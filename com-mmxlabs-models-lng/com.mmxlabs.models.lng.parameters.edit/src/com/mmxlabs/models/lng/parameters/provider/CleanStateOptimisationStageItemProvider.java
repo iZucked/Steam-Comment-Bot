@@ -93,6 +93,7 @@ public class CleanStateOptimisationStageItemProvider extends ParallisableOptimis
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ParametersPackage.Literals.CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS);
 			childrenFeatures.add(ParametersPackage.Literals.CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS);
+			childrenFeatures.add(ParametersPackage.Literals.CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS);
 		}
 		return childrenFeatures;
 	}
@@ -153,6 +154,7 @@ public class CleanStateOptimisationStageItemProvider extends ParallisableOptimis
 				return;
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS:
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS:
+			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -179,6 +181,11 @@ public class CleanStateOptimisationStageItemProvider extends ParallisableOptimis
 			(createChildParameter
 				(ParametersPackage.Literals.CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS,
 				 ParametersFactory.eINSTANCE.createAnnealingSettings()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ParametersPackage.Literals.CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS,
+				 ParametersFactory.eINSTANCE.createCleanStateOptimisationSettings()));
 	}
 
 }

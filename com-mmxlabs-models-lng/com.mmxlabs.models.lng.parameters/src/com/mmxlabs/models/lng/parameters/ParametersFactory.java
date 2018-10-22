@@ -240,6 +240,15 @@ public interface ParametersFactory extends EFactory {
 	ParallelMultiobjectiveSimilarityOptimisationStage createParallelMultiobjectiveSimilarityOptimisationStage();
 
 	/**
+	 * Returns a new object of class '<em>Clean State Optimisation Settings</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Clean State Optimisation Settings</em>'.
+	 * @generated
+	 */
+	CleanStateOptimisationSettings createCleanStateOptimisationSettings();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

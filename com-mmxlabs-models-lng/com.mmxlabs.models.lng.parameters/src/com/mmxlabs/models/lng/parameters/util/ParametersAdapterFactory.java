@@ -183,6 +183,10 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 				return createParallelMultiobjectiveSimilarityOptimisationStageAdapter();
 			}
 			@Override
+			public Adapter caseCleanStateOptimisationSettings(CleanStateOptimisationSettings object) {
+				return createCleanStateOptimisationSettingsAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -571,6 +575,20 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createParallelMultiobjectiveSimilarityOptimisationStageAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings <em>Clean State Optimisation Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings
+	 * @generated
+	 */
+	public Adapter createCleanStateOptimisationSettingsAdapter() {
 		return null;
 	}
 

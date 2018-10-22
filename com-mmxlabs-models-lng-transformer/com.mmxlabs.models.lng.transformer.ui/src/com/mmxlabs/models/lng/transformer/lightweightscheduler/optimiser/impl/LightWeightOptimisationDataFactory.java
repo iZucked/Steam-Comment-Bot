@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -18,6 +21,7 @@ import javax.inject.Inject;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.joda.time.DateTime;
 
 import com.google.inject.name.Named;
 import com.mmxlabs.common.CollectionsUtil;
@@ -81,7 +85,6 @@ public class LightWeightOptimisationDataFactory {
 		if (LightWeightSchedulerStage2Module.DEBUG) {
 			printPairings(pairingsMap);
 		}
-
 
 		// Create data for optimiser
 		
@@ -199,7 +202,6 @@ public class LightWeightOptimisationDataFactory {
 
 		List<ILoadOption> longtermLoads = getLongTermLoads(longTermSlots);
 		List<IDischargeOption> longTermDischarges = getLongTermDischarges(longTermSlots);
-
 		optimiserRecorder.init(longtermLoads, longTermDischarges);
 
 		// (2) Generate Slot to Slot bindings matrix for LT slots
@@ -251,6 +253,45 @@ public class LightWeightOptimisationDataFactory {
 		return cargoWindows;
 	}
 
+	private void printSlotsToFile(List<? extends IPortSlot> loads, List<? extends IPortSlot> discharges) {
+		DateTime date = DateTime.now();
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(String.format("c:/temp/slots-%s-%s-%s.txt", date.getHourOfDay(), date.getMinuteOfHour(), date.getSecondOfMinute()), "UTF-8");
+			loads.forEach(l->writer.println(l.getId())); 
+			discharges.forEach(d->writer.println(d.getId())); 
+			writer.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void printPairingsToFile(List<ILoadOption> sortedLoads, Map<ILoadOption, IDischargeOption> pairingsMap) {
+		DateTime date = DateTime.now();
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(String.format("c:/temp/pairings-%s-%s-%s.txt", date.getHourOfDay(), date.getMinuteOfHour(), date.getSecondOfMinute()), "UTF-8");
+			for (ILoadOption load : sortedLoads) {
+				if (pairingsMap.get(load) != null) {
+					writer.println(
+						String.format("%s -> %s", load.getId(), pairingsMap.get(load))
+						);
+				}
+			}
+			writer.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 
 	private void printPairings(Map<ILoadOption, IDischargeOption> pairingsMap) {
 		System.out.println("####Pairings####");
@@ -259,5 +300,24 @@ public class LightWeightOptimisationDataFactory {
 				System.out.println(String.format("%s -> %s", entry.getKey(), entry.getValue()));
 			}
 		}
+	}
+	
+	private void printShippedCargoesToFile(List<List<IPortSlot>> shippedCargoes) {
+		DateTime date = DateTime.now();
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(String.format("c:/temp/shipped-cargoes-%s-%s-%s.txt", date.getHourOfDay(), date.getMinuteOfHour(), date.getSecondOfMinute()), "UTF-8");
+			for (List<IPortSlot> cargoe : shippedCargoes) {
+				writer.println(cargoe.stream().map(s->s.getId()).collect(Collectors.joining("-")));
+			}
+			writer.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }

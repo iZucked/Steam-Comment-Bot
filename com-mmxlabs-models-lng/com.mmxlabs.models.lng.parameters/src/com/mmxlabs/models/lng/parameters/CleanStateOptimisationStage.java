@@ -18,6 +18,7 @@ package com.mmxlabs.models.lng.parameters;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage#getSeed <em>Seed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage#getAnnealingSettings <em>Annealing Settings</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage#getCleanStateSettings <em>Clean State Settings</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getCleanStateOptimisationStage()
@@ -76,5 +77,31 @@ public interface CleanStateOptimisationStage extends ParallisableOptimisationSta
 	 * @generated
 	 */
 	void setAnnealingSettings(AnnealingSettings value);
+
+	/**
+	 * Returns the value of the '<em><b>Clean State Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Clean State Settings</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Clean State Settings</em>' containment reference.
+	 * @see #setCleanStateSettings(CleanStateOptimisationSettings)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getCleanStateOptimisationStage_CleanStateSettings()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	CleanStateOptimisationSettings getCleanStateSettings();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage#getCleanStateSettings <em>Clean State Settings</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Clean State Settings</em>' containment reference.
+	 * @see #getCleanStateSettings()
+	 * @generated
+	 */
+	void setCleanStateSettings(CleanStateOptimisationSettings value);
 
 } // CleanStateOptimisationStage
