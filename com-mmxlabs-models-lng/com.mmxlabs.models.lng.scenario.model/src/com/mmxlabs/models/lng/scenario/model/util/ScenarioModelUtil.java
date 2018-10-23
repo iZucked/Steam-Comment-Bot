@@ -388,4 +388,8 @@ public final class ScenarioModelUtil {
 		}
 		throw new IllegalArgumentException("Invalid scenario model");
 	}
+
+	public static @Nullable ADPModel getADPModel(@NonNull LNGScenarioModel lngScenarioModel) {
+		return lngScenarioModel.getAdpModel();
+	}
 }

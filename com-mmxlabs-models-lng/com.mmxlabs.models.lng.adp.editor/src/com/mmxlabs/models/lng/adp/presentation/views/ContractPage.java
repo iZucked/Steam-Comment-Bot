@@ -482,7 +482,17 @@ public class ContractPage extends ADPComposite {
 				objects.addAll(commercialModel.getPurchaseContracts());
 				objects.addAll(commercialModel.getSalesContracts());
 
-				RunnerHelper.runNowOrAsync(() -> objectSelector.setInput(objects));
+				RunnerHelper.runNowOrAsync(() -> {
+					Object selected = objectSelector.getStructuredSelection().getFirstElement();
+					objectSelector.setInput(objects);
+					if (selected != null && !objects.contains(selected)) {
+						if (objects.isEmpty()) {
+							objectSelector.setSelection(StructuredSelection.EMPTY);
+						} else {
+							objectSelector.setSelection(new StructuredSelection(objects.get(0)));
+						}
+					}
+				});
 			} else if (msg.getNotifier() instanceof Contract) {
 				RunnerHelper.runNowOrAsync(() -> objectSelector.refresh(true));
 			}

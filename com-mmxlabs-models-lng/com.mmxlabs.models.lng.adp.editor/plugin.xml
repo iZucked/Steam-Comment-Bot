@@ -306,5 +306,12 @@
       </command>
    </menuContribution>
 </extension>
+<extension
+      point="com.mmxlabs.models.common.modelcommandprovider">
+   <ModelCommandProvider
+         commandProvider="com.mmxlabs.models.lng.adp.editor.commandproviders.ContractProfileCommandProvider"
+         id="com.mmxlabs.models.lng.adp.editor.commandproviders.ContractProfileCommandProvider">
+   </ModelCommandProvider>
+</extension>
 
 </plugin>

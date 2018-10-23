@@ -93,7 +93,7 @@ public class SummaryPage extends ADPComposite {
 					return super.getElements(inputElement);
 				}
 			});
-			createColumn(purchasesViewer, "Contract", (profile) -> profile.getContract().getName());
+			createColumn(purchasesViewer, "Contract", (profile) -> profile.getContract() == null ? "<unknown>" : profile.getContract().getName());
 			createColumn(purchasesViewer, "Num cargoes", (profile) -> Long.toString(editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
 					.filter(s -> profile.getContract() == s.getContract()).count()));
 		}
