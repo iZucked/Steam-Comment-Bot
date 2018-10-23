@@ -64,6 +64,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/contractType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/pricingEvent"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/cancellationExpression"/>
+      <genFeatures createChild="false" propertyDescription="Trade date nomination time period"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/windowNominationSize"/>
+      <genFeatures createChild="false" propertyDescription="Trade date nomination time period unit"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/windowNominationSizeUnits"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//SalesContract">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//SalesContract/minCvValue"/>

@@ -7,6 +7,7 @@ import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -41,6 +42,8 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getContractType <em>Contract Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getCancellationExpression <em>Cancellation Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getWindowNominationSize <em>Window Nomination Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getWindowNominationSizeUnits <em>Window Nomination Size Units</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract()
@@ -477,6 +480,61 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setCancellationExpression(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Window Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Window Nomination Size</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Window Nomination Size</em>' attribute.
+	 * @see #setWindowNominationSize(int)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_WindowNominationSize()
+	 * @model unique="false"
+	 * @generated
+	 */
+	int getWindowNominationSize();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getWindowNominationSize <em>Window Nomination Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Nomination Size</em>' attribute.
+	 * @see #getWindowNominationSize()
+	 * @generated
+	 */
+	void setWindowNominationSize(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Window Nomination Size Units</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.TimePeriod}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Window Nomination Size Units</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Window Nomination Size Units</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @see #setWindowNominationSizeUnits(TimePeriod)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_WindowNominationSizeUnits()
+	 * @model unique="false"
+	 * @generated
+	 */
+	TimePeriod getWindowNominationSizeUnits();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getWindowNominationSizeUnits <em>Window Nomination Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Nomination Size Units</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @see #getWindowNominationSizeUnits()
+	 * @generated
+	 */
+	void setWindowNominationSizeUnits(TimePeriod value);
 
 	/**
 	 * Returns the value of the '<em><b>Code</b></em>' attribute.

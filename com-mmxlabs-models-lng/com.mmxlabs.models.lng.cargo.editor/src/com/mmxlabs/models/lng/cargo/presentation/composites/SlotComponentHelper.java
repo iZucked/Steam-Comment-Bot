@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.editor.SlotContractRestrictionsWrapper;
@@ -116,6 +117,8 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_overrideRestrictionsEditor(detailComposite, topClass);
 		add_nominatedVesselEditor(detailComposite, topClass);
 		add_lockedEditor(detailComposite, topClass);
+		add_windowNominationDateEditor(detailComposite, topClass);
+		add_windowNominationIsDoneEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -261,6 +264,28 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_lockedEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		 detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__LOCKED));
+	}
+
+	/**
+	 * Create the editor for the windowNominationDate feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_windowNominationDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_NOMINATION_DATE));
+		}
+	}
+
+	/**
+	 * Create the editor for the windowNominationIsDone feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_windowNominationIsDoneEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_NOMINATION_IS_DONE));
+		}
 	}
 
 	/**

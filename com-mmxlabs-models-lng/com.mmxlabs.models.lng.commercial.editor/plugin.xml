@@ -311,5 +311,11 @@
             class="com.mmxlabs.models.lng.commercial.importer.CharterContractBallastBonusImporterExtraImporter">
       </extramodelimporter>
    </extension>
+   <!--<extension
+         point="com.mmxlabs.models.ui.dialogpostchangecommandprovider">
+      <dialogpostchangecommandprovider
+            class="com.mmxlabs.models.lng.commercial.editor.NominationsDialogPostChangeCommandProvider">
+      </dialogpostchangecommandprovider>
+   </extension>-->
 
 </plugin>

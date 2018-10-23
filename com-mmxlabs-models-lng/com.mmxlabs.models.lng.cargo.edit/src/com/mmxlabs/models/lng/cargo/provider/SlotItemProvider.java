@@ -84,6 +84,8 @@ public class SlotItemProvider
 			addOverrideRestrictionsPropertyDescriptor(object);
 			addNominatedVesselPropertyDescriptor(object);
 			addLockedPropertyDescriptor(object);
+			addWindowNominationDatePropertyDescriptor(object);
+			addWindowNominationIsDonePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -859,6 +861,50 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Window Nomination Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWindowNominationDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_windowNominationDate_feature"),
+				 getString("_UI_Slot_windowNominationDate_description"),
+				 CargoPackage.Literals.SLOT__WINDOW_NOMINATION_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Window Nomination Is Done feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWindowNominationIsDonePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_windowNominationIsDone_feature"),
+				 getString("_UI_Slot_windowNominationIsDone_description"),
+				 CargoPackage.Literals.SLOT__WINDOW_NOMINATION_IS_DONE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -922,6 +968,8 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
 			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
 			case CargoPackage.SLOT__LOCKED:
+			case CargoPackage.SLOT__WINDOW_NOMINATION_DATE:
+			case CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

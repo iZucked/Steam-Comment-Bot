@@ -359,7 +359,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			public EditingDomain getEditingDomain() {
 				return commandHandler.getEditingDomain();
 			}
-			
+
 			@Override
 			public ModelReference getModelReference() {
 				return commandHandler.getModelReference();
@@ -931,6 +931,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		try {
 			final int value = open();
 			if (value == OK) {
+				final EditingDomain editingDomain = commandHandler.getEditingDomain();
 				if (returnDuplicates) {
 					final CompoundCommand adder = new CompoundCommand();
 					for (final Map.Entry<EObject, EObject> entry : originalToDuplicate.entrySet()) {
@@ -949,9 +950,15 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 						adder.append(AddCommand.create(commandHandler.getEditingDomain(), eContainer, original.eContainingFeature(), Collections.singleton(duplicate)));
 					}
-					final boolean isExecutable = adder.canExecute();
+
+					Command finalCommand = adder;
+					for (IDialogPostChangeCommandProvider p : Activator.getDefault().getDialogPostChangeCommandProviders()) {
+						finalCommand = p.provideExtraCommand(editingDomain, finalCommand, rootObject, objects);
+					}
+
+					final boolean isExecutable = finalCommand.canExecute();
 					if (isExecutable) {
-						executeFinalCommand(adder);
+						executeFinalCommand(finalCommand);
 					} else {
 						MessageDialog.openError(getShell(), "Error applying change",
 								"An error occurred applying the change - the command to apply it was not executable. Refer to the error log for more details");
@@ -962,7 +969,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 					final CompoundCommand cc = new CompoundCommand();
 
-					final EditingDomain editingDomain = commandHandler.getEditingDomain();
 					if (editingDomain instanceof CommandProviderAwareEditingDomain) {
 						((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(true);
 					}
@@ -977,10 +983,15 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					// TODO check this experimental option works properly
 					// cc.append(replaceOriginals(commandHandler.getEditingDomain(), rootObject));
 
-					final boolean isExecutable = cc.canExecute();
+					Command finalCommand = cc;
+					for (IDialogPostChangeCommandProvider p : Activator.getDefault().getDialogPostChangeCommandProviders()) {
+						finalCommand = p.provideExtraCommand(editingDomain, finalCommand, rootObject, objects);
+					}
+
+					final boolean isExecutable = finalCommand.canExecute();
 					if (isExecutable) {
 
-						executeFinalCommand(cc);
+						executeFinalCommand(finalCommand);
 
 					} else {
 						MessageDialog.openError(getShell(), "Error applying change",
@@ -1011,7 +1022,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		}
 	}
 
-	private void executeFinalCommand(final CompoundCommand cc) {
+	private void executeFinalCommand(final Command cc) {
 		commandHandler.getEditingDomain().getCommandStack().execute(cc);
 	}
 

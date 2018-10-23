@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -56,6 +57,8 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getContractType <em>Contract Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getWindowNominationSize <em>Window Nomination Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getWindowNominationSizeUnits <em>Window Nomination Size Units</em>}</li>
  * </ul>
  *
  * @generated
@@ -447,6 +450,46 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected String cancellationExpression = CANCELLATION_EXPRESSION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getWindowNominationSize() <em>Window Nomination Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowNominationSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int WINDOW_NOMINATION_SIZE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getWindowNominationSize() <em>Window Nomination Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowNominationSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected int windowNominationSize = WINDOW_NOMINATION_SIZE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getWindowNominationSizeUnits() <em>Window Nomination Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowNominationSizeUnits()
+	 * @generated NOT
+	 * @ordered
+	 */
+	protected static final TimePeriod WINDOW_NOMINATION_SIZE_UNITS_EDEFAULT = TimePeriod.DAYS;
+
+	/**
+	 * The cached value of the '{@link #getWindowNominationSizeUnits() <em>Window Nomination Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowNominationSizeUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected TimePeriod windowNominationSizeUnits = WINDOW_NOMINATION_SIZE_UNITS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -862,6 +905,48 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getWindowNominationSize() {
+		return windowNominationSize;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setWindowNominationSize(int newWindowNominationSize) {
+		int oldWindowNominationSize = windowNominationSize;
+		windowNominationSize = newWindowNominationSize;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE, oldWindowNominationSize, windowNominationSize));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public TimePeriod getWindowNominationSizeUnits() {
+		return windowNominationSizeUnits;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setWindowNominationSizeUnits(TimePeriod newWindowNominationSizeUnits) {
+		TimePeriod oldWindowNominationSizeUnits = windowNominationSizeUnits;
+		windowNominationSizeUnits = newWindowNominationSizeUnits == null ? WINDOW_NOMINATION_SIZE_UNITS_EDEFAULT : newWindowNominationSizeUnits;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS, oldWindowNominationSizeUnits, windowNominationSizeUnits));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public String getCode() {
 		return code;
 	}
@@ -1078,6 +1163,10 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getPricingEvent();
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				return getCancellationExpression();
+			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE:
+				return getWindowNominationSize();
+			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
+				return getWindowNominationSizeUnits();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1157,6 +1246,12 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				setCancellationExpression((String)newValue);
 				return;
+			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE:
+				setWindowNominationSize((Integer)newValue);
+				return;
+			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
+				setWindowNominationSizeUnits((TimePeriod)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1232,6 +1327,12 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				setCancellationExpression(CANCELLATION_EXPRESSION_EDEFAULT);
 				return;
+			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE:
+				setWindowNominationSize(WINDOW_NOMINATION_SIZE_EDEFAULT);
+				return;
+			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
+				setWindowNominationSizeUnits(WINDOW_NOMINATION_SIZE_UNITS_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1286,6 +1387,10 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return pricingEvent != PRICING_EVENT_EDEFAULT;
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				return CANCELLATION_EXPRESSION_EDEFAULT == null ? cancellationExpression != null : !CANCELLATION_EXPRESSION_EDEFAULT.equals(cancellationExpression);
+			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE:
+				return windowNominationSize != WINDOW_NOMINATION_SIZE_EDEFAULT;
+			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
+				return windowNominationSizeUnits != WINDOW_NOMINATION_SIZE_UNITS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1362,6 +1467,10 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(pricingEvent);
 		result.append(", cancellationExpression: ");
 		result.append(cancellationExpression);
+		result.append(", windowNominationSize: ");
+		result.append(windowNominationSize);
+		result.append(", windowNominationSizeUnits: ");
+		result.append(windowNominationSizeUnits);
 		result.append(')');
 		return result.toString();
 	}

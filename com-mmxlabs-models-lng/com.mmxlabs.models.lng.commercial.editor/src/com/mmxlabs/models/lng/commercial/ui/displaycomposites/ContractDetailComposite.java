@@ -54,7 +54,6 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 		boolean topOfPaneElement = true;
 
 		// Here the exceptions are listed for the elements which should go into the bottom
-		// Here the exceptions are listed for the elements which should go into the bottom
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedListsArePermissive()) {
 			topOfPaneElement = false;
 		}
@@ -126,6 +125,22 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 					// 64 - magic constant from MultiDetailDialog
 					gd.horizontalSpan = 3;
 
+					return gd;
+				}
+				
+				if (feature == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE || feature == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					gd.horizontalSpan = 3;
+					if (feature == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Nomination period");
+						}
+						editor.setLabel(null);
+					} else {
+						editor.setLabel(null);
+					}
 					return gd;
 				}
 

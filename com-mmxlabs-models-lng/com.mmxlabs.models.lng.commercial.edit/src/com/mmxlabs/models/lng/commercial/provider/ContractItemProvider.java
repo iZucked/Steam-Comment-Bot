@@ -72,6 +72,8 @@ public class ContractItemProvider
 			addContractTypePropertyDescriptor(object);
 			addPricingEventPropertyDescriptor(object);
 			addCancellationExpressionPropertyDescriptor(object);
+			addWindowNominationSizePropertyDescriptor(object);
+			addWindowNominationSizeUnitsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -429,6 +431,50 @@ public class ContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Window Nomination Size feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWindowNominationSizePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_windowNominationSize_feature"),
+				 getString("_UI_Contract_windowNominationSize_description"),
+				 CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Window Nomination Size Units feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWindowNominationSizeUnitsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_windowNominationSizeUnits_feature"),
+				 getString("_UI_Contract_windowNominationSizeUnits_description"),
+				 CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Code feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -620,6 +666,8 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 			case CommercialPackage.CONTRACT__PRICING_EVENT:
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
+			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE:
+			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CommercialPackage.CONTRACT__PRICE_INFO:

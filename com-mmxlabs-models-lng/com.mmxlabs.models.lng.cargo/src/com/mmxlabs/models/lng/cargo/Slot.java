@@ -65,6 +65,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isOverrideRestrictions <em>Override Restrictions</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getNominatedVessel <em>Nominated Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isLocked <em>Locked</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowNominationDate <em>Window Nomination Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isWindowNominationIsDone <em>Window Nomination Is Done</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot()
@@ -1474,6 +1476,112 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	void setLocked(boolean value);
 
 	/**
+	 * Returns the value of the '<em><b>Window Nomination Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Window Nomination Date</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Window Nomination Date</em>' attribute.
+	 * @see #isSetWindowNominationDate()
+	 * @see #unsetWindowNominationDate()
+	 * @see #setWindowNominationDate(LocalDate)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowNominationDate()
+	 * @model unique="false" unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getWindowNominationDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowNominationDate <em>Window Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Nomination Date</em>' attribute.
+	 * @see #isSetWindowNominationDate()
+	 * @see #unsetWindowNominationDate()
+	 * @see #getWindowNominationDate()
+	 * @generated
+	 */
+	void setWindowNominationDate(LocalDate value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowNominationDate <em>Window Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetWindowNominationDate()
+	 * @see #getWindowNominationDate()
+	 * @see #setWindowNominationDate(LocalDate)
+	 * @generated
+	 */
+	void unsetWindowNominationDate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowNominationDate <em>Window Nomination Date</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Window Nomination Date</em>' attribute is set.
+	 * @see #unsetWindowNominationDate()
+	 * @see #getWindowNominationDate()
+	 * @see #setWindowNominationDate(LocalDate)
+	 * @generated
+	 */
+	boolean isSetWindowNominationDate();
+
+	/**
+	 * Returns the value of the '<em><b>Window Nomination Is Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Window Nomination Is Done</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Window Nomination Is Done</em>' attribute.
+	 * @see #isSetWindowNominationIsDone()
+	 * @see #unsetWindowNominationIsDone()
+	 * @see #setWindowNominationIsDone(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowNominationIsDone()
+	 * @model unique="false" unsettable="true"
+	 * @generated
+	 */
+	boolean isWindowNominationIsDone();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isWindowNominationIsDone <em>Window Nomination Is Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Nomination Is Done</em>' attribute.
+	 * @see #isSetWindowNominationIsDone()
+	 * @see #unsetWindowNominationIsDone()
+	 * @see #isWindowNominationIsDone()
+	 * @generated
+	 */
+	void setWindowNominationIsDone(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isWindowNominationIsDone <em>Window Nomination Is Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetWindowNominationIsDone()
+	 * @see #isWindowNominationIsDone()
+	 * @see #setWindowNominationIsDone(boolean)
+	 * @generated
+	 */
+	void unsetWindowNominationIsDone();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isWindowNominationIsDone <em>Window Nomination Is Done</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Window Nomination Is Done</em>' attribute is set.
+	 * @see #unsetWindowNominationIsDone()
+	 * @see #isWindowNominationIsDone()
+	 * @see #setWindowNominationIsDone(boolean)
+	 * @generated
+	 */
+	boolean isSetWindowNominationIsDone();
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
@@ -1634,6 +1742,14 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	String getSlotOrDelegateCN();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getSlotOrDelegateWindowNominationDate();
 
 } // end of  Slot
 

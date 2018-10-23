@@ -497,13 +497,31 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
 
 	/**
+	 * The feature id for the '<em><b>Window Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__WINDOW_NOMINATION_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
+
+	/**
+	 * The feature id for the '<em><b>Window Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__WINDOW_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 22;
+
+	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
+	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -721,6 +739,24 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__CANCELLATION_EXPRESSION = CONTRACT__CANCELLATION_EXPRESSION;
+
+	/**
+	 * The feature id for the '<em><b>Window Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__WINDOW_NOMINATION_SIZE = CONTRACT__WINDOW_NOMINATION_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Window Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__WINDOW_NOMINATION_SIZE_UNITS = CONTRACT__WINDOW_NOMINATION_SIZE_UNITS;
 
 	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
@@ -974,6 +1010,24 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int PURCHASE_CONTRACT__CANCELLATION_EXPRESSION = CONTRACT__CANCELLATION_EXPRESSION;
+
+	/**
+	 * The feature id for the '<em><b>Window Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__WINDOW_NOMINATION_SIZE = CONTRACT__WINDOW_NOMINATION_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Window Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__WINDOW_NOMINATION_SIZE_UNITS = CONTRACT__WINDOW_NOMINATION_SIZE_UNITS;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -2151,6 +2205,28 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getContract_CancellationExpression();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getWindowNominationSize <em>Window Nomination Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Window Nomination Size</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getWindowNominationSize()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_WindowNominationSize();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getWindowNominationSizeUnits <em>Window Nomination Size Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Window Nomination Size Units</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getWindowNominationSizeUnits()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_WindowNominationSizeUnits();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getCode <em>Code</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2948,6 +3024,22 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONTRACT__CANCELLATION_EXPRESSION = eINSTANCE.getContract_CancellationExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Window Nomination Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__WINDOW_NOMINATION_SIZE = eINSTANCE.getContract_WindowNominationSize();
+
+		/**
+		 * The meta object literal for the '<em><b>Window Nomination Size Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__WINDOW_NOMINATION_SIZE_UNITS = eINSTANCE.getContract_WindowNominationSizeUnits();
 
 		/**
 		 * The meta object literal for the '<em><b>Code</b></em>' attribute feature.
