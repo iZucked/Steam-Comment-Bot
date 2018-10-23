@@ -56,6 +56,7 @@ import com.mmxlabs.models.ui.tabular.columngeneration.IColumnFactory;
 import com.mmxlabs.models.ui.tabular.columngeneration.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.DateTimeAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.HoursSingleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
@@ -1150,7 +1151,114 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			});
 		}
 			break;
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-windowNomination": {
+			{
+				columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
 
+					@Override
+					public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
+						ColumnBlock block = blockManager.getBlockByID(columnID);
+						if (block == null) {
+							block = blockManager.createBlock(columnID, "", LOAD_WINDOW_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL, "Load nomination date");
+						}
+						block.setPlaceholder(true);
+						block.setExpandable(true);
+						block.setExpandByDefault(false);
+						block.setForceGroup(true);
+
+						{
+							final DateTimeAttributeManipulator rendMan = new DateTimeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowNominationDate(), editingDomain);
+							final ColumnHandler createColumn = blockManager.createColumn(block, "Nomination date", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+							createColumn.column.getColumn().setSummary(true);
+							createColumn.column.getColumn().setDetail(false);
+
+							createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
+
+								@Override
+								public void treeExpanded(final TreeEvent e) {
+									createColumn.column.getColumn().getColumnGroup().setText("Nomination");
+								}
+
+								@Override
+								public void treeCollapsed(final TreeEvent e) {
+									createColumn.column.getColumn().getColumnGroup().setText("");
+
+								}
+							});
+						}
+						{
+							final DateTimeAttributeManipulator rendMan = new DateTimeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowNominationDate(), editingDomain);
+							final ColumnHandler createColumn = blockManager.createColumn(block, "Date", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+							createColumn.column.getColumn().setSummary(false);
+							createColumn.column.getColumn().setDetail(true);
+						}
+						{
+							final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowNominationIsDone(), editingDomain);
+							final ColumnHandler createColumn = blockManager.createColumn(block, "Flag", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+							createColumn.column.getColumn().setSummary(false);
+							createColumn.column.getColumn().setDetail(true);
+						}
+						return null;
+					}
+				});
+
+			}
+		}
+			break;
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-windowNomination": {
+			{
+				columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+
+					@Override
+					public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
+						ColumnBlock block = blockManager.getBlockByID(columnID);
+						if (block == null) {
+							block = blockManager.createBlock(columnID, "", DISCHARGE_WINDOW_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL, "Discharge nomination date");
+						}
+						block.setPlaceholder(true);
+						block.setExpandable(true);
+						block.setExpandByDefault(false);
+						block.setForceGroup(true);
+
+						{
+							final DateTimeAttributeManipulator rendMan = new DateTimeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowNominationDate(), editingDomain);
+							final ColumnHandler createColumn = blockManager.createColumn(block, "Nomination date", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+							createColumn.column.getColumn().setSummary(true);
+							createColumn.column.getColumn().setDetail(false);
+
+							createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
+
+								@Override
+								public void treeExpanded(final TreeEvent e) {
+									createColumn.column.getColumn().getColumnGroup().setText("Nomination");
+								}
+
+								@Override
+								public void treeCollapsed(final TreeEvent e) {
+									createColumn.column.getColumn().getColumnGroup().setText("");
+
+								}
+							});
+						}
+						{
+							final DateTimeAttributeManipulator rendMan = new DateTimeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowNominationDate(), editingDomain);
+							final ColumnHandler createColumn = blockManager.createColumn(block, "Date", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+							createColumn.column.getColumn().setSummary(false);
+							createColumn.column.getColumn().setDetail(true);
+						}
+						{
+							final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowNominationIsDone(), editingDomain);
+							final ColumnHandler createColumn = blockManager.createColumn(block, "Flag", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+							createColumn.column.getColumn().setSummary(false);
+							createColumn.column.getColumn().setDetail(true);
+						}
+						return null;
+					}
+				});
+
+			}
+		}
+			break;
 		}
 	}
 

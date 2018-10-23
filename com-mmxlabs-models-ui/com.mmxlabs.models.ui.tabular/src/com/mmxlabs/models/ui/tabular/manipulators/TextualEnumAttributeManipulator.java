@@ -32,6 +32,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.ui.editors.autocomplete.AutoCompleteHelper;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -59,6 +61,11 @@ public class TextualEnumAttributeManipulator extends BasicAttributeManipulator {
 		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
 		EEnum eenum = (EEnum) ((EAttribute) field).getEAttributeType();
 		for (final EEnumLiteral literal : eenum.getELiterals()) {
+			if (((EAttribute) field) == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS) {
+				if (literal.getValue() == TimePeriod.HOURS_VALUE) {
+					continue;
+				}
+			}
 			values.add(new Pair<String, Object>(getName(literal), literal.getInstance()));
 		}
 		return values;

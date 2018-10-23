@@ -541,6 +541,24 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getContract_WindowNominationSize() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(20);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getContract_WindowNominationSizeUnits() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(21);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getContract_Code() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(0);
 	}
@@ -1075,6 +1093,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(contractEClass, CONTRACT__CONTRACT_TYPE);
 		createEAttribute(contractEClass, CONTRACT__PRICING_EVENT);
 		createEAttribute(contractEClass, CONTRACT__CANCELLATION_EXPRESSION);
+		createEAttribute(contractEClass, CONTRACT__WINDOW_NOMINATION_SIZE);
+		createEAttribute(contractEClass, CONTRACT__WINDOW_NOMINATION_SIZE_UNITS);
 
 		salesContractEClass = createEClass(SALES_CONTRACT);
 		createEAttribute(salesContractEClass, SALES_CONTRACT__MIN_CV_VALUE);
@@ -1245,6 +1265,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getContract_ContractType(), this.getContractType(), "contractType", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_PricingEvent(), this.getPricingEvent(), "pricingEvent", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_CancellationExpression(), ecorePackage.getEString(), "cancellationExpression", "0", 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContract_WindowNominationSize(), ecorePackage.getEInt(), "windowNominationSize", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContract_WindowNominationSizeUnits(), theTypesPackage.getTimePeriod(), "windowNominationSizeUnits", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(salesContractEClass, SalesContract.class, "SalesContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSalesContract_MinCvValue(), ecorePackage.getEDouble(), "minCvValue", null, 0, 1, SalesContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

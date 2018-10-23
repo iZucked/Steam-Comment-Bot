@@ -82,6 +82,10 @@
         <details key="type" value="commodity"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowNominationSize" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowNominationSizeUnits"
+        unique="false" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//TimePeriod"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SalesContract" eSuperTypes="#//Contract">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCvValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"

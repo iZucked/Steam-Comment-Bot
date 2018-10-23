@@ -752,13 +752,31 @@ public interface CargoPackage extends EPackage {
 	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 34;
 
 	/**
+	 * The feature id for the '<em><b>Window Nomination Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__WINDOW_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 35;
+
+	/**
+	 * The feature id for the '<em><b>Window Nomination Is Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__WINDOW_NOMINATION_IS_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 36;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 35;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 37;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -977,13 +995,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_DELEGATE_CN = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 20;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Window Nomination Date</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 21;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 21;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 22;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1319,6 +1346,24 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__LOCKED = SLOT__LOCKED;
 
 	/**
+	 * The feature id for the '<em><b>Window Nomination Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__WINDOW_NOMINATION_DATE = SLOT__WINDOW_NOMINATION_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Window Nomination Is Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__WINDOW_NOMINATION_IS_DONE = SLOT__WINDOW_NOMINATION_IS_DONE;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1587,6 +1632,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_CN = SLOT___GET_SLOT_OR_DELEGATE_CN;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Window Nomination Date</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -1949,6 +2003,24 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__LOCKED = SLOT__LOCKED;
 
 	/**
+	 * The feature id for the '<em><b>Window Nomination Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__WINDOW_NOMINATION_DATE = SLOT__WINDOW_NOMINATION_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Window Nomination Is Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__WINDOW_NOMINATION_IS_DONE = SLOT__WINDOW_NOMINATION_IS_DONE;
+
+	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2217,6 +2289,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_CN = SLOT___GET_SLOT_OR_DELEGATE_CN;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Window Nomination Date</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -2671,6 +2752,24 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__LOCKED = LOAD_SLOT__LOCKED;
 
 	/**
+	 * The feature id for the '<em><b>Window Nomination Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__WINDOW_NOMINATION_DATE = LOAD_SLOT__WINDOW_NOMINATION_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Window Nomination Is Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__WINDOW_NOMINATION_IS_DONE = LOAD_SLOT__WINDOW_NOMINATION_IS_DONE;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2948,6 +3047,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_CN = LOAD_SLOT___GET_SLOT_OR_DELEGATE_CN;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Window Nomination Date</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = LOAD_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -3320,6 +3428,24 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__LOCKED = DISCHARGE_SLOT__LOCKED;
 
 	/**
+	 * The feature id for the '<em><b>Window Nomination Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__WINDOW_NOMINATION_DATE = DISCHARGE_SLOT__WINDOW_NOMINATION_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Window Nomination Is Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__WINDOW_NOMINATION_IS_DONE = DISCHARGE_SLOT__WINDOW_NOMINATION_IS_DONE;
+
+	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3598,6 +3724,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_CN = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_CN;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Window Nomination Date</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -6995,6 +7130,28 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_Locked();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowNominationDate <em>Window Nomination Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Window Nomination Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getWindowNominationDate()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_WindowNominationDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isWindowNominationIsDone <em>Window Nomination Is Done</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Window Nomination Is Done</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isWindowNominationIsDone()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_WindowNominationIsDone();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateDuration() <em>Get Slot Or Delegate Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7205,6 +7362,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getSlot__GetSlotOrDelegateCN();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateWindowNominationDate() <em>Get Slot Or Delegate Window Nomination Date</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Window Nomination Date</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateWindowNominationDate()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegateWindowNominationDate();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -9408,6 +9575,22 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__LOCKED = eINSTANCE.getSlot_Locked();
 
 		/**
+		 * The meta object literal for the '<em><b>Window Nomination Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__WINDOW_NOMINATION_DATE = eINSTANCE.getSlot_WindowNominationDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Window Nomination Is Done</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__WINDOW_NOMINATION_IS_DONE = eINSTANCE.getSlot_WindowNominationIsDone();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Duration</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -9566,6 +9749,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_CN = eINSTANCE.getSlot__GetSlotOrDelegateCN();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Window Nomination Date</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = eINSTANCE.getSlot__GetSlotOrDelegateWindowNominationDate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

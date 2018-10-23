@@ -27,6 +27,7 @@ import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.util.NominationUtils;
 import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -89,6 +90,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOverrideRestrictions <em>Override Restrictions</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNominatedVessel <em>Nominated Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isLocked <em>Locked</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowNominationDate <em>Window Nomination Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isWindowNominationIsDone <em>Window Nomination Is Done</em>}</li>
  * </ul>
  *
  * @generated
@@ -839,6 +842,64 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean locked = LOCKED_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getWindowNominationDate() <em>Window Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowNominationDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate WINDOW_NOMINATION_DATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getWindowNominationDate() <em>Window Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowNominationDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate windowNominationDate = WINDOW_NOMINATION_DATE_EDEFAULT;
+
+	/**
+	 * This is true if the Window Nomination Date attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean windowNominationDateESet;
+
+	/**
+	 * The default value of the '{@link #isWindowNominationIsDone() <em>Window Nomination Is Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isWindowNominationIsDone()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean WINDOW_NOMINATION_IS_DONE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isWindowNominationIsDone() <em>Window Nomination Is Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isWindowNominationIsDone()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean windowNominationIsDone = WINDOW_NOMINATION_IS_DONE_EDEFAULT;
+
+	/**
+	 * This is true if the Window Nomination Is Done attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean windowNominationIsDoneESet;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -2037,6 +2098,98 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public LocalDate getWindowNominationDate() {
+		return windowNominationDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setWindowNominationDate(LocalDate newWindowNominationDate) {
+		LocalDate oldWindowNominationDate = windowNominationDate;
+		windowNominationDate = newWindowNominationDate;
+		boolean oldWindowNominationDateESet = windowNominationDateESet;
+		windowNominationDateESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_NOMINATION_DATE, oldWindowNominationDate, windowNominationDate, !oldWindowNominationDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetWindowNominationDate() {
+		LocalDate oldWindowNominationDate = windowNominationDate;
+		boolean oldWindowNominationDateESet = windowNominationDateESet;
+		windowNominationDate = WINDOW_NOMINATION_DATE_EDEFAULT;
+		windowNominationDateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__WINDOW_NOMINATION_DATE, oldWindowNominationDate, WINDOW_NOMINATION_DATE_EDEFAULT, oldWindowNominationDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetWindowNominationDate() {
+		return windowNominationDateESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isWindowNominationIsDone() {
+		return windowNominationIsDone;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setWindowNominationIsDone(boolean newWindowNominationIsDone) {
+		boolean oldWindowNominationIsDone = windowNominationIsDone;
+		windowNominationIsDone = newWindowNominationIsDone;
+		boolean oldWindowNominationIsDoneESet = windowNominationIsDoneESet;
+		windowNominationIsDoneESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE, oldWindowNominationIsDone, windowNominationIsDone, !oldWindowNominationIsDoneESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetWindowNominationIsDone() {
+		boolean oldWindowNominationIsDone = windowNominationIsDone;
+		boolean oldWindowNominationIsDoneESet = windowNominationIsDoneESet;
+		windowNominationIsDone = WINDOW_NOMINATION_IS_DONE_EDEFAULT;
+		windowNominationIsDoneESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE, oldWindowNominationIsDone, WINDOW_NOMINATION_IS_DONE_EDEFAULT, oldWindowNominationIsDoneESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetWindowNominationIsDone() {
+		return windowNominationIsDoneESet;
+	}
+
+								/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EList<AVesselSet<Vessel>> getAllowedVessels() {
 		if (allowedVessels == null) {
 			allowedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, CargoPackage.SLOT__ALLOWED_VESSELS);
@@ -2335,6 +2488,17 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public LocalDate getSlotOrDelegateWindowNominationDate() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		return (LocalDate) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_NOMINATION_DATE);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -2463,6 +2627,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return basicGetNominatedVessel();
 			case CargoPackage.SLOT__LOCKED:
 				return isLocked();
+			case CargoPackage.SLOT__WINDOW_NOMINATION_DATE:
+				return getWindowNominationDate();
+			case CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE:
+				return isWindowNominationIsDone();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -2583,6 +2751,12 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__LOCKED:
 				setLocked((Boolean)newValue);
 				return;
+			case CargoPackage.SLOT__WINDOW_NOMINATION_DATE:
+				setWindowNominationDate((LocalDate)newValue);
+				return;
+			case CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE:
+				setWindowNominationIsDone((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -2699,6 +2873,12 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__LOCKED:
 				setLocked(LOCKED_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__WINDOW_NOMINATION_DATE:
+				unsetWindowNominationDate();
+				return;
+			case CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE:
+				unsetWindowNominationIsDone();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -2780,6 +2960,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return nominatedVessel != null;
 			case CargoPackage.SLOT__LOCKED:
 				return locked != LOCKED_EDEFAULT;
+			case CargoPackage.SLOT__WINDOW_NOMINATION_DATE:
+				return isSetWindowNominationDate();
+			case CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE:
+				return isSetWindowNominationIsDone();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -2895,6 +3079,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getSlotOrDelegateCounterparty();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_CN:
 				return getSlotOrDelegateCN();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE:
+				return getSlotOrDelegateWindowNominationDate();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -2964,6 +3150,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		result.append(overrideRestrictions);
 		result.append(", locked: ");
 		result.append(locked);
+		result.append(", windowNominationDate: ");
+		if (windowNominationDateESet) result.append(windowNominationDate); else result.append("<unset>");
+		result.append(", windowNominationIsDone: ");
+		if (windowNominationIsDoneESet) result.append(windowNominationIsDone); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
@@ -3052,7 +3242,28 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 					
 				}				
 			};
-		} 
+		} else if (feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_DATE) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = null;
+					final Contract contract = (Contract) getContract();
+					if (contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE)) {
+							final int wnSize = ((Contract) contract).getWindowNominationSize();
+							final TimePeriod wnUnits = ((Contract) contract).getWindowNominationSizeUnits();
+							if (wnUnits == null) return result;
+							result = NominationUtils.computeNewDate(getWindowStart(), wnUnits, -wnSize);
+						}
+					}
+					return result;
+					
+				}	
+			};
+		}
 		
 		return super.getUnsetValueOrDelegate(feature);
 	}	

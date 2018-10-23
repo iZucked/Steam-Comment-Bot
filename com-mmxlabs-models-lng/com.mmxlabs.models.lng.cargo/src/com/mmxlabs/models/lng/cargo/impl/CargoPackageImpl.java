@@ -772,6 +772,24 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSlot_WindowNominationDate() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(34);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_WindowNominationIsDone() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(35);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getSlot__GetSlotOrDelegateDuration() {
 		return slotEClass.getEOperations().get(0);
 	}
@@ -954,6 +972,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	public EOperation getSlot__GetSlotOrDelegateCN() {
 		return slotEClass.getEOperations().get(19);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getSlot__GetSlotOrDelegateWindowNominationDate() {
+		return slotEClass.getEOperations().get(20);
 	}
 
 	/**
@@ -2596,6 +2623,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(slotEClass, SLOT__OVERRIDE_RESTRICTIONS);
 		createEReference(slotEClass, SLOT__NOMINATED_VESSEL);
 		createEAttribute(slotEClass, SLOT__LOCKED);
+		createEAttribute(slotEClass, SLOT__WINDOW_NOMINATION_DATE);
+		createEAttribute(slotEClass, SLOT__WINDOW_NOMINATION_IS_DONE);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_DURATION);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_MIN_QUANTITY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_MAX_QUANTITY);
@@ -2616,6 +2645,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(slotEClass, SLOT___GET_SLOT_CONTRACT_PARAMS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_COUNTERPARTY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_CN);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE);
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CV);
@@ -2951,6 +2981,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getSlot_OverrideRestrictions(), ecorePackage.getEBoolean(), "overrideRestrictions", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_NominatedVessel(), theFleetPackage.getVessel(), null, "nominatedVessel", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Locked(), ecorePackage.getEBoolean(), "locked", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_WindowNominationDate(), theDateTimePackage.getLocalDate(), "windowNominationDate", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_WindowNominationIsDone(), ecorePackage.getEBoolean(), "windowNominationIsDone", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrDelegateDuration(), ecorePackage.getEInt(), "getSlotOrDelegateDuration", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -2991,6 +3023,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEOperation(getSlot__GetSlotOrDelegateCounterparty(), ecorePackage.getEString(), "getSlotOrDelegateCounterparty", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrDelegateCN(), ecorePackage.getEString(), "getSlotOrDelegateCN", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetSlotOrDelegateWindowNominationDate(), theDateTimePackage.getLocalDate(), "getSlotOrDelegateWindowNominationDate", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

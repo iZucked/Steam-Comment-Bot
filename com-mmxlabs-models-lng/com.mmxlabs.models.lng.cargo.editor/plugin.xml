@@ -546,6 +546,10 @@
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.AssignableElementCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.AssignableElementCommandProvider">
     </ModelCommandProvider>
+    <!--<ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.ContractNominationCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.ContractNominationCommandProvider">
+    </ModelCommandProvider>-->
  </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated cargo -->

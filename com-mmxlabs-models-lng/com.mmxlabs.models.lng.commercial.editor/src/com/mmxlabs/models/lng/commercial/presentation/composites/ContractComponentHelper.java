@@ -87,6 +87,8 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_contractTypeEditor(detailComposite, topClass);
 		add_pricingEventEditor(detailComposite, topClass);
 		add_cancellationExpressionEditor(detailComposite, topClass);
+		add_windowNominationSizeEditor(detailComposite, topClass);
+		add_windowNominationSizeUnitsEditor(detailComposite, topClass);
 	}
 	
 	/**
@@ -134,6 +136,28 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cancellationExpressionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__CANCELLATION_EXPRESSION));
+	}
+
+	/**
+	 * Create the editor for the windowNominationSize feature on Contract
+	 *
+	 * @generated NOT
+	 */
+	protected void add_windowNominationSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if(LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE));
+		}
+	}
+
+	/**
+	 * Create the editor for the windowNominationSizeUnits feature on Contract
+	 *
+	 * @generated NOT
+	 */
+	protected void add_windowNominationSizeUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if(LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS));
+		}
 	}
 
 	/**

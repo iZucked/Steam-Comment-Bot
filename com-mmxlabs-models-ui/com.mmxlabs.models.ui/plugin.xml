@@ -13,6 +13,7 @@
    <extension-point id="com.mmxlabs.models.ui.displaycompositefactories" name="Display Composite Factories" schema="schema/com.mmxlabs.models.ui.displaycompositefactories.exsd"/>
    <extension-point id="com.mmxlabs.models.ui.jointmodeleditors" name="Joint Model Editor Extensions" schema="schema/com.mmxlabs.models.ui.jointmodeleditors.exsd"/>
    <extension-point id="com.mmxlabs.models.ui.modelfactories" name="Model Element Factories" schema="schema/com.mmxlabs.models.ui.modelfactories.exsd"/>
+   <extension-point id="dialogpostchangecommandprovider" name="dialogpostchangecommandprovider" schema="schema/dialogpostchangecommandprovider.exsd"/>
    <extension
          id="com.mmxlabs.models.ui.defs"
          name="Def. ed. factories"
@@ -119,4 +120,10 @@
             modelClass="com.mmxlabs.models.mmxcore.OtherNamesObject">
       </componentHelper>
    </extension>
+   <!--<extension
+         point="com.mmxlabs.models.ui.dialogpostchangecommandprovider">
+      <dialogpostchangecommandprovider
+            class="com.mmxlabs.models.lng.commercial.editor.NominationsDialogPostChangeCommandProvider">
+      </dialogpostchangecommandprovider>
+   </extension>-->
 </plugin>

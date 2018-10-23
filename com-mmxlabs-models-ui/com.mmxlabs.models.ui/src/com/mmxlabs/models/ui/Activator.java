@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -14,6 +17,10 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogPostChangeCommandProvider;
+import com.mmxlabs.models.ui.editors.dialogs.commandext.DialogPostChangeCommandProviderExtensionProxy;
+import com.mmxlabs.models.ui.editors.dialogs.commandext.DialogPostChangeCommandProviderModule;
+import com.mmxlabs.models.ui.editors.dialogs.commandext.IDialogPostChangeCommandProviderExtension;
 import com.mmxlabs.models.ui.extensions.ExtensionConfigurationModule;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IDisplayCompositeFactoryRegistry;
@@ -42,6 +49,12 @@ public class Activator extends AbstractUIPlugin {
 	IJointModelEditorContributionRegistry jointModelEditorContributionRegistry;
 	@Inject
 	IModelFactoryRegistry modelFactoryRegistry;
+
+	@Inject
+	private Iterable<IDialogPostChangeCommandProvider> commandProviderServices;
+
+	@Inject
+	private Iterable<IDialogPostChangeCommandProviderExtension> commandProvidersExtensions;
 
 	// The shared instance
 	private static Activator plugin;
@@ -75,7 +88,7 @@ public class Activator extends AbstractUIPlugin {
 		validationServiceTracker = new ServiceTracker<IValidationService, IValidationService>(context, IValidationService.class.getName(), null);
 		validationServiceTracker.open();
 
-		final Injector injector = Guice.createInjector(new ExtensionConfigurationModule(this));
+		final Injector injector = Guice.createInjector(new ExtensionConfigurationModule(this), new DialogPostChangeCommandProviderModule(context));
 		injector.injectMembers(this);
 	}
 
@@ -143,5 +156,18 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public IValidationService getValidationService() {
 		return validationServiceTracker.getService();
+	}
+
+	public List<IDialogPostChangeCommandProvider> getDialogPostChangeCommandProviders() {
+
+		final List<IDialogPostChangeCommandProvider> providers = new ArrayList<>();
+		for (final IDialogPostChangeCommandProvider p : commandProviderServices) {
+			providers.add(p);
+		}
+		for (final IDialogPostChangeCommandProviderExtension e : commandProvidersExtensions) {
+			providers.add(new DialogPostChangeCommandProviderExtensionProxy(e));
+		}
+
+		return providers;
 	}
 }

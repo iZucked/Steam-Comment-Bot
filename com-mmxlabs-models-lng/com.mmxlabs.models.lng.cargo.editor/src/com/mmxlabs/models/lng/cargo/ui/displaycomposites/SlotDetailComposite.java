@@ -22,7 +22,6 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.resource.impl.EFSURIHandlerImpl;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
@@ -39,6 +38,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
 
 import com.google.common.collect.Sets;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -67,6 +67,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private static final EStructuralFeature WindowSizeUnits = CargoFeatures.getSlot_WindowSizeUnits();
 	private static final EStructuralFeature WindowFlex = CargoFeatures.getSlot_WindowFlex();
 	private static final EStructuralFeature WindowFlexUnits = CargoFeatures.getSlot_WindowFlexUnits();
+	private static final EStructuralFeature WindowNomination = CargoFeatures.getSlot_WindowNominationDate();
+	private static final EStructuralFeature WindowNominationIsDone = CargoFeatures.getSlot_WindowNominationIsDone();
 	private static final EStructuralFeature Contract = CargoFeatures.getSlot_Contract();
 	private static final EStructuralFeature PriceExpression = CargoFeatures.getSlot_PriceExpression();
 	private static final EClass SlotContractParams = CommercialPackage.eINSTANCE.getSlotContractParams();
@@ -75,6 +77,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private final Map<EStructuralFeature, IInlineEditor> feature2Editor;
 	final ExpandableSet esPricing;
 	private final ExpandableSet esWindow;
+	private ExpandableSet esNomination;
 	private final ExpandableSet esTerms;
 	private final ExpandableSet esOther;
 	private ArrayList<EStructuralFeature[]> nameFeatures;
@@ -83,6 +86,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private ArrayList<EStructuralFeature[]> mainFeatures;
 	private ArrayList<EStructuralFeature[]> windowFeatures;
 	private HashSet<EStructuralFeature> windowTitleFeatures;
+	private ArrayList<EStructuralFeature[]> nominationFeatures;
+	private HashSet<EStructuralFeature> nominationTitleFeatures;
 	private ArrayList<EStructuralFeature[]> loadTermsFeatures;
 	private ArrayList<EStructuralFeature[]> dischargeTermsFeatures;
 	private ArrayList<EStructuralFeature[]> noteFeatures;
@@ -217,6 +222,17 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			}
 		};
 		esWindow.setToolTipText("Permitted arrival date range (inclusive start and end dates)");
+		
+		// FM - put separately to allow feature enablement
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			esNomination = new ExpandableSet("Nomination", this);
+			{
+				nominationFeatures = new ArrayList<EStructuralFeature[]>();
+				nominationFeatures.add(new EStructuralFeature[] {WindowNomination, WindowNominationIsDone});
+				nominationTitleFeatures = Sets.newHashSet(WindowNomination, WindowNominationIsDone);
+				allFeatures.addAll(getAllFeatures(nominationFeatures));
+			}
+		}
 
 		esTerms = new ExpandableSet("Terms", this);
 
@@ -270,6 +286,29 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 						editor.setLabel(null);
 					}
 					return gd;
+				}
+				if (LicenseFeatures.isPermitted("features:nominations")) {
+					if (feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_DATE || feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_IS_DONE) {
+						final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+						// 64 - magic constant from MultiDetailDialog
+						gd.widthHint = 100;
+	
+						// FIXME: Hack pending proper APi to manipulate labels
+						if (feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_DATE) {
+							final Label label = editor.getLabel();
+							if (label != null) {
+								label.setText("Window");
+							}
+							editor.setLabel(null);
+						} else {
+							final Label label = editor.getLabel();
+							if (label != null) {
+								label.setText("Done");
+							}
+							editor.setLabel(null);
+						}
+						return gd;
+					}
 				}
 				if (feature == CargoPackage.Literals.SLOT__WINDOW_FLEX || feature == CargoPackage.Literals.SLOT__WINDOW_FLEX_UNITS) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
@@ -329,6 +368,11 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				case WINDOW:
 					windowFeatures.add(new EStructuralFeature[]{f});
 					break;
+				case NOMINATION:
+					if (LicenseFeatures.isPermitted("features:nominations")) {
+						nominationFeatures.add(new EStructuralFeature[]{f});
+					}
+					break;
 				case OTHER:
 				default:
 					missedFeaturesList.add(f);
@@ -350,6 +394,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		final MMXObject eo = (MMXObject) object;
 		esPricing.init(eo);
 		esWindow.init(eo);
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			esNomination.init(eo);
+		}
 		esTerms.init(eo);
 		esTerms.init(eo);
 	}
@@ -408,7 +455,12 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		createSpacer();
 		makeExpandable(dialogContext, root, object, dbc, esWindow, windowFeatures, windowTitleFeatures, true);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(esWindow.ec, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot_Window");
-
+		
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			createSpacer();
+			makeExpandable(dialogContext, root, object, dbc, esNomination, nominationFeatures, nominationTitleFeatures, true);
+		}
+		
 		createSpacer();
 		makeExpandable(dialogContext, root, object, dbc, esTerms, isLoad ? loadTermsFeatures : dischargeTermsFeatures, null, true);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(esTerms.ec, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot_Terms");
@@ -493,7 +545,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	
 	private enum Section {
 		OTHER, MAIN,
-		PRICING, WINDOW, TERMS,
+		PRICING, WINDOW, TERMS, NOMINATION
 	}
 	
 	private Section getSectionFor(EStructuralFeature feature) {
@@ -507,6 +559,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				case "pricing": return Section.PRICING;
 				case "window": return Section.WINDOW;
 				case "terms": return Section.TERMS;
+				case "nominations": return Section.NOMINATION;
 				}
 			}
 		}
