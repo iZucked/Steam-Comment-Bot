@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.port;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import java.time.ZoneId;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,6 +22,7 @@ import java.time.ZoneId;
  *   <li>{@link com.mmxlabs.models.lng.port.Location#getCountry <em>Country</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Location#getLat <em>Lat</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Location#getLon <em>Lon</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Location#getOtherIdentifiers <em>Other Identifiers</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getLocation()
@@ -157,6 +159,22 @@ public interface Location extends NamedObject, OtherNamesObject {
 	 * @generated
 	 */
 	void setLon(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Other Identifiers</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.port.OtherIdentifiers}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Other Identifiers</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Other Identifiers</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getLocation_OtherIdentifiers()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<OtherIdentifiers> getOtherIdentifiers();
 
 	/**
 	 * <!-- begin-user-doc -->

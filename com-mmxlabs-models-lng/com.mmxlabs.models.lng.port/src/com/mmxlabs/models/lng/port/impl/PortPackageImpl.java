@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.port.ContingencyMatrix;
 import com.mmxlabs.models.lng.port.ContingencyMatrixEntry;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
+import com.mmxlabs.models.lng.port.OtherIdentifiers;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortCountryGroup;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -114,6 +115,13 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	private EClass contingencyMatrixEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass otherIdentifiersEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -452,6 +460,24 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getRouteLine_Provider() {
+		return (EAttribute)routeLineEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRouteLine_ErrorCode() {
+		return (EAttribute)routeLineEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPortModel() {
 		return portModelEClass;
 	}
@@ -605,6 +631,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getLocation_OtherIdentifiers() {
+		return (EReference)locationEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPortCountryGroup() {
 		return portCountryGroupEClass;
 	}
@@ -695,6 +730,33 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getOtherIdentifiers() {
+		return otherIdentifiersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getOtherIdentifiers_Identifier() {
+		return (EAttribute)otherIdentifiersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getOtherIdentifiers_Provider() {
+		return (EAttribute)otherIdentifiersEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getRouteOption() {
 		return routeOptionEEnum;
 	}
@@ -767,6 +829,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEReference(routeLineEClass, ROUTE_LINE__FROM);
 		createEReference(routeLineEClass, ROUTE_LINE__TO);
 		createEAttribute(routeLineEClass, ROUTE_LINE__DISTANCE);
+		createEAttribute(routeLineEClass, ROUTE_LINE__PROVIDER);
+		createEAttribute(routeLineEClass, ROUTE_LINE__ERROR_CODE);
 
 		portModelEClass = createEClass(PORT_MODEL);
 		createEReference(portModelEClass, PORT_MODEL__PORTS);
@@ -787,6 +851,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(locationEClass, LOCATION__COUNTRY);
 		createEAttribute(locationEClass, LOCATION__LAT);
 		createEAttribute(locationEClass, LOCATION__LON);
+		createEReference(locationEClass, LOCATION__OTHER_IDENTIFIERS);
 
 		portCountryGroupEClass = createEClass(PORT_COUNTRY_GROUP);
 
@@ -801,6 +866,10 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEReference(contingencyMatrixEntryEClass, CONTINGENCY_MATRIX_ENTRY__FROM_PORT);
 		createEReference(contingencyMatrixEntryEClass, CONTINGENCY_MATRIX_ENTRY__TO_PORT);
 		createEAttribute(contingencyMatrixEntryEClass, CONTINGENCY_MATRIX_ENTRY__DURATION);
+
+		otherIdentifiersEClass = createEClass(OTHER_IDENTIFIERS);
+		createEAttribute(otherIdentifiersEClass, OTHER_IDENTIFIERS__IDENTIFIER);
+		createEAttribute(otherIdentifiersEClass, OTHER_IDENTIFIERS__PROVIDER);
 
 		// Create enums
 		routeOptionEEnum = createEEnum(ROUTE_OPTION);
@@ -905,6 +974,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEReference(getRouteLine_From(), this.getPort(), null, "from", null, 1, 1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRouteLine_To(), this.getPort(), null, "to", null, 1, 1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRouteLine_Distance(), ecorePackage.getEDouble(), "distance", null, 1, 1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRouteLine_Provider(), ecorePackage.getEString(), "provider", null, 0, 1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRouteLine_ErrorCode(), ecorePackage.getEString(), "errorCode", null, 0, 1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portModelEClass, PortModel.class, "PortModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPortModel_Ports(), this.getPort(), null, "ports", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -925,6 +996,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getLocation_Country(), ecorePackage.getEString(), "country", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLocation_Lat(), ecorePackage.getEDouble(), "lat", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLocation_Lon(), ecorePackage.getEDouble(), "lon", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLocation_OtherIdentifiers(), this.getOtherIdentifiers(), null, "otherIdentifiers", null, 0, -1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(locationEClass, theDateTimePackage.getZoneId(), "getZoneId", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -943,6 +1015,10 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEReference(getContingencyMatrixEntry_FromPort(), this.getPort(), null, "fromPort", null, 0, 1, ContingencyMatrixEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContingencyMatrixEntry_ToPort(), this.getPort(), null, "toPort", null, 0, 1, ContingencyMatrixEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContingencyMatrixEntry_Duration(), ecorePackage.getEInt(), "duration", null, 0, 1, ContingencyMatrixEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(otherIdentifiersEClass, OtherIdentifiers.class, "OtherIdentifiers", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getOtherIdentifiers_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, OtherIdentifiers.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOtherIdentifiers_Provider(), ecorePackage.getEString(), "provider", null, 0, 1, OtherIdentifiers.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(routeOptionEEnum, RouteOption.class, "RouteOption");

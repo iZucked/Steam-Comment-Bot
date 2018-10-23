@@ -67,6 +67,8 @@ public class RouteLineComponentHelper extends BaseComponentHelper {
 		add_fromEditor(detailComposite, topClass);
 		add_toEditor(detailComposite, topClass);
 		add_distanceEditor(detailComposite, topClass);
+		add_providerEditor(detailComposite, topClass);
+		add_errorCodeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the from feature on RouteLine
@@ -91,5 +93,23 @@ public class RouteLineComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_distanceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE_LINE__DISTANCE));
+	}
+
+	/**
+	 * Create the editor for the provider feature on RouteLine
+	 *
+	 * @generated
+	 */
+	protected void add_providerEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE_LINE__PROVIDER));
+	}
+
+	/**
+	 * Create the editor for the errorCode feature on RouteLine
+	 *
+	 * @generated
+	 */
+	protected void add_errorCodeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE_LINE__ERROR_CODE));
 	}
 }

@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
 import com.mmxlabs.scenario.service.manifest.ModelArtifact;
@@ -93,9 +94,13 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 				if (notification.isTouch()) {
 					return;
 				}
-				
+
 				if (notification.getNotifier() instanceof Port) {
-					changedRef[0] = true;
+					if (!(notification.getFeature() == PortPackage.Literals.PORT__LOCATION //
+							|| notification.getFeature() == MMXCorePackage.Literals.NAMED_OBJECT__NAME //
+					)) {
+						changedRef[0] = true;
+					}
 				} else if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__PORTS) {
 					changedRef[0] = true;
 				}

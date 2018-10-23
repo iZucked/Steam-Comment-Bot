@@ -49,7 +49,7 @@ public class ModelDistanceProvider extends EContentAdapter {
 			final Map<Pair<String, String>, Double> distanceMatrixCacheObj = new HashMap<>();
 
 			for (final RouteLine rl : route.getLines()) {
-				if (rl.getDistance() != Double.MAX_VALUE && rl.getDistance() >= 0.0) {
+				if (rl.getDistance() != Double.MAX_VALUE && rl.getDistance() != Integer.MAX_VALUE && rl.getDistance() >= 0.0) {
 
 					String fromId = getId(rl.getFrom());
 					String toId = getId(rl.getTo());

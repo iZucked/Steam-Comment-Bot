@@ -24,6 +24,8 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getFrom <em>From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getTo <em>To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getDistance <em>Distance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getProvider <em>Provider</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getErrorCode <em>Error Code</em>}</li>
  * </ul>
  *
  * @generated
@@ -68,6 +70,46 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * @ordered
 	 */
 	protected double distance = DISTANCE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getProvider() <em>Provider</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getProvider()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String PROVIDER_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getProvider() <em>Provider</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getProvider()
+	 * @generated
+	 * @ordered
+	 */
+	protected String provider = PROVIDER_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getErrorCode() <em>Error Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getErrorCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String ERROR_CODE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getErrorCode() <em>Error Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getErrorCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected String errorCode = ERROR_CODE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -190,6 +232,48 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getProvider() {
+		return provider;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setProvider(String newProvider) {
+		String oldProvider = provider;
+		provider = newProvider;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE_LINE__PROVIDER, oldProvider, provider));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getErrorCode() {
+		return errorCode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setErrorCode(String newErrorCode) {
+		String oldErrorCode = errorCode;
+		errorCode = newErrorCode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE_LINE__ERROR_CODE, oldErrorCode, errorCode));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -201,6 +285,10 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 				return basicGetTo();
 			case PortPackage.ROUTE_LINE__DISTANCE:
 				return getDistance();
+			case PortPackage.ROUTE_LINE__PROVIDER:
+				return getProvider();
+			case PortPackage.ROUTE_LINE__ERROR_CODE:
+				return getErrorCode();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -223,6 +311,12 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 			case PortPackage.ROUTE_LINE__DISTANCE:
 				setDistance((Double)newValue);
 				return;
+			case PortPackage.ROUTE_LINE__PROVIDER:
+				setProvider((String)newValue);
+				return;
+			case PortPackage.ROUTE_LINE__ERROR_CODE:
+				setErrorCode((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -244,6 +338,12 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 			case PortPackage.ROUTE_LINE__DISTANCE:
 				setDistance(DISTANCE_EDEFAULT);
 				return;
+			case PortPackage.ROUTE_LINE__PROVIDER:
+				setProvider(PROVIDER_EDEFAULT);
+				return;
+			case PortPackage.ROUTE_LINE__ERROR_CODE:
+				setErrorCode(ERROR_CODE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -262,6 +362,10 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 				return to != null;
 			case PortPackage.ROUTE_LINE__DISTANCE:
 				return distance != DISTANCE_EDEFAULT;
+			case PortPackage.ROUTE_LINE__PROVIDER:
+				return PROVIDER_EDEFAULT == null ? provider != null : !PROVIDER_EDEFAULT.equals(provider);
+			case PortPackage.ROUTE_LINE__ERROR_CODE:
+				return ERROR_CODE_EDEFAULT == null ? errorCode != null : !ERROR_CODE_EDEFAULT.equals(errorCode);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -278,6 +382,10 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (distance: ");
 		result.append(distance);
+		result.append(", provider: ");
+		result.append(provider);
+		result.append(", errorCode: ");
+		result.append(errorCode);
 		result.append(')');
 		return result.toString();
 	}

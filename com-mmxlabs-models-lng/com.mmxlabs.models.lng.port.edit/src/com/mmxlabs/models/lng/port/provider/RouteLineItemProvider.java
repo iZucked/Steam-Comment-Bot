@@ -51,6 +51,8 @@ public class RouteLineItemProvider
 			addFromPropertyDescriptor(object);
 			addToPropertyDescriptor(object);
 			addDistancePropertyDescriptor(object);
+			addProviderPropertyDescriptor(object);
+			addErrorCodePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -122,6 +124,50 @@ public class RouteLineItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Provider feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addProviderPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_RouteLine_provider_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RouteLine_provider_feature", "_UI_RouteLine_type"),
+				 PortPackage.Literals.ROUTE_LINE__PROVIDER,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Error Code feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addErrorCodePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_RouteLine_errorCode_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RouteLine_errorCode_feature", "_UI_RouteLine_type"),
+				 PortPackage.Literals.ROUTE_LINE__ERROR_CODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns RouteLine.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -157,6 +203,8 @@ public class RouteLineItemProvider
 
 		switch (notification.getFeatureID(RouteLine.class)) {
 			case PortPackage.ROUTE_LINE__DISTANCE:
+			case PortPackage.ROUTE_LINE__PROVIDER:
+			case PortPackage.ROUTE_LINE__ERROR_CODE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

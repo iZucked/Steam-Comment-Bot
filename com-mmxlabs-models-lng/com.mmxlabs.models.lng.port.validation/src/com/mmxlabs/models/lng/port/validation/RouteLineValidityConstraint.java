@@ -46,7 +46,7 @@ public class RouteLineValidityConstraint extends AbstractModelConstraint {
 	 */
 	private IStatus validateDistance(final IValidationContext ctx, final RouteLine routeLine) {
 		if (routeLine.getFrom() != null && routeLine.getTo() != null) {
-			if (routeLine.getDistance() < 0 || routeLine.getDistance() > MAX_DISTANCE) {
+			if (routeLine.getDistance() > MAX_DISTANCE || (routeLine.getDistance() < 0 && routeLine.getErrorCode() == null)) {
 				return ctx.createFailureStatus(routeLine.getFrom().getName(), routeLine.getTo().getName(), routeLine.getDistance());
 			}
 		}

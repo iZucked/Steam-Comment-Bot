@@ -87,6 +87,7 @@ public class LocationComponentHelper extends BaseComponentHelper {
 		add_countryEditor(detailComposite, topClass);
 		add_latEditor(detailComposite, topClass);
 		add_lonEditor(detailComposite, topClass);
+		add_otherIdentifiersEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the mmxId feature on Location
@@ -177,5 +178,14 @@ public class LocationComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_lonEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.LOCATION__LON));
+	}
+
+	/**
+	 * Create the editor for the otherIdentifiers feature on Location
+	 *
+	 * @generated NOT
+	 */
+	protected void add_otherIdentifiersEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.LOCATION__OTHER_IDENTIFIERS));
 	}
 }

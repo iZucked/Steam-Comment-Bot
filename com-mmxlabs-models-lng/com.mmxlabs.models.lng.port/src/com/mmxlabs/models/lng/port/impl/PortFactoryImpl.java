@@ -76,6 +76,7 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 			case PortPackage.ENTRY_POINT: return createEntryPoint();
 			case PortPackage.CONTINGENCY_MATRIX: return createContingencyMatrix();
 			case PortPackage.CONTINGENCY_MATRIX_ENTRY: return createContingencyMatrixEntry();
+			case PortPackage.OTHER_IDENTIFIERS: return createOtherIdentifiers();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -223,6 +224,16 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	public ContingencyMatrixEntry createContingencyMatrixEntry() {
 		ContingencyMatrixEntryImpl contingencyMatrixEntry = new ContingencyMatrixEntryImpl();
 		return contingencyMatrixEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OtherIdentifiers createOtherIdentifiers() {
+		OtherIdentifiersImpl otherIdentifiers = new OtherIdentifiersImpl();
+		return otherIdentifiers;
 	}
 
 	/**
