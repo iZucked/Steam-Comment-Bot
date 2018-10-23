@@ -21,6 +21,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceRegistration;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -29,6 +31,8 @@ import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.lingo.its.verifier.SolutionData;
+import com.mmxlabs.models.lng.adp.ext.ISlotTemplateFactory;
+import com.mmxlabs.models.lng.adp.ext.impl.AbstractSlotTemplateFactory;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -65,6 +69,7 @@ public abstract class AbstractADPAndLightWeightTests extends AbstractMicroTestCa
 			"optimisation-similarity",
 			"optimisation-hillclimb");
 	private static List<String> addedFeatures = new LinkedList<>();
+	private static ServiceRegistration<?> registerService;
 
 	@BeforeClass
 	public static void hookIn() {
@@ -74,6 +79,10 @@ public abstract class AbstractADPAndLightWeightTests extends AbstractMicroTestCa
 				addedFeatures.add(feature);
 			}
 		}
+		registerService = FrameworkUtil.getBundle(AbstractADPAndLightWeightTests.class).getBundleContext().registerService(
+	            ISlotTemplateFactory.class.getCanonicalName(),
+	            new AbstractSlotTemplateFactory(), null
+	            );
 	}
 
 	@AfterClass
@@ -82,6 +91,7 @@ public abstract class AbstractADPAndLightWeightTests extends AbstractMicroTestCa
 			LicenseFeatures.removeFeatureEnablements(feature);
 		}
 		addedFeatures.clear();
+		registerService.unregister();
 	}
 
 	// Which scenario data to import
@@ -90,26 +100,6 @@ public abstract class AbstractADPAndLightWeightTests extends AbstractMicroTestCa
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData("/trainingcases/Shipping_I/");
 
 		return scenarioDataProvider;
-	}
-
-	// Override default behaviour to also import portfolio data e.g. cargoes, vessel availabilities, events
-	@NonNull
-	public static IScenarioDataProvider importReferenceData(final String url) throws MalformedURLException {
-
-		final @NonNull String urlRoot = AbstractMicroTestCase.class.getResource(url).toString();
-		final CSVImporter importer = new CSVImporter();
-		importer.importPortData(urlRoot);
-		importer.importCostData(urlRoot);
-		importer.importEntityData(urlRoot);
-		importer.importFleetData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importPromptData(urlRoot);
-		importer.importMarketData(urlRoot);
-
-		// Import cargoes from CSV
-		importer.importPorfolioData(urlRoot);
-
-		return importer.doImport();
 	}
 
 	@Override

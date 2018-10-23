@@ -7,12 +7,14 @@ import java.time.YearMonth;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.models.lng.adp.IntervalType;
 import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import com.mmxlabs.models.lng.adp.ext.impl.AbstractSlotTemplateFactory;
 import com.mmxlabs.models.lng.adp.util.ADPModelBuilder;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -25,6 +27,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.optimiser.core.IMultiStateResult;
 
 public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	
@@ -69,6 +72,47 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		Assert.assertNotNull(discharge.getCargo());
 	}
 
+	@Test
+	public void testBasic12CargoADPOptimisation() {
+
+		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
+
+		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
+
+		setSimple12CargoCase(adpModelBuilder);
+
+		// Generate all the ADP slots
+		ADPModelUtil.generateModelSlots(scenarioModelBuilder.getLNGScenarioModel(), adpModelBuilder.getADPModel());
+
+		final CargoModel cargoModel = cargoModelBuilder.getCargoModel();
+
+		// Check initial conditions are correct
+		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+
+		final OptimisationPlan optimisationPlan = createOptimisationPlan();
+
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withOptimisationPlan(optimisationPlan) //
+				.withOptimiseHint() //
+				.withThreadCount(1) //
+				.buildDefaultRunner();
+
+		try {
+			runnerBuilder.evaluateInitialState();
+			runnerBuilder.run(false, runner -> {
+				// Run, get result and store to schedule model for inspection at EMF level if needed
+				final IMultiStateResult result = runner.runAndApplyBest();
+				// Simple verification, have these slots been used?
+				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
+				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 12, result, msg -> Assert.fail(msg));
+			});
+		} finally {
+			runnerBuilder.dispose();
+		}
+	}
+
 	private void setSimple12CargoCase(final ADPModelBuilder adpModelBuilder) {
 		adpModelBuilder.withPurchaseContractProfile(commercialModelFinder.findPurchaseContract("Purchase A")) //
 				.withVolume(3_000_000 * 12, LNGVolumeUnit.MMBTU) // Not really used...
@@ -95,16 +139,16 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	}
 	
 	private CharterInMarket setDefaultVesselsAndContracts() {
-		final Vessel vesselEbisu = fleetModelFinder.findVessel("LNG Ebisu");
-		final Vessel vesselRogers = fleetModelFinder.findVessel("Woodside Rogers");
-		final Port pluto = portFinder.findPort("Pluto");
-		final Port himeji = portFinder.findPort("Himeji");
-		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselEbisu, "50000", 0);
+		final Vessel vesselSmall = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP);
+		final Vessel vesselMedium = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
+		final Port darwin = portFinder.findPort(TrainingCaseConstants.PORT_DARWIN);
+		final Port himeji = portFinder.findPort(TrainingCaseConstants.PORT_HIMEJI);
+		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselSmall, "50000", 0);
 		defaultCharterInMarket.setNominal(true);
 		defaultCharterInMarket.setEnabled(true);
 
 		@SuppressWarnings("unused")
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vesselRogers, entity) //
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vesselMedium, entity) //
 				.withStartWindow(LocalDateTime.of(2018, 10, 1, 0, 0)) //
 				.withStartHeel(1_000, 3_000, 22.6, "5") //
 				.withEndWindow(LocalDateTime.of(2019, 10, 1, 0, 0)) //
@@ -112,7 +156,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withCharterRate("50000") //
 				.build();
 		final PurchaseContract purchaseContract = commercialModelBuilder.makeExpressionPurchaseContract("Purchase A", entity, "5");
-		purchaseContract.setPreferredPort(pluto);
+		purchaseContract.setPreferredPort(darwin);
 		final SalesContract salesContract = commercialModelBuilder.makeExpressionSalesContract("Sales A", entity, "8");
 		salesContract.setPreferredPort(himeji);
 		return defaultCharterInMarket;
