@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.transformer.ui;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -78,6 +79,8 @@ import com.mmxlabs.models.lng.scenario.LNGScenarioModelValidationTransformer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataSection;
@@ -520,7 +523,7 @@ public final class OptimisationHelper {
 			final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 			choiceData.addChoice("Off", Boolean.FALSE);
 			choiceData.addChoice("On", Boolean.TRUE);
-
+			
 			choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-charter-out-generation") && isAllowedGCO(scenario);
 			if (choiceData.enabled == false) {
 				// if not enabled make sure to set setting to false
@@ -532,6 +535,37 @@ public final class OptimisationHelper {
 					SWTBOT_CHARTEROUTGENERATION_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
 			optionAdded = true;
 			enabledOptionAdded = choiceData.enabled;
+			
+			if (scenario != null) {
+				final SpotMarketsModel model = ScenarioModelUtil.getSpotMarketsModel(scenario);
+				if (model!= null) {
+					final CharterOutMarketParameters params = model.getCharterOutMarketParameters();
+					if (params != null) {
+						String ltext = "";
+						final DateTimeFormatter format = DateTimeFormatter.ofPattern("d/M/yyyy");
+						final LocalDate start = params.getCharterOutStartDate();
+						final LocalDate end = params.getCharterOutEndDate();
+						boolean hasStart = false;
+						if (start != null) {
+							ltext += start.format(format);
+							hasStart = true;
+						}
+						if (end != null) {
+							if (hasStart) ltext += "-";
+							ltext += end.format(format);
+						}
+						if (ltext.length() > 0) {
+							final String ftext = "Charter out dates (" + ltext + ")";
+							choiceData.changeHandlers.add((label,value) -> {
+								label.setText(ftext);
+								label.setVisible((Boolean)value);
+							});
+						}
+					}
+				}
+			}
+			
+			
 		}
 		if (!forEvaluation) {
 			{
