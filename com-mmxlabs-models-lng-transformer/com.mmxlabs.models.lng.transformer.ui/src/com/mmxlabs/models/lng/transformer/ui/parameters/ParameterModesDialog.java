@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -78,7 +79,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	private static final String SWTBOT_KEY = "org.eclipse.swtbot.widget.key";
 
 	public enum DataType {
-		Boolean, PositiveInt, Date, MonthYear, Choice
+		Boolean, PositiveInt, Date, MonthYear, Choice, Label
 	}
 
 	public enum DataSection {
@@ -88,6 +89,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	public static class ChoiceData {
 
 		private final List<Pair<String, Object>> choices = new LinkedList<>();
+		public final List<BiConsumer<Label,Object>> changeHandlers = new LinkedList<>();
 		public boolean enabled = true;
 		public Function<UserSettings, Boolean> enabledHook;
 		public String disabledMessage;
@@ -365,6 +367,10 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			break;
 		case Choice:
 			option.control = createChoiceEditor(parent, option);
+			break;
+		case Label:
+			option.control = createLabel(parent, option);
+			break;
 		default:
 			break;
 		}
@@ -372,6 +378,11 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		if (option.choiceData != null && !option.choiceData.enabled && option.choiceData.disabledMessage != null) {
 			toolkit.createText(parent, option.choiceData.disabledMessage);
 		}
+	}
+
+	private Control createLabel(Composite parent, Option option) {
+		final Label label = toolkit.createLabel(parent, option.label);
+		return label;
 	}
 
 	/**
@@ -670,10 +681,15 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 		// Create the multi-validator
 		final MyValidator validator = new MyValidator(option, v);
+		
+		Label mlbl = choiceData.changeHandlers.isEmpty() ? null : toolkit.createLabel(parent, "");
 
 		for (final Pair<String, Object> p : choiceData.choices) {
 			final Button btn = toolkit.createButton(area, p.getFirst(), SWT.RADIO);
 			if (p.getSecond().equals(target.eGet(lastFeature))) {
+				for (BiConsumer<Label,Object> c : choiceData.changeHandlers) {
+					c.accept(mlbl,p.getSecond());
+				}
 				btn.setSelection(true);
 			}
 			btn.setData(SWTBOT_KEY, option.swtBotId + "." + p.getFirst());
@@ -683,6 +699,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
 					if (btn.getSelection()) {
+						for (BiConsumer<Label,Object> c : choiceData.changeHandlers) {
+							c.accept(mlbl,p.getSecond());
+						}
 						option.editingDomain.getCommandStack().execute(SetCommand.create(option.editingDomain, target, lastFeature, p.getSecond()));
 					}
 				}

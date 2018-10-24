@@ -69,7 +69,24 @@
                      class="CharterInMarket">
                </target>
             </constraint>       
-    
+            <constraint
+                  class="com.mmxlabs.models.lng.spotmarkets.validation.CharterOutMarketParametersConstraint"
+                  id="com.mmxlabs.models.lng.spotmarkets.validation.CharterOutMarketParametersConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Charter Out Market Period availability Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Charter out market needs sensible period availability (or none at all).
+               </description>
+               <target
+                     class="CharterOutMarketParameters">
+               </target>
+            </constraint>
             <constraint
                   class="com.mmxlabs.models.lng.spotmarkets.validation.CharterCostModelConstraint"
                   id="com.mmxlabs.models.lng.spotmarkets.validation.CharterCostModelConstraint"
