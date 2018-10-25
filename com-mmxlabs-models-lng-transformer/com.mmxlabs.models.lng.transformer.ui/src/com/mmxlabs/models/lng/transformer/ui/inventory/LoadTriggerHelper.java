@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Inventory;
@@ -36,34 +37,48 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
 
 public class LoadTriggerHelper {
 
-	public void doLoadTrigger(LNGScenarioModel model, int globalLoadTrigger, Integer cargoVolume, LocalDate start) {
+	public void doMatchAndMoveLoadTrigger(LNGScenarioModel model, int globalLoadTrigger, Integer cargoVolume, LocalDate start) {
 		EList<Inventory> inventoryModels = model.getCargoModel().getInventoryModels();
 		if (inventoryModels.size() != 1) {
 			throw new RuntimeException("Only 1 inventory model is supported at present.");
 		}
 		for (Inventory inventory : inventoryModels) {
-			EList<InventoryCapacityRow> capacities = inventory.getCapacities();
-			Port port = inventory.getPort();
-			
-			TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap = 
-					capacities.stream()
-					.collect(Collectors.toMap((c) -> c.getDate(),
-								c -> c,
-								(oldValue, newValue) -> newValue,
-								TreeMap::new));
-			
-			TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = new TreeMap<>();
-			
-			// add all feeds to map
-			addNetVolumes(inventory.getFeeds(), capcityTreeMap, insAndOuts, Function.identity());
-			addNetVolumes(inventory.getOfftakes(), capcityTreeMap, insAndOuts, a -> -a);
+			TreeMap<LocalDate, InventoryDailyEvent> inventoryInsAndOuts = getInventoryInsAndOuts(inventory);
 			// modify to take into account start date
-			List<SlotAllocation> loadSlotsToConsider = getSortedFilteredLoadSlots(model, start, inventory, insAndOuts);
-			processWithLoadsAndStartDate(loadSlotsToConsider, insAndOuts, start);
+			List<SlotAllocation> loadSlotsToConsider = getSortedFilteredLoadSlots(model, start, inventory, inventoryInsAndOuts);
+			processWithLoadsAndStartDate(loadSlotsToConsider, inventoryInsAndOuts, start);
 			// create new Loads
-			//standardLoadTrigger(model, port, insAndOuts, cargoVolume, start);
-			moveAndMatchSlotsLoadTrigger(model, port, insAndOuts, globalLoadTrigger, cargoVolume, start);
+			matchAndMoveSlotsLoadTrigger(model, inventory.getPort(), inventoryInsAndOuts, globalLoadTrigger, cargoVolume, start);
 		}
+	}
+	
+	public List<Pair<LocalDate, LoadSlot>> getLoadDatesForExistingSlotsFromLoadTrigger(LNGScenarioModel model, Inventory inventory, int globalLoadTrigger, Integer cargoVolume, LocalDate start) {
+		TreeMap<LocalDate, InventoryDailyEvent> inventoryInsAndOuts = getInventoryInsAndOuts(inventory);
+		// modify to take into account start date
+		List<SlotAllocation> loadSlotsToConsider = getSortedFilteredLoadSlots(model, start, inventory, inventoryInsAndOuts);
+		processWithLoadsAndStartDate(loadSlotsToConsider, inventoryInsAndOuts, start);
+		// create new Loads
+		return getSlotsEarliestDate(model, inventory.getPort(), inventoryInsAndOuts, globalLoadTrigger, cargoVolume, start);
+	}
+
+	
+	private TreeMap<LocalDate, InventoryDailyEvent> getInventoryInsAndOuts(Inventory inventory) {
+		EList<InventoryCapacityRow> capacities = inventory.getCapacities();
+		Port port = inventory.getPort();
+		
+		TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap = 
+				capacities.stream()
+				.collect(Collectors.toMap((c) -> c.getDate(),
+							c -> c,
+							(oldValue, newValue) -> newValue,
+							TreeMap::new));
+		
+		TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = new TreeMap<>();
+		
+		// add all feeds to map
+		addNetVolumes(inventory.getFeeds(), capcityTreeMap, insAndOuts, Function.identity());
+		addNetVolumes(inventory.getOfftakes(), capcityTreeMap, insAndOuts, a -> -a);
+		return insAndOuts;
 	}
 
 
@@ -151,22 +166,10 @@ public class LoadTriggerHelper {
 	 * @param cargoVolume
 	 * @param start
 	 */
-	private void moveAndMatchSlotsLoadTrigger(LNGScenarioModel model, Port port, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, int globalLoadTrigger, Integer cargoVolume, LocalDate start) {
-		List<LoadSlot> sortedSlots = model.getCargoModel().getLoadSlots().stream() //
-				.filter(l->l.getPort() == port && (l.getWindowStart().isAfter(start) || l.getWindowStart().isEqual(start))) //
-				.sorted((a,b) -> a.getWindowStart().compareTo(b.getWindowStart())) //
-				.collect(Collectors.toList());
+	private void matchAndMoveSlotsLoadTrigger(LNGScenarioModel model, Port port, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, int globalLoadTrigger, Integer cargoVolume, LocalDate start) {
+		List<LoadSlot> sortedSlots = getSortedSlots(model, port, start);
 		
-		// Create all the load date
-		List<LocalDate> loadDates = new LinkedList<>();
-		int runningVolume = 0;
-		for (Entry<LocalDate, InventoryDailyEvent> entry : insAndOuts.entrySet()) {
-			runningVolume += entry.getValue().netVolumeIn;
-			if (runningVolume > globalLoadTrigger) {
-				loadDates.add(entry.getKey());
-				runningVolume -= cargoVolume;
-			}
-		}
+		List<LocalDate> loadDates = getLoadDates(insAndOuts, globalLoadTrigger, cargoVolume);
 		
 		// Assign the new load date to the current load slot
 		int interSize = Math.min(sortedSlots.size(), loadDates.size());
@@ -184,6 +187,40 @@ public class LoadTriggerHelper {
 		else {
 			clearLoadSlots(sortedSlots.subList(loadDates.size(), sortedSlots.size()), model.getCargoModel(), model);
 		}
+	}
+
+	private List<LoadSlot> getSortedSlots(LNGScenarioModel model, Port port, LocalDate start) {
+		List<LoadSlot> sortedSlots = model.getCargoModel().getLoadSlots().stream() //
+				.filter(l->l.getPort() == port && (l.getWindowStart().isAfter(start) || l.getWindowStart().isEqual(start))) //
+				.sorted((a,b) -> a.getWindowStart().compareTo(b.getWindowStart())) //
+				.collect(Collectors.toList());
+		return sortedSlots;
+	}
+	
+	private List<Pair<LocalDate, LoadSlot>> getSlotsEarliestDate(LNGScenarioModel model, Port port, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, int globalLoadTrigger, Integer cargoVolume, LocalDate start) {
+		List<Pair<LocalDate, LoadSlot>> slotsWithDates = new LinkedList<>();
+		List<LoadSlot> sortedSlots = getSortedSlots(model, port, start);
+		List<LocalDate> loadDates = getLoadDates(insAndOuts, globalLoadTrigger, cargoVolume);
+		for (int i = 0; i < Math.min(sortedSlots.size(), loadDates.size()); i++) {
+			slotsWithDates.add(
+					new Pair<LocalDate, LoadSlot>(loadDates.get(i), sortedSlots.get(i))
+					);
+		}
+		return slotsWithDates;
+	}
+
+	private List<LocalDate> getLoadDates(TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, int globalLoadTrigger, Integer cargoVolume) {
+		// Create all the load date
+		List<LocalDate> loadDates = new LinkedList<>();
+		int runningVolume = 0;
+		for (Entry<LocalDate, InventoryDailyEvent> entry : insAndOuts.entrySet()) {
+			runningVolume += entry.getValue().netVolumeIn;
+			if (runningVolume > globalLoadTrigger) {
+				loadDates.add(entry.getKey());
+				runningVolume -= cargoVolume;
+			}
+		}
+		return loadDates;
 	}
 	
 	private void addNetVolumes(List<InventoryEventRow> events, TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, Function<Integer, Integer> volumeFunction) {
