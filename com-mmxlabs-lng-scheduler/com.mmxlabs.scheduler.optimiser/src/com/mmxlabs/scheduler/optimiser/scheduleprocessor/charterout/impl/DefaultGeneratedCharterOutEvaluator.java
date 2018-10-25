@@ -86,11 +86,12 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	private IDistanceProvider distanceProvider;
 
 	@Inject
-	private IVoyagePlanOptimiser vpo;
+	private Provider<IVoyagePlanOptimiser> vpoProvider;
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
 
+	// Note: Not threadsafe!!!!
 	private final GeneratedCharterOutOptionCache generatedCharterOutOptionCache = new GeneratedCharterOutOptionCache();
 
 	private static final double canalChoiceThreshold = 0.1; // percentage improvement required to choose a canal route
@@ -552,7 +553,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			vpoChoices.add(new ReliqVoyagePlanChoice(bigSequence.getToCharter(), bigSequence.getFromCharter()));
 		}
 		// Calculate our new plan
-		final VoyagePlan newVoyagePlan = vpo.optimise(null, vessel, startHeelRangeInM3, baseFuelPricePerMT, originalVoyagePlan.getCharterInRatePerDay(), bigSequence.getPortTimesRecord(),
+		final VoyagePlan newVoyagePlan = vpoProvider.get().optimise(null, vessel, startHeelRangeInM3, baseFuelPricePerMT, originalVoyagePlan.getCharterInRatePerDay(), bigSequence.getPortTimesRecord(),
 				bigSequence.getSequence(), vpoChoices, startingTime);
 
 		return newVoyagePlan;
