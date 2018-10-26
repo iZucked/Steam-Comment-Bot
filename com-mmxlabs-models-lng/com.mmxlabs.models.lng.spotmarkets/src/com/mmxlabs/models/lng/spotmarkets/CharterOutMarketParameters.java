@@ -37,9 +37,11 @@ public interface CharterOutMarketParameters extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Charter Out Start Date</em>' attribute.
+	 * @see #isSetCharterOutStartDate()
+	 * @see #unsetCharterOutStartDate()
 	 * @see #setCharterOutStartDate(LocalDate)
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterOutMarketParameters_CharterOutStartDate()
-	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
 	LocalDate getCharterOutStartDate();
@@ -49,10 +51,35 @@ public interface CharterOutMarketParameters extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Charter Out Start Date</em>' attribute.
+	 * @see #isSetCharterOutStartDate()
+	 * @see #unsetCharterOutStartDate()
 	 * @see #getCharterOutStartDate()
 	 * @generated
 	 */
 	void setCharterOutStartDate(LocalDate value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters#getCharterOutStartDate <em>Charter Out Start Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetCharterOutStartDate()
+	 * @see #getCharterOutStartDate()
+	 * @see #setCharterOutStartDate(LocalDate)
+	 * @generated
+	 */
+	void unsetCharterOutStartDate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters#getCharterOutStartDate <em>Charter Out Start Date</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Charter Out Start Date</em>' attribute is set.
+	 * @see #unsetCharterOutStartDate()
+	 * @see #getCharterOutStartDate()
+	 * @see #setCharterOutStartDate(LocalDate)
+	 * @generated
+	 */
+	boolean isSetCharterOutStartDate();
 
 	/**
 	 * Returns the value of the '<em><b>Charter Out End Date</b></em>' attribute.
@@ -63,9 +90,11 @@ public interface CharterOutMarketParameters extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Charter Out End Date</em>' attribute.
+	 * @see #isSetCharterOutEndDate()
+	 * @see #unsetCharterOutEndDate()
 	 * @see #setCharterOutEndDate(LocalDate)
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterOutMarketParameters_CharterOutEndDate()
-	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
 	LocalDate getCharterOutEndDate();
@@ -75,9 +104,34 @@ public interface CharterOutMarketParameters extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Charter Out End Date</em>' attribute.
+	 * @see #isSetCharterOutEndDate()
+	 * @see #unsetCharterOutEndDate()
 	 * @see #getCharterOutEndDate()
 	 * @generated
 	 */
 	void setCharterOutEndDate(LocalDate value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters#getCharterOutEndDate <em>Charter Out End Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetCharterOutEndDate()
+	 * @see #getCharterOutEndDate()
+	 * @see #setCharterOutEndDate(LocalDate)
+	 * @generated
+	 */
+	void unsetCharterOutEndDate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters#getCharterOutEndDate <em>Charter Out End Date</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Charter Out End Date</em>' attribute is set.
+	 * @see #unsetCharterOutEndDate()
+	 * @see #getCharterOutEndDate()
+	 * @see #setCharterOutEndDate(LocalDate)
+	 * @generated
+	 */
+	boolean isSetCharterOutEndDate();
 
 } // CharterOutMarketParameters
