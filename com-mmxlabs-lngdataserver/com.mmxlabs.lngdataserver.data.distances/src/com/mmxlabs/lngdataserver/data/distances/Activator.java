@@ -13,7 +13,7 @@ public class Activator implements BundleActivator {
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> new DataImporter().importData());
+//		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> new DataImporter().importData());
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Dataserver: Port API
+Bundle-Vendor: Minimax Labs Ltd.
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.integration.ports;singleton:=true
 Bundle-Version: 4.5.22.qualifier
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
@@ -23,6 +24,8 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.scenario.model,
  com.mmxlabs.lngdataserver.commons,
  org.eclipse.ui;bundle-version="3.109.0",
+ com.fasterxml.jackson.datatype.jackson-datatype-jsr310,
+ com.fasterxml.jackson.core.jackson-annotations,
  com.mmxlabs.lngdataservice.ports.client;bundle-version="1.0.0";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.slf4j
@@ -31,5 +34,4 @@ Bundle-Activator: com.mmxlabs.lngdataserver.integration.ports.internal.Activator
 Bundle-ClassPath: .
 Export-Package: com.mmxlabs.lngdataserver.integration.ports,
  com.mmxlabs.lngdataserver.integration.ports.internal
-Bundle-Vendor: Minimax Labs Ltd.
 Automatic-Module-Name: com.mmxlabs.lngdataserver.integration.ports

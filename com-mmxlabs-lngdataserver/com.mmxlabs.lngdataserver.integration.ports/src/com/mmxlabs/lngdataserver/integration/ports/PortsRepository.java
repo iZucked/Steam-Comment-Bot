@@ -5,7 +5,6 @@
 package com.mmxlabs.lngdataserver.integration.ports;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -41,7 +40,6 @@ public class PortsRepository extends AbstractDataRepository {
 	private final PortApi localApi;
 	private final PortApi upstreamApi;
 
-
 	private PortsRepository() {
 		localApi = new PortApi(new ApiClient());
 		upstreamApi = new PortApi(new ApiClient());
@@ -57,10 +55,7 @@ public class PortsRepository extends AbstractDataRepository {
 	}
 
 	public boolean isReady() {
-		if (backendUrl != null) {
-			return true;
-		} else if (BackEndUrlProvider.INSTANCE.isAvailable()) {
-			backendUrl = BackEndUrlProvider.INSTANCE.getUrl();
+		if (BackEndUrlProvider.INSTANCE.isAvailable()) {
 			localApi.getApiClient().setBasePath(BackEndUrlProvider.INSTANCE.getUrl());
 			return true;
 		} else {
@@ -99,19 +94,6 @@ public class PortsRepository extends AbstractDataRepository {
 			throw new RuntimeException("Error fetching ports versions", e);
 		}
 	}
-
-//	@Override
-//	public DataVersion getUpstreamVersion(String identifier) {
-//		ensureReady();
-//		try {
-//			Version v = upstreamApi.fetchVersionUsingGET(identifier);
-//			final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
-//			return new DataVersion(v.getIdentifier(), createdAt, true);
-//		} catch (final Exception e) {
-//			LOG.error("Error fetching specific ports version" + e.getMessage());
-//			throw new RuntimeException("Error fetching specific ports version", e);
-//		}
-//	}
 
 	public IPortsProvider getPortsProvider(final String versionTag) {
 		ensureReady();
@@ -159,7 +141,7 @@ public class PortsRepository extends AbstractDataRepository {
 		final String json = new ObjectMapper().writeValueAsString(version);
 
 		final RequestBody body = RequestBody.create(JSON, json);
-		final Request request = new Request.Builder().url(backendUrl + SYNC_VERSION_ENDPOINT).post(body).build();
+		final Request request = new Request.Builder().url(BackEndUrlProvider.INSTANCE.getUrl() + SYNC_VERSION_ENDPOINT).post(body).build();
 		try (final Response response = CLIENT.newCall(request).execute()) {
 
 			if (!response.isSuccessful()) {

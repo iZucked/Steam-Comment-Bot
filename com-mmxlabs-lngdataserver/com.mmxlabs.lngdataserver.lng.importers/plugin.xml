@@ -24,4 +24,10 @@
                class="com.mmxlabs.lngdataserver.lng.importers.menus.DataBrowserContentMenuContribution">
          </DataBrowserContextMenuExtension>
       </extension>
+      <extension
+            point="org.eclipse.ui.startup">
+         <startup
+               class="com.mmxlabs.lngdataserver.lng.importers.internal.PluginStartup">
+         </startup>
+      </extension>
 </plugin>

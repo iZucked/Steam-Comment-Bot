@@ -5,28 +5,21 @@
 package com.mmxlabs.lngdataserver.integration.distances;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.http.auth.AuthenticationException;
-import org.eclipse.jdt.annotation.Nullable;
-import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
+import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
-import com.mmxlabs.lngdataservice.client.distances.ApiClient;
-import com.mmxlabs.lngdataservice.client.distances.ApiException;
-import com.mmxlabs.lngdataservice.client.distances.api.DistancesApi;
-import com.mmxlabs.lngdataservice.client.distances.model.Version;
 
 import okhttp3.Request;
 import okhttp3.Response;
@@ -38,41 +31,22 @@ import okhttp3.Response;
  */
 public class DistanceRepository extends AbstractDataRepository {
 
-	public static DistanceRepository INSTANCE = new DistanceRepository();
+	public static final DistanceRepository INSTANCE = new DistanceRepository();
 
 	private static final Logger LOG = LoggerFactory.getLogger(DistanceRepository.class);
 
-	private static final String SYNC_ENDPOINT = "/distances/sync/publish";
 	private static final String SYNC_VERSION_ENDPOINT = "/distances/sync/versions/";
-
-	private final DistancesApi localApi;
-	private final DistancesApi upstreamApi;
+	
+	private static final TypeReference<List<DistancesVersion>> TYPE_VERSIONS_LIST = new TypeReference<List<DistancesVersion>>() {
+	};
 
 	private DistanceRepository() {
-		localApi = new DistancesApi(new ApiClient());
-		upstreamApi = new DistancesApi(new ApiClient());
-
-		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> {
-			String localURL = BackEndUrlProvider.INSTANCE.getUrl();
-			if (localURL != null) {
-				localApi.getApiClient().setBasePath(localURL);
-			}
-		});
-
 		doHandleUpstreamURLChange();
 	}
 
 	@Override
 	public boolean isReady() {
-		if (backendUrl != null) {
-			return true;
-		} else if (BackEndUrlProvider.INSTANCE.isAvailable()) {
-			backendUrl = BackEndUrlProvider.INSTANCE.getUrl();
-			localApi.getApiClient().setBasePath(backendUrl);
-			return true;
-		} else {
-			return false;
-		}
+		return BackEndUrlProvider.INSTANCE.isAvailable();
 	}
 
 	private void ensureReady() {
@@ -85,13 +59,10 @@ public class DistanceRepository extends AbstractDataRepository {
 	public List<DataVersion> getLocalVersions() {
 		ensureReady();
 		try {
-			return localApi.getVersionsUsingGET().stream().map(v -> {
-				final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
-				return new DataVersion(v.getIdentifier(), createdAt, false);
-			}).collect(Collectors.toList());
-		} catch (final ApiException e) {
-			LOG.error("Error fetching distances versions" + e.getMessage());
-			throw new RuntimeException("Error fetching distances versions", e);
+			return getVersions(BackEndUrlProvider.INSTANCE.getUrl(), null, null);
+		} catch (final Exception e) {
+			LOG.error("Error fetching local distances versions" + e.getMessage());
+			throw new RuntimeException("Error fetching local distances versions", e);
 		}
 	}
 
@@ -99,91 +70,46 @@ public class DistanceRepository extends AbstractDataRepository {
 	public List<DataVersion> getUpstreamVersions() {
 		ensureReady();
 		try {
-			return upstreamApi.getVersionsUsingGET().stream().map(v -> {
-				final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
-				return new DataVersion(v.getIdentifier(), createdAt, v.isPublished());
-			}).collect(Collectors.toList());
-		} catch (final ApiException e) {
-			LOG.error("Error fetching distances versions" + e.getMessage());
-			throw new RuntimeException("Error fetching distances versions", e);
+			return getVersions(UpstreamUrlProvider.INSTANCE.getBaseURL(), UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
+		} catch (final Exception e) {
+			LOG.error("Error fetching upstream distances versions" + e.getMessage());
+			throw new RuntimeException("Error fetching upstream distances versions", e);
 		}
 	}
 
-//	@Override
-//	public DataVersion getUpstreamVersion(String identifier) {
-//		ensureReady();
-//		try {
-//			Version v = upstreamApi.getFullVersionUsingGET(identifier);
-//			final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
-//			return new DataVersion(v.getIdentifier(), createdAt, true);
-//		} catch (final Exception e) {
-//			LOG.error("Error fetching specific distances version" + e.getMessage());
-//			throw new RuntimeException("Error fetching specific distances version", e);
-//		}
-//	}
-
-	public IDistanceProvider getDistances(final String version) {
-
-		try {
-
-			final Map<Via, Map<String, Map<String, Double>>> result = UpstreamDistancesFetcher.getDistances(BackEndUrlProvider.INSTANCE.getUrl(), version, "", "");
-			return new DefaultDistanceProvider(version, result);
-		} catch (AuthenticationException | IOException | ParseException e) {
-			LOG.error("Error fetching versions from upstream service", e);
-			throw new RuntimeException("Error fetching versions from upstream service", e);
+	public List<DataVersion> getVersions(final String baseUrl, final String username, final String password) throws IOException {
+		final Request request = createRequestBuilder(baseUrl + "/distances/versions", username, password).build();
+		try (Response response = CLIENT.newCall(request).execute()) {
+			if (!response.isSuccessful()) {
+				final String body = response.body().string();
+				throw new RuntimeException("Error making request to " + baseUrl + ". Reason " + response.message() + " Response body is " + body);
+			} else {
+				final List<DistancesVersion> hubVersions = new ObjectMapper().readValue(response.body().byteStream(), TYPE_VERSIONS_LIST);
+				return hubVersions.stream() //
+						.filter(v -> v.getIdentifier() != null) //
+						.sorted((v1, v2) -> v2.getCreatedAt().compareTo(v1.getCreatedAt())) //
+						.map(v -> new DataVersion(v.getIdentifier(), v.getCreatedAt(), false, false)) //
+						.collect(Collectors.toList());
+			}
 		}
 	}
 
 	@Override
-	public List<DataVersion> updateAvailable() throws ApiException {
+	public List<DataVersion> updateAvailable() throws Exception {
 		final List<DataVersion> upstreamVersions = getUpstreamVersions();
-		final Set<String> localVersions = getLocalVersions().stream().map(v -> v.getIdentifier()).collect(Collectors.toSet());
+		final Set<String> localVersions = getLocalVersions().stream().map(DataVersion::getIdentifier).collect(Collectors.toSet());
 		upstreamVersions.removeIf(uv -> localVersions.contains(uv.getIdentifier()));
 		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished())).collect(Collectors.toList());
 	}
 
-	public List<DataVersion> getUpstreamDistances() throws ApiException {
-		final List<Version> upstreamVersions = upstreamApi.getVersionsUsingGET();
-		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), fromDateTimeAtUTC(v.getCreatedAt()), v.isPublished())).collect(Collectors.toList());
-	}
-
-	public @Nullable IDistanceProvider getLatestDistances() {
-
-		final List<DataVersion> versions = getLocalVersions();
-		if (versions.isEmpty()) {
-			return null;
-		}
-		final String version = versions.get(0).getIdentifier();
-
-		try {
-			final Map<Via, Map<String, Map<String, Double>>> result = UpstreamDistancesFetcher.getDistances(BackEndUrlProvider.INSTANCE.getUrl(), version, "", "");
-			return new DefaultDistanceProvider(version, result);
-		} catch (AuthenticationException | IOException | ParseException e) {
-			LOG.error("Error fetching versions from upstream service", e);
-			throw new RuntimeException("Error fetching versions from upstream service", e);
-		}
-	}
-
-	@Override
-	protected void doHandleUpstreamURLChange() {
-
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
-		if (upstreamURL != null && !upstreamURL.isEmpty()) {
-			upstreamApi.getApiClient().setBasePath(upstreamURL);
-			upstreamApi.getApiClient().setUsername(UpstreamUrlProvider.INSTANCE.getUsername());
-			upstreamApi.getApiClient().setPassword(UpstreamUrlProvider.INSTANCE.getPassword());
-			upstreamApi.getApiClient().getHttpClient().setAuthenticator(getAuthenticator());
-		}
-	}
-
 	@Override
 	protected boolean canWaitForNewLocalVersion() {
-		return false;
+		return true;
 	}
 
 	@Override
 	protected boolean canWaitForNewUpstreamVersion() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -195,20 +121,23 @@ public class DistanceRepository extends AbstractDataRepository {
 	protected String getVersionNotificationEndpoint() {
 		return "/distances/version_notification";
 	}
-	
 
-	public com.mmxlabs.lngdataserver.integration.distances.model.Version getLocalVersion(String versionTag) throws IOException {
+	public DistancesVersion getLocalVersion(String versionTag) throws IOException {
 		ensureReady();
-		Request request = new Request.Builder().url(BackEndUrlProvider.INSTANCE.getUrl() + SYNC_VERSION_ENDPOINT + versionTag).build();
+		String url = BackEndUrlProvider.INSTANCE.getUrl() + SYNC_VERSION_ENDPOINT;
+		Request request = new Request.Builder().url(url + versionTag).build();
 		try (Response response = CLIENT.newCall(request).execute()) {
-			final ObjectMapper mapper = new ObjectMapper();
-			mapper.findAndRegisterModules();
-			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			if (!response.isSuccessful()) {
+				final String body = response.body().string();
+				throw new RuntimeException("Error making request to " + url + ". Reason " + response.message() + " Response body is " + body);
+			} else {
+				final ObjectMapper mapper = new ObjectMapper();
+				mapper.findAndRegisterModules();
+				mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-			return mapper.readValue(response.body().byteStream(), com.mmxlabs.lngdataserver.integration.distances.model.Version.class);
+				return mapper.readValue(response.body().byteStream(), DistancesVersion.class);
+			}
 		}
 
 	}
-
-
 }

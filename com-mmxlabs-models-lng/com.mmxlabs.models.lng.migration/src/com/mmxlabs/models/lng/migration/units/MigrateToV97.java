@@ -40,6 +40,6 @@ public class MigrateToV97 extends AbstractMigrationUnit {
 
 	@Override
 	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
-
+		// Nothing to do
 	}
 }

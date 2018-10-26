@@ -25,11 +25,13 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.integration.distances.model.GeographicPoint;
+import com.mmxlabs.lngdataserver.integration.distances.model.Identifier;
 import com.mmxlabs.lngdataserver.integration.distances.model.Routes;
 import com.mmxlabs.lngdataserver.integration.distances.model.RoutingPoint;
-import com.mmxlabs.lngdataserver.integration.distances.model.Version;
+import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
+import com.mmxlabs.models.lng.port.OtherIdentifiers;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -46,7 +48,7 @@ public class PortAndDistancesToScenarioCopier {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PortAndDistancesToScenarioCopier.class);
 
-	public static Command getUpdateCommand(final @NonNull EditingDomain editingDomain, final @NonNull PortModel portModel, final @NonNull Version version) {
+	public static Command getUpdateCommand(final @NonNull EditingDomain editingDomain, final @NonNull PortModel portModel, final @NonNull DistancesVersion version) {
 
 		final CompoundCommand cmd = new CompoundCommand("Update ports");
 
@@ -82,8 +84,6 @@ public class PortAndDistancesToScenarioCopier {
 				oldPort = PortFactory.eINSTANCE.createPort();
 				oldPort.setLocation(PortFactory.eINSTANCE.createLocation());
 				oldPort.getLocation().setMmxId(mmxId);
-				// Currently we do not update port name if port already exists
-				oldPort.setName(versionLocation.getName());
 
 				oldPort.setDefaultWindowSize(1);
 				oldPort.setDefaultWindowSizeUnits(TimePeriod.DAYS);
@@ -94,6 +94,10 @@ public class PortAndDistancesToScenarioCopier {
 			}
 			idToPort.put(mmxId, oldPort);
 
+			// Only update name if not set
+			if (oldPort.getName() == null || oldPort.getName().isEmpty()) {
+				cmd.append(SetCommand.create(editingDomain, oldPort, MMXCorePackage.Literals.NAMED_OBJECT__NAME, versionLocation.getName()));
+			}
 			cmd.append(SetCommand.create(editingDomain, oldPort.getLocation(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, versionLocation.getName()));
 
 			cmd.append(SetCommand.create(editingDomain, oldPort.getLocation(), PortPackage.Literals.LOCATION__MMX_ID, versionLocation.getMmxId()));
@@ -111,6 +115,17 @@ public class PortAndDistancesToScenarioCopier {
 				cmd.append(SetCommand.create(editingDomain, oldPort.getLocation(), PortPackage.Literals.LOCATION__LAT, geographicPoint.getLat()));
 				cmd.append(SetCommand.create(editingDomain, oldPort.getLocation(), PortPackage.Literals.LOCATION__LON, geographicPoint.getLon()));
 			}
+
+			final List<OtherIdentifiers> otherIdentifiers = new LinkedList<>();
+			if (versionLocation.getOtherIdentifiers() != null) {
+				for (final Map.Entry<String, Identifier> e : versionLocation.getOtherIdentifiers().entrySet()) {
+					final OtherIdentifiers id = PortFactory.eINSTANCE.createOtherIdentifiers();
+					id.setIdentifier(e.getValue().getIdentifier());
+					id.setProvider(e.getValue().getProvider());
+					otherIdentifiers.add(id);
+				}
+			}
+			cmd.append(SetCommand.create(editingDomain, oldPort.getLocation(), PortPackage.Literals.LOCATION__OTHER_IDENTIFIERS, otherIdentifiers));
 		}
 
 		final List<RoutingPoint> routingPoints = version.getRoutingPoints();
@@ -229,9 +244,9 @@ public class PortAndDistancesToScenarioCopier {
 						final com.mmxlabs.lngdataserver.integration.distances.model.Route r = e.getValue();
 						{
 							final double distance = r.getDistance();
-							if (distance < 0.0) {
-								continue;
-							}
+							// if (distance < 0.0) {
+							// continue;
+							// }
 							final RouteLine rl = PortFactoryImpl.eINSTANCE.createRouteLine();
 							rl.setFrom(idToPort.get(from));
 							rl.setTo(idToPort.get(to));
@@ -240,6 +255,8 @@ public class PortAndDistancesToScenarioCopier {
 								continue;
 							}
 							rl.setDistance(distance);
+							rl.setProvider(r.getProvider());
+							rl.setErrorCode(r.getErrorCode());
 							toAdd.add(rl);
 
 							directMatrix.put(new Pair<>(rl.getFrom(), rl.getTo()), rl.getDistance());

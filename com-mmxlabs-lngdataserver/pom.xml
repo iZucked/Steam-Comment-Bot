@@ -19,6 +19,7 @@
 	<modules>
 		<module>com.mmxlabs.lngdataserver.lib</module>
 		<module>com.mmxlabs.lngdataserver.lib.test</module>
+
 		<module>com.mmxlabs.lngdataserver.commons</module>
 		<module>com.mmxlabs.lngdataserver.server</module>
 
@@ -26,18 +27,20 @@
 		<module>com.mmxlabs.lngdataserver.integration.ports</module>
 		<module>com.mmxlabs.lngdataserver.integration.distances</module>
 		<module>com.mmxlabs.lngdataserver.integration.pricing</module>
-		<module>com.mmxlabs.lngdataserver.integration.pricing.tests</module>
 		<module>com.mmxlabs.lngdataserver.integration.reports</module>
 		<module>com.mmxlabs.lngdataserver.integration.ui</module>
 		<module>com.mmxlabs.lngdataserver.integration.ui.scenarios</module>
 
 		<module>com.mmxlabs.lngdataserver.lng.importers</module>
-		<module>com.mmxlabs.lngdataserver.lng.importers.tests</module>
 		<module>com.mmxlabs.lngdataserver.browser</module>
 		<module>com.mmxlabs.lngdataserver.browser.edit</module>
 		<module>com.mmxlabs.lngdataserver.browser.ui</module>
 
 		<module>com.mmxlabs.lngdataserver.feature</module>
+
+		<module>com.mmxlabs.lngdataserver.data.distances</module>
+		<module>com.mmxlabs.lngdataserver.integration.pricing.tests</module>
+		<module>com.mmxlabs.lngdataserver.lng.importers.tests</module>
 	</modules>
 
 	<build>

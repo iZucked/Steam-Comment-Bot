@@ -16,7 +16,6 @@ import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
 import com.mmxlabs.lngdataserver.integration.distances.DistanceRepository;
-import com.mmxlabs.lngdataservice.client.distances.ApiException;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class DistanceRepositoryActionHandler implements IDataBrowserActionsHandler {
@@ -76,7 +75,7 @@ public class DistanceRepositoryActionHandler implements IDataBrowserActionsHandl
 			List<DataVersion> newVersions;
 			try {
 				newVersions = repository.updateAvailable();
-			} catch (ApiException e1) {
+			} catch (Exception e1) {
 				e1.printStackTrace();
 				return;
 			}

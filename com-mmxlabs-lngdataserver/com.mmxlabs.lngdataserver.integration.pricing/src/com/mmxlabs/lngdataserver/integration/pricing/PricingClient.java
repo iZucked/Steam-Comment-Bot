@@ -67,60 +67,6 @@ public class PricingClient {
 		return pricingRequestBuilder;
 	}
 
-//	public static boolean publishVersion(final String version, final String baseUrl, final String upstreamUrl) throws IOException {
-//
-//		final PublishRequest publishRequest = new PublishRequest();
-//		publishRequest.setVersion(version);
-//		publishRequest.setUpstreamUrl(upstreamUrl + SYNC_VERSION_ENDPOINT);
-//
-//		final String json = new ObjectMapper().writeValueAsString(publishRequest);
-//
-//		final RequestBody body = RequestBody.create(JSON, json);
-//		final Request request = new Request.Builder().url(baseUrl + "/pricing/sync/publish").post(body).build();
-//		try (Response response = CLIENT.newCall(request).execute()) {
-//
-//			if (!response.isSuccessful()) {
-//				LOGGER.error("Error publishing version: " + response.message());
-//				return false;
-//			}
-//			return true;
-//		}
-//	}
-
-//	public static boolean getUpstreamVersion(final String baseUrl, final String upstreamUrl, final String version) throws IOException {
-//		final String json;
-//		// Pull down the version data
-//		final Request pullRequest = new Request.Builder().url(upstreamUrl + SYNC_VERSION_ENDPOINT + version).get().build();
-//		try (final Response pullResponse = CLIENT.newCall(pullRequest).execute()) {
-//			if (!pullResponse.isSuccessful()) {
-//				return false;
-//			}
-//			json = pullResponse.body().string();
-//		}
-//		// Post the data to local repo
-//		final RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-//		final Request postRequest = new Request.Builder().url(baseUrl + SYNC_VERSION_ENDPOINT).post(body).build();
-//		try (final Response postResponse = CLIENT.newCall(postRequest).execute()) {
-//			return postResponse.isSuccessful();
-//		}
-//	}
-//
-//	public static PricingVersion pullUpstreamVersion(final String upstreamUrl, final String version) throws IOException {
-//
-//		// Pull down the version data
-//		final Request pullRequest = new Request.Builder().url(upstreamUrl + SYNC_VERSION_ENDPOINT + version).get().build();
-//		try (final Response pullResponse = CLIENT.newCall(pullRequest).execute()) {
-//			if (!pullResponse.isSuccessful()) {
-//				return null;
-//			}
-//
-//			final Version v = new ObjectMapper().readValue(pullResponse.body().byteStream(), new TypeReference<Version>() {
-//			});
-//
-//			return new PricingVersion(v.getIdentifier(), v.getCreatedAt(), true, v.isCurrent());
-//		}
-//	}
-
 	public static boolean saveVersion(final String baseUrl, final Version version) throws IOException {
 
 		final String json = new ObjectMapper().writeValueAsString(version);

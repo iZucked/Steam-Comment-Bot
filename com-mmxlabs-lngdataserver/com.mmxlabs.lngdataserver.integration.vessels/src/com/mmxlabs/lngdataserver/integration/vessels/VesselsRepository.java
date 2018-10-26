@@ -60,10 +60,8 @@ public class VesselsRepository extends AbstractDataRepository {
 
 	@Override
 	public boolean isReady() {
-		if (backendUrl != null) {
-			return true;
-		} else if (BackEndUrlProvider.INSTANCE.isAvailable()) {
-			backendUrl = BackEndUrlProvider.INSTANCE.getUrl();
+		if (BackEndUrlProvider.INSTANCE.isAvailable()) {
+			String backendUrl = BackEndUrlProvider.INSTANCE.getUrl();
 			localApi.getApiClient().setBasePath(backendUrl);
 			localWaitingApi.getApiClient().setBasePath(backendUrl);
 			localWaitingApi.getApiClient().getHttpClient().setReadTimeout(0, TimeUnit.MILLISECONDS);
@@ -91,19 +89,6 @@ public class VesselsRepository extends AbstractDataRepository {
 			throw new RuntimeException("Error fetching vessels versions", e);
 		}
 	}
-//
-//	@Override
-//	public DataVersion getUpstreamVersion(String identifier) {
-//		ensureReady();
-//		try {
-//			Version v = upstreamApi.getVersionUsingGET(identifier);
-//			final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
-//			return new DataVersion(v.getIdentifier(), createdAt, true);
-//		} catch (final Exception e) {
-//			LOG.error("Error fetching specific vessels version" + e.getMessage());
-//			throw new RuntimeException("Error fetching specific vessels version", e);
-//		}
-//	}
 
 	public List<DataVersion> getUpstreamVersions() {
 		ensureReady();

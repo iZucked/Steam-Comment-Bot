@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.lngdataservice.client.distances.model.Version;
+import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -24,7 +24,11 @@ public class DistanceUploaderClient {
 	private static final OkHttpClient CLIENT = new OkHttpClient();
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-	public static boolean saveVersion(String baseUrl, Version version) throws IOException {
+	private DistanceUploaderClient() {
+
+	}
+
+	public static boolean saveVersion(String baseUrl, DistancesVersion version) throws IOException {
 		String json = new ObjectMapper().writeValueAsString(version);
 
 		RequestBody body = RequestBody.create(JSON, json);

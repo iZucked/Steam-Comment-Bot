@@ -21,7 +21,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
  * @author robert.erdin@gmail.com created on 03/02/17.
  */
 @Entity("versions")
-public class Version {
+public class DistancesVersion {
 
 	private String identifier;
 
@@ -39,7 +39,7 @@ public class Version {
 	@Reference
 	private List<RoutingPoint> routingPoints = new ArrayList<>();
 
-	public Version() {
+	public DistancesVersion() {
 		// morphia/jackson
 	}
 
@@ -87,10 +87,10 @@ public class Version {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (!(o instanceof Version))
+		if (!(o instanceof DistancesVersion))
 			return false;
 
-		Version version = (Version) o;
+		DistancesVersion version = (DistancesVersion) o;
 
 		return identifier == version.identifier;
 	}

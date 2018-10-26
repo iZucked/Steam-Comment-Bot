@@ -22,7 +22,7 @@ import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
 public class PricingRepository extends AbstractDataRepository {
 
-	public static PricingRepository INSTANCE = new PricingRepository();
+	public static final PricingRepository INSTANCE = new PricingRepository();
 
 	private static final Logger LOG = LoggerFactory.getLogger(PricingRepository.class);
 
@@ -35,10 +35,7 @@ public class PricingRepository extends AbstractDataRepository {
 	}
 
 	public boolean isReady() {
-		if (backendUrl != null) {
-			return true;
-		} else if (BackEndUrlProvider.INSTANCE.isAvailable()) {
-			backendUrl = BackEndUrlProvider.INSTANCE.getUrl();
+		if (BackEndUrlProvider.INSTANCE.isAvailable()) {
 			return true;
 		} else {
 			return false;
@@ -54,7 +51,7 @@ public class PricingRepository extends AbstractDataRepository {
 	public List<DataVersion> getLocalVersions() {
 		ensureReady();
 		try {
-			return PricingClient.getVersions(backendUrl).stream().map(v -> {
+			return PricingClient.getVersions(BackEndUrlProvider.INSTANCE.getUrl()).stream().map(v -> {
 				final LocalDateTime createdAt = v.getCreatedAt();
 				return new DataVersion(v.getIdentifier(), createdAt, v.isPublished(), v.isCurrent());
 			}).collect(Collectors.toList());
@@ -63,19 +60,6 @@ public class PricingRepository extends AbstractDataRepository {
 			throw new RuntimeException("Error fetching pricing versions", e);
 		}
 	}
-//
-//	@Override
-//	public DataVersion getUpstreamVersion(String identifier) {
-//		ensureReady();
-//		try {
-//			PricingVersion v = PricingClient.pullUpstreamVersion(getUpstreamUrl(), identifier);
-//			final LocalDateTime createdAt = v.getCreatedAt();
-//			return new DataVersion(v.getIdentifier(), createdAt, true);
-//		} catch (final Exception e) {
-//			LOG.error("Error fetching specific ports version" + e.getMessage());
-//			throw new RuntimeException("Error fetching specific ports version", e);
-//		}
-//	}
 
 	public List<DataVersion> getUpstreamVersions() {
 		ensureReady();
@@ -91,19 +75,19 @@ public class PricingRepository extends AbstractDataRepository {
 	}
 
 	public void saveVersion(Version version) throws IOException {
-		PricingClient.saveVersion(backendUrl, version);
+		PricingClient.saveVersion(BackEndUrlProvider.INSTANCE.getUrl(), version);
 	}
 
 	public boolean deleteVersion(String version) throws IOException {
-		return PricingClient.deleteVersion(backendUrl, version);
+		return PricingClient.deleteVersion(BackEndUrlProvider.INSTANCE.getUrl(), version);
 	}
 
 	public boolean renameVersion(String oldVersion, String newVersion) throws IOException {
-		return PricingClient.renameVersion(backendUrl, oldVersion, newVersion);
+		return PricingClient.renameVersion(BackEndUrlProvider.INSTANCE.getUrl(), oldVersion, newVersion);
 	}
 
 	public boolean setCurrentVersion(String version) throws IOException {
-		return PricingClient.setCurrentVersion(backendUrl, version);
+		return PricingClient.setCurrentVersion(BackEndUrlProvider.INSTANCE.getUrl(), version);
 	}
 
 	public IPricingProvider getLatestPrices() throws IOException {
@@ -114,6 +98,7 @@ public class PricingRepository extends AbstractDataRepository {
 	public IPricingProvider getPricingProvider(String version) throws IOException {
 		ensureReady();
 
+		String backendUrl = BackEndUrlProvider.INSTANCE.getUrl();
 		List<Curve> commoditiesCurves = PricingClient.getCommodityCurves(backendUrl, version);
 
 		List<Curve> baseFuelCurves = PricingClient.getFuelCurves(backendUrl, version);

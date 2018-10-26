@@ -15,6 +15,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,9 +43,6 @@ public abstract class AbstractDataRepository implements IDataRepository {
 
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-	// protected final Triple<String, String, String> auth;
-	protected String backendUrl;
-	// protected String upstreamUrl;
 	protected boolean listenForNewLocalVersions;
 	protected boolean listenForNewUpstreamVersions;
 	protected final List<Consumer<DataVersion>> newLocalVersionCallbacks = new LinkedList<>();
@@ -66,7 +65,6 @@ public abstract class AbstractDataRepository implements IDataRepository {
 
 	public AbstractDataRepository() {
 		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(() -> doHandleUpstreamURLChange());
-		// upstreamUrl = getUpstreamUrl();
 	}
 
 	protected String getUpstreamUrl() {
@@ -187,34 +185,6 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		newUpstreamVersionCallbacks.add(versionConsumer);
 	}
 
-	// protected OkHttpClient buildClientWithBasicAuth() {
-	// Triple<String, String, String> auth = new Triple(UpstreamUrlProvider.INSTANCE.getBaseURL(), UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
-	// if (auth != null) {
-	// OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-	// clientBuilder.authenticator(new Authenticator() {
-	// @Override
-	// public Request authenticate(Route route, Response response) throws IOException {
-	// if (responseCount(response) >= 3) {
-	// return null;
-	// }
-	// String credential = Credentials.basic(auth.getSecond(), auth.getThird());
-	// return response.request().newBuilder().header("Authorization", credential).build();
-	// }
-	// });
-	// return clientBuilder.build();
-	// }
-	//
-	// return new OkHttpClient();
-	// }
-
-	private int responseCount(Response response) {
-		int result = 1;
-		while ((response = response.priorResponse()) != null) {
-			result++;
-		}
-		return result;
-	}
-
 	protected com.squareup.okhttp.Authenticator getAuthenticator() {
 		return new com.squareup.okhttp.Authenticator() {
 			@Override
@@ -253,7 +223,9 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		}
 	}
 
-	protected abstract void doHandleUpstreamURLChange();
+	protected void doHandleUpstreamURLChange() {
+		
+	}
 
 	public boolean hasUpstream() {
 		String upstreamUrl = getUpstreamUrl();
@@ -264,7 +236,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	public boolean publishVersion(final String version) throws Exception {
 
 		// load in the version data
-		final Request pullRequest = new Request.Builder().url(backendUrl + getSyncVersionEndpoint() + version).get().build();
+		final Request pullRequest = new Request.Builder().url(BackEndUrlProvider.INSTANCE.getUrl() + getSyncVersionEndpoint() + version).get().build();
 		final String json;
 		try (final Response pullResponse = CLIENT.newCall(pullRequest).execute()) {
 			if (!pullResponse.isSuccessful()) {
@@ -305,7 +277,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		}
 		// Post the data to local repo
 		final RequestBody body = RequestBody.create(JSON, json);
-		final Request postRequest = new Request.Builder().url(backendUrl + getSyncVersionEndpoint()).post(body).build();
+		final Request postRequest = new Request.Builder().url(BackEndUrlProvider.INSTANCE.getUrl() + getSyncVersionEndpoint()).post(body).build();
 		try (final Response postResponse = CLIENT.newCall(postRequest).execute()) {
 			// TODO: Check return code etc
 			return postResponse.isSuccessful();
@@ -392,5 +364,13 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		}
 
 		return false;
+	}
+
+	public static Request.@NonNull Builder createRequestBuilder(final @NonNull String url, final @Nullable String username, final @Nullable String password) {
+		final Request.@NonNull Builder requestBuilder = new Request.Builder().url(url);
+		if (username != null && password != null) {
+			requestBuilder.addHeader("Authorization", Credentials.basic(username, password));
+		}
+		return requestBuilder;
 	}
 }

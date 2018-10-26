@@ -17,7 +17,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.lngdataserver.integration.distances.model.Version;
+import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.model.DataManifest;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.model.Entry;
@@ -85,7 +85,7 @@ public class LingoDataImporter {
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		try (InputStream inputStream = uc.createInputStream(URI.createURI(baseURI + "/" + entry.getPath()))) {
-			final Version version = mapper.readValue(inputStream, Version.class);
+			final DistancesVersion version = mapper.readValue(inputStream, DistancesVersion.class);
 
 			final PortModel portModel = ScenarioModelUtil.getPortModel((LNGScenarioModel) modelReference.getInstance());
 			final EditingDomain editingDomain = modelReference.getEditingDomain();

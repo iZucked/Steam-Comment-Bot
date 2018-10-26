@@ -13,8 +13,6 @@ public interface IDataRepository {
 
 	List<DataVersion> getUpstreamVersions();
 	
-//	DataVersion getUpstreamVersion(String identifier);
-
 	boolean isReady();
 
 	boolean syncUpstreamVersion(final String version) throws Exception;

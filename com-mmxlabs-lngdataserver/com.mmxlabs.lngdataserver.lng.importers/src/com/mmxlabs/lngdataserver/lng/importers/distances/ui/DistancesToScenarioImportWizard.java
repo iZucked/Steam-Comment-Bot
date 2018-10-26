@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.integration.distances.DistanceRepository;
-import com.mmxlabs.lngdataserver.integration.distances.model.Version;
+import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
@@ -79,7 +79,7 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 						try {
 							final DistanceRepository distanceRepository = DistanceRepository.INSTANCE;
 
-							final Version version = distanceRepository.getLocalVersion(versionTag);
+							final DistancesVersion version = distanceRepository.getLocalVersion(versionTag);
 							for (final ScenarioInstance scenarioInstance : scenarioSelectionPage.getSelectedScenarios()) {
 
 								final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);

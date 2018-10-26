@@ -23,7 +23,7 @@ public class PortsSelectionPage extends WizardPage {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PortsSelectionPage.class);
 
-	private final PortsRepository portsRepository =   PortsRepository.INSTANCE;
+	private final PortsRepository portsRepository = PortsRepository.INSTANCE;
 
 	private String versionTag;
 	private boolean isSelected = false;
@@ -51,12 +51,14 @@ public class PortsSelectionPage extends WizardPage {
 		}
 
 		combo.addSelectionListener(new SelectionListener() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				versionTag = combo.getText();
 				isSelected = true;
 				getWizard().getContainer().updateButtons();
 			}
 
+			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				versionTag = combo.getText();
 				getWizard().getContainer().updateButtons();
