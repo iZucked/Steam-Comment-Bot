@@ -25,7 +25,6 @@
 		<module>com.mmxlabs.lngdataserver.integration.vessels</module>
 		<module>com.mmxlabs.lngdataserver.integration.ports</module>
 		<module>com.mmxlabs.lngdataserver.integration.distances</module>
-		<module>com.mmxlabs.lngdataserver.integration.distances.tests</module>
 		<module>com.mmxlabs.lngdataserver.integration.pricing</module>
 		<module>com.mmxlabs.lngdataserver.integration.pricing.tests</module>
 		<module>com.mmxlabs.lngdataserver.integration.reports</module>
