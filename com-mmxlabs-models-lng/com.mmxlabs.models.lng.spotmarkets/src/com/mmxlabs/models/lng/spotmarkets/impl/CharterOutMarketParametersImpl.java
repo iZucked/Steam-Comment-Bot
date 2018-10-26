@@ -54,6 +54,15 @@ public class CharterOutMarketParametersImpl extends EObjectImpl implements Chart
 	protected LocalDate charterOutStartDate = CHARTER_OUT_START_DATE_EDEFAULT;
 
 	/**
+	 * This is true if the Charter Out Start Date attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean charterOutStartDateESet;
+
+	/**
 	 * The default value of the '{@link #getCharterOutEndDate() <em>Charter Out End Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -72,6 +81,15 @@ public class CharterOutMarketParametersImpl extends EObjectImpl implements Chart
 	 * @ordered
 	 */
 	protected LocalDate charterOutEndDate = CHARTER_OUT_END_DATE_EDEFAULT;
+
+	/**
+	 * This is true if the Charter Out End Date attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean charterOutEndDateESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -109,8 +127,33 @@ public class CharterOutMarketParametersImpl extends EObjectImpl implements Chart
 	public void setCharterOutStartDate(LocalDate newCharterOutStartDate) {
 		LocalDate oldCharterOutStartDate = charterOutStartDate;
 		charterOutStartDate = newCharterOutStartDate;
+		boolean oldCharterOutStartDateESet = charterOutStartDateESet;
+		charterOutStartDateESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_START_DATE, oldCharterOutStartDate, charterOutStartDate));
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_START_DATE, oldCharterOutStartDate, charterOutStartDate, !oldCharterOutStartDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetCharterOutStartDate() {
+		LocalDate oldCharterOutStartDate = charterOutStartDate;
+		boolean oldCharterOutStartDateESet = charterOutStartDateESet;
+		charterOutStartDate = CHARTER_OUT_START_DATE_EDEFAULT;
+		charterOutStartDateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, SpotMarketsPackage.CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_START_DATE, oldCharterOutStartDate, CHARTER_OUT_START_DATE_EDEFAULT, oldCharterOutStartDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetCharterOutStartDate() {
+		return charterOutStartDateESet;
 	}
 
 	/**
@@ -130,8 +173,33 @@ public class CharterOutMarketParametersImpl extends EObjectImpl implements Chart
 	public void setCharterOutEndDate(LocalDate newCharterOutEndDate) {
 		LocalDate oldCharterOutEndDate = charterOutEndDate;
 		charterOutEndDate = newCharterOutEndDate;
+		boolean oldCharterOutEndDateESet = charterOutEndDateESet;
+		charterOutEndDateESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_END_DATE, oldCharterOutEndDate, charterOutEndDate));
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_END_DATE, oldCharterOutEndDate, charterOutEndDate, !oldCharterOutEndDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetCharterOutEndDate() {
+		LocalDate oldCharterOutEndDate = charterOutEndDate;
+		boolean oldCharterOutEndDateESet = charterOutEndDateESet;
+		charterOutEndDate = CHARTER_OUT_END_DATE_EDEFAULT;
+		charterOutEndDateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, SpotMarketsPackage.CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_END_DATE, oldCharterOutEndDate, CHARTER_OUT_END_DATE_EDEFAULT, oldCharterOutEndDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetCharterOutEndDate() {
+		return charterOutEndDateESet;
 	}
 
 	/**
@@ -177,10 +245,10 @@ public class CharterOutMarketParametersImpl extends EObjectImpl implements Chart
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case SpotMarketsPackage.CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_START_DATE:
-				setCharterOutStartDate(CHARTER_OUT_START_DATE_EDEFAULT);
+				unsetCharterOutStartDate();
 				return;
 			case SpotMarketsPackage.CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_END_DATE:
-				setCharterOutEndDate(CHARTER_OUT_END_DATE_EDEFAULT);
+				unsetCharterOutEndDate();
 				return;
 		}
 		super.eUnset(featureID);
@@ -195,9 +263,9 @@ public class CharterOutMarketParametersImpl extends EObjectImpl implements Chart
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case SpotMarketsPackage.CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_START_DATE:
-				return CHARTER_OUT_START_DATE_EDEFAULT == null ? charterOutStartDate != null : !CHARTER_OUT_START_DATE_EDEFAULT.equals(charterOutStartDate);
+				return isSetCharterOutStartDate();
 			case SpotMarketsPackage.CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_END_DATE:
-				return CHARTER_OUT_END_DATE_EDEFAULT == null ? charterOutEndDate != null : !CHARTER_OUT_END_DATE_EDEFAULT.equals(charterOutEndDate);
+				return isSetCharterOutEndDate();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -213,9 +281,9 @@ public class CharterOutMarketParametersImpl extends EObjectImpl implements Chart
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (charterOutStartDate: ");
-		result.append(charterOutStartDate);
+		if (charterOutStartDateESet) result.append(charterOutStartDate); else result.append("<unset>");
 		result.append(", charterOutEndDate: ");
-		result.append(charterOutEndDate);
+		if (charterOutEndDateESet) result.append(charterOutEndDate); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

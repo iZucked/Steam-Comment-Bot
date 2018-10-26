@@ -1048,8 +1048,8 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEAttribute(getSpotCharterMarket_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, SpotCharterMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterOutMarketParametersEClass, CharterOutMarketParameters.class, "CharterOutMarketParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCharterOutMarketParameters_CharterOutStartDate(), theDateTimePackage.getLocalDate(), "charterOutStartDate", null, 0, 1, CharterOutMarketParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCharterOutMarketParameters_CharterOutEndDate(), theDateTimePackage.getLocalDate(), "charterOutEndDate", null, 0, 1, CharterOutMarketParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOutMarketParameters_CharterOutStartDate(), theDateTimePackage.getLocalDate(), "charterOutStartDate", null, 0, 1, CharterOutMarketParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOutMarketParameters_CharterOutEndDate(), theDateTimePackage.getLocalDate(), "charterOutEndDate", null, 0, 1, CharterOutMarketParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(spotTypeEEnum, SpotType.class, "SpotType");

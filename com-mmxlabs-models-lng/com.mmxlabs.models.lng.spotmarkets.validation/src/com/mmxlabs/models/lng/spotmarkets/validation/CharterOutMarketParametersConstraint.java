@@ -42,13 +42,10 @@ public class CharterOutMarketParametersConstraint extends AbstractModelMultiCons
 			
 			if (endDate != null) {
 				sensible = startDate != null ? startDate.isBefore(endDate) : false;
-				sensible = endDate.isAfter(LocalDate.now());
-			} else {
-				sensible = startDate != null ? startDate.isBefore(LocalDate.now()) : true;
 			}
 
 			if (!sensible) {
-				final String message = "Charter out market start and end dates are not sensible.";
+				final String message = "Charter out market start date is before the end date!";
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dcsd.addEObjectAndFeature(charterOutMarketParameters, SpotMarketsPackage.eINSTANCE.getCharterOutMarketParameters_CharterOutEndDate());
 				dcsd.addEObjectAndFeature(charterOutMarketParameters, SpotMarketsPackage.eINSTANCE.getCharterOutMarketParameters_CharterOutEndDate());
