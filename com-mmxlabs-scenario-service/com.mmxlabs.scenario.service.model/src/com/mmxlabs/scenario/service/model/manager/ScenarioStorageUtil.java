@@ -252,8 +252,10 @@ public class ScenarioStorageUtil {
 		{
 			final URI manifestURI = createArtifactURI(archiveURI, PATH_MANIFEST_OBJECT);
 			final Resource manifestResource = resourceSet.createResource(manifestURI);
-
-			manifestResource.getContents().add(EcoreUtil.copy(manifest));
+			Manifest copy = EcoreUtil.copy(manifest);
+			copy.setClientVersionContext("com.mmxlabs.lingo.vanilla");
+			copy.setClientScenarioVersion(2);
+			manifestResource.getContents().add(copy);
 
 			manifestResource.save(null);
 		}
