@@ -121,7 +121,7 @@ public class DistanceRepositoryActionHandler implements IDataBrowserActionsHandl
 
 	@Override
 	public boolean refreshLocal() {
-		List<DataVersion> versions = repository.getVersions();
+		List<DataVersion> versions = repository.getLocalVersions();
 		RunnerHelper.asyncExec(() -> {
 			dataRoot.getChildren().clear();
 			if (versions != null) {

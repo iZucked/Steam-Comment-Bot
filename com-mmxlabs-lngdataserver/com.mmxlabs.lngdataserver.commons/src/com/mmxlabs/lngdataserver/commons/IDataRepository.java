@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 
 public interface IDataRepository {
 
-	List<DataVersion> getVersions();
+	List<DataVersion> getLocalVersions();
 
 	List<DataVersion> getUpstreamVersions();
 	

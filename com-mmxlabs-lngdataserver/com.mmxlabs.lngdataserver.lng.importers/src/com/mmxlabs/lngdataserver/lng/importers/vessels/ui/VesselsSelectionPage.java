@@ -43,7 +43,7 @@ public class VesselsSelectionPage extends WizardPage {
 		final Combo combo = new Combo(container, SWT.READ_ONLY);
 
 		try {
-			VesselsRepository.INSTANCE.getVersions().forEach(v -> combo.add(v.getIdentifier()));
+			VesselsRepository.INSTANCE.getLocalVersions().forEach(v -> combo.add(v.getIdentifier()));
 		} catch (Exception e2) {
 			LOGGER.error("Error retrieving vessels versions", e2);
 		}

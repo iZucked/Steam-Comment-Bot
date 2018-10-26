@@ -74,7 +74,7 @@ public class PortsRepository extends AbstractDataRepository {
 		}
 	}
 
-	public List<DataVersion> getVersions() {
+	public List<DataVersion> getLocalVersions() {
 		ensureReady();
 		try {
 			return localApi.fetchVersionsUsingGET().stream().map(v -> {
@@ -126,7 +126,7 @@ public class PortsRepository extends AbstractDataRepository {
 
 	@Override
 	public List<DataVersion> updateAvailable() throws Exception {
-		final Set<String> localVersions = getVersions().stream().map(v -> v.getIdentifier()).collect(Collectors.toSet());
+		final Set<String> localVersions = getLocalVersions().stream().map(v -> v.getIdentifier()).collect(Collectors.toSet());
 		final List<DataVersion> upstreamVersions = upstreamApi.fetchVersionsUsingGET().stream() //
 				.filter(v -> !localVersions.contains(v.getIdentifier())) //
 				.map(v -> new DataVersion(v.getIdentifier(), LocalDateTime.now() /* v.getCreatedAt() */, true /* v.isPublished() */))//

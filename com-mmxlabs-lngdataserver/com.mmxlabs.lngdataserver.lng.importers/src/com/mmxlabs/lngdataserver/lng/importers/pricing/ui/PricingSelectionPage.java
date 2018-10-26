@@ -46,7 +46,7 @@ public class PricingSelectionPage extends WizardPage {
 
 		try {
 			PricingRepository.INSTANCE.isReady();
-			PricingRepository.INSTANCE.getVersions().forEach(v -> combo.add(v.getIdentifier()));
+			PricingRepository.INSTANCE.getLocalVersions().forEach(v -> combo.add(v.getIdentifier()));
 		} catch (Exception e1) {
 			LOGGER.error("Error retrieving pricing versions", e1);
 		}

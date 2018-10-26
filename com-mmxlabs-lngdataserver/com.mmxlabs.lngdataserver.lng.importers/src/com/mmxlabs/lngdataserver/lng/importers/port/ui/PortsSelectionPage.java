@@ -45,7 +45,7 @@ public class PortsSelectionPage extends WizardPage {
 		final Combo combo = new Combo(container, SWT.READ_ONLY);
 
 		try {
-			portsRepository.getVersions().forEach(v -> combo.add(v.getIdentifier()));
+			portsRepository.getLocalVersions().forEach(v -> combo.add(v.getIdentifier()));
 		} catch (Exception e2) {
 			LOGGER.error("Error retrieving ports versions", e2);
 		}

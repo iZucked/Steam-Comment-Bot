@@ -90,7 +90,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 					if (newVersionFuture != null) {
 						final Boolean newVersionAvailable = newVersionFuture.get();
 						if (Boolean.TRUE == newVersionAvailable) {
-							final List<DataVersion> versions = getVersions();
+							final List<DataVersion> versions = getLocalVersions();
 							for (final DataVersion v : versions) {
 								newLocalVersionCallbacks.forEach(c -> c.accept(v));
 							}
@@ -363,7 +363,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 			return false;
 		}
 
-		List<DataVersion> versions = getVersions();
+		List<DataVersion> versions = getLocalVersions();
 
 		if (versions != null) {
 			for (DataVersion v : versions) {

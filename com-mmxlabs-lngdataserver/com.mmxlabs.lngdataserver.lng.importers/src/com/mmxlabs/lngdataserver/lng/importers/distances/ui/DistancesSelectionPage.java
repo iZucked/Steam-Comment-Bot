@@ -41,7 +41,7 @@ public class DistancesSelectionPage extends WizardPage {
 
 		DistanceRepository dr =   DistanceRepository.INSTANCE;
 		dr.isReady();
-		dr.getVersions().forEach(v -> combo.add(v.getIdentifier()));
+		dr.getLocalVersions().forEach(v -> combo.add(v.getIdentifier()));
 
 		combo.addSelectionListener(new SelectionListener() {
 

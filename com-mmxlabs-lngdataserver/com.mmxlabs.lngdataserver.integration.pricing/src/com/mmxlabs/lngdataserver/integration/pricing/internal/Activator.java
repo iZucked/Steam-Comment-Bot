@@ -119,7 +119,7 @@ public class Activator extends AbstractUIPlugin {
 			LOGGER.debug("Pricing back-end ready, retrieving versions...");
 			try {
 				pricingDataRoot.getChildren().clear();
-				List<DataVersion> versions = pricingRepository.getVersions();
+				List<DataVersion> versions = pricingRepository.getLocalVersions();
 				if (versions != null) {
 					for (final DataVersion v : versions) {
 						final Node version = BrowserFactory.eINSTANCE.createLeaf();

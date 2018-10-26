@@ -116,7 +116,7 @@ public class Activator extends AbstractUIPlugin {
 			try {
 				dataRoot.getChildren().clear();
 				try {
-					final List<DataVersion> versions = repository.getVersions();
+					final List<DataVersion> versions = repository.getLocalVersions();
 					if (versions != null) {
 						boolean first = true;
 						for (final DataVersion v : versions) {

@@ -79,7 +79,7 @@ public class VesselsRepository extends AbstractDataRepository {
 		}
 	}
 
-	public List<DataVersion> getVersions() {
+	public List<DataVersion> getLocalVersions() {
 		ensureReady();
 		try {
 			return localApi.getVersionsUsingGET().stream().map(v -> {

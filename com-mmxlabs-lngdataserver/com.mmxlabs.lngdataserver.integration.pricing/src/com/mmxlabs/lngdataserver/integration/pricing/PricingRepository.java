@@ -51,7 +51,7 @@ public class PricingRepository extends AbstractDataRepository {
 		}
 	}
 
-	public List<DataVersion> getVersions() {
+	public List<DataVersion> getLocalVersions() {
 		ensureReady();
 		try {
 			return PricingClient.getVersions(backendUrl).stream().map(v -> {
@@ -108,7 +108,7 @@ public class PricingRepository extends AbstractDataRepository {
 
 	public IPricingProvider getLatestPrices() throws IOException {
 		ensureReady();
-		return getPricingProvider(getVersions().get(0).getIdentifier());
+		return getPricingProvider(getLocalVersions().get(0).getIdentifier());
 	}
 
 	public IPricingProvider getPricingProvider(String version) throws IOException {
@@ -128,7 +128,7 @@ public class PricingRepository extends AbstractDataRepository {
 	@Override
 	public List<DataVersion> updateAvailable() throws Exception {
 		final List<DataVersion> upstreamVersions = getUpstreamVersions();
-		final Set<String> localVersions = getVersions().stream().map(v -> v.getIdentifier()).collect(Collectors.toSet());
+		final Set<String> localVersions = getLocalVersions().stream().map(v -> v.getIdentifier()).collect(Collectors.toSet());
 		upstreamVersions.removeIf(uv -> localVersions.contains(uv.getIdentifier()));
 		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished())).collect(Collectors.toList());
 	}

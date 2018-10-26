@@ -122,7 +122,7 @@ public class Activator extends AbstractUIPlugin {
 			try {
 				vesselsDataRoot.getChildren().clear();
 				try {
-					List<DataVersion> versions = vesselsRepository.getVersions();
+					List<DataVersion> versions = vesselsRepository.getLocalVersions();
 					if (versions != null) {
 						boolean first = true;
 						for (DataVersion v : versions) {

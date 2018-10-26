@@ -117,7 +117,7 @@ public class Activator extends AbstractUIPlugin {
 				boolean first = true;
 				try {
 
-					List<DataVersion> versions = repository.getVersions();
+					List<DataVersion> versions = repository.getLocalVersions();
 					if (versions != null) {
 						for (final DataVersion v : versions) {
 							final Node version = BrowserFactory.eINSTANCE.createLeaf();
