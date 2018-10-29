@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.util;
 
 import com.mmxlabs.models.lng.cargo.*;
+import com.mmxlabs.models.lng.commercial.Contract;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -111,7 +112,7 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 				return result;
 			}
 			case CargoPackage.SLOT: {
-				Slot slot = (Slot)theEObject;
+				Slot<?> slot = (Slot<?>)theEObject;
 				T1 result = caseSlot(slot);
 				if (result == null) result = caseUUIDObject(slot);
 				if (result == null) result = caseNamedObject(slot);
@@ -412,7 +413,7 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseSlot(Slot object) {
+	public <T extends Contract> T1 caseSlot(Slot<T> object) {
 		return null;
 	}
 

@@ -1,8 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2018
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.adp.impl;
 
@@ -10,8 +6,6 @@ import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.FlowType;
 
 import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
  * <!-- begin-user-doc -->

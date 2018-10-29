@@ -20,7 +20,7 @@ public class CargoSizeFactory implements IDistributionModelFactory {
 	}
 
 	@Override
-	public boolean isMatchForCurrent(SubContractProfile<?> rule) {
+	public boolean isMatchForCurrent(SubContractProfile<?, ?> rule) {
 
 		return ADPPackage.Literals.CARGO_SIZE_DISTRIBUTION_MODEL.isInstance(rule.getDistributionModel());
 	}

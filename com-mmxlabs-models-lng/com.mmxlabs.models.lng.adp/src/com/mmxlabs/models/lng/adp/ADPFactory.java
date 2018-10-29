@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.adp;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
 import org.eclipse.emf.ecore.EFactory;
 
 /**
@@ -51,7 +52,7 @@ public interface ADPFactory extends EFactory {
 	 * @return a new object of class '<em>Contract Profile</em>'.
 	 * @generated
 	 */
-	<T extends Slot> ContractProfile<T> createContractProfile();
+	<T extends Slot<U>, U extends Contract> ContractProfile<T, U> createContractProfile();
 
 	/**
 	 * Returns a new object of class '<em>Cargo Size Distribution Model</em>'.
@@ -96,7 +97,7 @@ public interface ADPFactory extends EFactory {
 	 * @return a new object of class '<em>Sub Contract Profile</em>'.
 	 * @generated
 	 */
-	<T extends Slot> SubContractProfile<T> createSubContractProfile();
+	<T extends Slot<U>, U extends Contract> SubContractProfile<T, U> createSubContractProfile();
 
 	/**
 	 * Returns a new object of class '<em>Period Distribution Profile Constraint</em>'.

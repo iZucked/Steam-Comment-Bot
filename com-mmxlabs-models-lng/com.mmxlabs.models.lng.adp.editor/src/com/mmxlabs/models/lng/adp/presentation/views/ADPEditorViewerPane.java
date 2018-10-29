@@ -405,9 +405,9 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		// Note: These indicies need to be kept in sync with page.
 		if (target instanceof FleetProfile) {
 			folder.setSelection(1);
-		} else if (target instanceof ContractProfile<?>) {
+		} else if (target instanceof ContractProfile<?, ?>) {
 			folder.setSelection(0);
-			((ContractPage) pages.get(0)).setSelectedProfile((ContractProfile<?>) target);
+			((ContractPage) pages.get(0)).setSelectedProfile((ContractProfile<?, ?>) target);
 		}
 	}
 }

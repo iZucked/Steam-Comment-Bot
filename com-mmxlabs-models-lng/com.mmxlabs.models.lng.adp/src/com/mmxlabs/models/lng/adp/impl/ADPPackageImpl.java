@@ -960,7 +960,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getFlowType() {
 		return flowTypeEClass;
 	}
@@ -970,7 +969,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getSupplyFromFlow() {
 		return supplyFromFlowEClass;
 	}
@@ -980,7 +978,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getDeliverToFlow() {
 		return deliverToFlowEClass;
 	}
@@ -990,7 +987,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getSupplyFromProfileFlow() {
 		return supplyFromProfileFlowEClass;
 	}
@@ -1000,7 +996,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getSupplyFromProfileFlow_Profile() {
 		return (EReference)supplyFromProfileFlowEClass.getEStructuralFeatures().get(0);
 	}
@@ -1010,7 +1005,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getSupplyFromProfileFlow_SubProfile() {
 		return (EReference)supplyFromProfileFlowEClass.getEStructuralFeatures().get(1);
 	}
@@ -1020,7 +1014,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getDeliverToProfileFlow() {
 		return deliverToProfileFlowEClass;
 	}
@@ -1030,7 +1023,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getDeliverToProfileFlow_Profile() {
 		return (EReference)deliverToProfileFlowEClass.getEStructuralFeatures().get(0);
 	}
@@ -1040,7 +1032,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getDeliverToProfileFlow_SubProfile() {
 		return (EReference)deliverToProfileFlowEClass.getEStructuralFeatures().get(1);
 	}
@@ -1050,7 +1041,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getSupplyFromSpotFlow() {
 		return supplyFromSpotFlowEClass;
 	}
@@ -1060,7 +1050,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getSupplyFromSpotFlow_Market() {
 		return (EReference)supplyFromSpotFlowEClass.getEStructuralFeatures().get(0);
 	}
@@ -1070,7 +1059,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getDeliverToSpotFlow() {
 		return deliverToSpotFlowEClass;
 	}
@@ -1080,7 +1068,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getDeliverToSpotFlow_Market() {
 		return (EReference)deliverToSpotFlowEClass.getEStructuralFeatures().get(0);
 	}
@@ -1480,22 +1467,36 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 
 		// Create type parameters
 		ETypeParameter contractProfileEClass_T = addETypeParameter(contractProfileEClass, "T");
+		ETypeParameter contractProfileEClass_U = addETypeParameter(contractProfileEClass, "U");
 		ETypeParameter subContractProfileEClass_T = addETypeParameter(subContractProfileEClass, "T");
+		ETypeParameter subContractProfileEClass_U = addETypeParameter(subContractProfileEClass, "U");
 
 		// Set bounds for type parameters
 		EGenericType g1 = createEGenericType(theCargoPackage.getSlot());
+		EGenericType g2 = createEGenericType(contractProfileEClass_U);
+		g1.getETypeArguments().add(g2);
 		contractProfileEClass_T.getEBounds().add(g1);
+		g1 = createEGenericType(theCommercialPackage.getContract());
+		contractProfileEClass_U.getEBounds().add(g1);
 		g1 = createEGenericType(theCargoPackage.getSlot());
+		g2 = createEGenericType(subContractProfileEClass_U);
+		g1.getETypeArguments().add(g2);
 		subContractProfileEClass_T.getEBounds().add(g1);
+		g1 = createEGenericType(theCommercialPackage.getContract());
+		subContractProfileEClass_U.getEBounds().add(g1);
 
 		// Add supertypes to classes
 		adpModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		g1 = createEGenericType(this.getContractProfile());
-		EGenericType g2 = createEGenericType(theCargoPackage.getLoadSlot());
+		g2 = createEGenericType(theCargoPackage.getLoadSlot());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(theCommercialPackage.getPurchaseContract());
 		g1.getETypeArguments().add(g2);
 		purchaseContractProfileEClass.getEGenericSuperTypes().add(g1);
 		g1 = createEGenericType(this.getContractProfile());
 		g2 = createEGenericType(theCargoPackage.getDischargeSlot());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(theCommercialPackage.getSalesContract());
 		g1.getETypeArguments().add(g2);
 		salesContractProfileEClass.getEGenericSuperTypes().add(g1);
 		distributionModelEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
@@ -1531,7 +1532,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEReference(getFleetProfile_DefaultNominalMarket(), theSpotMarketsPackage.getCharterInMarket(), null, "defaultNominalMarket", null, 0, 1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(contractProfileEClass, ContractProfile.class, "ContractProfile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getContractProfile_Contract(), theCommercialPackage.getContract(), null, "contract", null, 0, 1, ContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(contractProfileEClass_U);
+		initEReference(getContractProfile_Contract(), g1, null, "contract", null, 0, 1, ContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContractProfile_ContractCode(), ecorePackage.getEString(), "contractCode", null, 0, 1, ContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContractProfile_Custom(), ecorePackage.getEBoolean(), "custom", null, 0, 1, ContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContractProfile_Enabled(), ecorePackage.getEBoolean(), "enabled", null, 0, 1, ContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1539,6 +1541,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEAttribute(getContractProfile_VolumeUnit(), this.getLNGVolumeUnit(), "volumeUnit", null, 0, 1, ContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(this.getSubContractProfile());
 		g2 = createEGenericType(contractProfileEClass_T);
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(contractProfileEClass_U);
 		g1.getETypeArguments().add(g2);
 		initEReference(getContractProfile_SubProfiles(), g1, null, "subProfiles", null, 0, -1, ContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContractProfile_Constraints(), this.getProfileConstraint(), null, "constraints", null, 0, -1, ContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1599,22 +1603,20 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEClass(deliverToFlowEClass, DeliverToFlow.class, "DeliverToFlow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(supplyFromProfileFlowEClass, SupplyFromProfileFlow.class, "SupplyFromProfileFlow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getContractProfile());
-		g2 = createEGenericType();
-		g1.getETypeArguments().add(g2);
-		initEReference(getSupplyFromProfileFlow_Profile(), g1, null, "profile", null, 0, 1, SupplyFromProfileFlow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSupplyFromProfileFlow_Profile(), this.getPurchaseContractProfile(), null, "profile", null, 0, 1, SupplyFromProfileFlow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(this.getSubContractProfile());
 		g2 = createEGenericType(theCargoPackage.getLoadSlot());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(theCommercialPackage.getPurchaseContract());
 		g1.getETypeArguments().add(g2);
 		initEReference(getSupplyFromProfileFlow_SubProfile(), g1, null, "subProfile", null, 0, 1, SupplyFromProfileFlow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deliverToProfileFlowEClass, DeliverToProfileFlow.class, "DeliverToProfileFlow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getContractProfile());
-		g2 = createEGenericType();
-		g1.getETypeArguments().add(g2);
-		initEReference(getDeliverToProfileFlow_Profile(), g1, null, "profile", null, 0, 1, DeliverToProfileFlow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeliverToProfileFlow_Profile(), this.getSalesContractProfile(), null, "profile", null, 0, 1, DeliverToProfileFlow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(this.getSubContractProfile());
 		g2 = createEGenericType(theCargoPackage.getDischargeSlot());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(theCommercialPackage.getSalesContract());
 		g1.getETypeArguments().add(g2);
 		initEReference(getDeliverToProfileFlow_SubProfile(), g1, null, "subProfile", null, 0, 1, DeliverToProfileFlow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

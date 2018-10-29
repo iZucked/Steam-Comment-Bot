@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.adp.SalesContractProfile;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import org.eclipse.emf.ecore.EClass;
 
 /**
@@ -20,7 +21,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class SalesContractProfileImpl extends ContractProfileImpl<DischargeSlot> implements SalesContractProfile {
+public class SalesContractProfileImpl extends ContractProfileImpl<DischargeSlot, SalesContract> implements SalesContractProfile {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -38,6 +39,17 @@ public class SalesContractProfileImpl extends ContractProfileImpl<DischargeSlot>
 	@Override
 	protected EClass eStaticClass() {
 		return ADPPackage.Literals.SALES_CONTRACT_PROFILE;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * This is specialized for the more specific type known in this context.
+	 * @generated
+	 */
+	@Override
+	public void setContract(SalesContract newContract) {
+		super.setContract(newContract);
 	}
 
 } //SalesContractProfileImpl

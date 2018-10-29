@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.adp.ext.impl;
 
-import org.eclipse.emf.validation.service.ConstraintChangeEventType;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.adp.ADPModel;
@@ -15,15 +13,11 @@ import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.types.VolumeUnits;
-import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 
-@NonNullByDefault
 public class DefaultADPProfileProvider extends AbstractADPProfileProvider {
 
 	@Override
@@ -47,7 +41,7 @@ public class DefaultADPProfileProvider extends AbstractADPProfileProvider {
 		// Base
 		final PurchaseContractProfile profile = createGenericModel(contract, volume * 12, unit);
 
-		final SubContractProfile<LoadSlot> subProfile = createCargoNumberSubProfile(contract, contract.getContractType(), "Volume", 12, volume, unit);
+		final SubContractProfile<LoadSlot, PurchaseContract> subProfile = createCargoNumberSubProfile(contract, contract.getContractType(), "Volume", 12, volume, unit);
 		profile.getSubProfiles().add(subProfile);
 
 		return profile;
@@ -64,11 +58,10 @@ public class DefaultADPProfileProvider extends AbstractADPProfileProvider {
 		// Base
 		final SalesContractProfile profile = createGenericModel(contract, volume * 12, unit);
 
-		final SubContractProfile<DischargeSlot> subProfile = createCargoNumberSubProfile(contract, contract.getContractType(), "Volume", 12, volume, unit);
+		final SubContractProfile<DischargeSlot, SalesContract> subProfile = createCargoNumberSubProfile(contract, contract.getContractType(), "Volume", 12, volume, unit);
 		profile.getSubProfiles().add(subProfile);
 
 		return profile;
 	}
-
 
 }

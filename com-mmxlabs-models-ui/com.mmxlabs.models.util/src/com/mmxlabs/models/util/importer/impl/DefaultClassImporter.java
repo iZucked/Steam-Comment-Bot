@@ -20,11 +20,13 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EPackage.Registry;
@@ -199,7 +201,15 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	 * @param reference
 	 * @return
 	 */
-	protected @NonNull EClass getEReferenceLinkType(final @NonNull EReference reference) {
+	protected @NonNull EClass getEReferenceLinkType(final EObject instance, final @NonNull EReference reference) {
+
+		// In the case where we have a generic type on a super class reference, extract out the fully qualified type from the instance class.
+		final EClass eClass = instance.eClass();
+		final EGenericType featureType = eClass.getFeatureType(reference);
+		if (featureType != null && featureType.getEClassifier() instanceof EClass) {
+			// If there is no generic type, then the classifier should be the same as the reference#getEReferenceType
+			return (EClass) featureType.getEClassifier();
+		}
 		final EClass eReferenceType = reference.getEReferenceType();
 		assert eReferenceType != null;
 		return eReferenceType;
@@ -234,7 +244,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 				// The reference itself is present, so do a lookup later
 				final String referentName = row.get(lcrn).trim();
 				if (!referentName.isEmpty()) {
-					context.doLater(new SetReference(instance, reference, getEReferenceLinkType(reference), row.get(lcrn), context));
+					context.doLater(new SetReference(instance, reference, getEReferenceLinkType(instance, reference), row.get(lcrn), context));
 				}
 			}
 			// If the reference is marked in the EMF model as "contained" by its parent, we expect the child object's fields in the CSV data
@@ -286,7 +296,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 								notifyMissingFields((EObject) instance.eGet(reference), context.createProblem("Field not present", true, false, true), context);
 							}
 						}
-						if (!reference.isUnsettable() &&reference.getLowerBound() > 0) {
+						if (!reference.isUnsettable() && reference.getLowerBound() > 0) {
 							context.addProblem(context.createProblem(reference.getName() + " is missing from " + instance.eClass().getName(), true, false, true));
 						}
 					} else {
@@ -427,7 +437,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 				}
 
 				if (shouldWarn) {
-					if (!attribute.isUnsettable() && attribute.getLowerBound() > 0 && !(attribute.getEType() instanceof EEnum) ) {
+					if (!attribute.isUnsettable() && attribute.getLowerBound() > 0 && !(attribute.getEType() instanceof EEnum)) {
 						context.addProblem(context.createProblem("Field not present", true, false, true));
 					}
 				}

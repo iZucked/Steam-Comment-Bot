@@ -12,7 +12,7 @@ public interface ISubProfileConstraintFactory {
 
 	String getName();
 
-	boolean validFor(ContractProfile<?> profile, SubContractProfile<?> subProfile);
+	boolean validFor(ContractProfile<?, ?> profile, SubContractProfile<?, ?> subProfile);
 
 	SubProfileConstraint createInstance();
 }

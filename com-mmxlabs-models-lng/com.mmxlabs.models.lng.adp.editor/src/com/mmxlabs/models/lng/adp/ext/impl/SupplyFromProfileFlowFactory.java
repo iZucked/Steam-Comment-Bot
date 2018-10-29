@@ -19,7 +19,7 @@ public class SupplyFromProfileFlowFactory implements ISubProfileConstraintFactor
 	}
 
 	@Override
-	public boolean validFor(ContractProfile<?> profile, SubContractProfile<?> subContractProfile) {
+	public boolean validFor(ContractProfile<?, ?> profile, SubContractProfile<?, ?> subContractProfile) {
 		return profile instanceof SalesContractProfile;
 	}
 

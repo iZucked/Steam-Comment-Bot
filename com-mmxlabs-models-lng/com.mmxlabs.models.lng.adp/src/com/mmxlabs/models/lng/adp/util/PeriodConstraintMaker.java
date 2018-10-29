@@ -17,24 +17,24 @@ import com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint;
 import com.mmxlabs.models.lng.fleet.Vessel;
 
 public class PeriodConstraintMaker<T> {
-	private ContractProfile<?> contractProfile;
+	private ContractProfile<?, ?> contractProfile;
 	private PeriodDistributionProfileConstraint constraint;
 
 	private T builder;
 
-	public PeriodConstraintMaker(ContractProfile<?> model, PeriodDistributionProfileConstraint constraint, T builder) {
+	public PeriodConstraintMaker(ContractProfile<?, ?> model, PeriodDistributionProfileConstraint constraint, T builder) {
 		this.contractProfile = model;
 		this.constraint = constraint;
 		this.builder = builder;
 	}
 
-	public static <T> PeriodConstraintMaker<T> makePeriodDistributionProfileConstraint(ContractProfile<?> model, T builder) {
+	public static <T> PeriodConstraintMaker<T> makePeriodDistributionProfileConstraint(ContractProfile<?, ?> model, T builder) {
 		PeriodConstraintMaker<T> maker = new PeriodConstraintMaker<>(model, ADPFactory.eINSTANCE.createPeriodDistributionProfileConstraint(), builder);
 
 		return maker;
 	}
 
-	public PeriodConstraintMaker <T>withRow(Integer minCargoes, Integer maxCargoes, YearMonth... months) {
+	public PeriodConstraintMaker<T> withRow(Integer minCargoes, Integer maxCargoes, YearMonth... months) {
 		PeriodDistribution distribution = ADPFactory.eINSTANCE.createPeriodDistribution();
 		if (minCargoes != null) {
 			distribution.setMinCargoes(minCargoes);

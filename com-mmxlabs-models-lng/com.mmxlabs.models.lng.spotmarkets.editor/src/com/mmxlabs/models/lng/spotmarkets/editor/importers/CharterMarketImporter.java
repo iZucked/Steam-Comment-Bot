@@ -61,7 +61,7 @@ public class CharterMarketImporter extends DefaultClassImporter {
 							final CharterOutMarket market = SpotMarketsFactory.eINSTANCE.createCharterOutMarket();
 
 							context.doLater(new SetReference(market, SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__VESSELS,
-									getEReferenceLinkType(SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__VESSELS), vessel, context));
+									getEReferenceLinkType(market, SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__VESSELS), vessel, context));
 
 							market.setCharterOutRate(charterOutPrice);
 
@@ -86,7 +86,7 @@ public class CharterMarketImporter extends DefaultClassImporter {
 						if (charterInPrice != null && !charterInPrice.isEmpty()) {
 							final CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 							context.doLater(new SetReference(market, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__VESSEL,
-									getEReferenceLinkType(SpotMarketsPackage.Literals.CHARTER_IN_MARKET__VESSEL), vessel, context));
+									getEReferenceLinkType(market, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__VESSEL), vessel, context));
 
 							market.setCharterInRate(charterInPrice);
 

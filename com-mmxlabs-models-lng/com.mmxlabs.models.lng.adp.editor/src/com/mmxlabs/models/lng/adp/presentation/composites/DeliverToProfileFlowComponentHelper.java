@@ -79,7 +79,6 @@ public class DeliverToProfileFlowComponentHelper extends BaseComponentHelper {
 	protected void add_profileEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.DELIVER_TO_PROFILE_FLOW__PROFILE));
 	}
-
 	/**
 	 * Create the editor for the subProfile feature on DeliverToProfileFlow
 	 *

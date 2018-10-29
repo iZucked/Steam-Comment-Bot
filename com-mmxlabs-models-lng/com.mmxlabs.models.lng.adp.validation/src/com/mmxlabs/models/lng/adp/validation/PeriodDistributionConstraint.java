@@ -29,7 +29,7 @@ public class PeriodDistributionConstraint extends AbstractModelMultiConstraint {
 			final PeriodDistribution periodDistribution = (PeriodDistribution) target;
 
 			String name = "Unknown adp profile";
-			final ContractProfile<?> profile = getProfile(periodDistribution, extraContext);
+			final ContractProfile<?, ?> profile = getProfile(periodDistribution, extraContext);
 			if (profile != null && profile.getContract() != null) {
 				name = "ADP profile for " + profile.getContract().getName();
 			}
@@ -55,12 +55,12 @@ public class PeriodDistributionConstraint extends AbstractModelMultiConstraint {
 		}
 	}
 
-	private @Nullable ContractProfile<?> getProfile(final PeriodDistribution periodDistribution, @NonNull final IExtraValidationContext extraContext) {
+	private @Nullable ContractProfile<?, ?> getProfile(final PeriodDistribution periodDistribution, @NonNull final IExtraValidationContext extraContext) {
 
 		EObject container = extraContext.getContainer(periodDistribution);
 		while (container != null) {
-			if (container instanceof ContractProfile<?>) {
-				return (ContractProfile<?>) container;
+			if (container instanceof ContractProfile<?, ?>) {
+				return (ContractProfile<?, ?>) container;
 			}
 			container = extraContext.getContainer(container);
 

@@ -30,11 +30,11 @@ public class SubContractProfileConstraint extends AbstractModelMultiConstraint {
 	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof SubContractProfile<?>) {
-			final SubContractProfile<?> subContractProfile = (SubContractProfile<?>) target;
+		if (target instanceof SubContractProfile<?, ?>) {
+			final SubContractProfile<?, ?> subContractProfile = (SubContractProfile<?, ?>) target;
 			String name = "<unknown>";
-			if (subContractProfile.eContainer() instanceof ContractProfile<?>) {
-				final ContractProfile<?> contractProfile = (ContractProfile<?>) subContractProfile.eContainer();
+			if (subContractProfile.eContainer() instanceof ContractProfile<?, ?>) {
+				final ContractProfile<?, ?> contractProfile = (ContractProfile<?, ?>) subContractProfile.eContainer();
 				final Contract contract = contractProfile.getContract();
 				if (contract != null) {
 					final String n = contract.getName();

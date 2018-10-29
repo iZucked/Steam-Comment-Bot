@@ -25,16 +25,16 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
-@NonNullByDefault
 public class CargoIntervalGenerator implements IProfileGenerator {
 
 	@Override
-	public <T extends Slot> boolean canGenerate(final ContractProfile<T> profile, final SubContractProfile<T> subProfile) {
+	public <T extends Slot<U>, U extends Contract> boolean canGenerate(final ContractProfile<T, U> profile, final SubContractProfile<T, U> subProfile) {
 		return subProfile.getDistributionModel() instanceof CargoIntervalDistributionModel;
 	}
 
 	@Override
-	public <T extends Slot> List<T> generateSlots(final ADPModel adpModel, final ContractProfile<T> profile, final SubContractProfile<T> subProfile, final ISlotTemplateFactory factory) {
+	public <T extends Slot<U>, U extends Contract> List<T> generateSlots(final ADPModel adpModel, final ContractProfile<T, U> profile, final SubContractProfile<T, U> subProfile,
+			final ISlotTemplateFactory factory) {
 
 		final CargoIntervalDistributionModel model = (CargoIntervalDistributionModel) subProfile.getDistributionModel();
 		final List<T> slots = new LinkedList<>();

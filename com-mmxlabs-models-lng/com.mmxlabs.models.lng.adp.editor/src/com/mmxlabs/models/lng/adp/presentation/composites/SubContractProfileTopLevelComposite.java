@@ -82,7 +82,7 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 
 	private Group constraintComposite;
 	private EClass eClass;
-	private SubContractProfile<?> contractProfile;
+	private SubContractProfile<?, ?> contractProfile;
 	private List<ISubProfileConstraintFactory> subProfileConstraintFactories;
 	private Collection<ServiceReference<ISubProfileConstraintFactory>> subProfileConstraintFactoriesServiceReferences;
 	private Composite distributionModelComposite;
@@ -107,9 +107,9 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 
 		int noCols = 1;
 		String groupName = EditorUtils.unmangle(eClass.getName());
-		if (object instanceof SubContractProfile<?>) {
+		if (object instanceof SubContractProfile<?, ?>) {
 			// createSlotButtons = true;
-			final SubContractProfile<?> subProfile = (SubContractProfile<?>) object;
+			final SubContractProfile<?, ?> subProfile = (SubContractProfile<?, ?>) object;
 			// groupName = subProfile.getName();
 			groupName = "Profile";// subProfile.getName();
 			noCols = 3;
@@ -203,7 +203,7 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 			{
 				final Control addAction = HoverActionHelper.createAddAction(constraintComposite, helper -> {
 					for (final ISubProfileConstraintFactory factory : subProfileConstraintFactories) {
-						if (factory.validFor((ContractProfile<?>) contractProfile.eContainer(), contractProfile)) {
+						if (factory.validFor((ContractProfile<?, ?>) contractProfile.eContainer(), contractProfile)) {
 							helper.addAction(new RunnableAction(factory.getName(), () -> {
 								final SubProfileConstraint opt = factory.createInstance();
 								final Command cmd = AddCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), contractProfile,
@@ -222,7 +222,7 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 
 		}
 		final boolean displayDeleteButton = false;
-		if (displayDeleteButton && object instanceof SubContractProfile<?>) { // Create a toolbar for remove buttons
+		if (displayDeleteButton && object instanceof SubContractProfile<?, ?>) { // Create a toolbar for remove buttons
 			final DetailToolbarManager removeButtonManager = new DetailToolbarManager(g, SWT.RIGHT);
 			toolkit.adapt(removeButtonManager.getToolbarManager().getControl());
 
@@ -247,8 +247,8 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 		// Overrides default layout factory so we get a single column rather than multiple columns and one row
 		this.setLayout(new GridLayout(1, false));
 
-		if (object instanceof SubContractProfile<?>) {
-			contractProfile = (SubContractProfile<?>) object;
+		if (object instanceof SubContractProfile<?, ?>) {
+			contractProfile = (SubContractProfile<?, ?>) object;
 			distributionModelSelector.setInput(getFactoriesFor(contractProfile));
 
 			final IDistributionModelFactory currentFactory = getCurrentFactory(contractProfile);
@@ -302,8 +302,8 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 	protected int createChildConstraintsCompsiteSection(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range,
 			final EMFDataBindingContext dbc, final EClass eClass, final Composite parent) {
 		final ChildCompositeContainer childContainer = new ChildCompositeContainer();
-		if (object instanceof SubContractProfile<?>) {
-			final SubContractProfile<?> subContractProfile = (SubContractProfile<?>) object;
+		if (object instanceof SubContractProfile<?, ?>) {
+			final SubContractProfile<?, ?> subContractProfile = (SubContractProfile<?, ?>) object;
 			for (final SubProfileConstraint constraint : subContractProfile.getConstraints()) {
 				final String label = EditorUtils.unmangle(constraint);
 				final IDisplayComposite c = createChildArea(childContainer, root, object, parent, ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS, label, constraint, (g) -> { // Create a toolbar
@@ -344,8 +344,8 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 	protected int createChildDistributionCompsiteSection(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range,
 			final EMFDataBindingContext dbc, final EClass eClass, final Composite parent) {
 		final ChildCompositeContainer childContainer = new ChildCompositeContainer();
-		if (object instanceof SubContractProfile<?>) {
-			final SubContractProfile<?> subContractProfile = (SubContractProfile<?>) object;
+		if (object instanceof SubContractProfile<?, ?>) {
+			final SubContractProfile<?, ?> subContractProfile = (SubContractProfile<?, ?>) object;
 			final DistributionModel distributionModel = subContractProfile.getDistributionModel();
 			if (distributionModel != null) {
 				createChildArea(childContainer, root, object, parent, ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL, null, distributionModel);
@@ -429,8 +429,8 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 				if (!isDisposed() && isVisible()) {
 					if (distributionModelSelector != null && distributionModelSelector.getCombo().isDisposed() == false) {
 
-						if (notification.getNotifier() instanceof SubContractProfile<?>) {
-							final SubContractProfile<?> profile = (SubContractProfile<?>) notification.getNotifier();
+						if (notification.getNotifier() instanceof SubContractProfile<?, ?>) {
+							final SubContractProfile<?, ?> profile = (SubContractProfile<?, ?>) notification.getNotifier();
 							distributionModelSelector.setInput(getFactoriesFor(profile));
 							distributionModelSelector.setSelection(new StructuredSelection(getCurrentFactory(profile)));
 						}
@@ -463,7 +463,7 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 		}
 	}
 
-	private IDistributionModelFactory getCurrentFactory(final SubContractProfile<?> profile) {
+	private IDistributionModelFactory getCurrentFactory(final SubContractProfile<?, ?> profile) {
 
 		for (final IDistributionModelFactory ft : distributionFactories) {
 			if (ft.isMatchForCurrent(profile)) {
@@ -473,7 +473,7 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 		return null;
 	}
 
-	private List<IDistributionModelFactory> getFactoriesFor(final SubContractProfile<?> profile) {
+	private List<IDistributionModelFactory> getFactoriesFor(final SubContractProfile<?, ?> profile) {
 
 		final List<IDistributionModelFactory> l = new LinkedList<>();
 

@@ -26,7 +26,7 @@ public class ContractProfileConstraint extends AbstractModelMultiConstraint {
 	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof ContractProfile<?>) {
+		if (target instanceof ContractProfile<?, ?>) {
 			final ContractProfile profile = (ContractProfile) target;
 
 			DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //

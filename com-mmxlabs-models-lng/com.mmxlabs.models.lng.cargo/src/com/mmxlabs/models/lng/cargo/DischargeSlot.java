@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 
 /**
@@ -26,7 +28,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  * @model
  * @generated
  */
-public interface DischargeSlot extends Slot {
+public interface DischargeSlot extends Slot<SalesContract> {
 
 	/**
 	 * Returns the value of the '<em><b>FOB Sale</b></em>' attribute.

@@ -18,6 +18,8 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 
@@ -38,7 +40,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  *
  * @generated
  */
-public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
+public class DischargeSlotImpl extends SlotImpl<SalesContract> implements DischargeSlot {
 	/**
 	 * The default value of the '{@link #isFOBSale() <em>FOB Sale</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -167,6 +169,17 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	@Override
 	protected EClass eStaticClass() {
 		return CargoPackage.Literals.DISCHARGE_SLOT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * This is specialized for the more specific type known in this context.
+	 * @generated
+	 */
+	@Override
+	public void setContract(SalesContract newContract) {
+		super.setContract(newContract);
 	}
 
 	/**

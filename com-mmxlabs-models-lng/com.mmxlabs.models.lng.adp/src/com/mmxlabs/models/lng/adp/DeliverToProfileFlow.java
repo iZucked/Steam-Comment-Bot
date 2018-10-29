@@ -1,12 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2018
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.adp;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+
+import com.mmxlabs.models.lng.commercial.SalesContract;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,12 +33,12 @@ public interface DeliverToProfileFlow extends DeliverToFlow {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Profile</em>' reference.
-	 * @see #setProfile(ContractProfile)
+	 * @see #setProfile(SalesContractProfile)
 	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getDeliverToProfileFlow_Profile()
 	 * @model
 	 * @generated
 	 */
-	ContractProfile<?> getProfile();
+	SalesContractProfile getProfile();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.DeliverToProfileFlow#getProfile <em>Profile</em>}' reference.
@@ -50,7 +48,7 @@ public interface DeliverToProfileFlow extends DeliverToFlow {
 	 * @see #getProfile()
 	 * @generated
 	 */
-	void setProfile(ContractProfile<?> value);
+	void setProfile(SalesContractProfile value);
 
 	/**
 	 * Returns the value of the '<em><b>Sub Profile</b></em>' reference.
@@ -66,7 +64,7 @@ public interface DeliverToProfileFlow extends DeliverToFlow {
 	 * @model
 	 * @generated
 	 */
-	SubContractProfile<DischargeSlot> getSubProfile();
+	SubContractProfile<DischargeSlot, SalesContract> getSubProfile();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.DeliverToProfileFlow#getSubProfile <em>Sub Profile</em>}' reference.
@@ -76,6 +74,6 @@ public interface DeliverToProfileFlow extends DeliverToFlow {
 	 * @see #getSubProfile()
 	 * @generated
 	 */
-	void setSubProfile(SubContractProfile<DischargeSlot> value);
+	void setSubProfile(SubContractProfile<DischargeSlot, SalesContract> value);
 
 } // DeliverToProfileFlow

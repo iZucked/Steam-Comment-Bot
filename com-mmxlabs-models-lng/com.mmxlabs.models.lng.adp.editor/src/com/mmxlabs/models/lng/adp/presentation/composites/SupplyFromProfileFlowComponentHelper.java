@@ -79,7 +79,6 @@ public class SupplyFromProfileFlowComponentHelper extends BaseComponentHelper {
 	protected void add_profileEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUPPLY_FROM_PROFILE_FLOW__PROFILE));
 	}
-
 	/**
 	 * Create the editor for the subProfile feature on SupplyFromProfileFlow
 	 *

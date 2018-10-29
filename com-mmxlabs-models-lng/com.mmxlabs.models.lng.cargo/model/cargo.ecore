@@ -44,6 +44,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Slot" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
     <eAnnotations source="http://www.mmxlabs.com/models/featureOverride"/>
+    <eTypeParameters name="T">
+      <eBounds eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"/>
+    </eTypeParameters>
     <eOperations name="getSlotOrDelegateDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getSlotOrDelegateMinQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getSlotOrDelegateMaxQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -68,8 +71,9 @@
     <eOperations name="getSlotOrDelegateDivertible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eOperations name="getSlotOrDelegateShippingDaysRestriction" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"
-        unsettable="true"/>
+        unsettable="true">
+      <eGenericType eTypeParameter="#//Slot/T"/>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="counterparty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
@@ -206,7 +210,7 @@
         unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         unsettable="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LoadSlot" eSuperTypes="#//Slot">
+  <eClassifiers xsi:type="ecore:EClass" name="LoadSlot">
     <eAnnotations source="http://www.mmxlabs.com/models/featureOverride"/>
     <eOperations name="getSlotOrDelegateCV" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eOperations name="getSlotOrDelegateDeliveryType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"/>
@@ -223,8 +227,11 @@
         eOpposite="#//DischargeSlot/transferTo"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="salesDeliveryType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"
         defaultValueLiteral="Any" unsettable="true"/>
+    <eGenericSuperTypes eClassifier="#//Slot">
+      <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PurchaseContract"/>
+    </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DischargeSlot" eSuperTypes="#//Slot">
+  <eClassifiers xsi:type="ecore:EClass" name="DischargeSlot">
     <eAnnotations source="http://www.mmxlabs.com/models/featureOverride"/>
     <eOperations name="getSlotOrDelegateMinCv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eOperations name="getSlotOrDelegateMaxCv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
@@ -246,6 +253,9 @@
         <details key="formatString" value="#0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//Slot">
+      <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SalesContract"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SpotSlot" abstract="true" interface="true"
       eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">

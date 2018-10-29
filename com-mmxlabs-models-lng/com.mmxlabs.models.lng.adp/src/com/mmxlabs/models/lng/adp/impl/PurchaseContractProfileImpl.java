@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import org.eclipse.emf.ecore.EClass;
 
 /**
@@ -20,7 +21,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class PurchaseContractProfileImpl extends ContractProfileImpl<LoadSlot> implements PurchaseContractProfile {
+public class PurchaseContractProfileImpl extends ContractProfileImpl<LoadSlot, PurchaseContract> implements PurchaseContractProfile {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -38,6 +39,17 @@ public class PurchaseContractProfileImpl extends ContractProfileImpl<LoadSlot> i
 	@Override
 	protected EClass eStaticClass() {
 		return ADPPackage.Literals.PURCHASE_CONTRACT_PROFILE;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * This is specialized for the more specific type known in this context.
+	 * @generated
+	 */
+	@Override
+	public void setContract(PurchaseContract newContract) {
+		super.setContract(newContract);
 	}
 
 } //PurchaseContractProfileImpl

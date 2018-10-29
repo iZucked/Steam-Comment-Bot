@@ -11,7 +11,7 @@ public interface IProfileConstraintFactory {
 
 	String getName();
 
-	boolean validFor(ContractProfile<?> profile);
+	boolean validFor(ContractProfile<?, ?> profile);
 
 	ProfileConstraint createInstance();
 }

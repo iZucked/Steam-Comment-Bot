@@ -173,11 +173,10 @@ public class ImportCSVFilesPage extends WizardPage {
 		// gd.horizontalIndent = 0;
 		// // gd.grabExcessHorizontalSpace = true;
 		// holder.setLayoutData(gd);
-		
+
 		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
 		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
 		final String lastDirectoryName = section == null ? null : section.get(FILTER_KEY);
-
 
 		final Button auto = new Button(holder, SWT.NONE);
 		auto.setText("Choose &Directory...");
@@ -250,7 +249,7 @@ public class ImportCSVFilesPage extends WizardPage {
 
 			decimalSelectionGroup = new RadioSelectionGroup(radioCompo, "Decimal separator", SWT.NONE, new String[] { "comma (\",\")", "period (\".\")" }, new int[] { CHOICE_COMMA, CHOICE_PERIOD });
 			// get the default export directory from the settings
-		
+
 			int delimiterValue = CHOICE_COMMA;
 			if (section != null && section.get(DELIMITER_KEY) != null) {
 				delimiterValue = section.getInt(DELIMITER_KEY);
@@ -275,15 +274,14 @@ public class ImportCSVFilesPage extends WizardPage {
 		 * fieldScroller.setSize(fieldScroller.computeSize(SWT.DEFAULT, SWT.DEFAULT)); fieldScroller.layout(); fieldComposite.setSize(fieldComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		 * fieldComposite.layout(); } });
 		 */
-		
-		File lastDirectoryFile = null; 
+
+		File lastDirectoryFile = null;
 		if (lastDirectoryName != null) {
 			final File dir = new File(lastDirectoryName);
 			if (dir.exists() && dir.isDirectory()) {
 				lastDirectoryFile = dir;
 			}
 		}
-		
 
 		// add a load of fields to the editor based on registered submodel importers
 		for (final ISubmodelImporter importer : Activator.getDefault().getImporterRegistry().getAllSubModelImporters()) {
@@ -298,7 +296,7 @@ public class ImportCSVFilesPage extends WizardPage {
 			if (parts.keySet().isEmpty()) {
 				continue;
 			}
-			
+
 			final Group g = new Group(inner, SWT.NONE);
 			g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			g.setLayout(new RowLayout(SWT.VERTICAL));
@@ -334,7 +332,7 @@ public class ImportCSVFilesPage extends WizardPage {
 			if (parts.keySet().isEmpty()) {
 				continue;
 			}
-		 
+
 			final Group g = new Group(inner, SWT.NONE);
 			g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			g.setLayout(new RowLayout(SWT.VERTICAL));
@@ -385,7 +383,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		final SimpleScenarioDataProvider scenarioDataProvider = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), scenarioModel);
 
 		for (final SubModelChunk c : subModelChunks) {
-			final HashMap<String, CSVReader> readers = new HashMap<String, CSVReader>();
+			final HashMap<String, CSVReader> readers = new HashMap<>();
 			try {
 				for (final String key : c.keys.keySet()) {
 					try {
@@ -413,7 +411,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		}
 
 		for (final ExtraModelChunk c : extraModelChunks) {
-			final HashMap<String, CSVReader> readers = new HashMap<String, CSVReader>();
+			final HashMap<String, CSVReader> readers = new HashMap<>();
 			try {
 				for (final String key : c.keys.keySet()) {
 					try {

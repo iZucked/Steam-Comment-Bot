@@ -76,48 +76,6 @@
          modelClass="com.mmxlabs.models.lng.adp.CargoIntervalDistributionModel">
    </componentHelper>
    <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.FlowTypeComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.FlowTypeComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.FlowType">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.SupplyFromFlowComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.SupplyFromFlowComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.SupplyFromFlow">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.DeliverToFlowComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.DeliverToFlowComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.DeliverToFlow">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.DeliverToSpotFlowComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.DeliverToSpotFlowComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.DeliverToSpotFlow">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.DeliverToProfileFlowComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.DeliverToProfileFlowComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.DeliverToProfileFlow">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.SupplyFromSpotFlowComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.SupplyFromSpotFlowComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.SupplyFromSpotFlow">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.SupplyFromProfileFlowComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.SupplyFromProfileFlowComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.SupplyFromProfileFlow">
-   </componentHelper>
-   <componentHelper
          helperClass="com.mmxlabs.models.lng.adp.presentation.composites.ShippingOptionComponentHelper"
          id="com.mmxlabs.models.lng.adp.presentation.composites.ShippingOptionComponentHelper"
          inheritable="true"
@@ -243,36 +201,9 @@
          referenceEClass="com.mmxlabs.models.lng.types.VesselAssignmentType">
    </valueProvider>
    <valueProvider
-         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.ContractProfileValueProviderFactory"
-         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.ContractProfileValueProviderFactory_Purchase"
-         referenceEClass="com.mmxlabs.models.lng.adp.PurchaseContractProfile">
-   </valueProvider>
-   <valueProvider
-         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.ContractProfileValueProviderFactory"
-         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.ContractProfileValueProviderFactory_Sale"
-         referenceEClass="com.mmxlabs.models.lng.adp.SalesContractProfile">
-   </valueProvider>
-   <valueProvider
-         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.ContractProfileValueProviderFactory"
-         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.ContractProfileValueProviderFactory"
-         referenceEClass="com.mmxlabs.models.lng.adp.ContractProfile">
-   </valueProvider>
-   <valueProvider
          factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.SubContractProfileValueProviderFactory"
          id="com.mmxlabs.models.lng.adp.presentation.valueproviders.SubContractProfileValueProviderFactory"
          referenceEClass="com.mmxlabs.models.lng.adp.SubContractProfile">
-   </valueProvider>
-   <valueProvider
-         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.SpotMarketValueProviderFactory"
-         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.SpotMarketValueProviderFactory.Supply"
-         ownerEClass="com.mmxlabs.models.lng.adp.SupplyFromSpotFlow"
-         referenceEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket">
-   </valueProvider>
-   <valueProvider
-         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.SpotMarketValueProviderFactory"
-         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.SpotMarketValueProviderFactory.Deliver"
-         ownerEClass="com.mmxlabs.models.lng.adp.DeliverToSpotFlow"
-         referenceEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket">
    </valueProvider>
 </extension>
 <extension

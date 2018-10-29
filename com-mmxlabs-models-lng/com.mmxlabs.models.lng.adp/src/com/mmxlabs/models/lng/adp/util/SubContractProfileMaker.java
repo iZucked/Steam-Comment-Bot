@@ -23,17 +23,18 @@ import com.mmxlabs.models.lng.adp.PreDefinedDistributionModel;
 import com.mmxlabs.models.lng.adp.ProfileVesselRestriction;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
-public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U, V>, U extends ContractProfile<V>, V extends Slot> {
+public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U, V, W>, U extends ContractProfile<V, W>, V extends Slot<W>, W extends Contract> {
 
 	protected final @NonNull ADPModelBuilder adpModelBuilder;
 
 	protected final @NonNull U contractProfile;
 
-	private final @NonNull SubContractProfile<V> subContractProfile;
+	private final @NonNull SubContractProfile<V, W> subContractProfile;
 
 	private final T parent;
 
@@ -51,25 +52,25 @@ public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U
 	}
 
 	@NonNull
-	public SubContractProfileMaker<T, U, V> withName(final String name) {
+	public SubContractProfileMaker<T, U, V, W> withName(final String name) {
 		subContractProfile.setName(name);
 		return this;
 	}
 
 	@NonNull
-	public SubContractProfileMaker<T, U, V> withContractType(final ContractType contractType) {
+	public SubContractProfileMaker<T, U, V, W> withContractType(final ContractType contractType) {
 		subContractProfile.setContractType(contractType);
 		return this;
 	}
 
 	@NonNull
-	public SubContractProfileMaker<T, U, V> withSlotTemplate(final String slotTemplate) {
+	public SubContractProfileMaker<T, U, V, W> withSlotTemplate(final String slotTemplate) {
 		subContractProfile.setSlotTemplateId(slotTemplate);
 		return this;
 	}
 
 	@NonNull
-	public SubContractProfileMaker<T, U, V> addProfileVesselRestriction(final Vessel... vessels) {
+	public SubContractProfileMaker<T, U, V, W> addProfileVesselRestriction(final Vessel... vessels) {
 
 		final ProfileVesselRestriction constraint = ADPFactory.eINSTANCE.createProfileVesselRestriction();
 		for (final Vessel vessel : vessels) {
@@ -86,13 +87,13 @@ public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U
 	 * @return
 	 */
 	@NonNull
-	public SubContractProfileMaker<T, U, V> with(@NonNull final Consumer<SubContractProfile<V>> action) {
+	public SubContractProfileMaker<T, U, V, W> with(@NonNull final Consumer<SubContractProfile<V, W>> action) {
 		action.accept(subContractProfile);
 		return this;
 	}
 
 	@NonNull
-	public SubContractProfileMaker<T, U, V> withPreDefinedDistributionModel(final int windowSize, final TimePeriod windowSizeUnit, final List<LocalDate> dates) {
+	public SubContractProfileMaker<T, U, V, W> withPreDefinedDistributionModel(final int windowSize, final TimePeriod windowSizeUnit, final List<LocalDate> dates) {
 
 		final PreDefinedDistributionModel model = ADPFactory.eINSTANCE.createPreDefinedDistributionModel();
 		model.setWindowSize(windowSize);
@@ -107,7 +108,7 @@ public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U
 	}
 
 	@NonNull
-	public SubContractProfileMaker<T, U, V> withCargoSizeDistributionModel(final boolean exact) {
+	public SubContractProfileMaker<T, U, V, W> withCargoSizeDistributionModel(final boolean exact) {
 
 		final CargoSizeDistributionModel model = ADPFactory.eINSTANCE.createCargoSizeDistributionModel();
 		model.setExact(exact);
@@ -116,7 +117,7 @@ public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U
 	}
 
 	@NonNull
-	public SubContractProfileMaker<T, U, V> withCargoByQuarterDistributionModel(final int q1, final int q2, final int q3, final int q4) {
+	public SubContractProfileMaker<T, U, V, W> withCargoByQuarterDistributionModel(final int q1, final int q2, final int q3, final int q4) {
 
 		final CargoByQuarterDistributionModel model = ADPFactory.eINSTANCE.createCargoByQuarterDistributionModel();
 		model.setQ1(q1);
@@ -128,7 +129,7 @@ public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U
 	}
 
 	@NonNull
-	public SubContractProfileMaker<T, U, V> withCargoIntervalDistributionModel(final int quantity, final IntervalType intervalType, final int spacing) {
+	public SubContractProfileMaker<T, U, V, W> withCargoIntervalDistributionModel(final int quantity, final IntervalType intervalType, final int spacing) {
 
 		final CargoIntervalDistributionModel model = ADPFactory.eINSTANCE.createCargoIntervalDistributionModel();
 
@@ -140,7 +141,7 @@ public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U
 	}
 
 	@NonNull
-	public SubContractProfileMaker<T, U, V> withCargoNumberDistributionModel(final int numberOfCargoes) {
+	public SubContractProfileMaker<T, U, V, W> withCargoNumberDistributionModel(final int numberOfCargoes) {
 
 		final CargoNumberDistributionModel model = ADPFactory.eINSTANCE.createCargoNumberDistributionModel();
 		model.setNumberOfCargoes(numberOfCargoes);

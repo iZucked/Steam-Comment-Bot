@@ -561,7 +561,7 @@ public class ContractPage extends ADPComposite {
 
 	}
 
-	public void setSelectedProfile(ContractProfile<?> p) {
+	public void setSelectedProfile(ContractProfile<?, ?> p) {
 		objectSelector.setSelection(new StructuredSelection(p.getContract()));
 	}
 }

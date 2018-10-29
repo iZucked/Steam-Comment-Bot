@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.adp.ext.impl;
 
 import java.util.function.Consumer;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.adp.ADPFactory;
@@ -28,7 +27,6 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
-@NonNullByDefault
 public abstract class AbstractADPProfileProvider implements IADPProfileProvider {
 	@Override
 	public void createProfiles(final LNGScenarioModel scenarioModel, final CommercialModel commercialModel, final ADPModel existingModel) {
@@ -91,15 +89,15 @@ public abstract class AbstractADPProfileProvider implements IADPProfileProvider 
 		return profile;
 	}
 
-	protected SubContractProfile<LoadSlot> createCargoNumberSubProfile(final PurchaseContract contract, final ContractType contractType, final String name, final int numCargoes, final int volume,
-			final LNGVolumeUnit volumeUnits) {
+	protected SubContractProfile<LoadSlot, PurchaseContract> createCargoNumberSubProfile(final PurchaseContract contract, final ContractType contractType, final String name, final int numCargoes,
+			final int volume, final LNGVolumeUnit volumeUnits) {
 
 		return createCargoNumberSubProfile(contract, contractType, name, numCargoes, volume, volumeUnits, null);
 	}
 
-	protected SubContractProfile<LoadSlot> createCargoNumberSubProfile(final PurchaseContract contract, final ContractType contractType, final String name, final int numCargoes, final int volume,
-			final LNGVolumeUnit volumeUnits, @Nullable Consumer<SubContractProfile<LoadSlot>> action) {
-		final SubContractProfile<LoadSlot> subProfile = ADPFactory.eINSTANCE.createSubContractProfile();
+	protected SubContractProfile<LoadSlot, PurchaseContract> createCargoNumberSubProfile(final PurchaseContract contract, final ContractType contractType, final String name, final int numCargoes,
+			final int volume, final LNGVolumeUnit volumeUnits, @Nullable Consumer<SubContractProfile<LoadSlot, PurchaseContract>> action) {
+		final SubContractProfile<LoadSlot, PurchaseContract> subProfile = ADPFactory.eINSTANCE.createSubContractProfile();
 		subProfile.setName(name);
 
 		final CargoNumberDistributionModel model = ADPFactory.eINSTANCE.createCargoNumberDistributionModel();
@@ -121,15 +119,15 @@ public abstract class AbstractADPProfileProvider implements IADPProfileProvider 
 		return subProfile;
 	}
 
-	protected SubContractProfile<DischargeSlot> createCargoNumberSubProfile(final SalesContract contract, final ContractType contractType, final String name, final int numCargoes, final int volume,
-			final LNGVolumeUnit volumeUnits) {
+	protected SubContractProfile<DischargeSlot, SalesContract> createCargoNumberSubProfile(final SalesContract contract, final ContractType contractType, final String name, final int numCargoes,
+			final int volume, final LNGVolumeUnit volumeUnits) {
 
 		return createCargoNumberSubProfile(contract, contractType, name, numCargoes, volume, volumeUnits, null);
 	}
 
-	protected SubContractProfile<DischargeSlot> createCargoNumberSubProfile(final SalesContract contract, final ContractType contractType, final String name, final int numCargoes, final int volume,
-			final LNGVolumeUnit volumeUnits, @Nullable Consumer<SubContractProfile<DischargeSlot>> action) {
-		final SubContractProfile<DischargeSlot> subProfile = ADPFactory.eINSTANCE.createSubContractProfile();
+	protected SubContractProfile<DischargeSlot, SalesContract> createCargoNumberSubProfile(final SalesContract contract, final ContractType contractType, final String name, final int numCargoes,
+			final int volume, final LNGVolumeUnit volumeUnits, @Nullable Consumer<SubContractProfile<DischargeSlot, SalesContract>> action) {
+		final SubContractProfile<DischargeSlot, SalesContract> subProfile = ADPFactory.eINSTANCE.createSubContractProfile();
 		subProfile.setName(name);
 		final CargoNumberDistributionModel model = ADPFactory.eINSTANCE.createCargoNumberDistributionModel();
 		model.setNumberOfCargoes(numCargoes);
@@ -150,9 +148,10 @@ public abstract class AbstractADPProfileProvider implements IADPProfileProvider 
 		return subProfile;
 	}
 
-	protected SubContractProfile<DischargeSlot> createCargoIntervalSubProfile(final SalesContract contract, final ContractType contractType, final String name, IntervalType intervalType, int spacing,
-			int quantity, final int perCargoVolume, final LNGVolumeUnit volumeUnits, @Nullable Consumer<SubContractProfile<DischargeSlot>> action) {
-		final SubContractProfile<DischargeSlot> subProfile = ADPFactory.eINSTANCE.createSubContractProfile();
+	protected SubContractProfile<DischargeSlot, SalesContract> createCargoIntervalSubProfile(final SalesContract contract, final ContractType contractType, final String name,
+			IntervalType intervalType, int spacing, int quantity, final int perCargoVolume, final LNGVolumeUnit volumeUnits,
+			@Nullable Consumer<SubContractProfile<DischargeSlot, SalesContract>> action) {
+		final SubContractProfile<DischargeSlot, SalesContract> subProfile = ADPFactory.eINSTANCE.createSubContractProfile();
 		subProfile.setName(name);
 
 		final CargoIntervalDistributionModel model = ADPFactory.eINSTANCE.createCargoIntervalDistributionModel();

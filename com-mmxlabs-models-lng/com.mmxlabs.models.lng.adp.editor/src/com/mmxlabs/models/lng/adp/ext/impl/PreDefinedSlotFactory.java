@@ -21,7 +21,7 @@ public class PreDefinedSlotFactory implements IDistributionModelFactory {
 	}
 
 	@Override
-	public boolean isMatchForCurrent(SubContractProfile<?> rule) {
+	public boolean isMatchForCurrent(SubContractProfile<?, ?> rule) {
 
 		return ADPPackage.Literals.PRE_DEFINED_DISTRIBUTION_MODEL.isInstance(rule.getDistributionModel());
 	}

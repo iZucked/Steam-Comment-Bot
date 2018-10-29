@@ -30,6 +30,8 @@ import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
@@ -77,10 +79,10 @@ public class SummaryPage extends ADPComposite {
 						final ADPModel adpModel = (ADPModel) inputElement;
 						final Set<Contract> contracts = new HashSet<>();
 						adpModel.getPurchaseContractProfiles().stream().map(p -> p.getContract()).forEach(c -> contracts.add(c));
-						final List<ContractProfile<?>> profiles = new LinkedList<>();
+						final List<ContractProfile<?, ?>> profiles = new LinkedList<>();
 						profiles.addAll(adpModel.getPurchaseContractProfiles());
 						final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(editorData.getScenarioDataProvider());
-						for (final Contract c : commercialModel.getPurchaseContracts()) {
+						for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
 							if (!contracts.contains(c)) {
 								final PurchaseContractProfile p = ADPFactory.eINSTANCE.createPurchaseContractProfile();
 								p.setContract(c);
@@ -107,10 +109,10 @@ public class SummaryPage extends ADPComposite {
 						final ADPModel adpModel = (ADPModel) inputElement;
 						final Set<Contract> contracts = new HashSet<>();
 						adpModel.getSalesContractProfiles().stream().map(p -> p.getContract()).forEach(c -> contracts.add(c));
-						final List<ContractProfile<?>> profiles = new LinkedList<>();
+						final List<ContractProfile<?, ?>> profiles = new LinkedList<>();
 						profiles.addAll(adpModel.getSalesContractProfiles());
 						final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(editorData.getScenarioDataProvider());
-						for (final Contract c : commercialModel.getSalesContracts()) {
+						for (final SalesContract c : commercialModel.getSalesContracts()) {
 							if (!contracts.contains(c)) {
 								final SalesContractProfile p = ADPFactory.eINSTANCE.createSalesContractProfile();
 								p.setContract(c);
@@ -204,14 +206,14 @@ public class SummaryPage extends ADPComposite {
 	//
 	// }
 
-	private void createColumn(final GridTableViewer viewer, final String name, final Function<ContractProfile<?>, String> labelProvider) {
+	private void createColumn(final GridTableViewer viewer, final String name, final Function<ContractProfile<?, ?>, String> labelProvider) {
 		final GridViewerColumn col = new GridViewerColumn(viewer, SWT.NONE);
 		col.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof ContractProfile<?>) {
-					return labelProvider.apply((ContractProfile<?>) element);
+				if (element instanceof ContractProfile<?, ?>) {
+					return labelProvider.apply((ContractProfile<?, ?>) element);
 				}
 				return "";
 			}

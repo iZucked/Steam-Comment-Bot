@@ -41,7 +41,7 @@ public class ContractProfileCommandProvider extends BaseModelCommandProvider<Obj
 				return null;
 			}
 
-			final Set<ContractProfile<?>> dead = new HashSet<>();
+			final Set<ContractProfile<?, ?>> dead = new HashSet<>();
 			for (final Object object : deleted) {
 				if (object instanceof Contract) {
 					adpModel.getPurchaseContractProfiles().stream().filter(p -> p.getContract() == object).forEach(dead::add);

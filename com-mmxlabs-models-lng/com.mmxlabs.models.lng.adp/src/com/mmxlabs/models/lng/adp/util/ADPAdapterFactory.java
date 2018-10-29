@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.adp.util;
 import com.mmxlabs.models.lng.adp.*;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.common.notify.Adapter;
@@ -85,7 +86,7 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 				return createFleetProfileAdapter();
 			}
 			@Override
-			public <T extends Slot> Adapter caseContractProfile(ContractProfile<T> object) {
+			public <T extends Slot<U>, U extends Contract> Adapter caseContractProfile(ContractProfile<T, U> object) {
 				return createContractProfileAdapter();
 			}
 			@Override
@@ -97,7 +98,7 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 				return createSalesContractProfileAdapter();
 			}
 			@Override
-			public <T extends Slot> Adapter caseSubContractProfile(SubContractProfile<T> object) {
+			public <T extends Slot<U>, U extends Contract> Adapter caseSubContractProfile(SubContractProfile<T, U> object) {
 				return createSubContractProfileAdapter();
 			}
 			@Override

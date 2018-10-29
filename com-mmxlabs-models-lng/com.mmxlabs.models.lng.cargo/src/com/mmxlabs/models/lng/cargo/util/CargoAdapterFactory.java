@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.util;
 
 import com.mmxlabs.models.lng.cargo.*;
+import com.mmxlabs.models.lng.commercial.Contract;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -102,7 +103,7 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createCargoAdapter();
 			}
 			@Override
-			public Adapter caseSlot(Slot object) {
+			public <T extends Contract> Adapter caseSlot(Slot<T> object) {
 				return createSlotAdapter();
 			}
 			@Override

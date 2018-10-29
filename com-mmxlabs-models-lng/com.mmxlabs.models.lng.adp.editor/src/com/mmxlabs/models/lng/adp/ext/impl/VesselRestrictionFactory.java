@@ -18,7 +18,7 @@ public class VesselRestrictionFactory implements ISubProfileConstraintFactory {
 	}
 
 	@Override
-	public boolean validFor(ContractProfile<?> profile, SubContractProfile<?> subContractProfile) {
+	public boolean validFor(ContractProfile<?, ?> profile, SubContractProfile<?, ?> subContractProfile) {
 		return true;
 	}
 

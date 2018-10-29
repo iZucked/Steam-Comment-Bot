@@ -34,7 +34,7 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 		if (notification.getFeature() == ADPPackage.eINSTANCE.getSubContractProfile_ContractType()) {
 
 			if (input instanceof SubContractProfile) {
-				SubContractProfile<?> subContractProfile = (SubContractProfile<?>) input;
+				SubContractProfile<?, ?> subContractProfile = (SubContractProfile<?, ?>) input;
 				if (notification.getNewValue() != ContractType.FOB && subContractProfile.eContainer() instanceof PurchaseContractProfile) {
 					editor.setEditorEnabled(true);
 					// editor.setEditorVisible(true);
@@ -54,7 +54,7 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 		this.editor = editor;
 		this.input = object;
 		if (input instanceof SubContractProfile) {
-			SubContractProfile<?> subContractProfile = (SubContractProfile<?>) input;
+			SubContractProfile<?, ?> subContractProfile = (SubContractProfile<?, ?>) input;
 			if (subContractProfile.getContractType() == ContractType.DES && subContractProfile.eContainer() instanceof PurchaseContractProfile) {
 				editor.setEditorEnabled(true);
 				// editor.setEditorVisible(true);

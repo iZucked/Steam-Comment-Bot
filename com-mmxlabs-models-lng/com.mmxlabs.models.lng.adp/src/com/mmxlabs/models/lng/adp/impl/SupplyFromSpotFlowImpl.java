@@ -1,8 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2018
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.adp.impl;
 
@@ -66,7 +62,6 @@ public class SupplyFromSpotFlowImpl extends SupplyFromFlowImpl implements Supply
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public SpotMarket getMarket() {
 		if (market != null && market.eIsProxy()) {
 			InternalEObject oldMarket = (InternalEObject)market;
@@ -93,7 +88,6 @@ public class SupplyFromSpotFlowImpl extends SupplyFromFlowImpl implements Supply
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setMarket(SpotMarket newMarket) {
 		SpotMarket oldMarket = market;
 		market = newMarket;

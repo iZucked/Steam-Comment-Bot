@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.adp;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.types.VolumeUnits;
@@ -37,7 +38,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface SubContractProfile<T extends Slot> extends EObject {
+public interface SubContractProfile<T extends Slot<U>, U extends Contract> extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->

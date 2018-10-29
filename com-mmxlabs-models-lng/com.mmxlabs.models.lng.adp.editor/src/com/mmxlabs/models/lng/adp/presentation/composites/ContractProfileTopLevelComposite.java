@@ -87,8 +87,8 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 		int noCols = 1;
 		String groupName = EditorUtils.unmangle(object);
 		// if (object instanceof ContractProfile<?>) {
-		final ContractProfile<?> contractProfile = (ContractProfile<?>) object;
-		groupName = null;//"Contract";
+		final ContractProfile<?, ?> contractProfile = (ContractProfile<?, ?>) object;
+		groupName = null;// "Contract";
 		noCols = 1;
 		// }
 		if (groupName != null) {
@@ -174,7 +174,7 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 
 			}
 		}
-		
+
 		{
 			// Initialise middle composite
 			middle = toolkit.createComposite(this);
@@ -182,7 +182,7 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 			final int numChildren = createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, middle);
 
 			boolean displayAddButtons = false;
-			
+
 			// We know there are n slots, so n columns
 			middle.setLayout(new GridLayout(numChildren + (displayAddButtons ? 2 : 0), false));
 			middle.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -193,7 +193,7 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 					@Override
 					public void run() {
 
-						final SubContractProfile<?> p2 = ADPFactory.eINSTANCE.createSubContractProfile();
+						final SubContractProfile<?, ?> p2 = ADPFactory.eINSTANCE.createSubContractProfile();
 						final Command remove = AddCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), object, ADPPackage.Literals.CONTRACT_PROFILE__SUB_PROFILES, p2);
 						commandHandler.handleCommand(remove, object, ADPPackage.Literals.CONTRACT_PROFILE__SUB_PROFILES);
 						// Object tree has changed, request a relayout
@@ -234,7 +234,7 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 		} else {
 			label = EditorUtils.unmangle(ref.getName());
 		}
-		if (value instanceof SubContractProfile<?>) {
+		if (value instanceof SubContractProfile<?, ?>) {
 			final IDisplayComposite sub = new SubContractProfileTopLevelComposite(parent, SWT.NONE, dialogContext, toolkit);
 			sub.setCommandHandler(commandHandler);
 			sub.setEditorWrapper(editorWrapper);

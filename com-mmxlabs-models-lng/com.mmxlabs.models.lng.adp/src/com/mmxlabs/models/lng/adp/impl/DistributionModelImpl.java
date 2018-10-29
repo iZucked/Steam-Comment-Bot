@@ -351,8 +351,8 @@ public abstract class DistributionModelImpl extends MMXObjectImpl implements Dis
 		
 		EObject p = eContainer();
 		while (p != null) {
-			if (p instanceof ContractProfile<?>) {
-				ContractProfile<?> contractProfile = (ContractProfile<?>) p;
+			if (p instanceof ContractProfile<?,?>) {
+				ContractProfile<?,?> contractProfile = (ContractProfile<?,?>) p;
 				return contractProfile.getContract();
 			}
 			p = p.eContainer();

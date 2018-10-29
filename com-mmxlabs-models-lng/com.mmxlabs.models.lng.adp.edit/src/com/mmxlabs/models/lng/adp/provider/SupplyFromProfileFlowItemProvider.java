@@ -1,8 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2018
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.adp.provider;
 
@@ -117,7 +113,7 @@ public class SupplyFromProfileFlowItemProvider extends SupplyFromFlowItemProvide
 	public String getText(Object object) {
 		return getString("_UI_SupplyFromProfileFlow_type");
 	}
-	
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached

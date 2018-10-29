@@ -923,7 +923,7 @@ public class SlotItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Slot)object).getName();
+		String label = ((Slot<?>)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Slot_type") :
 			getString("_UI_Slot_type") + " " + label;

@@ -239,7 +239,7 @@ public class SubContractProfileItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((SubContractProfile<?>)object).getName();
+		String label = ((SubContractProfile<?, ?>)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_SubContractProfile_type") :
 			getString("_UI_SubContractProfile_type") + " " + label;

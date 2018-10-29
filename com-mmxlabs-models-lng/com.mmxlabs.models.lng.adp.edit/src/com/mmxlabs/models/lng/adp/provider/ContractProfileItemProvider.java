@@ -260,7 +260,7 @@ public class ContractProfileItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ContractProfile<?>)object).getContractCode();
+		String label = ((ContractProfile<?, ?>)object).getContractCode();
 		return label == null || label.length() == 0 ?
 			getString("_UI_ContractProfile_type") :
 			getString("_UI_ContractProfile_type") + " " + label;

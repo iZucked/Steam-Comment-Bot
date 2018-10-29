@@ -37,8 +37,8 @@ public class FlowTypeContractProfileValueProviderFactory implements IReferenceVa
 						return new SimpleReferenceValueProvider(adpModel, ADPPackage.Literals.ADP_MODEL__PURCHASE_CONTRACT_PROFILES) {
 							@Override
 							public String getName(EObject referer, EReference feature, EObject referenceValue) {
-								if (referenceValue instanceof ContractProfile<?>) {
-									ContractProfile<?> contractProfile = (ContractProfile<?>) referenceValue;
+								if (referenceValue instanceof ContractProfile<?, ?>) {
+									ContractProfile<?, ?> contractProfile = (ContractProfile<?, ?>) referenceValue;
 									return contractProfile.getContract().getName();
 								}
 								return "";
@@ -48,8 +48,8 @@ public class FlowTypeContractProfileValueProviderFactory implements IReferenceVa
 						return new SimpleReferenceValueProvider(adpModel, ADPPackage.Literals.ADP_MODEL__SALES_CONTRACT_PROFILES) {
 							@Override
 							public String getName(EObject referer, EReference feature, EObject referenceValue) {
-								if (referenceValue instanceof ContractProfile<?>) {
-									ContractProfile<?> contractProfile = (ContractProfile<?>) referenceValue;
+								if (referenceValue instanceof ContractProfile<?, ?>) {
+									ContractProfile<?, ?> contractProfile = (ContractProfile<?, ?>) referenceValue;
 									return contractProfile.getContract().getName();
 								}
 								return "";
@@ -59,8 +59,8 @@ public class FlowTypeContractProfileValueProviderFactory implements IReferenceVa
 						return new MergedReferenceValueProvider(adpModel, ADPPackage.Literals.ADP_MODEL__PURCHASE_CONTRACT_PROFILES, ADPPackage.Literals.ADP_MODEL__SALES_CONTRACT_PROFILES) {
 							@Override
 							public String getName(EObject referer, EReference feature, EObject referenceValue) {
-								if (referenceValue instanceof ContractProfile<?>) {
-									ContractProfile<?> contractProfile = (ContractProfile<?>) referenceValue;
+								if (referenceValue instanceof ContractProfile<?, ?>) {
+									ContractProfile<?, ?> contractProfile = (ContractProfile<?, ?>) referenceValue;
 									return contractProfile.getContract().getName();
 								}
 								return "";

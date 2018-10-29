@@ -14,7 +14,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-import com.mmxlabs.common.time.Days;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.ext.ISlotTemplateFactory;
@@ -40,13 +39,13 @@ public class DistributionModelGeneratorUtil {
 		}
 	}
 
-	public static String generateName(final ContractProfile<?> profile, final Contract contract, final YearMonth start, final int i) {
+	public static String generateName(final ContractProfile<?, ?> profile, final Contract contract, final YearMonth start, final int i) {
 
 		final String contractShortName = getContractShortName(profile, contract);
 		return String.format("%2d-%s-%02d", start.getYear() - 2000, contractShortName, i);
 	}
 
-	public static String getContractShortName(final ContractProfile<?> profile, final Contract contract) {
+	public static String getContractShortName(final ContractProfile<?, ?> profile, final Contract contract) {
 
 		String s = profile.getContractCode();
 		if (s != null && !s.isEmpty()) {
@@ -61,8 +60,8 @@ public class DistributionModelGeneratorUtil {
 		return contractShortName;
 	}
 
-	public static <T extends Slot> T generateSlot(ISlotTemplateFactory factory, ContractProfile<T> profile, SubContractProfile<T> subProfile, YearMonth start, LocalDate date,
-			Function<LocalDate, LocalDate> nextDateGenerator, int idx) {
+	public static <T extends Slot<U>, U extends Contract> T generateSlot(ISlotTemplateFactory factory, ContractProfile<T, U> profile, SubContractProfile<T, U> subProfile, YearMonth start,
+			LocalDate date, Function<LocalDate, LocalDate> nextDateGenerator, int idx) {
 		final String name = factory.generateName(subProfile.getSlotTemplateId(), profile, subProfile, start, idx);
 		final T slot = factory.createSlot(subProfile.getSlotTemplateId(), profile, subProfile);
 		if (slot instanceof LoadSlot) {

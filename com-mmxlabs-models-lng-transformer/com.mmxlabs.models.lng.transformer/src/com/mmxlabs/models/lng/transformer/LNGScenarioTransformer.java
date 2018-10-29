@@ -1858,7 +1858,7 @@ public class LNGScenarioTransformer {
 			loadPriceCalculator = calculator;
 
 		} else if (loadSlot.isSetContract()) {
-			final PurchaseContract purchaseContract = (PurchaseContract) (loadSlot.getContract());
+			final PurchaseContract purchaseContract = loadSlot.getContract();
 			loadPriceCalculator = modelEntityMap.getOptimiserObject(purchaseContract, ILoadPriceCalculator.class);
 		} else {
 			loadPriceCalculator = null;

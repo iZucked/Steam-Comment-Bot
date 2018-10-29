@@ -21,8 +21,9 @@ import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
 
-public class AbstractContractProfileMaker<T extends AbstractContractProfileMaker<T, U, V>, U extends ContractProfile<V>, V extends Slot> {
+public class AbstractContractProfileMaker<T extends AbstractContractProfileMaker<T, U, V, W>, U extends ContractProfile<V, W>, V extends Slot<W>, W extends Contract> {
 
 	protected final @NonNull ADPModelBuilder adpModelBuilder;
 
@@ -101,20 +102,20 @@ public class AbstractContractProfileMaker<T extends AbstractContractProfileMaker
 		contractProfile.getConstraints().add(constraint);
 		return (T) this;
 	}
-	
+
 	@NonNull
-	public PeriodConstraintMaker<AbstractContractProfileMaker<T,U,V>> withPeriodConstraint() {
-		PeriodConstraintMaker<AbstractContractProfileMaker<T,U,V>> maker = PeriodConstraintMaker.makePeriodDistributionProfileConstraint(contractProfile, this);
+	public PeriodConstraintMaker<AbstractContractProfileMaker<T, U, V, W>> withPeriodConstraint() {
+		PeriodConstraintMaker<AbstractContractProfileMaker<T, U, V, W>> maker = PeriodConstraintMaker.makePeriodDistributionProfileConstraint(contractProfile, this);
 		return maker;
 	}
-	
+
 	@NonNull
 	public T addBiMonthlyMinMaxCargoConstraint(YearMonth start, int count, Integer min, Integer max) {
 		PeriodDistributionProfileConstraint constraint = ADPFactory.eINSTANCE.createPeriodDistributionProfileConstraint();
 		for (int i = 0; i < count; i++) {
 			PeriodDistribution periodDistribution = ADPFactory.eINSTANCE.createPeriodDistribution();
 			periodDistribution.getRange().add(start.plusMonths(i));
-			periodDistribution.getRange().add(start.plusMonths(i+1));
+			periodDistribution.getRange().add(start.plusMonths(i + 1));
 			periodDistribution.setMinCargoes(min);
 			periodDistribution.setMaxCargoes(max);
 			constraint.getDistributions().add(periodDistribution);
@@ -122,12 +123,12 @@ public class AbstractContractProfileMaker<T extends AbstractContractProfileMaker
 		contractProfile.getConstraints().add(constraint);
 		return (T) this;
 	}
-	
+
 	@NonNull
 	public T addYearlyMinMaxCargoConstraint(YearMonth start, Integer min, Integer max) {
 		PeriodDistributionProfileConstraint constraint = ADPFactory.eINSTANCE.createPeriodDistributionProfileConstraint();
 		PeriodDistribution periodDistribution = ADPFactory.eINSTANCE.createPeriodDistribution();
-		IntStream.range(0, 12).forEach(i->periodDistribution.getRange().add(start.plusMonths(i)));
+		IntStream.range(0, 12).forEach(i -> periodDistribution.getRange().add(start.plusMonths(i)));
 		periodDistribution.setMinCargoes(min);
 		periodDistribution.setMaxCargoes(max);
 		constraint.getDistributions().add(periodDistribution);
@@ -135,7 +136,6 @@ public class AbstractContractProfileMaker<T extends AbstractContractProfileMaker
 		return (T) this;
 	}
 
-	
 	/**
 	 * Generic modifier call
 	 * 
@@ -149,9 +149,9 @@ public class AbstractContractProfileMaker<T extends AbstractContractProfileMaker
 	}
 
 	@NonNull
-	public SubContractProfileMaker<T, U, V> withSubContractProfile(String name) {
+	public SubContractProfileMaker<T, U, V, W> withSubContractProfile(String name) {
 
-		SubContractProfileMaker<T, U, V> maker = new SubContractProfileMaker<T, U, V>(adpModelBuilder, contractProfile, (T) this);
+		SubContractProfileMaker<T, U, V, W> maker = new SubContractProfileMaker<>(adpModelBuilder, contractProfile, (T) this);
 		maker.withName(name);
 		return maker;
 	}

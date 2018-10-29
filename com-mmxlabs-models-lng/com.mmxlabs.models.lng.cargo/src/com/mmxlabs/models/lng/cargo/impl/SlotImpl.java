@@ -96,7 +96,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *
  * @generated
  */
-public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
+public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implements Slot<T> {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -124,7 +124,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected Contract contract;
+	protected T contract;
 
 	/**
 	 * This is true if the Contract reference has been set.
@@ -1188,10 +1188,11 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Contract getContract() {
+	@SuppressWarnings("unchecked")
+	public T getContract() {
 		if (contract != null && contract.eIsProxy()) {
 			InternalEObject oldContract = (InternalEObject)contract;
-			contract = (Contract)eResolveProxy(oldContract);
+			contract = (T)eResolveProxy(oldContract);
 			if (contract != oldContract) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.SLOT__CONTRACT, oldContract, contract));
@@ -1204,16 +1205,17 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Contract basicGetContract() {
+	public T basicGetContract() {
 		return contract;
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setContract(Contract newContract) {
-		Contract oldContract = contract;
+	public void setContract(T newContract) {
+		T oldContract = contract;
 		contract = newContract;
 		boolean oldContractESet = contractESet;
 		contractESet = true;
@@ -1227,7 +1229,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @generated
 	 */
 	public void unsetContract() {
-		Contract oldContract = contract;
+		T oldContract = contract;
 		boolean oldContractESet = contractESet;
 		contract = null;
 		contractESet = false;
@@ -2731,7 +2733,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				setName((String)newValue);
 				return;
 			case CargoPackage.SLOT__CONTRACT:
-				setContract((Contract)newValue);
+				setContract((T)newValue);
 				return;
 			case CargoPackage.SLOT__COUNTERPARTY:
 				setCounterparty((String)newValue);

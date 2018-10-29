@@ -73,7 +73,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model abstract="true"
  * @generated
  */
-public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
+public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITimezoneProvider {
 	/**
 	 * Returns the value of the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -90,7 +90,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
-	Contract getContract();
+	T getContract();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}' reference.
@@ -102,7 +102,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @see #getContract()
 	 * @generated
 	 */
-	void setContract(Contract value);
+	void setContract(T value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}' reference.

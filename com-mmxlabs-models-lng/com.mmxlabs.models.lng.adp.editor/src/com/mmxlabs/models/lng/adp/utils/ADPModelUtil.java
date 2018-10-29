@@ -17,7 +17,6 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -44,7 +43,6 @@ import com.mmxlabs.models.lng.adp.ext.IADPProfileProvider;
 import com.mmxlabs.models.lng.adp.ext.IProfileGenerator;
 import com.mmxlabs.models.lng.adp.ext.impl.DistributionModelGeneratorUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -54,11 +52,8 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
 public class ADPModelUtil {
@@ -153,7 +148,7 @@ public class ADPModelUtil {
 						cmd.append(DeleteCommand.create(editingDomain, cargoesToRemove));
 					}
 
-					for (final SubContractProfile<LoadSlot> subProfile : profile.getSubProfiles()) {
+					for (final SubContractProfile<LoadSlot, PurchaseContract> subProfile : profile.getSubProfiles()) {
 						for (final IProfileGenerator g : generators) {
 							if (g.canGenerate(profile, subProfile)) {
 								final List<LoadSlot> slots = DistributionModelGeneratorUtil.generateProfile(factory -> g.generateSlots(adpModel, profile, subProfile, factory));
@@ -227,7 +222,7 @@ public class ADPModelUtil {
 					if (!cargoesToRemove.isEmpty()) {
 						cmd.append(DeleteCommand.create(editingDomain, cargoesToRemove));
 					}
-					for (final SubContractProfile<DischargeSlot> subProfile : profile.getSubProfiles()) {
+					for (final SubContractProfile<DischargeSlot, SalesContract> subProfile : profile.getSubProfiles()) {
 						for (final IProfileGenerator g : generators) {
 							if (g.canGenerate(profile, subProfile)) {
 								final List<DischargeSlot> slots = DistributionModelGeneratorUtil.generateProfile(factory -> g.generateSlots(adpModel, profile, subProfile, factory));
@@ -390,7 +385,7 @@ public class ADPModelUtil {
 			}
 			try {
 				if (profile.isEnabled()) {
-					for (final SubContractProfile<LoadSlot> subProfile : profile.getSubProfiles()) {
+					for (final SubContractProfile<LoadSlot, PurchaseContract> subProfile : profile.getSubProfiles()) {
 						for (final IProfileGenerator g : generators) {
 							if (g.canGenerate(profile, subProfile)) {
 								final List<LoadSlot> slots = DistributionModelGeneratorUtil.generateProfile(factory -> g.generateSlots(adpModel, profile, subProfile, factory));
@@ -432,7 +427,7 @@ public class ADPModelUtil {
 			}
 			try {
 				if (profile.isEnabled()) {
-					for (final SubContractProfile<DischargeSlot> subProfile : profile.getSubProfiles()) {
+					for (final SubContractProfile<DischargeSlot, SalesContract> subProfile : profile.getSubProfiles()) {
 						for (final IProfileGenerator g : generators) {
 							if (g.canGenerate(profile, subProfile)) {
 								final List<DischargeSlot> slots = DistributionModelGeneratorUtil.generateProfile(factory -> g.generateSlots(adpModel, profile, subProfile, factory));

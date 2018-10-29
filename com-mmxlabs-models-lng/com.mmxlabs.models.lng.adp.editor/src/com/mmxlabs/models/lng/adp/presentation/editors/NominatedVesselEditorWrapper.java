@@ -46,7 +46,7 @@ public class NominatedVesselEditorWrapper extends IInlineEditorEnablementWrapper
 
 		final EObject object = (EObject) notification.getNotifier();
 		if (object instanceof SubContractProfile) {
-			SubContractProfile<?> subContractProfile = (SubContractProfile<?>) object;
+			SubContractProfile<?, ?> subContractProfile = (SubContractProfile<?, ?>) object;
 
 			if (notification.getFeature() == ADPPackage.eINSTANCE.getSubContractProfile_ContractType()) {
 				if (notification.getNotifier() == input) {
@@ -84,8 +84,8 @@ public class NominatedVesselEditorWrapper extends IInlineEditorEnablementWrapper
 
 		enabled = true; // FIXME: Notifications do not work, so always enable. We need to make the wizard more compliant with dialog API. Currently lots of "fake" implementations.
 		final EStructuralFeature feature = wrapped.getFeature();
-		if (object instanceof SubContractProfile<?>) {
-			SubContractProfile<?> subContractProfile = (SubContractProfile<?>) object;
+		if (object instanceof SubContractProfile<?, ?>) {
+			SubContractProfile<?, ?> subContractProfile = (SubContractProfile<?, ?>) object;
 			if (subContractProfile.getContractType() == ContractType.DES && subContractProfile.eContainer() instanceof PurchaseContractProfile) {
 				enabled = true;
 			}

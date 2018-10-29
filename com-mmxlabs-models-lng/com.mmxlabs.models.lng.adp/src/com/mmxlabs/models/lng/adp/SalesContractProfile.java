@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.adp;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 
 /**
  * <!-- begin-user-doc -->
@@ -18,5 +19,5 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
  * @model
  * @generated
  */
-public interface SalesContractProfile extends ContractProfile<DischargeSlot> {
+public interface SalesContractProfile extends ContractProfile<DischargeSlot, SalesContract> {
 } // SalesContractProfile

@@ -17,7 +17,7 @@ public class MaxCargoProfileConstraintFactory implements IProfileConstraintFacto
 	}
 
 	@Override
-	public boolean validFor(ContractProfile<?> profile) {
+	public boolean validFor(ContractProfile<?, ?> profile) {
 		return true;
 	}
 

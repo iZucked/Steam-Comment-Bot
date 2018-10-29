@@ -35,6 +35,7 @@
     </genClasses>
     <genClasses ecoreClass="adp.ecore#//ContractProfile">
       <genTypeParameters ecoreTypeParameter="adp.ecore#//ContractProfile/T"/>
+      <genTypeParameters ecoreTypeParameter="adp.ecore#//ContractProfile/U"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//ContractProfile/contract"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//ContractProfile/contractCode"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//ContractProfile/custom"/>
@@ -48,6 +49,7 @@
     <genClasses ecoreClass="adp.ecore#//SalesContractProfile"/>
     <genClasses ecoreClass="adp.ecore#//SubContractProfile">
       <genTypeParameters ecoreTypeParameter="adp.ecore#//SubContractProfile/T"/>
+      <genTypeParameters ecoreTypeParameter="adp.ecore#//SubContractProfile/U"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//SubContractProfile/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//SubContractProfile/contractType"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//SubContractProfile/distributionModel"/>

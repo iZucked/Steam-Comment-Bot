@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.adp;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 
 /**
  * <!-- begin-user-doc -->
@@ -18,5 +19,5 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
  * @model
  * @generated
  */
-public interface PurchaseContractProfile extends ContractProfile<LoadSlot> {
+public interface PurchaseContractProfile extends ContractProfile<LoadSlot, PurchaseContract> {
 } // PurchaseContractProfile

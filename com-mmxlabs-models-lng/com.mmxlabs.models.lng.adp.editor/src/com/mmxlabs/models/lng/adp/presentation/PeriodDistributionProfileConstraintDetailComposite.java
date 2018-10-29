@@ -438,7 +438,7 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 							YearMonth start = adpModel.getYearStart();
 							final List<PeriodDistribution> toAdd = new LinkedList<>();
 
-							final Contract c = ((ContractProfile<?>) oldValue.eContainer()).getContract();
+							final Contract c = ((ContractProfile<?, ?>) oldValue.eContainer()).getContract();
 							final YearMonth contractStart = c.getStartDate();
 
 							PeriodDistribution d = createPeriodDistribution(minMaxControls);

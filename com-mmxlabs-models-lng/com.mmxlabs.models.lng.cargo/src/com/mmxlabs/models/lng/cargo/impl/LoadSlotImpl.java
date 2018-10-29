@@ -40,7 +40,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  *
  * @generated
  */
-public class LoadSlotImpl extends SlotImpl implements LoadSlot {
+public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot {
 	/**
 	 * The default value of the '{@link #getCargoCV() <em>Cargo CV</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -175,6 +175,17 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	@Override
 	protected EClass eStaticClass() {
 		return CargoPackage.Literals.LOAD_SLOT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * This is specialized for the more specific type known in this context.
+	 * @generated
+	 */
+	@Override
+	public void setContract(PurchaseContract newContract) {
+		super.setContract(newContract);
 	}
 
 	/**

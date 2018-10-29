@@ -11,7 +11,7 @@ import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 
-public class PurchaseContractProfileMaker extends AbstractContractProfileMaker<PurchaseContractProfileMaker, PurchaseContractProfile, LoadSlot> {
+public class PurchaseContractProfileMaker extends AbstractContractProfileMaker<PurchaseContractProfileMaker, PurchaseContractProfile, LoadSlot, PurchaseContract> {
 
 	public static @NonNull PurchaseContractProfileMaker make(final @NonNull ADPModelBuilder adpModelBuilder, final @NonNull PurchaseContract contract) {
 		final PurchaseContractProfile contractProfile = ADPFactory.eINSTANCE.createPurchaseContractProfile();

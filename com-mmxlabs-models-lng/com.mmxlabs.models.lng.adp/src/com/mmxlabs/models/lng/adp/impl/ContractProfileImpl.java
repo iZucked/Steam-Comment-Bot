@@ -51,7 +51,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements ContractProfile<T> {
+public class ContractProfileImpl<T extends Slot<U>, U extends Contract> extends EObjectImpl implements ContractProfile<T, U> {
 	/**
 	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -60,7 +60,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected Contract contract;
+	protected U contract;
 
 	/**
 	 * The default value of the '{@link #getContractCode() <em>Contract Code</em>}' attribute.
@@ -170,7 +170,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<SubContractProfile<T>> subProfiles;
+	protected EList<SubContractProfile<T, U>> subProfiles;
 
 	/**
 	 * The cached value of the '{@link #getConstraints() <em>Constraints</em>}' containment reference list.
@@ -206,11 +206,12 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Contract getContract() {
+	public U getContract() {
 		if (contract != null && contract.eIsProxy()) {
 			InternalEObject oldContract = (InternalEObject)contract;
-			contract = (Contract)eResolveProxy(oldContract);
+			contract = (U)eResolveProxy(oldContract);
 			if (contract != oldContract) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.CONTRACT_PROFILE__CONTRACT, oldContract, contract));
@@ -224,7 +225,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Contract basicGetContract() {
+	public U basicGetContract() {
 		return contract;
 	}
 
@@ -233,9 +234,8 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setContract(Contract newContract) {
-		Contract oldContract = contract;
+	public void setContract(U newContract) {
+		U oldContract = contract;
 		contract = newContract;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.CONTRACT_PROFILE__CONTRACT, oldContract, contract));
@@ -360,9 +360,9 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * @generated
 	 */
 	@Override
-	public EList<SubContractProfile<T>> getSubProfiles() {
+	public EList<SubContractProfile<T, U>> getSubProfiles() {
 		if (subProfiles == null) {
-			subProfiles = new EObjectContainmentEList.Resolving<SubContractProfile<T>>(SubContractProfile.class, this, ADPPackage.CONTRACT_PROFILE__SUB_PROFILES);
+			subProfiles = new EObjectContainmentEList.Resolving<SubContractProfile<T, U>>(SubContractProfile.class, this, ADPPackage.CONTRACT_PROFILE__SUB_PROFILES);
 		}
 		return subProfiles;
 	}
@@ -434,7 +434,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case ADPPackage.CONTRACT_PROFILE__CONTRACT:
-				setContract((Contract)newValue);
+				setContract((U)newValue);
 				return;
 			case ADPPackage.CONTRACT_PROFILE__CONTRACT_CODE:
 				setContractCode((String)newValue);
@@ -453,7 +453,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 				return;
 			case ADPPackage.CONTRACT_PROFILE__SUB_PROFILES:
 				getSubProfiles().clear();
-				getSubProfiles().addAll((Collection<? extends SubContractProfile<T>>)newValue);
+				getSubProfiles().addAll((Collection<? extends SubContractProfile<T, U>>)newValue);
 				return;
 			case ADPPackage.CONTRACT_PROFILE__CONSTRAINTS:
 				getConstraints().clear();
@@ -472,7 +472,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case ADPPackage.CONTRACT_PROFILE__CONTRACT:
-				setContract((Contract)null);
+				setContract((U)null);
 				return;
 			case ADPPackage.CONTRACT_PROFILE__CONTRACT_CODE:
 				setContractCode(CONTRACT_CODE_EDEFAULT);

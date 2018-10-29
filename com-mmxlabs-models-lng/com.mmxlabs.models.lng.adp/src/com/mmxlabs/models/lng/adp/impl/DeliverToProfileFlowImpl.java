@@ -1,17 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2018
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.adp.impl;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
-import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.DeliverToProfileFlow;
+import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+
+import com.mmxlabs.models.lng.commercial.SalesContract;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -43,7 +41,8 @@ public class DeliverToProfileFlowImpl extends DeliverToFlowImpl implements Deliv
 	 * @generated
 	 * @ordered
 	 */
-	protected ContractProfile<?> profile;
+	protected SalesContractProfile profile;
+
 	/**
 	 * The cached value of the '{@link #getSubProfile() <em>Sub Profile</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -52,7 +51,7 @@ public class DeliverToProfileFlowImpl extends DeliverToFlowImpl implements Deliv
 	 * @generated
 	 * @ordered
 	 */
-	protected SubContractProfile<DischargeSlot> subProfile;
+	protected SubContractProfile<DischargeSlot, SalesContract> subProfile;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -78,11 +77,10 @@ public class DeliverToProfileFlowImpl extends DeliverToFlowImpl implements Deliv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public ContractProfile<?> getProfile() {
+	public SalesContractProfile getProfile() {
 		if (profile != null && profile.eIsProxy()) {
 			InternalEObject oldProfile = (InternalEObject)profile;
-			profile = (ContractProfile<?>)eResolveProxy(oldProfile);
+			profile = (SalesContractProfile)eResolveProxy(oldProfile);
 			if (profile != oldProfile) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.DELIVER_TO_PROFILE_FLOW__PROFILE, oldProfile, profile));
@@ -96,7 +94,7 @@ public class DeliverToProfileFlowImpl extends DeliverToFlowImpl implements Deliv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ContractProfile<?> basicGetProfile() {
+	public SalesContractProfile basicGetProfile() {
 		return profile;
 	}
 
@@ -105,9 +103,8 @@ public class DeliverToProfileFlowImpl extends DeliverToFlowImpl implements Deliv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setProfile(ContractProfile<?> newProfile) {
-		ContractProfile<?> oldProfile = profile;
+	public void setProfile(SalesContractProfile newProfile) {
+		SalesContractProfile oldProfile = profile;
 		profile = newProfile;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.DELIVER_TO_PROFILE_FLOW__PROFILE, oldProfile, profile));
@@ -118,12 +115,11 @@ public class DeliverToProfileFlowImpl extends DeliverToFlowImpl implements Deliv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	@SuppressWarnings("unchecked")
-	public SubContractProfile<DischargeSlot> getSubProfile() {
+	public SubContractProfile<DischargeSlot, SalesContract> getSubProfile() {
 		if (subProfile != null && subProfile.eIsProxy()) {
 			InternalEObject oldSubProfile = (InternalEObject)subProfile;
-			subProfile = (SubContractProfile<DischargeSlot>)eResolveProxy(oldSubProfile);
+			subProfile = (SubContractProfile<DischargeSlot, SalesContract>)eResolveProxy(oldSubProfile);
 			if (subProfile != oldSubProfile) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.DELIVER_TO_PROFILE_FLOW__SUB_PROFILE, oldSubProfile, subProfile));
@@ -137,7 +133,7 @@ public class DeliverToProfileFlowImpl extends DeliverToFlowImpl implements Deliv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SubContractProfile<DischargeSlot> basicGetSubProfile() {
+	public SubContractProfile<DischargeSlot, SalesContract> basicGetSubProfile() {
 		return subProfile;
 	}
 
@@ -146,9 +142,8 @@ public class DeliverToProfileFlowImpl extends DeliverToFlowImpl implements Deliv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setSubProfile(SubContractProfile<DischargeSlot> newSubProfile) {
-		SubContractProfile<DischargeSlot> oldSubProfile = subProfile;
+	public void setSubProfile(SubContractProfile<DischargeSlot, SalesContract> newSubProfile) {
+		SubContractProfile<DischargeSlot, SalesContract> oldSubProfile = subProfile;
 		subProfile = newSubProfile;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.DELIVER_TO_PROFILE_FLOW__SUB_PROFILE, oldSubProfile, subProfile));
@@ -182,10 +177,10 @@ public class DeliverToProfileFlowImpl extends DeliverToFlowImpl implements Deliv
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case ADPPackage.DELIVER_TO_PROFILE_FLOW__PROFILE:
-				setProfile((ContractProfile<?>)newValue);
+				setProfile((SalesContractProfile)newValue);
 				return;
 			case ADPPackage.DELIVER_TO_PROFILE_FLOW__SUB_PROFILE:
-				setSubProfile((SubContractProfile<DischargeSlot>)newValue);
+				setSubProfile((SubContractProfile<DischargeSlot, SalesContract>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -200,10 +195,10 @@ public class DeliverToProfileFlowImpl extends DeliverToFlowImpl implements Deliv
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case ADPPackage.DELIVER_TO_PROFILE_FLOW__PROFILE:
-				setProfile((ContractProfile<?>)null);
+				setProfile((SalesContractProfile)null);
 				return;
 			case ADPPackage.DELIVER_TO_PROFILE_FLOW__SUB_PROFILE:
-				setSubProfile((SubContractProfile<DischargeSlot>)null);
+				setSubProfile((SubContractProfile<DischargeSlot, SalesContract>)null);
 				return;
 		}
 		super.eUnset(featureID);

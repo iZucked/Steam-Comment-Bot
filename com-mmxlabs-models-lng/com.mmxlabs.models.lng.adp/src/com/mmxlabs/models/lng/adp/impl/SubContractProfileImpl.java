@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.SubProfileConstraint;
 import com.mmxlabs.models.lng.cargo.Slot;
 
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.types.VolumeUnits;
@@ -52,7 +53,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implements SubContractProfile<T> {
+public class SubContractProfileImpl<T extends Slot<U>, U extends Contract> extends EObjectImpl implements SubContractProfile<T, U> {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->

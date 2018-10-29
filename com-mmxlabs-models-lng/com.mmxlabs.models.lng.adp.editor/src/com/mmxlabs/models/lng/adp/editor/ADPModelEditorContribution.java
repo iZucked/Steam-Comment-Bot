@@ -133,10 +133,10 @@ public class ADPModelEditorContribution extends BaseJointModelEditorContribution
 		if (object instanceof FleetProfile) {
 			return object;
 		}
-		if (object instanceof ContractProfile) {
+		if (object instanceof ContractProfile<?, ?>) {
 			return object;
 		}
-		if (object instanceof SubContractProfile<?>) {
+		if (object instanceof SubContractProfile<?, ?>) {
 			return unwrapTarget(object.eContainer());
 		}
 		if (object instanceof ProfileConstraint) {

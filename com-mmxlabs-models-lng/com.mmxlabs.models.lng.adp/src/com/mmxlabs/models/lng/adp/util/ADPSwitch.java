@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.adp.util;
 import com.mmxlabs.models.lng.adp.*;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.ecore.EObject;
@@ -90,7 +91,7 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				return result;
 			}
 			case ADPPackage.CONTRACT_PROFILE: {
-				ContractProfile<?> contractProfile = (ContractProfile<?>)theEObject;
+				ContractProfile<?, ?> contractProfile = (ContractProfile<?, ?>)theEObject;
 				T1 result = caseContractProfile(contractProfile);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -110,7 +111,7 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				return result;
 			}
 			case ADPPackage.SUB_CONTRACT_PROFILE: {
-				SubContractProfile<?> subContractProfile = (SubContractProfile<?>)theEObject;
+				SubContractProfile<?, ?> subContractProfile = (SubContractProfile<?, ?>)theEObject;
 				T1 result = caseSubContractProfile(subContractProfile);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -344,7 +345,7 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public <T extends Slot> T1 caseContractProfile(ContractProfile<T> object) {
+	public <T extends Slot<U>, U extends Contract> T1 caseContractProfile(ContractProfile<T, U> object) {
 		return null;
 	}
 
@@ -464,7 +465,7 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public <T extends Slot> T1 caseSubContractProfile(SubContractProfile<T> object) {
+	public <T extends Slot<U>, U extends Contract> T1 caseSubContractProfile(SubContractProfile<T, U> object) {
 		return null;
 	}
 

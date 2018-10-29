@@ -14,11 +14,11 @@ public interface IDistributionModelFactory {
 
 	String getName();
 
-	default boolean validFor(SubContractProfile<?> profile) {
+	default boolean validFor(SubContractProfile<?, ?> profile) {
 		return true;
 	}
 
-	boolean isMatchForCurrent(SubContractProfile<?> profile);
+	boolean isMatchForCurrent(SubContractProfile<?, ?> profile);
 
 	DistributionModel createInstance();
 }

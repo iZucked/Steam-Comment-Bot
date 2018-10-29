@@ -64,8 +64,8 @@ public class ContractProfileValueProviderFactory implements IReferenceValueProvi
 
 							@Override
 							public String getName(EObject referer, EReference feature, EObject referenceValue) {
-								if (referenceValue instanceof ContractProfile<?>) {
-									ContractProfile<?> contractProfile = (ContractProfile<?>) referenceValue;
+								if (referenceValue instanceof ContractProfile<?, ?>) {
+									ContractProfile<?, ?> contractProfile = (ContractProfile<?, ?>) referenceValue;
 									return contractProfile.getContract().getName();
 								}
 								return "";
@@ -107,8 +107,8 @@ public class ContractProfileValueProviderFactory implements IReferenceValueProvi
 
 							@Override
 							public String getName(EObject referer, EReference feature, EObject referenceValue) {
-								if (referenceValue instanceof ContractProfile<?>) {
-									ContractProfile<?> contractProfile = (ContractProfile<?>) referenceValue;
+								if (referenceValue instanceof ContractProfile<?, ?>) {
+									ContractProfile<?, ?> contractProfile = (ContractProfile<?, ?>) referenceValue;
 									return contractProfile.getContract().getName();
 								}
 								return "";
@@ -150,8 +150,8 @@ public class ContractProfileValueProviderFactory implements IReferenceValueProvi
 
 							@Override
 							public String getName(EObject referer, EReference feature, EObject referenceValue) {
-								if (referenceValue instanceof ContractProfile<?>) {
-									ContractProfile<?> contractProfile = (ContractProfile<?>) referenceValue;
+								if (referenceValue instanceof ContractProfile<?, ?>) {
+									ContractProfile<?, ?> contractProfile = (ContractProfile<?, ?>) referenceValue;
 									return contractProfile.getContract().getName();
 								}
 								return "";
@@ -169,36 +169,36 @@ public class ContractProfileValueProviderFactory implements IReferenceValueProvi
 
 							}
 						};
-//						return new MergedReferenceValueProvider(adpModel, ADPPackage.Literals.ADP_MODEL__PURCHASE_CONTRACT_PROFILES, ADPPackage.Literals.ADP_MODEL__SALES_CONTRACT_PROFILES) {
-//
-//							@Override
-//							public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
-//
-//								List<Pair<String, EObject>> allowedValues = super.getAllowedValues(target, field);
-//								if (target instanceof DeliverToFlow) {
-//
-//									return allowedValues.stream() //
-//											.filter(p -> p.getSecond() instanceof SalesContractProfile) //
-//											.collect(Collectors.toList());
-//								} else if (target instanceof SupplyFromFlow) {
-//
-//									return allowedValues.stream() //
-//											.filter(p -> p.getSecond() instanceof PurchaseContractProfile) //
-//											.collect(Collectors.toList());
-//								}
-//
-//								return allowedValues;
-//							}
-//
-//							@Override
-//							public String getName(EObject referer, EReference feature, EObject referenceValue) {
-//								if (referenceValue instanceof ContractProfile<?>) {
-//									ContractProfile<?> contractProfile = (ContractProfile<?>) referenceValue;
-//									return contractProfile.getContract().getName();
-//								}
-//								return "";
-//							}
-//						};
+						// return new MergedReferenceValueProvider(adpModel, ADPPackage.Literals.ADP_MODEL__PURCHASE_CONTRACT_PROFILES, ADPPackage.Literals.ADP_MODEL__SALES_CONTRACT_PROFILES) {
+						//
+						// @Override
+						// public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
+						//
+						// List<Pair<String, EObject>> allowedValues = super.getAllowedValues(target, field);
+						// if (target instanceof DeliverToFlow) {
+						//
+						// return allowedValues.stream() //
+						// .filter(p -> p.getSecond() instanceof SalesContractProfile) //
+						// .collect(Collectors.toList());
+						// } else if (target instanceof SupplyFromFlow) {
+						//
+						// return allowedValues.stream() //
+						// .filter(p -> p.getSecond() instanceof PurchaseContractProfile) //
+						// .collect(Collectors.toList());
+						// }
+						//
+						// return allowedValues;
+						// }
+						//
+						// @Override
+						// public String getName(EObject referer, EReference feature, EObject referenceValue) {
+						// if (referenceValue instanceof ContractProfile<?>) {
+						// ContractProfile<?> contractProfile = (ContractProfile<?>) referenceValue;
+						// return contractProfile.getContract().getName();
+						// }
+						// return "";
+						// }
+						// };
 					}
 				}
 			}

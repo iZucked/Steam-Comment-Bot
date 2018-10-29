@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.datetime.DateTimePackage;
@@ -2897,16 +2898,19 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		// Obtain other dependent packages
 		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
-		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
+		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		SpotMarketsPackage theSpotMarketsPackage = (SpotMarketsPackage)EPackage.Registry.INSTANCE.getEPackage(SpotMarketsPackage.eNS_URI);
 
 		// Create type parameters
+		ETypeParameter slotEClass_T = addETypeParameter(slotEClass, "T");
 
 		// Set bounds for type parameters
+		EGenericType g1 = createEGenericType(theCommercialPackage.getContract());
+		slotEClass_T.getEBounds().add(g1);
 
 		// Add supertypes to classes
 		cargoModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
@@ -2915,8 +2919,14 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		slotEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		slotEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		slotEClass.getESuperTypes().add(theTypesPackage.getITimezoneProvider());
-		loadSlotEClass.getESuperTypes().add(this.getSlot());
-		dischargeSlotEClass.getESuperTypes().add(this.getSlot());
+		g1 = createEGenericType(this.getSlot());
+		EGenericType g2 = createEGenericType(theCommercialPackage.getPurchaseContract());
+		g1.getETypeArguments().add(g2);
+		loadSlotEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getSlot());
+		g2 = createEGenericType(theCommercialPackage.getSalesContract());
+		g1.getETypeArguments().add(g2);
+		dischargeSlotEClass.getEGenericSuperTypes().add(g1);
 		spotSlotEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		spotLoadSlotEClass.getESuperTypes().add(this.getLoadSlot());
 		spotLoadSlotEClass.getESuperTypes().add(this.getSpotSlot());
@@ -2932,8 +2942,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		maintenanceEventEClass.getESuperTypes().add(this.getVesselEvent());
 		dryDockEventEClass.getESuperTypes().add(this.getVesselEvent());
 		charterOutEventEClass.getESuperTypes().add(this.getVesselEvent());
-		EGenericType g1 = createEGenericType(theTypesPackage.getAVesselSet());
-		EGenericType g2 = createEGenericType(theFleetPackage.getVessel());
+		g1 = createEGenericType(theTypesPackage.getAVesselSet());
+		g2 = createEGenericType(theFleetPackage.getVessel());
 		g1.getETypeArguments().add(g2);
 		vesselTypeGroupEClass.getEGenericSuperTypes().add(g1);
 		startHeelOptionsEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
@@ -2974,7 +2984,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEOperation(getCargo__GetLoadName(), ecorePackage.getEString(), "getLoadName", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(slotEClass, Slot.class, "Slot", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getSlot_Contract(), theCommercialPackage.getContract(), null, "contract", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(slotEClass_T);
+		initEReference(getSlot_Contract(), g1, null, "contract", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Counterparty(), ecorePackage.getEString(), "counterparty", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Cn(), ecorePackage.getEString(), "cn", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_Port(), thePortPackage.getPort(), null, "port", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

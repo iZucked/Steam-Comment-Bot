@@ -356,7 +356,7 @@ public class SlotOverridesTest {
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// set up a new contract on discharge slot 1
-		final Contract forbidden = msc.addSalesContract("Forbidden Purchase Contract", 14);
+		final SalesContract forbidden = msc.addSalesContract("Forbidden Purchase Contract", 14);
 		msc.dischargeSlots[1].setContract(forbidden);
 
 		// do override the contracts' restricted contracts
@@ -380,7 +380,7 @@ public class SlotOverridesTest {
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// set up a new contract on discharge slot 1
-		final Contract forbidden = msc.addSalesContract("Forbidden Purchase Contract", 14);
+		final SalesContract forbidden = msc.addSalesContract("Forbidden Purchase Contract", 14);
 		msc.dischargeSlots[1].setContract(forbidden);
 
 		// do override the contracts' restricted contracts

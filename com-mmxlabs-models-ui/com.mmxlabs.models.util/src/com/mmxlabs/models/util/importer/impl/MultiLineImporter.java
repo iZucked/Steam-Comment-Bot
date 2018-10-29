@@ -227,7 +227,7 @@ public class MultiLineImporter extends DefaultClassImporter {
 					// The reference itself is present, so do a lookup later
 					final String referentName = row.get(lcrn).trim();
 					if (!referentName.isEmpty()) {
-						context.doLater(new SetReference(instance, reference, getEReferenceLinkType(reference), row.get(lcrn), context));
+						context.doLater(new SetReference(instance, reference, getEReferenceLinkType(instance, reference), row.get(lcrn), context));
 					}
 				}
 			} else {

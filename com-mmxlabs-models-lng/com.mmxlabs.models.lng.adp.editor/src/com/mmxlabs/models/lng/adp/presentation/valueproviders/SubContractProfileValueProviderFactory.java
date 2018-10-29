@@ -13,11 +13,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
-import com.mmxlabs.models.lng.adp.DeliverToProfileFlow;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
-import com.mmxlabs.models.lng.adp.SupplyFromProfileFlow;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.BaseReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -29,34 +26,15 @@ public class SubContractProfileValueProviderFactory implements IReferenceValuePr
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
 
 		return new BaseReferenceValueProvider() {
-			@Override
-			public boolean updateOnChangeToFeature(Object changedFeature) {
-				if (changedFeature == ADPPackage.Literals.DELIVER_TO_PROFILE_FLOW__PROFILE) {
-					return true;
-				}
-				if (changedFeature == ADPPackage.Literals.SUPPLY_FROM_PROFILE_FLOW__PROFILE) {
-					return true;
-				}
-				// TODO Auto-generated method stub
-				return super.updateOnChangeToFeature(changedFeature);
-			}
 
 			@Override
 			public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
 
-				if (target instanceof DeliverToProfileFlow) {
-					DeliverToProfileFlow deliverToProfileFlow = (DeliverToProfileFlow) target;
-					target = deliverToProfileFlow.getProfile();
-				} else if (target instanceof SupplyFromProfileFlow) {
-					SupplyFromProfileFlow supplyFromProfileFlow = (SupplyFromProfileFlow) target;
-					target = supplyFromProfileFlow.getProfile();
-				}
-
-				if (target instanceof ContractProfile<?>) {
-					ContractProfile<?> contractProfile = (ContractProfile<?>) target;
+				if (target instanceof ContractProfile<?, ?>) {
+					ContractProfile<?, ?> contractProfile = (ContractProfile<?, ?>) target;
 
 					List<Pair<String, EObject>> values = new LinkedList<>();
-					for (SubContractProfile<?> subProfile : contractProfile.getSubProfiles()) {
+					for (SubContractProfile<?, ?> subProfile : contractProfile.getSubProfiles()) {
 						values.add(new Pair<>(subProfile.getName(), subProfile));
 					}
 					return values;

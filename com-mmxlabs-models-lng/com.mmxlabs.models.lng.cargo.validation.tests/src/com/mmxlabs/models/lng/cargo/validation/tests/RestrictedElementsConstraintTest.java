@@ -24,6 +24,8 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.RestrictedElementsConstraint;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -48,8 +50,8 @@ public class RestrictedElementsConstraintTest {
 		final Port dischargePort = mock(Port.class);
 		final Port otherPort = mock(Port.class);
 
-		final Contract loadContract = mock(Contract.class);
-		final Contract dischargeContract = mock(Contract.class);
+		final PurchaseContract loadContract = mock(PurchaseContract.class);
+		final SalesContract dischargeContract = mock(SalesContract.class);
 		final Contract otherContract = mock(Contract.class);
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
@@ -116,8 +118,8 @@ public class RestrictedElementsConstraintTest {
 		final Port loadPort = mock(Port.class);
 		final Port dischargePort = mock(Port.class);
 
-		final Contract loadContract = mock(Contract.class);
-		final Contract dischargeContract = mock(Contract.class);
+		final PurchaseContract loadContract = mock(PurchaseContract.class);
+		final SalesContract dischargeContract = mock(SalesContract.class);
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
@@ -182,8 +184,8 @@ public class RestrictedElementsConstraintTest {
 		final Port loadPort = mock(Port.class);
 		final Port dischargePort = mock(Port.class);
 
-		final Contract loadContract = mock(Contract.class);
-		final Contract dischargeContract = mock(Contract.class);
+		final PurchaseContract loadContract = mock(PurchaseContract.class);
+		final SalesContract dischargeContract = mock(SalesContract.class);
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
@@ -247,8 +249,8 @@ public class RestrictedElementsConstraintTest {
 		final Port loadPort = mock(Port.class);
 		final Port dischargePort = mock(Port.class);
 
-		final Contract loadContract = mock(Contract.class);
-		final Contract dischargeContract = mock(Contract.class);
+		final PurchaseContract loadContract = mock(PurchaseContract.class);
+		final SalesContract dischargeContract = mock(SalesContract.class);
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
@@ -317,8 +319,8 @@ public class RestrictedElementsConstraintTest {
 
 		final Port dischargePort = mock(Port.class);
 
-		final Contract loadContract = mock(Contract.class);
-		final Contract dischargeContract = mock(Contract.class);
+		final PurchaseContract loadContract = mock(PurchaseContract.class);
+		final SalesContract dischargeContract = mock(SalesContract.class);
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
@@ -332,12 +334,11 @@ public class RestrictedElementsConstraintTest {
 		when(successStatus.getSeverity()).thenReturn(IStatus.OK);
 		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
 
-		
 		when(loadPort1.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort1));
 		when(loadPort2.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort2));
 		when(dischargePort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
-		when(portGroup.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port>   asEList(loadPort1, loadPort2));
-		
+		when(portGroup.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> asEList(loadPort1, loadPort2));
+
 		// Set up the expected return values of methods.
 		when(loadSlot.getPort()).thenReturn(loadPort1);
 		when(dischargeSlot.getPort()).thenReturn(dischargePort);
@@ -386,11 +387,11 @@ public class RestrictedElementsConstraintTest {
 
 		final Port loadPort = mock(Port.class);
 		final Port dischargePort = mock(Port.class);
-		
-		Mockito.when(dischargePort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port>newBasicEList(dischargePort));
 
-		final Contract loadContract = mock(Contract.class);
-		final Contract dischargeContract = mock(Contract.class);
+		Mockito.when(dischargePort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> newBasicEList(dischargePort));
+
+		final PurchaseContract loadContract = mock(PurchaseContract.class);
+		final SalesContract dischargeContract = mock(SalesContract.class);
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);

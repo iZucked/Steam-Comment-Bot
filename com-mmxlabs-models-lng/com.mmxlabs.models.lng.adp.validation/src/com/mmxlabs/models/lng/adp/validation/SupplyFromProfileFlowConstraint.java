@@ -43,7 +43,7 @@ public class SupplyFromProfileFlowConstraint extends AbstractModelMultiConstrain
 
 			if (flow.getProfile() != null) {
 				PurchaseContractProfile fromProfile = (PurchaseContractProfile) flow.getProfile();
-				SubContractProfile<?> rule = (SubContractProfile<?>) flow.eContainer();
+				SubContractProfile<?, ?> rule = (SubContractProfile<?, ?>) flow.eContainer();
 				if (rule != null) {
 					SalesContractProfile toProfile = (SalesContractProfile) rule.eContainer();
 

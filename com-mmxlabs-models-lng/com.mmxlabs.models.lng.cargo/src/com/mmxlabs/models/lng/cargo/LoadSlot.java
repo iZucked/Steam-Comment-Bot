@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 
 /**
@@ -26,7 +27,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  * @model
  * @generated
  */
-public interface LoadSlot extends Slot {
+public interface LoadSlot extends Slot<PurchaseContract> {
 	/**
 	 * Returns the value of the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->

@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.adp.impl;
 import com.mmxlabs.models.lng.adp.*;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -154,8 +155,8 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * @generated
 	 */
 	@Override
-	public <T extends Slot> ContractProfile<T> createContractProfile() {
-		ContractProfileImpl<T> contractProfile = new ContractProfileImpl<T>();
+	public <T extends Slot<U>, U extends Contract> ContractProfile<T, U> createContractProfile() {
+		ContractProfileImpl<T, U> contractProfile = new ContractProfileImpl<T, U>();
 		return contractProfile;
 	}
 
@@ -209,8 +210,8 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * @generated
 	 */
 	@Override
-	public <T extends Slot> SubContractProfile<T> createSubContractProfile() {
-		SubContractProfileImpl<T> subContractProfile = new SubContractProfileImpl<T>();
+	public <T extends Slot<U>, U extends Contract> SubContractProfile<T, U> createSubContractProfile() {
+		SubContractProfileImpl<T, U> subContractProfile = new SubContractProfileImpl<T, U>();
 		return subContractProfile;
 	}
 
@@ -281,7 +282,6 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public FlowType createFlowType() {
 		FlowTypeImpl flowType = new FlowTypeImpl();
 		return flowType;
@@ -292,7 +292,6 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public SupplyFromFlow createSupplyFromFlow() {
 		SupplyFromFlowImpl supplyFromFlow = new SupplyFromFlowImpl();
 		return supplyFromFlow;
@@ -303,7 +302,6 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public DeliverToFlow createDeliverToFlow() {
 		DeliverToFlowImpl deliverToFlow = new DeliverToFlowImpl();
 		return deliverToFlow;
@@ -314,7 +312,6 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public SupplyFromProfileFlow createSupplyFromProfileFlow() {
 		SupplyFromProfileFlowImpl supplyFromProfileFlow = new SupplyFromProfileFlowImpl();
 		return supplyFromProfileFlow;
@@ -325,7 +322,6 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public DeliverToProfileFlow createDeliverToProfileFlow() {
 		DeliverToProfileFlowImpl deliverToProfileFlow = new DeliverToProfileFlowImpl();
 		return deliverToProfileFlow;
@@ -336,7 +332,6 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public SupplyFromSpotFlow createSupplyFromSpotFlow() {
 		SupplyFromSpotFlowImpl supplyFromSpotFlow = new SupplyFromSpotFlowImpl();
 		return supplyFromSpotFlow;
@@ -347,7 +342,6 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public DeliverToSpotFlow createDeliverToSpotFlow() {
 		DeliverToSpotFlowImpl deliverToSpotFlow = new DeliverToSpotFlowImpl();
 		return deliverToSpotFlow;

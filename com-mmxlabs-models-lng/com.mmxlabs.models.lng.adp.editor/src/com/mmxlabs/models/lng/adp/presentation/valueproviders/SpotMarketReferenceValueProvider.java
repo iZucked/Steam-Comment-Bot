@@ -12,13 +12,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.adp.DeliverToSpotFlow;
-import com.mmxlabs.models.lng.adp.SupplyFromSpotFlow;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.BaseReferenceValueProvider;
 
@@ -36,28 +33,6 @@ public class SpotMarketReferenceValueProvider extends BaseReferenceValueProvider
 		if (rootObject instanceof LNGScenarioModel) {
 			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final List<EStructuralFeature> features = new LinkedList<>();
-			;
-			if (target instanceof SupplyFromSpotFlow) {
-
-//				final SupplyFromSpotFlow slot = (SupplyFromSpotFlow) target;
-
-				// if (slot.isDESPurchase()) {
-				features.add(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesPurchaseSpotMarket());
-				// } else {
-				features.add(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobPurchasesSpotMarket());
-				// }
-			} else if (target instanceof DeliverToSpotFlow) {
-
-				final DeliverToSpotFlow slot = (DeliverToSpotFlow) target;
-
-				// if (slot.isFOBSale()) {
-				features.add(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobSalesSpotMarket());
-				// } else {
-				features.add(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesSalesSpotMarket());
-				// }
-			} else {
-				// feature = null;
-			}
 
 			if (!features.isEmpty()) {
 

@@ -37,7 +37,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface ContractProfile<T extends Slot> extends EObject {
+public interface ContractProfile<T extends Slot<U>, U extends Contract> extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -52,7 +52,7 @@ public interface ContractProfile<T extends Slot> extends EObject {
 	 * @model
 	 * @generated
 	 */
-	Contract getContract();
+	U getContract();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.ContractProfile#getContract <em>Contract</em>}' reference.
@@ -62,7 +62,7 @@ public interface ContractProfile<T extends Slot> extends EObject {
 	 * @see #getContract()
 	 * @generated
 	 */
-	void setContract(Contract value);
+	void setContract(U value);
 
 	/**
 	 * Returns the value of the '<em><b>Contract Code</b></em>' attribute.
@@ -199,7 +199,7 @@ public interface ContractProfile<T extends Slot> extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Sub Profiles</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.SubContractProfile}<code>&lt;T&gt;</code>.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.SubContractProfile}<code>&lt;T, U&gt;</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Sub Profiles</em>' containment reference list isn't clear,
@@ -211,7 +211,7 @@ public interface ContractProfile<T extends Slot> extends EObject {
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	EList<SubContractProfile<T>> getSubProfiles();
+	EList<SubContractProfile<T, U>> getSubProfiles();
 
 	/**
 	 * Returns the value of the '<em><b>Constraints</b></em>' containment reference list.

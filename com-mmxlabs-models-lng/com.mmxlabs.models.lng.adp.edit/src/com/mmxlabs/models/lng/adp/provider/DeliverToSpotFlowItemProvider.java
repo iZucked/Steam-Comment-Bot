@@ -1,8 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2018
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.adp.provider;
 
@@ -94,7 +90,7 @@ public class DeliverToSpotFlowItemProvider extends DeliverToFlowItemProvider {
 	public String getText(Object object) {
 		return getString("_UI_DeliverToSpotFlow_type");
 	}
-	
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
