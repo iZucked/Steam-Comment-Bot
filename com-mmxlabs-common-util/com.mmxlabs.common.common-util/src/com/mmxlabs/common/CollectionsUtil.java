@@ -285,5 +285,4 @@ public final class CollectionsUtil {
 	public static <T> @Nullable T getLastElement(@NonNull List<T> list) {
 		return list.isEmpty() ? null : list.get(list.size() - 1);
 	}
-
 }

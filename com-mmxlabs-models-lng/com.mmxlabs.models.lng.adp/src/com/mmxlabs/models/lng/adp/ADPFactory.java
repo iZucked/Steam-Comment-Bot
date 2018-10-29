@@ -99,6 +99,24 @@ public interface ADPFactory extends EFactory {
 	<T extends Slot> SubContractProfile<T> createSubContractProfile();
 
 	/**
+	 * Returns a new object of class '<em>Period Distribution Profile Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Period Distribution Profile Constraint</em>'.
+	 * @generated
+	 */
+	PeriodDistributionProfileConstraint createPeriodDistributionProfileConstraint();
+
+	/**
+	 * Returns a new object of class '<em>Period Distribution</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Period Distribution</em>'.
+	 * @generated
+	 */
+	PeriodDistribution createPeriodDistribution();
+
+	/**
 	 * Returns a new object of class '<em>Cargo By Quarter Distribution Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

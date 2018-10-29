@@ -69,7 +69,6 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 
 	public DefaultTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
 		super(parent, style);
-		// this.location = location;
 		this.dialogContext = dialogContext;
 		this.toolkit = toolkit;
 		toolkit.adapt(this);
@@ -91,19 +90,19 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 
 		topLevel.display(dialogContext, root, object, range, dbc);
 
-		int numChildren = createDefaultChildCompsiteSection(dialogContext, root, object, range, dbc, eClass, this);
+		final int numChildren = createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, this);
 		setLayout(layoutProvider.createTopLevelLayout(root, object, numChildren + 1));
 	}
 
-	protected int createDefaultChildCompsiteSection(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range,
-			final EMFDataBindingContext dbc, final EClass eClass, Composite parent) {
-		ChildCompositeContainer childContainer = createChildComposites(root, object, eClass, parent);
+	protected int createDefaultChildCompositeSection(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range,
+			final EMFDataBindingContext dbc, final EClass eClass, final Composite parent) {
+		final ChildCompositeContainer childContainer = createChildComposites(root, object, eClass, parent);
 
 		final Iterator<IDisplayComposite> children = childContainer.childComposites.iterator();
 		final Iterator<EObject> childObjectsItr = childContainer.childObjects.iterator();
 
 		while (childObjectsItr.hasNext()) {
-			IDisplayComposite next = children.next();
+			final IDisplayComposite next = children.next();
 			GridData gridData = (GridData) next.getComposite().getLayoutData();
 			if (gridData == null) {
 				gridData = GridDataFactory.swtDefaults().create();
@@ -135,7 +134,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	 *            The GUI component to add sub-components to
 	 */
 	protected ChildCompositeContainer createChildComposites(final MMXRootObject root, final EObject object, final EClass eClass, final Composite parent) {
-		ChildCompositeContainer childReferences = new ChildCompositeContainer();
+		final ChildCompositeContainer childReferences = new ChildCompositeContainer();
 		for (final EReference ref : eClass.getEAllReferences()) {
 			if (shouldDisplay(ref)) {
 				if (ref.isMany()) {
@@ -155,9 +154,9 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		return childReferences;
 	}
 
-	protected IDisplayComposite createChildArea(ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
+	protected IDisplayComposite createChildArea(final ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
 			final EObject value) {
-		String label = EditorUtils.unmangle(ref.getName());
+		final String label = EditorUtils.unmangle(ref.getName());
 		return createChildArea(childCompositeContainer, root, object, parent, ref, label, value);
 
 	}
@@ -181,23 +180,23 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	 *            The object's sub-component value (which may be one of many, if the field is a list)
 	 * @return
 	 */
-	protected IDisplayComposite createChildArea(ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
-			String groupLabel, final EObject value) {
-		BiFunction<EObject, Composite, IDisplayComposite> factory = (v, g) -> Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(v.eClass())
+	protected IDisplayComposite createChildArea(final ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
+			final String groupLabel, final EObject value) {
+		final BiFunction<EObject, Composite, IDisplayComposite> factory = (v, g) -> Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(v.eClass())
 				.createSublevelComposite(g, v.eClass(), dialogContext, toolkit);
 		return createChildArea(childCompositeContainer, root, object, parent, ref, groupLabel, value, factory, null);
 	}
 
-	protected IDisplayComposite createChildArea(ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
-			String groupLabel, final EObject value, Consumer<Composite> compositeAction) {
-		BiFunction<EObject, Composite, IDisplayComposite> factory = (v, g) -> Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(v.eClass())
+	protected IDisplayComposite createChildArea(final ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
+			final String groupLabel, final EObject value, final Consumer<Composite> compositeAction) {
+		final BiFunction<EObject, Composite, IDisplayComposite> factory = (v, g) -> Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(v.eClass())
 				.createSublevelComposite(g, v.eClass(), dialogContext, toolkit);
 		return createChildArea(childCompositeContainer, root, object, parent, ref, groupLabel, value, factory, compositeAction);
 
 	}
 
-	protected IDisplayComposite createChildArea(ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
-			String groupLabel, final EObject value, BiFunction<EObject, Composite, IDisplayComposite> factory, Consumer<Composite> compositeAction) {
+	protected IDisplayComposite createChildArea(final ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
+			final String groupLabel, final EObject value, final BiFunction<EObject, Composite, IDisplayComposite> factory, final Consumer<Composite> compositeAction) {
 		if (value != null) {
 			Composite p = parent;
 			if (groupLabel != null) {
@@ -219,7 +218,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 					// descriptor for the feature
 					for (final IItemPropertyDescriptor descriptor : inputPropertySource.getPropertyDescriptors(object)) {
 
-						Object feature = descriptor.getFeature(object);
+						final Object feature = descriptor.getFeature(object);
 						if (ref.equals(feature)) {
 							// Found match
 							toolTip = descriptor.getDescription(value).replace("{0}", EditorUtils.unmangle(object.eClass().getName()).toLowerCase());
@@ -267,7 +266,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		if (topLevel != null) {
 			topLevel.displayValidationStatus(status);
 		}
-		for (ChildCompositeContainer childContainer : childCompositeContainers) {
+		for (final ChildCompositeContainer childContainer : childCompositeContainers) {
 			for (final IDisplayComposite child : childContainer.childComposites) {
 				child.displayValidationStatus(status);
 			}
@@ -280,7 +279,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		if (topLevel != null) {
 			topLevel.setEditorWrapper(editorWrapper);
 		}
-		for (ChildCompositeContainer childContainer : childCompositeContainers) {
+		for (final ChildCompositeContainer childContainer : childCompositeContainers) {
 			for (final IDisplayComposite child : childContainer.childComposites) {
 				child.setEditorWrapper(editorWrapper);
 			}
@@ -302,7 +301,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		if (topLevel != null) {
 			topLevel.checkVisibility(context);
 		}
-		for (ChildCompositeContainer childContainer : childCompositeContainers) {
+		for (final ChildCompositeContainer childContainer : childCompositeContainers) {
 			for (final IDisplayComposite child : childContainer.childComposites) {
 				changed |= child.checkVisibility(context);
 			}
@@ -316,7 +315,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	 * @return
 	 */
 	public static ComposedAdapterFactory createAdapterFactory() {
-		final List<AdapterFactory> factories = new ArrayList<AdapterFactory>();
+		final List<AdapterFactory> factories = new ArrayList<>();
 		factories.add(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
 		factories.add(new ReflectiveItemProviderAdapterFactory());
 		return new ComposedAdapterFactory(factories);

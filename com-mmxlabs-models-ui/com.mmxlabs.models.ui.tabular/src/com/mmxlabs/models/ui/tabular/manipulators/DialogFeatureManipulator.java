@@ -11,6 +11,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
+import com.mmxlabs.rcp.common.RunnerHelper;
+
 /**
  * @author hinton
  */
@@ -45,18 +47,14 @@ public abstract class DialogFeatureManipulator extends BasicAttributeManipulator
 			protected void doSetFocus() {
 				if (!locked) {
 					locked = true;
-					c.getShell().getDisplay().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							final Object o = openDialogBox(editor, object);
-							if (o != null) {
-								value = o;
-								valueChanged(true, true);
-							}
-							focusLost();
-							locked = false;
+					RunnerHelper.runNowOrAsync(() -> {
+						final Object o = openDialogBox(editor, object);
+						if (o != null) {
+							value = o;
+							valueChanged(true, true);
 						}
-
+						focusLost();
+						locked = false;
 					});
 				}
 				if (label != null) {
@@ -84,6 +82,7 @@ public abstract class DialogFeatureManipulator extends BasicAttributeManipulator
 
 				return editor;
 			}
+
 		};
 		// return new DialogCellEditor(c) {
 		// @Override
@@ -100,8 +99,6 @@ public abstract class DialogFeatureManipulator extends BasicAttributeManipulator
 		// };
 	}
 
-	
-	
 	@Override
 	protected String renderSetValue(Object o, Object setValue) {
 		return renderValue(setValue);

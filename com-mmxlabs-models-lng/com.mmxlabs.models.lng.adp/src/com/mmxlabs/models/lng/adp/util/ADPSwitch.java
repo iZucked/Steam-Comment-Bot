@@ -267,6 +267,19 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ADPPackage.PERIOD_DISTRIBUTION_PROFILE_CONSTRAINT: {
+				PeriodDistributionProfileConstraint periodDistributionProfileConstraint = (PeriodDistributionProfileConstraint)theEObject;
+				T1 result = casePeriodDistributionProfileConstraint(periodDistributionProfileConstraint);
+				if (result == null) result = caseProfileConstraint(periodDistributionProfileConstraint);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.PERIOD_DISTRIBUTION: {
+				PeriodDistribution periodDistribution = (PeriodDistribution)theEObject;
+				T1 result = casePeriodDistribution(periodDistribution);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case ADPPackage.FLEET_CONSTRAINT: {
 				FleetConstraint fleetConstraint = (FleetConstraint)theEObject;
 				T1 result = caseFleetConstraint(fleetConstraint);
@@ -341,6 +354,36 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseDistributionModel(DistributionModel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Period Distribution Profile Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Period Distribution Profile Constraint</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 casePeriodDistributionProfileConstraint(PeriodDistributionProfileConstraint object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Period Distribution</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Period Distribution</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 casePeriodDistribution(PeriodDistribution object) {
 		return null;
 	}
 

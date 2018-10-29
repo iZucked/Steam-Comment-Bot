@@ -83,7 +83,7 @@ public class BaseLegalEntityTopLevelComposite extends DefaultTopLevelComposite {
 
 		topLevel.display(dialogContext, root, object, range, dbc);
 
-		int numChildren = createDefaultChildCompsiteSection(dialogContext, root, object, range, dbc, eClass, middle);
+		int numChildren = createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, middle);
 		middle.setLayout(new GridLayout(numChildren, true));
 
 		// Overrides default layout factory so we get a single column rather than multiple columns and one row

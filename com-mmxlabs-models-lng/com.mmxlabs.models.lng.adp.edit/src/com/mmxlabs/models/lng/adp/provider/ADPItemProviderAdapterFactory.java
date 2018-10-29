@@ -279,6 +279,52 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PeriodDistributionProfileConstraintItemProvider periodDistributionProfileConstraintItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPeriodDistributionProfileConstraintAdapter() {
+		if (periodDistributionProfileConstraintItemProvider == null) {
+			periodDistributionProfileConstraintItemProvider = new PeriodDistributionProfileConstraintItemProvider(this);
+		}
+
+		return periodDistributionProfileConstraintItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.PeriodDistribution} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PeriodDistributionItemProvider periodDistributionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.PeriodDistribution}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPeriodDistributionAdapter() {
+		if (periodDistributionItemProvider == null) {
+			periodDistributionItemProvider = new PeriodDistributionItemProvider(this);
+		}
+
+		return periodDistributionItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.CargoByQuarterDistributionModel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -795,6 +841,8 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 		if (shippingOptionItemProvider != null) shippingOptionItemProvider.dispose();
 		if (minCargoConstraintItemProvider != null) minCargoConstraintItemProvider.dispose();
 		if (maxCargoConstraintItemProvider != null) maxCargoConstraintItemProvider.dispose();
+		if (periodDistributionProfileConstraintItemProvider != null) periodDistributionProfileConstraintItemProvider.dispose();
+		if (periodDistributionItemProvider != null) periodDistributionItemProvider.dispose();
 		if (targetCargoesOnVesselConstraintItemProvider != null) targetCargoesOnVesselConstraintItemProvider.dispose();
 	}
 

@@ -122,6 +122,14 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//MaxCargoConstraint/maxCargoes"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//MaxCargoConstraint/intervalType"/>
     </genClasses>
+    <genClasses ecoreClass="adp.ecore#//PeriodDistributionProfileConstraint">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//PeriodDistributionProfileConstraint/distributions"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//PeriodDistribution">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//PeriodDistribution/range"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//PeriodDistribution/minCargoes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//PeriodDistribution/maxCargoes"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="adp.ecore#//FleetConstraint"/>
     <genClasses ecoreClass="adp.ecore#//TargetCargoesOnVesselConstraint">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//TargetCargoesOnVesselConstraint/vessel"/>

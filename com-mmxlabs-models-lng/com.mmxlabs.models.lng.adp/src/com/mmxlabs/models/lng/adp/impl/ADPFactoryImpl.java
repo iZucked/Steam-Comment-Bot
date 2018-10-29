@@ -85,6 +85,8 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 			case ADPPackage.SHIPPING_OPTION: return createShippingOption();
 			case ADPPackage.MIN_CARGO_CONSTRAINT: return createMinCargoConstraint();
 			case ADPPackage.MAX_CARGO_CONSTRAINT: return createMaxCargoConstraint();
+			case ADPPackage.PERIOD_DISTRIBUTION_PROFILE_CONSTRAINT: return createPeriodDistributionProfileConstraint();
+			case ADPPackage.PERIOD_DISTRIBUTION: return createPeriodDistribution();
 			case ADPPackage.TARGET_CARGOES_ON_VESSEL_CONSTRAINT: return createTargetCargoesOnVesselConstraint();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -210,6 +212,26 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	public <T extends Slot> SubContractProfile<T> createSubContractProfile() {
 		SubContractProfileImpl<T> subContractProfile = new SubContractProfileImpl<T>();
 		return subContractProfile;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PeriodDistributionProfileConstraint createPeriodDistributionProfileConstraint() {
+		PeriodDistributionProfileConstraintImpl periodDistributionProfileConstraint = new PeriodDistributionProfileConstraintImpl();
+		return periodDistributionProfileConstraint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PeriodDistribution createPeriodDistribution() {
+		PeriodDistributionImpl periodDistribution = new PeriodDistributionImpl();
+		return periodDistribution;
 	}
 
 	/**

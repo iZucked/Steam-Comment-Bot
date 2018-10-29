@@ -87,7 +87,7 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 
 		topLevel.display(dialogContext, root, object, range, dbc);
 
-		createDefaultChildCompsiteSection(dialogContext, root, object, range, dbc, eClass, right);
+		createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, right);
 //		int numChildren = createChildComposites(root, object, eClass, right);
 //		final Iterator<IDisplayComposite> children = childComposites.iterator();
 //		final Iterator<EObject> childObjectsItr = childObjects.iterator();

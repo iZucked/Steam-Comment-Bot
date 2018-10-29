@@ -64,7 +64,7 @@ public class DischargeSlotTopLevelComposite extends DefaultTopLevelComposite {
 		topLevel.setEditorWrapper(editorWrapper);
 		topLevel.display(dialogContext, root, object, range, dbc);
 
-		int numChildren = createDefaultChildCompsiteSection(dialogContext, root, object, range, dbc, eClass, this);
+		int numChildren = createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, this);
 		setLayout(layoutProvider.createTopLevelLayout(root, object, numChildren + 1));
 	}
 }

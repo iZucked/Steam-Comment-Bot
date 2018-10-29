@@ -33,8 +33,10 @@ public class IntervalTypeInlineEditorFactory implements IInlineEditorFactory {
 				name = "Quarterly";
 				break;
 			case WEEKLY:
-				name = "Weekly";
-				break;
+				// Hide this for now
+				continue;
+//				name = "Weekly";
+//				break;
 			case BIMONTHLY:
 				name = "Bimonthly";
 				break;

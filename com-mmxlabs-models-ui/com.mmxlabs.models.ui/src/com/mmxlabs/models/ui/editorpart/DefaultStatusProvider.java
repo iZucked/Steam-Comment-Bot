@@ -19,7 +19,7 @@ import com.mmxlabs.models.ui.validation.IStatusProvider;
  * 
  */
 public abstract class DefaultStatusProvider implements IStatusProvider {
-	private final Set<IStatusChangedListener> listeners = new HashSet<IStatusChangedListener>();
+	private final Set<IStatusChangedListener> listeners = new HashSet<>();
 
 	@Override
 	public void addStatusChangedListener(final IStatusChangedListener l) {
@@ -33,7 +33,7 @@ public abstract class DefaultStatusProvider implements IStatusProvider {
 	}
 
 	public void fireStatusChanged(final IStatus status) {
-		final List<IStatusChangedListener> copy = new ArrayList<IStatusChangedListener>(listeners);
+		final List<IStatusChangedListener> copy = new ArrayList<>(listeners);
 		for (final IStatusChangedListener l : copy) {
 			l.onStatusChanged(this, status);
 		}

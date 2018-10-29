@@ -67,18 +67,18 @@ public class ListSelectionDialog extends Dialog {
 	private final ILabelProvider labelProvider;
 	private final GroupedElementProvider contentProvider;
 	private final Object input;
-	private final List<Pair<String, CellLabelProvider>> columns = new LinkedList<Pair<String, CellLabelProvider>>();
-	private final HashSet<Object> allSelectedElements = new HashSet<Object>();
-	private final HashSet<Object> filteredElements = new HashSet<Object>();
+	private final List<Pair<String, CellLabelProvider>> columns = new LinkedList<>();
+	private final HashSet<Object> allSelectedElements = new HashSet<>();
+	private final HashSet<Object> filteredElements = new HashSet<>();
 	private Object[] initialSelection = new Object[0];
 	private Object[] dialogResult;
 
 	private class GroupedElementProvider implements ITreeContentProvider {
 		private final IStructuredContentProvider delegate;
-		private final List<ILabelProvider> groupers = new LinkedList<ILabelProvider>();
+		private final List<ILabelProvider> groupers = new LinkedList<>();
 
-		private final Map<Object, E> originalToViewer = new HashMap<Object, E>();
-		private final Map<E, Object> viewerToOriginal = new HashMap<E, Object>();
+		private final Map<Object, E> originalToViewer = new HashMap<>();
+		private final Map<E, Object> viewerToOriginal = new HashMap<>();
 
 		private G lastTop;
 		private Object lastInput;
@@ -118,7 +118,7 @@ public class ListSelectionDialog extends Dialog {
 					final G[] children_ = new G[subGroups.size()];
 					int i = 0;
 
-					final List<ILabelProvider> subStack = stack.size() == 1 ? new LinkedList<ILabelProvider>() : stack.subList(1, stack.size() - 1);
+					final List<ILabelProvider> subStack = stack.size() == 1 ? new LinkedList<>() : stack.subList(1, stack.size() - 1);
 					for (final Map.Entry<String, List<Object>> group : subGroups.entrySet()) {
 						children_[i++] = new G(this, group.getKey(), group.getValue(), subStack);
 					}
@@ -131,15 +131,11 @@ public class ListSelectionDialog extends Dialog {
 			}
 
 			private Map<String, List<Object>> collect(final List<Object> inputs, final ILabelProvider grouper) {
-				final TreeMap<String, List<Object>> out = new TreeMap<String, List<Object>>();
+				final TreeMap<String, List<Object>> out = new TreeMap<>();
 
 				for (final Object o : inputs) {
 					final String s = grouper.getText(o);
-					List<Object> group = out.get(s);
-					if (group == null) {
-						group = new LinkedList<Object>();
-						out.put(s, group);
-					}
+					List<Object> group = out.computeIfAbsent(s, l -> new LinkedList<>());
 					group.add(o);
 				}
 
@@ -271,7 +267,7 @@ public class ListSelectionDialog extends Dialog {
 		}
 
 		public Object[] getInputElements(final Object[] checkedElements) {
-			final LinkedList<Object> result = new LinkedList<Object>();
+			final List<Object> result = new LinkedList<>();
 
 			for (final Object o : checkedElements) {
 				if (o instanceof E) {
@@ -313,7 +309,7 @@ public class ListSelectionDialog extends Dialog {
 		lr.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		final Text tr = new Text(inner, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
 
-		final List<String> filters = new ArrayList<String>();
+		final List<String> filters = new ArrayList<>();
 
 		tr.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		tr.addModifyListener(new ModifyListener() {
@@ -366,19 +362,19 @@ public class ListSelectionDialog extends Dialog {
 			}
 		});
 
-		if (columns.size() > 0) {
+		if (!columns.isEmpty()) {
 			for (final Pair<String, CellLabelProvider> column : columns) {
-				final TreeViewerColumn tvc = new TreeViewerColumn(viewer, SWT.NONE);				
+				final TreeViewerColumn tvc = new TreeViewerColumn(viewer, SWT.NONE);
 				final ColumnLabelProvider provider = (ColumnLabelProvider) column.getSecond();
-				
+
 				final ReversibleViewerComparator sorter = new ReversibleViewerComparator(new ViewerComparator() {
 					@Override
 					public int compare(final Viewer viewer, final Object arg0, final Object arg1) {
-						//FIXME: SG 29/07/2016 - log file reported NPE here!
+						// FIXME: SG 29/07/2016 - log file reported NPE here!
 						return provider.getText(arg0).compareTo(provider.getText(arg1));
-					}					
+					}
 				});
-				
+
 				tvc.getColumn().setText(column.getFirst());
 				tvc.setLabelProvider(column.getSecond());
 				tvc.getColumn().addSelectionListener(new SelectionListener() {
@@ -392,7 +388,7 @@ public class ListSelectionDialog extends Dialog {
 					@Override
 					public void widgetDefaultSelected(final SelectionEvent e) {
 					}
-					
+
 				});
 				// tvc.getColumn().pack();
 			}
@@ -409,7 +405,7 @@ public class ListSelectionDialog extends Dialog {
 				// propagate check marks
 			}
 		});
-				
+
 		viewer.expandAll();
 		for (final TreeColumn column : viewer.getTree().getColumns()) {
 			column.pack();
@@ -470,7 +466,7 @@ public class ListSelectionDialog extends Dialog {
 	 * 
 	 * @param title
 	 * @param columnLabelProvider
-	 * @return 
+	 * @return
 	 */
 	public CellLabelProvider addColumn(final String title, final ColumnLabelProvider columnLabelProvider) {
 		final CellLabelProvider result = contentProvider.wrapColumnLabelProvider(columnLabelProvider, columns.isEmpty());
@@ -501,11 +497,10 @@ public class ListSelectionDialog extends Dialog {
 	public Object[] getResult() {
 		return dialogResult;
 	}
-	
+
 	/**
-	 * Returns the text which the filter box searches through per display row element. 
-	 * Search is done on a trimmed string, so concatenating fields with whitespace will allow multiple
-	 * fields to be searched. 
+	 * Returns the text which the filter box searches through per display row element. Search is done on a trimmed string, so concatenating fields with whitespace will allow multiple fields to be
+	 * searched.
 	 * 
 	 * @param element
 	 * @return
@@ -548,16 +543,16 @@ public class ListSelectionDialog extends Dialog {
 			viewer.setSubtreeChecked(element, true);
 		}
 	}
-	
+
 	public class WrappedColumnLabelProvider extends ColumnLabelProvider {
-		final private ColumnLabelProvider clp;
-		final private boolean isFirstColumn;
-		
+		private final ColumnLabelProvider clp;
+		private final boolean isFirstColumn;
+
 		public WrappedColumnLabelProvider(final ColumnLabelProvider clp, final boolean isFirstColumn) {
 			this.clp = clp;
 			this.isFirstColumn = isFirstColumn;
 		}
-		
+
 		public ColumnLabelProvider getWrapped() {
 			return clp;
 		}
@@ -689,32 +684,31 @@ public class ListSelectionDialog extends Dialog {
 		public void removeListener(final ILabelProviderListener listener) {
 			clp.removeListener(listener);
 		}
-		
+
 	}
-	
+
 	public class ReversibleViewerComparator extends ViewerComparator {
 		int direction = 0;
-		
+
 		final ViewerComparator vc;
-		
+
 		public ReversibleViewerComparator(final ViewerComparator vc) {
 			this.vc = vc;
 		}
-		
+
 		public ViewerComparator select() {
 			if (direction == 1) {
 				direction = -1;
-			}
-			else {
+			} else {
 				direction = 1;
 			}
 			return this;
 		}
-		
+
 		@Override
 		public int compare(final Viewer viewer, final Object a, final Object b) {
 			return vc.compare(viewer, a, b) * direction;
 		}
 	}
-	
+
 }

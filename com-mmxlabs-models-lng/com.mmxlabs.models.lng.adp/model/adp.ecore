@@ -166,6 +166,20 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="intervalType" eType="#//IntervalType"
         defaultValueLiteral="YEARLY"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PeriodDistributionProfileConstraint"
+      eSuperTypes="#//ProfileConstraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="distributions" upperBound="-1"
+        eType="#//PeriodDistribution" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PeriodDistribution">
+    <eAnnotations source="http://www.mmxlabs.com/models/featureOverride"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="range" upperBound="-1"
+        eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCargoes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxCargoes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="LNGVolumeUnit">
     <eLiterals name="M3" literal="m3"/>
     <eLiterals name="MT" value="1" literal="MT"/>

@@ -106,7 +106,7 @@ public class FleetProfileTopLevelComposite extends DefaultTopLevelComposite {
 			// Initialise middle composite
 			middle = toolkit.createComposite(this);
 
-			final int numChildren = createDefaultChildCompsiteSection(dialogContext, root, object, range, dbc, eClass, middle);
+			final int numChildren = createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, middle);
 
 			// We know there are n slots, so n columns
 			middle.setLayout(new GridLayout(numChildren + 2, false));

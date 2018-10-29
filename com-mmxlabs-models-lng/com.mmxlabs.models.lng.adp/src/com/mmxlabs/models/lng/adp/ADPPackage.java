@@ -723,6 +723,176 @@ public interface ADPPackage extends EPackage {
 	int DISTRIBUTION_MODEL_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.PeriodDistributionImpl <em>Period Distribution</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.PeriodDistributionImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getPeriodDistribution()
+	 * @generated
+	 */
+	int PERIOD_DISTRIBUTION = 28;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.CargoByQuarterDistributionModelImpl <em>Cargo By Quarter Distribution Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.CargoByQuarterDistributionModelImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getCargoByQuarterDistributionModel()
+	 * @generated
+	 */
+	int CARGO_BY_QUARTER_DISTRIBUTION_MODEL = 10;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.CargoIntervalDistributionModelImpl <em>Cargo Interval Distribution Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.CargoIntervalDistributionModelImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getCargoIntervalDistributionModel()
+	 * @generated
+	 */
+	int CARGO_INTERVAL_DISTRIBUTION_MODEL = 11;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.PreDefinedDistributionModelImpl <em>Pre Defined Distribution Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.PreDefinedDistributionModelImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getPreDefinedDistributionModel()
+	 * @generated
+	 */
+	int PRE_DEFINED_DISTRIBUTION_MODEL = 12;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.PreDefinedDateImpl <em>Pre Defined Date</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.PreDefinedDateImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getPreDefinedDate()
+	 * @generated
+	 */
+	int PRE_DEFINED_DATE = 13;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.SubProfileConstraintImpl <em>Sub Profile Constraint</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.SubProfileConstraintImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSubProfileConstraint()
+	 * @generated
+	 */
+	int SUB_PROFILE_CONSTRAINT = 24;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.FlowTypeImpl <em>Flow Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.FlowTypeImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getFlowType()
+	 * @generated
+	 */
+	int FLOW_TYPE = 14;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.SupplyFromFlowImpl <em>Supply From Flow</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.SupplyFromFlowImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSupplyFromFlow()
+	 * @generated
+	 */
+	int SUPPLY_FROM_FLOW = 15;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.DeliverToFlowImpl <em>Deliver To Flow</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.DeliverToFlowImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDeliverToFlow()
+	 * @generated
+	 */
+	int DELIVER_TO_FLOW = 16;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.SupplyFromProfileFlowImpl <em>Supply From Profile Flow</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.SupplyFromProfileFlowImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSupplyFromProfileFlow()
+	 * @generated
+	 */
+	int SUPPLY_FROM_PROFILE_FLOW = 17;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.DeliverToProfileFlowImpl <em>Deliver To Profile Flow</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.DeliverToProfileFlowImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDeliverToProfileFlow()
+	 * @generated
+	 */
+	int DELIVER_TO_PROFILE_FLOW = 18;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.SupplyFromSpotFlowImpl <em>Supply From Spot Flow</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.SupplyFromSpotFlowImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSupplyFromSpotFlow()
+	 * @generated
+	 */
+	int SUPPLY_FROM_SPOT_FLOW = 19;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.DeliverToSpotFlowImpl <em>Deliver To Spot Flow</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.DeliverToSpotFlowImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDeliverToSpotFlow()
+	 * @generated
+	 */
+	int DELIVER_TO_SPOT_FLOW = 20;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.ProfileVesselRestrictionImpl <em>Profile Vessel Restriction</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.ProfileVesselRestrictionImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getProfileVesselRestriction()
+	 * @generated
+	 */
+	int PROFILE_VESSEL_RESTRICTION = 21;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.ShippingOptionImpl <em>Shipping Option</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.ShippingOptionImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getShippingOption()
+	 * @generated
+	 */
+	int SHIPPING_OPTION = 22;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.ProfileConstraintImpl <em>Profile Constraint</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.ProfileConstraintImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getProfileConstraint()
+	 * @generated
+	 */
+	int PROFILE_CONSTRAINT = 23;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.PeriodDistributionProfileConstraintImpl <em>Period Distribution Profile Constraint</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.PeriodDistributionProfileConstraintImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getPeriodDistributionProfileConstraint()
+	 * @generated
+	 */
+	int PERIOD_DISTRIBUTION_PROFILE_CONSTRAINT = 27;
+
+	/**
 	 * The feature id for the '<em><b>Volume Per Cargo</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -812,17 +982,6 @@ public interface ADPPackage extends EPackage {
 	 */
 	int CARGO_NUMBER_DISTRIBUTION_MODEL_OPERATION_COUNT = DISTRIBUTION_MODEL_OPERATION_COUNT + 0;
 
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.CargoByQuarterDistributionModelImpl <em>Cargo By Quarter Distribution Model</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.CargoByQuarterDistributionModelImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getCargoByQuarterDistributionModel()
-	 * @generated
-	 */
-	int CARGO_BY_QUARTER_DISTRIBUTION_MODEL = 10;
-
 	/**
 	 * The feature id for the '<em><b>Volume Per Cargo</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -895,17 +1054,6 @@ public interface ADPPackage extends EPackage {
 	 */
 	int CARGO_BY_QUARTER_DISTRIBUTION_MODEL_OPERATION_COUNT = DISTRIBUTION_MODEL_OPERATION_COUNT + 0;
 
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.CargoIntervalDistributionModelImpl <em>Cargo Interval Distribution Model</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.CargoIntervalDistributionModelImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getCargoIntervalDistributionModel()
-	 * @generated
-	 */
-	int CARGO_INTERVAL_DISTRIBUTION_MODEL = 11;
-
 	/**
 	 * The feature id for the '<em><b>Volume Per Cargo</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -968,16 +1116,6 @@ public interface ADPPackage extends EPackage {
 	 * @ordered
 	 */
 	int CARGO_INTERVAL_DISTRIBUTION_MODEL_OPERATION_COUNT = DISTRIBUTION_MODEL_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.PreDefinedDistributionModelImpl <em>Pre Defined Distribution Model</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.PreDefinedDistributionModelImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getPreDefinedDistributionModel()
-	 * @generated
-	 */
-	int PRE_DEFINED_DISTRIBUTION_MODEL = 12;
 
 	/**
 	 * The feature id for the '<em><b>Volume Per Cargo</b></em>' attribute.
@@ -1043,16 +1181,6 @@ public interface ADPPackage extends EPackage {
 	int PRE_DEFINED_DISTRIBUTION_MODEL_OPERATION_COUNT = DISTRIBUTION_MODEL_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.PreDefinedDateImpl <em>Pre Defined Date</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.PreDefinedDateImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getPreDefinedDate()
-	 * @generated
-	 */
-	int PRE_DEFINED_DATE = 13;
-
-	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1080,16 +1208,6 @@ public interface ADPPackage extends EPackage {
 	int PRE_DEFINED_DATE_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.SubProfileConstraintImpl <em>Sub Profile Constraint</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.SubProfileConstraintImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSubProfileConstraint()
-	 * @generated
-	 */
-	int SUB_PROFILE_CONSTRAINT = 24;
-
-	/**
 	 * The number of structural features of the '<em>Sub Profile Constraint</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1106,16 +1224,6 @@ public interface ADPPackage extends EPackage {
 	 * @ordered
 	 */
 	int SUB_PROFILE_CONSTRAINT_OPERATION_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.FlowTypeImpl <em>Flow Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.FlowTypeImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getFlowType()
-	 * @generated
-	 */
-	int FLOW_TYPE = 14;
 
 	/**
 	 * The number of structural features of the '<em>Flow Type</em>' class.
@@ -1136,16 +1244,6 @@ public interface ADPPackage extends EPackage {
 	int FLOW_TYPE_OPERATION_COUNT = SUB_PROFILE_CONSTRAINT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.SupplyFromFlowImpl <em>Supply From Flow</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.SupplyFromFlowImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSupplyFromFlow()
-	 * @generated
-	 */
-	int SUPPLY_FROM_FLOW = 15;
-
-	/**
 	 * The number of structural features of the '<em>Supply From Flow</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1164,16 +1262,6 @@ public interface ADPPackage extends EPackage {
 	int SUPPLY_FROM_FLOW_OPERATION_COUNT = FLOW_TYPE_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.DeliverToFlowImpl <em>Deliver To Flow</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.DeliverToFlowImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDeliverToFlow()
-	 * @generated
-	 */
-	int DELIVER_TO_FLOW = 16;
-
-	/**
 	 * The number of structural features of the '<em>Deliver To Flow</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1190,16 +1278,6 @@ public interface ADPPackage extends EPackage {
 	 * @ordered
 	 */
 	int DELIVER_TO_FLOW_OPERATION_COUNT = FLOW_TYPE_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.SupplyFromProfileFlowImpl <em>Supply From Profile Flow</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.SupplyFromProfileFlowImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSupplyFromProfileFlow()
-	 * @generated
-	 */
-	int SUPPLY_FROM_PROFILE_FLOW = 17;
 
 	/**
 	 * The feature id for the '<em><b>Profile</b></em>' reference.
@@ -1238,16 +1316,6 @@ public interface ADPPackage extends EPackage {
 	int SUPPLY_FROM_PROFILE_FLOW_OPERATION_COUNT = SUPPLY_FROM_FLOW_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.DeliverToProfileFlowImpl <em>Deliver To Profile Flow</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.DeliverToProfileFlowImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDeliverToProfileFlow()
-	 * @generated
-	 */
-	int DELIVER_TO_PROFILE_FLOW = 18;
-
-	/**
 	 * The feature id for the '<em><b>Profile</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1284,16 +1352,6 @@ public interface ADPPackage extends EPackage {
 	int DELIVER_TO_PROFILE_FLOW_OPERATION_COUNT = DELIVER_TO_FLOW_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.SupplyFromSpotFlowImpl <em>Supply From Spot Flow</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.SupplyFromSpotFlowImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSupplyFromSpotFlow()
-	 * @generated
-	 */
-	int SUPPLY_FROM_SPOT_FLOW = 19;
-
-	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1319,16 +1377,6 @@ public interface ADPPackage extends EPackage {
 	 * @ordered
 	 */
 	int SUPPLY_FROM_SPOT_FLOW_OPERATION_COUNT = SUPPLY_FROM_FLOW_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.DeliverToSpotFlowImpl <em>Deliver To Spot Flow</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.DeliverToSpotFlowImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDeliverToSpotFlow()
-	 * @generated
-	 */
-	int DELIVER_TO_SPOT_FLOW = 20;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -1358,16 +1406,6 @@ public interface ADPPackage extends EPackage {
 	int DELIVER_TO_SPOT_FLOW_OPERATION_COUNT = DELIVER_TO_FLOW_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.ProfileVesselRestrictionImpl <em>Profile Vessel Restriction</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.ProfileVesselRestrictionImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getProfileVesselRestriction()
-	 * @generated
-	 */
-	int PROFILE_VESSEL_RESTRICTION = 21;
-
-	/**
 	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1393,16 +1431,6 @@ public interface ADPPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROFILE_VESSEL_RESTRICTION_OPERATION_COUNT = SUB_PROFILE_CONSTRAINT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.ShippingOptionImpl <em>Shipping Option</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.ShippingOptionImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getShippingOption()
-	 * @generated
-	 */
-	int SHIPPING_OPTION = 22;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Assignment Type</b></em>' reference.
@@ -1448,16 +1476,6 @@ public interface ADPPackage extends EPackage {
 	 * @ordered
 	 */
 	int SHIPPING_OPTION_OPERATION_COUNT = SUB_PROFILE_CONSTRAINT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.ProfileConstraintImpl <em>Profile Constraint</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.ProfileConstraintImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getProfileConstraint()
-	 * @generated
-	 */
-	int PROFILE_CONSTRAINT = 23;
 
 	/**
 	 * The number of structural features of the '<em>Profile Constraint</em>' class.
@@ -1570,6 +1588,78 @@ public interface ADPPackage extends EPackage {
 	int MAX_CARGO_CONSTRAINT_OPERATION_COUNT = PROFILE_CONSTRAINT_OPERATION_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Distributions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD_DISTRIBUTION_PROFILE_CONSTRAINT__DISTRIBUTIONS = PROFILE_CONSTRAINT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Period Distribution Profile Constraint</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD_DISTRIBUTION_PROFILE_CONSTRAINT_FEATURE_COUNT = PROFILE_CONSTRAINT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Period Distribution Profile Constraint</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD_DISTRIBUTION_PROFILE_CONSTRAINT_OPERATION_COUNT = PROFILE_CONSTRAINT_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Range</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD_DISTRIBUTION__RANGE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Min Cargoes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD_DISTRIBUTION__MIN_CARGOES = 1;
+
+	/**
+	 * The feature id for the '<em><b>Max Cargoes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD_DISTRIBUTION__MAX_CARGOES = 2;
+
+	/**
+	 * The number of structural features of the '<em>Period Distribution</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD_DISTRIBUTION_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Period Distribution</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD_DISTRIBUTION_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.FleetConstraint <em>Fleet Constraint</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1577,7 +1667,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getFleetConstraint()
 	 * @generated
 	 */
-	int FLEET_CONSTRAINT = 27;
+	int FLEET_CONSTRAINT = 29;
 
 	/**
 	 * The number of structural features of the '<em>Fleet Constraint</em>' class.
@@ -1605,7 +1695,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getTargetCargoesOnVesselConstraint()
 	 * @generated
 	 */
-	int TARGET_CARGOES_ON_VESSEL_CONSTRAINT = 28;
+	int TARGET_CARGOES_ON_VESSEL_CONSTRAINT = 30;
 
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
@@ -1669,7 +1759,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getIntervalType()
 	 * @generated
 	 */
-	int INTERVAL_TYPE = 29;
+	int INTERVAL_TYPE = 31;
 
 
 	/**
@@ -1680,7 +1770,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getLNGVolumeUnit()
 	 * @generated
 	 */
-	int LNG_VOLUME_UNIT = 30;
+	int LNG_VOLUME_UNIT = 32;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.ADPModel <em>Model</em>}'.
@@ -1908,6 +1998,70 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getDistributionModel_VolumeUnit();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint <em>Period Distribution Profile Constraint</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Period Distribution Profile Constraint</em>'.
+	 * @see com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint
+	 * @generated
+	 */
+	EClass getPeriodDistributionProfileConstraint();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint#getDistributions <em>Distributions</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Distributions</em>'.
+	 * @see com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint#getDistributions()
+	 * @see #getPeriodDistributionProfileConstraint()
+	 * @generated
+	 */
+	EReference getPeriodDistributionProfileConstraint_Distributions();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.PeriodDistribution <em>Period Distribution</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Period Distribution</em>'.
+	 * @see com.mmxlabs.models.lng.adp.PeriodDistribution
+	 * @generated
+	 */
+	EClass getPeriodDistribution();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.lng.adp.PeriodDistribution#getRange <em>Range</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Range</em>'.
+	 * @see com.mmxlabs.models.lng.adp.PeriodDistribution#getRange()
+	 * @see #getPeriodDistribution()
+	 * @generated
+	 */
+	EAttribute getPeriodDistribution_Range();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.PeriodDistribution#getMinCargoes <em>Min Cargoes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Cargoes</em>'.
+	 * @see com.mmxlabs.models.lng.adp.PeriodDistribution#getMinCargoes()
+	 * @see #getPeriodDistribution()
+	 * @generated
+	 */
+	EAttribute getPeriodDistribution_MinCargoes();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.PeriodDistribution#getMaxCargoes <em>Max Cargoes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Cargoes</em>'.
+	 * @see com.mmxlabs.models.lng.adp.PeriodDistribution#getMaxCargoes()
+	 * @see #getPeriodDistribution()
+	 * @generated
+	 */
+	EAttribute getPeriodDistribution_MaxCargoes();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.CargoSizeDistributionModel <em>Cargo Size Distribution Model</em>}'.
@@ -2806,6 +2960,58 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DISTRIBUTION_MODEL__VOLUME_UNIT = eINSTANCE.getDistributionModel_VolumeUnit();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.PeriodDistributionProfileConstraintImpl <em>Period Distribution Profile Constraint</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.adp.impl.PeriodDistributionProfileConstraintImpl
+		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getPeriodDistributionProfileConstraint()
+		 * @generated
+		 */
+		EClass PERIOD_DISTRIBUTION_PROFILE_CONSTRAINT = eINSTANCE.getPeriodDistributionProfileConstraint();
+
+		/**
+		 * The meta object literal for the '<em><b>Distributions</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PERIOD_DISTRIBUTION_PROFILE_CONSTRAINT__DISTRIBUTIONS = eINSTANCE.getPeriodDistributionProfileConstraint_Distributions();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.PeriodDistributionImpl <em>Period Distribution</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.adp.impl.PeriodDistributionImpl
+		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getPeriodDistribution()
+		 * @generated
+		 */
+		EClass PERIOD_DISTRIBUTION = eINSTANCE.getPeriodDistribution();
+
+		/**
+		 * The meta object literal for the '<em><b>Range</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PERIOD_DISTRIBUTION__RANGE = eINSTANCE.getPeriodDistribution_Range();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Cargoes</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PERIOD_DISTRIBUTION__MIN_CARGOES = eINSTANCE.getPeriodDistribution_MinCargoes();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Cargoes</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PERIOD_DISTRIBUTION__MAX_CARGOES = eINSTANCE.getPeriodDistribution_MaxCargoes();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.CargoSizeDistributionModelImpl <em>Cargo Size Distribution Model</em>}' class.
