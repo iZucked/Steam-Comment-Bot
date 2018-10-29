@@ -1,9 +1,6 @@
 /**
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
- * 
- * Sets up tests for ADP using the training case data
- * 
  */
 package com.mmxlabs.lingo.its.tests.microcases.adp;
 
