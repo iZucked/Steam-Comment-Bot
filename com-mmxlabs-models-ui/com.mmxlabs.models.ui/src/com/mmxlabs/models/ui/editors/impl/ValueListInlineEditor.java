@@ -12,8 +12,6 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -32,7 +30,7 @@ import com.mmxlabs.common.Pair;
  * @author hinton
  * 
  */
-public class ValueListInlineEditor extends UnsettableInlineEditor {
+public class ValueListInlineEditor<T> extends UnsettableInlineEditor {
 
 	/**
 	 * Create a new List<Pair<String, Object>> from the list of elements. This method assumes an even number of elements in the form { label1, enum1, label2, enum2...}
@@ -41,12 +39,12 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	protected static List<Pair<String, Object>> createPairList(Object[] elements) {
-		final LinkedList<Pair<String, Object>> pairList = new LinkedList<Pair<String, Object>>();
+	protected static <T> List<Pair<String, T>> createPairList(Object[] elements) {
+		final LinkedList<Pair<String, T>> pairList = new LinkedList<>();
 		for (int i = 0; i < elements.length; i += 2) {
 			final String key = (String) elements[i];
-			final Object value = (Object) elements[i + 1];
-			pairList.add(new Pair<String, Object>(key, value));
+			final T value = (T) elements[i + 1];
+			pairList.add(new Pair<>(key, value));
 		}
 		return pairList;
 	}
@@ -54,13 +52,13 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 	protected Combo combo;
 
 	protected final ArrayList<String> names;
-	protected final ArrayList<Object> values;
+	protected final ArrayList<T> values;
 
-	public ValueListInlineEditor(final EStructuralFeature feature, final List<Pair<String, Object>> values) {
+	public ValueListInlineEditor(final EStructuralFeature feature, final List<Pair<String, T>> values) {
 		super(feature);
-		this.names = new ArrayList<String>(values.size());
-		this.values = new ArrayList<Object>(values.size());
-		for (final Pair<String, Object> pair : values) {
+		this.names = new ArrayList<>(values.size());
+		this.values = new ArrayList<>(values.size());
+		for (final Pair<String, T> pair : values) {
 			this.names.add(pair.getFirst());
 			this.values.add(pair.getSecond());
 		}
@@ -91,14 +89,14 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 		return super.createControl(parent, dbc, toolkit);
 	}
 
-	protected void updateCombo(final List<Pair<String, Object>> values) {
+	protected void updateCombo(final List<Pair<String, T>> values) {
 		this.names.clear();
 		this.values.clear();
 
 		this.names.ensureCapacity(values.size());
 		this.values.ensureCapacity(values.size());
 
-		for (final Pair<String, Object> pair : values) {
+		for (final Pair<String, T> pair : values) {
 			this.names.add(pair.getFirst());
 			this.values.add(pair.getSecond());
 		}
@@ -122,12 +120,7 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 		};
 
 		combo.addSelectionListener(sl);
-		combo.addDisposeListener(new DisposeListener() {
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				combo.removeSelectionListener(sl);
-			}
-		});
+		combo.addDisposeListener(e -> combo.removeSelectionListener(sl));
 
 		return combo;
 	}

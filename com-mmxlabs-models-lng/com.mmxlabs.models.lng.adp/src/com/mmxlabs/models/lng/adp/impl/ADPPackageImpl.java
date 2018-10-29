@@ -27,6 +27,8 @@ import com.mmxlabs.models.lng.adp.FlowType;
 import com.mmxlabs.models.lng.adp.IntervalType;
 import com.mmxlabs.models.lng.adp.MaxCargoConstraint;
 import com.mmxlabs.models.lng.adp.MinCargoConstraint;
+import com.mmxlabs.models.lng.adp.PeriodDistribution;
+import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
 import com.mmxlabs.models.lng.adp.PreDefinedDate;
 import com.mmxlabs.models.lng.adp.PreDefinedDistributionModel;
 import com.mmxlabs.models.lng.adp.ProfileConstraint;
@@ -98,6 +100,20 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	private EClass distributionModelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass periodDistributionProfileConstraintEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass periodDistributionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -561,6 +577,60 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 */
 	public EAttribute getDistributionModel_VolumeUnit() {
 		return (EAttribute)distributionModelEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getPeriodDistributionProfileConstraint() {
+		return periodDistributionProfileConstraintEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPeriodDistributionProfileConstraint_Distributions() {
+		return (EReference)periodDistributionProfileConstraintEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getPeriodDistribution() {
+		return periodDistributionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPeriodDistribution_Range() {
+		return (EAttribute)periodDistributionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPeriodDistribution_MinCargoes() {
+		return (EAttribute)periodDistributionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPeriodDistribution_MaxCargoes() {
+		return (EAttribute)periodDistributionEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1334,6 +1404,14 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEAttribute(maxCargoConstraintEClass, MAX_CARGO_CONSTRAINT__MAX_CARGOES);
 		createEAttribute(maxCargoConstraintEClass, MAX_CARGO_CONSTRAINT__INTERVAL_TYPE);
 
+		periodDistributionProfileConstraintEClass = createEClass(PERIOD_DISTRIBUTION_PROFILE_CONSTRAINT);
+		createEReference(periodDistributionProfileConstraintEClass, PERIOD_DISTRIBUTION_PROFILE_CONSTRAINT__DISTRIBUTIONS);
+
+		periodDistributionEClass = createEClass(PERIOD_DISTRIBUTION);
+		createEAttribute(periodDistributionEClass, PERIOD_DISTRIBUTION__RANGE);
+		createEAttribute(periodDistributionEClass, PERIOD_DISTRIBUTION__MIN_CARGOES);
+		createEAttribute(periodDistributionEClass, PERIOD_DISTRIBUTION__MAX_CARGOES);
+
 		fleetConstraintEClass = createEClass(FLEET_CONSTRAINT);
 
 		targetCargoesOnVesselConstraintEClass = createEClass(TARGET_CARGOES_ON_VESSEL_CONSTRAINT);
@@ -1415,6 +1493,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		shippingOptionEClass.getESuperTypes().add(this.getSubProfileConstraint());
 		minCargoConstraintEClass.getESuperTypes().add(this.getProfileConstraint());
 		maxCargoConstraintEClass.getESuperTypes().add(this.getProfileConstraint());
+		periodDistributionProfileConstraintEClass.getESuperTypes().add(this.getProfileConstraint());
 		targetCargoesOnVesselConstraintEClass.getESuperTypes().add(this.getFleetConstraint());
 
 		// Initialize classes, features, and operations; add parameters
@@ -1539,6 +1618,14 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEAttribute(getMaxCargoConstraint_MaxCargoes(), ecorePackage.getEInt(), "maxCargoes", null, 0, 1, MaxCargoConstraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMaxCargoConstraint_IntervalType(), this.getIntervalType(), "intervalType", "YEARLY", 0, 1, MaxCargoConstraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(periodDistributionProfileConstraintEClass, PeriodDistributionProfileConstraint.class, "PeriodDistributionProfileConstraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getPeriodDistributionProfileConstraint_Distributions(), this.getPeriodDistribution(), null, "distributions", null, 0, -1, PeriodDistributionProfileConstraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(periodDistributionEClass, PeriodDistribution.class, "PeriodDistribution", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPeriodDistribution_Range(), theDateTimePackage.getYearMonth(), "range", null, 0, -1, PeriodDistribution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPeriodDistribution_MinCargoes(), ecorePackage.getEInt(), "minCargoes", null, 0, 1, PeriodDistribution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPeriodDistribution_MaxCargoes(), ecorePackage.getEInt(), "maxCargoes", null, 0, 1, PeriodDistribution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(fleetConstraintEClass, FleetConstraint.class, "FleetConstraint", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(targetCargoesOnVesselConstraintEClass, TargetCargoesOnVesselConstraint.class, "TargetCargoesOnVesselConstraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1566,6 +1653,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		// Create annotations
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
+		// http://www.mmxlabs.com/models/featureOverride
+		createFeatureOverrideAnnotations();
 	}
 
 	/**
@@ -1587,6 +1676,21 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		   source,
 		   new String[] {
 			   "formatString", "##,##0"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/featureOverride</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createFeatureOverrideAnnotations() {
+		String source = "http://www.mmxlabs.com/models/featureOverride";
+		addAnnotation
+		  (periodDistributionEClass,
+		   source,
+		   new String[] {
 		   });
 	}
 

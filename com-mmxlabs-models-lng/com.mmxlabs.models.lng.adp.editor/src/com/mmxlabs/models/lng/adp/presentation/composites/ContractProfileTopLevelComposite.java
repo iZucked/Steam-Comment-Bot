@@ -8,15 +8,14 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -27,8 +26,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -51,11 +48,9 @@ import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editors.DetailToolbarManager;
 import com.mmxlabs.models.ui.editors.HoverActionHelper;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
-import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
-import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
-import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 
@@ -73,6 +68,7 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 	private EClass eClass;
 	private List<IProfileConstraintFactory> profileConstraintFactories;
 	private Collection<ServiceReference<IProfileConstraintFactory>> profileConstraintFactoriesServiceReferences;
+	private final List<IDisplayComposite> extraDislpayComposites = new LinkedList<>();
 
 	public ContractProfileTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
 		super(parent, style, dialogContext, toolkit);
@@ -92,8 +88,8 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 		String groupName = EditorUtils.unmangle(object);
 		// if (object instanceof ContractProfile<?>) {
 		final ContractProfile<?> contractProfile = (ContractProfile<?>) object;
-		groupName = "Profile";
-		noCols = 2;
+		groupName = null;//"Contract";
+		noCols = 1;
 		// }
 		if (groupName != null) {
 			g.setText(groupName);
@@ -109,14 +105,88 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 
 		{
 			// Initialise middle composite
+			final Group constraintComposite = new Group(this, SWT.NONE);
+			constraintComposite.setText("Contract constraints");
+			toolkit.adapt(constraintComposite);
+			constraintComposite.setLayout(new GridLayout(1, false));
+			constraintComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+			{
+				final Control addAction = HoverActionHelper.createAddAction(constraintComposite, helper -> {
+
+					final List<RunnableAction> actions = new LinkedList<>();
+					for (final IProfileConstraintFactory factory : profileConstraintFactories) {
+						if (factory.validFor(contractProfile))
+
+						{
+							actions.add(new RunnableAction(factory.getName(), () -> {
+								final ProfileConstraint opt = factory.createInstance();
+								final Command cmd = AddCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), contractProfile,
+										ADPPackage.eINSTANCE.getContractProfile_Constraints(), opt);
+								commandHandler.handleCommand(cmd, contractProfile, ADPPackage.eINSTANCE.getContractProfile_Constraints());
+								dialogContext.getDialogController().rebuild(false);
+							}));
+
+						}
+					}
+
+					actions.stream() //
+							.sorted((a, b) -> a.getText().compareTo(b.getText())) //
+							.forEach(a -> helper.addAction(a));
+
+				});
+				addAction.setToolTipText("Create new constraint");
+				toolkit.adapt(addAction, false, false);
+			}
+
+			for (final ProfileConstraint constraint : contractProfile.getConstraints()) {
+
+				final Group g2 = new Group(constraintComposite, SWT.NONE);
+				toolkit.adapt(g2);
+				g2.setText(EditorUtils.unmangle(constraint));
+				g2.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
+				g2.setLayout(GridLayoutFactory.fillDefaults().create());
+
+				final IDisplayCompositeFactory displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(constraint.eClass());
+				final IDisplayComposite delegate1 = displayCompositeFactory.createSublevelComposite(g2, constraint.eClass(), dialogContext, toolkit);
+				delegate1.getComposite().setLayoutData(GridDataFactory.fillDefaults().create());
+				delegate1.setCommandHandler(commandHandler);
+				delegate1.display(dialogContext, root, constraint, range, dbc);
+				{
+					final DetailToolbarManager removeButtonManager = new DetailToolbarManager(g2, SWT.TOP);
+
+					final Action action = new Action("Delete constraint") {
+						@Override
+						public void run() {
+							final Command remove = RemoveCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), object, ADPPackage.Literals.CONTRACT_PROFILE__CONSTRAINTS,
+									constraint);
+							commandHandler.handleCommand(remove, object, ADPPackage.Literals.CONTRACT_PROFILE__CONSTRAINTS);
+							dialogContext.getDialogController().rebuild(true);
+
+						}
+					};
+					action.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
+					removeButtonManager.getToolbarManager().add(action);
+					removeButtonManager.getToolbarManager().update(true);
+					toolkit.adapt(removeButtonManager.getToolbarManager().getControl());
+
+					extraDislpayComposites.add(delegate1);
+				}
+
+			}
+		}
+		
+		{
+			// Initialise middle composite
 			middle = toolkit.createComposite(this);
 
-			final int numChildren = createDefaultChildCompsiteSection(dialogContext, root, object, range, dbc, eClass, middle);
+			final int numChildren = createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, middle);
 
+			boolean displayAddButtons = false;
+			
 			// We know there are n slots, so n columns
-			middle.setLayout(new GridLayout(numChildren + 2, false));
+			middle.setLayout(new GridLayout(numChildren + (displayAddButtons ? 2 : 0), false));
 			middle.setLayoutData(new GridData(GridData.FILL_BOTH));
-			{ // Create a toolbar for remove buttons
+			if (displayAddButtons) { // Create a toolbar for remove buttons
 				final DetailToolbarManager addButtonManager = new DetailToolbarManager(middle, SWT.RIGHT);
 				toolkit.adapt(addButtonManager.getToolbarManager().getControl());
 				final Action action = new Action("New volume allocation") {
@@ -140,71 +210,10 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 
 			}
 
-			// Overrides default layout factory so we get a single column rather than multiple columns and one row
-			this.setLayout(new GridLayout(1, false));
 		}
-
-		{
-			// Initialise middle composite
-			final Group constraintComposite = new Group(this, SWT.NONE);
-			constraintComposite.setText("Profile constraints");
-			toolkit.adapt(constraintComposite);
-			constraintComposite.setLayout(new GridLayout(1, false));
-			constraintComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-			{
-				final Control addAction = HoverActionHelper.createAddAction(constraintComposite, helper -> {
-					for (final IProfileConstraintFactory factory : profileConstraintFactories) {
-						if (factory.validFor(contractProfile))
-
-						{
-							helper.addAction(new RunnableAction(factory.getName(), () -> {
-								final ProfileConstraint opt = factory.createInstance();
-								final Command cmd = AddCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), contractProfile,
-										ADPPackage.eINSTANCE.getContractProfile_Constraints(), opt);
-								commandHandler.handleCommand(cmd, contractProfile, ADPPackage.eINSTANCE.getContractProfile_Constraints());
-								dialogContext.getDialogController().rebuild(false);
-							}));
-
-						}
-					}
-				});
-				addAction.setToolTipText("Create new constraint");
-				toolkit.adapt(addAction, false, false);
-			}
-
-			for (final ProfileConstraint constraint : contractProfile.getConstraints()) {
-
-				final Group g2 = new Group(constraintComposite, SWT.NONE);
-				toolkit.adapt(g2);
-				g2.setText(EditorUtils.unmangle(constraint));
-				g2.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
-				g2.setLayout(GridLayoutFactory.fillDefaults().create());
-
-				final DefaultDetailComposite delegate1 = new DefaultDetailComposite(g2, 0, toolkit);
-				delegate1.getComposite().setLayoutData(GridDataFactory.fillDefaults().create());
-				delegate1.setCommandHandler(commandHandler);
-				delegate1.display(dialogContext, root, constraint, range, dbc);
-				{
-					final DetailToolbarManager removeButtonManager = new DetailToolbarManager(g2, SWT.TOP);
-
-					final Action action = new Action("Delete constraint") {
-						@Override
-						public void run() {
-							final Command remove = RemoveCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), object, ADPPackage.Literals.CONTRACT_PROFILE__CONSTRAINTS,
-									constraint);
-							commandHandler.handleCommand(remove, object, ADPPackage.Literals.CONTRACT_PROFILE__CONSTRAINTS);
-							dialogContext.getDialogController().rebuild(true);
-
-						}
-					};
-					action.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
-					removeButtonManager.getToolbarManager().add(action);
-					removeButtonManager.getToolbarManager().update(true);
-					toolkit.adapt(removeButtonManager.getToolbarManager().getControl());
-				}
-
-			}
-		}
+		// Overrides default layout factory so we get a single column rather than multiple columns and one row
+		this.setLayout(new GridLayout(1, false));
+		this.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 	}
 
 	@Override
@@ -253,6 +262,13 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 			profileConstraintFactories.add(bundleContext.getService(ref));
 
 		}
+	}
 
+	@Override
+	public void displayValidationStatus(final IStatus status) {
+		super.displayValidationStatus(status);
+		for (final IDisplayComposite d : extraDislpayComposites) {
+			d.displayValidationStatus(status);
+		}
 	}
 }

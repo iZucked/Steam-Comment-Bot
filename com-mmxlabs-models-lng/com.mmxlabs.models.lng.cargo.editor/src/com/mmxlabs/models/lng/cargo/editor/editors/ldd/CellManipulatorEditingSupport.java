@@ -8,18 +8,20 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class CellManipulatorEditingSupport extends EditingSupport {
-	private final GridTableViewer viewer;
+	private final Viewer viewer;
 	private final ICellManipulator manipulator;
 	private final EMFPath path;
 	private boolean lockedForEditing;
 
-	public CellManipulatorEditingSupport(final ColumnViewer columnViewer, final GridTableViewer viewer, final ICellManipulator manipulator, final EMFPath path) {
+	public CellManipulatorEditingSupport(final ColumnViewer columnViewer, final Viewer viewer, final ICellManipulator manipulator, final EMFPath path) {
 		super(columnViewer);
 		this.viewer = viewer;
 		this.manipulator = manipulator;
@@ -33,7 +35,7 @@ public class CellManipulatorEditingSupport extends EditingSupport {
 
 	@Override
 	protected CellEditor getCellEditor(final Object element) {
-		return manipulator.getCellEditor(viewer.getGrid(), path.get((EObject) element));
+		return manipulator.getCellEditor((Composite) viewer.getControl(), path.get((EObject) element));
 	}
 
 	@Override

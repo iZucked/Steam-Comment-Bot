@@ -5,11 +5,13 @@
 package com.mmxlabs.models.lng.port.ui.editors;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.port.CanalEntry;
@@ -42,7 +44,7 @@ public class CanalEntryInlineEditorFactory implements IInlineEditorFactory {
 				}
 				return super.updateOnChangeToFeature(changedFeature);
 			}
-			
+
 			@Override
 			protected void updateControl() {
 				super.updateControl();
@@ -60,9 +62,13 @@ public class CanalEntryInlineEditorFactory implements IInlineEditorFactory {
 						names.add(ModelDistanceProvider.getCanalEntranceName(portModel, canalBookingSlot.getRouteOption(), literal));
 					}
 				}
-				combo.setItems(names.toArray(new String[names.size()]));
+				String[] items = toStringArray(names);
+				combo.setItems(items);
 			}
 		};
 	}
 
+	private static String[] toStringArray(List<String> items) {
+		return items.toArray(new String[items.size()]);
+	}
 }

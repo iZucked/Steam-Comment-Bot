@@ -185,6 +185,14 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 				return createMaxCargoConstraintAdapter();
 			}
 			@Override
+			public Adapter casePeriodDistributionProfileConstraint(PeriodDistributionProfileConstraint object) {
+				return createPeriodDistributionProfileConstraintAdapter();
+			}
+			@Override
+			public Adapter casePeriodDistribution(PeriodDistribution object) {
+				return createPeriodDistributionAdapter();
+			}
+			@Override
 			public Adapter caseFleetConstraint(FleetConstraint object) {
 				return createFleetConstraintAdapter();
 			}
@@ -273,6 +281,34 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDistributionModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint <em>Period Distribution Profile Constraint</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint
+	 * @generated
+	 */
+	public Adapter createPeriodDistributionProfileConstraintAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.PeriodDistribution <em>Period Distribution</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.PeriodDistribution
+	 * @generated
+	 */
+	public Adapter createPeriodDistributionAdapter() {
 		return null;
 	}
 

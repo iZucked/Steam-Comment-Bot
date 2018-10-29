@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -18,6 +19,8 @@ import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.util.MonthlyDistributionConstraint;
+import com.mmxlabs.scheduler.optimiser.components.util.MonthlyDistributionConstraint.Row;
 import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotConstraintDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 
@@ -109,6 +112,43 @@ public class DefaultMaxSlotConstraintDataProviderEditor implements IMaxSlotConst
 	@Override
 	public void addMaxDischargeSlotsPerMonthlyPeriod(List<IDischargeOption> slots, int startMonth, int period, int limit) {
 		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, period, 1));
+	}
+
+	@Override
+	public void addMinMaxLoadSlotsPerMultiMonthPeriod(List<ILoadOption> slots, MonthlyDistributionConstraint monthlyDistributionConstraint) {
+		setMinMaxSlotsPerMultiMonthPeriod(loadMinRestrictions, loadMaxRestrictions, slots, monthlyDistributionConstraint);
+	}
+	
+	@Override
+	public void addMinMaxDischargeSlotsPerMultiMonthPeriod(List<IDischargeOption> slots, MonthlyDistributionConstraint monthlyDistributionConstraint) {
+		setMinMaxSlotsPerMultiMonthPeriod(dischargeMinRestrictions, dischargeMaxRestrictions, slots, monthlyDistributionConstraint);
+	}
+
+	private <T extends IPortSlot> void setMinMaxSlotsPerMultiMonthPeriod(List<Pair<Set<T>, Integer>> minList, List<Pair<Set<T>, Integer>> maxList, List<T> slots, MonthlyDistributionConstraint monthlyDistributionConstraint) {
+		for (Row row : monthlyDistributionConstraint.getRows()) {
+			if (row.getMin() != null) {
+				minList.addAll(addSlotsPerCollectionOfMonths(slots, row.getMonths(), row.getMin()));
+			}
+			if (row.getMax() != null) {
+				maxList.addAll(addSlotsPerCollectionOfMonths(slots, row.getMonths(), row.getMax()));
+			}
+		}
+	}
+
+	private <T extends IPortSlot> List<Pair<Set<T>, Integer>> addSlotsPerCollectionOfMonths(final List<T> slots, final Collection<Integer> monthsToConsider, final int limit) {
+		final List<Pair<Set<T>, Integer>> slotsSets = new LinkedList<>();
+		final Set<T> slotsSet = new LinkedHashSet<>();
+		for (int month : monthsToConsider) {
+			for (final T slot : slots) {
+				if (getUTCMonth(slot) == month) {
+					slotsSet.add(slot);
+				}
+			}
+		}
+		if (slotsSet.size() > 0) {
+			slotsSets.add(new Pair<>(slotsSet, limit));
+		}
+		return slotsSets;
 	}
 
 	private <T extends IPortSlot> List<Pair<Set<T>, Integer>> addSlotsPerMonth(final List<T> slots, final int startMonth, final int limit) {

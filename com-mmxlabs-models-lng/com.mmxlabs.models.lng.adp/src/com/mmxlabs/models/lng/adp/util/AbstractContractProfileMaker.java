@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.models.lng.adp.util;
 
+import java.time.YearMonth;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -14,6 +16,8 @@ import com.mmxlabs.models.lng.adp.IntervalType;
 import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import com.mmxlabs.models.lng.adp.MaxCargoConstraint;
 import com.mmxlabs.models.lng.adp.MinCargoConstraint;
+import com.mmxlabs.models.lng.adp.PeriodDistribution;
+import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -84,6 +88,54 @@ public class AbstractContractProfileMaker<T extends AbstractContractProfileMaker
 		return (T) this;
 	}
 
+	@NonNull
+	public T addMonthlyMinMaxCargoConstraint(YearMonth start, int count, Integer min, Integer max) {
+		PeriodDistributionProfileConstraint constraint = ADPFactory.eINSTANCE.createPeriodDistributionProfileConstraint();
+		for (int i = 0; i < count; i++) {
+			PeriodDistribution periodDistribution = ADPFactory.eINSTANCE.createPeriodDistribution();
+			periodDistribution.getRange().add(start.plusMonths(i));
+			periodDistribution.setMinCargoes(min);
+			periodDistribution.setMaxCargoes(max);
+			constraint.getDistributions().add(periodDistribution);
+		}
+		contractProfile.getConstraints().add(constraint);
+		return (T) this;
+	}
+	
+	@NonNull
+	public PeriodConstraintMaker<AbstractContractProfileMaker<T,U,V>> withPeriodConstraint() {
+		PeriodConstraintMaker<AbstractContractProfileMaker<T,U,V>> maker = PeriodConstraintMaker.makePeriodDistributionProfileConstraint(contractProfile, this);
+		return maker;
+	}
+	
+	@NonNull
+	public T addBiMonthlyMinMaxCargoConstraint(YearMonth start, int count, Integer min, Integer max) {
+		PeriodDistributionProfileConstraint constraint = ADPFactory.eINSTANCE.createPeriodDistributionProfileConstraint();
+		for (int i = 0; i < count; i++) {
+			PeriodDistribution periodDistribution = ADPFactory.eINSTANCE.createPeriodDistribution();
+			periodDistribution.getRange().add(start.plusMonths(i));
+			periodDistribution.getRange().add(start.plusMonths(i+1));
+			periodDistribution.setMinCargoes(min);
+			periodDistribution.setMaxCargoes(max);
+			constraint.getDistributions().add(periodDistribution);
+		}
+		contractProfile.getConstraints().add(constraint);
+		return (T) this;
+	}
+	
+	@NonNull
+	public T addYearlyMinMaxCargoConstraint(YearMonth start, Integer min, Integer max) {
+		PeriodDistributionProfileConstraint constraint = ADPFactory.eINSTANCE.createPeriodDistributionProfileConstraint();
+		PeriodDistribution periodDistribution = ADPFactory.eINSTANCE.createPeriodDistribution();
+		IntStream.range(0, 12).forEach(i->periodDistribution.getRange().add(start.plusMonths(i)));
+		periodDistribution.setMinCargoes(min);
+		periodDistribution.setMaxCargoes(max);
+		constraint.getDistributions().add(periodDistribution);
+		contractProfile.getConstraints().add(constraint);
+		return (T) this;
+	}
+
+	
 	/**
 	 * Generic modifier call
 	 * 

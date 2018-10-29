@@ -25,15 +25,15 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * @author hinton
  * 
  */
-public class ValueListAttributeManipulator extends BasicAttributeManipulator {
-	private final ArrayList<Object> valueList;
-	private final ArrayList<String> names;
+public class ValueListAttributeManipulator<T> extends BasicAttributeManipulator {
+	protected final ArrayList<T> valueList;
+	protected final ArrayList<String> names;
 
-	public ValueListAttributeManipulator(final EAttribute field, final EditingDomain editingDomain, final List<Pair<String, Object>> values) {
+	public ValueListAttributeManipulator(final EAttribute field, final EditingDomain editingDomain, final List<Pair<String, T>> values) {
 		super(field, editingDomain);
-		names = new ArrayList<String>(values.size());
-		this.valueList = new ArrayList<Object>(values.size());
-		for (final Pair<String, Object> pair : values) {
+		names = new ArrayList<>(values.size());
+		this.valueList = new ArrayList<>(values.size());
+		for (final Pair<String, T> pair : values) {
 			names.add(pair.getFirst());
 			this.valueList.add(pair.getSecond());
 		}
@@ -41,6 +41,8 @@ public class ValueListAttributeManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public String render(final Object object) {
+		updateDisplay(object);
+
 		Object value;
 		if (isValueUnset(object)) {
 			value = (object instanceof MMXObject) ? ((MMXObject) object).getUnsetValue(field) : SetCommand.UNSET_VALUE;
@@ -69,6 +71,7 @@ public class ValueListAttributeManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public CellEditor createCellEditor(final Composite c, final Object object) {
+		updateDisplay(object);
 		return new ComboBoxCellEditor(c, names.toArray(new String[valueList.size()]));
 	}
 
@@ -77,4 +80,7 @@ public class ValueListAttributeManipulator extends BasicAttributeManipulator {
 		return valueList.indexOf(super.getValue(object));
 	}
 
+	protected void updateDisplay(Object value) {
+		// Do nothing, for subclasses
+	}
 }

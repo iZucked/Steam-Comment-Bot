@@ -19,6 +19,8 @@ import com.mmxlabs.models.lng.adp.FleetConstraint;
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.MaxCargoConstraint;
 import com.mmxlabs.models.lng.adp.MinCargoConstraint;
+import com.mmxlabs.models.lng.adp.PeriodDistribution;
+import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
 import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
@@ -37,6 +39,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.util.MonthlyDistributionConstraint;
 import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotConstraintDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -157,7 +160,23 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					default:
 						throw new IllegalStateException("Unsupported interval type " + maxCargoConstraint.getIntervalType());
 					}
-				} else {
+				} else if (profileConstraint instanceof PeriodDistributionProfileConstraint) {
+					PeriodDistributionProfileConstraint periodDistributionProfileConstraint = (PeriodDistributionProfileConstraint) profileConstraint;
+					MonthlyDistributionConstraint monthlyDistributionConstraint = new MonthlyDistributionConstraint();
+					for (PeriodDistribution periodDistribution : periodDistributionProfileConstraint.getDistributions()) {
+						List<Integer> months = periodDistribution.getRange().stream()
+								.map(m -> calendarMonthMapper
+										.mapChangePointToMonth(dateAndCurveHelper
+												.convertTime(m)))
+								.collect(Collectors.toList());
+						if (!months.isEmpty() && (periodDistribution.isSetMinCargoes() || periodDistribution.isSetMaxCargoes())) {
+						monthlyDistributionConstraint.addRow(months, periodDistribution.isSetMinCargoes() ? periodDistribution.getMinCargoes() : null ,
+								periodDistribution.isSetMaxCargoes() ? periodDistribution.getMaxCargoes() : null);
+						}
+					}
+					maxSlotConstraintDataTransformer.addMinMaxLoadSlotsPerMultiMonthPeriod(o_slots, monthlyDistributionConstraint);
+				}
+				else {
 					// Not handled here.
 				}
 
@@ -230,6 +249,21 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					default:
 						throw new IllegalStateException("Unsupported interval type " + maxCargoConstraint.getIntervalType());
 					}
+				} else if (profileConstraint instanceof PeriodDistributionProfileConstraint) {
+					PeriodDistributionProfileConstraint periodDistributionProfileConstraint = (PeriodDistributionProfileConstraint) profileConstraint;
+					MonthlyDistributionConstraint monthlyDistributionConstraint = new MonthlyDistributionConstraint();
+					for (PeriodDistribution periodDistribution : periodDistributionProfileConstraint.getDistributions()) {
+						List<Integer> months = periodDistribution.getRange().stream()
+								.map(m -> calendarMonthMapper
+										.mapChangePointToMonth(dateAndCurveHelper
+												.convertTime(m)))
+								.collect(Collectors.toList());
+						if (!months.isEmpty() && (periodDistribution.isSetMinCargoes() || periodDistribution.isSetMaxCargoes())) {
+							monthlyDistributionConstraint.addRow(months, periodDistribution.isSetMinCargoes() ? periodDistribution.getMinCargoes() : null ,
+								periodDistribution.isSetMaxCargoes() ? periodDistribution.getMaxCargoes() : null);
+						}
+					}
+					maxSlotConstraintDataTransformer.addMinMaxDischargeSlotsPerMultiMonthPeriod(o_slots, monthlyDistributionConstraint);
 				} else {
 					// Not handled here.
 				}

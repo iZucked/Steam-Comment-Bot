@@ -165,6 +165,18 @@
          inheritable="true"
          modelClass="com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint">
    </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.PeriodDistributionComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.PeriodDistributionComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.PeriodDistribution">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.PeriodDistributionProfileConstraintComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.PeriodDistributionProfileConstraintComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint">
+   </componentHelper>
 </extension>
 <extension
       point="com.mmxlabs.models.ui.displaycompositefactories">
@@ -190,6 +202,12 @@
          eClass="com.mmxlabs.models.lng.adp.DistributionModel"
          factory="com.mmxlabs.models.lng.adp.presentation.composites.DistributionModelTopLevelCompositeFactory"
          id="com.mmxlabs.models.lng.adp.presentation.composites.DistributionModelTopLevelCompositeFactory"
+         inheritable="true">
+   </displayCompositeFactory>
+   <displayCompositeFactory
+         eClass="com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint"
+         factory="com.mmxlabs.models.lng.adp.presentation.PeriodDistributionProfileConstraintDisplayCompositeFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.PeriodDistributionProfileConstraintDisplayCompositeFactory"
          inheritable="true">
    </displayCompositeFactory>
 </extension>

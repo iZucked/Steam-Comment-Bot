@@ -21,16 +21,15 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -64,7 +63,6 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.ValidationStatusWrapper;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
-import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite.ChildCompositeContainer;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 
 /**
@@ -91,12 +89,7 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 
 	public SubContractProfileTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
 		super(parent, style, dialogContext, toolkit);
-		addDisposeListener(new DisposeListener() {
-			@Override
-			public void widgetDisposed(final DisposeEvent e) {
-				removeAdapter();
-			}
-		});
+		addDisposeListener(e -> removeAdapter());
 	}
 
 	@Override
@@ -117,7 +110,8 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 		if (object instanceof SubContractProfile<?>) {
 			// createSlotButtons = true;
 			final SubContractProfile<?> subProfile = (SubContractProfile<?>) object;
-			groupName = subProfile.getName();
+			// groupName = subProfile.getName();
+			groupName = "Profile";// subProfile.getName();
 			noCols = 3;
 		}
 
@@ -141,7 +135,7 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 			// Initialise middle composite
 			// middleComposite = toolkit.createComposite(this, SWT.BORDER);
 
-			int numChildren = createChildOtherCompsiteSection(dialogContext, root, object, range, dbc, eClass, this);
+			final int numChildren = createChildOtherCompsiteSection(dialogContext, root, object, range, dbc, eClass, this);
 
 			// // We know there are n slots, so n columns
 			// middleComposite.setLayout(new GridLayout(numChildren + 1, false));
@@ -151,58 +145,57 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 
 			// Initialise middle composite
 			distributionComposite = new Group(this, SWT.NONE);
-			distributionComposite.setText("Distribution");
+			distributionComposite.setText("Slot generation");
 			toolkit.adapt(distributionComposite);
 
-			toolkit.createLabel(distributionComposite, "Model:");
-			distributionModelSelector = new ComboViewer(distributionComposite, SWT.DROP_DOWN);
-			distributionModelSelector.setContentProvider(new ArrayContentProvider());
-			distributionModelSelector.setLabelProvider(new DistributionModelFactoryLabelProvider());
+			{
+				final Composite selectorComposite = toolkit.createComposite(distributionComposite);
+				selectorComposite.setLayout(new GridLayout(2, false));
 
-			distributionModelValidationWrapper = ValidationStatusWrapper.createValidationDecorator(distributionModelSelector.getControl(), object,
-					ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL);
-			distributionModelSelector.getCombo().addSelectionListener(new SelectionListener() {
+				toolkit.createLabel(selectorComposite, "Model:");
+				distributionModelSelector = new ComboViewer(selectorComposite, SWT.DROP_DOWN);
+				distributionModelSelector.setContentProvider(new ArrayContentProvider());
+				distributionModelSelector.setLabelProvider(new DistributionModelFactoryLabelProvider());
 
-				@Override
-				public void widgetSelected(final SelectionEvent e) {
-					final ISelection selection = distributionModelSelector.getSelection();
-					if (selection.isEmpty()) {
-						return;
-					}
-					if (selection instanceof IStructuredSelection) {
-						final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
-						final Object firstElement = iStructuredSelection.getFirstElement();
-						if (firstElement instanceof IDistributionModelFactory) {
-							final IDistributionModelFactory factory = (IDistributionModelFactory) firstElement;
-							DistributionModel distributionModel = factory.createInstance();
-							Command command = SetCommand.create(getCommandHandler().getEditingDomain(), contractProfile, ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL,
-									distributionModel);
-							getCommandHandler().handleCommand(command, contractProfile, ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL);
-							dialogContext.getDialogController().relayout();
+				distributionModelValidationWrapper = ValidationStatusWrapper.createValidationDecorator(distributionModelSelector.getControl(), object,
+						ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL);
+				distributionModelSelector.getCombo().addSelectionListener(new SelectionAdapter() {
+
+					@Override
+					public void widgetSelected(final SelectionEvent e) {
+						final ISelection selection = distributionModelSelector.getSelection();
+						if (selection.isEmpty()) {
+							return;
+						}
+						if (selection instanceof IStructuredSelection) {
+							final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
+							final Object firstElement = iStructuredSelection.getFirstElement();
+							if (firstElement instanceof IDistributionModelFactory) {
+								final IDistributionModelFactory factory = (IDistributionModelFactory) firstElement;
+								final DistributionModel distributionModel = factory.createInstance();
+								final Command command = SetCommand.create(getCommandHandler().getEditingDomain(), contractProfile, ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL,
+										distributionModel);
+								getCommandHandler().handleCommand(command, contractProfile, ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL);
+								dialogContext.getDialogController().relayout();
+							}
 						}
 					}
-				}
-
-				@Override
-				public void widgetDefaultSelected(final SelectionEvent e) {
-
-				}
-			});
-
-			int numChildren = createChildDistributionCompsiteSection(dialogContext, root, object, range, dbc, eClass, distributionComposite);
+				});
+			}
+			final int numChildren = createChildDistributionCompsiteSection(dialogContext, root, object, range, dbc, eClass, distributionComposite);
 
 			// We know there are n slots, so n columns
-			distributionComposite.setLayout(new GridLayout(numChildren + 1, false));
-			distributionComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+			distributionComposite.setLayout(new GridLayout(1, false));
+			distributionComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 		}
 		{
 
 			// Initialise middle composite
 			constraintComposite = new Group(this, SWT.NONE);
-			constraintComposite.setText("Volume constraints");
+			constraintComposite.setText("Profile constraints");
 			toolkit.adapt(constraintComposite);
 
-			int numChildren = createChildConstraintsCompsiteSection(dialogContext, root, object, range, dbc, eClass, constraintComposite);
+			final int numChildren = createChildConstraintsCompsiteSection(dialogContext, root, object, range, dbc, eClass, constraintComposite);
 
 			constraintComposite.setLayout(new GridLayout(1, false));
 			constraintComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -210,12 +203,10 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 			{
 				final Control addAction = HoverActionHelper.createAddAction(constraintComposite, helper -> {
 					for (final ISubProfileConstraintFactory factory : subProfileConstraintFactories) {
-						if (factory.validFor((ContractProfile<?>) contractProfile.eContainer(), contractProfile))
-
-						{
+						if (factory.validFor((ContractProfile<?>) contractProfile.eContainer(), contractProfile)) {
 							helper.addAction(new RunnableAction(factory.getName(), () -> {
-								SubProfileConstraint opt = factory.createInstance();
-								Command cmd = AddCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), contractProfile,
+								final SubProfileConstraint opt = factory.createInstance();
+								final Command cmd = AddCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), contractProfile,
 										ADPPackage.eINSTANCE.getSubContractProfile_Constraints(), opt);
 								commandHandler.handleCommand(cmd, contractProfile, ADPPackage.eINSTANCE.getSubContractProfile_Constraints());
 								dialogContext.getDialogController().rebuild(false);
@@ -230,7 +221,8 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 			}
 
 		}
-		if (object instanceof SubContractProfile<?>) { // Create a toolbar for remove buttons
+		final boolean displayDeleteButton = false;
+		if (displayDeleteButton && object instanceof SubContractProfile<?>) { // Create a toolbar for remove buttons
 			final DetailToolbarManager removeButtonManager = new DetailToolbarManager(g, SWT.RIGHT);
 			toolkit.adapt(removeButtonManager.getToolbarManager().getControl());
 
@@ -259,21 +251,19 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 			contractProfile = (SubContractProfile<?>) object;
 			distributionModelSelector.setInput(getFactoriesFor(contractProfile));
 
-			IDistributionModelFactory currentFactory = getCurrentFactory(contractProfile);
+			final IDistributionModelFactory currentFactory = getCurrentFactory(contractProfile);
 			if (currentFactory != null) {
 				distributionModelSelector.setSelection(new StructuredSelection(currentFactory));
 			}
 
 			contractProfile.eAdapters().add(adapter);
-
-			// distributionModelSelector.getCombo().setEnabled(!((ContractProfile)contractProfile.eContainer()).isCustom());
 		}
 
 	}
 
 	protected int createChildOtherCompsiteSection(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range,
-			final EMFDataBindingContext dbc, final EClass eClass, Composite parent) {
-		ChildCompositeContainer childContainer = new ChildCompositeContainer();
+			final EMFDataBindingContext dbc, final EClass eClass, final Composite parent) {
+		final ChildCompositeContainer childContainer = new ChildCompositeContainer();
 		for (final EReference ref : eClass.getEAllReferences()) {
 			if (ref == ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS) {
 				continue;
@@ -310,14 +300,15 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 	}
 
 	protected int createChildConstraintsCompsiteSection(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range,
-			final EMFDataBindingContext dbc, final EClass eClass, Composite parent) {
-		ChildCompositeContainer childContainer = new ChildCompositeContainer();
+			final EMFDataBindingContext dbc, final EClass eClass, final Composite parent) {
+		final ChildCompositeContainer childContainer = new ChildCompositeContainer();
 		if (object instanceof SubContractProfile<?>) {
-			SubContractProfile<?> subContractProfile = (SubContractProfile<?>) object;
-			for (SubProfileConstraint constraint : subContractProfile.getConstraints()) {
-				String label = EditorUtils.unmangle(constraint);
-				IDisplayComposite c = createChildArea(childContainer, root, object, parent, ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS, label, constraint, (g) -> { // Create a toolbar for
-																																												// remove buttons
+			final SubContractProfile<?> subContractProfile = (SubContractProfile<?>) object;
+			for (final SubProfileConstraint constraint : subContractProfile.getConstraints()) {
+				final String label = EditorUtils.unmangle(constraint);
+				final IDisplayComposite c = createChildArea(childContainer, root, object, parent, ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS, label, constraint, (g) -> { // Create a toolbar
+																																														// for
+					// remove buttons
 					final DetailToolbarManager removeButtonManager = new DetailToolbarManager(g, SWT.RIGHT);
 
 					final Action action = new Action("Delete") {
@@ -351,11 +342,11 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 	}
 
 	protected int createChildDistributionCompsiteSection(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range,
-			final EMFDataBindingContext dbc, final EClass eClass, Composite parent) {
-		ChildCompositeContainer childContainer = new ChildCompositeContainer();
+			final EMFDataBindingContext dbc, final EClass eClass, final Composite parent) {
+		final ChildCompositeContainer childContainer = new ChildCompositeContainer();
 		if (object instanceof SubContractProfile<?>) {
-			SubContractProfile<?> subContractProfile = (SubContractProfile<?>) object;
-			DistributionModel distributionModel = subContractProfile.getDistributionModel();
+			final SubContractProfile<?> subContractProfile = (SubContractProfile<?>) object;
+			final DistributionModel distributionModel = subContractProfile.getDistributionModel();
 			if (distributionModel != null) {
 				createChildArea(childContainer, root, object, parent, ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL, null, distributionModel);
 			}
@@ -379,7 +370,7 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 	}
 
 	@Override
-	protected IDisplayComposite createChildArea(ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
+	protected IDisplayComposite createChildArea(final ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
 			final EObject value) {
 		final String label;
 		if (value instanceof CustomSubProfileAttributes) {

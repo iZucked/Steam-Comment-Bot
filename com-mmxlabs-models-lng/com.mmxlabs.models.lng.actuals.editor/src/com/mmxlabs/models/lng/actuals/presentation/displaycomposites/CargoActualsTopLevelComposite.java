@@ -75,7 +75,7 @@ public class CargoActualsTopLevelComposite extends DefaultTopLevelComposite {
 
 		// Initialise middle composite
 		middle = toolkit.createComposite(this);
-		int numChildren = createDefaultChildCompsiteSection(dialogContext, root, object, range, dbc, eClass, middle);
+		int numChildren = createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, middle);
 
 		// We know there are n slots, so n columns
 		middle.setLayout(new GridLayout(numChildren, true));

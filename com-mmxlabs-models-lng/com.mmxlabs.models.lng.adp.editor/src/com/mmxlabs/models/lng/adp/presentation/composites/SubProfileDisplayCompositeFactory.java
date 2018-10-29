@@ -25,7 +25,6 @@ public class SubProfileDisplayCompositeFactory implements IDisplayCompositeFacto
 
 	@Override
 	public IDisplayComposite createToplevelComposite(final Composite parent, final EClass eClass, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
-		// return defaultFactory.createToplevelComposite(composite, eClass, dialogContext, toolkit);
 		return new SubContractProfileTopLevelComposite(parent, SWT.NONE, dialogContext, toolkit)  ;
 	}
 

@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.eclipse.core.databinding.ObservablesManager;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -38,9 +37,6 @@ public class EmbeddedDetailComposite {
 
 	private EObject input;
 
-	private Composite parent;
-
-	private IDisplayCompositeFactory displayCompositeFactory;
 	private ObservablesManager observablesManager;
 	private EMFDataBindingContext dbc;
 	private IDisplayComposite displayComposite;
@@ -48,7 +44,6 @@ public class EmbeddedDetailComposite {
 	private FormToolkit toolkit = new FormToolkit(Display.getDefault());
 
 	private ScrolledComposite mainCompositeScrolled;
-	private Composite mainComposite;
 
 	private final IDialogController dialogController = new IDialogController() {
 
@@ -62,18 +57,11 @@ public class EmbeddedDetailComposite {
 		@Override
 		public void rebuild(boolean pack) {
 			setInput(input);
-			// updateEditor();
-			if (pack) {
-				// getShell().pack(false);
-			}
 		}
 
 		@Override
 		public void relayout() {
 			setInput(input);
-			// mainCompositeScrolled.setMinSize(mainComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-			//
-
 		}
 
 		@Override
@@ -104,39 +92,22 @@ public class EmbeddedDetailComposite {
 	public EmbeddedDetailComposite(final Composite parent, IScenarioEditingLocation scenarioEditingLocation) {
 		this.scenarioEditingLocation = scenarioEditingLocation;
 
-		statusChangedListener = new IStatusChangedListener() {
-
-			@Override
-			public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
-
-				if (displayComposite != null) {
-					RunnerHelper.runNowOrAsync(() -> displayComposite.displayValidationStatus(status));
-				}
+		statusChangedListener = (provider, status) -> {
+			if (displayComposite != null) {
+				RunnerHelper.runNowOrAsync(() -> displayComposite.displayValidationStatus(status));
 			}
 		};
 
 		mainCompositeScrolled = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
 		mainCompositeScrolled.setExpandVertical(true);
-		mainComposite = new Composite(mainCompositeScrolled, SWT.NONE);
-		mainComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		mainCompositeScrolled.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		mainCompositeScrolled.setContent(mainComposite);
 
 		mainCompositeScrolled.setLayoutData(GridDataFactory.fillDefaults()//
-				.grab(true, true)//
-				.create());
-		mainComposite.setLayoutData(GridDataFactory.fillDefaults()//
 				.grab(true, true)//
 				.create());
 		mainCompositeScrolled.setLayout(GridLayoutFactory.fillDefaults()//
 				.equalWidth(false) //
 				.numColumns(1) //
-				.margins(0, 0) //
-				.spacing(0, 0) //
-				.create());
-		mainComposite.setLayout(GridLayoutFactory.fillDefaults()//
-				.equalWidth(false) //
-				.numColumns(5) //
 				.margins(0, 0) //
 				.spacing(0, 0) //
 				.create());
@@ -155,7 +126,7 @@ public class EmbeddedDetailComposite {
 			statusProvider.removeStatusChangedListener(statusChangedListener);
 			statusProvider.addStatusChangedListener(statusChangedListener);
 		}
-		mainCompositeScrolled.setContent(mainComposite);
+		mainCompositeScrolled.setContent(null);
 
 		if (displayComposite != null) {
 			displayComposite.getComposite().dispose();
@@ -165,21 +136,26 @@ public class EmbeddedDetailComposite {
 			return;
 		}
 
-		final EObject selection = object;
-		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(object.eClass());
 		dialogContext = new DefaultDialogEditingContext(dialogController, scenarioEditingLocation, false, true);
+
+		final EObject selection = object;
+		IDisplayCompositeFactory displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(object.eClass());
 		displayComposite = displayCompositeFactory.createToplevelComposite(mainCompositeScrolled, selection.eClass(), dialogContext, toolkit);
+		displayComposite.getComposite().setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		mainCompositeScrolled.setContent(displayComposite.getComposite());
 
 		displayComposite.setCommandHandler(scenarioEditingLocation.getDefaultCommandHandler());
 
 		displayComposite.getComposite().setLayoutData(GridDataFactory.fillDefaults() //
 				.grab(true, true) //
-				.create());
+				.span(5, 1).create());
 
 		final Collection<EObject> range = Collections.emptySet();
 		displayComposite.display(dialogContext, scenarioEditingLocation.getRootObject(), object, range, dbc);
 
+		displayComposite.getComposite().setLayoutData(GridDataFactory.fillDefaults() //
+				.grab(true, true) //
+				.span(5, 1).create());
 		// Trigger update of inline editor visibility and UI state update
 		dialogController.updateEditorVisibility();
 
@@ -208,8 +184,9 @@ public class EmbeddedDetailComposite {
 				doCreateFormContent(input);
 			});
 		}
-
-		mainCompositeScrolled.setMinSize(mainCompositeScrolled.getContent().computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		if (mainCompositeScrolled.getContent() != null) {
+			mainCompositeScrolled.setMinSize(mainCompositeScrolled.getContent().computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		}
 
 	}
 
@@ -233,7 +210,7 @@ public class EmbeddedDetailComposite {
 	}
 
 	public Control getComposite() {
-		return mainComposite;
+		return mainCompositeScrolled;
 	}
 
 }
