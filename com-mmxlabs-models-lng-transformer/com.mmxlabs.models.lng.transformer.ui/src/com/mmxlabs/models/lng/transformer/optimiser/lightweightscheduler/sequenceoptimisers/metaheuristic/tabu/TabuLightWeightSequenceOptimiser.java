@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.joda.time.DateTime;
 
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightConstraintChecker;
@@ -95,10 +94,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 				// Create new candidate schedules
 				// TODO: not threadsafe. Cannot use a parallel stream due to the random object being reused.
 				List<TabuSolution> tabuSolutions = getNewCandidateSolutions(currentSolution.schedule, unusedCargoes, usedCargoes, random, mapping);
-				List<TabuSolution> findMatchingSolutions = TabuDebugHelper.findMatchingSolutions(tabuSolutions, 0, Lists.newArrayList(0,1,2,3,4,5,6,7,8,9,10,11));
-				if (findMatchingSolutions.size() > 0) {
-					int z = 0;
-				}
+
 				// Evaluate solutions
 				evaluateTabuSolutions(lightWeightOptimisationData, constraintCheckers, fitnessFunctions, cargoCount, tabuSolutions);
 

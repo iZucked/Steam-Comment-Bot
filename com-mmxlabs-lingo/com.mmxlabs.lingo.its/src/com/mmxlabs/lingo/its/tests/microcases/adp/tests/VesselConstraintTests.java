@@ -89,12 +89,6 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 		try {
-			MicroCaseUtils.storeToFile(scenarioDataProvider, "weird first cargo");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
 			runnerBuilder.evaluateInitialState();
 			runnerBuilder.run(false, runner -> {
 				// Run, get result and store to schedule model for inspection at EMF level if needed
