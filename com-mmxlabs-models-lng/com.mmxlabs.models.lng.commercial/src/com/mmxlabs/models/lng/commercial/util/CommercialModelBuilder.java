@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -58,6 +59,7 @@ public class CommercialModelBuilder {
 		params.setPriceExpression(expression);
 
 		contract.setPriceInfo(params);
+		contract.setPricingEvent(PricingEvent.START_DISCHARGE);
 		commercialModel.getSalesContracts().add(contract);
 
 		return contract;

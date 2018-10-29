@@ -63,7 +63,6 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 
 		Random random = new Random(this.seed);
 
-		long[] neighbourhoodFitnesses = new long[search];
 		CargoMap mapping = new CargoMap(currentSolution.schedule);
 
 		int bestIteration = 0;
