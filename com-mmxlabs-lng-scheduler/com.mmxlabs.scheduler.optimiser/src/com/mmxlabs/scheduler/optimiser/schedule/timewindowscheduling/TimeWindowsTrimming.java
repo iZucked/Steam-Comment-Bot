@@ -17,6 +17,7 @@ import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
@@ -391,7 +392,8 @@ public class TimeWindowsTrimming {
 
 		int bestPurchaseDetailsIdx = 0;
 		int bestSalesDetailsIdx = salesIntervals.length - 1;
-		final int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(load.getMaxLoadVolumeMMBTU());
+		
+		final int loadVolumeMMBTU = getExternalVolumeM3(vessel, load);
 		LadenRouteData bestCanalDetails = sortedCanalTimes[0];
 		long bestMargin = Long.MIN_VALUE;
 		if (purchaseIntervals.length > 1 || salesIntervals.length > 1) {
@@ -423,6 +425,15 @@ public class TimeWindowsTrimming {
 				salesIntervals[bestSalesDetailsIdx].end, loadDuration, (int) bestCanalDetails.ladenTimeAtMaxSpeed, (int) bestCanalDetails.ladenTimeAtNBOSpeed);
 	}
 
+	private int getExternalVolumeM3(final IVessel vessel, final ILoadOption load) {
+		final int loadCV = load.getCargoCVValue();
+		final long vesselLoadVolumeM3 = vessel.getCargoCapacity();
+		final long vesselLoadVolumeMMBTU = Calculator.convertM3ToMMBTu(vesselLoadVolumeM3, loadCV);
+		
+		final int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(Math.min(load.getMaxLoadVolumeMMBTU(),vesselLoadVolumeMMBTU));
+		return loadVolumeMMBTU;
+	}
+
 	/**
 	 * Loops through the different pairs of purchase and sales pricing buckets and finds the option with the best margin
 	 * 
@@ -443,7 +454,7 @@ public class TimeWindowsTrimming {
 
 		int bestPurchaseDetailsIdx = purchaseIntervals.length - 1;
 		int bestSalesDetailsIdx = 0;
-		final int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(load.getMaxLoadVolumeMMBTU());
+		final int loadVolumeMMBTU = getExternalVolumeM3(vessel, load);
 		LadenRouteData bestCanalDetails = sortedCanalTimes[0];
 		long bestMargin = Long.MIN_VALUE;
 		if (purchaseIntervals.length > 1 || salesIntervals.length > 1) {
