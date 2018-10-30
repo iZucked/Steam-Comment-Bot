@@ -29,8 +29,13 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.bindings.keys.IKeyLookup;
+import org.eclipse.jface.bindings.keys.KeyLookupFactory;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.ColumnViewerEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -38,6 +43,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
 import org.eclipse.nebula.widgets.formattedtext.FormattedText;
 import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -137,6 +143,27 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 		lblComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		tableViewer = new GridTableViewer(this, SWT.FULL_SELECTION | SWT.V_SCROLL);
+
+		final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tableViewer) {
+			@Override
+			protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
+				final boolean activate = event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION //
+						|| event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC //
+						|| event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL;
+				if (activate) {
+					return true;
+				}
+				if (event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) {
+					if (event.keyCode == KeyLookupFactory.getDefault().formalKeyLookup(IKeyLookup.ENTER_NAME)) {
+						return true;
+					}
+				}
+				return false;
+			}
+		};
+
+		GridViewerEditor.create(tableViewer, actSupport, ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.KEYBOARD_ACTIVATION);
+
 		final Grid table = tableViewer.getGrid();
 		GridViewerHelper.configureLookAndFeel(tableViewer);
 
