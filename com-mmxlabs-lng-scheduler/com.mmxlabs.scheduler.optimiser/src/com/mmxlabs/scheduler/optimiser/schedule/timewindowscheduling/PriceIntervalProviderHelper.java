@@ -25,8 +25,6 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
-import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -34,17 +32,17 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.util.ApproximateFuelCosts;
+import com.mmxlabs.scheduler.optimiser.voyage.util.ApproximateVoyageCalculatorHelper;
+import com.mmxlabs.scheduler.optimiser.voyage.util.ApproximateVoyageCalculatorHelper.ApproximateFuelCostLegData;
 import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 
 public class PriceIntervalProviderHelper {
@@ -71,9 +69,6 @@ public class PriceIntervalProviderHelper {
 			new PricingEventType[] { PricingEventType.END_OF_DISCHARGE, PricingEventType.END_OF_DISCHARGE_WINDOW, PricingEventType.START_OF_DISCHARGE, PricingEventType.START_OF_DISCHARGE_WINDOW, }));
 
 	private final @NonNull PriceIntervalsComparator priceIntervalComparator = new PriceIntervalsComparator();
-
-	private final static int TOTAL_BOILOFF_COSTS_INDEX = 0;
-	private final static int TOTAL_BUNKER_COSTS_INDEX = 1;
 
 	/**
 	 * Compares price intervals based on price
@@ -309,137 +304,27 @@ public class PriceIntervalProviderHelper {
 			final @NonNull IVessel vessel, final int cv, final int equivalenceFactor, final LadenRouteData canal, final long charterRatePerDay, final boolean isLaden) {
 		final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenTimeAtMaxSpeed,
 				(int) canal.ladenTimeAtNBOSpeed);
-		final long[] fuelCosts = getLegFuelCosts(salesPrice, boiloffRateM3, vessel, cv, times, canal.ladenRouteDistance, equivalenceFactor,
-				vesselBaseFuelCalculator.getBaseFuelPrices(vessel, times[0]), canal.transitTime, loadDuration, isLaden);
 
-		final long charterCost = OptimiserUnitConvertor.convertToInternalDailyCost((charterRatePerDay * (long) (times[1] - times[0])) / 24L); // note: converting charter rate to same scale as fuel
-																																				// costs
-		final long cost = canal.ladenRouteCost + fuelCosts[TOTAL_BOILOFF_COSTS_INDEX] + fuelCosts[TOTAL_BUNKER_COSTS_INDEX] + charterCost;
+		ApproximateFuelCostLegData inputData = new ApproximateFuelCostLegData();
+		inputData.salesPrice = salesPrice;
+		inputData.boiloffRateM3 = boiloffRateM3;
+		inputData.vessel = vessel;
+		inputData.cv = cv;
+		inputData.times = times;
+		inputData.distance = canal.ladenRouteDistance;
+		inputData.equivalenceFactor = equivalenceFactor;
+		inputData.baseFuelPricesPerMT = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, times[0]);
+		inputData.canalTransitTime = canal.transitTime;
+		inputData.durationAtPort = loadDuration;
+		inputData.isLaden = isLaden;
+		inputData.forceBaseFuel = false; // not using this here right now
+		inputData.includeIdleBunkerCosts = false; // not using this here right now
+
+		ApproximateFuelCosts legFuelCosts = ApproximateVoyageCalculatorHelper.getLegFuelCosts(inputData);
+		
+		final long charterCost = Calculator.costFromDailyRateAndTimeInHours(charterRatePerDay, times[1] - times[0]);
+		final long cost = canal.ladenRouteCost + legFuelCosts.getBoilOffCost() + legFuelCosts.getJourneyBunkerCost() + charterCost;
 		return cost;
-	}
-
-	/**
-	 * Calculates approximate fuel costs. Assumptions: does not calculate the in port costs, route costs or idle bunkers
-	 * 
-	 * @param salesPrice
-	 * @param boiloffRateM3
-	 * @param vesselClass
-	 * @param cv
-	 * @param times
-	 * @param distance
-	 * @param equivalenceFactor
-	 * @param baseFuelPricesPerMT
-	 * @param canalTransitTime
-	 * @param durationAtPort
-	 * @param isLaden
-	 * TODO
-	 * @return
-	 */
-	public static long[] getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVessel vessel, final int cv, final int[] times, final long distance, final int equivalenceFactor,
-			final int[] baseFuelPricesPerMT, final int canalTransitTime, final int durationAtPort, final boolean isLaden) {
-		final VesselState vesselState;
-		if (isLaden) {
-			vesselState = VesselState.Laden;
-		} else {
-			vesselState = VesselState.Ballast;
-		}
-		final int totalLegLengthInHours = (times[1] - times[0] - durationAtPort - canalTransitTime);
-
-		if (distance == 0 || totalLegLengthInHours == 0) {
-			return new long[] { 0, 0 };
-		}
-
-		// estimate speed and rate
-		final int nboSpeed = vessel.getConsumptionRate(vesselState).getSpeed(Calculator.convertM3ToMT(boiloffRateM3, cv, equivalenceFactor));
-		final int naturalSpeed = Calculator.speedFromDistanceTime(distance, totalLegLengthInHours);
-		final int speed = Math.min(Math.max(nboSpeed, naturalSpeed), vessel.getMaxSpeed()); // the speed bounded by NBO and Max
-		final long rate = vessel.getConsumptionRate(vesselState).getRate(speed);
-		final long vesselTravelTimeInHours = Calculator.getTimeFromSpeedDistance(speed, distance);
-		final long idleTimeInHours = Math.max(totalLegLengthInHours - vesselTravelTimeInHours, 0) + canalTransitTime; // note: modelling canal time as idle
-
-		final long requiredTotalFuelMT = (rate * vesselTravelTimeInHours) / 24L;
-		final long requiredTotalFuelM3 = Calculator.convertMTToM3(requiredTotalFuelMT, cv, equivalenceFactor);
-		final long requiredTotalFuelMMBTu = Calculator.convertM3ToMMBTu(requiredTotalFuelM3, cv);
-
-		final long idleBoiloffMMBTU = Calculator.convertM3ToMMBTu(vessel.getIdleNBORate(vesselState) * (int) idleTimeInHours, cv) / 24L;
-		final long idleBoiloffCost = Calculator.costFromVolume(idleBoiloffMMBTU, salesPrice);
-
-		final long[] fuelCosts = new long[2];
-		final long totalBoilOffCost;
-		final long totalBunkerCost;
-
-		if (vessel.hasReliqCapability()) {
-			totalBoilOffCost = Calculator.costFromVolume(requiredTotalFuelMMBTu, salesPrice);
-			totalBunkerCost = 0L;
-		} else {
-			final long boiloffM3 = (vesselTravelTimeInHours * boiloffRateM3) / 24L;
-			final long boiloffMMBTU = Calculator.convertM3ToMMBTu((vesselTravelTimeInHours * boiloffRateM3) / 24, cv);
-			final long boiloffMT = Calculator.convertM3ToMT(boiloffM3, cv, equivalenceFactor);
-			final long boiloffCost = Calculator.costFromVolume(boiloffMMBTU, salesPrice);
-			final long boiloffCostMMBTU = boiloffCost;
-
-			final long bunkersNeededMT = Math.max(0, requiredTotalFuelMT - boiloffMT);
-			final long bunkersCost = Calculator.costFromConsumption(bunkersNeededMT, baseFuelPricesPerMT[vessel.getTravelBaseFuel().getIndex()]);
-
-			final long fboInMMBTU = Math.max(0, requiredTotalFuelMMBTu - boiloffMMBTU);
-			final long fboCost = Calculator.costFromVolume(fboInMMBTU, salesPrice);
-
-			if (fboCost > bunkersCost) {
-				totalBoilOffCost = boiloffCostMMBTU;
-				totalBunkerCost = bunkersCost;
-			} else {
-				totalBoilOffCost = Calculator.costFromVolume(requiredTotalFuelMMBTu, salesPrice);
-				totalBunkerCost = 0L;
-			}
-		}
-		// note converting units so same scale as charter rate
-		fuelCosts[0] = OptimiserUnitConvertor.convertToInternalDailyCost(totalBoilOffCost + idleBoiloffCost);
-		fuelCosts[1] = OptimiserUnitConvertor.convertToInternalDailyCost(totalBunkerCost);
-		return fuelCosts;
-	}
-
-	public NonNullPair<LadenRouteData, Long> getBestCanalDetailsWithBoiloff(@NonNull final IntervalData purchase, @NonNull final IntervalData sales, final int loadDuration, final int salesPrice,
-			@NonNull final LadenRouteData[] sortedCanalTimes, final long boiloffRateM3, final int cv, final int loadVolumeMMBTU) {
-		assert sortedCanalTimes.length > 0;
-		long bestMargin = Long.MAX_VALUE;
-		long bestBoiloffCostMMBTU = Long.MIN_VALUE;
-		LadenRouteData bestCanal = null;
-		for (final LadenRouteData canal : sortedCanalTimes) {
-			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.ladenTimeAtMaxSpeed)) {
-				final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenTimeAtMaxSpeed,
-						(int) canal.ladenTimeAtNBOSpeed);
-				final int ladenLength = (times[1] - times[0]) / 24;
-
-				final long boiloffMMBTU = Calculator.convertM3ToMMBTu((ladenLength) * boiloffRateM3, cv);
-				final long boiloffCost = Calculator.costFromVolume(boiloffMMBTU, sales.price);
-				final long boiloffCostMMBTU = OptimiserUnitConvertor.convertToInternalDailyCost(boiloffCost);
-				final long charterCost = 0;
-				final long cost = canal.ladenRouteCost + boiloffCostMMBTU + charterCost;
-				if (cost < bestMargin) {
-					bestMargin = cost;
-					bestCanal = canal;
-					bestBoiloffCostMMBTU = boiloffCostMMBTU;
-				}
-			}
-		}
-		if (bestCanal == null) {
-			final long fastest = Long.MAX_VALUE;
-			for (final LadenRouteData canal : sortedCanalTimes) {
-				if (canal.ladenTimeAtMaxSpeed < fastest) {
-					bestCanal = canal;
-				}
-			}
-			if (bestCanal != null) {
-				final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) bestCanal.ladenTimeAtMaxSpeed,
-						(int) bestCanal.ladenTimeAtMaxSpeed);
-				final int ladenLength = (times[1] - times[0]) / 24;
-				final long boiloffMMBTU = Calculator.convertM3ToMMBTu((ladenLength) * boiloffRateM3, cv);
-				final long boiloffCost = Calculator.costFromVolume(boiloffMMBTU, sales.price);
-				bestBoiloffCostMMBTU = OptimiserUnitConvertor.convertToInternalDailyCost(boiloffCost);
-			}
-		}
-		assert bestCanal != null;
-		return new NonNullPair<>(bestCanal, bestBoiloffCostMMBTU);
 	}
 
 	int getMinIndexOfPriceIntervalList(final IntervalData @NonNull [] purchaseIntervals) {

@@ -9,7 +9,7 @@ public class ApproximateFuelCosts {
 	private final long journeyBunkerCost;
 	
 	public ApproximateFuelCosts(final long boiloffCost, final long journeyBunkers) {
-		boilOffCost = boiloffCost;
+		this.boilOffCost = boiloffCost;
 		this.journeyBunkerCost = journeyBunkers;
 	}
 
