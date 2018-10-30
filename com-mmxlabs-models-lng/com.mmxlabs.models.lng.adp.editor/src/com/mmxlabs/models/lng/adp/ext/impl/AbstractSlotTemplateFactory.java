@@ -44,8 +44,12 @@ public class AbstractSlotTemplateFactory implements ISlotTemplateFactory {
 	public <T extends Slot> String generateName(final String templateID, final ContractProfile<T> profile, final SubContractProfile<T> subProfile, final YearMonth yearStart, final int i) {
 
 		final String contractShortName = DistributionModelGeneratorUtil.getContractShortName(profile, profile.getContract());
-		final String type = subProfile.getName();
-		return String.format("%2d-%s-%s-%02d", yearStart.getYear() - 2000, contractShortName, type, 1 + i);
+		if (profile.getSubProfiles().size() == 1) {
+			return String.format("%2d-%s-%02d", yearStart.getYear() - 2000, contractShortName, 1 + cargoNumber);
+		} else {
+			final String code = subProfile.getName();
+			return String.format("%2d-%s-%s-%02d", yearStart.getYear() - 2000, contractShortName, code, 1 + cargoNumber);
+		}
 	}
 
 	protected LoadSlot createGenericFOBPurchase(final ContractProfile<?> profile, final SubContractProfile<?> subProfile) {
