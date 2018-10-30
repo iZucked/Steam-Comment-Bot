@@ -47,7 +47,7 @@ public abstract class DialogFeatureManipulator extends BasicAttributeManipulator
 			protected void doSetFocus() {
 				if (!locked) {
 					locked = true;
-					RunnerHelper.runNowOrAsync(() -> {
+					RunnerHelper.asyncExec(() -> {
 						final Object o = openDialogBox(editor, object);
 						if (o != null) {
 							value = o;
