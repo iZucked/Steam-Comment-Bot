@@ -15,6 +15,8 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ContractType;
 
 @NonNullByDefault
 public class AbstractSlotTemplateFactory implements ISlotTemplateFactory {
@@ -28,20 +30,18 @@ public class AbstractSlotTemplateFactory implements ISlotTemplateFactory {
 	public <T extends Slot> T createSlot(final String templateID, final ContractProfile<T> profile, final SubContractProfile<T> subProfile) {
 		switch (templateID) {
 		case TEMPLATE_GENERIC_FOB_PURCHASE:
-			return (T) createGenericFOBPurchase(profile, subProfile);
-		case TEMPLATE_GENERIC_FOB_SALE:
-			return (T) createGenericFOBSale(profile, subProfile);
 		case TEMPLATE_GENERIC_DES_PURCHASE:
-			return (T) createGenericDESPurchase(profile, subProfile);
+			return (T) createGenericPurchase(profile, subProfile);
+		case TEMPLATE_GENERIC_FOB_SALE:
 		case TEMPLATE_GENERIC_DES_SALE:
-			return (T) createGenericDESSale(profile, subProfile);
+			return (T) createGenericSale(profile, subProfile);
 		}
 
 		throw new IllegalArgumentException("Unknown template ID " + templateID);
 	}
 
 	@Override
-	public <T extends Slot> String generateName(final String templateID, final ContractProfile<T> profile, final SubContractProfile<T> subProfile, final YearMonth yearStart, final int i) {
+	public <T extends Slot> String generateName(final String templateID, final ContractProfile<T> profile, final SubContractProfile<T> subProfile, final YearMonth yearStart, final int cargoNumber) {
 
 		final String contractShortName = DistributionModelGeneratorUtil.getContractShortName(profile, profile.getContract());
 		if (profile.getSubProfiles().size() == 1) {
@@ -52,45 +52,41 @@ public class AbstractSlotTemplateFactory implements ISlotTemplateFactory {
 		}
 	}
 
-	protected LoadSlot createGenericFOBPurchase(final ContractProfile<?> profile, final SubContractProfile<?> subProfile) {
+	protected LoadSlot createGenericPurchase(final ContractProfile<?> profile, final SubContractProfile<?> subProfile) {
 
 		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
+		Contract contract = profile.getContract();
 
-		slot.setContract(profile.getContract());
-		slot.setPort(profile.getContract().getPreferredPort());
+		slot.setContract(contract);
+		slot.setPort(contract.getPreferredPort());
+
+		if (contract.getContractType() == ContractType.DES) {
+			slot.setDESPurchase(true);
+			slot.setNominatedVessel(subProfile.getNominatedVessel());
+			if (subProfile.getShippingDays() > 0) {
+				slot.setDivertible(true);
+				slot.setShippingDaysRestriction(subProfile.getShippingDays());
+			}
+		}
+
 		return slot;
 	}
 
-	protected LoadSlot createGenericDESPurchase(final ContractProfile<?> profile, final SubContractProfile<?> subProfile) {
-
-		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
-		slot.setDESPurchase(true);
-
-		slot.setContract(profile.getContract());
-		slot.setPort(profile.getContract().getPreferredPort());
-
-		slot.setNominatedVessel(subProfile.getNominatedVessel());
-
-		return slot;
-	}
-
-	protected DischargeSlot createGenericDESSale(final ContractProfile<?> profile, final SubContractProfile<?> subProfile) {
+	protected DischargeSlot createGenericSale(final ContractProfile<?> profile, final SubContractProfile<?> subProfile) {
 
 		final DischargeSlot slot = CargoFactory.eINSTANCE.createDischargeSlot();
 
-		slot.setContract(profile.getContract());
-		slot.setPort(profile.getContract().getPreferredPort());
-		return slot;
-	}
-
-	protected DischargeSlot createGenericFOBSale(final ContractProfile<?> profile, final SubContractProfile<?> subProfile) {
-
-		final DischargeSlot slot = CargoFactory.eINSTANCE.createDischargeSlot();
-		slot.setFOBSale(true);
-
-		slot.setContract(profile.getContract());
-		slot.setPort(profile.getContract().getPreferredPort());
-		slot.setNominatedVessel(subProfile.getNominatedVessel());
+		Contract contract = profile.getContract();
+		slot.setContract(contract);
+		slot.setPort(contract.getPreferredPort());
+		if (contract.getContractType() == ContractType.DES) {
+			slot.setFOBSale(true);
+			slot.setNominatedVessel(subProfile.getNominatedVessel());
+			if (subProfile.getShippingDays() > 0) {
+				slot.setDivertible(true);
+				slot.setShippingDaysRestriction(subProfile.getShippingDays());
+			}
+		}
 
 		return slot;
 	}
