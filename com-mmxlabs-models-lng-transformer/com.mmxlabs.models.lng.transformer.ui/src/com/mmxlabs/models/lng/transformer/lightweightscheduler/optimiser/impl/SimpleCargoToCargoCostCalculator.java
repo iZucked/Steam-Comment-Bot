@@ -101,6 +101,7 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 			inputData.durationAtPort = 0;
 			inputData.isLaden = false;
 			inputData.forceBaseFuel = false;
+			inputData.includeIdleBunkerCosts = true;
 
 			legFuelCosts = ApproximateVoyageCalculatorHelper.getLegFuelCosts(inputData);
 		} else {
@@ -118,6 +119,7 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 			inputData.durationAtPort = 0;
 			inputData.isLaden = false;
 			inputData.forceBaseFuel = true;
+			inputData.includeIdleBunkerCosts = true;
 			try {
 				legFuelCosts = ApproximateVoyageCalculatorHelper.getLegFuelCosts(inputData);
 			} catch (Exception e) {

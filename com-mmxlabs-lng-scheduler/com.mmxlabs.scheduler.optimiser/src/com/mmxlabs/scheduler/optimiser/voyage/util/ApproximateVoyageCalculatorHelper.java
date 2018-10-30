@@ -5,7 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.voyage.util;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+//import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
@@ -24,20 +24,21 @@ public class ApproximateVoyageCalculatorHelper {
 		public int durationAtPort;
 		public boolean isLaden;
 		public boolean forceBaseFuel;
+		public boolean includeIdleBunkerCosts;
 	}
 	
 	public static ApproximateFuelCosts getLegFuelCosts(ApproximateFuelCostLegData data) {
 		return getLegFuelCosts(data.salesPrice, data.boiloffRateM3, data.vessel, data.cv, data.times, data.distance, data.equivalenceFactor,
-				data.baseFuelPricesPerMT, data.canalTransitTime, data.durationAtPort, data.isLaden, data.forceBaseFuel);
+				data.baseFuelPricesPerMT, data.canalTransitTime, data.durationAtPort, data.isLaden, data.forceBaseFuel, data.includeIdleBunkerCosts);
 	}
 	
 	public static ApproximateFuelCosts getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVessel vessel, final int cv, final int[] times, final long distance, final int equivalenceFactor,
 			final int[] baseFuelPricesPerMT, final int canalTransitTime, final int durationAtPort, final boolean isLaden) {
-		return getLegFuelCosts(salesPrice, boiloffRateM3, vessel, cv, times, distance, equivalenceFactor, baseFuelPricesPerMT, canalTransitTime, durationAtPort, isLaden, false);
+		return getLegFuelCosts(salesPrice, boiloffRateM3, vessel, cv, times, distance, equivalenceFactor, baseFuelPricesPerMT, canalTransitTime, durationAtPort, isLaden, false, false);
 	}
 	
 	/**
-	 * Calculates approximate fuel costs. Assumptions: does not calculate the in port costs, route costs or idle bunkers
+	 * Calculates approximate fuel costs. Assumptions: does not calculate the in port costs, route costs
 	 * 
 	 * @param salesPrice
 	 * @param boiloffRateM3
@@ -53,7 +54,7 @@ public class ApproximateVoyageCalculatorHelper {
 	 * @return
 	 */
 	public static ApproximateFuelCosts getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVessel vessel, final int cv, final int[] times, final long distance, final int equivalenceFactor,
-			final int[] baseFuelPricesPerMT, final int canalTransitTime, final int durationAtPort, final boolean isLaden, final boolean forceBaseFuel) {
+			final int[] baseFuelPricesPerMT, final int canalTransitTime, final int durationAtPort, final boolean isLaden, final boolean forceBaseFuel, final boolean includeIdleBunkerCosts) {
 		final VesselState vesselState;
 		if (isLaden) {
 			vesselState = VesselState.Laden;
@@ -62,6 +63,9 @@ public class ApproximateVoyageCalculatorHelper {
 		}
 		final int totalLegLengthInHours = (times[1] - times[0] - durationAtPort - canalTransitTime);
 
+		if (distance == 0 || totalLegLengthInHours == 0) {		
+				return new ApproximateFuelCosts(0, 0);
+		}
 		// estimate speed and rate
 		final int nboSpeed = vessel.getConsumptionRate(vesselState).getSpeed(Calculator.convertM3ToMT(boiloffRateM3, cv, equivalenceFactor));
 		final int naturalSpeed = Calculator.speedFromDistanceTime(distance, totalLegLengthInHours);
@@ -74,16 +78,16 @@ public class ApproximateVoyageCalculatorHelper {
 		final long requiredTotalFuelM3 = Calculator.convertMTToM3(requiredTotalFuelMT, cv, equivalenceFactor);
 		final long requiredTotalFuelMMBTu = Calculator.convertM3ToMMBTu(requiredTotalFuelM3, cv);
 
-		long idleBunkerTotalFuelMT = (vessel.getIdleConsumptionRate(vesselState) * idleTimeInHours) / 24L;
+		long idleBunkerTotalFuelMT = includeIdleBunkerCosts ? (vessel.getIdleConsumptionRate(vesselState) * idleTimeInHours) / 24L : 0L;
 		final long idleBoiloffMMBTU = Calculator.convertM3ToMMBTu(vessel.getIdleNBORate(vesselState) * (int) idleTimeInHours, cv) / 24L;
 		
 		final long idleBoiloffCost = Calculator.costFromVolume(idleBoiloffMMBTU, salesPrice);
 
-		final long[] fuelCosts = new long[2];
+		final ApproximateFuelCosts fuelCosts;
 		final long totalBoilOffCost;
 		final long totalBunkerCost;
 		
-		final long idleBunkerCost = idleTimeInHours * Calculator.costFromConsumption(idleBunkerTotalFuelMT,
+		final long idleBunkerCost = Calculator.costFromConsumption(idleBunkerTotalFuelMT,
 				baseFuelPricesPerMT[vessel.getIdleBaseFuel().getIndex()]);
 
 		if (forceBaseFuel) {
@@ -116,10 +120,12 @@ public class ApproximateVoyageCalculatorHelper {
 			}
 		}
 		// note converting units so same scale as charter rate
-		fuelCosts[0] = OptimiserUnitConvertor.convertToInternalDailyCost(totalBoilOffCost + idleBoiloffCost);
-		fuelCosts[1] = OptimiserUnitConvertor.convertToInternalDailyCost(totalBunkerCost + idleBunkerCost);
+		fuelCosts = new ApproximateFuelCosts(
+				totalBoilOffCost + idleBoiloffCost,
+				totalBunkerCost + idleBunkerCost
+			);
 		
-		return new ApproximateFuelCosts(fuelCosts[0], fuelCosts[1]);
+		return fuelCosts;
 	}
 
 }

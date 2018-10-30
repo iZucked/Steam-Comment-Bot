@@ -46,6 +46,11 @@ public final class Calculator {
 		return (volume * price) / HighScaleFactor;
 	}
 
+	public static long costFromDailyRateAndTimeInHours(final long rate, final int timeInHours) {
+
+		return (rate * (long) timeInHours) / 24L;
+	}
+
 	public static long convertM3ToMMBTu(final long m3, final int factor) {
 
 		return (m3 * (long) factor) / HighScaleFactor;

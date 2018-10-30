@@ -119,9 +119,6 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void testLowLevelCosts() throws Exception {
-
-		Assert.fail("Alex - fix me!");
-
 		// Create the required basic elements
 		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
@@ -170,24 +167,48 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				assert load != null;
 				final long directCost = priceIntervalProviderHelper.getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, o_vessel.getNBORate(VesselState.Laden), o_vessel,
 						load.getCargoCVValue(), equivalenceFactor, lrd[0], 0, true);
+				
+				// Canal date 
+//				baseFuelPricesPerMT	(id=131)	->  [0, 0, 0, 0, 0, 1000000000]
+//				boiloffRateM3	200000	
+//				canalTransitTime	0	
+//				cv	23400000	
+//				distance	500	
+//				durationAtPort	0	
+//				equivalenceFactor	45600000	
+//				forceBaseFuel	false	
+//				includeIdleBunkerCosts	false	
+//				isLaden	true	
+//				salesPrice	10000000
+//				times	(id=126)	->    [1, 50]
+//				vessel	Vessel  (id=116)   ->  STEAM-145
+//				totalLegLengthInHours	49	
+//				nboSpeed	13175	
+//				naturalSpeed	10204	
+//				speed	13175	
+//				rateVoyage	102625	
+//				vesselTravelTimeInHours	37	
+//				idleTimeInHours	12	
+
+				
 				final long canalCost = priceIntervalProviderHelper.getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, o_vessel.getNBORate(VesselState.Laden), o_vessel,
 						load.getCargoCVValue(), equivalenceFactor, lrd[1], 0, true);
 				/*
 				 * Test correct values are being calculated
 				 */
-				Assert.assertEquals(directCost, 15_674_022_0000L);
-				Assert.assertEquals(canalCost, 7_752_039_0000L);
+				Assert.assertEquals(directCost, 156_740220L); //$156,740
+				Assert.assertEquals(canalCost,  593_205000L); //$593,205
 				/*
 				 * Test correct route chosen
 				 */
 				final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd,
 						o_vessel.getNBORate(VesselState.Laden), o_vessel, load.getCargoCVValue(), true);
-				Assert.assertEquals(totalEstimatedJourneyCost.getFirst(), lrd[1]);
+				Assert.assertEquals(totalEstimatedJourneyCost.getFirst(), lrd[0]);
 				final TimeWindowsTrimming timeWindowsTrimming = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, TimeWindowsTrimming.class);
 				final long charterRate = 0;
 				final int[] findBestBucketPairWithRouteAndBoiloffConsiderations = timeWindowsTrimming.findBestBucketPairWithRouteAndBoiloffConsiderations(o_vesselAvailability.getVessel(), load, lrd,
 						loadDuration, new IntervalData[] { purchase }, new IntervalData[] { sales }, new IntervalData[] { sales }, charterRate);
-				Assert.assertArrayEquals(findBestBucketPairWithRouteAndBoiloffConsiderations, new int[] { 10, 11, 50, 51 });
+				Assert.assertArrayEquals(findBestBucketPairWithRouteAndBoiloffConsiderations, new int[] { 0, 1, 70, 71 });
 			});
 		});
 	}
@@ -529,7 +550,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowSize(5, TimePeriod.HOURS).build() //
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
-				.withWindowSize(24000, TimePeriod.HOURS).build() //
+				.withWindowSize(3, TimePeriod.MONTHS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
