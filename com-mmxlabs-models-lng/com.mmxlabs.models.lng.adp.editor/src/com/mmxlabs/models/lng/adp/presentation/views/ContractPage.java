@@ -483,6 +483,9 @@ public class ContractPage extends ADPComposite {
 				objects.addAll(commercialModel.getSalesContracts());
 
 				RunnerHelper.runNowOrAsync(() -> {
+					if (objectSelector.getControl().isDisposed()) {
+						return;
+					}
 					Object selected = objectSelector.getStructuredSelection().getFirstElement();
 					objectSelector.setInput(objects);
 					if (selected != null && !objects.contains(selected)) {
@@ -494,7 +497,11 @@ public class ContractPage extends ADPComposite {
 					}
 				});
 			} else if (msg.getNotifier() instanceof Contract) {
-				RunnerHelper.runNowOrAsync(() -> objectSelector.refresh(true));
+				RunnerHelper.runNowOrAsync(() -> {
+					if (!objectSelector.getControl().isDisposed()) {
+						objectSelector.refresh(true);
+					}
+				});
 			}
 		}
 	};
