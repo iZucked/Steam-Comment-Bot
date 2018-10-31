@@ -383,8 +383,9 @@ public class FeasibleTimeWindowTrimmer {
 				}
 			} else {
 				if (index == 0) {// first time window is special
-					windowStartTime[index] = window.getInclusiveStart();
-					windowEndTime[index] = window.getExclusiveEnd();
+					// It is possible the first window is a spot market slot with a negative start window due to timezones
+					windowStartTime[index] = Math.max(0, window.getInclusiveStart());
+					windowEndTime[index] = Math.max(1, window.getExclusiveEnd());
 				} else {
 
 					// subsequent time windows have their start time clipped, so
