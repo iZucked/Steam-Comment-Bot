@@ -363,7 +363,7 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 							}
 							YearMonth start = adpModel.getYearStart();
 							final List<PeriodDistribution> toAdd = new LinkedList<>();
-							while (start.isBefore(adpModel.getYearEnd())) {
+							while (start.isBefore(adpModel.getYearEnd().minusMonths(1))) {
 								final PeriodDistribution d = createPeriodDistribution(minMaxControls);
 
 								d.getRange().add(start);
@@ -415,13 +415,14 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 							final YearMonth contractStart = c.getStartDate();
 
 							PeriodDistribution d = createPeriodDistribution(minMaxControls);
-							toAdd.add(d);
 							while (start.isBefore(adpModel.getYearEnd())) {
+								if (!toAdd.contains(d)) {
+									toAdd.add(d);
+								}
 								d.getRange().add(start);
 								start = start.plusMonths(1);
 								if (contractStart != null && start.getMonth() == contractStart.getMonth()) {
 									d = createPeriodDistribution(minMaxControls);
-									toAdd.add(d);
 								}
 							}
 
