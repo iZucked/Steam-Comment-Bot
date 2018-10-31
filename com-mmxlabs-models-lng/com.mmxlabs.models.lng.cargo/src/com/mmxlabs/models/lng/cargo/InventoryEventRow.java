@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getCounterParty <em>Counter Party</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getReliability <em>Reliability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getVolume <em>Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getForecastDate <em>Forecast Date</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getInventoryEventRow()
@@ -191,6 +192,59 @@ public interface InventoryEventRow extends EObject {
 	 * @generated
 	 */
 	void setVolume(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Forecast Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Forecast Date</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Forecast Date</em>' attribute.
+	 * @see #isSetForecastDate()
+	 * @see #unsetForecastDate()
+	 * @see #setForecastDate(LocalDate)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getInventoryEventRow_ForecastDate()
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getForecastDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getForecastDate <em>Forecast Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Forecast Date</em>' attribute.
+	 * @see #isSetForecastDate()
+	 * @see #unsetForecastDate()
+	 * @see #getForecastDate()
+	 * @generated
+	 */
+	void setForecastDate(LocalDate value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getForecastDate <em>Forecast Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetForecastDate()
+	 * @see #getForecastDate()
+	 * @see #setForecastDate(LocalDate)
+	 * @generated
+	 */
+	void unsetForecastDate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getForecastDate <em>Forecast Date</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Forecast Date</em>' attribute is set.
+	 * @see #unsetForecastDate()
+	 * @see #getForecastDate()
+	 * @see #setForecastDate(LocalDate)
+	 * @generated
+	 */
+	boolean isSetForecastDate();
 
 	/**
 	 * <!-- begin-user-doc -->

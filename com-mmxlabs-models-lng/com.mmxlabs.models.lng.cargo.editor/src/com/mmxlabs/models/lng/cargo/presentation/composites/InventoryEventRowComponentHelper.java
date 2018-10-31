@@ -73,6 +73,7 @@ public class InventoryEventRowComponentHelper extends BaseComponentHelper {
 		add_counterPartyEditor(detailComposite, topClass);
 		add_reliabilityEditor(detailComposite, topClass);
 		add_volumeEditor(detailComposite, topClass);
+		add_forecastDateEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the startDate feature on InventoryEventRow
@@ -122,5 +123,14 @@ public class InventoryEventRowComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_volumeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.INVENTORY_EVENT_ROW__VOLUME));
+	}
+
+	/**
+	 * Create the editor for the forecastDate feature on InventoryEventRow
+	 *
+	 * @generated
+	 */
+	protected void add_forecastDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.INVENTORY_EVENT_ROW__FORECAST_DATE));
 	}
 }
