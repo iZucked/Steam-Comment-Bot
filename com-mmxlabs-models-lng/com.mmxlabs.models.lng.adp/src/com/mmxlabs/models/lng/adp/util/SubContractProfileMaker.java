@@ -92,12 +92,9 @@ public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U
 	}
 
 	@NonNull
-	public SubContractProfileMaker<T, U, V> withPreDefinedDistributionModel(final double volumne, final LNGVolumeUnit volumeUnit, final int windowSize, final TimePeriod windowSizeUnit,
-			final List<LocalDate> dates) {
+	public SubContractProfileMaker<T, U, V> withPreDefinedDistributionModel(final int windowSize, final TimePeriod windowSizeUnit, final List<LocalDate> dates) {
 
 		final PreDefinedDistributionModel model = ADPFactory.eINSTANCE.createPreDefinedDistributionModel();
-		model.setVolumePerCargo(volumne);
-		model.setVolumeUnit(volumeUnit);
 		model.setWindowSize(windowSize);
 		model.setWindowSizeUnits(windowSizeUnit);
 		dates.forEach(d -> {
@@ -110,22 +107,18 @@ public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U
 	}
 
 	@NonNull
-	public SubContractProfileMaker<T, U, V> withCargoSizeDistributionModel(final double volume, final LNGVolumeUnit volumeUnit, final boolean exact) {
+	public SubContractProfileMaker<T, U, V> withCargoSizeDistributionModel(final boolean exact) {
 
 		final CargoSizeDistributionModel model = ADPFactory.eINSTANCE.createCargoSizeDistributionModel();
-		model.setVolumePerCargo(volume);
-		model.setVolumeUnit(volumeUnit);
 		model.setExact(exact);
 		subContractProfile.setDistributionModel(model);
 		return this;
 	}
 
 	@NonNull
-	public SubContractProfileMaker<T, U, V> withCargoByQuarterDistributionModel(final double volume, final LNGVolumeUnit volumeUnit, final int q1, final int q2, final int q3, final int q4) {
+	public SubContractProfileMaker<T, U, V> withCargoByQuarterDistributionModel(final int q1, final int q2, final int q3, final int q4) {
 
 		final CargoByQuarterDistributionModel model = ADPFactory.eINSTANCE.createCargoByQuarterDistributionModel();
-		model.setVolumePerCargo(volume);
-		model.setVolumeUnit(volumeUnit);
 		model.setQ1(q1);
 		model.setQ2(q2);
 		model.setQ3(q3);
@@ -135,12 +128,9 @@ public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U
 	}
 
 	@NonNull
-	public SubContractProfileMaker<T, U, V> withCargoIntervalDistributionModel(final double volume, final LNGVolumeUnit volumeUnit, final int quantity, final IntervalType intervalType,
-			final int spacing) {
+	public SubContractProfileMaker<T, U, V> withCargoIntervalDistributionModel(final int quantity, final IntervalType intervalType, final int spacing) {
 
 		final CargoIntervalDistributionModel model = ADPFactory.eINSTANCE.createCargoIntervalDistributionModel();
-		model.setVolumePerCargo(volume);
-		model.setVolumeUnit(volumeUnit);
 
 		model.setSpacing(spacing);
 		model.setQuantity(quantity);
@@ -150,11 +140,9 @@ public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U
 	}
 
 	@NonNull
-	public SubContractProfileMaker<T, U, V> withCargoNumberDistributionModel(final double volume, final LNGVolumeUnit volumeUnit, final int numberOfCargoes) {
+	public SubContractProfileMaker<T, U, V> withCargoNumberDistributionModel(final int numberOfCargoes) {
 
 		final CargoNumberDistributionModel model = ADPFactory.eINSTANCE.createCargoNumberDistributionModel();
-		model.setVolumePerCargo(volume);
-		model.setVolumeUnit(volumeUnit);
 		model.setNumberOfCargoes(numberOfCargoes);
 		subContractProfile.setDistributionModel(model);
 		return this;

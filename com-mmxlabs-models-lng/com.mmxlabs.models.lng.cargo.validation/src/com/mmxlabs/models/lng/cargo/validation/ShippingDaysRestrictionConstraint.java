@@ -57,13 +57,13 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 			if (object instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) object;
 				if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy_AnyDisPort) {
-					if (loadSlot.getShippingDaysRestriction() > MAX_SHIPPING_DAYS) {
+					if (loadSlot.getSlotOrDelegateShippingDaysRestriction() > MAX_SHIPPING_DAYS) {
 						final String message = String.format("DES Purchase|%s shipping days restriction is too big.", loadSlot.getName());
 						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
 						dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
 						failures.add(dsd);
-					} else if (loadSlot.getShippingDaysRestriction() == 0) {
+					} else if (loadSlot.getSlotOrDelegateShippingDaysRestriction() == 0) {
 						final String message = String.format("DES Purchase|%s shipping days restriction is set to zero - unable to ship anywhere!", loadSlot.getName());
 						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
@@ -211,12 +211,12 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									// Total min travel time.
 									final int totalRoundTripTimeInHours = loadDurationInHours + ladenTimeInHours + dischargeDurationInHours + ballastTravelTimeInHours;
 
-									if (totalRoundTripTimeInHours > desPurchase.getShippingDaysRestriction() * 24) {
+									if (totalRoundTripTimeInHours > desPurchase.getSlotOrDelegateShippingDaysRestriction() * 24) {
 										final String message = String.format(
 												"DES Purchase|%s is paired with a sale at %s. However the round trip time (%s) is greater than the permitted restriction (%s) by (%s).",
 												desPurchase.getName(), dischargeSlot.getPort().getName(), TravelTimeUtils.formatHours(totalRoundTripTimeInHours),
-												TravelTimeUtils.formatHours(desPurchase.getShippingDaysRestriction() * 24),
-												TravelTimeUtils.formatHours(totalRoundTripTimeInHours - desPurchase.getShippingDaysRestriction() * 24));
+												TravelTimeUtils.formatHours(desPurchase.getSlotOrDelegateShippingDaysRestriction() * 24),
+												TravelTimeUtils.formatHours(totalRoundTripTimeInHours - desPurchase.getSlotOrDelegateShippingDaysRestriction() * 24));
 										final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 										dsd.addEObjectAndFeature(desPurchase, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
@@ -307,12 +307,12 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									// Total min travel time.
 									final int totalRoundTripTimeInHours = loadDurationInHours + ladenTimeInHours + dischargeDurationInHours + ballastTravelTimeInHours;
 
-									if (totalRoundTripTimeInHours > fobSale.getShippingDaysRestriction() * 24) {
+									if (totalRoundTripTimeInHours > fobSale.getSlotOrDelegateShippingDaysRestriction() * 24) {
 										final String message = String.format(
 												"DES Purchase|%s is paired with a sale at %s. However the round trip time (%s) is greater than the permitted restriction (%s) by (%s).",
 												fobPurchase.getName(), fobSale.getPort().getName(), TravelTimeUtils.formatHours(totalRoundTripTimeInHours),
-												TravelTimeUtils.formatHours(fobSale.getShippingDaysRestriction() * 24),
-												TravelTimeUtils.formatHours(totalRoundTripTimeInHours - fobSale.getShippingDaysRestriction() * 24));
+												TravelTimeUtils.formatHours(fobSale.getSlotOrDelegateShippingDaysRestriction() * 24),
+												TravelTimeUtils.formatHours(totalRoundTripTimeInHours - fobSale.getSlotOrDelegateShippingDaysRestriction() * 24));
 										final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 										dsd.addEObjectAndFeature(fobSale, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());

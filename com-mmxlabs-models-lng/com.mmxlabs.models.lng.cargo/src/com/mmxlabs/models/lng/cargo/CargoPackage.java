@@ -1004,13 +1004,31 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 21;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Divertible</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 22;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Shipping Days Restriction</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 23;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 22;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 24;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1641,6 +1659,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Divertible</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE = SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Shipping Days Restriction</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -2298,6 +2334,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Divertible</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE = SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Shipping Days Restriction</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -3058,6 +3112,24 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = LOAD_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Divertible</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE = LOAD_SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Shipping Days Restriction</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = LOAD_SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3733,6 +3805,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Divertible</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Shipping Days Restriction</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -7383,6 +7473,26 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrDelegateWindowNominationDate();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateDivertible() <em>Get Slot Or Delegate Divertible</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Divertible</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateDivertible()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegateDivertible();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateShippingDaysRestriction() <em>Get Slot Or Delegate Shipping Days Restriction</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Shipping Days Restriction</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateShippingDaysRestriction()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegateShippingDaysRestriction();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9777,6 +9887,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = eINSTANCE.getSlot__GetSlotOrDelegateWindowNominationDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Divertible</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE = eINSTANCE.getSlot__GetSlotOrDelegateDivertible();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Shipping Days Restriction</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = eINSTANCE.getSlot__GetSlotOrDelegateShippingDaysRestriction();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

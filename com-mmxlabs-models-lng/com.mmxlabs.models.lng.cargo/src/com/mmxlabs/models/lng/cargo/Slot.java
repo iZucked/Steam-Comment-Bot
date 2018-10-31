@@ -1057,9 +1057,11 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Divertible</em>' attribute.
+	 * @see #isSetDivertible()
+	 * @see #unsetDivertible()
 	 * @see #setDivertible(boolean)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Divertible()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	boolean isDivertible();
@@ -1069,10 +1071,35 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Divertible</em>' attribute.
+	 * @see #isSetDivertible()
+	 * @see #unsetDivertible()
 	 * @see #isDivertible()
 	 * @generated
 	 */
 	void setDivertible(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isDivertible <em>Divertible</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetDivertible()
+	 * @see #isDivertible()
+	 * @see #setDivertible(boolean)
+	 * @generated
+	 */
+	void unsetDivertible();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isDivertible <em>Divertible</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Divertible</em>' attribute is set.
+	 * @see #unsetDivertible()
+	 * @see #isDivertible()
+	 * @see #setDivertible(boolean)
+	 * @generated
+	 */
+	boolean isSetDivertible();
 
 	/**
 	 * Returns the value of the '<em><b>Shipping Days Restriction</b></em>' attribute.
@@ -1083,9 +1110,12 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Shipping Days Restriction</em>' attribute.
+	 * @see #isSetShippingDaysRestriction()
+	 * @see #unsetShippingDaysRestriction()
 	 * @see #setShippingDaysRestriction(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_ShippingDaysRestriction()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='days' formatString='###'"
+	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='days' formatString='###'"
 	 * @generated
 	 */
 	int getShippingDaysRestriction();
@@ -1095,10 +1125,35 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Shipping Days Restriction</em>' attribute.
+	 * @see #isSetShippingDaysRestriction()
+	 * @see #unsetShippingDaysRestriction()
 	 * @see #getShippingDaysRestriction()
 	 * @generated
 	 */
 	void setShippingDaysRestriction(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction <em>Shipping Days Restriction</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetShippingDaysRestriction()
+	 * @see #getShippingDaysRestriction()
+	 * @see #setShippingDaysRestriction(int)
+	 * @generated
+	 */
+	void unsetShippingDaysRestriction();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction <em>Shipping Days Restriction</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Shipping Days Restriction</em>' attribute is set.
+	 * @see #unsetShippingDaysRestriction()
+	 * @see #getShippingDaysRestriction()
+	 * @see #setShippingDaysRestriction(int)
+	 * @generated
+	 */
+	boolean isSetShippingDaysRestriction();
 
 	/**
 	 * Returns the value of the '<em><b>Entity</b></em>' reference.
@@ -1750,6 +1805,22 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	LocalDate getSlotOrDelegateWindowNominationDate();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean getSlotOrDelegateDivertible();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getSlotOrDelegateShippingDaysRestriction();
 
 } // end of  Slot
 

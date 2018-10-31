@@ -124,6 +124,7 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 			case ADPPackage.DISTRIBUTION_MODEL: {
 				DistributionModel distributionModel = (DistributionModel)theEObject;
 				T1 result = caseDistributionModel(distributionModel);
+				if (result == null) result = caseMMXObject(distributionModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -131,6 +132,7 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				CargoSizeDistributionModel cargoSizeDistributionModel = (CargoSizeDistributionModel)theEObject;
 				T1 result = caseCargoSizeDistributionModel(cargoSizeDistributionModel);
 				if (result == null) result = caseDistributionModel(cargoSizeDistributionModel);
+				if (result == null) result = caseMMXObject(cargoSizeDistributionModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -138,6 +140,7 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				CargoNumberDistributionModel cargoNumberDistributionModel = (CargoNumberDistributionModel)theEObject;
 				T1 result = caseCargoNumberDistributionModel(cargoNumberDistributionModel);
 				if (result == null) result = caseDistributionModel(cargoNumberDistributionModel);
+				if (result == null) result = caseMMXObject(cargoNumberDistributionModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -145,6 +148,7 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				CargoByQuarterDistributionModel cargoByQuarterDistributionModel = (CargoByQuarterDistributionModel)theEObject;
 				T1 result = caseCargoByQuarterDistributionModel(cargoByQuarterDistributionModel);
 				if (result == null) result = caseDistributionModel(cargoByQuarterDistributionModel);
+				if (result == null) result = caseMMXObject(cargoByQuarterDistributionModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -152,6 +156,7 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				CargoIntervalDistributionModel cargoIntervalDistributionModel = (CargoIntervalDistributionModel)theEObject;
 				T1 result = caseCargoIntervalDistributionModel(cargoIntervalDistributionModel);
 				if (result == null) result = caseDistributionModel(cargoIntervalDistributionModel);
+				if (result == null) result = caseMMXObject(cargoIntervalDistributionModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -159,6 +164,7 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				PreDefinedDistributionModel preDefinedDistributionModel = (PreDefinedDistributionModel)theEObject;
 				T1 result = casePreDefinedDistributionModel(preDefinedDistributionModel);
 				if (result == null) result = caseDistributionModel(preDefinedDistributionModel);
+				if (result == null) result = caseMMXObject(preDefinedDistributionModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

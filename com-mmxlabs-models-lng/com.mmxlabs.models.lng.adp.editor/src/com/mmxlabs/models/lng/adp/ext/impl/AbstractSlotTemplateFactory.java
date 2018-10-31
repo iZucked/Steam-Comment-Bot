@@ -63,10 +63,6 @@ public class AbstractSlotTemplateFactory implements ISlotTemplateFactory {
 		if (contract.getContractType() == ContractType.DES) {
 			slot.setDESPurchase(true);
 			slot.setNominatedVessel(subProfile.getNominatedVessel());
-			if (subProfile.getShippingDays() > 0) {
-				slot.setDivertible(true);
-				slot.setShippingDaysRestriction(subProfile.getShippingDays());
-			}
 		}
 
 		return slot;
@@ -82,10 +78,6 @@ public class AbstractSlotTemplateFactory implements ISlotTemplateFactory {
 		if (contract.getContractType() == ContractType.DES) {
 			slot.setFOBSale(true);
 			slot.setNominatedVessel(subProfile.getNominatedVessel());
-			if (subProfile.getShippingDays() > 0) {
-				slot.setDivertible(true);
-				slot.setShippingDaysRestriction(subProfile.getShippingDays());
-			}
 		}
 
 		return slot;

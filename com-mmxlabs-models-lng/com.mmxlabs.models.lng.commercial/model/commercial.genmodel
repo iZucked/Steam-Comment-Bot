@@ -68,6 +68,8 @@
           ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/windowNominationSize"/>
       <genFeatures createChild="false" propertyDescription="Trade date nomination time period unit"
           ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/windowNominationSizeUnits"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/divertible"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/shippingDaysRestriction"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//SalesContract">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//SalesContract/minCvValue"/>

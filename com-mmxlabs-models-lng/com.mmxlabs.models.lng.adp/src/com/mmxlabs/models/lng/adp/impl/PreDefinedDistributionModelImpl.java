@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.adp.PreDefinedDate;
 import com.mmxlabs.models.lng.adp.PreDefinedDistributionModel;
 
 import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 import java.time.LocalDate;
 
 import java.util.Collection;
@@ -38,8 +39,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.PreDefinedDistributionModelImpl#getVolumePerCargo <em>Volume Per Cargo</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.PreDefinedDistributionModelImpl#getVolumeUnit <em>Volume Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.PreDefinedDistributionModelImpl#getDates <em>Dates</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.PreDefinedDistributionModelImpl#getWindowSize <em>Window Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.PreDefinedDistributionModelImpl#getWindowSizeUnits <em>Window Size Units</em>}</li>
@@ -47,44 +46,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class PreDefinedDistributionModelImpl extends EObjectImpl implements PreDefinedDistributionModel {
-	/**
-	 * The default value of the '{@link #getVolumePerCargo() <em>Volume Per Cargo</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumePerCargo()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double VOLUME_PER_CARGO_EDEFAULT = 0.0;
-	/**
-	 * The cached value of the '{@link #getVolumePerCargo() <em>Volume Per Cargo</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumePerCargo()
-	 * @generated
-	 * @ordered
-	 */
-	protected double volumePerCargo = VOLUME_PER_CARGO_EDEFAULT;
-	/**
-	 * The default value of the '{@link #getVolumeUnit() <em>Volume Unit</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumeUnit()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final LNGVolumeUnit VOLUME_UNIT_EDEFAULT = LNGVolumeUnit.M3;
-	/**
-	 * The cached value of the '{@link #getVolumeUnit() <em>Volume Unit</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumeUnit()
-	 * @generated
-	 * @ordered
-	 */
-	protected LNGVolumeUnit volumeUnit = VOLUME_UNIT_EDEFAULT;
-
+public class PreDefinedDistributionModelImpl extends DistributionModelImpl implements PreDefinedDistributionModel {
 	/**
 	 * The cached value of the '{@link #getDates() <em>Dates</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -209,48 +171,6 @@ public class PreDefinedDistributionModelImpl extends EObjectImpl implements PreD
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public double getVolumePerCargo() {
-		return volumePerCargo;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setVolumePerCargo(double newVolumePerCargo) {
-		double oldVolumePerCargo = volumePerCargo;
-		volumePerCargo = newVolumePerCargo;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__VOLUME_PER_CARGO, oldVolumePerCargo, volumePerCargo));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public LNGVolumeUnit getVolumeUnit() {
-		return volumeUnit;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setVolumeUnit(LNGVolumeUnit newVolumeUnit) {
-		LNGVolumeUnit oldVolumeUnit = volumeUnit;
-		volumeUnit = newVolumeUnit == null ? VOLUME_UNIT_EDEFAULT : newVolumeUnit;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__VOLUME_UNIT, oldVolumeUnit, volumeUnit));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -268,10 +188,6 @@ public class PreDefinedDistributionModelImpl extends EObjectImpl implements PreD
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
-				return getVolumePerCargo();
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__VOLUME_UNIT:
-				return getVolumeUnit();
 			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__DATES:
 				return getDates();
 			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE:
@@ -291,12 +207,6 @@ public class PreDefinedDistributionModelImpl extends EObjectImpl implements PreD
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
-				setVolumePerCargo((Double)newValue);
-				return;
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__VOLUME_UNIT:
-				setVolumeUnit((LNGVolumeUnit)newValue);
-				return;
 			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__DATES:
 				getDates().clear();
 				getDates().addAll((Collection<? extends PreDefinedDate>)newValue);
@@ -319,12 +229,6 @@ public class PreDefinedDistributionModelImpl extends EObjectImpl implements PreD
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
-				setVolumePerCargo(VOLUME_PER_CARGO_EDEFAULT);
-				return;
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__VOLUME_UNIT:
-				setVolumeUnit(VOLUME_UNIT_EDEFAULT);
-				return;
 			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__DATES:
 				getDates().clear();
 				return;
@@ -346,10 +250,6 @@ public class PreDefinedDistributionModelImpl extends EObjectImpl implements PreD
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
-				return volumePerCargo != VOLUME_PER_CARGO_EDEFAULT;
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__VOLUME_UNIT:
-				return volumeUnit != VOLUME_UNIT_EDEFAULT;
 			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__DATES:
 				return dates != null && !dates.isEmpty();
 			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE:
@@ -370,11 +270,7 @@ public class PreDefinedDistributionModelImpl extends EObjectImpl implements PreD
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (volumePerCargo: ");
-		result.append(volumePerCargo);
-		result.append(", volumeUnit: ");
-		result.append(volumeUnit);
-		result.append(", windowSize: ");
+		result.append(" (windowSize: ");
 		result.append(windowSize);
 		result.append(", windowSizeUnits: ");
 		result.append(windowSizeUnits);

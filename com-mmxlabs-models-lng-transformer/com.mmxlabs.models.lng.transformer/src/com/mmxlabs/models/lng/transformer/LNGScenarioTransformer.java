@@ -1408,7 +1408,7 @@ public class LNGScenarioTransformer {
 			return twUTC;
 		} else if (modelSlot instanceof DischargeSlot) {
 			final DischargeSlot slot = (DischargeSlot) modelSlot;
-			if (slot.isFOBSale() && slot.isDivertible()) {
+			if (slot.isFOBSale() && slot.getSlotOrDelegateDivertible()) {
 				return getTimewindowAsUTCWithFlex(slot);
 
 			}
@@ -1441,7 +1441,7 @@ public class LNGScenarioTransformer {
 		LocalDateTime startTime = wStart;
 		// Probably considering too much here, maybe a days/2 would be better estimate?
 		// Should probably try to update the matching windows code instead to compute travel time...
-		startTime = startTime.minusDays(slot.getShippingDaysRestriction());
+		startTime = startTime.minusDays(slot.getSlotOrDelegateShippingDaysRestriction());
 		{
 			if (slotFlex < 0) {
 				switch (p) {
@@ -1507,7 +1507,7 @@ public class LNGScenarioTransformer {
 				}
 
 				builder.bindLoadSlotsToFOBSale(discharge, marketPortsMap);
-			} else if (dischargeSlot.isDivertible()) {
+			} else if (dischargeSlot.getSlotOrDelegateDivertible()) {
 				// Bind to all loads
 				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 				for (final IPort port : allLoadPorts) {
@@ -1568,7 +1568,7 @@ public class LNGScenarioTransformer {
 				builder.bindDischargeSlotsToDESPurchase(load, marketPortsMap);
 			} else {
 				// Bind FOB/DES slots to resource
-				if (loadSlot.isDivertible()) {
+				if (loadSlot.getSlotOrDelegateDivertible()) {
 
 					// Bind to all discharges
 					// Note: DES Diversion already take into account shipping days restriction
@@ -1732,7 +1732,7 @@ public class LNGScenarioTransformer {
 					localTimeWindow = createUTCPlusTimeWindow(utcStart, utcEnd);
 				} else {
 
-					if (dischargeSlot.isDivertible()) {
+					if (dischargeSlot.getSlotOrDelegateDivertible()) {
 						final ITimeWindow utcWindow = getTimewindowAsUTCWithFlex(dischargeSlot);
 						localTimeWindow = TimeWindowMaker.createInclusiveExclusive(utcWindow.getInclusiveStart() - 12, utcWindow.getExclusiveEnd(), dischargeSlot.getWindowFlex(), false);
 					} else {
@@ -1749,8 +1749,8 @@ public class LNGScenarioTransformer {
 				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrDelegateDuration(),
 						pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatePricingEvent()), dischargeSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3);
 
-				if (dischargeSlot.isDivertible()) {
-					builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
+				if (dischargeSlot.getSlotOrDelegateDivertible()) {
+					builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getSlotOrDelegateShippingDaysRestriction() * 24);
 				}
 			} else {
 				discharge = builder.createDischargeSlot(name, portAssociation.lookupNullChecked(dischargeSlot.getPort()), dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator,
@@ -1891,9 +1891,9 @@ public class LNGScenarioTransformer {
 		final boolean slotLocked = loadSlot.isLocked() || shippingOnly && loadSlot.getCargo() == null;
 		if (loadSlot.isDESPurchase()) {
 			final ITimeWindow localTimeWindow;
-			if (loadSlot.isDivertible()) {
+			if (loadSlot.getSlotOrDelegateDivertible()) {
 				// Extend window out to cover whole shipping days restriction
-				localTimeWindow = TimeWindowMaker.createInclusiveExclusive(loadWindow.getInclusiveStart(), loadWindow.getExclusiveEnd() + loadSlot.getShippingDaysRestriction() * 24, 0, false);
+				localTimeWindow = TimeWindowMaker.createInclusiveExclusive(loadWindow.getInclusiveStart(), loadWindow.getExclusiveEnd() + loadSlot.getSlotOrDelegateShippingDaysRestriction() * 24, 0, false);
 			} else if (loadSlot instanceof SpotLoadSlot) {
 				// Convert back into a UTC based date and add in TZ flex
 				final int utcStart = timeZoneToUtcOffsetProvider.UTC(loadWindow.getInclusiveStart(), portAssociation.lookup(loadSlot.getPort()));
@@ -1912,8 +1912,8 @@ public class LNGScenarioTransformer {
 					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegateCV()), loadSlot.getSlotOrDelegateDuration(), slotPricingDate,
 					transformPricingEvent(loadSlot.getSlotOrDelegatePricingEvent()), loadSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3);
 
-			if (loadSlot.isDivertible()) {
-				builder.setShippingHoursRestriction(load, loadWindow, loadSlot.getShippingDaysRestriction() * 24);
+			if (loadSlot.getSlotOrDelegateDivertible()) {
+				builder.setShippingHoursRestriction(load, loadWindow, loadSlot.getSlotOrDelegateShippingDaysRestriction() * 24);
 			}
 		} else {
 			load = builder.createLoadSlot(elementName, portAssociation.lookupNullChecked(loadSlot.getPort()), loadWindow, minVolume, maxVolume, loadPriceCalculator,

@@ -13,11 +13,13 @@ import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.ui.displaycomposites.DivertibleContractInlineEditorChangedListener;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
@@ -89,6 +91,8 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_cancellationExpressionEditor(detailComposite, topClass);
 		add_windowNominationSizeEditor(detailComposite, topClass);
 		add_windowNominationSizeUnitsEditor(detailComposite, topClass);
+		add_divertibleEditor(detailComposite, topClass);
+		add_shippingDaysRestrictionEditor(detailComposite, topClass);
 	}
 	
 	/**
@@ -161,9 +165,31 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
+	 * Create the editor for the divertible feature on Contract
+	 *
+	 * @generated NOT
+	 */
+	protected void add_divertibleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__DIVERTIBLE);
+		editor.addNotificationChangedListener(new DivertibleContractInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
+	}
+
+	/**
+	 * Create the editor for the shippingDaysRestriction feature on Contract
+	 *
+	 * @generated NOT
+	 */
+	protected void add_shippingDaysRestrictionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__SHIPPING_DAYS_RESTRICTION);
+		editor.addNotificationChangedListener(new DivertibleContractInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
+	}
+
+	/**
 	 * Create the editor for the code feature on Contract
 	 *
-	 * @generated NO
+	 * @generated NOT
 	 */
 	protected void add_codeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		if (LicenseFeatures.isPermitted("features:adp")) {

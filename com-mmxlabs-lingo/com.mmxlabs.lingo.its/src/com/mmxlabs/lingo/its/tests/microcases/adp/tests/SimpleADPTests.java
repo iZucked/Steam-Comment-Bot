@@ -34,10 +34,11 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 
 public class SimpleADPTests extends AbstractADPAndLightWeightTests {
-	
+
 	@Test
 	public void testEvaluateDoesNotUpair() {
 
@@ -113,10 +114,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				final IMultiStateResult result = runner.runAndApplyBest();
 				// Simple verification, have these slots been used?
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.withAnySolutionResultChecker()
-					.withCargoCount(12, true)
-					.build()
-					;
+				verifier.withAnySolutionResultChecker().withCargoCount(12, true).build();
 				verifier.verifyOptimisationResults(result, msg -> Assert.fail(msg));
 			});
 		} finally {
@@ -131,7 +129,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withSubContractProfile("Volume") //
 				.withContractType(ContractType.FOB) //
 				.withSlotTemplate(AbstractSlotTemplateFactory.TEMPLATE_GENERIC_DES_PURCHASE) //
-				.withCargoNumberDistributionModel(3_000_000, LNGVolumeUnit.MMBTU, 12) //
+				.withCargoNumberDistributionModel(12) //
 				.build() //
 				//
 				.addMaxCargoConstraint(1, IntervalType.MONTHLY) //
@@ -143,12 +141,12 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withSubContractProfile("Volume") //
 				.withContractType(ContractType.DES) //
 				.withSlotTemplate(AbstractSlotTemplateFactory.TEMPLATE_GENERIC_DES_SALE) //
-				.withCargoNumberDistributionModel(3_000_000, LNGVolumeUnit.MMBTU, 12) //
+				.withCargoNumberDistributionModel(12) //
 				.build() //
 				//
 				.build();
 	}
-	
+
 	/**
 	 * Trim the start of the vessel to start earlier Expect 2 fewer cargoes
 	 */
@@ -188,17 +186,14 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				final IMultiStateResult result = runner.runAndApplyBest();
 				// Simple verification, have these slots been used?
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.withAnySolutionResultChecker()
-					.withCargoCount(10, true)
-					.build()
-					;
+				verifier.withAnySolutionResultChecker().withCargoCount(10, true).build();
 				verifier.verifyOptimisationResults(result, msg -> Assert.fail(msg));
 			});
 		} finally {
 			runnerBuilder.dispose();
 		}
 	}
-	
+
 	/**
 	 * Trim the end of the vessel to end earlier Expect 2 fewer cargoes
 	 */
@@ -291,7 +286,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 			runnerBuilder.dispose();
 		}
 	}
-	
+
 	private CharterInMarket setDefaultVesselsAndContracts() {
 		final Vessel vesselSmall = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP);
 		final Vessel vesselMedium = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
@@ -300,7 +295,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselSmall, "50000", 0);
 		defaultCharterInMarket.setNominal(true);
 		defaultCharterInMarket.setEnabled(false);
-	
+
 		@SuppressWarnings("unused")
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vesselMedium, entity) //
 				.withStartWindow(LocalDateTime.of(2018, 10, 1, 0, 0)) //
@@ -310,9 +305,13 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withCharterRate("50000") //
 				.build();
 		final PurchaseContract purchaseContract = commercialModelBuilder.makeExpressionPurchaseContract("Purchase A", entity, "5");
+		purchaseContract.setMaxQuantity(3_000_000);
+		purchaseContract.setVolumeLimitsUnit(VolumeUnits.MMBTU);
 		purchaseContract.setPreferredPort(darwin);
 		final SalesContract salesContract = commercialModelBuilder.makeExpressionSalesContract("Sales A", entity, "8");
 		salesContract.setPreferredPort(himeji);
+		salesContract.setMaxQuantity(3_000_000);
+		salesContract.setVolumeLimitsUnit(VolumeUnits.MMBTU);
 		return defaultCharterInMarket;
 	}
 

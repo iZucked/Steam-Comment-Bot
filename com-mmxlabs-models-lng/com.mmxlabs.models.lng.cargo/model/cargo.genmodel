@@ -141,6 +141,8 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateCounterparty"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateCN"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWindowNominationDate"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateDivertible"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateShippingDaysRestriction"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//LoadSlot">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/cargoCV"/>

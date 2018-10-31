@@ -113,8 +113,6 @@ public abstract class AbstractADPProfileProvider implements IADPProfileProvider 
 			subProfile.setSlotTemplateId(AbstractSlotTemplateFactory.TEMPLATE_GENERIC_FOB_PURCHASE);
 		}
 		subProfile.setContractType(contractType);
-		model.setVolumePerCargo(volume);
-		model.setVolumeUnit(volumeUnits);
 
 		if (action != null) {
 			action.accept(subProfile);
@@ -144,8 +142,6 @@ public abstract class AbstractADPProfileProvider implements IADPProfileProvider 
 			subProfile.setSlotTemplateId(AbstractSlotTemplateFactory.TEMPLATE_GENERIC_DES_SALE);
 		}
 		subProfile.setContractType(contractType);
-		model.setVolumePerCargo(volume);
-		model.setVolumeUnit(volumeUnits);
 
 		if (action != null) {
 			action.accept(subProfile);
@@ -171,14 +167,23 @@ public abstract class AbstractADPProfileProvider implements IADPProfileProvider 
 			subProfile.setSlotTemplateId(AbstractSlotTemplateFactory.TEMPLATE_GENERIC_DES_SALE);
 		}
 		subProfile.setContractType(contractType);
-		model.setVolumePerCargo(perCargoVolume);
-		model.setVolumeUnit(volumeUnits);
 
 		if (action != null) {
 			action.accept(subProfile);
 		}
 
 		return subProfile;
+	}
+
+	protected LNGVolumeUnit mapVolumeUnits(VolumeUnits units) {
+		switch (units) {
+		case M3:
+			return LNGVolumeUnit.M3;
+		case MMBTU:
+			return LNGVolumeUnit.MMBTU;
+		default:
+			throw new IllegalArgumentException();
+		}
 	}
 
 }

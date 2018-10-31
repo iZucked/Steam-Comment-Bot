@@ -125,7 +125,7 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 			final List<Slot> slotsToValidate = new LinkedList<>();
 			if (target instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) target;
-				if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
+				if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
 					final Vessel nominatedVessel = loadSlot.getNominatedVessel();
 					if (nominatedVessel != null) {
 						inaccessiblePorts = nominatedVessel.getVesselOrDelegateInaccessiblePorts();
@@ -135,7 +135,7 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 
 			else if (target instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) target;
-				if (dischargeSlot.isFOBSale() && dischargeSlot.isDivertible()) {
+				if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateDivertible()) {
 					final Vessel nominatedVessel = dischargeSlot.getNominatedVessel();
 					if (nominatedVessel != null) {
 						inaccessiblePorts = nominatedVessel.getVesselOrDelegateInaccessiblePorts();

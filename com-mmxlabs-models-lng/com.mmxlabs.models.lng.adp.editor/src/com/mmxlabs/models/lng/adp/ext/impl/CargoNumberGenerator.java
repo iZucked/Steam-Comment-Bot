@@ -77,7 +77,7 @@ public class CargoNumberGenerator implements IProfileGenerator {
 		while (date.isBefore(endDate)) {
 			if (DistributionModelGeneratorUtil.checkContractDate(contract, date)) {
 				final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, date, nextDateGenerator, idx++);
-				ADPModelUtil.setSlotVolumeFrom(model.getVolumePerCargo(), model.getVolumeUnit(), slot);
+				ADPModelUtil.setSlotVolumeFrom(model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot);
 				slots.add(slot);
 			}
 

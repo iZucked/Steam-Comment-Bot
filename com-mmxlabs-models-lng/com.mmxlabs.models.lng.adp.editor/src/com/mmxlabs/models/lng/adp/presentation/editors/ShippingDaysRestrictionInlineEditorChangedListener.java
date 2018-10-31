@@ -35,15 +35,15 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 
 			if (input instanceof SubContractProfile) {
 				SubContractProfile<?> subContractProfile = (SubContractProfile<?>) input;
-				if (subContractProfile.getContractType() == ContractType.DES && subContractProfile.eContainer() instanceof PurchaseContractProfile) {
+				if (notification.getNewValue() != ContractType.FOB && subContractProfile.eContainer() instanceof PurchaseContractProfile) {
 					editor.setEditorEnabled(true);
-					editor.setEditorVisible(true);
-				} else if (subContractProfile.getContractType() == ContractType.FOB && subContractProfile.eContainer() instanceof SalesContractProfile) {
+					// editor.setEditorVisible(true);
+				} else if (notification.getNewValue() != ContractType.DES && subContractProfile.eContainer() instanceof SalesContractProfile) {
 					editor.setEditorEnabled(true);
-					editor.setEditorVisible(true);
+					// editor.setEditorVisible(true);
 				} else {
 					editor.setEditorEnabled(false);
-					editor.setEditorVisible(false);
+					// editor.setEditorVisible(false);
 				}
 			}
 		}
@@ -57,13 +57,13 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 			SubContractProfile<?> subContractProfile = (SubContractProfile<?>) input;
 			if (subContractProfile.getContractType() == ContractType.DES && subContractProfile.eContainer() instanceof PurchaseContractProfile) {
 				editor.setEditorEnabled(true);
-				editor.setEditorVisible(true);
+				// editor.setEditorVisible(true);
 			} else if (subContractProfile.getContractType() == ContractType.FOB && subContractProfile.eContainer() instanceof SalesContractProfile) {
 				editor.setEditorEnabled(true);
-				editor.setEditorVisible(true);
+				// editor.setEditorVisible(true);
 			} else {
 				editor.setEditorEnabled(false);
-				editor.setEditorVisible(false);
+				// editor.setEditorVisible(false);
 			}
 		}
 	}

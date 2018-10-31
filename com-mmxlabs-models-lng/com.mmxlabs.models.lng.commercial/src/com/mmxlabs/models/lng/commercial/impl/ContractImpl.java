@@ -59,6 +59,8 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getWindowNominationSize <em>Window Nomination Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getWindowNominationSizeUnits <em>Window Nomination Size Units</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isDivertible <em>Divertible</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  * </ul>
  *
  * @generated
@@ -490,6 +492,46 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected TimePeriod windowNominationSizeUnits = WINDOW_NOMINATION_SIZE_UNITS_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isDivertible() <em>Divertible</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDivertible()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DIVERTIBLE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDivertible() <em>Divertible</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDivertible()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean divertible = DIVERTIBLE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getShippingDaysRestriction() <em>Shipping Days Restriction</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShippingDaysRestriction()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SHIPPING_DAYS_RESTRICTION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getShippingDaysRestriction() <em>Shipping Days Restriction</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShippingDaysRestriction()
+	 * @generated
+	 * @ordered
+	 */
+	protected int shippingDaysRestriction = SHIPPING_DAYS_RESTRICTION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -947,6 +989,48 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isDivertible() {
+		return divertible;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDivertible(boolean newDivertible) {
+		boolean oldDivertible = divertible;
+		divertible = newDivertible;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__DIVERTIBLE, oldDivertible, divertible));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getShippingDaysRestriction() {
+		return shippingDaysRestriction;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setShippingDaysRestriction(int newShippingDaysRestriction) {
+		int oldShippingDaysRestriction = shippingDaysRestriction;
+		shippingDaysRestriction = newShippingDaysRestriction;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION, oldShippingDaysRestriction, shippingDaysRestriction));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public String getCode() {
 		return code;
 	}
@@ -1167,6 +1251,10 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getWindowNominationSize();
 			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
 				return getWindowNominationSizeUnits();
+			case CommercialPackage.CONTRACT__DIVERTIBLE:
+				return isDivertible();
+			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
+				return getShippingDaysRestriction();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1252,6 +1340,12 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
 				setWindowNominationSizeUnits((TimePeriod)newValue);
 				return;
+			case CommercialPackage.CONTRACT__DIVERTIBLE:
+				setDivertible((Boolean)newValue);
+				return;
+			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
+				setShippingDaysRestriction((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1333,6 +1427,12 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
 				setWindowNominationSizeUnits(WINDOW_NOMINATION_SIZE_UNITS_EDEFAULT);
 				return;
+			case CommercialPackage.CONTRACT__DIVERTIBLE:
+				setDivertible(DIVERTIBLE_EDEFAULT);
+				return;
+			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
+				setShippingDaysRestriction(SHIPPING_DAYS_RESTRICTION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1391,6 +1491,10 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return windowNominationSize != WINDOW_NOMINATION_SIZE_EDEFAULT;
 			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
 				return windowNominationSizeUnits != WINDOW_NOMINATION_SIZE_UNITS_EDEFAULT;
+			case CommercialPackage.CONTRACT__DIVERTIBLE:
+				return divertible != DIVERTIBLE_EDEFAULT;
+			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
+				return shippingDaysRestriction != SHIPPING_DAYS_RESTRICTION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1471,6 +1575,10 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(windowNominationSize);
 		result.append(", windowNominationSizeUnits: ");
 		result.append(windowNominationSizeUnits);
+		result.append(", divertible: ");
+		result.append(divertible);
+		result.append(", shippingDaysRestriction: ");
+		result.append(shippingDaysRestriction);
 		result.append(')');
 		return result.toString();
 	}

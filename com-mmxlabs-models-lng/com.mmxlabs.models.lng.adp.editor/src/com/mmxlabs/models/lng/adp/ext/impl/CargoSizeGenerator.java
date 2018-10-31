@@ -38,11 +38,11 @@ public class CargoSizeGenerator implements IProfileGenerator {
 		final List<T> slots = new LinkedList<>();
 
 		Function<LocalDate, LocalDate> nextDateGenerator;
-		if (profile.getVolumeUnit() != model.getVolumeUnit()) {
+		if (profile.getVolumeUnit() != model.getModelOrContractVolumeUnit()) {
 			// They must match!
 			throw new IllegalArgumentException();
 		}
-		final int numberOfCargoes = (int) Math.round(profile.getTotalVolume() / model.getVolumePerCargo());
+		final int numberOfCargoes = (int) Math.round(profile.getTotalVolume() / model.getModelOrContractVolumePerCargo());
 
 		if (numberOfCargoes == 12) {
 			nextDateGenerator = date -> date.plusMonths(1);
@@ -78,7 +78,7 @@ public class CargoSizeGenerator implements IProfileGenerator {
 		while (date.isBefore(endDate)) {
 			if (DistributionModelGeneratorUtil.checkContractDate(contract, date)) {
 				final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, date, nextDateGenerator, idx++);
-				ADPModelUtil.setSlotVolumeFrom(model.getVolumePerCargo(), model.getVolumeUnit(), slot);
+				ADPModelUtil.setSlotVolumeFrom(model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot);
 				slots.add(slot);
 			}
 

@@ -25,7 +25,7 @@ public class EnumAttributeManipulator extends ValueListAttributeManipulator {
 	}
 
 	private static List<Pair<String, Object>> getValues(final EEnum eenum) {
-		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
+		final LinkedList<Pair<String, Object>> values = new LinkedList<>();
 		for (final EEnumLiteral literal : eenum.getELiterals()) {
 			values.add(new Pair<String, Object>(literal.getName(), literal.getInstance()));
 		}

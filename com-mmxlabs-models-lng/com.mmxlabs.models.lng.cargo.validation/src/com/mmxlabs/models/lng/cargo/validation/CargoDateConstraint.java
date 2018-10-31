@@ -245,7 +245,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 				if (cargo.getSortedSlots().size() == 2) {
 					final LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
 					final DischargeSlot dischargeSlot = (DischargeSlot) cargo.getSortedSlots().get(1);
-					if (loadSlot.isDivertible()) {
+					if (loadSlot.getSlotOrDelegateDivertible()) {
 						validateNonShippedSlotTravelTime(ctx, extraContext, cargo, loadSlot, dischargeSlot, failures);
 					}
 				}

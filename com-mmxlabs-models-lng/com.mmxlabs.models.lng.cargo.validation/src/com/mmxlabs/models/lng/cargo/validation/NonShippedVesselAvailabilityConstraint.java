@@ -51,8 +51,8 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 				final ZonedDateTime start = loadSlot.getWindowStartWithSlotOrPortTime();
 				ZonedDateTime end = loadSlot.getWindowEndWithSlotOrPortTime();
 				// For divertible cargoes, we should find the round trip time
-				if (loadSlot.isDivertible()) {
-					end = end.plusDays(loadSlot.getShippingDaysRestriction());
+				if (loadSlot.getSlotOrDelegateDivertible()) {
+					end = end.plusDays(loadSlot.getSlotOrDelegateShippingDaysRestriction());
 				}
 				interval = new NonNullPair<>(start, end);
 				type = "DES Purchase";

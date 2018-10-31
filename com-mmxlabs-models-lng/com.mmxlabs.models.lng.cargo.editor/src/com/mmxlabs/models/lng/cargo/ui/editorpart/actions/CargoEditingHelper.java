@@ -341,7 +341,7 @@ public class CargoEditingHelper {
 
 	public void convertToFOBPurchase(@NonNull final String description, @NonNull final LoadSlot loadSlot) {
 		assert loadSlot.isDESPurchase() == true;
-		assert loadSlot.isDivertible() == true;
+		assert loadSlot.getSlotOrDelegateDivertible() == true;
 
 		final CompoundCommand cc = new CompoundCommand(description);
 		cc.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE, Boolean.FALSE));
@@ -353,7 +353,7 @@ public class CargoEditingHelper {
 		if (verifyChanges) {
 			assert loadSlot.isDESPurchase() == false;
 			assert loadSlot.getNominatedVessel() == null;
-			assert loadSlot.getShippingDaysRestriction() == 0;
+			assert loadSlot.getSlotOrDelegateShippingDaysRestriction() == 0;
 		}
 
 		verifyModel();
@@ -376,7 +376,7 @@ public class CargoEditingHelper {
 
 		if (verifyChanges) {
 			assert loadSlot.isDESPurchase() == true;
-			assert loadSlot.isDivertible() == true;
+			assert loadSlot.getSlotOrDelegateDivertible() == true;
 			if (cargo != null) {
 				assert cargo.getVesselAssignmentType() == null;
 				assert cargo.getSpotIndex() == -1;
@@ -389,7 +389,7 @@ public class CargoEditingHelper {
 
 	public void convertToDESSale(@NonNull final String description, @NonNull final DischargeSlot dischargeSlot) {
 		assert dischargeSlot.isFOBSale() == true;
-		assert dischargeSlot.isDivertible() == true;
+		assert dischargeSlot.getSlotOrDelegateDivertible() == true;
 
 		final CompoundCommand cc = new CompoundCommand(description);
 		cc.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE, Boolean.FALSE));
@@ -401,7 +401,7 @@ public class CargoEditingHelper {
 		if (verifyChanges) {
 			assert dischargeSlot.isFOBSale() == false;
 			assert dischargeSlot.getNominatedVessel() == null;
-			assert dischargeSlot.getShippingDaysRestriction() == 0;
+			assert dischargeSlot.getSlotOrDelegateShippingDaysRestriction() == 0;
 		}
 
 		verifyModel();
@@ -424,7 +424,7 @@ public class CargoEditingHelper {
 
 		if (verifyChanges) {
 			assert dischargeSlot.isFOBSale() == true;
-			assert dischargeSlot.isDivertible() == true;
+			assert dischargeSlot.getSlotOrDelegateDivertible() == true;
 			if (cargo != null) {
 				assert cargo.getVesselAssignmentType() == null;
 				assert cargo.getSpotIndex() == -1;

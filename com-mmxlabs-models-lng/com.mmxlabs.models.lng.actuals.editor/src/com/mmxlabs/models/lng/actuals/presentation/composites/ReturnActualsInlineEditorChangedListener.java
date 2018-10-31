@@ -79,7 +79,7 @@ public class ReturnActualsInlineEditorChangedListener implements IInlineEditorEx
 						Slot slot = slotActuals.getSlot();
 						if (slot instanceof LoadSlot) {
 							LoadSlot loadSlot = (LoadSlot) slot;
-							if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
+							if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
 								enabled = true;
 								break;
 							}

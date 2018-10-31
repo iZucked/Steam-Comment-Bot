@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.adp.CargoIntervalDistributionModel;
 import com.mmxlabs.models.lng.adp.IntervalType;
 
 import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -26,8 +27,6 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.CargoIntervalDistributionModelImpl#getVolumePerCargo <em>Volume Per Cargo</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.CargoIntervalDistributionModelImpl#getVolumeUnit <em>Volume Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.CargoIntervalDistributionModelImpl#getQuantity <em>Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.CargoIntervalDistributionModelImpl#getIntervalType <em>Interval Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.CargoIntervalDistributionModelImpl#getSpacing <em>Spacing</em>}</li>
@@ -35,47 +34,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class CargoIntervalDistributionModelImpl extends EObjectImpl implements CargoIntervalDistributionModel {
-	/**
-	 * The default value of the '{@link #getVolumePerCargo() <em>Volume Per Cargo</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumePerCargo()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double VOLUME_PER_CARGO_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getVolumePerCargo() <em>Volume Per Cargo</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumePerCargo()
-	 * @generated
-	 * @ordered
-	 */
-	protected double volumePerCargo = VOLUME_PER_CARGO_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getVolumeUnit() <em>Volume Unit</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumeUnit()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final LNGVolumeUnit VOLUME_UNIT_EDEFAULT = LNGVolumeUnit.M3;
-
-	/**
-	 * The cached value of the '{@link #getVolumeUnit() <em>Volume Unit</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumeUnit()
-	 * @generated
-	 * @ordered
-	 */
-	protected LNGVolumeUnit volumeUnit = VOLUME_UNIT_EDEFAULT;
-
+public class CargoIntervalDistributionModelImpl extends DistributionModelImpl implements CargoIntervalDistributionModel {
 	/**
 	 * The default value of the '{@link #getQuantity() <em>Quantity</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -229,55 +188,9 @@ public class CargoIntervalDistributionModelImpl extends EObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public double getVolumePerCargo() {
-		return volumePerCargo;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setVolumePerCargo(double newVolumePerCargo) {
-		double oldVolumePerCargo = volumePerCargo;
-		volumePerCargo = newVolumePerCargo;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__VOLUME_PER_CARGO, oldVolumePerCargo, volumePerCargo));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public LNGVolumeUnit getVolumeUnit() {
-		return volumeUnit;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setVolumeUnit(LNGVolumeUnit newVolumeUnit) {
-		LNGVolumeUnit oldVolumeUnit = volumeUnit;
-		volumeUnit = newVolumeUnit == null ? VOLUME_UNIT_EDEFAULT : newVolumeUnit;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__VOLUME_UNIT, oldVolumeUnit, volumeUnit));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
-				return getVolumePerCargo();
-			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__VOLUME_UNIT:
-				return getVolumeUnit();
 			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__QUANTITY:
 				return getQuantity();
 			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__INTERVAL_TYPE:
@@ -296,12 +209,6 @@ public class CargoIntervalDistributionModelImpl extends EObjectImpl implements C
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
-				setVolumePerCargo((Double)newValue);
-				return;
-			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__VOLUME_UNIT:
-				setVolumeUnit((LNGVolumeUnit)newValue);
-				return;
 			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__QUANTITY:
 				setQuantity((Integer)newValue);
 				return;
@@ -323,12 +230,6 @@ public class CargoIntervalDistributionModelImpl extends EObjectImpl implements C
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
-				setVolumePerCargo(VOLUME_PER_CARGO_EDEFAULT);
-				return;
-			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__VOLUME_UNIT:
-				setVolumeUnit(VOLUME_UNIT_EDEFAULT);
-				return;
 			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__QUANTITY:
 				setQuantity(QUANTITY_EDEFAULT);
 				return;
@@ -350,10 +251,6 @@ public class CargoIntervalDistributionModelImpl extends EObjectImpl implements C
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
-				return volumePerCargo != VOLUME_PER_CARGO_EDEFAULT;
-			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__VOLUME_UNIT:
-				return volumeUnit != VOLUME_UNIT_EDEFAULT;
 			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__QUANTITY:
 				return quantity != QUANTITY_EDEFAULT;
 			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__INTERVAL_TYPE:
@@ -374,11 +271,7 @@ public class CargoIntervalDistributionModelImpl extends EObjectImpl implements C
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (volumePerCargo: ");
-		result.append(volumePerCargo);
-		result.append(", volumeUnit: ");
-		result.append(volumeUnit);
-		result.append(", quantity: ");
+		result.append(" (quantity: ");
 		result.append(quantity);
 		result.append(", intervalType: ");
 		result.append(intervalType);

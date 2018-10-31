@@ -93,7 +93,7 @@ public class CargoIntervalGenerator implements IProfileGenerator {
 
 				for (int i = 0; i < numberOfCargoes; ++i) {
 					final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, date, nextDateGenerator, idx++);
-					ADPModelUtil.setSlotVolumeFrom(model.getVolumePerCargo(), model.getVolumeUnit(), slot);
+					ADPModelUtil.setSlotVolumeFrom(model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot);
 					if (model.getIntervalType() != IntervalType.MONTHLY) {
 						if (model.getIntervalType() == IntervalType.QUARTERLY) {
 							slot.setWindowSize(3);

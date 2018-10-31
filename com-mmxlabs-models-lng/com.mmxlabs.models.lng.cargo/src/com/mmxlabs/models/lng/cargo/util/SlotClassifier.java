@@ -28,7 +28,7 @@ public final class SlotClassifier {
 			// "It's a buy!"
 			final LoadSlot load = (LoadSlot) slot;
 			if (load.isDESPurchase()) {
-				if (load.isDivertible()) {
+				if (load.getSlotOrDelegateDivertible()) {
 					// DES purchase at a load port, so will go to some discharge port.
 					return SlotType.DES_Buy_AnyDisPort;
 				} else {
@@ -42,7 +42,7 @@ public final class SlotClassifier {
 			// It's a sell...
 			final DischargeSlot dis = (DischargeSlot) slot;
 			if (dis.isFOBSale()) {
-				if (dis.isDivertible()) {
+				if (dis.getSlotOrDelegateDivertible()) {
 					// This is speculative ATOW, Nov 2013
 					return SlotType.FOB_Sale_AnyLoadPort;
 				} else {

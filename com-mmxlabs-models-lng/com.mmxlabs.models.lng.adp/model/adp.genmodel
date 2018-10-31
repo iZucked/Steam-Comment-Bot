@@ -61,6 +61,8 @@
     <genClasses image="false" ecoreClass="adp.ecore#//DistributionModel">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//DistributionModel/volumePerCargo"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//DistributionModel/volumeUnit"/>
+      <genOperations ecoreOperation="adp.ecore#//DistributionModel/getModelOrContractVolumePerCargo"/>
+      <genOperations ecoreOperation="adp.ecore#//DistributionModel/getModelOrContractVolumeUnit"/>
     </genClasses>
     <genClasses ecoreClass="adp.ecore#//CargoSizeDistributionModel">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//CargoSizeDistributionModel/exact"/>

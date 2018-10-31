@@ -36,7 +36,7 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 			if (input instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) input;
 				if (loadSlot.isDESPurchase()) {
-					if (loadSlot.isDivertible()) {
+					if (loadSlot.getSlotOrDelegateDivertible()) {
 						editor.setEditorEnabled(true);
 						editor.setEditorVisible(true);
 					} else {
@@ -50,7 +50,7 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 			} else if (input instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) input;
 				if (dischargeSlot.isFOBSale()) {
-					if (dischargeSlot.isDivertible()) {
+					if (dischargeSlot.getSlotOrDelegateDivertible()) {
 						editor.setEditorEnabled(true);
 						editor.setEditorVisible(true);
 					} else {
@@ -72,7 +72,7 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 		if (input instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) input;
 			if (loadSlot.isDESPurchase()) {
-				if (loadSlot.isDivertible()) {
+				if (loadSlot.getSlotOrDelegateDivertible()) {
 					editor.setEditorEnabled(true);
 					editor.setEditorVisible(true);
 				} else {
@@ -86,7 +86,7 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 		} else if (input instanceof DischargeSlot) {
 			final DischargeSlot dischargeSlot = (DischargeSlot) input;
 			if (dischargeSlot.isFOBSale()) {
-				if (dischargeSlot.isDivertible()) {
+				if (dischargeSlot.getSlotOrDelegateDivertible()) {
 					editor.setEditorEnabled(true);
 					editor.setEditorVisible(true);
 				} else {

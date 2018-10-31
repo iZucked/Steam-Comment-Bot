@@ -100,11 +100,11 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 			cargoModel.getVesselAvailabilities().forEach(va -> endPorts.addAll(SetUtils.getObjects(va.getEndAt())));
 
 			cargoModel.getLoadSlots().stream() //
-					.filter(s -> !s.isDESPurchase() || s.isDivertible()) //
+					.filter(s -> !s.isDESPurchase() || s.getSlotOrDelegateDivertible()) //
 					.forEach(s -> loadPorts.add(s.getPort()));
 
 			cargoModel.getDischargeSlots().stream() //
-					.filter(s -> !s.isFOBSale() || s.isDivertible()) //
+					.filter(s -> !s.isFOBSale() || s.getSlotOrDelegateDivertible()) //
 					.forEach(s -> dischargePorts.add(s.getPort()));
 
 			// TODO: Complex cargoes will also have load -> load and discharge -> discharge distance requirements

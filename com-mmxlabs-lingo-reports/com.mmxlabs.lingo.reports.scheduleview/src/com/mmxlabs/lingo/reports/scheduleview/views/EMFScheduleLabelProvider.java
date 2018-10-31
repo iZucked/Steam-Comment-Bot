@@ -446,12 +446,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				// Do not check divertible slots
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
-					if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
+					if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
 						checkLateness = false;
 					}
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
-					if (dischargeSlot.isFOBSale() && dischargeSlot.isDivertible()) {
+					if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateDivertible()) {
 						checkLateness = false;
 					}
 				}

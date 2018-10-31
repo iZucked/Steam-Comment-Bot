@@ -127,7 +127,7 @@ public class SubContractProfileComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_nominatedVesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		NominatedVesselEditorWrapper editor = new NominatedVesselEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUB_CONTRACT_PROFILE__NOMINATED_VESSEL));
+		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUB_CONTRACT_PROFILE__NOMINATED_VESSEL);
 		editor.addNotificationChangedListener(new ShippingDaysRestrictionInlineEditorChangedListener());
 		detailComposite.addInlineEditor(editor);
 	}
@@ -138,9 +138,10 @@ public class SubContractProfileComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_shippingDaysEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUB_CONTRACT_PROFILE__SHIPPING_DAYS);
-		editor.addNotificationChangedListener(new ShippingDaysRestrictionInlineEditorChangedListener());
-		detailComposite.addInlineEditor(editor);
+		// Hide it!
+//		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUB_CONTRACT_PROFILE__SHIPPING_DAYS);
+//		editor.addNotificationChangedListener(new ShippingDaysRestrictionInlineEditorChangedListener());
+//		detailComposite.addInlineEditor(editor);
 	}
 
 	/**

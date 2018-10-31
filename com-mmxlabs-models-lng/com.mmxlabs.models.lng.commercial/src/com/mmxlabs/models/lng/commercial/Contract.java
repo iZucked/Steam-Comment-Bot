@@ -44,6 +44,8 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getCancellationExpression <em>Cancellation Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getWindowNominationSize <em>Window Nomination Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getWindowNominationSizeUnits <em>Window Nomination Size Units</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isDivertible <em>Divertible</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract()
@@ -535,6 +537,58 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setWindowNominationSizeUnits(TimePeriod value);
+
+	/**
+	 * Returns the value of the '<em><b>Divertible</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Divertible</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Divertible</em>' attribute.
+	 * @see #setDivertible(boolean)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_Divertible()
+	 * @model
+	 * @generated
+	 */
+	boolean isDivertible();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#isDivertible <em>Divertible</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Divertible</em>' attribute.
+	 * @see #isDivertible()
+	 * @generated
+	 */
+	void setDivertible(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Shipping Days Restriction</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Shipping Days Restriction</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Shipping Days Restriction</em>' attribute.
+	 * @see #setShippingDaysRestriction(int)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_ShippingDaysRestriction()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='days' formatString='###'"
+	 * @generated
+	 */
+	int getShippingDaysRestriction();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getShippingDaysRestriction <em>Shipping Days Restriction</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Shipping Days Restriction</em>' attribute.
+	 * @see #getShippingDaysRestriction()
+	 * @generated
+	 */
+	void setShippingDaysRestriction(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Code</b></em>' attribute.

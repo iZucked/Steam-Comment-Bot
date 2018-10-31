@@ -1,0 +1,74 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
+package com.mmxlabs.models.lng.adp.ext.impl;
+
+import org.eclipse.emf.validation.service.ConstraintChangeEventType;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
+import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
+import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
+import com.mmxlabs.models.lng.adp.SalesContractProfile;
+import com.mmxlabs.models.lng.adp.SubContractProfile;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.types.VolumeUnits;
+import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
+
+@NonNullByDefault
+public class DefaultADPProfileProvider extends AbstractADPProfileProvider {
+
+	@Override
+	public @Nullable PurchaseContractProfile createProfile(final LNGScenarioModel scenarioModel, final CommercialModel commercialModel, final ADPModel existingModel, PurchaseContract contract) {
+		return createGenericModel(contract);
+	}
+
+	@Override
+	public @Nullable SalesContractProfile createProfile(final LNGScenarioModel scenarioModel, final CommercialModel commercialModel, final ADPModel existingModel, SalesContract contract) {
+		return createGenericModel(contract);
+	}
+
+	protected PurchaseContractProfile createGenericModel(final PurchaseContract contract) {
+
+		LNGVolumeUnit unit = mapVolumeUnits(contract.getVolumeLimitsUnit());
+		int volume = contract.getMaxQuantity();
+		if (volume == 0) {
+			volume = (unit == LNGVolumeUnit.MMBTU) ? 3_000_000 : 150_000;
+		}
+
+		// Base
+		final PurchaseContractProfile profile = createGenericModel(contract, volume * 12, unit);
+
+		final SubContractProfile<LoadSlot> subProfile = createCargoNumberSubProfile(contract, contract.getContractType(), "Volume", 12, volume, unit);
+		profile.getSubProfiles().add(subProfile);
+
+		return profile;
+	}
+
+	protected SalesContractProfile createGenericModel(final SalesContract contract) {
+
+		LNGVolumeUnit unit = mapVolumeUnits(contract.getVolumeLimitsUnit());
+		int volume = contract.getMaxQuantity();
+		if (volume == 0) {
+			volume = (unit == LNGVolumeUnit.MMBTU) ? 3_000_000 : 150_000;
+		}
+
+		// Base
+		final SalesContractProfile profile = createGenericModel(contract, volume * 12, unit);
+
+		final SubContractProfile<DischargeSlot> subProfile = createCargoNumberSubProfile(contract, contract.getContractType(), "Volume", 12, volume, unit);
+		profile.getSubProfiles().add(subProfile);
+
+		return profile;
+	}
+
+
+}

@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 
 public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
@@ -44,16 +45,15 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 	public void testTargetVesselWithNoWeight() {
 		test12Cargoes2Vessels(0, TrainingCaseConstants.VESSEL_LARGE_SHIP);
 	}
-	
-//	@Test
-//	public void testTargetVesselWith5mWeight() {
-//		test12Cargoes2Vessels(10_000_000, TrainingCaseConstants.VESSEL_SMALL_SHIP);
-//	}
+
+	// @Test
+	// public void testTargetVesselWith5mWeight() {
+	// test12Cargoes2Vessels(10_000_000, TrainingCaseConstants.VESSEL_SMALL_SHIP);
+	// }
 
 	/**
-	 * Test has two vessels and 12 cargoes.
-	 * The cargoes have a wide volume, so with no preference weightings we would
-	 * expect the cargoes to be put on the largest vessel
+	 * Test has two vessels and 12 cargoes. The cargoes have a wide volume, so with no preference weightings we would expect the cargoes to be put on the largest vessel
+	 * 
 	 * @param contraintWeight
 	 * @param targetVessel
 	 */
@@ -71,13 +71,9 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 		ADPModelUtil.generateModelSlots(scenarioModelBuilder.getLNGScenarioModel(), adpModelBuilder.getADPModel());
 
 		// set up fleet constraints
-		TargetCargoesOnVesselConstraintMaker.makeTargetCargoesOnVesselConstraint(adpModelBuilder.getADPModel())
-		.withVessel(fleetModelFinder.findVessel(targetVessel))
-		.withTargetNumberOfCargoes(12)
-		.withIntervalType(IntervalType.YEARLY)
-		.withWeight(5_000_000)
-		.build();
-		
+		TargetCargoesOnVesselConstraintMaker.makeTargetCargoesOnVesselConstraint(adpModelBuilder.getADPModel()).withVessel(fleetModelFinder.findVessel(targetVessel)).withTargetNumberOfCargoes(12)
+				.withIntervalType(IntervalType.YEARLY).withWeight(5_000_000).build();
+
 		final CargoModel cargoModel = cargoModelBuilder.getCargoModel();
 
 		// Check initial conditions are correct
@@ -102,15 +98,9 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 				for (int i = 0; i < lngScenarioModel.getCargoModel().getLoadSlots().size(); i++) {
 					LoadSlot loadSlot = lngScenarioModel.getCargoModel().getLoadSlots().get(i);
 					System.out.println(loadSlot.getName());
-					verifier
-					.withAnySolutionResultChecker()
-					.withUsedLoad(loadSlot.getName()).onFleetVessel(targetVessel)
-					.build();
+					verifier.withAnySolutionResultChecker().withUsedLoad(loadSlot.getName()).onFleetVessel(targetVessel).build();
 				}
-				verifier
-				.withAnySolutionResultChecker()
-				.withCargoCount(12, false)
-				.build();
+				verifier.withAnySolutionResultChecker().withCargoCount(12, false).build();
 				verifier.verifySingleOptimisationResult(result, msg -> Assert.fail(msg));
 			});
 		} finally {
@@ -120,27 +110,27 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 
 	private void setContractsAndCargoes(final int limit, final ADPModelBuilder adpModelBuilder) {
 		adpModelBuilder.withPurchaseContractProfile(commercialModelFinder.findPurchaseContract("Purchase A")) //
-		.withVolume(4_000_000 * 12, LNGVolumeUnit.MMBTU) // Not really used...
-		//
-		.withSubContractProfile("Volume") //
-		.withContractType(ContractType.FOB) //
-		.withSlotTemplate(AbstractSlotTemplateFactory.TEMPLATE_GENERIC_DES_PURCHASE) //
-		.withCargoNumberDistributionModel(5_000_000, LNGVolumeUnit.MMBTU, 12) //
-		.build() //
-		//
-		.build();
+				.withVolume(4_000_000 * 12, LNGVolumeUnit.MMBTU) // Not really used...
+				//
+				.withSubContractProfile("Volume") //
+				.withContractType(ContractType.FOB) //
+				.withSlotTemplate(AbstractSlotTemplateFactory.TEMPLATE_GENERIC_DES_PURCHASE) //
+				.withCargoNumberDistributionModel(12) //
+				.build() //
+				//
+				.build();
 
 		adpModelBuilder.withSalesContractProfile(commercialModelFinder.findSalesContract("Sales A")) //
-		.withVolume(3_000_000 * 12, LNGVolumeUnit.MMBTU) // Not really used...
-		//
-		.withSubContractProfile("Volume") //
-		.withContractType(ContractType.DES) //
-		.withSlotTemplate(AbstractSlotTemplateFactory.TEMPLATE_GENERIC_DES_SALE) //
-		.withCargoNumberDistributionModel(5_000_000, LNGVolumeUnit.MMBTU, 12) //
-		.build() //
-		.addMaxCargoConstraint(limit, IntervalType.YEARLY)
-		//
-		.build();
+				.withVolume(3_000_000 * 12, LNGVolumeUnit.MMBTU) // Not really used...
+				//
+				.withSubContractProfile("Volume") //
+				.withContractType(ContractType.DES) //
+				.withSlotTemplate(AbstractSlotTemplateFactory.TEMPLATE_GENERIC_DES_SALE) //
+				.withCargoNumberDistributionModel(12) //
+				.build() //
+				.addMaxCargoConstraint(limit, IntervalType.YEARLY)
+				//
+				.build();
 	}
 
 	private CharterInMarket setDefaultVesselsAndContracts() {
@@ -169,32 +159,28 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 				.build();
 		PurchaseContract purchaseContract = commercialModelBuilder.makeExpressionPurchaseContract("Purchase A", entity, "5");
 		purchaseContract.setPreferredPort(pluto);
+		purchaseContract.setMaxQuantity(5_000_000);
+		purchaseContract.setVolumeLimitsUnit(VolumeUnits.MMBTU);
 		SalesContract salesContract = commercialModelBuilder.makeExpressionSalesContract("Sales A", entity, SALES_TEST_NAME);
 		salesContract.setPreferredPort(himeji);
+		salesContract.setMaxQuantity(5_000_000);
+		salesContract.setVolumeLimitsUnit(VolumeUnits.MMBTU);
 		return defaultCharterInMarket;
 	}
 
 	private void makeCommodityCurveForQuarters() {
-		pricingModelBuilder.makeCommodityDataCurve(SALES_TEST_NAME, "$", "mmBTU")
-				.addIndexPoint(YearMonth.of(2019, 1), 10.0)
-				.addIndexPoint(YearMonth.of(2019, 2), 10.0)
+		pricingModelBuilder.makeCommodityDataCurve(SALES_TEST_NAME, "$", "mmBTU").addIndexPoint(YearMonth.of(2019, 1), 10.0).addIndexPoint(YearMonth.of(2019, 2), 10.0)
 				.addIndexPoint(YearMonth.of(2019, 3), 14.0)
-				
-				.addIndexPoint(YearMonth.of(2019, 4), 14.0)
-				.addIndexPoint(YearMonth.of(2019, 5), 10.0)
-				.addIndexPoint(YearMonth.of(2019, 6), 10.0)
-				
-				.addIndexPoint(YearMonth.of(2019, 7), 10.0)
-				.addIndexPoint(YearMonth.of(2019, 8), 10.0)
-				.addIndexPoint(YearMonth.of(2019, 9), 14.0)
-				
-				.addIndexPoint(YearMonth.of(2019, 10), 14.0)
-				.addIndexPoint(YearMonth.of(2019, 11), 10.0)
-				.addIndexPoint(YearMonth.of(2019, 12), 10.0)
+
+				.addIndexPoint(YearMonth.of(2019, 4), 14.0).addIndexPoint(YearMonth.of(2019, 5), 10.0).addIndexPoint(YearMonth.of(2019, 6), 10.0)
+
+				.addIndexPoint(YearMonth.of(2019, 7), 10.0).addIndexPoint(YearMonth.of(2019, 8), 10.0).addIndexPoint(YearMonth.of(2019, 9), 14.0)
+
+				.addIndexPoint(YearMonth.of(2019, 10), 14.0).addIndexPoint(YearMonth.of(2019, 11), 10.0).addIndexPoint(YearMonth.of(2019, 12), 10.0)
 
 				.build();
 	}
-	
+
 	protected OptimisationPlan createOptimisationPlan() {
 		// create plan in parent
 		final OptimisationPlan optimisationPlan = super.createOptimisationPlan(createUserSettings());

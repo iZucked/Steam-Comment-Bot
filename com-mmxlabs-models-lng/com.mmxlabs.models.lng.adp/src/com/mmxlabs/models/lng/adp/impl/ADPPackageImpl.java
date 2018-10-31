@@ -60,6 +60,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EGenericType;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -577,6 +578,24 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 */
 	public EAttribute getDistributionModel_VolumeUnit() {
 		return (EAttribute)distributionModelEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getDistributionModel__GetModelOrContractVolumePerCargo() {
+		return distributionModelEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getDistributionModel__GetModelOrContractVolumeUnit() {
+		return distributionModelEClass.getEOperations().get(1);
 	}
 
 	/**
@@ -1338,6 +1357,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		distributionModelEClass = createEClass(DISTRIBUTION_MODEL);
 		createEAttribute(distributionModelEClass, DISTRIBUTION_MODEL__VOLUME_PER_CARGO);
 		createEAttribute(distributionModelEClass, DISTRIBUTION_MODEL__VOLUME_UNIT);
+		createEOperation(distributionModelEClass, DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_PER_CARGO);
+		createEOperation(distributionModelEClass, DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_UNIT);
 
 		cargoSizeDistributionModelEClass = createEClass(CARGO_SIZE_DISTRIBUTION_MODEL);
 		createEAttribute(cargoSizeDistributionModelEClass, CARGO_SIZE_DISTRIBUTION_MODEL__EXACT);
@@ -1477,6 +1498,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		g2 = createEGenericType(theCargoPackage.getDischargeSlot());
 		g1.getETypeArguments().add(g2);
 		salesContractProfileEClass.getEGenericSuperTypes().add(g1);
+		distributionModelEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		cargoSizeDistributionModelEClass.getESuperTypes().add(this.getDistributionModel());
 		cargoNumberDistributionModelEClass.getESuperTypes().add(this.getDistributionModel());
 		cargoByQuarterDistributionModelEClass.getESuperTypes().add(this.getDistributionModel());
@@ -1537,9 +1559,13 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 
 		initEClass(customSubProfileAttributesEClass, CustomSubProfileAttributes.class, "CustomSubProfileAttributes", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(distributionModelEClass, DistributionModel.class, "DistributionModel", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getDistributionModel_VolumePerCargo(), ecorePackage.getEDouble(), "volumePerCargo", null, 0, 1, DistributionModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDistributionModel_VolumeUnit(), this.getLNGVolumeUnit(), "volumeUnit", null, 0, 1, DistributionModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(distributionModelEClass, DistributionModel.class, "DistributionModel", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getDistributionModel_VolumePerCargo(), ecorePackage.getEDouble(), "volumePerCargo", null, 0, 1, DistributionModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDistributionModel_VolumeUnit(), this.getLNGVolumeUnit(), "volumeUnit", null, 0, 1, DistributionModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getDistributionModel__GetModelOrContractVolumePerCargo(), ecorePackage.getEInt(), "getModelOrContractVolumePerCargo", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getDistributionModel__GetModelOrContractVolumeUnit(), this.getLNGVolumeUnit(), "getModelOrContractVolumeUnit", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(cargoSizeDistributionModelEClass, CargoSizeDistributionModel.class, "CargoSizeDistributionModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCargoSizeDistributionModel_Exact(), ecorePackage.getEBoolean(), "exact", null, 0, 1, CargoSizeDistributionModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

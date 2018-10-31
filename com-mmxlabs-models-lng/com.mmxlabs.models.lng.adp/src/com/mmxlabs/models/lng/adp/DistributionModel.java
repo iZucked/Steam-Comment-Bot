@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.adp;
 
+import com.mmxlabs.models.mmxcore.MMXObject;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -22,10 +23,10 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getDistributionModel()
- * @model interface="true" abstract="true"
+ * @model abstract="true"
  * @generated
  */
-public interface DistributionModel extends EObject {
+public interface DistributionModel extends MMXObject {
 
 	/**
 	 * Returns the value of the '<em><b>Volume Per Cargo</b></em>' attribute.
@@ -36,9 +37,11 @@ public interface DistributionModel extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Volume Per Cargo</em>' attribute.
+	 * @see #isSetVolumePerCargo()
+	 * @see #unsetVolumePerCargo()
 	 * @see #setVolumePerCargo(double)
 	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getDistributionModel_VolumePerCargo()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	double getVolumePerCargo();
@@ -48,10 +51,35 @@ public interface DistributionModel extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Volume Per Cargo</em>' attribute.
+	 * @see #isSetVolumePerCargo()
+	 * @see #unsetVolumePerCargo()
 	 * @see #getVolumePerCargo()
 	 * @generated
 	 */
 	void setVolumePerCargo(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.adp.DistributionModel#getVolumePerCargo <em>Volume Per Cargo</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetVolumePerCargo()
+	 * @see #getVolumePerCargo()
+	 * @see #setVolumePerCargo(double)
+	 * @generated
+	 */
+	void unsetVolumePerCargo();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.adp.DistributionModel#getVolumePerCargo <em>Volume Per Cargo</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Volume Per Cargo</em>' attribute is set.
+	 * @see #unsetVolumePerCargo()
+	 * @see #getVolumePerCargo()
+	 * @see #setVolumePerCargo(double)
+	 * @generated
+	 */
+	boolean isSetVolumePerCargo();
 
 	/**
 	 * Returns the value of the '<em><b>Volume Unit</b></em>' attribute.
@@ -64,9 +92,11 @@ public interface DistributionModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Volume Unit</em>' attribute.
 	 * @see com.mmxlabs.models.lng.adp.LNGVolumeUnit
+	 * @see #isSetVolumeUnit()
+	 * @see #unsetVolumeUnit()
 	 * @see #setVolumeUnit(LNGVolumeUnit)
 	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getDistributionModel_VolumeUnit()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	LNGVolumeUnit getVolumeUnit();
@@ -77,9 +107,50 @@ public interface DistributionModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Volume Unit</em>' attribute.
 	 * @see com.mmxlabs.models.lng.adp.LNGVolumeUnit
+	 * @see #isSetVolumeUnit()
+	 * @see #unsetVolumeUnit()
 	 * @see #getVolumeUnit()
 	 * @generated
 	 */
 	void setVolumeUnit(LNGVolumeUnit value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.adp.DistributionModel#getVolumeUnit <em>Volume Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetVolumeUnit()
+	 * @see #getVolumeUnit()
+	 * @see #setVolumeUnit(LNGVolumeUnit)
+	 * @generated
+	 */
+	void unsetVolumeUnit();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.adp.DistributionModel#getVolumeUnit <em>Volume Unit</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Volume Unit</em>' attribute is set.
+	 * @see #unsetVolumeUnit()
+	 * @see #getVolumeUnit()
+	 * @see #setVolumeUnit(LNGVolumeUnit)
+	 * @generated
+	 */
+	boolean isSetVolumeUnit();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getModelOrContractVolumePerCargo();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	LNGVolumeUnit getModelOrContractVolumeUnit();
 
 } // DistributionModel

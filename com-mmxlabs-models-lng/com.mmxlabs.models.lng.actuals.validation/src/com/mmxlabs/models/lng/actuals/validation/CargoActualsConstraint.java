@@ -109,7 +109,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 									status.addEObjectAndFeature(loadSlot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
 									failures.add(status);
 								}
-								if (loadSlot.isDivertible()) {
+								if (loadSlot.getSlotOrDelegateDivertible()) {
 									checkReturnActuals = true;
 								}
 

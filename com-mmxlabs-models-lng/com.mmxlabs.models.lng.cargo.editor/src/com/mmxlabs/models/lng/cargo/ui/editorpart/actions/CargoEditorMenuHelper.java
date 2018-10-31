@@ -759,8 +759,8 @@ public class CargoEditorMenuHelper {
 		// DES load
 		if (load.isDESPurchase()) {
 			// divertible DES - discharge time should be within shipping restriction window for load slot
-			if (load.isDivertible()) {
-				final int restriction = load.getShippingDaysRestriction();
+			if (load.getSlotOrDelegateDivertible()) {
+				final int restriction = load.getSlotOrDelegateShippingDaysRestriction();
 				return (daysDifference <= restriction);
 			}
 			// regular DES - windows should overlap
@@ -772,8 +772,8 @@ public class CargoEditorMenuHelper {
 		else {
 			// FOB sale - windows should overlap
 			if (discharge.isFOBSale()) {
-				if (discharge.isDivertible()) {
-					final int restriction = discharge.getShippingDaysRestriction();
+				if (discharge.getSlotOrDelegateDivertible()) {
+					final int restriction = discharge.getSlotOrDelegateShippingDaysRestriction();
 					return (daysDifference <= restriction);
 				}
 
@@ -806,14 +806,14 @@ public class CargoEditorMenuHelper {
 			}
 			// DES sale - only at the same port or divertible
 			else {
-				return load.isDivertible() || (load.getPort() == discharge.getPort());
+				return load.getSlotOrDelegateDivertible() || (load.getPort() == discharge.getPort());
 			}
 		}
 		// FOB purchase
 		else {
 			// FOB sale - only at the same port or divertible
 			if (discharge.isFOBSale() == true) {
-				return discharge.isDivertible() || (load.getPort() == discharge.getPort());
+				return discharge.getSlotOrDelegateDivertible() || (load.getPort() == discharge.getPort());
 			}
 			// DES sale - compatible
 			else {
@@ -1149,7 +1149,7 @@ public class CargoEditorMenuHelper {
 						// Get start of month and create full sized window
 						ZonedDateTime cal = source.getWindowStartWithSlotOrPortTime();
 						// Take into account travel time
-						if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
+						if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel());
 							cal = cal.plusHours(travelTime);
 							cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());

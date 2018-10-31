@@ -1,51 +1,38 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2018
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.adp.provider;
 
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
-import com.mmxlabs.models.lng.adp.CargoNumberDistributionModel;
+import com.mmxlabs.models.lng.adp.DistributionModel;
 
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
+
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
-import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IChildCreationExtender;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.adp.CargoNumberDistributionModel} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.adp.DistributionModel} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class CargoNumberDistributionModelItemProvider 
-	extends DistributionModelItemProvider {
+public class DistributionModelItemProvider extends MMXObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CargoNumberDistributionModelItemProvider(AdapterFactory adapterFactory) {
+	public DistributionModelItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -60,42 +47,54 @@ public class CargoNumberDistributionModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNumberOfCargoesPropertyDescriptor(object);
+			addVolumePerCargoPropertyDescriptor(object);
+			addVolumeUnitPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Number Of Cargoes feature.
+	 * This adds a property descriptor for the Volume Per Cargo feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addNumberOfCargoesPropertyDescriptor(Object object) {
+	protected void addVolumePerCargoPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CargoNumberDistributionModel_numberOfCargoes_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoNumberDistributionModel_numberOfCargoes_feature", "_UI_CargoNumberDistributionModel_type"),
-				 ADPPackage.Literals.CARGO_NUMBER_DISTRIBUTION_MODEL__NUMBER_OF_CARGOES,
+				 getString("_UI_DistributionModel_volumePerCargo_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DistributionModel_volumePerCargo_feature", "_UI_DistributionModel_type"),
+				 ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_PER_CARGO,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This returns CargoNumberDistributionModel.gif.
+	 * This adds a property descriptor for the Volume Unit feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/CargoNumberDistributionModel"));
+	protected void addVolumeUnitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DistributionModel_volumeUnit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DistributionModel_volumeUnit_feature", "_UI_DistributionModel_type"),
+				 ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_UNIT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -106,10 +105,10 @@ public class CargoNumberDistributionModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		CargoNumberDistributionModel cargoNumberDistributionModel = (CargoNumberDistributionModel)object;
-		return getString("_UI_CargoNumberDistributionModel_type") + " " + cargoNumberDistributionModel.getVolumePerCargo();
+		DistributionModel distributionModel = (DistributionModel)object;
+		return getString("_UI_DistributionModel_type") + " " + distributionModel.getVolumePerCargo();
 	}
-	
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -122,8 +121,9 @@ public class CargoNumberDistributionModelItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(CargoNumberDistributionModel.class)) {
-			case ADPPackage.CARGO_NUMBER_DISTRIBUTION_MODEL__NUMBER_OF_CARGOES:
+		switch (notification.getFeatureID(DistributionModel.class)) {
+			case ADPPackage.DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
+			case ADPPackage.DISTRIBUTION_MODEL__VOLUME_UNIT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

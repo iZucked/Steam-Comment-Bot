@@ -10,6 +10,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -327,10 +328,10 @@ public interface ADPPackage extends EPackage {
 	int CONTRACT_PROFILE_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.DistributionModel <em>Distribution Model</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.DistributionModelImpl <em>Distribution Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.DistributionModel
+	 * @see com.mmxlabs.models.lng.adp.impl.DistributionModelImpl
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDistributionModel()
 	 * @generated
 	 */
@@ -687,13 +688,22 @@ public interface ADPPackage extends EPackage {
 	int CUSTOM_SUB_PROFILE_ATTRIBUTES_OPERATION_COUNT = 0;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISTRIBUTION_MODEL__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
 	 * The feature id for the '<em><b>Volume Per Cargo</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISTRIBUTION_MODEL__VOLUME_PER_CARGO = 0;
+	int DISTRIBUTION_MODEL__VOLUME_PER_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
@@ -702,7 +712,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISTRIBUTION_MODEL__VOLUME_UNIT = 1;
+	int DISTRIBUTION_MODEL__VOLUME_UNIT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Distribution Model</em>' class.
@@ -711,7 +721,52 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISTRIBUTION_MODEL_FEATURE_COUNT = 2;
+	int DISTRIBUTION_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISTRIBUTION_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISTRIBUTION_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISTRIBUTION_MODEL___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Model Or Contract Volume Per Cargo</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_PER_CARGO = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Model Or Contract Volume Unit</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_UNIT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Distribution Model</em>' class.
@@ -720,7 +775,16 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISTRIBUTION_MODEL_OPERATION_COUNT = 0;
+	int DISTRIBUTION_MODEL_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_SIZE_DISTRIBUTION_MODEL__EXTENSIONS = DISTRIBUTION_MODEL__EXTENSIONS;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.PeriodDistributionImpl <em>Period Distribution</em>}' class.
@@ -929,6 +993,51 @@ public interface ADPPackage extends EPackage {
 	int CARGO_SIZE_DISTRIBUTION_MODEL_FEATURE_COUNT = DISTRIBUTION_MODEL_FEATURE_COUNT + 1;
 
 	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_SIZE_DISTRIBUTION_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = DISTRIBUTION_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_SIZE_DISTRIBUTION_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = DISTRIBUTION_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_SIZE_DISTRIBUTION_MODEL___ECONTAINER_OP = DISTRIBUTION_MODEL___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Model Or Contract Volume Per Cargo</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_SIZE_DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_PER_CARGO = DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_PER_CARGO;
+
+	/**
+	 * The operation id for the '<em>Get Model Or Contract Volume Unit</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_SIZE_DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_UNIT = DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_UNIT;
+
+	/**
 	 * The number of operations of the '<em>Cargo Size Distribution Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -936,6 +1045,15 @@ public interface ADPPackage extends EPackage {
 	 * @ordered
 	 */
 	int CARGO_SIZE_DISTRIBUTION_MODEL_OPERATION_COUNT = DISTRIBUTION_MODEL_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_NUMBER_DISTRIBUTION_MODEL__EXTENSIONS = DISTRIBUTION_MODEL__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Volume Per Cargo</b></em>' attribute.
@@ -974,6 +1092,51 @@ public interface ADPPackage extends EPackage {
 	int CARGO_NUMBER_DISTRIBUTION_MODEL_FEATURE_COUNT = DISTRIBUTION_MODEL_FEATURE_COUNT + 1;
 
 	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_NUMBER_DISTRIBUTION_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = DISTRIBUTION_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_NUMBER_DISTRIBUTION_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = DISTRIBUTION_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_NUMBER_DISTRIBUTION_MODEL___ECONTAINER_OP = DISTRIBUTION_MODEL___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Model Or Contract Volume Per Cargo</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_NUMBER_DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_PER_CARGO = DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_PER_CARGO;
+
+	/**
+	 * The operation id for the '<em>Get Model Or Contract Volume Unit</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_NUMBER_DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_UNIT = DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_UNIT;
+
+	/**
 	 * The number of operations of the '<em>Cargo Number Distribution Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -981,6 +1144,15 @@ public interface ADPPackage extends EPackage {
 	 * @ordered
 	 */
 	int CARGO_NUMBER_DISTRIBUTION_MODEL_OPERATION_COUNT = DISTRIBUTION_MODEL_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_BY_QUARTER_DISTRIBUTION_MODEL__EXTENSIONS = DISTRIBUTION_MODEL__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Volume Per Cargo</b></em>' attribute.
@@ -1046,6 +1218,51 @@ public interface ADPPackage extends EPackage {
 	int CARGO_BY_QUARTER_DISTRIBUTION_MODEL_FEATURE_COUNT = DISTRIBUTION_MODEL_FEATURE_COUNT + 4;
 
 	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_BY_QUARTER_DISTRIBUTION_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = DISTRIBUTION_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_BY_QUARTER_DISTRIBUTION_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = DISTRIBUTION_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_BY_QUARTER_DISTRIBUTION_MODEL___ECONTAINER_OP = DISTRIBUTION_MODEL___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Model Or Contract Volume Per Cargo</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_BY_QUARTER_DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_PER_CARGO = DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_PER_CARGO;
+
+	/**
+	 * The operation id for the '<em>Get Model Or Contract Volume Unit</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_BY_QUARTER_DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_UNIT = DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_UNIT;
+
+	/**
 	 * The number of operations of the '<em>Cargo By Quarter Distribution Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1053,6 +1270,15 @@ public interface ADPPackage extends EPackage {
 	 * @ordered
 	 */
 	int CARGO_BY_QUARTER_DISTRIBUTION_MODEL_OPERATION_COUNT = DISTRIBUTION_MODEL_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_INTERVAL_DISTRIBUTION_MODEL__EXTENSIONS = DISTRIBUTION_MODEL__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Volume Per Cargo</b></em>' attribute.
@@ -1109,6 +1335,51 @@ public interface ADPPackage extends EPackage {
 	int CARGO_INTERVAL_DISTRIBUTION_MODEL_FEATURE_COUNT = DISTRIBUTION_MODEL_FEATURE_COUNT + 3;
 
 	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_INTERVAL_DISTRIBUTION_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = DISTRIBUTION_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_INTERVAL_DISTRIBUTION_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = DISTRIBUTION_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_INTERVAL_DISTRIBUTION_MODEL___ECONTAINER_OP = DISTRIBUTION_MODEL___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Model Or Contract Volume Per Cargo</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_INTERVAL_DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_PER_CARGO = DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_PER_CARGO;
+
+	/**
+	 * The operation id for the '<em>Get Model Or Contract Volume Unit</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_INTERVAL_DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_UNIT = DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_UNIT;
+
+	/**
 	 * The number of operations of the '<em>Cargo Interval Distribution Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1116,6 +1387,15 @@ public interface ADPPackage extends EPackage {
 	 * @ordered
 	 */
 	int CARGO_INTERVAL_DISTRIBUTION_MODEL_OPERATION_COUNT = DISTRIBUTION_MODEL_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRE_DEFINED_DISTRIBUTION_MODEL__EXTENSIONS = DISTRIBUTION_MODEL__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Volume Per Cargo</b></em>' attribute.
@@ -1170,6 +1450,51 @@ public interface ADPPackage extends EPackage {
 	 * @ordered
 	 */
 	int PRE_DEFINED_DISTRIBUTION_MODEL_FEATURE_COUNT = DISTRIBUTION_MODEL_FEATURE_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRE_DEFINED_DISTRIBUTION_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = DISTRIBUTION_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRE_DEFINED_DISTRIBUTION_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = DISTRIBUTION_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRE_DEFINED_DISTRIBUTION_MODEL___ECONTAINER_OP = DISTRIBUTION_MODEL___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Model Or Contract Volume Per Cargo</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRE_DEFINED_DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_PER_CARGO = DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_PER_CARGO;
+
+	/**
+	 * The operation id for the '<em>Get Model Or Contract Volume Unit</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRE_DEFINED_DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_UNIT = DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_UNIT;
 
 	/**
 	 * The number of operations of the '<em>Pre Defined Distribution Model</em>' class.
@@ -1998,6 +2323,26 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getDistributionModel_VolumeUnit();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.adp.DistributionModel#getModelOrContractVolumePerCargo() <em>Get Model Or Contract Volume Per Cargo</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Model Or Contract Volume Per Cargo</em>' operation.
+	 * @see com.mmxlabs.models.lng.adp.DistributionModel#getModelOrContractVolumePerCargo()
+	 * @generated
+	 */
+	EOperation getDistributionModel__GetModelOrContractVolumePerCargo();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.adp.DistributionModel#getModelOrContractVolumeUnit() <em>Get Model Or Contract Volume Unit</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Model Or Contract Volume Unit</em>' operation.
+	 * @see com.mmxlabs.models.lng.adp.DistributionModel#getModelOrContractVolumeUnit()
+	 * @generated
+	 */
+	EOperation getDistributionModel__GetModelOrContractVolumeUnit();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint <em>Period Distribution Profile Constraint</em>}'.
@@ -2936,10 +3281,10 @@ public interface ADPPackage extends EPackage {
 		EReference CONTRACT_PROFILE__CONSTRAINTS = eINSTANCE.getContractProfile_Constraints();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.DistributionModel <em>Distribution Model</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.DistributionModelImpl <em>Distribution Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.adp.DistributionModel
+		 * @see com.mmxlabs.models.lng.adp.impl.DistributionModelImpl
 		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDistributionModel()
 		 * @generated
 		 */
@@ -2960,6 +3305,22 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DISTRIBUTION_MODEL__VOLUME_UNIT = eINSTANCE.getDistributionModel_VolumeUnit();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Model Or Contract Volume Per Cargo</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_PER_CARGO = eINSTANCE.getDistributionModel__GetModelOrContractVolumePerCargo();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Model Or Contract Volume Unit</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation DISTRIBUTION_MODEL___GET_MODEL_OR_CONTRACT_VOLUME_UNIT = eINSTANCE.getDistributionModel__GetModelOrContractVolumeUnit();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.PeriodDistributionProfileConstraintImpl <em>Period Distribution Profile Constraint</em>}' class.

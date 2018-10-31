@@ -180,7 +180,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 						loadPort = loadSlot.getPort();
 						slotActuals = ActualsFactory.eINSTANCE.createLoadActuals();
 						if (loadSlot.isDESPurchase()) {
-							isDivertibleDESPurchase = loadSlot.isDivertible();
+							isDivertibleDESPurchase = loadSlot.getSlotOrDelegateDivertible();
 							cargoActuals.setVessel(slot.getNominatedVessel());
 						}
 						slotActuals.setCV(((LoadSlot) slot).getSlotOrDelegateCV());

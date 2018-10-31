@@ -63,9 +63,13 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CustomSubProfileAttributes" abstract="true"
       interface="true"/>
-  <eClassifiers xsi:type="ecore:EClass" name="DistributionModel" abstract="true" interface="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumePerCargo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnit" eType="#//LNGVolumeUnit"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DistributionModel" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eOperations name="getModelOrContractVolumePerCargo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getModelOrContractVolumeUnit" eType="#//LNGVolumeUnit"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumePerCargo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnit" eType="#//LNGVolumeUnit"
+        unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CargoSizeDistributionModel" eSuperTypes="#//DistributionModel">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="exact" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>

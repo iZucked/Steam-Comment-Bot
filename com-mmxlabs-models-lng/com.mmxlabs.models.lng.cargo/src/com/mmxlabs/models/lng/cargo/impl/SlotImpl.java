@@ -636,6 +636,15 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	protected boolean divertible = DIVERTIBLE_EDEFAULT;
 
 	/**
+	 * This is true if the Divertible attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean divertibleESet;
+
+	/**
 	 * The default value of the '{@link #getShippingDaysRestriction() <em>Shipping Days Restriction</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -654,6 +663,15 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected int shippingDaysRestriction = SHIPPING_DAYS_RESTRICTION_EDEFAULT;
+
+	/**
+	 * This is true if the Shipping Days Restriction attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean shippingDaysRestrictionESet;
 
 	/**
 	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
@@ -1793,8 +1811,33 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	public void setDivertible(boolean newDivertible) {
 		boolean oldDivertible = divertible;
 		divertible = newDivertible;
+		boolean oldDivertibleESet = divertibleESet;
+		divertibleESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__DIVERTIBLE, oldDivertible, divertible));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__DIVERTIBLE, oldDivertible, divertible, !oldDivertibleESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetDivertible() {
+		boolean oldDivertible = divertible;
+		boolean oldDivertibleESet = divertibleESet;
+		divertible = DIVERTIBLE_EDEFAULT;
+		divertibleESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__DIVERTIBLE, oldDivertible, DIVERTIBLE_EDEFAULT, oldDivertibleESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetDivertible() {
+		return divertibleESet;
 	}
 
 	/**
@@ -1814,8 +1857,33 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	public void setShippingDaysRestriction(int newShippingDaysRestriction) {
 		int oldShippingDaysRestriction = shippingDaysRestriction;
 		shippingDaysRestriction = newShippingDaysRestriction;
+		boolean oldShippingDaysRestrictionESet = shippingDaysRestrictionESet;
+		shippingDaysRestrictionESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION, oldShippingDaysRestriction, shippingDaysRestriction));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION, oldShippingDaysRestriction, shippingDaysRestriction, !oldShippingDaysRestrictionESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetShippingDaysRestriction() {
+		int oldShippingDaysRestriction = shippingDaysRestriction;
+		boolean oldShippingDaysRestrictionESet = shippingDaysRestrictionESet;
+		shippingDaysRestriction = SHIPPING_DAYS_RESTRICTION_EDEFAULT;
+		shippingDaysRestrictionESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION, oldShippingDaysRestriction, SHIPPING_DAYS_RESTRICTION_EDEFAULT, oldShippingDaysRestrictionESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetShippingDaysRestriction() {
+		return shippingDaysRestrictionESet;
 	}
 
 	/**
@@ -2493,9 +2561,25 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @generated NOT
 	 */
 	public LocalDate getSlotOrDelegateWindowNominationDate() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
 		return (LocalDate) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_NOMINATION_DATE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public boolean getSlotOrDelegateDivertible() {
+		return (Boolean) eGetWithDefault(CargoPackage.Literals.SLOT__DIVERTIBLE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public int getSlotOrDelegateShippingDaysRestriction() {
+		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__SHIPPING_DAYS_RESTRICTION);
 	}
 
 	/**
@@ -2835,10 +2919,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				setNotes(NOTES_EDEFAULT);
 				return;
 			case CargoPackage.SLOT__DIVERTIBLE:
-				setDivertible(DIVERTIBLE_EDEFAULT);
+				unsetDivertible();
 				return;
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
-				setShippingDaysRestriction(SHIPPING_DAYS_RESTRICTION_EDEFAULT);
+				unsetShippingDaysRestriction();
 				return;
 			case CargoPackage.SLOT__ENTITY:
 				unsetEntity();
@@ -2935,9 +3019,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__NOTES:
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 			case CargoPackage.SLOT__DIVERTIBLE:
-				return divertible != DIVERTIBLE_EDEFAULT;
+				return isSetDivertible();
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
-				return shippingDaysRestriction != SHIPPING_DAYS_RESTRICTION_EDEFAULT;
+				return isSetShippingDaysRestriction();
 			case CargoPackage.SLOT__ENTITY:
 				return isSetEntity();
 			case CargoPackage.SLOT__RESTRICTED_CONTRACTS:
@@ -3081,6 +3165,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getSlotOrDelegateCN();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE:
 				return getSlotOrDelegateWindowNominationDate();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE:
+				return getSlotOrDelegateDivertible();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION:
+				return getSlotOrDelegateShippingDaysRestriction();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -3135,9 +3223,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		result.append(", notes: ");
 		result.append(notes);
 		result.append(", divertible: ");
-		result.append(divertible);
+		if (divertibleESet) result.append(divertible); else result.append("<unset>");
 		result.append(", shippingDaysRestriction: ");
-		result.append(shippingDaysRestriction);
+		if (shippingDaysRestrictionESet) result.append(shippingDaysRestriction); else result.append("<unset>");
 		result.append(", restrictedListsArePermissive: ");
 		result.append(restrictedListsArePermissive);
 		result.append(", hedges: ");
@@ -3177,6 +3265,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Entity(), null);
 		} else if (CargoPackage.Literals.SLOT__COUNTERPARTY == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Counterparty(), null);
+		} else if (cargo.getSlot_Divertible() == feature) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Divertible(), Boolean.FALSE);
+		} else if (cargo.getSlot_ShippingDaysRestriction() == feature) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_ShippingDaysRestriction(), (Integer)0);
 		} else if (CargoPackage.Literals.SLOT__CN == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Cn(), null);
 		} else if (CargoPackage.Literals.SLOT__CANCELLATION_EXPRESSION == feature) {

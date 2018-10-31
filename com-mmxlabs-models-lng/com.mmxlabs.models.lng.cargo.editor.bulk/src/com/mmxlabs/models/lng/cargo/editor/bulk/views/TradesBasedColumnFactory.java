@@ -154,7 +154,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					if (loadSlot.isDESPurchase()) {
-						if (slot.isDivertible()) {
+						if (slot.getSlotOrDelegateDivertible()) {
 							return yesSymbol;
 						}
 					}
@@ -163,7 +163,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					if (dischargeSlot.isFOBSale()) {
-						if (slot.isDivertible()) {
+						if (slot.getSlotOrDelegateDivertible()) {
 							return yesSymbol;
 						}
 					}
@@ -1021,7 +1021,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 								if (object instanceof LoadSlot) {
 									final LoadSlot loadSlot = (LoadSlot) object;
-									return loadSlot.isDESPurchase() && loadSlot.isDivertible();
+									return loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible();
 
 								}
 								return false;
@@ -1030,7 +1030,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							public String render(final Object object) {
 								if (object instanceof LoadSlot) {
 									final LoadSlot loadSlot = (LoadSlot) object;
-									if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
+									if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
 										return super.render(object);
 
 									}
@@ -1122,7 +1122,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 								if (object instanceof DischargeSlot) {
 									final DischargeSlot dischargeSlot = (DischargeSlot) object;
-									return dischargeSlot.isFOBSale() && dischargeSlot.isDivertible();
+									return dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateDivertible();
 
 								}
 								return false;
@@ -1131,7 +1131,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							public String render(final Object object) {
 								if (object instanceof DischargeSlot) {
 									final DischargeSlot dischargeSlot = (DischargeSlot) object;
-									if (dischargeSlot.isFOBSale() && dischargeSlot.isDivertible()) {
+									if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateDivertible()) {
 										return super.render(object);
 									}
 
