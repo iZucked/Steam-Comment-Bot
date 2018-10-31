@@ -35,6 +35,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl#getCounterParty <em>Counter Party</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl#getReliability <em>Reliability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl#getVolume <em>Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl#getForecastDate <em>Forecast Date</em>}</li>
  * </ul>
  *
  * @generated
@@ -159,6 +160,35 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * @ordered
 	 */
 	protected int volume = VOLUME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getForecastDate() <em>Forecast Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getForecastDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate FORECAST_DATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getForecastDate() <em>Forecast Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getForecastDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate forecastDate = FORECAST_DATE_EDEFAULT;
+
+	/**
+	 * This is true if the Forecast Date attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean forecastDateESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -308,6 +338,52 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LocalDate getForecastDate() {
+		return forecastDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setForecastDate(LocalDate newForecastDate) {
+		LocalDate oldForecastDate = forecastDate;
+		forecastDate = newForecastDate;
+		boolean oldForecastDateESet = forecastDateESet;
+		forecastDateESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.INVENTORY_EVENT_ROW__FORECAST_DATE, oldForecastDate, forecastDate, !oldForecastDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetForecastDate() {
+		LocalDate oldForecastDate = forecastDate;
+		boolean oldForecastDateESet = forecastDateESet;
+		forecastDate = FORECAST_DATE_EDEFAULT;
+		forecastDateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.INVENTORY_EVENT_ROW__FORECAST_DATE, oldForecastDate, FORECAST_DATE_EDEFAULT, oldForecastDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetForecastDate() {
+		return forecastDateESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public int getReliableVolume() {
@@ -334,6 +410,8 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 				return getReliability();
 			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME:
 				return getVolume();
+			case CargoPackage.INVENTORY_EVENT_ROW__FORECAST_DATE:
+				return getForecastDate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -363,6 +441,9 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 				return;
 			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME:
 				setVolume((Integer)newValue);
+				return;
+			case CargoPackage.INVENTORY_EVENT_ROW__FORECAST_DATE:
+				setForecastDate((LocalDate)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -394,6 +475,9 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME:
 				setVolume(VOLUME_EDEFAULT);
 				return;
+			case CargoPackage.INVENTORY_EVENT_ROW__FORECAST_DATE:
+				unsetForecastDate();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -418,6 +502,8 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 				return reliability != RELIABILITY_EDEFAULT;
 			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME:
 				return volume != VOLUME_EDEFAULT;
+			case CargoPackage.INVENTORY_EVENT_ROW__FORECAST_DATE:
+				return isSetForecastDate();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -458,6 +544,8 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 		result.append(reliability);
 		result.append(", volume: ");
 		result.append(volume);
+		result.append(", forecastDate: ");
+		if (forecastDateESet) result.append(forecastDate); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

@@ -5393,13 +5393,22 @@ public interface CargoPackage extends EPackage {
 	int INVENTORY_EVENT_ROW__VOLUME = 5;
 
 	/**
+	 * The feature id for the '<em><b>Forecast Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENT_ROW__FORECAST_DATE = 6;
+
+	/**
 	 * The number of structural features of the '<em>Inventory Event Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_EVENT_ROW_FEATURE_COUNT = 6;
+	int INVENTORY_EVENT_ROW_FEATURE_COUNT = 7;
 
 	/**
 	 * The operation id for the '<em>Get Reliable Volume</em>' operation.
@@ -8508,6 +8517,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getInventoryEventRow_Volume();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getForecastDate <em>Forecast Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Forecast Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryEventRow#getForecastDate()
+	 * @see #getInventoryEventRow()
+	 * @generated
+	 */
+	EAttribute getInventoryEventRow_ForecastDate();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getReliableVolume() <em>Get Reliable Volume</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10639,6 +10659,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute INVENTORY_EVENT_ROW__VOLUME = eINSTANCE.getInventoryEventRow_Volume();
+
+		/**
+		 * The meta object literal for the '<em><b>Forecast Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_EVENT_ROW__FORECAST_DATE = eINSTANCE.getInventoryEventRow_ForecastDate();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Reliable Volume</b></em>' operation.

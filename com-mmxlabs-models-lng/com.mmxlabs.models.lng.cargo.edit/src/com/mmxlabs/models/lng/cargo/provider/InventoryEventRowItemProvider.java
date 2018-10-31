@@ -73,6 +73,7 @@ public class InventoryEventRowItemProvider
 			addCounterPartyPropertyDescriptor(object);
 			addReliabilityPropertyDescriptor(object);
 			addVolumePropertyDescriptor(object);
+			addForecastDatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -210,6 +211,28 @@ public class InventoryEventRowItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Forecast Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addForecastDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_InventoryEventRow_forecastDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_InventoryEventRow_forecastDate_feature", "_UI_InventoryEventRow_type"),
+				 CargoPackage.Literals.INVENTORY_EVENT_ROW__FORECAST_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns InventoryEventRow.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -254,6 +277,7 @@ public class InventoryEventRowItemProvider
 			case CargoPackage.INVENTORY_EVENT_ROW__COUNTER_PARTY:
 			case CargoPackage.INVENTORY_EVENT_ROW__RELIABILITY:
 			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME:
+			case CargoPackage.INVENTORY_EVENT_ROW__FORECAST_DATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
