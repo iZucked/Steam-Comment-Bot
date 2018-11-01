@@ -250,6 +250,11 @@
                         <count
                               value="1">
                         </count>
+						<test
+	                        args="features:adp"
+	                        forcePluginActivation="true"
+                        	property="com.mmxlabs.license.features.enablement">
+						</test>
                      </and>
                   </visibleWhen>
       </command>
