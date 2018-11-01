@@ -79,7 +79,7 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/volumeLimitsUnit"/>
       <genFeatures createChild="false" propertyDescription="Minimum quantity" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/minQuantity"/>
       <genFeatures createChild="false" propertyDescription="Minimum quantity" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/maxQuantity"/>
-      <genFeatures createChild="false" propertyDescription="The operation tolerance around transfered volume"
+      <genFeatures createChild="false" propertyDescription="The operation tolerance around transfered volume. Only used for reporting."
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/operationalTolerance"/>
       <genFeatures createChild="false" propertyDescription="If optional, this position may be left open"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/optional"/>

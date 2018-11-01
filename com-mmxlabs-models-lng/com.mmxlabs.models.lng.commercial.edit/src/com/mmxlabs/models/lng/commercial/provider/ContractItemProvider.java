@@ -58,6 +58,7 @@ public class ContractItemProvider
 			addEntityPropertyDescriptor(object);
 			addStartDatePropertyDescriptor(object);
 			addEndDatePropertyDescriptor(object);
+			addContractYearStartPropertyDescriptor(object);
 			addAllowedPortsPropertyDescriptor(object);
 			addPreferredPortPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
@@ -521,6 +522,28 @@ public class ContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Contract Year Start feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addContractYearStartPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_contractYearStart_feature"),
+				 getString("_UI_Contract_contractYearStart_description"),
+				 CommercialPackage.Literals.CONTRACT__CONTRACT_YEAR_START,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Code feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -703,6 +726,7 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__CN:
 			case CommercialPackage.CONTRACT__START_DATE:
 			case CommercialPackage.CONTRACT__END_DATE:
+			case CommercialPackage.CONTRACT__CONTRACT_YEAR_START:
 			case CommercialPackage.CONTRACT__MIN_QUANTITY:
 			case CommercialPackage.CONTRACT__MAX_QUANTITY:
 			case CommercialPackage.CONTRACT__VOLUME_LIMITS_UNIT:

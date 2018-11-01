@@ -120,6 +120,26 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 					}
 					return gd;
 				}
+				if (feature == CommercialPackage.Literals.CONTRACT__START_DATE || feature == CommercialPackage.Literals.CONTRACT__END_DATE) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					if (feature == CommercialPackage.Literals.CONTRACT__START_DATE) {
+						gd.widthHint = 80;
+					}
+
+					// FIXME: Hack pending proper APi to manipulate labels
+					if (feature == CommercialPackage.Literals.CONTRACT__START_DATE) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Contract dates");
+						}
+						editor.setLabel(null);
+					} else {
+						editor.setLabel(null);
+					}
+					gd.horizontalSpan = 3;
+					return gd;
+				}
 				if (feature == CommercialPackage.Literals.CONTRACT__COUNTERPARTY || feature == CommercialPackage.Literals.CONTRACT__CN) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
@@ -127,7 +147,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 
 					return gd;
 				}
-				
+
 				if (feature == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE || feature == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog

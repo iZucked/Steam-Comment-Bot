@@ -19,6 +19,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.dates.MonthInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
@@ -75,6 +76,7 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_entityEditor(detailComposite, topClass);
 		add_startDateEditor(detailComposite, topClass);
 		add_endDateEditor(detailComposite, topClass);
+		add_contractYearStartEditor(detailComposite, topClass);
 		add_allowedPortsEditor(detailComposite, topClass);
 		add_preferredPortEditor(detailComposite, topClass);
 		add_minQuantityEditor(detailComposite, topClass);
@@ -184,6 +186,15 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__SHIPPING_DAYS_RESTRICTION);
 		editor.addNotificationChangedListener(new DivertibleContractInlineEditorChangedListener());
 		detailComposite.addInlineEditor(editor);
+	}
+
+	/**
+	 * Create the editor for the contractYearStart feature on Contract
+	 *
+	 * @generated NOT
+	 */
+	protected void add_contractYearStartEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new MonthInlineEditor(CommercialPackage.Literals.CONTRACT__CONTRACT_YEAR_START));
 	}
 
 	/**

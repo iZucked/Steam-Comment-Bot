@@ -28,6 +28,7 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getEndDate <em>End Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getContractYearStart <em>Contract Year Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getAllowedPorts <em>Allowed Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPreferredPort <em>Preferred Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getMinQuantity <em>Min Quantity</em>}</li>
@@ -589,6 +590,32 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setShippingDaysRestriction(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Contract Year Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Contract Year Start</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Contract Year Start</em>' attribute.
+	 * @see #setContractYearStart(int)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_ContractYearStart()
+	 * @model
+	 * @generated
+	 */
+	int getContractYearStart();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getContractYearStart <em>Contract Year Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Contract Year Start</em>' attribute.
+	 * @see #getContractYearStart()
+	 * @generated
+	 */
+	void setContractYearStart(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Code</b></em>' attribute.

@@ -43,6 +43,7 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getEndDate <em>End Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getContractYearStart <em>Contract Year Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getAllowedPorts <em>Allowed Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPreferredPort <em>Preferred Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getMinQuantity <em>Min Quantity</em>}</li>
@@ -213,6 +214,26 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected boolean endDateESet;
+
+	/**
+	 * The default value of the '{@link #getContractYearStart() <em>Contract Year Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContractYearStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CONTRACT_YEAR_START_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getContractYearStart() <em>Contract Year Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContractYearStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected int contractYearStart = CONTRACT_YEAR_START_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getAllowedPorts() <em>Allowed Ports</em>}' reference list.
@@ -1031,6 +1052,27 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getContractYearStart() {
+		return contractYearStart;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setContractYearStart(int newContractYearStart) {
+		int oldContractYearStart = contractYearStart;
+		contractYearStart = newContractYearStart;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__CONTRACT_YEAR_START, oldContractYearStart, contractYearStart));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public String getCode() {
 		return code;
 	}
@@ -1218,6 +1260,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getStartDate();
 			case CommercialPackage.CONTRACT__END_DATE:
 				return getEndDate();
+			case CommercialPackage.CONTRACT__CONTRACT_YEAR_START:
+				return getContractYearStart();
 			case CommercialPackage.CONTRACT__ALLOWED_PORTS:
 				return getAllowedPorts();
 			case CommercialPackage.CONTRACT__PREFERRED_PORT:
@@ -1288,6 +1332,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return;
 			case CommercialPackage.CONTRACT__END_DATE:
 				setEndDate((YearMonth)newValue);
+				return;
+			case CommercialPackage.CONTRACT__CONTRACT_YEAR_START:
+				setContractYearStart((Integer)newValue);
 				return;
 			case CommercialPackage.CONTRACT__ALLOWED_PORTS:
 				getAllowedPorts().clear();
@@ -1379,6 +1426,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__END_DATE:
 				unsetEndDate();
 				return;
+			case CommercialPackage.CONTRACT__CONTRACT_YEAR_START:
+				setContractYearStart(CONTRACT_YEAR_START_EDEFAULT);
+				return;
 			case CommercialPackage.CONTRACT__ALLOWED_PORTS:
 				getAllowedPorts().clear();
 				return;
@@ -1459,6 +1509,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return isSetStartDate();
 			case CommercialPackage.CONTRACT__END_DATE:
 				return isSetEndDate();
+			case CommercialPackage.CONTRACT__CONTRACT_YEAR_START:
+				return contractYearStart != CONTRACT_YEAR_START_EDEFAULT;
 			case CommercialPackage.CONTRACT__ALLOWED_PORTS:
 				return allowedPorts != null && !allowedPorts.isEmpty();
 			case CommercialPackage.CONTRACT__PREFERRED_PORT:
@@ -1553,6 +1605,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		if (startDateESet) result.append(startDate); else result.append("<unset>");
 		result.append(", endDate: ");
 		if (endDateESet) result.append(endDate); else result.append("<unset>");
+		result.append(", contractYearStart: ");
+		result.append(contractYearStart);
 		result.append(", minQuantity: ");
 		result.append(minQuantity);
 		result.append(", maxQuantity: ");
