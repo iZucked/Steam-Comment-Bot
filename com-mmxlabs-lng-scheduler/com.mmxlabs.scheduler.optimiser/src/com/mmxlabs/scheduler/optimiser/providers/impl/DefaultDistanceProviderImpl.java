@@ -18,10 +18,12 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
@@ -46,6 +48,9 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 
 	@Inject
 	private IRouteExclusionProvider routeExclusionProvider;
+	
+	@Inject
+	private IExtraIdleTimeProvider routeContingencyProvider;
 
 	// Pair<North Entrance, South entrance>
 	private final Map<ERouteOption, Pair<IPort, IPort>> routeOptionEntryPoints = new HashMap<>();
@@ -128,7 +133,7 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 		ERouteOption bestRoute = null;
 		int bestTime = Integer.MAX_VALUE;
 		for (final ERouteOption route : getRoutes()) {
-
+			
 			if (!isRouteValid(route, availableRouteChoices)) {
 				continue;
 			}
@@ -146,6 +151,20 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 		}
 
 		return new Pair<>(bestRoute, bestTime);
+	}
+	
+	@Override
+	public Pair<ERouteOption, Integer> getQuickestTravelTimeWithContingency(@NonNull final IVessel vessel, final IPortSlot from, final IPortSlot to, final int speed, AvailableRouteChoices availableRouteChoices) {
+
+		Pair<ERouteOption, Integer> result = getQuickestTravelTime(vessel, from.getPort(), to.getPort(), speed, availableRouteChoices);
+
+		int bestTime = result.getSecond();
+		if (bestTime != Integer.MAX_VALUE) {
+			bestTime += routeContingencyProvider.getExtraIdleTimeInHours(from, to);
+		}
+		result.setSecond(bestTime);
+		
+		return result;
 	}
 
 	@Override

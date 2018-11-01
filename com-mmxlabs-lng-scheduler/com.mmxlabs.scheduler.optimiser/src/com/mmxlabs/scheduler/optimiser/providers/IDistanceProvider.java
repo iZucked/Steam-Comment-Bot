@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
@@ -80,6 +81,9 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	@NonNull
 	Pair<@NonNull ERouteOption, @NonNull Integer> getQuickestTravelTime(@NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int speed, AvailableRouteChoices availableRouteChoices);
 
+	@NonNull
+	Pair<@NonNull ERouteOption, @NonNull Integer> getQuickestTravelTimeWithContingency(@NonNull IVessel vessel, @NonNull IPortSlot from, @NonNull IPortSlot to, int speed, AvailableRouteChoices availableRouteChoices);
+	
 	ERouteOption[] getRoutes();
 
 	/**
