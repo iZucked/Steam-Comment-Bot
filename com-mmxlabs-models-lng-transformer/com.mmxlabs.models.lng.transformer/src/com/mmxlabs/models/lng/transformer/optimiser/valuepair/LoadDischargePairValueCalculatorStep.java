@@ -100,18 +100,22 @@ public class LoadDischargePairValueCalculatorStep {
 			@NonNull final IProgressMonitor monitor) {
 		final IPhaseOptimisationData optimisationData = injector.getInstance(IPhaseOptimisationData.class);
 		final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
 		final List<ILoadOption> loads = LoadDischargePairValueCalculator.findPurchases(optimisationData, portSlotProvider);
 		final List<IDischargeOption> discharges = LoadDischargePairValueCalculator.findSales(optimisationData, portSlotProvider);
-
-		run(nominalMarketAvailability, loads, discharges, recorder, executorService, monitor);
+		final List<IVesselAvailability> vessels = LoadDischargePairValueCalculator.findVessels(optimisationData, vesselProvider);
+		
+		run(nominalMarketAvailability, loads, discharges, recorder, executorService, monitor, vessels);
 	}
 
 	public void run(final @NonNull IVesselAvailability nominalMarketAvailability, //
-			final List<ILoadOption> loads, List<IDischargeOption> discharges, //
+			final List<ILoadOption> loads, final List<IDischargeOption> discharges, //
 			final ProfitAndLossExtractor recorder, //
 			@NonNull final CleanableExecutorService executorService, //
-			@NonNull final IProgressMonitor monitor) {
+			@NonNull final IProgressMonitor monitor,
+			final List<IVesselAvailability> vessels) {
+		
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
 			try {
@@ -125,7 +129,7 @@ public class LoadDischargePairValueCalculatorStep {
 							futures.add(executorService.submit(() -> {
 								try {
 									final LoadDischargePairValueCalculator calculator = injector.getInstance(LoadDischargePairValueCalculator.class);
-									calculator.generate(loadOption, dischargeOption, nominalMarketAvailability, recorder);
+									calculator.generate(loadOption, dischargeOption, nominalMarketAvailability, recorder, vessels);
 								} finally {
 									monitor.worked(1);
 								}

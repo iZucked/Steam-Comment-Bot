@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.optimiser.valuepair;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -106,12 +107,34 @@ public class LoadDischargePairValueCalculator {
 		}
 		for (final IPairwiseConstraintChecker checker : constraintCheckers) {
 			if (!checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(vessel))) {
-				checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(vessel));
+				//checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(vessel));
 				return false;
 			}
 		}
 
 		return true;
+	}
+	
+	private boolean isValidPair(final ILoadOption load, final IDischargeOption discharge, final IVesselAvailability vessel, Collection<IVesselAvailability> vessels) {
+
+		if (!(load instanceof ILoadSlot) && !(discharge instanceof IDischargeSlot)) {
+			return false;
+		}
+		for (final IVesselAvailability v : vessels) {
+			if (v == vessel) continue;
+			boolean isValid = true;
+			for (final IPairwiseConstraintChecker checker : constraintCheckers) {
+				if (!checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(v))) {
+					//checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(v));
+					isValid = false;//return false;
+				}
+			}
+			if (isValid) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private Pair<IAnnotatedSolution, EvaluationState> evaluate(final ILoadOption load, final IDischargeOption discharge, final IVesselAvailability vesselAvailability) {
@@ -191,17 +214,27 @@ public class LoadDischargePairValueCalculator {
 				.map(s -> (IDischargeOption) s)//
 				.collect(Collectors.toList());
 	}
+	
+	public static List<IVesselAvailability> findVessels(final IPhaseOptimisationData optimisationData, final IVesselProvider vesselProvider) {
 
-	public void generate(final ILoadOption loadOption, final IDischargeOption dischargeOption, final IVesselAvailability nominalVessel, final ResultRecorder recorder) {
+		return optimisationData.getResources().stream()
+				.map(m -> vesselProvider.getVesselAvailability(m))//
+				.collect(Collectors.toList());
+	}
+
+	public void generate(final ILoadOption loadOption, final IDischargeOption dischargeOption, //
+			final IVesselAvailability nominalVessel, final ResultRecorder recorder, //
+			final List<IVesselAvailability> vessels) {
 
 		final IVesselAvailability vesselAvailability = getCorrectVesselAvailability(loadOption, dischargeOption, nominalVessel);
 		if (isValidPair(loadOption, dischargeOption, vesselAvailability)) {
-
-			final Pair<IAnnotatedSolution, EvaluationState> result = evaluate(loadOption, dischargeOption, vesselAvailability);
-			if (result != null) {
-				recorder.record(loadOption, dischargeOption, vesselAvailability, result);
-			} else {
-				// System.out.printf("Failed Pair %s -> %s\n", loadOption.getId(), dischargeOption.getId());
+			if ((nominalVessel != vesselAvailability) || (isValidPair(loadOption, dischargeOption, vesselAvailability, vessels))) {
+				final Pair<IAnnotatedSolution, EvaluationState> result = evaluate(loadOption, dischargeOption, vesselAvailability);
+				if (result != null) {
+					recorder.record(loadOption, dischargeOption, vesselAvailability, result);
+				} else {
+					// System.out.printf("Failed Pair %s -> %s\n", loadOption.getId(), dischargeOption.getId());
+				}
 			}
 		} else {
 			// System.out.printf("Invalid Pair %s -> %s\n", loadOption.getId(), dischargeOption.getId());
