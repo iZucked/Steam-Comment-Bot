@@ -9,7 +9,7 @@ import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.server.internal.Activator;
 
 public class DataserverPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
@@ -25,7 +25,9 @@ public class DataserverPreferencePage extends FieldEditorPreferencePage implemen
 
 		addField(new StringFieldEditor(StandardDateRepositoryPreferenceConstants.P_URL_KEY, "&URL", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY, "Enable &Base case sharing", getFieldEditorParent()));
-		// addField(new BooleanFieldEditor(StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY, "Enable &Team workspace", getFieldEditorParent()));
+		if (LicenseFeatures.isPermitted("features:hub-team-folder")) {
+			addField(new BooleanFieldEditor(StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY, "Enable &Team workspace", getFieldEditorParent()));
+		}
 	}
 
 	@Override
