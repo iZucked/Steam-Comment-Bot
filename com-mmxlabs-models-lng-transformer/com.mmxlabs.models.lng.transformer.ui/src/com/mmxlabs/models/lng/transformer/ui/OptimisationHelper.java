@@ -1160,6 +1160,11 @@ public final class OptimisationHelper {
 	public static boolean checkUserSettings(@NonNull final UserSettings to, final boolean quiet) {
 		resetDisabledFeatures(to);
 
+		if (!to.isAdpOptimisation()) {
+			// Clean state is only valid with ADP mode
+			to.setCleanStateOptimisation(false);
+		}
+		
 		// Turn off if settings are not nice
 		if (to.isBuildActionSets()) {
 
