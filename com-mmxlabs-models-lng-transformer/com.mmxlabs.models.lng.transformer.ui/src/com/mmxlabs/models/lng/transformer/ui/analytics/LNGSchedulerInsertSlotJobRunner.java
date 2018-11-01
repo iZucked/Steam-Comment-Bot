@@ -138,7 +138,6 @@ public class LNGSchedulerInsertSlotJobRunner {
 		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
 				.withOptimisationPlan(LNGScenarioRunnerUtils.createDefaultOptimisationPlan()) //
 				.withOptimiserInjectorService(extraService) //
-				.withThreadCount(1)//
 				.withHints(hints) //
 				.buildDefaultRunner();
 
@@ -149,7 +148,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 			targetOptimiserSlots = new LinkedList<>();
 			targetOptimiserEvents = new LinkedList<>();
 			final CargoModelFinder finder = new CargoModelFinder(ScenarioModelUtil.getCargoModel(scenarioRunner.getScenarioToOptimiserBridge().getOptimiserScenario()));
-			for (final Slot original : targetSlots) {
+			for (final Slot<?> original : targetSlots) {
 				try {
 					if (original instanceof LoadSlot) {
 						targetOptimiserSlots.add(finder.findLoadSlot(original.getName()));
@@ -177,7 +176,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 		dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
 
 		performBreakEven = false;
-		for (final Slot slot : targetOptimiserSlots) {
+		for (final Slot<?> slot : targetOptimiserSlots) {
 			if (slot.getPriceExpression() != null && slot.getPriceExpression().contains("?")) {
 				performBreakEven = true;
 			}
