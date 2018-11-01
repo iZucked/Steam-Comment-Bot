@@ -113,7 +113,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 		plan = LNGScenarioRunnerUtils.createExtendedSettings(plan, true, true);
 
-		for (OptimisationStage stage : plan.getStages()) {
+		for (final OptimisationStage stage : plan.getStages()) {
 			if (stage instanceof InsertionOptimisationStage) {
 				insertionStage = (InsertionOptimisationStage) stage;
 				break;
@@ -124,7 +124,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 		final IOptimiserInjectorService extraService = buildSpotSlotLimitModule();
 
 		boolean isBreakEven = false;
-		for (final Slot slot : targetSlots) {
+		for (final Slot<?> slot : targetSlots) {
 			if (slot.isSetPriceExpression()) {
 				if (slot.getPriceExpression().contains("?")) {
 					isBreakEven = true;
@@ -135,7 +135,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 		// TODO: Only disable caches if we do a break-even (caches *should* be ok otherwise?)
 		final String[] hints = isBreakEven ? hint_with_breakeven : hint_without_breakeven;
-		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
+		final LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
 				.withOptimisationPlan(LNGScenarioRunnerUtils.createDefaultOptimisationPlan()) //
 				.withOptimiserInjectorService(extraService) //
 				.withHints(hints) //
@@ -256,21 +256,21 @@ public class LNGSchedulerInsertSlotJobRunner {
 	}
 
 	public SlotInsertionOptions exportSolutions(final @NonNull IMultiStateResult results, final long targetPNL, final @NonNull IProgressMonitor monitor) {
-		final SlotInsertionOptions plan = AnalyticsFactory.eINSTANCE.createSlotInsertionOptions();
+		final SlotInsertionOptions slotInsertionOptions = AnalyticsFactory.eINSTANCE.createSlotInsertionOptions();
 		// Make sure this is the original, not the optimiser
-		plan.getSlotsInserted().addAll(targetSlots);
-		plan.getEventsInserted().addAll(targetEvents);
-		plan.setUserSettings(EcoreUtil.copy(userSettings));
+		slotInsertionOptions.getSlotsInserted().addAll(targetSlots);
+		slotInsertionOptions.getEventsInserted().addAll(targetEvents);
+		slotInsertionOptions.setUserSettings(EcoreUtil.copy(userSettings));
 
-		plan.setName(AnalyticsSolutionHelper.generateName(plan));
+		slotInsertionOptions.setName(AnalyticsSolutionHelper.generateName(slotInsertionOptions));
 
 		final OptionalLong portfolioBreakEvenTarget = performBreakEven ? OptionalLong.of(targetPNL) : OptionalLong.empty();
-		final IChainLink link = SolutionSetExporterUnit.exportMultipleSolutions(null, 1, scenarioRunner.getScenarioToOptimiserBridge(), () -> plan, portfolioBreakEvenTarget);
+		final IChainLink link = SolutionSetExporterUnit.exportMultipleSolutions(null, 1, scenarioRunner.getScenarioToOptimiserBridge(), () -> slotInsertionOptions, portfolioBreakEvenTarget);
 
-		SequencesContainer initialSequencesContainer = new SequencesContainer(scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().getInitialResult().getBestSolution());
+		final SequencesContainer initialSequencesContainer = new SequencesContainer(scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().getInitialResult().getBestSolution());
 		link.run(initialSequencesContainer, results, monitor);
 
-		return plan;
+		return slotInsertionOptions;
 	}
 
 	public LNGScenarioRunner getLNGScenarioRunner() {
