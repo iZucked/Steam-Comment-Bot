@@ -134,7 +134,8 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 	}
 	
 	private List<CargoTimeDetails> getMostCompressedTimes(List<Integer> sequence, int availability, CargoWindowData[] cargoWindows, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, ITimeWindow[] vesselStartTimeWindows, ITimeWindow[] vesselEndTimeWindows, int[] cargoEndDurations) {
-		List<CargoTimeDetails> details = setFastestTimesAndLateness(sequence, availability, cargoWindows, cargoToCargoMinTravelTimes, cargoMinTravelTimes, vesselStartTimeWindows[availability].getInclusiveStart(), vesselEndTimeWindows[availability].getExclusiveEnd(), cargoEndDurations);
+		int vesselStartTime = vesselStartTimeWindows[availability] != null ? vesselStartTimeWindows[availability].getInclusiveStart() : Integer.MIN_VALUE;
+		List<CargoTimeDetails> details = setFastestTimesAndLateness(sequence, availability, cargoWindows, cargoToCargoMinTravelTimes, cargoMinTravelTimes, vesselStartTime, vesselEndTimeWindows[availability].getExclusiveEnd(), cargoEndDurations);
 		if (details.size() > 0) {
 			// compress last load to discharge journey
 			CargoTimeDetails cargoTimeDetails = details.get(details.size() - 1);
