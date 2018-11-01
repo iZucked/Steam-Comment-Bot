@@ -185,6 +185,13 @@ public class LightWeightOptimisationDataFactory {
 				.filter(v -> PairingOptimiserHelper.isShippedVessel(v)).collect(Collectors.toList());
 		return vessels;
 	}
+	
+	private List<@NonNull IVesselAvailability> getAllVessels() {
+		List<@NonNull IVesselAvailability> vessels = initialSequences.getResources().stream() //
+				.map(v -> vesselProvider.getVesselAvailability(v)) //
+				.collect(Collectors.toList());
+		return vessels;
+	}
 
 	/**
 	 * Get the slot pairing matrix as a sparse binary matrix (sum of each row and column <= 1)
@@ -205,7 +212,7 @@ public class LightWeightOptimisationDataFactory {
 		optimiserRecorder.init(longtermLoads, longTermDischarges);
 
 		// (2) Generate Slot to Slot bindings matrix for LT slots
-		calculator.run(pnlVessel, optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), new ProfitAndLossExtractor(optimiserRecorder), executorService, monitor);
+		calculator.run(pnlVessel, optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), new ProfitAndLossExtractor(optimiserRecorder), executorService, monitor, getAllVessels());
 
 		// (3) Optimise matrix
 		boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges(),
