@@ -113,14 +113,16 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 							return;
 						}
 					}
-					Set<String> existingNames = new HashSet<>();
+					final Set<String> existingNames = new HashSet<>();
 					instance.getFragments().forEach(f -> existingNames.add(f.getName()));
 					instance.getElements().forEach(f -> existingNames.add(f.getName()));
 					final UserSettings userSettings = OptimisationHelper.promptForUserSettings(root, false, true, false, new NameProvider("Action set", existingNames));
 					new Thread("CreateActionableSetThread") {
+
 						@Override
 						public void run() {
-							final ScenarioLock scenarioLock = scenarioDataProvider.getModelReference().getLock();
+							final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("ActionPlanContextMenuExtension:2");
+							final ScenarioLock scenarioLock = sdp.getModelReference().getLock();
 
 							scenarioLock.lock();
 							// Use a latch to trigger unlock in this thread
@@ -133,7 +135,7 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 								job = new CreateActionableSetPlanJobDescriptor(instance.getName(), instance, userSettings);
 
 								// New optimisation, so check there are no validation errors.
-								if (!validateScenario(scenarioDataProvider, false)) {
+								if (!validateScenario(sdp, false)) {
 									scenarioLock.unlock();
 									return;
 								}

@@ -164,7 +164,7 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 
 			@Override
 			protected void configure() {
-				binder().requireExplicitBindings();
+//				binder().requireExplicitBindings();
 
 			}
 		});
