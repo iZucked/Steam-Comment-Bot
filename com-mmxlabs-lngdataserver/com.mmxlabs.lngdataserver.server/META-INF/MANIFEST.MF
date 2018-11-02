@@ -25,7 +25,8 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
 Import-Package: org.slf4j,
  org.slf4j.helpers,
  org.slf4j.spi
-Export-Package: com.mmxlabs.lngdataserver.server
+Export-Package: com.mmxlabs.lngdataserver.server,
+ com.mmxlabs.lngdataserver.server.preferences
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-Activator: com.mmxlabs.lngdataserver.server.internal.Activator
 Automatic-Module-Name: com.mmxlabs.lngdataserver.server
