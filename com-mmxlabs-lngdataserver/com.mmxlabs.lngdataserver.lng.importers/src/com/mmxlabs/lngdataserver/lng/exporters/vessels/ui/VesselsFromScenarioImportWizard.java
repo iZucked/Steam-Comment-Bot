@@ -15,8 +15,8 @@ import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
 import com.mmxlabs.lngdataserver.integration.vessels.VesselsRepository;
+import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
 import com.mmxlabs.lngdataserver.lng.exporters.vessels.VesselsFromScenarioCopier;
-import com.mmxlabs.lngdataservice.client.vessel.model.Version;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
@@ -57,7 +57,7 @@ public class VesselsFromScenarioImportWizard extends Wizard implements IImportWi
 								LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
 
 								FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
-								Version version = VesselsFromScenarioCopier.generateVersion(fleetModel);
+								VesselsVersion version = VesselsFromScenarioCopier.generateVersion(fleetModel);
 								try {
 									VesselsRepository repo = new VesselsRepository();
 									repo.isReady();

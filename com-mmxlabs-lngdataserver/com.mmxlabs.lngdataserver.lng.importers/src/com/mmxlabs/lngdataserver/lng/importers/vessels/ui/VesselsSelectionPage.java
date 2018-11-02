@@ -7,8 +7,8 @@ package com.mmxlabs.lngdataserver.lng.importers.vessels.ui;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.integration.vessels.IVesselsProvider;
 import com.mmxlabs.lngdataserver.integration.vessels.VesselsRepository;
 
 public class VesselsSelectionPage extends WizardPage {
@@ -42,49 +41,28 @@ public class VesselsSelectionPage extends WizardPage {
 
 		final Combo combo = new Combo(container, SWT.READ_ONLY);
 
-		try {
-			VesselsRepository.INSTANCE.getLocalVersions().forEach(v -> combo.add(v.getIdentifier()));
-		} catch (Exception e2) {
-			LOGGER.error("Error retrieving vessels versions", e2);
-		}
+		final VesselsRepository dr = VesselsRepository.INSTANCE;
+		dr.isReady();
+		dr.getLocalVersions().forEach(v -> combo.add(v.getIdentifier()));
 
-		combo.addSelectionListener(new SelectionListener() {
-			public void widgetSelected(SelectionEvent e) {
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
 				versionTag = combo.getText();
 				isSelected = true;
 				getWizard().getContainer().updateButtons();
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-				versionTag = combo.getText();
-				getWizard().getContainer().updateButtons();
-				isSelected = false;
 			}
 		});
 		setControl(container);
 	}
 
-	public IVesselsProvider getVesselsVersion() {
-		if (isSelected) {
-			try {
-				return VesselsRepository.INSTANCE.getVesselsProvider(versionTag);
-			} catch (Exception e) {
-				LOGGER.error("Error retrieving vessels for version {}", versionTag);
-				LOGGER.error(e.getMessage());
-				throw new RuntimeException("Error retrieving vessels for version " + versionTag);
-			}
-		} else {
-			throw new IllegalStateException("No version selected");
-		}
-	}
-
-	@Override
-	public boolean canFlipToNextPage() {
-		return isPageComplete();
-	}
-
 	@Override
 	public boolean isPageComplete() {
 		return isSelected;
+	}
+
+	public String getVersionTag() {
+		return versionTag;
 	}
 }

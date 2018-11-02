@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.lngdataserver.lng.importers.vessels.ui;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.Command;
@@ -16,17 +16,19 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
-import com.mmxlabs.lngdataserver.integration.vessels.IVesselsProvider;
 import com.mmxlabs.lngdataserver.integration.vessels.VesselsRepository;
+import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
 import com.mmxlabs.lngdataserver.lng.importers.vessels.VesselsToScenarioCopier;
-import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class VesselsToScenarioImportWizard extends Wizard implements IImportWizard {
 
@@ -48,71 +50,69 @@ public class VesselsToScenarioImportWizard extends Wizard implements IImportWiza
 		if (versionIdentifier == null) {
 			vesselsSelectionPage = new VesselsSelectionPage("Vessels");
 		}
-
 	}
 
 	@Override
 	public boolean performFinish() {
-		IVesselsProvider vesselsProvider;
-		if (versionIdentifier != null) {
+		{
+			final String versionTag = versionIdentifier != null ? versionIdentifier : vesselsSelectionPage.getVersionTag();
 			try {
-				vesselsProvider = VesselsRepository.INSTANCE.getVesselsProvider(versionIdentifier);
-			} catch (Exception e) {
+				// Do not fork otherwise this causes a dead lock for me (SG 2018/02/12)
+				getContainer().run(false, true, new IRunnableWithProgress() {
+
+					@Override
+					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						monitor.beginTask("Copy ports", scenarioSelectionPage.getSelectedScenarios().size() * 3);
+
+						try {
+							final VesselsRepository vesselsRepository = VesselsRepository.INSTANCE;
+
+							final VesselsVersion version = vesselsRepository.getLocalVersion(versionTag);
+							for (final ScenarioInstance scenarioInstance : scenarioSelectionPage.getSelectedScenarios()) {
+
+								final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+								try (ModelReference modelReference = modelRecord.aquireReference(VesselsToScenarioImportWizard.class.getSimpleName())) {
+									modelReference.executeWithLock(true, () -> {
+										monitor.subTask(String.format("Importing %s into %s", versionTag, modelRecord.getName()));
+
+										final FleetModel fleetModel = ScenarioModelUtil.getFleetModel((LNGScenarioModel) modelReference.getInstance());
+										final PortModel portModel = ScenarioModelUtil.getPortModel((LNGScenarioModel) modelReference.getInstance());
+										final EditingDomain editingDomain = modelReference.getEditingDomain();
+										final Command command = VesselsToScenarioCopier.getUpdateCommand(editingDomain, fleetModel, portModel, version);
+
+										if (!command.canExecute()) {
+											throw new RuntimeException("Unable to execute command");
+										}
+										RunnerHelper.syncExecDisplayOptional(() -> modelReference.getCommandStack().execute(command));
+										monitor.worked(1);
+										if (autoSave) {
+											try {
+												modelReference.save();
+											} catch (final IOException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
+										}
+									});
+								}
+							}
+						} catch (final Exception e) {
+							e.printStackTrace();
+
+						}
+
+					}
+				});
+			} catch (final InvocationTargetException e) {
+				e.printStackTrace();
+				return false;
+			} catch (final InterruptedException e) {
 				e.printStackTrace();
 				return false;
 			}
-		} else {
-			vesselsProvider = vesselsSelectionPage.getVesselsVersion();
-		}
-
-		try {
-			List<ScenarioInstance> selectedScenarios = scenarioSelectionPage.getSelectedScenarios();
-
-			// Do not fork otherwise this causes a dead lock for me (SG 2018/02/12)
-			getContainer().run(false, true, new IRunnableWithProgress() {
-				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					monitor.beginTask("copy into scenario", selectedScenarios.size());
-
-					for (ScenarioInstance scenario : selectedScenarios) {
-						ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
-						try (ModelReference modelReference = modelRecord.aquireReference(VesselsToScenarioImportWizard.class.getSimpleName())) {
-							modelReference.getLock().lock();
-							LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
-
-							EditingDomain editingDomain = modelReference.getEditingDomain();
-
-							Command updateCommand = VesselsToScenarioCopier.getUpdateVesselsCommand(editingDomain, vesselsProvider, scenarioModel.getReferenceModel().getFleetModel());
-
-							if (!updateCommand.canExecute()) {
-								throw new RuntimeException("Unable to copy vessel information to scenario");
-							}
-							try {
-								RunnerHelper.syncExecDisplayOptional(() -> modelReference.getCommandStack().execute(updateCommand));
-								monitor.worked(1);
-
-								if (autoSave) {
-									modelReference.save();
-								}
-
-							} catch (Exception e) {
-								e.printStackTrace();
-							} finally {
-								((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
-								modelReference.getLock().unlock();
-							}
-						}
-					}
-				}
-			});
-		} catch (final InvocationTargetException e) {
-			e.printStackTrace();
-			return false;
-		} catch (final InterruptedException e) {
-			e.printStackTrace();
-			return false;
 		}
 		return true;
+
 	}
 
 	@Override

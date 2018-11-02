@@ -25,6 +25,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
+import com.mmxlabs.lngdataserver.integration.distances.DistanceUploaderClient;
+import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
+import com.mmxlabs.lngdataserver.integration.ports.PortsUploaderClient;
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
@@ -32,7 +35,9 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceCli
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.ReportsServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.ReportPublisherExtensionUtil;
-import com.mmxlabs.lngdataserver.integration.vessels.VesselsClient;
+import com.mmxlabs.lngdataserver.integration.vessels.VesselsUploaderClient;
+import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
+import com.mmxlabs.lngdataserver.lng.exporters.distances.DistancesFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.vessels.VesselsFromScenarioCopier;
@@ -347,42 +352,26 @@ public class ScenarioServicePublishAction {
 		return versionId;
 	}
 
-	private static String exportPort(final ModelRecord modelRecord, final LNGScenarioModel scenarioModel) {
-		final String url = BackEndUrlProvider.INSTANCE.getUrl();
-		String versionId = null;
+	private static String exportDistances(final ModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
 		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-		final PortsVersion version = PortFromScenarioCopier.generateVersion(portModel);
-
-//		try {
-			final boolean res = false;//PortsClient.saveVersion(url, version);
-			if (res) {
-				versionId = version.getIdentifier();
-			}
-//		} catch (final IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
-		return versionId;
+		final DistancesVersion version = DistancesFromScenarioCopier.generateVersion(portModel);
+		DistanceUploaderClient.saveVersion(BackEndUrlProvider.INSTANCE.getUrl(), version);
+		return version.getIdentifier();
 	}
 
-	private static String exportVessel(final ModelRecord modelRecord, final LNGScenarioModel scenarioModel) {
-		final String url = BackEndUrlProvider.INSTANCE.getUrl();
-		String versionId = null;
+	private static String exportPort(final ModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
+		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
+		final PortsVersion version = PortFromScenarioCopier.generateVersion(portModel);
+		PortsUploaderClient.saveVersion(BackEndUrlProvider.INSTANCE.getUrl(), version);
+		return version.getIdentifier();
+	}
+
+	private static String exportVessel(final ModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
+
 		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
-		final com.mmxlabs.lngdataservice.client.vessel.model.Version version = VesselsFromScenarioCopier.generateVersion(fleetModel);
-
-		try {
-			final boolean res = VesselsClient.saveVersion(url, version);
-			if (res) {
-				versionId = version.getIdentifier();
-			}
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return versionId;
+		final VesselsVersion version = VesselsFromScenarioCopier.generateVersion(fleetModel);
+		VesselsUploaderClient.saveVersion(BackEndUrlProvider.INSTANCE.getUrl(), version);
+		return version.getIdentifier();
 	}
 
 	private static IProgressListener wrapMonitor(final IProgressMonitor monitor) {
