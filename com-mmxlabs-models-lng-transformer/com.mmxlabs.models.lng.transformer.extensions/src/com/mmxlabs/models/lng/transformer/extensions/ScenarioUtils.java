@@ -392,6 +392,11 @@ public class ScenarioUtils {
 
 	@NonNull
 	public static ConstraintAndFitnessSettings createDefaultConstraintAndFitnessSettings() {
+		return createDefaultConstraintAndFitnessSettings(true);
+	}
+
+	@NonNull
+	public static ConstraintAndFitnessSettings createDefaultConstraintAndFitnessSettings(boolean includeRoundTrip) {
 
 		final ConstraintAndFitnessSettings settings = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 
@@ -401,8 +406,10 @@ public class ScenarioUtils {
 
 			// "Quick" resource allocation checks
 			constraints.add(createConstraint(ResourceAllocationConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(RoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
+			if (includeRoundTrip) {
+				constraints.add(createConstraint(RoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
+				constraints.add(createConstraint(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
+			}
 			constraints.add(createConstraint(AllowedVesselPermissionConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(PortExclusionConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(VesselEventConstraintCheckerFactory.NAME, true));
