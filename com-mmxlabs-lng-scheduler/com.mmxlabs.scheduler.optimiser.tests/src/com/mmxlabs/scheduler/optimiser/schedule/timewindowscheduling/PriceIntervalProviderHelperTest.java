@@ -127,9 +127,14 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(vessel.getMaxSpeed()).thenReturn(maxSpeed);
 		final IConsumptionRateCalculator consumptionRateCalculator = getMockedFixedConsumptionRateCalculator(maxSpeed);
 		Mockito.when(vessel.getConsumptionRate(Mockito.any())).thenReturn(consumptionRateCalculator);
+		
 		final IBaseFuel baseFuel = Mockito.mock(IBaseFuel.class);
 		Mockito.when(baseFuel.getEquivalenceFactor()).thenReturn(44100);
+		
 		Mockito.when(vessel.getTravelBaseFuel()).thenReturn(baseFuel);
+		Mockito.when(vessel.getIdleBaseFuel()).thenReturn(baseFuel);
+		Mockito.when(vessel.getPilotLightBaseFuel()).thenReturn(baseFuel);
+		Mockito.when(vessel.getInPortBaseFuel()).thenReturn(baseFuel);
 		return vessel;
 	}
 
