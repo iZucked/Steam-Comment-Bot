@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -190,7 +191,7 @@ public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 
 	private final Set<ScheduleModel> hookedSchedules = new HashSet<>();
 
-	private final MMXContentAdapter contentAdapter = new MMXContentAdapter() {
+	private final @NonNull MMXContentAdapter contentAdapter = new MMXContentAdapter() {
 
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {
