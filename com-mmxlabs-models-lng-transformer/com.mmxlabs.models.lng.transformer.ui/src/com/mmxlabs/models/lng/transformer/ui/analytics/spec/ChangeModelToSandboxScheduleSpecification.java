@@ -253,6 +253,9 @@ public class ChangeModelToSandboxScheduleSpecification {
 			final ZonedDateTime vesselStart = newAvailability.getStartAfterAsDateTime();
 			final ZonedDateTime sequenceStart = firstSequenceEvent.getStart();
 
+			newAvailability.setMinDuration(oldAvailability.getAvailabilityOrContractMinDuration());
+			newAvailability.setMaxDuration(oldAvailability.getAvailabilityOrContractMaxDuration());
+
 			final int hours = Hours.between(sequenceStart, vesselStart);
 			if (hours > 0) {
 				if (oldAvailability.getAvailabilityOrContractMinDuration() != 0) {
