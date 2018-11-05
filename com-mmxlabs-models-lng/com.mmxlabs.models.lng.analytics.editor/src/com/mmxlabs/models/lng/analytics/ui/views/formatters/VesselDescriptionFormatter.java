@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.formatters;
 
-import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselAndClassContentProvider;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.VesselAndClassContentProvider;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 

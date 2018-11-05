@@ -2,17 +2,24 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.analytics.ui.views.providers;
+package com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers;
 
-import java.util.Collection;
+import java.util.List;
 
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 
-public class OptionsTreeViewerContentProvider implements ITreeContentProvider {
-	
+public class OptionsViewerContentProvider implements ITreeContentProvider {
+
+	private final EReference feature;
+
+	public OptionsViewerContentProvider(EReference feature) {
+		this.feature = feature;
+	}
+
 	@Override
 	public void dispose() {
 
@@ -26,34 +33,27 @@ public class OptionsTreeViewerContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getElements(final Object inputElement) {
 
-		if (inputElement instanceof Collection) {
-			Collection collection = (Collection) inputElement;
-			return collection.toArray();
+		if (inputElement instanceof OptionAnalysisModel) {
+			final OptionAnalysisModel model = (OptionAnalysisModel) inputElement;
+			return ((List<?>) model.eGet(feature)).toArray();
 		}
 		return new Object[0];
 	}
 
 	@Override
 	public Object[] getChildren(final Object parentElement) {
-		if (parentElement instanceof OptionAnalysisModel && ((OptionAnalysisModel) parentElement).getChildren() != null) {
-			final OptionAnalysisModel model = (OptionAnalysisModel) parentElement;
-			return model.getChildren().toArray();
-		}
 		return new Object[0];
 	}
 
 	@Override
 	public Object getParent(final Object element) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean hasChildren(final Object element) {
 		if (element instanceof OptionAnalysisModel) {
-			if (((OptionAnalysisModel) element).getChildren().size() > 0) {
-				return true;
-			}
+			return true;
 		}
 		return false;
 	}

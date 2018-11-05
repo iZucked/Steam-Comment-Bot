@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.analytics.ui.views;
+package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -16,8 +16,9 @@ import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.VesselDescriptionFormatter;
-import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselContentProvider;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.VesselContentProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 

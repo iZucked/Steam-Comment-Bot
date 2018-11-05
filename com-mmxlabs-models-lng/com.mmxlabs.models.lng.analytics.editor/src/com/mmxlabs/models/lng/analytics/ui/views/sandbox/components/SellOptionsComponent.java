@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.analytics.ui.views;
+package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
 
 import java.util.List;
 import java.util.Map;
@@ -32,9 +32,11 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
-import com.mmxlabs.models.lng.analytics.ui.views.providers.CellFormatterLabelProvider;
-import com.mmxlabs.models.lng.analytics.ui.views.providers.OptionsViewerContentProvider;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.OptionMenuHelper;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatterLabelProvider;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.OptionsViewerContentProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 

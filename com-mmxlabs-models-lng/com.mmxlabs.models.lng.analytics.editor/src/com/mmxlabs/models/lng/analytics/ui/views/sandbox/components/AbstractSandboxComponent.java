@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.analytics.ui.views;
+package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -51,7 +51,9 @@ import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
-import com.mmxlabs.models.lng.analytics.ui.views.providers.CellFormatterLabelProvider;
+import com.mmxlabs.models.lng.analytics.ui.views.EditObjectMouseListener;
+import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatterLabelProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogController;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;

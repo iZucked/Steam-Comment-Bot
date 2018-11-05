@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.analytics.ui.views;
+package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
 
 import java.time.LocalDate;
 import java.util.Iterator;

@@ -2,11 +2,10 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.analytics.ui.views;
+package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
 
 import java.util.Collection;
 import java.util.LinkedList;
-
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -24,19 +23,16 @@ import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.widgets.Menu;
 
-import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.BuyOpportunity;
-import com.mmxlabs.models.lng.analytics.BuyOption;
-import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.analytics.SellOpportunity;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.ui.views.ResultsSetDeletionHelper;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 
-public class BuyOptionsContextMenuManager implements MenuDetectListener {
+public class ShippingOptionsContextMenuManager implements MenuDetectListener {
 
 	private final @NonNull GridTreeViewer viewer;
 	private final @NonNull IScenarioEditingLocation scenarioEditingLocation;
@@ -47,7 +43,7 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 
 	private Menu menu;
 
-	public BuyOptionsContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr) {
+	public ShippingOptionsContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr) {
 		this.mgr = mgr;
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.viewer = viewer;
@@ -64,11 +60,10 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 		{
 			IContributionItem[] items = mgr.getItems();
 			mgr.removeAll();
-			for (IContributionItem mItem : items) {
-				mItem.dispose();
+			for (IContributionItem item : items) {
+				item.dispose();
 			}
 		}
-
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {
@@ -76,7 +71,7 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 				final Collection<EObject> c = new LinkedList<>();
 				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
 				final Collection<EObject> linkedResults = ResultsSetDeletionHelper.getRelatedResultSets(c, optionAnalysisModel);
-				final CompoundCommand compoundCommand = new CompoundCommand("Delete buy option");
+				final CompoundCommand compoundCommand = new CompoundCommand("Delete shipping option");
 				compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c));
 				if (!linkedResults.isEmpty()) {
 					compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), linkedResults));
@@ -88,44 +83,14 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 		if (items.length == 1) {
 
 			final Object ed = items[0].getData();
-			final BuyOption row = (BuyOption) ed;
-			if (row instanceof BuyReference) {
-				final BuyReference buyReference = (BuyReference) row;
-				final LoadSlot slot = buyReference.getSlot();
-				if (slot != null) {
-					mgr.add(new RunnableAction("Copy", () -> {
-						final BuyOpportunity newBuy = AnalyticsFactory.eINSTANCE.createBuyOpportunity();
-						newBuy.setDesPurchase(slot.isDESPurchase());
-						newBuy.setPort(slot.getPort());
-						newBuy.setDate(slot.getWindowStart());
-						if (slot.isSetContract()) {
-							newBuy.setContract((PurchaseContract) slot.getContract());
-						} else {
-							newBuy.setEntity(slot.getSlotOrDelegateEntity());
-							newBuy.setCv(slot.getSlotOrDelegateCV());
-						}
-						if (slot.isSetCargoCV()) {
-							newBuy.setCv(slot.getCargoCV());
-						}
-						if (slot.isSetPriceExpression()) {
-							newBuy.setPriceExpression(slot.getPriceExpression());
-						}
-						newBuy.setMiscCosts(slot.getMiscCosts());
-						newBuy.setCancellationExpression(slot.getCancellationExpression());
+			final ShippingOption row = (ShippingOption) ed;
 
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-
-								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, newBuy), optionAnalysisModel,
-								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
-					}));
-				}
-			}
-			if (row instanceof BuyOpportunity) {
+			if (row instanceof SellOpportunity) {
 				mgr.add(new RunnableAction("Copy", () -> {
-					final BuyOption copy = EcoreUtil.copy(row);
+					final ShippingOption copy = EcoreUtil.copy(row);
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, copy), optionAnalysisModel,
-							AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
+							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, copy),
+							optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(copy));
 				}));
 			}

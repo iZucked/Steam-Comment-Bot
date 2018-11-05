@@ -57,8 +57,9 @@ import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescription
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.CargoResultDetailsDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
-import com.mmxlabs.models.lng.analytics.ui.views.providers.ResultsFormatterLabelProvider;
-import com.mmxlabs.models.lng.analytics.ui.views.providers.ResultsViewerContentProvider;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.AbstractSandboxComponent;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.ResultsFormatterLabelProvider;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.ResultsViewerContentProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;

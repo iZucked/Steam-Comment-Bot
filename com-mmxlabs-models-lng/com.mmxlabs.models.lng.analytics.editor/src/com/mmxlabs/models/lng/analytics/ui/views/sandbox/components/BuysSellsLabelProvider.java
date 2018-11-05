@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.analytics.ui.views;
+package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
 
 import java.util.Map;
 
@@ -22,21 +22,22 @@ import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.DefaultSandboxLabelProvider;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class BuysSellsLabelProvider extends DefaultSandboxLabelProvider {
-	Image imgFOB = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/FOB.png").createImage();
-	Image imgDES = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/DES.png").createImage();
-	Image imgSPOT_FOB = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/SPOT_FOB.png").createImage();
-	Image imgSPOT_DES = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/SPOT_DES.png").createImage();
+	protected Image imgFOB = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/FOB.png").createImage();
+	protected Image imgDES = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/DES.png").createImage();
+	protected Image imgSPOT_FOB = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/SPOT_FOB.png").createImage();
+	protected Image imgSPOT_DES = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/SPOT_DES.png").createImage();
 
 	public BuysSellsLabelProvider(final ICellRenderer renderer, Map<Object, IStatus> validationErrors, String name, final ETypedElement... pathObjects) {
 		super(renderer, validationErrors, name, pathObjects);
 	}
-	
+
 	public BuysSellsLabelProvider(ICellRenderer renderer, Map<Object, IStatus> validationErrors, String name, @Nullable EMFPath path) {
 		super(renderer, validationErrors, name, path);
 	}
@@ -59,30 +60,24 @@ public class BuysSellsLabelProvider extends DefaultSandboxLabelProvider {
 			}
 		} else {
 			if (element instanceof BuyOption) {
-				if (
-						(element instanceof BuyOpportunity && ((BuyOpportunity) element).isDesPurchase())
-						|| (element instanceof BuyReference && ((BuyReference) element).getSlot().isDESPurchase())
-					) {
+				if ((element instanceof BuyOpportunity && ((BuyOpportunity) element).isDesPurchase()) || (element instanceof BuyReference && ((BuyReference) element).getSlot().isDESPurchase())) {
 					return imgDES;
 				} else if ((element instanceof BuyMarket)) {
 					if (((BuyMarket) element).getMarket() instanceof DESPurchaseMarket) {
 						return imgSPOT_DES;
-					}	else {
+					} else {
 						return imgSPOT_FOB;
 					}
 				} else {
 					return imgFOB;
 				}
 			} else if (element instanceof SellOption) {
-				if (
-						(element instanceof SellOpportunity && ((SellOpportunity) element).isFobSale())
-						|| (element instanceof SellReference && ((SellReference) element).getSlot().isFOBSale())
-						) {
+				if ((element instanceof SellOpportunity && ((SellOpportunity) element).isFobSale()) || (element instanceof SellReference && ((SellReference) element).getSlot().isFOBSale())) {
 					return imgFOB;
 				} else if ((element instanceof SellMarket)) {
 					if (((SellMarket) element).getMarket() instanceof FOBSalesMarket) {
 						return imgSPOT_FOB;
-					}	else {
+					} else {
 						return imgSPOT_DES;
 					}
 				} else {
@@ -93,7 +88,6 @@ public class BuysSellsLabelProvider extends DefaultSandboxLabelProvider {
 		return null;
 	}
 
-	
 	public void dispose() {
 		super.dispose();
 		imgFOB.dispose();

@@ -2,14 +2,14 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.analytics.ui.views.providers;
+package com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 
-public class BaseCaseContentProvider implements ITreeContentProvider {
+public class PartialCaseContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
@@ -26,7 +26,7 @@ public class BaseCaseContentProvider implements ITreeContentProvider {
 
 		if (inputElement instanceof OptionAnalysisModel) {
 			final OptionAnalysisModel model = (OptionAnalysisModel) inputElement;
-			return model.getBaseCase().getBaseCase().toArray();
+			return model.getPartialCase().getPartialCase().toArray();
 		}
 		return new Object[0];
 	}

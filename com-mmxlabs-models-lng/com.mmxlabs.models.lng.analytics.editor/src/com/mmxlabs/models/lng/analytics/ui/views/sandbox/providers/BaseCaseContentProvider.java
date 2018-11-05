@@ -2,23 +2,14 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.analytics.ui.views.providers;
+package com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers;
 
-import java.util.List;
-
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 
-public class OptionsViewerContentProvider implements ITreeContentProvider {
-
-	private final EReference feature;
-
-	public OptionsViewerContentProvider(EReference feature) {
-		this.feature = feature;
-	}
+public class BaseCaseContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
@@ -35,7 +26,7 @@ public class OptionsViewerContentProvider implements ITreeContentProvider {
 
 		if (inputElement instanceof OptionAnalysisModel) {
 			final OptionAnalysisModel model = (OptionAnalysisModel) inputElement;
-			return ((List<?>) model.eGet(feature)).toArray();
+			return model.getBaseCase().getBaseCase().toArray();
 		}
 		return new Object[0];
 	}

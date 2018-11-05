@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.analytics.ui.views;
+package com.mmxlabs.models.lng.analytics.ui.views.sandbox;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
-import com.mmxlabs.models.lng.analytics.ui.views.providers.CellFormatterLabelProvider;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatterLabelProvider;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
@@ -37,22 +37,23 @@ public class DefaultSandboxLabelProvider extends CellFormatterLabelProvider {
 		this.validationErrors = validationErrors;
 		this.name = name;
 	}
+
 	public DefaultSandboxLabelProvider(ICellRenderer renderer, Map<Object, IStatus> validationErrors, String name, @Nullable EMFPath path) {
 		super(renderer, path);
 		this.validationErrors = validationErrors;
 		this.name = name;
 	}
 
-	Image imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
-	Image imgWarn = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/warning.gif").createImage();
-	Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
-	Image imgShippingRoundTrip = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png").createImage();
-	Image imgShippingFleet = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/fleet.png").createImage();
-	Image imgModel = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/console_view.gif").createImage();
+	protected Image imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
+	protected Image imgWarn = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/warning.gif").createImage();
+	protected Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
+	protected Image imgShippingRoundTrip = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png").createImage();
+	protected Image imgShippingFleet = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/fleet.png").createImage();
+	protected Image imgModel = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/console_view.gif").createImage();
 
-	Color colour_error = new Color(Display.getDefault(), new RGB(255, 100, 100));
-	Color colour_warn = new Color(Display.getDefault(), new RGB(255, 255, 200));
-	Color colour_info = new Color(Display.getDefault(), new RGB(200, 240, 240));
+	protected Color colour_error = new Color(Display.getDefault(), new RGB(255, 100, 100));
+	protected Color colour_warn = new Color(Display.getDefault(), new RGB(255, 255, 200));
+	protected Color colour_info = new Color(Display.getDefault(), new RGB(200, 240, 240));
 
 	@Override
 	protected @Nullable Image getImage(@NonNull final ViewerCell cell, @Nullable final Object element) {
@@ -189,7 +190,7 @@ public class DefaultSandboxLabelProvider extends CellFormatterLabelProvider {
 
 	protected void setFont(ViewerCell cell, Object element2) {
 	}
-	
+
 	@Override
 	public void dispose() {
 		imgError.dispose();

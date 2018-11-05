@@ -2,22 +2,34 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.analytics.ui.views.providers;
+package com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers;
+
+import java.util.List;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
-public class VesselContentProvider implements ITreeContentProvider {
+public class VesselAndClassContentProvider implements ITreeContentProvider {
+
+	public static class VesselContainer {
+
+		public Object[] vessels;
+
+		public VesselContainer(List<Vessel> vessels) {
+			this.vessels = vessels.toArray();
+		}
+	}
 
 	private IScenarioEditingLocation loc;
 
-	public VesselContentProvider(IScenarioEditingLocation loc) {
+	public VesselAndClassContentProvider(IScenarioEditingLocation loc) {
 		this.loc = loc;
 	}
 
@@ -41,7 +53,7 @@ public class VesselContentProvider implements ITreeContentProvider {
 			if (referenceModel != null) {
 				FleetModel fleetModel = referenceModel.getFleetModel();
 
-				return fleetModel.getVessels().toArray();
+				return new Object[] { new VesselContainer(fleetModel.getVessels()) };
 			}
 		}
 
@@ -50,6 +62,10 @@ public class VesselContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getChildren(final Object parentElement) {
+		if (parentElement instanceof VesselContainer) {
+			VesselContainer vesselContainer = (VesselContainer) parentElement;
+			return vesselContainer.vessels;
+		}
 
 		return new Object[0];
 	}
@@ -61,7 +77,9 @@ public class VesselContentProvider implements ITreeContentProvider {
 
 	@Override
 	public boolean hasChildren(final Object element) {
-
+		if (element instanceof VesselContainer) {
+			return true;
+		}
 		return false;
 	}
 

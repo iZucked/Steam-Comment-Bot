@@ -28,8 +28,9 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.OptionTreeViewerFormatter;
-import com.mmxlabs.models.lng.analytics.ui.views.providers.CellFormatterLabelProvider;
-import com.mmxlabs.models.lng.analytics.ui.views.providers.OptionsTreeViewerContentProvider;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.AbstractSandboxComponent;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatterLabelProvider;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.OptionsTreeViewerContentProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 
