@@ -1085,7 +1085,10 @@ public final class ChangeSetTransformerUtil {
 			}
 
 			for (final OpenSlotAllocation openSlotAllocation : toSchedule.getOpenSlotAllocations()) {
-				pnl += openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+				GroupProfitAndLoss groupProfitAndLoss = openSlotAllocation.getGroupProfitAndLoss();
+				if (groupProfitAndLoss != null) {
+					pnl += groupProfitAndLoss.getProfitAndLoss();
+				}
 			}
 		}
 
