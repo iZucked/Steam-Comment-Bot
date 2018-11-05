@@ -61,11 +61,21 @@ public class ScheduleSpecificationHelper {
 	public void processExtraDataProvider(ExtraDataProvider extraDataProvider) {
 
 		// Null Check
-		extraAvailabilities.addAll(extraDataProvider.extraVesselAvailabilities);
-		extraCharterInMarkets.addAll(extraDataProvider.extraCharterInMarkets);
-		extraCharterInMarketOverrides.addAll(extraDataProvider.extraCharterInMarketOverrides);
-		extraLoads.addAll(extraDataProvider.extraLoads);
-		extraDischarges.addAll(extraDataProvider.extraDischarges);
+		if (extraDataProvider.extraVesselAvailabilities != null) {
+			extraAvailabilities.addAll(extraDataProvider.extraVesselAvailabilities);
+		}
+		if (extraDataProvider.extraCharterInMarkets != null) {
+			extraCharterInMarkets.addAll(extraDataProvider.extraCharterInMarkets);
+		}
+		if (extraDataProvider.extraCharterInMarketOverrides != null) {
+			extraCharterInMarketOverrides.addAll(extraDataProvider.extraCharterInMarketOverrides);
+		}
+		if (extraDataProvider.extraLoads != null) {
+			extraLoads.addAll(extraDataProvider.extraLoads);
+		}
+		if (extraDataProvider.extraDischarges != null) {
+			extraDischarges.addAll(extraDataProvider.extraDischarges);
+		}
 	}
 
 	public void addJobs(BiConsumer<LNGScenarioToOptimiserBridge, Injector> job) {
