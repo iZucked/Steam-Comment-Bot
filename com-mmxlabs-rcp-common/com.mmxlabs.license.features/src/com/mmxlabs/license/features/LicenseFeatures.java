@@ -132,10 +132,9 @@ public class LicenseFeatures {
 
 		final boolean result = subject.isPermitted(feature);
 
-		if (!result && feature.startsWith("feature:")) {
-			LOG.info("Feature {} not found.", feature);
-			if (feature.contains("feature:")) {
-				LOG.info("Probable typo - use \"features:\" instead of \"features:\"");
+		if ((!result) && subject.isAuthenticated()) {
+			if (feature.startsWith("feature:")) {
+				LOG.info("Probable typo - use \"features:\" instead of \"feature:\"");
 			}
 		}
 
