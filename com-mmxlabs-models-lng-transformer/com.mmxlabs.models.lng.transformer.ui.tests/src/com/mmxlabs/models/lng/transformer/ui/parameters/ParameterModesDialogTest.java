@@ -34,8 +34,11 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 
@@ -464,7 +467,11 @@ public class ParameterModesDialogTest {
 					// Create a dummy model with minimal data need to get tests working correctly.
 					final LNGScenarioModel dummyModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
 					final CargoModel dummyCargoModel = CargoFactory.eINSTANCE.createCargoModel();
+					final LNGReferenceModel dummyReferenceModel = LNGScenarioFactory.eINSTANCE.createLNGReferenceModel();
+					final SpotMarketsModel dummySpotMarketsModel = SpotMarketsFactory.eINSTANCE.createSpotMarketsModel();
 					dummyModel.setCargoModel(dummyCargoModel);
+					dummyModel.setReferenceModel(dummyReferenceModel);
+					dummyReferenceModel.setSpotMarketsModel(dummySpotMarketsModel);
 
 					UserSettings settings[] = new UserSettings[1];
 					Realm.runWithDefault(SWTObservables.getRealm(display), () -> {
