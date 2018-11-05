@@ -477,9 +477,7 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 					Label l = toolkit.createLabel(buttons, "Min");
 					FormattedText txt = new FormattedText(buttons);
 					final IntegerFormatter inner = new IntegerFormatter("##");
-					final Supplier<String> overrideStringSupplier = () -> {
-						return inner.getDisplayString();
-					};
+					final Supplier<String> overrideStringSupplier = inner::getDisplayString;
 					IntegerFormatter formatter = new ExtendedIntegerFormatter("##", overrideStringSupplier);
 					txt.setFormatter(formatter);
 					minMaxControls[0] = txt;
@@ -488,9 +486,7 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 					Label l = toolkit.createLabel(buttons, "Max");
 					FormattedText txt = new FormattedText(buttons);
 					final IntegerFormatter inner = new IntegerFormatter("##");
-					final Supplier<String> overrideStringSupplier = () -> {
-						return inner.getDisplayString();
-					};
+					final Supplier<String> overrideStringSupplier = inner::getDisplayString;
 					IntegerFormatter formatter = new ExtendedIntegerFormatter("##", overrideStringSupplier);
 					txt.setFormatter(formatter);
 					minMaxControls[1] = txt;
