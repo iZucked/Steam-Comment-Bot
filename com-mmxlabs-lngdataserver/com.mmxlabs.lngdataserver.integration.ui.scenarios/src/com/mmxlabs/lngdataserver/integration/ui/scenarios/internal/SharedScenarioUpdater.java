@@ -24,10 +24,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
@@ -51,9 +52,12 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.ScenarioEncryptionException;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 
 public class SharedScenarioUpdater {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(SharedScenarioUpdater.class);
 
 	private final SharedWorkspaceServiceClient client;
 
@@ -64,10 +68,13 @@ public class SharedScenarioUpdater {
 	private final ScenarioService modelRoot;
 	private final File basePath;
 	private Instant lastModified = Instant.EPOCH;
-	private final IUpstreamDetailChangedListener detailChangedListener =  () -> lastModified = Instant.EPOCH; //Reset to trigger refresh
+	private final IUpstreamDetailChangedListener detailChangedListener = () -> lastModified = Instant.EPOCH; // Reset to trigger refresh
 
 	private Thread updateThread;
 	private final ReentrantLock updateLock = new ReentrantLock();
+
+	// Set used to emit load failure messages once
+	private Set<String> warnedLoadFailures = new HashSet<>();
 
 	public SharedScenarioUpdater(final ScenarioService modelRoot, final File basePath, final SharedWorkspaceServiceClient client) {
 		this.modelRoot = modelRoot;
@@ -169,7 +176,10 @@ public class SharedScenarioUpdater {
 
 		@Override
 		public void run() {
-			RunnerHelper.syncExecDisplayOptional(() -> parent.getElements().add(f));
+			RunnerHelper.syncExecDisplayOptional(() -> {
+
+				parent.getElements().add(f);
+			});
 		}
 	}
 
@@ -304,20 +314,30 @@ public class SharedScenarioUpdater {
 			final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
 			meta.setCreator(record.creator);
 			meta.setCreated(Date.from(record.creationDate));
-			
+
 			scenarioInstance.setMetadata(meta);
 			meta.setContentType(manifest.getScenarioType());
 			// Probably better pass in from service
 			ServiceHelper.withOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, true, false, false, scenarioCipherProvider);
-				if (modelRecord != null) {
-					modelRecord.setName(scenarioInstance.getName());
-					modelRecord.setScenarioInstance(scenarioInstance);
-					SSDataManager.Instance.register(scenarioInstance, modelRecord);
-					scenarioInstance.setRootObjectURI(archiveURI.toString());
+				try {
+					final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURIChecked(archiveURI, true, false, false, scenarioCipherProvider);
+					if (modelRecord != null) {
+						modelRecord.setName(scenarioInstance.getName());
+						modelRecord.setScenarioInstance(scenarioInstance);
+						SSDataManager.Instance.register(scenarioInstance, modelRecord);
+						scenarioInstance.setRootObjectURI(archiveURI.toString());
+					}
+				} catch (ScenarioEncryptionException e) {
+					LOGGER.error(e.getMessage(), e);
+				} catch (Exception e) {
+					LOGGER.error(e.getMessage(), e);
 				}
 			});
 			return scenarioInstance;
+		}
+
+		if (warnedLoadFailures.add(f.getName())) {
+			LOGGER.error("Error reading team scenario file {}. Check encryption certificate.", f.getName());
 		}
 		return null;
 	}

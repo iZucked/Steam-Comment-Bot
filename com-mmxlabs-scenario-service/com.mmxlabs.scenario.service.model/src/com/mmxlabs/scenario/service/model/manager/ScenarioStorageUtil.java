@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.model.manager;
 
+import java.io.CharConversionException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -67,6 +68,15 @@ import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvide
  * 
  */
 public class ScenarioStorageUtil {
+
+	public static class EncryptedScenarioException extends RuntimeException {
+
+		public EncryptedScenarioException(Exception e) {
+			super(e);
+		}
+
+	}
+
 	public static final @NonNull String DEFAULT_CONTENT_TYPE = "com.mmxlabs.shiplingo.platform.models.manifest.scnfile";
 	public static final @NonNull String PATH_ROOT_OBJECT = "rootObject.xmi";
 	public static final @NonNull String PATH_MANIFEST_OBJECT = "MANIFEST.xmi";
@@ -297,6 +307,16 @@ public class ScenarioStorageUtil {
 
 	public static ScenarioModelRecord loadInstanceFromURI(final URI archiveURI, final boolean copyToTemp, final boolean allowSave, final boolean allowMigration,
 			final @Nullable IScenarioCipherProvider scenarioCipherProvider) {
+		try {
+			return loadInstanceFromURIChecked(archiveURI, copyToTemp, allowSave, allowMigration, scenarioCipherProvider);
+		} catch (final Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		return null;
+	}
+
+	public static ScenarioModelRecord loadInstanceFromURIChecked(final URI archiveURI, final boolean copyToTemp, final boolean allowSave, final boolean allowMigration,
+			final @Nullable IScenarioCipherProvider scenarioCipherProvider) throws Exception {
 
 		final URI manifestURI = createArtifactURI(archiveURI, PATH_MANIFEST_OBJECT);
 		final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
@@ -368,8 +388,8 @@ public class ScenarioStorageUtil {
 					return modelRecord;
 				}
 			}
-		} catch (final Exception e) {
-			log.error(e.getMessage(), e);
+		} catch (CharConversionException e) {
+			throw new EncryptedScenarioException(e);
 		}
 		return null;
 	}
