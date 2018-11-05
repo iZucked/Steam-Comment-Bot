@@ -31,6 +31,7 @@ import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 import com.mmxlabs.optimiser.lso.multiobjective.impl.NonDominatedSolution;
 import com.mmxlabs.optimiser.lso.multiobjective.impl.SimpleMultiObjectiveOptimiser;
 import com.mmxlabs.optimiser.lso.multiobjective.impl.SimpleMultiObjectiveOptimiser.eQuartile;
+import com.mmxlabs.optimiser.lso.multiobjective.modules.MultiObjectiveOptimiserModule;
 
 public class SimpleMultiObjectiveOptimiserTest {
 
@@ -253,6 +254,8 @@ public class SimpleMultiObjectiveOptimiserTest {
 				bind(IFitnessHelper.class).toInstance(Mockito.mock(IFitnessHelper.class));
 				bind(ILookupManager.class).toInstance(Mockito.mock(ILookupManager.class));
 				bind(Boolean.class).annotatedWith(Names.named(LocalSearchOptimiserModule.OPTIMISER_DEBUG_MODE)).toInstance(Boolean.FALSE);
+				// Make sure array length is equals to number of fitness objectives.
+				bind(long[].class).annotatedWith(Names.named(MultiObjectiveOptimiserModule.MULTIOBJECTIVE_OBJECTIVE_EPSILON_DOMINANCE_VALUES)).toInstance(new long[2]);
 			}
 
 			@Provides
