@@ -35,7 +35,7 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	@Inject
 	private PriceIntervalProviderHelper priceIntervalProviderHelper;
 
-	private ThreadLocal<Integer> price = new ThreadLocal<Integer>();
+	private ThreadLocal<Integer> price = new ThreadLocal<>();
 
 	@Override
 	public void preparePurchaseForEvaluation(final @NonNull ISequences sequences) {
@@ -48,7 +48,11 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerM3, final IAllocationAnnotation allocationAnnotation,
 			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences,
 			final IDetailTree annotations) {
-		return price.get();
+		Integer p = price.get();
+		if (p == null) {
+			return 0;
+		}
+		return p;
 	}
 
 	/**
