@@ -18,7 +18,9 @@ import org.mockito.Mockito;
 
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.validation.VesselConstraint;
+import com.mmxlabs.models.lng.port.RouteOption;
 
 public class VesselClassMinHeelConstraintTest {
 
@@ -31,6 +33,14 @@ public class VesselClassMinHeelConstraintTest {
 		target.setPilotLightBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
 		target.setInPortBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
 
+		VesselClassRouteParameters vcrp1 = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+		vcrp1.setRouteOption(RouteOption.SUEZ);
+		VesselClassRouteParameters vcrp2 = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+		vcrp2.setRouteOption(RouteOption.PANAMA);
+		
+		target.getRouteParameters().add(vcrp1);
+		target.getRouteParameters().add(vcrp2);
+		
 		target.setSafetyHeel(500);
 		target.setCapacity(1000);
 		target.setFillCapacity(1.0);
