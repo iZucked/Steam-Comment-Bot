@@ -54,7 +54,7 @@ public class NullReferenceConstraintTest {
 		final Slot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		// port is initially null, so set it.
 		slot.setPort(PortFactory.eINSTANCE.createPort());
-		slot.setContract(CommercialFactory.eINSTANCE.createContract());
+		slot.setContract(CommercialFactory.eINSTANCE.createPurchaseContract());
 		return slot;
 	}
 
