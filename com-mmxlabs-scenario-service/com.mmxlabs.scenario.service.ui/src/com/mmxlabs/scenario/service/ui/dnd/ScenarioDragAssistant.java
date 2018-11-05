@@ -34,7 +34,6 @@ import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.navigator.CommonDropAdapter;
 import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
-import org.omg.CORBA.ShortSeqHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,8 +81,8 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 					return Status.CANCEL_STATUS;
 				}
 				if (target instanceof ScenarioInstance) {
-					// Could open up to multipe?
-					if (!(ss.size() == 1 && ss.getFirstElement() instanceof ScenarioFragment)) {
+					// Could open up to multiple?
+					if (!(ss.size() == 1 && (ss.getFirstElement() instanceof ScenarioFragment || ss.getFirstElement() instanceof IChangeSource))) {
 						return Status.CANCEL_STATUS;
 					}
 				}
@@ -212,6 +211,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 						try {
 							dialog.run(true, true, new IRunnableWithProgress() {
 
+								@SuppressWarnings("deprecation")
 								@Override
 								public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
@@ -322,6 +322,12 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 						final ScenarioFragment scenarioFragment = (ScenarioFragment) e;
 						ServiceHelper.withAllServices(IScenarioFragmentCopyHandler.class, null, handler -> {
 							final boolean handled = handler.copy(scenarioFragment, scenarioInstance);
+							return !handled;
+						});
+					}else if (e instanceof IChangeSource) {
+						IChangeSource iChangeSource = (IChangeSource) e;
+						ServiceHelper.withAllServices(IScenarioInstanceChangeHandler.class, null, handler -> {
+							final boolean handled = handler.applyChange(scenarioInstance, iChangeSource);
 							return !handled;
 						});
 					}
