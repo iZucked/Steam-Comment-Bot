@@ -26,8 +26,8 @@ public class SeriesParserChangePointsTests {
 	@Parameters(name = "{0}")
 	public static Iterable<Object[]> generateTests() {
 		return Arrays.asList(new Object[][] { //
-				// Testing split month function
-				{ "splitmonth(HH,HH2, 15)", new ArrayList<>(Arrays.asList(0, 15 * 24, 1, (15 * 24) + 1)) } //
+				// Testing split month function (First day of month is zero not 1, hence -1)
+				{ "splitmonth(HH,HH2, 15)", new ArrayList<>(Arrays.asList(0, (15 - 1) * 24, 1, ((15 - 1) * 24) + 1)) } //
 		});
 	}
 
