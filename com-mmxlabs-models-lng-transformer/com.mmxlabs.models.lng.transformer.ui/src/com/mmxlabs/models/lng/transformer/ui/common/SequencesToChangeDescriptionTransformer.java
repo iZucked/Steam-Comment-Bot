@@ -40,7 +40,10 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
+import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.PhaseOptimisationDataModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificationHelper;
 import com.mmxlabs.optimiser.core.IResource;
@@ -75,7 +78,7 @@ public class SequencesToChangeDescriptionTransformer {
 	private Function<ISequences, ChangeDescription> createChangeDescriptionFunction(final ISequences baseSolution) {
 
 		// Create a small injector to check hold of the IMoveHandlerHelper instance.
-		final Injector injector = dataTransformer.getInjector().createChildInjector(new SequencesManipulatorModule(), new AbstractModule() {
+		final Injector injector = dataTransformer.getInjector().createChildInjector(new InitialSequencesModule(baseSolution), new InputSequencesModule(baseSolution), new PhaseOptimisationDataModule(), new SequencesManipulatorModule(), new AbstractModule() {
 
 			@Override
 			protected void configure() {
