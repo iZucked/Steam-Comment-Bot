@@ -68,6 +68,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
@@ -82,6 +83,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExtraIdleTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapBaseFuelCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
@@ -115,6 +117,7 @@ public class ScheduleCalculatorTest {
 		final IShippingHoursRestrictionProvider shippingHoursRestrictionProvider = mock(IShippingHoursRestrictionProvider.class);
 		final IRouteExclusionProvider routeExclusionProvider = new HashMapRouteExclusionProvider();
 		final IBaseFuelProvider baseFuelProvider = new DefaultBaseFuelProvider();
+		final IExtraIdleTimeProvider contingencyProvider = mock(IExtraIdleTimeProvider.class);
 		class TestModule extends AbstractModule {
 
 			@Provides
@@ -172,6 +175,7 @@ public class ScheduleCalculatorTest {
 				bind(ICharterRateCalculator.class).toInstance(charterRateCalculator);
 				bind(IActualsDataProvider.class).toInstance(actualsDataProvider);
 				bind(IStartEndRequirementProvider.class).toInstance(startEndRequirementProvider);
+				bind(IExtraIdleTimeProvider.class).toInstance(contingencyProvider);
 
 				final IPromptPeriodProvider promptProvider = Mockito.mock(IPromptPeriodProvider.class);
 
