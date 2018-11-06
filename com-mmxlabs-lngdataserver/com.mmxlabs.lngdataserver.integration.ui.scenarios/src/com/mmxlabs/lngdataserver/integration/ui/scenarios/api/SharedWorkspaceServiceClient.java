@@ -40,9 +40,13 @@ public class SharedWorkspaceServiceClient {
 	private static final String SCENARIO_MOVE_URL = "/scenarios/v1/shared/move/";
 	private static final String SCENARIO_LAST_MODIFIED_URL = "/scenarios/v1/shared/lastModified";
 
+	private final OkHttpClient httpClient = new OkHttpClient.Builder() //
+			.build();
+
+	private final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+
 	public String uploadScenario(final File file, final String path, final IProgressListener progressListener) throws IOException {
 
-		final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("scenario", "scenario.lingo", RequestBody.create(mediaType, file))//
@@ -58,9 +62,6 @@ public class SharedWorkspaceServiceClient {
 				.url(upstreamURL + SCENARIO_UPLOAD_URL) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.post(requestBody).build();
-
-		final OkHttpClient httpClient = new OkHttpClient.Builder() //
-				.build();
 
 		// Check the response
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -81,7 +82,7 @@ public class SharedWorkspaceServiceClient {
 	}
 
 	public boolean downloadTo(final String uuid, final File file, final IProgressListener progressListener) throws IOException {
-		OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+		OkHttpClient.Builder clientBuilder = httpClient.newBuilder();
 		if (progressListener != null) {
 			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
 				@Override
@@ -91,7 +92,7 @@ public class SharedWorkspaceServiceClient {
 				}
 			});
 		}
-		final OkHttpClient httpClient = clientBuilder //
+		final OkHttpClient localHttpClient = clientBuilder //
 				.build();
 
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
@@ -101,7 +102,7 @@ public class SharedWorkspaceServiceClient {
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
-		try (Response response = httpClient.newCall(request).execute()) {
+		try (Response response = localHttpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				response.body().close();
 				throw new IOException("Unexpected code: " + response);
@@ -115,9 +116,7 @@ public class SharedWorkspaceServiceClient {
 		}
 	}
 
-	public static String getBaseCaseDetails(final String uuid) throws IOException {
-		final OkHttpClient httpClient = new OkHttpClient.Builder() //
-				.build();
+	public String getBaseCaseDetails(final String uuid) throws IOException {
 
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
@@ -139,9 +138,7 @@ public class SharedWorkspaceServiceClient {
 		}
 	}
 
-	public static Pair<String, Instant> getScenarios() throws IOException {
-		final OkHttpClient httpClient = new OkHttpClient.Builder() //
-				.build();
+	public Pair<String, Instant> getScenarios() throws IOException {
 
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
@@ -167,9 +164,7 @@ public class SharedWorkspaceServiceClient {
 		}
 	}
 
-	public static void deleteScenario(final String uuid) throws IOException {
-		final OkHttpClient httpClient = new OkHttpClient.Builder() //
-				.build();
+	public void deleteScenario(final String uuid) throws IOException {
 
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
@@ -189,8 +184,6 @@ public class SharedWorkspaceServiceClient {
 	}
 
 	public Instant getLastModified() {
-		final OkHttpClient httpClient = new OkHttpClient.Builder() //
-				.build();
 
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
@@ -215,8 +208,6 @@ public class SharedWorkspaceServiceClient {
 	}
 
 	public void rename(final String uuid, final String newPath) throws IOException {
-		final OkHttpClient httpClient = new OkHttpClient.Builder() //
-				.build();
 
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {

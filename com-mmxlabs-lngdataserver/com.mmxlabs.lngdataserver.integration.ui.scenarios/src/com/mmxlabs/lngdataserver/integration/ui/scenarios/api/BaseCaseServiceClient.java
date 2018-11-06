@@ -10,7 +10,6 @@ import java.time.Instant;
 
 import org.json.JSONObject;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
 import com.mmxlabs.lngdataserver.commons.http.ProgressRequestBody;
 import com.mmxlabs.lngdataserver.commons.http.ProgressResponseBody;
@@ -35,6 +34,11 @@ public class BaseCaseServiceClient {
 	private static final String BASECASE_DOWNLOAD_URL = "/scenarios/v1/basecase/";
 	private static final String BASECASE_CURRENT_URL = "/scenarios/v1/basecase/current";
 
+	private final OkHttpClient httpClient = new OkHttpClient.Builder() //
+			.build();
+
+	private final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+
 	// public String uploadBaseCase(File file, String portsVersionUUID, String vesselsVersionUUID, String pricingVersionUUID, String distancesVersionUUID) throws IOException {
 	public String uploadBaseCase(final File file, //
 			final String scenarioName, ///
@@ -43,7 +47,6 @@ public class BaseCaseServiceClient {
 		if (pricingVersionUUID == null) {
 			throw new IllegalArgumentException("Pricing version cannot be null");
 		}
-		final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("pricingVersionUUID", pricingVersionUUID) //
@@ -64,9 +67,6 @@ public class BaseCaseServiceClient {
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.post(requestBody).build();
 
-		final OkHttpClient httpClient = new OkHttpClient.Builder() //
-				.build();
-
 		// Check the response
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
@@ -80,7 +80,7 @@ public class BaseCaseServiceClient {
 	}
 
 	public boolean downloadTo(final String uuid, final File file, final IProgressListener progressListener) throws IOException {
-		OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+		OkHttpClient.Builder clientBuilder = httpClient.newBuilder();
 		if (progressListener != null) {
 			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
 				@Override
@@ -90,7 +90,7 @@ public class BaseCaseServiceClient {
 				}
 			});
 		}
-		final OkHttpClient httpClient = clientBuilder //
+		final OkHttpClient localHttpClient = clientBuilder //
 				.build();
 
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
@@ -100,7 +100,7 @@ public class BaseCaseServiceClient {
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
-		try (Response response = httpClient.newCall(request).execute()) {
+		try (Response response = localHttpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				response.body().close();
 				throw new IOException(UNEXPECTED_CODE + response);
@@ -114,7 +114,7 @@ public class BaseCaseServiceClient {
 		}
 	}
 
-	public static String getCurrentBaseCase() throws IOException {
+	public String getCurrentBaseCase() throws IOException {
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
@@ -124,9 +124,6 @@ public class BaseCaseServiceClient {
 		if (!UpstreamUrlProvider.INSTANCE.isAvailable()) {
 			return null;
 		}
-
-		final OkHttpClient httpClient = new OkHttpClient.Builder() //
-				.build();
 
 		final Request request = new Request.Builder() //
 				.url(upstreamURL + BASECASE_CURRENT_URL) //
@@ -146,9 +143,7 @@ public class BaseCaseServiceClient {
 		}
 	}
 
-	public static String setCurrentBaseCase(final String uuid) throws IOException {
-		final OkHttpClient httpClient = new OkHttpClient.Builder() //
-				.build();
+	public String setCurrentBaseCase(final String uuid) throws IOException {
 
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
@@ -168,9 +163,7 @@ public class BaseCaseServiceClient {
 		}
 	}
 
-	public static String getBaseCaseDetails(final String uuid) throws IOException {
-		final OkHttpClient httpClient = new OkHttpClient.Builder() //
-				.build();
+	public String getBaseCaseDetails(final String uuid) throws IOException {
 
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {

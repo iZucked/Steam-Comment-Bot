@@ -33,9 +33,15 @@ public class ReportsServiceClient {
 
 	private File baseCaseFolder;
 
+	private final OkHttpClient httpClient = new OkHttpClient.Builder() //
+			.build();
+
+	private final BaseCaseServiceClient baseCaseClient = new BaseCaseServiceClient();
+
+	private final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+
 	public String uploadReport(String data, String type, String uuid) throws IOException {
 
-		okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("report", type + ".json", RequestBody.create(mediaType, data))//
@@ -47,9 +53,6 @@ public class ReportsServiceClient {
 				.url(upstreamURL + REPORT_UPLOAD_URL + "/" + uuid + "/" + type) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.post(requestBody).build();
-
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
-				.build();
 
 		// Check the response
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -64,8 +67,6 @@ public class ReportsServiceClient {
 	}
 
 	public boolean downloadTo(String uuid, File file, BiConsumer<File, Instant> callback) throws IOException {
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
-				.build();
 
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
@@ -108,7 +109,7 @@ public class ReportsServiceClient {
 			try {
 				// Connect to service.
 				// Does the current match known current?
-				String uuid = BaseCaseServiceClient.getCurrentBaseCase();
+				String uuid = baseCaseClient.getCurrentBaseCase();
 				{
 					File target = new File(baseCaseFolder.getAbsolutePath() + File.separator + uuid + ".lingo");
 					if (!target.exists()) {
