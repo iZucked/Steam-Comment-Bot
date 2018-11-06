@@ -24,6 +24,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProvider;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
@@ -151,6 +152,8 @@ public class DefaultDistanceProviderImplTest {
 
 		final IDistanceMatrixProvider matrixProvider = Mockito.mock(IDistanceMatrixProvider.class);
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
+		
+		final IExtraIdleTimeProvider contingencyProvider = Mockito.mock(IExtraIdleTimeProvider.class);
 
 		Mockito.when(matrixProvider.get(ERouteOption.DIRECT, port1, port2)).thenReturn(40);
 		Mockito.when(matrixProvider.get(ERouteOption.SUEZ, port1, port2)).thenReturn(20);
@@ -170,7 +173,7 @@ public class DefaultDistanceProviderImplTest {
 
 		HashMapRouteExclusionProvider routeExclusionProvider = new HashMapRouteExclusionProvider();
 		routeExclusionProvider.setExcludedRoutes(vessel, Sets.newHashSet(ERouteOption.PANAMA));
-		DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider, routeExclusionProvider);
+		DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider, routeExclusionProvider, contingencyProvider);
 
 		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.DIRECT, vessel)).thenReturn(0);
 		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.PANAMA, vessel)).thenReturn(12);
@@ -263,11 +266,11 @@ public class DefaultDistanceProviderImplTest {
 	}
 
 	private DefaultDistanceProviderImpl createDistanceProvider(final IDistanceMatrixProvider matrixProvider, final IRouteCostProvider routeCostProvider) {
-		return createDistanceProvider(matrixProvider, routeCostProvider, new HashMapRouteExclusionProvider());
+		return createDistanceProvider(matrixProvider, routeCostProvider, new HashMapRouteExclusionProvider(), new DefaultExtraIdleTimeProviderEditor());
 	}
 
 	private DefaultDistanceProviderImpl createDistanceProvider(final IDistanceMatrixProvider matrixProvider, final IRouteCostProvider routeCostProvider,
-			final IRouteExclusionProvider routeExclusionProvider) {
+			final IRouteExclusionProvider routeExclusionProvider, final IExtraIdleTimeProvider contingencyProvider) {
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
@@ -275,6 +278,7 @@ public class DefaultDistanceProviderImplTest {
 				bind(IDistanceMatrixProvider.class).toInstance(matrixProvider);
 				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 				bind(IRouteExclusionProvider.class).toInstance(routeExclusionProvider);
+				bind(IExtraIdleTimeProvider.class).toInstance(contingencyProvider);
 			}
 
 		});
