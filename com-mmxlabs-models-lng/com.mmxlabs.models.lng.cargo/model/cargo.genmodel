@@ -279,6 +279,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/reliability"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/volume"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/forecastDate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/volumeLow"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/volumeHigh"/>
       <genOperations ecoreOperation="cargo.ecore#//InventoryEventRow/getReliableVolume"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//InventoryCapacityRow">

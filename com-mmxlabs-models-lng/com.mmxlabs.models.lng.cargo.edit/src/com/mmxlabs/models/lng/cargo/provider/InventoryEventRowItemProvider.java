@@ -74,6 +74,8 @@ public class InventoryEventRowItemProvider
 			addReliabilityPropertyDescriptor(object);
 			addVolumePropertyDescriptor(object);
 			addForecastDatePropertyDescriptor(object);
+			addVolumeLowPropertyDescriptor(object);
+			addVolumeHighPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -233,6 +235,50 @@ public class InventoryEventRowItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Volume Low feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeLowPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_InventoryEventRow_volumeLow_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_InventoryEventRow_volumeLow_feature", "_UI_InventoryEventRow_type"),
+				 CargoPackage.Literals.INVENTORY_EVENT_ROW__VOLUME_LOW,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume High feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeHighPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_InventoryEventRow_volumeHigh_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_InventoryEventRow_volumeHigh_feature", "_UI_InventoryEventRow_type"),
+				 CargoPackage.Literals.INVENTORY_EVENT_ROW__VOLUME_HIGH,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns InventoryEventRow.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -278,6 +324,8 @@ public class InventoryEventRowItemProvider
 			case CargoPackage.INVENTORY_EVENT_ROW__RELIABILITY:
 			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME:
 			case CargoPackage.INVENTORY_EVENT_ROW__FORECAST_DATE:
+			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME_LOW:
+			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME_HIGH:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

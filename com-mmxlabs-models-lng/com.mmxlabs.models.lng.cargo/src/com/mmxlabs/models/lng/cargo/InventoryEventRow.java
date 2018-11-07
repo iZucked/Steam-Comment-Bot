@@ -26,6 +26,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getReliability <em>Reliability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getVolume <em>Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getForecastDate <em>Forecast Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getVolumeLow <em>Volume Low</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getVolumeHigh <em>Volume High</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getInventoryEventRow()
@@ -245,6 +247,60 @@ public interface InventoryEventRow extends EObject {
 	 * @generated
 	 */
 	boolean isSetForecastDate();
+
+	/**
+	 * Returns the value of the '<em><b>Volume Low</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume Low</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume Low</em>' attribute.
+	 * @see #setVolumeLow(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getInventoryEventRow_VolumeLow()
+	 * @model default="0"
+	 * @generated
+	 */
+	int getVolumeLow();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getVolumeLow <em>Volume Low</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume Low</em>' attribute.
+	 * @see #getVolumeLow()
+	 * @generated
+	 */
+	void setVolumeLow(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Volume High</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume High</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume High</em>' attribute.
+	 * @see #setVolumeHigh(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getInventoryEventRow_VolumeHigh()
+	 * @model default="0"
+	 * @generated
+	 */
+	int getVolumeHigh();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getVolumeHigh <em>Volume High</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume High</em>' attribute.
+	 * @see #getVolumeHigh()
+	 * @generated
+	 */
+	void setVolumeHigh(int value);
 
 	/**
 	 * <!-- begin-user-doc -->

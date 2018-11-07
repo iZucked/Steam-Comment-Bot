@@ -36,6 +36,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl#getReliability <em>Reliability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl#getVolume <em>Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl#getForecastDate <em>Forecast Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl#getVolumeLow <em>Volume Low</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl#getVolumeHigh <em>Volume High</em>}</li>
  * </ul>
  *
  * @generated
@@ -189,6 +191,46 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * @ordered
 	 */
 	protected boolean forecastDateESet;
+
+	/**
+	 * The default value of the '{@link #getVolumeLow() <em>Volume Low</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeLow()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int VOLUME_LOW_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getVolumeLow() <em>Volume Low</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeLow()
+	 * @generated
+	 * @ordered
+	 */
+	protected int volumeLow = VOLUME_LOW_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVolumeHigh() <em>Volume High</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeHigh()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int VOLUME_HIGH_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getVolumeHigh() <em>Volume High</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeHigh()
+	 * @generated
+	 * @ordered
+	 */
+	protected int volumeHigh = VOLUME_HIGH_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -384,6 +426,48 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getVolumeLow() {
+		return volumeLow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeLow(int newVolumeLow) {
+		int oldVolumeLow = volumeLow;
+		volumeLow = newVolumeLow;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.INVENTORY_EVENT_ROW__VOLUME_LOW, oldVolumeLow, volumeLow));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getVolumeHigh() {
+		return volumeHigh;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeHigh(int newVolumeHigh) {
+		int oldVolumeHigh = volumeHigh;
+		volumeHigh = newVolumeHigh;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.INVENTORY_EVENT_ROW__VOLUME_HIGH, oldVolumeHigh, volumeHigh));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public int getReliableVolume() {
@@ -412,6 +496,10 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 				return getVolume();
 			case CargoPackage.INVENTORY_EVENT_ROW__FORECAST_DATE:
 				return getForecastDate();
+			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME_LOW:
+				return getVolumeLow();
+			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME_HIGH:
+				return getVolumeHigh();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -444,6 +532,12 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 				return;
 			case CargoPackage.INVENTORY_EVENT_ROW__FORECAST_DATE:
 				setForecastDate((LocalDate)newValue);
+				return;
+			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME_LOW:
+				setVolumeLow((Integer)newValue);
+				return;
+			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME_HIGH:
+				setVolumeHigh((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -478,6 +572,12 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 			case CargoPackage.INVENTORY_EVENT_ROW__FORECAST_DATE:
 				unsetForecastDate();
 				return;
+			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME_LOW:
+				setVolumeLow(VOLUME_LOW_EDEFAULT);
+				return;
+			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME_HIGH:
+				setVolumeHigh(VOLUME_HIGH_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -504,6 +604,10 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 				return volume != VOLUME_EDEFAULT;
 			case CargoPackage.INVENTORY_EVENT_ROW__FORECAST_DATE:
 				return isSetForecastDate();
+			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME_LOW:
+				return volumeLow != VOLUME_LOW_EDEFAULT;
+			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME_HIGH:
+				return volumeHigh != VOLUME_HIGH_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -546,6 +650,10 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 		result.append(volume);
 		result.append(", forecastDate: ");
 		if (forecastDateESet) result.append(forecastDate); else result.append("<unset>");
+		result.append(", volumeLow: ");
+		result.append(volumeLow);
+		result.append(", volumeHigh: ");
+		result.append(volumeHigh);
 		result.append(')');
 		return result.toString();
 	}

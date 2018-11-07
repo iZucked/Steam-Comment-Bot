@@ -1970,6 +1970,24 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getInventoryEventRow_VolumeLow() {
+		return (EAttribute)inventoryEventRowEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getInventoryEventRow_VolumeHigh() {
+		return (EAttribute)inventoryEventRowEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getInventoryEventRow__GetReliableVolume() {
 		return inventoryEventRowEClass.getEOperations().get(0);
 	}
@@ -2787,6 +2805,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(inventoryEventRowEClass, INVENTORY_EVENT_ROW__RELIABILITY);
 		createEAttribute(inventoryEventRowEClass, INVENTORY_EVENT_ROW__VOLUME);
 		createEAttribute(inventoryEventRowEClass, INVENTORY_EVENT_ROW__FORECAST_DATE);
+		createEAttribute(inventoryEventRowEClass, INVENTORY_EVENT_ROW__VOLUME_LOW);
+		createEAttribute(inventoryEventRowEClass, INVENTORY_EVENT_ROW__VOLUME_HIGH);
 		createEOperation(inventoryEventRowEClass, INVENTORY_EVENT_ROW___GET_RELIABLE_VOLUME);
 
 		inventoryCapacityRowEClass = createEClass(INVENTORY_CAPACITY_ROW);
@@ -3202,6 +3222,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getInventoryEventRow_Reliability(), ecorePackage.getEDouble(), "reliability", "100.0", 0, 1, InventoryEventRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getInventoryEventRow_Volume(), ecorePackage.getEInt(), "volume", null, 0, 1, InventoryEventRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getInventoryEventRow_ForecastDate(), theDateTimePackage.getLocalDate(), "forecastDate", null, 0, 1, InventoryEventRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventoryEventRow_VolumeLow(), ecorePackage.getEInt(), "volumeLow", "0", 0, 1, InventoryEventRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventoryEventRow_VolumeHigh(), ecorePackage.getEInt(), "volumeHigh", "0", 0, 1, InventoryEventRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getInventoryEventRow__GetReliableVolume(), ecorePackage.getEInt(), "getReliableVolume", 0, 1, IS_UNIQUE, IS_ORDERED);
 

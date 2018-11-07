@@ -67,6 +67,7 @@ import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
+import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -220,10 +221,14 @@ public class InventoryReport extends ViewPart {
 				createColumn("Date", 150, o -> "" + o.date.format(formatter));
 				//createColumn("Type", 150, o -> o.type);
 				createColumn("Total Feed In", 150, o -> String.format("%,d", o.feedIn));
+				createColumn("Forecast low", 150, o -> String.format("%,d", o.volumeLow));
+				createColumn("Forecast high", 150, o -> String.format("%,d", o.volumeHigh));
 				createColumn("Total Feed Out", 150, o -> String.format("%,d", o.feedOut));
 				createColumn("Total Cargo Out", 150, o -> String.format("%,d", o.cargoOut));
 				createColumn("Change", 150, o -> String.format("%,d", o.changeInM3));
 				createColumn("Level", 150, o -> String.format("%,d", o.runningTotal));
+				createColumn("Level low", 150, o -> String.format("%,d", o.ttlLow));
+				createColumn("Level high", 150, o -> String.format("%,d", o.ttlHigh));
 				createColumn("Vessel", 150, o -> o.vessel);
 				createColumn("D-ID", 150, o -> o.dischargeId);
 				createColumn("Buyer", 150, o -> o.salesContract);
@@ -322,6 +327,11 @@ public class InventoryReport extends ViewPart {
 						if (inventory.getName() == null) {
 							continue;
 						}
+						
+						final List<InventoryEventRow> invs = inventory.getFeeds();
+						if (invs == null){
+							continue;
+						}
 
 						{
 							final Optional<InventoryChangeEvent> firstInventoryDataFinal = firstInventoryData;
@@ -364,7 +374,10 @@ public class InventoryReport extends ViewPart {
 										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), vessel, dischargeId,
 												dischargePort, salesContract, time == null ? null : time.toLocalDate());
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
-										
+										if (e.getEvent() != null) {
+											lvl.volumeLow = e.getEvent().getVolumeLow();
+											lvl.volumeHigh = e.getEvent().getVolumeHigh();
+										}
 										// FM cargo out happens only when there's a vessel
 										lvl.cargoOut = lvl.changeInM3;
 										addToInventoryLevelList(tableLevels, lvl);
@@ -372,13 +385,20 @@ public class InventoryReport extends ViewPart {
 										type = "Open";
 										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), null, null, null, null, null);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
-										
+										if (e.getEvent() != null) {
+											lvl.volumeLow = e.getEvent().getVolumeLow();
+											lvl.volumeHigh = e.getEvent().getVolumeHigh();
+										}
 										// FM
 										setInventoryLevelFeed(lvl);
 										addToInventoryLevelList(tableLevels, lvl);
 									} else if (e.getEvent() != null) {
 										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity(), null, null, null, null, null);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
+										if (e.getEvent() != null) {
+											lvl.volumeLow = e.getEvent().getVolumeLow();
+											lvl.volumeHigh = e.getEvent().getVolumeHigh();
+										}
 										InventoryChangeEvent first = firstInventoryDataFinal.get();
 										
 										// FM
@@ -509,9 +529,23 @@ public class InventoryReport extends ViewPart {
 			final InventoryChangeEvent evt = firstInventoryData.get();
 			total = evt.getCurrentLevel() - evt.getChangeQuantity();
 		}
+		int totalLow = total;
+		int totalHigh = total;
 		for (final InventoryLevel lvl : tableLevels) {
-			lvl.runningTotal = total + lvl.changeInM3;
-			total = lvl.runningTotal;
+			total += lvl.changeInM3;
+			lvl.runningTotal = total;
+			/*
+			 * In the case, when the low/high forecast value is zero , we assume that's a wrong data!
+			 * Hence we use the feedIn (actual volume) if it's also not zero.
+			 * Maybe we need to fix that!
+			 */
+			final int vl = lvl.volumeLow == 0 ? lvl.feedIn == 0 ? 0 : lvl.feedIn : lvl.volumeLow;
+			totalLow += vl - Math.abs(lvl.feedOut) - Math.abs(lvl.cargoOut);
+			lvl.ttlLow = totalLow;
+			final int vh = lvl.volumeHigh == 0 ? lvl.feedIn == 0 ? 0 : lvl.feedIn : lvl.volumeHigh;
+			totalHigh += vh - Math.abs(lvl.feedOut) - Math.abs(lvl.cargoOut);
+			lvl.ttlHigh = totalHigh;
+			
 		}
 		
 		tableViewer.setInput(tableLevels);
@@ -643,8 +677,12 @@ public class InventoryReport extends ViewPart {
 		public int feedIn = 0; //FM - adding a required field
 		public int feedOut = 0; //FM - adding a required field
 		public int cargoOut = 0; //FM - adding a required field
+		public int volumeLow = 0;
+		public int volumeHigh = 0;
 
 		public int runningTotal = 0;
+		public int ttlLow = 0;
+		public int ttlHigh = 0;
 		public boolean breach = false;
 		private String salesContract;
 		private LocalDate salesDate;
@@ -660,6 +698,8 @@ public class InventoryReport extends ViewPart {
 		public void merge(final InventoryLevel lvl) {
 			this.changeInM3 += lvl.changeInM3;
 			this.feedIn += lvl.feedIn;
+			this.volumeLow += lvl.volumeLow;
+			this.volumeHigh += lvl.volumeHigh;
 			this.feedOut += lvl.feedOut;
 			this.cargoOut += lvl.cargoOut;
 			this.vessel = lvl.vessel != null ? lvl.vessel : this.vessel;

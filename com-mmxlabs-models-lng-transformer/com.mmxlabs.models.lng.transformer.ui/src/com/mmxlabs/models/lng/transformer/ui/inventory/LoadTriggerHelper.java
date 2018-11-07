@@ -27,12 +27,18 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.cargo.util.SlotMaker;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
 public class LoadTriggerHelper {
@@ -244,9 +250,10 @@ public class LoadTriggerHelper {
 
 	/**
 	 * Entry point to create Load slots
+	 * Taking the very first contract. (due to client L preferences)
 	 * 
 	 */
-	public void createLoadSlots(final LNGScenarioModel scenario, Port port, List<LocalDate> dates, int cargoVolume, LocalDate start, boolean clear) {
+	public void createLoadSlots(final LNGScenarioModel scenario, final Port port, final List<LocalDate> dates, final int cargoVolume, final LocalDate start, boolean clear) {
 		// First clear all load slots
 		final EList<LoadSlot> loadSlots = scenario.getCargoModel().getLoadSlots();
 		if (loadSlots != null) {
@@ -256,12 +263,19 @@ public class LoadTriggerHelper {
 		}
 		CargoModelBuilder builder = new CargoModelBuilder(scenario.getCargoModel());
 		int i = 0;
+		
+		PurchaseContract mdpc = null;
+		if (!scenario.getReferenceModel().getCommercialModel().getPurchaseContracts().isEmpty()) {
+			mdpc = scenario.getReferenceModel().getCommercialModel().getPurchaseContracts().get(0);
+		}
+		
 		for (LocalDate slotDate : dates) {
 			assert port != null;
 			SlotMaker<LoadSlot> loadMaker = new SlotMaker<>(builder);
-			loadMaker.withFOBPurchase(String.format("%s_%s","load", ++i), slotDate, port, null,
-					scenario.getReferenceModel().getCommercialModel().getEntities().get(0), "10%BRENT_ICE", null);
+			loadMaker.withFOBPurchase(String.format("%s_%s","load", ++i), slotDate, port, mdpc,
+					scenario.getReferenceModel().getCommercialModel().getEntities().get(0), null, null);
 			loadMaker.withVolumeLimits(0, cargoVolume, VolumeUnits.M3);
+			loadMaker.withWindowSize(0, TimePeriod.DAYS);
 			loadMaker.build();
 		}
 	}
@@ -272,7 +286,7 @@ public class LoadTriggerHelper {
 	 * @param scenario
 	 * @param start 
 	 */
-	private void clearCargoesAndSchedule(final LNGScenarioModel scenario, LocalDate start) {
+	private void clearCargoesAndSchedule(final LNGScenarioModel scenario, final LocalDate start) {
 		Iterator<Cargo> cargoIterator = scenario.getCargoModel().getCargoes().iterator();
 		while (cargoIterator.hasNext()) {
 			Cargo cargo = cargoIterator.next();

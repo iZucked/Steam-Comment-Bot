@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EFactory;
@@ -125,6 +127,9 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuE
 import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -645,8 +650,20 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 	public void setCargoes(final Table table, final LNGScenarioModel lngScenarioModel) {
 		final EList<Cargo> cargoes = ScenarioModelUtil.getCargoModel(lngScenarioModel).getCargoes();
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+		final Schedule schedule = scheduleModel.getSchedule();
+		List<SlotAllocation> slotAllocs = new ArrayList<SlotAllocation>();
+		if (schedule != null) {
+			slotAllocs = schedule.getSlotAllocations();
+		}
 		resetTable(table); // Clear rows and cache
 		final HashSet<Slot> slotsInCargo = new HashSet<>();
+		final Map<Slot,SlotAllocation> slots = new HashMap<Slot, SlotAllocation>();
+		for (final SlotAllocation sa : slotAllocs) {
+			if (sa.getSlot() != null) {
+				slots.put(sa.getSlot(), sa);
+			}
+		}
 		for (final Cargo cargo : cargoes) {
 			final EPackage dataModel = customRowPackage;
 			final EFactory factory = dataModel.getEFactoryInstance();
@@ -661,6 +678,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			row.setDischargeSlot(discharge);
 			slotsInCargo.add(discharge);
 			row.setDischargeSlotContractParams(SlotContractParamsHelper.findOrCreateSlotContractParams(discharge));
+			row.setLoadAllocation(slots.get(load));
+			row.setDischargeAllocation(slots.get(discharge));
 
 			transformRowWithExtensions(cargo, row);
 			addRowToTable(table, row);

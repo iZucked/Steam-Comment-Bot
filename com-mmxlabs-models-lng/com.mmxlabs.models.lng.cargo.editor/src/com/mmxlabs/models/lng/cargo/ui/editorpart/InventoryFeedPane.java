@@ -20,6 +20,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class InventoryFeedPane extends ScenarioTableViewerPane {
@@ -39,11 +40,15 @@ public class InventoryFeedPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Start", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_StartDate(), editingDomain));
 		addTypicalColumn("End", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_EndDate(), editingDomain));
 		addTypicalColumn("Volume (m³)", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Volume(), editingDomain));
+		
+		addTypicalColumn("Volume High (m³)", new ReadOnlyManipulatorWrapper<NumericAttributeManipulator>(new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_VolumeHigh(), editingDomain)));
+		addTypicalColumn("Volume Low (m³)", new ReadOnlyManipulatorWrapper<NumericAttributeManipulator>(new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_VolumeLow(), editingDomain)));
+		addTypicalColumn("Forecast", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_ForecastDate(), editingDomain));
+		
+		addTypicalColumn("Reliability (%)", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Reliability(), editingDomain));
 		addTypicalColumn("Frequency", new InventoryPeriodEnumAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Period(), editingDomain));
 		addTypicalColumn("Counterparty", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_CounterParty(), editingDomain));
-		addTypicalColumn("Reliability (%)", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Reliability(), editingDomain));
-		addTypicalColumn("Forecast", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_ForecastDate(), editingDomain));
-
+		
 		setTitle("In");
 	}
 }
