@@ -23,6 +23,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/withSpotCargoMarkets"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/buildActionSets"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/similarityMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/nominalADP"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/cleanStateOptimisation"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/floatingDaysLimit"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/adpOptimisation"/>

@@ -401,8 +401,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EAttribute getUserSettings_CleanStateOptimisation() {
+	public EAttribute getUserSettings_NominalADP() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -412,7 +411,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getUserSettings_FloatingDaysLimit() {
+	public EAttribute getUserSettings_CleanStateOptimisation() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -421,8 +420,18 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUserSettings_AdpOptimisation() {
+	@Override
+	public EAttribute getUserSettings_FloatingDaysLimit() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUserSettings_AdpOptimisation() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -1158,6 +1167,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		createEAttribute(userSettingsEClass, USER_SETTINGS__WITH_SPOT_CARGO_MARKETS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__BUILD_ACTION_SETS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__SIMILARITY_MODE);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__NOMINAL_ADP);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__CLEAN_STATE_OPTIMISATION);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__FLOATING_DAYS_LIMIT);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__ADP_OPTIMISATION);
@@ -1328,6 +1338,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEAttribute(getUserSettings_WithSpotCargoMarkets(), ecorePackage.getEBoolean(), "withSpotCargoMarkets", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_BuildActionSets(), ecorePackage.getEBoolean(), "buildActionSets", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_SimilarityMode(), this.getSimilarityMode(), "similarityMode", "OFF", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_NominalADP(), ecorePackage.getEBoolean(), "nominalADP", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_CleanStateOptimisation(), ecorePackage.getEBoolean(), "cleanStateOptimisation", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_FloatingDaysLimit(), ecorePackage.getEInt(), "floatingDaysLimit", "15", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_AdpOptimisation(), ecorePackage.getEBoolean(), "adpOptimisation", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

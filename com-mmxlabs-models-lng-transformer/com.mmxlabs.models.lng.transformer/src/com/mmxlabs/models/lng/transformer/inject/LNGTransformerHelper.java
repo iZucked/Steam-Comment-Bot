@@ -62,6 +62,7 @@ public class LNGTransformerHelper {
 
 	public static final @NonNull String HINT_DISABLE_CACHES = "hint-lngtransformer-disable-caches";
 	public static final @NonNull String HINT_PORTFOLIO_BREAKEVEN = "hint-portfolio-breakeven";
+	public static final @NonNull String HINT_NOMINAL_ADP = "hint-nominal-adp";
 
 	@NonNull
 	public static Set<@NonNull String> getHints(@NonNull final UserSettings userSettings, @NonNull final String @Nullable... initialHints) {
@@ -98,6 +99,10 @@ public class LNGTransformerHelper {
 			if (LicenseFeatures.isPermitted("features:optimisation-actionset")) {
 				hints.add(HINT_OPTIMISE_BREAKDOWN);
 			}
+		}
+
+		if (userSettings.isNominalADP()) {
+			hints.add(HINT_NOMINAL_ADP);
 		}
 
 		return hints;

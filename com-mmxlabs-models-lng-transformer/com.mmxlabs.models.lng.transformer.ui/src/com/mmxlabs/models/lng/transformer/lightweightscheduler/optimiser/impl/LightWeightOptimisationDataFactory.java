@@ -9,8 +9,11 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,6 +26,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.joda.time.DateTime;
 
+import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
@@ -37,14 +41,22 @@ import com.mmxlabs.models.lng.transformer.optimiser.pairing.PairingOptimiserHelp
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.LoadDischargePairValueCalculatorStep;
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.ProfitAndLossExtractor;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 
 public class LightWeightOptimisationDataFactory {
 
@@ -55,7 +67,11 @@ public class LightWeightOptimisationDataFactory {
 	@Inject
 	private IPairingMatrixOptimiser matrixOptimiser;
 	@Inject
+	private IPortSlotProvider portSlotProvider;
+	@Inject
 	private IVesselProvider vesselProvider;
+	@Inject
+	private IVirtualVesselSlotProvider virtualVesselProvider;
 	@Inject
 	private ICargoToCargoCostCalculator cargoToCargoCostCalculator;
 	@Inject
@@ -67,18 +83,21 @@ public class LightWeightOptimisationDataFactory {
 	@Inject
 	private @Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) ISequences initialSequences;
 
-	public ILightWeightOptimisationData createLightWeightOptimisationData(IVesselAvailability pnlVessel, LoadDischargePairValueCalculatorStep calculator, CleanableExecutorService executorService,
-			IProgressMonitor monitor) {
+	@Inject
+	private Injector injector;
+
+	public ILightWeightOptimisationData createLightWeightOptimisationData(final IVesselAvailability pnlVessel, final LoadDischargePairValueCalculatorStep calculator,
+			final CleanableExecutorService executorService, final IProgressMonitor monitor) {
 		// get the slot pairing matrix as a sparse binary matrix (sum of each row and column <= 1)
-		boolean[][] pairingsMatrix = createSlotPairingMatrix(pnlVessel, calculator, executorService, monitor);
+		final boolean[][] pairingsMatrix = createSlotPairingMatrix(pnlVessel, calculator, executorService, monitor);
 
 		if (pairingsMatrix == null) {
 			return null;
 		}
 
 		// Export the pairings matrix to a Map
-		Map<ILoadOption, IDischargeOption> pairingsMap = new LinkedHashMap<>();
-		for (ILoadOption load : optimiserRecorder.getSortedLoads()) {
+		final Map<ILoadOption, IDischargeOption> pairingsMap = new LinkedHashMap<>();
+		for (final ILoadOption load : optimiserRecorder.getSortedLoads()) {
 			pairingsMap.put(load, optimiserRecorder.getPairedDischarge(load, pairingsMatrix));
 		}
 
@@ -87,241 +106,327 @@ public class LightWeightOptimisationDataFactory {
 		}
 
 		// Create data for optimiser
-		
+
 		// add cargoes
-		Set<Integer> cargoIndexes = new HashSet<>();
-		List<List<IPortSlot>> shippedCargoes = PairingOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pairingsMatrix, ShippingType.SHIPPED);
+		final Set<Integer> cargoIndexes = new HashSet<>();
+		final List<List<IPortSlot>> shippedCargoes = PairingOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pairingsMatrix,
+				ShippingType.SHIPPED);
 		if (shippedCargoes.isEmpty()) {
 			// No cargoes found!
 			return null;
 		}
-		
+
 		for (int i = 0; i < shippedCargoes.size(); i++) {
 			cargoIndexes.add(i);
 		}
-		
+
 		// add events
-		Set<Integer> eventIndexes = new HashSet<>();
+		final Set<Integer> eventIndexes = new HashSet<>();
 		longTermSlotsProvider.getLongTermEvents().forEach(e -> {
 			shippedCargoes.add(CollectionsUtil.makeLinkedList(e));
 			eventIndexes.add(shippedCargoes.size() - 1);
 		});
 
 		// add vessels
-		List<@NonNull IVesselAvailability> vessels = getVessels();
+		final List<@NonNull IVesselAvailability> vessels = getVessels();
 
 		// calculate shipping costs between two cargoes
-		long[][][] cargoToCargoCostsOnAvailability = cargoToCargoCostCalculator.createCargoToCargoCostMatrix(shippedCargoes, vessels);
+		final long[][][] cargoToCargoCostsOnAvailability = cargoToCargoCostCalculator.createCargoToCargoCostMatrix(shippedCargoes, vessels);
 
 		// set vessel restrictions
-		ArrayList<Set<Integer>> cargoVesselRestrictions = cargoVesselRestrictionsMatrixProducer.getIntegerCargoVesselRestrictions(shippedCargoes, vessels,
+		final ArrayList<Set<Integer>> cargoVesselRestrictions = cargoVesselRestrictionsMatrixProducer.getIntegerCargoVesselRestrictions(shippedCargoes, vessels,
 				cargoVesselRestrictionsMatrixProducer.getCargoVesselRestrictions(shippedCargoes, vessels));
 
 		// Cargo Detail
-		LightWeightCargoDetails[] cargoDetails = getCargoDetails(shippedCargoes, vessels);
+		final LightWeightCargoDetails[] cargoDetails = getCargoDetails(shippedCargoes, vessels);
 
 		// Cargo PNL
-		long[] cargoPNL = LightWeightOptimiserHelper.getCargoPNL(optimiserRecorder.getProfit(), shippedCargoes, optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pnlVessel, cargoDetails);
+		final long[] cargoPNL = LightWeightOptimiserHelper.getCargoPNL(optimiserRecorder.getProfit(), shippedCargoes, optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(),
+				pnlVessel, cargoDetails);
 
 		// Min Travel Time
-		int[][][] minCargoToCargoTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoToCargoTravelTimesPerVessel(shippedCargoes, vessels);
+		final int[][][] minCargoToCargoTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoToCargoTravelTimesPerVessel(shippedCargoes, vessels);
 
 		// Time window
-		int[][] minCargoStartToEndSlotTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoStartToEndSlotTravelTimesPerVessel(shippedCargoes, vessels);
+		final int[][] minCargoStartToEndSlotTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoStartToEndSlotTravelTimesPerVessel(shippedCargoes, vessels);
 
 		// Charter costs
-		long[][] cargoCharterCostPerAvailability = cargoToCargoCostCalculator.getCargoCharterCostPerAvailability(shippedCargoes, vessels);
+		final long[][] cargoCharterCostPerAvailability = cargoToCargoCostCalculator.getCargoCharterCostPerAvailability(shippedCargoes, vessels);
 
 		// Vessel Capacity
-		long[] capacity = getVesselCapacities(vessels);
+		final long[] capacity = getVesselCapacities(vessels);
 
 		// Cargo Volume
-		long[] cargoesVolumes = getCargoVolumes(shippedCargoes);
-		
+		final long[] cargoesVolumes = getCargoVolumes(shippedCargoes);
+
 		// Vessel windows
-		ITimeWindow[] vesselStartWindows = vessels.stream().map(v->v.getStartRequirement().getTimeWindow()).toArray(size -> new ITimeWindow[size]);
-		ITimeWindow[] vesselEndWindows = vessels.stream().map(v->v.getEndRequirement().getTimeWindow()).toArray(size -> new ITimeWindow[size]);
+		final ITimeWindow[] vesselStartWindows = vessels.stream().map(v -> v.getStartRequirement().getTimeWindow()).toArray(size -> new ITimeWindow[size]);
+		final ITimeWindow[] vesselEndWindows = vessels.stream().map(v -> v.getEndRequirement().getTimeWindow()).toArray(size -> new ITimeWindow[size]);
 
 		// Cargo windows
-		int[] cargoStartSlotDurations = cargoToCargoCostCalculator.getCargoStartSlotDurations(shippedCargoes);
-		int[] cargoEndSlotDurations = cargoToCargoCostCalculator.getCargoEndSlotDurations(shippedCargoes);
-		CargoWindowData[] cargoWindows = calculateCargoWindows(shippedCargoes, minCargoStartToEndSlotTravelTimesPerVessel, cargoIndexes);
+		final int[] cargoStartSlotDurations = cargoToCargoCostCalculator.getCargoStartSlotDurations(shippedCargoes);
+		final int[] cargoEndSlotDurations = cargoToCargoCostCalculator.getCargoEndSlotDurations(shippedCargoes);
+		final CargoWindowData[] cargoWindows = calculateCargoWindows(shippedCargoes, minCargoStartToEndSlotTravelTimesPerVessel, cargoIndexes);
 
-		LightWeightOptimisationData lightWeightOptimisationData = new LightWeightOptimisationData(shippedCargoes, vessels, capacity, cargoPNL, cargoToCargoCostsOnAvailability, cargoVesselRestrictions,
-				minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel, pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight, cargoesVolumes, cargoDetails,
-				cargoCharterCostPerAvailability, cargoIndexes, eventIndexes, vesselStartWindows, vesselEndWindows, cargoStartSlotDurations, cargoEndSlotDurations, cargoWindows);
+		final LightWeightOptimisationData lightWeightOptimisationData = new LightWeightOptimisationData(shippedCargoes, vessels, capacity, cargoPNL, cargoToCargoCostsOnAvailability,
+				cargoVesselRestrictions, minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel, pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight,
+				cargoesVolumes, cargoDetails, cargoCharterCostPerAvailability, cargoIndexes, eventIndexes, vesselStartWindows, vesselEndWindows, cargoStartSlotDurations, cargoEndSlotDurations,
+				cargoWindows);
 
 		return lightWeightOptimisationData;
 	}
 
-	private long[] getVesselCapacities(List<@NonNull IVesselAvailability> vessels) {
-		long[] capacity = vessels.stream().mapToLong(v -> v.getVessel().getCargoCapacity()).toArray();
+	public ISequences createNominalADP(final IVesselAvailability pnlVessel, final LoadDischargePairValueCalculatorStep calculator, final CleanableExecutorService executorService,
+			final IProgressMonitor monitor) {
+		// get the slot pairing matrix as a sparse binary matrix (sum of each row and column <= 1)
+		final boolean[][] pairingsMatrix = createSlotPairingMatrix(pnlVessel, calculator, executorService, monitor);
+
+		if (pairingsMatrix == null) {
+			return null;
+		}
+
+		// Export the pairings matrix to a Map
+		final Map<ILoadOption, IDischargeOption> pairingsMap = new LinkedHashMap<>();
+		for (final ILoadOption load : optimiserRecorder.getSortedLoads()) {
+			pairingsMap.put(load, optimiserRecorder.getPairedDischarge(load, pairingsMatrix));
+		}
+
+		if (LightWeightSchedulerStage2Module.DEBUG) {
+			printPairings(pairingsMap);
+		}
+
+		// Create data for optimiser
+
+		// add cargoes
+		final List<List<IPortSlot>> shippedCargoes = PairingOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pairingsMatrix,
+				ShippingType.SHIPPED);
+		if (shippedCargoes.isEmpty()) {
+			// No cargoes found!
+			return null;
+		}
+
+		final Collection<IResource> resources = new LinkedHashSet<>();
+		final IResource o_resource = vesselProvider.getResource(pnlVessel);
+		resources.add(o_resource);
+
+		// Gather FOB/DES resources
+		for (final List<IPortSlot> cargo : shippedCargoes) {
+			for (final IPortSlot e : cargo) {
+				final IVesselAvailability va = virtualVesselProvider.getVesselAvailabilityForElement(portSlotProvider.getElement(e));
+				if (va != null) {
+					resources.add(vesselProvider.getResource(va));
+				}
+			}
+		}
+
+		final IModifiableSequences sequences = new ModifiableSequences(new ArrayList<>(resources));
+
+		final IStartEndRequirementProvider startEndRequirementProvider = injector.getInstance(IStartEndRequirementProvider.class);
+
+		@NonNull
+		final IModifiableSequence modifiableSequence = sequences.getModifiableSequence(o_resource);
+		modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
+
+		for (final List<IPortSlot> cargo : shippedCargoes) {
+			// Grab FOB/DES vessel
+			IVesselAvailability va = null;
+			for (final IPortSlot e : cargo) {
+				va = virtualVesselProvider.getVesselAvailabilityForElement(portSlotProvider.getElement(e));
+				if (va != null) {
+					break;
+				}
+			}
+
+			final IModifiableSequence thisModifiableSequence = modifiableSequence;
+			IResource thisResource = null;
+
+			if (va != null) {
+				thisResource = vesselProvider.getResource(va);
+				thisModifiableSequence.add(startEndRequirementProvider.getStartElement(thisResource));
+			}
+
+			for (final IPortSlot e : cargo) {
+				thisModifiableSequence.add(portSlotProvider.getElement(e));
+			}
+
+			if (va != null) {
+				thisResource = vesselProvider.getResource(va);
+				thisModifiableSequence.add(startEndRequirementProvider.getEndElement(thisResource));
+			}
+		}
+
+		modifiableSequence.add(startEndRequirementProvider.getEndElement(o_resource));
+
+		return sequences;
+
+	}
+
+	private long[] getVesselCapacities(final List<@NonNull IVesselAvailability> vessels) {
+		final long[] capacity = vessels.stream().mapToLong(v -> v.getVessel().getCargoCapacity()).toArray();
 		return capacity;
 	}
 
-	private long[] getCargoVolumes(List<List<IPortSlot>> shippedCargoes) {
-		long[] cargoesVolumes = shippedCargoes.stream().mapToLong(x -> {
+	private long[] getCargoVolumes(final List<List<IPortSlot>> shippedCargoes) {
+		final long[] cargoesVolumes = shippedCargoes.stream().mapToLong(x -> {
 			if (!(x.get(0) instanceof ILoadOption)) {
 				return 1;
 			}
-			long loadVolume = ((ILoadOption) x.get(0)).getMaxLoadVolume();
-			long dischargeVolume = ((IDischargeOption) x.get(1)).getMaxDischargeVolume(23);
+			final long loadVolume = ((ILoadOption) x.get(0)).getMaxLoadVolume();
+			final long dischargeVolume = ((IDischargeOption) x.get(1)).getMaxDischargeVolume(23);
 			return Math.min(loadVolume, dischargeVolume);
 		}).toArray();
 		return cargoesVolumes;
 	}
 
-	private LightWeightCargoDetails[] getCargoDetails(List<List<IPortSlot>> shippedCargoes, List<@NonNull IVesselAvailability> vessels) {
-		LightWeightCargoDetails[] cargoDetails = shippedCargoes.stream().map(x -> {
+	private LightWeightCargoDetails[] getCargoDetails(final List<List<IPortSlot>> shippedCargoes, final List<@NonNull IVesselAvailability> vessels) {
+		final LightWeightCargoDetails[] cargoDetails = shippedCargoes.stream().map(x -> {
 			return new LightWeightCargoDetails(x.get(0).getPortType());
 		}).toArray(LightWeightCargoDetails[]::new);
 		return cargoDetails;
 	}
 
 	private List<@NonNull IVesselAvailability> getVessels() {
-		List<@NonNull IVesselAvailability> vessels = initialSequences.getResources().stream() //
+		final List<@NonNull IVesselAvailability> vessels = initialSequences.getResources().stream() //
 				.sorted((a, b) -> a.getName().compareTo(b.getName())) //
 				.map(v -> vesselProvider.getVesselAvailability(v)) //
 				.filter(v -> PairingOptimiserHelper.isShippedVessel(v)).collect(Collectors.toList());
 		return vessels;
 	}
-	
+
 	private List<@NonNull IVesselAvailability> getAllVessels() {
-		List<@NonNull IVesselAvailability> vessels = initialSequences.getResources().stream() //
+		final List<@NonNull IVesselAvailability> vessels = initialSequences.getResources().stream() //
 				.map(v -> vesselProvider.getVesselAvailability(v)) //
 				.collect(Collectors.toList());
 		return vessels;
 	}
 
 	/**
-	 * Get the slot pairing matrix as a sparse binary matrix (sum of each row and column <= 1)
-	 * ALEX_TODO: move this to LongTerm package
+	 * Get the slot pairing matrix as a sparse binary matrix (sum of each row and column <= 1) ALEX_TODO: move this to LongTerm package
+	 * 
 	 * @param pnlVessel
 	 * @param calculator
 	 * @param executorService
 	 * @param monitor
 	 * @return
 	 */
-	public boolean[][] createSlotPairingMatrix(IVesselAvailability pnlVessel, LoadDischargePairValueCalculatorStep calculator, CleanableExecutorService executorService, IProgressMonitor monitor) {
+	public boolean[][] createSlotPairingMatrix(final IVesselAvailability pnlVessel, final LoadDischargePairValueCalculatorStep calculator, final CleanableExecutorService executorService,
+			final IProgressMonitor monitor) {
 		// (1) Identify LT slots
 		@NonNull
-		Collection<IPortSlot> longTermSlots = getLongTermSlots();
+		final Collection<IPortSlot> longTermSlots = getLongTermSlots();
 
-		List<ILoadOption> longtermLoads = getLongTermLoads(longTermSlots);
-		List<IDischargeOption> longTermDischarges = getLongTermDischarges(longTermSlots);
+		final List<ILoadOption> longtermLoads = getLongTermLoads(longTermSlots);
+		final List<IDischargeOption> longTermDischarges = getLongTermDischarges(longTermSlots);
 		optimiserRecorder.init(longtermLoads, longTermDischarges);
 
 		// (2) Generate Slot to Slot bindings matrix for LT slots
-		calculator.run(pnlVessel, optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), new ProfitAndLossExtractor(optimiserRecorder), executorService, monitor, getAllVessels());
+		calculator.run(pnlVessel, optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), new ProfitAndLossExtractor(optimiserRecorder), executorService, monitor,
+				getAllVessels());
 
 		// (3) Optimise matrix
-		boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges(),
-				optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCount(), optimiserRecorder.getMinDischargeGroupCount(), optimiserRecorder.getMaxLoadGroupCount(),
-				optimiserRecorder.getMinLoadGroupCount());
+		final boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(),
+				optimiserRecorder.getOptionalDischarges(), optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCount(), optimiserRecorder.getMinDischargeGroupCount(),
+				optimiserRecorder.getMaxLoadGroupCount(), optimiserRecorder.getMinLoadGroupCount());
 		return pairingsMatrix;
 	}
 
 	private Collection<IPortSlot> getLongTermSlots() {
 		@NonNull
-		Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();
+		final Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();
 		return longTermSlots;
 	}
 
-	private List<IDischargeOption> getLongTermDischarges(Collection<IPortSlot> longTermSlots) {
-		List<IDischargeOption> longTermDischarges = longTermSlots.stream().filter(s -> (s instanceof IDischargeOption)).map(m -> (IDischargeOption) m).collect(Collectors.toCollection(ArrayList::new));
+	private List<IDischargeOption> getLongTermDischarges(final Collection<IPortSlot> longTermSlots) {
+		final List<IDischargeOption> longTermDischarges = longTermSlots.stream().filter(s -> (s instanceof IDischargeOption)).map(m -> (IDischargeOption) m)
+				.collect(Collectors.toCollection(ArrayList::new));
 		return longTermDischarges;
 	}
-	
-	private List<ILoadOption> getLongTermLoads(Collection<IPortSlot> longTermSlots) {
-		List<ILoadOption> longtermLoads = longTermSlots.stream().filter(s -> (s instanceof ILoadOption)).map(m -> (ILoadOption) m).collect(Collectors.toCollection(ArrayList::new));
+
+	private List<ILoadOption> getLongTermLoads(final Collection<IPortSlot> longTermSlots) {
+		final List<ILoadOption> longtermLoads = longTermSlots.stream().filter(s -> (s instanceof ILoadOption)).map(m -> (ILoadOption) m).collect(Collectors.toCollection(ArrayList::new));
 		return longtermLoads;
 	}
-	
-	private CargoWindowData[] calculateCargoWindows(List<List<IPortSlot>> cargoes, int[][] cargoMinTravelTimes, Set<Integer> cargoIndexes) {
-		CargoWindowData[] cargoWindows = new CargoWindowData[cargoes.size()];
+
+	private CargoWindowData[] calculateCargoWindows(final List<List<IPortSlot>> cargoes, final int[][] cargoMinTravelTimes, final Set<Integer> cargoIndexes) {
+		final CargoWindowData[] cargoWindows = new CargoWindowData[cargoes.size()];
 
 		for (int i = 0; i < cargoes.size(); i++) {
 			if (cargoIndexes.contains(i)) {
-				ITimeWindow loadTW = cargoes.get(i).get(0).getTimeWindow();
-				ITimeWindow dischargeTW = cargoes.get(i).get(1).getTimeWindow();
-				
-				cargoWindows[i] = new CargoWindowData(loadTW.getInclusiveStart(), loadTW.getExclusiveEnd(),
-						dischargeTW.getInclusiveStart(), dischargeTW.getExclusiveEnd());
+				final ITimeWindow loadTW = cargoes.get(i).get(0).getTimeWindow();
+				final ITimeWindow dischargeTW = cargoes.get(i).get(1).getTimeWindow();
+
+				cargoWindows[i] = new CargoWindowData(loadTW.getInclusiveStart(), loadTW.getExclusiveEnd(), dischargeTW.getInclusiveStart(), dischargeTW.getExclusiveEnd());
 			} else {
-				ITimeWindow tw  = cargoes.get(i).get(0).getTimeWindow();
-				
+				final ITimeWindow tw = cargoes.get(i).get(0).getTimeWindow();
+
 				// vessel events are vessel independent for duration so get time from first vessel
-				cargoWindows[i] = new CargoWindowData(tw.getInclusiveStart(), tw.getExclusiveEnd(),
-						tw.getInclusiveStart() + cargoMinTravelTimes[i][0],
+				cargoWindows[i] = new CargoWindowData(tw.getInclusiveStart(), tw.getExclusiveEnd(), tw.getInclusiveStart() + cargoMinTravelTimes[i][0],
 						tw.getExclusiveEnd() + cargoMinTravelTimes[i][0]);
 			}
 		}
-		
+
 		return cargoWindows;
 	}
 
-	private void printSlotsToFile(List<? extends IPortSlot> loads, List<? extends IPortSlot> discharges) {
-		DateTime date = DateTime.now();
+	private void printSlotsToFile(final List<? extends IPortSlot> loads, final List<? extends IPortSlot> discharges) {
+		final DateTime date = DateTime.now();
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(String.format("c:/temp/slots-%s-%s-%s.txt", date.getHourOfDay(), date.getMinuteOfHour(), date.getSecondOfMinute()), "UTF-8");
-			loads.forEach(l->writer.println(l.getId())); 
-			discharges.forEach(d->writer.println(d.getId())); 
+			loads.forEach(l -> writer.println(l.getId()));
+			discharges.forEach(d -> writer.println(d.getId()));
 			writer.close();
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
+		} catch (final UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	private void printPairingsToFile(List<ILoadOption> sortedLoads, Map<ILoadOption, IDischargeOption> pairingsMap) {
-		DateTime date = DateTime.now();
+
+	private void printPairingsToFile(final List<ILoadOption> sortedLoads, final Map<ILoadOption, IDischargeOption> pairingsMap) {
+		final DateTime date = DateTime.now();
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(String.format("c:/temp/pairings-%s-%s-%s.txt", date.getHourOfDay(), date.getMinuteOfHour(), date.getSecondOfMinute()), "UTF-8");
-			for (ILoadOption load : sortedLoads) {
+			for (final ILoadOption load : sortedLoads) {
 				if (pairingsMap.get(load) != null) {
-					writer.println(
-						String.format("%s -> %s", load.getId(), pairingsMap.get(load))
-						);
+					writer.println(String.format("%s -> %s", load.getId(), pairingsMap.get(load)));
 				}
 			}
 			writer.close();
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
+		} catch (final UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-
-	private void printPairings(Map<ILoadOption, IDischargeOption> pairingsMap) {
+	private void printPairings(final Map<ILoadOption, IDischargeOption> pairingsMap) {
 		System.out.println("####Pairings####");
-		for (Entry<ILoadOption, IDischargeOption> entry : pairingsMap.entrySet()) {
+		for (final Entry<ILoadOption, IDischargeOption> entry : pairingsMap.entrySet()) {
 			if (entry.getValue() != null) {
 				System.out.println(String.format("%s -> %s", entry.getKey(), entry.getValue()));
 			}
 		}
 	}
-	
-	private void printShippedCargoesToFile(List<List<IPortSlot>> shippedCargoes) {
-		DateTime date = DateTime.now();
+
+	private void printShippedCargoesToFile(final List<List<IPortSlot>> shippedCargoes) {
+		final DateTime date = DateTime.now();
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(String.format("c:/temp/shipped-cargoes-%s-%s-%s.txt", date.getHourOfDay(), date.getMinuteOfHour(), date.getSecondOfMinute()), "UTF-8");
-			for (List<IPortSlot> cargoe : shippedCargoes) {
-				writer.println(cargoe.stream().map(s->s.getId()).collect(Collectors.joining("-")));
+			for (final List<IPortSlot> cargoe : shippedCargoes) {
+				writer.println(cargoe.stream().map(s -> s.getId()).collect(Collectors.joining("-")));
 			}
 			writer.close();
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
+		} catch (final UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

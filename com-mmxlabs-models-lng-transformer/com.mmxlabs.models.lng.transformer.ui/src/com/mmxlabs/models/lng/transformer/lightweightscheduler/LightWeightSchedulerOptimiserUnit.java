@@ -126,10 +126,15 @@ public class LightWeightSchedulerOptimiserUnit {
 					final CleanStateOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
 					copyStageSettings.setSeed(seed);
 
-					final LightWeightSchedulerOptimiserUnit t = new LightWeightSchedulerOptimiserUnit(dataTransformer, userSettings, copyStageSettings, copyStageSettings.getConstraintAndFitnessSettings(),
-							executorService, (LNGScenarioModel) (optimiserBridge.getOptimiserScenario().getScenario()), hints);
-
-					final IMultiStateResult result = t.runAll(initialSequencesContainer.getSequences(), monitor);
+					final LightWeightSchedulerOptimiserUnit t = new LightWeightSchedulerOptimiserUnit(dataTransformer, userSettings, copyStageSettings,
+							copyStageSettings.getConstraintAndFitnessSettings(), executorService, (LNGScenarioModel) (optimiserBridge.getOptimiserScenario().getScenario()), hints);
+					final IMultiStateResult result;
+					if (userSettings.isNominalADP()) {
+						ISequences seq = t.computeNominalADP(initialSequencesContainer.getSequences(), monitor);
+						result = new MultiStateResult(seq, new HashMap<>());
+					} else {
+						result = t.runAll(initialSequencesContainer.getSequences(), monitor);
+					}
 
 					// Check monitor state
 					if (monitor.isCanceled()) {
@@ -200,7 +205,7 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		return result;
 	}
-	
+
 	public boolean[][] runAndGetPairings(@NonNull final ISequences referenceSequences, @NonNull final IProgressMonitor monitor) {
 
 		// Convert the given monitor into a progress instance
@@ -223,12 +228,10 @@ public class LightWeightSchedulerOptimiserUnit {
 			return scheduler.createSlotPairingMatrix(pnlVessel, calculator, executorService, monitor);
 		} catch (Exception e) {
 			return null;
-		}
-		finally {
+		} finally {
 			executorService.shutdown();
 		}
 	}
-
 
 	@NonNullByDefault
 	private Injector buildStage2Injector(final Injector stage1Injector, final ILightWeightOptimisationData lwOptimsdationData) {
@@ -258,7 +261,7 @@ public class LightWeightSchedulerOptimiserUnit {
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 
 		modules.add(new LightWeightSchedulerStage1Module());
-		
+
 		final Injector injector = dataTransformer.getInjector().createChildInjector(modules);
 
 		return injector;
@@ -285,6 +288,28 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		try {
 			return scheduler.createLightWeightOptimisationData(pnlVessel, calculator, executorService, monitor);
+		} finally {
+			executorService.shutdown();
+		}
+
+	}
+
+	public ISequences computeNominalADP(@NonNull final ISequences referenceSequences, final IProgressMonitor monitor) {
+
+		final Injector stage1Injector = buildStage1Injector(referenceSequences);
+
+		prepareLongTermData(stage1Injector, referenceSequences);
+
+		final IVesselAvailability pnlVessel = stage1Injector.getInstance(Key.get(IVesselAvailability.class, Names.named(OptimiserConstants.DEFAULT_VESSEL)));
+
+		final LoadDischargePairValueCalculatorStep calculator = SlotValueHelper.createLoadDischargeCalculatorUnit(dataTransformer);
+
+		final LightWeightOptimisationDataFactory scheduler = stage1Injector.getInstance(LightWeightOptimisationDataFactory.class);
+
+		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1));
+
+		try {
+			return scheduler.createNominalADP(pnlVessel, calculator, executorService, monitor);
 		} finally {
 			executorService.shutdown();
 		}

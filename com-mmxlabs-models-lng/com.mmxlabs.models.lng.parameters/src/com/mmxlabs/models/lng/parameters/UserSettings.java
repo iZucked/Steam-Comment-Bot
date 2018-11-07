@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isWithSpotCargoMarkets <em>With Spot Cargo Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isBuildActionSets <em>Build Action Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getSimilarityMode <em>Similarity Mode</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isNominalADP <em>Nominal ADP</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanStateOptimisation <em>Clean State Optimisation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isAdpOptimisation <em>Adp Optimisation</em>}</li>
@@ -281,6 +282,33 @@ public interface UserSettings extends EObject {
 	 * @generated
 	 */
 	void setSimilarityMode(SimilarityMode value);
+
+	/**
+	 * Returns the value of the '<em><b>Nominal ADP</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Nominal ADP</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Nominal ADP</em>' attribute.
+	 * @see #setNominalADP(boolean)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_NominalADP()
+	 * @model default="false"
+	 * @generated
+	 */
+	boolean isNominalADP();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#isNominalADP <em>Nominal ADP</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Nominal ADP</em>' attribute.
+	 * @see #isNominalADP()
+	 * @generated
+	 */
+	void setNominalADP(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Clean State Optimisation</b></em>' attribute.

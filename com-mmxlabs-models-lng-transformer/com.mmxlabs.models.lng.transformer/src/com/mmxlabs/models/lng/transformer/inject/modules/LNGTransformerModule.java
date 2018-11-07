@@ -442,7 +442,7 @@ public class LNGTransformerModule extends AbstractModule {
 	private List<VesselAvailability> provideExtraAvailabilities() {
 		return Collections.emptyList();
 	}
-	
+
 	@Provides
 	@Named(LNGScenarioTransformer.EXTRA_VESSEL_EVENTS)
 	private List<VesselEvent> provideExtraVesselEvents() {

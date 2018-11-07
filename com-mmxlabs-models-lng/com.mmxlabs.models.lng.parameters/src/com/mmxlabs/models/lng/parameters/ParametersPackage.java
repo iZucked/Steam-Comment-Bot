@@ -134,13 +134,22 @@ public interface ParametersPackage extends EPackage {
 	int USER_SETTINGS__SIMILARITY_MODE = 6;
 
 	/**
+	 * The feature id for the '<em><b>Nominal ADP</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__NOMINAL_ADP = 7;
+
+	/**
 	 * The feature id for the '<em><b>Clean State Optimisation</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__CLEAN_STATE_OPTIMISATION = 7;
+	int USER_SETTINGS__CLEAN_STATE_OPTIMISATION = 8;
 
 	/**
 	 * The feature id for the '<em><b>Floating Days Limit</b></em>' attribute.
@@ -149,7 +158,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__FLOATING_DAYS_LIMIT = 8;
+	int USER_SETTINGS__FLOATING_DAYS_LIMIT = 9;
 
 	/**
 	 * The feature id for the '<em><b>Adp Optimisation</b></em>' attribute.
@@ -158,7 +167,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__ADP_OPTIMISATION = 9;
+	int USER_SETTINGS__ADP_OPTIMISATION = 10;
 
 	/**
 	 * The number of structural features of the '<em>User Settings</em>' class.
@@ -167,7 +176,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS_FEATURE_COUNT = 10;
+	int USER_SETTINGS_FEATURE_COUNT = 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -1547,6 +1556,17 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getUserSettings_SimilarityMode();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isNominalADP <em>Nominal ADP</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Nominal ADP</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isNominalADP()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_NominalADP();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanStateOptimisation <em>Clean State Optimisation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2420,6 +2440,14 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute USER_SETTINGS__SIMILARITY_MODE = eINSTANCE.getUserSettings_SimilarityMode();
+
+		/**
+		 * The meta object literal for the '<em><b>Nominal ADP</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__NOMINAL_ADP = eINSTANCE.getUserSettings_NominalADP();
 
 		/**
 		 * The meta object literal for the '<em><b>Clean State Optimisation</b></em>' attribute feature.
