@@ -33,7 +33,7 @@ import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
 public class LoadTriggerDialog extends TitleAreaDialog {
-	public static final int DEFAULT_GLOBAL_LOAD_TRIGGER = 250_000;
+	public static final int DEFAULT_GLOBAL_LOAD_TRIGGER = 200_000;
 	public static final int DEFAULT_VOLUME = 158_000;
 	private LocalDate selectedDate = LocalDate.now();
 	private Integer globalLoadTrigger = DEFAULT_GLOBAL_LOAD_TRIGGER;

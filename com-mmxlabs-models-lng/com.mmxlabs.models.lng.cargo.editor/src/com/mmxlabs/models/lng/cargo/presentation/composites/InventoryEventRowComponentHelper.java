@@ -74,6 +74,8 @@ public class InventoryEventRowComponentHelper extends BaseComponentHelper {
 		add_reliabilityEditor(detailComposite, topClass);
 		add_volumeEditor(detailComposite, topClass);
 		add_forecastDateEditor(detailComposite, topClass);
+		add_volumeLowEditor(detailComposite, topClass);
+		add_volumeHighEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the startDate feature on InventoryEventRow
@@ -132,5 +134,23 @@ public class InventoryEventRowComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_forecastDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.INVENTORY_EVENT_ROW__FORECAST_DATE));
+	}
+
+	/**
+	 * Create the editor for the volumeLow feature on InventoryEventRow
+	 *
+	 * @generated NOT
+	 */
+	protected void add_volumeLowEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.INVENTORY_EVENT_ROW__VOLUME_LOW));
+	}
+
+	/**
+	 * Create the editor for the volumeHigh feature on InventoryEventRow
+	 *
+	 * @generated NOT
+	 */
+	protected void add_volumeHighEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.INVENTORY_EVENT_ROW__VOLUME_HIGH));
 	}
 }

@@ -5492,13 +5492,31 @@ public interface CargoPackage extends EPackage {
 	int INVENTORY_EVENT_ROW__FORECAST_DATE = 6;
 
 	/**
+	 * The feature id for the '<em><b>Volume Low</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENT_ROW__VOLUME_LOW = 7;
+
+	/**
+	 * The feature id for the '<em><b>Volume High</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENT_ROW__VOLUME_HIGH = 8;
+
+	/**
 	 * The number of structural features of the '<em>Inventory Event Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_EVENT_ROW_FEATURE_COUNT = 7;
+	int INVENTORY_EVENT_ROW_FEATURE_COUNT = 9;
 
 	/**
 	 * The operation id for the '<em>Get Reliable Volume</em>' operation.
@@ -8638,6 +8656,28 @@ public interface CargoPackage extends EPackage {
 	EAttribute getInventoryEventRow_ForecastDate();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getVolumeLow <em>Volume Low</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Low</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryEventRow#getVolumeLow()
+	 * @see #getInventoryEventRow()
+	 * @generated
+	 */
+	EAttribute getInventoryEventRow_VolumeLow();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getVolumeHigh <em>Volume High</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume High</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryEventRow#getVolumeHigh()
+	 * @see #getInventoryEventRow()
+	 * @generated
+	 */
+	EAttribute getInventoryEventRow_VolumeHigh();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getReliableVolume() <em>Get Reliable Volume</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10793,6 +10833,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute INVENTORY_EVENT_ROW__FORECAST_DATE = eINSTANCE.getInventoryEventRow_ForecastDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Low</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_EVENT_ROW__VOLUME_LOW = eINSTANCE.getInventoryEventRow_VolumeLow();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume High</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_EVENT_ROW__VOLUME_HIGH = eINSTANCE.getInventoryEventRow_VolumeHigh();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Reliable Volume</b></em>' operation.
