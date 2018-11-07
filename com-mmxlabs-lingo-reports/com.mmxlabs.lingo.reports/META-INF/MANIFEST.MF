@@ -103,8 +103,9 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.transformer,
  com.mmxlabs.models.lng.transformer.ui,
  org.swtchart;bundle-version="0.7.0",
- com.mmxlabs.scenario.service.util, 
- com.mmxlabs.models.lng.cargo.editor
+ com.mmxlabs.scenario.service.util,
+ com.mmxlabs.models.lng.cargo.editor,
+ javax.annotation;bundle-version="1.2.0"
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
 Bundle-ActivationPolicy: lazy
