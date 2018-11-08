@@ -17,8 +17,9 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
 public class LightWeightOptimisationData implements ILightWeightOptimisationData {
-    private LightWeightCargoDetails[] cargoDetails;
-	private List<List<IPortSlot>> cargoes;
+	private LightWeightCargoDetails[] cargoDetails;
+	private List<List<IPortSlot>> shippedCargoes;
+	private List<List<IPortSlot>> nonShippedCargoes;
 	private List<IVesselAvailability> vessels;
 	private long[] cargoPNL;
 	private long[] vesselCapacities;
@@ -30,7 +31,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	private int[] desiredVesselCargoCount;
 	private long[] desiredVesselCargoWeight;
 	private long[] cargoesVolumesInM3;
-	
+
 	private long[][] cargoCharterCostPerAvailability;
 	private Set<Integer> cargoIndexes;
 	private Set<Integer> eventIndexes;
@@ -40,36 +41,35 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	private int[] cargoEndSlotDurations;
 	private CargoWindowData[] cargoWindows;
 
-	public LightWeightOptimisationData(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, long[] vesselCapacities,
-			long[] cargoPNL, long[][][] cargoToCargoCostsOnAvailability, ArrayList<Set<Integer>> cargoVesselRestrictions,
-			int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Map<ILoadOption, IDischargeOption> pairingsMap,
-			int[] desiredVesselCargoCount, long[] desiredVesselCargoWeight, long[] cargoesVolumes, LightWeightCargoDetails[] cargoDetails,
-			long[][] cargoCharterCostPerAvailability, Set<Integer> cargoIndexes, Set<Integer> eventIndexes,
-			ITimeWindow[] vesselStartWindows, ITimeWindow[] vesselEndWindows, int[] cargoStartSlotDurations,
-			int[] cargoEndSlotDurations, CargoWindowData[] cargoWindows) {
-				this.cargoes = cargoes;
-				this.vessels = vessels;
-				this.vesselCapacities = vesselCapacities;
-				this.cargoPNL = cargoPNL;
-				this.cargoToCargoCostsOnAvailability = cargoToCargoCostsOnAvailability;
-				this.cargoVesselRestrictions = cargoVesselRestrictions;
-				this.cargoToCargoMinTravelTimes = cargoToCargoMinTravelTimes;
-				this.cargoMinTravelTimes = cargoMinTravelTimes;
-				this.pairingsMap = pairingsMap;
-				this.desiredVesselCargoCount = desiredVesselCargoCount;
-				this.cargoCharterCostPerAvailability = cargoCharterCostPerAvailability;
-				this.cargoIndexes = cargoIndexes;
-				this.eventIndexes = eventIndexes;
-				this.vesselStartWindows = vesselStartWindows;
-				this.vesselEndWindows = vesselEndWindows;
-				this.cargoStartSlotDurations = cargoStartSlotDurations;
-				this.cargoEndSlotDurations = cargoEndSlotDurations;
-				this.cargoWindows = cargoWindows;
-				this.setDesiredVesselCargoWeight(desiredVesselCargoWeight);
-				this.cargoesVolumesInM3 = cargoesVolumes;
-				this.cargoDetails = cargoDetails;
+	public LightWeightOptimisationData(List<List<IPortSlot>> shippedCargoes, List<List<IPortSlot>> nonShippedCargoes, List<IVesselAvailability> vessels, long[] vesselCapacities, long[] cargoPNL,
+			long[][][] cargoToCargoCostsOnAvailability, ArrayList<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes,
+			Map<ILoadOption, IDischargeOption> pairingsMap, int[] desiredVesselCargoCount, long[] desiredVesselCargoWeight, long[] cargoesVolumes, LightWeightCargoDetails[] cargoDetails,
+			long[][] cargoCharterCostPerAvailability, Set<Integer> cargoIndexes, Set<Integer> eventIndexes, ITimeWindow[] vesselStartWindows, ITimeWindow[] vesselEndWindows,
+			int[] cargoStartSlotDurations, int[] cargoEndSlotDurations, CargoWindowData[] cargoWindows) {
+		this.shippedCargoes = shippedCargoes;
+		this.nonShippedCargoes = nonShippedCargoes;
+		this.vessels = vessels;
+		this.vesselCapacities = vesselCapacities;
+		this.cargoPNL = cargoPNL;
+		this.cargoToCargoCostsOnAvailability = cargoToCargoCostsOnAvailability;
+		this.cargoVesselRestrictions = cargoVesselRestrictions;
+		this.cargoToCargoMinTravelTimes = cargoToCargoMinTravelTimes;
+		this.cargoMinTravelTimes = cargoMinTravelTimes;
+		this.pairingsMap = pairingsMap;
+		this.desiredVesselCargoCount = desiredVesselCargoCount;
+		this.cargoCharterCostPerAvailability = cargoCharterCostPerAvailability;
+		this.cargoIndexes = cargoIndexes;
+		this.eventIndexes = eventIndexes;
+		this.vesselStartWindows = vesselStartWindows;
+		this.vesselEndWindows = vesselEndWindows;
+		this.cargoStartSlotDurations = cargoStartSlotDurations;
+		this.cargoEndSlotDurations = cargoEndSlotDurations;
+		this.cargoWindows = cargoWindows;
+		this.setDesiredVesselCargoWeight(desiredVesselCargoWeight);
+		this.cargoesVolumesInM3 = cargoesVolumes;
+		this.cargoDetails = cargoDetails;
 	}
-	
+
 	public CargoWindowData[] getCargoWindows() {
 		return cargoWindows;
 	}
@@ -77,6 +77,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	public List<IVesselAvailability> getVessels() {
 		return vessels;
 	}
+
 	public void setVessels(List<IVesselAvailability> vessels) {
 		this.vessels = vessels;
 	}
@@ -85,6 +86,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	public long[] getCargoPNLPerM3() {
 		return cargoPNL;
 	}
+
 	public void setCargoPNLPerM3(long[] cargoPNL) {
 		this.cargoPNL = cargoPNL;
 	}
@@ -93,6 +95,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	public long[][][] getCargoToCargoCostsOnAvailability() {
 		return cargoToCargoCostsOnAvailability;
 	}
+
 	public void setCargoToCargoCostsOnAvailability(long[][][] cargoToCargoCostsOnAvailability) {
 		this.cargoToCargoCostsOnAvailability = cargoToCargoCostsOnAvailability;
 	}
@@ -101,6 +104,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	public ArrayList<Set<Integer>> getCargoVesselRestrictions() {
 		return cargoVesselRestrictions;
 	}
+
 	public void setCargoVesselRestrictions(ArrayList<Set<Integer>> cargoVesselRestrictions) {
 		this.cargoVesselRestrictions = cargoVesselRestrictions;
 	}
@@ -109,6 +113,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	public int[][][] getCargoToCargoMinTravelTimes() {
 		return cargoToCargoMinTravelTimes;
 	}
+
 	public void setCargoToCargoMinTravelTimes(int[][][] cargoToCargoMinTravelTimes) {
 		this.cargoToCargoMinTravelTimes = cargoToCargoMinTravelTimes;
 	}
@@ -117,22 +122,23 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	public int[][] getCargoMinTravelTimes() {
 		return cargoMinTravelTimes;
 	}
+
 	public void setCargoMinTravelTimes(int[][] cargoMinTravelTimes) {
 		this.cargoMinTravelTimes = cargoMinTravelTimes;
 	}
 
 	@Override
-	public List<List<IPortSlot>> getCargoes() {
-		return cargoes;
+	public List<List<IPortSlot>> getShippedCargoes() {
+		return shippedCargoes;
 	}
-	
+
 	@Override
 	public LightWeightCargoDetails[] getCargoDetails() {
 		return this.cargoDetails;
 	}
-	
-	public void setCargoes(List<List<IPortSlot>> cargoes) {
-		this.cargoes = cargoes;
+
+	public void setShippedCargoes(List<List<IPortSlot>> shippedCargoes) {
+		this.shippedCargoes = shippedCargoes;
 	}
 
 	@Override
@@ -188,7 +194,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	public void setCargoCharterCostPerAvailability(long[][] cargoCharterCostPerAvailability) {
 		this.cargoCharterCostPerAvailability = cargoCharterCostPerAvailability;
 	}
-	
+
 	@Override
 	public Set<Integer> getCargoIndexes() {
 		return cargoIndexes;
@@ -198,7 +204,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	public Set<Integer> getEventIndexes() {
 		return eventIndexes;
 	}
-	
+
 	@Override
 	public ITimeWindow[] getVesselStartWindows() {
 		return vesselStartWindows;
@@ -221,6 +227,10 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 
 	@Override
 	public int getCargoCount() {
-		return cargoes.size();
+		return shippedCargoes.size();
+	}
+
+	public List<List<IPortSlot>> getNonShippedCargoes() {
+		return nonShippedCargoes;
 	}
 }

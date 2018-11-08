@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -28,7 +28,6 @@ import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightW
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunction;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightOptimisationData;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightSequenceOptimiser;
-import com.mmxlabs.models.lng.transformer.optimiser.common.AbstractOptimiserHelper.ShippingType;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -37,16 +36,12 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * Light weight scheduling optimisation.
@@ -61,6 +56,9 @@ public class LightWeightSchedulerOptimiser {
 
 	@Inject
 	private IVesselProvider vesselProvider;
+
+	@Inject
+	private IStartEndRequirementProvider startEndRequirementProvider;
 
 	@Inject
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
@@ -100,24 +98,15 @@ public class LightWeightSchedulerOptimiser {
 		List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData, constraintCheckers, fitnessFunctions, monitor);
 
 		// Export the pairings matrix to the raw sequences:
-		
-		ModifiableSequences rawSequences = new ModifiableSequences(initialSequences);
+
+		ModifiableSequences rawSequences1 = new ModifiableSequences(initialSequences);
+		LightWeightOptimiserHelper.moveElementsToUnusedList(rawSequences1, portSlotProvider);
+		ModifiableSequences rawSequences = new ModifiableSequences(initialSequences.getResources());
+		rawSequences.getModifiableUnusedElements().addAll(rawSequences1.getUnusedElements());
+
 		// (a) update shipped
-		updateSequences(rawSequences, sequences, lightWeightOptimisationData.getCargoes(), lightWeightOptimisationData.getVessels(), lightWeightOptimisationData.getPairingsMap());
-		
-		// (b) update non-shipped
-		LightWeightOptimiserHelper.updateVirtualSequences(rawSequences, lightWeightOptimisationData.getCargoes(), lightWeightOptimisationData.getPairingsMap(), vesselProvider.getResource(pnlVessel), portSlotProvider,
-				virtualVesselSlotProvider, vesselProvider, ShippingType.NON_SHIPPED);
-		
-		// (c) update unscheduled and put on nominal
-		HashMap<ILoadOption, IDischargeOption> unscheduleddMap = new HashMap<>(lightWeightOptimisationData.getPairingsMap());
-		for (List<Integer> sequence : sequences) {
-			for (Integer idx : sequence) {
-				unscheduleddMap.remove(lightWeightOptimisationData.getCargoes().get(idx).get(0));
-			}
-		}
-		LightWeightOptimiserHelper.updateVirtualSequences(rawSequences, lightWeightOptimisationData.getCargoes(), unscheduleddMap, vesselProvider.getResource(pnlVessel), portSlotProvider, virtualVesselSlotProvider, vesselProvider,
-				ShippingType.SHIPPED);
+		updateSequences(rawSequences, sequences, lightWeightOptimisationData.getShippedCargoes(), lightWeightOptimisationData.getVessels());
+
 		return new Pair<>(rawSequences, 0L);
 	}
 
@@ -131,52 +120,61 @@ public class LightWeightSchedulerOptimiser {
 	 * @param pairingsMap
 	 * @param nominal
 	 */
-	private void updateSequences(@NonNull IModifiableSequences rawSequences, List<List<Integer>> sequences, List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels,
-			@NonNull Map<ILoadOption, IDischargeOption> pairingsMap) {
-		LightWeightOptimiserHelper.moveElementsToUnusedList(rawSequences, portSlotProvider);
+	private void updateSequences(@NonNull IModifiableSequences rawSequences, List<List<Integer>> sequences, List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels) {
+		List<ISequenceElement> unusedElements = rawSequences.getModifiableUnusedElements();
+
+		Set<ISequenceElement> usedElements = new HashSet<>();
 		for (int vesselIndex = 0; vesselIndex < vessels.size(); vesselIndex++) {
 			IVesselAvailability vesselAvailability = vessels.get(vesselIndex);
-			IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(vesselProvider.getResource(vesselAvailability));
-			int insertIndex = 0;
-			for (int i = 0; i < modifiableSequence.size(); i++) {
-				if (portSlotProvider.getPortSlot(modifiableSequence.get(i)) != null && portSlotProvider.getPortSlot(modifiableSequence.get(i)).getPortType() == PortType.End) {
-					break;
-				}
-				insertIndex++;
-			}
-			List<ISequenceElement> unusedElements = rawSequences.getModifiableUnusedElements();
+			IResource o_resource = vesselProvider.getResource(vesselAvailability);
+
+			IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(o_resource);
+			modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
+
 			List<Integer> cargoIndexes = sequences.get(vesselIndex);
 			for (int cargoIndex : cargoIndexes) {
 				List<IPortSlot> cargo = cargoes.get(cargoIndex);
-				ILoadOption loadOption = LightWeightOptimiserHelper.getLoadOption(cargo);
-				IDischargeOption dischargeOption = LightWeightOptimiserHelper.getDischargeOption(cargo);
-				IPortSlot vesselEvent = LightWeightOptimiserHelper.getVesselEvent(cargo);
-				if (vesselEvent != null) {
-					modifiableSequence.insert(insertIndex++, portSlotProvider.getElement(vesselEvent));
-					unusedElements.remove(portSlotProvider.getElement(vesselEvent));
-				} else if (dischargeOption == null) { // skip if unallocated
-					continue;
-				} else if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
-					// FOB-DES
-					modifiableSequence.insert(insertIndex++, portSlotProvider.getElement(loadOption));
-					modifiableSequence.insert(insertIndex++, portSlotProvider.getElement(dischargeOption));
-					unusedElements.remove(portSlotProvider.getElement(loadOption));
-					unusedElements.remove(portSlotProvider.getElement(dischargeOption));
-				} else if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeOption) {
-					// Fob Sale
-					IResource resource = LightWeightOptimiserHelper.getVirtualResource(dischargeOption, portSlotProvider, virtualVesselSlotProvider, vesselProvider);
-					if (resource != null) {
-						IModifiableSequence fobSale = rawSequences.getModifiableSequence(resource);
-						LightWeightOptimiserHelper.insertCargo(unusedElements, loadOption, dischargeOption, fobSale, portSlotProvider);
-					}
-				} else if (loadOption instanceof ILoadOption && dischargeOption instanceof IDischargeSlot) {
-					// DES purchase
-					IResource resource = LightWeightOptimiserHelper.getVirtualResource(loadOption, portSlotProvider, virtualVesselSlotProvider, vesselProvider);
-					if (resource != null) {
-						IModifiableSequence desPurchase = rawSequences.getModifiableSequence(resource);
-						LightWeightOptimiserHelper.insertCargo(unusedElements, loadOption, dischargeOption, desPurchase, portSlotProvider);
+
+				for (final IPortSlot e : cargo) {
+					modifiableSequence.add(portSlotProvider.getElement(e));
+					usedElements.add(portSlotProvider.getElement(e));
+				}
+			}
+			modifiableSequence.add(startEndRequirementProvider.getEndElement(o_resource));
+		}
+		{
+			for (final List<IPortSlot> cargo : lightWeightOptimisationData.getNonShippedCargoes()) {
+				// Grab FOB/DES vessel
+				IVesselAvailability va = null;
+				for (final IPortSlot e : cargo) {
+					va = virtualVesselSlotProvider.getVesselAvailabilityForElement(portSlotProvider.getElement(e));
+					if (va != null) {
+						break;
 					}
 				}
+
+				assert va != null;
+				IResource o_resource = vesselProvider.getResource(va);
+				final IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(o_resource);
+				modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
+
+				for (final IPortSlot e : cargo) {
+					modifiableSequence.add(portSlotProvider.getElement(e));
+					usedElements.add(portSlotProvider.getElement(e));
+				}
+
+				modifiableSequence.add(startEndRequirementProvider.getEndElement(o_resource));
+			}
+		}
+
+		unusedElements.removeAll(usedElements);
+
+		// Make sure any untouched resources have start/end elements
+		for (IResource o_resource : rawSequences.getResources()) {
+			final IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(o_resource);
+			if (modifiableSequence.size() == 0) {
+				modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
+				modifiableSequence.add(startEndRequirementProvider.getEndElement(o_resource));
 			}
 		}
 	}
@@ -205,12 +203,10 @@ public class LightWeightSchedulerOptimiser {
 			writer = new PrintWriter(String.format("c:/temp/sequence-%s-%s-%s.txt", date.getHourOfDay(), date.getMinuteOfHour(), date.getSecondOfMinute()), "UTF-8");
 			for (IResource iResource : sequences.getResources()) {
 				ISequence sequence = sequences.getSequence(iResource);
-				String seqString = StreamSupport.stream(sequence.spliterator(), false).map(s->s.getName()).collect(Collectors.joining("-"));
+				String seqString = StreamSupport.stream(sequence.spliterator(), false).map(s -> s.getName()).collect(Collectors.joining("-"));
 				writer.println(seqString);
 			}
-			String seqString = StreamSupport.stream(sequences.getUnusedElements().spliterator(), false)
-					.sorted((a,b)->a.getName().compareTo(b.getName()))
-					.map(s->s.getName())
+			String seqString = StreamSupport.stream(sequences.getUnusedElements().spliterator(), false).sorted((a, b) -> a.getName().compareTo(b.getName())).map(s -> s.getName())
 					.collect(Collectors.joining("-"));
 			writer.println(seqString);
 			writer.close();

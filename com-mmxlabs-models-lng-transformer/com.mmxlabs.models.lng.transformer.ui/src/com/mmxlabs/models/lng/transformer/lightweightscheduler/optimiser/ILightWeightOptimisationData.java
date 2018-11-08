@@ -21,8 +21,8 @@ public interface ILightWeightOptimisationData {
 	long[] getCargoPNLPerM3();
 
 	/**
-	 * Calculates the cargo charter costs.
-	 * Only calculates cost for non-optional charters
+	 * Calculates the cargo charter costs. Only calculates cost for non-optional charters
+	 * 
 	 * @return
 	 */
 	long[][][] getCargoToCargoCostsOnAvailability();
@@ -33,7 +33,9 @@ public interface ILightWeightOptimisationData {
 
 	int[][] getCargoMinTravelTimes();
 
-	List<List<IPortSlot>> getCargoes();
+	List<List<IPortSlot>> getShippedCargoes();
+
+	List<List<IPortSlot>> getNonShippedCargoes();
 
 	List<IVesselAvailability> getVessels();
 
@@ -44,9 +46,9 @@ public interface ILightWeightOptimisationData {
 	long[] getVesselCapacities();
 
 	long[] getDesiredVesselCargoWeight();
-	
+
 	long[] getCargoesVolumesInM3();
-	
+
 	LightWeightCargoDetails[] getCargoDetails();
 
 	long[][] getCargoCharterCostPerAvailability();
@@ -64,6 +66,6 @@ public interface ILightWeightOptimisationData {
 	int[] getCargoEndSlotDurations();
 
 	CargoWindowData[] getCargoWindows();
-	
+
 	int getCargoCount();
 }

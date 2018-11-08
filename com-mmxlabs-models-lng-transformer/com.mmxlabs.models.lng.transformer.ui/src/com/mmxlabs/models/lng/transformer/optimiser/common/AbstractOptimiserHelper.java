@@ -44,8 +44,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
-abstract public class AbstractOptimiserHelper {
-	public static enum ShippingType {
+public abstract class AbstractOptimiserHelper {
+	public enum ShippingType {
 		SHIPPED, NON_SHIPPED, ALL
 	}
 

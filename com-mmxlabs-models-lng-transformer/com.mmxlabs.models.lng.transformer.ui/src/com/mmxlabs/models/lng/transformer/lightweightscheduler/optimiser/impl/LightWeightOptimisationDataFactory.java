@@ -111,7 +111,9 @@ public class LightWeightOptimisationDataFactory {
 		final Set<Integer> cargoIndexes = new HashSet<>();
 		final List<List<IPortSlot>> shippedCargoes = PairingOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pairingsMatrix,
 				ShippingType.SHIPPED);
-		if (shippedCargoes.isEmpty()) {
+		final List<List<IPortSlot>> nonshippedCargoes = PairingOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pairingsMatrix,
+				ShippingType.NON_SHIPPED);
+		if (shippedCargoes.isEmpty() && nonshippedCargoes.isEmpty()) {
 			// No cargoes found!
 			return null;
 		}
@@ -168,7 +170,7 @@ public class LightWeightOptimisationDataFactory {
 		final int[] cargoEndSlotDurations = cargoToCargoCostCalculator.getCargoEndSlotDurations(shippedCargoes);
 		final CargoWindowData[] cargoWindows = calculateCargoWindows(shippedCargoes, minCargoStartToEndSlotTravelTimesPerVessel, cargoIndexes);
 
-		final LightWeightOptimisationData lightWeightOptimisationData = new LightWeightOptimisationData(shippedCargoes, vessels, capacity, cargoPNL, cargoToCargoCostsOnAvailability,
+		final LightWeightOptimisationData lightWeightOptimisationData = new LightWeightOptimisationData(shippedCargoes, nonshippedCargoes, vessels, capacity, cargoPNL, cargoToCargoCostsOnAvailability,
 				cargoVesselRestrictions, minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel, pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight,
 				cargoesVolumes, cargoDetails, cargoCharterCostPerAvailability, cargoIndexes, eventIndexes, vesselStartWindows, vesselEndWindows, cargoStartSlotDurations, cargoEndSlotDurations,
 				cargoWindows);
@@ -198,8 +200,7 @@ public class LightWeightOptimisationDataFactory {
 		// Create data for optimiser
 
 		// add cargoes
-		final List<List<IPortSlot>> shippedCargoes = PairingOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pairingsMatrix,
-				ShippingType.SHIPPED);
+		final List<List<IPortSlot>> shippedCargoes = PairingOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pairingsMatrix, ShippingType.ALL);
 		if (shippedCargoes.isEmpty()) {
 			// No cargoes found!
 			return null;
@@ -220,12 +221,12 @@ public class LightWeightOptimisationDataFactory {
 		}
 
 		final IModifiableSequences sequences = new ModifiableSequences(new ArrayList<>(resources));
-
 		final IStartEndRequirementProvider startEndRequirementProvider = injector.getInstance(IStartEndRequirementProvider.class);
 
 		@NonNull
 		final IModifiableSequence modifiableSequence = sequences.getModifiableSequence(o_resource);
 		modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
+		Set<ISequenceElement> usedElements = new HashSet<>();
 
 		for (final List<IPortSlot> cargo : shippedCargoes) {
 			// Grab FOB/DES vessel
@@ -237,16 +238,19 @@ public class LightWeightOptimisationDataFactory {
 				}
 			}
 
-			final IModifiableSequence thisModifiableSequence = modifiableSequence;
+			IModifiableSequence thisModifiableSequence = modifiableSequence;
 			IResource thisResource = null;
 
 			if (va != null) {
 				thisResource = vesselProvider.getResource(va);
+				thisModifiableSequence = sequences.getModifiableSequence(thisResource);
+
 				thisModifiableSequence.add(startEndRequirementProvider.getStartElement(thisResource));
 			}
 
 			for (final IPortSlot e : cargo) {
 				thisModifiableSequence.add(portSlotProvider.getElement(e));
+				usedElements.add(portSlotProvider.getElement(e));
 			}
 
 			if (va != null) {
@@ -256,6 +260,19 @@ public class LightWeightOptimisationDataFactory {
 		}
 
 		modifiableSequence.add(startEndRequirementProvider.getEndElement(o_resource));
+
+		List<@NonNull ISequenceElement> unusedElements = sequences.getModifiableUnusedElements();
+		optimiserRecorder.getSortedLoads().stream() //
+				.map(portSlotProvider::getElement) //
+				.filter(e -> !usedElements.contains(e)) //
+				.forEach(unusedElements::add);
+
+		optimiserRecorder.getSortedDischarges().stream() //
+				.map(portSlotProvider::getElement) //
+				.filter(e -> !usedElements.contains(e)) //
+				.forEach(unusedElements::add);
+
+		// TODO: Vessel Events?
 
 		return sequences;
 
