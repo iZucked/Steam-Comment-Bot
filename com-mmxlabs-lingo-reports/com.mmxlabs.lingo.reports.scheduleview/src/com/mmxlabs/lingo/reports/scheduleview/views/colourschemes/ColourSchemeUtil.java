@@ -194,7 +194,7 @@ public class ColourSchemeUtil {
 				if (cargoAllocation != null) {
 					return cargoAllocation.getCargoType() == CargoType.FOB;
 				}
-			} else {
+			} else if (slot instanceof DischargeSlot) {
 				isFOB = ((DischargeSlot) slot).isFOBSale();
 			}
 		}

@@ -72,7 +72,9 @@ public class SolutionSetExporterUnit {
 					final AbstractSolutionSet plan = solutionSetFactory.get();
 					boolean firstSolution = true;
 					for (final NonNullPair<ISequences, Map<String, Object>> changeSet : solutions) {
-
+						if (changeSet.getFirst() == null) {
+							continue;
+						}
 						try {
 							ISequences sequences = spotUndoHelper.undoSpotMarketSwaps(initialSequences.getSequences(), changeSet.getFirst());
 

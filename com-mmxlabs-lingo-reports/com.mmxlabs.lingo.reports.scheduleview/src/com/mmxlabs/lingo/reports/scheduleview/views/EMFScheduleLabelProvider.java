@@ -333,20 +333,20 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				if (element instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) element;
 					final Slot slot = ((SlotVisit) element).getSlotAllocation().getSlot();
-
-					final Contract contract = slot.getContract();
-					if (contract != null) {
-						tt.append("Contract: " + contract.getName() + " \n");
-					} else if (slot instanceof SpotSlot) {
-						final SpotSlot spotSlot = (SpotSlot) slot;
-						final SpotMarket market = spotSlot.getMarket();
-						tt.append("Spot market: " + market.getName() + " \n");
-					} else {
-						// Spot purchase or sale - leave blank?
-						// tt.append("Spot " + (slot instanceof LoadSlot ? "purchase" : "sale") + " \n");
+					if (slot != null) {
+						final Contract contract = slot.getContract();
+						if (contract != null) {
+							tt.append("Contract: " + contract.getName() + " \n");
+						} else if (slot instanceof SpotSlot) {
+							final SpotSlot spotSlot = (SpotSlot) slot;
+							final SpotMarket market = spotSlot.getMarket();
+							tt.append("Spot market: " + market.getName() + " \n");
+						} else {
+							// Spot purchase or sale - leave blank?
+							// tt.append("Spot " + (slot instanceof LoadSlot ? "purchase" : "sale") + " \n");
+						}
+						tt.append(" \n");
 					}
-					tt.append(" \n");
-
 					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 					Sequence sequence = slotVisit.getSequence();
 					if (slotAllocation != null && sequence != null) {
@@ -437,11 +437,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			} else if (element instanceof SlotVisit) {
 				final SlotVisit slotVisit = (SlotVisit) element;
 				final Slot slot = ((SlotVisit) element).getSlotAllocation().getSlot();
-				eventText.append("Time in port: " + durationTime + " \n");
-				// eventText.append("Window Start: " + dateToString(slot.getWindowStartWithSlotOrPortTime()) + "\n");
-				eventText.append("Window End: " + dateToString(slot.getWindowEndWithSlotOrPortTime()) + "\n");
-				eventText.append(" \n");
-
+				if (slot != null) {
+					eventText.append("Time in port: " + durationTime + " \n");
+					// eventText.append("Window Start: " + dateToString(slot.getWindowStartWithSlotOrPortTime()) + "\n");
+					eventText.append("Window End: " + dateToString(slot.getWindowEndWithSlotOrPortTime()) + "\n");
+					eventText.append(" \n");
+				}
 				boolean checkLateness = true;
 				// Do not check divertible slots
 				if (slot instanceof LoadSlot) {
