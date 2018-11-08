@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -37,6 +38,8 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -93,15 +96,15 @@ public class LightWeightSchedulerOptimiser {
 	 * @param charterInMarket
 	 * @return
 	 */
-	public Pair<ISequences, Long> optimise(final IVesselAvailability pnlVessel, @NonNull IProgressMonitor monitor) {
+	public Pair<ISequences, Long> optimise(final IVesselAvailability pnlVessel, @NonNull final IProgressMonitor monitor) {
 		// Get optimised sequences from our injected sequences optimiser
-		List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData, constraintCheckers, fitnessFunctions, monitor);
+		final List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData, constraintCheckers, fitnessFunctions, monitor);
 
 		// Export the pairings matrix to the raw sequences:
 
-		ModifiableSequences rawSequences1 = new ModifiableSequences(initialSequences);
+		final ModifiableSequences rawSequences1 = new ModifiableSequences(initialSequences);
 		LightWeightOptimiserHelper.moveElementsToUnusedList(rawSequences1, portSlotProvider);
-		ModifiableSequences rawSequences = new ModifiableSequences(initialSequences.getResources());
+		final ModifiableSequences rawSequences = new ModifiableSequences(initialSequences.getResources());
 		rawSequences.getModifiableUnusedElements().addAll(rawSequences1.getUnusedElements());
 
 		// (a) update shipped
@@ -120,20 +123,20 @@ public class LightWeightSchedulerOptimiser {
 	 * @param pairingsMap
 	 * @param nominal
 	 */
-	private void updateSequences(@NonNull IModifiableSequences rawSequences, List<List<Integer>> sequences, List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels) {
-		List<ISequenceElement> unusedElements = rawSequences.getModifiableUnusedElements();
+	private void updateSequences(@NonNull final IModifiableSequences rawSequences, final List<List<Integer>> sequences, final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels) {
+		final List<ISequenceElement> unusedElements = rawSequences.getModifiableUnusedElements();
 
-		Set<ISequenceElement> usedElements = new HashSet<>();
+		final Set<ISequenceElement> usedElements = new HashSet<>();
 		for (int vesselIndex = 0; vesselIndex < vessels.size(); vesselIndex++) {
-			IVesselAvailability vesselAvailability = vessels.get(vesselIndex);
-			IResource o_resource = vesselProvider.getResource(vesselAvailability);
+			final IVesselAvailability vesselAvailability = vessels.get(vesselIndex);
+			final IResource o_resource = vesselProvider.getResource(vesselAvailability);
 
-			IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(o_resource);
+			final IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(o_resource);
 			modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
 
-			List<Integer> cargoIndexes = sequences.get(vesselIndex);
-			for (int cargoIndex : cargoIndexes) {
-				List<IPortSlot> cargo = cargoes.get(cargoIndex);
+			final List<Integer> cargoIndexes = sequences.get(vesselIndex);
+			for (final int cargoIndex : cargoIndexes) {
+				final List<IPortSlot> cargo = cargoes.get(cargoIndex);
 
 				for (final IPortSlot e : cargo) {
 					modifiableSequence.add(portSlotProvider.getElement(e));
@@ -154,7 +157,7 @@ public class LightWeightSchedulerOptimiser {
 				}
 
 				assert va != null;
-				IResource o_resource = vesselProvider.getResource(va);
+				final IResource o_resource = vesselProvider.getResource(va);
 				final IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(o_resource);
 				modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
 
@@ -167,10 +170,38 @@ public class LightWeightSchedulerOptimiser {
 			}
 		}
 
+		// Add paired, but unscheduled and put on nominal
+		final Map<ILoadOption, IDischargeOption> unscheduledMap = lightWeightOptimisationData.getPairingsMap();
+		{
+			final IResource o_resource = vesselProvider.getResource(pnlVesselAvailability);
+			final IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(o_resource);
+
+			if (modifiableSequence.size() == 0) {
+				modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
+			} else {
+				// Pop last element off, to re-add later
+				modifiableSequence.remove(modifiableSequence.get(modifiableSequence.size() - 1));
+			}
+
+			for (final Map.Entry<ILoadOption, IDischargeOption> e : unscheduledMap.entrySet()) {
+				final ISequenceElement loadElement = portSlotProvider.getElement(e.getKey());
+
+				if (e.getValue() != null && !usedElements.contains(loadElement)) {
+					final ISequenceElement dischargeElement = portSlotProvider.getElement(e.getValue());
+					modifiableSequence.add(loadElement);
+					modifiableSequence.add(dischargeElement);
+
+					usedElements.add(loadElement);
+					usedElements.add(dischargeElement);
+				}
+			}
+			modifiableSequence.add(startEndRequirementProvider.getEndElement(o_resource));
+		}
+
 		unusedElements.removeAll(usedElements);
 
 		// Make sure any untouched resources have start/end elements
-		for (IResource o_resource : rawSequences.getResources()) {
+		for (final IResource o_resource : rawSequences.getResources()) {
 			final IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(o_resource);
 			if (modifiableSequence.size() == 0) {
 				modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
@@ -179,14 +210,14 @@ public class LightWeightSchedulerOptimiser {
 		}
 	}
 
-	private static List<List<Integer>> getStoredSequences(String path) throws IOException {
+	private static List<List<Integer>> getStoredSequences(final String path) throws IOException {
 		ObjectInputStream objectinputstream = null;
 		LightWeightOutputData readCase = null;
 		try {
-			FileInputStream streamIn = new FileInputStream(path);
+			final FileInputStream streamIn = new FileInputStream(path);
 			objectinputstream = new ObjectInputStream(streamIn);
 			readCase = (LightWeightOutputData) objectinputstream.readObject();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		} finally {
 			if (objectinputstream != null) {
@@ -196,24 +227,24 @@ public class LightWeightSchedulerOptimiser {
 		return readCase.sequences;
 	}
 
-	private void printSequencesToFile(ISequences sequences) {
-		DateTime date = DateTime.now();
+	private void printSequencesToFile(final ISequences sequences) {
+		final DateTime date = DateTime.now();
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(String.format("c:/temp/sequence-%s-%s-%s.txt", date.getHourOfDay(), date.getMinuteOfHour(), date.getSecondOfMinute()), "UTF-8");
-			for (IResource iResource : sequences.getResources()) {
-				ISequence sequence = sequences.getSequence(iResource);
-				String seqString = StreamSupport.stream(sequence.spliterator(), false).map(s -> s.getName()).collect(Collectors.joining("-"));
+			for (final IResource iResource : sequences.getResources()) {
+				final ISequence sequence = sequences.getSequence(iResource);
+				final String seqString = StreamSupport.stream(sequence.spliterator(), false).map(s -> s.getName()).collect(Collectors.joining("-"));
 				writer.println(seqString);
 			}
-			String seqString = StreamSupport.stream(sequences.getUnusedElements().spliterator(), false).sorted((a, b) -> a.getName().compareTo(b.getName())).map(s -> s.getName())
+			final String seqString = StreamSupport.stream(sequences.getUnusedElements().spliterator(), false).sorted((a, b) -> a.getName().compareTo(b.getName())).map(s -> s.getName())
 					.collect(Collectors.joining("-"));
 			writer.println(seqString);
 			writer.close();
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
+		} catch (final UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
