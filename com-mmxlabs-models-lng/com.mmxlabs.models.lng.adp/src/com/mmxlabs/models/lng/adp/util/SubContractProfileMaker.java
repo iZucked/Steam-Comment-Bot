@@ -68,6 +68,12 @@ public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U
 		subContractProfile.setSlotTemplateId(slotTemplate);
 		return this;
 	}
+	
+	@NonNull
+	public SubContractProfileMaker<T, U, V, W> withNominatedVessel(final Vessel vessel) {
+		subContractProfile.setNominatedVessel(vessel);
+		return this;
+	}
 
 	@NonNull
 	public SubContractProfileMaker<T, U, V, W> addProfileVesselRestriction(final Vessel... vessels) {

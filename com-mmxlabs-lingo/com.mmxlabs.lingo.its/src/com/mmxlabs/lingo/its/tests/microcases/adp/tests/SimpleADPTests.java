@@ -56,13 +56,13 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		final PurchaseContract purchaseContract = commercialModelFinder.findPurchaseContract("Purchase A");
 		final SalesContract salesContract = commercialModelFinder.findSalesContract("Sales A");
 
-		Cargo testCargo = cargoModelBuilder.makeCargo() ///
+		final Cargo testCargo = cargoModelBuilder.makeCargo() ///
 				.makeFOBPurchase("F1", LocalDate.of(2018, 11, 1), purchaseContract.getPreferredPort(), purchaseContract, null, null).build() //
 				.makeDESSale("D1", LocalDate.of(2018, 12, 1), salesContract.getPreferredPort(), salesContract, null, null).build() //
 				.build();
 
-		Slot load = testCargo.getSlots().get(0);
-		Slot discharge = testCargo.getSlots().get(1);
+		final Slot load = testCargo.getSlots().get(0);
+		final Slot discharge = testCargo.getSlots().get(1);
 
 		final OptimisationPlan optimisationPlan = createOptimisationPlan();
 
@@ -148,7 +148,93 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				//
 				.build();
 	}
-	
+
+	@Test
+	public void tesDESPurchaseADPOptimisation() {
+
+		final Vessel vesselSmall = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP);
+		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselSmall, "50000", 0);
+		defaultCharterInMarket.setNominal(true);
+		defaultCharterInMarket.setEnabled(false);
+
+		final Port darwin = portFinder.findPort(TrainingCaseConstants.PORT_DARWIN);
+		final Port himeji = portFinder.findPort(TrainingCaseConstants.PORT_HIMEJI);
+
+		final PurchaseContract purchaseContract = commercialModelBuilder.makeExpressionPurchaseContract("Purchase A", entity, "5");
+		purchaseContract.setMaxQuantity(3_000_000);
+		purchaseContract.setVolumeLimitsUnit(VolumeUnits.MMBTU);
+		purchaseContract.setPreferredPort(darwin);
+		purchaseContract.setContractType(ContractType.DES);
+		purchaseContract.setDivertible(true);
+		purchaseContract.setShippingDaysRestriction(60);
+
+		final SalesContract salesContract = commercialModelBuilder.makeExpressionSalesContract("Sales A", entity, "8");
+		salesContract.setPreferredPort(himeji);
+		salesContract.setMaxQuantity(3_000_000);
+		salesContract.setVolumeLimitsUnit(VolumeUnits.MMBTU);
+		salesContract.setContractType(ContractType.DES);
+
+		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
+
+		adpModelBuilder.withPurchaseContractProfile(commercialModelFinder.findPurchaseContract("Purchase A")) //
+				.withVolume(3_000_000 * 12, LNGVolumeUnit.MMBTU) // Not really used...
+				//
+				.withSubContractProfile("Volume") //
+				.withContractType(ContractType.DES) //
+				.withSlotTemplate(AbstractSlotTemplateFactory.TEMPLATE_GENERIC_DES_PURCHASE) //
+				.withNominatedVessel(vesselSmall) //
+				.withCargoNumberDistributionModel(12) //
+				.build() //
+				//
+				.addMaxCargoConstraint(1, IntervalType.MONTHLY) //
+				.build();
+
+		adpModelBuilder.withSalesContractProfile(commercialModelFinder.findSalesContract("Sales A")) //
+				.withVolume(3_000_000 * 12, LNGVolumeUnit.MMBTU) // Not really used...
+				//
+				.withSubContractProfile("Volume") //
+				.withContractType(ContractType.DES) //
+				.withSlotTemplate(AbstractSlotTemplateFactory.TEMPLATE_GENERIC_DES_SALE) //
+				.withCargoNumberDistributionModel(12) //
+				.build() //
+				//
+				.build();
+		// Generate all the ADP slots
+		ADPModelUtil.generateModelSlots(scenarioModelBuilder.getLNGScenarioModel(), adpModelBuilder.getADPModel());
+
+		final CargoModel cargoModel = cargoModelBuilder.getCargoModel();
+
+		// Check initial conditions are correct
+		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+
+		// create plan in parent
+		final OptimisationPlan optimisationPlan = super.createOptimisationPlan(createUserSettings(true));
+		// and now delete lso and hill
+		OptimisationEMFTestUtils.removeLSOAndHill(optimisationPlan);
+
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withOptimisationPlan(optimisationPlan) //
+				.withOptimiseHint() //
+				.withThreadCount(1) //
+				.buildDefaultRunner();
+
+		try {
+			runnerBuilder.evaluateInitialState();
+			runnerBuilder.run(false, runner -> {
+				// Run, get result and store to schedule model for inspection at EMF level if needed
+				final IMultiStateResult result = runner.runAndApplyBest();
+				// Simple verification, have these slots been used?
+				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
+				verifier.withAnySolutionResultChecker().withCargoCount(12, true).build();
+				verifier.verifyOptimisationResults(result, Assert::fail);
+			});
+		} finally {
+			runnerBuilder.dispose();
+		}
+	}
+
 	/**
 	 * Trim the start of the vessel to start earlier Expect 2 fewer cargoes
 	 */
@@ -288,7 +374,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 			runnerBuilder.dispose();
 		}
 	}
-	
+
 	/**
 	 * Test the contingency.
 	 */
@@ -296,9 +382,8 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	public void testContingencyOneVessel() {
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
-		//final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
+		// final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2018, 11), defaultCharterInMarket);
-		
 
 		setSimple12CargoCase(adpModelBuilder);
 
@@ -332,7 +417,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 			runnerBuilder.dispose();
 		}
 	}
-	
+
 	/**
 	 * Test the contingency.
 	 */
@@ -340,8 +425,8 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	public void testContingencyTwoVessels() {
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
-		//final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
-		//final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
+		// final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
+		// final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2018, 12), defaultCharterInMarket);
 
 		setSimple12CargoCase(adpModelBuilder);
@@ -355,15 +440,15 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
 		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
 		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
-		
-		for(final LoadSlot ls : cargoModel.getLoadSlots()) {
+
+		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
 			System.out.print(ls.getName() + "\n");
 		}
 
-		for(final DischargeSlot ds : cargoModel.getDischargeSlots()) {
+		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
 			System.out.print(ds.getName() + "\n");
 		}
-		
+
 		final OptimisationPlan optimisationPlan = createOptimisationPlan();
 		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
 				.withOptimisationPlan(optimisationPlan) //
@@ -384,7 +469,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 			runnerBuilder.dispose();
 		}
 	}
-	
+
 	private CharterInMarket setDefaultVesselsAndContracts() {
 		final Vessel vesselSmall = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP);
 		final Vessel vesselMedium = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);

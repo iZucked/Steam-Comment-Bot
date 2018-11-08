@@ -60,11 +60,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitness
 @RunWith(value = ShiroRunner.class)
 public abstract class AbstractADPAndLightWeightTests extends AbstractMicroTestCase {
 
-	private static List<String> requiredFeatures = Lists.newArrayList(
-			"adp",
-			"optimisation-clean-state",
-			"optimisation-similarity",
-			"optimisation-hillclimb");
+	private static List<String> requiredFeatures = Lists.newArrayList("adp", "optimisation-clean-state", "optimisation-similarity", "optimisation-hillclimb");
 	private static List<String> addedFeatures = new LinkedList<>();
 	private static ServiceRegistration<?> registerService;
 
@@ -76,10 +72,8 @@ public abstract class AbstractADPAndLightWeightTests extends AbstractMicroTestCa
 				addedFeatures.add(feature);
 			}
 		}
-		registerService = FrameworkUtil.getBundle(AbstractADPAndLightWeightTests.class).getBundleContext().registerService(
-	            ISlotTemplateFactory.class.getCanonicalName(),
-	            new AbstractSlotTemplateFactory(), null
-	            );
+		registerService = FrameworkUtil.getBundle(AbstractADPAndLightWeightTests.class).getBundleContext().registerService(ISlotTemplateFactory.class.getCanonicalName(),
+				new AbstractSlotTemplateFactory(), null);
 	}
 
 	@AfterClass
@@ -105,11 +99,16 @@ public abstract class AbstractADPAndLightWeightTests extends AbstractMicroTestCa
 	}
 
 	protected @NonNull UserSettings createUserSettings() {
+		return createUserSettings(false);
+	}
+
+	protected @NonNull UserSettings createUserSettings(boolean nominalADP) {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setAdpOptimisation(true);
 		userSettings.setCleanStateOptimisation(true);
+		userSettings.setNominalADP(nominalADP);
 
 		userSettings.setShippingOnly(false);
 		userSettings.setWithSpotCargoMarkets(true);
