@@ -111,4 +111,18 @@ public final class TravelTimeUtils {
 			return days + " day" + (days > 1 ? "s" : "") + (remainderHours > 0 ? (", " + remainderHours + " hour" + (remainderHours > 1 ? "s" : "")) : "");
 		}
 	}
+
+	public static String formatShortHours(final long hours) {
+		if (hours < 24) {
+			if (hours == 1) {
+				return hours + " hour";
+			} else {
+				return hours + " hours";
+			}
+		} else {
+			final long remainderHours = hours % 24L;
+			final long days = hours / 24L;
+			return days + "d" + (remainderHours > 0 ? (" " + remainderHours + "h") : "");
+		}
+	}
 }

@@ -278,10 +278,14 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 				int travelTime = CargoTravelTimeUtils.getDivertibleDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(getScenarioModel(extraContext)),
 						vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true),
 						extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
+				int slotDur = from.getSlotOrDelegateDuration();
 				if (travelTime + from.getSlotOrDelegateDuration() > windowLength) {
-					final String message = String.format("Purchase|%s] is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s",
-							from.getName(), to.getPort().getName(), TravelTimeUtils.formatHours(travelTime + from.getSlotOrDelegateDuration()),
-							TravelTimeUtils.formatHours((travelTime + from.getSlotOrDelegateDuration()) - windowLength));
+//					final String message = String.format("Purchase %s is being shipped to %s but the laden leg (%s travel, %s loading) is greater than the shortest journey by %s.",
+//							from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(travelTime),TravelTimeUtils.formatShortHours(slotDur),
+//							TravelTimeUtils.formatHours((travelTime + slotDur) - windowLength));
+					final String message = String.format("[Purchase '%s'] Laden leg to %s is too long: %s loading, %s travel is %s more than the %s available.",
+							from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(travelTime), TravelTimeUtils.formatShortHours(slotDur),
+							TravelTimeUtils.formatShortHours((travelTime + slotDur) - windowLength), TravelTimeUtils.formatShortHours(windowLength));
 					final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
 					dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
