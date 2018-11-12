@@ -1153,7 +1153,7 @@ public class CargoEditorMenuHelper {
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel());
 							cal = cal.plusHours(travelTime);
 							cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());
-						} else if (!loadSlot.isDESPurchase()) {
+						} else if (!loadSlot.isDESPurchase() && !dischargeSlot.isFOBSale()) {
 
 							Vessel assignedVessel = null;
 							if (loadSlot.getCargo() != null) {
@@ -1167,6 +1167,11 @@ public class CargoEditorMenuHelper {
 								}
 							}
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
+							if (travelTime == Integer.MAX_VALUE) {
+								String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.",
+										loadSlot.getPort().getName(), dischargeSlot.getPort().getName(), travelTime);
+								throw new RuntimeException(message);
+							}
 							cal = cal.plusHours(travelTime);
 							cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());
 						}
@@ -1209,7 +1214,7 @@ public class CargoEditorMenuHelper {
 						// Get start of month and create full sized window
 						ZonedDateTime cal = source.getWindowStartWithSlotOrPortTime();
 						// Take into account travel time
-						if (!dischargeSlot.isFOBSale()) {
+						if (!dischargeSlot.isFOBSale() && !loadSlot.isDESPurchase()) {
 
 							Vessel assignedVessel = null;
 							if (loadSlot.getCargo() != null) {
@@ -1223,6 +1228,11 @@ public class CargoEditorMenuHelper {
 								}
 							}
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
+							if (travelTime == Integer.MAX_VALUE) {
+								String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.",
+										loadSlot.getPort().getName(), dischargeSlot.getPort().getName(), travelTime);
+								throw new RuntimeException(message);
+							}
 							cal = cal.minusHours(travelTime);
 							cal = cal.minusHours(loadSlot.getSlotOrDelegateDuration());
 						}
