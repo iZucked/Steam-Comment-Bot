@@ -68,6 +68,9 @@ public final class TravelTimeUtils {
 			ModelDistanceProvider modelDistanceProvider) {
 
 		final int distance = getDistance(route, fromPort, toPort, modelDistanceProvider);
+		if (distance == Integer.MAX_VALUE) {
+			return Integer.MAX_VALUE;
+		}
 		final int extraIdleTime = getContingencyIdleTimeInHours(fromPort, toPort, modelDistanceProvider);
 
 		int extraTime = 0;
@@ -77,9 +80,6 @@ public final class TravelTimeUtils {
 					extraTime = vcrp.getExtraTransitTime();
 				}
 			}
-		}
-		if (distance == Integer.MAX_VALUE) {
-			return Integer.MAX_VALUE;
 		}
 
 		final double travelTime = distance / referenceSpeed;
