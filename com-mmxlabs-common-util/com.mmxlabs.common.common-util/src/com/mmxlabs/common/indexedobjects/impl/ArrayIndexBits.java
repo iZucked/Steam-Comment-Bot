@@ -34,4 +34,9 @@ public class ArrayIndexBits<T extends IIndexedObject> implements IIndexBits<T> {
 	public void clear(final @NonNull T element) {
 		bits.clear(element.getIndex());
 	}
+
+	@Override
+	public void clearAll() {
+		bits.clear();
+	}
 }

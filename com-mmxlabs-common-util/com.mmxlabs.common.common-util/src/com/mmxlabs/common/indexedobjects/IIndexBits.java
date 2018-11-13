@@ -34,4 +34,6 @@ public interface IIndexBits<T extends IIndexedObject> {
 	 * @param element
 	 */
 	void clear(@NonNull T element);
+
+	void clearAll();
 }
