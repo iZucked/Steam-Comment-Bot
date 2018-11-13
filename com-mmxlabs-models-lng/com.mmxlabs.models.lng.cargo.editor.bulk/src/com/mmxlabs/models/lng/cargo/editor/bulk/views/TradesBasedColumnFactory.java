@@ -23,6 +23,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.TreeEvent;
 import org.eclipse.swt.events.TreeListener;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -1153,6 +1154,9 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-windowNomination": {
 			{
+				if (!LicenseFeatures.isPermitted("features:nominations")) {
+					break;
+				}
 				columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
 
 					@Override
@@ -1207,6 +1211,9 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-windowNomination": {
 			{
+				if (!LicenseFeatures.isPermitted("features:nominations")) {
+					break;
+				}
 				columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
 
 					@Override
