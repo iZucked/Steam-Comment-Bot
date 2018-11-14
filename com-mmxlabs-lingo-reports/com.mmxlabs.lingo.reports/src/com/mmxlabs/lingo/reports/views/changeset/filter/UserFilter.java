@@ -11,6 +11,7 @@ import java.util.Objects;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 
 public class UserFilter {
@@ -152,6 +153,15 @@ public class UserFilter {
 		}
 		if (vesselType == FilterVesselType.BY_NAME) {
 			return vesselKey.equalsIgnoreCase(row.getAfterVesselName());
+		}
+		if (vesselType == FilterVesselType.BY_SPOT_MARKET) {
+			return row.getAfterVesselType() == ChangeSetVesselType.MARKET;
+		}
+		if (vesselType == FilterVesselType.BY_FLEET) {
+			return row.getAfterVesselType() == ChangeSetVesselType.FLEET;
+		}
+		if (vesselType == FilterVesselType.BY_NOMINAL) {
+			return row.getAfterVesselType() == ChangeSetVesselType.NOMINAL;
 		}
 
 		return true;

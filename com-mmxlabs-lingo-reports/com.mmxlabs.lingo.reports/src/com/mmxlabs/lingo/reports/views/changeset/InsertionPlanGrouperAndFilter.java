@@ -14,8 +14,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
@@ -37,6 +39,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -226,7 +229,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 												f.lhsType = UserFilter.FilterSlotType.BY_ID;
 												f.rhsKey = d.getDischargeAllocation().getSpotMarket().getName();
 												f.rhsType = UserFilter.FilterSlotType.BY_SPOT_MARKET;
-												exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+												exploreSlotOptions.computeIfAbsent(key, createSortedSet()).add(f);
 											}
 										} else {
 											{
@@ -235,7 +238,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 												f.lhsType = UserFilter.FilterSlotType.BY_ID;
 												f.rhsKey = d.getRhsName();
 												f.rhsType = UserFilter.FilterSlotType.BY_ID;
-												exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+												exploreSlotOptions.computeIfAbsent(key, createSortedSet()).add(f);
 											}
 											if (d.getDischargeAllocation().getContract() != null) {
 												final UserFilter f = new UserFilter(d.getLhsName() + " to " + d.getDischargeAllocation().getContract().getName());
@@ -243,16 +246,39 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 												f.lhsType = UserFilter.FilterSlotType.BY_ID;
 												f.rhsKey = d.getDischargeAllocation().getContract().getName();
 												f.rhsType = UserFilter.FilterSlotType.BY_CONTRACT;
-												exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+												exploreSlotOptions.computeIfAbsent(key, createSortedSet()).add(f);
 											}
 										}
-										if (d.getVesselName() != null) {
-											final UserFilter f = new UserFilter(d.getLhsName() + " on " + d.getVesselName());
-											f.lhsKey = d.getLhsName();
-											f.lhsType = UserFilter.FilterSlotType.BY_ID;
-											f.vesselKey = d.getVesselName();
-											f.vesselType = UserFilter.FilterVesselType.BY_NAME;
-											exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+										if (d.getVesselName() != null && !d.getVesselName().isEmpty()) {
+											{
+												final UserFilter f = new UserFilter(d.getLhsName() + " on " + d.getVesselName());
+												f.lhsKey = d.getLhsName();
+												f.lhsType = UserFilter.FilterSlotType.BY_ID;
+												f.vesselKey = d.getVesselName();
+												f.vesselType = UserFilter.FilterVesselType.BY_NAME;
+												exploreSlotOptions.computeIfAbsent(key, createSortedSet()).add(f);
+											}
+											if (d.getVesselType() == ChangeSetVesselType.FLEET) {
+												final UserFilter f = new UserFilter(d.getLhsName() + " on fleet vessel");
+												f.lhsKey = d.getLhsName();
+												f.lhsType = UserFilter.FilterSlotType.BY_ID;
+												f.vesselType = UserFilter.FilterVesselType.BY_FLEET;
+												exploreSlotOptions.computeIfAbsent(key, createSortedSet()).add(f);
+											}
+											if (d.getVesselType() == ChangeSetVesselType.MARKET) {
+												final UserFilter f = new UserFilter(d.getLhsName() + " on market vessel");
+												f.lhsKey = d.getLhsName();
+												f.lhsType = UserFilter.FilterSlotType.BY_ID;
+												f.vesselType = UserFilter.FilterVesselType.BY_SPOT_MARKET;
+												exploreSlotOptions.computeIfAbsent(key, createSortedSet()).add(f);
+											}
+											if (d.getVesselType() == ChangeSetVesselType.NOMINAL) {
+												final UserFilter f = new UserFilter(d.getLhsName() + " on nominal vessel");
+												f.lhsKey = d.getLhsName();
+												f.lhsType = UserFilter.FilterSlotType.BY_ID;
+												f.vesselType = UserFilter.FilterVesselType.BY_NOMINAL;
+												exploreSlotOptions.computeIfAbsent(key, createSortedSet()).add(f);
+											}
 										}
 									}
 								}
@@ -268,7 +294,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 												f.rhsType = UserFilter.FilterSlotType.BY_ID;
 												f.lhsKey = d.getLoadAllocation().getSpotMarket().getName();
 												f.lhsType = UserFilter.FilterSlotType.BY_SPOT_MARKET;
-												exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+												exploreSlotOptions.computeIfAbsent(key, createSortedSet()).add(f);
 											}
 										} else {
 											{
@@ -277,7 +303,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 												f.lhsType = UserFilter.FilterSlotType.BY_ID;
 												f.rhsKey = d.getRhsName();
 												f.rhsType = UserFilter.FilterSlotType.BY_ID;
-												exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+												exploreSlotOptions.computeIfAbsent(key, createSortedSet()).add(f);
 											}
 											if (d.getLoadAllocation().getContract() != null) {
 												final UserFilter f = new UserFilter(d.getLoadAllocation().getContract().getName() + " to " + d.getRhsName());
@@ -285,16 +311,39 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 												f.lhsType = UserFilter.FilterSlotType.BY_CONTRACT;
 												f.rhsKey = d.getRhsName();
 												f.rhsType = UserFilter.FilterSlotType.BY_ID;
-												exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+												exploreSlotOptions.computeIfAbsent(key, createSortedSet()).add(f);
 											}
 										}
-										if (d.getVesselName() != null) {
-											final UserFilter f = new UserFilter(d.getRhsName() + " on " + d.getVesselName());
-											f.rhsKey = d.getRhsName();
-											f.rhsType = UserFilter.FilterSlotType.BY_ID;
-											f.vesselKey = d.getVesselName();
-											f.vesselType = UserFilter.FilterVesselType.BY_NAME;
-											exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+										if (d.getVesselName() != null && !d.getVesselName().isEmpty()) {
+											{
+												final UserFilter f = new UserFilter(d.getRhsName() + " on " + d.getVesselName());
+												f.rhsKey = d.getRhsName();
+												f.rhsType = UserFilter.FilterSlotType.BY_ID;
+												f.vesselKey = d.getVesselName();
+												f.vesselType = UserFilter.FilterVesselType.BY_NAME;
+												exploreSlotOptions.computeIfAbsent(key, createSortedSet()).add(f);
+											}
+											if (d.getVesselType() == ChangeSetVesselType.FLEET) {
+												final UserFilter f = new UserFilter(d.getRhsName() + " on fleet vessel");
+												f.rhsKey = d.getRhsName();
+												f.rhsType = UserFilter.FilterSlotType.BY_ID;
+												f.vesselType = UserFilter.FilterVesselType.BY_FLEET;
+												exploreSlotOptions.computeIfAbsent(key, createSortedSet()).add(f);
+											}
+											if (d.getVesselType() == ChangeSetVesselType.MARKET) {
+												final UserFilter f = new UserFilter(d.getRhsName() + " on market vessel");
+												f.rhsKey = d.getRhsName();
+												f.rhsType = UserFilter.FilterSlotType.BY_ID;
+												f.vesselType = UserFilter.FilterVesselType.BY_SPOT_MARKET;
+												exploreSlotOptions.computeIfAbsent(key, createSortedSet()).add(f);
+											}
+											if (d.getVesselType() == ChangeSetVesselType.NOMINAL) {
+												final UserFilter f = new UserFilter(d.getRhsName() + " on nominal vessel");
+												f.rhsKey = d.getRhsName();
+												f.rhsType = UserFilter.FilterSlotType.BY_ID;
+												f.vesselType = UserFilter.FilterVesselType.BY_NOMINAL;
+												exploreSlotOptions.computeIfAbsent(key, createSortedSet()).add(f);
+											}
 										}
 									}
 								}
@@ -385,13 +434,13 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				if (getUserFilters().size() > 1) {
 					remove.addAction(new RunnableAction("All filters", () -> {
 						clearFilter();
-						ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+						ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 					}));
 				}
 				for (final UserFilter f : getUserFilters()) {
 					remove.addAction(new RunnableAction(f.getLabel(), () -> {
 						getUserFilters().remove(f);
-						ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+						ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 					}));
 				}
 				helper.addSubMenu(remove);
@@ -431,7 +480,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								f.rhsType = FilterSlotType.BY_ID;
 								f.negate = exclude;
 								mergeFilter(f);
-								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+								ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 
 							}));
 						}
@@ -446,7 +495,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								f.rhsType = FilterSlotType.BY_CONTRACT;
 								f.negate = exclude;
 								mergeFilter(f);
-								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+								ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 
 							}));
 						}
@@ -463,7 +512,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 									f.rhsType = FilterSlotType.BY_SPOT_MARKET;
 									f.negate = exclude;
 									mergeFilter(f);
-									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+									ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 
 								}));
 								final String label2 = row.getLhsName() + " to " + market.getName();
@@ -475,7 +524,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 									f.rhsType = FilterSlotType.BY_SPOT_MARKET;
 									f.negate = exclude;
 									mergeFilter(f);
-									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+									ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 
 								}));
 							}
@@ -490,22 +539,60 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							f.rhsType = FilterSlotType.BY_OPEN;
 							f.negate = exclude;
 							mergeFilter(f);
-							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 						}));
 					}
 				}
 				if (row.getAfterVesselName() != null && !row.getAfterVesselName().isEmpty()) {
-					final String label = row.getLhsName() + " on " + row.getAfterVesselName();
-					showFromMenu.addAction(new RunnableAction(label, () -> {
-						final UserFilter f = new UserFilter(label);
-						f.lhsKey = row.getLhsName();
-						f.lhsType = FilterSlotType.BY_ID;
-						f.vesselType = FilterVesselType.BY_NAME;
-						f.vesselKey = row.getAfterVesselName();
-						f.negate = exclude;
-						mergeFilter(f);
-						ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
-					}));
+					{
+						final String label = row.getLhsName() + " on " + row.getAfterVesselName();
+						showFromMenu.addAction(new RunnableAction(label, () -> {
+							final UserFilter f = new UserFilter(label);
+							f.lhsKey = row.getLhsName();
+							f.lhsType = FilterSlotType.BY_ID;
+							f.vesselType = FilterVesselType.BY_NAME;
+							f.vesselKey = row.getAfterVesselName();
+							f.negate = exclude;
+							mergeFilter(f);
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+						}));
+					}
+					if (row.getAfterVesselType() == ChangeSetVesselType.FLEET) {
+						final String label = row.getLhsName() + " on fleet vessel";
+						showFromMenu.addAction(new RunnableAction(label, () -> {
+							final UserFilter f = new UserFilter(label);
+							f.lhsKey = row.getLhsName();
+							f.lhsType = FilterSlotType.BY_ID;
+							f.vesselType = FilterVesselType.BY_FLEET;
+							f.negate = exclude;
+							mergeFilter(f);
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+						}));
+					}
+					if (row.getAfterVesselType() == ChangeSetVesselType.MARKET) {
+						final String label = row.getLhsName() + " on market vessel";
+						showFromMenu.addAction(new RunnableAction(label, () -> {
+							final UserFilter f = new UserFilter(label);
+							f.lhsKey = row.getLhsName();
+							f.lhsType = FilterSlotType.BY_ID;
+							f.vesselType = FilterVesselType.BY_SPOT_MARKET;
+							f.negate = exclude;
+							mergeFilter(f);
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+						}));
+					}
+					if (row.getAfterVesselType() == ChangeSetVesselType.NOMINAL) {
+						final String label = row.getLhsName() + " on nominal vessel";
+						showFromMenu.addAction(new RunnableAction(label, () -> {
+							final UserFilter f = new UserFilter(label);
+							f.lhsKey = row.getLhsName();
+							f.lhsType = FilterSlotType.BY_ID;
+							f.vesselType = FilterVesselType.BY_NOMINAL;
+							f.negate = exclude;
+							mergeFilter(f);
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+						}));
+					}
 				}
 			}
 			if (showRHSActions && row.isRhsSlot()) {
@@ -528,7 +615,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								f.rhsType = FilterSlotType.BY_ID;
 								f.negate = exclude;
 								mergeFilter(f);
-								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+								ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 							}));
 						}
 						final Contract contract = load == null ? null : load.getContract();
@@ -542,7 +629,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								f.rhsType = FilterSlotType.BY_ID;
 								f.negate = exclude;
 								mergeFilter(f);
-								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+								ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 							}));
 						}
 						if (load instanceof SpotSlot) {
@@ -558,7 +645,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 									f.rhsType = FilterSlotType.BY_ID;
 									f.negate = exclude;
 									mergeFilter(f);
-									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+									ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 								}));
 								final String label2 = market.getName() + " to " + row.getRhsName();
 								showFromMenu.addAction(new RunnableAction(label2, () -> {
@@ -569,7 +656,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 									f.rhsType = FilterSlotType.BY_ID;
 									f.negate = exclude;
 									mergeFilter(f);
-									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+									ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 
 								}));
 							}
@@ -584,7 +671,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							f.rhsType = FilterSlotType.BY_ID;
 							f.negate = exclude;
 							mergeFilter(f);
-							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 						}));
 					}
 				}
@@ -605,7 +692,43 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							f.vesselKey = row.getAfterVesselName();
 							f.negate = exclude;
 							mergeFilter(f);
-							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+						}));
+					}
+					if (row.getAfterVesselType() == ChangeSetVesselType.FLEET) {
+						final String label = row.getRhsName() + " on fleet vessel";
+						showFromMenu.addAction(new RunnableAction(label, () -> {
+							final UserFilter f = new UserFilter(label);
+							f.rhsKey = row.getRhsName();
+							f.rhsType = FilterSlotType.BY_ID;
+							f.vesselType = FilterVesselType.BY_FLEET;
+							f.negate = exclude;
+							mergeFilter(f);
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+						}));
+					}
+					if (row.getAfterVesselType() == ChangeSetVesselType.MARKET) {
+						final String label = row.getRhsName() + " on market vessel";
+						showFromMenu.addAction(new RunnableAction(label, () -> {
+							final UserFilter f = new UserFilter(label);
+							f.rhsKey = row.getRhsName();
+							f.rhsType = FilterSlotType.BY_ID;
+							f.vesselType = FilterVesselType.BY_SPOT_MARKET;
+							f.negate = exclude;
+							mergeFilter(f);
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+						}));
+					}
+					if (row.getAfterVesselType() == ChangeSetVesselType.NOMINAL) {
+						final String label = row.getRhsName() + " on nominal vessel";
+						showFromMenu.addAction(new RunnableAction(label, () -> {
+							final UserFilter f = new UserFilter(label);
+							f.rhsKey = row.getRhsName();
+							f.rhsType = FilterSlotType.BY_ID;
+							f.vesselType = FilterVesselType.BY_NOMINAL;
+							f.negate = exclude;
+							mergeFilter(f);
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 						}));
 					}
 
@@ -639,7 +762,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 									f.rhsKey = null;
 									f.rhsType = FilterSlotType.BY_SPOT_MARKET;
 									mergeFilter(f);
-									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+									ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 
 								}));
 								final String label2 = row.getLhsName() + " to " + market.getName();
@@ -650,7 +773,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 									f.rhsKey = market.getName();
 									f.rhsType = FilterSlotType.BY_SPOT_MARKET;
 									mergeFilter(f);
-									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+									ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 
 								}));
 							}
@@ -663,7 +786,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								f.rhsKey = contract.getName();
 								f.rhsType = FilterSlotType.BY_CONTRACT;
 								mergeFilter(f);
-								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+								ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 
 							}));
 						} else {
@@ -675,7 +798,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								f.rhsKey = row.getRhsName();
 								f.rhsType = FilterSlotType.BY_ID;
 								mergeFilter(f);
-								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+								ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 
 							}));
 						}
@@ -688,7 +811,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							f.lhsType = FilterSlotType.BY_ID;
 							f.rhsType = FilterSlotType.BY_OPEN;
 							mergeFilter(f);
-							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 						}));
 					}
 				} else if (row.getRhsAfter() != null && row.getRhsAfter().getDischargeSlot() == targetElement) {
@@ -708,7 +831,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 									f.rhsKey = row.getRhsName();
 									f.rhsType = FilterSlotType.BY_ID;
 									mergeFilter(f);
-									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+									ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 								}));
 								final String label2 = market.getName() + " to " + row.getRhsName();
 								showFromMenu.addAction(new RunnableAction(label2, () -> {
@@ -718,7 +841,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 									f.rhsKey = row.getRhsName();
 									f.rhsType = FilterSlotType.BY_ID;
 									mergeFilter(f);
-									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+									ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 
 								}));
 							}
@@ -731,7 +854,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								f.rhsKey = row.getRhsName();
 								f.rhsType = FilterSlotType.BY_ID;
 								mergeFilter(f);
-								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+								ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 							}));
 						} else {
 
@@ -743,7 +866,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								f.rhsKey = row.getRhsName();
 								f.rhsType = FilterSlotType.BY_ID;
 								mergeFilter(f);
-								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+								ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 							}));
 						}
 
@@ -755,7 +878,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							f.rhsKey = row.getRhsName();
 							f.rhsType = FilterSlotType.BY_ID;
 							mergeFilter(f);
-							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 						}));
 					}
 
@@ -791,6 +914,12 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							SubLocalMenuHelper menu = null;
 							if (f.vesselType == FilterVesselType.BY_NAME) {
 								menu = loadMenuVessel;
+							} else if (f.vesselType == FilterVesselType.BY_FLEET) {
+								menu = loadMenuVessel;
+							} else if (f.vesselType == FilterVesselType.BY_SPOT_MARKET) {
+								menu = loadMenuVessel;
+							} else if (f.vesselType == FilterVesselType.BY_NOMINAL) {
+								menu = loadMenuVessel;
 							} else if (f.rhsType == FilterSlotType.BY_ID) {
 								menu = loadMenuSlot;
 							} else if (f.rhsType == FilterSlotType.BY_CONTRACT) {
@@ -802,7 +931,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								menu.addAction(new RunnableAction(f.getLabel(), () -> {
 									// clearFilter();
 									mergeFilter(f);
-									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+									ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 								}));
 							}
 						}
@@ -837,6 +966,12 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							SubLocalMenuHelper menu = null;
 							if (f.vesselType == FilterVesselType.BY_NAME) {
 								menu = dischargeMenuVessel;
+							} else if (f.vesselType == FilterVesselType.BY_FLEET) {
+								menu = dischargeMenuVessel;
+							} else if (f.vesselType == FilterVesselType.BY_SPOT_MARKET) {
+								menu = dischargeMenuVessel;
+							} else if (f.vesselType == FilterVesselType.BY_NOMINAL) {
+								menu = dischargeMenuVessel;
 							} else if (f.lhsType == FilterSlotType.BY_ID) {
 								menu = dischargeMenuSlot;
 							} else if (f.lhsType == FilterSlotType.BY_CONTRACT) {
@@ -848,7 +983,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								menu.addAction(new RunnableAction(f.getLabel(), () -> {
 									// clearFilter();
 									mergeFilter(f);
-									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+									ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 								}));
 							}
 						}
@@ -899,6 +1034,12 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 						SubLocalMenuHelper menu = null;
 						if (f.vesselType == FilterVesselType.BY_NAME) {
 							menu = loadMenuVessel;
+						} else if (f.vesselType == FilterVesselType.BY_FLEET) {
+							menu = loadMenuVessel;
+						} else if (f.vesselType == FilterVesselType.BY_NOMINAL) {
+							menu = loadMenuVessel;
+						} else if (f.vesselType == FilterVesselType.BY_SPOT_MARKET) {
+							menu = loadMenuVessel;
 						} else if (f.rhsType == FilterSlotType.BY_ID) {
 							menu = loadMenuSlot;
 						} else if (f.rhsType == FilterSlotType.BY_CONTRACT) {
@@ -910,7 +1051,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							menu.addAction(new RunnableAction(f.getLabel(), () -> {
 								// clearFilter();
 								mergeFilter(f);
-								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+								ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 							}));
 						}
 					}
@@ -1089,5 +1230,10 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 	public GroupMode getGroupMode() {
 		return groupMode;
+	}
+
+	private Function<Object, Set<UserFilter>> createSortedSet() {
+		// Sort filters by name
+		return k -> new TreeSet<>((a, b) -> a.getLabel().compareTo(b.getLabel()));
 	}
 }
