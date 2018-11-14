@@ -50,6 +50,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
@@ -240,10 +241,8 @@ public class ContractPage extends ADPComposite {
 									final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
 									final CompoundCommand c = new CompoundCommand();
 									final Iterator<?> itr = iStructuredSelection.iterator();
-									while (itr.hasNext()) {
-										final Object o = itr.next();
-										c.append(DeleteCommand.create(editorData.getEditingDomain(), o));
-									}
+									List<Object> objectsToDelete = Lists.newArrayList(itr);
+									c.append(DeleteCommand.create(editorData.getEditingDomain(), objectsToDelete));
 									editorData.getEditingDomain().getCommandStack().execute(c);
 									updatePreviewPaneInput(detailComposite.getInput());
 								}
