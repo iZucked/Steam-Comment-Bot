@@ -47,7 +47,7 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
-public class PartialCaseCompoment extends AbstractSandboxComponent {
+public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModellerView, OptionAnalysisModel> {
 
 	private Label generateButton;
 	private GridTreeViewer partialCaseViewer;

@@ -765,7 +765,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (fobSale: ");
 		result.append(fobSale);
 		result.append(", date: ");

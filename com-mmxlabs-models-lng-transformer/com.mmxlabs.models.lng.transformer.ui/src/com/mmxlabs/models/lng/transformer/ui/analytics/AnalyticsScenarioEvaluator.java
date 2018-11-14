@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
+
+import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
@@ -29,11 +30,13 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BaseCase;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -45,6 +48,7 @@ import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -57,16 +61,21 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificationHelper;
+import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilitySanboxUnit;
+import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilityWindowTrimmer;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -74,6 +83,11 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultBreakEvenEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduling.ICustomTimeWindowTrimmer;
 
 public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
@@ -100,17 +114,21 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
 	public void multiEvaluate(ScenarioInstance scenarioInstance, EditingDomain editingDomain, @NonNull IScenarioDataProvider scenarioDataProvider, @NonNull UserSettings userSettings,
 			long targetProfitAndLoss, BreakEvenMode breakEvenMode, List<Pair<BaseCase, ScheduleSpecification>> baseCases, IMapperClass mapper, BiConsumer<BaseCase, Schedule> resultHandler) {
 
-		ScheduleSpecificationHelper helper = new ScheduleSpecificationHelper(scenarioDataProvider);
+		// @Override
+		// public void multiEvaluate(final ScenarioInstance scenarioInstance, final EditingDomain editingDomain, @NonNull final IScenarioDataProvider scenarioDataProvider,
+		// @NonNull final UserSettings userSettings, final long targetProfitAndLoss, final BreakEvenMode breakEvenMode, final List<Pair<BaseCase, ScheduleSpecification>> baseCases,
+		// final IMapperClass mapper, final BiConsumer<BaseCase, Schedule> resultHandler) {
+
+		final ScheduleSpecificationHelper helper = new ScheduleSpecificationHelper(scenarioDataProvider);
 		helper.processExtraDataProvider(mapper.getExtraDataProvider());
 
-		for (Pair<BaseCase, ScheduleSpecification> p : baseCases) {
+		for (final Pair<BaseCase, ScheduleSpecification> p : baseCases) {
 
 			final BiConsumer<LNGScenarioToOptimiserBridge, Injector> job = (bridge, injector) -> {
 				final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
@@ -127,20 +145,20 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			};
 			helper.addJobs(job);
 		}
-		List<String> hints = new LinkedList<>();
+		final List<String> hints = new LinkedList<>();
 		if (breakEvenMode == BreakEvenMode.PORTFOLIO) {
 			hints.add(LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN);
 		}
 
-		helper.generateResults(scenarioInstance, userSettings, editingDomain, hints);
+		helper.generateResults(scenarioInstance, userSettings, editingDomain, hints, new NullProgressMonitor());
 	}
 
 	@Override
-	public ScenarioInstance exportResult(ScenarioResult result, String name) {
+	public ScenarioInstance exportResult(final ScenarioResult result, final String name) {
 
 		try {
 			return ExportScheduleHelper.export(result, name, true, createModelCustomiser());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -287,13 +305,13 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			cargoModel.getCharterInMarketOverrides().clear();
 			cargoModel.getCharterInMarketOverrides().addAll(usedCharterInMarketOverrides);
 
-			SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(input_scenario);
+			final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(input_scenario);
 			usedCharterInMarkets.removeAll(spotMarketsModel.getCharterInMarkets());
 			spotMarketsModel.getCharterInMarkets().addAll(usedCharterInMarkets);
 
 			input_scenario.getScheduleModel().setSchedule(null);
 
-			AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(input_scenario);
+			final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(input_scenario);
 			analyticsModel.getOptimisations().clear();
 			analyticsModel.getOptionModels().clear();
 
@@ -312,4 +330,58 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			}
 		};
 	}
+
+	@Override
+	public void evaluateViabilitySandbox(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance, @NonNull final UserSettings userSettings,
+			final ViabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap) {
+
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+
+		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
+
+		final ScheduleSpecificationHelper helper = new ScheduleSpecificationHelper(scenarioDataProvider);
+		helper.processExtraDataProvider(mapper.getExtraDataProvider());
+
+		helper.withModuleService(OptimiserInjectorServiceMaker.begin()//
+				.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, new AbstractModule() {
+
+					@Override
+					protected void configure() {
+
+						bind(ViabilityWindowTrimmer.class).in(Singleton.class);
+						bind(ICustomTimeWindowTrimmer.class).to(ViabilityWindowTrimmer.class);
+					}
+
+				})//
+				.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_Evaluation, new AbstractModule() {
+
+					@Override
+					protected void configure() {
+
+							bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
+					}
+
+				})//
+
+				.make());
+
+		final List<String> hints = new LinkedList<>();
+		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
+
+		final ExecutorService executorService = LNGScenarioChainBuilder.createExecutorService();
+		try {
+			helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, (bridge) -> {
+				LNGDataTransformer dataTransformer = bridge.getDataTransformer();
+				ViabilitySanboxUnit unit = new ViabilitySanboxUnit(lngScenarioModel, dataTransformer, "viability-sandbox", userSettings, constraints, executorService,
+						dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
+				/* Command cmd = */
+				unit.run(model, mapper, shippingMap, new NullProgressMonitor());
+			});
+		} finally {
+			executorService.shutdownNow();
+		}
+	}
+
 }

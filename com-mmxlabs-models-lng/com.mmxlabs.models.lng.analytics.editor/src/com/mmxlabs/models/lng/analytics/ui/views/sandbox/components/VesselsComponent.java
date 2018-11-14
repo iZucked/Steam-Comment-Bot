@@ -15,23 +15,22 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
-import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
+import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.VesselDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.VesselContentProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 
-public class VesselsComponent extends AbstractSandboxComponent {
+public class VesselsComponent extends AbstractSandboxComponent<Object, AbstractAnalysisModel> {
 
 	private GridTreeViewer vesselViewer;
 
-	public VesselsComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors, @NonNull final Supplier<OptionAnalysisModel> modelProvider) {
+	public VesselsComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors, @NonNull final Supplier<AbstractAnalysisModel> modelProvider) {
 		super(scenarioEditingLocation, validationErrors, modelProvider);
 	}
 
 	@Override
-	public void createControls(final Composite parent, boolean expanded, final IExpansionListener expansionListener, OptionModellerView optionModellerView) {
+	public void createControls(final Composite parent, boolean expanded, final IExpansionListener expansionListener, Object optionModellerView) {
 
 		final ExpandableComposite expandableVessels = wrapInExpandable(parent, "Vessels", p -> createVesselOptionsViewer(p).getGrid());
 		expandableVessels.setExpanded(expanded);

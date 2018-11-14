@@ -1008,6 +1008,75 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ViabilityModel} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ViabilityModelItemProvider viabilityModelItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ViabilityModel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createViabilityModelAdapter() {
+		if (viabilityModelItemProvider == null) {
+			viabilityModelItemProvider = new ViabilityModelItemProvider(this);
+		}
+
+		return viabilityModelItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ViabilityRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ViabilityRowItemProvider viabilityRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ViabilityRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createViabilityRowAdapter() {
+		if (viabilityRowItemProvider == null) {
+			viabilityRowItemProvider = new ViabilityRowItemProvider(this);
+		}
+
+		return viabilityRowItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ViabilityResult} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ViabilityResultItemProvider viabilityResultItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ViabilityResult}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createViabilityResultAdapter() {
+		if (viabilityResultItemProvider == null) {
+			viabilityResultItemProvider = new ViabilityResultItemProvider(this);
+		}
+
+		return viabilityResultItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SolutionOption} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1229,6 +1298,9 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (marketVesselAllocationDescriptorItemProvider != null) marketVesselAllocationDescriptorItemProvider.dispose();
 		if (fleetVesselAllocationDescriptorItemProvider != null) fleetVesselAllocationDescriptorItemProvider.dispose();
 		if (positionDescriptorItemProvider != null) positionDescriptorItemProvider.dispose();
+		if (viabilityModelItemProvider != null) viabilityModelItemProvider.dispose();
+		if (viabilityRowItemProvider != null) viabilityRowItemProvider.dispose();
+		if (viabilityResultItemProvider != null) viabilityResultItemProvider.dispose();
 	}
 
 }

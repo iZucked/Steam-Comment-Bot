@@ -30,9 +30,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
+import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.OptionMenuHelper;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatterLabelProvider;
@@ -40,23 +39,23 @@ import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.OptionsViewer
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 
-public class BuyOptionsComponent extends AbstractSandboxComponent {
+public class BuyOptionsComponent extends AbstractSandboxComponent<Object, AbstractAnalysisModel> {
 
 	private GridTreeViewer buyOptionsViewer;
 	private MenuManager mgr;
 
-	public BuyOptionsComponent(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors, @NonNull Supplier<OptionAnalysisModel> modelProvider) {
+	public BuyOptionsComponent(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors, @NonNull Supplier<AbstractAnalysisModel> modelProvider) {
 		super(scenarioEditingLocation, validationErrors, modelProvider);
 	}
 
 	@Override
-	public void createControls(Composite parent, boolean expanded, IExpansionListener expansionListener, OptionModellerView optionModellerView) {
+	public void createControls(Composite parent, boolean expanded, IExpansionListener expansionListener, Object optionModellerView) {
 		ExpandableComposite expandable = wrapInExpandable(parent, "Buys", p -> createBuyOptionsViewer(p), expandableComposite -> {
 
 			{
 				final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 				final BuysDropTargetListener listener = new BuysDropTargetListener(scenarioEditingLocation, buyOptionsViewer);
-				inputWants.add(model -> listener.setOptionAnalysisModel(model));
+				inputWants.add(model -> listener.setModel(model));
 				// Control control = getControl();
 				final DropTarget dropTarget = new DropTarget(expandableComposite, DND.DROP_MOVE);
 				dropTarget.setTransfer(types);
@@ -105,18 +104,18 @@ public class BuyOptionsComponent extends AbstractSandboxComponent {
 		CellFormatterLabelProvider labelProvider = new BuysSellsLabelProvider(new BuyOptionDescriptionFormatter(), validationErrors, "Buy");
 		createColumn(buyOptionsViewer, labelProvider, "Buy", new BuyOptionDescriptionFormatter(), false);
 
-		buyOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS));
+		buyOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS));
 		hookOpenEditor(buyOptionsViewer);
 		{
 			mgr = new MenuManager();
 			final BuyOptionsContextMenuManager listener = new BuyOptionsContextMenuManager(buyOptionsViewer, scenarioEditingLocation, mgr);
-			inputWants.add(model -> listener.setOptionAnalysisModel(model));
+			inputWants.add(model -> listener.setModel(model));
 			buyOptionsViewer.getGrid().addMenuDetectListener(listener);
 		}
 		{
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 			final BuysDropTargetListener listener = new BuysDropTargetListener(scenarioEditingLocation, buyOptionsViewer);
-			inputWants.add(model -> listener.setOptionAnalysisModel(model));
+			inputWants.add(model -> listener.setModel(model));
 			buyOptionsViewer.addDropSupport(DND.DROP_MOVE, types, listener);
 		}
 		inputWants.add(model -> buyOptionsViewer.setInput(model));
@@ -130,7 +129,7 @@ public class BuyOptionsComponent extends AbstractSandboxComponent {
 	}
 
 	@Override
-	public List<Consumer<OptionAnalysisModel>> getInputWants() {
+	public List<Consumer<AbstractAnalysisModel>> getInputWants() {
 		return inputWants;
 	}
 

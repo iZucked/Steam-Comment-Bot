@@ -13,6 +13,8 @@ import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.ViabilityRow;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -22,7 +24,11 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 	@Override
 	public String render(final Object object) {
 
-		if (object instanceof PartialCaseRow) {
+		if (object instanceof ViabilityRow) {
+			final ViabilityRow row = (ViabilityRow) object;
+			final ShippingOption shipping = row.getShipping();
+			return render(shipping);
+		} else if (object instanceof PartialCaseRow) {
 			final PartialCaseRow partialCaseRow = (PartialCaseRow) object;
 			final Collection<?> shipping = partialCaseRow.getShipping();
 

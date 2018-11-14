@@ -25,6 +25,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
@@ -648,7 +649,7 @@ public class AnalyticsBuilder {
 		return null;
 	}
 
-	public static BuyOption getOrCreateBuyOption(final LoadSlot loadSlot, final OptionAnalysisModel optionAnalysisModel, final IScenarioEditingLocation scenarioEditingLocation,
+	public static BuyOption getOrCreateBuyOption(final LoadSlot loadSlot, final AbstractAnalysisModel optionAnalysisModel, final IScenarioEditingLocation scenarioEditingLocation,
 			final CompoundCommand cmd) {
 
 		BuyReference buyRef = null;
@@ -666,7 +667,7 @@ public class AnalyticsBuilder {
 			if (buyRef == null) {
 				buyRef = AnalyticsFactory.eINSTANCE.createBuyReference();
 				buyRef.setSlot(loadSlot);
-				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, buyRef));
+				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS, buyRef));
 			}
 		}
 		return buyRef;
@@ -677,7 +678,7 @@ public class AnalyticsBuilder {
 
 		final ShippingOption opt = AnalyticsBuilder.getOrCreateShippingOption(cargo, load, dischargeSlot, optionAnalysisModel);
 		if (opt.eContainer() == null) {
-			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
+			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
 		}
 		cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, Collections.singletonList(opt)));
 
@@ -688,13 +689,13 @@ public class AnalyticsBuilder {
 
 		final ShippingOption opt = AnalyticsBuilder.getOrCreateShippingOption(cargo, load, dischargeSlot, optionAnalysisModel);
 		if (opt.eContainer() == null) {
-			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
+			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
 		}
 		cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt));
 
 	}
 
-	public static ShippingOption getOrCreateShippingOption(final Cargo cargo, final LoadSlot load, final DischargeSlot dischargeSlot, final OptionAnalysisModel optionAnalysisModel) {
+	public static ShippingOption getOrCreateShippingOption(final Cargo cargo, final LoadSlot load, final DischargeSlot dischargeSlot, final AbstractAnalysisModel optionAnalysisModel) {
 
 		if (cargo != null) {
 			if (cargo.getCargoType() == CargoType.FLEET) {
@@ -827,7 +828,7 @@ public class AnalyticsBuilder {
 		return null;
 	}
 
-	public static SellOption getOrCreateSellOption(final DischargeSlot dischargeSlot, final OptionAnalysisModel optionAnalysisModel, final IScenarioEditingLocation scenarioEditingLocation,
+	public static SellOption getOrCreateSellOption(final DischargeSlot dischargeSlot, final AbstractAnalysisModel optionAnalysisModel, final IScenarioEditingLocation scenarioEditingLocation,
 			final CompoundCommand cmd) {
 		SellReference sellRef = null;
 
@@ -844,7 +845,7 @@ public class AnalyticsBuilder {
 			if (sellRef == null) {
 				sellRef = AnalyticsFactory.eINSTANCE.createSellReference();
 				sellRef.setSlot(dischargeSlot);
-				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, sellRef));
+				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS, sellRef));
 			}
 		}
 		return sellRef;
@@ -889,7 +890,7 @@ public class AnalyticsBuilder {
 		final NominatedShippingOption opt = AnalyticsBuilder.getOrCreateNominatedShippingOption(optionAnalysisModel, vessel);
 		final CompoundCommand cmd = new CompoundCommand();
 		if (opt.eContainer() == null) {
-			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
+			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
 		}
 		final Object target = feature.isMany() ? Collections.singletonList(opt) : opt;
 
@@ -932,7 +933,7 @@ public class AnalyticsBuilder {
 			opt.setVessel(vessel);
 
 			final CompoundCommand cmd = new CompoundCommand();
-			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
+			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
 			final Object target = feature.isMany() ? Collections.singletonList(opt) : opt;
 			cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, feature, target));
 			scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);

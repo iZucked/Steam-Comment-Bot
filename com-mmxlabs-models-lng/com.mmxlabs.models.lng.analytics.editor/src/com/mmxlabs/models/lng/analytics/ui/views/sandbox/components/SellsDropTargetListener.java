@@ -19,10 +19,10 @@ import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 
+import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOption;
-import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
@@ -37,15 +37,15 @@ public class SellsDropTargetListener implements DropTargetListener {
 
 	private final @NonNull IScenarioEditingLocation scenarioEditingLocation;
 
-	private OptionAnalysisModel optionAnalysisModel;
+	private AbstractAnalysisModel model;
 
 	private @NonNull final GridTreeViewer viewer;
 
 	private final LocalMenuHelper menuHelper;
 
-	public SellsDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, @NonNull final GridTreeViewer viewer) {
+	public SellsDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final AbstractAnalysisModel model, @NonNull final GridTreeViewer viewer) {
 		this.scenarioEditingLocation = scenarioEditingLocation;
-		this.optionAnalysisModel = optionAnalysisModel;
+		this.model = model;
 		this.viewer = viewer;
 		menuHelper = new LocalMenuHelper(scenarioEditingLocation.getShell());
 		viewer.getControl().addDisposeListener(new DisposeListener() {
@@ -68,7 +68,7 @@ public class SellsDropTargetListener implements DropTargetListener {
 
 	@Override
 	public void drop(final DropTargetEvent event) {
-		final OptionAnalysisModel optionAnalysisModel = this.optionAnalysisModel;
+		final AbstractAnalysisModel optionAnalysisModel = this.model;
 		if (optionAnalysisModel == null) {
 			return;
 		}
@@ -101,8 +101,8 @@ public class SellsDropTargetListener implements DropTargetListener {
 						AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, row);
 
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), optionAnalysisModel,
-								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
+								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS, row), optionAnalysisModel,
+								AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS);
 						DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row);
 					}
 				}
@@ -149,11 +149,11 @@ public class SellsDropTargetListener implements DropTargetListener {
 
 	}
 
-	public OptionAnalysisModel getOptionAnalysisModel() {
-		return optionAnalysisModel;
+	public AbstractAnalysisModel getModel() {
+		return model;
 	}
 
-	public void setOptionAnalysisModel(final OptionAnalysisModel optionAnalysisModel) {
-		this.optionAnalysisModel = optionAnalysisModel;
+	public void setModel(final AbstractAnalysisModel model) {
+		this.model = model;
 	}
 }

@@ -17,6 +17,7 @@ import javax.inject.Named;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.Provider;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.caches.LHMCache;
 import com.mmxlabs.optimiser.core.IResource;
@@ -37,6 +38,9 @@ public class TimeWindowScheduler {
 
 	@com.google.inject.Inject(optional = true)
 	private PriceBasedWindowTrimmer priceBasedWindowTrimmer;
+
+	@com.google.inject.Inject(optional = true)
+	private ICustomTimeWindowTrimmer customTimeTrimmer;
 
 	@Inject
 	private IPanamaBookingsProvider panamaSlotsProvider;
@@ -111,6 +115,11 @@ public class TimeWindowScheduler {
 
 			final MinTravelTimeData minTimeData = new MinTravelTimeData(key.resource, key.sequence);
 			final List<IPortTimeWindowsRecord> trimmedWindows = timeWindowTrimmer.generateTrimmedWindows(key.resource, key.sequence, minTimeData, key.currentBookingData);
+			ICustomTimeWindowTrimmer customTrimmer = customTimeTrimmer == null ? null : customTimeTrimmer;
+			if (customTrimmer != null) {
+				customTrimmer.trimWindows(key.resource, trimmedWindows, minTimeData);
+			}
+
 			if (usePriceBasedWindowTrimming && priceBasedWindowTrimmer != null) {
 				priceBasedWindowTrimmer.trimWindows(key.resource, trimmedWindows, minTimeData);
 			}
@@ -121,7 +130,7 @@ public class TimeWindowScheduler {
 	public ScheduledTimeWindows schedule(final @NonNull ISequences sequences) {
 		final Map<IResource, MinTravelTimeData> travelTimeDataMap = new HashMap<>();
 
-		final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows = new HashMap<IResource, List<IPortTimeWindowsRecord>>();
+		final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows = new HashMap<>();
 
 		// Construct new bookings data object
 		final CurrentBookingData data = new CurrentBookingData();
@@ -223,7 +232,11 @@ public class TimeWindowScheduler {
 				timeWindowTrimmer.setTrimByPanamaCanalBookings(useCanalBasedWindowTrimming);
 				final MinTravelTimeData minTimeData = new MinTravelTimeData(resource, sequence);
 				list = timeWindowTrimmer.generateTrimmedWindows(resource, sequence, minTimeData, data);
+				ICustomTimeWindowTrimmer customTrimmer = customTimeTrimmer == null ? null : customTimeTrimmer;
 
+				if (customTrimmer != null) {
+					customTrimmer.trimWindows(resource, list, minTimeData);
+				}
 				if (usePriceBasedWindowTrimming && priceBasedWindowTrimmer != null) {
 					priceBasedWindowTrimmer.trimWindows(resource, list, minTimeData);
 				}

@@ -11,6 +11,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -48,8 +49,31 @@ public class AnalyticsModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addViabilityModelPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Viability Model feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addViabilityModelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AnalyticsModel_viabilityModel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AnalyticsModel_viabilityModel_feature", "_UI_AnalyticsModel_type"),
+				 AnalyticsPackage.Literals.ANALYTICS_MODEL__VIABILITY_MODEL,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -66,6 +90,7 @@ public class AnalyticsModelItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTION_MODELS);
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS);
+			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__VIABILITY_MODEL);
 		}
 		return childrenFeatures;
 	}
@@ -122,6 +147,7 @@ public class AnalyticsModelItemProvider
 		switch (notification.getFeatureID(AnalyticsModel.class)) {
 			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
 			case AnalyticsPackage.ANALYTICS_MODEL__OPTIMISATIONS:
+			case AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -158,6 +184,11 @@ public class AnalyticsModelItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS,
 				 AnalyticsFactory.eINSTANCE.createOptimisationResult()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ANALYTICS_MODEL__VIABILITY_MODEL,
+				 AnalyticsFactory.eINSTANCE.createViabilityModel()));
 	}
 
 }

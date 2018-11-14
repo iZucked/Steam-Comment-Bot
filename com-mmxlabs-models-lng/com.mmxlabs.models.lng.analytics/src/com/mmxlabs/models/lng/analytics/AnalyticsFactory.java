@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EFactory;
  * @generated
  */
 public interface AnalyticsFactory extends EFactory {
+
 	/**
 	 * The singleton instance of the factory.
 	 * <!-- begin-user-doc -->
@@ -285,6 +286,24 @@ public interface AnalyticsFactory extends EFactory {
 	SlotInsertionOptions createSlotInsertionOptions();
 
 	/**
+	 * Returns a new object of class '<em>Solution Option</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Solution Option</em>'.
+	 * @generated
+	 */
+	SolutionOption createSolutionOption();
+
+	/**
+	 * Returns a new object of class '<em>Optimisation Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Optimisation Result</em>'.
+	 * @generated
+	 */
+	OptimisationResult createOptimisationResult();
+
+	/**
 	 * Returns a new object of class '<em>Change Description</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -384,22 +403,31 @@ public interface AnalyticsFactory extends EFactory {
 	PositionDescriptor createPositionDescriptor();
 
 	/**
-	 * Returns a new object of class '<em>Solution Option</em>'.
+	 * Returns a new object of class '<em>Viability Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Solution Option</em>'.
+	 * @return a new object of class '<em>Viability Model</em>'.
 	 * @generated
 	 */
-	SolutionOption createSolutionOption();
+	ViabilityModel createViabilityModel();
 
 	/**
-	 * Returns a new object of class '<em>Optimisation Result</em>'.
+	 * Returns a new object of class '<em>Viability Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Optimisation Result</em>'.
+	 * @return a new object of class '<em>Viability Row</em>'.
 	 * @generated
 	 */
-	OptimisationResult createOptimisationResult();
+	ViabilityRow createViabilityRow();
+
+	/**
+	 * Returns a new object of class '<em>Viability Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Viability Result</em>'.
+	 * @generated
+	 */
+	ViabilityResult createViabilityResult();
 
 	/**
 	 * Returns the package supported by this factory.

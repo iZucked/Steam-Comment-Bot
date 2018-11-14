@@ -30,6 +30,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
+import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
@@ -40,23 +41,23 @@ import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.OptionsViewer
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 
-public class SellOptionsComponent extends AbstractSandboxComponent {
+public class SellOptionsComponent extends AbstractSandboxComponent<Object, AbstractAnalysisModel> {
 
 	private GridTreeViewer sellOptionsViewer;
 	private MenuManager mgr;
 
-	public SellOptionsComponent(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors, @NonNull Supplier<OptionAnalysisModel> modelProvider) {
+	public SellOptionsComponent(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors, @NonNull Supplier<AbstractAnalysisModel> modelProvider) {
 		super(scenarioEditingLocation, validationErrors, modelProvider);
 	}
 
 	@Override
-	public void createControls(Composite parent, boolean expanded, IExpansionListener expansionListener, OptionModellerView optionModellerView) {
+	public void createControls(Composite parent, boolean expanded, IExpansionListener expansionListener, Object optionModellerView) {
 		ExpandableComposite expandable = wrapInExpandable(parent, "Sells", p -> createSellOptionsViewer(p), expandableComposite -> {
 
 			{
 				final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 				final SellsDropTargetListener listener = new SellsDropTargetListener(scenarioEditingLocation, sellOptionsViewer);
-				inputWants.add(model -> listener.setOptionAnalysisModel(model));
+				inputWants.add(model -> listener.setModel(model));
 				// Control control = getControl();
 				final DropTarget dropTarget = new DropTarget(expandableComposite, DND.DROP_MOVE);
 				dropTarget.setTransfer(types);
@@ -107,18 +108,18 @@ public class SellOptionsComponent extends AbstractSandboxComponent {
 		CellFormatterLabelProvider labelProvider = new BuysSellsLabelProvider(new SellOptionDescriptionFormatter(), validationErrors, "Sell");
 		createColumn(sellOptionsViewer, labelProvider, "Sell", new SellOptionDescriptionFormatter(), false);
 
-		sellOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS));
+		sellOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS));
 		hookOpenEditor(sellOptionsViewer);
 		{
 			mgr = new MenuManager();
 			final SellOptionsContextMenuManager listener = new SellOptionsContextMenuManager(sellOptionsViewer, scenarioEditingLocation, mgr);
-			inputWants.add(model -> listener.setOptionAnalysisModel(model));
+			inputWants.add(model -> listener.setModel(model));
 			sellOptionsViewer.getGrid().addMenuDetectListener(listener);
 		}
 		{
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 			final SellsDropTargetListener listener = new SellsDropTargetListener(scenarioEditingLocation, sellOptionsViewer);
-			inputWants.add(model -> listener.setOptionAnalysisModel(model));
+			inputWants.add(model -> listener.setModel(model));
 			sellOptionsViewer.addDropSupport(DND.DROP_MOVE, types, listener);
 		}
 		inputWants.add(model -> sellOptionsViewer.setInput(model));
@@ -131,7 +132,7 @@ public class SellOptionsComponent extends AbstractSandboxComponent {
 	}
 
 	@Override
-	public List<Consumer<OptionAnalysisModel>> getInputWants() {
+	public List<Consumer<AbstractAnalysisModel>> getInputWants() {
 		return inputWants;
 	}
 

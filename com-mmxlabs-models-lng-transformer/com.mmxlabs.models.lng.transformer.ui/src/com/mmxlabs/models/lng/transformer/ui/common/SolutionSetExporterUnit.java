@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.	annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,6 +80,7 @@ public class SolutionSetExporterUnit {
 
 							// Perform a portfolio break-even if requested.
 							if (portfolioBreakEvenTarget.isPresent()) {
+								plan.setPortfolioBreakEvenMode(true);
 
 								@NonNull
 								final Collection<@NonNull String> hints = new LinkedList<>(dataTransformer.getHints());

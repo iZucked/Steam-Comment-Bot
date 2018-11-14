@@ -5,9 +5,11 @@
 package com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers;
 
 import java.util.Collection;
+
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
@@ -32,8 +34,8 @@ public class ShippingOptionsContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getElements(final Object inputElement) {
 
-		if (inputElement instanceof OptionAnalysisModel) {
-			final OptionAnalysisModel model = (OptionAnalysisModel) inputElement;
+		if (inputElement instanceof AbstractAnalysisModel) {
+			final AbstractAnalysisModel model = (AbstractAnalysisModel) inputElement;
 			return model.getShippingTemplates().toArray();
 		}
 //		return new Object[0];
@@ -77,7 +79,7 @@ public class ShippingOptionsContentProvider implements ITreeContentProvider {
 		if (element instanceof Collection<?>) {
 			return true;
 		}
-		if (element instanceof OptionAnalysisModel) {
+		if (element instanceof AbstractAnalysisModel) {
 			return true;
 		}
 		return false;

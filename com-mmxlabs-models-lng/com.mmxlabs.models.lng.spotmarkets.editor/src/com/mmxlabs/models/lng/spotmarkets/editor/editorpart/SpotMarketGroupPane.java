@@ -8,6 +8,10 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jface.util.LocalSelectionTransfer;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -24,6 +28,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.rcp.common.dnd.BasicDragSource;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
@@ -77,6 +82,13 @@ public class SpotMarketGroupPane extends ScenarioTableViewerPane {
 			addTypicalColumn("Ports", new MultipleReferenceManipulator(pp.getFOBSalesMarket_OriginPorts(), provider, getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 			break;
 		}
+
+		final DragSource source = new DragSource(getScenarioViewer().getControl(), DND.DROP_MOVE);
+		final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+		source.setTransfer(types);
+
+		source.addDragListener(new BasicDragSource(viewer));
+
 	}
 
 	@Override

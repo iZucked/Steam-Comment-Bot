@@ -751,5 +751,12 @@
              id="com.mmxlabs.models.lng.migration.units.MigrateToV100"
              to="100">
        </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV101"
+             context="com.mmxlabs.lingo"
+             from="100"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV101"
+             to="101">
+       </MigrationUnit>
    </extension>
 </plugin>

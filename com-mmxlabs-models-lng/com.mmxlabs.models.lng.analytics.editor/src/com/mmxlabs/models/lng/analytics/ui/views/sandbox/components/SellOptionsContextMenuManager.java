@@ -24,6 +24,7 @@ import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.widgets.Menu;
 
+import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
@@ -44,7 +45,7 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 
 	private final @NonNull MenuManager mgr;
 
-	private OptionAnalysisModel optionAnalysisModel;
+	private AbstractAnalysisModel abstractAnalysisModel;
 
 	private Menu menu;
 
@@ -77,11 +78,13 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 				final Collection<EObject> c = new LinkedList<>();
 				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
 
-				final Collection<EObject> linkedResults = ResultsSetDeletionHelper.getRelatedResultSets(c, optionAnalysisModel);
 				final CompoundCommand compoundCommand = new CompoundCommand("Delete sell option");
 				compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c));
-				if (!linkedResults.isEmpty()) {
-					compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), linkedResults));
+				if (abstractAnalysisModel instanceof OptionAnalysisModel) {
+					final Collection<EObject> linkedResults = ResultsSetDeletionHelper.getRelatedResultSets(c, (OptionAnalysisModel) abstractAnalysisModel);
+					if (!linkedResults.isEmpty()) {
+						compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), linkedResults));
+					}
 				}
 				scenarioEditingLocation.getDefaultCommandHandler().handleCommand(compoundCommand, null, null);
 			}));
@@ -113,8 +116,8 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 
-								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, newSell),
-								optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
+								AddCommand.create(scenarioEditingLocation.getEditingDomain(), abstractAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS, newSell),
+								abstractAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS);
 					}));
 				}
 			}
@@ -122,8 +125,8 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 				mgr.add(new RunnableAction("Copy", () -> {
 					final SellOption copy = EcoreUtil.copy(row);
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, copy), optionAnalysisModel,
-							AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
+							AddCommand.create(scenarioEditingLocation.getEditingDomain(), abstractAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS, copy), abstractAnalysisModel,
+							AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS);
 					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(copy));
 				}));
 			}
@@ -131,12 +134,12 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 		menu.setVisible(true);
 	}
 
-	public OptionAnalysisModel getOptionAnalysisModel() {
-		return optionAnalysisModel;
+	public AbstractAnalysisModel getModel() {
+		return abstractAnalysisModel;
 	}
 
-	public void setOptionAnalysisModel(final OptionAnalysisModel optionAnalysisModel) {
-		this.optionAnalysisModel = optionAnalysisModel;
+	public void setModel(final AbstractAnalysisModel optionAnalysisModel) {
+		this.abstractAnalysisModel = optionAnalysisModel;
 	}
 
 }

@@ -104,6 +104,9 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.MARKET_VESSEL_ALLOCATION_DESCRIPTOR: return createMarketVesselAllocationDescriptor();
 			case AnalyticsPackage.FLEET_VESSEL_ALLOCATION_DESCRIPTOR: return createFleetVesselAllocationDescriptor();
 			case AnalyticsPackage.POSITION_DESCRIPTOR: return createPositionDescriptor();
+			case AnalyticsPackage.VIABILITY_MODEL: return createViabilityModel();
+			case AnalyticsPackage.VIABILITY_ROW: return createViabilityRow();
+			case AnalyticsPackage.VIABILITY_RESULT: return createViabilityResult();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -544,6 +547,36 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public PositionDescriptor createPositionDescriptor() {
 		PositionDescriptorImpl positionDescriptor = new PositionDescriptorImpl();
 		return positionDescriptor;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ViabilityModel createViabilityModel() {
+		ViabilityModelImpl viabilityModel = new ViabilityModelImpl();
+		return viabilityModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ViabilityRow createViabilityRow() {
+		ViabilityRowImpl viabilityRow = new ViabilityRowImpl();
+		return viabilityRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ViabilityResult createViabilityResult() {
+		ViabilityResultImpl viabilityResult = new ViabilityResultImpl();
+		return viabilityResult;
 	}
 
 	/**

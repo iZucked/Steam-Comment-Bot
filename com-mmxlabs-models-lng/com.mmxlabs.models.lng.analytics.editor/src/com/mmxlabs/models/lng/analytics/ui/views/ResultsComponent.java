@@ -69,7 +69,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
-public class ResultsComponent extends AbstractSandboxComponent {
+public class ResultsComponent extends AbstractSandboxComponent<OptionModellerView, OptionAnalysisModel> {
 
 	private GridTreeViewer resultsViewer;
 	private ResultsSetWiringDiagram resultsDiagram;

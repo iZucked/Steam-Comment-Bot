@@ -53,6 +53,7 @@ import org.eclipse.ui.forms.events.IExpansionListener;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -72,7 +73,6 @@ import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.EmbeddedRepo
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.SellOptionsComponent;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.ShippingOptionsComponent;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.VesselsComponent;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -101,7 +101,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private DialogValidationSupport validationSupport;
 
 	// Callbacks for objects that need the current input
-	private final List<Consumer<OptionAnalysisModel>> inputWants = new LinkedList<>();
+	private final List<Consumer<AbstractAnalysisModel>> inputWants = new LinkedList<>();
 	private final List<Runnable> disposables = new LinkedList<>();
 	private Label errorLabel;
 	private Link createNewLink;
@@ -520,11 +520,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				return null;
 			}
 
-			if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS) {
+			if (notification.getFeature() == AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS) {
 				return new Pair<>(true, EnumSet.of(SectionType.BUYS));
-			} else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS) {
+			} else if (notification.getFeature() == AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS) {
 				return new Pair<>(true, EnumSet.of(SectionType.SELLS));
-			} else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES) {
+			} else if (notification.getFeature() == AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES) {
 				return new Pair<>(true, EnumSet.of(SectionType.VESSEL));
 			} else if (notification.getNotifier() instanceof ShippingOption || notification.getNotifier() instanceof VesselAvailability) {
 				return new Pair<>(true, EnumSet.of(SectionType.VESSEL, SectionType.MIDDLE));

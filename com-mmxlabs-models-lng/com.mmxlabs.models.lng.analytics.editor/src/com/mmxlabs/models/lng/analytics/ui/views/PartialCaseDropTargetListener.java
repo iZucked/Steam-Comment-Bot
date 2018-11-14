@@ -163,8 +163,8 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 							AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, row);
 
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), optionAnalysisModel,
-									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
+									AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS, row), optionAnalysisModel,
+									AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS);
 
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 									AddCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS, Collections.singletonList(row)),
@@ -187,8 +187,8 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 							AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, row);
 
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row),
-									optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
+									AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS, row),
+									optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS);
 
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 									AddCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, Collections.singletonList(row)),

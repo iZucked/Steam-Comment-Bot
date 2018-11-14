@@ -32,7 +32,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class OptionAnalysisModelItemProvider 
-	extends NamedObjectItemProvider {
+	extends AbstractAnalysisModelItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -93,10 +93,7 @@ public class OptionAnalysisModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
-			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE);
-			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS);
@@ -159,10 +156,7 @@ public class OptionAnalysisModelItemProvider
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BUYS:
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SELLS:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULTS:
@@ -186,78 +180,8 @@ public class OptionAnalysisModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS,
-				 AnalyticsFactory.eINSTANCE.createBuyOpportunity()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS,
-				 AnalyticsFactory.eINSTANCE.createBuyMarket()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS,
-				 AnalyticsFactory.eINSTANCE.createBuyReference()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS,
-				 AnalyticsFactory.eINSTANCE.createSellOpportunity()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS,
-				 AnalyticsFactory.eINSTANCE.createSellMarket()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS,
-				 AnalyticsFactory.eINSTANCE.createSellReference()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE,
 				 AnalyticsFactory.eINSTANCE.createBaseCase()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
-				 AnalyticsFactory.eINSTANCE.createShippingOption()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
-				 AnalyticsFactory.eINSTANCE.createFleetShippingOption()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
-				 AnalyticsFactory.eINSTANCE.createOptionalAvailabilityShippingOption()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
-				 AnalyticsFactory.eINSTANCE.createRoundTripShippingOption()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
-				 AnalyticsFactory.eINSTANCE.createNominatedShippingOption()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
-				 AnalyticsFactory.eINSTANCE.createNewVesselAvailability()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
-				 AnalyticsFactory.eINSTANCE.createExistingVesselAvailability()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
-				 AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption()));
 
 		newChildDescriptors.add
 			(createChildParameter

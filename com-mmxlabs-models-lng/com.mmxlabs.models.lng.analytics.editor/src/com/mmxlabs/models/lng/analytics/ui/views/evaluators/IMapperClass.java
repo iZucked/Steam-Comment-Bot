@@ -23,48 +23,49 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 public interface IMapperClass {
 
-		LoadSlot getOriginal(BuyOption buy);
+	LoadSlot getOriginal(BuyOption buy);
 
-		LoadSlot getBreakEven(BuyOption buy);
+	LoadSlot getBreakEven(BuyOption buy);
 
-		LoadSlot getChangable(BuyOption buy);
+	LoadSlot getChangable(BuyOption buy);
 
-		DischargeSlot getOriginal(SellOption sell);
+	DischargeSlot getOriginal(SellOption sell);
 
-		DischargeSlot getBreakEven(SellOption sell);
+	DischargeSlot getBreakEven(SellOption sell);
 
-		DischargeSlot getChangable(SellOption sell);
+	DischargeSlot getChangable(SellOption sell);
 
-		void addMapping(BuyOption buy, LoadSlot original, LoadSlot breakEven, LoadSlot changable);
+	void addMapping(BuyOption buy, LoadSlot original, LoadSlot breakEven, LoadSlot changable);
 
-		void addMapping(SellOption sell, DischargeSlot original, DischargeSlot breakEven, DischargeSlot changable);
+	void addMapping(SellOption sell, DischargeSlot original, DischargeSlot breakEven, DischargeSlot changable);
 
-		void addMapping(SpotMarket market, YearMonth date, LoadSlot slot_original, LoadSlot slot_breakEven, LoadSlot slot_changable);
+	void addMapping(SpotMarket market, YearMonth date, LoadSlot slot_original, LoadSlot slot_breakEven, LoadSlot slot_changable);
 
-		void addMapping(SpotMarket market, YearMonth date, DischargeSlot slot_original, DischargeSlot slot_breakEven, DischargeSlot slot_changable);
+	void addMapping(SpotMarket market, YearMonth date, DischargeSlot slot_original, DischargeSlot slot_breakEven, DischargeSlot slot_changable);
 
-		DischargeSlot getSalesMarketBreakEven(SpotMarket market, @NonNull YearMonth from);
+	DischargeSlot getSalesMarketBreakEven(SpotMarket market, @NonNull YearMonth from);
 
-		DischargeSlot getSalesMarketChangable(SpotMarket market, @NonNull YearMonth date);
+	DischargeSlot getSalesMarketChangable(SpotMarket market, @NonNull YearMonth date);
 
-		DischargeSlot getSalesMarketOriginal(SpotMarket market, @NonNull YearMonth date);
+	DischargeSlot getSalesMarketOriginal(SpotMarket market, @NonNull YearMonth date);
 
-		LoadSlot getPurchaseMarketBreakEven(SpotMarket market, @NonNull YearMonth date);
+	LoadSlot getPurchaseMarketBreakEven(SpotMarket market, @NonNull YearMonth date);
 
-		LoadSlot getPurchaseMarketChangable(SpotMarket market, @NonNull YearMonth date);
+	LoadSlot getPurchaseMarketChangable(SpotMarket market, @NonNull YearMonth date);
 
-		LoadSlot getPurchaseMarketOriginal(SpotMarket market, @NonNull YearMonth date);
+	LoadSlot getPurchaseMarketOriginal(SpotMarket market, @NonNull YearMonth date);
 
 	ExtraDataProvider getExtraDataProvider();
 
 	void addMapping(RoundTripShippingOption shippingOption, CharterInMarket newMarket);
 
 	void addMapping(FleetShippingOption shippingOption, VesselAvailability vesselAvailability);
+
 	void addMapping(ExistingVesselAvailability shippingOption, VesselAvailability vesselAvailability);
+
 	void addMapping(NewVesselAvailability shippingOption, VesselAvailability vesselAvailability);
 
 	VesselAvailability get(FleetShippingOption fleetShippingOption);
 
 	CharterInMarket get(RoundTripShippingOption roundTripShippingOption);
-
-	}
+}

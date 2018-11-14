@@ -158,7 +158,7 @@ public abstract class SlotDescriptorImpl extends EObjectImpl implements SlotDesc
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (slotType: ");
 		result.append(slotType);
 		result.append(')');

@@ -218,7 +218,7 @@ public class RoundTripShippingOptionImpl extends ShippingOptionImpl implements R
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (hireCost: ");
 		result.append(hireCost);
 		result.append(')');

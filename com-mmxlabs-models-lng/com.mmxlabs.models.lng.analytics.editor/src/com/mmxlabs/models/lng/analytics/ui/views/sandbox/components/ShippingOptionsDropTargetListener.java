@@ -18,6 +18,7 @@ import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 
+import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
@@ -39,13 +40,13 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 
 	private final @NonNull IScenarioEditingLocation scenarioEditingLocation;
 
-	private OptionAnalysisModel optionAnalysisModel;
+	private AbstractAnalysisModel optionAnalysisModel;
 
 	private @NonNull final GridTreeViewer viewer;
 
 	private final LocalMenuHelper menuHelper;
 
-	public ShippingOptionsDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, @NonNull final GridTreeViewer viewer) {
+	public ShippingOptionsDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final AbstractAnalysisModel optionAnalysisModel, @NonNull final GridTreeViewer viewer) {
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.optionAnalysisModel = optionAnalysisModel;
 		this.viewer = viewer;
@@ -70,7 +71,7 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 
 	@Override
 	public void drop(final DropTargetEvent event) {
-		final OptionAnalysisModel optionAnalysisModel = this.optionAnalysisModel;
+		final AbstractAnalysisModel optionAnalysisModel = this.optionAnalysisModel;
 		if (optionAnalysisModel == null) {
 			return;
 		}
@@ -88,8 +89,8 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 						opt.setNominatedVessel(vessel);
 
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-								optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+								optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					}));
@@ -97,8 +98,8 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 						final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 						opt.setVessel(vessel);
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-								optionAnalysisModel, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+								optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					}));
 					// menuHelper.addAction(new RunnableAction("Create fleet", () -> {
@@ -115,8 +116,8 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 						AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
 						opt.setVessel(vessel);
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-								optionAnalysisModel, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+								optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					}));
 
@@ -125,8 +126,8 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 					ShippingOption opt = (ShippingOption) EcoreUtil.copy((ShippingOption) o);
 
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-							optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+							optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 				}
 				if (o instanceof CargoModelRowTransformer.RowData) {
 					final CargoModelRowTransformer.RowData rowData = (CargoModelRowTransformer.RowData) o;
@@ -137,7 +138,7 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 
 					final ShippingOption shippingOption = AnalyticsBuilder.getOrCreateShippingOption(rowData.getCargo(), loadSlot, dischargeSlot, optionAnalysisModel);
 					if (shippingOption != null && shippingOption.eContainer() == null) {
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
+						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
 								shippingOption));
 					}
 					if (!cmd.isEmpty()) {
@@ -187,11 +188,11 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 
 	}
 
-	public OptionAnalysisModel getOptionAnalysisModel() {
+	public AbstractAnalysisModel getModel() {
 		return optionAnalysisModel;
 	}
 
-	public void setOptionAnalysisModel(OptionAnalysisModel optionAnalysisModel) {
+	public void setModel(AbstractAnalysisModel optionAnalysisModel) {
 		this.optionAnalysisModel = optionAnalysisModel;
 	}
 }

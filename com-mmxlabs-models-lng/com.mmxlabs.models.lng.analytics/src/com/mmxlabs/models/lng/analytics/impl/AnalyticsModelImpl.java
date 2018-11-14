@@ -6,16 +6,20 @@ package com.mmxlabs.models.lng.analytics.impl;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
@@ -28,6 +32,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getOptionModels <em>Option Models</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getOptimisations <em>Optimisations</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getViabilityModel <em>Viability Model</em>}</li>
  * </ul>
  *
  * @generated
@@ -52,6 +57,16 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * @ordered
 	 */
 	protected EList<AbstractSolutionSet> optimisations;
+
+	/**
+	 * The cached value of the '{@link #getViabilityModel() <em>Viability Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getViabilityModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected ViabilityModel viabilityModel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -101,6 +116,49 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ViabilityModel getViabilityModel() {
+		return viabilityModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetViabilityModel(ViabilityModel newViabilityModel, NotificationChain msgs) {
+		ViabilityModel oldViabilityModel = viabilityModel;
+		viabilityModel = newViabilityModel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL, oldViabilityModel, newViabilityModel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setViabilityModel(ViabilityModel newViabilityModel) {
+		if (newViabilityModel != viabilityModel) {
+			NotificationChain msgs = null;
+			if (viabilityModel != null)
+				msgs = ((InternalEObject)viabilityModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL, null, msgs);
+			if (newViabilityModel != null)
+				msgs = ((InternalEObject)newViabilityModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL, null, msgs);
+			msgs = basicSetViabilityModel(newViabilityModel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL, newViabilityModel, newViabilityModel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -108,6 +166,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return ((InternalEList<?>)getOptionModels()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.ANALYTICS_MODEL__OPTIMISATIONS:
 				return ((InternalEList<?>)getOptimisations()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL:
+				return basicSetViabilityModel(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -124,6 +184,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return getOptionModels();
 			case AnalyticsPackage.ANALYTICS_MODEL__OPTIMISATIONS:
 				return getOptimisations();
+			case AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL:
+				return getViabilityModel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -145,6 +207,9 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				getOptimisations().clear();
 				getOptimisations().addAll((Collection<? extends AbstractSolutionSet>)newValue);
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL:
+				setViabilityModel((ViabilityModel)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -163,6 +228,9 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 			case AnalyticsPackage.ANALYTICS_MODEL__OPTIMISATIONS:
 				getOptimisations().clear();
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL:
+				setViabilityModel((ViabilityModel)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -179,6 +247,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return optionModels != null && !optionModels.isEmpty();
 			case AnalyticsPackage.ANALYTICS_MODEL__OPTIMISATIONS:
 				return optimisations != null && !optimisations.isEmpty();
+			case AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL:
+				return viabilityModel != null;
 		}
 		return super.eIsSet(featureID);
 	}

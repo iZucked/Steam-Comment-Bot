@@ -34,7 +34,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.OptionsTreeVi
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 
-public class OptionModelsComponent extends AbstractSandboxComponent {
+public class OptionModelsComponent extends AbstractSandboxComponent<OptionModellerView, OptionAnalysisModel> {
 
 	private GridTreeViewer optionsTreeViewer;
 	private MenuManager mgr;

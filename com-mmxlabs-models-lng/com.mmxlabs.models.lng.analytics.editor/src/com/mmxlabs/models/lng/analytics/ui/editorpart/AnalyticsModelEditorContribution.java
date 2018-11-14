@@ -5,10 +5,8 @@
 package com.mmxlabs.models.lng.analytics.ui.editorpart;
 
 import java.lang.ref.WeakReference;
-import java.util.List;
 
 import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -53,7 +51,7 @@ public class AnalyticsModelEditorContribution extends BaseJointModelEditorContri
 
 	@Override
 	public IPropertySource getPropertySource(Object object) {
-		 if (object instanceof IPropertySource) {
+		if (object instanceof IPropertySource) {
 			return (IPropertySource) object;
 		}
 		return null;
@@ -61,20 +59,20 @@ public class AnalyticsModelEditorContribution extends BaseJointModelEditorContri
 
 	@Override
 	public void gotoTarget(Object object) {
-		
+
 		if (object instanceof OptionAnalysisModel) {
 			OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel) object;
 			final EModelService modelService = editorPart.getSite().getService(EModelService.class);
 			final EPartService partService = editorPart.getSite().getService(EPartService.class);
 			final MApplication application = editorPart.getSite().getService(MApplication.class);
 
-//			// Switch perspective
-//			final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
-//			for (final MPerspective p : perspectives) {
-//				if (p.getElementId().equals("com.mmxlabs.lingo.app.perspective.analysis")) {
-//					partService.switchPerspective(p);
-//				}
-//			}
+			// // Switch perspective
+			// final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
+			// for (final MPerspective p : perspectives) {
+			// if (p.getElementId().equals("com.mmxlabs.lingo.app.perspective.analysis")) {
+			// partService.switchPerspective(p);
+			// }
+			// }
 
 			// Activate change set view
 			final MPart part = partService.showPart("com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView", PartState.ACTIVATE);
@@ -92,5 +90,6 @@ public class AnalyticsModelEditorContribution extends BaseJointModelEditorContri
 				}
 			}
 		}
+
 	}
 }

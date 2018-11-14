@@ -19,6 +19,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
@@ -56,27 +57,27 @@ import com.mmxlabs.rcp.common.menus.SubLocalMenuHelper;
  */
 public class OptionMenuHelper {
 
-	public static MouseListener createNewBuyOptionMenuListener(final Composite parent, final IScenarioEditingLocation scenarioEditingLocation, final Supplier<OptionAnalysisModel> modelSupplier) {
+	public static MouseListener createNewBuyOptionMenuListener(final Composite parent, final IScenarioEditingLocation scenarioEditingLocation, final Supplier<AbstractAnalysisModel> modelSupplier) {
 		return createNewOptionMenuListener(parent, scenarioEditingLocation, modelSupplier, true);
 	}
 
-	public static MouseListener createNewSellOptionMenuListener(final Composite parent, final IScenarioEditingLocation scenarioEditingLocation, final Supplier<OptionAnalysisModel> modelSupplier) {
+	public static MouseListener createNewSellOptionMenuListener(final Composite parent, final IScenarioEditingLocation scenarioEditingLocation, final Supplier<AbstractAnalysisModel> modelSupplier) {
 		return createNewOptionMenuListener(parent, scenarioEditingLocation, modelSupplier, false);
 	}
 
 	public static <T extends Slot, U extends EObject> MouseListener createNewOptionMenuListener(final Composite parent, final IScenarioEditingLocation scenarioEditingLocation,
-			final Supplier<OptionAnalysisModel> modelSupplier, final boolean purchase) {
+			final Supplier<AbstractAnalysisModel> modelSupplier, final boolean purchase) {
 
 		final EStructuralFeature containerFeature;
 
 		final Function<T, EObject> referenceFactory;
 		final Supplier<EObject> opportunityFactory;
 		final Function<SpotMarket, EObject> marketFactory;
-		final Function<OptionAnalysisModel, List<T>> existingSlots;
+		final Function<AbstractAnalysisModel, List<T>> existingSlots;
 		final ICellRenderer f;
 
 		if (purchase) {
-			containerFeature = AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS;
+			containerFeature = AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS;
 			f = new BuyOptionDescriptionFormatter();
 			referenceFactory = s -> {
 				final BuyReference row = AnalyticsFactory.eINSTANCE.createBuyReference();
@@ -109,7 +110,7 @@ public class OptionMenuHelper {
 				return existing;
 			};
 		} else {
-			containerFeature = AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS;
+			containerFeature = AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS;
 			f = new SellOptionDescriptionFormatter();
 			referenceFactory = s -> {
 				final SellReference row = AnalyticsFactory.eINSTANCE.createSellReference();
@@ -156,7 +157,7 @@ public class OptionMenuHelper {
 
 				helper.clearActions();
 
-				final OptionAnalysisModel model = modelSupplier.get();
+				final AbstractAnalysisModel model = modelSupplier.get();
 				if (model != null) {
 
 					helper.addAction(new RunnableAction("New", () -> {

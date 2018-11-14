@@ -10,6 +10,8 @@
         eType="#//OptionAnalysisModel" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="optimisations" upperBound="-1"
         eType="#//AbstractSolutionSet" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="viabilityModel" eType="#//ViabilityModel"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BuyOption" abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="SellOption" abstract="true" interface="true"/>
@@ -161,15 +163,18 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoPNL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OptionAnalysisModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractAnalysisModel" abstract="true"
+      eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="buys" upperBound="-1" eType="#//BuyOption"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sells" upperBound="-1"
         eType="#//SellOption" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="baseCase" eType="#//BaseCase"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="shippingTemplates" upperBound="-1"
         eType="#//ShippingOption" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OptionAnalysisModel" eSuperTypes="#//AbstractAnalysisModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="baseCase" eType="#//BaseCase"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="partialCase" eType="#//PartialCase"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseCaseResult" eType="#//Result"
@@ -326,5 +331,39 @@
   <eClassifiers xsi:type="ecore:EClass" name="PositionDescriptor">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="after" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="before" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ViabilityModel" eSuperTypes="#//AbstractAnalysisModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//ViabilityRow"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="markets" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ViabilityRow">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buyOption" eType="#//BuyOption"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sellOption" eType="#//SellOption"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" eType="#//ShippingOption"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhsResults" upperBound="-1"
+        eType="#//ViabilityResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsResults" upperBound="-1"
+        eType="#//ViabilityResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eta" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referencePrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startVolume" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ViabilityResult">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="earliestETA" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="latestETA" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="earliestVolume" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="latestVolume" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="earliestPrice" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="latestPrice" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
 </ecore:EPackage>

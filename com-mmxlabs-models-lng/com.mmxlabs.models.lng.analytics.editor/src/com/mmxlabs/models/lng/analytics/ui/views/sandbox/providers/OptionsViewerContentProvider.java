@@ -10,7 +10,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 
 public class OptionsViewerContentProvider implements ITreeContentProvider {
 
@@ -33,8 +33,8 @@ public class OptionsViewerContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getElements(final Object inputElement) {
 
-		if (inputElement instanceof OptionAnalysisModel) {
-			final OptionAnalysisModel model = (OptionAnalysisModel) inputElement;
+		if (inputElement instanceof AbstractAnalysisModel) {
+			final AbstractAnalysisModel model = (AbstractAnalysisModel) inputElement;
 			return ((List<?>) model.eGet(feature)).toArray();
 		}
 		return new Object[0];
@@ -52,7 +52,7 @@ public class OptionsViewerContentProvider implements ITreeContentProvider {
 
 	@Override
 	public boolean hasChildren(final Object element) {
-		if (element instanceof OptionAnalysisModel) {
+		if (element instanceof AbstractAnalysisModel) {
 			return true;
 		}
 		return false;

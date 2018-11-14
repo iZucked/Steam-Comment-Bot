@@ -11,8 +11,10 @@ import java.util.Collection;
 
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
+import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.ViabilityRow;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -27,7 +29,11 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 			return "<open>";
 		}
 
-		if (object instanceof PartialCaseRow) {
+		if (object instanceof ViabilityRow) {
+			final ViabilityRow row = (ViabilityRow) object;
+			final BuyOption buy = row.getBuyOption();
+			return render(buy);
+		} else if (object instanceof PartialCaseRow) {
 			final PartialCaseRow partialCaseRow = (PartialCaseRow) object;
 			final Collection<?> buys = partialCaseRow.getBuyOptions();
 			return render(buys);

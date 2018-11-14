@@ -108,13 +108,22 @@ public interface AnalyticsPackage extends EPackage {
 	int ANALYTICS_MODEL__OPTIMISATIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Viability Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYTICS_MODEL__VIABILITY_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYTICS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int ANALYTICS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}' class.
@@ -1091,14 +1100,14 @@ s	 * <!-- end-user-doc -->
 	int BREAK_EVEN_RESULT_FEATURE_COUNT = ANALYSIS_RESULT_DETAIL_FEATURE_COUNT + 3;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.AbstractAnalysisModelImpl <em>Abstract Analysis Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionAnalysisModel()
+	 * @see com.mmxlabs.models.lng.analytics.impl.AbstractAnalysisModelImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractAnalysisModel()
 	 * @generated
 	 */
-	int OPTION_ANALYSIS_MODEL = 21;
+	int ABSTRACT_ANALYSIS_MODEL = 21;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1107,7 +1116,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+	int ABSTRACT_ANALYSIS_MODEL__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1116,7 +1125,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+	int ABSTRACT_ANALYSIS_MODEL__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Buys</b></em>' containment reference list.
@@ -1125,7 +1134,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__BUYS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+	int ABSTRACT_ANALYSIS_MODEL__BUYS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Sells</b></em>' containment reference list.
@@ -1134,16 +1143,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__SELLS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Base Case</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTION_ANALYSIS_MODEL__BASE_CASE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int ABSTRACT_ANALYSIS_MODEL__SELLS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Templates</b></em>' containment reference list.
@@ -1152,7 +1152,80 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Abstract Analysis Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionAnalysisModel()
+	 * @generated
+	 */
+	int OPTION_ANALYSIS_MODEL = 22;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTION_ANALYSIS_MODEL__EXTENSIONS = ABSTRACT_ANALYSIS_MODEL__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTION_ANALYSIS_MODEL__NAME = ABSTRACT_ANALYSIS_MODEL__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Buys</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTION_ANALYSIS_MODEL__BUYS = ABSTRACT_ANALYSIS_MODEL__BUYS;
+
+	/**
+	 * The feature id for the '<em><b>Sells</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTION_ANALYSIS_MODEL__SELLS = ABSTRACT_ANALYSIS_MODEL__SELLS;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Templates</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES = ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES;
+
+	/**
+	 * The feature id for the '<em><b>Base Case</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTION_ANALYSIS_MODEL__BASE_CASE = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Partial Case</b></em>' containment reference.
@@ -1161,7 +1234,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__PARTIAL_CASE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int OPTION_ANALYSIS_MODEL__PARTIAL_CASE = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Base Case Result</b></em>' containment reference.
@@ -1170,7 +1243,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Results</b></em>' containment reference.
@@ -1179,7 +1252,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__RESULTS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+	int OPTION_ANALYSIS_MODEL__RESULTS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Use Target PNL</b></em>' attribute.
@@ -1188,7 +1261,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__USE_TARGET_PNL = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
+	int OPTION_ANALYSIS_MODEL__USE_TARGET_PNL = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Children</b></em>' containment reference list.
@@ -1197,7 +1270,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__CHILDREN = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 8;
+	int OPTION_ANALYSIS_MODEL__CHILDREN = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Option Analysis Model</em>' class.
@@ -1206,7 +1279,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 9;
+	int OPTION_ANALYSIS_MODEL_FEATURE_COUNT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ResultSetImpl <em>Result Set</em>}' class.
@@ -1216,7 +1289,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResultSet()
 	 * @generated
 	 */
-	int RESULT_SET = 22;
+	int RESULT_SET = 23;
 
 	/**
 	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
@@ -1262,7 +1335,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResult()
 	 * @generated
 	 */
-	int RESULT = 23;
+	int RESULT = 24;
 
 	/**
 	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
@@ -1326,7 +1399,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCase()
 	 * @generated
 	 */
-	int BASE_CASE = 24;
+	int BASE_CASE = 25;
 
 	/**
 	 * The feature id for the '<em><b>Base Case</b></em>' containment reference list.
@@ -1372,7 +1445,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCase()
 	 * @generated
 	 */
-	int PARTIAL_CASE = 25;
+	int PARTIAL_CASE = 26;
 
 	/**
 	 * The feature id for the '<em><b>Partial Case</b></em>' containment reference list.
@@ -1409,7 +1482,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getNewVesselAvailability()
 	 * @generated
 	 */
-	int NEW_VESSEL_AVAILABILITY = 26;
+	int NEW_VESSEL_AVAILABILITY = 27;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Availability</b></em>' containment reference.
@@ -1437,7 +1510,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingVesselAvailability()
 	 * @generated
 	 */
-	int EXISTING_VESSEL_AVAILABILITY = 27;
+	int EXISTING_VESSEL_AVAILABILITY = 28;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Availability</b></em>' reference.
@@ -1465,7 +1538,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingCharterMarketOption()
 	 * @generated
 	 */
-	int EXISTING_CHARTER_MARKET_OPTION = 28;
+	int EXISTING_CHARTER_MARKET_OPTION = 29;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market</b></em>' reference.
@@ -1502,7 +1575,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractSolutionSet()
 	 * @generated
 	 */
-	int ABSTRACT_SOLUTION_SET = 29;
+	int ABSTRACT_SOLUTION_SET = 30;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1593,7 +1666,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSetPlan()
 	 * @generated
 	 */
-	int ACTIONABLE_SET_PLAN = 30;
+	int ACTIONABLE_SET_PLAN = 31;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1684,7 +1757,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotInsertionOptions()
 	 * @generated
 	 */
-	int SLOT_INSERTION_OPTIONS = 31;
+	int SLOT_INSERTION_OPTIONS = 32;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1793,7 +1866,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSolutionOption()
 	 * @generated
 	 */
-	int SOLUTION_OPTION = 32;
+	int SOLUTION_OPTION = 33;
 
 	/**
 	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
@@ -1821,7 +1894,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChangeDescription()
 	 * @generated
 	 */
-	int CHANGE_DESCRIPTION = 34;
+	int CHANGE_DESCRIPTION = 35;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ChangeImpl <em>Change</em>}' class.
@@ -1831,7 +1904,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChange()
 	 * @generated
 	 */
-	int CHANGE = 35;
+	int CHANGE = 36;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OpenSlotChangeImpl <em>Open Slot Change</em>}' class.
@@ -1841,7 +1914,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOpenSlotChange()
 	 * @generated
 	 */
-	int OPEN_SLOT_CHANGE = 36;
+	int OPEN_SLOT_CHANGE = 37;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CargoChangeImpl <em>Cargo Change</em>}' class.
@@ -1851,7 +1924,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoChange()
 	 * @generated
 	 */
-	int CARGO_CHANGE = 37;
+	int CARGO_CHANGE = 38;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventChangeImpl <em>Vessel Event Change</em>}' class.
@@ -1861,7 +1934,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventChange()
 	 * @generated
 	 */
-	int VESSEL_EVENT_CHANGE = 38;
+	int VESSEL_EVENT_CHANGE = 39;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventDescriptorImpl <em>Vessel Event Descriptor</em>}' class.
@@ -1871,7 +1944,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventDescriptor()
 	 * @generated
 	 */
-	int VESSEL_EVENT_DESCRIPTOR = 39;
+	int VESSEL_EVENT_DESCRIPTOR = 40;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotDescriptorImpl <em>Slot Descriptor</em>}' class.
@@ -1881,7 +1954,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotDescriptor()
 	 * @generated
 	 */
-	int SLOT_DESCRIPTOR = 40;
+	int SLOT_DESCRIPTOR = 41;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.RealSlotDescriptorImpl <em>Real Slot Descriptor</em>}' class.
@@ -1891,7 +1964,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getRealSlotDescriptor()
 	 * @generated
 	 */
-	int REAL_SLOT_DESCRIPTOR = 41;
+	int REAL_SLOT_DESCRIPTOR = 42;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SpotMarketSlotDescriptorImpl <em>Spot Market Slot Descriptor</em>}' class.
@@ -1901,7 +1974,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSpotMarketSlotDescriptor()
 	 * @generated
 	 */
-	int SPOT_MARKET_SLOT_DESCRIPTOR = 42;
+	int SPOT_MARKET_SLOT_DESCRIPTOR = 43;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselAllocationDescriptorImpl <em>Vessel Allocation Descriptor</em>}' class.
@@ -1911,7 +1984,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselAllocationDescriptor()
 	 * @generated
 	 */
-	int VESSEL_ALLOCATION_DESCRIPTOR = 43;
+	int VESSEL_ALLOCATION_DESCRIPTOR = 44;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketVesselAllocationDescriptorImpl <em>Market Vessel Allocation Descriptor</em>}' class.
@@ -1921,7 +1994,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketVesselAllocationDescriptor()
 	 * @generated
 	 */
-	int MARKET_VESSEL_ALLOCATION_DESCRIPTOR = 44;
+	int MARKET_VESSEL_ALLOCATION_DESCRIPTOR = 45;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.FleetVesselAllocationDescriptorImpl <em>Fleet Vessel Allocation Descriptor</em>}' class.
@@ -1931,7 +2004,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFleetVesselAllocationDescriptor()
 	 * @generated
 	 */
-	int FLEET_VESSEL_ALLOCATION_DESCRIPTOR = 45;
+	int FLEET_VESSEL_ALLOCATION_DESCRIPTOR = 46;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PositionDescriptorImpl <em>Position Descriptor</em>}' class.
@@ -1941,7 +2014,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPositionDescriptor()
 	 * @generated
 	 */
-	int POSITION_DESCRIPTOR = 46;
+	int POSITION_DESCRIPTOR = 47;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptimisationResultImpl <em>Optimisation Result</em>}' class.
@@ -1951,7 +2024,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptimisationResult()
 	 * @generated
 	 */
-	int OPTIMISATION_RESULT = 33;
+	int OPTIMISATION_RESULT = 34;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2350,6 +2423,279 @@ s	 * <!-- end-user-doc -->
 	int POSITION_DESCRIPTOR_FEATURE_COUNT = 2;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ViabilityModelImpl <em>Viability Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.ViabilityModelImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityModel()
+	 * @generated
+	 */
+	int VIABILITY_MODEL = 48;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_MODEL__EXTENSIONS = ABSTRACT_ANALYSIS_MODEL__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_MODEL__NAME = ABSTRACT_ANALYSIS_MODEL__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Buys</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_MODEL__BUYS = ABSTRACT_ANALYSIS_MODEL__BUYS;
+
+	/**
+	 * The feature id for the '<em><b>Sells</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_MODEL__SELLS = ABSTRACT_ANALYSIS_MODEL__SELLS;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Templates</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_MODEL__SHIPPING_TEMPLATES = ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES;
+
+	/**
+	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_MODEL__ROWS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Markets</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_MODEL__MARKETS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Viability Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_MODEL_FEATURE_COUNT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ViabilityRowImpl <em>Viability Row</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.ViabilityRowImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityRow()
+	 * @generated
+	 */
+	int VIABILITY_ROW = 49;
+
+	/**
+	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_ROW__BUY_OPTION = 0;
+
+	/**
+	 * The feature id for the '<em><b>Sell Option</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_ROW__SELL_OPTION = 1;
+
+	/**
+	 * The feature id for the '<em><b>Shipping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_ROW__SHIPPING = 2;
+
+	/**
+	 * The feature id for the '<em><b>Lhs Results</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_ROW__LHS_RESULTS = 3;
+
+	/**
+	 * The feature id for the '<em><b>Rhs Results</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_ROW__RHS_RESULTS = 4;
+
+	/**
+	 * The feature id for the '<em><b>Target</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_ROW__TARGET = 5;
+
+	/**
+	 * The feature id for the '<em><b>Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_ROW__PRICE = 6;
+
+	/**
+	 * The feature id for the '<em><b>Eta</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_ROW__ETA = 7;
+
+	/**
+	 * The feature id for the '<em><b>Reference Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_ROW__REFERENCE_PRICE = 8;
+
+	/**
+	 * The feature id for the '<em><b>Start Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_ROW__START_VOLUME = 9;
+
+	/**
+	 * The number of structural features of the '<em>Viability Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_ROW_FEATURE_COUNT = 10;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ViabilityResultImpl <em>Viability Result</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.ViabilityResultImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityResult()
+	 * @generated
+	 */
+	int VIABILITY_RESULT = 50;
+
+	/**
+	 * The feature id for the '<em><b>Target</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_RESULT__TARGET = 0;
+
+	/**
+	 * The feature id for the '<em><b>Earliest ETA</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_RESULT__EARLIEST_ETA = 1;
+
+	/**
+	 * The feature id for the '<em><b>Latest ETA</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_RESULT__LATEST_ETA = 2;
+
+	/**
+	 * The feature id for the '<em><b>Earliest Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_RESULT__EARLIEST_VOLUME = 3;
+
+	/**
+	 * The feature id for the '<em><b>Latest Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_RESULT__LATEST_VOLUME = 4;
+
+	/**
+	 * The feature id for the '<em><b>Earliest Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_RESULT__EARLIEST_PRICE = 5;
+
+	/**
+	 * The feature id for the '<em><b>Latest Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_RESULT__LATEST_PRICE = 6;
+
+	/**
+	 * The number of structural features of the '<em>Viability Result</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_RESULT_FEATURE_COUNT = 7;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2357,7 +2703,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 47;
+	int VOLUME_MODE = 51;
 
 
 	/**
@@ -2368,7 +2714,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotType()
 	 * @generated
 	 */
-	int SLOT_TYPE = 48;
+	int SLOT_TYPE = 52;
 
 
 	/**
@@ -2402,6 +2748,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getAnalyticsModel_Optimisations();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getViabilityModel <em>Viability Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Viability Model</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getViabilityModel()
+	 * @see #getAnalyticsModel()
+	 * @generated
+	 */
+	EReference getAnalyticsModel_ViabilityModel();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}'.
@@ -3264,6 +3621,49 @@ s	 * <!-- end-user-doc -->
 	EAttribute getBreakEvenResult_CargoPNL();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel <em>Abstract Analysis Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Abstract Analysis Model</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractAnalysisModel
+	 * @generated
+	 */
+	EClass getAbstractAnalysisModel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getBuys <em>Buys</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Buys</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getBuys()
+	 * @see #getAbstractAnalysisModel()
+	 * @generated
+	 */
+	EReference getAbstractAnalysisModel_Buys();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getSells <em>Sells</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Sells</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getSells()
+	 * @see #getAbstractAnalysisModel()
+	 * @generated
+	 */
+	EReference getAbstractAnalysisModel_Sells();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getShippingTemplates <em>Shipping Templates</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Shipping Templates</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getShippingTemplates()
+	 * @see #getAbstractAnalysisModel()
+	 * @generated
+	 */
+	EReference getAbstractAnalysisModel_ShippingTemplates();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel <em>Option Analysis Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3283,39 +3683,6 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getOptionAnalysisModel_BaseCase();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getShippingTemplates <em>Shipping Templates</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Shipping Templates</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getShippingTemplates()
-	 * @see #getOptionAnalysisModel()
-	 * @generated
-	 */
-	EReference getOptionAnalysisModel_ShippingTemplates();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getBuys <em>Buys</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Buys</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getBuys()
-	 * @see #getOptionAnalysisModel()
-	 * @generated
-	 */
-	EReference getOptionAnalysisModel_Buys();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getSells <em>Sells</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Sells</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getSells()
-	 * @see #getOptionAnalysisModel()
-	 * @generated
-	 */
-	EReference getOptionAnalysisModel_Sells();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BaseCase <em>Base Case</em>}'.
@@ -3924,6 +4291,245 @@ s	 * <!-- end-user-doc -->
 	EAttribute getPositionDescriptor_Before();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ViabilityModel <em>Viability Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Viability Model</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityModel
+	 * @generated
+	 */
+	EClass getViabilityModel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.ViabilityModel#getRows <em>Rows</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Rows</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityModel#getRows()
+	 * @see #getViabilityModel()
+	 * @generated
+	 */
+	EReference getViabilityModel_Rows();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.ViabilityModel#getMarkets <em>Markets</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Markets</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityModel#getMarkets()
+	 * @see #getViabilityModel()
+	 * @generated
+	 */
+	EReference getViabilityModel_Markets();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ViabilityRow <em>Viability Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Viability Row</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityRow
+	 * @generated
+	 */
+	EClass getViabilityRow();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ViabilityRow#getBuyOption <em>Buy Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Buy Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityRow#getBuyOption()
+	 * @see #getViabilityRow()
+	 * @generated
+	 */
+	EReference getViabilityRow_BuyOption();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ViabilityRow#getSellOption <em>Sell Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Sell Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityRow#getSellOption()
+	 * @see #getViabilityRow()
+	 * @generated
+	 */
+	EReference getViabilityRow_SellOption();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ViabilityRow#getShipping <em>Shipping</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Shipping</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityRow#getShipping()
+	 * @see #getViabilityRow()
+	 * @generated
+	 */
+	EReference getViabilityRow_Shipping();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.ViabilityRow#getLhsResults <em>Lhs Results</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Lhs Results</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityRow#getLhsResults()
+	 * @see #getViabilityRow()
+	 * @generated
+	 */
+	EReference getViabilityRow_LhsResults();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.ViabilityRow#getRhsResults <em>Rhs Results</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Rhs Results</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityRow#getRhsResults()
+	 * @see #getViabilityRow()
+	 * @generated
+	 */
+	EReference getViabilityRow_RhsResults();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ViabilityRow#getTarget <em>Target</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Target</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityRow#getTarget()
+	 * @see #getViabilityRow()
+	 * @generated
+	 */
+	EReference getViabilityRow_Target();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ViabilityRow#getPrice <em>Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityRow#getPrice()
+	 * @see #getViabilityRow()
+	 * @generated
+	 */
+	EAttribute getViabilityRow_Price();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ViabilityRow#getEta <em>Eta</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Eta</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityRow#getEta()
+	 * @see #getViabilityRow()
+	 * @generated
+	 */
+	EAttribute getViabilityRow_Eta();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ViabilityRow#getReferencePrice <em>Reference Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Reference Price</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityRow#getReferencePrice()
+	 * @see #getViabilityRow()
+	 * @generated
+	 */
+	EAttribute getViabilityRow_ReferencePrice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ViabilityRow#getStartVolume <em>Start Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Volume</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityRow#getStartVolume()
+	 * @see #getViabilityRow()
+	 * @generated
+	 */
+	EAttribute getViabilityRow_StartVolume();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ViabilityResult <em>Viability Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Viability Result</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityResult
+	 * @generated
+	 */
+	EClass getViabilityResult();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ViabilityResult#getTarget <em>Target</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Target</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityResult#getTarget()
+	 * @see #getViabilityResult()
+	 * @generated
+	 */
+	EReference getViabilityResult_Target();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ViabilityResult#getEarliestETA <em>Earliest ETA</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Earliest ETA</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityResult#getEarliestETA()
+	 * @see #getViabilityResult()
+	 * @generated
+	 */
+	EAttribute getViabilityResult_EarliestETA();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ViabilityResult#getLatestETA <em>Latest ETA</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Latest ETA</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityResult#getLatestETA()
+	 * @see #getViabilityResult()
+	 * @generated
+	 */
+	EAttribute getViabilityResult_LatestETA();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ViabilityResult#getEarliestVolume <em>Earliest Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Earliest Volume</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityResult#getEarliestVolume()
+	 * @see #getViabilityResult()
+	 * @generated
+	 */
+	EAttribute getViabilityResult_EarliestVolume();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ViabilityResult#getLatestVolume <em>Latest Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Latest Volume</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityResult#getLatestVolume()
+	 * @see #getViabilityResult()
+	 * @generated
+	 */
+	EAttribute getViabilityResult_LatestVolume();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ViabilityResult#getEarliestPrice <em>Earliest Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Earliest Price</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityResult#getEarliestPrice()
+	 * @see #getViabilityResult()
+	 * @generated
+	 */
+	EAttribute getViabilityResult_EarliestPrice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ViabilityResult#getLatestPrice <em>Latest Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Latest Price</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityResult#getLatestPrice()
+	 * @see #getViabilityResult()
+	 * @generated
+	 */
+	EAttribute getViabilityResult_LatestPrice();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SolutionOption <em>Solution Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4185,6 +4791,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ANALYTICS_MODEL__OPTIMISATIONS = eINSTANCE.getAnalyticsModel_Optimisations();
+
+		/**
+		 * The meta object literal for the '<em><b>Viability Model</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ANALYTICS_MODEL__VIABILITY_MODEL = eINSTANCE.getAnalyticsModel_ViabilityModel();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}' class.
@@ -4867,6 +5481,40 @@ s	 * <!-- end-user-doc -->
 		EAttribute BREAK_EVEN_RESULT__CARGO_PNL = eINSTANCE.getBreakEvenResult_CargoPNL();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.AbstractAnalysisModelImpl <em>Abstract Analysis Model</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.AbstractAnalysisModelImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractAnalysisModel()
+		 * @generated
+		 */
+		EClass ABSTRACT_ANALYSIS_MODEL = eINSTANCE.getAbstractAnalysisModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Buys</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ABSTRACT_ANALYSIS_MODEL__BUYS = eINSTANCE.getAbstractAnalysisModel_Buys();
+
+		/**
+		 * The meta object literal for the '<em><b>Sells</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ABSTRACT_ANALYSIS_MODEL__SELLS = eINSTANCE.getAbstractAnalysisModel_Sells();
+
+		/**
+		 * The meta object literal for the '<em><b>Shipping Templates</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES = eINSTANCE.getAbstractAnalysisModel_ShippingTemplates();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4883,30 +5531,6 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference OPTION_ANALYSIS_MODEL__BASE_CASE = eINSTANCE.getOptionAnalysisModel_BaseCase();
-
-		/**
-		 * The meta object literal for the '<em><b>Shipping Templates</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES = eINSTANCE.getOptionAnalysisModel_ShippingTemplates();
-
-		/**
-		 * The meta object literal for the '<em><b>Buys</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPTION_ANALYSIS_MODEL__BUYS = eINSTANCE.getOptionAnalysisModel_Buys();
-
-		/**
-		 * The meta object literal for the '<em><b>Sells</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPTION_ANALYSIS_MODEL__SELLS = eINSTANCE.getOptionAnalysisModel_Sells();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseImpl <em>Base Case</em>}' class.
@@ -5405,6 +6029,188 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute POSITION_DESCRIPTOR__BEFORE = eINSTANCE.getPositionDescriptor_Before();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ViabilityModelImpl <em>Viability Model</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.ViabilityModelImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityModel()
+		 * @generated
+		 */
+		EClass VIABILITY_MODEL = eINSTANCE.getViabilityModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Rows</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VIABILITY_MODEL__ROWS = eINSTANCE.getViabilityModel_Rows();
+
+		/**
+		 * The meta object literal for the '<em><b>Markets</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VIABILITY_MODEL__MARKETS = eINSTANCE.getViabilityModel_Markets();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ViabilityRowImpl <em>Viability Row</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.ViabilityRowImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityRow()
+		 * @generated
+		 */
+		EClass VIABILITY_ROW = eINSTANCE.getViabilityRow();
+
+		/**
+		 * The meta object literal for the '<em><b>Buy Option</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VIABILITY_ROW__BUY_OPTION = eINSTANCE.getViabilityRow_BuyOption();
+
+		/**
+		 * The meta object literal for the '<em><b>Sell Option</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VIABILITY_ROW__SELL_OPTION = eINSTANCE.getViabilityRow_SellOption();
+
+		/**
+		 * The meta object literal for the '<em><b>Shipping</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VIABILITY_ROW__SHIPPING = eINSTANCE.getViabilityRow_Shipping();
+
+		/**
+		 * The meta object literal for the '<em><b>Lhs Results</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VIABILITY_ROW__LHS_RESULTS = eINSTANCE.getViabilityRow_LhsResults();
+
+		/**
+		 * The meta object literal for the '<em><b>Rhs Results</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VIABILITY_ROW__RHS_RESULTS = eINSTANCE.getViabilityRow_RhsResults();
+
+		/**
+		 * The meta object literal for the '<em><b>Target</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VIABILITY_ROW__TARGET = eINSTANCE.getViabilityRow_Target();
+
+		/**
+		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VIABILITY_ROW__PRICE = eINSTANCE.getViabilityRow_Price();
+
+		/**
+		 * The meta object literal for the '<em><b>Eta</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VIABILITY_ROW__ETA = eINSTANCE.getViabilityRow_Eta();
+
+		/**
+		 * The meta object literal for the '<em><b>Reference Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VIABILITY_ROW__REFERENCE_PRICE = eINSTANCE.getViabilityRow_ReferencePrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VIABILITY_ROW__START_VOLUME = eINSTANCE.getViabilityRow_StartVolume();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ViabilityResultImpl <em>Viability Result</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.ViabilityResultImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityResult()
+		 * @generated
+		 */
+		EClass VIABILITY_RESULT = eINSTANCE.getViabilityResult();
+
+		/**
+		 * The meta object literal for the '<em><b>Target</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VIABILITY_RESULT__TARGET = eINSTANCE.getViabilityResult_Target();
+
+		/**
+		 * The meta object literal for the '<em><b>Earliest ETA</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VIABILITY_RESULT__EARLIEST_ETA = eINSTANCE.getViabilityResult_EarliestETA();
+
+		/**
+		 * The meta object literal for the '<em><b>Latest ETA</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VIABILITY_RESULT__LATEST_ETA = eINSTANCE.getViabilityResult_LatestETA();
+
+		/**
+		 * The meta object literal for the '<em><b>Earliest Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VIABILITY_RESULT__EARLIEST_VOLUME = eINSTANCE.getViabilityResult_EarliestVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Latest Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VIABILITY_RESULT__LATEST_VOLUME = eINSTANCE.getViabilityResult_LatestVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Earliest Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VIABILITY_RESULT__EARLIEST_PRICE = eINSTANCE.getViabilityResult_EarliestPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Latest Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VIABILITY_RESULT__LATEST_PRICE = eINSTANCE.getViabilityResult_LatestPrice();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl <em>Solution Option</em>}' class.

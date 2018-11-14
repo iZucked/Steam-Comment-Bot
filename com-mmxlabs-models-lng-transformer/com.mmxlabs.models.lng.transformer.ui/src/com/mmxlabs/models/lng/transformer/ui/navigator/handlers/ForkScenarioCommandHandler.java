@@ -67,6 +67,8 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 							try {
 								final String finalNewName = ScenarioServiceModelUtils.getNewForkName(instance, false);
 								if (finalNewName != null) {
+									
+									
 									final ScenarioInstance fork = ScenarioServiceModelUtils.fork(instance, finalNewName, new NullProgressMonitor());
 
 									stripScenario(fork);
@@ -102,6 +104,7 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 			// Strip optimisation result
 			analyticsModel.getOptionModels().clear();
 			analyticsModel.getOptimisations().clear();
+			analyticsModel.setViabilityModel(null);
 
 			scenarioDataProvider.getModelReference().save();
 		}
