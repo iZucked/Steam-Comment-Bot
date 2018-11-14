@@ -15,7 +15,7 @@ import com.mmxlabs.lingo.reports.scheduleview.views.SchedulerView;
 import com.mmxlabs.lingo.reports.views.headline.HeadlineReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
-import com.mmxlabs.lingo.reports.views.standard.CapacityViolationReportView;
+import com.mmxlabs.lingo.reports.views.standard.VolumeIssuesReportView;
 import com.mmxlabs.lingo.reports.views.standard.CooldownReportView;
 import com.mmxlabs.lingo.reports.views.standard.FitnessReportView;
 import com.mmxlabs.lingo.reports.views.standard.KPIReportView;
@@ -84,7 +84,7 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		reportsFolder.addPlaceholder(LatenessReportView.ID);
 		reportsFolder.addPlaceholder(CooldownReportView.ID);
 		reportsFolder.addPlaceholder(FitnessReportView.ID);
-		reportsFolder.addPlaceholder(CapacityViolationReportView.ID);
+		reportsFolder.addPlaceholder(VolumeIssuesReportView.ID);
 
 		layout.addShowViewShortcut("com.mmxlabs.scenario.service.ui.navigator");
 		layout.addShowViewShortcut("com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport");
@@ -99,7 +99,7 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut(LatenessReportView.ID);
 		layout.addShowViewShortcut(CooldownReportView.ID);
 		layout.addShowViewShortcut(FitnessReportView.ID);
-		layout.addShowViewShortcut(CapacityViolationReportView.ID);
+		layout.addShowViewShortcut(VolumeIssuesReportView.ID);
 		layout.addShowViewShortcut(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID);
 		layout.addShowViewShortcut(ReportsConstants.VIEW_OPTIMISATIONS_ID);
 

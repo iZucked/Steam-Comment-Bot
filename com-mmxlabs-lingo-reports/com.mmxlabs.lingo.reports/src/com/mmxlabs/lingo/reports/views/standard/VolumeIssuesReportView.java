@@ -54,7 +54,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  * @author Simon Goodall
  * 
  */
-public class CapacityViolationReportView extends EMFReportView {
+public class VolumeIssuesReportView extends EMFReportView {
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.CapacityViolationReportView";
 
 	private EPackage tableDataModel;
@@ -99,7 +99,7 @@ public class CapacityViolationReportView extends EMFReportView {
 
 	}
 
-	public CapacityViolationReportView() {
+	public VolumeIssuesReportView() {
 		super("com.mmxlabs.lingo.doc.Reports_CapacityViolations");
 
 		createDataModel();
@@ -112,7 +112,7 @@ public class CapacityViolationReportView extends EMFReportView {
 
 		addColumn("type", "Type", ColumnType.NORMAL, Formatters.objectFormatter, ref_Row_Owner, sp.getEvent__Type());
 
-		addColumn("violation", "Violation", ColumnType.NORMAL, new BaseFormatter() {
+		addColumn("violation", "Issue", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String render(final Object object) {
 
@@ -216,7 +216,7 @@ public class CapacityViolationReportView extends EMFReportView {
 			@Override
 			public void beginCollecting(boolean pinDiffMode) {
 				super.beginCollecting(pinDiffMode);
-				CapacityViolationReportView.this.clearPinModeData();
+				VolumeIssuesReportView.this.clearPinModeData();
 
 				dataModelInstance = GenericEMFTableDataModel.createRootInstance(tableDataModel);
 			}
@@ -246,7 +246,7 @@ public class CapacityViolationReportView extends EMFReportView {
 					}
 				}
 
-				CapacityViolationReportView.this.collectPinModeElements(rows, pinned);
+				VolumeIssuesReportView.this.collectPinModeElements(rows, pinned);
 
 				return rows;
 			}

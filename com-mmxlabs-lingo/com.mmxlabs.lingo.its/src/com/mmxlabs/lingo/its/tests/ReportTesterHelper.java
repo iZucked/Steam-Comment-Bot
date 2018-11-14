@@ -32,7 +32,7 @@ import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
 import com.mmxlabs.lingo.reports.views.headline.HeadlineReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
-import com.mmxlabs.lingo.reports.views.standard.CapacityViolationReportView;
+import com.mmxlabs.lingo.reports.views.standard.VolumeIssuesReportView;
 import com.mmxlabs.lingo.reports.views.standard.CooldownReportView;
 import com.mmxlabs.lingo.reports.views.standard.KPIReportView;
 import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
@@ -65,7 +65,7 @@ public class ReportTesterHelper {
 	public static final String LATENESS_REPORT_ID = LatenessReportView.ID;
 	public static final String LATENESS_REPORT_SHORTNAME = "LatenessReport";
 
-	public static final String CAPACITY_REPORT_ID = CapacityViolationReportView.ID;
+	public static final String CAPACITY_REPORT_ID = VolumeIssuesReportView.ID;
 	public static final String CAPACITY_REPORT_SHORTNAME = "CapacityReport";
 
 	public static final String COOLDOWN_REPORT_ID = CooldownReportView.ID;
