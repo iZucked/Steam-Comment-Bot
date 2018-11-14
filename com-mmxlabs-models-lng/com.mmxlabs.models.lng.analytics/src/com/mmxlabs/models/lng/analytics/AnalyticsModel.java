@@ -18,6 +18,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getOptionModels <em>Option Models</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getOptimisations <em>Optimisations</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getViabilityModel <em>Viability Model</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel()
@@ -56,6 +57,32 @@ public interface AnalyticsModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<AbstractSolutionSet> getOptimisations();
+
+	/**
+	 * Returns the value of the '<em><b>Viability Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Viability Model</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Viability Model</em>' containment reference.
+	 * @see #setViabilityModel(ViabilityModel)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_ViabilityModel()
+	 * @model containment="true"
+	 * @generated
+	 */
+	ViabilityModel getViabilityModel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getViabilityModel <em>Viability Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Viability Model</em>' containment reference.
+	 * @see #getViabilityModel()
+	 * @generated
+	 */
+	void setViabilityModel(ViabilityModel value);
 
 } // end of  AnalyticsModel
 

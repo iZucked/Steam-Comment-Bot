@@ -7,12 +7,12 @@ package com.mmxlabs.models.lng.analytics.impl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.datetime.DateTimePackage;
+import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.AnalysisResultDetail;
@@ -63,6 +63,9 @@ import com.mmxlabs.models.lng.analytics.SpotMarketSlotDescriptor;
 import com.mmxlabs.models.lng.analytics.VesselAllocationDescriptor;
 import com.mmxlabs.models.lng.analytics.VesselEventChange;
 import com.mmxlabs.models.lng.analytics.VesselEventDescriptor;
+import com.mmxlabs.models.lng.analytics.ViabilityModel;
+import com.mmxlabs.models.lng.analytics.ViabilityResult;
+import com.mmxlabs.models.lng.analytics.ViabilityRow;
 import com.mmxlabs.models.lng.analytics.VolumeMode;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -74,6 +77,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.scenario.service.ui.dnd.IChangeSource;
 
 /**
  * <!-- begin-user-doc -->
@@ -228,6 +232,13 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass breakEvenResultEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass abstractAnalysisModelEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -402,6 +413,27 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass viabilityModelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass viabilityRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass viabilityResultEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass solutionOptionEClass = null;
 
 	/**
@@ -453,7 +485,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link AnalyticsPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -467,7 +499,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		if (isInited) return (AnalyticsPackage)EPackage.Registry.INSTANCE.getEPackage(AnalyticsPackage.eNS_URI);
 
 		// Obtain or create and register package
-		AnalyticsPackageImpl theAnalyticsPackage = (AnalyticsPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof AnalyticsPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new AnalyticsPackageImpl());
+		Object registeredAnalyticsPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		AnalyticsPackageImpl theAnalyticsPackage = registeredAnalyticsPackage instanceof AnalyticsPackageImpl ? (AnalyticsPackageImpl)registeredAnalyticsPackage : new AnalyticsPackageImpl();
 
 		isInited = true;
 
@@ -493,7 +526,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		// Mark meta-data to indicate it can't be changed
 		theAnalyticsPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(AnalyticsPackage.eNS_URI, theAnalyticsPackage);
 		return theAnalyticsPackage;
@@ -525,6 +557,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	public EReference getAnalyticsModel_Optimisations() {
 		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAnalyticsModel_ViabilityModel() {
+		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1262,6 +1303,42 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getAbstractAnalysisModel() {
+		return abstractAnalysisModelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAbstractAnalysisModel_Buys() {
+		return (EReference)abstractAnalysisModelEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAbstractAnalysisModel_Sells() {
+		return (EReference)abstractAnalysisModelEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAbstractAnalysisModel_ShippingTemplates() {
+		return (EReference)abstractAnalysisModelEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getOptionAnalysisModel() {
 		return optionAnalysisModelEClass;
 	}
@@ -1272,34 +1349,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EReference getOptionAnalysisModel_BaseCase() {
-		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getOptionAnalysisModel_ShippingTemplates() {
-		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getOptionAnalysisModel_Buys() {
 		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getOptionAnalysisModel_Sells() {
-		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1820,6 +1870,204 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getViabilityModel() {
+		return viabilityModelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getViabilityModel_Rows() {
+		return (EReference)viabilityModelEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getViabilityModel_Markets() {
+		return (EReference)viabilityModelEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getViabilityRow() {
+		return viabilityRowEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getViabilityRow_BuyOption() {
+		return (EReference)viabilityRowEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getViabilityRow_SellOption() {
+		return (EReference)viabilityRowEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getViabilityRow_Shipping() {
+		return (EReference)viabilityRowEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getViabilityRow_LhsResults() {
+		return (EReference)viabilityRowEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getViabilityRow_RhsResults() {
+		return (EReference)viabilityRowEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getViabilityRow_Target() {
+		return (EReference)viabilityRowEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getViabilityRow_Price() {
+		return (EAttribute)viabilityRowEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getViabilityRow_Eta() {
+		return (EAttribute)viabilityRowEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getViabilityRow_ReferencePrice() {
+		return (EAttribute)viabilityRowEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getViabilityRow_StartVolume() {
+		return (EAttribute)viabilityRowEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getViabilityResult() {
+		return viabilityResultEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getViabilityResult_Target() {
+		return (EReference)viabilityResultEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getViabilityResult_EarliestETA() {
+		return (EAttribute)viabilityResultEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getViabilityResult_LatestETA() {
+		return (EAttribute)viabilityResultEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getViabilityResult_EarliestVolume() {
+		return (EAttribute)viabilityResultEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getViabilityResult_LatestVolume() {
+		return (EAttribute)viabilityResultEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getViabilityResult_EarliestPrice() {
+		return (EAttribute)viabilityResultEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getViabilityResult_LatestPrice() {
+		return (EAttribute)viabilityResultEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getSolutionOption() {
 		return solutionOptionEClass;
 	}
@@ -1848,7 +2096,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EReference getOptionAnalysisModel_PartialCase() {
-		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(4);
+		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1857,7 +2105,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EReference getOptionAnalysisModel_BaseCaseResult() {
-		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(5);
+		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1866,7 +2114,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EReference getOptionAnalysisModel_Results() {
-		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(6);
+		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -1875,7 +2123,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EAttribute getOptionAnalysisModel_UseTargetPNL() {
-		return (EAttribute)optionAnalysisModelEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)optionAnalysisModelEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1884,7 +2132,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EReference getOptionAnalysisModel_Children() {
-		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(8);
+		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -2027,6 +2275,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		analyticsModelEClass = createEClass(ANALYTICS_MODEL);
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__OPTION_MODELS);
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__OPTIMISATIONS);
+		createEReference(analyticsModelEClass, ANALYTICS_MODEL__VIABILITY_MODEL);
 
 		buyOptionEClass = createEClass(BUY_OPTION);
 
@@ -2128,11 +2377,13 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(breakEvenResultEClass, BREAK_EVEN_RESULT__PRICE_STRING);
 		createEAttribute(breakEvenResultEClass, BREAK_EVEN_RESULT__CARGO_PNL);
 
+		abstractAnalysisModelEClass = createEClass(ABSTRACT_ANALYSIS_MODEL);
+		createEReference(abstractAnalysisModelEClass, ABSTRACT_ANALYSIS_MODEL__BUYS);
+		createEReference(abstractAnalysisModelEClass, ABSTRACT_ANALYSIS_MODEL__SELLS);
+		createEReference(abstractAnalysisModelEClass, ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+
 		optionAnalysisModelEClass = createEClass(OPTION_ANALYSIS_MODEL);
-		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__BUYS);
-		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__SELLS);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__BASE_CASE);
-		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__RESULTS);
@@ -2234,6 +2485,31 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(positionDescriptorEClass, POSITION_DESCRIPTOR__AFTER);
 		createEAttribute(positionDescriptorEClass, POSITION_DESCRIPTOR__BEFORE);
 
+		viabilityModelEClass = createEClass(VIABILITY_MODEL);
+		createEReference(viabilityModelEClass, VIABILITY_MODEL__ROWS);
+		createEReference(viabilityModelEClass, VIABILITY_MODEL__MARKETS);
+
+		viabilityRowEClass = createEClass(VIABILITY_ROW);
+		createEReference(viabilityRowEClass, VIABILITY_ROW__BUY_OPTION);
+		createEReference(viabilityRowEClass, VIABILITY_ROW__SELL_OPTION);
+		createEReference(viabilityRowEClass, VIABILITY_ROW__SHIPPING);
+		createEReference(viabilityRowEClass, VIABILITY_ROW__LHS_RESULTS);
+		createEReference(viabilityRowEClass, VIABILITY_ROW__RHS_RESULTS);
+		createEReference(viabilityRowEClass, VIABILITY_ROW__TARGET);
+		createEAttribute(viabilityRowEClass, VIABILITY_ROW__PRICE);
+		createEAttribute(viabilityRowEClass, VIABILITY_ROW__ETA);
+		createEAttribute(viabilityRowEClass, VIABILITY_ROW__REFERENCE_PRICE);
+		createEAttribute(viabilityRowEClass, VIABILITY_ROW__START_VOLUME);
+
+		viabilityResultEClass = createEClass(VIABILITY_RESULT);
+		createEReference(viabilityResultEClass, VIABILITY_RESULT__TARGET);
+		createEAttribute(viabilityResultEClass, VIABILITY_RESULT__EARLIEST_ETA);
+		createEAttribute(viabilityResultEClass, VIABILITY_RESULT__LATEST_ETA);
+		createEAttribute(viabilityResultEClass, VIABILITY_RESULT__EARLIEST_VOLUME);
+		createEAttribute(viabilityResultEClass, VIABILITY_RESULT__LATEST_VOLUME);
+		createEAttribute(viabilityResultEClass, VIABILITY_RESULT__EARLIEST_PRICE);
+		createEAttribute(viabilityResultEClass, VIABILITY_RESULT__LATEST_PRICE);
+
 		// Create enums
 		volumeModeEEnum = createEEnum(VOLUME_MODE);
 		slotTypeEEnum = createEEnum(SLOT_TYPE);
@@ -2294,7 +2570,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		nominatedShippingOptionEClass.getESuperTypes().add(this.getShippingOption());
 		profitAndLossResultEClass.getESuperTypes().add(this.getAnalysisResultDetail());
 		breakEvenResultEClass.getESuperTypes().add(this.getAnalysisResultDetail());
-		optionAnalysisModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		abstractAnalysisModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		optionAnalysisModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
 		newVesselAvailabilityEClass.getESuperTypes().add(this.getShippingOption());
 		existingVesselAvailabilityEClass.getESuperTypes().add(this.getShippingOption());
 		existingCharterMarketOptionEClass.getESuperTypes().add(this.getShippingOption());
@@ -2310,11 +2587,13 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		spotMarketSlotDescriptorEClass.getESuperTypes().add(this.getSlotDescriptor());
 		marketVesselAllocationDescriptorEClass.getESuperTypes().add(this.getVesselAllocationDescriptor());
 		fleetVesselAllocationDescriptorEClass.getESuperTypes().add(this.getVesselAllocationDescriptor());
+		viabilityModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(analyticsModelEClass, AnalyticsModel.class, "AnalyticsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAnalyticsModel_OptionModels(), this.getOptionAnalysisModel(), null, "optionModels", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAnalyticsModel_Optimisations(), this.getAbstractSolutionSet(), null, "optimisations", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAnalyticsModel_ViabilityModel(), this.getViabilityModel(), null, "viabilityModel", null, 0, 1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(buyOptionEClass, BuyOption.class, "BuyOption", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -2416,11 +2695,13 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getBreakEvenResult_PriceString(), ecorePackage.getEString(), "priceString", null, 0, 1, BreakEvenResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBreakEvenResult_CargoPNL(), ecorePackage.getEDouble(), "cargoPNL", null, 0, 1, BreakEvenResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(abstractAnalysisModelEClass, AbstractAnalysisModel.class, "AbstractAnalysisModel", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAbstractAnalysisModel_Buys(), this.getBuyOption(), null, "buys", null, 0, -1, AbstractAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAbstractAnalysisModel_Sells(), this.getSellOption(), null, "sells", null, 0, -1, AbstractAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAbstractAnalysisModel_ShippingTemplates(), this.getShippingOption(), null, "shippingTemplates", null, 0, -1, AbstractAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(optionAnalysisModelEClass, OptionAnalysisModel.class, "OptionAnalysisModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getOptionAnalysisModel_Buys(), this.getBuyOption(), null, "buys", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOptionAnalysisModel_Sells(), this.getSellOption(), null, "sells", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_BaseCase(), this.getBaseCase(), null, "baseCase", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOptionAnalysisModel_ShippingTemplates(), this.getShippingOption(), null, "shippingTemplates", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_PartialCase(), this.getPartialCase(), null, "partialCase", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_BaseCaseResult(), this.getResult(), null, "baseCaseResult", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_Results(), this.getResult(), null, "results", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2522,6 +2803,31 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getPositionDescriptor_After(), ecorePackage.getEString(), "after", null, 0, 1, PositionDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPositionDescriptor_Before(), ecorePackage.getEString(), "before", null, 0, 1, PositionDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(viabilityModelEClass, ViabilityModel.class, "ViabilityModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getViabilityModel_Rows(), this.getViabilityRow(), null, "rows", null, 0, -1, ViabilityModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getViabilityModel_Markets(), theSpotMarketsPackage.getSpotMarket(), null, "markets", null, 0, -1, ViabilityModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(viabilityRowEClass, ViabilityRow.class, "ViabilityRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getViabilityRow_BuyOption(), this.getBuyOption(), null, "buyOption", null, 0, 1, ViabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getViabilityRow_SellOption(), this.getSellOption(), null, "sellOption", null, 0, 1, ViabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getViabilityRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, 1, ViabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getViabilityRow_LhsResults(), this.getViabilityResult(), null, "lhsResults", null, 0, -1, ViabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getViabilityRow_RhsResults(), this.getViabilityResult(), null, "rhsResults", null, 0, -1, ViabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getViabilityRow_Target(), ecorePackage.getEObject(), null, "target", null, 0, 1, ViabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getViabilityRow_Price(), ecorePackage.getEDouble(), "price", null, 0, 1, ViabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getViabilityRow_Eta(), theDateTimePackage.getLocalDate(), "eta", null, 0, 1, ViabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getViabilityRow_ReferencePrice(), ecorePackage.getEDouble(), "referencePrice", null, 0, 1, ViabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getViabilityRow_StartVolume(), ecorePackage.getELong(), "startVolume", null, 0, 1, ViabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(viabilityResultEClass, ViabilityResult.class, "ViabilityResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getViabilityResult_Target(), theSpotMarketsPackage.getSpotMarket(), null, "target", null, 0, 1, ViabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getViabilityResult_EarliestETA(), theDateTimePackage.getLocalDate(), "earliestETA", null, 0, 1, ViabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getViabilityResult_LatestETA(), theDateTimePackage.getLocalDate(), "latestETA", null, 0, 1, ViabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getViabilityResult_EarliestVolume(), ecorePackage.getEInt(), "earliestVolume", null, 0, 1, ViabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getViabilityResult_LatestVolume(), ecorePackage.getEInt(), "latestVolume", null, 0, 1, ViabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getViabilityResult_EarliestPrice(), ecorePackage.getEDouble(), "earliestPrice", null, 0, 1, ViabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getViabilityResult_LatestPrice(), ecorePackage.getEDouble(), "latestPrice", null, 0, 1, ViabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(volumeModeEEnum, VolumeMode.class, "VolumeMode");
 		addEEnumLiteral(volumeModeEEnum, VolumeMode.NOT_SPECIFIED);
@@ -2553,12 +2859,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	protected void createNumberFormatAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/numberFormat";	
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";
 		addAnnotation
-		  (getBuyOpportunity_Cv(), 
-		   source, 
+		  (getBuyOpportunity_Cv(),
+		   source,
 		   new String[] {
-			 "formatString", "#0.###"
+			   "formatString", "#0.###"
 		   });
 	}
 
@@ -2569,66 +2875,66 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	protected void createExpressionTypeAnnotations() {
-		String source = "http://www.mmxlabs.com/models/pricing/expressionType";	
+		String source = "http://www.mmxlabs.com/models/pricing/expressionType";
 		addAnnotation
-		  (getBuyOpportunity_PriceExpression(), 
-		   source, 
+		  (getBuyOpportunity_PriceExpression(),
+		   source,
 		   new String[] {
-			 "type", "commodity"
-		   });	
+			   "type", "commodity"
+		   });
 		addAnnotation
-		  (getBuyOpportunity_CancellationExpression(), 
-		   source, 
+		  (getBuyOpportunity_CancellationExpression(),
+		   source,
 		   new String[] {
-			 "type", "commodity"
-		   });	
+			   "type", "commodity"
+		   });
 		addAnnotation
-		  (getBuyOpportunity_MiscCosts(), 
-		   source, 
+		  (getBuyOpportunity_MiscCosts(),
+		   source,
 		   new String[] {
-			 "type", "commodity"
-		   });	
+			   "type", "commodity"
+		   });
 		addAnnotation
-		  (getSellOpportunity_PriceExpression(), 
-		   source, 
+		  (getSellOpportunity_PriceExpression(),
+		   source,
 		   new String[] {
-			 "type", "commodity"
-		   });	
+			   "type", "commodity"
+		   });
 		addAnnotation
-		  (getSellOpportunity_CancellationExpression(), 
-		   source, 
+		  (getSellOpportunity_CancellationExpression(),
+		   source,
 		   new String[] {
-			 "type", "commodity"
-		   });	
+			   "type", "commodity"
+		   });
 		addAnnotation
-		  (getSellOpportunity_MiscCosts(), 
-		   source, 
+		  (getSellOpportunity_MiscCosts(),
+		   source,
 		   new String[] {
-			 "type", "commodity"
-		   });	
+			   "type", "commodity"
+		   });
 		addAnnotation
-		  (getFleetShippingOption_HireCost(), 
-		   source, 
+		  (getFleetShippingOption_HireCost(),
+		   source,
 		   new String[] {
-			 "type", "charter"
-		   });	
+			   "type", "charter"
+		   });
 		addAnnotation
-		  (getOptionalAvailabilityShippingOption_BallastBonus(), 
-		   source, 
+		  (getOptionalAvailabilityShippingOption_BallastBonus(),
+		   source,
 		   new String[] {
-			 "type", "charter"
-		   });	
+			   "type", "charter"
+		   });
 		addAnnotation
-		  (getOptionalAvailabilityShippingOption_RepositioningFee(), 
-		   source, 
+		  (getOptionalAvailabilityShippingOption_RepositioningFee(),
+		   source,
 		   new String[] {
-			 "type", "charter"
-		   });	
+			   "type", "charter"
+		   });
 		addAnnotation
-		  (getRoundTripShippingOption_HireCost(), 
-		   source, 
+		  (getRoundTripShippingOption_HireCost(),
+		   source,
 		   new String[] {
-			 "type", "charter"
+			   "type", "charter"
 		   });
 	}
 
@@ -2639,36 +2945,36 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	protected void createNamedObjectAnnotations() {
-		String source = "http://www.mmxlabs.com/models/mmxcore/validation/NamedObject";	
+		String source = "http://www.mmxlabs.com/models/mmxcore/validation/NamedObject";
 		addAnnotation
-		  (analyticsModelEClass, 
-		   source, 
+		  (analyticsModelEClass,
+		   source,
 		   new String[] {
-			 "nonUniqueChildren", "true"
-		   });	
+			   "nonUniqueChildren", "true"
+		   });
 		addAnnotation
-		  (resultEClass, 
-		   source, 
+		  (resultEClass,
+		   source,
 		   new String[] {
-			 "nonUniqueChildren", "true"
-		   });	
+			   "nonUniqueChildren", "true"
+		   });
 		addAnnotation
-		  (abstractSolutionSetEClass, 
-		   source, 
+		  (abstractSolutionSetEClass,
+		   source,
 		   new String[] {
-			 "nonUniqueChildren", "true"
-		   });	
+			   "nonUniqueChildren", "true"
+		   });
 		addAnnotation
-		  (actionableSetPlanEClass, 
-		   source, 
+		  (actionableSetPlanEClass,
+		   source,
 		   new String[] {
-			 "nonUniqueChildren", "true"
-		   });	
+			   "nonUniqueChildren", "true"
+		   });
 		addAnnotation
-		  (slotInsertionOptionsEClass, 
-		   source, 
+		  (slotInsertionOptionsEClass,
+		   source,
 		   new String[] {
-			 "nonUniqueChildren", "true"
+			   "nonUniqueChildren", "true"
 		   });
 	}
 

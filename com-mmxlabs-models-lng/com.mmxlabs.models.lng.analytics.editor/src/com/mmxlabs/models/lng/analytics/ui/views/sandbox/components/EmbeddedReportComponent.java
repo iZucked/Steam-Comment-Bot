@@ -23,14 +23,13 @@ import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
+import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.application.BindSelectionListener;
 import com.mmxlabs.rcp.common.application.IInjectableE4ComponentFactory;
 
-public class EmbeddedReportComponent extends AbstractSandboxComponent {
+public class EmbeddedReportComponent extends AbstractSandboxComponent<Object, AbstractAnalysisModel> {
 	private IEclipseContext reportContext;
 	private Object reportObject;
 	private String componentId;
@@ -38,7 +37,7 @@ public class EmbeddedReportComponent extends AbstractSandboxComponent {
 	private IViewSite viewSite;
 	private Consumer<IEclipseContext> contextConsumer;
 
-	public EmbeddedReportComponent(@NonNull IScenarioEditingLocation scenarioEditingLocation, Map<Object, IStatus> validationErrors, @NonNull Supplier<OptionAnalysisModel> modelProvider,
+	public EmbeddedReportComponent(@NonNull IScenarioEditingLocation scenarioEditingLocation, Map<Object, IStatus> validationErrors, @NonNull Supplier<AbstractAnalysisModel> modelProvider,
 			String componentId, String componentName, IViewSite viewSite, final Consumer<IEclipseContext> contextConsumer) {
 		super(scenarioEditingLocation, validationErrors, modelProvider);
 		this.componentId = componentId;
@@ -48,7 +47,7 @@ public class EmbeddedReportComponent extends AbstractSandboxComponent {
 	}
 
 	@Override
-	public void createControls(final Composite parent, boolean expanded, final IExpansionListener expansionListener, OptionModellerView optionModellerView) {
+	public void createControls(final Composite parent, boolean expanded, final IExpansionListener expansionListener, Object optionModellerView) {
 		final Pair<Object, IEclipseContext> p = createReportControl(componentId, componentName, parent, expansionListener, expanded);
 		this.reportObject = p.getFirst();
 		this.reportContext = p.getSecond();

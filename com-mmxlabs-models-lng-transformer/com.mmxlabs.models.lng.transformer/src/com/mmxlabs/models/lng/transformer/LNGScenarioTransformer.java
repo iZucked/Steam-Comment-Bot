@@ -1320,8 +1320,14 @@ public class LNGScenarioTransformer {
 				setSlotAsSoftRequired(builder, loadSlot, load);
 			}
 
-			configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load,
-					getTimeWindowForSlotBinding(loadSlot, load, portAssociation.lookupNullChecked(loadSlot.getPort())));
+			final ITimeWindow twForSlotBinding;
+			if (loadSlot.getPort() == null) {
+				twForSlotBinding = getTimeWindowForSlotBinding(loadSlot, load, portProvider.getAnywherePort());
+			} else {
+				twForSlotBinding = getTimeWindowForSlotBinding(loadSlot, load, portAssociation.lookupNullChecked(loadSlot.getPort()));
+			}
+
+			configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load, twForSlotBinding);
 		}
 		for (final LoadSlot loadSlot : extraLoadSlots) {
 			assert loadSlot != null;
@@ -1382,8 +1388,14 @@ public class LNGScenarioTransformer {
 				setSlotAsSoftRequired(builder, dischargeSlot, discharge);
 			}
 
-			configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge,
-					getTimeWindowForSlotBinding(dischargeSlot, discharge, portAssociation.lookup(dischargeSlot.getPort())));
+			final ITimeWindow twForSlotBinding;
+			if (dischargeSlot.getPort() == null) {
+				twForSlotBinding = getTimeWindowForSlotBinding(dischargeSlot, discharge, portProvider.getAnywherePort());
+			} else {
+				twForSlotBinding = getTimeWindowForSlotBinding(dischargeSlot, discharge, portAssociation.lookupNullChecked(dischargeSlot.getPort()));
+			}
+
+			configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge, twForSlotBinding);
 		}
 	}
 

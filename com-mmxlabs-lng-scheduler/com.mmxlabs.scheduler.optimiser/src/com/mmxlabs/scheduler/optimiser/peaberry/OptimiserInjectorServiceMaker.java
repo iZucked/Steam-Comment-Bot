@@ -19,6 +19,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
 import com.google.inject.Module;
+import com.google.inject.util.Modules;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 
 /**
@@ -162,10 +163,47 @@ public class OptimiserInjectorServiceMaker {
 
 	}
 
-	public @Nullable IOptimiserInjectorService make(@Nullable IOptimiserInjectorService optimiserInjectorService) {
-		if (optimiserInjectorService != null) {
-			throw new UnsupportedOperationException();
+	public @Nullable IOptimiserInjectorService make(@Nullable final IOptimiserInjectorService optimiserInjectorService) {
+
+		final IOptimiserInjectorService local = make();
+
+		if (optimiserInjectorService == null) {
+			return local;
+		} else if (local == null) {
+			return optimiserInjectorService;
 		}
-		return make();
+
+		return new IOptimiserInjectorService() {
+			@Override
+			public @Nullable Module requestModule(final ModuleType moduleType, final Collection<String> hints) {
+				final Module moduleA = local.requestModule(moduleType, hints);
+				final Module moduleB = optimiserInjectorService.requestModule(moduleType, hints);
+				if (moduleA == null) {
+					return moduleB;
+				} else if (moduleB == null) {
+					return moduleA;
+				} else {
+					return Modules.combine(moduleA, moduleB);
+				}
+			}
+
+			@Override
+			public @Nullable List<Module> requestModuleOverrides(final ModuleType moduleType, final Collection<String> hints) {
+
+				final List<Module> moduleA = local.requestModuleOverrides(moduleType, hints);
+				final List<Module> moduleB = optimiserInjectorService.requestModuleOverrides(moduleType, hints);
+
+				if (moduleA == null) {
+					return moduleB;
+				} else if (moduleB == null) {
+					return moduleA;
+				} else {
+					final List<Module> newList = new LinkedList<>();
+					newList.addAll(moduleA);
+					newList.addAll(moduleB);
+					return newList;
+				}
+			}
+		};
 	}
 }

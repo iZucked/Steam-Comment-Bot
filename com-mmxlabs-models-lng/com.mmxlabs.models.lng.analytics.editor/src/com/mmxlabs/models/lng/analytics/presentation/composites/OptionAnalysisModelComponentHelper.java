@@ -48,7 +48,7 @@ public class OptionAnalysisModelComponentHelper extends BaseComponentHelper {
 	 */
 	public OptionAnalysisModelComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL));
 	}
 	
 	/**
@@ -69,10 +69,7 @@ public class OptionAnalysisModelComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_buysEditor(detailComposite, topClass);
-		add_sellsEditor(detailComposite, topClass);
 		add_baseCaseEditor(detailComposite, topClass);
-		add_shippingTemplatesEditor(detailComposite, topClass);
 		add_partialCaseEditor(detailComposite, topClass);
 		add_baseCaseResultEditor(detailComposite, topClass);
 		add_resultsEditor(detailComposite, topClass);
@@ -88,31 +85,6 @@ public class OptionAnalysisModelComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE));
 	}
 
-	/**
-	 * Create the editor for the shippingTemplates feature on OptionAnalysisModel
-	 *
-	 * @generated
-	 */
-	protected void add_shippingTemplatesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES));
-	}
-
-	/**
-	 * Create the editor for the buys feature on OptionAnalysisModel
-	 *
-	 * @generated
-	 */
-	protected void add_buysEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS));
-	}
-	/**
-	 * Create the editor for the sells feature on OptionAnalysisModel
-	 *
-	 * @generated
-	 */
-	protected void add_sellsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS));
-	}
 	/**
 	 * Create the editor for the partialCase feature on OptionAnalysisModel
 	 *

@@ -109,6 +109,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -164,6 +166,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.IScenarioInstanceProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -1671,6 +1674,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 
 		cargoesToRemove.removeAll(cargoesToKeep);
+//		if (cargoesToRemove.size() > 0 ||slotsToRemove.size() > 0) {
+//			final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioEditingLocation.getScenarioDataProvider());
+//			analyticsModel.setViabilityModel(null);
+//		}
 		for (final Cargo cargo : cargoesToRemove) {
 			deleteCommands.add(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), cargo));
 		}

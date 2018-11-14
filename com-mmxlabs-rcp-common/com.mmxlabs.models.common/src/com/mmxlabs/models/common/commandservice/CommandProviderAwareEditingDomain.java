@@ -164,7 +164,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 				final Command addition = provider.provideAdditionalAfterCommand(this, rootObject, overrides, editSet, commandClass, commandParameter, normal);
 				if (addition != null) {
 					log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
-					if (addition.canExecute() == false) {
+					if (!addition.canExecute()) {
 						log.error("Provided command was not executable", new RuntimeException());
 					}
 					wrapper.append(addition);
@@ -179,11 +179,11 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 		}
 	}
 
-	private final WeakHashMap<EObject, EObject> overrides = new WeakHashMap<EObject, EObject>();
+	private final WeakHashMap<EObject, EObject> overrides = new WeakHashMap<>();
 	/**
 	 * The {@link Set} of objects currently being edited.
 	 */
-	private final Set<EObject> editSet = new HashSet<EObject>();
+	private final Set<EObject> editSet = new HashSet<>();
 
 	public void setOverride(final EObject real, final EObject override) {
 		overrides.put(real, override);

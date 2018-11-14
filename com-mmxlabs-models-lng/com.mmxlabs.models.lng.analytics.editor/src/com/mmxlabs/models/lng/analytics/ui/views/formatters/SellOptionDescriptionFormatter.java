@@ -12,7 +12,9 @@ import java.util.Collection;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
+import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
+import com.mmxlabs.models.lng.analytics.ViabilityRow;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -26,7 +28,11 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 			return "<open>";
 		}
 
-		if (object instanceof PartialCaseRow) {
+		if (object instanceof ViabilityRow) {
+			final ViabilityRow row = (ViabilityRow) object;
+			final SellOption sell = row.getSellOption();
+			return render(sell);
+		} else if (object instanceof PartialCaseRow) {
 			final PartialCaseRow partialCaseRow = (PartialCaseRow) object;
 			final Collection<?> sells = partialCaseRow.getSellOptions();
 

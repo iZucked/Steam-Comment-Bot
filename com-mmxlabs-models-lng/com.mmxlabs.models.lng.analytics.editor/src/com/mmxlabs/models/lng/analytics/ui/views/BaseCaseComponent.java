@@ -56,7 +56,7 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
-public class BaseCaseComponent extends AbstractSandboxComponent {
+public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerView, OptionAnalysisModel> {
 	private boolean baseCaseValid = true;
 
 	private GridTreeViewer baseCaseViewer;

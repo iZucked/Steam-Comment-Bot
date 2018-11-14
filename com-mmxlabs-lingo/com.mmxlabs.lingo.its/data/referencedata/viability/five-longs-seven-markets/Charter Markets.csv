@@ -1,0 +1,14 @@
+charteroutstartdate,enabled,name,charterInRate,spotCharterCount,overrideInaccessibleRoutes,inaccessibleRoutes,nominal,minDuration,maxDuration,vessel,kind,charterOutRate,minCharterOutDuration,maxCharterOutDuration,availablePorts,vessels
+,,,,,,,,,,,,,,,,
+,false,CI_1,TC_TFDE,0,false,,false,,,M_3,CharterInMarket,,,,,
+,false,CI_2,TC_DFDE,2,false,,false,,,TFDE_3,CharterInMarket,,,,,
+,false,CI_3,TC_DFDE,0,false,,false,,,TFDE_4,CharterInMarket,,,,,
+,false,CI_4,TC_DFDE,0,false,,false,,,TFDE_5,CharterInMarket,,,,,
+,false,CI_5,TC_DFDE,1,false,,false,,,TFDE_6,CharterInMarket,,,,,
+,false,CI_6,TC_DFDE,1,false,,false,,,TFDE_7,CharterInMarket,,,,,
+,false,CI_7,TC_DFDE,1,false,,false,,,Steam_1,CharterInMarket,,,,,
+,false,CI_8,TC_DFDE,0,false,,false,,,Charter A,CharterInMarket,,,,,
+,false,CI_9,TC_DFDE,0,false,,false,,,Steam_2,CharterInMarket,,,,,
+,false,CI_10,21750,1,false,,false,,,Steam_2,CharterInMarket,,,,,
+,false,CI_11,35000,1,false,,false,,,Charter A,CharterInMarket,,,,,
+,true,CO_1,,,,,,,,,CharterOutMarket,1500000,15,,,VesselGroup:TFDE_1

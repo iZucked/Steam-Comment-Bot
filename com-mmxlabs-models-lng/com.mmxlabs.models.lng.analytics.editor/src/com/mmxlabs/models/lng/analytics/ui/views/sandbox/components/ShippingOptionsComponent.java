@@ -28,14 +28,13 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.internal.handlers.WizardHandler.New;
 
+import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
-import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
@@ -48,22 +47,23 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 
-public class ShippingOptionsComponent extends AbstractSandboxComponent {
+public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, AbstractAnalysisModel> {
 
 	private GridTreeViewer shippingOptionsViewer;
 	private MenuManager mgr;
 
-	public ShippingOptionsComponent(@NonNull IScenarioEditingLocation scenarioEditingLocation, Map<Object, IStatus> validationErrors, @NonNull Supplier<OptionAnalysisModel> modelProvider) {
+	public ShippingOptionsComponent(@NonNull IScenarioEditingLocation scenarioEditingLocation, Map<Object, IStatus> validationErrors, @NonNull Supplier<AbstractAnalysisModel> modelProvider) {
 		super(scenarioEditingLocation, validationErrors, modelProvider);
 	}
 
-	public void createControls(Composite parent, boolean expanded, IExpansionListener expansionListener, OptionModellerView optionModellerView) {
+	@Override
+	public void createControls(Composite parent, boolean expanded, IExpansionListener expansionListener, Object optionModellerView) {
 		ExpandableComposite expandableShipping = wrapInExpandable(parent, "Shipping", p -> createShippingOptionsViewer(p).getGrid(), expandableCompo -> {
 
 			{
 				final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 				final ShippingOptionsDropTargetListener listener = new ShippingOptionsDropTargetListener(scenarioEditingLocation, shippingOptionsViewer);
-				inputWants.add(model -> listener.setOptionAnalysisModel(model));
+				inputWants.add(model -> listener.setModel(model));
 				// Control control = getControl();
 				final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
 				dropTarget.setTransfer(types);
@@ -101,8 +101,8 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent {
 						final NominatedShippingOption opt = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
 
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-								modelProvider.get(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+								AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+								modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					}));
@@ -110,8 +110,8 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent {
 						final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-								modelProvider.get(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+								AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+								modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					}));
@@ -119,8 +119,8 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent {
 						final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createOptionalAvailabilityShippingOption();
 						AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-								modelProvider.get(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+								AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+								modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					}));
@@ -130,8 +130,8 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent {
 							opt.setVesselAvailability(CargoFactory.eINSTANCE.createVesselAvailability());
 							AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-									modelProvider.get(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+									AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+									modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 
 							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 						}));
@@ -182,7 +182,7 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent {
 			final Transfer[] transferTypes = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 			final ShippingOptionsDropTargetListener listener = new ShippingOptionsDropTargetListener(scenarioEditingLocation, shippingOptionsViewer);
 			shippingOptionsViewer.addDropSupport(DND.DROP_MOVE, transferTypes, listener);
-			inputWants.add(model -> listener.setOptionAnalysisModel(model));
+			inputWants.add(model -> listener.setModel(model));
 		}
 
 		mgr = new MenuManager();
@@ -192,7 +192,7 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent {
 		hookDragSource(shippingOptionsViewer);
 
 		inputWants.add(model -> shippingOptionsViewer.setInput(model));
-		inputWants.add(model -> listener.setOptionAnalysisModel(model));
+		inputWants.add(model -> listener.setModel(model));
 
 		return shippingOptionsViewer;
 	}

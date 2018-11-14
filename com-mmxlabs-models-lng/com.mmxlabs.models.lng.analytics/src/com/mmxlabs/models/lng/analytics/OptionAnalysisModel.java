@@ -18,10 +18,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getBuys <em>Buys</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getSells <em>Sells</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getBaseCase <em>Base Case</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getShippingTemplates <em>Shipping Templates</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getPartialCase <em>Partial Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getBaseCaseResult <em>Base Case Result</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getResults <em>Results</em>}</li>
@@ -33,7 +30,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface OptionAnalysisModel extends NamedObject {
+public interface OptionAnalysisModel extends AbstractAnalysisModel {
 	/**
 	 * Returns the value of the '<em><b>Base Case</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
@@ -59,54 +56,6 @@ public interface OptionAnalysisModel extends NamedObject {
 	 * @generated
 	 */
 	void setBaseCase(BaseCase value);
-
-	/**
-	 * Returns the value of the '<em><b>Shipping Templates</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.ShippingOption}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Shipping Templates</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Shipping Templates</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel_ShippingTemplates()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<ShippingOption> getShippingTemplates();
-
-	/**
-	 * Returns the value of the '<em><b>Buys</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.BuyOption}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Buys</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Buys</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel_Buys()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<BuyOption> getBuys();
-
-	/**
-	 * Returns the value of the '<em><b>Sells</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.SellOption}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Sells</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Sells</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel_Sells()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<SellOption> getSells();
 
 	/**
 	 * Returns the value of the '<em><b>Partial Case</b></em>' containment reference.

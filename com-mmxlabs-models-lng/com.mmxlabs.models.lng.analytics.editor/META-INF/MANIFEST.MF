@@ -13,7 +13,8 @@ Export-Package: com.mmxlabs.models.lng.analytics.importer,
  com.mmxlabs.models.lng.analytics.services,
  com.mmxlabs.models.lng.analytics.ui.utils,
  com.mmxlabs.models.lng.analytics.ui.views.evaluators,
- com.mmxlabs.models.lng.analytics.ui.views.sandbox
+ com.mmxlabs.models.lng.analytics.ui.views.sandbox,
+ com.mmxlabs.models.lng.analytics.ui.views.viability
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.core.resources;visibility:=reexport,
  org.eclipse.emf.edit.ui;bundle-version="2.7.0";visibility:=reexport,
@@ -57,6 +58,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.schedule,
  com.mmxlabs.scenario.service.ui,
  com.mmxlabs.scenario.service.util,
+ org.eclipse.ui.navigator,
+ com.mmxlabs.models.datetime.ui,
  javax.annotation;bundle-version="1.2.0"
 Bundle-ActivationPolicy: lazy
 Import-Package: org.slf4j;version="1.6.4"

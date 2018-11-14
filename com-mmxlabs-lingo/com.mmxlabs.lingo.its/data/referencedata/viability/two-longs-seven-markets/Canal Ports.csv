@@ -1,0 +1,4 @@
+name,distance,kind,northEntrance.name,northEntrance.kind,southEntrance.name,southEntrance.kind,northEntrance.port
+Direct,0.000,Route,,,,,
+Suez canal,102.279,Route,Suez North,EntryPoint,Suez South,EntryPoint,
+Panama canal,39.970,Route,Panama Northside,EntryPoint,Panama Southside,EntryPoint,"Colon, Panama"

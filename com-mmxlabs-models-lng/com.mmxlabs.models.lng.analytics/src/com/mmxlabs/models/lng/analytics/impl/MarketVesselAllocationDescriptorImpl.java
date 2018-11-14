@@ -208,7 +208,7 @@ public class MarketVesselAllocationDescriptorImpl extends VesselAllocationDescri
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (marketName: ");
 		result.append(marketName);
 		result.append(", spotIndex: ");

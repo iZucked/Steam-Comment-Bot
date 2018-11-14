@@ -39,10 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getBuys <em>Buys</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getSells <em>Sells</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getBaseCase <em>Base Case</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getShippingTemplates <em>Shipping Templates</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getPartialCase <em>Partial Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getBaseCaseResult <em>Base Case Result</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getResults <em>Results</em>}</li>
@@ -52,27 +49,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAnalysisModel {
-	/**
-	 * The cached value of the '{@link #getBuys() <em>Buys</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBuys()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<BuyOption> buys;
-
-	/**
-	 * The cached value of the '{@link #getSells() <em>Sells</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSells()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<SellOption> sells;
-
+public class OptionAnalysisModelImpl extends AbstractAnalysisModelImpl implements OptionAnalysisModel {
 	/**
 	 * The cached value of the '{@link #getBaseCase() <em>Base Case</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -82,16 +59,6 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 	 * @ordered
 	 */
 	protected BaseCase baseCase;
-
-	/**
-	 * The cached value of the '{@link #getShippingTemplates() <em>Shipping Templates</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getShippingTemplates()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<ShippingOption> shippingTemplates;
 
 	/**
 	 * The cached value of the '{@link #getPartialCase() <em>Partial Case</em>}' containment reference.
@@ -213,42 +180,6 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE, newBaseCase, newBaseCase));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<ShippingOption> getShippingTemplates() {
-		if (shippingTemplates == null) {
-			shippingTemplates = new EObjectContainmentEList<ShippingOption>(ShippingOption.class, this, AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
-		}
-		return shippingTemplates;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<BuyOption> getBuys() {
-		if (buys == null) {
-			buys = new EObjectContainmentEList<BuyOption>(BuyOption.class, this, AnalyticsPackage.OPTION_ANALYSIS_MODEL__BUYS);
-		}
-		return buys;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<SellOption> getSells() {
-		if (sells == null) {
-			sells = new EObjectContainmentEList<SellOption>(SellOption.class, this, AnalyticsPackage.OPTION_ANALYSIS_MODEL__SELLS);
-		}
-		return sells;
 	}
 
 	/**
@@ -421,14 +352,8 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BUYS:
-				return ((InternalEList<?>)getBuys()).basicRemove(otherEnd, msgs);
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SELLS:
-				return ((InternalEList<?>)getSells()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:
 				return basicSetBaseCase(null, msgs);
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
-				return ((InternalEList<?>)getShippingTemplates()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
 				return basicSetPartialCase(null, msgs);
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT:
@@ -449,14 +374,8 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BUYS:
-				return getBuys();
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SELLS:
-				return getSells();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:
 				return getBaseCase();
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
-				return getShippingTemplates();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
 				return getPartialCase();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT:
@@ -480,20 +399,8 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BUYS:
-				getBuys().clear();
-				getBuys().addAll((Collection<? extends BuyOption>)newValue);
-				return;
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SELLS:
-				getSells().clear();
-				getSells().addAll((Collection<? extends SellOption>)newValue);
-				return;
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:
 				setBaseCase((BaseCase)newValue);
-				return;
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
-				getShippingTemplates().clear();
-				getShippingTemplates().addAll((Collection<? extends ShippingOption>)newValue);
 				return;
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
 				setPartialCase((PartialCase)newValue);
@@ -523,17 +430,8 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BUYS:
-				getBuys().clear();
-				return;
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SELLS:
-				getSells().clear();
-				return;
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:
 				setBaseCase((BaseCase)null);
-				return;
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
-				getShippingTemplates().clear();
 				return;
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
 				setPartialCase((PartialCase)null);
@@ -562,14 +460,8 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BUYS:
-				return buys != null && !buys.isEmpty();
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SELLS:
-				return sells != null && !sells.isEmpty();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:
 				return baseCase != null;
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
-				return shippingTemplates != null && !shippingTemplates.isEmpty();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
 				return partialCase != null;
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT:
@@ -593,7 +485,7 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (useTargetPNL: ");
 		result.append(useTargetPNL);
 		result.append(')');

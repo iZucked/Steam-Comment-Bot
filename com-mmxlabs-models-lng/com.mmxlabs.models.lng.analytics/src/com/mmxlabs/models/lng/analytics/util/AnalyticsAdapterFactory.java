@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.scenario.service.ui.dnd.IChangeSource;
 
 /**
  * <!-- begin-user-doc -->
@@ -160,6 +161,10 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createBreakEvenResultAdapter();
 			}
 			@Override
+			public Adapter caseAbstractAnalysisModel(AbstractAnalysisModel object) {
+				return createAbstractAnalysisModelAdapter();
+			}
+			@Override
 			public Adapter caseOptionAnalysisModel(OptionAnalysisModel object) {
 				return createOptionAnalysisModelAdapter();
 			}
@@ -262,6 +267,18 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter casePositionDescriptor(PositionDescriptor object) {
 				return createPositionDescriptorAdapter();
+			}
+			@Override
+			public Adapter caseViabilityModel(ViabilityModel object) {
+				return createViabilityModelAdapter();
+			}
+			@Override
+			public Adapter caseViabilityRow(ViabilityRow object) {
+				return createViabilityRowAdapter();
+			}
+			@Override
+			public Adapter caseViabilityResult(ViabilityResult object) {
+				return createViabilityResultAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -586,6 +603,20 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createBreakEvenResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel <em>Abstract Analysis Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractAnalysisModel
+	 * @generated
+	 */
+	public Adapter createAbstractAnalysisModelAdapter() {
 		return null;
 	}
 
@@ -922,6 +953,48 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPositionDescriptorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ViabilityModel <em>Viability Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityModel
+	 * @generated
+	 */
+	public Adapter createViabilityModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ViabilityRow <em>Viability Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityRow
+	 * @generated
+	 */
+	public Adapter createViabilityRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ViabilityResult <em>Viability Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.ViabilityResult
+	 * @generated
+	 */
+	public Adapter createViabilityResultAdapter() {
 		return null;
 	}
 

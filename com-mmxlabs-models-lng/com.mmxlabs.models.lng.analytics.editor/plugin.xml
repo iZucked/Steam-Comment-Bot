@@ -17,7 +17,6 @@
 <plugin>
 
 
-
 	
 	<extension
 		point="com.mmxlabs.models.ui.componenthelpers">
@@ -242,6 +241,10 @@
             feature="sandbox"
             plugin.xml="sandbox.plugin.xml">
       </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="viability"
+            plugin.xml="viability.plugin.xml">
+      </PluginXMLEnablement>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -276,12 +279,47 @@
             </visibleWhen>
          </command>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
+         <command
+               commandId="com.mmxlabs.models.lng.analytics.editor.createBreakEven"
+               icon="icons/sandbox.gif"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <test
+                        args="features:sandbox"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                     </iterate>
+                  </with>
+                  <count
+                        value="1">
+                  </count>
+               </and>
+            </visibleWhen>
+         </command>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
       <command
             id="com.mmxlabs.models.lng.analytics.editor.createSandbox"
             name="Create sandbox">
+      </command>
+      <command
+            id="com.mmxlabs.models.lng.analytics.editor.createBreakEven"
+            name="Create break-even sandbox">
       </command>
    </extension>
    <extension

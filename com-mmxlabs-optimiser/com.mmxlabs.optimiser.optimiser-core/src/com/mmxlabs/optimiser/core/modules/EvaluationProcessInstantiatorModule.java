@@ -33,7 +33,7 @@ public class EvaluationProcessInstantiatorModule extends AbstractModule {
 		final EvaluationProcessInstantiator evaluationProcessInstantiator = new EvaluationProcessInstantiator();
 		final List<IEvaluationProcess> evaluationProcesses = evaluationProcessInstantiator.instantiateEvaluationProcesses(evaluationProcessRegistry, enabledProcessNames, optimisationData);
 
-		final List<IEvaluationProcess> result = new ArrayList<IEvaluationProcess>(evaluationProcesses.size());
+		final List<IEvaluationProcess> result = new ArrayList<>(evaluationProcesses.size());
 		for (final IEvaluationProcess process : evaluationProcesses) {
 			if (process != null) {
 				result.add(process);

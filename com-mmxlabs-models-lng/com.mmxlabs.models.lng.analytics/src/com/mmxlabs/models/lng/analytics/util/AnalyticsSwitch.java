@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.scenario.service.ui.dnd.IChangeSource;
 
 /**
  * <!-- begin-user-doc -->
@@ -218,9 +219,18 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL: {
+				AbstractAnalysisModel abstractAnalysisModel = (AbstractAnalysisModel)theEObject;
+				T result = caseAbstractAnalysisModel(abstractAnalysisModel);
+				if (result == null) result = caseNamedObject(abstractAnalysisModel);
+				if (result == null) result = caseMMXObject(abstractAnalysisModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL: {
 				OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel)theEObject;
 				T result = caseOptionAnalysisModel(optionAnalysisModel);
+				if (result == null) result = caseAbstractAnalysisModel(optionAnalysisModel);
 				if (result == null) result = caseNamedObject(optionAnalysisModel);
 				if (result == null) result = caseMMXObject(optionAnalysisModel);
 				if (result == null) result = defaultCase(theEObject);
@@ -398,6 +408,27 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 			case AnalyticsPackage.POSITION_DESCRIPTOR: {
 				PositionDescriptor positionDescriptor = (PositionDescriptor)theEObject;
 				T result = casePositionDescriptor(positionDescriptor);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.VIABILITY_MODEL: {
+				ViabilityModel viabilityModel = (ViabilityModel)theEObject;
+				T result = caseViabilityModel(viabilityModel);
+				if (result == null) result = caseAbstractAnalysisModel(viabilityModel);
+				if (result == null) result = caseNamedObject(viabilityModel);
+				if (result == null) result = caseMMXObject(viabilityModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.VIABILITY_ROW: {
+				ViabilityRow viabilityRow = (ViabilityRow)theEObject;
+				T result = caseViabilityRow(viabilityRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.VIABILITY_RESULT: {
+				ViabilityResult viabilityResult = (ViabilityResult)theEObject;
+				T result = caseViabilityResult(viabilityResult);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -717,6 +748,21 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseBreakEvenResult(BreakEvenResult object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Abstract Analysis Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Abstract Analysis Model</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAbstractAnalysisModel(AbstractAnalysisModel object) {
 		return null;
 	}
 
@@ -1077,6 +1123,51 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePositionDescriptor(PositionDescriptor object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Viability Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Viability Model</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseViabilityModel(ViabilityModel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Viability Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Viability Row</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseViabilityRow(ViabilityRow object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Viability Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Viability Result</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseViabilityResult(ViabilityResult object) {
 		return null;
 	}
 

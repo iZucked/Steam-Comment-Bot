@@ -438,7 +438,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 		assert heelInM3Range[1] >= 0;
 
 		// For spot charters, start with the safety heel.
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER) {
+		// FIXME: Disabled due to the charter in overrides
+		if (false && vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER) {
 			assert heelInM3Range[0] == vesselAvailability.getVessel().getSafetyHeel();
 			assert heelInM3Range[1] == vesselAvailability.getVessel().getSafetyHeel();
 			assert heelInM3Range[0] >= 0;

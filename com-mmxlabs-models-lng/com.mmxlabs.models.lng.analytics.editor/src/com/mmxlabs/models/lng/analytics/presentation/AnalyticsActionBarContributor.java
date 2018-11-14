@@ -162,6 +162,7 @@ public class AnalyticsActionBarContributor
 	 */
 	@Override
 	public void contributeToToolBar(IToolBarManager toolBarManager) {
+		super.contributeToToolBar(toolBarManager);
 		toolBarManager.add(new Separator("analytics-settings"));
 		toolBarManager.add(new Separator("analytics-additions"));
 	}
