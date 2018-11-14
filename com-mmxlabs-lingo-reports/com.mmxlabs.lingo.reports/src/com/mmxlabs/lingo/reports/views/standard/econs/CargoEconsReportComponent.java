@@ -139,26 +139,28 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		final ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor(path);
 		return imageDescriptor.createImage();
 	}
+
 	private CellLabelProvider createRowHeaderLabelProvider() {
 		return new CellLabelProvider() {
-			
+
 			@Override
 			public void update(ViewerCell cell) {
 				Object element = cell.getElement();
-				
+
 				if (element == null) {
 					return;
 				}
-				
+
 				if (!(element instanceof CargoEconsReportRow)) {
 					return;
 				}
-				
+
 				CargoEconsReportRow row = (CargoEconsReportRow) cell.getElement();
 				cell.setText(row.name);
 			}
 		};
 	}
+
 	@PostConstruct
 	public void createPartControl(final Composite parent) {
 
@@ -176,11 +178,11 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 		viewer.getGrid().setRowHeaderVisible(true);
 		viewer.setContentProvider(new ArrayContentProvider());
-		
+
 		// Set row header column
 		viewer.setRowHeaderLabelProvider(createRowHeaderLabelProvider());
 		viewer.refreshRowHeaders(null);
-		
+
 		// Add the dummy name column to fix row height issue
 		final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 		{
@@ -193,18 +195,18 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 		// Our input!
 		// Array content provider as we pass in an array of enums
-		final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
+		final List<CargoEconsReportRow> rows = new LinkedList<>();
 		ServiceHelper.withAllServices(IEconsRowFactory.class, null, factory -> {
 			rows.addAll(factory.createRows(options, null));
 			return true;
 		});
 		Collections.sort(rows, (a, b) -> a.order - b.order);
-		
+
 		viewer.setInput(rows);
 		viewer.getGrid().setHeaderVisible(true);
 
 		// If we have data, dispose of the dummy name column immediately
-		if (rows != null && rows.size() > 0) {
+		if (rows != null && !rows.isEmpty()) {
 			gvc.getColumn().dispose();
 		}
 
@@ -262,7 +264,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	}
 
 	public void setSelectedObject(final Collection<Object> objects) {
-		selectedObjects = new ArrayList<Object>(objects);
+		selectedObjects = new ArrayList<>(objects);
 	}
 
 	public List<Object> getSelectedObject() {
@@ -364,7 +366,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			cell.setBackground(getBackground(cell.getElement()));
 
 			final Object element = cell.getElement();
-			
+
 			if (element instanceof CargoEconsReportRow) {
 				final CargoEconsReportRow row = (CargoEconsReportRow) element;
 
