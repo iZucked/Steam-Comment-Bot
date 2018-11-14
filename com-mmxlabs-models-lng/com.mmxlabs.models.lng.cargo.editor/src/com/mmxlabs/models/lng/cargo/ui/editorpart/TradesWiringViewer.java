@@ -4,9 +4,12 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,6 +17,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -106,6 +110,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
@@ -127,6 +132,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.ComplexCargoAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
+import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -134,9 +140,6 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -190,6 +193,7 @@ import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.rcp.common.dnd.BasicDragSource;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
@@ -237,6 +241,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private final TradesFilter tradesFilter = new TradesFilter();
 
 	private final TradesCargoFilter tradesCargoFilter = new TradesCargoFilter();
+	
+	private final TimePeriodFilter monthFilter = new TimePeriodFilter();
+	private LocalDate earliest;
+	private LocalDate latest;
 
 	private Action resetSortOrder;
 
@@ -440,6 +448,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 				addFilter(tradesFilter);
 				addFilter(tradesCargoFilter);
+				addFilter(monthFilter);
 			}
 
 			protected EObjectTableViewerValidationSupport createValidationSupport() {
@@ -791,6 +800,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		final IStatusProvider statusProvider = scenarioEditingLocation.getStatusProvider();
 		getScenarioViewer().setStatusProvider(statusProvider);
+		
+		this.earliest = getEarliestScenarioDate();
+		this.latest = getLatestScenarioDate();
 
 		if (statusProvider != null) {
 			statusChangedListener = new IStatusChangedListener() {
@@ -1277,6 +1289,56 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		});
 	}
 
+	private LocalDate getEarliestScenarioDate() {
+		LocalDate result = LocalDate.now();
+		
+		final IScenarioDataProvider sdp = scenarioEditingLocation.getScenarioDataProvider();
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
+		
+		LocalDate erl = result;
+		
+		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
+			if (erl.isAfter(ls.getWindowStart())){
+				erl = ls.getWindowStart();
+			}
+		}
+		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
+			if (erl.isAfter(ds.getWindowStart())){
+				erl = ds.getWindowStart();
+			}
+		}
+		if (erl.isBefore(result)) {
+			result = erl;
+		}
+		
+		return result;
+	}
+	
+	private LocalDate getLatestScenarioDate() {
+		LocalDate result = LocalDate.now();
+		
+		final IScenarioDataProvider sdp = scenarioEditingLocation.getScenarioDataProvider();
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
+		
+		LocalDate erl = result;
+		
+		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
+			if (erl.isBefore(ls.getWindowEndWithSlotOrPortTime().toLocalDate())){
+				erl = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+			}
+		}
+		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
+			if (erl.isBefore(ds.getWindowEndWithSlotOrPortTime().toLocalDate())){
+				erl = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+			}
+		}
+		if (erl.isAfter(result)) {
+			result = erl;
+		}
+		
+		return result;
+	}
+	
 	protected String getTimeWindowSuffix(final Object owner) {
 		if (owner instanceof Slot) {
 			final Slot slot = (Slot) owner;
@@ -1768,39 +1830,35 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		@Override
 		public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-			RowData c = null;
+			RowData row = null;
 			Cargo cargo = null;
 			if (element instanceof RowData) {
-				c = (RowData) element;
-				cargo = c.getCargo();
+				row = (RowData) element;
+				cargo = row.getCargo();
 			}
 			switch (option) {
 			case NONE:
 				return true;
 			case CARGO:
-				if (cargo != null) {
-					return true;
-				} else {
-					return false;
-				}
+				return cargo != null ? true : false;
 			case LONG:
-				return isLong(c, cargo);
+				return isLong(row, cargo);
 			case SHORT:
-				return isShort(c, cargo);
+				return isShort(row, cargo);
 			case OPEN:
-				return isLong(c, cargo) || isShort(c, cargo);
+				return isLong(row, cargo) || isShort(row, cargo);
 			}
 			return false;
 		}
 
-		private boolean isShort(RowData c, Cargo cargo) {
-			if (c != null && cargo == null && c.getDischargeSlot() != null) {
+		private boolean isShort(RowData row, Cargo cargo) {
+			if (row != null && cargo == null && row.getDischargeSlot() != null) {
 				return true;
-			} else if (c != null && cargo != null && c.getDischargeSlot() != null && c.getLoadSlot() instanceof SpotSlot) {
+			} else if (row != null && cargo != null && row.getDischargeSlot() != null && row.getLoadSlot() instanceof SpotSlot) {
 				return true;
-			} else if (c != null && cargo != null && c.getDischargeSlot() != null && c.getLoadSlot() != null) {
-				final LoadSlot s = c.getLoadSlot();
-				final Contract contract = s.getContract();
+			} else if (row != null && cargo != null && row.getDischargeSlot() != null && row.getLoadSlot() != null) {
+				final LoadSlot load = row.getLoadSlot();
+				final Contract contract = load.getContract();
 				if (contract != null && contract.getName() != null) {
 					return filters_openContracts.contains(contract.getName().toLowerCase());
 				}
@@ -1808,14 +1866,14 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			return false;
 		}
 
-		private boolean isLong(RowData c, Cargo cargo) {
-			if (c != null && cargo == null && c.getLoadSlot() != null) {
+		private boolean isLong(RowData row, Cargo cargo) {
+			if (row != null && cargo == null && row.getLoadSlot() != null) {
 				return true;
-			} else if (c != null && cargo != null && c.getLoadSlot() != null && c.getDischargeSlot() instanceof SpotSlot) {
+			} else if (row != null && cargo != null && row.getLoadSlot() != null && row.getDischargeSlot() instanceof SpotSlot) {
 				return true;
-			} else if (c != null && cargo != null && c.getLoadSlot() != null && c.getDischargeSlot() != null) {
-				final DischargeSlot s = c.getDischargeSlot();
-				final Contract contract = s.getContract();
+			} else if (row != null && cargo != null && row.getLoadSlot() != null && row.getDischargeSlot() != null) {
+				final DischargeSlot discharge = row.getDischargeSlot();
+				final Contract contract = discharge.getContract();
 				if (contract != null && contract.getName() != null) {
 					return filters_openContracts.contains(contract.getName().toLowerCase());
 				}
@@ -1823,6 +1881,98 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			return false;
 		}
 
+	}
+	
+	private enum TimeFilterType{
+		NONE, YEARMONTH, PROMPT
+	}
+	
+	private class TimePeriodFilter extends ViewerFilter{
+		private TimeFilterType type = TimeFilterType.NONE;
+		private YearMonth choice = null;
+		private int promptMonth = 3;
+		
+		@Override
+		public boolean select(Viewer viewer, Object parentElement, Object element) {
+			if (type == TimeFilterType.NONE) return true;
+			if (element instanceof RowData) {
+				RowData row = (RowData) element;
+				switch (type) {
+				case YEARMONTH:
+					return checkYearMonth(row, choice);
+				case PROMPT:
+					return checkPrompt(row, promptMonth);
+				}
+			}
+			return false;
+		}
+		
+		private boolean checkYearMonth(final RowData row, final YearMonth choice) {
+			LocalDate start = null;
+			LocalDate end = null;
+			LoadSlot ls = row.getLoadSlot();
+			if (ls != null) {
+				start = ls.getWindowStartWithSlotOrPortTime().toLocalDate();
+				end = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+			}
+			if ((start != null) && (end != null)) {
+				YearMonth yms = YearMonth.from(start);
+				YearMonth yme = YearMonth.from(end);
+				if ((yms.equals(choice))||(yme.equals(choice))) {
+					return true;
+				}
+			}
+			DischargeSlot ds = row.getDischargeSlot();
+			if (ds != null) {
+				start = ds.getWindowStartWithSlotOrPortTime().toLocalDate();
+				end = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+			}
+			if ((start != null) && (end != null)) {
+				YearMonth yms = YearMonth.from(start);
+				YearMonth yme = YearMonth.from(end);
+				if ((yms.equals(choice))||(yme.equals(choice))) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		private boolean checkPrompt(final RowData row, int month) {
+			boolean result = false;
+			LocalDate start = null;
+			LocalDate end = null;
+			final LocalDate today = LocalDate.now();
+			final LocalDate prompt = today.plusMonths(month);
+			LoadSlot ls = row.getLoadSlot();
+			if (ls != null) {
+				start = ls.getWindowStartWithSlotOrPortTime().toLocalDate();
+				end = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+			}
+			if (start != null && end != null) {
+				if (start.isAfter(today) && start.isBefore(prompt)) {
+					return true;
+				}
+				if (end.isAfter(today) && end.isBefore(prompt)) {
+					return true;
+				}
+			}
+			DischargeSlot ds = row.getDischargeSlot();
+			if (ds != null) {
+				start = ds.getWindowStartWithSlotOrPortTime().toLocalDate();
+				end = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+			}
+			if (start != null && end != null) {
+				if (start.isAfter(today) && start.isBefore(prompt)) {
+					return true;
+				}
+				if (end.isAfter(today) && end.isBefore(prompt)) {
+					return true;
+				}
+			}
+			
+			return result;
+		}
+		
 	}
 
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
@@ -1856,6 +2006,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				public void run() {
 					tradesFilter.clear();
 					tradesCargoFilter.option = CargoFilterOption.NONE;
+					monthFilter.type = TimeFilterType.NONE;
 					scenarioViewer.refresh(false);
 				}
 			};
@@ -1904,6 +2055,59 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 			};
 			addActionToMenu(dmca, menu);
+			
+			
+			final DefaultMenuCreatorAction dmcaTimePeriod = new DefaultMenuCreatorAction("Months") {
+				
+				@Override
+				protected void populate(Menu menu) {
+					
+					final Action fooAction = new Action("Prompt") {
+						@Override
+						public void run(){
+							monthFilter.type = TimeFilterType.PROMPT;
+							monthFilter.promptMonth = 3;
+							scenarioViewer.refresh(false);
+						}
+					};
+					addActionToMenu(fooAction, menu);
+					
+					buildMonth(earliest, latest, menu);
+				}
+				
+				private void buildMonth(final LocalDate start, final LocalDate end, final Menu menu) {
+					final YearMonth yms = YearMonth.from(start);
+					final int firstYear = yms.getYear();
+					final YearMonth yme = YearMonth.from(end);
+					int i = 0;
+					
+					while (!yme.isBefore(yms.plusMonths(i))) {
+						final YearMonth ymc = yms.plusMonths(i);
+						final Action fooAction = new Action(formatMe(ymc, firstYear != ymc.getYear())) {
+							@Override
+							public void run(){
+								monthFilter.choice = ymc;
+								monthFilter.type = TimeFilterType.YEARMONTH;
+								scenarioViewer.refresh(false);
+							}
+						};
+						
+						addActionToMenu(fooAction, menu);
+						i++;
+					}
+				}
+				
+				private String formatMe(final YearMonth val, boolean showYear) {
+					String result = String.format("%s", val.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
+					if (showYear) {
+						result += String.format(" %d", (val.getYear()%100));
+					}
+					return result;
+				}
+				
+			};
+			
+			addActionToMenu(dmcaTimePeriod, menu);
 			//TODO : Consider using TradesBasedFilterHandler!
 		}
 	}
@@ -2406,5 +2610,4 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		public void mouseUp(final MouseEvent e) {
 		}
 	}
-
 }
