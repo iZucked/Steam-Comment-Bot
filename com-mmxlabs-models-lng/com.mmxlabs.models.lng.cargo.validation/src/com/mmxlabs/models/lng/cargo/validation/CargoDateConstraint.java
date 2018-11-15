@@ -284,7 +284,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 //							from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(travelTime),TravelTimeUtils.formatShortHours(slotDur),
 //							TravelTimeUtils.formatHours((travelTime + slotDur) - windowLength));
 					final String message = String.format("[Purchase '%s'] Laden leg to %s is too long: %s loading, %s travel is %s more than the %s available.",
-							from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(travelTime), TravelTimeUtils.formatShortHours(slotDur),
+							from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(slotDur), TravelTimeUtils.formatShortHours(travelTime), 
 							TravelTimeUtils.formatShortHours((travelTime + slotDur) - windowLength), TravelTimeUtils.formatShortHours(windowLength));
 					final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);

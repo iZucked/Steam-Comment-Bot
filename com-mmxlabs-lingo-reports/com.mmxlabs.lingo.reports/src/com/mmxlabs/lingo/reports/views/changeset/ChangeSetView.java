@@ -1225,7 +1225,7 @@ public class ChangeSetView extends ViewPart {
 								idx = root.getGroups().indexOf(changeSetTableGroup);
 							}
 							final String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
-
+ 
 							helper.addAction(new ExportChangeAction(changeSetTableGroup, name));
 							showMenu = true;
 						}
