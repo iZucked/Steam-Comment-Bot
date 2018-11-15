@@ -1194,12 +1194,12 @@ public class ChangeSetView extends ViewPart {
 							final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) obj;
 							if (insertionPlanFilter.getUserFilters().isEmpty()) {
 								if (insertionPlanFilter.getExpandedGroups().contains(changeSetTableGroup.getGroupObject())) {
-									helper.addAction(new RunnableAction("Hide related changes", () -> {
+									helper.addAction(new RunnableAction("Hide similar", () -> {
 										insertionPlanFilter.getExpandedGroups().remove(changeSetTableGroup.getGroupObject());
 										ViewerHelper.refreshThen(viewer, true, AbstractTreeViewer::expandAll);
 									}));
 								} else {
-									helper.addAction(new RunnableAction("Show related changes", () -> {
+									helper.addAction(new RunnableAction("Show similar", () -> {
 										insertionPlanFilter.getExpandedGroups().add(changeSetTableGroup.getGroupObject());
 										ViewerHelper.refreshThen(viewer, true, AbstractTreeViewer::expandAll);
 									}));
