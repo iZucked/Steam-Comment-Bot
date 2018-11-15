@@ -7,6 +7,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.awt.Button;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -773,6 +774,8 @@ public final class OptimisationHelper {
 						ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
 				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
 						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
+				// TODO : add a button which sets period start date to today.
+				
 				if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
 					optStart.enabled = false;
 					optEnd.enabled = false;
