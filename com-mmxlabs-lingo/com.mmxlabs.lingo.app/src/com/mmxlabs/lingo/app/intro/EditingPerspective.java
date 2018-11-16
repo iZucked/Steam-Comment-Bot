@@ -8,9 +8,6 @@ import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IViewLayout;
-import org.eclipse.ui.internal.e4.compatibility.ModeledPageLayout;
-
-import com.mmxlabs.lingo.reports.ReportsConstants;
 
 public class EditingPerspective implements IPerspectiveFactory {
 
@@ -19,11 +16,11 @@ public class EditingPerspective implements IPerspectiveFactory {
 	@Override
 	public void createInitialLayout(final IPageLayout layout) {
 
-		if (layout instanceof ModeledPageLayout) {
-			ModeledPageLayout modeledPageLayout = (ModeledPageLayout) layout;
-			modeledPageLayout.stackView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID, IPageLayout.ID_EDITOR_AREA, false);
-			modeledPageLayout.stackView(ReportsConstants.VIEW_OPTIMISATIONS_ID, IPageLayout.ID_EDITOR_AREA, false);
-		}
+//		if (layout instanceof ModeledPageLayout) {
+//			ModeledPageLayout modeledPageLayout = (ModeledPageLayout) layout;
+//			modeledPageLayout.stackView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID, IPageLayout.ID_EDITOR_AREA, false);
+//			modeledPageLayout.stackView(ReportsConstants.VIEW_OPTIMISATIONS_ID, IPageLayout.ID_EDITOR_AREA, false);
+//		}
 
 		// final IFolderLayout costsFolder = layout.createFolder("costsFolder", IPageLayout.RIGHT, 0.75f, IPageLayout.ID_EDITOR_AREA);
 
