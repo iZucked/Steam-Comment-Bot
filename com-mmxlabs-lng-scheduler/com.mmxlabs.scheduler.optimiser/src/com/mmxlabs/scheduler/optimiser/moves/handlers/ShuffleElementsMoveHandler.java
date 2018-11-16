@@ -104,7 +104,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 			// TODO: check new API - null might be events or start/ends?
 			// TODO: Really need port type in here
 			final Collection<IResource> resources = racDCP.getAllowedResources(e);
-			if (resources == null || (resources.size() > 1) || phaseOptimisationData.isElementOptional(e)) {
+			if (resources == null || (resources.size() > 1) || phaseOptimisationData.isOptionalOrConsideredOptionalElement(e)) {
 				final PortType portType = portTypeProvider.getPortType(e);
 
 				if (portType == PortType.Load || portType == PortType.Discharge) {
@@ -438,7 +438,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 		// something the the extra element
 		final Pair<IResource, Integer> targetPosition = lookupManager.lookup(target);
 		final IResource targetResource = targetPosition.getFirst();
-		if (phaseOptimisationData.isElementOptional(target) && random.nextBoolean()) {
+		if (phaseOptimisationData.isOptionalOrConsideredOptionalElement(target) && random.nextBoolean()) {
 			// Can stick on unused elements list
 			builder.addFrom(targetResource, targetPosition.getSecond(), target);
 			builder.addTo(null, 0, 1);
@@ -490,7 +490,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 
 			// Did not find an option, so true to remove if optional (assumes
 			// the previous check resulted in false)
-			if (phaseOptimisationData.isElementOptional(target)) {
+			if (phaseOptimisationData.isOptionalOrConsideredOptionalElement(target)) {
 				// Can stick on unused elements list
 				builder.addFrom(targetResource, targetPosition.getSecond(), target);
 				builder.addTo(null, 0, 1);
@@ -543,7 +543,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 
 			// Did not find an option, so true to remove if optional (assumes
 			// the previous check resulted in false)
-			if (phaseOptimisationData.isElementOptional(target)) {
+			if (phaseOptimisationData.isOptionalOrConsideredOptionalElement(target)) {
 				// Can stick on unused elements list
 				builder.addFrom(targetResource, targetPosition.getSecond(), target);
 				builder.addTo(null, 0, 1);

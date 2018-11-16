@@ -90,7 +90,7 @@ public class InsertFOBSaleMoveHandler implements IGuidedMoveHandler {
 					if (e == possibleFOBPurchase) {
 						continue;
 					}
-					if (!helper.isOptional(e) && options.isStrictOptional()) {
+					if (!helper.isOptionalOrConsideredOptionalElement(e) && options.isStrictOptional()) {
 						continue LOOP_CANDIDATES;
 					}
 				}
@@ -103,7 +103,7 @@ public class InsertFOBSaleMoveHandler implements IGuidedMoveHandler {
 					if (e == possibleFOBPurchase) {
 						continue;
 					}
-					if (!helper.isOptional(e)) {
+					if (!helper.isOptionalOrConsideredOptionalElement(e)) {
 						hints.addProblemElement(e);
 					}
 					elementsToRemove.add(new Pair<>(fobPurchaseResource, e));

@@ -6,6 +6,7 @@ package com.mmxlabs.optimiser.core.scenario.impl;
 
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -18,15 +19,14 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  */
 public final class OptimisationData implements IOptimisationData {
 
-	private List<IResource> resources;
+	private ImmutableList<IResource> resources;
 
-	private List<ISequenceElement> sequenceElements;
+	private ImmutableList<ISequenceElement> sequenceElements;
 
-	public OptimisationData() {
-	}
+	private ImmutableList<ISequenceElement> consideredAsOptionalElements;
 
 	@Override
-	public List<ISequenceElement> getSequenceElements() {
+	public ImmutableList<ISequenceElement> getSequenceElements() {
 		return sequenceElements;
 	}
 
@@ -35,12 +35,12 @@ public final class OptimisationData implements IOptimisationData {
 	 * 
 	 * @param sequenceElements
 	 */
-	public void setSequenceElements(final List<ISequenceElement> sequenceElements) {
+	public void setSequenceElements(final ImmutableList<ISequenceElement> sequenceElements) {
 		this.sequenceElements = sequenceElements;
 	}
 
 	@Override
-	public List<IResource> getResources() {
+	public ImmutableList<IResource> getResources() {
 		return resources;
 	}
 
@@ -49,14 +49,16 @@ public final class OptimisationData implements IOptimisationData {
 	 * 
 	 * @param resources
 	 */
-	public void setResources(final List<IResource> resources) {
+	public void setResources(final ImmutableList<IResource> resources) {
 		this.resources = resources;
 	}
 
-	@Override
-	public void dispose() {
+	public void setConsideredAsOptionalElements(ImmutableList<ISequenceElement> consideredAsOptionalElements) {
+		this.consideredAsOptionalElements = consideredAsOptionalElements;
+	}
 
-		resources = null;
-		sequenceElements = null;
+	@Override
+	public ImmutableList<ISequenceElement> getConsideredAsOptionalElements() {
+		return consideredAsOptionalElements;
 	}
 }

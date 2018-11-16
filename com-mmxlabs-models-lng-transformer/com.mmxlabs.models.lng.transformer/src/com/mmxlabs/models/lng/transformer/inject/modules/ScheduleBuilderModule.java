@@ -70,7 +70,7 @@ public class ScheduleBuilderModule extends AbstractModule {
 	@Provides
 	@Singleton
 	private List<IBuilderExtension> provideBuilderExtensions(final Injector injector, final Iterable<IBuilderExtensionFactory> extensionFactories) {
-		final List<IBuilderExtension> extensions = new ArrayList<IBuilderExtension>();
+		final List<IBuilderExtension> extensions = new ArrayList<>();
 		for (final IBuilderExtensionFactory factory : extensionFactories) {
 			final IBuilderExtension instance = factory.createInstance();
 			injector.injectMembers(instance);
@@ -82,7 +82,7 @@ public class ScheduleBuilderModule extends AbstractModule {
 	@Provides
 	@Singleton
 	private List<ITransformerExtension> provideTransformerExtensions(final Injector injector, final Iterable<ITransformerExtensionFactory> extensionFactories) {
-		final List<ITransformerExtension> extensions = new ArrayList<ITransformerExtension>();
+		final List<ITransformerExtension> extensions = new ArrayList<>();
 		for (final ITransformerExtensionFactory factory : extensionFactories) {
 			final ITransformerExtension instance = factory.createInstance();
 			injector.injectMembers(instance);

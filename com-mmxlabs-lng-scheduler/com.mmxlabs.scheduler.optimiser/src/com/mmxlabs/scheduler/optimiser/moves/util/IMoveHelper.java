@@ -52,7 +52,7 @@ public interface IMoveHelper {
 
 	boolean isStartOrEndSlot(@NonNull ISequenceElement element);
 
-	boolean isOptional(@NonNull ISequenceElement element);
+	boolean isOptionalOrConsideredOptionalElement(@NonNull ISequenceElement element);
 
 	boolean isCharterOutEvent(@NonNull ISequenceElement element);
 

@@ -43,7 +43,7 @@ public class RemoveSlotMoveHandler implements IGuidedMoveHandler {
 
 		}
 		final RemoveElementsMove.Builder builder = RemoveElementsMove.Builder.newMove();
-		if (!helper.isOptional(element)) {
+		if (!helper.isOptionalOrConsideredOptionalElement(element)) {
 			if (options.isStrictOptional()) {
 				return null;
 			} else {

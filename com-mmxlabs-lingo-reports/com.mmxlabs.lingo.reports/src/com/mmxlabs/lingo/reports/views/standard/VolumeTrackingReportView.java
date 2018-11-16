@@ -192,7 +192,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 						final Contract contract = sa.getContract();
 						final String contractName;
 						if (contract == null) {
-							final Slot slot = sa.getSlot();
+							final Slot<?> slot = sa.getSlot();
 							if (slot instanceof LoadSlot) {
 								contractName = "Other purchases";
 							} else if (slot instanceof DischargeSlot) {

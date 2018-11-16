@@ -245,7 +245,7 @@ public class SlotInsertionOptimiserUnit {
 						final IModifiableSequences tmpRawSequences = new ModifiableSequences(state.originalRawSequences);
 
 						for (final ISequenceElement e : tmpRawSequences.getUnusedElements()) {
-							if (phaseOptimisationData.isElementRequired(e) || phaseOptimisationData.getSoftRequiredElements().contains(e)) {
+							if (!phaseOptimisationData.isOptionalElement(e)) {
 								state.initiallyUnused.add(e);
 							}
 						}
@@ -268,7 +268,7 @@ public class SlotInsertionOptimiserUnit {
 									// Increment the compulsory slot count to take into account solution change. Otherwise when inserting multiple slots, the first move has to insert all the slots
 									// at
 									// once.
-									if (phaseOptimisationData.isElementRequired(e)) {
+									if (!phaseOptimisationData.isOptionalElement(e)) {
 										++state.initialMetrics[MetricType.COMPULSARY_SLOT.ordinal()];
 									}
 								}

@@ -58,7 +58,7 @@ public class RemoveCargoMoveHandler implements IGuidedMoveHandler {
 
 		final RemoveElementsMove.Builder builder = RemoveElementsMove.Builder.newMove();
 		for (final ISequenceElement e : orderedCargoElements) {
-			if (!helper.isOptional(e)) {
+			if (!helper.isOptionalOrConsideredOptionalElement(e)) {
 				if (options.isStrictOptional()) {
 					return null;
 				} else {
@@ -70,6 +70,6 @@ public class RemoveCargoMoveHandler implements IGuidedMoveHandler {
 			builder.removeElement(fromResource, e);
 		}
 
-		return new Pair<IMove, Hints>(builder.create(), hints);
+		return new Pair<>(builder.create(), hints);
 	}
 }

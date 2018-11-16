@@ -154,7 +154,7 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 		final IModifiableSequences currentRawSequences = new ModifiableSequences(providedRawSequences);
 
 		final long existingUnusedCompulsarySlotCount = currentRawSequences.getUnusedElements().stream() //
-				.filter(e -> phaseOptimisationData.isElementRequired(e)) //
+				.filter(e -> !phaseOptimisationData.isOptionalElement(e)) //
 				.count();
 		MoveResult checkPointResult = null;
 
@@ -188,7 +188,7 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 
 			// FIXME: This check does not work properly -- maybe soft required is kicking in?
 			final long newUnusedCompulsarySlotCount = currentRawSequences.getUnusedElements().stream() //
-					.filter(e -> phaseOptimisationData.isElementRequired(e)) //
+					.filter(e -> !phaseOptimisationData.isOptionalElement(e)) //
 					.count();
 			// If the current state passes the constraint checkers, then maybe return it.
 			if (

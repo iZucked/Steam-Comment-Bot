@@ -39,9 +39,6 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	private final String name;
 
 	@Inject
-	private IPhaseOptimisationData phaseOptimisationData;
-
-	@Inject
 	private IVesselProvider vesselProvider;
 
 	private final Set<ISequenceElement> interestingElements = new HashSet<>();
@@ -56,9 +53,9 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	public void init(@NonNull final IPhaseOptimisationData data) {
 
 		interestingElements.addAll(data.getSequenceElements());
-		interestingElements.removeAll(phaseOptimisationData.getOptionalElements());
+		interestingElements.removeAll(data.getOptionalElements());
 		// Make sure these are retained
-		interestingElements.addAll(phaseOptimisationData.getSoftRequiredElements());
+		interestingElements.addAll(data.getConsideredAsOptionalElements());
 	}
 
 	@Override

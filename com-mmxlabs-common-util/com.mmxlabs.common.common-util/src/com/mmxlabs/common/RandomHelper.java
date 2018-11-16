@@ -7,6 +7,8 @@ package com.mmxlabs.common;
 import java.util.List;
 import java.util.Random;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * A class which adds some convenience methods to a Random
  * 
@@ -42,7 +44,7 @@ public final class RandomHelper {
 	 * @param collection
 	 * @return
 	 */
-	public static final <T> T chooseElementFrom(final Random random, final List<T> collection) {
+	public static final <@NonNull T> T chooseElementFrom(final Random random, final List<T> collection) {
 		return collection.get(random.nextInt(collection.size()));
 	}
 

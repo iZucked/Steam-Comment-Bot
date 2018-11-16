@@ -96,22 +96,22 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	public void init(@Named(OptimiserConstants.SEQUENCE_TYPE_INPUT) final ISequences inputRawSequences) {
 
 		// Enable new move if this is a full optimisation or a period greater than 6 months AND there is at least one nominal cargo.
-//		if (!promptPeriodProvider.isPeriodOptimisation() //
-//				|| (promptPeriodProvider.getEndOfOptimisationPeriod() - promptPeriodProvider.getStartOfOptimisationPeriod() > 30 * 6 * 24)) {
-//			boolean hasNominalCargoes = false;
-//			for (final IResource r : inputRawSequences.getResources()) {
-//				@NonNull
-//				final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(r);
-//				if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
-//					final ISequence s = inputRawSequences.getSequence(r);
-//					if (s.size() > 2) {
-//						hasNominalCargoes = true;
-//						break;
-//					}
-//				}
-//			}
-//			enableSwapCargoMove = hasNominalCargoes;
-//		}
+		// if (!promptPeriodProvider.isPeriodOptimisation() //
+		// || (promptPeriodProvider.getEndOfOptimisationPeriod() - promptPeriodProvider.getStartOfOptimisationPeriod() > 30 * 6 * 24)) {
+		// boolean hasNominalCargoes = false;
+		// for (final IResource r : inputRawSequences.getResources()) {
+		// @NonNull
+		// final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(r);
+		// if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+		// final ISequence s = inputRawSequences.getSequence(r);
+		// if (s.size() > 2) {
+		// hasNominalCargoes = true;
+		// break;
+		// }
+		// }
+		// }
+		// enableSwapCargoMove = hasNominalCargoes;
+		// }
 
 		if (isLoopingSCMG) {
 			this.sequencesMoveGenerator = new SequencesConstrainedLoopingMoveGeneratorUnit();
@@ -128,7 +128,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		injector.injectMembers(elementSwapMoveGenerator);
 
 		if (phaseOptimisationData != null) {
-			if (!phaseOptimisationData.getOptionalElements().isEmpty()) {
+			if (!phaseOptimisationData.getAllElementsConsideredOptional().isEmpty()) {
 				this.optionalMoveGenerator = new OptionalConstrainedMoveGeneratorUnit();
 				injector.injectMembers(optionalMoveGenerator);
 			} else {

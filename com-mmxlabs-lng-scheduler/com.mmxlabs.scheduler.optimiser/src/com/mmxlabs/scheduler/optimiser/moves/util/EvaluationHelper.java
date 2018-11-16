@@ -161,7 +161,7 @@ public class EvaluationHelper {
 
 		int thisUnusedCompulsarySlotCount = 0;
 		for (final ISequenceElement e : rawSequences.getUnusedElements()) {
-			if (phaseOptimisationData.isElementRequired(e)) {
+			if (!phaseOptimisationData.isOptionalElement(e)) {
 				thisUnusedCompulsarySlotCount++;
 			}
 		}

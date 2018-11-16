@@ -16,10 +16,12 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -83,7 +85,6 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
-import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExtraIdleTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapBaseFuelCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
@@ -221,8 +222,8 @@ public class ScheduleCalculatorTest {
 		when(element4.getName()).thenReturn("element4");
 		when(element5.getName()).thenReturn("element5");
 
-		final List<ISequenceElement> unusedElements = Lists.newArrayList(element1, element2, element3, element4, element5);
-		when(sequences.getUnusedElements()).thenReturn(unusedElements);
+		final List<@NonNull ISequenceElement> unusedElements = Lists.newArrayList(element1, element2, element3, element4, element5);
+		when(sequences.getUnusedElements()).thenReturn(ImmutableList.copyOf(unusedElements));
 
 		final ILoadOption portSlot1 = mock(ILoadOption.class);
 		final ILoadSlot portSlot2 = mock(ILoadSlot.class);

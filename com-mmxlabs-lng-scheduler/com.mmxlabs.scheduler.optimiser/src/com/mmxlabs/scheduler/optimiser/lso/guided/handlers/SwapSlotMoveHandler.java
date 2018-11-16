@@ -148,7 +148,7 @@ public class SwapSlotMoveHandler implements IGuidedMoveHandler {
 					continue;
 				}
 
-				if (!helper.isOptional(element)) {
+				if (!helper.isOptionalOrConsideredOptionalElement(element)) {
 					if (options.isStrictOptional()) {
 						continue;
 					} else {
@@ -186,7 +186,7 @@ public class SwapSlotMoveHandler implements IGuidedMoveHandler {
 					continue;
 				}
 
-				if (!helper.isOptional(candidate)) {
+				if (!helper.isOptionalOrConsideredOptionalElement(candidate)) {
 					if (options.isStrictOptional()) {
 						foundElementB = false;
 						elementHints.clear();
@@ -205,16 +205,16 @@ public class SwapSlotMoveHandler implements IGuidedMoveHandler {
 
 		// Record hints
 		elementHints.forEach(p -> hints.addSuggestedElements(p.getSecond()));
-		if (helper.isOptional(builder.getElementA())) {
+		if (helper.isOptionalOrConsideredOptionalElement(builder.getElementA())) {
 			hints.getUsedElements().add(builder.getElementA());
 		}
-		if (helper.isOptional(builder.getElementB())) {
+		if (helper.isOptionalOrConsideredOptionalElement(builder.getElementB())) {
 			hints.getUsedElements().add(builder.getElementB());
 		}
 
 		hints.addSuggestedElements(builder.getElementA());
 		hints.addSuggestedElements(builder.getElementB());
 
-		return new Pair<IMove, Hints>(builder.create(), hints);
+		return new Pair<>(builder.create(), hints);
 	}
 }

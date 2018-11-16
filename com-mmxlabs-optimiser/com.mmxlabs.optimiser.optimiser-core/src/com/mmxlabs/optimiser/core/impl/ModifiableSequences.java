@@ -5,7 +5,6 @@
 package com.mmxlabs.optimiser.core.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -16,6 +15,8 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -71,7 +72,7 @@ public final class ModifiableSequences implements IModifiableSequences {
 	 * Constructor which creates a modifiable copy of the input {@link ISequences} object.
 	 * 
 	 * @param sequences
-	 *                      Source {@link ISequences} object
+	 *            Source {@link ISequences} object
 	 */
 	public ModifiableSequences(@NonNull final ISequences sequences) {
 
@@ -117,8 +118,8 @@ public final class ModifiableSequences implements IModifiableSequences {
 
 	@Override
 	@NonNull
-	public List<@NonNull IResource> getResources() {
-		return Collections.unmodifiableList(resources);
+	public ImmutableList<@NonNull IResource> getResources() {
+		return ImmutableList.copyOf(resources);
 	}
 
 	@Override
@@ -143,15 +144,13 @@ public final class ModifiableSequences implements IModifiableSequences {
 
 	@Override
 	@NonNull
-	public Map<@NonNull IResource, @NonNull ISequence> getSequences() {
+	public ImmutableMap<@NonNull IResource, @NonNull ISequence> getSequences() {
 
 		// Create a copy so external modification does not affect internal
 		// state. We could call (@link {@link Collections#unmodifiableMap(Map)}
 		// however the generics mismatch between ISequence and
 		// IModifiableSequence still needs to be addressed.
-		final Map<@NonNull IResource, @NonNull ISequence> map = new HashMap<>(sequenceMap);
-
-		return map;
+		return ImmutableMap.copyOf(sequenceMap);
 	}
 
 	@Override
@@ -207,8 +206,8 @@ public final class ModifiableSequences implements IModifiableSequences {
 
 	@Override
 	@NonNull
-	public List<@NonNull ISequenceElement> getUnusedElements() {
-		return Collections.unmodifiableList(unusedElements);
+	public ImmutableList<@NonNull ISequenceElement> getUnusedElements() {
+		return ImmutableList.copyOf(unusedElements);
 	}
 
 	@Override

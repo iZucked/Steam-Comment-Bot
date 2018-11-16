@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -45,7 +46,7 @@ public class RemoveElementsMoveTest {
 
 		final IModifiableSequences sequences = Mockito.mock(IModifiableSequences.class);
 		Mockito.when(sequences.getModifiableUnusedElements()).thenReturn(modifiableUnusedSequences);
-		Mockito.when(sequences.getUnusedElements()).thenReturn(modifiableUnusedSequences);
+		Mockito.when(sequences.getUnusedElements()).thenReturn(ImmutableList.copyOf(modifiableUnusedSequences));
 
 		final ListModifiableSequence sequenceA = new ListModifiableSequence(Lists.newArrayList(elementA, elementB, elementC));
 		final ListModifiableSequence sequenceB = new ListModifiableSequence(Lists.newArrayList(elementD, elementE));

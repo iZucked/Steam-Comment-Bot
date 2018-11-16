@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -50,8 +51,8 @@ public class InsertCargoMoveTest {
 		final ListModifiableSequence sequenceA = new ListModifiableSequence(Lists.newArrayList(elementResourceAStart, elementA, elementB, elementC, elementD, elementResourceAEnd));
 		final ListModifiableSequence sequenceB = new ListModifiableSequence(Lists.newArrayList(elementResourceBStart, elementResourceBEnd));
 
-		Mockito.when(sequences.getModifiableUnusedElements()).thenReturn(modifiableUnusedSequences);
-		Mockito.when(sequences.getUnusedElements()).thenReturn(modifiableUnusedSequences);
+		Mockito.when(sequences.getModifiableUnusedElements()).thenReturn(ImmutableList.copyOf(modifiableUnusedSequences));
+		Mockito.when(sequences.getUnusedElements()).thenReturn(ImmutableList.copyOf(modifiableUnusedSequences));
 
 		Mockito.when(sequences.getModifiableSequence(resourceA)).thenReturn(sequenceA);
 		Mockito.when(sequences.getSequence(resourceA)).thenReturn(sequenceA);
@@ -106,7 +107,7 @@ public class InsertCargoMoveTest {
 		final ListModifiableSequence sequenceB = new ListModifiableSequence(Lists.newArrayList(elementResourceBStart, elementResourceBEnd));
 
 		Mockito.when(sequences.getModifiableUnusedElements()).thenReturn(modifiableUnusedSequences);
-		Mockito.when(sequences.getUnusedElements()).thenReturn(modifiableUnusedSequences);
+		Mockito.when(sequences.getUnusedElements()).thenReturn(ImmutableList.copyOf(modifiableUnusedSequences));
 
 		Mockito.when(sequences.getModifiableSequence(resourceA)).thenReturn(sequenceA);
 		Mockito.when(sequences.getSequence(resourceA)).thenReturn(sequenceA);

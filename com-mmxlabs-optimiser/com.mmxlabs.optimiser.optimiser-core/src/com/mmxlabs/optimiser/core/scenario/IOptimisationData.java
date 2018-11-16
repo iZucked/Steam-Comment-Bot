@@ -4,10 +4,9 @@
  */
 package com.mmxlabs.optimiser.core.scenario;
 
-import java.util.List;
-
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.collect.ImmutableList;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
@@ -25,17 +24,13 @@ public interface IOptimisationData {
 	 * @return
 	 */
 	@NonNull
-	List<@NonNull ISequenceElement> getSequenceElements();
+	ImmutableList<@NonNull ISequenceElement> getSequenceElements();
 
 	/**
 	 * Returns a list of all the {@link IResource}s in the optimisation.
 	 */
 	@NonNull
-	List<@NonNull IResource> getResources();
+	ImmutableList<@NonNull IResource> getResources();
 
-	/**
-	 * Notify {@link IOptimisationData} that it is no longer required and clean up internal references.s
-	 */
-	void dispose();
-
+	ImmutableList<ISequenceElement> getConsideredAsOptionalElements();
 }

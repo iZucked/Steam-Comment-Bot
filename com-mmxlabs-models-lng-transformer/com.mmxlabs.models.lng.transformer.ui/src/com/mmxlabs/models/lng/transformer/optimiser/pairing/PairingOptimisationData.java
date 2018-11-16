@@ -18,10 +18,10 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.ProfitAndLossRecorder;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotCountConstraintDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
@@ -125,16 +125,16 @@ public class PairingOptimisationData implements ProfitAndLossRecorder {
 	private void setOptionalLoads() {
 		optionalLoads = new boolean[this.getSortedLoads().size()];
 		for (int i = 0; i < getSortedLoads().size(); i++) {
-			optionalLoads[i] = phaseOptimisationData.isElementOptional(portSlotProvider.getElement(getSortedLoads().get(i)))
-					&& !phaseOptimisationData.getSoftRequiredElements().contains(portSlotProvider.getElement(getSortedLoads().get(i)));
+			ISequenceElement element = portSlotProvider.getElement(getSortedLoads().get(i));
+			optionalLoads[i] = phaseOptimisationData.isOptionalElement(element);
 		}
 	}
 
 	private void setOptionalDischarges() {
 		optionalDischarges = new boolean[this.getSortedDischarges().size()];
 		for (int i = 0; i < getSortedDischarges().size(); i++) {
-			optionalDischarges[i] = phaseOptimisationData.isElementOptional(portSlotProvider.getElement(getSortedDischarges().get(i)))
-					&& !phaseOptimisationData.getSoftRequiredElements().contains(portSlotProvider.getElement(getSortedDischarges().get(i)));
+			ISequenceElement element = portSlotProvider.getElement(getSortedDischarges().get(i));
+			optionalDischarges[i] = phaseOptimisationData.isOptionalElement(element);
 		}
 	}
 
