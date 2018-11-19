@@ -275,7 +275,8 @@ public class MainTableCompoment {
 		if (date == null) {
 			return "";
 		}
-		return String.format("%d %s", date.getDayOfMonth(), date.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
+		//return String.format("%d %s", date.getDayOfMonth(), date.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
+		return date.toString();
 	}
 	
 	private String formatPrice(final double price) {

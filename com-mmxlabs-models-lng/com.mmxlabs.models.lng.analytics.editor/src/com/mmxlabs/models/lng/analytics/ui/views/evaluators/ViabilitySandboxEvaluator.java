@@ -266,7 +266,6 @@ public class ViabilitySandboxEvaluator {
 				if (fleetShippingOption.isUseSafetyHeel()) {
 					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());
 					vesselAvailability.getStartHeel().setCvValue(22.8);
-					// vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
 
 					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getSafetyHeel());
 					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getSafetyHeel());
@@ -300,6 +299,12 @@ public class ViabilitySandboxEvaluator {
 				final VesselAvailability va = eva.getVesselAvailability();
 				availabilitiesMap.put(eva, va);
 				mapper.addMapping(eva, va);
+			} else if (shipping instanceof ExistingCharterMarketOption) {
+				final ExistingCharterMarketOption ecmo = (ExistingCharterMarketOption) shipping;
+				final CharterInMarket charter = ecmo.getCharterInMarket();
+				
+				availabilitiesMap.put(ecmo, charter);
+				mapper.addMapping(ecmo, charter);
 			}
 		}
 

@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
@@ -56,6 +57,7 @@ public class Mapper implements IMapperClass {
 
 	Map<ShippingOption, VesselAvailability> fleetOptionMap = new HashMap<>();
 	Map<RoundTripShippingOption, CharterInMarket> roundTripOptionMap = new HashMap<>();
+	Map<ExistingCharterMarketOption, CharterInMarket> charterMarketOptionMap = new HashMap<>();
 
 	public Mapper(LNGScenarioModel scenarioModel) {
 		this.scenarioModel = scenarioModel;
@@ -252,5 +254,18 @@ public class Mapper implements IMapperClass {
 	public ExtraDataProvider getExtraDataProvider() {
 		return new ExtraDataProvider(new ArrayList<>(extraVesselAvailabilities), new ArrayList<>(extraCharterInMarkets), Collections.emptyList(), new ArrayList<>(extraLoads),
 				new ArrayList<>(extraDischarges));
+	}
+
+	@Override
+	public void addMapping(ExistingCharterMarketOption shippingOption, CharterInMarket newMarket) {
+		if (!ScenarioModelUtil.getSpotMarketsModel(scenarioModel).getCharterInMarkets().contains(newMarket)) {
+			extraCharterInMarkets.add(newMarket);
+		}
+		charterMarketOptionMap.put(shippingOption, newMarket);
+	}
+
+	@Override
+	public CharterInMarket get(ExistingCharterMarketOption existingCharterMarketOption) {
+		return charterMarketOptionMap.get(existingCharterMarketOption);
 	}
 }

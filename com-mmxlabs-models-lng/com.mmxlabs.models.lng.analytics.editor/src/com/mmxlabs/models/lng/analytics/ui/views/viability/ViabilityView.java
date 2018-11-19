@@ -4,13 +4,13 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.viability;
 
-import java.time.LocalDate;
 import java.util.EventObject;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -42,28 +42,24 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
-import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
-import com.mmxlabs.models.lng.analytics.SellReference;
+import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.ViabilityResult;
 import com.mmxlabs.models.lng.analytics.ViabilityRow;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.ViabilitySandboxEvaluator;
-import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -73,12 +69,12 @@ import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class ViabilityView extends ScenarioInstanceView implements CommandStackListener {
 
-	private ViabilityModel model;
-	private ViabilityModel rootOptionsModel;
+	private ViabilityModel currentModel;
 	private MMXRootObject rootObject;
 	// listens which object is selected
 	private org.eclipse.e4.ui.workbench.modeling.ISelectionListener selectionListener;
@@ -89,8 +85,6 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 	private final List<Consumer<ViabilityModel>> inputWants = new LinkedList<>();
 	private final List<Runnable> disposables = new LinkedList<>();
 	private Label errorLabel;
-	
-	private ScenarioInstance instance;
 
 	private Composite parent;
 
@@ -112,33 +106,40 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 		final RunnableAction go = new RunnableAction("Generate", Action.AS_PUSH_BUTTON, () -> {
 			BusyIndicator.showWhile(Display.getDefault(), () -> {
 				try {
-					ForkJoinPool.commonPool().submit(() -> {
+					final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
+					final ScenarioInstance scenarioInstance = getScenarioInstance();
+					final IScenarioDataProvider sdp = getScenarioDataProvider();
+					if (scenarioModel == null) {
+						return;
+					}
+					final ExecutorService executor = Executors.newFixedThreadPool(1);
+					try {
+						executor.submit(() -> {
+							final ViabilityModel model = ViabilityUtils.createModelFromScenario(scenarioModel, "viabilitymarket");
+							ViabilitySandboxEvaluator.evaluate(sdp, scenarioInstance, model);
 
-						final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
-						final ScenarioInstance si = getScenarioInstance();
-						if (scenarioModel == null) {
-							return;
-						}
-						final String name = "viability model" + (si != null ? si.getName() : "");
-						final ViabilityModel model = ViabilityUtils.createModelFromScenario(scenarioModel, name);
-						//populateModel(model);
-						this.instance = si;
+							RunnerHelper.asyncExec(() -> {
+								final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
+								final EditingDomain editingDomain = sdp.getEditingDomain();
+								// clearing the viability model before the evaluation of the new one
+								// SG - No need for this?
+								// editingDomain.getCommandStack()
+								// .execute(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), SetCommand.UNSET_VALUE));
 
-						ViabilitySandboxEvaluator.evaluate(getScenarioDataProvider(), si, model);
+								final CompoundCommand cmd = new CompoundCommand("Create viability matrix");
+								cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), model));
+								editingDomain.getCommandStack().execute(cmd);
 
-						RunnerHelper.asyncExec(() -> {
-							final CompoundCommand cmd = new CompoundCommand("Create viability matrix");
-							final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(getScenarioDataProvider());
-							cmd.append(SetCommand.create(getEditingDomain(), analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), model));
-							getEditingDomain().getCommandStack().execute(cmd);
-
-							doDisplayScenarioInstance(si, getRootObject(), model);
-						});
-					}).get();
-				} catch (InterruptedException e) {
+								doDisplayScenarioInstance(scenarioInstance, scenarioModel, model);
+							});
+						}).get();
+					} finally {
+						executor.shutdown();
+					}
+				} catch (final InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (ExecutionException e) {
+				} catch (final ExecutionException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -146,16 +147,16 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 		});
 		go.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif"));
 		getViewSite().getActionBars().getToolBarManager().add(go);
-		
+
 		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(mainTableComponent.getViewer());
 		getViewSite().getActionBars().getToolBarManager().add(packColumnsAction);
-		
+
 		final Action copyTableAction = new CopyGridToClipboardAction(mainTableComponent.getViewer().getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 		getViewSite().getActionBars().getToolBarManager().add(copyTableAction);
-		
+
 		getViewSite().getActionBars().getToolBarManager().update(true);
-		
+
 		service = getSite().getService(ESelectionService.class);
 		listenToSelectionsFrom();
 
@@ -167,97 +168,105 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 		doDisplayScenarioInstance(scenarioInstance, rootObject, null);
 	}
 
-	void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable final ViabilityModel model) {
+	synchronized void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable ViabilityModel model) {
 
 		if (errorLabel != null) {
 			errorLabel.dispose();
 			errorLabel = null;
 		}
 
-		//extractForTest(model);
-		
-		ViabilityModel tmodel = null;
 		boolean update = false;
-		
-		if (scenarioInstance == null) {
 
+		if (scenarioInstance == null) {
 			errorLabel = new Label(this.parent, SWT.NONE);
 			errorLabel.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 			errorLabel.setText("No scenario selected");
-			tmodel = null;
+			model = null;
 			update = true;
-			this.instance = null;
+			this.rootObject = null;
 		} else {
-			final ViabilityModel tempModel = getModel();
-			if (tempModel != null) {
-				if (tempModel.equals(model)) {
-					return;
-				} else {
-					if (this.instance.equals(scenarioInstance)) {
-						return;
-					}
-				}
-			}
-			
-			if (model != null) {
-				tmodel = model;
-				update = true;
-			} else if (rootObject instanceof LNGScenarioModel) {
+			if (model == null && rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final @NonNull AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(lngScenarioModel);
-	
-				if (analyticsModel.getViabilityModel() == null) {
-					tmodel = null;
-					this.instance = null;
-					update = true;
-				} else {
-					if (!scenarioInstance.equals(this.instance)) {
-						tmodel = analyticsModel.getViabilityModel();
-						this.instance = scenarioInstance;
-						update = true;
-					}
+				model = analyticsModel.getViabilityModel();
+			}
+
+			if (model != this.currentModel) {
+				update = true;
+				if (model != null) {
+					//extractPlainForTest(model);
 				}
 			}
 		}
 		if (update) {
-			setModel(tmodel);
-			setInput(tmodel);
+			setInput(model);
 		}
 	}
 
 	@SuppressWarnings("unused")
 	private void extractForTest(final ViabilityModel model) {
-		//for tests
-		if(model != null) {
-			for(ViabilityRow row : model.getRows()) {
-				for (BuyOption bo : model.getBuys()) {
+		// for tests
+		if (model != null) {
+			for (final ViabilityRow row : model.getRows()) {
+				for (final BuyOption bo : model.getBuys()) {
 					final BuyReference br = (BuyReference) bo;
-					String line1 = "//" + br.getSlot().getName();
-					
+					final String line1 = "//" + br.getSlot().getName();
+
 					String vesselName = "//";
-					
+
 					final ShippingOption so = row.getShipping();
 					if (so instanceof ExistingVesselAvailability) {
 						final VesselAvailability va = ((ExistingVesselAvailability) so).getVesselAvailability();
 						vesselName += va.getVessel().getName();
 					}
-					
-					for (ViabilityResult vr : row.getRhsResults()) {
+
+					for (final ViabilityResult vr : row.getRhsResults()) {
 						if (vr.getEarliestETA() == null) {
 							continue;
 						}
 						System.out.println(line1);
 						System.out.println(vesselName);
-						String line2 = "vls.add(createResult(findMarketByName(spotModel, \"" + vr.getTarget().getName() 
-								+ "\"), //\n"
-								+ vr.getEarliestVolume() + "," + vr.getLatestVolume() + ",\n"
-								+ vr.getEarliestPrice() + ", " + vr.getLatestPrice() + ",\n" 
-								+ "LocalDate.of(" + vr.getEarliestETA().getYear() + "," 
-								+ vr.getEarliestETA().getMonthValue() + ","
-								+ vr.getEarliestETA().getDayOfMonth() + "),"
-								+ "LocalDate.of(" + vr.getLatestETA().getYear() + "," 
-								+ vr.getLatestETA().getMonthValue() + ","
+						final String line2 = "vls.add(createResult(findMarketByName(spotModel, \"" + vr.getTarget().getName() + "\"), //\n" + vr.getEarliestVolume() + "," + vr.getLatestVolume()
+								+ ",\n" + vr.getEarliestPrice() + ", " + vr.getLatestPrice() + ",\n" + "LocalDate.of(" + vr.getEarliestETA().getYear() + "," + vr.getEarliestETA().getMonthValue() + ","
+								+ vr.getEarliestETA().getDayOfMonth() + ")," + "LocalDate.of(" + vr.getLatestETA().getYear() + "," + vr.getLatestETA().getMonthValue() + ","
 								+ vr.getLatestETA().getDayOfMonth() + ")));\n";
+						System.out.print(line2);
+						System.out.println(line1);
+					}
+				}
+			}
+		}
+	}
+
+	@SuppressWarnings("unused")
+	private void extractPlainForTest(final ViabilityModel model) {
+		// for tests
+		if (model != null) {
+			for (final ViabilityRow row : model.getRows()) {
+				for (final BuyOption bo : model.getBuys()) {
+					final BuyReference br = (BuyReference) bo;
+					final String line1 = "//" + br.getSlot().getName();
+
+					String vesselName = "//";
+
+					final ShippingOption so = row.getShipping();
+					if (so instanceof ExistingVesselAvailability) {
+						final VesselAvailability va = ((ExistingVesselAvailability) so).getVesselAvailability();
+						vesselName += va.getVessel().getName();
+					}
+					if (so instanceof RoundTripShippingOption) {
+						final Vessel v = ((RoundTripShippingOption) so).getVessel();
+						vesselName += v.getName();
+					}
+
+					for (final ViabilityResult vr : row.getRhsResults()) {
+						if (vr.getEarliestETA() == null) {
+							continue;
+						}
+						System.out.println(line1);
+						System.out.println(vesselName);
+						final String line2 = vr.getTarget().getName() + "\n" + vr.getEarliestVolume() + "," + vr.getLatestVolume() + ",\n" + vr.getEarliestPrice() + ", " + vr.getLatestPrice() + ",\n"
+								+ vr.getEarliestETA().toString() + ",\n" + vr.getLatestETA().toString() + "\n";
 						System.out.print(line2);
 						System.out.println(line1);
 					}
@@ -269,38 +278,46 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 	/**
 	 * If the current model is deleted, then clear the input
 	 */
-	private final EContentAdapter deletedOptionModelAdapter = new EContentAdapter() {
+	private final EContentAdapter deletedOptionModelAdapter = new MMXContentAdapter() {
+
 		@Override
-		public void notifyChanged(final Notification notification) {
+		protected void missedNotifications(java.util.List<Notification> missed) {
+			boolean doDisplay = false;
+			for (Notification notification : missed) {
+
+				if (notification.isTouch()) {
+					continue;
+				}
+				if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel()) {
+					doDisplay = true;
+					break;
+				}
+			}
+			if (doDisplay) {
+				displayScenarioInstance(getScenarioInstance());
+			}
+		};
+
+		public void reallyNotifyChanged(Notification notification) {
 			super.notifyChanged(notification);
 			if (notification.isTouch()) {
 				return;
 			}
 			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel()) {
-				if (model != null && notification.getOldValue() == model) {
-					displayScenarioInstance(getScenarioInstance());
-				} else if (rootOptionsModel != null && notification.getOldValue() == rootOptionsModel) {
-					displayScenarioInstance(getScenarioInstance());
-				}
+				displayScenarioInstance(getScenarioInstance());
 			}
 		}
 	};
 
 	public void setInput(final @Nullable ViabilityModel model) {
-		if (rootOptionsModel != null) {
-			rootOptionsModel.eAdapters().remove(deletedOptionModelAdapter);
-			rootOptionsModel = null;
-		}
 		if (rootObject != null) {
 			rootObject.eAdapters().remove(deletedOptionModelAdapter);
 			rootObject = null;
 		}
 
-		this.setModel(model);
+		this.currentModel = model;
 
 		inputWants.forEach(want -> want.accept(model));
-
-		rootOptionsModel = getRootOptionsModel(model);
 
 		rootObject = getRootObject();
 		if (rootObject != null) {
@@ -308,26 +325,19 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 		}
 	}
 
-	private ViabilityModel getRootOptionsModel(@Nullable final ViabilityModel optionModel) {
-		return optionModel;
-	}
-
 	@Override
 	public void dispose() {
 
-		disposables.forEach(r -> r.run());
+		disposables.forEach(Runnable::run);
 
-		if (model != null) {
-			model = null;
-		}
-		if (rootOptionsModel != null) {
-			rootOptionsModel = null;
+		if (currentModel != null) {
+			currentModel = null;
 		}
 		if (rootObject != null) {
 			rootObject.eAdapters().remove(deletedOptionModelAdapter);
 			rootObject = null;
 		}
-		
+
 		if (selectionListener != null) {
 			service.removePostSelectionListener(selectionListener);
 			selectionListener = null;
@@ -337,11 +347,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 	}
 
 	public ViabilityModel getModel() {
-		return model;
-	}
-
-	public void setModel(final ViabilityModel model) {
-		this.model = model;
+		return currentModel;
 	}
 
 	@Override
@@ -359,12 +365,12 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 
 					if (domain instanceof CommandProviderAwareEditingDomain) {
 						final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
-						commandProviderAwareEditingDomain.disableAdapters(model);
+						commandProviderAwareEditingDomain.disableAdapters(currentModel);
 					}
 					superHandler.handleCommand(command, target, feature);
 					if (domain instanceof CommandProviderAwareEditingDomain) {
 						final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
-						commandProviderAwareEditingDomain.enableAdapters(model, false);
+						commandProviderAwareEditingDomain.enableAdapters(currentModel, false);
 					}
 
 				}
@@ -389,98 +395,17 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 		return commandHandler;
 
 	}
-	
-//	public static ViabilityModel createModelFromScenario(final @NonNull LNGScenarioModel sm, final @NonNull String name) {
-//		final ViabilityModel model = AnalyticsFactory.eINSTANCE.createViabilityModel();
-//		model.setName(name);
-//		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sm);
-//		final SpotMarketsModel spotModel = ScenarioModelUtil.getSpotMarketsModel(sm);
-//
-//		for (final LoadSlot slot : cargoModel.getLoadSlots()) {
-//			if (slot.getCargo() == null) {
-//				final BuyReference buy = AnalyticsFactory.eINSTANCE.createBuyReference();
-//				buy.setSlot(slot);
-//				model.getBuys().add(buy);
-//			}
-//		}
-//		for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
-//			if (slot.getCargo() == null) {
-//				final SellReference sale = AnalyticsFactory.eINSTANCE.createSellReference();
-//				sale.setSlot(slot);
-//				model.getSells().add(sale);
-//			}
-//		}
-//		for (final VesselAvailability vessel : cargoModel.getVesselAvailabilities()) {
-//			if (vessel != null) {
-//				final ExistingVesselAvailability v = AnalyticsFactory.eINSTANCE.createExistingVesselAvailability();
-//				v.setVesselAvailability(vessel);
-//				model.getShippingTemplates().add(v);
-//			}
-//		}
-//		// final SpotMarketGroup smgDP = spotModel.getDesPurchaseSpotMarket();
-//		// if (smgDP != null) {
-//		// for (final SpotMarket spotMarket : smgDP.getMarkets()) {
-//		// if (spotMarket != null) {
-//		// model.getMarkets().add(spotMarket);
-//		// }
-//		// }
-//		// }
-//		final SpotMarketGroup smgDS = spotModel.getDesSalesSpotMarket();
-//		if (smgDS != null) {
-//			for (final SpotMarket spotMarket : smgDS.getMarkets()) {
-//				if (spotMarket != null) {
-//					if (spotMarket.isEnabled()) {
-//						model.getMarkets().add(spotMarket);
-//					}
-//				}
-//			}
-//		}
-//		// final SpotMarketGroup smgFP = spotModel.getFobPurchasesSpotMarket();
-//		// if (smgFP != null) {
-//		// for (final SpotMarket spotMarket : smgFP.getMarkets()) {
-//		// if (spotMarket != null) {
-//		// model.getMarkets().add(spotMarket);
-//		// }
-//		// }
-//		// }
-//		final SpotMarketGroup smgFS = spotModel.getFobSalesSpotMarket();
-//		if (smgFS != null) {
-//			for (final SpotMarket spotMarket : smgFS.getMarkets()) {
-//				if (spotMarket != null) {
-//					if (spotMarket.isEnabled()) {
-//						model.getMarkets().add(spotMarket);
-//					}
-//				}
-//			}
-//		}
-//
-//		populateModel(model);
-//		
-//		return model;
-//	}
-//	
-//	public static void populateModel(final @NonNull ViabilityModel model) {
-//		for (final BuyOption bo : model.getBuys()) {
-//			for (final ShippingOption so : model.getShippingTemplates()) {
-//				final ViabilityRow row = AnalyticsFactory.eINSTANCE.createViabilityRow();
-//				row.setBuyOption(bo);
-//				row.setShipping(so);
-//				model.getRows().add(row);
-//			}
-//		}
-//	}
 
 	@Override
 	public void commandStackChanged(final EventObject event) {
-		// TODO Auto-generated method stub
-
+		displayScenarioInstance(getScenarioInstance());
 	}
 
 	@Override
 	public void setFocus() {
 		mainTableComponent.setFocus();
 	}
-	
+
 	/*
 	 * Looks for selection
 	 */
@@ -511,29 +436,29 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 		};
 		service.addPostSelectionListener(selectionListener);
 	}
-	
+
 	/*
 	 * At the moment only allows to process ONE load slot
 	 */
 	private LoadSlot processSelection(final IWorkbenchPart part, final ISelection selection) {
-		
+
 		if (selection instanceof IStructuredSelection) {
 
 			final Iterator<?> itr = ((IStructuredSelection) selection).iterator();
 			while (itr.hasNext()) {
-				Object obj = itr.next();
+				final Object obj = itr.next();
 				/*
 				 * Just the first Load Slot selection now
 				 */
 				if (obj instanceof LoadSlot) {
-					LoadSlot load = (LoadSlot) obj;
+					final LoadSlot load = (LoadSlot) obj;
 					if (load.getCargo() == null) {
 						return load;
 					}
 				}
 			}
 		}
-		
+
 		return null;
 	}
 
