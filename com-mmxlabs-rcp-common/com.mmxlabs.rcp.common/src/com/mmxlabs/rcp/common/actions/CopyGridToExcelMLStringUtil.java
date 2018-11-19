@@ -188,8 +188,8 @@ public class CopyGridToExcelMLStringUtil {
 			// Note this may be zero if no columns have been defined. However an
 			// implicit column will be created in such cases
 			final int numColumns = table.getColumnCount();
-			sw.write(String.format("<Table ss:ExpandedColumnCount=\"%d\" ss:ExpandedRowCount=\"%d\" x:FullColumns=\"1\" x:FullRows=\"1\" ss:DefaultRowHeight=\"13.2\" >\n", numColumns,
-					table.getRootItems().length + 2)); //  +2 for double headers
+			sw.write(String.format("<Table ss:ExpandedColumnCount=\"%d\" ss:ExpandedRowCount=\"%d\" x:FullColumns=\"1\" x:FullRows=\"1\" ss:DefaultRowHeight=\"13.2\" >\n", 1 + numColumns,
+					table.getRootItems().length + 2)); // +2 for double headers
 
 			try {
 				// addPreTableRows(sw);
@@ -240,9 +240,11 @@ public class CopyGridToExcelMLStringUtil {
 
 		// top left blank cell
 		if (rowHeadersIncluded) {
-			// addCell(topRow, "Cell", getTopLeftCellUpperText(), 0, 0, new String[] {}, 1);
-			// addCell(bottomRow, "Cell", getTopLeftCellLowerText(), 0, 0, new String[] {}, 1);
-			// addCell(singleRow, "Cell", getTopLeftCellText(), 0, 0, new String[] {}, 1);
+			String typeString = "ss:Type=\"String\"";
+
+			addCell(topRow, "Cell", getTopLeftCellUpperText(), 0, 0, new String[] { typeString }, -1, "");
+			addCell(bottomRow, "Cell", getTopLeftCellLowerText(), 0, 0, new String[] { typeString }, -1, "");
+			addCell(singleRow, "Cell", getTopLeftCellText(), 0, 0, new String[] { typeString }, -1, "");
 		}
 		// Set of column groups already seen. This assumes all columns within a group are next to each other
 		final Set<GridColumnGroup> seenGroups = new HashSet<>();
@@ -285,8 +287,7 @@ public class CopyGridToExcelMLStringUtil {
 							groupCount++;
 						}
 					}
-					addCell(topRow, "", columnGroup.getText(), 0, groupCount - 1,
-							combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1, colourString);
+					addCell(topRow, "", columnGroup.getText(), 0, groupCount - 1, combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1, colourString);
 					// idx += groupCount;
 				}
 			}
@@ -348,7 +349,7 @@ public class CopyGridToExcelMLStringUtil {
 		sw.write("<Row>");
 
 		if (rowHeadersIncluded) {
-			// addCell(sw, item.getHeaderText(), 0, 0, getAdditionalRowHeaderAttributes(item));
+			addCell(sw, item.getHeaderText(), 0, 0, getAdditionalRowHeaderAttributes(item), -1, "");
 		}
 
 		final int[] columnOrder = includeAllColumns ? getAllColumns(table) : table.getColumnOrder();
@@ -482,12 +483,18 @@ public class CopyGridToExcelMLStringUtil {
 		return null;
 	}
 
-	public final void addCell(final StringWriter sw, final String text, int rowSpan, int colSpan, final String[] attributes, int colIdx, String extra) {
-		addCell(sw, "Cell", text, rowSpan, colSpan, attributes, colIdx, extra);
+	public final void addCell(final StringWriter sw, final String text, int rowSpan, int colSpan, final String[] attributes, int colIdx, String style) {
+		addCell(sw, "Cell", text, rowSpan, colSpan, attributes, colIdx, style);
 	}
 
 	public final void addCell(final StringWriter sw, final String tag, String text, int rowSpan, int colSpan, final String[] attributes, int colIdx, String style) {
 
+		if (rowHeadersIncluded) {
+			if (colIdx == -1) {
+				++colIdx;
+			}
+			++colIdx;
+		}
 		String range = "";
 		if (!"Cell".equals(tag)) {
 			// range = tag;

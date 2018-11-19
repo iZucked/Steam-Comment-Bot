@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.components;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.emf.databinding.EMFProperties;
@@ -52,33 +53,33 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 	private final EObjectTableViewerSortingSupport sortingSupport;
 	private final EObjectTableViewerFilterSupport filterSupport;
 
-	private static final ImageDescriptor imageDescriptorSteadyArrow = Activator.getPlugin().getImageDescriptor("icons/steady_arrow.png");
 	private static final ImageDescriptor imageDescriptorGreenArrowDown = Activator.getPlugin().getImageDescriptor("icons/green_arrow_down.png");
 	private static final ImageDescriptor imageDescriptorGreenArrowUp = Activator.getPlugin().getImageDescriptor("icons/green_arrow_up.png");
 	private static final ImageDescriptor imageDescriptorRedArrowDown = Activator.getPlugin().getImageDescriptor("icons/red_arrow_down.png");
 	private static final ImageDescriptor imageDescriptorRedArrowUp = Activator.getPlugin().getImageDescriptor("icons/red_arrow_up.png");
 
-	private static final Image cellImageSteadyArrow = imageDescriptorSteadyArrow.createImage();
 	private static final Image cellImageGreenArrowDown = imageDescriptorGreenArrowDown.createImage();
 	private static final Image cellImageGreenArrowUp = imageDescriptorGreenArrowUp.createImage();
 	private static final Image cellImageRedArrowDown = imageDescriptorRedArrowDown.createImage();
 	private static final Image cellImageRedArrowUp = imageDescriptorRedArrowUp.createImage();
+	private BooleanSupplier copyPasteMode;
 
-	public DiffingGridTableViewerColumnFactory(final GridTableViewer viewer, final EObjectTableViewerSortingSupport sortingSupport, final EObjectTableViewerFilterSupport filterSupport) {
+	public DiffingGridTableViewerColumnFactory(final GridTableViewer viewer, final EObjectTableViewerSortingSupport sortingSupport, final EObjectTableViewerFilterSupport filterSupport,
+			BooleanSupplier copyPasteMode) {
 		this.viewer = viewer;
 		this.sortingSupport = sortingSupport;
 		this.filterSupport = filterSupport;
+		this.copyPasteMode = copyPasteMode;
 	}
 
-	private String computeCompositeRow(CompositeRow element, EMFPath[] path, GridColumn col, ICellRenderer formatter, boolean withFormatting) {
+	private Object computeCompositeRow(final CompositeRow element, final EMFPath[] path, final GridColumn col, final ICellRenderer formatter) {
 
 		Object pinnedElement = null;
 		Object previousElement = null;
 
-		String deltaValue = "";
 		if (element instanceof CompositeRow) {
-			Row pinnedRow = ((CompositeRow) element).getPinnedRow();
-			Row previousRow = ((CompositeRow) element).getPreviousRow();
+			final Row pinnedRow = ((CompositeRow) element).getPinnedRow();
+			final Row previousRow = ((CompositeRow) element).getPreviousRow();
 
 			for (final EMFPath p : path) {
 				pinnedElement = p.get((EObject) pinnedRow);
@@ -107,14 +108,13 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 			// Those formatters will also return -MAX_VALUE for the reference row
 			// Bug ?
 			if (formatter instanceof GeneratedCharterDaysFormatter) {
-				valuePinned = new Double(0);
+				valuePinned = Double.valueOf(0.0);
 			}
 
 			if (formatter instanceof GeneratedCharterRevenueFormatter) {
-				valuePinned = new Integer(0);
+				valuePinned = Integer.valueOf(0);
 			}
 
-			deltaValue = "";
 			if (valuePrevious instanceof Integer || valuePinned instanceof Integer) {
 				int delta = 0;
 
@@ -125,12 +125,7 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 				} else if (valuePinned != null) {
 					delta = -((int) valuePinned);
 				}
-
-				if (withFormatting) {
-					deltaValue = NumberFormat.getInstance().format(delta);
-				} else {
-					deltaValue = String.valueOf(delta);
-				}
+				return delta;
 			} else if (valuePrevious instanceof Long || valuePinned instanceof Long) {
 				long delta = 0L;
 				if (valuePrevious != null && valuePinned != null) {
@@ -140,14 +135,9 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 				} else if (valuePinned != null) {
 					delta = -((long) valuePinned);
 				}
-
-				if (withFormatting) {
-					deltaValue = NumberFormat.getInstance().format(delta);
-				} else {
-					deltaValue = String.valueOf(delta);
-				}
+				return delta;
 			} else if (valuePrevious instanceof Double || valuePinned instanceof Double) {
-				double epsilon = 0.0001f;
+				final double epsilon = 0.0001f;
 				double delta = 0.0f;
 
 				if (valuePrevious != null && valuePinned != null) {
@@ -157,14 +147,9 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 				} else if (valuePinned != null) {
 					delta = -((double) valuePinned);
 				}
-
-				if (withFormatting) {
-					deltaValue = NumberFormat.getInstance().format(delta);
-				} else {
-					deltaValue = String.valueOf(delta);
-				}
+				return delta;
 			} else if (valuePrevious instanceof String || valuePinned instanceof String) {
-
+				String deltaValue = null;
 				if (col.getText().compareTo("Scenario") == 0) {
 					deltaValue = " ";
 				}
@@ -192,15 +177,15 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 						deltaValue = (String) valuePrevious;
 					}
 				}
+				return deltaValue;
 			}
-			return deltaValue;
 		}
-		return "";
+		return null;
 	}
 
 	@Override
 	public GridViewerColumn createColumn(final ColumnHandler handler) {
-		GridColumnGroup group = handler.block.getOrCreateColumnGroup(viewer.getGrid());
+		final GridColumnGroup group = handler.block.getOrCreateColumnGroup(viewer.getGrid());
 
 		final String title = handler.title;
 		final ICellRenderer formatter = handler.getFormatter();
@@ -222,14 +207,14 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 		// Set a default label provider
 		column.setLabelProvider(new CellLabelProvider() {
 
-			public void setIndicationArrow(ViewerCell cell, ICellRenderer formatter) {
+			public void setIndicationArrow(final ViewerCell cell, final ICellRenderer formatter, final boolean isNegative) {
 				if (formatter instanceof CostFormatter) {
-					CostFormatter costFormatter = (CostFormatter) formatter;
-					CostFormatter.Type typeFormatter = costFormatter.getType();
-					String formattedValue = cell.getText();
+					final CostFormatter costFormatter = (CostFormatter) formatter;
+					final CostFormatter.Type typeFormatter = costFormatter.getType();
+					final String formattedValue = cell.getText();
 
 					if (formattedValue != null) {
-						List<String> nullValues = new ArrayList<>();
+						final List<String> nullValues = new ArrayList<>();
 						nullValues.add("0");
 						nullValues.add("$0");
 						nullValues.add("$0mmbtu");
@@ -237,13 +222,13 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 
 						if (!nullValues.contains(formattedValue.toLowerCase())) {
 							if (typeFormatter == CostFormatter.Type.COST) {
-								if (formattedValue.contains("-")) {
+								if (isNegative) {
 									cell.setImage(cellImageGreenArrowDown);
 								} else if (!formattedValue.contains("-")) {
 									cell.setImage(cellImageRedArrowUp);
 								}
 							} else if (typeFormatter == CostFormatter.Type.REVENUE) {
-								if (formattedValue.contains("-")) {
+								if (isNegative) {
 									cell.setImage(cellImageRedArrowDown);
 								} else if (!formattedValue.contains("-")) {
 									cell.setImage(cellImageGreenArrowUp);
@@ -260,14 +245,11 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 				Object element = cell.getElement();
 
 				if (element instanceof List) {
-					int accInt = 0;
-					long accLong = 0L;
-					double accDouble = 0.0f;
 
 					if (((List<CompositeRow>) element).size() > 0) {
 						// Fetch the first element of the list and pass it through the column formatter
 						// to get its type
-						CompositeRow firstCompositeRow = ((List<CompositeRow>) element).get(0);
+						final CompositeRow firstCompositeRow = ((List<CompositeRow>) element).get(0);
 
 						Object pinnedElement = null;
 						for (final EMFPath p : path) {
@@ -278,64 +260,91 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 						}
 
 						String deltaValue = "";
-						Object valuePinned = formatter.getComparable(pinnedElement);
+						boolean isNegative = false;
+						final Object valuePinned = formatter.getComparable(pinnedElement);
 
 						// Sum the value depending on the column type
 						if (valuePinned != null) {
-							List<CompositeRow> compositeRows = (List<CompositeRow>) element;
+							final List<CompositeRow> compositeRows = (List<CompositeRow>) element;
 							if (valuePinned instanceof Integer) {
-								for (CompositeRow compositeRow : compositeRows) {
+								int accInt = 0;
+								for (final CompositeRow compositeRow : compositeRows) {
 									boolean included = true;
-									for(ViewerFilter viewerFilter: viewer.getFilters()) {
+									for (final ViewerFilter viewerFilter : viewer.getFilters()) {
 										included &= viewerFilter.select(viewer, null, compositeRow.getPinnedRow());
 										included &= viewerFilter.select(viewer, null, compositeRow.getPreviousRow());
 									}
-									
-									if (included) {
-										String res = computeCompositeRow(compositeRow, path, col, formatter, false);
 
-										if (res.compareTo("") != 0) {
-											accInt += Integer.parseInt(computeCompositeRow(compositeRow, path, col, formatter, false));
+									if (included) {
+										final Object res = computeCompositeRow(compositeRow, path, col, formatter);
+										if (res instanceof Number) {
+											final Number number = (Number) res;
+											if (number.intValue() != 0) {
+												accInt += number.intValue();
+											}
 										}
 									}
 								}
-								deltaValue = NumberFormat.getInstance().format(accInt);
+								isNegative = accInt < 0.0;
+								if (copyPasteMode.getAsBoolean()) {
+									deltaValue = NumberFormat.getInstance().format(accInt);
+								} else {
+									deltaValue = NumberFormat.getInstance().format(Math.abs(accInt));
+								}
 							} else if (valuePinned instanceof Long) {
-								for (CompositeRow compositeRow : compositeRows) {
+								long accLong = 0L;
+
+								for (final CompositeRow compositeRow : compositeRows) {
 
 									boolean included = true;
-									for (ViewerFilter viewerFilter : viewer.getFilters()) {
+									for (final ViewerFilter viewerFilter : viewer.getFilters()) {
 										included &= viewerFilter.select(viewer, null, compositeRow.getPinnedRow());
 										included &= viewerFilter.select(viewer, null, compositeRow.getPreviousRow());
 									}
 
 									if (included) {
 
-										String res = computeCompositeRow(compositeRow, path, col, formatter, false);
-										if (res.compareTo("") != 0) {
-											accLong += Long.parseLong(res);
+										final Object res = computeCompositeRow(compositeRow, path, col, formatter);
+										if (res instanceof Number) {
+											final Number number = (Number) res;
+											if (number.longValue() != 0L) {
+												accLong += number.longValue();
+											}
 										}
 									}
 								}
-								deltaValue = NumberFormat.getInstance().format(accLong);
+								isNegative = accLong < 0.0;
+								if (copyPasteMode.getAsBoolean()) {
+									deltaValue = NumberFormat.getInstance().format(accLong);
+								} else {
+									deltaValue = NumberFormat.getInstance().format(Math.abs(accLong));
+								}
 							} else if (valuePinned instanceof Double) {
-								for (CompositeRow compositeRow : compositeRows) {
+								double accDouble = 0.0f;
+								for (final CompositeRow compositeRow : compositeRows) {
 
 									boolean included = true;
-									for (ViewerFilter viewerFilter : viewer.getFilters()) {
+									for (final ViewerFilter viewerFilter : viewer.getFilters()) {
 										included &= viewerFilter.select(viewer, null, compositeRow.getPinnedRow());
 										included &= viewerFilter.select(viewer, null, compositeRow.getPreviousRow());
 									}
 
 									if (included) {
-										String res = computeCompositeRow(compositeRow, path, col, formatter, false);
-
-										if (res.compareTo("") != 0) {
-											accDouble += Double.parseDouble(res);
+										final Object res = computeCompositeRow(compositeRow, path, col, formatter);
+										if (res instanceof Number) {
+											final Number number = (Number) res;
+											if (number.doubleValue() != 0.0) {
+												accDouble += number.doubleValue();
+											}
 										}
 									}
 								}
-								deltaValue = NumberFormat.getInstance().format(accDouble);
+								isNegative = accDouble < 0.0;
+								if (copyPasteMode.getAsBoolean()) {
+									deltaValue = NumberFormat.getInstance().format(accDouble);
+								} else {
+									deltaValue = NumberFormat.getInstance().format(Math.abs(accDouble));
+								}
 							}
 						}
 
@@ -344,11 +353,11 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 						if (col.getText().equals("Scenario")) {
 							cell.setText("Total Δ");// FM Changed to "Total Δ"
 						}
-						setIndicationArrow(cell, formatter);
+						setIndicationArrow(cell, formatter, isNegative);
 					}
 				} else if (element instanceof CompositeRow) {
-					CompositeRow compositeRow = (CompositeRow) element;
-					String deltaValue = computeCompositeRow(compositeRow, path, col, formatter, true);
+					final CompositeRow compositeRow = (CompositeRow) element;
+					final Object deltaValue = computeCompositeRow(compositeRow, path, col, formatter);
 
 					// Get the underlying pinned element object to set the row span in the grid
 					Object pinnedElement = null;
@@ -359,12 +368,31 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 						}
 					}
 					setRowSpan(formatter, cell, pinnedElement);
-					
+
 					if (col.getText().equals("Scenario")) {
 						cell.setText("Δ");
 					} else {
-						cell.setText(deltaValue);
-						setIndicationArrow(cell, formatter);
+						String txt = deltaValue == null ? "" : deltaValue.toString();
+						boolean isNegative = false;
+						if (deltaValue instanceof Number) {
+							final Number num = (Number) deltaValue;
+							isNegative = num.doubleValue() < 0.0;
+							if (copyPasteMode.getAsBoolean()) {
+								if (num instanceof Double) {
+									txt = NumberFormat.getInstance().format(num.doubleValue());
+								} else {
+									txt = NumberFormat.getInstance().format(num.longValue());
+								}
+							} else {
+								if (num instanceof Double) {
+									txt = NumberFormat.getInstance().format(Math.abs(num.doubleValue()));
+								} else {
+									txt = NumberFormat.getInstance().format(Math.abs(num.longValue()));
+								}
+							}
+						}
+						cell.setText(txt);
+						setIndicationArrow(cell, formatter, isNegative);
 					}
 				} else {
 					if (element != null) {
@@ -397,7 +425,7 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 					cell.setText(formatter.render(element));
 					cell.setImage(null);
 					if (formatter instanceof IImageProvider) {
-						Image image = ((IImageProvider) formatter).getImage(cell.getElement());
+						final Image image = ((IImageProvider) formatter).getImage(cell.getElement());
 						if (image != null && !image.isDisposed()) {
 							cell.setImage(image);
 						}
@@ -408,7 +436,9 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 
 		// But try and create an observable based label provider for better data
 		// linkage.
-		try {
+		try
+
+		{
 			if (viewer.getContentProvider() instanceof ObservableListContentProvider) {
 
 				final ObservableListContentProvider contentProvider = (ObservableListContentProvider) viewer.getContentProvider();
@@ -514,12 +544,12 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 		}
 	}
 
-	private void setRowSpan(final ICellRenderer formatter, final ViewerCell cell, Object element) {
+	private void setRowSpan(final ICellRenderer formatter, final ViewerCell cell, final Object element) {
 		if (formatter instanceof IRowSpanProvider) {
 			final IRowSpanProvider rowSpanProvider = (IRowSpanProvider) formatter;
 			final DataVisualizer dv = viewer.getGrid().getDataVisualizer();
 			// final GridItem item = (GridItem) cell.getItem();
-			int rowSpan = rowSpanProvider.getRowSpan(cell, element);
+			final int rowSpan = rowSpanProvider.getRowSpan(cell, element);
 			{
 				ViewerCell c = cell;
 				for (int i = 0; i < rowSpan; i++) {

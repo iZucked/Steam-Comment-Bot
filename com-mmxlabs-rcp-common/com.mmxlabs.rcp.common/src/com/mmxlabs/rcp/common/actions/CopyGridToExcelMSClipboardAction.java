@@ -80,6 +80,7 @@ public class CopyGridToExcelMSClipboardAction extends Action {
 				// sw.append(" </Worksheet>");
 				// sw.append(" </Workbook>");
 				// contents = sw.toString();
+				System.out.println(contents);
 			}
 			// Create a new clipboard instance
 			final Display display = Display.getDefault();

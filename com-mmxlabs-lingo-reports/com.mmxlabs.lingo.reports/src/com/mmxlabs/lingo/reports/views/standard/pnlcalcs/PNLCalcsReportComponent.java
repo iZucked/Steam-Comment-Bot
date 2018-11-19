@@ -78,6 +78,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.models.ui.tabular.IImageProvider;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
@@ -103,12 +104,6 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  */
 public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart */ {
 
-	private Image cellImageSteadyArrow;
-	private Image cellImageGreenArrowDown;
-	private Image cellImageGreenArrowUp;
-	private Image cellImageRedArrowDown;
-	private Image cellImageRedArrowUp;
-
 	@Inject
 	private ESelectionService selectionService;
 
@@ -123,6 +118,7 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 	 * List of dynamically generated columns to be disposed on selection changes
 	 */
 	private final List<GridViewerColumn> dataColumns = new LinkedList<GridViewerColumn>();
+	private final PNLCalcsOptions options = new PNLCalcsOptions();
 
 	private Map<String, GridColumnGroup> gridColumnGroupsMap = new HashMap<String, GridColumnGroup>();
 
@@ -161,11 +157,6 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 	public void createPartControl(final Composite parent) {
 
 		pinImage = createImage("icons/Pinned.gif");
-		cellImageSteadyArrow = createImage("icons/steady_arrow.png");
-		cellImageGreenArrowDown = createImage("icons/green_arrow_down.png");
-		cellImageGreenArrowUp = createImage("icons/green_arrow_up.png");
-		cellImageRedArrowDown = createImage("icons/red_arrow_down.png");
-		cellImageRedArrowUp = createImage("icons/red_arrow_up.png");
 
 		viewer = new GridTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 
@@ -193,7 +184,7 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 		// Array content provider as we pass in an array of enums
 		final List<PNLCalcsReportRow> rows = new LinkedList<>();
 		ServiceHelper.withAllServices(IPNLCalcsRowFactory.class, null, factory -> {
-			rows.addAll(factory.createRows(null));
+			rows.addAll(factory.createRows(options, null));
 			return true;
 		});
 		Collections.sort(rows, (a, b) -> a.order - b.order);
@@ -214,31 +205,6 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 		if (pinImage != null) {
 			pinImage.dispose();
 			pinImage = null;
-		}
-
-		if (cellImageSteadyArrow != null) {
-			cellImageSteadyArrow.dispose();
-			cellImageSteadyArrow = null;
-		}
-
-		if (cellImageGreenArrowDown != null) {
-			cellImageGreenArrowDown.dispose();
-			cellImageGreenArrowDown = null;
-		}
-
-		if (cellImageGreenArrowUp != null) {
-			cellImageGreenArrowUp.dispose();
-			cellImageGreenArrowUp = null;
-		}
-
-		if (cellImageRedArrowDown != null) {
-			cellImageRedArrowDown.dispose();
-			cellImageRedArrowDown = null;
-		}
-
-		if (cellImageRedArrowUp != null) {
-			cellImageRedArrowUp.dispose();
-			cellImageRedArrowUp = null;
 		}
 
 		if (selectedObjects != null) {
@@ -307,6 +273,13 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 
 		@Override
 		public Image getImage(final Object element) {
+			if (element instanceof PNLCalcsReportRow) {
+				final PNLCalcsReportRow row = (PNLCalcsReportRow) element;
+				if (row.formatter instanceof IImageProvider) {
+					IImageProvider ip = (IImageProvider) row.formatter;
+					return ip.getImage(columnElement);
+				}
+			}
 			return null;
 		}
 
@@ -354,36 +327,7 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 			cell.setText(getText(cell.getElement()));
 			cell.setForeground(getForeground(cell.getElement()));
 			cell.setBackground(getBackground(cell.getElement()));
-
-			final Object element = cell.getElement();
-
-			if (element instanceof PNLCalcsReportRow) {
-				final PNLCalcsReportRow row = (PNLCalcsReportRow) element;
-
-				if (columnElement instanceof DeltaPair || columnElement instanceof List<?>) {
-					final String formattedValue = getText(element);
-					if (formattedValue != null) {
-						final List<String> nullValues = new ArrayList<>();
-						nullValues.add("$0");
-						nullValues.add("$0mmbtu");
-						nullValues.add("0mmbtu");
-
-						if (nullValues.contains(formattedValue.toLowerCase())) {
-							// cell.setImage(cellImageSteadyArrow);
-						} else {
-							if (row.isCost && formattedValue.contains("-")) {
-								cell.setImage(cellImageGreenArrowDown);
-							} else if (row.isCost && !formattedValue.contains("-")) {
-								cell.setImage(cellImageRedArrowUp);
-							} else if (!row.isCost && !formattedValue.contains("-")) {
-								cell.setImage(cellImageGreenArrowUp);
-							} else if (!row.isCost && formattedValue.contains("-")) {
-								cell.setImage(cellImageRedArrowDown);
-							}
-						}
-					}
-				}
-			}
+			cell.setImage(getImage(cell.getElement()));
 		}
 	}
 
@@ -708,16 +652,16 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 	}
 
 	public void rebuild() {
-		final Collection<Object> validObjects = new ArrayList<Object>(getSelectedObject());
+		final Collection<Object> validObjects = new ArrayList<>(getSelectedObject());
 		toggleCompare();
 		// Dispose old data columns - clone list to try to avoid concurrent modification exceptions
-		final List<GridViewerColumn> oldColumns = new ArrayList<GridViewerColumn>(dataColumns);
+		final List<GridViewerColumn> oldColumns = new ArrayList<>(dataColumns);
 		dataColumns.clear();
 		for (final GridViewerColumn gvc : oldColumns) {
 			gvc.getColumn().dispose();
 		}
 
-		if (validObjects == null || validObjects.size() == 0) {
+		if (validObjects == null || validObjects.isEmpty()) {
 			return;
 		}
 
@@ -744,7 +688,7 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 		// Create the row object
 		final List<PNLCalcsReportRow> rows = new LinkedList<>();
 		ServiceHelper.withAllServices(IPNLCalcsRowFactory.class, null, factory -> {
-			rows.addAll(factory.createRows(validObjects));
+			rows.addAll(factory.createRows(options, validObjects));
 			return true;
 		});
 		Collections.sort(rows, (a, b) -> a.order - b.order);
@@ -893,5 +837,10 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 	private void createCenteringGroupRenderer(final GridColumnGroup gcg) {
 		final CenteringColumnGroupHeaderRenderer renderer = new CenteringColumnGroupHeaderRenderer();
 		gcg.setHeaderRenderer(renderer);
+	}
+
+	public void setCopyPasteMode(boolean copyPasteMode) {
+		setIncludedUnit(!copyPasteMode);
+		options.alwaysShowRawValue = copyPasteMode;
 	}
 }

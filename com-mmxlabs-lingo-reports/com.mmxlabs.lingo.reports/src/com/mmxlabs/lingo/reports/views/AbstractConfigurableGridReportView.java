@@ -303,7 +303,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			filterField.setFilterSupport(filterSupport);
 
 			getBlockManager().setGrid(viewer.getGrid());
-			getBlockManager().setColumnFactory(new DiffingGridTableViewerColumnFactory(viewer, sortingSupport, filterSupport));
+			getBlockManager().setColumnFactory(new DiffingGridTableViewerColumnFactory(viewer, sortingSupport, filterSupport, () -> copyPasteMode));
 			// filterField.setFilterSupport(viewer.getFilterSupport());
 
 			viewer.getGrid().setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -681,6 +681,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	private final HashMap<Object, Object> equivalents = new HashMap<Object, Object>();
 	private final HashSet<Object> contents = new HashSet<Object>();
 	protected Table table;
+	protected boolean copyPasteMode;
 
 	public void setInputEquivalents(final Object input, final Collection<? extends Object> objectEquivalents) {
 		for (final Object o : objectEquivalents) {
@@ -737,8 +738,13 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	private void makeActions() {
 		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
-		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false);
+		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false, () -> setCopyPasteMode(true), () -> setCopyPasteMode(false));
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
+	}
+
+	protected void setCopyPasteMode(boolean copyPasteMode) {
+		this.copyPasteMode = copyPasteMode;
+		ViewerHelper.refresh(viewer, true);
 	}
 
 	@Override

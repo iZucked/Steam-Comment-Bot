@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory.EconsOptions.MarginBy;
+import com.mmxlabs.lingo.reports.views.standard.econs.EconsOptions.MarginBy;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToExcelMSClipboardAction;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
@@ -88,17 +88,17 @@ public class CargoEconsReport extends ViewPart {
 		}
 
 		Runnable preOperation = () -> {
-			component.setIncludedUnit(false);
+			component.setCopyPasteMode(true);
 			ViewerHelper.refresh(component.getViewer(), true);
 		};
 
 		Runnable postOperation = () -> {
-			component.setIncludedUnit(true);
+			component.setCopyPasteMode(false);
 			ViewerHelper.refresh(component.getViewer(), true);
 		};
 
 		final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
-		final CopyGridToExcelMSClipboardAction copyAction = new CopyGridToExcelMSClipboardAction(viewer.getGrid(), false, preOperation, postOperation);
+		final CopyGridToExcelMSClipboardAction copyAction = new CopyGridToExcelMSClipboardAction(viewer.getGrid(), true, preOperation, postOperation);
 		copyAction.setAdditionalAttributeProvider(new IAdditionalAttributeProvider() {
 
 			@Override
@@ -109,7 +109,7 @@ public class CargoEconsReport extends ViewPart {
 				} catch (Exception e) {
 
 				}
-				return null;
+				return String.class;
 			}
 
 			@Override

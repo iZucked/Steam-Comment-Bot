@@ -10,9 +10,9 @@ import org.eclipse.jdt.annotation.Nullable;
 
 public interface IPNLCalcsRowFactory {
 
-	default Collection<PNLCalcsReportRow> createRows() {
-		return createRows(null);
+	default Collection<PNLCalcsReportRow> createRows(PNLCalcsOptions options) {
+		return createRows(options, null);
 	}
 
-	Collection<PNLCalcsReportRow> createRows(@Nullable Collection<Object> targets);
+	Collection<PNLCalcsReportRow> createRows(PNLCalcsOptions options, @Nullable Collection<Object> targets);
 }

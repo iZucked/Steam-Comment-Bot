@@ -143,9 +143,9 @@ public class FleetReportTransformer {
 
 	public List<Row> generateRows(final Table dataModelInstance, final ScenarioResult scenarioInstance, final Schedule schedule, final boolean isPinned) {
 
-		final List<EObject> interestingEvents = new LinkedList<EObject>();
-		final Set<EObject> allEvents = new HashSet<EObject>();
-		final Set<Vessel> seenVessels = new HashSet<Vessel>();
+		final List<EObject> interestingEvents = new LinkedList<>();
+		final Set<EObject> allEvents = new HashSet<>();
+		final Set<Vessel> seenVessels = new HashSet<>();
 		for (final Sequence sequence : schedule.getSequences()) {
 			if (builder.showEvent(sequence)) {
 				final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
@@ -164,8 +164,8 @@ public class FleetReportTransformer {
 		return generateRows(dataModelInstance, scenarioInstance, schedule, interestingEvents, allEvents, isPinned);
 	}
 
-	public List<Row> generateRows(final Table tableModelInstance, final ScenarioResult scenarioResult, final Schedule schedule, final List<EObject> interestingElements,
-			final Set<EObject> allElements, final boolean isReferenceSchedule) {
+	public List<Row> generateRows(final Table tableModelInstance, final ScenarioResult scenarioResult, final Schedule schedule, final List<EObject> interestingElements, final Set<EObject> allElements,
+			final boolean isReferenceSchedule) {
 		final List<Row> rows = new ArrayList<>(interestingElements.size());
 
 		if (isReferenceSchedule) {

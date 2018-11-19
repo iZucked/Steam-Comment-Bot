@@ -58,8 +58,7 @@ import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
-import com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory.EconsOptions;
-import com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory.EconsOptions.MarginBy;
+import com.mmxlabs.lingo.reports.views.standard.econs.EconsOptions.MarginBy;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -77,6 +76,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.models.ui.tabular.IImageProvider;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
@@ -100,13 +100,7 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * @author Simon Goodall
  * 
  */
-public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart */ {
-
-	private Image cellImageSteadyArrow;
-	private Image cellImageGreenArrowDown;
-	private Image cellImageGreenArrowUp;
-	private Image cellImageRedArrowDown;
-	private Image cellImageRedArrowUp;
+public class CargoEconsReportComponent implements IAdaptable {
 
 	@Inject
 	private ESelectionService selectionService;
@@ -165,11 +159,6 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	public void createPartControl(final Composite parent) {
 
 		pinImage = createImage("icons/Pinned.gif");
-		cellImageSteadyArrow = createImage("icons/steady_arrow.png");
-		cellImageGreenArrowDown = createImage("icons/green_arrow_down.png");
-		cellImageGreenArrowUp = createImage("icons/green_arrow_up.png");
-		cellImageRedArrowDown = createImage("icons/red_arrow_down.png");
-		cellImageRedArrowUp = createImage("icons/red_arrow_up.png");
 
 		viewer = new GridTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 
@@ -206,7 +195,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		viewer.getGrid().setHeaderVisible(true);
 
 		// If we have data, dispose of the dummy name column immediately
-		if (rows != null && !rows.isEmpty()) {
+		if (rows.isEmpty()) {
 			gvc.getColumn().dispose();
 		}
 
@@ -218,31 +207,6 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		if (pinImage != null) {
 			pinImage.dispose();
 			pinImage = null;
-		}
-
-		if (cellImageSteadyArrow != null) {
-			cellImageSteadyArrow.dispose();
-			cellImageSteadyArrow = null;
-		}
-
-		if (cellImageGreenArrowDown != null) {
-			cellImageGreenArrowDown.dispose();
-			cellImageGreenArrowDown = null;
-		}
-
-		if (cellImageGreenArrowUp != null) {
-			cellImageGreenArrowUp.dispose();
-			cellImageGreenArrowUp = null;
-		}
-
-		if (cellImageRedArrowDown != null) {
-			cellImageRedArrowDown.dispose();
-			cellImageRedArrowDown = null;
-		}
-
-		if (cellImageRedArrowUp != null) {
-			cellImageRedArrowUp.dispose();
-			cellImageRedArrowUp = null;
 		}
 
 		if (selectedObjects != null) {
@@ -291,16 +255,10 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		public String getText(final Object element) {
 			if (element instanceof CargoEconsReportRow) {
 				final CargoEconsReportRow fieldType = (CargoEconsReportRow) element;
-				return fieldType.name; // + " (" + fieldType.getUnit() + ")";
+				return fieldType.name;
 			}
 			return null;
 		}
-
-		// @Override
-		// public void update(final ViewerCell cell) {
-		// cell.setText(getText(cell.getElement()));
-		// }
-
 	}
 
 	/**
@@ -317,6 +275,13 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 		@Override
 		public Image getImage(final Object element) {
+			if (element instanceof CargoEconsReportRow) {
+				final CargoEconsReportRow row = (CargoEconsReportRow) element;
+				if (row.formatter instanceof IImageProvider) {
+					IImageProvider ip = (IImageProvider) row.formatter;
+					return ip.getImage(columnElement);
+				}
+			}
 			return null;
 		}
 
@@ -364,36 +329,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			cell.setText(getText(cell.getElement()));
 			cell.setForeground(getForeground(cell.getElement()));
 			cell.setBackground(getBackground(cell.getElement()));
-
-			final Object element = cell.getElement();
-
-			if (element instanceof CargoEconsReportRow) {
-				final CargoEconsReportRow row = (CargoEconsReportRow) element;
-
-				if (columnElement instanceof DeltaPair || columnElement instanceof List<?>) {
-					final String formattedValue = getText(element);
-					if (formattedValue != null) {
-						final List<String> nullValues = new ArrayList<>();
-						nullValues.add("$0");
-						nullValues.add("$0mmbtu");
-						nullValues.add("0mmbtu");
-
-						if (nullValues.contains(formattedValue.toLowerCase())) {
-							// cell.setImage(cellImageSteadyArrow);
-						} else {
-							if (row.isCost && formattedValue.contains("-")) {
-								cell.setImage(cellImageGreenArrowDown);
-							} else if (row.isCost && !formattedValue.contains("-")) {
-								cell.setImage(cellImageRedArrowUp);
-							} else if (!row.isCost && !formattedValue.contains("-")) {
-								cell.setImage(cellImageGreenArrowUp);
-							} else if (!row.isCost && formattedValue.contains("-")) {
-								cell.setImage(cellImageRedArrowDown);
-							}
-						}
-					}
-				}
-			}
+			cell.setImage(getImage(cell.getElement()));
 		}
 	}
 
@@ -411,7 +347,6 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	}
 
 	public void toggleCompare() {
-		final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 		final ScenarioResult scenario = selectedScenariosService.getPinnedScenario();
 
 		if (scenario != null) {
@@ -428,7 +363,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	 * @return
 	 */
 	private Collection<Object> processSelection(final IWorkbenchPart part, final ISelection selection) {
-		final Collection<Object> validObjects = new LinkedHashSet<Object>();
+		final Collection<Object> validObjects = new LinkedHashSet<>();
 
 		if (selection instanceof IStructuredSelection) {
 
@@ -728,16 +663,16 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	}
 
 	public void rebuild() {
-		final Collection<Object> validObjects = new ArrayList<Object>(getSelectedObject());
+		final Collection<Object> validObjects = new ArrayList<>(getSelectedObject());
 		toggleCompare();
 		// Dispose old data columns - clone list to try to avoid concurrent modification exceptions
-		final List<GridViewerColumn> oldColumns = new ArrayList<GridViewerColumn>(dataColumns);
+		final List<GridViewerColumn> oldColumns = new ArrayList<>(dataColumns);
 		dataColumns.clear();
 		for (final GridViewerColumn gvc : oldColumns) {
 			gvc.getColumn().dispose();
 		}
 
-		if (validObjects == null || validObjects.size() == 0) {
+		if (validObjects == null || validObjects.isEmpty()) {
 			return;
 		}
 
@@ -770,9 +705,9 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		Collections.sort(rows, (a, b) -> a.order - b.order);
 
 		viewer.setInput(rows);
-		if (compareMode == true) {
+		if (compareMode) {
 
-			if (onlyDiffMode == true) {
+			if (onlyDiffMode) {
 				validObjects.clear();
 			}
 
@@ -791,7 +726,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			validObjects.clear();
 			validObjects.addAll(sortedObjects);
 
-			final List<DeltaPair> aggregateList = new ArrayList(cargoAllocationPairs.size() + vesselEventVisitsPairs.size());
+			final List<DeltaPair> aggregateList = new ArrayList<>(cargoAllocationPairs.size() + vesselEventVisitsPairs.size());
 
 			// The finals aggregated elements
 			aggregateList.addAll(cargoAllocationPairs);
@@ -841,7 +776,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				// Diff of cargo
 			} else if (selectedObject instanceof DeltaPair) {
 				final DeltaPair pair = (DeltaPair) selectedObject;
-				if (pair.second() != null || onlyDiffMode == true) {
+				if (pair.second() != null || onlyDiffMode) {
 
 					final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(pair.getName());
 					final GridColumn gc = new GridColumn(gridColumnGroup, SWT.NONE);
@@ -913,5 +848,10 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	private void createCenteringGroupRenderer(final GridColumnGroup gcg) {
 		final CenteringColumnGroupHeaderRenderer renderer = new CenteringColumnGroupHeaderRenderer();
 		gcg.setHeaderRenderer(renderer);
+	}
+
+	public void setCopyPasteMode(boolean copyPasteMode) {
+		setIncludedUnit(!copyPasteMode);
+		options.alwaysShowRawValue = copyPasteMode;
 	}
 }
