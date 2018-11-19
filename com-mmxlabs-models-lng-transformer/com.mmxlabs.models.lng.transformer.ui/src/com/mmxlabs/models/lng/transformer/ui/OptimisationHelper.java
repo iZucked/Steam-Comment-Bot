@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -46,6 +47,9 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
@@ -164,6 +168,8 @@ public final class OptimisationHelper {
 	public static final String SWTBOT_SIMILARITY_PREFIX_HIGH = SWTBOT_SIMILARITY_PREFIX + ".High";
 
 	public static final String SWTBOT_PERIOD_START = "swtbot.period.start";
+	public static final String SWTBOT_PERIOD_TODAY = "swtbot.period.today";
+	public static final String SWTBOT_PERIOD_THREE_MONTH = "swtbot.period.three_month";
 	public static final String SWTBOT_PERIOD_END = "swtbot.period.end";
 
 	public static final String SWTBOT_IDLE_DAYS = "swtbot.idledays";
@@ -355,7 +361,7 @@ public final class OptimisationHelper {
 						final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 						choiceData.addChoice("No", Boolean.FALSE);
 						choiceData.addChoice("Yes", Boolean.TRUE);
-						final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Enabled: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_ADP_PREFIX,
+						final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Enabled: ", "",copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_ADP_PREFIX,
 								ParametersPackage.eINSTANCE.getUserSettings_AdpOptimisation());
 						optionAdded = true;
 						enabledOptionAdded = true;
@@ -370,7 +376,7 @@ public final class OptimisationHelper {
 						} else {
 							choiceData.enabledHook = (UserSettings::isAdpOptimisation);
 						}
-						final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Clean slate: ", copy, defaultSettings, DataType.Choice, choiceData,
+						final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Clean slate: ", "",copy, defaultSettings, DataType.Choice, choiceData,
 								SWTBOT_CLEAN_STATE_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_CleanStateOptimisation());
 						optionAdded = true;
 						enabledOptionAdded = true;
@@ -414,7 +420,7 @@ public final class OptimisationHelper {
 						} else {
 							choiceData.enabledHook = (u -> (u.isAdpOptimisation() && u.isCleanStateOptimisation()));
 						}
-						final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Nominal ADP: ", copy, defaultSettings, DataType.Choice, choiceData,
+						final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Nominal ADP: ", "",copy, defaultSettings, DataType.Choice, choiceData,
 								SWTBOT_NOMINAL_ADP_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_NominalADP());
 						optionAdded = true;
 						enabledOptionAdded = true;
@@ -439,13 +445,43 @@ public final class OptimisationHelper {
 				}
 
 				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
-				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
+				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)", "",copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
 						ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
-				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
+				// Added a button. Had to extend Option and DataType classes.
+				final Option optToday = dialog.addOption(DataSection.Controls, group, editingDomain, "T", "Today",copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_TODAY,
+						null);
+				optToday.setListener(new MouseAdapter() {
+					
+					@Override
+					public void mouseDown(MouseEvent e) {
+						if (copy != null) {
+							copy.setPeriodStartDate(LocalDate.now());
+						}
+						if (defaultSettings != null) {
+							defaultSettings.setPeriodStartDate(LocalDate.now());
+						}
+					}
+				});
+				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", "",copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
 						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
+				final Option optThreeMonth = dialog.addOption(DataSection.Controls, group, editingDomain, "+3M", "Three month",copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_THREE_MONTH,
+						null);
+				optThreeMonth.setListener(new MouseAdapter() {
+					@Override
+					public void mouseDown(MouseEvent e) {
+						if (copy != null) {
+							copy.setPeriodEnd(YearMonth.from(LocalDate.now().plusMonths(3)));
+						}
+						if (defaultSettings != null) {
+							defaultSettings.setPeriodEnd(YearMonth.from(LocalDate.now().plusMonths(3)));
+						}
+					}
+				});
+				
 				if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
 					optStart.enabled = false;
 					optEnd.enabled = false;
+					optToday.enabled = false;
 				} else {
 					enabledOptionAdded = true;
 
@@ -536,7 +572,7 @@ public final class OptimisationHelper {
 				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 				choiceData.addChoice("Off", Boolean.FALSE);
 				choiceData.addChoice("On", Boolean.TRUE);
-				dialog.addOption(DataSection.Toggles, null, editingDomain, "Shipping only: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_SHIPPING_ONLY_PREFIX,
+				dialog.addOption(DataSection.Toggles, null, editingDomain, "Shipping only: ", "",copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_SHIPPING_ONLY_PREFIX,
 						ParametersPackage.eINSTANCE.getUserSettings_ShippingOnly());
 				optionAdded = true;
 				enabledOptionAdded = true;
@@ -545,7 +581,7 @@ public final class OptimisationHelper {
 				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 				choiceData.addChoice("Off", Boolean.FALSE);
 				choiceData.addChoice("On", Boolean.TRUE);
-				dialog.addOption(DataSection.Toggles, null, editingDomain, "Spot cargo markets: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX,
+				dialog.addOption(DataSection.Toggles, null, editingDomain, "Spot cargo markets: ", "",copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX,
 						ParametersPackage.eINSTANCE.getUserSettings_WithSpotCargoMarkets());
 				optionAdded = true;
 				enabledOptionAdded = true;
@@ -567,7 +603,7 @@ public final class OptimisationHelper {
 			}
 			// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
 			// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-			final Option gcoOption = dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", copy, defaultSettings, DataType.Choice, choiceData,
+			final Option gcoOption = dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", "",copy, defaultSettings, DataType.Choice, choiceData,
 					SWTBOT_CHARTEROUTGENERATION_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
 			optionAdded = true;
 			enabledOptionAdded = choiceData.enabled;
@@ -606,7 +642,7 @@ public final class OptimisationHelper {
 		if (!forEvaluation) {
 			{
 				if (LicenseFeatures.isPermitted("features:optimisation-idle-days")) {
-					final Option idleDays = dialog.addOption(DataSection.Toggles, null, editingDomain, "Netback idle day tolerance", copy, defaultSettings, DataType.PositiveInt, SWTBOT_IDLE_DAYS,
+					final Option idleDays = dialog.addOption(DataSection.Toggles, null, editingDomain, "Netback idle day tolerance", "",copy, defaultSettings, DataType.PositiveInt, SWTBOT_IDLE_DAYS,
 							ParametersPackage.eINSTANCE.getUserSettings_FloatingDaysLimit());
 				}
 			}
@@ -624,7 +660,7 @@ public final class OptimisationHelper {
 
 				choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-similarity");
 
-				final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_SIMILARITY_PREFIX,
+				final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, "", "",copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_SIMILARITY_PREFIX,
 						ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE);
 				optionAdded = true;
 				enabledOptionAdded = choiceData.enabled;
@@ -640,7 +676,7 @@ public final class OptimisationHelper {
 
 				choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-actionset");
 
-				final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, " ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_ACTION_SET_PREFIX,
+				final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, " ", "",copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_ACTION_SET_PREFIX,
 						ParametersPackage.eINSTANCE.getUserSettings_BuildActionSets());
 				optionAdded = true;
 				dialog.addValidation(option, new IValidator() {
@@ -770,11 +806,41 @@ public final class OptimisationHelper {
 			// Check period optimisation is permitted
 			if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
 				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
-				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
+				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)","", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
 						ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
-				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
+				// Added a button. Had to extend Option and DataType classes.
+				final Option optToday = dialog.addOption(DataSection.Controls, group, editingDomain, "T", "Today", copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_TODAY,
+						null);
+				optToday.setListener(new MouseAdapter() {
+					
+					@Override
+					public void mouseDown(MouseEvent e) {
+						if (copy != null) {
+							copy.setPeriodStartDate(LocalDate.now());
+						}
+						if (defaultSettings != null) {
+							defaultSettings.setPeriodStartDate(LocalDate.now());
+						}
+					}
+				});
+				//TODO set the optToday button size
+				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", "", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
 						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
-				// TODO : add a button which sets period start date to today.
+				final Option optThreeMonth = dialog.addOption(DataSection.Controls, group, editingDomain, "+3M", "Add three month",copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_THREE_MONTH,
+						null);
+				optThreeMonth.setListener(new MouseAdapter() {
+					
+					@Override
+					public void mouseDown(MouseEvent e) {
+						if (copy != null) {
+							copy.setPeriodEnd(YearMonth.from(LocalDate.now().plusMonths(3)));
+						}
+						if (defaultSettings != null) {
+							defaultSettings.setPeriodEnd(YearMonth.from(LocalDate.now().plusMonths(3)));
+						}
+					}
+				});
+				
 				
 				if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
 					optStart.enabled = false;
@@ -877,7 +943,7 @@ public final class OptimisationHelper {
 				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 				choiceData.addChoice("Off", Boolean.FALSE);
 				choiceData.addChoice("On", Boolean.TRUE);
-				dialog.addOption(DataSection.Toggles, null, editingDomain, "Spot cargo markets: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX,
+				dialog.addOption(DataSection.Toggles, null, editingDomain, "Spot cargo markets: ", "",copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX,
 						ParametersPackage.eINSTANCE.getUserSettings_WithSpotCargoMarkets());
 				optionAdded = true;
 				enabledOptionAdded = true;
@@ -899,7 +965,7 @@ public final class OptimisationHelper {
 			}
 			// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
 			// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-			final Option gcoOption = dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", copy, defaultSettings, DataType.Choice, choiceData,
+			final Option gcoOption = dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", "",copy, defaultSettings, DataType.Choice, choiceData,
 					SWTBOT_CHARTEROUTGENERATION_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
 			optionAdded = true;
 			enabledOptionAdded = choiceData.enabled;
@@ -907,7 +973,7 @@ public final class OptimisationHelper {
 		if (!forEvaluation) {
 			{
 				if (LicenseFeatures.isPermitted("features:optimisation-idle-days")) {
-					final Option idleDays = dialog.addOption(DataSection.Toggles, null, editingDomain, "Netback idle day tolerance", copy, defaultSettings, DataType.PositiveInt, SWTBOT_IDLE_DAYS,
+					final Option idleDays = dialog.addOption(DataSection.Toggles, null, editingDomain, "Netback idle day tolerance", "",copy, defaultSettings, DataType.PositiveInt, SWTBOT_IDLE_DAYS,
 							ParametersPackage.eINSTANCE.getUserSettings_FloatingDaysLimit());
 				}
 			}
