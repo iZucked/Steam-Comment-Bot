@@ -55,10 +55,15 @@ public final class ViabilityUtils {
 		for (final CharterInMarket cim : spotModel.getCharterInMarkets()) {
 			if (cim != null) {
 				if (cim.getVessel() != null) {
-					final RoundTripShippingOption rtso = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-					rtso.setHireCost(cim.getCharterInRate());
-					rtso.setVessel(cim.getVessel());
-					model.getShippingTemplates().add(rtso);
+					if (cim.isEnabled() && cim.getSpotCharterCount() > 0) {
+						final ExistingCharterMarketOption ecmo = AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption();
+						
+						ecmo.setCharterInMarket(cim);
+						ecmo.setSpotIndex(0);
+						//ecmo.setSpotIndex(cim.getSpotCharterCount());
+						
+						model.getShippingTemplates().add(ecmo);
+					}
 				}
 			}
 		}

@@ -5,10 +5,10 @@
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
 import java.time.YearMonth;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
@@ -64,8 +64,12 @@ public interface IMapperClass {
 	void addMapping(ExistingVesselAvailability shippingOption, VesselAvailability vesselAvailability);
 
 	void addMapping(NewVesselAvailability shippingOption, VesselAvailability vesselAvailability);
+	
+	void addMapping(ExistingCharterMarketOption shippingOption, CharterInMarket newMarket);
 
 	VesselAvailability get(FleetShippingOption fleetShippingOption);
 
 	CharterInMarket get(RoundTripShippingOption roundTripShippingOption);
+	
+	CharterInMarket get(ExistingCharterMarketOption existingCharterMarketOption);
 }

@@ -30,6 +30,7 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.ViabilityResult;
@@ -234,7 +235,18 @@ public class ViabilitySanboxUnit {
 						row.getRhsResults().clear();
 						row.getLhsResults().clear();
 
-						final VesselAssignmentType vesselAssignment = shippingMap.get(row.getShipping());
+						ShippingOption shipping = row.getShipping();
+						
+						final VesselAssignmentType vesselAssignment = shippingMap.get(shipping);
+						int vsi = -2;
+						
+						if (shipping instanceof ExistingCharterMarketOption) {
+							final ExistingCharterMarketOption ecmo = (ExistingCharterMarketOption) shipping;
+							vsi = ecmo.getSpotIndex();
+						}
+						
+						final int vesselSpotIndex = vsi;
+						
 
 						final LoadSlot load;
 
@@ -331,7 +343,7 @@ public class ViabilitySanboxUnit {
 											timeZone = discharge.getPort().getLocation().getTimeZone();
 										}
 
-										final InternalResult result = doIt(shipped, vesselAssignment, load, discharge, be_target, dataTransformer.getInitialSequences());
+										final InternalResult result = doIt(shipped, vesselAssignment, vesselSpotIndex, load, discharge, be_target, dataTransformer.getInitialSequences());
 										ret.merge(result);
 										if (!shipped) {
 											// only one iteration.
@@ -409,7 +421,7 @@ public class ViabilitySanboxUnit {
 		}
 	}
 
-	private InternalResult doIt(final boolean shipped, final VesselAssignmentType vesselAssignment, final LoadSlot load, final DischargeSlot discharge, final Slot target,
+	private InternalResult doIt(final boolean shipped, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, final LoadSlot load, final DischargeSlot discharge, final Slot target,
 			final ISequences initialSequences) {
 		final IResource resource;
 
@@ -430,7 +442,7 @@ public class ViabilitySanboxUnit {
 			if (vesselAssignment instanceof VesselAvailability) {
 				resource = SequenceHelper.getResource(dataTransformer, (VesselAvailability) vesselAssignment);
 			} else if (vesselAssignment instanceof CharterInMarket) {
-				resource = SequenceHelper.getResource(dataTransformer, (CharterInMarket) vesselAssignment, -1);
+				resource = SequenceHelper.getResource(dataTransformer, (CharterInMarket) vesselAssignment, vesselSpotIndex);
 			} else {
 				return null;
 			}
