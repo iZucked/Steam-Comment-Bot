@@ -283,6 +283,20 @@ public class CargoEditorMenuHelper {
 						createAssignmentMenus(manager, dischargeSlot.getCargo());
 					}
 				}
+				
+				{
+					final Cargo cargo = dischargeSlot.getCargo();
+					if (cargo != null) {
+						if (cargo.getCargoType() == CargoType.FOB || cargo.getCargoType() == CargoType.DES) {
+							if (!cargo.isAllowRewiring()) {
+								manager.add(new RunnableAction("Unlock", () -> helper.unlockCargoAssignment("Unlock assignment", cargo)));
+							} else if(cargo.isAllowRewiring()){
+								manager.add(new RunnableAction("Lock", () -> helper.lockCargoAssignment("Lock assignment", cargo)));
+							} 
+						}
+					}
+				}
+				
 				final Contract contract = dischargeSlot.getContract();
 				if (contract == null || contract.getContractType() == ContractType.BOTH) {
 					createFOBDESSwitchMenu(manager, dischargeSlot);
@@ -531,12 +545,20 @@ public class CargoEditorMenuHelper {
 			}
 
 			{
-				if (cargo.getVesselAssignmentType() != null) {
-					if (cargo.isLocked()) {
 
+				if (cargo.getVesselAssignmentType() != null) {
+					if (cargo.isLocked() && !cargo.isAllowRewiring()) {
 						menuManager.add(new RunnableAction("Unlock", () -> helper.unlockCargoAssignment("Unlock assignment", cargo)));
-					} else {
+					} else if(!cargo.isLocked() && cargo.isAllowRewiring()){
 						menuManager.add(new RunnableAction("Lock", () -> helper.lockCargoAssignment("Lock assignment", cargo)));
+					} 
+				} else {
+					if (cargo.getCargoType() == CargoType.FOB || cargo.getCargoType() == CargoType.DES) {
+						if (!cargo.isAllowRewiring()) {
+							menuManager.add(new RunnableAction("Unlock", () -> helper.unlockCargoAssignment("Unlock assignment", cargo)));
+						} else if(cargo.isAllowRewiring()){
+							menuManager.add(new RunnableAction("Lock", () -> helper.lockCargoAssignment("Lock assignment", cargo)));
+						} 
 					}
 				}
 			}
@@ -563,13 +585,13 @@ public class CargoEditorMenuHelper {
 				boolean anyUnlocked = false;
 
 				for (final Cargo cargo : cargoes) {
-					if (cargo.getCargoType() == CargoType.FLEET) {
+					//if (cargo.getCargoType() == CargoType.FLEET) {
 						if (cargo.isLocked()) {
 							anyLocked = true;
 						} else {
 							anyUnlocked = true;
 						}
-					}
+					//}
 				}
 
 				if (anyLocked) {
@@ -630,6 +652,21 @@ public class CargoEditorMenuHelper {
 
 					}
 				}
+				
+				{
+					final Cargo cargo = loadSlot.getCargo();
+					if (cargo != null) {
+						if (cargo.getCargoType() == CargoType.FOB || cargo.getCargoType() == CargoType.DES) {
+							if (!cargo.isAllowRewiring()) {
+								manager.add(new RunnableAction("Unlock", () -> helper.unlockCargoAssignment("Unlock assignment", cargo)));
+							} else if(cargo.isAllowRewiring()){
+								manager.add(new RunnableAction("Lock", () -> helper.lockCargoAssignment("Lock assignment", cargo)));
+							} 
+						}
+					}
+				}
+				
+				
 				final Contract contract = loadSlot.getContract();
 				if (contract == null || contract.getContractType() == ContractType.BOTH) {
 					createFOBDESSwitchMenu(manager, loadSlot);
