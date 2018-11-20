@@ -448,7 +448,7 @@ public final class OptimisationHelper {
 				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)", "",copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
 						ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
 				// Added a button. Had to extend Option and DataType classes.
-				final Option optToday = dialog.addOption(DataSection.Controls, group, editingDomain, "T", "Today",copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_TODAY,
+				final Option optToday = dialog.addOption(DataSection.Controls, group, editingDomain, "Today", "Today",copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_TODAY,
 						null);
 				optToday.setListener(new MouseAdapter() {
 					
@@ -464,7 +464,7 @@ public final class OptimisationHelper {
 				});
 				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", "",copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
 						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
-				final Option optThreeMonth = dialog.addOption(DataSection.Controls, group, editingDomain, "+3M", "Three month",copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_THREE_MONTH,
+				final Option optThreeMonth = dialog.addOption(DataSection.Controls, group, editingDomain, "+3m", "Three months",copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_THREE_MONTH,
 						null);
 				optThreeMonth.setListener(new MouseAdapter() {
 					@Override
@@ -809,7 +809,7 @@ public final class OptimisationHelper {
 				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)","", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
 						ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
 				// Added a button. Had to extend Option and DataType classes.
-				final Option optToday = dialog.addOption(DataSection.Controls, group, editingDomain, "T", "Today", copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_TODAY,
+				final Option optToday = dialog.addOption(DataSection.Controls, group, editingDomain, "Today", "Today", copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_TODAY,
 						null);
 				optToday.setListener(new MouseAdapter() {
 					
@@ -826,7 +826,7 @@ public final class OptimisationHelper {
 				//TODO set the optToday button size
 				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", "", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
 						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
-				final Option optThreeMonth = dialog.addOption(DataSection.Controls, group, editingDomain, "+3M", "Add three month",copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_THREE_MONTH,
+				final Option optThreeMonth = dialog.addOption(DataSection.Controls, group, editingDomain, "+3m", "Three months",copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_THREE_MONTH,
 						null);
 				optThreeMonth.setListener(new MouseAdapter() {
 					
