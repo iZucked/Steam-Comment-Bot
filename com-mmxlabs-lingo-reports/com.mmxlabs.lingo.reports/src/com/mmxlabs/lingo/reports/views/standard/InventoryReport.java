@@ -13,6 +13,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -26,26 +27,32 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.internal.cocoa.NSPoint;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
@@ -84,6 +91,7 @@ import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class InventoryReport extends ViewPart {
@@ -235,7 +243,6 @@ public class InventoryReport extends ViewPart {
 				createColumn("Delivery date", 150, o -> o.salesDate != null ? o.salesDate.format(formatter) : null);
 				createColumn("Delivery port", 150, o -> o.dischargePort);
 				tableItem.setControl(tableViewer.getControl());
-
 			}
 
 		}
@@ -252,12 +259,51 @@ public class InventoryReport extends ViewPart {
 		copyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(tableViewer);
 		getViewSite().getActionBars().getToolBarManager().add(copyAction);
 		copyAction.setEnabled(folder.getSelectionIndex() == 1);
+		
+		Action todayAction = new Action("Today") {
+			
+			@Override
+			public void run() {
+				final LocalDate today = LocalDate.now();
+				if (tableViewer == null) {
+					return;
+				}
+				if (tableViewer.getInput() == null) {
+					return;
+				}
+				if (tableViewer.getGrid() == null) {
+					return;
+				}
+				final Object oLevels = tableViewer.getInput();
+				if (oLevels instanceof List<?>) {
+					final List<InventoryLevel> levels = (List<InventoryLevel>)oLevels;
+					int position = -1;
+					for (InventoryLevel il : levels) {
+						if (il.date.isAfter(today)) {
+							break;
+						}
+						position++;
+					}
+					if (position != -1) {
+						tableViewer.getGrid().deselectAll();
+						tableViewer.getGrid().select(position);
+						tableViewer.getGrid().showSelection();
+					}
+					
+				}
+				
+			}
+		};
+		todayAction.setToolTipText("Scroll to today's day");
+		getViewSite().getActionBars().getToolBarManager().add(todayAction);
+		todayAction.setEnabled(folder.getSelectionIndex() == 1);
 
 		folder.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				copyAction.setEnabled(folder.getSelectionIndex() == 1);
 				packAction.setEnabled(folder.getSelectionIndex() == 1);
+				todayAction.setEnabled(folder.getSelectionIndex() == 1);
 			}
 		});
 		getViewSite().getActionBars().getToolBarManager().update(true);
