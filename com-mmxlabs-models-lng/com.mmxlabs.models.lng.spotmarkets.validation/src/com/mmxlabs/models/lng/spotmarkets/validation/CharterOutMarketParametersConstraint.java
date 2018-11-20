@@ -41,7 +41,7 @@ public class CharterOutMarketParametersConstraint extends AbstractModelMultiCons
 			}
 			
 			if (endDate != null) {
-				sensible = startDate != null ? startDate.isBefore(endDate) : false;
+				sensible = startDate != null ? startDate.isBefore(endDate) : true;
 			}
 
 			if (!sensible) {

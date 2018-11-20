@@ -11,6 +11,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -18,7 +19,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters;
-import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
@@ -40,6 +40,9 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  * 
  */
 public class CharterOutMarketPane extends ScenarioTableViewerPane {
+	
+	private CharterOutParametersToolbarEditor charterOutParametersToolbarEditor;
+	
 	public CharterOutMarketPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 	}
@@ -47,6 +50,15 @@ public class CharterOutMarketPane extends ScenarioTableViewerPane {
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
+		
+		final ToolBarManager toolbar = getToolBarManager();
+		setMinToolbarHeight(30);
+		
+		charterOutParametersToolbarEditor = new CharterOutParametersToolbarEditor("charter_out_parameters_toolbar", //
+				scenarioEditingLocation.getEditingDomain(), (LNGScenarioModel)scenarioEditingLocation.getRootObject());
+		
+		toolbar.appendToGroup(EDIT_GROUP, charterOutParametersToolbarEditor);
+		toolbar.update(true);
 
 		addTypicalColumn("Name ", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()));
 
@@ -60,37 +72,5 @@ public class CharterOutMarketPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Lending Rate", new BasicAttributeManipulator(SpotMarketsPackage.eINSTANCE.getCharterOutMarket_CharterOutRate(), getEditingDomain()));
 
 		defaultSetTitle("Charter Out  Market");
-
-		final Action editCharterOutStartDateAction = new Action("Edit charter out dates") {
-			@Override
-			public void run() {
-
-				final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
-				if (rootObject instanceof LNGScenarioModel) {
-					final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-					final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioModel);
-
-//					CharterOutStartDate charterOutStartDate = spotMarketsModel.getCharterOutStartDate();
-//					if (charterOutStartDate == null) {
-//						charterOutStartDate = SpotMarketsFactory.eINSTANCE.createCharterOutStartDate();
-//						final Command cmd = SetCommand.create(getEditingDomain(), spotMarketsModel, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE, charterOutStartDate);
-//						getEditingDomain().getCommandStack().execute(cmd);
-//					}
-//
-//					DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, charterOutStartDate);
-					CharterOutMarketParameters charterOutMarketParameters = spotMarketsModel.getCharterOutMarketParameters();
-					if (charterOutMarketParameters == null) {
-						charterOutMarketParameters = SpotMarketsFactory.eINSTANCE.createCharterOutMarketParameters();
-						final Command cmd = SetCommand.create(getEditingDomain(), spotMarketsModel, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS, charterOutMarketParameters);
-						getEditingDomain().getCommandStack().execute(cmd);
-					}
-
-					DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, charterOutMarketParameters);
-
-				}
-			}
-		};
-		getMenuManager().add(editCharterOutStartDateAction);
-		getMenuManager().update(true);
 	}
 }
