@@ -116,20 +116,20 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 			sequence.getValue().add(startEndRequirementProvider.getStartElement(sequence.getKey()));
 		}
 
-		final Collection<@NonNull Slot> modelSlots = mem.getAllModelObjects(Slot.class);
+		final Collection<@NonNull Slot<?>> modelSlots = mem.getAllModelObjects(Slot.class);
 
 		final Map<ISequenceElement, ISequenceElement> cargoSlotPairing = new HashMap<>();
 		// Process data to find pre-linked DES Purchases and FOB Sales and construct their sequences
-		for (final Slot slot : modelSlots) {
+		for (final Slot<?> slot : modelSlots) {
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				final Cargo cargo = loadSlot.getCargo();
 				if (cargo != null) {
-					final EList<Slot> slots = cargo.getSortedSlots();
+					final EList<Slot<?>> slots = cargo.getSortedSlots();
 					// Only process this loop if slot is first in the list
 					if (slots.get(0) == loadSlot) {
 						ISequenceElement prevElement = null;
-						for (final Slot currentSlot : slots) {
+						for (final Slot<?> currentSlot : slots) {
 							assert currentSlot != null;
 							final IPortSlot slotObject = mem.getOptimiserObjectNullChecked(currentSlot, IPortSlot.class);
 							final ISequenceElement slotElement = portSlotProvider.getElement(slotObject);
@@ -144,7 +144,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		}
 
 		// Process data to find pre-linked DES Purchases and FOB Sales and construct their sequences
-		for (final Slot slot : modelSlots) {
+		for (final Slot<?> slot : modelSlots) {
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				// Note: We assume a DES Purchase is at most two slots to the cargo
@@ -161,8 +161,8 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 						final IResource resource = vesselProvider.getResource(vesselAvailability);
 						assert (resource != null);
 
-						final EList<Slot> slots = cargo.getSortedSlots();
-						for (final Slot currentSlot : slots) {
+						final EList<Slot<?>> slots = cargo.getSortedSlots();
+						for (final Slot<?> currentSlot : slots) {
 							assert currentSlot != null;
 							final IPortSlot slotObject = mem.getOptimiserObjectNullChecked(currentSlot, IPortSlot.class);
 							final ISequenceElement slotElement = portSlotProvider.getElement(slotObject);
@@ -186,8 +186,8 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 						final IResource resource = vesselProvider.getResource(vesselAvailability);
 						assert resource != null;
 
-						final List<Slot> slots = cargo.getSortedSlots();
-						for (final Slot currentSlot : slots) {
+						final List<Slot<?>> slots = cargo.getSortedSlots();
+						for (final Slot<?> currentSlot : slots) {
 							final IPortSlot slotObject = mem.getOptimiserObjectNullChecked(currentSlot, IPortSlot.class);
 							assert slotObject != null;
 							final ISequenceElement slotElement = portSlotProvider.getElement(slotObject);
@@ -299,7 +299,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 			final Cargo cargo = (Cargo) modelObject;
 
 			final List<ISequenceElement> elements = new ArrayList<>(cargo.getSortedSlots().size());
-			for (final Slot slot : cargo.getSortedSlots()) {
+			for (final Slot<?> slot : cargo.getSortedSlots()) {
 				assert slot != null;
 				final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
 				assert portSlot != null;
@@ -307,7 +307,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 			}
 			return elements.toArray(new ISequenceElement[elements.size()]);
 		} else if (modelObject instanceof Slot) {
-			final Slot slot = (Slot) modelObject;
+			final Slot<?> slot = (Slot<?>) modelObject;
 			final IPortSlot portSlot = modelEntityMap.getOptimiserObject(slot, IPortSlot.class);
 			if (portSlot != null) {
 				return new ISequenceElement[] { psp.getElement(portSlot) };

@@ -1399,8 +1399,8 @@ public class ChangeSetTransformerUtilTest {
 		final Cargo cargo = Mockito.mock(Cargo.class);
 		Mockito.when(cargo.getLoadName()).thenReturn(name);
 
-		final EList<Slot> slotList = new BasicEList<>();
-		for (final Slot slot : slots) {
+		final EList<Slot<?>> slotList = new BasicEList<>();
+		for (final Slot<?> slot : slots) {
 			Mockito.when(slot.getCargo()).thenReturn(cargo);
 			slotList.add(slot);
 		}

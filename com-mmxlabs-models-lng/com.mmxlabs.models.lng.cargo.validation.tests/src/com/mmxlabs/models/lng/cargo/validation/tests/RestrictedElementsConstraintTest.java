@@ -42,7 +42,7 @@ public class RestrictedElementsConstraintTest {
 		final DischargeSlot dischargeSlot = mock(DischargeSlot.class);
 		final Cargo cargo = mock(Cargo.class);
 
-		final EList<Slot> slots = new BasicEList<Slot>();
+		final EList<Slot<?>> slots = new BasicEList<>();
 		slots.add(loadSlot);
 		slots.add(dischargeSlot);
 		when(cargo.getSlots()).thenReturn(slots);
@@ -110,7 +110,7 @@ public class RestrictedElementsConstraintTest {
 		final DischargeSlot dischargeSlot = mock(DischargeSlot.class);
 		final Cargo cargo = mock(Cargo.class);
 
-		final EList<Slot> slots = new BasicEList<Slot>();
+		final EList<Slot<?>> slots = new BasicEList<>();
 		slots.add(loadSlot);
 		slots.add(dischargeSlot);
 		when(cargo.getSlots()).thenReturn(slots);
@@ -176,7 +176,7 @@ public class RestrictedElementsConstraintTest {
 		final DischargeSlot dischargeSlot = mock(DischargeSlot.class);
 		final Cargo cargo = mock(Cargo.class);
 
-		final EList<Slot> slots = new BasicEList<Slot>();
+		final EList<Slot<?>> slots = new BasicEList<>();
 		slots.add(loadSlot);
 		slots.add(dischargeSlot);
 		when(cargo.getSlots()).thenReturn(slots);
@@ -241,7 +241,7 @@ public class RestrictedElementsConstraintTest {
 		final LoadSlot loadSlot = mock(LoadSlot.class);
 		final DischargeSlot dischargeSlot = mock(DischargeSlot.class);
 		final Cargo cargo = mock(Cargo.class);
-		final EList<Slot> slots = new BasicEList<Slot>();
+		final EList<Slot<?>> slots = new BasicEList<>();
 		slots.add(loadSlot);
 		slots.add(dischargeSlot);
 		when(cargo.getSlots()).thenReturn(slots);
@@ -306,7 +306,7 @@ public class RestrictedElementsConstraintTest {
 		final LoadSlot loadSlot = mock(LoadSlot.class);
 		final DischargeSlot dischargeSlot = mock(DischargeSlot.class);
 		final Cargo cargo = mock(Cargo.class);
-		final EList<Slot> slots = new BasicEList<Slot>();
+		final EList<Slot<?>> slots = new BasicEList<>();
 		slots.add(loadSlot);
 		slots.add(dischargeSlot);
 		when(cargo.getSlots()).thenReturn(slots);
@@ -380,7 +380,7 @@ public class RestrictedElementsConstraintTest {
 		final DischargeSlot dischargeSlot = mock(DischargeSlot.class);
 		final Cargo cargo = mock(Cargo.class);
 
-		final EList<Slot> slots = new BasicEList<Slot>();
+		final EList<Slot<?>> slots = new BasicEList<>();
 		slots.add(loadSlot);
 		slots.add(dischargeSlot);
 		when(cargo.getSlots()).thenReturn(slots);

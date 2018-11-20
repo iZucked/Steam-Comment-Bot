@@ -931,14 +931,14 @@ public class PeriodTransformerTests {
 		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 
-		final Set<Slot> seenSlots = new HashSet<>();
-		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Slot<?>> seenSlots = new HashSet<>();
+		final Set<Slot<?>> removedSlots = new HashSet<>();
 		final Set<Cargo> removedCargoes = new HashSet<>();
-		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
+		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot>());
+				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -979,14 +979,14 @@ public class PeriodTransformerTests {
 		copyCargo.setVesselAssignmentType(vesselA);
 		copyCargo.setAllowRewiring(true);
 
-		final Set<Slot> seenSlots = new HashSet<>();
-		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Slot<?>> seenSlots = new HashSet<>();
+		final Set<Slot<?>> removedSlots = new HashSet<>();
 		final Set<Cargo> removedCargoes = new HashSet<>();
-		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
+		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot>());
+				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1060,14 +1060,14 @@ public class PeriodTransformerTests {
 		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
 		Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
 
-		final Set<Slot> seenSlots = new HashSet<>();
-		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Slot<?>> seenSlots = new HashSet<>();
+		final Set<Slot<?>> removedSlots = new HashSet<>();
 		final Set<Cargo> removedCargoes = new HashSet<>();
-		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
+		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot>());
+				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1187,14 +1187,14 @@ public class PeriodTransformerTests {
 		// Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
 		// Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
 
-		final Set<Slot> seenSlots = new HashSet<>();
-		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Slot<?>> seenSlots = new HashSet<>();
+		final Set<Slot<?>> removedSlots = new HashSet<>();
 		final Set<Cargo> removedCargoes = new HashSet<>();
-		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
+		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot>());
+				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1265,14 +1265,14 @@ public class PeriodTransformerTests {
 		// Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
 		// Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
 
-		final Set<Slot> seenSlots = new HashSet<>();
-		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Slot<?>> seenSlots = new HashSet<>();
+		final Set<Slot<?>> removedSlots = new HashSet<>();
 		final Set<Cargo> removedCargoes = new HashSet<>();
-		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
+		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot>());
+				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1323,14 +1323,14 @@ public class PeriodTransformerTests {
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.JANUARY, 1));
 
-		final Set<Slot> seenSlots = new HashSet<>();
-		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Slot<?>> seenSlots = new HashSet<>();
+		final Set<Slot<?>> removedSlots = new HashSet<>();
 		final Set<Cargo> removedCargoes = new HashSet<>();
-		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
+		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot>());
+				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1374,14 +1374,14 @@ public class PeriodTransformerTests {
 		// Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
 		// Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
 
-		final Set<Slot> seenSlots = new HashSet<>();
-		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Slot<?>> seenSlots = new HashSet<>();
+		final Set<Slot<?>> removedSlots = new HashSet<>();
 		final Set<Cargo> removedCargoes = new HashSet<>();
-		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
+		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot>());
+				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1426,14 +1426,14 @@ public class PeriodTransformerTests {
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.MAY, 1));
 
-		final Set<Slot> seenSlots = new HashSet<>();
-		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Slot<?>> seenSlots = new HashSet<>();
+		final Set<Slot<?>> removedSlots = new HashSet<>();
 		final Set<Cargo> removedCargoes = new HashSet<>();
-		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
+		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot>());
+				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1483,14 +1483,14 @@ public class PeriodTransformerTests {
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.SEPTEMBER, 1));
 
-		final Set<Slot> seenSlots = new HashSet<>();
-		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Slot<?>> seenSlots = new HashSet<>();
+		final Set<Slot<?>> removedSlots = new HashSet<>();
 		final Set<Cargo> removedCargoes = new HashSet<>();
-		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
+		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot>());
+				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1546,14 +1546,14 @@ public class PeriodTransformerTests {
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.DECEMBER, 1));
 
-		final Set<Slot> seenSlots = new HashSet<>();
-		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Slot<?>> seenSlots = new HashSet<>();
+		final Set<Slot<?>> removedSlots = new HashSet<>();
 		final Set<Cargo> removedCargoes = new HashSet<>();
-		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
+		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot>());
+				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -2249,7 +2249,7 @@ public class PeriodTransformerTests {
 		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot2)).thenReturn(dischargeSlot2);
 		Mockito.when(mapping.getOriginalFromCopy(copyCargo2)).thenReturn(cargo2);
 
-		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Slot<?>> removedSlots = new HashSet<>();
 		final Set<Cargo> removedCargoes = new HashSet<>();
 
 		removedSlots.add(copyLoadSlot2);
@@ -2326,12 +2326,12 @@ public class PeriodTransformerTests {
 		loadVisit.setStart(PeriodTestUtils.createDate("UTC", 2014, 10, 5, 1));
 		dischargeVisit.setStart(PeriodTestUtils.createDate("UTC", 2014, 11, 10, 2));
 
-		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
+		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		slotAllocationMap.put(loadSlot1, loadAllocation);
 		slotAllocationMap.put(dischargeSlot1, dischargeAllocation);
 
-		transformer.lockDownCargoDates(slotAllocationMap, cargo1, new HashSet<Cargo>(), true);
+		transformer.lockDownCargoDates(slotAllocationMap, cargo1, new HashSet<>(), true);
 
 		Assert.assertFalse(cargo1.isAllowRewiring());
 		Assert.assertTrue(cargo1.isLocked());

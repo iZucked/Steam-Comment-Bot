@@ -143,7 +143,7 @@ public class InclusionCheckerTests {
 		final LoadSlot loadSlot = Mockito.mock(LoadSlot.class);
 		final DischargeSlot dischargeSlot = Mockito.mock(DischargeSlot.class);
 
-		final EList<Slot> slotsList = new BasicEList<>();
+		final EList<Slot<?>> slotsList = new BasicEList<>();
 		slotsList.add(loadSlot);
 		slotsList.add(dischargeSlot);
 		Mockito.when(cargo.getSlots()).thenReturn(slotsList);
@@ -205,7 +205,7 @@ public class InclusionCheckerTests {
 		final LoadSlot loadSlot = Mockito.mock(LoadSlot.class);
 		final DischargeSlot dischargeSlot = Mockito.mock(DischargeSlot.class);
 
-		final EList<Slot> slotsList = new BasicEList<>();
+		final EList<Slot<?>> slotsList = new BasicEList<>();
 		slotsList.add(loadSlot);
 		slotsList.add(dischargeSlot);
 		Mockito.when(cargo.getSlots()).thenReturn(slotsList);
@@ -232,7 +232,7 @@ public class InclusionCheckerTests {
 		final LoadSlot loadSlot = Mockito.mock(LoadSlot.class);
 		final DischargeSlot dischargeSlot = Mockito.mock(DischargeSlot.class);
 
-		final EList<Slot> slotsList = new BasicEList<>();
+		final EList<Slot<?>> slotsList = new BasicEList<>();
 		slotsList.add(loadSlot);
 		slotsList.add(dischargeSlot);
 		Mockito.when(cargo.getSlots()).thenReturn(slotsList);
@@ -278,7 +278,7 @@ public class InclusionCheckerTests {
 		final LoadSlot loadSlot = Mockito.mock(LoadSlot.class);
 		final DischargeSlot dischargeSlot = Mockito.mock(DischargeSlot.class);
 
-		final EList<Slot> slotsList = new BasicEList<>();
+		final EList<Slot<?>> slotsList = new BasicEList<>();
 		slotsList.add(loadSlot);
 		slotsList.add(dischargeSlot);
 		Mockito.when(cargo.getSlots()).thenReturn(slotsList);
@@ -324,7 +324,7 @@ public class InclusionCheckerTests {
 		final LoadSlot loadSlot = Mockito.mock(LoadSlot.class);
 		final DischargeSlot dischargeSlot = Mockito.mock(DischargeSlot.class);
 
-		final EList<Slot> slotsList = new BasicEList<>();
+		final EList<Slot<?>> slotsList = new BasicEList<>();
 		slotsList.add(loadSlot);
 		slotsList.add(dischargeSlot);
 		Mockito.when(cargo.getSlots()).thenReturn(slotsList);
@@ -388,7 +388,7 @@ public class InclusionCheckerTests {
 		final LoadSlot loadSlot = Mockito.mock(LoadSlot.class);
 		final DischargeSlot dischargeSlot = Mockito.mock(DischargeSlot.class);
 
-		final EList<Slot> slotsList = new BasicEList<>();
+		final EList<Slot<?>> slotsList = new BasicEList<>();
 		slotsList.add(loadSlot);
 		slotsList.add(dischargeSlot);
 		Mockito.when(cargo.getSlots()).thenReturn(slotsList);

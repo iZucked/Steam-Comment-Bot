@@ -112,8 +112,8 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 	private void addEndDateFeature(final DetailConstraintStatusDecorator failure, final AssignableElement uuidObject) {
 		if (uuidObject instanceof Cargo) {
 			final Cargo cargo = (Cargo) uuidObject;
-			final EList<Slot> sortedSlots = cargo.getSortedSlots();
-			final Slot slot = sortedSlots.get(sortedSlots.size() - 1);
+			final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
+			final Slot<?> slot = sortedSlots.get(sortedSlots.size() - 1);
 			failure.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
@@ -124,8 +124,8 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 	private ZonedDateTime getStartDate(final AssignableElement uuidObject, boolean isStartOfWindow) {
 		if (uuidObject instanceof Cargo) {
 			final Cargo cargo = (Cargo) uuidObject;
-			final EList<Slot> sortedSlots = cargo.getSortedSlots();
-			final Slot slot = sortedSlots.get(0);
+			final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
+			final Slot<?> slot = sortedSlots.get(0);
 			if (slot instanceof SpotSlot) {
 				return null;
 			}
@@ -140,8 +140,8 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 	private ZonedDateTime getEndDate(final AssignableElement uuidObject) {
 		if (uuidObject instanceof Cargo) {
 			final Cargo cargo = (Cargo) uuidObject;
-			final EList<Slot> sortedSlots = cargo.getSortedSlots();
-			final Slot slot = sortedSlots.get(sortedSlots.size() - 1);
+			final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
+			final Slot<?> slot = sortedSlots.get(sortedSlots.size() - 1);
 			if (slot instanceof SpotSlot) {
 				return null;
 			}

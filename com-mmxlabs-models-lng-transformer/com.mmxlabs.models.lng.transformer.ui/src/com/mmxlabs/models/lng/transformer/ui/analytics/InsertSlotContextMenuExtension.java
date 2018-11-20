@@ -79,10 +79,10 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			menuManager.add(action);
 			return;
 		} else {
-			final List<Slot> slots = slot.getCargo().getSortedSlots();
+			final List<Slot<?>> slots = slot.getCargo().getSortedSlots();
 			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
 
-			for (final Slot slot2 : slots) {
+			for (final Slot<?> slot2 : slots) {
 				if (slot2.isLocked()) {
 					action.setEnabled(false);
 					action.setText(action.getText() + " (Kept open)");
@@ -103,7 +103,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			return;
 		}
 		{
-			List<Slot> slots = new LinkedList<>();
+			List<Slot<?>> slots = new LinkedList<>();
 			final Iterator<?> itr = selection.iterator();
 			boolean noCargoSelected = true;
 			while (itr.hasNext()) {
@@ -136,7 +136,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 				}
 				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
 
-				for (final Slot slot : slots) {
+				for (final Slot<?> slot : slots) {
 					if (slot.isLocked()) {
 						action.setEnabled(false);
 						action.setText(action.getText() + " (Kept open)");
@@ -169,10 +169,10 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			}
 
 			if (cargoes.size() == 1) {
-				final List<Slot> slots = cargoes.stream().flatMap(c -> c.getSortedSlots().stream()).collect(Collectors.toList());
+				final List<Slot<?>> slots = cargoes.stream().flatMap(c -> c.getSortedSlots().stream()).collect(Collectors.toList());
 				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
 
-				for (final Slot slot : slots) {
+				for (final Slot<?> slot : slots) {
 					if (slot.isLocked()) {
 						action.setEnabled(false);
 						action.setText(action.getText() + " (Kept open)");
@@ -195,10 +195,10 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 	private static class InsertSlotAction extends Action {
 
-		private final List<Slot> targetSlots;
+		private final List<Slot<?>> targetSlots;
 		private final IScenarioEditingLocation scenarioEditingLocation;
 
-		public InsertSlotAction(final IScenarioEditingLocation scenarioEditingLocation, final List<Slot> targetSlots) {
+		public InsertSlotAction(final IScenarioEditingLocation scenarioEditingLocation, final List<Slot<?>> targetSlots) {
 			super(AnalyticsSolutionHelper.generateInsertionName(targetSlots));
 			this.scenarioEditingLocation = scenarioEditingLocation;
 			this.targetSlots = targetSlots;

@@ -154,8 +154,8 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 
 		final EList<Cargo> cargoes = scenario.getCargoModel().getCargoes();
 		for (final Cargo cargo : cargoes) {
-			final EList<Slot> slots = cargo.getSortedSlots();
-			final Slot slot = slots.get(slots.size() - 1);
+			final EList<Slot<?>> slots = cargo.getSortedSlots();
+			final Slot<?> slot = slots.get(slots.size() - 1);
 			final ZonedDateTime slotDate = slot.getWindowEndWithSlotOrPortTime();
 
 			if (date == null || date.isBefore(slotDate)) {
@@ -193,8 +193,8 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 
 		final EList<Cargo> cargoes = scenario.getCargoModel().getCargoes();
 		for (final Cargo cargo : cargoes) {
-			final EList<Slot> slots = cargo.getSortedSlots();
-			final Slot slot = slots.get(0);
+			final EList<Slot<?>> slots = cargo.getSortedSlots();
+			final Slot<?> slot = slots.get(0);
 			final ZonedDateTime slotDate = slot.getWindowStartWithSlotOrPortTime();
 
 			if (date == null || date.isAfter(slotDate)) {

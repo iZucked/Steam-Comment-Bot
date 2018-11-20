@@ -36,7 +36,7 @@ public class ActualsAssignableDateProvider implements IAssignableElementDateProv
 				if (cargo == null) {
 					continue;
 				}
-				final List<Slot> slots = cargo.getSortedSlots();
+				final List<Slot<?>> slots = cargo.getSortedSlots();
 				if (slots.isEmpty()) {
 					continue;
 				}

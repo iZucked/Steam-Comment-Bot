@@ -28,14 +28,14 @@ public final class LNGSlotInsertionJobDescriptor implements IJobDescriptor, Seri
 
 	private UserSettings userSettings;
 
-	private List<Slot> targetSlots;
+	private List<Slot<?>> targetSlots;
 	private List<VesselEvent> targetEvents;
 
 	public UserSettings getUserSettings() {
 		return userSettings;
 	}
 
-	public List<Slot> getTargetSlots() {
+	public List<Slot<?>> getTargetSlots() {
 		return targetSlots;
 	}
 
@@ -43,7 +43,7 @@ public final class LNGSlotInsertionJobDescriptor implements IJobDescriptor, Seri
 		return targetEvents;
 	}
 
-	public LNGSlotInsertionJobDescriptor(final String name, final ScenarioInstance scenarioInstance, final UserSettings userSettings, List<Slot> targetSlots, List<VesselEvent> targetEvents) {
+	public LNGSlotInsertionJobDescriptor(final String name, final ScenarioInstance scenarioInstance, final UserSettings userSettings, List<Slot<?>> targetSlots, List<VesselEvent> targetEvents) {
 		this.name = name;
 		this.scenarioInstance = scenarioInstance;
 		this.userSettings = userSettings;

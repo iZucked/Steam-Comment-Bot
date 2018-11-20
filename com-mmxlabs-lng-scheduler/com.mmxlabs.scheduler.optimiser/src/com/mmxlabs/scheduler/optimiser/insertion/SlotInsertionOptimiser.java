@@ -82,7 +82,7 @@ public class SlotInsertionOptimiser {
 		final long[] initialMetrics = state.initialMetrics;
 
 		// Randomise the insertion order
-		final List<ISequenceElement> slots = new ArrayList<ISequenceElement>(_slots);
+		final List<ISequenceElement> slots = new ArrayList<>(_slots);
 		Collections.shuffle(slots, new Random(seed));
 		long currentPNL = 0L;
 		for (final ISequenceElement slot : slots) {

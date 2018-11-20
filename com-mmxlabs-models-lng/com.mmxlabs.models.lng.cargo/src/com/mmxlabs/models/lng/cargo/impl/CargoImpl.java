@@ -144,7 +144,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Slot> slots;
+	protected EList<Slot<?>> slots;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -292,9 +292,9 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Slot> getSlots() {
+	public EList<Slot<?>> getSlots() {
 		if (slots == null) {
-			slots = new EObjectWithInverseResolvingEList<Slot>(Slot.class, this, CargoPackage.CARGO__SLOTS, CargoPackage.SLOT__CARGO);
+			slots = new EObjectWithInverseResolvingEList<Slot<?>>(Slot.class, this, CargoPackage.CARGO__SLOTS, CargoPackage.SLOT__CARGO);
 		}
 		return slots;
 	}
@@ -327,7 +327,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public EList<Slot> getSortedSlots() {
+	public EList<Slot<?>> getSortedSlots() {
 		return CargoSlotSorter.sortedSlots(getSlots());
 	}
 
@@ -337,7 +337,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * @generated NOT
 	 */
 	public String getLoadName() {
-		for (final Slot slot: getSortedSlots()) {
+		for (final Slot<?> slot: getSortedSlots()) {
 			if (slot instanceof LoadSlot) {
 				return slot.getName();
 			}
@@ -425,7 +425,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 				return;
 			case CargoPackage.CARGO__SLOTS:
 				getSlots().clear();
-				getSlots().addAll((Collection<? extends Slot>)newValue);
+				getSlots().addAll((Collection<? extends Slot<?>>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

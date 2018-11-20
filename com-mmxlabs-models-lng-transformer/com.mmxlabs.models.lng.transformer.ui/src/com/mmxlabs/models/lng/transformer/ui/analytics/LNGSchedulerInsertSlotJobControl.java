@@ -62,7 +62,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 		// TODO: This should be static / central service?
 		executorService = LNGScenarioChainBuilder.createExecutorService();
 
-		final List<Slot> targetSlots = jobDescriptor.getTargetSlots();
+		final List<Slot<?>> targetSlots = jobDescriptor.getTargetSlots();
 		final List<VesselEvent> targetEvents = jobDescriptor.getTargetEvents();
 		final UserSettings userSettings = jobDescriptor.getUserSettings();
 		this.taskName = jobDescriptor.getJobName();

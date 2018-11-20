@@ -34,7 +34,7 @@ public class CargoMaker {
 	@NonNull
 	private final Cargo cargo;
 	@NonNull
-	private final List<Slot> slots = new LinkedList<>();
+	private final List<Slot<?>> slots = new LinkedList<>();
 
 	public class CargoMakerSlotMaker extends AbstractSlotMaker<CargoMakerSlotMaker> {
 

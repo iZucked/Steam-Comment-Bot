@@ -8,13 +8,9 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -24,13 +20,10 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.parameters.Constraint;
-import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
@@ -41,9 +34,6 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.SlotInsertionOptimiserUni
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 
 public class AbstractSlotInsertionTests {
 
@@ -75,11 +65,11 @@ public class AbstractSlotInsertionTests {
 
 		final List<EObject> objectsToInsert = objectInsertionGetter.apply(scenarioDataProvider);
 
-		final List<Slot> targetSlots = new LinkedList<>();
+		final List<Slot<?>> targetSlots = new LinkedList<>();
 		final List<VesselEvent> targetEvents = new LinkedList<>();
 		for (final Object obj : objectsToInsert) {
 			if (obj instanceof Slot) {
-				final Slot slot = (Slot) obj;
+				final Slot<?> slot = (Slot<?>) obj;
 				targetSlots.add(slot);
 			} else if (obj instanceof VesselEvent) {
 				final VesselEvent vesselEvent = (VesselEvent) obj;

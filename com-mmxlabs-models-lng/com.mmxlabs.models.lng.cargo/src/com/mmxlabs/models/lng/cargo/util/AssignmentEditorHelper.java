@@ -44,9 +44,9 @@ public class AssignmentEditorHelper {
 	public static Pair<ZonedDateTime, ZonedDateTime> getStartPeriodIgnoreSpots(@Nullable final AssignableElement element) {
 		if (element instanceof Cargo) {
 			final Cargo cargo = (Cargo) element;
-			final List<Slot> sortedSlots = cargo.getSortedSlots();
+			final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
 			if (sortedSlots != null) {
-				for (final Slot slot : sortedSlots) {
+				for (final Slot<?> slot : sortedSlots) {
 					if (slot instanceof SpotSlot) {
 						continue;
 					}
@@ -60,9 +60,9 @@ public class AssignmentEditorHelper {
 	public static ZonedDateTime getStartDateIgnoreSpots(@Nullable final AssignableElement element) {
 		if (element instanceof Cargo) {
 			final Cargo cargo = (Cargo) element;
-			final List<Slot> sortedSlots = cargo.getSortedSlots();
+			final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
 			if (sortedSlots != null) {
-				for (final Slot slot : sortedSlots) {
+				for (final Slot<?> slot : sortedSlots) {
 					if (slot instanceof SpotSlot) {
 						continue;
 					}
@@ -77,18 +77,18 @@ public class AssignmentEditorHelper {
 
 		if (element instanceof Cargo) {
 			final Cargo cargo = (Cargo) element;
-			final EList<Slot> slots = cargo.getSortedSlots();
+			final List<Slot<?>> slots = cargo.getSortedSlots();
 			if (slots.isEmpty()) {
 				return null;
 			}
-			final Slot firstSlot = slots.get(0);
+			final Slot<?> firstSlot = slots.get(0);
 			return new Pair<>(firstSlot.getWindowStartWithSlotOrPortTime(), firstSlot.getWindowEndWithSlotOrPortTime());
 		} else if (element instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) element;
 
 			return new Pair<>(vesselEvent.getStartAfterAsDateTime(), vesselEvent.getStartByAsDateTime());
-		} else if (element instanceof Slot) {
-			final Slot slot = (Slot) element;
+		} else if (element instanceof Slot<?>) {
+			final Slot<?> slot = (Slot<?>) element;
 			return new Pair<>(slot.getWindowStartWithSlotOrPortTime(), slot.getWindowEndWithSlotOrPortTime());
 		} else {
 			return null;
@@ -99,16 +99,16 @@ public class AssignmentEditorHelper {
 
 		if (element instanceof Cargo) {
 			final Cargo cargo = (Cargo) element;
-			final EList<Slot> slots = cargo.getSortedSlots();
+			final List<Slot<?>> slots = cargo.getSortedSlots();
 			if (slots.isEmpty()) {
 				return null;
 			}
-			final Slot firstSlot = slots.get(0);
+			final Slot<?> firstSlot = slots.get(0);
 			return firstSlot.getWindowStartWithSlotOrPortTime();
 		} else if (element instanceof VesselEvent) {
 			return ((VesselEvent) element).getStartByAsDateTime();
-		} else if (element instanceof Slot) {
-			return ((Slot) element).getWindowStartWithSlotOrPortTime();
+		} else if (element instanceof Slot<?>) {
+			return ((Slot<?>) element).getWindowStartWithSlotOrPortTime();
 		} else {
 			return null;
 		}
@@ -119,9 +119,9 @@ public class AssignmentEditorHelper {
 
 		if (element instanceof Cargo) {
 			final Cargo cargo = (Cargo) element;
-			final List<Slot> sortedSlots = cargo.getSortedSlots();
+			final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
 			if (sortedSlots != null) {
-				for (final Slot slot : sortedSlots) {
+				for (final Slot<?> slot : sortedSlots) {
 					if (slot instanceof SpotSlot) {
 						continue;
 					}
@@ -136,11 +136,11 @@ public class AssignmentEditorHelper {
 	public static ZonedDateTime getEndDate(@Nullable final AssignableElement element) {
 		if (element instanceof Cargo) {
 			final Cargo cargo = (Cargo) element;
-			final EList<Slot> slots = cargo.getSortedSlots();
+			final List<Slot<?>> slots = cargo.getSortedSlots();
 			if (slots.isEmpty()) {
 				return null;
 			}
-			final Slot lastSlot = slots.get(slots.size() - 1);
+			final Slot<?> lastSlot = slots.get(slots.size() - 1);
 			if (lastSlot.getWindowStart() != null) {
 				return lastSlot.getWindowEndWithSlotOrPortTime();
 			}
@@ -150,7 +150,7 @@ public class AssignmentEditorHelper {
 				return dateTime.plusDays(((VesselEvent) element).getDurationInDays());
 			}
 		} else if (element instanceof Slot) {
-			final Slot slot = (Slot) element;
+			final Slot<?> slot = (Slot<?>) element;
 			if (slot.getWindowStart() != null) {
 				return slot.getWindowEndWithSlotOrPortTime();
 			}
@@ -240,7 +240,7 @@ public class AssignmentEditorHelper {
 				fleetGrouping.get(vesselAvailability).add(assignableElement);
 			} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
 				final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) vesselAssignmentType;
-				marketOverridesGrouping.computeIfAbsent(charterInMarketOverride, k-> new LinkedList<>()).add(assignableElement);
+				marketOverridesGrouping.computeIfAbsent(charterInMarketOverride, k -> new LinkedList<>()).add(assignableElement);
 			}
 		}
 
@@ -299,9 +299,9 @@ public class AssignmentEditorHelper {
 		final ZonedDateTime vesselAvailabilityStartAfter = vesselAvailability.getStartAfterAsDateTime();
 		if (element instanceof Cargo) {
 			final Cargo cargo = (Cargo) element;
-			final List<Slot> sortedSlots = cargo.getSortedSlots();
-			final Slot firstSlot = sortedSlots.get(0);
-			final Slot lastSlot = sortedSlots.get(sortedSlots.size() - 1);
+			final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
+			final Slot<?> firstSlot = sortedSlots.get(0);
+			final Slot<?> lastSlot = sortedSlots.get(sortedSlots.size() - 1);
 
 			if (firstSlot.getWindowStart() == null || lastSlot.getWindowStart() == null) {
 				return false;

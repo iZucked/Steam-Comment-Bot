@@ -83,9 +83,9 @@ public class InclusionChecker {
 			// FOB sales stay fixed. DES purchases, only if divertible
 
 			final Cargo cargo = (Cargo) object;
-			final NonNullPair<Slot, Slot> slots = getFirstAndLastSlots(cargo);
-			final Slot firstSlot = slots.getFirst();
-			final Slot lastSlot = slots.getSecond();
+			final NonNullPair<Slot<?>, Slot<?>> slots = getFirstAndLastSlots(cargo);
+			final Slot<?> firstSlot = slots.getFirst();
+			final Slot<?> lastSlot = slots.getSecond();
 			if (periodRecord.upperCutoff != null) {
 				final PortVisit portVisit = scheduledEventMap.get(firstSlot);
 				if (getScheduledStart(firstSlot, portVisit).isAfter(periodRecord.upperCutoff)) {
@@ -139,8 +139,8 @@ public class InclusionChecker {
 				}
 				return new NonNullPair<>(type, pos);
 			}
-		} else if (object instanceof Slot) {
-			final Slot slot = (Slot) object;
+		} else if (object instanceof Slot<?>) {
+			final Slot<?> slot = (Slot<?>) object;
 
 			// This should just be open positions and thus are only IN or OUT
 
@@ -247,20 +247,20 @@ public class InclusionChecker {
 	}
 
 	@NonNull
-	public NonNullPair<Slot, Slot> getFirstAndLastSlots(@NonNull final Cargo cargo) {
-		final List<Slot> sortedSlots = cargo.getSortedSlots();
+	public NonNullPair<Slot<?>, Slot<?>> getFirstAndLastSlots(@NonNull final Cargo cargo) {
+		final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
 
-		final Slot firstSlot = sortedSlots.get(0);
+		final Slot<?> firstSlot = sortedSlots.get(0);
 		assert firstSlot != null;
 
-		final Slot lastSlot = sortedSlots.get(sortedSlots.size() - 1);
+		final Slot<?> lastSlot = sortedSlots.get(sortedSlots.size() - 1);
 		assert lastSlot != null;
 
 		return new NonNullPair<>(firstSlot, lastSlot);
 	}
 
 	@NonNull
-	public ZonedDateTime getScheduledStart(@NonNull final Slot slot, @Nullable final PortVisit portVisit) {
+	public ZonedDateTime getScheduledStart(@NonNull final Slot<?> slot, @Nullable final PortVisit portVisit) {
 		final ZonedDateTime visitTime = portVisit == null ? null : portVisit.getStart();
 		if (visitTime == null) {
 			return slot.getWindowStartWithSlotOrPortTime();
@@ -270,7 +270,7 @@ public class InclusionChecker {
 	}
 
 	@NonNull
-	public ZonedDateTime getScheduledEnd(@NonNull final Slot slot, @Nullable final PortVisit portVisit) {
+	public ZonedDateTime getScheduledEnd(@NonNull final Slot<?> slot, @Nullable final PortVisit portVisit) {
 		final ZonedDateTime visitTime = portVisit == null ? null : portVisit.getEnd();
 		if (visitTime == null) {
 			return slot.getWindowEndWithSlotOrPortTime().plusHours(slot.getDuration());

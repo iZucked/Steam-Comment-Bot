@@ -25,7 +25,7 @@ public interface IPeriodTransformerExtension {
 	 * @return
 	 */
 	@Nullable
-	List<Slot> getExtraDependenciesForSlot(Slot slot);
+	List<Slot<?>> getExtraDependenciesForSlot(Slot<?> slot);
 
 	/**
 	 * A hook for an extension to process the final list of removed cargoes and slots for any final modifications needed.
@@ -34,8 +34,8 @@ public interface IPeriodTransformerExtension {
 	 * @param excludedSlots
 	 * @param excludedCargoes
 	 */
-	void processSlotInclusionsAndExclusions(@NonNull CargoModel cargoModel, @NonNull Schedule schedule, @NonNull Collection<Slot> excludedSlots, @NonNull Collection<Cargo> excludedCargoes);
-	
+	void processSlotInclusionsAndExclusions(@NonNull CargoModel cargoModel, @NonNull Schedule schedule, @NonNull Collection<Slot<?>> excludedSlots, @NonNull Collection<Cargo> excludedCargoes);
+
 	default void init(@NonNull CargoModel cargoModel, @NonNull Schedule schedule) {
 	}
 }

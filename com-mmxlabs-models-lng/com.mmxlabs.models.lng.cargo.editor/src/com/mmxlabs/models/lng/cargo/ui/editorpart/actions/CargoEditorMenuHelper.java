@@ -150,29 +150,29 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	private void addSetToSubMenu(final IMenuManager manager, final String name, final Slot source, final boolean sourceIsLoad, final Set<Slot> targetSet, final boolean includeContract,
+	private void addSetToSubMenu(final IMenuManager manager, final String name, final Slot<?> source, final boolean sourceIsLoad, final Set<Slot<?>> targetSet, final boolean includeContract,
 			final boolean includePort) {
-		for (final Slot target : targetSet) {
+		for (final Slot<?> target : targetSet) {
 			createWireAction(manager, source, target, sourceIsLoad, includeContract, includePort);
 		}
 	}
 
-	private void buildSubMenu(final IMenuManager manager, final String name, final Slot source, final boolean sourceIsLoad, final Map<String, Set<Slot>> targets, final boolean includeContract,
+	private void buildSubMenu(final IMenuManager manager, final String name, final Slot<?> source, final boolean sourceIsLoad, final Map<String, Set<Slot<?>>> targets, final boolean includeContract,
 			final boolean includePort) {
 		final MenuManager subMenu = new MenuManager(name, null);
 
 		// For single item sub menus, skip the sub menu and add item directly
 		if (targets.size() == 1) {
-			for (final Map.Entry<String, Set<Slot>> e : targets.entrySet()) {
-				for (final Slot target : e.getValue()) {
+			for (final Map.Entry<String, Set<Slot<?>>> e : targets.entrySet()) {
+				for (final Slot<?> target : e.getValue()) {
 					createWireAction(subMenu, source, target, sourceIsLoad, includeContract, includePort);
 				}
 			}
 
 		} else {
-			for (final Map.Entry<String, Set<Slot>> e : targets.entrySet()) {
+			for (final Map.Entry<String, Set<Slot<?>>> e : targets.entrySet()) {
 				final MenuManager subSubMenu = new MenuManager(e.getKey(), null);
-				for (final Slot target : e.getValue()) {
+				for (final Slot<?> target : e.getValue()) {
 					createWireAction(subSubMenu, source, target, sourceIsLoad, includeContract, includePort);
 				}
 				subMenu.add(subSubMenu);
@@ -182,22 +182,22 @@ public class CargoEditorMenuHelper {
 		manager.add(subMenu);
 	}
 
-	private void buildSwapMenu(final IMenuManager manager, final String name, final Slot source, final Map<String, Set<Slot>> targets, final boolean isLoad, final boolean includeContract,
+	private void buildSwapMenu(final IMenuManager manager, final String name, final Slot<?> source, final Map<String, Set<Slot<?>>> targets, final boolean isLoad, final boolean includeContract,
 			final boolean includePort) {
 		final MenuManager subMenu = new MenuManager(name, null);
 
 		// For single item sub menus, skip the sub menu and add item directly
 		if (targets.size() == 1) {
-			for (final Map.Entry<String, Set<Slot>> e : targets.entrySet()) {
-				for (final Slot target : e.getValue()) {
+			for (final Map.Entry<String, Set<Slot<?>>> e : targets.entrySet()) {
+				for (final Slot<?> target : e.getValue()) {
 					createSwapAction(subMenu, source, target, isLoad, includeContract, includePort);
 				}
 			}
 
 		} else {
-			for (final Map.Entry<String, Set<Slot>> e : targets.entrySet()) {
+			for (final Map.Entry<String, Set<Slot<?>>> e : targets.entrySet()) {
 				final MenuManager subSubMenu = new MenuManager(e.getKey(), null);
-				for (final Slot target : e.getValue()) {
+				for (final Slot<?> target : e.getValue()) {
 					createSwapAction(subSubMenu, source, target, isLoad, includeContract, includePort);
 				}
 				subMenu.add(subSubMenu);
@@ -208,7 +208,7 @@ public class CargoEditorMenuHelper {
 		manager.add(subMenu);
 	}
 
-	private void createDeleteSlotMenu(final IMenuManager newMenuManager, final Slot slot) {
+	private void createDeleteSlotMenu(final IMenuManager newMenuManager, final Slot<?> slot) {
 		final Action deleteAction = new Action("Delete") {
 			@Override
 			public void run() {
@@ -273,7 +273,7 @@ public class CargoEditorMenuHelper {
 				} else if (dischargeSlot.getCargo() != null) {
 
 					boolean foundDESPurchase = false;
-					for (final Slot s : dischargeSlot.getCargo().getSlots()) {
+					for (final Slot<?> s : dischargeSlot.getCargo().getSlots()) {
 						if (s instanceof LoadSlot && ((LoadSlot) s).isDESPurchase()) {
 							createAssignmentMenus(manager, s);
 							foundDESPurchase = true;
@@ -310,7 +310,7 @@ public class CargoEditorMenuHelper {
 		};
 	}
 
-	private void createEditMenu(final IMenuManager newMenuManager, final Slot slot, final Contract contract, final Cargo cargo) {
+	private void createEditMenu(final IMenuManager newMenuManager, final Slot<?> slot, final Contract contract, final Cargo cargo) {
 		newMenuManager.add(new Separator());
 		newMenuManager.add(new EditAction("Edit Slot", slot));
 		if (contract != null) {
@@ -327,7 +327,7 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	private void createAssignmentMenus(final IMenuManager menuManager, final Slot slot) {
+	private void createAssignmentMenus(final IMenuManager menuManager, final Slot<?> slot) {
 		menuManager.add(new Separator());
 
 		if (slot != null) {
@@ -566,7 +566,7 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	private void createPanamaAssignmentMenus(final IMenuManager menuManager, final Slot slot) {
+	private void createPanamaAssignmentMenus(final IMenuManager menuManager, final Slot<?> slot) {
 		menuManager.add(new Separator());
 
 		if (slot != null) {
@@ -641,7 +641,7 @@ public class CargoEditorMenuHelper {
 					createPanamaAssignmentMenus(manager, loadSlot);
 				} else if (loadSlot.getCargo() != null) {
 					boolean foundFobSale = false;
-					for (final Slot s : loadSlot.getCargo().getSlots()) {
+					for (final Slot<?> s : loadSlot.getCargo().getSlots()) {
 						if (s instanceof DischargeSlot && ((DischargeSlot) s).isFOBSale()) {
 							createAssignmentMenus(manager, s);
 							foundFobSale = true;
@@ -681,19 +681,19 @@ public class CargoEditorMenuHelper {
 
 	/**
 	 */
-	public IMenuListener createSwapSlotsMenuListener(final List<Slot> slots, final int index) {
+	public IMenuListener createSwapSlotsMenuListener(final List<Slot<?>> slots, final int index) {
 		final CargoModel cargoModel = scenarioModel.getCargoModel();
 		return new IMenuListener() {
 
 			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
-				final Slot slot = slots.get(index);
+				final Slot<?> slot = slots.get(index);
 				final MenuManager newMenuManager = new MenuManager("New...", null);
 				manager.add(newMenuManager);
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					if (!loadSlot.isDESPurchase()) {
-						final List<Slot> filteredSlots = new LinkedList<Slot>();
+						final List<Slot<?>> filteredSlots = new LinkedList<>();
 						for (final LoadSlot s : cargoModel.getLoadSlots()) {
 							if (!s.isDESPurchase()) {
 								filteredSlots.add(s);
@@ -706,7 +706,7 @@ public class CargoEditorMenuHelper {
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					if (!dischargeSlot.isFOBSale()) {
-						final List<Slot> filteredSlots = new LinkedList<Slot>();
+						final List<Slot<?>> filteredSlots = new LinkedList<>();
 						for (final DischargeSlot s : cargoModel.getDischargeSlots()) {
 							if (!s.isFOBSale()) {
 								filteredSlots.add(s);
@@ -719,13 +719,13 @@ public class CargoEditorMenuHelper {
 		};
 	}
 
-	private void createSwapWithMenus(final IMenuManager manager, final Slot source, final List<? extends Slot> possibleTargets, final boolean sourceIsLoad) {
+	private void createSwapWithMenus(final IMenuManager manager, final Slot<?> source, final List<? extends Slot<?>> possibleTargets, final boolean sourceIsLoad) {
 
-		final Map<String, Set<Slot>> slotsByDate = new TreeMap<String, Set<Slot>>();
-		final Map<String, Set<Slot>> slotsByContract = new TreeMap<String, Set<Slot>>();
-		final Map<String, Set<Slot>> slotsByPort = new TreeMap<String, Set<Slot>>();
+		final Map<String, Set<Slot<?>>> slotsByDate = new TreeMap<>();
+		final Map<String, Set<Slot<?>>> slotsByContract = new TreeMap<>();
+		final Map<String, Set<Slot<?>>> slotsByPort = new TreeMap<>();
 
-		for (final Slot target : possibleTargets) {
+		for (final Slot<?> target : possibleTargets) {
 
 			// Perform some filtering on the possible targets
 			if (source.getCargo().getSlots().contains(target)) {
@@ -756,13 +756,13 @@ public class CargoEditorMenuHelper {
 	 * @param possibleTargets
 	 * @return
 	 */
-	private List<Slot> filterSlotsByCompatibility(final Slot source, final List<? extends Slot> possibleTargets) {
+	private List<Slot<?>> filterSlotsByCompatibility(final Slot<?> source, final List<? extends Slot<?>> possibleTargets) {
 
-		final List<Slot> filteredSlots = new LinkedList<Slot>();
+		final List<Slot<?>> filteredSlots = new LinkedList<>();
 
-		for (final Slot slot : possibleTargets) {
+		for (final Slot<?> slot : possibleTargets) {
 			// Check restrictions on both slots
-			if (areUnsortedSlotsCompatible(source, slot) == false) {
+			if (!areUnsortedSlotsCompatible(source, slot)) {
 				continue;
 			}
 			if (!checkSourceContractConstraints(source, slot) || !checkSourceContractConstraints(slot, source)) {
@@ -868,7 +868,7 @@ public class CargoEditorMenuHelper {
 	 * @param b
 	 * @return
 	 */
-	private boolean areUnsortedSlotsCompatible(final Slot a, final Slot b) {
+	private boolean areUnsortedSlotsCompatible(final Slot<?> a, final Slot<?> b) {
 		// need load / discharge or discharge / load
 		if (a instanceof LoadSlot && b instanceof DischargeSlot) {
 			return areSlotsCompatible((LoadSlot) a, (DischargeSlot) b);
@@ -886,7 +886,7 @@ public class CargoEditorMenuHelper {
 	 * @param target
 	 * @return
 	 */
-	private boolean checkSourceContractConstraints(final Slot source, final Slot target) {
+	private boolean checkSourceContractConstraints(final Slot<?> source, final Slot<?> target) {
 		final EList<Port> restrictedPorts = source.getRestrictedPorts();
 		final EList<Contract> restrictedContracts = source.getRestrictedContracts();
 		final boolean areRestrictedListsPermissive = source.getSlotOrDelegateRestrictedListsArePermissive();
@@ -906,15 +906,15 @@ public class CargoEditorMenuHelper {
 		return true;
 	}
 
-	private void createMenus(final IMenuManager manager, final Slot source, final Cargo sourceCargo, final List<? extends Slot> possibleTargets, final boolean sourceIsLoad) {
+	private void createMenus(final IMenuManager manager, final Slot<?> source, final Cargo sourceCargo, final List<? extends Slot<?>> possibleTargets, final boolean sourceIsLoad) {
 
-		final Map<String, Set<Slot>> unusedSlotsByDate = new TreeMap<String, Set<Slot>>();
-		final Set<Slot> nearSlotsByDate = createSlotTreeSet();
-		final Map<String, Set<Slot>> slotsByDate = new TreeMap<String, Set<Slot>>();
-		final Map<String, Set<Slot>> slotsByContract = new TreeMap<String, Set<Slot>>();
-		final Map<String, Set<Slot>> slotsByPort = new TreeMap<String, Set<Slot>>();
+		final Map<String, Set<Slot<?>>> unusedSlotsByDate = new TreeMap<>();
+		final Set<Slot<?>> nearSlotsByDate = createSlotTreeSet();
+		final Map<String, Set<Slot<?>>> slotsByDate = new TreeMap<>();
+		final Map<String, Set<Slot<?>>> slotsByContract = new TreeMap<>();
+		final Map<String, Set<Slot<?>>> slotsByPort = new TreeMap<>();
 
-		for (final Slot target : possibleTargets) {
+		for (final Slot<?> target : possibleTargets) {
 
 			final Cargo targetCargo;
 			final int daysDifference;
@@ -978,7 +978,7 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	void createNewSlotMenu(final IMenuManager menuManager, final Slot source) {
+	void createNewSlotMenu(final IMenuManager menuManager, final Slot<?> source) {
 
 		final List<Port> transferPorts = new LinkedList<Port>();
 		for (final Port p : scenarioModel.getReferenceModel().getPortModel().getPorts()) {
@@ -1039,11 +1039,11 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	private TreeSet<Slot> createSlotTreeSet() {
-		final TreeSet<Slot> slotsByDate = new TreeSet<Slot>(new Comparator<Slot>() {
+	private TreeSet<Slot<?>> createSlotTreeSet() {
+		final TreeSet<Slot<?>> slotsByDate = new TreeSet<>(new Comparator<Slot<?>>() {
 
 			@Override
-			public int compare(final Slot o1, final Slot o2) {
+			public int compare(final Slot<?> o1, final Slot<?> o2) {
 				if (o1.getWindowStart() == null) {
 					return -1;
 				} else if (o2.getWindowStart() == null) {
@@ -1055,9 +1055,9 @@ public class CargoEditorMenuHelper {
 		return slotsByDate;
 	}
 
-	void createSpotMarketMenu(final IMenuManager manager, final SpotType spotType, final Slot source, String marketMenuSuffix) {
+	void createSpotMarketMenu(final IMenuManager manager, final SpotType spotType, final Slot<?> source, String marketMenuSuffix) {
 		final SpotMarketsModel pricingModel = scenarioModel.getReferenceModel().getSpotMarketsModel();
-		final Collection<SpotMarket> validMarkets = new LinkedList<SpotMarket>();
+		final Collection<SpotMarket> validMarkets = new LinkedList<>();
 		String menuName = "";
 		boolean isSpecial = false;
 		if (spotType == SpotType.DES_PURCHASE) {
@@ -1099,7 +1099,7 @@ public class CargoEditorMenuHelper {
 
 	}
 
-	private void createWireAction(final IMenuManager subMenu, final Slot source, final Slot target, final boolean sourceIsLoad, final boolean includeContract, final boolean includePort) {
+	private void createWireAction(final IMenuManager subMenu, final Slot<?> source, final Slot<?> target, final boolean sourceIsLoad, final boolean includeContract, final boolean includePort) {
 		final String name = getActionName(target, !sourceIsLoad, includeContract, includePort);
 		if (sourceIsLoad) {
 			subMenu.add(new RunnableAction(name, () -> helper.pairSlotsIntoCargo("Rewire Cargoes", (LoadSlot) source, (DischargeSlot) target)));
@@ -1108,12 +1108,12 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	private void createSwapAction(final MenuManager subMenu, final Slot source, final Slot target, final boolean isLoad, final boolean includeContract, final boolean includePort) {
+	private void createSwapAction(final MenuManager subMenu, final Slot<?> source, final Slot<?> target, final boolean isLoad, final boolean includeContract, final boolean includePort) {
 		final String name = getActionName(target, isLoad, includeContract, includePort);
 		subMenu.add(new SwapAction(name, source, target));
 	}
 
-	private String getActionName(final Slot slot, final boolean isLoad, final boolean includeContract, final boolean includePort) {
+	private String getActionName(final Slot<?> slot, final boolean isLoad, final boolean includeContract, final boolean includePort) {
 		final StringBuilder sb = new StringBuilder();
 
 		sb.append(formatDate(slot.getWindowStart()));
@@ -1129,8 +1129,8 @@ public class CargoEditorMenuHelper {
 		return sb.toString();
 	}
 
-	private void addTargetByDateToSortedSet(final Slot target, final String group, final Map<String, Set<Slot>> targets) {
-		Set<Slot> targetGroupSlots;
+	private void addTargetByDateToSortedSet(final Slot<?> target, final String group, final Map<String, Set<Slot<?>>> targets) {
+		Set<Slot<?>> targetGroupSlots;
 		if (targets.containsKey(group)) {
 			targetGroupSlots = targets.get(group);
 		} else {
@@ -1142,7 +1142,7 @@ public class CargoEditorMenuHelper {
 
 	class CreateSlotAction extends Action {
 
-		private final Slot source;
+		private final Slot<?> source;
 		private final SpotMarket market;
 		private final boolean sourceIsLoad;
 		private final boolean isDesPurchaseOrFobSale;
@@ -1153,7 +1153,7 @@ public class CargoEditorMenuHelper {
 			return key;
 		}
 
-		public CreateSlotAction(final String name, final Slot source, final SpotMarket market, final boolean isDesPurchaseOrFobSale, final Port shipToShipPort) {
+		public CreateSlotAction(final String name, final Slot<?> source, final SpotMarket market, final boolean isDesPurchaseOrFobSale, final Port shipToShipPort) {
 			super(name);
 			this.source = source;
 			this.market = market;
@@ -1166,8 +1166,8 @@ public class CargoEditorMenuHelper {
 		public void run() {
 			final CargoModel cargoModel = scenarioModel.getCargoModel();
 
-			final List<Command> setCommands = new LinkedList<Command>();
-			final List<Command> deleteCommands = new LinkedList<Command>();
+			final List<Command> setCommands = new LinkedList<>();
+			final List<Command> deleteCommands = new LinkedList<>();
 
 			// when we create a ship to ship linked slot, we don't rewire the cargoes
 			if (shipToShipPort != null) {
@@ -1206,8 +1206,8 @@ public class CargoEditorMenuHelper {
 							}
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
 							if (travelTime == Integer.MAX_VALUE) {
-								String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.",
-										loadSlot.getPort().getName(), dischargeSlot.getPort().getName(), travelTime);
+								String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
+										dischargeSlot.getPort().getName(), travelTime);
 								throw new RuntimeException(message);
 							}
 							cal = cal.plusHours(travelTime);
@@ -1267,8 +1267,8 @@ public class CargoEditorMenuHelper {
 							}
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
 							if (travelTime == Integer.MAX_VALUE) {
-								String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.",
-										loadSlot.getPort().getName(), dischargeSlot.getPort().getName(), travelTime);
+								String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
+										dischargeSlot.getPort().getName(), travelTime);
 								throw new RuntimeException(message);
 							}
 							cal = cal.minusHours(travelTime);
@@ -1328,10 +1328,10 @@ public class CargoEditorMenuHelper {
 
 	class SwapAction extends Action {
 
-		final private Slot source;
-		final private Slot target;
+		final private Slot<?> source;
+		final private Slot<?> target;
 
-		public SwapAction(final String text, final Slot source, final Slot target) {
+		public SwapAction(final String text, final Slot<?> source, final Slot<?> target) {
 			super(text);
 			this.source = source;
 			this.target = target;
@@ -1355,10 +1355,10 @@ public class CargoEditorMenuHelper {
 			if (target instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) target;
 				if (loadSlot.getWindowStart() != null && !c.getSlots().isEmpty()) {
-					final EList<Slot> sortedSlots = c.getSortedSlots();
-					final Iterator<Slot> iterator = sortedSlots.iterator();
+					final List<Slot<?>> sortedSlots = c.getSortedSlots();
+					final Iterator<Slot<?>> iterator = sortedSlots.iterator();
 					while (iterator.hasNext()) {
-						final Slot slot = iterator.next();
+						final Slot<?> slot = iterator.next();
 						// This is the slot we are replacing!
 						if (slot == source) {
 							continue;
@@ -1381,7 +1381,7 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	private void createFOBDESSwitchMenu(final IMenuManager manager, final Slot slot) {
+	private void createFOBDESSwitchMenu(final IMenuManager manager, final Slot<?> slot) {
 
 		final Contract contract = slot.getContract();
 		assert (contract == null || contract.getContractType() == ContractType.BOTH);
@@ -1406,7 +1406,7 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	private void panamaAssignmentMenu(final IMenuManager menuManager, final Slot slot) {
+	private void panamaAssignmentMenu(final IMenuManager menuManager, final Slot<?> slot) {
 
 		class AssignCanalAction extends Action {
 			private final CanalBookingSlot canalBookingSlot;
@@ -1515,7 +1515,7 @@ public class CargoEditorMenuHelper {
 					if (cargo.eContainer() == null) {
 						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), Collections.singleton(cargo)));
 					}
-					for (final Slot s : cargo.getSlots()) {
+					for (final Slot<?> s : cargo.getSlots()) {
 
 						if (s.eContainer() == null) {
 

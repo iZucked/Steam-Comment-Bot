@@ -9,14 +9,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.junit.Assert;
 
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
@@ -31,10 +30,8 @@ import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
@@ -111,8 +108,8 @@ public class SuboptimalScenarioTester {
 
 		// the csc by default will initialise all cargoes with the same purchase and sales contracts
 		// we will give them separate contracts in case constraints are placed on the contracts
-		smallToLargeCargo.getSlots().get(0).setContract(csc.addPurchaseContract("Other Purchase Contract", 0.0));
-		smallToLargeCargo.getSlots().get(1).setContract(csc.addSalesContract("Other Sales Contract", cscDischargePrice));
+		((LoadSlot) smallToLargeCargo.getSlots().get(0)).setContract(csc.addPurchaseContract("Other Purchase Contract", 0.0));
+		((DischargeSlot) smallToLargeCargo.getSlots().get(1)).setContract(csc.addSalesContract("Other Sales Contract", cscDischargePrice));
 
 		// build and run the scenario.
 		scenarioDataProvider = csc.getScenarioDataProvider();
@@ -122,9 +119,9 @@ public class SuboptimalScenarioTester {
 	 * Runs the optimiser on the scenario and tests whether the optimised wiring matches a specified expected wiring.
 	 * 
 	 * @param loadPorts
-	 *            A list of load ports for the expected wiring, in the same order as the discharge ports they should be wired to.
+	 *                           A list of load ports for the expected wiring, in the same order as the discharge ports they should be wired to.
 	 * @param dischargePorts
-	 *            A list of discharge ports for the expected wiring, in the same order as the load ports they should be wired to.
+	 *                           A list of discharge ports for the expected wiring, in the same order as the load ports they should be wired to.
 	 */
 	public void testExpectedWiringProduced(final Port[] loadPorts, final Port[] dischargePorts) {
 		Assert.assertEquals("Load port and discharge port lists should have same length", loadPorts.length, dischargePorts.length);
@@ -231,7 +228,7 @@ public class SuboptimalScenarioTester {
 	 * 
 	 * @param expectedResult
 	 * @param checker
-	 *            A new instance of the constraint checker (must be new since this method injects it with dependencies).
+	 *                           A new instance of the constraint checker (must be new since this method injects it with dependencies).
 	 */
 	// TODO: rewrite to take a constraint checker factory instead of a constraint checker, so that the expected parameter does not have weird not-initialised semantics
 	public void testConstraintChecker(final boolean expectedResult, final AbstractPairwiseConstraintChecker checker) {

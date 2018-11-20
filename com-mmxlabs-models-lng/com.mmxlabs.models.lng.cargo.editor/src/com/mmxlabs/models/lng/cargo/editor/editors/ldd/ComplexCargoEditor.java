@@ -350,8 +350,8 @@ public class ComplexCargoEditor extends Dialog {
 					return 1;
 				}
 
-				final Slot s1 = (Slot) e1;
-				final Slot s2 = (Slot) e2;
+				final Slot<?> s1 = (Slot<?>) e1;
+				final Slot<?> s2 = (Slot<?>) e2;
 
 				if (s1.getWindowStart() != null && s2.getWindowStart() != null) {
 					return s1.getWindowStart().compareTo(s2.getWindowStart());

@@ -101,8 +101,8 @@ public class SlotInsertionOptimiserUnit {
 
 	@SuppressWarnings("null")
 	public SlotInsertionOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
-			@NonNull final InsertionOptimisationStage stage, @NonNull final CleanableExecutorService executorService, @NonNull final ISequences initialSequences, @NonNull final IMultiStateResult inputState,
-			@NonNull final Collection<String> initialHints) {
+			@NonNull final InsertionOptimisationStage stage, @NonNull final CleanableExecutorService executorService, @NonNull final ISequences initialSequences,
+			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> initialHints) {
 
 		this.stage = stage;
 		final Set<String> hints = new HashSet<>(initialHints);
@@ -166,11 +166,11 @@ public class SlotInsertionOptimiserUnit {
 		this.inputState = inputState;
 	}
 
-	public IMultiStateResult run(final @NonNull List<Slot> slotsToInsert, final List<VesselEvent> eventsToInsert, @NonNull final IProgressMonitor monitor) {
+	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, @NonNull final IProgressMonitor monitor) {
 		return run(slotsToInsert, eventsToInsert, stage.getIterations(), monitor);
 	}
 
-	public IMultiStateResult run(final @NonNull List<Slot> slotsToInsert, final List<VesselEvent> eventsToInsert, final int tries, @NonNull final IProgressMonitor monitor) {
+	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, final int tries, @NonNull final IProgressMonitor monitor) {
 		// try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 		// scope.enter();
 		try {
@@ -184,7 +184,7 @@ public class SlotInsertionOptimiserUnit {
 					.map(s -> modelEntityMap.getOptimiserObjectNullChecked(s, IPortSlot.class)) //
 					.collect(Collectors.toList());
 
-			final List<IPortSlot> optionElements = new ArrayList<IPortSlot>(slotElements.size() + eventElements.size());
+			final List<IPortSlot> optionElements = new ArrayList<>(slotElements.size() + eventElements.size());
 			optionElements.addAll(slotElements);
 			optionElements.addAll(eventElements);
 

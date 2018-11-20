@@ -57,7 +57,7 @@ public interface Cargo extends UUIDObject, AssignableElement {
 
 	/**
 	 * Returns the value of the '<em><b>Slots</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.Slot}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.Slot}<code>&lt;?&gt;</code>.
 	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -72,7 +72,7 @@ public interface Cargo extends UUIDObject, AssignableElement {
 	 * @model opposite="cargo"
 	 * @generated
 	 */
-	EList<Slot> getSlots();
+	EList<Slot<?>> getSlots();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -89,7 +89,7 @@ public interface Cargo extends UUIDObject, AssignableElement {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<Slot> getSortedSlots();
+	EList<Slot<?>> getSortedSlots();
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -384,10 +384,10 @@ public class LNGScenarioTransformer {
 	 * A {@link Map} of existing spot market slots by ID. This map is used later when building the spot market options.
 	 */
 	@NonNull
-	private final Map<String, @NonNull Slot> marketSlotsByID = new HashMap<>();
+	private final Map<String, @NonNull Slot<?>> marketSlotsByID = new HashMap<>();
 
 	@NonNull
-	private final Map<SpotMarket, TreeMap<String, Collection<Slot>>> existingSpotCount = new HashMap<>();
+	private final Map<SpotMarket, TreeMap<String, Collection<Slot<?>>>> existingSpotCount = new HashMap<>();
 
 	@Inject
 	@NonNull
@@ -1049,15 +1049,15 @@ public class LNGScenarioTransformer {
 			}
 
 			final boolean freeze = assignableElement.isLocked();
-			final Set<Slot> lockedSlots = checkAndCollectLockedSlots(assignableElement);
+			final Set<Slot<?>> lockedSlots = checkAndCollectLockedSlots(assignableElement);
 			final boolean freezeElements = (!(!freeze && lockedSlots.isEmpty()));
 
 			if (assignableElement instanceof Cargo) {
 				final Cargo cargo = (Cargo) assignableElement;
 				final List<IPortSlot> allOptimiserSlots = new LinkedList<>();
-				Slot prevSlot = null;
+				Slot<?> prevSlot = null;
 				IPortSlot prevPortSlot = null;
-				for (final Slot slot : cargo.getSortedSlots()) {
+				for (final Slot<?> slot : cargo.getSortedSlots()) {
 
 					final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
 					allOptimiserSlots.add(portSlot);
@@ -1092,12 +1092,12 @@ public class LNGScenarioTransformer {
 	}
 
 	@NonNull
-	private Set<@NonNull Slot> checkAndCollectLockedSlots(@NonNull final AssignableElement assignableElement) {
-		final Set<@NonNull Slot> lockedSlots = new HashSet<>();
+	private Set<@NonNull Slot<?>> checkAndCollectLockedSlots(@NonNull final AssignableElement assignableElement) {
+		final Set<@NonNull Slot<?>> lockedSlots = new HashSet<>();
 
 		if (assignableElement instanceof Cargo) {
 			final Cargo cargo = (Cargo) assignableElement;
-			for (final Slot slot : cargo.getSortedSlots()) {
+			for (final Slot<?> slot : cargo.getSortedSlots()) {
 				if (slot.isLocked()) {
 					lockedSlots.add(slot);
 				}
@@ -1200,7 +1200,7 @@ public class LNGScenarioTransformer {
 		final Set<DischargeSlot> usedDischargeSlots = new HashSet<>();
 
 		final CargoModel cargoModel = rootObject.getCargoModel();
-		final Map<Slot, IPortSlot> transferSlotMap = new HashMap<>();
+		final Map<Slot<?>, IPortSlot> transferSlotMap = new HashMap<>();
 
 		for (final Cargo eCargo : cargoModel.getCargoes()) {
 
@@ -1211,8 +1211,8 @@ public class LNGScenarioTransformer {
 			final List<@NonNull ILoadOption> loadOptions = new LinkedList<>();
 			final List<@NonNull IDischargeOption> dischargeOptions = new LinkedList<>();
 			final List<@NonNull IPortSlot> slots = new ArrayList<>(eCargo.getSortedSlots().size());
-			final Map<Slot, IPortSlot> slotMap = new HashMap<>();
-			for (final Slot slot : eCargo.getSortedSlots()) {
+			final Map<Slot<?>, IPortSlot> slotMap = new HashMap<>();
+			for (final Slot<?> slot : eCargo.getSortedSlots()) {
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					{
@@ -1244,9 +1244,9 @@ public class LNGScenarioTransformer {
 				if (eCargo.getSpotIndex() == NOMINAL_CARGO_INDEX) {
 					final LocalDate promptPeriodEnd = rootObject.getPromptPeriodEnd();
 					if (promptPeriodEnd != null) {
-						final List<Slot> sortedSlots = eCargo.getSortedSlots();
+						final List<Slot<?>> sortedSlots = eCargo.getSortedSlots();
 						if (!sortedSlots.isEmpty()) {
-							final Slot slot = sortedSlots.get(0);
+							final Slot<?> slot = sortedSlots.get(0);
 							if (slot.getWindowStartWithSlotOrPortTime().toLocalDate().isBefore(promptPeriodEnd)) {
 								isSoftRequired = true;
 							}
@@ -1255,7 +1255,7 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			for (final Slot slot : eCargo.getSortedSlots()) {
+			for (final Slot<?> slot : eCargo.getSortedSlots()) {
 				boolean isTransfer = false;
 
 				if (slot instanceof LoadSlot) {
@@ -1293,10 +1293,10 @@ public class LNGScenarioTransformer {
 		}
 
 		// register ship-to-ship transfers with the relevant data component provider
-		for (final Entry<Slot, IPortSlot> entry : transferSlotMap.entrySet()) {
-			final Slot slot = entry.getKey();
+		for (final Entry<Slot<?>, IPortSlot> entry : transferSlotMap.entrySet()) {
+			final Slot<?> slot = entry.getKey();
 			final IPortSlot portSlot = entry.getValue();
-			Slot converse = null;
+			Slot<?> converse = null;
 			if (slot instanceof DischargeSlot) {
 				converse = ((DischargeSlot) slot).getTransferTo();
 			} else if (slot instanceof LoadSlot) {
@@ -1399,14 +1399,14 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	private void setSlotAsSoftRequired(final ISchedulerBuilder builder, final Slot eSlot, final IPortSlot slot) {
+	private void setSlotAsSoftRequired(final ISchedulerBuilder builder, final Slot<?> eSlot, final IPortSlot slot) {
 		if (!eSlot.isOptional()) {
 			builder.setSoftRequired(slot);
 		}
 	}
 
 	@NonNull
-	private ITimeWindow getTimeWindowForSlotBinding(final Slot modelSlot, final IPortSlot optimiserSlot, final IPort port) {
+	private ITimeWindow getTimeWindowForSlotBinding(final Slot<?> modelSlot, final IPortSlot optimiserSlot, final IPort port) {
 
 		if (modelSlot instanceof SpotSlot) {
 			// TODO: IS this with flex or not??
@@ -1439,7 +1439,7 @@ public class LNGScenarioTransformer {
 	 * @param slot
 	 * @return
 	 */
-	private ITimeWindow getTimewindowAsUTCWithFlex(final Slot slot) {
+	private ITimeWindow getTimewindowAsUTCWithFlex(final Slot<?> slot) {
 		LocalDateTime wStart = slot.getWindowStart().atStartOfDay();
 		if (slot.isSetWindowStartTime()) {
 			wStart = wStart.withHour(slot.getWindowStartTime());
@@ -1905,7 +1905,8 @@ public class LNGScenarioTransformer {
 			final ITimeWindow localTimeWindow;
 			if (loadSlot.getSlotOrDelegateDivertible()) {
 				// Extend window out to cover whole shipping days restriction
-				localTimeWindow = TimeWindowMaker.createInclusiveExclusive(loadWindow.getInclusiveStart(), loadWindow.getExclusiveEnd() + loadSlot.getSlotOrDelegateShippingDaysRestriction() * 24, 0, false);
+				localTimeWindow = TimeWindowMaker.createInclusiveExclusive(loadWindow.getInclusiveStart(), loadWindow.getExclusiveEnd() + loadSlot.getSlotOrDelegateShippingDaysRestriction() * 24, 0,
+						false);
 			} else if (loadSlot instanceof SpotLoadSlot) {
 				// Convert back into a UTC based date and add in TZ flex
 				final int utcStart = timeZoneToUtcOffsetProvider.UTC(loadWindow.getInclusiveStart(), portAssociation.lookup(loadSlot.getPort()));
@@ -1964,7 +1965,7 @@ public class LNGScenarioTransformer {
 		return load;
 	}
 
-	private void registerSpotMarketSlot(final ModelEntityMap modelEntityMap, final Slot modelSlot, final IPortSlot portSlot) {
+	private void registerSpotMarketSlot(final ModelEntityMap modelEntityMap, final Slot<?> modelSlot, final IPortSlot portSlot) {
 		final SpotSlot spotSlot = (SpotSlot) modelSlot;
 		final SpotMarket market = spotSlot.getMarket();
 		final ISequenceElement element = portSlotProvider.getElement(portSlot);
@@ -2090,11 +2091,11 @@ public class LNGScenarioTransformer {
 							}
 						}
 
-						final Collection<Slot> existing = getSpotSlots(market, SpotSlotUtils.getKeyForDate(startTime));
+						final Collection<Slot<?>> existing = getSpotSlots(market, SpotSlotUtils.getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<>(count);
-						for (final Slot slot : existing) {
+						for (final Slot<?> slot : existing) {
 							final IPortSlot portSlot = modelEntityMap.getOptimiserObject(slot, IPortSlot.class);
 							marketSlots.add(portSlot);
 							marketGroupSlots.add(portSlot);
@@ -2243,11 +2244,11 @@ public class LNGScenarioTransformer {
 							}
 						}
 
-						final Collection<Slot> existing = getSpotSlots(market, SpotSlotUtils.getKeyForDate(startTime));
+						final Collection<Slot<?>> existing = getSpotSlots(market, SpotSlotUtils.getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<>(count);
-						for (final Slot slot : existing) {
+						for (final Slot<?> slot : existing) {
 							final IPortSlot portSlot = modelEntityMap.getOptimiserObject(slot, IPortSlot.class);
 							marketSlots.add(portSlot);
 							marketGroupSlots.add(portSlot);
@@ -2406,11 +2407,11 @@ public class LNGScenarioTransformer {
 							continue;
 						}
 
-						final Collection<Slot> existing = getSpotSlots(market, SpotSlotUtils.getKeyForDate(startTime));
+						final Collection<Slot<?>> existing = getSpotSlots(market, SpotSlotUtils.getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<>(count);
-						for (final Slot slot : existing) {
+						for (final Slot<?> slot : existing) {
 							final IPortSlot portSlot = modelEntityMap.getOptimiserObject(slot, IPortSlot.class);
 							marketSlots.add(portSlot);
 							marketGroupSlots.add(portSlot);
@@ -2551,11 +2552,11 @@ public class LNGScenarioTransformer {
 
 						final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(fobPurchaseMarket.getCv());
 
-						final Collection<Slot> existing = getSpotSlots(market, SpotSlotUtils.getKeyForDate(startTime));
+						final Collection<Slot<?>> existing = getSpotSlots(market, SpotSlotUtils.getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<>(count);
-						for (final Slot slot : existing) {
+						for (final Slot<?> slot : existing) {
 							final IPortSlot portSlot = modelEntityMap.getOptimiserObject(slot, IPortSlot.class);
 							marketSlots.add(portSlot);
 							marketGroupSlots.add(portSlot);
@@ -3626,7 +3627,7 @@ public class LNGScenarioTransformer {
 			return;
 		}
 
-		final TreeMap<String, Collection<Slot>> curve;
+		final TreeMap<String, Collection<Slot<?>>> curve;
 		if (existingSpotCount.containsKey(market)) {
 			curve = existingSpotCount.get(market);
 		} else {
@@ -3634,9 +3635,9 @@ public class LNGScenarioTransformer {
 			existingSpotCount.put(market, curve);
 		}
 		if (spotSlot instanceof Slot) {
-			final Slot slot = (Slot) spotSlot;
+			final Slot<?> slot = (Slot<?>) spotSlot;
 			final String key = SpotSlotUtils.getKeyForDate(slot.getWindowStart());
-			final Collection<Slot> slots;
+			final Collection<Slot<?>> slots;
 			if (curve.containsKey(key)) {
 				slots = curve.get(key);
 			} else {
@@ -3648,12 +3649,12 @@ public class LNGScenarioTransformer {
 	}
 
 	@NonNull
-	private Collection<@NonNull Slot> getSpotSlots(@NonNull final SpotMarket spotMarket, @NonNull final String key) {
+	private Collection<@NonNull Slot<?>> getSpotSlots(@NonNull final SpotMarket spotMarket, @NonNull final String key) {
 
 		if (existingSpotCount.containsKey(spotMarket)) {
-			final TreeMap<String, Collection<@NonNull Slot>> curve = existingSpotCount.get(spotMarket);
+			final TreeMap<String, Collection<@NonNull Slot<?>>> curve = existingSpotCount.get(spotMarket);
 			if (curve.containsKey(key)) {
-				final Collection<Slot> slots = curve.get(key);
+				final Collection<Slot<?>> slots = curve.get(key);
 				if (slots != null) {
 					return slots;
 				}

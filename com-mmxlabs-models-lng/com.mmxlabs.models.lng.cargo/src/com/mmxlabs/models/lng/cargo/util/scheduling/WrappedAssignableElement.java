@@ -42,7 +42,8 @@ public class WrappedAssignableElement {
 	private Pair<ZonedDateTime, ZonedDateTime> endWindow;
 	private int minElementDuration;
 
-	public WrappedAssignableElement(final @NonNull List<Slot> sortedSlots, @Nullable Vessel vessel, final @Nullable PortModel portModel, @Nullable ModelDistanceProvider modelDistanceProvider, @Nullable final IAssignableElementDateProvider dateProvider) {
+	public WrappedAssignableElement(final @NonNull List<Slot> sortedSlots, @Nullable Vessel vessel, final @Nullable PortModel portModel, @Nullable ModelDistanceProvider modelDistanceProvider,
+			@Nullable final IAssignableElementDateProvider dateProvider) {
 		this.assignableElement = null;
 		{
 			Slot firstSlot = null;
@@ -161,18 +162,19 @@ public class WrappedAssignableElement {
 		}
 	}
 
-	public WrappedAssignableElement(final @NonNull AssignableElement assignableElement, final @Nullable PortModel portModel, @Nullable ModelDistanceProvider modelDistanceProvider, @Nullable final IAssignableElementDateProvider dateProvider) {
+	public WrappedAssignableElement(final @NonNull AssignableElement assignableElement, final @Nullable PortModel portModel, @Nullable ModelDistanceProvider modelDistanceProvider,
+			@Nullable final IAssignableElementDateProvider dateProvider) {
 		this.assignableElement = assignableElement;
 		if (assignableElement instanceof Cargo) {
 			final Cargo cargo = (Cargo) assignableElement;
 
-			final List<@NonNull Slot> sortedSlots = cargo.getSortedSlots();
+			final List<@NonNull Slot<?>> sortedSlots = cargo.getSortedSlots();
 			assert sortedSlots != null;
-			Slot firstSlot = null;
-			Slot lastSlot = null;
+			Slot<?> firstSlot = null;
+			Slot<?> lastSlot = null;
 
 			// TODO: Handle LDD etc
-			for (final Slot slot : sortedSlots) {
+			for (final Slot<?> slot : sortedSlots) {
 				if (slot instanceof SpotSlot) {
 					continue;
 				}
@@ -186,7 +188,7 @@ public class WrappedAssignableElement {
 			{
 				Port lastPort = null;
 				ZonedDateTime lastTime = null;
-				for (final Slot slot : sortedSlots) {
+				for (final Slot<?> slot : sortedSlots) {
 
 					final Port nextPort = slot.getPort();
 					final ZonedDateTime slotTime = getWindowStart(slot, dateProvider);
@@ -218,12 +220,12 @@ public class WrappedAssignableElement {
 			}
 			final ZonedDateTime maxStartDate;
 			{
-				final List<@NonNull Slot> reverseOrder = new ArrayList<>(sortedSlots);
+				final List<@NonNull Slot<?>> reverseOrder = new ArrayList<>(sortedSlots);
 				Collections.reverse(reverseOrder);
 
 				Port lastPort = null;
 				ZonedDateTime lastTime = null;
-				for (final Slot slot : reverseOrder) {
+				for (final Slot<?> slot : reverseOrder) {
 
 					final ZonedDateTime slotTime = getWindowEnd(slot, dateProvider);
 					final Port nextPort = slot.getPort();

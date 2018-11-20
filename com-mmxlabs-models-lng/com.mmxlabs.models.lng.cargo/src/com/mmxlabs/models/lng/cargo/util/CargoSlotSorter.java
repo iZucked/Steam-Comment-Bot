@@ -31,9 +31,9 @@ public class CargoSlotSorter {
 	 * A {@link TimeZone} aware {@link Comparator} implementation to sort {@link Slot}s based on their start window.
 	 * 
 	 */
-	public static class SlotComparator implements Comparator<Slot> {
+	public static class SlotComparator implements Comparator<Slot<?>> {
 		@Override
-		public int compare(final Slot o1, final Slot o2) {
+		public int compare(final Slot<?> o1, final Slot<?> o2) {
 
 			// Implicit Loads followed by discharges - does not support LDLD cargoes
 			final int c = getSlotType(o1) - getSlotType(o2);
@@ -52,7 +52,7 @@ public class CargoSlotSorter {
 			return d1.compareTo(d2);
 		}
 
-		private int getSlotType(final Slot s) {
+		private int getSlotType(final Slot<?> s) {
 			if (s instanceof LoadSlot) {
 				return 1;
 			}
@@ -69,9 +69,9 @@ public class CargoSlotSorter {
 	 * @param slots
 	 * @return
 	 */
-	public static EList<Slot> sortedSlots(final List<Slot> slots) {
+	public static EList<Slot<?>> sortedSlots(final List<Slot<?>> slots) {
 		// Copy original list
-		final EList<Slot> sortedSlots = new BasicEList<Slot>(slots);
+		final EList<Slot<?>> sortedSlots = new BasicEList<>(slots);
 		// Sort!
 		Collections.sort(sortedSlots, new SlotComparator());
 		// Return

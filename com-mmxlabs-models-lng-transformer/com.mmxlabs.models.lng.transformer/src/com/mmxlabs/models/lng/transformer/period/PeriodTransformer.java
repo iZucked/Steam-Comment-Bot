@@ -75,7 +75,6 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -230,7 +229,7 @@ public class PeriodTransformer {
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
 		generateStartAndEndConditionsMap(schedule, startConditionMap, endConditionMap);
 
-		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
+		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 		generateSlotAllocationMap(schedule, slotAllocationMap);
 
 		// final Map<Cargo, CargoAllocation> fullMap = originalScenario.getScheduleModel().getSchedule().getCargoAllocations().stream() //
@@ -302,12 +301,12 @@ public class PeriodTransformer {
 
 		// List of new vessel availabilities for cargoes outside normal range
 		final List<VesselAvailability> newVesselAvailabilities = new LinkedList<>();
-		final Set<Slot> seenSlots = new HashSet<>();
-		final Set<Slot> slotsToRemove = new HashSet<>();
+		final Set<Slot<?>> seenSlots = new HashSet<>();
+		final Set<Slot<?>> slotsToRemove = new HashSet<>();
 		final Set<Cargo> cargoesToRemove = new HashSet<>();
 
 		final Set<Cargo> lockedCargoes = new HashSet<>();
-		final Set<Slot> lockedSlots = new HashSet<>();
+		final Set<Slot<?>> lockedSlots = new HashSet<>();
 
 		// Filter out slots and cargoes, create new availabilities for special cases.
 		findSlotsAndCargoesToRemove(internalDomain, periodRecord, cargoModel, seenSlots, slotsToRemove, cargoesToRemove, slotAllocationMap, objectToPortVisitMap, lockedCargoes, lockedSlots);
@@ -370,22 +369,20 @@ public class PeriodTransformer {
 		return new NonNullPair<>(outputDataProvider, internalDomain);
 	}
 
-	private void lockAndRemoveCanalBookings(final Set<Slot> slotsToRemove, final Set<Cargo> cargoesToRemove, final Set<Slot> lockedSlots, final Set<Cargo> lockedCargoes,
-			final Map<Slot, SlotAllocation> slotAllocationMap, final LNGScenarioModel output) {
+	private void lockAndRemoveCanalBookings(final Set<Slot<?>> slotsToRemove, final Set<Cargo> cargoesToRemove, final Set<Slot<?>> lockedSlots, final Set<Cargo> lockedCargoes,
+			final Map<Slot<?>, SlotAllocation> slotAllocationMap, final LNGScenarioModel output) {
 		final CargoModel cargoModel = output.getCargoModel();
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 		if (canalBookings != null) {
 			// data structures
-			final Map<Slot, CanalBookingSlot> slotToCanalBooking = new HashMap<>();
-			final Map<Slot, Slot> slotToNextSlot = new HashMap<>();
 
-			final Map<Slot, CanalBookingSlot> preBookedBookings = new HashMap<>();
-			final Map<Slot, CanalBookingSlot> bookingToLock = new HashMap<>();
+			final Map<Slot<?>, CanalBookingSlot> preBookedBookings = new HashMap<>();
+			final Map<Slot<?>, CanalBookingSlot> bookingToLock = new HashMap<>();
 			final Set<CanalBookingSlot> bookingToRemove = new HashSet<>();
 
-			final Set<Slot> allSlotsRemoved = new HashSet<>(slotsToRemove);
+			final Set<Slot<?>> allSlotsRemoved = new HashSet<>(slotsToRemove);
 			allSlotsRemoved.addAll(cargoesToRemove.stream().map(c -> c.getSortedSlots()).flatMap(c -> c.stream()).collect(Collectors.toSet()));
-			final Set<Slot> allSlotsLocked = new HashSet<>(lockedSlots);
+			final Set<Slot<?>> allSlotsLocked = new HashSet<>(lockedSlots);
 			allSlotsLocked.addAll(lockedCargoes.stream().map(c -> c.getSortedSlots()).flatMap(c -> c.stream()).collect(Collectors.toSet()));
 
 			for (final CanalBookingSlot booking : canalBookings.getCanalBookingSlots()) {
@@ -394,7 +391,7 @@ public class PeriodTransformer {
 				}
 			}
 
-			for (final Slot slot : allSlotsRemoved) {
+			for (final Slot<?> slot : allSlotsRemoved) {
 				final SlotAllocation slotAllocation = slotAllocationMap.get(slot);
 				if (slotAllocation != null) {
 					final SlotVisit slotVisit = slotAllocation.getSlotVisit();
@@ -412,7 +409,7 @@ public class PeriodTransformer {
 				}
 			}
 
-			for (final Slot slot : allSlotsLocked) {
+			for (final Slot<?> slot : allSlotsLocked) {
 				final SlotAllocation slotAllocation = slotAllocationMap.get(slot);
 				if (slotAllocation != null) {
 					final SlotVisit slotVisit = slotAllocation.getSlotVisit();
@@ -420,7 +417,7 @@ public class PeriodTransformer {
 						if (slotVisit.getNextEvent() instanceof Journey) {
 							final Journey journey = (Journey) slotVisit.getNextEvent();
 							if (journey.getCanalBooking() != null) {
-								Slot nextSlot = null;
+								Slot<?> nextSlot = null;
 								Event nextEvent = slotVisit.getNextEvent();
 								while (nextEvent.getNextEvent() != null) {
 									if (nextEvent instanceof SlotVisit) {
@@ -445,7 +442,7 @@ public class PeriodTransformer {
 				canalBookings.getCanalBookingSlots().remove(bookingSlot);
 			}
 
-			for (final Map.Entry<Slot, CanalBookingSlot> bookingSlot : bookingToLock.entrySet()) {
+			for (final Map.Entry<Slot<?>, CanalBookingSlot> bookingSlot : bookingToLock.entrySet()) {
 				bookingSlot.getValue().setSlot(bookingSlot.getKey());
 			}
 		}
@@ -569,8 +566,8 @@ public class PeriodTransformer {
 	}
 
 	private void lockOpenSlots(@NonNull final CargoModel cargoModel, @NonNull final PeriodRecord periodRecord, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
-		for (final List<Slot> slotList : new List[] { cargoModel.getLoadSlots(), cargoModel.getDischargeSlots() }) {
-			for (final Slot slot : slotList) {
+		for (final List<Slot<?>> slotList : new List[] { cargoModel.getLoadSlots(), cargoModel.getDischargeSlots() }) {
+			for (final Slot<?> slot : slotList) {
 				if (inclusionChecker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord).getFirst() != InclusionType.In) {
 					if (slot.getCargo() != null && isNominalInPrompt(slot.getCargo(), periodRecord)) {
 						// break out if part of a nominal cargo
@@ -583,8 +580,8 @@ public class PeriodTransformer {
 		}
 	}
 
-	private void updateSlotsToRemoveWithDependencies(@NonNull final Map<Slot, SlotAllocation> slotAllocationMap, @NonNull final Set<Slot> slotsToRemove, @NonNull final Set<Cargo> cargoesToRemove,
-			@NonNull final Set<Cargo> cargoesToKeep, final Set<Cargo> lockedCargoes) {
+	private void updateSlotsToRemoveWithDependencies(@NonNull final Map<Slot<?>, SlotAllocation> slotAllocationMap, @NonNull final Set<Slot<?>> slotsToRemove,
+			@NonNull final Set<Cargo> cargoesToRemove, @NonNull final Set<Cargo> cargoesToKeep, final Set<Cargo> lockedCargoes) {
 		for (final Cargo cargo : cargoesToKeep) {
 			if (cargoesToRemove.contains(cargo)) {
 				lockDownCargoDates(slotAllocationMap, cargo, lockedCargoes, true);
@@ -672,8 +669,9 @@ public class PeriodTransformer {
 	}
 
 	public void findSlotsAndCargoesToRemove(@NonNull final EditingDomain internalDomain, @NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel,
-			@NonNull final Set<Slot> seenSlots, @NonNull final Collection<Slot> slotsToRemove, @NonNull final Collection<Cargo> cargoesToRemove,
-			@NonNull final Map<Slot, SlotAllocation> slotAllocationMap, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap, final Set<Cargo> lockedCargoes, final Set<Slot> lockedSlots) {
+			@NonNull final Set<Slot<?>> seenSlots, @NonNull final Collection<Slot<?>> slotsToRemove, @NonNull final Collection<Cargo> cargoesToRemove,
+			@NonNull final Map<Slot<?>, SlotAllocation> slotAllocationMap, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap, final Set<Cargo> lockedCargoes,
+			final Set<Slot<?>> lockedSlots) {
 
 		for (final Cargo cargo : cargoModel.getCargoes()) {
 			assert cargo != null;
@@ -689,7 +687,7 @@ public class PeriodTransformer {
 					// lock whole cargo if both slots are outside period or if there is no vessel
 					// check slots are after start
 					boolean isBefore = false;
-					for (Slot slot : cargo.getSlots()) {
+					for (Slot<?> slot : cargo.getSlots()) {
 						if (inclusionChecker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord).getSecond() == Position.Before) {
 							isBefore = true;
 							break;
@@ -698,7 +696,7 @@ public class PeriodTransformer {
 					lockDownCargoDates(slotAllocationMap, cargo, lockedCargoes, isBefore);
 				} else {
 					// lock only one slot
-					final NonNullPair<Slot, Slot> slots = inclusionChecker.getFirstAndLastSlots(cargo);
+					final NonNullPair<Slot<?>, Slot<?>> slots = inclusionChecker.getFirstAndLastSlots(cargo);
 					if (pos == Position.After) {
 						if (inclusionChecker.getObjectInclusionType(slots.getFirst(), objectToPortVisitMap, periodRecord).getFirst() == InclusionType.In) {
 							if (!isNominalInPrompt(cargo, periodRecord)) {
@@ -761,27 +759,27 @@ public class PeriodTransformer {
 	 * @param lockedCargoes
 	 *                                    TODO
 	 */
-	public void checkIfRemovedSlotsAreStillNeeded(final @NonNull Set<Slot> seenSlots, final @NonNull Collection<Slot> slotsToRemove, final @NonNull Collection<Cargo> cargoesToRemove,
+	public void checkIfRemovedSlotsAreStillNeeded(final @NonNull Set<Slot<?>> seenSlots, final @NonNull Collection<Slot<?>> slotsToRemove, final @NonNull Collection<Cargo> cargoesToRemove,
 			final @NonNull List<VesselAvailability> newVesselAvailabilities, final @NonNull Map<AssignableElement, PortVisit> startConditionMap,
-			final @NonNull Map<AssignableElement, PortVisit> endConditionMap, final @NonNull Map<Slot, SlotAllocation> slotAllocationMap, final Set<Cargo> lockedCargoes) {
+			final @NonNull Map<AssignableElement, PortVisit> endConditionMap, final @NonNull Map<Slot<?>, SlotAllocation> slotAllocationMap, final Set<Cargo> lockedCargoes) {
 
-		for (final Slot slot : seenSlots) {
+		for (final Slot<?> slot : seenSlots) {
 			// Slot has already been removed, ignore it.
 			// FIXME: This slot may be a dependency of a slot later in the list and have it's own dependencies which will not be included. We should probably loop over a cloned list which can be added
 			// to.
 			if (slotsToRemove.contains(slot)) {
 				continue;
 			}
-			final Set<Slot> slotDependencies = new HashSet<>(getExtraDependenciesForSlot(slot));
+			final Set<Slot<?>> slotDependencies = new HashSet<>(getExtraDependenciesForSlot(slot));
 			updateSlotDependencies(slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap, slotDependencies, lockedCargoes);
 		}
 	}
 
-	private void updateSlotDependencies(final @NonNull Collection<Slot> slotsToRemove, final @NonNull Collection<Cargo> cargoesToRemove,
+	private void updateSlotDependencies(final @NonNull Collection<Slot<?>> slotsToRemove, final @NonNull Collection<Cargo> cargoesToRemove,
 			final @NonNull List<VesselAvailability> newVesselAvailabilities, final @NonNull Map<AssignableElement, PortVisit> startConditionMap,
-			@NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Map<Slot, SlotAllocation> slotAllocationMap, final Set<Slot> slotDependencies,
+			@NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Map<Slot<?>, SlotAllocation> slotAllocationMap, final Set<Slot<?>> slotDependencies,
 			final Set<Cargo> lockedCargoes) {
-		for (final Slot dep : slotDependencies) {
+		for (final Slot<?> dep : slotDependencies) {
 			if (slotsToRemove.contains(dep)) {
 				slotsToRemove.remove(dep);
 				final Cargo depCargo = dep.getCargo();
@@ -833,14 +831,14 @@ public class PeriodTransformer {
 	 * @param slotsToRemove
 	 * @param cargoesToRemove
 	 */
-	public void removeExcludedSlotsAndCargoes(final EditingDomain internalDomain, final IScenarioEntityMapping mapping, final Collection<@NonNull Slot> slotsToRemove,
+	public void removeExcludedSlotsAndCargoes(final EditingDomain internalDomain, final IScenarioEntityMapping mapping, final Collection<@NonNull Slot<?>> slotsToRemove,
 			final Collection<@NonNull Cargo> cargoesToRemove) {
 		// <<<
 		// Delete slots and cargoes outside of range.
 		List<EObject> objectsToDelete = new LinkedList<>();
-		for (final Slot slot : slotsToRemove) {
+		for (final Slot<?> slot : slotsToRemove) {
 			@Nullable
-			final Slot originalFromCopy = mapping.getOriginalFromCopy(slot);
+			final Slot<?> originalFromCopy = mapping.getOriginalFromCopy(slot);
 			assert originalFromCopy != null; // We should not be null in the transformer
 			mapping.registerRemovedOriginal(originalFromCopy);
 			if (slot instanceof LoadSlot) {
@@ -863,7 +861,7 @@ public class PeriodTransformer {
 		internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, objectsToDelete));
 	}
 
-	public void lockDownCargoDates(final Map<Slot, SlotAllocation> slotAllocationMap, final Cargo cargo, final Set<Cargo> lockedCargoes, boolean doLockDates) {
+	public void lockDownCargoDates(final Map<Slot<?>, SlotAllocation> slotAllocationMap, final Cargo cargo, final Set<Cargo> lockedCargoes, boolean doLockDates) {
 
 		final VesselAssignmentType vat = cargo.getVesselAssignmentType();
 		Vessel lockedVessel = null;
@@ -875,7 +873,7 @@ public class PeriodTransformer {
 			lockedVessel = (((CharterInMarketOverride) vat).getCharterInMarket().getVessel());
 		}
 
-		for (final Slot slot : cargo.getSlots()) {
+		for (final Slot<?> slot : cargo.getSlots()) {
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				if (loadSlot.isDESPurchase()) {
@@ -917,7 +915,7 @@ public class PeriodTransformer {
 		lockedCargoes.add(cargo);
 	}
 
-	public void lockDownSlotDates(final Map<Slot, SlotAllocation> slotAllocationMap, final Slot slot, final Set<Slot> lockedSlots, boolean doLockDates) {
+	public void lockDownSlotDates(final Map<Slot<?>, SlotAllocation> slotAllocationMap, final Slot<?> slot, final Set<Slot<?>> lockedSlots, boolean doLockDates) {
 		if (slot instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) slot;
 			if (loadSlot.isDESPurchase()) {
@@ -972,7 +970,7 @@ public class PeriodTransformer {
 	}
 
 	private boolean isInPrompt(@NonNull Cargo cargo, @NonNull PeriodRecord periodRecord) {
-		Slot first = cargo.getSlots().get(0);
+		Slot<?> first = cargo.getSlots().get(0);
 		if (periodRecord.promptEnd != null && first.getWindowStart().isBefore(periodRecord.promptEnd)) {
 			// start is within the prompt
 			return true;
@@ -980,14 +978,14 @@ public class PeriodTransformer {
 		return false;
 	}
 
-	protected List<Slot> getExtraDependenciesForSlot(final Slot slot) {
+	protected List<Slot<?>> getExtraDependenciesForSlot(final Slot<?> slot) {
 
 		if (extensions == null) {
 			return Collections.emptyList();
 		}
-		final List<Slot> extraDependencies = new LinkedList<Slot>();
+		final List<Slot<?>> extraDependencies = new LinkedList<>();
 		for (final IPeriodTransformerExtension ext : extensions) {
-			final List<Slot> extraDependenciesForSlot = ext.getExtraDependenciesForSlot(slot);
+			final List<Slot<?>> extraDependenciesForSlot = ext.getExtraDependenciesForSlot(slot);
 			if (extraDependenciesForSlot != null) {
 				extraDependencies.addAll(extraDependenciesForSlot);
 			}
@@ -1111,7 +1109,7 @@ public class PeriodTransformer {
 			for (final Event event : sequence.getEvents()) {
 				if (event instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) event;
-					final Slot slot = slotVisit.getSlotAllocation().getSlot();
+					final Slot<?> slot = slotVisit.getSlotAllocation().getSlot();
 					objectToPortVisitMap.put(slot, slotVisit);
 				} else if (event instanceof VesselEventVisit) {
 					final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
@@ -1242,7 +1240,7 @@ public class PeriodTransformer {
 		return new Pair<>(ClonedScenarioDataProvider.make(output, wholeScenarioDataProvider), copyBaseSchedule);
 	}
 
-	public void generateSlotAllocationMap(@NonNull final Schedule schedule, @NonNull final Map<Slot, SlotAllocation> slotAllocationMap) {
+	public void generateSlotAllocationMap(@NonNull final Schedule schedule, @NonNull final Map<Slot<?>, SlotAllocation> slotAllocationMap) {
 		for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
 			slotAllocationMap.put(slotAllocation.getSlot(), slotAllocation);
 		}
