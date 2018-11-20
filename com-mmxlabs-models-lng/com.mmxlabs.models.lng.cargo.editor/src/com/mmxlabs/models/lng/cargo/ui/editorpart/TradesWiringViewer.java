@@ -598,7 +598,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(rootData.getLoadSlots(), idx);
 							listener.menuAboutToShow(mgr);
 							if (contextMenuExtensions != null) {
-								final Slot slot = rootData.getLoadSlots().get(idx);
+								final Slot<?> slot = rootData.getLoadSlots().get(idx);
 								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
 									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
 								}
@@ -607,7 +607,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(rootData.getDischargeSlots(), idx);
 							listener.menuAboutToShow(mgr);
 							if (contextMenuExtensions != null) {
-								final Slot slot = rootData.getDischargeSlots().get(idx);
+								final Slot<?> slot = rootData.getDischargeSlots().get(idx);
 								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
 									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
 								}
@@ -619,7 +619,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(rootData.getDischargeSlots(), idx);
 							listener.menuAboutToShow(mgr);
 							if (contextMenuExtensions != null) {
-								final Slot slot = rootData.getDischargeSlots().get(idx);
+								final Slot<?> slot = rootData.getDischargeSlots().get(idx);
 								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
 									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
 								}
@@ -628,7 +628,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(rootData.getLoadSlots(), idx);
 							listener.menuAboutToShow(mgr);
 							if (contextMenuExtensions != null) {
-								final Slot slot = rootData.getLoadSlots().get(idx);
+								final Slot<?> slot = rootData.getLoadSlots().get(idx);
 								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
 									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
 								}
@@ -877,11 +877,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			final List<Object> extraObjects = new LinkedList<>();
 			for (final Object o : objectsToDelete) {
 				Cargo c = null;
-				if (o instanceof Slot) {
-					c = ((Slot) o).getCargo();
+				if (o instanceof Slot<?>) {
+					c = ((Slot<?>) o).getCargo();
 				}
 				if (c != null) {
-					for (final Slot s : c.getSlots()) {
+					for (final Slot<?> s : c.getSlots()) {
 						if (s instanceof SpotSlot) {
 							extraObjects.add(s);
 						}
@@ -1562,8 +1562,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		final CargoModel cargoModel = getScenarioModel().getCargoModel();
 
-		final Set<Slot> slotsToRemove = new HashSet<>();
-		final Set<Slot> slotsToKeep = new HashSet<>();
+		final Set<Slot<?>> slotsToRemove = new HashSet<>();
+		final Set<Slot<?>> slotsToKeep = new HashSet<>();
 		final Set<Cargo> cargoesToRemove = new HashSet<>();
 		final Set<Cargo> cargoesToKeep = new HashSet<>();
 		for (final Map.Entry<RowData, RowData> e : newWiring.entrySet()) {
@@ -1583,7 +1583,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 						if (!createComplexCargo) {
 							// Break the existing wiring
-							for (final Slot s : c.getSlots()) {
+							for (final Slot<?> s : c.getSlots()) {
 								if (s != loadSide.loadSlot) {
 									setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), s, CargoPackage.eINSTANCE.getSlot_Cargo(), null));
 
@@ -1619,7 +1619,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						}
 						if (dischargeCargo != null) {
 							if (dischargeCargo.getSlots().size() <= 2) {
-								for (final Slot s : dischargeCargo.getSlots()) {
+								for (final Slot<?> s : dischargeCargo.getSlots()) {
 									if (s != dischargeSide.dischargeSlot) {
 										setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), s, CargoPackage.eINSTANCE.getSlot_Cargo(), null));
 
@@ -1641,7 +1641,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					// Broken the wiring
 					if (loadSide.cargo != null) {
 						cargoesToRemove.add(loadSide.cargo);
-						for (final Slot s : loadSide.cargo.getSlots()) {
+						for (final Slot<?> s : loadSide.cargo.getSlots()) {
 							// Optional market slots can be removed.
 							if (s instanceof SpotSlot && s.isOptional()) {
 								slotsToRemove.add(s);
@@ -1661,7 +1661,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			deleteCommands.add(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), cargo));
 		}
 		slotsToRemove.removeAll(slotsToKeep);
-		for (final Slot slot : slotsToRemove) {
+		for (final Slot<?> slot : slotsToRemove) {
 			deleteCommands.add(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), slot));
 		}
 
@@ -2313,14 +2313,14 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 		}
 
-		private final void initialiseSlot(final Slot newSlot, final boolean isLoad, final RowData referenceRowData) {
+		private final void initialiseSlot(final Slot<?> newSlot, final boolean isLoad, final RowData referenceRowData) {
 			newSlot.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 			newSlot.setOptional(false);
 			newSlot.setName("");
 			// Set window so that via default sorting inserts new slot at current table position
 			if (referenceRowData != null) {
-				final Slot primarySortSlot = isLoad ? referenceRowData.loadSlot : referenceRowData.dischargeSlot;
-				final Slot secondarySortSlot = isLoad ? referenceRowData.dischargeSlot : referenceRowData.loadSlot;
+				final Slot<?> primarySortSlot = isLoad ? referenceRowData.loadSlot : referenceRowData.dischargeSlot;
+				final Slot<?> secondarySortSlot = isLoad ? referenceRowData.dischargeSlot : referenceRowData.loadSlot;
 				if (primarySortSlot != null) {
 					newSlot.setWindowStart(primarySortSlot.getWindowStart());
 					newSlot.setPort(primarySortSlot.getPort());
@@ -2513,7 +2513,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
 					if (rootObject instanceof LNGScenarioModel) {
 
-						Slot selectedObject = null;
+						Slot<?> selectedObject = null;
 						final ISelection selection = TradesWiringViewer.this.getScenarioViewer().getSelection();
 						if (selection instanceof IStructuredSelection) {
 							final IStructuredSelection ss = (IStructuredSelection) selection;
@@ -2531,8 +2531,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 									}
 								}
 
-								if (o instanceof Slot) {
-									selectedObject = (Slot) o;
+								if (o instanceof Slot<?>) {
+									selectedObject = (Slot<?>) o;
 									break;
 								}
 
