@@ -14,6 +14,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -40,6 +41,7 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -268,36 +270,38 @@ public class InventoryReport extends ViewPart {
 				if (tableViewer == null) {
 					return;
 				}
-				if (tableViewer.getInput() == null) {
+				final Grid grid = tableViewer.getGrid();
+				if (grid == null) {
 					return;
 				}
-				if (tableViewer.getGrid() == null) {
+				final int count = grid.getItemCount();
+				if (count <= 0) {
 					return;
 				}
-				final Object oLevels = tableViewer.getInput();
-				if (oLevels instanceof List<?>) {
-					final List<InventoryLevel> levels = (List<InventoryLevel>)oLevels;
-					int position = -1;
-					for (InventoryLevel il : levels) {
+				
+				final GridItem[] items = grid.getItems();
+				int pos = -1;
+				for (GridItem item : items) {
+					Object oData = item.getData();
+					if (oData instanceof InventoryLevel) {
+						InventoryLevel il = (InventoryLevel) oData;
 						if (il.date.isAfter(today)) {
 							break;
 						}
-						position++;
+						pos++;
 					}
-					if (position != -1) {
-						tableViewer.getGrid().deselectAll();
-						tableViewer.getGrid().select(position);
-						tableViewer.getGrid().showSelection();
-					}
-					
 				}
-				
+				if (pos != -1) {
+					grid.deselectAll();
+					grid.select(pos);
+					grid.showSelection();
+				}
 			}
 		};
-		todayAction.setToolTipText("Scroll to today's day");
+		todayAction.setToolTipText("Snap to today");
 		getViewSite().getActionBars().getToolBarManager().add(todayAction);
 		todayAction.setEnabled(folder.getSelectionIndex() == 1);
-
+		
 		folder.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
