@@ -180,6 +180,8 @@ public class ChangeSetView extends ViewPart {
 
 	private static final String KEY_RESTORE_ANALYTICS_SOLUTION = "restore-analytics-solution-from-tags";
 
+	private static final boolean RE_SORT_ON_FILTER = false;
+
 	private GridTreeViewer viewer;
 
 	private IScenarioServiceSelectionProvider scenarioSelectionProvider;
@@ -532,7 +534,8 @@ public class ChangeSetView extends ViewPart {
 		viewer.setContentProvider(createContentProvider());
 
 		columnHelper = new ChangeSetViewColumnHelper(this, viewer);
-		columnHelper.makeColumns();
+		insertionPlanFilter = new InsertionPlanGrouperAndFilter();
+		columnHelper.makeColumns(insertionPlanFilter);
 
 		// Selection listener for pin/diff driver.
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -686,7 +689,7 @@ public class ChangeSetView extends ViewPart {
 				return true;
 			}
 		};
-		insertionPlanFilter = new InsertionPlanGrouperAndFilter();
+//		insertionPlanFilter = new InsertionPlanGrouperAndFilter();
 		filters[1] = insertionPlanFilter;
 
 		viewer.setFilters(filters);
@@ -718,11 +721,11 @@ public class ChangeSetView extends ViewPart {
 					g2 = (ChangeSetTableGroup) e2;
 				}
 				if (g1 != null && g2 != null) {
-					if (insertionPlanFilter.getUserFilters().isEmpty()) {
+//					if (insertionPlanFilter.getUserFilters().isEmpty()) {
 						if (!Objects.equal(g1.getGroupObject(), g2.getGroupObject())) {
 							return Double.compare(g2.getGroupSortValue(), g1.getGroupSortValue());
 
-						}
+//						}
 					}
 					return -Double.compare(g2.getSortValue(), g1.getSortValue());
 				}

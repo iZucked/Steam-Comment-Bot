@@ -207,7 +207,7 @@ public class ChangeSetViewColumnHelper {
 		columnExtenders = ChangeSetColumnValueExtenderExtensionUtil.getColumnExtendeders();
 	}
 
-	public void makeColumns() {
+	public void makeColumns(InsertionPlanGrouperAndFilter insertionPlanFilter) {
 		// Create columns
 		{
 			column_SetName = new GridViewerColumn(viewer, SWT.CENTER);
@@ -217,7 +217,7 @@ public class ChangeSetViewColumnHelper {
 			column_SetName.getColumn().setWidth(60);
 			column_SetName.getColumn().setResizeable(true);
 			column_SetName.getColumn().setMoveable(false);
-			column_SetName.setLabelProvider(createCSLabelProvider());
+			column_SetName.setLabelProvider(createCSLabelProvider(insertionPlanFilter));
 			column_SetName.getColumn().setCellRenderer(createCellRenderer());
 		}
 
@@ -1556,7 +1556,7 @@ public class ChangeSetViewColumnHelper {
 		});
 	}
 
-	private CellLabelProvider createCSLabelProvider() {
+	private CellLabelProvider createCSLabelProvider(InsertionPlanGrouperAndFilter insertionPlanFilter) {
 
 		return new CellLabelProvider() {
 
@@ -1567,7 +1567,14 @@ public class ChangeSetViewColumnHelper {
 				if (element instanceof ChangeSetTableGroup) {
 					// ChangeSetNode changeSetNode = (ChangeSetNode) element;
 					final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
-					cell.setFont(boldFont);
+					cell.setFont(null);
+					if(insertionPlanFilter.isUnexpandedInsertionGroup(changeSet)) {
+						cell.setFont(boldFont);
+					}
+					else {
+//						cell.setFont(boldFont);						
+					}
+//					cell.setFont(boldFont);						
 					final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSet.eContainer();
 					int idx = 0;
 					if (root != null) {

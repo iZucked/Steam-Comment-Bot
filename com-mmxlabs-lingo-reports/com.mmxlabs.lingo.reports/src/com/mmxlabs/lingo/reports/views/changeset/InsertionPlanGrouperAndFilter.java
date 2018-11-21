@@ -1154,6 +1154,20 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 	}
 
+	public boolean isUnexpandedInsertionGroup(ChangeSetTableGroup changeSetTableGroup) {
+
+        if (!insertionModeActive) {
+            return false;
+        }
+
+//        if (userFilters.isEmpty()) {
+            if (!expandedGroups.contains(changeSetTableGroup.getGroupObject())) {
+                return true;
+            }
+//        }
+        return false;
+    }
+
 	private Pair<String, Object> getDestination(final ChangeSetTableGroup tableGroup, final Object target) {
 		final ChangeSet changeSet = tableGroup.getChangeSet();
 		Object sendTo = null;
