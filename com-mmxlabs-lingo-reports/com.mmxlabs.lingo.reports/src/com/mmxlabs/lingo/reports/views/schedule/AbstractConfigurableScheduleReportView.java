@@ -7,6 +7,7 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -23,8 +25,11 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.PlatformUI;
+import org.osgi.service.event.EventHandler;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
@@ -47,15 +52,20 @@ import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.rcp.common.handlers.TodayHandler;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
- * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
- * for the user to change the default settings.
+ * A customisable report for schedule based data. Extension points define the
+ * available columns for all instances and initial state for each instance of
+ * this report. Optionally a dialog is available for the user to change the
+ * default settings.
  */
 public abstract class AbstractConfigurableScheduleReportView extends AbstractConfigurableGridReportView {
 
@@ -72,6 +82,8 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 	@Inject
 	private ScenarioComparisonService scenarioComparisonService;
+
+	private EventHandler todayHandler;
 
 	protected AbstractConfigurableScheduleReportView(final String id, final ScheduleBasedReportBuilder builder) {
 		super(id);
@@ -110,8 +122,10 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 	private final IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
 		//
-		// private final Map<Object, ScenarioResult> _elementToInstanceMap = new HashMap<>();
-		// private final Map<Object, LNGScenarioModel> _elementToModelMap = new HashMap<>();
+		// private final Map<Object, ScenarioResult> _elementToInstanceMap = new
+		// HashMap<>();
+		// private final Map<Object, LNGScenarioModel> _elementToModelMap = new
+		// HashMap<>();
 
 		@Override
 		public void compareDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final ScenarioResult pin, @NonNull final ScenarioResult other, @NonNull final Table table,
@@ -222,11 +236,60 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		} });
 
 		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener);
+		
+		//Adding an event broker for the snap-to-date event todayHandler
+		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		this.todayHandler = event -> snapTo((LocalDate)  event.getProperty(IEventBroker.DATA));
+	    eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
+	}
+	
+	private void snapTo(LocalDate date) {
+		if (viewer == null) {
+			return;
+		}
+		final Grid grid = viewer.getGrid();
+		if (grid == null) {
+			return;
+		}
+		final int count = grid.getItemCount();
+		if (count <= 0) {
+			return;
+		}
+		
+		final GridItem[] items = grid.getItems();
+		int pos = -1;
+		for (GridItem item : items) {
+			Object oData = item.getData();
+			if (oData instanceof Row) {
+				Row r = (Row) oData;
+				SlotAllocation sa = r.getLoadAllocation();
+				if (sa == null) {
+					break;
+				}
+				SlotVisit sv = sa.getSlotVisit();
+				if (sv == null) {
+					break;
+				}
+				if (sv.getStart().toLocalDate().isAfter(date)) {
+					break;
+				}
+				pos++;
+			}
+		}
+		if (pos != -1) {
+			grid.deselectAll();
+			grid.select(pos);
+			grid.showSelection();
+		}
 	}
 
 	@Override
 	public void dispose() {
 		scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
+		if (this.todayHandler != null) {
+			IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+			eventBroker.unsubscribe(this.todayHandler);
+		}
 		super.dispose();
 	}
 
@@ -270,7 +333,8 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	}
 
 	/**
-	 * Examine the view extension point to determine the default set of columns, order,row types and diff options.
+	 * Examine the view extension point to determine the default set of columns,
+	 * order,row types and diff options.
 	 */
 	@Override
 	protected void setInitialState() {
@@ -413,7 +477,8 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	}
 
 	/**
-	 * Examine the eclipse registry for defined columns for this report and hook them in.
+	 * Examine the eclipse registry for defined columns for this report and hook
+	 * them in.
 	 */
 	@Override
 	protected void registerReportColumns() {

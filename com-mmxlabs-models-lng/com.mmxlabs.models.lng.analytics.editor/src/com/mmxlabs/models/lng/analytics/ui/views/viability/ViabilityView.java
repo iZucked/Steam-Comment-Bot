@@ -299,7 +299,6 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 		};
 
 		public void reallyNotifyChanged(Notification notification) {
-			super.notifyChanged(notification);
 			if (notification.isTouch()) {
 				return;
 			}
