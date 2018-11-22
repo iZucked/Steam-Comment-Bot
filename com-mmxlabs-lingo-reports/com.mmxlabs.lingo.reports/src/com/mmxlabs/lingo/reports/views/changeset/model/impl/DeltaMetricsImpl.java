@@ -38,7 +38,7 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int PNL_DELTA_EDEFAULT = 0;
+	protected static final long PNL_DELTA_EDEFAULT = 0L;
 
 	/**
 	 * The cached value of the '{@link #getPnlDelta() <em>Pnl Delta</em>}' attribute.
@@ -48,7 +48,7 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 	 * @generated
 	 * @ordered
 	 */
-	protected int pnlDelta = PNL_DELTA_EDEFAULT;
+	protected long pnlDelta = PNL_DELTA_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getLatenessDelta() <em>Lateness Delta</em>}' attribute.
@@ -114,7 +114,7 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getPnlDelta() {
+	public long getPnlDelta() {
 		return pnlDelta;
 	}
 
@@ -123,8 +123,8 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setPnlDelta(int newPnlDelta) {
-		int oldPnlDelta = pnlDelta;
+	public void setPnlDelta(long newPnlDelta) {
+		long oldPnlDelta = pnlDelta;
 		pnlDelta = newPnlDelta;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.DELTA_METRICS__PNL_DELTA, oldPnlDelta, pnlDelta));
@@ -199,7 +199,7 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case ChangesetPackage.DELTA_METRICS__PNL_DELTA:
-				setPnlDelta((Integer)newValue);
+				setPnlDelta((Long)newValue);
 				return;
 			case ChangesetPackage.DELTA_METRICS__LATENESS_DELTA:
 				setLatenessDelta((Integer)newValue);
@@ -259,7 +259,7 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (pnlDelta: ");
 		result.append(pnlDelta);
 		result.append(", latenessDelta: ");

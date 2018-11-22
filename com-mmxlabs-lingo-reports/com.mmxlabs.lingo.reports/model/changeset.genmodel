@@ -4,26 +4,33 @@
     editorDirectory="" modelPluginID="com.mmxlabs.lingo.reports" dynamicTemplates="true"
     modelName="Changeset" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0"
-    copyrightFields="false" runtimeVersion="2.11" usedGenPackages="../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet ../../com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types ../../com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.scenario.service.model/model/scenario.service.genmodel#//model ../../com.mmxlabs.models.lng.schedule/model/schedule.genmodel#//schedule ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets"
+    copyrightFields="false" runtimeVersion="2.11" usedGenPackages="../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet ../../com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types ../../com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.models.lng.schedule/model/schedule.genmodel#//schedule ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets"
     operationReflection="true" runtimePlatform="RCP" importOrganizing="true">
   <foreignModel>changeset.ecore</foreignModel>
   <genPackages prefix="Changeset" basePackage="com.mmxlabs.lingo.reports.views.changeset"
       disposableProviderFactory="true" ecorePackage="changeset.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="changeset.ecore#//ChangeSetVesselType">
+      <genEnumLiterals ecoreEnumLiteral="changeset.ecore#//ChangeSetVesselType/Fleet"/>
+      <genEnumLiterals ecoreEnumLiteral="changeset.ecore#//ChangeSetVesselType/Market"/>
+      <genEnumLiterals ecoreEnumLiteral="changeset.ecore#//ChangeSetVesselType/Nominal"/>
+      <genEnumLiterals ecoreEnumLiteral="changeset.ecore#//ChangeSetVesselType/FOB"/>
+      <genEnumLiterals ecoreEnumLiteral="changeset.ecore#//ChangeSetVesselType/DES"/>
+    </genEnums>
+    <genDataTypes ecoreDataType="changeset.ecore#//ScenarioResult"/>
     <genClasses ecoreClass="changeset.ecore#//ChangeSetRoot">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRoot/changeSets"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//ChangeSet">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/metricsToBase"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/metricsToPrevious"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/baseScenarioRef"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/prevScenarioRef"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/currentScenarioRef"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/baseScenario"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/prevScenario"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/currentScenario"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/changeSetRowsToBase"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/changeSetRowsToPrevious"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/metricsToDefaultBase"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/metricsToAlternativeBase"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSet/baseScenario"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSet/currentScenario"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSet/altBaseScenario"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSet/altCurrentScenario"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/changeSetRowsToDefaultBase"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/changeSetRowsToAlternativeBase"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/currentMetrics"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSet/description"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//Metrics">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//Metrics/pnl"/>
@@ -35,27 +42,82 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//DeltaMetrics/latenessDelta"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//DeltaMetrics/capacityDelta"/>
     </genClasses>
+    <genClasses ecoreClass="changeset.ecore#//ChangeSetRowDataGroup">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowDataGroup/members"/>
+    </genClasses>
     <genClasses ecoreClass="changeset.ecore#//ChangeSetRow">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/lhsName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/rhsName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/originalVesselName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/newVesselName"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/lhsWiringLink"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/rhsWiringLink"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/loadSlot"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/dischargeSlot"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/originalLoadAllocation"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/newLoadAllocation"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/originalDischargeAllocation"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/newDischargeAllocation"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/wiringChange"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/vesselChange"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/originalGroupProfitAndLoss"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/newGroupProfitAndLoss"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/originalEventGrouping"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/newEventGrouping"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/originalVesselShortName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/newVesselShortName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/beforeData"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/afterData"/>
+    </genClasses>
+    <genClasses ecoreClass="changeset.ecore#//ChangeSetRowData">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/primaryRecord"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/rowDataGroup"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/eventGrouping"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/vesselName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/vesselShortName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/vesselType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/lhsName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/rhsName"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/lhsLink"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/rhsLink"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/loadSlot"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/dischargeSlot"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/loadAllocation"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/dischargeAllocation"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/openLoadAllocation"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/openDischargeAllocation"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/lhsEvent"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/rhsEvent"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/lhsGroupProfitAndLoss"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/rhsGroupProfitAndLoss"/>
+    </genClasses>
+    <genClasses ecoreClass="changeset.ecore#//ChangeSetTableGroup">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableGroup/rows"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableGroup/deltaMetrics"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableGroup/currentMetrics"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableGroup/changeSet"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableGroup/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableGroup/baseScenario"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableGroup/currentScenario"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableGroup/linkedGroup"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableGroup/complexity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableGroup/sortValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableGroup/groupSortValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableGroup/groupObject"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableGroup/groupAlternative"/>
+    </genClasses>
+    <genClasses ecoreClass="changeset.ecore#//ChangeSetTableRow">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/lhsName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/rhsName"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/lhsBefore"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/lhsAfter"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/rhsBefore"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/rhsAfter"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/beforeVesselName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/beforeVesselShortName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/afterVesselName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/afterVesselShortName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/wiringChange"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/vesselChange"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/previousRHS"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/nextLHS"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/lhsSlot"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/lhsSpot"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/lhsOptional"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/lhsValid"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/lhsNonShipped"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/rhsSlot"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/rhsSpot"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/rhsOptional"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/rhsValid"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/rhsNonShipped"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/beforeVesselType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/afterVesselType"/>
+    </genClasses>
+    <genClasses ecoreClass="changeset.ecore#//ChangeSetTableRoot">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRoot/groups"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

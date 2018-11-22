@@ -354,7 +354,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (wiringChange: ");
 		result.append(wiringChange);
 		result.append(", vesselChange: ");

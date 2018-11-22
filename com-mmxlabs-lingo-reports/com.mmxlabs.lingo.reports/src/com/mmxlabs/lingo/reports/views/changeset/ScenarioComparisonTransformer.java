@@ -157,7 +157,7 @@ public class ScenarioComparisonTransformer {
 							}
 						}
 
-						return Integer.compare(o2.getMetricsToDefaultBase().getPnlDelta(), o1.getMetricsToDefaultBase().getPnlDelta());
+						return Long.compare(o2.getMetricsToDefaultBase().getPnlDelta(), o1.getMetricsToDefaultBase().getPnlDelta());
 					}
 				});
 				root.getChangeSets().addAll(changeSets);
@@ -331,7 +331,7 @@ public class ScenarioComparisonTransformer {
 		long lateness = ScheduleModelKPIUtils.getScheduleLateness(fromSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
 		long violations = ScheduleModelKPIUtils.getScheduleViolationCount(fromSchedule);
 
-		currentMetrics.setPnl((int) pnl);
+		currentMetrics.setPnl(pnl);
 		currentMetrics.setCapacity((int) violations);
 		currentMetrics.setLateness((int) lateness);
 		pnl = 0;
@@ -367,7 +367,7 @@ public class ScenarioComparisonTransformer {
 			}
 		}
 
-		deltaMetrics.setPnlDelta((int) pnl);
+		deltaMetrics.setPnlDelta(pnl);
 		deltaMetrics.setLatenessDelta((int) lateness);
 		deltaMetrics.setCapacityDelta((int) violations);
 		changeSet.setMetricsToDefaultBase(deltaMetrics);

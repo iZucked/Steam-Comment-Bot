@@ -371,7 +371,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			}
 			for (final Map.Entry<ChangeSetMetadata, List<ChangeSetTableGroup>> e : grouper.entrySet()) {
 				final List<ChangeSetTableGroup> groups = e.getValue();
-				Collections.sort(groups, (a, b) -> Integer.compare(b.getDeltaMetrics().getPnlDelta(), a.getDeltaMetrics().getPnlDelta()));
+				Collections.sort(groups, (a, b) -> Long.compare(b.getDeltaMetrics().getPnlDelta(), a.getDeltaMetrics().getPnlDelta()));
 				boolean first = true;
 				double sortValue = 0.0;
 				for (final ChangeSetTableGroup g : groups) {
