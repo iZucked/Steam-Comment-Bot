@@ -9,7 +9,10 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.net.ssl.SSLException;
@@ -39,6 +42,8 @@ public class UpstreamUrlProvider {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UpstreamUrlProvider.class);
 
+	private static final OkHttpClient CLIENT = new okhttp3.OkHttpClient();
+
 	// Avoids repeated error reporting
 	private static final ConcurrentHashMap<String, Object> reportedError = new ConcurrentHashMap<>();
 
@@ -54,7 +59,9 @@ public class UpstreamUrlProvider {
 	private boolean baseCaseServiceEnabled = false;
 	private boolean teamServiceEnabled = false;
 
-	private static final OkHttpClient CLIENT = new okhttp3.OkHttpClient();
+	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+	private boolean connectionValid = false;
+	private String currentBaseURL;
 
 	private UpstreamUrlProvider() {
 		if (Activator.getDefault() != null) {
@@ -66,13 +73,23 @@ public class UpstreamUrlProvider {
 
 		baseCaseServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY));
 		teamServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY));
+
+		// Schedule a "is alive" check every minute....
+		scheduler.scheduleAtFixedRate(this::testUpstreamAvailability, 1, 1, TimeUnit.MINUTES);
+		// ... and do one now as first invocation can be a bit delayed.
+		testUpstreamAvailability();
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		scheduler.shutdown();
+		super.finalize();
 	}
 
 	private final IPropertyChangeListener listener = event -> {
 		switch (event.getProperty()) {
 		case StandardDateRepositoryPreferenceConstants.P_URL_KEY:
-			// case StandardDateRepositoryPreferenceConstants.P_USERNAME_KEY:
-			// case StandardDateRepositoryPreferenceConstants.P_PASSWORD_KEY:
+			testUpstreamAvailability();
 			fireChangedListeners();
 			break;
 		case StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY:
@@ -93,70 +110,14 @@ public class UpstreamUrlProvider {
 	protected String password;
 
 	public String getBaseURL() {
-		String baseUrl = preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_URL_KEY);
-		if (baseUrl == null || baseUrl.isEmpty()) {
-			return "";
+		String url = null;
+		if (connectionValid) {
+			url = currentBaseURL;
 		}
-
-		// Strip trailing forward slash if present
-		if (baseUrl.charAt(baseUrl.length() - 1) == '/') {
-			baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
+		if (url != null) {
+			return url;
 		}
-		final String url = baseUrl;
-		if (!testUpstreamAvailability(url)) {
-			return "";
-		}
-
-		if (!checkCredentials(url, username, password)) {
-			hasDetails = false;
-		}
-
-		if (!hasDetails) {
-			final ISecurePreferences preferences = SecurePreferencesFactory.getDefault();
-			if (preferences.nodeExists("upstream")) {
-				final ISecurePreferences node = preferences.node("upstream");
-				try {
-					final String storedUsername = node.get("username", "n/a");
-					final String storedPassword = node.get("password", "n/a");
-					UpstreamUrlProvider.this.username = storedUsername;
-					UpstreamUrlProvider.this.password = storedPassword;
-					if (checkCredentials(url, username, password)) {
-						hasDetails = true;
-					}
-				} catch (final StorageException e1) {
-					e1.printStackTrace();
-				}
-			}
-		}
-
-		if (!hasDetails) {
-			final Display display = RunnerHelper.getWorkbenchDisplay();
-			if (display == null) {
-				return "";
-			}
-
-			if (dialogOpen.compareAndSet(false, true)) {
-				display.syncExec(() -> {
-					final AuthDetailsPromptDialog dialog = new AuthDetailsPromptDialog(display.getActiveShell());
-					dialog.setUrl(url);
-					dialog.setBlockOnOpen(true);
-					if (dialog.open() == Window.OK) {
-						UpstreamUrlProvider.this.username = dialog.getUsername();
-						UpstreamUrlProvider.this.password = new String(dialog.getPassword());
-						dialogOpen.compareAndSet(true, false);
-					}
-					hasDetails = true;
-				});
-				// Fire change listener without further blocking this call
-				ForkJoinPool.commonPool().submit(this::fireChangedListeners);
-			}
-		}
-
-		if (!hasDetails) {
-			return "";
-		}
-
-		return url;
+		return "";
 	}
 
 	public String getUsername() {
@@ -209,9 +170,98 @@ public class UpstreamUrlProvider {
 		return true;
 	}
 
+	public void testUpstreamAvailability() {
+
+		boolean valid = false;
+		try {
+
+			String baseUrl = preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_URL_KEY);
+			if (baseUrl == null || baseUrl.isEmpty()) {
+
+				return;
+			}
+
+			// Strip trailing forward slash if present
+			if (baseUrl.charAt(baseUrl.length() - 1) == '/') {
+				baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
+			}
+			final String url = baseUrl;
+			if (!testUpstreamAvailability(url)) {
+
+				return;
+			}
+
+			if (!checkCredentials(url, username, password)) {
+				hasDetails = false;
+			}
+
+			if (!hasDetails) {
+				final ISecurePreferences preferences = SecurePreferencesFactory.getDefault();
+				if (preferences.nodeExists("upstream")) {
+					final ISecurePreferences node = preferences.node("upstream");
+					try {
+						final String storedUsername = node.get("username", "n/a");
+						final String storedPassword = node.get("password", "n/a");
+						UpstreamUrlProvider.this.username = storedUsername;
+						UpstreamUrlProvider.this.password = storedPassword;
+						if (checkCredentials(url, username, password)) {
+							hasDetails = true;
+						}
+					} catch (final StorageException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+
+			if (!hasDetails) {
+				final Display display = RunnerHelper.getWorkbenchDisplay();
+				if (display == null) {
+					return;
+				}
+
+				if (dialogOpen.compareAndSet(false, true)) {
+					display.syncExec(() -> {
+						final AuthDetailsPromptDialog dialog = new AuthDetailsPromptDialog(display.getActiveShell());
+						dialog.setUrl(url);
+						dialog.setBlockOnOpen(true);
+						if (dialog.open() == Window.OK) {
+							UpstreamUrlProvider.this.username = dialog.getUsername();
+							UpstreamUrlProvider.this.password = new String(dialog.getPassword());
+							dialogOpen.compareAndSet(true, false);
+						}
+						hasDetails = true;
+					});
+					// Fire change listener without further blocking this call
+					ForkJoinPool.commonPool().submit(this::fireChangedListeners);
+				}
+			}
+
+			if (!hasDetails) {
+				return;
+			}
+			valid = true;
+			currentBaseURL = url;
+			connectionValid = true;
+		} finally {
+			// Set state to invalid if we didn't complete the checks successfully
+			if (!valid) {
+				connectionValid = false;
+				currentBaseURL = null;
+			}
+		}
+	}
+
 	public static boolean testUpstreamAvailability(final String url) {
 
 		if (url == null || url.isEmpty()) {
+			return false;
+		}
+
+		if (!url.startsWith("http")) {
+			return false;
+		}
+
+		if (url.charAt(url.length() - 1) == '/') {
 			return false;
 		}
 
@@ -262,23 +312,7 @@ public class UpstreamUrlProvider {
 
 	public boolean isAvailable() {
 		final String url = getBaseURL();
-		if (url == null || url.isEmpty()) {
-			return false;
-		}
-
-		if (!url.startsWith("http")) {
-			return false;
-		}
-
-		if (url.charAt(url.length() - 1) == '/') {
-			return false;
-		}
-
-		if (!testUpstreamAvailability(getBaseURL())) {
-			return false;
-		}
-
-		return true;
+		return (url != null && !url.isEmpty());
 	}
 
 	private void fireChangedListeners() {
