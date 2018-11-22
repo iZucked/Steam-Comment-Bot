@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -103,6 +104,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.service.event.EventHandler;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -187,6 +189,7 @@ import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.rcp.common.dnd.BasicDragSource;
+import com.mmxlabs.rcp.common.handlers.TodayHandler;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -220,6 +223,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private Object[] sortedChildren;
 	private int[] sortedIndices;
+	
+	//todayHandler
+	private EventHandler todayHandler;
 
 	protected int[] reverseSortedIndices;
 
@@ -287,6 +293,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		if (wiringDiagram != null) {
 			wiringDiagram.dispose();
 			wiringDiagram = null;
+		}
+		
+		if (this.todayHandler != null) {
+			IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+			eventBroker.unsubscribe(this.todayHandler);
 		}
 
 		super.dispose();
@@ -828,6 +839,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
+		// set up snap-to-today
+		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		this.todayHandler = event -> snapTo((LocalDate)  event.getProperty(IEventBroker.DATA));
+	    eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
+		
 		// set up toolbars
 		final ToolBarManager toolbar = getToolBarManager();
 
@@ -1276,6 +1292,50 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				super.dragStart(event);
 			}
 		});
+	}
+
+	private void snapTo(final LocalDate property) {
+		if (scenarioViewer == null) {
+			return;
+		}
+		final Grid grid = scenarioViewer.getGrid();
+		if (grid == null) {
+			return;
+		}
+		final int count = grid.getItemCount();
+		if (count <= 0) {
+			return;
+		}
+		
+		final GridItem[] items = grid.getItems();
+		int pos = -1;
+		for (GridItem item : items) {
+			Object oData = item.getData();
+			if (oData instanceof RowData) {
+				RowData rd = (RowData) oData;
+				LoadSlot ls = rd.getLoadSlot();
+				if (ls != null) {
+					if (ls.getWindowStart().isAfter(property)) {
+						break;
+					}
+					pos++;
+					continue;
+				}
+				DischargeSlot ds = rd.getDischargeSlot();
+				if (ds != null) {
+					if (ds.getWindowStart().isAfter(property)) {
+						break;
+					}
+					pos++;
+					continue;
+				}
+			}
+		}
+		if (pos != -1) {
+			grid.deselectAll();
+			grid.select(pos);
+			grid.showSelection();
+		}
 	}
 
 	private LocalDate getEarliestScenarioDate() {

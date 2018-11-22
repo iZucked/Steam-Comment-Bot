@@ -45,7 +45,27 @@
                optional="true">
          </commandParameter>
       </command>
+      <command
+            defaultHandler="com.mmxlabs.rcp.common.handlers.TodayHandler"
+            id="com.mmxlabs.rcp.common.TodayHandler"
+            name="Snap to today">
+      </command>
    </extension>
+    <extension
+       point="org.eclipse.ui.menus">
+    <menuContribution
+          allPopups="false"
+	          locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+       <toolbar
+             id="com.mmxlabs.models.lng.analytics.editor.toolbarSnapToToday">
+          <command
+                commandId="com.mmxlabs.rcp.common.TodayHandler"
+                label="Today"
+                style="push">
+          </command>
+       </toolbar>
+    </menuContribution>
+ 	</extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page

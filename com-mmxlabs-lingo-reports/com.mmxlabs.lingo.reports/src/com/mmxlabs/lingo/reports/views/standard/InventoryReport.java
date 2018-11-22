@@ -13,8 +13,6 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -27,13 +25,12 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -48,15 +45,14 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.service.event.EventHandler;
 import org.swtchart.Chart;
 import org.swtchart.IAxisSet;
 import org.swtchart.IBarSeries;
@@ -92,7 +88,7 @@ import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
-import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.common.handlers.TodayHandler;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class InventoryReport extends ViewPart {
@@ -104,6 +100,8 @@ public class InventoryReport extends ViewPart {
 	private Inventory selectedInventory;
 	private ScenarioResult currentResult;
 	private Color color_Orange;
+	
+	private EventHandler todayHandler;
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
@@ -261,52 +259,16 @@ public class InventoryReport extends ViewPart {
 		getViewSite().getActionBars().getToolBarManager().add(copyAction);
 		copyAction.setEnabled(folder.getSelectionIndex() == 1);
 		
-		Action todayAction = new Action("Today") {
-			
-			@Override
-			public void run() {
-				final LocalDate today = LocalDate.now();
-				if (tableViewer == null) {
-					return;
-				}
-				final Grid grid = tableViewer.getGrid();
-				if (grid == null) {
-					return;
-				}
-				final int count = grid.getItemCount();
-				if (count <= 0) {
-					return;
-				}
-				
-				final GridItem[] items = grid.getItems();
-				int pos = -1;
-				for (GridItem item : items) {
-					Object oData = item.getData();
-					if (oData instanceof InventoryLevel) {
-						InventoryLevel il = (InventoryLevel) oData;
-						if (il.date.isAfter(today)) {
-							break;
-						}
-						pos++;
-					}
-				}
-				if (pos != -1) {
-					grid.deselectAll();
-					grid.select(pos);
-					grid.showSelection();
-				}
-			}
-		};
-		todayAction.setToolTipText("Snap to today");
-		getViewSite().getActionBars().getToolBarManager().add(todayAction);
-		todayAction.setEnabled(folder.getSelectionIndex() == 1);
+		//Adding an event broker for the snap-to-date event todayHandler
+		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		this.todayHandler = event -> snapTo((LocalDate)  event.getProperty(IEventBroker.DATA));
+	    eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
 		
 		folder.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				copyAction.setEnabled(folder.getSelectionIndex() == 1);
 				packAction.setEnabled(folder.getSelectionIndex() == 1);
-				todayAction.setEnabled(folder.getSelectionIndex() == 1);
 			}
 		});
 		getViewSite().getActionBars().getToolBarManager().update(true);
@@ -326,6 +288,10 @@ public class InventoryReport extends ViewPart {
 			color_Orange.dispose();
 		}
 		selectedScenariosService.removeListener(selectedScenariosServiceListener);
+		if (this.todayHandler != null) {
+			IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+			eventBroker.unsubscribe(this.todayHandler);
+		}
 
 		super.dispose();
 	}
@@ -713,6 +679,38 @@ public class InventoryReport extends ViewPart {
 		});
 
 		return column;
+	}
+
+	private void snapTo(LocalDate date) {
+		if (tableViewer == null) {
+			return;
+		}
+		final Grid grid = tableViewer.getGrid();
+		if (grid == null) {
+			return;
+		}
+		final int count = grid.getItemCount();
+		if (count <= 0) {
+			return;
+		}
+		
+		final GridItem[] items = grid.getItems();
+		int pos = -1;
+		for (GridItem item : items) {
+			Object oData = item.getData();
+			if (oData instanceof InventoryLevel) {
+				InventoryLevel il = (InventoryLevel) oData;
+				if (il.date.isAfter(date)) {
+					break;
+				}
+				pos++;
+			}
+		}
+		if (pos != -1) {
+			grid.deselectAll();
+			grid.select(pos);
+			grid.showSelection();
+		}
 	}
 
 	private static class InventoryLevel {

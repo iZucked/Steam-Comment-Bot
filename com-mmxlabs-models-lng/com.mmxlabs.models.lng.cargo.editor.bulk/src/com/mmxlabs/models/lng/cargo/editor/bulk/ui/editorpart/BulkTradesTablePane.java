@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -18,11 +19,11 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EFactory;
@@ -83,6 +84,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.service.event.EventHandler;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
@@ -153,6 +155,7 @@ import com.mmxlabs.models.util.emfpath.IEMFPath;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
+import com.mmxlabs.rcp.common.handlers.TodayHandler;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAdaptable {
@@ -186,6 +189,9 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	private Table table;
 	private final CargoPackage cargoPkg = CargoPackage.eINSTANCE;
 	private final EMFReportColumnManager columnManager = new EMFReportColumnManager();
+	
+	//todayHandler
+	private EventHandler todayHandler;
 
 	private final Map<EObject, Row> rowDataToRow = new HashMap<>();
 
@@ -252,6 +258,10 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		if (preferenceStore != null) {
 			preferenceStore.removePropertyChangeListener(propertyChangeListener);
 		}
+		if (this.todayHandler != null) {
+			IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+			eventBroker.unsubscribe(this.todayHandler);
+		}
 		super.dispose();
 	}
 	// FM - properties -
@@ -290,12 +300,61 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
 
+		// set up snap-to-today
+		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		this.todayHandler = event -> snapTo((LocalDate)  event.getProperty(IEventBroker.DATA));
+	    eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
+		
 		extendRowModel();
 		createColumns();
 		buildRowTransformerHandlers(rowTransformerHandlers);
 
 		buildToolbar();
 		setInitialState();
+	}
+	
+	private void snapTo(final LocalDate property) {
+		if (scenarioViewer == null) {
+			return;
+		}
+		final Grid grid = scenarioViewer.getGrid();
+		if (grid == null) {
+			return;
+		}
+		final int count = grid.getItemCount();
+		if (count <= 0) {
+			return;
+		}
+		
+		final GridItem[] items = grid.getItems();
+		int pos = -1;
+		for (GridItem item : items) {
+			Object oData = item.getData();
+			if (oData instanceof Row) {
+				Row rd = (Row) oData;
+				LoadSlot ls = rd.getLoadSlot();
+				if (ls != null) {
+					if (ls.getWindowStart().isAfter(property)) {
+						break;
+					}
+					pos++;
+					continue;
+				}
+				DischargeSlot ds = rd.getDischargeSlot();
+				if (ds != null) {
+					if (ds.getWindowStart().isAfter(property)) {
+						break;
+					}
+					pos++;
+					continue;
+				}
+			}
+		}
+		if (pos != -1) {
+			grid.deselectAll();
+			grid.select(pos);
+			grid.showSelection();
+		}
 	}
 
 	public Object getAdapter(final Class c) {
