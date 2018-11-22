@@ -4,16 +4,12 @@
  */
 package com.mmxlabs.lingo.reports.views.headline;
 
-import java.awt.PageAttributes.ColorType;
-
 import org.eclipse.jdt.annotation.NonNull;
-import org.w3c.dom.CDATASection;
 
 import com.mmxlabs.lingo.reports.views.headline.HeadlineReportView.ColumnDefinition;
 import com.mmxlabs.lingo.reports.views.headline.HeadlineReportView.ColumnType;
 import com.mmxlabs.lingo.reports.views.headline.extensions.HeadlineValueExtenderExtensionUtil;
 import com.mmxlabs.lingo.reports.views.headline.extensions.IHeadlineValueExtender;
-import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
