@@ -35,7 +35,7 @@ public class ScenarioServiceSelectionGroup extends Composite {
 	private boolean setShowOnlyCapsImport = false;
 
 	private ScenarioServiceContentProvider contentProvider;
-	
+
 	public ScenarioServiceSelectionGroup(final Composite parent, final Listener listener, final int style) {
 		super(parent, style);
 		this.listener = listener;
@@ -48,16 +48,15 @@ public class ScenarioServiceSelectionGroup extends Composite {
 		treeViewer = new TreeViewer(this, SWT.NONE);
 		contentProvider = new ScenarioServiceContentProvider();
 
+		contentProvider.setShowRemoteServices(false);
 		contentProvider.setShowFolders(true);
 		contentProvider.setShowScenarioInstances(true);
 		contentProvider.setShowOnlyCapsImport(isSetShowOnlyCapsImport());
 
 		treeViewer.setContentProvider(contentProvider);
 		treeViewer.setLabelProvider(new ScenarioServiceLabelProvider());
-
-		treeViewer.setLabelProvider(new ScenarioServiceLabelProvider());
 		treeViewer.setComparator(new ScenarioServiceSorter());
-		
+
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
@@ -95,7 +94,7 @@ public class ScenarioServiceSelectionGroup extends Composite {
 		selectedContainer = container;
 
 		// expand to and select the specified container
-		final List<Object> itemsToExpand = new ArrayList<Object>();
+		final List<Object> itemsToExpand = new ArrayList<>();
 		Container parent = container.getParent();
 		while (parent != null) {
 			itemsToExpand.add(0, parent);
@@ -127,7 +126,7 @@ public class ScenarioServiceSelectionGroup extends Composite {
 	/**
 	 */
 	public ScenarioServiceContentProvider getContentProvider() {
-		return contentProvider; 
+		return contentProvider;
 	}
 
 	/**

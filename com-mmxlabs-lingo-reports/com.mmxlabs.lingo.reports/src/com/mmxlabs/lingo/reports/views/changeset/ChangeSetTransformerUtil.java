@@ -932,7 +932,7 @@ public final class ChangeSetTransformerUtil {
 			return 0L;
 		}
 
-		final Set<ProfitAndLossContainer> containers = new HashSet<ProfitAndLossContainer>();
+		final Set<ProfitAndLossContainer> containers = new HashSet<>();
 		for (final ChangeSetRowData d : row.getMembers()) {
 			containers.add(d.getLhsGroupProfitAndLoss());
 			containers.add(d.getRhsGroupProfitAndLoss());

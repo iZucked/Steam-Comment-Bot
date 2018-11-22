@@ -64,6 +64,12 @@
               id="com.mmxlabs.shiplingo.platform.models.manifest.csvExportWizard"
               name="Export CSV">
         </wizard>
+        <wizard
+              category="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards"
+              class="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizard"
+              id="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizard"
+              name="Export scenario">
+        </wizard>
         <category
               id="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards"
               name="LNG Scenario Export">
@@ -134,6 +140,11 @@
             <command
                   commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
                   label="Import Scenario"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizardHandler"
+                  label="Export as .lingo file"
                   style="push">
             </command>
          </menuContribution>
@@ -227,6 +238,11 @@
                defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizardHandler"
                id="com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario"
                name="Export Scenario as CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizardHandler"
+               id="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizardHandler"
+               name="Export Scenario as .lingo file">
          </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCommodityCurveHandler"

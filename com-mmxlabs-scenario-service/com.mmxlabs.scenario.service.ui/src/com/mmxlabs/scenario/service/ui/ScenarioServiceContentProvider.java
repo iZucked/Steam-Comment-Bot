@@ -158,6 +158,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 
 	private final Map<ScenarioInstanceSavable, ScenarioInstance> saveablesMap = new HashMap<>();
 	private InternalSaveablesProvider provider;
+	private boolean showRemoteServices = true;
 
 	public ScenarioServiceContentProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
@@ -307,7 +308,9 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 				if (visible && isShowOnlyCapsForking()) {
 					visible = ss.isSupportsForking();
 				}
-
+				if (visible && !showRemoteServices) {
+					visible = ss.isLocal();
+				}
 				filtered = !visible;
 			} else if (e instanceof ScenarioServiceRegistry) {
 				filtered = false;
@@ -454,5 +457,9 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 			ss.removeScenarioServiceListener(scenarioServiceListener);
 		}
 		super.dispose();
+	}
+
+	public void setShowRemoteServices(boolean showRemoteServices) {
+		this.showRemoteServices = showRemoteServices;
 	}
 }
