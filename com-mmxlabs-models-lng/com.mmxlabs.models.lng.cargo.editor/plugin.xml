@@ -420,7 +420,7 @@
       <factory
           ID="com.mmxlabs.models.lng.cargo.editor.vesselAvailabilityFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="VesselAvailability"
+          label="Vessel charter"
           targetEClass="com.mmxlabs.models.lng.cargo.VesselAvailability">
     </factory>
     <factory

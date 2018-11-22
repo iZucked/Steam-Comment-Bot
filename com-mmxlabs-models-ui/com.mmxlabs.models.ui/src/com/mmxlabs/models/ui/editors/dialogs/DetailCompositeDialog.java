@@ -314,7 +314,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	 * Construct a new detail composite dialog, with style.
 	 * 
 	 * @param style
-	 *            - turns style bits on or off (since "&"ed with current); e.g. "~SWT.MAX" removes min/max button.
+	 *                  - turns style bits on or off (since "&"ed with current); e.g. "~SWT.MAX" removes min/max button.
 	 */
 	public DetailCompositeDialog(final Shell parentShell, final ICommandHandler commandHandler, final int style) {
 		this(parentShell, commandHandler);
@@ -442,7 +442,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		final IScenarioEditingLocation sel = location;
 
 		String text = returnDuplicates ? "Duplicating " : "Editing ";
-		text += EditorUtils.unmangle(selection.eClass().getName()).toLowerCase() + " ";
+		text += EditorUtils.unmangle(selection).toLowerCase() + " ";
 		if (selection instanceof NamedObject) {
 			final String name = ((NamedObject) selection).getName();
 			text += name != null ? "\"" + name + "\"" : "<unspecified>";

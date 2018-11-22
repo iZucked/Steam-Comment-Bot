@@ -61,7 +61,7 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		final Group g = new Group(containerComposite, SWT.NONE);
 		toolkit.adapt(g);
 
-		g.setText(EditorUtils.unmangle(eClass.getName()));
+		g.setText(EditorUtils.unmangle(object));
 		g.setLayout(new FillLayout());
 		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
 		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
