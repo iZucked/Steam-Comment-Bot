@@ -36,12 +36,12 @@ public interface DeltaMetrics extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Pnl Delta</em>' attribute.
-	 * @see #setPnlDelta(int)
+	 * @see #setPnlDelta(long)
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getDeltaMetrics_PnlDelta()
 	 * @model
 	 * @generated
 	 */
-	int getPnlDelta();
+	long getPnlDelta();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics#getPnlDelta <em>Pnl Delta</em>}' attribute.
@@ -51,7 +51,7 @@ public interface DeltaMetrics extends EObject {
 	 * @see #getPnlDelta()
 	 * @generated
 	 */
-	void setPnlDelta(int value);
+	void setPnlDelta(long value);
 
 	/**
 	 * Returns the value of the '<em><b>Lateness Delta</b></em>' attribute.

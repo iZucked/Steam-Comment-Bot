@@ -37,7 +37,6 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
@@ -159,7 +158,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link ChangesetPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -173,7 +172,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		if (isInited) return (ChangesetPackage)EPackage.Registry.INSTANCE.getEPackage(ChangesetPackage.eNS_URI);
 
 		// Obtain or create and register package
-		ChangesetPackageImpl theChangesetPackage = (ChangesetPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ChangesetPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ChangesetPackageImpl());
+		Object registeredChangesetPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		ChangesetPackageImpl theChangesetPackage = registeredChangesetPackage instanceof ChangesetPackageImpl ? (ChangesetPackageImpl)registeredChangesetPackage : new ChangesetPackageImpl();
 
 		isInited = true;
 
@@ -186,7 +186,6 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		MMXCorePackage.eINSTANCE.eClass();
 		PortPackage.eINSTANCE.eClass();
 		PricingPackage.eINSTANCE.eClass();
-		ScenarioServicePackage.eINSTANCE.eClass();
 		SchedulePackage.eINSTANCE.eClass();
 		SpotMarketsPackage.eINSTANCE.eClass();
 
@@ -199,7 +198,6 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		// Mark meta-data to indicate it can't be changed
 		theChangesetPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(ChangesetPackage.eNS_URI, theChangesetPackage);
 		return theChangesetPackage;
@@ -1238,12 +1236,12 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEAttribute(getChangeSet_Description(), ecorePackage.getEString(), "description", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(metricsEClass, Metrics.class, "Metrics", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getMetrics_Pnl(), ecorePackage.getEInt(), "pnl", null, 0, 1, Metrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMetrics_Pnl(), ecorePackage.getELong(), "pnl", null, 0, 1, Metrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMetrics_Lateness(), ecorePackage.getEInt(), "lateness", null, 0, 1, Metrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMetrics_Capacity(), ecorePackage.getEInt(), "capacity", null, 0, 1, Metrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deltaMetricsEClass, DeltaMetrics.class, "DeltaMetrics", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getDeltaMetrics_PnlDelta(), ecorePackage.getEInt(), "pnlDelta", null, 0, 1, DeltaMetrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDeltaMetrics_PnlDelta(), ecorePackage.getELong(), "pnlDelta", null, 0, 1, DeltaMetrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDeltaMetrics_LatenessDelta(), ecorePackage.getEInt(), "latenessDelta", null, 0, 1, DeltaMetrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDeltaMetrics_CapacityDelta(), ecorePackage.getEInt(), "capacityDelta", null, 0, 1, DeltaMetrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

@@ -29,7 +29,7 @@ public class MergeChangesAction extends Action {
 		for (final ChangeSetTableGroup cs : selectedSets) {
 			firstChangeSet.getRows().addAll(cs.getRows());
 			if (firstChangeSet.getCurrentMetrics() != null) {
-				final int pnl = firstChangeSet.getCurrentMetrics().getPnl();
+				final long pnl = firstChangeSet.getCurrentMetrics().getPnl();
 				firstChangeSet.getCurrentMetrics().setPnl(pnl + cs.getCurrentMetrics().getPnl());
 
 				final int capacity = firstChangeSet.getCurrentMetrics().getCapacity();
@@ -39,7 +39,7 @@ public class MergeChangesAction extends Action {
 				firstChangeSet.getCurrentMetrics().setLateness(lateness + cs.getCurrentMetrics().getLateness());
 			}
 			if (firstChangeSet.getDeltaMetrics() != null) {
-				final int pnl = firstChangeSet.getDeltaMetrics().getPnlDelta();
+				final long pnl = firstChangeSet.getDeltaMetrics().getPnlDelta();
 				firstChangeSet.getDeltaMetrics().setPnlDelta(pnl + cs.getDeltaMetrics().getPnlDelta());
 
 				final int capacity = firstChangeSet.getDeltaMetrics().getCapacityDelta();

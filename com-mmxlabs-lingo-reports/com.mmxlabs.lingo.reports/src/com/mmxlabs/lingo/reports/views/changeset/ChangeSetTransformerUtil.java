@@ -1092,7 +1092,7 @@ public final class ChangeSetTransformerUtil {
 			}
 		}
 
-		currentMetrics.setPnl((int) pnl);
+		currentMetrics.setPnl(pnl);
 		currentMetrics.setCapacity(violations);
 		currentMetrics.setLateness(lateness);
 		if (fromSchedule != null) {
@@ -1127,7 +1127,7 @@ public final class ChangeSetTransformerUtil {
 				pnl -= openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 			}
 		}
-		deltaMetrics.setPnlDelta((int) pnl);
+		deltaMetrics.setPnlDelta(pnl);
 		deltaMetrics.setLatenessDelta((int) lateness);
 		deltaMetrics.setCapacityDelta((int) violations);
 		if (isAlternative) {

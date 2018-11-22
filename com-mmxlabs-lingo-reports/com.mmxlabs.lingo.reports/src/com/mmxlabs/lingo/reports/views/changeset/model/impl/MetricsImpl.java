@@ -38,7 +38,7 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int PNL_EDEFAULT = 0;
+	protected static final long PNL_EDEFAULT = 0L;
 
 	/**
 	 * The cached value of the '{@link #getPnl() <em>Pnl</em>}' attribute.
@@ -48,7 +48,7 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * @generated
 	 * @ordered
 	 */
-	protected int pnl = PNL_EDEFAULT;
+	protected long pnl = PNL_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getLateness() <em>Lateness</em>}' attribute.
@@ -114,7 +114,7 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getPnl() {
+	public long getPnl() {
 		return pnl;
 	}
 
@@ -123,8 +123,8 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setPnl(int newPnl) {
-		int oldPnl = pnl;
+	public void setPnl(long newPnl) {
+		long oldPnl = pnl;
 		pnl = newPnl;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.METRICS__PNL, oldPnl, pnl));
@@ -199,7 +199,7 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case ChangesetPackage.METRICS__PNL:
-				setPnl((Integer)newValue);
+				setPnl((Long)newValue);
 				return;
 			case ChangesetPackage.METRICS__LATENESS:
 				setLateness((Integer)newValue);
@@ -259,7 +259,7 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (pnl: ");
 		result.append(pnl);
 		result.append(", lateness: ");

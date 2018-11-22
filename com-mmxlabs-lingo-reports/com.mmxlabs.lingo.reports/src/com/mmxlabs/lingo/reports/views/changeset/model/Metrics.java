@@ -36,12 +36,12 @@ public interface Metrics extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Pnl</em>' attribute.
-	 * @see #setPnl(int)
+	 * @see #setPnl(long)
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getMetrics_Pnl()
 	 * @model
 	 * @generated
 	 */
-	int getPnl();
+	long getPnl();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getPnl <em>Pnl</em>}' attribute.
@@ -51,7 +51,7 @@ public interface Metrics extends EObject {
 	 * @see #getPnl()
 	 * @generated
 	 */
-	void setPnl(int value);
+	void setPnl(long value);
 
 	/**
 	 * Returns the value of the '<em><b>Lateness</b></em>' attribute.
