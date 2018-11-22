@@ -64,8 +64,11 @@ import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.actionplan.ChangeChecker;
 import com.mmxlabs.scheduler.optimiser.actionplan.SimilarityState;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionEvaluator;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiser;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserInitialState;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
@@ -92,8 +95,10 @@ public class SlotInsertionOptimiserUnit {
 	@NonNull
 	private final String phase;
 
+	private final Map<Thread, SlotInsertionEvaluator> threadCache_SlotInsertionEvaluator = new ConcurrentHashMap<>(100);
 	private final Map<Thread, SlotInsertionOptimiser> threadCache_SlotInsertionOptimiser = new ConcurrentHashMap<>(100);
 	private final Map<Thread, EvaluationHelper> threadCache_EvaluationHelper = new ConcurrentHashMap<>(100);
+	private final Map<Thread, PerChainUnitScopeImpl> threadCache_Scope = new ConcurrentHashMap<>(100);
 
 	private @NonNull CleanableExecutorService executorService;
 
@@ -151,11 +156,31 @@ public class SlotInsertionOptimiserUnit {
 
 				SlotInsertionOptimiser optimiser = threadCache_SlotInsertionOptimiser.get(Thread.currentThread());
 				if (optimiser == null) {
-					final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
-					scope.enter();
+					threadCache_Scope.computeIfAbsent(Thread.currentThread(), (k) -> {
+						final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
+						scope.enter();
+						return scope;
+					});
 					optimiser = new SlotInsertionOptimiser();
 					injector.injectMembers(optimiser);
 					threadCache_SlotInsertionOptimiser.put(Thread.currentThread(), optimiser);
+				}
+				return optimiser;
+			}
+
+			@Provides
+			private SlotInsertionEvaluator providePerThreadEvaluator(@NonNull final Injector injector) {
+
+				SlotInsertionEvaluator optimiser = threadCache_SlotInsertionEvaluator.get(Thread.currentThread());
+				if (optimiser == null) {
+					threadCache_Scope.computeIfAbsent(Thread.currentThread(), (k) -> {
+						final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
+						scope.enter();
+						return scope;
+					});
+					optimiser = new SlotInsertionEvaluator();
+					injector.injectMembers(optimiser);
+					threadCache_SlotInsertionEvaluator.put(Thread.currentThread(), optimiser);
 				}
 				return optimiser;
 			}
@@ -191,12 +216,13 @@ public class SlotInsertionOptimiserUnit {
 			monitor.beginTask("Generate solutions", tries);
 
 			final SlotInsertionOptimiserInitialState state = new SlotInsertionOptimiserInitialState();
+			final List<Pair<ISequenceElement, ISequenceElement>> nonShippedPairs = new LinkedList<>();
 			{
 				final IPhaseOptimisationData phaseOptimisationData = injector.getInstance(IPhaseOptimisationData.class);
 				final IMoveHandlerHelper moveHandlerHelper = injector.getInstance(IMoveHandlerHelper.class);
 				final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 
-				// Calculate the initial metrics
+				// Calculate the initial metrics and slot pairings.
 				try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 					scope.enter();
 					final IFollowersAndPreceders followersAndPreceders = injector.getInstance(IFollowersAndPreceders.class);
@@ -275,30 +301,94 @@ public class SlotInsertionOptimiserUnit {
 							}
 						}
 					}
+
+					// Find all possible valid non-shipped pairs
+					for (final IPortSlot portSlot : slotElements) {
+						final ISequenceElement element = portSlotProvider.getElement(portSlot);
+						if (portSlot instanceof ILoadOption) {
+							final boolean isFOBPurchase = portSlot instanceof ILoadSlot;
+							final Followers<ISequenceElement> validFollowers = followersAndPreceders.getValidFollowers(element);
+							for (final ISequenceElement follower : validFollowers) {
+								final IPortSlot followerSlot = portSlotProvider.getPortSlot(follower);
+								if (followerSlot instanceof IDischargeOption) {
+									final IDischargeOption dischargeOption = (IDischargeOption) followerSlot;
+									final boolean isDESSale = dischargeOption instanceof IDischargeSlot;
+									if (isFOBPurchase && !isDESSale) {
+										nonShippedPairs.add(new Pair<>(element, follower));
+									} else if (!isFOBPurchase && isDESSale) {
+										nonShippedPairs.add(new Pair<>(element, follower));
+									}
+								}
+							}
+						} else if (portSlot instanceof IDischargeOption) {
+							final boolean isDESSale = portSlot instanceof IDischargeSlot;
+							final Followers<ISequenceElement> validPreceders = followersAndPreceders.getValidPreceders(element);
+							for (final ISequenceElement preceder : validPreceders) {
+								final IPortSlot precederSlot = portSlotProvider.getPortSlot(preceder);
+								if (precederSlot instanceof ILoadOption) {
+									final ILoadOption loadOption = (ILoadOption) precederSlot;
+									final boolean isFOBPurchase = loadOption instanceof ILoadSlot;
+									if (isFOBPurchase && !isDESSale) {
+										nonShippedPairs.add(new Pair<>(preceder, element));
+									} else if (!isFOBPurchase && isDESSale) {
+										nonShippedPairs.add(new Pair<>(preceder, element));
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 
 			final List<Future<Pair<ISequences, Long>>> futures = new LinkedList<>();
+
+			// Step 1: Exhaustive search of non-shipped pairs
 			try {
-				for (int tryNo = 0; tryNo < tries; ++tryNo) {
-					final int pTryNo = tryNo;
+				{
+					for (final Pair<ISequenceElement, ISequenceElement> p : nonShippedPairs) {
+						final ISequenceElement buy = p.getFirst();
+						final ISequenceElement sell = p.getSecond();
 
-					futures.add(executorService.submit(() -> {
-						if (monitor.isCanceled()) {
+						futures.add(executorService.submit(() -> {
+							if (monitor.isCanceled()) {
+								return null;
+							}
+							try {
+								final SlotInsertionEvaluator calculator = injector.getInstance(SlotInsertionEvaluator.class);
+								return calculator.insert(state, buy, sell);
+							} catch (final Exception e) {
+								e.printStackTrace();
+							} finally {
+								monitor.worked(1);
+							}
 							return null;
-						}
-						try {
-							// Bit nasty, but we are still in PoC stages
+						}));
+					}
 
-							final SlotInsertionOptimiser calculator = injector.getInstance(SlotInsertionOptimiser.class);
-							return calculator.generate(optionElements, state, pTryNo);
-						} catch (final Exception e) {
-							e.printStackTrace();
-						} finally {
-							monitor.worked(1);
-						}
-						return null;
-					}));
+				}
+
+				// Step 2: full search
+				if (false) {
+					for (int tryNo = 0; tryNo < tries; ++tryNo) {
+						final int pTryNo = tryNo;
+
+						futures.add(executorService.submit(() -> {
+							if (monitor.isCanceled()) {
+								return null;
+							}
+							try {
+								// Bit nasty, but we are still in PoC stages
+
+								final SlotInsertionOptimiser calculator = injector.getInstance(SlotInsertionOptimiser.class);
+								return calculator.generate(optionElements, state, pTryNo);
+							} catch (final Exception e) {
+								e.printStackTrace();
+							} finally {
+								monitor.worked(1);
+							}
+							return null;
+						}));
+					}
 				}
 				List<Pair<ISequences, Long>> results = new LinkedList<>();
 
@@ -420,10 +510,12 @@ public class SlotInsertionOptimiserUnit {
 			final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
 
 			// Clean up thread-locals created in the scope object
-			for (final Thread thread : threadCache_SlotInsertionOptimiser.keySet()) {
+			for (final Thread thread : threadCache_Scope.keySet()) {
 				scope.exit(thread);
 			}
 			threadCache_SlotInsertionOptimiser.clear();
+			threadCache_SlotInsertionEvaluator.clear();
+			threadCache_Scope.clear();
 
 			threadCache_EvaluationHelper.clear();
 		}
