@@ -83,7 +83,7 @@ Build: {1}
    </configurations>
 
    <repositories>
-      <repository location="https://server1.mmxlabs.com/updates/LiNGO/" enabled="true" />
+      <repository location="https://updates.minimaxlabs.com/updates/LiNGO/" enabled="true" />
    </repositories>
 
    <preferencesInfo>
