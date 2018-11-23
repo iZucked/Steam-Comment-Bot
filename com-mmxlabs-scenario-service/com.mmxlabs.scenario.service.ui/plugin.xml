@@ -484,6 +484,7 @@
                label="Delete"
                style="push">
          </command>
+         <!--
          <command
                commandId="com.mmxlabs.scenario.service.ui.revert"
                label="Revert"
@@ -507,6 +508,7 @@
                </and>
             </visibleWhen>
          </command>
+         -->
          <command
                commandId="com.mmxlabs.scenario.service.ui.fork"
                label="Fork"
