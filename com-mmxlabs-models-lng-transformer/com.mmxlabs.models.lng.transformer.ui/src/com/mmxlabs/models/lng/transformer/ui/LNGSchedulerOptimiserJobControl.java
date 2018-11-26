@@ -163,8 +163,10 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	protected void reallyPrepare() {
-//		originalScenarioDataProvider.setLastEvaluationFailed(true);
-//		scenarioRunner.evaluateInitialState();
+		if (!jobDescriptor.getOptimisationPlan().getUserSettings().isCleanStateOptimisation()) {
+			originalScenarioDataProvider.setLastEvaluationFailed(true);
+			scenarioRunner.evaluateInitialState();
+		}
 	}
 
 	@Override
