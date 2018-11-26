@@ -98,6 +98,21 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		rows.add(createRow(70, "    Canal", true, "$", "", true, createShippingCanalCosts(options, true)));
 		rows.add(createRow(80, "    Boil-off", true, "$", "", true, createShippingBOGTotal(options, true), createBOGColourProvider(options)));
 		rows.add(createRow(90, "    Charter Cost", true, "$", "", true, createShippingCharterCosts(options, true), createCharterFeesColourProvider(options)));
+		{
+			final CargoEconsReportRow row = createRow(91, "    $/mmBtu", true, "$", "", true, createShippingCostsByMMBTU(options, true));
+			row.tooltip = () -> {
+				switch (options.marginBy) {
+				case PURCHASE_VOLUME:
+					return "Cost by purchase volume";
+				case SALE_VOLUME:
+					return "Cost by sales volume";
+				default:
+					return null;
+
+				}
+			};
+			rows.add(row);
+		}
 		if (containsCooldown) {
 			rows.add(createRow(92, "    Cooldown Cost", true, "$", "", true, createShippingCooldownCosts(options, true)));
 		}
@@ -319,7 +334,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return createBasicFormatter(options, isCost, Long.class, VolumeMMBtuFormat::format, createMappingFunction(Long.class, helper));
 	}
 
-	private double cargoAllocationPNLPerMMBTUVolumeHelper(final Object object, final EconsOptions options) {
+	private static double cargoAllocationPerMMBTUVolumeHelper(final Object object, final EconsOptions options) {
 
 		if (!(object instanceof CargoAllocation)) {
 			return 0.0f;
@@ -375,7 +390,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 					return 0.0;
 				}
 
-				final double volume = cargoAllocationPNLPerMMBTUVolumeHelper(object, options);
+				final double volume = cargoAllocationPerMMBTUVolumeHelper(object, options);
 				if (volume == 0.0) {
 					return 0.0;
 				}
@@ -406,9 +421,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				return getFromCargoAllocationPair(Double.class, helper, object);
 			} else if (object instanceof List<?>) {
 				final List<DeltaPair> pairs = (List<DeltaPair>) object;
-				final double totalVolume = pairs.stream().mapToDouble(x -> cargoAllocationPNLPerMMBTUVolumeHelper(x.first(), options)).sum();
+				final double totalVolume = pairs.stream().mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.first(), options)).sum();
 				final double totalPNL = pairs.stream().mapToDouble(x -> cargoAllocationPNLPerMMBTUPNLHelper(x.first())).sum();
-				final double totalOldVolume = pairs.stream().mapToDouble(x -> cargoAllocationPNLPerMMBTUVolumeHelper(x.second(), options)).sum();
+				final double totalOldVolume = pairs.stream().mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.second(), options)).sum();
 				final double totalOldPNL = pairs.stream().mapToDouble(x -> cargoAllocationPNLPerMMBTUPNLHelper(x.second())).sum();
 				final double value = (double) (totalOldPNL / totalOldVolume) - (double) (totalPNL / totalVolume);
 				return value;
@@ -671,8 +686,58 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::vesselEventVisitShippingRepositioningHelper));
 	}
 
+	private @NonNull ICellRenderer createShippingCostsByMMBTU(final EconsOptions options, final boolean isCost) {
+
+		final Function<Object, @Nullable Double> helper = object -> getShippingCostByMMBTU(options, object);
+
+		final Function<Object, @Nullable Double> transformer = object -> {
+			if (object instanceof CargoAllocation) {
+				final CargoAllocation cargoAllocation = (CargoAllocation) object;
+				return helper.apply(cargoAllocation);
+			} else if (object instanceof MarketAllocation) {
+				final MarketAllocation marketAllocation = (MarketAllocation) object;
+				return helper.apply(marketAllocation);
+			} else if (object instanceof CargoAllocationPair) {
+				return getFromCargoAllocationPair(Double.class, helper, object);
+			} else if (object instanceof List<?>) {
+				final List<DeltaPair> pairs = (List<DeltaPair>) object;
+				final double totalVolume = pairs.stream().mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.first(), options)).sum();
+				final double totalCost = pairs.stream().mapToDouble(x -> getShippingCost(x.first())).sum();
+
+				final double totalOldVolume = pairs.stream().mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.second(), options)).sum();
+				final double totalOldCost = pairs.stream().mapToDouble(x -> getShippingCost(x.second())).sum();
+				final double value = (double) (totalOldCost / totalOldVolume) - (double) (totalCost / totalVolume);
+				return value;
+			}
+			return null;
+		};
+
+		return createBasicFormatter(options, isCost, Double.class, DollarsPerMMBtuFormat::format, transformer);
+	}
+
 	private @NonNull ICellRenderer createShippingCosts(final EconsOptions options, final boolean isCost) {
 		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::getShippingCost));
+	}
+
+	private static Double getShippingCostByMMBTU(final EconsOptions options, final Object object) {
+
+		if (object == null) {
+			return null;
+		}
+
+		if (object instanceof CargoAllocation) {
+			final double volume = cargoAllocationPerMMBTUVolumeHelper(object, options);
+			if (volume == 0.0) {
+				return 0.0;
+			}
+			final Integer shippingCost = getShippingCost(object);
+			if (shippingCost != null) {
+				return (double) shippingCost / volume;
+			}
+		}
+
+		return null;
+
 	}
 
 	private static Integer getShippingCost(final Object object) {
