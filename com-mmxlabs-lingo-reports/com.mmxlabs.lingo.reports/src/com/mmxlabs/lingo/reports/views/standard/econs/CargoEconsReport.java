@@ -5,6 +5,9 @@
 package com.mmxlabs.lingo.reports.views.standard.econs;
 
 import java.text.NumberFormat;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
 import javax.annotation.PreDestroy;
 
@@ -19,6 +22,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
@@ -62,21 +66,32 @@ public class CargoEconsReport extends ViewPart {
 
 		// component.listenToSelectionsFrom(null);
 
-		GridTableViewer viewer = component.getViewer();
+		final GridTableViewer viewer = component.getViewer();
 
 		{
-			final Action volumeByPurchase = new RunnableAction("Margin by purchase volume", () -> {
-				IEclipseContext actionCtx = EclipseContextFactory.create();
+			final Map<MarginBy, Action> actionMap = new EnumMap<>(MarginBy.class);
+			final Consumer<MarginBy> changeSelectedAction = mode -> {
+				for (final Map.Entry<MarginBy, Action> e : actionMap.entrySet()) {
+					e.getValue().setChecked(e.getKey() == mode);
+				}
+			};
+			final Action volumeByPurchase = new RunnableAction("Per mmBtu by purchase volume", SWT.TOGGLE, () -> {
+				final IEclipseContext actionCtx = EclipseContextFactory.create();
 				actionCtx.set(MarginBy.class, MarginBy.PURCHASE_VOLUME);
 				ContextInjectionFactory.invoke(component, SetEconsMarginMode.class, componentContext, actionCtx, null);
+				changeSelectedAction.accept(MarginBy.PURCHASE_VOLUME);
 			});
 			getViewSite().getActionBars().getMenuManager().add(volumeByPurchase);
 
-			final Action volumeBySell = new RunnableAction("Margin by sales volume", () -> {
-				IEclipseContext actionCtx = EclipseContextFactory.create();
+			final Action volumeBySell = new RunnableAction("Per mmBtu by sales volume", SWT.TOGGLE, () -> {
+				final IEclipseContext actionCtx = EclipseContextFactory.create();
 				actionCtx.set(MarginBy.class, MarginBy.SALE_VOLUME);
 				ContextInjectionFactory.invoke(component, SetEconsMarginMode.class, componentContext, actionCtx, null);
+				changeSelectedAction.accept(MarginBy.SALE_VOLUME);
 			});
+			actionMap.put(MarginBy.PURCHASE_VOLUME, volumeByPurchase);
+			actionMap.put(MarginBy.SALE_VOLUME, volumeBySell);
+
 			getViewSite().getActionBars().getMenuManager().add(volumeBySell);
 
 			final Action showOnlyDiff = new RunnableAction("Δ", () -> {
@@ -85,14 +100,16 @@ public class CargoEconsReport extends ViewPart {
 			});
 			getViewSite().getActionBars().getToolBarManager().add(showOnlyDiff);
 
+			// Default to sales volume
+			volumeBySell.run();
 		}
 
-		Runnable preOperation = () -> {
+		final Runnable preOperation = () -> {
 			component.setCopyPasteMode(true);
 			ViewerHelper.refresh(component.getViewer(), true);
 		};
 
-		Runnable postOperation = () -> {
+		final Runnable postOperation = () -> {
 			component.setCopyPasteMode(false);
 			ViewerHelper.refresh(component.getViewer(), true);
 		};
@@ -103,10 +120,10 @@ public class CargoEconsReport extends ViewPart {
 
 			@Override
 			public Object getTypedValue(final GridItem item, final int i) {
-				String text = item.getText(i);
+				final String text = item.getText(i);
 				try {
 					return NumberFormat.getInstance().parseObject(text);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 
 				}
 				return String.class;
@@ -128,7 +145,7 @@ public class CargoEconsReport extends ViewPart {
 			}
 
 			@Override
-			public @NonNull String @Nullable [] getAdditionalRowHeaderAttributes(@NonNull GridItem item) {
+			public @NonNull String @Nullable [] getAdditionalRowHeaderAttributes(@NonNull final GridItem item) {
 				return null;
 			}
 
@@ -138,24 +155,25 @@ public class CargoEconsReport extends ViewPart {
 			}
 
 			@Override
-			public @NonNull String @Nullable [] getAdditionalHeaderAttributes(GridColumn column) {
+			public @NonNull String @Nullable [] getAdditionalHeaderAttributes(final GridColumn column) {
 				return null;
 			}
 
 			@Override
-			public @NonNull String @Nullable [] getAdditionalAttributes(@NonNull GridItem item, int columnIdx) {
+			public @NonNull String @Nullable [] getAdditionalAttributes(@NonNull final GridItem item, final int columnIdx) {
 
 				return null;
 			}
 
 			@Override
-			public int getBorders(GridItem item, int i) {
+			public int getBorders(final GridItem item, final int i) {
 				return 0;
 			}
 		});
 		getViewSite().getActionBars().getToolBarManager().add(packAction);
 		getViewSite().getActionBars().getToolBarManager().add(copyAction);
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction);
+
 	}
 
 	@PreDestroy
@@ -179,7 +197,7 @@ public class CargoEconsReport extends ViewPart {
 	public <T> T getAdapter(final Class<T> adapter) {
 
 		if (component instanceof IAdaptable) {
-			T result = ((IAdaptable) component).getAdapter(adapter);
+			final T result = ((IAdaptable) component).getAdapter(adapter);
 			if (result != null) {
 				return result;
 			}
