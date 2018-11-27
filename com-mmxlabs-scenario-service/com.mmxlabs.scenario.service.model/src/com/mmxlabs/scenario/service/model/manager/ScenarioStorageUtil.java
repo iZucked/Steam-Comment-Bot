@@ -158,8 +158,7 @@ public class ScenarioStorageUtil {
 
 	protected File getTemporaryFile(final ScenarioModelRecord modelRecord) throws IOException {
 		final String name = modelRecord.getName();
-
-		final Path tempDirectory = Files.createTempDirectory(storageDirectory, "lingo");
+		final Path tempDirectory = Files.createTempDirectory(getTempDirectory().toPath(), "lingo");
 
 		return new File(tempDirectory.toFile(), escape(name) + ".lingo");
 	}
