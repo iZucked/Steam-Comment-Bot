@@ -53,7 +53,7 @@ public class PortsRepositoryActionHandler implements IDataBrowserActionsHandler 
 	public boolean delete(String version) {
 		return false;
 	}
-	
+
 	@Override
 	public boolean supportsSetCurrent() {
 		return false;
@@ -63,7 +63,7 @@ public class PortsRepositoryActionHandler implements IDataBrowserActionsHandler 
 	public boolean setCurrent(String version) {
 		return false;
 	}
-	
+
 	@Override
 	public boolean supportsSyncUpstream() {
 		return repository.hasUpstream();
@@ -126,6 +126,9 @@ public class PortsRepositoryActionHandler implements IDataBrowserActionsHandler 
 			if (versions != null) {
 				boolean first = true;
 				for (final DataVersion v : versions) {
+					if ("initial_version".equals(v.getFullIdentifier())) {
+						continue;
+					}
 					final Node version = BrowserFactory.eINSTANCE.createLeaf();
 					version.setParent(dataRoot);
 					version.setDisplayName(v.getFullIdentifier());

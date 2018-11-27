@@ -20,7 +20,7 @@ import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
-public class PricingRepository extends AbstractDataRepository {
+public class PricingRepository extends AbstractDataRepository<PricingVersion> {
 
 	public static final PricingRepository INSTANCE = new PricingRepository();
 
@@ -29,23 +29,10 @@ public class PricingRepository extends AbstractDataRepository {
 	private static final String SYNC_VERSION_ENDPOINT = "/pricing/sync/versions/";
 
 	private PricingRepository() {
+		super("Pricing", PricingVersion.class);
 		isReady();
 		doHandleUpstreamURLChange();
 
-	}
-
-	public boolean isReady() {
-		if (BackEndUrlProvider.INSTANCE.isAvailable()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private void ensureReady() {
-		if (!isReady()) {
-			throw new IllegalStateException("Pricing back-end not ready yet");
-		}
 	}
 
 	public List<DataVersion> getLocalVersions() {
@@ -141,5 +128,15 @@ public class PricingRepository extends AbstractDataRepository {
 	@Override
 	protected String getVersionNotificationEndpoint() {
 		return "/pricing/version_notification";
+	}
+
+	@Override
+	protected String getVersionsURL() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	protected SimpleVersion wrap(PricingVersion version) {
+		throw new UnsupportedOperationException();
 	}
 }

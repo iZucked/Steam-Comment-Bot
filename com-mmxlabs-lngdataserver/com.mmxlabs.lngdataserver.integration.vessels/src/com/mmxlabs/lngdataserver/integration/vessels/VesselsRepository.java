@@ -24,7 +24,7 @@ import com.mmxlabs.lngdataservice.client.vessel.model.Version;
 
 import okhttp3.OkHttpClient;
 
-public class VesselsRepository extends AbstractDataRepository {
+public class VesselsRepository extends AbstractDataRepository<VesselsVersion> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(VesselsRepository.class);
 
@@ -40,6 +40,7 @@ public class VesselsRepository extends AbstractDataRepository {
 	public static final VesselsRepository INSTANCE = new VesselsRepository();
 
 	public VesselsRepository() {
+		super("Vessels", VesselsVersion.class);
 		localApi = new VesselsApi(new ApiClient());
 		localWaitingApi = new VesselsApi(new ApiClient());
 
@@ -68,12 +69,6 @@ public class VesselsRepository extends AbstractDataRepository {
 			return true;
 		} else {
 			return false;
-		}
-	}
-
-	private void ensureReady() {
-		if (!isReady()) {
-			throw new IllegalStateException("Pricing back-end not ready yet");
 		}
 	}
 
@@ -119,12 +114,12 @@ public class VesselsRepository extends AbstractDataRepository {
 
 	@Override
 	protected boolean canWaitForNewLocalVersion() {
-		return true;
+		return false;
 	}
 
 	@Override
 	protected boolean canWaitForNewUpstreamVersion() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -153,5 +148,15 @@ public class VesselsRepository extends AbstractDataRepository {
 	@Override
 	protected String getVersionNotificationEndpoint() {
 		return "/vessels/version_notification";
+	}
+
+	@Override
+	protected SimpleVersion wrap(VesselsVersion version) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	protected String getVersionsURL() {
+		throw new UnsupportedOperationException();
 	}
 }

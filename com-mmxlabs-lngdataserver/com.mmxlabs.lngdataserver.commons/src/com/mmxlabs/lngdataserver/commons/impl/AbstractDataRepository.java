@@ -10,16 +10,21 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.IDataRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
@@ -37,7 +42,15 @@ import okhttp3.Response;
  * 
  * @author Robert Erdin
  */
-public abstract class AbstractDataRepository implements IDataRepository {
+public abstract class AbstractDataRepository<T> implements IDataRepository {
+
+	protected interface SimpleVersion {
+		public String getIdentifier();
+
+		public LocalDateTime getCreatedAt();
+	}
+
+	private static final String CONST_AUTHORIZATION = "Authorization";
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractDataRepository.class);
 
@@ -59,12 +72,21 @@ public abstract class AbstractDataRepository implements IDataRepository {
 
 	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss+00:00");
 
+	private String type;
+
+	private Class<T> dataVersionType;
+
+	protected final TypeReference<List<T>> TYPE_VERSIONS_LIST = new TypeReference<List<T>>() {
+	};
+
 	protected static LocalDateTime fromDateTimeAtUTC(final String dateTime) {
 		return LocalDateTime.parse(dateTime, DATE_FORMATTER);
 	}
 
-	public AbstractDataRepository() {
-		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(() -> doHandleUpstreamURLChange());
+	public AbstractDataRepository(String repoType, Class<T> dataVersionType) {
+		this.type = repoType;
+		this.dataVersionType = dataVersionType;
+		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(this::doHandleUpstreamURLChange);
 	}
 
 	protected String getUpstreamUrl() {
@@ -90,6 +112,9 @@ public abstract class AbstractDataRepository implements IDataRepository {
 						if (Boolean.TRUE == newVersionAvailable) {
 							final List<DataVersion> versions = getLocalVersions();
 							for (final DataVersion v : versions) {
+								if ("initial_version".equals(v.getFullIdentifier())) {
+									continue;
+								}
 								newLocalVersionCallbacks.forEach(c -> c.accept(v));
 							}
 						}
@@ -134,6 +159,9 @@ public abstract class AbstractDataRepository implements IDataRepository {
 					if (versionAvailable == Boolean.TRUE) {
 						final List<DataVersion> versions = getUpstreamVersions();
 						for (final DataVersion v : versions) {
+							if ("initial_version".equals(v.getFullIdentifier())) {
+								continue;
+							}
 							newUpstreamVersionCallbacks.forEach(c -> c.accept(v));
 						}
 					}
@@ -190,7 +218,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 			@Override
 			public com.squareup.okhttp.Request authenticate(Proxy proxy, com.squareup.okhttp.Response response) throws IOException {
 				String credential = Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
-				return response.request().newBuilder().header("Authorization", credential).build();
+				return response.request().newBuilder().header(CONST_AUTHORIZATION, credential).build();
 			}
 
 			@Override
@@ -224,7 +252,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	}
 
 	protected void doHandleUpstreamURLChange() {
-		
+
 	}
 
 	public boolean hasUpstream() {
@@ -258,7 +286,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		final String credential = Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
 		return new Request.Builder() //
 				.url(url) //
-				.addHeader("Authorization", credential);
+				.addHeader(CONST_AUTHORIZATION, credential);
 	}
 
 	@Override
@@ -285,7 +313,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	}
 
 	protected CompletableFuture<Boolean> waitForNewLocalVersion() {
-		return notifyOnNewVersion(false);
+		return notifyOnNewVersion(true);
 	}
 
 	protected CompletableFuture<Boolean> waitForNewUpstreamVersion() {
@@ -369,8 +397,91 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	public static Request.@NonNull Builder createRequestBuilder(final @NonNull String url, final @Nullable String username, final @Nullable String password) {
 		final Request.@NonNull Builder requestBuilder = new Request.Builder().url(url);
 		if (username != null && password != null) {
-			requestBuilder.addHeader("Authorization", Credentials.basic(username, password));
+			requestBuilder.addHeader(CONST_AUTHORIZATION, Credentials.basic(username, password));
 		}
 		return requestBuilder;
 	}
+
+	@Override
+	public boolean isReady() {
+		return BackEndUrlProvider.INSTANCE.isAvailable();
+	}
+
+	protected void ensureReady() {
+		if (!isReady()) {
+			throw new IllegalStateException(type + " back-end not ready yet");
+		}
+	}
+
+	@Override
+	public List<DataVersion> getUpstreamVersions() {
+		ensureReady();
+		try {
+			return getVersions(UpstreamUrlProvider.INSTANCE.getBaseURL(), UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
+		} catch (final Exception e) {
+			String msg = String.format("Error fetching upstream %s versions", type.toLowerCase());
+			LOG.error(msg + e.getMessage());
+			throw new RuntimeException(msg, e);
+		}
+	}
+
+	public List<DataVersion> getVersions(final String baseUrl, final String username, final String password) throws IOException {
+		final Request request = createRequestBuilder(baseUrl + getVersionsURL(), username, password).build();
+		try (Response response = CLIENT.newCall(request).execute()) {
+			if (!response.isSuccessful()) {
+				final String body = response.body().string();
+				throw new RuntimeException("Error making request to " + baseUrl + ". Reason " + response.message() + " Response body is " + body);
+			} else {
+				final List<T> hubVersions = new ObjectMapper().readValue(response.body().byteStream(), TYPE_VERSIONS_LIST);
+				return hubVersions.stream() //
+						.map(this::wrap) //
+						.filter(v -> v.getIdentifier() != null) //
+						.sorted((v1, v2) -> v2.getCreatedAt().compareTo(v1.getCreatedAt())) //
+						.map(v -> new DataVersion(v.getIdentifier(), v.getCreatedAt(), false, false)) //
+						.collect(Collectors.toList());
+			}
+		}
+	}
+
+	protected abstract String getVersionsURL();
+
+	@Override
+	public List<DataVersion> getLocalVersions() {
+		ensureReady();
+		try {
+			return getVersions(BackEndUrlProvider.INSTANCE.getUrl(), null, null);
+		} catch (final Exception e) {
+			String msg = String.format("Error fetching local %s versions", type.toLowerCase());
+
+			LOG.error(msg + e.getMessage());
+			throw new RuntimeException(msg, e);
+		}
+	}
+
+	@Override
+	public List<DataVersion> updateAvailable() throws Exception {
+		final List<DataVersion> upstreamVersions = getUpstreamVersions();
+		final Set<String> localVersions = getLocalVersions().stream().map(DataVersion::getIdentifier).collect(Collectors.toSet());
+		upstreamVersions.removeIf(uv -> localVersions.contains(uv.getIdentifier()));
+		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished())).collect(Collectors.toList());
+	}
+
+	public T getLocalVersion(String versionTag) throws IOException {
+		String url = getSyncVersionEndpoint();
+		final Request request = new Request.Builder().url(url + versionTag).build();
+		try (Response response = CLIENT.newCall(request).execute()) {
+			if (!response.isSuccessful()) {
+				final String body = response.body().string();
+				throw new RuntimeException("Error making request to " + url + ". Reason " + response.message() + " Response body is " + body);
+			} else {
+				final ObjectMapper mapper = new ObjectMapper();
+				mapper.findAndRegisterModules();
+				mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+				return mapper.readValue(response.body().byteStream(), dataVersionType);
+			}
+		}
+	}
+
+	protected abstract SimpleVersion wrap(T version);
 }

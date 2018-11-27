@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.integration.pricing.internal;
 
-import java.util.List;
-import java.util.Objects;
-
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -15,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
-import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
@@ -118,44 +114,15 @@ public class Activator extends AbstractUIPlugin {
 		if (active) {
 			LOGGER.debug("Pricing back-end ready, retrieving versions...");
 			try {
-				pricingDataRoot.getChildren().clear();
-				List<DataVersion> versions = pricingRepository.getLocalVersions();
-				if (versions != null) {
-					for (final DataVersion v : versions) {
-						final Node version = BrowserFactory.eINSTANCE.createLeaf();
-						version.setParent(pricingDataRoot);
-						version.setDisplayName(v.getFullIdentifier());
-						version.setVersionIdentifier(v.getIdentifier());
-						version.setPublished(v.isPublished());
-
-						if (v.isCurrent()) {
-							RunnerHelper.asyncExec(c -> pricingDataRoot.setCurrent(version));
-						}
-
-						RunnerHelper.asyncExec(c -> pricingDataRoot.getChildren().add(version));
-					}
-				}
 				pricingDataRoot.setDisplayName("Pricing");
+				pricingDataRoot.getChildren().clear();
+				pricingDataRoot.getActionHandler().refreshLocal();
 			} catch (final Exception e) {
 				LOGGER.error("Error retrieving pricing versions");
 			}
 
 			// register consumer to update on new version
-			pricingRepository.registerLocalVersionListener(v -> {
-
-				RunnerHelper.asyncExec(c -> {
-					// Check for existing versions
-					for (final Node n : pricingDataRoot.getChildren()) {
-						if (Objects.equals(v.getFullIdentifier(), n.getDisplayName())) {
-							return;
-						}
-					}
-					final Node newVersion = BrowserFactory.eINSTANCE.createLeaf();
-					newVersion.setDisplayName(v.getFullIdentifier());
-					newVersion.setVersionIdentifier(v.getIdentifier());
-					pricingDataRoot.getChildren().add(newVersion);
-				});
-			});
+			pricingRepository.registerLocalVersionListener(v -> pricingDataRoot.getActionHandler().refreshLocal());
 			pricingRepository.startListenForNewLocalVersions();
 
 			pricingRepository.registerUpstreamVersionListener(v -> {

@@ -114,49 +114,15 @@ public class Activator extends AbstractUIPlugin {
 		if (active) {
 			LOGGER.debug("Ports back-end ready, retrieving versions...");
 			try {
-				dataRoot.getChildren().clear();
-				try {
-					final List<DataVersion> versions = repository.getLocalVersions();
-					if (versions != null) {
-						boolean first = true;
-						for (final DataVersion v : versions) {
-							final Node version = BrowserFactory.eINSTANCE.createLeaf();
-							version.setParent(dataRoot);
-							version.setDisplayName(v.getFullIdentifier());
-							version.setVersionIdentifier(v.getIdentifier());
-							version.setPublished(v.isPublished());
-							if (first) {
-								RunnerHelper.asyncExec(c -> dataRoot.setCurrent(version));
-							}
-							first = false;
-							RunnerHelper.asyncExec(c -> dataRoot.getChildren().add(version));
-						}
-					}
-				} catch (final Exception e) {
-					e.printStackTrace();
-				}
 				dataRoot.setDisplayName("Ports");
+				dataRoot.getChildren().clear();
+				dataRoot.getActionHandler().refreshLocal();
 			} catch (final Exception e) {
 				LOGGER.error("Error retrieving ports versions");
 			}
 
 			// register consumer to update on new version
-			repository.registerLocalVersionListener(v -> {
-				RunnerHelper.asyncExec(c -> {
-					// Check for existing versions
-					for (final Node n : dataRoot.getChildren()) {
-						if (Objects.equals(v.getFullIdentifier(), n.getDisplayName())) {
-							return;
-						}
-					}
-
-					final Node newVersion = BrowserFactory.eINSTANCE.createLeaf();
-					newVersion.setDisplayName(v.getFullIdentifier());
-					newVersion.setParent(dataRoot);
-					newVersion.setVersionIdentifier(v.getIdentifier());
-					dataRoot.getChildren().add(0, newVersion);
-				});
-			});
+			repository.registerLocalVersionListener(v -> dataRoot.getActionHandler().refreshLocal());
 			repository.startListenForNewLocalVersions();
 
 			repository.registerUpstreamVersionListener(v -> {

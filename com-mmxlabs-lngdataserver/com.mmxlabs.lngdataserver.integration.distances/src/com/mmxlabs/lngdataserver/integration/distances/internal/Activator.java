@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.integration.distances.internal;
 
-import java.util.List;
-import java.util.Objects;
-
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -15,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
-import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.integration.distances.DistanceRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
@@ -114,48 +110,13 @@ public class Activator extends AbstractUIPlugin {
 			LOGGER.debug("Distances back-end ready, retrieving versions...");
 			try {
 				dataRoot.getChildren().clear();
-				boolean first = true;
-				try {
-
-					List<DataVersion> versions = repository.getLocalVersions();
-					if (versions != null) {
-						for (final DataVersion v : versions) {
-							final Node version = BrowserFactory.eINSTANCE.createLeaf();
-							version.setParent(dataRoot);
-							version.setDisplayName(v.getFullIdentifier());
-							version.setVersionIdentifier(v.getIdentifier());
-							version.setPublished(v.isPublished());
-							if (first) {
-								RunnerHelper.asyncExec(c -> dataRoot.setCurrent(version));
-							}
-							first = false;
-							RunnerHelper.asyncExec(c -> dataRoot.getChildren().add(version));
-						}
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 				dataRoot.setDisplayName("Distances");
+				dataRoot.getActionHandler().refreshLocal();
 			} catch (Exception e) {
 				LOGGER.error("Error retrieving distance versions");
 			}
 			// register consumer to update on new version
-			repository.registerLocalVersionListener(v -> {
-				RunnerHelper.asyncExec(c -> {
-					// Check for existing versions
-					for (final Node n : dataRoot.getChildren()) {
-						if (Objects.equals(v.getFullIdentifier(), n.getDisplayName())) {
-							return;
-						}
-					}
-
-					final Node newVersion = BrowserFactory.eINSTANCE.createLeaf();
-					newVersion.setDisplayName(v.getFullIdentifier());
-					newVersion.setVersionIdentifier(v.getIdentifier());
-					newVersion.setParent(dataRoot);
-					dataRoot.getChildren().add(0, newVersion);
-				});
-			});
+			repository.registerLocalVersionListener(v -> dataRoot.getActionHandler().refreshLocal());
 			repository.startListenForNewLocalVersions();
 
 			repository.registerUpstreamVersionListener(v -> {

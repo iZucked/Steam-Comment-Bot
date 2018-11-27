@@ -141,6 +141,9 @@ public class PricingRepositoryActionHandler implements IDataBrowserActionsHandle
 			dataRoot.getChildren().clear();
 			if (versions != null) {
 				for (final DataVersion v : versions) {
+					if ("initial_version".equals(v.getFullIdentifier())) {
+						continue;
+					}
 					final Node version = BrowserFactory.eINSTANCE.createLeaf();
 					version.setParent(dataRoot);
 					version.setDisplayName(v.getFullIdentifier());

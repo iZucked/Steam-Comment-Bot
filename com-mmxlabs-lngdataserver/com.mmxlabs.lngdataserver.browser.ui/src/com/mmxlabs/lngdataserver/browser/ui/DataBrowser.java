@@ -36,7 +36,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
@@ -195,10 +194,12 @@ public class DataBrowser extends ViewPart {
 		dv.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		dv.setLayout(GridLayoutFactory.fillDefaults().create());
 		dv.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+
 		dataViewer = new GridTreeViewer(dv, SWT.NONE | SWT.SINGLE | SWT.V_SCROLL);
 		dataViewer.setContentProvider(new DataBrowserContentProvider(createNewAdapterFactory()));
 		dataViewer.setAutoExpandLevel(GridTreeViewer.ALL_LEVELS);
 		dataViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+
 		GridViewerColumn data_col1 = new GridViewerColumn(dataViewer, SWT.NONE);
 		data_col1.getColumn().setTree(true);
 		data_col1.getColumn().setWidth(300);
@@ -214,6 +215,7 @@ public class DataBrowser extends ViewPart {
 
 		getSite().setSelectionProvider(dataViewer);
 		contextMenuExtensions = DataBrowserContextMenuExtensionUtil.getContextMenuExtensions();
+		
 		final MenuManager data_mgr = new MenuManager();
 		dataViewer.getControl().addMenuDetectListener(new MenuDetectListener() {
 
@@ -580,14 +582,14 @@ public class DataBrowser extends ViewPart {
 			super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
 		}
 
-//		@Override
-//		public void dispose() {
-//		}
-//
-//		@Override
-//		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-//
-//		}
+		// @Override
+		// public void dispose() {
+		// }
+		//
+		// @Override
+		// public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		//
+		// }
 
 		@Override
 		public Object[] getElements(Object inputElement) {
