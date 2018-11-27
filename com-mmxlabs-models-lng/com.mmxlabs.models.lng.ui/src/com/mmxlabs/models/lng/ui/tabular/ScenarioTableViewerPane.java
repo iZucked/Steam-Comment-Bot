@@ -293,6 +293,7 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 								if (callback != null) {
 									uniqueObjects.addAll(callback.apply(objects));
 								}
+								filterObjectsToDelete(uniqueObjects);
 
 								// Clear current selection
 								selectionChanged(new SelectionChangedEvent(viewer, StructuredSelection.EMPTY));
@@ -306,6 +307,7 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 							getJointModelEditorPart().setDisableUpdates(false);
 						}
 					}
+
 				};
 				BusyIndicator.showWhile(null, runnable);
 			}
@@ -338,5 +340,15 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 		}
 
 		super.setLocked(locked);
+	}
+
+	/**
+	 * Subclasses can override this to filter out object from deletion. Each dummmy UI objects that are in the selection.
+	 * 
+	 * @param uniqueObjects
+	 */
+	protected void filterObjectsToDelete(Set<Object> uniqueObjects) {
+		// TODO Auto-generated method stub
+
 	}
 }

@@ -6,9 +6,11 @@ package com.mmxlabs.models.lng.pricing.ui.editorpart;
 
 import java.time.YearMonth;
 import java.util.EnumMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
@@ -99,7 +101,7 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  */
 public class IndexPane extends ScenarioTableViewerPane {
 
-	private static final YearMonth dateZero = YearMonth.of(2000,1);
+	private static final YearMonth dateZero = YearMonth.of(2000, 1);
 
 	private YearMonth minDisplayDate = null;
 	private YearMonth maxDisplayDate = null;
@@ -589,15 +591,15 @@ public class IndexPane extends ScenarioTableViewerPane {
 				}
 
 				@Override
-				public void setParent(Object parent, Object object) {
+				public void setParent(final Object parent, final Object object) {
 					// TODO Auto-generated method stub
-					
+
 				}
 
 				@Override
-				public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
+				public void setExtraCommandsHook(final IExtraCommandsHook extraCommandsHook) {
 					// TODO Auto-generated method stub
-					
+
 				}
 			};
 			col.getColumn().setData(EObjectTableViewer.COLUMN_MANIPULATOR, manipulator);
@@ -828,5 +830,17 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 	public void openUnitsEditor() {
 		unitAction.run();
+	}
+
+	@Override
+	protected void filterObjectsToDelete(final Set<Object> uniqueObjects) {
+		// Do not delete tree model nodes
+		final Iterator<Object> itr = uniqueObjects.iterator();
+		while (itr.hasNext()) {
+			final Object obj = itr.next();
+			if (transformer.isNode(obj)) {
+				itr.remove();
+			}
+		}
 	}
 }

@@ -145,6 +145,10 @@ public class IndexTreeTransformer {
 		}
 	}
 
+	public boolean isNode(Object obj) {
+		return nodeClass.isInstance(obj);
+	}
+
 	public void update(final PricingModel pricingModel) {
 
 		for (final DataType dt : DataType.values()) {
