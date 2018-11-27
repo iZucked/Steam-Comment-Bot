@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.lngdataserver.commons.model.PublishRequest;
 import com.mmxlabs.lngdataserver.commons.model.RenameRequest;
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Curve;
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
@@ -183,10 +182,15 @@ public class PricingClient {
 	}
 
 	public static <T> T getCurve(final String baseUrl, final String version, final String curve, final Class<T> type) throws IOException {
-		final Request request = new Request.Builder().url(baseUrl + "/curves/" + curve + "?v=" + version).build();
+		final Request request = new Request.Builder().url(baseUrl + "/curves/" + curve.replaceAll("\\.","_") + "?v=" + version).build();
 		try (Response response = CLIENT.newCall(request).execute()) {
-			final T result = new ObjectMapper().readValue(response.body().byteStream(), type);
-			return result;
+			if (response.isSuccessful()) {
+				final T result = new ObjectMapper().readValue(response.body().byteStream(), type);
+				return result;
+			} else {
+				System.out.println(response.body().string());
+				throw new RuntimeException("Error getting curves");
+			}
 		}
 	}
 
