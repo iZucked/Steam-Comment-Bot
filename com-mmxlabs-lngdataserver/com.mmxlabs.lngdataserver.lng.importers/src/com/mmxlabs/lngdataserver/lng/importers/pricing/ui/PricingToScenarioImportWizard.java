@@ -23,6 +23,7 @@ import com.mmxlabs.lngdataserver.lng.importers.pricing.PricingToScenarioCopier;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
@@ -33,18 +34,18 @@ public class PricingToScenarioImportWizard extends Wizard implements IImportWiza
 
 	private ScenarioSelectionPage scenarioSelectionPage;
 	private PricingSelectionPage pricingSelectionPage;
-	private String versionIdentifier;
-	private ScenarioInstance currentInstance;
-	private boolean autoSave;
+	private final String versionIdentifier;
+	private final ScenarioInstance currentInstance;
+	private final boolean autoSave;
 
-	public PricingToScenarioImportWizard(String versionIdentifier, ScenarioInstance currentInstance, boolean autoSave) {
+	public PricingToScenarioImportWizard(final String versionIdentifier, final ScenarioInstance currentInstance, final boolean autoSave) {
 		this.versionIdentifier = versionIdentifier;
 		this.currentInstance = currentInstance;
 		this.autoSave = autoSave;
 	}
 
 	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 		scenarioSelectionPage = new ScenarioSelectionPage("Scenario", currentInstance);
 		if (versionIdentifier == null) {
 			pricingSelectionPage = new PricingSelectionPage("Pricing");
@@ -58,7 +59,7 @@ public class PricingToScenarioImportWizard extends Wizard implements IImportWiza
 		if (versionIdentifier != null) {
 			try {
 				pricingProvider = PricingRepository.INSTANCE.getPricingProvider(versionIdentifier);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				e.printStackTrace();
 				return false;
 			}
@@ -66,39 +67,36 @@ public class PricingToScenarioImportWizard extends Wizard implements IImportWiza
 			pricingProvider = pricingSelectionPage.getPricingVersion();
 		}
 		try {
-			List<ScenarioInstance> selectedScenarios = scenarioSelectionPage.getSelectedScenarios();
+			final List<ScenarioInstance> selectedScenarios = scenarioSelectionPage.getSelectedScenarios();
 
 			// Do not fork otherwise this causes a dead lock for me (SG 2018/02/12)
 			getContainer().run(false, true, new IRunnableWithProgress() {
 				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+				public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					monitor.beginTask("copy into scenario", selectedScenarios.size());
 
-					for (ScenarioInstance scenario : selectedScenarios) {
-						ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
+					for (final ScenarioInstance scenario : selectedScenarios) {
+						final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
 						try (ModelReference modelReference = modelRecord.aquireReference(PricingToScenarioImportWizard.class.getSimpleName())) {
-							modelReference.getLock().lock();
-							LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
+							modelReference.executeWithLock(true, () -> {
+								final LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
+								final EditingDomain editingDomain = modelReference.getEditingDomain();
+								final Command updatePricingCommand = PricingToScenarioCopier.getUpdatePricingCommand(editingDomain, pricingProvider, ScenarioModelUtil.getPricingModel(scenarioModel));
 
-							EditingDomain editingDomain = modelReference.getEditingDomain();
-
-							Command updatePricingCommand = PricingToScenarioCopier.getUpdatePricingCommand(editingDomain, pricingProvider, scenarioModel.getReferenceModel().getPricingModel());
-
-							if (!updatePricingCommand.canExecute()) {
-								throw new RuntimeException("Unable to copy pricing information to scenario");
-							}
-							try {
-								RunnerHelper.syncExecDisplayOptional(() -> modelReference.getCommandStack().execute(updatePricingCommand));
-								monitor.worked(1);
-								if (autoSave) {
-									modelReference.save();
+								if (!updatePricingCommand.canExecute()) {
+									throw new RuntimeException("Unable to copy pricing information to scenario");
 								}
-							} catch (Exception e) {
-								e.printStackTrace();
-							} finally {
-								((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
-								modelReference.getLock().unlock();
-							}
+								try {
+									RunnerHelper.syncExecDisplayOptional(() -> modelReference.getCommandStack().execute(updatePricingCommand));
+									monitor.worked(1);
+									if (autoSave) {
+										modelReference.save();
+									}
+								} catch (final Exception e) {
+									e.printStackTrace();
+
+								}
+							});
 						}
 					}
 				}
