@@ -245,6 +245,10 @@
             feature="viability"
             plugin.xml="viability.plugin.xml">
       </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="mtm"
+            plugin.xml="mtm.plugin.xml">
+      </PluginXMLEnablement>
    </extension>
    <extension
          point="org.eclipse.ui.menus">

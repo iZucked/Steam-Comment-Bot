@@ -23,6 +23,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/optionModels"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/optimisations"/>
       <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/viabilityModel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/mtmModel"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//BuyOption"/>
     <genClasses ecoreClass="analytics.ecore#//SellOption"/>
@@ -248,6 +249,30 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//ViabilityResult/latestVolume"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//ViabilityResult/earliestPrice"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//ViabilityResult/latestPrice"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//MTMModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//MTMModel/rows"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MTMModel/markets"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MTMModel/nominalMarkets"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//MTMResult">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MTMResult/target"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMResult/earliestETA"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMResult/earliestVolume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMResult/earliestPrice"/>
+      <genFeatures createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MTMResult/shipping"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMResult/shippingCost"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//MTMRow">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MTMRow/buyOption"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MTMRow/sellOption"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//MTMRow/lhsResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//MTMRow/rhsResults"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MTMRow/target"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMRow/price"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMRow/eta"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMRow/referencePrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMRow/startVolume"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

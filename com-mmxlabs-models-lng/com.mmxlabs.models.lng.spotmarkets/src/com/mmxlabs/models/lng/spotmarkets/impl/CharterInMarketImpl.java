@@ -50,6 +50,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#isNominal <em>Nominal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getMinDuration <em>Min Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getMaxDuration <em>Max Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#isMtm <em>Mtm</em>}</li>
  * </ul>
  *
  * @generated
@@ -263,6 +264,26 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	protected boolean maxDurationESet;
 
 	/**
+	 * The default value of the '{@link #isMtm() <em>Mtm</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isMtm()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean MTM_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isMtm() <em>Mtm</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isMtm()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean mtm = MTM_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -463,6 +484,27 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 */
 	public boolean isSetMaxDuration() {
 		return maxDurationESet;
+	}
+
+/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isMtm() {
+		return mtm;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMtm(boolean newMtm) {
+		boolean oldMtm = mtm;
+		mtm = newMtm;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__MTM, oldMtm, mtm));
 	}
 
 /**
@@ -706,6 +748,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return getMinDuration();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MAX_DURATION:
 				return getMaxDuration();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__MTM:
+				return isMtm();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -754,6 +798,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MAX_DURATION:
 				setMaxDuration((Integer)newValue);
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__MTM:
+				setMtm((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -799,6 +846,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MAX_DURATION:
 				unsetMaxDuration();
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__MTM:
+				setMtm(MTM_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -833,6 +883,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return isSetMinDuration();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MAX_DURATION:
 				return isSetMaxDuration();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__MTM:
+				return mtm != MTM_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -917,6 +969,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 		if (minDurationESet) result.append(minDuration); else result.append("<unset>");
 		result.append(", maxDuration: ");
 		if (maxDurationESet) result.append(maxDuration); else result.append("<unset>");
+		result.append(", mtm: ");
+		result.append(mtm);
 		result.append(')');
 		return result.toString();
 	}

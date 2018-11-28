@@ -35,6 +35,7 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BaseCase;
+import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
@@ -71,6 +72,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.analytics.mtm.MTMSanboxUnit;
 import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificationHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilitySanboxUnit;
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilityWindowTrimmer;
@@ -119,11 +121,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	@Override
 	public void multiEvaluate(ScenarioInstance scenarioInstance, EditingDomain editingDomain, @NonNull IScenarioDataProvider scenarioDataProvider, @NonNull UserSettings userSettings,
 			long targetProfitAndLoss, BreakEvenMode breakEvenMode, List<Pair<BaseCase, ScheduleSpecification>> baseCases, IMapperClass mapper, BiConsumer<BaseCase, Schedule> resultHandler) {
-
-		// @Override
-		// public void multiEvaluate(final ScenarioInstance scenarioInstance, final EditingDomain editingDomain, @NonNull final IScenarioDataProvider scenarioDataProvider,
-		// @NonNull final UserSettings userSettings, final long targetProfitAndLoss, final BreakEvenMode breakEvenMode, final List<Pair<BaseCase, ScheduleSpecification>> baseCases,
-		// final IMapperClass mapper, final BiConsumer<BaseCase, Schedule> resultHandler) {
 
 		final ScheduleSpecificationHelper helper = new ScheduleSpecificationHelper(scenarioDataProvider);
 		helper.processExtraDataProvider(mapper.getExtraDataProvider());
@@ -382,6 +379,49 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		} finally {
 			executorService.shutdownNow();
 		}
+	}
+
+	@Override
+	public void evaluateMTMSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, MTMModel model,
+			IMapperClass mapper) {
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+
+		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
+
+		final ScheduleSpecificationHelper helper = new ScheduleSpecificationHelper(scenarioDataProvider);
+		helper.processExtraDataProvider(mapper.getExtraDataProvider());
+
+		helper.withModuleService(OptimiserInjectorServiceMaker.begin()//
+				.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_Evaluation, new AbstractModule() {
+
+					@Override
+					protected void configure() {
+
+							bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
+					}
+
+				})//
+
+				.make());
+
+		final List<String> hints = new LinkedList<>();
+		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
+
+		final ExecutorService executorService = LNGScenarioChainBuilder.createExecutorService();
+		try {
+			helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, (bridge) -> {
+				LNGDataTransformer dataTransformer = bridge.getDataTransformer();
+				MTMSanboxUnit unit = new MTMSanboxUnit(lngScenarioModel, dataTransformer, "mtm-sandbox", userSettings, constraints, executorService,
+						dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
+				/* Command cmd = */
+				unit.run(model, mapper, new NullProgressMonitor());
+			});
+		} finally {
+			executorService.shutdownNow();
+		}
+		
 	}
 
 }

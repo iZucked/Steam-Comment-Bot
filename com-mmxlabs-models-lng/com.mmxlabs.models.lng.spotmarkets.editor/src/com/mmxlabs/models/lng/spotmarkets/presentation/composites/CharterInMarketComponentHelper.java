@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -78,6 +79,7 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 		add_nominalEditor(detailComposite, topClass);
 		add_minDurationEditor(detailComposite, topClass);
 		add_maxDurationEditor(detailComposite, topClass);
+		add_mtmEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vessel feature on CharterInMarket
@@ -113,6 +115,17 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_maxDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__MAX_DURATION));
+	}
+
+	/**
+	 * Create the editor for the mtm feature on CharterInMarket
+	 *
+	 * @generated NOT
+	 */
+	protected void add_mtmEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if(LicenseFeatures.isPermitted("features:mtm")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__MTM));
+		}
 	}
 
 	/**

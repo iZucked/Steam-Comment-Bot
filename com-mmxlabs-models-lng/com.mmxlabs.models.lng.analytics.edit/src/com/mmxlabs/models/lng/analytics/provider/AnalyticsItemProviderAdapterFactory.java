@@ -1077,6 +1077,75 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MTMModel} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MTMModelItemProvider mtmModelItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MTMModel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMTMModelAdapter() {
+		if (mtmModelItemProvider == null) {
+			mtmModelItemProvider = new MTMModelItemProvider(this);
+		}
+
+		return mtmModelItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MTMResult} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MTMResultItemProvider mtmResultItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MTMResult}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMTMResultAdapter() {
+		if (mtmResultItemProvider == null) {
+			mtmResultItemProvider = new MTMResultItemProvider(this);
+		}
+
+		return mtmResultItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MTMRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MTMRowItemProvider mtmRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MTMRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMTMRowAdapter() {
+		if (mtmRowItemProvider == null) {
+			mtmRowItemProvider = new MTMRowItemProvider(this);
+		}
+
+		return mtmRowItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SolutionOption} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1301,6 +1370,9 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (viabilityModelItemProvider != null) viabilityModelItemProvider.dispose();
 		if (viabilityRowItemProvider != null) viabilityRowItemProvider.dispose();
 		if (viabilityResultItemProvider != null) viabilityResultItemProvider.dispose();
+		if (mtmModelItemProvider != null) mtmModelItemProvider.dispose();
+		if (mtmResultItemProvider != null) mtmResultItemProvider.dispose();
+		if (mtmRowItemProvider != null) mtmRowItemProvider.dispose();
 	}
 
 }

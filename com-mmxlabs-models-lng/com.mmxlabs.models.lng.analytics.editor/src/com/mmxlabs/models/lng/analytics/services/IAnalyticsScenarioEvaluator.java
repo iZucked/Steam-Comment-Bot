@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.BaseCase;
+import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
@@ -39,4 +40,7 @@ public interface IAnalyticsScenarioEvaluator {
 
 	void evaluateViabilitySandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, ViabilityModel model,
 			IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap);
+	
+	void evaluateMTMSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, MTMModel model,
+			IMapperClass mapper);
 }

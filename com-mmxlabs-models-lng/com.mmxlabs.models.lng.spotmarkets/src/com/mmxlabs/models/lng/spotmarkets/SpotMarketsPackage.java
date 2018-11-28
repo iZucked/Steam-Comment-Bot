@@ -361,13 +361,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int SPOT_MARKET__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
+	 * The feature id for the '<em><b>Mtm</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET__MTM = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+
+	/**
 	 * The number of structural features of the '<em>Spot Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int SPOT_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl <em>DES Purchase Market</em>}' class.
@@ -504,6 +513,15 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int DES_PURCHASE_MARKET__RESTRICTED_CONTRACTS = SPOT_MARKET__RESTRICTED_CONTRACTS;
+
+	/**
+	 * The feature id for the '<em><b>Mtm</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__MTM = SPOT_MARKET__MTM;
 
 	/**
 	 * The feature id for the '<em><b>Cv</b></em>' attribute.
@@ -669,6 +687,15 @@ public interface SpotMarketsPackage extends EPackage {
 	int DES_SALES_MARKET__RESTRICTED_CONTRACTS = SPOT_MARKET__RESTRICTED_CONTRACTS;
 
 	/**
+	 * The feature id for the '<em><b>Mtm</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__MTM = SPOT_MARKET__MTM;
+
+	/**
 	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -830,6 +857,15 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_PURCHASES_MARKET__RESTRICTED_CONTRACTS = SPOT_MARKET__RESTRICTED_CONTRACTS;
+
+	/**
+	 * The feature id for the '<em><b>Mtm</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__MTM = SPOT_MARKET__MTM;
 
 	/**
 	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
@@ -1002,6 +1038,15 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_SALES_MARKET__RESTRICTED_CONTRACTS = SPOT_MARKET__RESTRICTED_CONTRACTS;
+
+	/**
+	 * The feature id for the '<em><b>Mtm</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__MTM = SPOT_MARKET__MTM;
 
 	/**
 	 * The feature id for the '<em><b>Origin Ports</b></em>' reference list.
@@ -1324,13 +1369,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_IN_MARKET__MAX_DURATION = SPOT_CHARTER_MARKET_FEATURE_COUNT + 10;
 
 	/**
+	 * The feature id for the '<em><b>Mtm</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET__MTM = SPOT_CHARTER_MARKET_FEATURE_COUNT + 11;
+
+	/**
 	 * The number of structural features of the '<em>Charter In Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 11;
+	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketParametersImpl <em>Charter Out Market Parameters</em>}' class.
@@ -1653,6 +1707,17 @@ public interface SpotMarketsPackage extends EPackage {
 	EReference getSpotMarket_RestrictedContracts();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#isMtm <em>Mtm</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Mtm</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarket#isMtm()
+	 * @see #getSpotMarket()
+	 * @generated
+	 */
+	EAttribute getSpotMarket_Mtm();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket <em>DES Purchase Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1951,6 +2016,17 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCharterInMarket_MaxDuration();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isMtm <em>Mtm</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Mtm</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isMtm()
+	 * @see #getCharterInMarket()
+	 * @generated
+	 */
+	EAttribute getCharterInMarket_Mtm();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket <em>Spot Charter Market</em>}'.
@@ -2283,6 +2359,14 @@ public interface SpotMarketsPackage extends EPackage {
 		EReference SPOT_MARKET__RESTRICTED_CONTRACTS = eINSTANCE.getSpotMarket_RestrictedContracts();
 
 		/**
+		 * The meta object literal for the '<em><b>Mtm</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SPOT_MARKET__MTM = eINSTANCE.getSpotMarket_Mtm();
+
+		/**
 		 * The meta object literal for the '<em><b>Enabled</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2537,6 +2621,14 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHARTER_IN_MARKET__MAX_DURATION = eINSTANCE.getCharterInMarket_MaxDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Mtm</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_IN_MARKET__MTM = eINSTANCE.getCharterInMarket_Mtm();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotCharterMarketImpl <em>Spot Charter Market</em>}' class.

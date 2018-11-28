@@ -38,7 +38,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.fleet.editor,
  com.mmxlabs.scenario.service.util,
  com.mmxlabs.rcp.common,
- org.eclipse.nebula.widgets.formattedtext
+ org.eclipse.nebula.widgets.formattedtext,
+ com.mmxlabs.license.features
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.inject;version="1.0.0"
 Automatic-Module-Name: com.mmxlabs.models.lng.spotmarkets.editor

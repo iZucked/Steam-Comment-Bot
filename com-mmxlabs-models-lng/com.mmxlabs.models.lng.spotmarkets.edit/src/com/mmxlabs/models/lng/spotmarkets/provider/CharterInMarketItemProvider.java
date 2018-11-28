@@ -62,6 +62,7 @@ public class CharterInMarketItemProvider
 			addNominalPropertyDescriptor(object);
 			addMinDurationPropertyDescriptor(object);
 			addMaxDurationPropertyDescriptor(object);
+			addMtmPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -194,6 +195,28 @@ public class CharterInMarketItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Mtm feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMtmPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterInMarket_mtm_feature"),
+				 getString("_UI_CharterInMarket_mtm_description"),
+				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__MTM,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -383,6 +406,7 @@ public class CharterInMarketItemProvider
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MIN_DURATION:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MAX_DURATION:
+			case SpotMarketsPackage.CHARTER_IN_MARKET__MTM:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__EXTENSIONS:

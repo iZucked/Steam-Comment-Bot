@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -33,6 +34,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getOptionModels <em>Option Models</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getOptimisations <em>Optimisations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getViabilityModel <em>Viability Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getMtmModel <em>Mtm Model</em>}</li>
  * </ul>
  *
  * @generated
@@ -67,6 +69,16 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * @ordered
 	 */
 	protected ViabilityModel viabilityModel;
+
+	/**
+	 * The cached value of the '{@link #getMtmModel() <em>Mtm Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMtmModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected MTMModel mtmModel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -159,6 +171,49 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public MTMModel getMtmModel() {
+		return mtmModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetMtmModel(MTMModel newMtmModel, NotificationChain msgs) {
+		MTMModel oldMtmModel = mtmModel;
+		mtmModel = newMtmModel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL, oldMtmModel, newMtmModel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMtmModel(MTMModel newMtmModel) {
+		if (newMtmModel != mtmModel) {
+			NotificationChain msgs = null;
+			if (mtmModel != null)
+				msgs = ((InternalEObject)mtmModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL, null, msgs);
+			if (newMtmModel != null)
+				msgs = ((InternalEObject)newMtmModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL, null, msgs);
+			msgs = basicSetMtmModel(newMtmModel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL, newMtmModel, newMtmModel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -168,6 +223,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return ((InternalEList<?>)getOptimisations()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL:
 				return basicSetViabilityModel(null, msgs);
+			case AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL:
+				return basicSetMtmModel(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -186,6 +243,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return getOptimisations();
 			case AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL:
 				return getViabilityModel();
+			case AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL:
+				return getMtmModel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -210,6 +269,9 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 			case AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL:
 				setViabilityModel((ViabilityModel)newValue);
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL:
+				setMtmModel((MTMModel)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -231,6 +293,9 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 			case AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL:
 				setViabilityModel((ViabilityModel)null);
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL:
+				setMtmModel((MTMModel)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -249,6 +314,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return optimisations != null && !optimisations.isEmpty();
 			case AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL:
 				return viabilityModel != null;
+			case AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL:
+				return mtmModel != null;
 		}
 		return super.eIsSet(featureID);
 	}

@@ -68,7 +68,23 @@
                <target
                      class="CharterInMarket">
                </target>
-            </constraint>       
+            </constraint>    
+            <!--<constraint
+                  class="com.mmxlabs.models.lng.spotmarkets.validation.CharterInMarketMTMConstraint"
+                  id="com.mmxlabs.models.lng.spotmarkets.validation.CharterInMarketMTMConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Charter In Market MTM Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="SpotMarketsModel">
+               </target>
+            </constraint>-->   
             <constraint
                   class="com.mmxlabs.models.lng.spotmarkets.validation.CharterOutMarketParametersConstraint"
                   id="com.mmxlabs.models.lng.spotmarkets.validation.CharterOutMarketParametersConstraint"

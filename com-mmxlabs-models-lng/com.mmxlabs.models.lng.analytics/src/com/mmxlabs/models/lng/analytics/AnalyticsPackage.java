@@ -117,13 +117,22 @@ public interface AnalyticsPackage extends EPackage {
 	int ANALYTICS_MODEL__VIABILITY_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Mtm Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYTICS_MODEL__MTM_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYTICS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int ANALYTICS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}' class.
@@ -2696,6 +2705,270 @@ s	 * <!-- end-user-doc -->
 	int VIABILITY_RESULT_FEATURE_COUNT = 7;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MTMModelImpl <em>MTM Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.MTMModelImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMModel()
+	 * @generated
+	 */
+	int MTM_MODEL = 51;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_MODEL__EXTENSIONS = ABSTRACT_ANALYSIS_MODEL__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_MODEL__NAME = ABSTRACT_ANALYSIS_MODEL__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Buys</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_MODEL__BUYS = ABSTRACT_ANALYSIS_MODEL__BUYS;
+
+	/**
+	 * The feature id for the '<em><b>Sells</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_MODEL__SELLS = ABSTRACT_ANALYSIS_MODEL__SELLS;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Templates</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_MODEL__SHIPPING_TEMPLATES = ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES;
+
+	/**
+	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_MODEL__ROWS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Markets</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_MODEL__MARKETS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Nominal Markets</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_MODEL__NOMINAL_MARKETS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>MTM Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_MODEL_FEATURE_COUNT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MTMResultImpl <em>MTM Result</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.MTMResultImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMResult()
+	 * @generated
+	 */
+	int MTM_RESULT = 52;
+
+	/**
+	 * The feature id for the '<em><b>Target</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_RESULT__TARGET = 0;
+
+	/**
+	 * The feature id for the '<em><b>Earliest ETA</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_RESULT__EARLIEST_ETA = 1;
+
+	/**
+	 * The feature id for the '<em><b>Earliest Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_RESULT__EARLIEST_VOLUME = 2;
+
+	/**
+	 * The feature id for the '<em><b>Earliest Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_RESULT__EARLIEST_PRICE = 3;
+
+	/**
+	 * The feature id for the '<em><b>Shipping</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_RESULT__SHIPPING = 4;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_RESULT__SHIPPING_COST = 5;
+
+	/**
+	 * The number of structural features of the '<em>MTM Result</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_RESULT_FEATURE_COUNT = 6;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MTMRowImpl <em>MTM Row</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.MTMRowImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMRow()
+	 * @generated
+	 */
+	int MTM_ROW = 53;
+
+	/**
+	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_ROW__BUY_OPTION = 0;
+
+	/**
+	 * The feature id for the '<em><b>Sell Option</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_ROW__SELL_OPTION = 1;
+
+	/**
+	 * The feature id for the '<em><b>Lhs Results</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_ROW__LHS_RESULTS = 2;
+
+	/**
+	 * The feature id for the '<em><b>Rhs Results</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_ROW__RHS_RESULTS = 3;
+
+	/**
+	 * The feature id for the '<em><b>Target</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_ROW__TARGET = 4;
+
+	/**
+	 * The feature id for the '<em><b>Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_ROW__PRICE = 5;
+
+	/**
+	 * The feature id for the '<em><b>Eta</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_ROW__ETA = 6;
+
+	/**
+	 * The feature id for the '<em><b>Reference Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_ROW__REFERENCE_PRICE = 7;
+
+	/**
+	 * The feature id for the '<em><b>Start Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_ROW__START_VOLUME = 8;
+
+	/**
+	 * The number of structural features of the '<em>MTM Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_ROW_FEATURE_COUNT = 9;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2703,7 +2976,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 51;
+	int VOLUME_MODE = 54;
 
 
 	/**
@@ -2714,7 +2987,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotType()
 	 * @generated
 	 */
-	int SLOT_TYPE = 52;
+	int SLOT_TYPE = 55;
 
 
 	/**
@@ -2759,6 +3032,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getAnalyticsModel_ViabilityModel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getMtmModel <em>Mtm Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Mtm Model</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getMtmModel()
+	 * @see #getAnalyticsModel()
+	 * @generated
+	 */
+	EReference getAnalyticsModel_MtmModel();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}'.
@@ -4530,6 +4814,234 @@ s	 * <!-- end-user-doc -->
 	EAttribute getViabilityResult_LatestPrice();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.MTMModel <em>MTM Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>MTM Model</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMModel
+	 * @generated
+	 */
+	EClass getMTMModel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.MTMModel#getRows <em>Rows</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Rows</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMModel#getRows()
+	 * @see #getMTMModel()
+	 * @generated
+	 */
+	EReference getMTMModel_Rows();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.MTMModel#getMarkets <em>Markets</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Markets</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMModel#getMarkets()
+	 * @see #getMTMModel()
+	 * @generated
+	 */
+	EReference getMTMModel_Markets();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.MTMModel#getNominalMarkets <em>Nominal Markets</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Nominal Markets</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMModel#getNominalMarkets()
+	 * @see #getMTMModel()
+	 * @generated
+	 */
+	EReference getMTMModel_NominalMarkets();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.MTMResult <em>MTM Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>MTM Result</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMResult
+	 * @generated
+	 */
+	EClass getMTMResult();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MTMResult#getTarget <em>Target</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Target</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMResult#getTarget()
+	 * @see #getMTMResult()
+	 * @generated
+	 */
+	EReference getMTMResult_Target();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MTMResult#getEarliestETA <em>Earliest ETA</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Earliest ETA</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMResult#getEarliestETA()
+	 * @see #getMTMResult()
+	 * @generated
+	 */
+	EAttribute getMTMResult_EarliestETA();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MTMResult#getEarliestVolume <em>Earliest Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Earliest Volume</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMResult#getEarliestVolume()
+	 * @see #getMTMResult()
+	 * @generated
+	 */
+	EAttribute getMTMResult_EarliestVolume();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MTMResult#getEarliestPrice <em>Earliest Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Earliest Price</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMResult#getEarliestPrice()
+	 * @see #getMTMResult()
+	 * @generated
+	 */
+	EAttribute getMTMResult_EarliestPrice();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.MTMResult#getShipping <em>Shipping</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Shipping</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMResult#getShipping()
+	 * @see #getMTMResult()
+	 * @generated
+	 */
+	EReference getMTMResult_Shipping();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MTMResult#getShippingCost <em>Shipping Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Shipping Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMResult#getShippingCost()
+	 * @see #getMTMResult()
+	 * @generated
+	 */
+	EAttribute getMTMResult_ShippingCost();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.MTMRow <em>MTM Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>MTM Row</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMRow
+	 * @generated
+	 */
+	EClass getMTMRow();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MTMRow#getBuyOption <em>Buy Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Buy Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMRow#getBuyOption()
+	 * @see #getMTMRow()
+	 * @generated
+	 */
+	EReference getMTMRow_BuyOption();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MTMRow#getSellOption <em>Sell Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Sell Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMRow#getSellOption()
+	 * @see #getMTMRow()
+	 * @generated
+	 */
+	EReference getMTMRow_SellOption();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.MTMRow#getLhsResults <em>Lhs Results</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Lhs Results</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMRow#getLhsResults()
+	 * @see #getMTMRow()
+	 * @generated
+	 */
+	EReference getMTMRow_LhsResults();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.MTMRow#getRhsResults <em>Rhs Results</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Rhs Results</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMRow#getRhsResults()
+	 * @see #getMTMRow()
+	 * @generated
+	 */
+	EReference getMTMRow_RhsResults();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MTMRow#getTarget <em>Target</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Target</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMRow#getTarget()
+	 * @see #getMTMRow()
+	 * @generated
+	 */
+	EReference getMTMRow_Target();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MTMRow#getPrice <em>Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMRow#getPrice()
+	 * @see #getMTMRow()
+	 * @generated
+	 */
+	EAttribute getMTMRow_Price();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MTMRow#getEta <em>Eta</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Eta</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMRow#getEta()
+	 * @see #getMTMRow()
+	 * @generated
+	 */
+	EAttribute getMTMRow_Eta();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MTMRow#getReferencePrice <em>Reference Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Reference Price</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMRow#getReferencePrice()
+	 * @see #getMTMRow()
+	 * @generated
+	 */
+	EAttribute getMTMRow_ReferencePrice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MTMRow#getStartVolume <em>Start Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Volume</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMRow#getStartVolume()
+	 * @see #getMTMRow()
+	 * @generated
+	 */
+	EAttribute getMTMRow_StartVolume();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SolutionOption <em>Solution Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4799,6 +5311,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ANALYTICS_MODEL__VIABILITY_MODEL = eINSTANCE.getAnalyticsModel_ViabilityModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Mtm Model</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ANALYTICS_MODEL__MTM_MODEL = eINSTANCE.getAnalyticsModel_MtmModel();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}' class.
@@ -6211,6 +6731,180 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute VIABILITY_RESULT__LATEST_PRICE = eINSTANCE.getViabilityResult_LatestPrice();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.MTMModelImpl <em>MTM Model</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.MTMModelImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMModel()
+		 * @generated
+		 */
+		EClass MTM_MODEL = eINSTANCE.getMTMModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Rows</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MTM_MODEL__ROWS = eINSTANCE.getMTMModel_Rows();
+
+		/**
+		 * The meta object literal for the '<em><b>Markets</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MTM_MODEL__MARKETS = eINSTANCE.getMTMModel_Markets();
+
+		/**
+		 * The meta object literal for the '<em><b>Nominal Markets</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MTM_MODEL__NOMINAL_MARKETS = eINSTANCE.getMTMModel_NominalMarkets();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.MTMResultImpl <em>MTM Result</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.MTMResultImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMResult()
+		 * @generated
+		 */
+		EClass MTM_RESULT = eINSTANCE.getMTMResult();
+
+		/**
+		 * The meta object literal for the '<em><b>Target</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MTM_RESULT__TARGET = eINSTANCE.getMTMResult_Target();
+
+		/**
+		 * The meta object literal for the '<em><b>Earliest ETA</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MTM_RESULT__EARLIEST_ETA = eINSTANCE.getMTMResult_EarliestETA();
+
+		/**
+		 * The meta object literal for the '<em><b>Earliest Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MTM_RESULT__EARLIEST_VOLUME = eINSTANCE.getMTMResult_EarliestVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Earliest Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MTM_RESULT__EARLIEST_PRICE = eINSTANCE.getMTMResult_EarliestPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Shipping</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MTM_RESULT__SHIPPING = eINSTANCE.getMTMResult_Shipping();
+
+		/**
+		 * The meta object literal for the '<em><b>Shipping Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MTM_RESULT__SHIPPING_COST = eINSTANCE.getMTMResult_ShippingCost();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.MTMRowImpl <em>MTM Row</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.MTMRowImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMRow()
+		 * @generated
+		 */
+		EClass MTM_ROW = eINSTANCE.getMTMRow();
+
+		/**
+		 * The meta object literal for the '<em><b>Buy Option</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MTM_ROW__BUY_OPTION = eINSTANCE.getMTMRow_BuyOption();
+
+		/**
+		 * The meta object literal for the '<em><b>Sell Option</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MTM_ROW__SELL_OPTION = eINSTANCE.getMTMRow_SellOption();
+
+		/**
+		 * The meta object literal for the '<em><b>Lhs Results</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MTM_ROW__LHS_RESULTS = eINSTANCE.getMTMRow_LhsResults();
+
+		/**
+		 * The meta object literal for the '<em><b>Rhs Results</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MTM_ROW__RHS_RESULTS = eINSTANCE.getMTMRow_RhsResults();
+
+		/**
+		 * The meta object literal for the '<em><b>Target</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MTM_ROW__TARGET = eINSTANCE.getMTMRow_Target();
+
+		/**
+		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MTM_ROW__PRICE = eINSTANCE.getMTMRow_Price();
+
+		/**
+		 * The meta object literal for the '<em><b>Eta</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MTM_ROW__ETA = eINSTANCE.getMTMRow_Eta();
+
+		/**
+		 * The meta object literal for the '<em><b>Reference Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MTM_ROW__REFERENCE_PRICE = eINSTANCE.getMTMRow_ReferencePrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MTM_ROW__START_VOLUME = eINSTANCE.getMTMRow_StartVolume();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl <em>Solution Option</em>}' class.

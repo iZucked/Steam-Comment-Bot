@@ -9,6 +9,8 @@ import java.util.Collection;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.MTMResult;
+import com.mmxlabs.models.lng.analytics.MTMRow;
 import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
@@ -24,7 +26,12 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 	@Override
 	public String render(final Object object) {
 
-		if (object instanceof ViabilityRow) {
+		if (object instanceof MTMRow) {
+			final MTMRow row = (MTMRow) object;
+			final MTMResult result = row.getRhsResults().get(0);
+			final ShippingOption shipping = result.getShipping();
+			return render(shipping);
+		} else if (object instanceof ViabilityRow) {
 			final ViabilityRow row = (ViabilityRow) object;
 			final ShippingOption shipping = row.getShipping();
 			return render(shipping);

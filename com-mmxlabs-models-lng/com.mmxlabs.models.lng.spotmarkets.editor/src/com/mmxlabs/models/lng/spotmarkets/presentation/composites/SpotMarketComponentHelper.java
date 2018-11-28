@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
@@ -76,6 +77,7 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 		add_restrictedListsArePermissiveEditor(detailComposite, topClass);
 		add_restrictedPortsEditor(detailComposite, topClass);
 		add_restrictedContractsEditor(detailComposite, topClass);
+		add_mtmEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the enabled feature on SpotMarket
@@ -172,5 +174,16 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_restrictedContractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS));
+	}
+
+	/**
+	 * Create the editor for the mtm feature on SpotMarket
+	 *
+	 * @generated NOT
+	 */
+	protected void add_mtmEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if(LicenseFeatures.isPermitted("features:mtm")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__MTM));
+		}
 	}
 }

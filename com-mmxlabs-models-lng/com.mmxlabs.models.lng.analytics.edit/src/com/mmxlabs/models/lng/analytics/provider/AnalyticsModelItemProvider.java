@@ -91,6 +91,7 @@ public class AnalyticsModelItemProvider
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTION_MODELS);
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS);
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__VIABILITY_MODEL);
+			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__MTM_MODEL);
 		}
 		return childrenFeatures;
 	}
@@ -148,6 +149,7 @@ public class AnalyticsModelItemProvider
 			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
 			case AnalyticsPackage.ANALYTICS_MODEL__OPTIMISATIONS:
 			case AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL:
+			case AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -189,6 +191,11 @@ public class AnalyticsModelItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.ANALYTICS_MODEL__VIABILITY_MODEL,
 				 AnalyticsFactory.eINSTANCE.createViabilityModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ANALYTICS_MODEL__MTM_MODEL,
+				 AnalyticsFactory.eINSTANCE.createMTMModel()));
 	}
 
 }

@@ -67,6 +67,7 @@ public class AnalyticsModelComponentHelper extends BaseComponentHelper {
 		add_optionModelsEditor(detailComposite, topClass);
 		add_optimisationsEditor(detailComposite, topClass);
 		add_viabilityModelEditor(detailComposite, topClass);
+		add_mtmModelEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the optionModels feature on AnalyticsModel
@@ -93,5 +94,14 @@ public class AnalyticsModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_viabilityModelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__VIABILITY_MODEL));
+	}
+
+	/**
+	 * Create the editor for the mtmModel feature on AnalyticsModel
+	 *
+	 * @generated
+	 */
+	protected void add_mtmModelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__MTM_MODEL));
 	}
 }
