@@ -605,7 +605,7 @@ public final class OptimisationHelper {
 			// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
 			final Option gcoOption = dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", "",copy, defaultSettings, DataType.Choice, choiceData,
 					SWTBOT_CHARTEROUTGENERATION_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
-			optionAdded = true;
+			optionAdded = !forEvaluation;
 			enabledOptionAdded = choiceData.enabled;
 
 			if (scenario != null) {
