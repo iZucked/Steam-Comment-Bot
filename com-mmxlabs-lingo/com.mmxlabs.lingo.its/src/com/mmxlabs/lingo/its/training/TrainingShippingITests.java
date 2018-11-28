@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -21,6 +22,8 @@ import org.junit.runner.RunWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lingo.its.tests.TestMode;
+import com.mmxlabs.lingo.its.tests.TestingModes;
 import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
@@ -141,6 +144,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 	@Test
 	@Category({ OptimisationTest.class })
 	public void testShipping_I_Stage_1_Shipping() throws Exception {
+		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
@@ -167,13 +171,11 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 1
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker()
-							.withUsedLoad("A_3").onFleetVessel("Small Ship") //
+							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel("Small Ship") //
 							.withUsedLoad("S_1").onFleetVessel("Medium Ship") //
 							.withUsedLoad("S_4").onFleetVessel("Large Ship") //
 							.pnlDelta(initialPNL, 944_899, 1_000) //
-							.build()
-					;
+							.build();
 
 					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
@@ -181,12 +183,10 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 2
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker()
-							.withUsedLoad("A_3").onFleetVessel("Small Ship") //
+							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel("Small Ship") //
 							.withUsedLoad("S_4").onFleetVessel("Medium Ship") //
 							.pnlDelta(initialPNL, 610_378, 1_000) //
-							.build()
-					;
+							.build();
 
 					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
@@ -198,6 +198,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 	@Test
 	@Category({ OptimisationTest.class })
 	public void testShipping_I_Stage_2_1_Lateness() throws Exception {
+		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
@@ -233,16 +234,14 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 1
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker()
-							.withUsedLoad("A_3").onFleetVessel("Small Ship") //
+							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel("Small Ship") //
 							.withUsedLoad("BO_1").onFleetVessel("Small Ship") //
 							.withUsedLoad("S_1").onFleetVessel("Medium Ship") //
 							.withUsedLoad("S_4").onFleetVessel("Large Ship") //
 							.violationDelta(initialViolations, -1) //
 							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
 							.pnlDelta(initialPNL, -992_994, 1_000) //
-							.build()
-					;
+							.build();
 
 					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
@@ -250,15 +249,13 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 2
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker()
-							.withUsedLoad("A_3").onFleetVessel("Small Ship") //
+							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel("Small Ship") //
 							.withUsedLoad("BO_1").onFleetVessel("Small Ship") //
 							.withUsedLoad("S_4").onFleetVessel("Medium Ship") //
 							.violationDelta(initialViolations, -1) //
 							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
 							.pnlDelta(initialPNL, -1_327_515, 1_000) //
-							.build()
-					;
+							.build();
 
 					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
@@ -266,13 +263,11 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 3
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner) //
-							.withAnySolutionResultChecker()
-							.withUsedLoad("BO_1").onFleetVessel("Small Ship") //
+							.withAnySolutionResultChecker().withUsedLoad("BO_1").onFleetVessel("Small Ship") //
 							.violationDelta(initialViolations, -1) //
 							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
 							.pnlDelta(initialPNL, -2_144_366, 1_000) //
-							.build()
-					;
+							.build();
 
 					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
@@ -285,6 +280,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 	@Test
 	@Category({ OptimisationTest.class })
 	public void testShipping_I_Stage_2_2_Lateness_with_charter_in() throws Exception {
+		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
@@ -326,16 +322,14 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 1
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker()
-							.withUsedLoad("A_3").onFleetVessel("Small Ship") //
+							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel("Small Ship") //
 							.withUsedLoad("BO_2").onSpotCharter("CI_10") //
 							.withUsedLoad("S_1").onFleetVessel("Medium Ship") //
 							.withUsedLoad("S_4").onFleetVessel("Large Ship") //
 							.violationDelta(initialViolations, 0) //
 							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
 							.pnlDelta(initialPNL, -147_982, 1_000) //
-							.build()
-					;
+							.build();
 
 					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
@@ -343,15 +337,13 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 2
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker()
-							.withUsedLoad("A_3").onFleetVessel("Small Ship") //
+							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel("Small Ship") //
 							.withUsedLoad("BO_2").onSpotCharter("CI_10") //
 							.withUsedLoad("S_4").onFleetVessel("Medium Ship") //
 							.violationDelta(initialViolations, 0) //
 							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
 							.pnlDelta(initialPNL, -482_503, 1_000) //
-							.build()
-					;
+							.build();
 
 					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
@@ -360,13 +352,11 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 3
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker()
-							.withUsedLoad("BO_2").onSpotCharter("CI_10") //
+							.withAnySolutionResultChecker().withUsedLoad("BO_2").onSpotCharter("CI_10") //
 							.violationDelta(initialViolations, 0) //
 							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
 							.pnlDelta(initialPNL, -1_351_441, 1_000) //
-							.build()
-					;
+							.build();
 
 					final ISequences solution = verifier.verifySolutionExistsInResults(result, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
@@ -379,6 +369,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 	@Test
 	@Category({ OptimisationTest.class })
 	public void testShipping_I_Stage_3_1_allocation_and_keep_open() throws Exception {
+		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
@@ -439,16 +430,14 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 1
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker()
-							.withCargo("New_Load", "New_Discharge").onFleetVessel("Small Ship") //
+							.withAnySolutionResultChecker().withCargo("New_Load", "New_Discharge").onFleetVessel("Small Ship") //
 							.withUsedLoad("A_3").onFleetVessel("Small Ship") //
 							.withUsedLoad("S_1").onFleetVessel("Medium Ship") //
 							.withUsedLoad("S_4").onFleetVessel("Large Ship") //
 							.violationDelta(initialViolations, -1) //
 							.latenessDelta(initialLateness, 0) //
 							.pnlDelta(initialPNL, 19_124_719, 1_000) //
-							.build()
-					;
+							.build();
 
 					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
@@ -457,13 +446,11 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 2
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker()
-							.withCargo("New_Load", "New_Discharge").onFleetVessel("Small Ship") //
+							.withAnySolutionResultChecker().withCargo("New_Load", "New_Discharge").onFleetVessel("Small Ship") //
 							.violationDelta(initialViolations, -1) //
 							.latenessDelta(initialLateness, 0) //
 							.pnlDelta(initialPNL, 18_179_820, 1_000) //
-							.build()
-					;
+							.build();
 
 					final ISequences solution = verifier.verifySolutionExistsInResults(result, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
