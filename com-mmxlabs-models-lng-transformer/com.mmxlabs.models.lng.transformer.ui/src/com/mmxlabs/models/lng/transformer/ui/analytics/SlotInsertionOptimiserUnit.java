@@ -368,7 +368,7 @@ public class SlotInsertionOptimiserUnit {
 				}
 
 				// Step 2: full search
-				if (false) {
+				{
 					for (int tryNo = 0; tryNo < tries; ++tryNo) {
 						final int pTryNo = tryNo;
 
