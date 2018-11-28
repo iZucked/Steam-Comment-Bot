@@ -4,15 +4,21 @@
  */
 package com.mmxlabs.models.ui.validation;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.service.IValidator;
-import org.eclipse.jdt.annotation.Nullable;
 
 /**
  */
 public interface IValidationService {
-	IStatus runValidation(IValidator<EObject> validator, IExtraValidationContext extraContext, IValidationRootObjectTransformerService transformer, EObject rootObject, @Nullable EObject extraTarget);
+	default IStatus runValidation(final IValidator<EObject> validator, final IExtraValidationContext extraContext, final EObject target) {
+		return runValidation(validator, extraContext, Collections.singleton(target));
+	}
+
+	IStatus runValidation(final IValidator<EObject> validator, final IExtraValidationContext extraContext, final Collection<? extends EObject> targets);
 
 	/**
 	 * Returns the registered {@link IExtraValidationContext} for the current thread

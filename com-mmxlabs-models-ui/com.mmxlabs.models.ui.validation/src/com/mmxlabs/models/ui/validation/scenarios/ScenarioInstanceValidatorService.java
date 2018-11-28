@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.ui.validation.scenarios;
 
-import java.util.Collections;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
@@ -14,7 +12,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
-import com.mmxlabs.models.ui.validation.IValidationRootObjectTransformerService;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
@@ -33,7 +30,6 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 public class ScenarioInstanceValidatorService implements IPostChangeHook {
 
 	private IValidationService validationService;
-	private IValidationRootObjectTransformerService objectTransformerService;
 
 	public void start() {
 		SSDataManager.Instance.registerChangeHook(this, SSDataManager.PostChangeHookPhase.VALIDATION);
@@ -51,14 +47,6 @@ public class ScenarioInstanceValidatorService implements IPostChangeHook {
 		this.validationService = null;
 	}
 
-	public void bindRootObjectTransformerService(final IValidationRootObjectTransformerService objectTransformerService) {
-		this.objectTransformerService = objectTransformerService;
-	}
-
-	public void unbindRootObjectTransformerService(final IValidationRootObjectTransformerService objectTransformerService) {
-		this.objectTransformerService = null;
-	}
-
 	@Override
 	public void changed(@NonNull final ScenarioModelRecord modelRecord) {
 
@@ -69,17 +57,8 @@ public class ScenarioInstanceValidatorService implements IPostChangeHook {
 			final IExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation);
 
 			final IValidationService pValidationService = validationService;
-			final IValidationRootObjectTransformerService pObjectTransformerService = objectTransformerService;
 			if (pValidationService != null) {
-
-				final IValidationRootObjectTransformerService transformer;
-//				if (pObjectTransformerService != null) {
-//					transformer = pObjectTransformerService;
-//				} else {
-					transformer = root -> Collections.singleton(root);
-//				}
-
-				final IStatus status = pValidationService.runValidation(createValidator(), extraContext, transformer, scenarioDataProvider.getScenario(), null);
+				final IStatus status = pValidationService.runValidation(createValidator(), extraContext, scenarioDataProvider.getScenario());
 				if (status != null) {
 					modelRecord.setValidationStatus(status);
 				}

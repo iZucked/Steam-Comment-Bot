@@ -4,8 +4,7 @@
  */
 package com.mmxlabs.models.ui.validation.impl;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -20,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
-import com.mmxlabs.models.ui.validation.IValidationRootObjectTransformerService;
 import com.mmxlabs.models.ui.validation.IValidationService;
 
 /**
@@ -56,13 +54,7 @@ public class ValidationService implements IValidationService {
 	}
 
 	@Override
-	public IStatus runValidation(final IValidator<EObject> validator, final IExtraValidationContext extraContext, final IValidationRootObjectTransformerService transformer, final EObject rootObject,
-			final EObject extraTarget) {
-		final List<EObject> targets = new LinkedList<>();
-		targets.addAll(transformer.getTargets(rootObject));
-		if (extraTarget != null) {
-			targets.add(extraTarget);
-		}
+	public IStatus runValidation(IValidator<EObject> validator, IExtraValidationContext extraContext, Collection<? extends EObject> targets) {
 		final FutureTask<IStatus> validationTask = new FutureTask<>(new Callable<IStatus>() {
 			@Override
 			public IStatus call() throws Exception {
