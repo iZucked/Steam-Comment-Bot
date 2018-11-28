@@ -117,7 +117,7 @@ public final class ViewerHelper {
 		RunnerHelper.exec(runnable, syncExec);
 	}
 
-	public static <T extends Viewer> void refreshThen(@Nullable final T viewer, final boolean syncExec, @NonNull Consumer<T> then) {
+	public static <T extends Viewer> void refreshThenConsumer(@Nullable final T viewer, final boolean syncExec, @NonNull Consumer<T> then) {
 		if (viewer == null) {
 			return;
 		}
