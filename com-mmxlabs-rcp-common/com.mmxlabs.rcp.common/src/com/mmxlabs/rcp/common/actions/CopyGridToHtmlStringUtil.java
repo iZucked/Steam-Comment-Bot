@@ -36,6 +36,7 @@ public class CopyGridToHtmlStringUtil {
 	private boolean showBackgroundColours = false;
 	private boolean includeAllColumns = false;
 	private IAdditionalAttributeProvider additionalAttributeProvider = null;
+	private static final String EOL = System.getProperty("line.separator");
 
 	public CopyGridToHtmlStringUtil(final Grid table, final boolean includeRowHeaders, final boolean includeAllColumns) {
 
@@ -55,9 +56,9 @@ public class CopyGridToHtmlStringUtil {
 			// implicit column will be created in such cases
 			final int numColumns = table.getColumnCount();
 			if (includeBorder) {
-				sw.write("<table border='0'>\n");
+				sw.write("<table border='0'>" + EOL);
 			} else {
-				sw.write("<table >\n");
+				sw.write("<table >" + EOL);
 
 			}
 			try {
@@ -96,7 +97,7 @@ public class CopyGridToHtmlStringUtil {
 	private void addHeader(@NonNull final StringWriter sw) {
 		// final int numColumns = table.getColumnCount();
 		// write the head
-		sw.write("<thead>\n");
+		sw.write("<thead>" + EOL);
 
 		// Create temporary writers to create both header rows concurrently.
 		final StringWriter topRow = new StringWriter();
@@ -151,14 +152,14 @@ public class CopyGridToHtmlStringUtil {
 		if (!seenGroups.isEmpty()) {
 			sw.write("<tr>");
 			sw.write(topRow.toString());
-			sw.write("</tr>\n");
+			sw.write("</tr>" + EOL);
 			sw.write("<tr>");
 			sw.write(bottomRow.toString());
-			sw.write("</tr>\n</thead>\n");
+			sw.write("</tr>" + EOL + "</thead>" + EOL);
 		} else {
 			sw.write("<tr>");
 			sw.write(singleRow.toString());
-			sw.write("</tr>\n</thead>\n");
+			sw.write("</tr>" + EOL + "</thead>" + EOL);
 
 		}
 	}
@@ -235,7 +236,7 @@ public class CopyGridToHtmlStringUtil {
 			}
 			// end row
 			if ((i + 1) >= numColumns) {
-				sw.write("</tr>\n");
+				sw.write("</tr>" + EOL);
 			}
 		}
 	}
