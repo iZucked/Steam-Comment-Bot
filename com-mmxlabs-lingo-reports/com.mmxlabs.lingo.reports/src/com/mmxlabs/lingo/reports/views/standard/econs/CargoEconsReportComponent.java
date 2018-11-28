@@ -129,6 +129,8 @@ public class CargoEconsReportComponent implements IAdaptable {
 	private boolean compareMode = true;
 	private boolean onlyDiffMode = false;
 
+	private GridViewerColumn dummyDataCol;
+
 	private Image createImage(String path) {
 		final ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor(path);
 		return imageDescriptor.createImage();
@@ -172,13 +174,12 @@ public class CargoEconsReportComponent implements IAdaptable {
 		viewer.setRowHeaderLabelProvider(createRowHeaderLabelProvider());
 		viewer.refreshRowHeaders(null);
 
-		// Add the dummy name column to fix row height issue
-		final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+		dummyDataCol = new GridViewerColumn(viewer, SWT.NONE);
 		{
-			GridViewerHelper.configureLookAndFeel(gvc);
-			gvc.getColumn().setText("Dummy");
-			gvc.setLabelProvider(new FieldTypeNameLabelProvider());
-			gvc.getColumn().setVisible(false);
+			GridViewerHelper.configureLookAndFeel(dummyDataCol);
+			dummyDataCol.getColumn().setText("Dummy");
+			dummyDataCol.setLabelProvider(new FieldTypeNameLabelProvider());
+			dummyDataCol.getColumn().setVisible(false);
 		}
 		// All other columns dynamically added.
 
@@ -196,7 +197,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 
 		// If we have data, dispose of the dummy name column immediately
 		if (rows.isEmpty()) {
-			gvc.getColumn().dispose();
+			dummyDataCol.getColumn().dispose();
 		}
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_CargoEcons");
@@ -612,7 +613,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 		}
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
-
+			dummyDataCol.getColumn().dispose();
 			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 			final String contents = util.convert();
 			return (T) new IReportContents() {
