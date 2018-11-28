@@ -441,6 +441,15 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSpotMarket_Mtm() {
+		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getDESPurchaseMarket() {
 		return desPurchaseMarketEClass;
 	}
@@ -693,6 +702,15 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getCharterInMarket_Mtm() {
+		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getSpotCharterMarket() {
 		return spotCharterMarketEClass;
 	}
@@ -842,6 +860,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEAttribute(spotMarketEClass, SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE);
 		createEReference(spotMarketEClass, SPOT_MARKET__RESTRICTED_PORTS);
 		createEReference(spotMarketEClass, SPOT_MARKET__RESTRICTED_CONTRACTS);
+		createEAttribute(spotMarketEClass, SPOT_MARKET__MTM);
 
 		desPurchaseMarketEClass = createEClass(DES_PURCHASE_MARKET);
 		createEAttribute(desPurchaseMarketEClass, DES_PURCHASE_MARKET__CV);
@@ -883,6 +902,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__NOMINAL);
 		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__MIN_DURATION);
 		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__MAX_DURATION);
+		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__MTM);
 
 		spotCharterMarketEClass = createEClass(SPOT_CHARTER_MARKET);
 		createEAttribute(spotCharterMarketEClass, SPOT_CHARTER_MARKET__ENABLED);
@@ -977,6 +997,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		g1.getETypeArguments().add(g2);
 		initEReference(getSpotMarket_RestrictedPorts(), g1, null, "restrictedPorts", null, 0, -1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarket_RestrictedContracts(), theCommercialPackage.getContract(), null, "restrictedContracts", null, 0, -1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSpotMarket_Mtm(), ecorePackage.getEBoolean(), "mtm", null, 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(desPurchaseMarketEClass, DESPurchaseMarket.class, "DESPurchaseMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDESPurchaseMarket_Cv(), ecorePackage.getEDouble(), "cv", null, 0, 1, DESPurchaseMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1039,6 +1060,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEAttribute(getCharterInMarket_Nominal(), ecorePackage.getEBoolean(), "nominal", "true", 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterInMarket_MinDuration(), ecorePackage.getEInt(), "minDuration", null, 1, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterInMarket_MaxDuration(), ecorePackage.getEInt(), "maxDuration", null, 1, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterInMarket_Mtm(), ecorePackage.getEBoolean(), "mtm", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(charterInMarketEClass, ecorePackage.getEInt(), "getMarketOrContractMinDuration", 0, 1, IS_UNIQUE, IS_ORDERED);
 

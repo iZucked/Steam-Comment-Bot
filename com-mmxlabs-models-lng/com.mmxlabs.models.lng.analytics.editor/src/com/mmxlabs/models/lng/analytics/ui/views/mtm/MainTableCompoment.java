@@ -1,0 +1,257 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
+/**
+ * All rights reserved.
+ */
+package com.mmxlabs.models.lng.analytics.ui.views.mtm;
+
+import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
+import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridColumnGroup;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+
+import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
+import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.MTMModel;
+import com.mmxlabs.models.lng.analytics.MTMResult;
+import com.mmxlabs.models.lng.analytics.MTMRow;
+import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatterLabelProvider;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.rcp.common.ViewerHelper;
+
+public class MainTableCompoment {
+
+	private final @NonNull List<Consumer<MTMModel>> inputWants = new LinkedList<>();
+	private Color myColor;
+
+	private final List<GridColumn> dynamicColumns = new LinkedList<>();
+	private GridTreeViewer tableViewer;
+	
+	public GridTreeViewer getViewer() {
+		return this.tableViewer;
+	}
+
+	public @NonNull List<Consumer<MTMModel>> getInputWants() {
+		return inputWants;
+	}
+
+	public void createControls(final Composite main_parent, final MTMView breakEvenModellerView) {
+		myColor = new Color(Display.getDefault(), 0, 168, 107);
+		Control control = createViewer(main_parent);
+		control.setLayoutData(GridDataFactory.fillDefaults().minSize(SWT.DEFAULT, 300).grab(true, true).create());
+		
+	}
+	
+	public void dispose() {
+		myColor.dispose();
+	}
+
+	private Control createViewer(final Composite parent) {
+		tableViewer = new GridTreeViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+		ColumnViewerToolTipSupport.enableFor(tableViewer);
+
+		GridViewerHelper.configureLookAndFeel(tableViewer);
+		tableViewer.getGrid().setHeaderVisible(true);
+
+		tableViewer.getGrid().setAutoHeight(true);
+		tableViewer.getGrid().setRowHeaderVisible(true);
+
+		//TODO : to add/change columns see MainTableComponent in viability
+		createColumn(tableViewer, "Buy", new BuyOptionDescriptionFormatter(), false).getColumn().setWordWrap(true);
+
+		final GridColumnGroup rhsMarkets = new GridColumnGroup(tableViewer.getGrid(), SWT.CENTER);
+		GridViewerHelper.configureLookAndFeel(rhsMarkets);
+		rhsMarkets.setText("Sales markets");
+
+		Consumer<MTMModel> refreshDynamicColumns = (m) -> {
+			dynamicColumns.forEach(GridColumn::dispose);
+			dynamicColumns.clear();
+
+			final List<SpotMarket> markets = m == null ? Collections.emptyList()
+					: m.getMarkets().stream() //
+							.sorted((a, b) -> a.getName().compareToIgnoreCase(b.getName())) //
+							.collect(Collectors.toList());
+
+			for (final SpotMarket sm : markets) {
+				if (!sm.isMtm()) {
+					continue;
+				}
+				GridColumnGroup group = rhsMarkets;
+
+				final GridColumn gc = new GridColumn(group, SWT.CENTER | SWT.WRAP);
+				final GridViewerColumn gvc = new GridViewerColumn(tableViewer, gc);
+				gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+				gvc.getColumn().setText(sm.getName());
+				gvc.getColumn().setWordWrap(true);
+				gvc.getColumn().setData(sm);
+
+				gvc.getColumn().setWidth(120);
+				gvc.setLabelProvider(new ColumnLabelProvider() {
+					@Override
+					public void update(final ViewerCell cell) {
+						double price = Double.MAX_VALUE;
+						cell.setText("");
+
+						final Object element = cell.getElement();
+						if (element instanceof MTMRow) {
+							final MTMRow row = (MTMRow) element;
+							if (row.getBuyOption() != null) {
+								for (final MTMResult result : row.getRhsResults()) {
+									if (result.getEarliestETA() == null) continue;
+									if (price > result.getEarliestPrice())
+									{
+										price = result.getEarliestPrice();
+									}
+									
+									if (result.getTarget() == sm) {
+										cell.setText(generateString(result));
+									}
+								}
+							}
+						}
+						if (cell.getText().contains(String.format("$%.2f", price))) {
+							cell.setForeground(myColor);
+						}
+					}
+				});
+				dynamicColumns.add(gvc.getColumn());
+			}
+		};
+		inputWants.add(refreshDynamicColumns);
+		tableViewer.setContentProvider(new MTMModelContentProvider());
+		inputWants.add(model -> tableViewer.setInput(model));
+
+		return tableViewer.getGrid();
+	}
+
+	public void refresh() {
+		tableViewer.refresh();
+		GridViewerHelper.recalculateRowHeights(tableViewer.getGrid());
+	}
+	
+	private String generateString(final MTMResult result) {
+		String r="";
+		ShippingOption so = result.getShipping();
+		if (so == null) {
+			return r;
+		}
+		ExistingCharterMarketOption ecmo = (ExistingCharterMarketOption) so;
+		CharterInMarket cim = ecmo.getCharterInMarket();
+		if (cim == null) {
+			return r;
+		}
+		String vName = cim.getName();
+		if (result.getEarliestETA() != null) {
+				r = String.format("%s %s \n %s %s", //
+						formatDate(result.getEarliestETA()), //
+						formatPrice(result.getEarliestPrice()),
+						vName,
+						formatPrice(result.getShippingCost()));
+		}
+		return r;
+	}
+
+	private String formatDate(final LocalDate date) {
+		if (date == null) {
+			return "";
+		}
+		return String.format("%s %d", date.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()),date.getYear()%100);
+	}
+	
+	private String formatPrice(final double price) {
+		if (price == 0.0) {
+			return "";
+		}
+		return String.format("$%.2f", price);
+	}
+	
+	@SuppressWarnings("unused")
+	private String formatVolume(final int volume) {
+		if (volume == 0) {
+			return "";
+		}
+		return String.format("%.2f", ((double)volume)/1000_000L);
+	}
+
+	protected GridViewerColumn createColumn(final GridTreeViewer viewer, final String name, final ICellRenderer renderer, final boolean isTree, final ETypedElement... pathObjects) {
+		return createColumn(viewer, createLabelProvider(name, renderer, pathObjects), name, renderer, isTree, pathObjects);
+	}
+
+	protected GridViewerColumn createColumn(final GridTreeViewer viewer, CellFormatterLabelProvider labelProvider, final String name, final ICellRenderer renderer, final boolean isTree,
+			final ETypedElement... pathObjects) {
+
+		final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER | SWT.WRAP);
+		gvc.getColumn().setTree(isTree);
+		GridViewerHelper.configureLookAndFeel(gvc);
+		gvc.getColumn().setText(name);
+		gvc.getColumn().setWidth(250);
+		gvc.getColumn().setDetail(true);
+		gvc.getColumn().setSummary(true);
+		gvc.setLabelProvider(labelProvider);
+		return gvc;
+	}
+
+	private CellFormatterLabelProvider createLabelProvider(final String name, final ICellRenderer renderer, final ETypedElement... pathObjects) {
+		return new CellFormatterLabelProvider(renderer, pathObjects) {
+
+			Image imgShippingRoundTrip = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png").createImage();
+			Image imgShippingFleet = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/fleet.png").createImage();
+
+			@Override
+			protected @Nullable Image getImage(@NonNull final ViewerCell cell, @Nullable final Object element) {
+
+				if (element instanceof RoundTripShippingOption) {
+					return imgShippingRoundTrip;
+				} else if (element instanceof FleetShippingOption) {
+					return imgShippingFleet;
+				}
+				return null;
+			}
+
+			@Override
+			public void dispose() {
+
+				imgShippingRoundTrip.dispose();
+				imgShippingFleet.dispose();
+
+				super.dispose();
+			}
+		};
+	}
+	
+	public void setFocus() {
+		ViewerHelper.setFocus(getViewer());
+	}
+}

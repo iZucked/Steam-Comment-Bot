@@ -281,6 +281,18 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createViabilityResultAdapter();
 			}
 			@Override
+			public Adapter caseMTMModel(MTMModel object) {
+				return createMTMModelAdapter();
+			}
+			@Override
+			public Adapter caseMTMResult(MTMResult object) {
+				return createMTMResultAdapter();
+			}
+			@Override
+			public Adapter caseMTMRow(MTMRow object) {
+				return createMTMRowAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -995,6 +1007,48 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createViabilityResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MTMModel <em>MTM Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MTMModel
+	 * @generated
+	 */
+	public Adapter createMTMModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MTMResult <em>MTM Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MTMResult
+	 * @generated
+	 */
+	public Adapter createMTMResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MTMRow <em>MTM Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MTMRow
+	 * @generated
+	 */
+	public Adapter createMTMRowAdapter() {
 		return null;
 	}
 

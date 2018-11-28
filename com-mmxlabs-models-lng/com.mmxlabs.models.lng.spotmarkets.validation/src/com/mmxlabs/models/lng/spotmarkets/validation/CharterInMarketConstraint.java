@@ -68,7 +68,16 @@ public class CharterInMarketConstraint extends AbstractModelConstraint {
 					failures.add(dsd);
 				}
 			}
-
+			if (spotMarket.isMtm()) {
+				if (!spotMarket.isNominal()) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+							(IConstraintStatus) ctx.createFailureStatus(String.format("[Charter in market vessel | %s] is used for MTM but not Nominal.", spotMarket.getName())));
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getCharterInMarket_Mtm());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getCharterInMarket_Nominal());
+					failures.add(dsd);
+				}
+			}
 		}
 		final MultiStatus multi = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, null, null);
 		for (final IStatus s : failures) {

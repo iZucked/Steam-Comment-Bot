@@ -34,6 +34,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getRestrictedContracts <em>Restricted Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#isMtm <em>Mtm</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarket()
@@ -315,6 +316,32 @@ public interface SpotMarket extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	EList<Contract> getRestrictedContracts();
+
+	/**
+	 * Returns the value of the '<em><b>Mtm</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Mtm</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Mtm</em>' attribute.
+	 * @see #setMtm(boolean)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarket_Mtm()
+	 * @model
+	 * @generated
+	 */
+	boolean isMtm();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#isMtm <em>Mtm</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Mtm</em>' attribute.
+	 * @see #isMtm()
+	 * @generated
+	 */
+	void setMtm(boolean value);
 
 } // end of  SpotMarket
 

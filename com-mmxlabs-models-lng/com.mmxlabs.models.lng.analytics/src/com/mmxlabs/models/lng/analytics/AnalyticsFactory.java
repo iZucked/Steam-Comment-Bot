@@ -430,6 +430,33 @@ public interface AnalyticsFactory extends EFactory {
 	ViabilityResult createViabilityResult();
 
 	/**
+	 * Returns a new object of class '<em>MTM Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>MTM Model</em>'.
+	 * @generated
+	 */
+	MTMModel createMTMModel();
+
+	/**
+	 * Returns a new object of class '<em>MTM Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>MTM Result</em>'.
+	 * @generated
+	 */
+	MTMResult createMTMResult();
+
+	/**
+	 * Returns a new object of class '<em>MTM Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>MTM Row</em>'.
+	 * @generated
+	 */
+	MTMRow createMTMRow();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.analytics.MTMRow;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.ViabilityRow;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -29,7 +30,11 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 			return "<open>";
 		}
 
-		if (object instanceof ViabilityRow) {
+		if (object instanceof MTMRow) {
+			final MTMRow row = (MTMRow) object;
+			final BuyOption buy = row.getBuyOption();
+			return render(buy);
+		} else if (object instanceof ViabilityRow) {
 			final ViabilityRow row = (ViabilityRow) object;
 			final BuyOption buy = row.getBuyOption();
 			return render(buy);

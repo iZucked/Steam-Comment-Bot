@@ -107,6 +107,9 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.VIABILITY_MODEL: return createViabilityModel();
 			case AnalyticsPackage.VIABILITY_ROW: return createViabilityRow();
 			case AnalyticsPackage.VIABILITY_RESULT: return createViabilityResult();
+			case AnalyticsPackage.MTM_MODEL: return createMTMModel();
+			case AnalyticsPackage.MTM_RESULT: return createMTMResult();
+			case AnalyticsPackage.MTM_ROW: return createMTMRow();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -577,6 +580,36 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public ViabilityResult createViabilityResult() {
 		ViabilityResultImpl viabilityResult = new ViabilityResultImpl();
 		return viabilityResult;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MTMModel createMTMModel() {
+		MTMModelImpl mtmModel = new MTMModelImpl();
+		return mtmModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MTMResult createMTMResult() {
+		MTMResultImpl mtmResult = new MTMResultImpl();
+		return mtmResult;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MTMRow createMTMRow() {
+		MTMRowImpl mtmRow = new MTMRowImpl();
+		return mtmRow;
 	}
 
 	/**

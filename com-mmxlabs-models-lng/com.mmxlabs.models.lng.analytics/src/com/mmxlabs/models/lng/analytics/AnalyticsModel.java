@@ -19,6 +19,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getOptionModels <em>Option Models</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getOptimisations <em>Optimisations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getViabilityModel <em>Viability Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getMtmModel <em>Mtm Model</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel()
@@ -83,6 +84,32 @@ public interface AnalyticsModel extends UUIDObject {
 	 * @generated
 	 */
 	void setViabilityModel(ViabilityModel value);
+
+	/**
+	 * Returns the value of the '<em><b>Mtm Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Mtm Model</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Mtm Model</em>' containment reference.
+	 * @see #setMtmModel(MTMModel)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_MtmModel()
+	 * @model containment="true"
+	 * @generated
+	 */
+	MTMModel getMtmModel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getMtmModel <em>Mtm Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Mtm Model</em>' containment reference.
+	 * @see #getMtmModel()
+	 * @generated
+	 */
+	void setMtmModel(MTMModel value);
 
 } // end of  AnalyticsModel
 

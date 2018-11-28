@@ -46,6 +46,7 @@ import java.util.Collection;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#isMtm <em>Mtm</em>}</li>
  * </ul>
  *
  * @generated
@@ -240,6 +241,26 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * @ordered
 	 */
 	protected EList<Contract> restrictedContracts;
+
+	/**
+	 * The default value of the '{@link #isMtm() <em>Mtm</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isMtm()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean MTM_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isMtm() <em>Mtm</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isMtm()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean mtm = MTM_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -539,6 +560,27 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isMtm() {
+		return mtm;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMtm(boolean newMtm) {
+		boolean oldMtm = mtm;
+		mtm = newMtm;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__MTM, oldMtm, mtm));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -604,6 +646,8 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				return getRestrictedPorts();
 			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS:
 				return getRestrictedContracts();
+			case SpotMarketsPackage.SPOT_MARKET__MTM:
+				return isMtm();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -655,6 +699,9 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				getRestrictedContracts().clear();
 				getRestrictedContracts().addAll((Collection<? extends Contract>)newValue);
 				return;
+			case SpotMarketsPackage.SPOT_MARKET__MTM:
+				setMtm((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -703,6 +750,9 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS:
 				getRestrictedContracts().clear();
 				return;
+			case SpotMarketsPackage.SPOT_MARKET__MTM:
+				setMtm(MTM_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -739,6 +789,8 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				return restrictedPorts != null && !restrictedPorts.isEmpty();
 			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS:
 				return restrictedContracts != null && !restrictedContracts.isEmpty();
+			case SpotMarketsPackage.SPOT_MARKET__MTM:
+				return mtm != MTM_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -799,6 +851,8 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 		result.append(pricingEvent);
 		result.append(", restrictedListsArePermissive: ");
 		result.append(restrictedListsArePermissive);
+		result.append(", mtm: ");
+		result.append(mtm);
 		result.append(')');
 		return result.toString();
 	}

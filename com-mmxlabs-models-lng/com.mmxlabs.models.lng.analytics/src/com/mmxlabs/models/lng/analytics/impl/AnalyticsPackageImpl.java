@@ -34,6 +34,9 @@ import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.FleetVesselAllocationDescriptor;
+import com.mmxlabs.models.lng.analytics.MTMModel;
+import com.mmxlabs.models.lng.analytics.MTMResult;
+import com.mmxlabs.models.lng.analytics.MTMRow;
 import com.mmxlabs.models.lng.analytics.MarketVesselAllocationDescriptor;
 import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
@@ -434,6 +437,27 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass mtmModelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass mtmResultEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass mtmRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass solutionOptionEClass = null;
 
 	/**
@@ -566,6 +590,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	public EReference getAnalyticsModel_ViabilityModel() {
 		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAnalyticsModel_MtmModel() {
+		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -2068,6 +2101,195 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getMTMModel() {
+		return mtmModelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getMTMModel_Rows() {
+		return (EReference)mtmModelEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getMTMModel_Markets() {
+		return (EReference)mtmModelEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getMTMModel_NominalMarkets() {
+		return (EReference)mtmModelEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getMTMResult() {
+		return mtmResultEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getMTMResult_Target() {
+		return (EReference)mtmResultEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMTMResult_EarliestETA() {
+		return (EAttribute)mtmResultEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMTMResult_EarliestVolume() {
+		return (EAttribute)mtmResultEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMTMResult_EarliestPrice() {
+		return (EAttribute)mtmResultEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getMTMResult_Shipping() {
+		return (EReference)mtmResultEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMTMResult_ShippingCost() {
+		return (EAttribute)mtmResultEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getMTMRow() {
+		return mtmRowEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getMTMRow_BuyOption() {
+		return (EReference)mtmRowEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getMTMRow_SellOption() {
+		return (EReference)mtmRowEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getMTMRow_LhsResults() {
+		return (EReference)mtmRowEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getMTMRow_RhsResults() {
+		return (EReference)mtmRowEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getMTMRow_Target() {
+		return (EReference)mtmRowEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMTMRow_Price() {
+		return (EAttribute)mtmRowEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMTMRow_Eta() {
+		return (EAttribute)mtmRowEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMTMRow_ReferencePrice() {
+		return (EAttribute)mtmRowEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMTMRow_StartVolume() {
+		return (EAttribute)mtmRowEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getSolutionOption() {
 		return solutionOptionEClass;
 	}
@@ -2276,6 +2498,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__OPTION_MODELS);
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__OPTIMISATIONS);
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__VIABILITY_MODEL);
+		createEReference(analyticsModelEClass, ANALYTICS_MODEL__MTM_MODEL);
 
 		buyOptionEClass = createEClass(BUY_OPTION);
 
@@ -2510,6 +2733,30 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(viabilityResultEClass, VIABILITY_RESULT__EARLIEST_PRICE);
 		createEAttribute(viabilityResultEClass, VIABILITY_RESULT__LATEST_PRICE);
 
+		mtmModelEClass = createEClass(MTM_MODEL);
+		createEReference(mtmModelEClass, MTM_MODEL__ROWS);
+		createEReference(mtmModelEClass, MTM_MODEL__MARKETS);
+		createEReference(mtmModelEClass, MTM_MODEL__NOMINAL_MARKETS);
+
+		mtmResultEClass = createEClass(MTM_RESULT);
+		createEReference(mtmResultEClass, MTM_RESULT__TARGET);
+		createEAttribute(mtmResultEClass, MTM_RESULT__EARLIEST_ETA);
+		createEAttribute(mtmResultEClass, MTM_RESULT__EARLIEST_VOLUME);
+		createEAttribute(mtmResultEClass, MTM_RESULT__EARLIEST_PRICE);
+		createEReference(mtmResultEClass, MTM_RESULT__SHIPPING);
+		createEAttribute(mtmResultEClass, MTM_RESULT__SHIPPING_COST);
+
+		mtmRowEClass = createEClass(MTM_ROW);
+		createEReference(mtmRowEClass, MTM_ROW__BUY_OPTION);
+		createEReference(mtmRowEClass, MTM_ROW__SELL_OPTION);
+		createEReference(mtmRowEClass, MTM_ROW__LHS_RESULTS);
+		createEReference(mtmRowEClass, MTM_ROW__RHS_RESULTS);
+		createEReference(mtmRowEClass, MTM_ROW__TARGET);
+		createEAttribute(mtmRowEClass, MTM_ROW__PRICE);
+		createEAttribute(mtmRowEClass, MTM_ROW__ETA);
+		createEAttribute(mtmRowEClass, MTM_ROW__REFERENCE_PRICE);
+		createEAttribute(mtmRowEClass, MTM_ROW__START_VOLUME);
+
 		// Create enums
 		volumeModeEEnum = createEEnum(VOLUME_MODE);
 		slotTypeEEnum = createEEnum(SLOT_TYPE);
@@ -2588,12 +2835,14 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		marketVesselAllocationDescriptorEClass.getESuperTypes().add(this.getVesselAllocationDescriptor());
 		fleetVesselAllocationDescriptorEClass.getESuperTypes().add(this.getVesselAllocationDescriptor());
 		viabilityModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
+		mtmModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(analyticsModelEClass, AnalyticsModel.class, "AnalyticsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAnalyticsModel_OptionModels(), this.getOptionAnalysisModel(), null, "optionModels", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAnalyticsModel_Optimisations(), this.getAbstractSolutionSet(), null, "optimisations", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAnalyticsModel_ViabilityModel(), this.getViabilityModel(), null, "viabilityModel", null, 0, 1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAnalyticsModel_MtmModel(), this.getMTMModel(), null, "mtmModel", null, 0, 1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(buyOptionEClass, BuyOption.class, "BuyOption", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -2827,6 +3076,30 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getViabilityResult_LatestVolume(), ecorePackage.getEInt(), "latestVolume", null, 0, 1, ViabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getViabilityResult_EarliestPrice(), ecorePackage.getEDouble(), "earliestPrice", null, 0, 1, ViabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getViabilityResult_LatestPrice(), ecorePackage.getEDouble(), "latestPrice", null, 0, 1, ViabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(mtmModelEClass, MTMModel.class, "MTMModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getMTMModel_Rows(), this.getMTMRow(), null, "rows", null, 0, -1, MTMModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMTMModel_Markets(), theSpotMarketsPackage.getSpotMarket(), null, "markets", null, 0, -1, MTMModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMTMModel_NominalMarkets(), theSpotMarketsPackage.getCharterInMarket(), null, "nominalMarkets", null, 0, -1, MTMModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(mtmResultEClass, MTMResult.class, "MTMResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getMTMResult_Target(), theSpotMarketsPackage.getSpotMarket(), null, "target", null, 0, 1, MTMResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMTMResult_EarliestETA(), theDateTimePackage.getLocalDate(), "earliestETA", null, 0, 1, MTMResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMTMResult_EarliestVolume(), ecorePackage.getEInt(), "earliestVolume", null, 0, 1, MTMResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMTMResult_EarliestPrice(), ecorePackage.getEDouble(), "earliestPrice", null, 0, 1, MTMResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMTMResult_Shipping(), this.getShippingOption(), null, "shipping", null, 0, 1, MTMResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMTMResult_ShippingCost(), ecorePackage.getEDouble(), "shippingCost", null, 0, 1, MTMResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(mtmRowEClass, MTMRow.class, "MTMRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getMTMRow_BuyOption(), this.getBuyOption(), null, "buyOption", null, 0, 1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMTMRow_SellOption(), this.getSellOption(), null, "sellOption", null, 0, 1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMTMRow_LhsResults(), this.getMTMResult(), null, "lhsResults", null, 0, -1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMTMRow_RhsResults(), this.getMTMResult(), null, "rhsResults", null, 0, -1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMTMRow_Target(), ecorePackage.getEObject(), null, "target", null, 0, 1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMTMRow_Price(), ecorePackage.getEDouble(), "price", null, 0, 1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMTMRow_Eta(), theDateTimePackage.getLocalDate(), "eta", null, 0, 1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMTMRow_ReferencePrice(), ecorePackage.getEDouble(), "referencePrice", null, 0, 1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMTMRow_StartVolume(), ecorePackage.getELong(), "startVolume", null, 0, 1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(volumeModeEEnum, VolumeMode.class, "VolumeMode");
