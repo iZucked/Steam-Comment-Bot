@@ -209,6 +209,7 @@ public class UpstreamUrlProvider {
 						}
 					} catch (final StorageException e1) {
 						e1.printStackTrace();
+						return;
 					}
 				}
 			}
