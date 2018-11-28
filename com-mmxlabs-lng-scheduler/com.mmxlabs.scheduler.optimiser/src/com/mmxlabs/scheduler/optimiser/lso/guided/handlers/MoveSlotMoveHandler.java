@@ -75,7 +75,7 @@ public class MoveSlotMoveHandler implements IGuidedMoveHandler {
 				if (e == element) {
 					continue;
 				}
-				if (!helper.isOptionalOrConsideredOptionalElement(e)) {
+				if (!helper.isOptional(e)) {
 					return null;
 				}
 			}
@@ -167,7 +167,7 @@ public class MoveSlotMoveHandler implements IGuidedMoveHandler {
 				continue;
 			}
 			// Check for optional restrictions
-			if (options.isStrictOptional() && !helper.isOptionalOrConsideredOptionalElement(candidate)) {
+			if (options.isStrictOptional() && !helper.isOptional(candidate)) {
 				itr.remove();
 				continue;
 			}
@@ -185,7 +185,7 @@ public class MoveSlotMoveHandler implements IGuidedMoveHandler {
 			if (e == candidate) {
 				continue;
 			}
-			if (!helper.isOptionalOrConsideredOptionalElement(e)) {
+			if (!helper.isOptional(e)) {
 				hints.addProblemElement(e);
 			}
 			elementsToRemove.add(new Pair<>(candidateResource, e));

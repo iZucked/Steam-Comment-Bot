@@ -225,8 +225,7 @@ public class MoveHelper implements IMoveHelper {
 		}
 
 		if (resource == null) {
-			// Can we move element to unused list?
-			return phaseOptimisationData.isOptionalElement(element) || phaseOptimisationData.isConsideredAsOptionalElement(element);
+			return phaseOptimisationData.isElementOptional(element);
 		}
 
 		final Collection<@NonNull IResource> resources = cachedResult.computeIfAbsent(element, cacheComputeFunction);
@@ -378,8 +377,8 @@ public class MoveHelper implements IMoveHelper {
 	}
 
 	@Override
-	public boolean isOptionalOrConsideredOptionalElement(@NonNull final ISequenceElement element) {
-		return phaseOptimisationData.isOptionalOrConsideredOptionalElement(element);
+	public boolean isOptional(@NonNull final ISequenceElement element) {
+		return phaseOptimisationData.isElementOptional(element);
 	}
 
 	@Override

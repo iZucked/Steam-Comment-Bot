@@ -164,7 +164,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		final Set<@NonNull ISequenceElement> tails = new LinkedHashSet<>();
 
 		// Get the set of all optional elements...
-		final Collection<@NonNull ISequenceElement> optionalElements = new LinkedHashSet<>(phaseOptimisationData.getAllElementsConsideredOptional());
+		final Collection<@NonNull ISequenceElement> optionalElements = new LinkedHashSet<>(phaseOptimisationData.getOptionalElements());
 		// ...remove elements specified in the paringHints as these will be used and should not be considered optional for the builder
 		optionalElements.removeAll(pairingHints.keySet());
 		optionalElements.removeAll(pairingHints.values());

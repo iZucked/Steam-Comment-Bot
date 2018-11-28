@@ -52,7 +52,7 @@ public class MoveTypeHelper {
 
 		if (checkResource) {
 			// We get here with non-shipped slots!
-			if (helper.isLockedToVessel(element) && resource != null && !helper.isOptionalOrConsideredOptionalElement(element)) {// && helper.isShipped(element)) {
+			if (helper.isLockedToVessel(element) && resource != null && !helper.isOptional(element)) {// && helper.isShipped(element)) {
 				// TODO: Strictly we could shift within the sequence
 				// moveTypes.add(MoveTypes.Swap_Slot/*_InSequence*/);
 				return moveTypes;
@@ -84,16 +84,16 @@ public class MoveTypeHelper {
 			// Currently used
 			if (helper.isVesselEvent(element)) {
 				// If relocated charter event, do nothing.
-				if (helper.isOptionalOrConsideredOptionalElement(element)) {
+				if (helper.isOptional(element)) {
 					moveTypes.add(GuidedMoveTypes.Remove_Vessel_Event);
 				}
 				moveTypes.add(GuidedMoveTypes.Move_Vessel_Event);
 			} else if (helper.isDESPurchase(element)) {
-				if (helper.isOptionalOrConsideredOptionalElement(element)) {
+				if (helper.isOptional(element)) {
 					moveTypes.add(GuidedMoveTypes.Remove_DES_Purchase);
 				}
 			} else if (helper.isFOBSale(element)) {
-				if (helper.isOptionalOrConsideredOptionalElement(element)) {
+				if (helper.isOptional(element)) {
 					moveTypes.add(GuidedMoveTypes.Remove_FOB_Sale);
 				}
 			} else {
@@ -102,7 +102,7 @@ public class MoveTypeHelper {
 				}
 				moveTypes.add(GuidedMoveTypes.Swap_Slot);
 				moveTypes.add(GuidedMoveTypes.Swap_Cargo_Vessel);
-				if (helper.isOptionalOrConsideredOptionalElement(element)) {
+				if (helper.isOptional(element)) {
 					moveTypes.add(GuidedMoveTypes.Remove_Slot);
 					moveTypes.add(GuidedMoveTypes.Remove_Cargo);
 				}

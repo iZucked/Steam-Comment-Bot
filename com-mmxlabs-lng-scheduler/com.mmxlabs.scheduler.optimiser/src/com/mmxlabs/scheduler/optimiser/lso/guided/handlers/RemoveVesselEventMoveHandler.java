@@ -54,7 +54,7 @@ public class RemoveVesselEventMoveHandler implements IGuidedMoveHandler {
 
 		final RemoveElementsMove.Builder builder = RemoveElementsMove.Builder.newMove();
 		for (final ISequenceElement e : orderedElements) {
-			if (!helper.isOptionalOrConsideredOptionalElement(e)) {
+			if (!helper.isOptional(e)) {
 				return null;
 			}
 			builder.removeElement(fromResource, e);

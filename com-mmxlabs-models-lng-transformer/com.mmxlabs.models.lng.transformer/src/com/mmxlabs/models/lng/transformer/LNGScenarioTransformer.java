@@ -1401,7 +1401,7 @@ public class LNGScenarioTransformer {
 
 	private void setSlotAsSoftRequired(final ISchedulerBuilder builder, final Slot<?> eSlot, final IPortSlot slot) {
 		if (!eSlot.isOptional()) {
-			builder.setConsideredAsOptionalElement(slot);
+			builder.setSoftRequired(slot);
 		}
 	}
 

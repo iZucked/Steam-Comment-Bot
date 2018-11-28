@@ -143,7 +143,7 @@ public class SimpleSchedulerTest {
 		builder.setVesselStateParameters(vessel3, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
 				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0, OptimiserUnitConvertor.convertToInternalDailyRate(100));
 
-		final IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0));
+		IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0));
 
 		builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
 				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), null, new ConstantValueLongCurve(0), false);
@@ -233,11 +233,9 @@ public class SimpleSchedulerTest {
 		return data;
 	}
 
-	private IPhaseOptimisationData createPhaseOptimisationData(final Injector injector, final IOptimisationData optimisationData) {
-		final PhaseOptimisationData phase = injector.getInstance(PhaseOptimisationData.class);
-		phase.setResources(optimisationData.getResources());
+	private IPhaseOptimisationData createPhaseOptimisationData(Injector injector, IOptimisationData optimisationData) {
+		PhaseOptimisationData phase = injector.getInstance(PhaseOptimisationData.class);
 		phase.setSequenceElements(optimisationData.getSequenceElements());
-		phase.setConsideredAsOptionalElements(optimisationData.getConsideredAsOptionalElements());
 		return phase;
 	}
 
@@ -341,7 +339,8 @@ public class SimpleSchedulerTest {
 					protected void configure() {
 						bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
 					}
-				});
+				}
+		);
 	}
 
 	void printSequences(final Collection<ISequences> sequences) {

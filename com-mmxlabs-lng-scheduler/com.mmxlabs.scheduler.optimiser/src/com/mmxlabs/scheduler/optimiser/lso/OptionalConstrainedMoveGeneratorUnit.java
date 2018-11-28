@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
+import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -42,7 +43,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IMoveGenerator {
 	@Override
 	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager lookupManager, @NonNull Random random) {
 		// select an optional element at random
-		final ISequenceElement optional = RandomHelper.chooseElementFrom(random, phaseOptimisationData.getAllElementsConsideredOptional());
+		final ISequenceElement optional = RandomHelper.chooseElementFrom(random, phaseOptimisationData.getOptionalElements());
 		final Pair<IResource, Integer> location = lookupManager.lookup(optional);
 
 		if (location.getFirst() == null) {

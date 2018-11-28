@@ -21,8 +21,6 @@ public class InitialPhaseOptimisationDataModule extends AbstractModule {
 		final PhaseOptimisationData phaseOptimisationData = injector.getInstance(PhaseOptimisationData.class);
 		phaseOptimisationData.setSequenceElements(optimisationData.getSequenceElements());
 		phaseOptimisationData.setResources(optimisationData.getResources());
-		phaseOptimisationData.setConsideredAsOptionalElements(optimisationData.getConsideredAsOptionalElements());
-
 		return phaseOptimisationData;
 	}
 

@@ -203,7 +203,7 @@ public class SequencesHitchHikerHelper {
 		for (int i = 0; i < 4; ++i) {
 			final List<ISequenceElement> recheck = new LinkedList<>();
 			for (final ISequenceElement slot : revertedSeq.getUnusedElements()) {
-				if (!phaseOptimisationData.isOptionalElement(slot)) {
+				if (phaseOptimisationData.isElementRequired(slot) || phaseOptimisationData.getSoftRequiredElements().contains(slot)) {
 					if (!target.getUnusedElements().contains(slot)) {
 						recheck.add(slot);
 					}

@@ -15,6 +15,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
+import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -57,13 +58,16 @@ public class RemoveOptionalElementMoveHandler implements IMoveGenerator {
 	@Override
 	public IMove generateMove(@NonNull final ISequences rawSequences, @NonNull final ILookupManager lookupManager, @NonNull final Random random) {
 
-		List<@NonNull ISequenceElement> consideredOptionalElements = phaseOptimisationData.getAllElementsConsideredOptional();
-		if (consideredOptionalElements.isEmpty()) {
+		if (phaseOptimisationData.getOptionalElements().isEmpty()) {
 			return new NullMove("RemoveOptionalElementMoveHandler", "No optional elements");
 		}
 
 		// select an optional element at random
-		final ISequenceElement optional = RandomHelper.chooseElementFrom(random, consideredOptionalElements);
+
+		if (phaseOptimisationData.getOptionalElements().isEmpty()) {
+			return new NullMove("RemoveOptionalElement", "No Optional Elements");
+		}
+		final ISequenceElement optional = RandomHelper.chooseElementFrom(random, phaseOptimisationData.getOptionalElements());
 		final Pair<IResource, Integer> location = lookupManager.lookup(optional);
 
 		if (location.getFirst() != null) {
@@ -102,7 +106,7 @@ public class RemoveOptionalElementMoveHandler implements IMoveGenerator {
 
 			final RemoveElementsMove.Builder builder = RemoveElementsMove.Builder.newMove();
 			for (final ISequenceElement e : orderedElements) {
-				if (!helper.isOptionalOrConsideredOptionalElement(e)) {
+				if (!helper.isOptional(e)) {
 					return null;
 				}
 
@@ -121,7 +125,7 @@ public class RemoveOptionalElementMoveHandler implements IMoveGenerator {
 			// first check whether either neighbour is optional, and if so whether we can
 			// take it out as well and get a good answer
 
-			if (phaseOptimisationData.isOptionalOrConsideredOptionalElement(beforeElement)) {
+			if (phaseOptimisationData.isElementOptional(beforeElement)) {
 				// check whether we can skip out both
 				final ISequenceElement beforeBeforeElement = locationSequence.get(locationIndex - 2);
 				if (followersAndPreceders.getValidFollowers(beforeBeforeElement).contains(afterElement)) {
@@ -130,7 +134,7 @@ public class RemoveOptionalElementMoveHandler implements IMoveGenerator {
 				}
 			}
 
-			if (phaseOptimisationData.isOptionalOrConsideredOptionalElement(afterElement)) {
+			if (phaseOptimisationData.isElementOptional(afterElement)) {
 				final ISequenceElement afterAfterElement = locationSequence.get(locationIndex + 2);
 				if (followersAndPreceders.getValidFollowers(beforeElement).contains(afterAfterElement)) {
 					// remove both
@@ -138,7 +142,7 @@ public class RemoveOptionalElementMoveHandler implements IMoveGenerator {
 				}
 			}
 
-			final ISequenceElement another = RandomHelper.chooseElementFrom(random, phaseOptimisationData.getAllElementsConsideredOptional());
+			final ISequenceElement another = RandomHelper.chooseElementFrom(random, phaseOptimisationData.getOptionalElements());
 			final Pair<IResource, Integer> location2 = lookupManager.lookup(another);
 			if (location2.getFirst() == null) {
 				// this is a spare element, so we can rotate them

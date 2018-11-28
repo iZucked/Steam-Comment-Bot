@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -39,7 +38,7 @@ public class SwapElementsMoveTest {
 		final List<ISequenceElement> modifiableUnusedSequences = Lists.newArrayList(elementA, elementB, elementC, elementD);
 
 		Mockito.when(sequences.getModifiableUnusedElements()).thenReturn(modifiableUnusedSequences);
-		Mockito.when(sequences.getUnusedElements()).thenReturn(ImmutableList.copyOf(modifiableUnusedSequences));
+		Mockito.when(sequences.getUnusedElements()).thenReturn(modifiableUnusedSequences);
 
 		move.apply(sequences);
 
@@ -76,7 +75,7 @@ public class SwapElementsMoveTest {
 		ListModifiableSequence sequenceA = new ListModifiableSequence(Lists.newArrayList(elementD, elementE, elementF));
 
 		Mockito.when(sequences.getModifiableUnusedElements()).thenReturn(modifiableUnusedSequences);
-		Mockito.when(sequences.getUnusedElements()).thenReturn(ImmutableList.copyOf(modifiableUnusedSequences));
+		Mockito.when(sequences.getUnusedElements()).thenReturn(modifiableUnusedSequences);
 
 		Mockito.when(sequences.getModifiableSequence(resourceA)).thenReturn(sequenceA);
 		Mockito.when(sequences.getSequence(resourceA)).thenReturn(sequenceA);
@@ -118,7 +117,7 @@ public class SwapElementsMoveTest {
 		ListModifiableSequence sequenceA = new ListModifiableSequence(Lists.newArrayList(elementD, elementE, elementF));
 
 		Mockito.when(sequences.getModifiableUnusedElements()).thenReturn(modifiableUnusedSequences);
-		Mockito.when(sequences.getUnusedElements()).thenReturn(ImmutableList.copyOf(modifiableUnusedSequences));
+		Mockito.when(sequences.getUnusedElements()).thenReturn(modifiableUnusedSequences);
 
 		Mockito.when(sequences.getModifiableSequence(resourceA)).thenReturn(sequenceA);
 		Mockito.when(sequences.getSequence(resourceA)).thenReturn(sequenceA);

@@ -92,14 +92,14 @@ public class RemoveLinkedSlotMoveHandler implements IGuidedMoveHandler {
 			final ISequence candidateSequence = sequences.getSequence(candidateLocation.getFirst());
 
 			hints.addProblemElement(element);
-			if (!helper.isOptionalOrConsideredOptionalElement(candidate)) {
+			if (!helper.isOptional(candidate)) {
 //				continue;
 //				hints.addProblemElement(candidate);
 				
 			}
 			moveHandlerHelper.extractSegment(candidateSequence, candidate).forEach(e -> {
 				builder.removeElement(candidateResource, e);	
-				if (!helper.isOptionalOrConsideredOptionalElement(e)) {
+				if (!helper.isOptional(e)) {
 //					continue;
 					hints.addProblemElement(e);
 					

@@ -70,7 +70,7 @@ public class SlotInsertionOptimiser {
 
 	@Inject
 	private Provider<LookupManager> lookupManagerProvider;
-
+	
 	private @Nullable Pair<ISequences, Long> insert(final SlotInsertionOptimiserInitialState state, final int seed, final List<ISequenceElement> _slots) {
 
 		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
@@ -148,7 +148,7 @@ public class SlotInsertionOptimiser {
 				final ILookupManager beforeManager = state.lookupManager;
 				final LookupManager afterManager = lookupManagerProvider.get();
 				afterManager.createLookup(currentSequences);
-
+				
 				for (final ISequenceElement slot : slots) {
 					IResource afterResource;
 					List<ISequenceElement> afterSegment;
@@ -193,7 +193,7 @@ public class SlotInsertionOptimiser {
 			{
 				// First check any non-optional input elements have been included. This can happen in a multi slot insertion where subsequent moves undo earlier moves.
 				for (final ISequenceElement slot : slots) {
-					if (phaseOptimisationData.isOptionalElement(slot)) {
+					if (phaseOptimisationData.isElementRequired(slot) || phaseOptimisationData.getSoftRequiredElements().contains(slot)) {
 						if (simpleSeq.getUnusedElements().contains(slot)) {
 							System.out.println("Generated move does not include target element");
 							return null;
@@ -204,7 +204,7 @@ public class SlotInsertionOptimiser {
 			{
 				// Make sure we have not swapped unused, compulsory elements
 				for (final ISequenceElement e : simpleSeq.getUnusedElements()) {
-					if (!phaseOptimisationData.isOptionalElement(e)) {
+					if (phaseOptimisationData.isElementRequired(e) || phaseOptimisationData.getSoftRequiredElements().contains(e)) {
 						if (!state.initiallyUnused.contains(e)) {
 							System.out.println("New required element is in unused list");
 							return null;
@@ -229,7 +229,7 @@ public class SlotInsertionOptimiser {
 				{
 					// First check any non-optional input elements have been included. This can happen in a multi slot insertion where subsequent moves undo earlier moves.
 					for (final ISequenceElement slot : slots) {
-						if (!phaseOptimisationData.isOptionalElement(slot)) {
+						if (phaseOptimisationData.isElementRequired(slot) || phaseOptimisationData.getSoftRequiredElements().contains(slot)) {
 							if (currentSequences.getUnusedElements().contains(slot)) {
 								System.out.println("Generated move does not include target element");
 								return null;
@@ -240,7 +240,7 @@ public class SlotInsertionOptimiser {
 				{
 					// Make sure we have not swapped unused, compulsory elements
 					for (final ISequenceElement e : currentSequences.getUnusedElements()) {
-						if (!phaseOptimisationData.isOptionalElement(e)) {
+						if (phaseOptimisationData.isElementRequired(e) || phaseOptimisationData.getSoftRequiredElements().contains(e)) {
 							if (!state.initiallyUnused.contains(e)) {
 								System.out.println("New required element is in unused list");
 								return null;

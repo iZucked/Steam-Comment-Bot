@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -44,7 +43,7 @@ public class InsertFOBSaleMoveTest {
 		ListModifiableSequence sequenceA = new ListModifiableSequence(Lists.newArrayList(elementFOBSaleStart, elementFOBSaleEnd));
 
 		Mockito.when(sequences.getModifiableUnusedElements()).thenReturn(modifiableUnusedSequences);
-		Mockito.when(sequences.getUnusedElements()).thenReturn(ImmutableList.copyOf(modifiableUnusedSequences));
+		Mockito.when(sequences.getUnusedElements()).thenReturn(modifiableUnusedSequences);
 
 		Mockito.when(sequences.getModifiableSequence(resourceFOBSale)).thenReturn(sequenceA);
 		Mockito.when(sequences.getSequence(resourceFOBSale)).thenReturn(sequenceA);
@@ -86,7 +85,7 @@ public class InsertFOBSaleMoveTest {
 		ListModifiableSequence sequenceB = new ListModifiableSequence(Lists.newArrayList());
 
 		Mockito.when(sequences.getModifiableUnusedElements()).thenReturn(modifiableUnusedSequences);
-		Mockito.when(sequences.getUnusedElements()).thenReturn(ImmutableList.copyOf(modifiableUnusedSequences));
+		Mockito.when(sequences.getUnusedElements()).thenReturn(modifiableUnusedSequences);
 
 		Mockito.when(sequences.getModifiableSequence(resourceFOBSale)).thenReturn(sequenceA);
 		Mockito.when(sequences.getSequence(resourceFOBSale)).thenReturn(sequenceA);

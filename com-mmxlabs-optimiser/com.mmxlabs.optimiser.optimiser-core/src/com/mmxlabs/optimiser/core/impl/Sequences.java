@@ -5,6 +5,7 @@
 package com.mmxlabs.optimiser.core.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,8 +13,6 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -28,11 +27,11 @@ import com.mmxlabs.optimiser.core.ISequences;
  */
 public final class Sequences implements ISequences {
 
-	private final ImmutableList<@NonNull IResource> resources;
+	private final List<@NonNull IResource> resources;
 
-	private final ImmutableMap<@NonNull IResource, @NonNull ISequence> sequenceMap;
+	private final Map<@NonNull IResource, @NonNull ISequence> sequenceMap;
 
-	private final ImmutableList<@NonNull ISequenceElement> unusedElements;
+	private final List<@NonNull ISequenceElement> unusedElements = new ArrayList<>();
 
 	/**
 	 * Constructor taking a list of {@link IResource} instances. The {@link ISequence} instances will be created automatically. The resources list is copied to maintain internal consistency with the
@@ -42,14 +41,11 @@ public final class Sequences implements ISequences {
 	 */
 	public Sequences(final @NonNull List<@NonNull IResource> resources) {
 		// Copy the list as we do not track changes
-		this.resources = ImmutableList.copyOf(new ArrayList<>(resources));
-		Map<@NonNull IResource, @NonNull ISequence> tmpSequenceMap = new HashMap<>();
+		this.resources = new ArrayList<>(resources);
+		sequenceMap = new HashMap<>();
 		for (final IResource resource : resources) {
-			tmpSequenceMap.put(resource, new ListSequence(new LinkedList<>()));
+			sequenceMap.put(resource, new ListSequence(new LinkedList<>()));
 		}
-		sequenceMap = ImmutableMap.copyOf(tmpSequenceMap);
-		this.unusedElements = ImmutableList.of();
-
 	}
 
 	/**
@@ -59,15 +55,14 @@ public final class Sequences implements ISequences {
 	 * @param sequenceMap
 	 */
 	public Sequences(final List<@NonNull IResource> resources, final Map<@NonNull IResource, @NonNull ISequence> sequenceMap) {
-		this.resources = ImmutableList.copyOf(new ArrayList<>(resources));
-		this.sequenceMap = ImmutableMap.copyOf(new HashMap<>(sequenceMap));
-		this.unusedElements = ImmutableList.of();
+		this.resources = resources;
+		this.sequenceMap = sequenceMap;
 	}
 
 	public Sequences(final List<@NonNull IResource> resources, final Map<@NonNull IResource, @NonNull ISequence> sequenceMap, final @NonNull List<@NonNull ISequenceElement> unusedElements) {
-		this.resources = ImmutableList.copyOf(new ArrayList<>(resources));
-		this.sequenceMap = ImmutableMap.copyOf(new HashMap<>(sequenceMap));
-		this.unusedElements = ImmutableList.copyOf(new ArrayList<>(unusedElements));
+		this.resources = resources;
+		this.sequenceMap = sequenceMap;
+		this.unusedElements.addAll(unusedElements);
 	}
 
 	/**
@@ -78,28 +73,26 @@ public final class Sequences implements ISequences {
 	 */
 	public Sequences(final ISequences sequences) {
 
-		this.resources = ImmutableList.copyOf(new ArrayList<>(sequences.getResources()));
+		this.resources = new ArrayList<>(sequences.getResources());
 
-		Map<@NonNull IResource, @NonNull ISequence> tmpSequenceMap = new HashMap<>();
-		for (final IResource resource : resources) {
+		this.sequenceMap = new HashMap<>();
+		for (final IResource r : resources) {
 			// Get original sequence
-			final ISequence seq = sequences.getSequence(resource);
+			final ISequence seq = sequences.getSequence(r);
 
 			// Create a copied sequence object
 			final ListSequence sequence = new ListSequence(seq);
 
 			// store the new object
-			tmpSequenceMap.put(resource, sequence);
+			sequenceMap.put(r, sequence);
 		}
-		sequenceMap = ImmutableMap.copyOf(tmpSequenceMap);
-		this.unusedElements = ImmutableList.copyOf(new ArrayList<>(sequences.getUnusedElements()));
-
+		this.unusedElements.addAll(sequences.getUnusedElements());
 	}
 
 	@Override
 	@NonNull
-	public ImmutableList<@NonNull IResource> getResources() {
-		return ImmutableList.copyOf(resources);
+	public List<@NonNull IResource> getResources() {
+		return Collections.unmodifiableList(resources);
 	}
 
 	@Override
@@ -125,11 +118,11 @@ public final class Sequences implements ISequences {
 	@SuppressWarnings("null")
 	@Override
 	@NonNull
-	public ImmutableMap<@NonNull IResource, @NonNull ISequence> getSequences() {
+	public Map<@NonNull IResource, @NonNull ISequence> getSequences() {
 
 		// Create a copy so external modification does not affect internal
 		// state.
-		return ImmutableMap.copyOf(sequenceMap);
+		return Collections.unmodifiableMap(sequenceMap);
 	}
 
 	@Override
@@ -166,7 +159,7 @@ public final class Sequences implements ISequences {
 
 	@Override
 	@NonNull
-	public ImmutableList<@NonNull ISequenceElement> getUnusedElements() {
-		return ImmutableList.copyOf(unusedElements);
+	public List<@NonNull ISequenceElement> getUnusedElements() {
+		return Collections.unmodifiableList(unusedElements);
 	}
 }

@@ -58,6 +58,12 @@ public class LNGInitialSequencesModule extends PrivateModule {
 
 	@Override
 	protected void configure() {
+		// if (Platform.isRunning()) {
+		// bind(IConstraintCheckerRegistry.class).toProvider(service(IConstraintCheckerRegistry.class).single());
+		// }
+		//
+		// install(new ConstraintCheckerInstantiatorModule());
+		// install(new OptimiserContextModule());
 
 		if (Platform.isRunning()) {
 			bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());
@@ -65,11 +71,16 @@ public class LNGInitialSequencesModule extends PrivateModule {
 
 		install(new FitnessFunctionInstantiatorModule());
 
+		// install(new LocalSearchOptimiserModule());
+		// install(new LinearFitnessEvaluatorModule());
+
 		bind(IFitnessHelper.class).to(FitnessHelper.class);
+
 		bind(IOptimisationTransformer.class).to(OptimisationTransformer.class).in(Singleton.class);
 	}
 
 	@Provides
+	// @Singleton
 	private IFitnessCombiner createFitnessCombiner(@Named(LinearFitnessEvaluatorModule.LINEAR_FITNESS_WEIGHTS_MAP) final Map<String, Double> weightsMap) {
 
 		final LinearFitnessCombiner combiner = new LinearFitnessCombiner();
@@ -89,8 +100,7 @@ public class LNGInitialSequencesModule extends PrivateModule {
 	@Singleton
 	@Named(KEY_GENERATED_RAW_SEQUENCES)
 	@Exposed
-	private ISequences provideInitialSequences(@NonNull final IOptimisationTransformer optimisationTransformer, @NonNull final IPhaseOptimisationData data,
-			@NonNull final ModelEntityMap modelEntityMap) {
+	private ISequences provideInitialSequences(@NonNull final IOptimisationTransformer optimisationTransformer, @NonNull final IPhaseOptimisationData data, @NonNull final ModelEntityMap modelEntityMap) {
 
 		final ISequences sequences = optimisationTransformer.createInitialSequences(data, modelEntityMap);
 

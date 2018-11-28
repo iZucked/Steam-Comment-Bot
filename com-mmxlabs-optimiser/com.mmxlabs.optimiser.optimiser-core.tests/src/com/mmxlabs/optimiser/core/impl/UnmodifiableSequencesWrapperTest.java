@@ -126,6 +126,41 @@ public class UnmodifiableSequencesWrapperTest {
 	}
 
 	@Test
+	public void testSetSequences() {
+		final IResource resource1 = Mockito.mock(IResource.class, "resource-1");
+		final IResource resource2 = Mockito.mock(IResource.class, "resource-2");
+
+		final IModifiableSequence sequence1 = Mockito.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = Mockito.mock(IModifiableSequence.class, "sequence2");
+
+		final List<IResource> resources1 = CollectionsUtil.makeArrayList(resource1);
+
+		final List<IResource> resources2 = CollectionsUtil.makeArrayList(resource2);
+
+		final Map<IResource, IModifiableSequence> map1 = CollectionsUtil.makeHashMap(resource1, sequence1);
+
+		final Map<IResource, IModifiableSequence> map2 = CollectionsUtil.makeHashMap(resource2, sequence2);
+
+		final ModifiableSequences sequences1 = new ModifiableSequences(resources1, map1);
+
+		final ModifiableSequences sequences2 = new ModifiableSequences(resources2, map2);
+
+		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences1);
+
+		Assert.assertTrue(wrapper.getSequence(0) instanceof UnmodifiableSequenceWrapper);
+		Assert.assertTrue(wrapper.getSequence(resource1) instanceof UnmodifiableSequenceWrapper);
+
+		wrapper.getSequence(resource1).size();
+		Mockito.verify(sequence1).size();
+
+		wrapper.setSequences(sequences2);
+
+		wrapper.getSequence(resource2).size();
+		Mockito.verify(sequence2).size();
+
+	}
+
+	@Test
 	public void testSize() {
 		final IResource resource1 = Mockito.mock(IResource.class, "resource-1");
 		final IResource resource2 = Mockito.mock(IResource.class, "resource-2");

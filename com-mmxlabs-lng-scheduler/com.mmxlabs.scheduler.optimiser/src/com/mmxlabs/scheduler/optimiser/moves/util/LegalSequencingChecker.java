@@ -98,7 +98,6 @@ public class LegalSequencingChecker {
 		}
 		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
 			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource)) {
-				pairwiseChecker.checkPairwiseConstraint(e1, e2, resource);
 				// if (log.isInfoEnabled()) {
 				// log.info("Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
 				// }

@@ -98,7 +98,7 @@ public class InsertDESPurchaseMoveHandler implements IGuidedMoveHandler {
 					if (e == possibleDESSale) {
 						continue;
 					}
-					if (!helper.isOptionalOrConsideredOptionalElement(e) && options.isStrictOptional()) {
+					if (!helper.isOptional(e) && options.isStrictOptional()) {
 						continue LOOP_CANDIDATES;
 					}
 				}
@@ -111,7 +111,7 @@ public class InsertDESPurchaseMoveHandler implements IGuidedMoveHandler {
 					if (e == possibleDESSale) {
 						continue;
 					}
-					if (!helper.isOptionalOrConsideredOptionalElement(e)) {
+					if (!helper.isOptional(e)) {
 						hints.addProblemElement(e);
 					}
 					elementsToRemove.add(new Pair<>(desSaleResouce, e));

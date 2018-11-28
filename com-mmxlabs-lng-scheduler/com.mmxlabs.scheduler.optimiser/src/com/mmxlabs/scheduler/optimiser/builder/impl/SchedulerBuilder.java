@@ -22,7 +22,6 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
@@ -329,9 +328,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	@NonNull
 	private IOptionalElementsProviderEditor optionalElements;
-
-	@NonNull
-	private List<ISequenceElement> consideredAsOptionalElements = new LinkedList<>();
 
 	@Inject
 	@NonNull
@@ -1105,9 +1101,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final OptimisationData data = new OptimisationData();
 
-		data.setResources(ImmutableList.copyOf(resources));
-		data.setSequenceElements(ImmutableList.copyOf(sequenceElements));
-		data.setConsideredAsOptionalElements(ImmutableList.copyOf(consideredAsOptionalElements));
+		data.setResources(resources);
+		data.setSequenceElements(sequenceElements);
 
 		for (final IBuilderExtension extension : extensions) {
 			extension.finishBuilding(data);
@@ -1727,9 +1722,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param slot
 	 */
 	@Override
-	public void setConsideredAsOptionalElement(@NonNull final IPortSlot slot) {
+	public void setSoftRequired(@NonNull final IPortSlot slot) {
 		final ISequenceElement element = portSlotsProvider.getElement(slot);
-		consideredAsOptionalElements.add(element);
+		optionalElements.setSoftRequired(element, true);
 	}
 
 	/**

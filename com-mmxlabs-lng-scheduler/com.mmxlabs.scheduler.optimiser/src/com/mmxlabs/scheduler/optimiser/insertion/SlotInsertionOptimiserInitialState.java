@@ -20,7 +20,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 public class SlotInsertionOptimiserInitialState {
 
 	/**
-	 * List of compulsary, but unused slots in original solution. The final solution should not contain any additional slots meeting this criteria.
+	 * List of compulsary, but unsed slots in original solution. The final solution should not contain any additional slots meeting this criteria.
 	 * 
 	 */
 	public final Set<ISequenceElement> initiallyUnused = new HashSet<>();

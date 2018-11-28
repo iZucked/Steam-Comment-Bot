@@ -6,7 +6,6 @@ package com.mmxlabs.optimiser.core.scenario.impl;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -19,14 +18,15 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  */
 public final class OptimisationData implements IOptimisationData {
 
-	private ImmutableList<IResource> resources;
+	private List<IResource> resources;
 
-	private ImmutableList<ISequenceElement> sequenceElements;
+	private List<ISequenceElement> sequenceElements;
 
-	private ImmutableList<ISequenceElement> consideredAsOptionalElements;
+	public OptimisationData() {
+	}
 
 	@Override
-	public ImmutableList<ISequenceElement> getSequenceElements() {
+	public List<ISequenceElement> getSequenceElements() {
 		return sequenceElements;
 	}
 
@@ -35,12 +35,12 @@ public final class OptimisationData implements IOptimisationData {
 	 * 
 	 * @param sequenceElements
 	 */
-	public void setSequenceElements(final ImmutableList<ISequenceElement> sequenceElements) {
+	public void setSequenceElements(final List<ISequenceElement> sequenceElements) {
 		this.sequenceElements = sequenceElements;
 	}
 
 	@Override
-	public ImmutableList<IResource> getResources() {
+	public List<IResource> getResources() {
 		return resources;
 	}
 
@@ -49,16 +49,14 @@ public final class OptimisationData implements IOptimisationData {
 	 * 
 	 * @param resources
 	 */
-	public void setResources(final ImmutableList<IResource> resources) {
+	public void setResources(final List<IResource> resources) {
 		this.resources = resources;
 	}
 
-	public void setConsideredAsOptionalElements(ImmutableList<ISequenceElement> consideredAsOptionalElements) {
-		this.consideredAsOptionalElements = consideredAsOptionalElements;
-	}
-
 	@Override
-	public ImmutableList<ISequenceElement> getConsideredAsOptionalElements() {
-		return consideredAsOptionalElements;
+	public void dispose() {
+
+		resources = null;
+		sequenceElements = null;
 	}
 }
