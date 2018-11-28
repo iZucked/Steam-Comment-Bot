@@ -147,7 +147,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 					final Command addition = provider.provideAdditionalBeforeCommand(this, rootObject, overrides, editSet, commandClass, commandParameter, normal);
 					if (addition != null) {
 						log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
-						if (addition.canExecute() == false) {
+						if (!addition.canExecute() && !(addition instanceof CancelledCommand)) {
 							log.error("Provided command was not executable", new RuntimeException());
 						}
 						wrapper.append(addition);
@@ -164,7 +164,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 				final Command addition = provider.provideAdditionalAfterCommand(this, rootObject, overrides, editSet, commandClass, commandParameter, normal);
 				if (addition != null) {
 					log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
-					if (!addition.canExecute()) {
+					if (!addition.canExecute() && !(addition instanceof CancelledCommand)) {
 						log.error("Provided command was not executable", new RuntimeException());
 					}
 					wrapper.append(addition);

@@ -17,6 +17,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.MessageDialog;
 
 import com.mmxlabs.models.common.commandservice.BaseModelCommandProvider;
+import com.mmxlabs.models.common.commandservice.CancelledCommand;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -80,7 +81,7 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 										"This change will remove all optimisation results. Press OK to continue, otherwise press cancel and fork the scenario.");
 							});
 							if (!result[0]) {
-								return UnexecutableCommand.INSTANCE;
+								return CancelledCommand.INSTANCE;
 							}
 							setContext(Boolean.TRUE);
 						} else if (analyticsModel.getViabilityModel() != null) {
@@ -90,7 +91,7 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 										"This change will remove all analytics results. Press OK to continue, otherwise press cancel and fork the scenario.");
 							});
 							if (!result[0]) {
-								return UnexecutableCommand.INSTANCE;
+								return CancelledCommand.INSTANCE;
 							}
 							setContext(Boolean.TRUE);
 						}

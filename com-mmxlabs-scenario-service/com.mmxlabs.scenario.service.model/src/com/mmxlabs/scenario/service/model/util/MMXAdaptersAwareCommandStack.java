@@ -11,6 +11,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.common.commandservice.CancelledCommand;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -89,7 +90,7 @@ public class MMXAdaptersAwareCommandStack extends CommandWrappingCommandStack {
 				throwExceptionOnBadCommand(cmd);
 			}
 		} else {
-			if (!command.canExecute()) {
+			if (!command.canExecute() && !(command instanceof CancelledCommand)) {
 				throw new RuntimeException("Unable to execute command: " + command);
 			}
 		}
