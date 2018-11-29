@@ -41,7 +41,7 @@
              id="com.mmxlabs.models.lng.analytics.editor.toolbar1">
           <command
                 commandId="com.mmxlabs.models.lng.analytics.editor.LiveEvaluatorEnabled"
-                icon="icons/bg-eval.gif"
+                icon="icons/auto_evaluate2.gif"
                 label="Auto-evaluate on/off"
                 style="toggle">
           </command>
