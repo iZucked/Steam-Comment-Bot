@@ -231,7 +231,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * Constructs a new action builder which contributes actions to the given window.
 	 * 
 	 * @param configurer
-	 *            the action bar configurer for the window
+	 *                       the action bar configurer for the window
 	 */
 	public ApplicationActionBarAdvisor(final IActionBarConfigurer configurer) {
 		super(configurer);
@@ -458,8 +458,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// menu.add(newMenu);
 		// }
 
-		menu.add(new GroupMarker(IWorkbenchActionConstants.NEW_EXT));
-		menu.add(new Separator());
+		// Disable this to hide the "import projects from filesystem" which does not go away with activity bindings.
+		// menu.add(new GroupMarker(IWorkbenchActionConstants.NEW_EXT));
+		// menu.add(new Separator());
 
 		menu.add(closeAction);
 		menu.add(closeAllAction);
@@ -633,12 +634,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// addKeyboardShortcuts(menu);
 		menu.add(newWindowAction);
 		final Separator sep = new Separator(IWorkbenchActionConstants.MB_ADDITIONS);
-		//sep.setVisible(!Util.isMac());
+		// sep.setVisible(!Util.isMac());
 		menu.add(sep);
 
 		// See the comment for quit in createFileMenu
 		final ActionContributionItem openPreferencesItem = new ActionContributionItem(openPreferencesAction);
-		//openPreferencesItem.setVisible(!Util.isMac());
+		// openPreferencesItem.setVisible(!Util.isMac());
 		menu.add(openPreferencesItem);
 
 		menu.add(ContributionItemFactory.OPEN_WINDOWS.create(getWindow()));
@@ -755,9 +756,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * useSeparator.MENUID.GROUPID that is set to <code>true</code>.
 	 * 
 	 * @param menu
-	 *            the menu to add to
+	 *                    the menu to add to
 	 * @param groupId
-	 *            the group id for the added separator or group marker
+	 *                    the group id for the added separator or group marker
 	 */
 	private void addSeparatorOrGroupMarker(final MenuManager menu, final String groupId) {
 		final String prefId = "useSeparator." + menu.getId() + "." + groupId; //$NON-NLS-1$ //$NON-NLS-2$
