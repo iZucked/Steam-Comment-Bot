@@ -49,6 +49,7 @@ import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -78,6 +79,7 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilitySanbox
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilityWindowTrimmer;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -85,6 +87,9 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
@@ -366,6 +371,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		final List<String> hints = new LinkedList<>();
 		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
+		customiseConstraints(constraints);
 
 		final ExecutorService executorService = LNGScenarioChainBuilder.createExecutorService();
 		try {
@@ -408,6 +414,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		final List<String> hints = new LinkedList<>();
 		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
+		customiseConstraints(constraints);
 
 		final ExecutorService executorService = LNGScenarioChainBuilder.createExecutorService();
 		try {
@@ -422,6 +429,25 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			executorService.shutdownNow();
 		}
 		
+	}
+	
+	public void customiseConstraints(final ConstraintAndFitnessSettings constraintAndFitnessSettings) {
+		final Iterator<Constraint> iterator = constraintAndFitnessSettings.getConstraints().iterator();
+        while (iterator.hasNext()) {
+            final Constraint constraint = iterator.next();
+            if (constraint.getName().equals(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
+                iterator.remove();
+            }
+            if (constraint.getName().equals(RoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
+                iterator.remove();
+            }            
+            if (constraint.getName().equals(LockedUnusedElementsConstraintCheckerFactory.NAME)) {
+                iterator.remove();
+            }
+            if (constraint.getName().equals(AllowedVesselPermissionConstraintCheckerFactory.NAME)) {
+            	iterator.remove();
+            }
+        }
 	}
 
 }
