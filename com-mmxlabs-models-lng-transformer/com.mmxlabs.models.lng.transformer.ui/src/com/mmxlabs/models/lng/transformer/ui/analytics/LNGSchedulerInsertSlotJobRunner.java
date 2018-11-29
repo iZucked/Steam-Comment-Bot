@@ -214,6 +214,10 @@ public class LNGSchedulerInsertSlotJobRunner {
 		scenarioRunner.evaluateInitialState();
 	}
 
+	public void setIteration(int iterations) {
+		insertionStage.setIterations(iterations);
+	}
+
 	public SlotInsertionOptions doRunJob(final IProgressMonitor progressMonitor) {
 		final long start = System.currentTimeMillis();
 		final SubMonitor subMonitor = SubMonitor.convert(progressMonitor, "Inserting option(s)", 100);

@@ -81,7 +81,7 @@ public class AbstractSlotInsertionTests {
 		try {
 			final LNGSchedulerInsertSlotJobRunner runner = new LNGSchedulerInsertSlotJobRunner(executorService, null, scenarioDataProvider, LNGSchedulerJobUtils.createLocalEditingDomain(),
 					userSettings, targetSlots, targetEvents);
-
+			runner.setIteration(iterations);
 			runner.prepare();
 
 			final IMultiStateResult results = runner.runInsertion(new NullProgressMonitor());
