@@ -73,22 +73,14 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 			if (getContext() == Boolean.FALSE) {
 				if (System.getProperty("lingo.suppress.dialogs") == null) {
 					{
-						if (!analyticsModel.getOptimisations().isEmpty()) {
+						if (!analyticsModel.getOptimisations().isEmpty() 
+								|| analyticsModel.getViabilityModel() != null 
+								|| analyticsModel.getMtmModel() != null) {
 
 							boolean result[] = new boolean[1];
 							RunnerHelper.syncExec((display) -> {
 								result[0] = MessageDialog.openConfirm(display.getActiveShell(), "Scenario edit",
-										"This change will remove all optimisation results. Press OK to continue, otherwise press cancel and fork the scenario.");
-							});
-							if (!result[0]) {
-								return CancelledCommand.INSTANCE;
-							}
-							setContext(Boolean.TRUE);
-						} else if (analyticsModel.getViabilityModel() != null) {
-							boolean result[] = new boolean[1];
-							RunnerHelper.syncExec((display) -> {
-								result[0] = MessageDialog.openConfirm(display.getActiveShell(), "Scenario edit",
-										"This change will remove all analytics results. Press OK to continue, otherwise press cancel and fork the scenario.");
+										"This change will remove all results. Press OK to continue, otherwise press cancel and fork the scenario.");
 							});
 							if (!result[0]) {
 								return CancelledCommand.INSTANCE;
@@ -105,9 +97,11 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 			if (scheduleModel.getSchedule() != null) {
 				delete.add(scheduleModel.getSchedule());
 			}
-
 			if (analyticsModel.getViabilityModel() != null) {
 				delete.add(analyticsModel.getViabilityModel());
+			}
+			if (analyticsModel.getMtmModel() != null) {
+				delete.add(analyticsModel.getMtmModel());
 			}
 			if (!analyticsModel.getOptimisations().isEmpty()) {
 				delete.addAll(analyticsModel.getOptimisations());
