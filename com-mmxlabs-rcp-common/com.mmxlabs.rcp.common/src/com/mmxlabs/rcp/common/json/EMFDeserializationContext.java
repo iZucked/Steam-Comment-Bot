@@ -10,14 +10,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.ECollections;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationConfig;
@@ -29,10 +26,13 @@ import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.mmxlabs.common.Pair;
 
 public class EMFDeserializationContext extends DefaultDeserializationContext {
+	private class State {
+		final List<Runnable> actions = new LinkedList<>();
+		final Map<Pair<String, String>, Object> nameMap = new HashMap<>();
+		final Map<Pair<String, String>, Object> idMap = new HashMap<>();
+	}
 
-	private final List<Runnable> actions = new LinkedList<>();
-	private final Map<Pair<String, String>, Object> nameMap = new HashMap<>();
-	private final Map<Pair<String, String>, Object> idMap = new HashMap<>();
+	private final State state;
 
 	public void registerType(final Object value) {
 
@@ -54,26 +54,26 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 					}
 				}
 			}
-
-			registerType(eObject.eClass().getName(), id, name, eObject);
+			String type = String.format("%s/%s", eObject.eClass().getEPackage().getNsURI(), eObject.eClass().getName());
+			registerType(type, id, name, eObject);
 		}
 	}
 
 	public void registerType(final String type, final String id, final String name, final Object value) {
 		if (name != null) {
-			nameMap.put(new Pair<>(type, name), value);
+			state.nameMap.put(new Pair<>(type, name), value);
 		}
 		if (id != null) {
-			idMap.put(new Pair<>(type, id), value);
+			state.idMap.put(new Pair<>(type, id), value);
 		}
 	}
 
 	public Object lookupType(final JSONReference ref) {
-		final Object idValue = idMap.get(new Pair<>(ref.getClassType(), ref.getGlobalId()));
+		final Object idValue = state.idMap.get(new Pair<>(ref.getClassType(), ref.getGlobalId()));
 		if (idValue != null) {
 			return idValue;
 		}
-		final Object nameValue = nameMap.get(new Pair<>(ref.getClassType(), ref.getName()));
+		final Object nameValue = state.nameMap.get(new Pair<>(ref.getClassType(), ref.getName()));
 		if (nameValue != null) {
 			return nameValue;
 		}
@@ -84,17 +84,17 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 	public void deferLookup(final JSONReference ref, final EObject owner, final EReference feature) {
 
 		if (feature.isMany()) {
-			actions.add(() -> ((List) owner.eGet(feature)).add(lookupType(ref)));
+			state.actions.add(() -> ((List) owner.eGet(feature)).add(lookupType(ref)));
 		} else {
-			actions.add(() -> owner.eSet(feature, lookupType(ref)));
+			state.actions.add(() -> owner.eSet(feature, lookupType(ref)));
 		}
 
 	}
 
 	public void runDeferredActions() {
 
-		final List<Runnable> actionsCopy = new LinkedList<>(actions);
-		actions.clear();
+		final List<Runnable> actionsCopy = new LinkedList<>(state.actions);
+		state.actions.clear();
 		actionsCopy.forEach(Runnable::run);
 	}
 
@@ -103,18 +103,24 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 	 */
 	public EMFDeserializationContext(final DeserializerFactory df) {
 		super(df, null);
+		this.state = new State();
 	}
 
 	protected EMFDeserializationContext(final EMFDeserializationContext src, final DeserializationConfig config, final JsonParser jp, final InjectableValues values) {
 		super(src, config, jp, values);
+		this.state = src.state;
+
 	}
 
 	protected EMFDeserializationContext(final EMFDeserializationContext src) {
 		super(src);
+		this.state = src.state;
+
 	}
 
 	protected EMFDeserializationContext(final EMFDeserializationContext src, final DeserializerFactory factory) {
 		super(src, factory);
+		this.state = src.state;
 	}
 
 	@Override

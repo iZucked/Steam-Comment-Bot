@@ -83,7 +83,7 @@ public class EMFDeserializer<T extends EObject> extends StdDeserializer<T> {
 							result.eSet(f, newList);
 						} else {
 							for (final JsonNode childNode : e.getValue()) {
-								final JsonParser parser = e.getValue().traverse();
+								final JsonParser parser = childNode.traverse();
 								parser.setCodec(jp.getCodec());
 								final JSONReference ref = parser.readValueAs(JSONReference.class);
 								// Defer the lookup until later

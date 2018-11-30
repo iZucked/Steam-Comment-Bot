@@ -70,7 +70,8 @@ public class JSONReference {
 				}
 			}
 		}
-		return new JSONReference(eObject.getClass().getName(), name, id);
+		String type = String.format("%s/%s", eObject.eClass().getEPackage().getNsURI(), eObject.eClass().getName());
+		return new JSONReference(type, name, id);
 
 	}
 }
