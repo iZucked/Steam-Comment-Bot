@@ -614,7 +614,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test that the correction to BugzId: 2304 has been fixed. (Initial fixes made all nominal cargoes optional, thus bad P&L caroges were optimised out)
+	 * Test that the correction to BugzId: 2304 has been fixed. (Initial fixes made all nominal cargoes optional, thus bad P&L cargoes were optimised out)
 	 * 
 	 * @throws Exception
 	 */

@@ -111,7 +111,7 @@ public final class CargoImportAction extends SimpleImportAction {
 		// Fix up the descriptor data references to point to destination objects in the cases where the source is not being transferred across
 		EMFModelMergeTools.rewriteMappingDescriptors(descriptors, importModel, destScenarioModel);
 
-		final CompoundCommand cmd = new CompoundCommand("Import caroges");
+		final CompoundCommand cmd = new CompoundCommand("Import cargoes");
 
 		cmd.append(EMFModelMergeTools.applyMappingDescriptors(destEditingDomain, destScenarioModel, descriptors));
 		cmd.append(new IdentityCommand() {
