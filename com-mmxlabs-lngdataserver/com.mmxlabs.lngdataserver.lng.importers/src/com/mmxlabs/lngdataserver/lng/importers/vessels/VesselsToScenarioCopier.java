@@ -5,12 +5,14 @@
 package com.mmxlabs.lngdataserver.lng.importers.vessels;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,7 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -53,10 +56,11 @@ public class VesselsToScenarioCopier {
 		final Map<String, Vessel> vesselsByMMXIdMap = new HashMap<>();
 		final Map<String, Vessel> vesselsByNameMap = new HashMap<>();
 
-		// Ignore vessel in current schedule without mmxId
+		final List<Vessel> updatedVessels = new LinkedList<>();
 		for (final Vessel vessel : fleetModel.getVessels()) {
 			final String mmxId = vessel.getMmxId();
 			if (mmxId != null && !mmxId.isEmpty()) {
+				// Ignore vessel in current schedule without mmxId
 				vesselsByMMXIdMap.put(mmxId, vessel);
 			}
 			vesselsByNameMap.put(vessel.getName(), vessel);
@@ -107,7 +111,7 @@ public class VesselsToScenarioCopier {
 
 			// final Vessel vesselToUpdate = vesselsByMMXIdMap.get(upstreamVessel.getMmxId());
 			if (upstreamVessel.getReferenceVessel().isPresent()) {
-				String id = upstreamVessel.getReferenceVessel().get();
+				final String id = upstreamVessel.getReferenceVessel().get();
 				if (vesselsByMMXIdMap.containsKey(id)) {
 					cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__REFERENCE, vesselsByMMXIdMap.get(id)));
 				} else {
@@ -215,7 +219,14 @@ public class VesselsToScenarioCopier {
 				cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS_OVERRIDE, Boolean.FALSE));
 				cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS, SetCommand.UNSET_VALUE));
 			}
+
+			updatedVessels.add(vesselToUpdate);
 		}
+
+		final Set<Vessel> vesselsToDelete = new HashSet<>(fleetModel.getVessels());
+		vesselsToDelete.removeAll(updatedVessels);
+
+		cc.append(DeleteCommand.create(editingDomain, vesselsToDelete));
 
 		cc.append(SetCommand.create(editingDomain, fleetModel, FleetPackage.Literals.FLEET_MODEL__FLEET_DATA_VERSION, vesselsVersion.getIdentifier()));
 

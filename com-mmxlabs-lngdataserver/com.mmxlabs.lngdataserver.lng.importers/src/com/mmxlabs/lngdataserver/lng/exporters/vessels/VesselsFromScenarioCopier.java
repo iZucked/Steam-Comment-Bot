@@ -157,6 +157,7 @@ public class VesselsFromScenarioCopier {
 		}
 		version.setIdentifier(fleetDataVersion);
 		version.setCreatedAt(LocalDateTime.now());
+		vessels.sort((a, b) -> a.getName().compareTo(b.getName()));
 		version.setVessels(vessels);
 
 		return version;
@@ -192,6 +193,7 @@ public class VesselsFromScenarioCopier {
 				fc.setConsumption(lingoFC.getConsumption());
 				newConsumptions.add(fc);
 			}
+			newConsumptions.sort((a, b) -> Double.compare(a.getSpeed(), b.getSpeed()));
 
 			travelAttributes.setFuelConsumption(Optional.of(newConsumptions));
 		}
