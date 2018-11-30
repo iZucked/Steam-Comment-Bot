@@ -9,7 +9,7 @@ public class VesselTravelAttributes {
 	private OptionalDouble nboRate = OptionalDouble.empty();
 	private OptionalDouble idleNBORate = OptionalDouble.empty();
 	private OptionalDouble idleBaseRate = OptionalDouble.empty();
-	private OptionalDouble serviceSped = OptionalDouble.empty();
+	private OptionalDouble serviceSpeed = OptionalDouble.empty();
 	private Optional<List<FuelConsumption>> fuelConsumption = Optional.empty();
 
 	public OptionalDouble getNboRate() {
@@ -37,11 +37,11 @@ public class VesselTravelAttributes {
 	}
 
 	public OptionalDouble getServiceSped() {
-		return serviceSped;
+		return serviceSpeed;
 	}
 
 	public void setServiceSped(OptionalDouble serviceSped) {
-		this.serviceSped = serviceSped;
+		this.serviceSpeed = serviceSped;
 	}
 
 	public Optional<List<FuelConsumption>> getFuelConsumption() {

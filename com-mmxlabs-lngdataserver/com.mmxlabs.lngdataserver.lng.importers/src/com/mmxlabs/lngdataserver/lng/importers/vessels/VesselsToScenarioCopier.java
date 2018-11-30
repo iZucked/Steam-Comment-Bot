@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -49,14 +50,16 @@ public class VesselsToScenarioCopier {
 	public static Command getUpdateCommand(@NonNull final EditingDomain editingDomain, @NonNull final FleetModel fleetModel, final PortModel portModel, final VesselsVersion vesselsVersion) {
 
 		final CompoundCommand cc = new CompoundCommand("Update Vessel");
-		final Map<String, Vessel> vesselsMap = new HashMap<>();
+		final Map<String, Vessel> vesselsByMMXIdMap = new HashMap<>();
+		final Map<String, Vessel> vesselsByNameMap = new HashMap<>();
 
 		// Ignore vessel in current schedule without mmxId
 		for (final Vessel vessel : fleetModel.getVessels()) {
 			final String mmxId = vessel.getMmxId();
 			if (mmxId != null && !mmxId.isEmpty()) {
-				vesselsMap.put(mmxId, vessel);
+				vesselsByMMXIdMap.put(mmxId, vessel);
 			}
+			vesselsByNameMap.put(vessel.getName(), vessel);
 		}
 
 		final Map<String, Port> portProvider = portModel.getPorts().stream() //
@@ -70,25 +73,46 @@ public class VesselsToScenarioCopier {
 		// Create new vessels if needed.
 		vesselsVersion.getVessels().stream() //
 				.filter(v -> v.getMmxId() != null && !v.getMmxId().isEmpty()) //
-				.filter(v -> !vesselsMap.containsKey(v.getMmxId()))//
+				.filter(v -> !vesselsByMMXIdMap.containsKey(v.getMmxId()))//
 				.forEach(v -> {
 					final Vessel newVessel = FleetFactory.eINSTANCE.createVessel();
+					newVessel.setName(v.getName());
 					newVessel.setMmxId(v.getMmxId());
 					newVessel.setLadenAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
 					newVessel.setBallastAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
 					cc.append(AddCommand.create(editingDomain, fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS, newVessel));
-					vesselsMap.put(newVessel.getMmxId(), newVessel);
+					vesselsByMMXIdMap.put(newVessel.getMmxId(), newVessel);
+				});
+		vesselsVersion.getVessels().stream() //
+				.filter(v -> v.getMmxId() == null || v.getMmxId().isEmpty()) //
+				.filter(v -> !vesselsByNameMap.containsKey(v.getName()))//
+				.forEach(v -> {
+					final Vessel newVessel = FleetFactory.eINSTANCE.createVessel();
+					newVessel.setName(v.getName());
+					newVessel.setLadenAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
+					newVessel.setBallastAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
+					cc.append(AddCommand.create(editingDomain, fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS, newVessel));
+					vesselsByNameMap.put(newVessel.getName(), newVessel);
 				});
 
 		// Create all vessel update
 		for (final com.mmxlabs.lngdataserver.integration.vessels.model.@NonNull Vessel upstreamVessel : vesselsVersion.getVessels()) {
+			Vessel vesselToUpdate;
 			if (upstreamVessel.getMmxId() == null || upstreamVessel.getMmxId().isEmpty()) {
-				throw new IllegalStateException("Upstream vessel has no mmx id");
+				// throw new IllegalStateException("Upstream vessel has no mmx id");
+				vesselToUpdate = vesselsByNameMap.get(upstreamVessel.getName());
+			} else {
+				vesselToUpdate = vesselsByMMXIdMap.get(upstreamVessel.getMmxId());
 			}
 
-			final Vessel vesselToUpdate = vesselsMap.get(upstreamVessel.getMmxId());
+			// final Vessel vesselToUpdate = vesselsByMMXIdMap.get(upstreamVessel.getMmxId());
 			if (upstreamVessel.getReferenceVessel().isPresent()) {
-				cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__REFERENCE, vesselsMap.get(upstreamVessel.getReferenceVessel().get())));
+				String id = upstreamVessel.getReferenceVessel().get();
+				if (vesselsByMMXIdMap.containsKey(id)) {
+					cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__REFERENCE, vesselsByMMXIdMap.get(id)));
+				} else {
+					cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__REFERENCE, vesselsByNameMap.get(id)));
+				}
 			} else {
 				cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__REFERENCE, SetCommand.UNSET_VALUE));
 			}
@@ -100,6 +124,7 @@ public class VesselsToScenarioCopier {
 			cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__IMO, upstreamVessel.getImo()));
 			cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__NOTES, upstreamVessel.getNotes()));
 
+			createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__TYPE, upstreamVessel.getType());
 			createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__SCNT, upstreamVessel.getScnt());
 			createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__CAPACITY, upstreamVessel.getCapacity());
 			createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__FILL_CAPACITY, upstreamVessel.getFillCapacity());
@@ -121,10 +146,9 @@ public class VesselsToScenarioCopier {
 			// Ballast Model
 			createSet(cc, editingDomain, vesselToUpdate.getBallastAttributes(), FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE, upstreamVessel.getBallastAttributes().getIdleBaseRate());
 			createSet(cc, editingDomain, vesselToUpdate.getBallastAttributes(), FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE, upstreamVessel.getBallastAttributes().getIdleNBORate());
-			createSet(cc, editingDomain, vesselToUpdate.getBallastAttributes(), FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__NBO_RATE, upstreamVessel.getBallastAttributes().getIdleNBORate());
+			createSet(cc, editingDomain, vesselToUpdate.getBallastAttributes(), FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__NBO_RATE, upstreamVessel.getBallastAttributes().getNboRate());
 			createSet(cc, editingDomain, vesselToUpdate.getBallastAttributes(), FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED, upstreamVessel.getBallastAttributes().getServiceSped());
-			createSetFuelConsumptions(cc, editingDomain, vesselToUpdate.getBallastAttributes(), FleetPackage.Literals.FUEL_CONSUMPTION__CONSUMPTION,
-					upstreamVessel.getBallastAttributes().getFuelConsumption());
+			createSetFuelConsumptions(cc, editingDomain, vesselToUpdate.getBallastAttributes(), upstreamVessel.getBallastAttributes().getFuelConsumption());
 
 			createSet(cc, editingDomain, vesselToUpdate.getBallastAttributes(), FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE,
 					upstreamVessel.getDischargeAttributes().getInPortBaseRate());
@@ -134,13 +158,12 @@ public class VesselsToScenarioCopier {
 			// Laden Model
 			createSet(cc, editingDomain, vesselToUpdate.getLadenAttributes(), FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE, upstreamVessel.getLadenAttributes().getIdleBaseRate());
 			createSet(cc, editingDomain, vesselToUpdate.getLadenAttributes(), FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE, upstreamVessel.getLadenAttributes().getIdleNBORate());
-			createSet(cc, editingDomain, vesselToUpdate.getLadenAttributes(), FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__NBO_RATE, upstreamVessel.getLadenAttributes().getIdleNBORate());
+			createSet(cc, editingDomain, vesselToUpdate.getLadenAttributes(), FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__NBO_RATE, upstreamVessel.getLadenAttributes().getNboRate());
 			createSet(cc, editingDomain, vesselToUpdate.getLadenAttributes(), FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED, upstreamVessel.getLadenAttributes().getServiceSped());
 			createSet(cc, editingDomain, vesselToUpdate.getLadenAttributes(), FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE, upstreamVessel.getLoadAttributes().getInPortBaseRate());
 			createSet(cc, editingDomain, vesselToUpdate.getLadenAttributes(), FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IN_PORT_NBO_RATE, upstreamVessel.getLoadAttributes().getInPortNBORate());
 
-			createSetFuelConsumptions(cc, editingDomain, vesselToUpdate.getLadenAttributes(), FleetPackage.Literals.FUEL_CONSUMPTION__CONSUMPTION,
-					upstreamVessel.getLadenAttributes().getFuelConsumption());
+			createSetFuelConsumptions(cc, editingDomain, vesselToUpdate.getLadenAttributes(), upstreamVessel.getLadenAttributes().getFuelConsumption());
 
 			// CANAL PARAMS
 			createSetRouteParameters(cc, editingDomain, vesselToUpdate, upstreamVessel.getRouteParameters());
@@ -157,9 +180,11 @@ public class VesselsToScenarioCopier {
 
 				cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_ROUTES_OVERRIDE, Boolean.TRUE));
 				if (!vesselToUpdate.getInaccessibleRoutes().isEmpty()) {
-					cc.append(AddCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_ROUTES, vesselToUpdate.getInaccessibleRoutes()));
+					cc.append(RemoveCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_ROUTES, vesselToUpdate.getInaccessibleRoutes()));
 				}
-				cc.append(AddCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_ROUTES, mappedRoutes));
+				if (!mappedRoutes.isEmpty()) {
+					cc.append(AddCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_ROUTES, mappedRoutes));
+				}
 			} else {
 				cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_ROUTES_OVERRIDE, Boolean.FALSE));
 				cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_ROUTES, SetCommand.UNSET_VALUE));
@@ -181,38 +206,44 @@ public class VesselsToScenarioCopier {
 
 				cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS_OVERRIDE, Boolean.TRUE));
 				if (!vesselToUpdate.getInaccessiblePorts().isEmpty()) {
-					cc.append(AddCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS, vesselToUpdate.getInaccessiblePorts()));
+					cc.append(RemoveCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS, vesselToUpdate.getInaccessiblePorts()));
 				}
-				cc.append(AddCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS, mappedPorts));
+				if (!mappedPorts.isEmpty()) {
+					cc.append(AddCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS, mappedPorts));
+				}
 			} else {
 				cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS_OVERRIDE, Boolean.FALSE));
 				cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS, SetCommand.UNSET_VALUE));
 			}
 		}
+
+		cc.append(SetCommand.create(editingDomain, fleetModel, FleetPackage.Literals.FLEET_MODEL__FLEET_DATA_VERSION, vesselsVersion.getIdentifier()));
+
 		return cc;
 	}
 
-	private static void createSetFuelConsumptions(final CompoundCommand cc, @NonNull final EditingDomain editingDomain, final VesselStateAttributes attributes, final EStructuralFeature feature,
+	private static void createSetFuelConsumptions(final CompoundCommand cc, @NonNull final EditingDomain editingDomain, final VesselStateAttributes attributes,
 			final Optional<List<FuelConsumption>> fuelConsumptions) {
 
 		if (!attributes.getFuelConsumption().isEmpty()) {
 			cc.append(SetCommand.create(editingDomain, attributes, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_OVERRIDE, Boolean.FALSE));
-			cc.append(RemoveCommand.create(editingDomain, attributes, feature, attributes.getFuelConsumption()));
+			cc.append(RemoveCommand.create(editingDomain, attributes, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION, attributes.getFuelConsumption()));
 		}
-		final List<com.mmxlabs.models.lng.fleet.FuelConsumption> newConsumptions = new LinkedList<>();
 		if (fuelConsumptions.isPresent()) {
+			final List<com.mmxlabs.models.lng.fleet.FuelConsumption> newConsumptions = new LinkedList<>();
 			for (final FuelConsumption upstreamFC : fuelConsumptions.get()) {
 				final com.mmxlabs.models.lng.fleet.FuelConsumption newFC = FleetFactory.eINSTANCE.createFuelConsumption();
 				newFC.setSpeed(upstreamFC.getSpeed());
 				newFC.setConsumption(upstreamFC.getConsumption());
 				newConsumptions.add(newFC);
 			}
+			if (!newConsumptions.isEmpty()) {
+				cc.append(SetCommand.create(editingDomain, attributes, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_OVERRIDE, Boolean.TRUE));
+				cc.append(AddCommand.create(editingDomain, attributes, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION, newConsumptions));
+			}
+		} else {
+			cc.append(SetCommand.create(editingDomain, attributes, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_OVERRIDE, Boolean.FALSE));
 		}
-		if (!newConsumptions.isEmpty()) {
-			cc.append(SetCommand.create(editingDomain, attributes, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_OVERRIDE, Boolean.TRUE));
-			cc.append(AddCommand.create(editingDomain, attributes, feature, newConsumptions));
-		}
-
 	}
 
 	private static void createSetRouteParameters(final CompoundCommand cc, @NonNull final EditingDomain editingDomain, final Vessel vesselToUpdate,
@@ -222,8 +253,8 @@ public class VesselsToScenarioCopier {
 			cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__ROUTE_PARAMETERS_OVERRIDE, Boolean.FALSE));
 			cc.append(RemoveCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__ROUTE_PARAMETERS, vesselToUpdate.getRouteParameters()));
 		}
-		final List<VesselClassRouteParameters> newParameters = new LinkedList<>();
 		if (routeParameters.isPresent()) {
+			final List<VesselClassRouteParameters> newParameters = new LinkedList<>();
 			for (final VesselRouteParameters upstreamFC : routeParameters.get()) {
 				final com.mmxlabs.models.lng.fleet.VesselClassRouteParameters newFC = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
 				newFC.setRouteOption(RouteOption.valueOf(upstreamFC.getRoute()));
@@ -234,12 +265,13 @@ public class VesselsToScenarioCopier {
 				newFC.setBallastConsumptionRate(upstreamFC.getBallastBunkerRate());
 				newParameters.add(newFC);
 			}
+			if (!newParameters.isEmpty()) {
+				cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__ROUTE_PARAMETERS_OVERRIDE, Boolean.TRUE));
+				cc.append(AddCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__ROUTE_PARAMETERS, newParameters));
+			}
+		} else {
+			cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__ROUTE_PARAMETERS_OVERRIDE, Boolean.FALSE));
 		}
-		if (!newParameters.isEmpty()) {
-			cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__ROUTE_PARAMETERS_OVERRIDE, Boolean.TRUE));
-			cc.append(AddCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__ROUTE_PARAMETERS, newParameters));
-		}
-
 	}
 
 	private static void createSet(final CompoundCommand cc, final EditingDomain editingDomain, final EObject owner, final EStructuralFeature feature, final Optional<?> value) {

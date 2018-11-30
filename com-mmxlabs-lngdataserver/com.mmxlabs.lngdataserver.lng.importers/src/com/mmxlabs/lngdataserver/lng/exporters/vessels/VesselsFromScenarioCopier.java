@@ -47,6 +47,9 @@ public class VesselsFromScenarioCopier {
 			vessel.setShortName(lingo_vessel.getShortName());
 			vessel.setImo(lingo_vessel.getIMO());
 			vessel.setNotes(lingo_vessel.getNotes());
+			if (lingo_vessel.getType() != null) {
+				vessel.setType(Optional.of(lingo_vessel.getType()));
+			}
 
 			if (lingo_vessel.isSetScnt()) {
 				vessel.setScnt(OptionalInt.of(lingo_vessel.getScnt()));
@@ -97,12 +100,18 @@ public class VesselsFromScenarioCopier {
 			setAttributes(lingo_vessel, lingo_vessel.getLadenAttributes(), vessel.getLoadAttributes(), vessel.getLadenAttributes());
 			setAttributes(lingo_vessel, lingo_vessel.getBallastAttributes(), vessel.getDischargeAttributes(), vessel.getBallastAttributes());
 
-			if (lingo_vessel.getReference() != null) {
-				vessel.setReferenceVessel(Optional.of(lingo_vessel.getReference().getMmxId()));
+			com.mmxlabs.models.lng.fleet.Vessel lingo_ReferenceVessel = lingo_vessel.getReference();
+			if (lingo_ReferenceVessel != null) {
+				if (lingo_ReferenceVessel.getMmxId() == null || lingo_ReferenceVessel.getMmxId().isEmpty()) {
+					// Temporary fallback...
+					vessel.setReferenceVessel(Optional.of(lingo_ReferenceVessel.getName()));
+				} else {
+					vessel.setReferenceVessel(Optional.of(lingo_ReferenceVessel.getMmxId()));
+				}
 			}
 
 			// CANAL PARAMS
-			if (lingo_vessel.isRouteParametersOverride() || lingo_vessel.getReference() == null) {
+			if (lingo_vessel.isRouteParametersOverride() || lingo_ReferenceVessel == null) {
 				final List<VesselRouteParameters> newParameters = new LinkedList<>();
 				for (final com.mmxlabs.models.lng.fleet.VesselClassRouteParameters lingoFC : lingo_vessel.getRouteParameters()) {
 					final VesselRouteParameters fc = new VesselRouteParameters();
@@ -119,7 +128,7 @@ public class VesselsFromScenarioCopier {
 			}
 
 			// ROUTE RESTRICTIONS
-			if (lingo_vessel.isInaccessibleRoutesOverride() || lingo_vessel.getReference() == null) {
+			if (lingo_vessel.isInaccessibleRoutesOverride() || lingo_ReferenceVessel == null) {
 				final List<String> newRoutes = new LinkedList<>();
 				for (final RouteOption rp : lingo_vessel.getInaccessibleRoutes()) {
 					newRoutes.add(rp.getLiteral());
@@ -128,11 +137,11 @@ public class VesselsFromScenarioCopier {
 			}
 
 			// PORT RESTRICTIONS
-			if (lingo_vessel.isInaccessiblePortsOverride() || lingo_vessel.getReference() == null) {
+			if (lingo_vessel.isInaccessiblePortsOverride() || lingo_ReferenceVessel == null) {
 				final List<String> newPorts = new LinkedList<>();
 				for (final APortSet<Port> port : lingo_vessel.getInaccessiblePorts()) {
 					if (port instanceof Port) {
-						newPorts.add(((Port) port).getTempMMXID());
+						newPorts.add(((Port) port).getLocation().getMmxId());
 					} else {
 						// log error
 					}

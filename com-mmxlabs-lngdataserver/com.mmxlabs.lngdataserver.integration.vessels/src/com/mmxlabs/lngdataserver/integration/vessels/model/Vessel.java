@@ -19,7 +19,7 @@ public class Vessel {
 	private String shortName;
 	// unique vessel id
 	private String imo;
-	private String type;
+	private Optional<String> type = Optional.empty();
 
 	private Optional<String> referenceVessel = Optional.empty();
 
@@ -90,11 +90,11 @@ public class Vessel {
 		this.imo = imo;
 	}
 
-	public String getType() {
+	public Optional<String> getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(Optional<String> type) {
 		this.type = type;
 	}
 
