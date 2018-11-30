@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -35,6 +34,9 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
 
 @NonNullByDefault
 public class CargoTravelTimeUtils {
+	private CargoTravelTimeUtils() {
+
+	}
 
 	public static final List<RouteOption> EMPTY_ROUTES = Collections.emptyList();
 
@@ -48,8 +50,7 @@ public class CargoTravelTimeUtils {
 		if (allowedRoutes == null || allowedRoutes.isEmpty()) {
 			allowedRoutes = portModel.getRoutes();
 		}
-		final int minDuration = getMinTimeFromAllowedRoutes(from, to, vessel, referenceSpeed, allowedRoutes, modelDistanceProvider);
-		return minDuration;
+		return getMinTimeFromAllowedRoutes(from, to, vessel, referenceSpeed, allowedRoutes, modelDistanceProvider);
 	}
 
 	public static int getDivertibleFOBMinRouteTimeInHours(final DischargeSlot fobSale, final Slot from, final Slot to, final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider,
@@ -62,13 +63,12 @@ public class CargoTravelTimeUtils {
 		if (allowedRoutes == null || allowedRoutes.isEmpty()) {
 			allowedRoutes = portModel.getRoutes();
 		}
-		final int minDuration = getMinTimeFromAllowedRoutes(from, to, vessel, referenceSpeed, allowedRoutes, modelDistanceProvider);
-		return minDuration;
+		return getMinTimeFromAllowedRoutes(from, to, vessel, referenceSpeed, allowedRoutes, modelDistanceProvider);
 	}
 
-	public static int getFobMinTimeInHours(final Slot from, final Slot to, final LocalDate date, final VesselAssignmentType vesselAssignmentType, final PortModel portModel, final CostModel costModel,
-			final double referenceSpeed, final ModelDistanceProvider modelDistanceProvider) {
-		final List<Route> allowedRoutes = getAllowedRoutes(vesselAssignmentType, date, portModel, costModel);
+	public static int getFobMinTimeInHours(final Slot<?> from, final Slot<?> to, final LocalDate date, final VesselAssignmentType vesselAssignmentType, final PortModel portModel,
+			final CostModel costModel, final double referenceSpeed, final ModelDistanceProvider modelDistanceProvider) {
+		final List<Route> allowedRoutes = getAllowedRoutes(vesselAssignmentType, portModel, costModel);
 		final Pair<Vessel, List<RouteOption>> vesselAssignmentTypeData = getVesselAssignmentTypeData(vesselAssignmentType);
 		final Vessel vessel = vesselAssignmentTypeData.getFirst();
 		final double maxSpeed = vessel != null ? vessel.getVesselOrDelegateMaxSpeed() : referenceSpeed;
@@ -81,13 +81,16 @@ public class CargoTravelTimeUtils {
 		return TravelTimeUtils.getMinTimeFromAllowedRoutes(from.getPort(), to.getPort(), vessel, referenceSpeed, allowedRoutes, modelDistanceProvider);
 	}
 
-	private static List<Route> getAllowedRoutes(final VesselAssignmentType vesselAssignmentType, final LocalDate date, final PortModel portModel, final CostModel costModel) {
+	private static List<Route> getAllowedRoutes(final VesselAssignmentType vesselAssignmentType, final PortModel portModel, final CostModel costModel) {
 		if (vesselAssignmentType == null) {
 			// allow all routes if not on a vessel
 			return portModel.getRoutes();
 		}
-		final List<Route> routes = new LinkedList<Route>();
+		final List<Route> routes = new LinkedList<>();
 		final Pair<Vessel, List<RouteOption>> vatData = getVesselAssignmentTypeData(vesselAssignmentType);
+		if (vatData.getFirst() == null) {
+			return routes;
+		}
 		for (final Route route : portModel.getRoutes()) {
 			if (!vatData.getSecond().contains(route.getRouteOption()) && !vatData.getFirst().getVesselOrDelegateInaccessibleRoutes().contains(route.getRouteOption())) {
 				routes.add(route);
@@ -118,19 +121,6 @@ public class CargoTravelTimeUtils {
 
 		vesselDisabledRoutes = vessel.getVesselOrDelegateInaccessibleRoutes();
 		return new Pair(vessel, vesselDisabledRoutes);
-	}
-
-	private static List<Route> processRouteOptions(final EList<Route> routes, final EList<RouteOption> inaccessibleRoutes) {
-		final List<Route> newRoutes = new LinkedList<>();
-		for (final Route route : routes) {
-			for (final RouteOption routeOption : inaccessibleRoutes) {
-				if (route.getRouteOption().equals(routeOption)) {
-					routes.add(route);
-					break;
-				}
-			}
-		}
-		return newRoutes;
 	}
 
 	public static Pair<@Nullable LoadSlot, @Nullable DischargeSlot> getDESSlots(final Cargo cargo) {
