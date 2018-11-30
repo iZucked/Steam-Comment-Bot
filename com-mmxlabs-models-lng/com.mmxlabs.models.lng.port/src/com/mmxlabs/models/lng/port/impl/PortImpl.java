@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.impl.APortSetImpl;
+import java.lang.reflect.InvocationTargetException;
 import java.time.ZoneId;
 
 /**
@@ -929,6 +930,22 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return MMX_ID_EDEFAULT == null ? mmxId != null : !MMX_ID_EDEFAULT.equals(mmxId);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case PortPackage.PORT___GET_ZONE_ID:
+				return getZoneId();
+			case PortPackage.PORT___GET_TEMP_MMXID:
+				return getTempMMXID();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

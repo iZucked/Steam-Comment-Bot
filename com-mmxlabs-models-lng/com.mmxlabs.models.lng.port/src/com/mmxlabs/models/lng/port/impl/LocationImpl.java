@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
+import java.lang.reflect.InvocationTargetException;
 import java.time.ZoneId;
 import java.util.Collection;
 
@@ -498,6 +499,22 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case PortPackage.LOCATION___GET_ZONE_ID:
+				return getZoneId();
+			case PortPackage.LOCATION___GET_TEMP_MMXID:
+				return getTempMMXID();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

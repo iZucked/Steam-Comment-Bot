@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.port;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -234,6 +235,69 @@ public interface PortPackage extends EPackage {
 	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 14;
 
 	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = TypesPackage.APORT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = TypesPackage.APORT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT___ECONTAINER_OP = TypesPackage.APORT_SET___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Collect</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT___COLLECT__ELIST = TypesPackage.APORT_SET___COLLECT__ELIST;
+
+	/**
+	 * The operation id for the '<em>Get Zone Id</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT___GET_ZONE_ID = TypesPackage.APORT_SET_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Temp MMXID</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT___GET_TEMP_MMXID = TypesPackage.APORT_SET_OPERATION_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Port</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_OPERATION_COUNT = TypesPackage.APORT_SET_OPERATION_COUNT + 2;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -334,6 +398,42 @@ public interface PortPackage extends EPackage {
 	int ROUTE_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE___ECONTAINER_OP = MMXCorePackage.NAMED_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>Route</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.PortGroupImpl <em>Group</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -387,6 +487,51 @@ public interface PortPackage extends EPackage {
 	 * @ordered
 	 */
 	int PORT_GROUP_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_GROUP___GET_UNSET_VALUE__ESTRUCTURALFEATURE = TypesPackage.APORT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_GROUP___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = TypesPackage.APORT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_GROUP___ECONTAINER_OP = TypesPackage.APORT_SET___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Collect</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_GROUP___COLLECT__ELIST = TypesPackage.APORT_SET___COLLECT__ELIST;
+
+	/**
+	 * The number of operations of the '<em>Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_GROUP_OPERATION_COUNT = TypesPackage.APORT_SET_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl <em>Route Line</em>}' class.
@@ -460,6 +605,42 @@ public interface PortPackage extends EPackage {
 	 * @ordered
 	 */
 	int ROUTE_LINE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE_LINE___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE_LINE___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE_LINE___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>Route Line</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE_LINE_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.PortModelImpl <em>Model</em>}' class.
@@ -571,6 +752,42 @@ public interface PortPackage extends EPackage {
 	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.CapabilityGroupImpl <em>Capability Group</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -624,6 +841,51 @@ public interface PortPackage extends EPackage {
 	 * @ordered
 	 */
 	int CAPABILITY_GROUP_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPABILITY_GROUP___GET_UNSET_VALUE__ESTRUCTURALFEATURE = TypesPackage.APORT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPABILITY_GROUP___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = TypesPackage.APORT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPABILITY_GROUP___ECONTAINER_OP = TypesPackage.APORT_SET___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Collect</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPABILITY_GROUP___COLLECT__ELIST = TypesPackage.APORT_SET___COLLECT__ELIST;
+
+	/**
+	 * The number of operations of the '<em>Capability Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPABILITY_GROUP_OPERATION_COUNT = TypesPackage.APORT_SET_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.LocationImpl <em>Location</em>}' class.
@@ -726,6 +988,60 @@ public interface PortPackage extends EPackage {
 	int LOCATION_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION___ECONTAINER_OP = MMXCorePackage.NAMED_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Zone Id</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION___GET_ZONE_ID = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Temp MMXID</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION___GET_TEMP_MMXID = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Location</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 2;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.PortCountryGroupImpl <em>Country Group</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -770,6 +1086,51 @@ public interface PortPackage extends EPackage {
 	 * @ordered
 	 */
 	int PORT_COUNTRY_GROUP_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COUNTRY_GROUP___GET_UNSET_VALUE__ESTRUCTURALFEATURE = TypesPackage.APORT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COUNTRY_GROUP___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = TypesPackage.APORT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COUNTRY_GROUP___ECONTAINER_OP = TypesPackage.APORT_SET___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Collect</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COUNTRY_GROUP___COLLECT__ELIST = TypesPackage.APORT_SET___COLLECT__ELIST;
+
+	/**
+	 * The number of operations of the '<em>Country Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COUNTRY_GROUP_OPERATION_COUNT = TypesPackage.APORT_SET_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.EntryPointImpl <em>Entry Point</em>}' class.
@@ -818,6 +1179,42 @@ public interface PortPackage extends EPackage {
 	int ENTRY_POINT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT___ECONTAINER_OP = MMXCorePackage.NAMED_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>Entry Point</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.ContingencyMatrixImpl <em>Contingency Matrix</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -853,6 +1250,15 @@ public interface PortPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONTINGENCY_MATRIX_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Contingency Matrix</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTINGENCY_MATRIX_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.ContingencyMatrixEntryImpl <em>Contingency Matrix Entry</em>}' class.
@@ -901,6 +1307,15 @@ public interface PortPackage extends EPackage {
 	int CONTINGENCY_MATRIX_ENTRY_FEATURE_COUNT = 3;
 
 	/**
+	 * The number of operations of the '<em>Contingency Matrix Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTINGENCY_MATRIX_ENTRY_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.OtherIdentifiersImpl <em>Other Identifiers</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -936,6 +1351,15 @@ public interface PortPackage extends EPackage {
 	 * @ordered
 	 */
 	int OTHER_IDENTIFIERS_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Other Identifiers</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_IDENTIFIERS_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}' enum.
@@ -1109,6 +1533,26 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPort_MmxId();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.port.Port#getZoneId() <em>Get Zone Id</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Zone Id</em>' operation.
+	 * @see com.mmxlabs.models.lng.port.Port#getZoneId()
+	 * @generated
+	 */
+	EOperation getPort__GetZoneId();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.port.Port#getTempMMXID() <em>Get Temp MMXID</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Temp MMXID</em>' operation.
+	 * @see com.mmxlabs.models.lng.port.Port#getTempMMXID()
+	 * @generated
+	 */
+	EOperation getPort__GetTempMMXID();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getShortName <em>Short Name</em>}'.
@@ -1479,6 +1923,26 @@ public interface PortPackage extends EPackage {
 	EReference getLocation_OtherIdentifiers();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.port.Location#getZoneId() <em>Get Zone Id</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Zone Id</em>' operation.
+	 * @see com.mmxlabs.models.lng.port.Location#getZoneId()
+	 * @generated
+	 */
+	EOperation getLocation__GetZoneId();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.port.Location#getTempMMXID() <em>Get Temp MMXID</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Temp MMXID</em>' operation.
+	 * @see com.mmxlabs.models.lng.port.Location#getTempMMXID()
+	 * @generated
+	 */
+	EOperation getLocation__GetTempMMXID();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.PortCountryGroup <em>Country Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1773,6 +2237,22 @@ public interface PortPackage extends EPackage {
 		EAttribute PORT__MMX_ID = eINSTANCE.getPort_MmxId();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Zone Id</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation PORT___GET_ZONE_ID = eINSTANCE.getPort__GetZoneId();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Temp MMXID</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation PORT___GET_TEMP_MMXID = eINSTANCE.getPort__GetTempMMXID();
+
+		/**
 		 * The meta object literal for the '<em><b>Short Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2055,6 +2535,22 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EReference LOCATION__OTHER_IDENTIFIERS = eINSTANCE.getLocation_OtherIdentifiers();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Zone Id</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation LOCATION___GET_ZONE_ID = eINSTANCE.getLocation__GetZoneId();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Temp MMXID</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation LOCATION___GET_TEMP_MMXID = eINSTANCE.getLocation__GetTempMMXID();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.PortCountryGroupImpl <em>Country Group</em>}' class.

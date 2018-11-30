@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EGenericType;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -334,6 +335,24 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getPort__GetZoneId() {
+		return portEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getPort__GetTempMMXID() {
+		return portEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getPort_ShortName() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(0);
 	}
@@ -640,6 +659,24 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getLocation__GetZoneId() {
+		return locationEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getLocation__GetTempMMXID() {
+		return locationEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPortCountryGroup() {
 		return portCountryGroupEClass;
 	}
@@ -813,6 +850,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(portEClass, PORT__MIN_CV_VALUE);
 		createEAttribute(portEClass, PORT__MAX_CV_VALUE);
 		createEAttribute(portEClass, PORT__MMX_ID);
+		createEOperation(portEClass, PORT___GET_ZONE_ID);
+		createEOperation(portEClass, PORT___GET_TEMP_MMXID);
 
 		routeEClass = createEClass(ROUTE);
 		createEReference(routeEClass, ROUTE__LINES);
@@ -852,6 +891,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(locationEClass, LOCATION__LAT);
 		createEAttribute(locationEClass, LOCATION__LON);
 		createEReference(locationEClass, LOCATION__OTHER_IDENTIFIERS);
+		createEOperation(locationEClass, LOCATION___GET_ZONE_ID);
+		createEOperation(locationEClass, LOCATION___GET_TEMP_MMXID);
 
 		portCountryGroupEClass = createEClass(PORT_COUNTRY_GROUP);
 
@@ -935,7 +976,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		portCountryGroupEClass.getEGenericSuperTypes().add(g1);
 		entryPointEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
-		// Initialize classes and features; add operations and parameters
+		// Initialize classes, features, and operations; add parameters
 		initEClass(portEClass, Port.class, "Port", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPort_ShortName(), ecorePackage.getEString(), "shortName", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPort_Location(), this.getLocation(), null, "location", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -952,9 +993,9 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getPort_MaxCvValue(), ecorePackage.getEDouble(), "maxCvValue", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_MmxId(), ecorePackage.getEString(), "mmxId", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		addEOperation(portEClass, theDateTimePackage.getZoneId(), "getZoneId", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getPort__GetZoneId(), theDateTimePackage.getZoneId(), "getZoneId", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		addEOperation(portEClass, ecorePackage.getEString(), "getTempMMXID", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getPort__GetTempMMXID(), ecorePackage.getEString(), "getTempMMXID", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(routeEClass, Route.class, "Route", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRoute_Lines(), this.getRouteLine(), null, "lines", null, 0, -1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -998,9 +1039,9 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getLocation_Lon(), ecorePackage.getEDouble(), "lon", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLocation_OtherIdentifiers(), this.getOtherIdentifiers(), null, "otherIdentifiers", null, 0, -1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		addEOperation(locationEClass, theDateTimePackage.getZoneId(), "getZoneId", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getLocation__GetZoneId(), theDateTimePackage.getZoneId(), "getZoneId", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		addEOperation(locationEClass, ecorePackage.getEString(), "getTempMMXID", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getLocation__GetTempMMXID(), ecorePackage.getEString(), "getTempMMXID", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(portCountryGroupEClass, PortCountryGroup.class, "PortCountryGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
