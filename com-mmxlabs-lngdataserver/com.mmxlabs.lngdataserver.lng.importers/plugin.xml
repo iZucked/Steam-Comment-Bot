@@ -23,6 +23,9 @@
          <DataBrowserContextMenuExtension
                class="com.mmxlabs.lngdataserver.lng.importers.menus.DataBrowserContentMenuContribution">
          </DataBrowserContextMenuExtension>
+         <DataBrowserContextMenuExtension
+               class="com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedDataCopyDataBrowserMenuExtension">
+         </DataBrowserContextMenuExtension>
       </extension>
       <extension
             point="org.eclipse.ui.startup">
