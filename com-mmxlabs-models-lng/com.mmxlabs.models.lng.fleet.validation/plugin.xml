@@ -54,10 +54,10 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  [VesselClass|{0}] {1} knots min speed is outside the range of the speed-fuel curve ({2} to {3} knots).
+                  [Vessel|{0}] {1} knots min speed is outside the range of the speed-fuel curve ({2} to {3} knots).
                </message>
                <description>
-                  The minimum speed of a vessel class must be somewhere within the upper bounds of its fuel consumption curve.
+                  The minimum speed of a vessel must be somewhere within the upper bounds of its fuel consumption curve.
                </description>
                <target
                      class="Vessel">
@@ -92,10 +92,10 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  [VesselClass|{0}] {1} knots max speed is outside the range of the speed-fuel curve ({2} to {3} knots).
+                  [Vessel|{0}] {1} knots max speed is outside the range of the speed-fuel curve ({2} to {3} knots).
                </message>
                <description>
-                  The maximum speed of a vessel class must be somewhere within the upper bounds of its fuel consumption curve.
+                  The maximum speed of a vessel must be somewhere within the upper bounds of its fuel consumption curve.
                </description>
                <target
                      class="Vessel">
@@ -111,10 +111,10 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Vessel class|{0}: Min speed ({1}) must be lower than max speed ({2}).
+                  Vessel|{0}: Min speed ({1}) must be lower than max speed ({2}).
                </message>
                <description>
-                  The minimum speed of a vessel class should be lower than its maximum speed.
+                  The minimum speed of a vessel should be lower than its maximum speed.
                </description>
                <target
                      class="Vessel">
