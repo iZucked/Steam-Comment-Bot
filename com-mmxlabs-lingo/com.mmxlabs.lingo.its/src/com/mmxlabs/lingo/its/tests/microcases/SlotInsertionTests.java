@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
@@ -22,7 +23,9 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
+import com.mmxlabs.lingo.its.verifier.SolutionData;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -150,10 +153,15 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 
 			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES2), Collections.emptyList(), 10, new NullProgressMonitor());
 			Assert.assertNotNull(result1);
-			Assert.assertEquals(2, result1.getSolutions().size());
-			assert result1.getSolutions().get(1).getFirst().getUnusedElements().size() == 1;
 
-			Assert.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("DES_Purchase1"));
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
+					.withAnySolutionResultChecker() //
+					.withCargo("DES_Purchase2", "DES_Sale1").anyNominalVessel() //
+					.withUnusedSlot("DES_Purchase1") //
+					.build();
+
+			final ISequences solution = verifier.verifySolutionExistsInResults(result1, Assert::fail);
+			Assert.assertNotNull(solution);
 
 		}, null);
 	}
@@ -269,11 +277,14 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_FOB2), Collections.emptyList(), 10, new NullProgressMonitor());
 			Assert.assertNotNull(result1);
 
-			Assert.assertEquals(2, result1.getSolutions().size());
-			assert result1.getSolutions().get(1).getFirst().getUnusedElements().size() == 1;
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
+					.withAnySolutionResultChecker() //
+					.withCargo("FOB_Purchase1", "FOB_Sale2").anyNominalVessel() //
+					.withUnusedSlot("FOB_Sale1") //
+					.build();
 
-			Assert.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("FOB_Sale1"));
-
+			final ISequences solution = verifier.verifySolutionExistsInResults(result1, Assert::fail);
+			Assert.assertNotNull(solution);
 		}, null);
 	}
 
@@ -506,40 +517,14 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES), Collections.emptyList(), 10, new NullProgressMonitor());
 			Assert.assertNotNull(result1);
 
-			Assert.assertEquals(2, result1.getSolutions().size());
-			@NonNull
-			final ISequences solution = result1.getSolutions().get(1).getFirst();
-			assert solution.getUnusedElements().size() == 0;
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
+					.withAnySolutionResultChecker() //
+					.withCargo("FOB_Purchase1", "DES_Sale2").onFleetVessel("STEAM-145") //
+					.withCargo("DES_Purchase_1", "DES_Sale1").anyNominalVessel() //
+					.build();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			final Injector injector = scenarioToOptimiserBridge.getDataTransformer().getInjector();
-
-			final ModelEntityMap modelEntityMap = scenarioToOptimiserBridge.getDataTransformer().getModelEntityMap();
-
-			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
-			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
-			final IVirtualVesselSlotProvider virtualVesselSlotProvider = injector.getInstance(IVirtualVesselSlotProvider.class);
-
-			final IVesselAvailability o_vesselAvailability = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability);
-
-			final IPortSlot dp_portSlot = modelEntityMap.getOptimiserObjectNullChecked(load_DES, IPortSlot.class);
-			final ISequenceElement dp_element = portSlotProvider.getElement(dp_portSlot);
-
-			final IVesselAvailability o_vesselAvailability2 = virtualVesselSlotProvider.getVesselAvailabilityForElement(dp_element);
-			final IResource resource2 = vesselProvider.getResource(o_vesselAvailability2);
-
-			final Function<ISequenceElement, Slot> slotMapper = e -> {
-				final IPortSlot ps = portSlotProvider.getPortSlot(e);
-				return modelEntityMap.getModelObjectNullChecked(ps, Slot.class);
-			};
-
-			Assert.assertSame(load_FOB1, slotMapper.apply(solution.getSequence(resource1).get(1)));
-			Assert.assertSame(discharge_DES2, slotMapper.apply(solution.getSequence(resource1).get(2)));
-
-			Assert.assertSame(load_DES, slotMapper.apply(solution.getSequence(resource2).get(1)));
-			Assert.assertSame(discharge_DES1, slotMapper.apply(solution.getSequence(resource2).get(2)));
-
+			final ISequences solution = verifier.verifySolutionExistsInResults(result1, Assert::fail);
+			Assert.assertNotNull(solution);
 		}, null);
 	}
 
@@ -613,11 +598,10 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			Assert.assertTrue(results.getSolutions().size() > 1);
 			// Next validate solution types exist
 			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
-					.withAnySolutionResultChecker()
+					.withAnySolutionResultChecker() //
 					.withCargo("FOB_Purchase2", "DES_Sale4").any() //
 					.withUnusedSlot("DES_Sale2") // Main sure we have a solution with this slot unused.
-					.build()
-			;
+					.build();
 
 			verifier.verifySolutionExistsInResults(results, msg -> Assert.fail(msg));
 		}, null);
