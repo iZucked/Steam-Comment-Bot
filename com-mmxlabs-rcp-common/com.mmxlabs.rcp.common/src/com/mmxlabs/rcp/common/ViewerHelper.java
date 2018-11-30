@@ -35,13 +35,10 @@ public final class ViewerHelper {
 		if (viewer == null) {
 			return;
 		}
-		final Runnable runnable2 = new Runnable() {
-			@Override
-			public void run() {
-				final Control control = viewer.getControl();
-				if (control != null && !control.isDisposed()) {
-					runnable.run();
-				}
+		final Runnable runnable2 = () -> {
+			final Control control = viewer.getControl();
+			if (control != null && !control.isDisposed()) {
+				runnable.run();
 			}
 		};
 		RunnerHelper.exec(runnable2, syncExec);
@@ -51,13 +48,10 @@ public final class ViewerHelper {
 		if (viewer == null) {
 			return;
 		}
-		final Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				final Control control = viewer.getControl();
-				if (control != null && !control.isDisposed()) {
-					consumer.accept(viewer);
-				}
+		final Runnable runnable = () -> {
+			final Control control = viewer.getControl();
+			if (control != null && !control.isDisposed()) {
+				consumer.accept(viewer);
 			}
 		};
 		RunnerHelper.exec(runnable, syncExec);
@@ -67,13 +61,10 @@ public final class ViewerHelper {
 		if (viewer == null) {
 			return;
 		}
-		final Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				final Control control = viewer.getControl();
-				if (control != null && !control.isDisposed()) {
-					viewer.setInput(inputProvider.getInput());
-				}
+		final Runnable runnable = () -> {
+			final Control control = viewer.getControl();
+			if (control != null && !control.isDisposed()) {
+				viewer.setInput(inputProvider.getInput());
 			}
 		};
 		RunnerHelper.exec(runnable, syncExec);
@@ -83,13 +74,10 @@ public final class ViewerHelper {
 		if (viewer == null) {
 			return;
 		}
-		final Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				final Control control = viewer.getControl();
-				if (control != null && !control.isDisposed()) {
-					viewer.setInput(input);
-				}
+		final Runnable runnable = () -> {
+			final Control control = viewer.getControl();
+			if (control != null && !control.isDisposed()) {
+				viewer.setInput(input);
 			}
 		};
 		RunnerHelper.exec(runnable, syncExec);
@@ -99,13 +87,10 @@ public final class ViewerHelper {
 		if (viewer == null) {
 			return;
 		}
-		final Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				final Control control = viewer.getControl();
-				if (control != null && !control.isDisposed()) {
-					viewer.refresh();
-				}
+		final Runnable runnable = () -> {
+			final Control control = viewer.getControl();
+			if (control != null && !control.isDisposed()) {
+				viewer.refresh();
 			}
 		};
 		RunnerHelper.exec(runnable, syncExec);
@@ -122,14 +107,11 @@ public final class ViewerHelper {
 		if (viewer == null) {
 			return;
 		}
-		final Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				final Control control = viewer.getControl();
-				if (control != null && !control.isDisposed()) {
-					viewer.refresh();
-					then.run();
-				}
+		final Runnable runnable = () -> {
+			final Control control = viewer.getControl();
+			if (control != null && !control.isDisposed()) {
+				viewer.refresh();
+				then.run();
 			}
 		};
 		RunnerHelper.exec(runnable, syncExec);
@@ -139,14 +121,11 @@ public final class ViewerHelper {
 		if (viewer == null) {
 			return;
 		}
-		final Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				final Control control = viewer.getControl();
-				if (control != null && !control.isDisposed()) {
-					viewer.refresh();
-					then.accept(viewer);
-				}
+		final Runnable runnable = () -> {
+			final Control control = viewer.getControl();
+			if (control != null && !control.isDisposed()) {
+				viewer.refresh();
+				then.accept(viewer);
 			}
 		};
 		RunnerHelper.exec(runnable, syncExec);
@@ -172,13 +151,10 @@ public final class ViewerHelper {
 		if (viewer == null) {
 			return;
 		}
-		final Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				final Control control = viewer.getControl();
-				if (control != null && !control.isDisposed()) {
-					viewer.setSelection(selection);
-				}
+		final Runnable runnable = () -> {
+			final Control control = viewer.getControl();
+			if (control != null && !control.isDisposed()) {
+				viewer.setSelection(selection);
 			}
 		};
 		RunnerHelper.exec(runnable, syncExec);
@@ -188,13 +164,10 @@ public final class ViewerHelper {
 		if (viewer == null) {
 			return;
 		}
-		final Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				final Control control = viewer.getControl();
-				if (control != null && !control.isDisposed()) {
-					viewer.setSelection(selection, reveal);
-				}
+		final Runnable runnable = () -> {
+			final Control control = viewer.getControl();
+			if (control != null && !control.isDisposed()) {
+				viewer.setSelection(selection, reveal);
 			}
 		};
 		RunnerHelper.exec(runnable, syncExec);
