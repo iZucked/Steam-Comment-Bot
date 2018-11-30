@@ -182,10 +182,39 @@ public class DataBrowser extends ViewPart {
 		// Change the colour used to paint the sashes
 		sash.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_GRAY));
 
+		contextMenuExtensions = DataBrowserContextMenuExtensionUtil.getContextMenuExtensions();
+
 		createScenarioViewer(parent, sash);
 		createDataViewer(parent, sash);
-
 		sash.setWeights(new int[] { 60, 40 });
+
+		final Injector injector = Guice.createInjector(new DataExtensionsModule());
+		final Iterable<DataExtensionPoint> extensions = injector.getInstance(Key.get(new TypeLiteral<Iterable<DataExtensionPoint>>() {
+		}));
+		LOGGER.debug("Found {} extensions", Iterables.size(extensions));
+
+		for (final DataExtensionPoint extensionPoint : extensions) {
+			final DataExtension dataExtension = extensionPoint.getDataExtension();
+			if (dataExtension != null) {
+				try {
+					final CompositeNode dataRoot = dataExtension.getDataRoot();
+					root.getChildren().add(dataRoot);
+
+					final GridViewerColumn c2 = new GridViewerColumn(scenarioViewer, SWT.NONE);
+					c2.setLabelProvider(new ScenarioLabelProvider(1, dataRoot));
+					c2.getColumn().setWidth(30);
+					GridViewerHelper.configureLookAndFeel(c2);
+
+					// Hacky renaming...
+					final String lbl_base = dataRoot.getDisplayName();
+					// Note this is a regex string!
+					final String lbl = lbl_base.replaceAll(" \\(loading...\\)", "");
+					c2.getColumn().setText(lbl);
+				} catch (final Exception e) {
+					LOGGER.error(e.getMessage(), e);
+				}
+			}
+		}
 
 		scenarioViewer.addSelectionChangedListener(scenarioSelectionListener);
 		dataViewer.addSelectionChangedListener(nodeSelectionListener);
@@ -226,33 +255,6 @@ public class DataBrowser extends ViewPart {
 		c1.getColumn().setWidth(200);
 		GridViewerHelper.configureLookAndFeel(c1);
 
-		final Injector injector = Guice.createInjector(new DataExtensionsModule());
-		final Iterable<DataExtensionPoint> extensions = injector.getInstance(Key.get(new TypeLiteral<Iterable<DataExtensionPoint>>() {
-		}));
-		LOGGER.debug("Found {} extensions", Iterables.size(extensions));
-
-		for (final DataExtensionPoint extensionPoint : extensions) {
-			final DataExtension dataExtension = extensionPoint.getDataExtension();
-			if (dataExtension != null) {
-				try {
-					final CompositeNode dataRoot = dataExtension.getDataRoot();
-					root.getChildren().add(dataRoot);
-
-					final GridViewerColumn c2 = new GridViewerColumn(scenarioViewer, SWT.NONE);
-					c2.setLabelProvider(new ScenarioLabelProvider(1, dataRoot));
-					c2.getColumn().setWidth(30);
-					GridViewerHelper.configureLookAndFeel(c2);
-
-					// Hacky renaming...
-					final String lbl_base = dataRoot.getDisplayName();
-					// Note this is a regex string!
-					final String lbl = lbl_base.replaceAll(" \\(loading...\\)", "");
-					c2.getColumn().setText(lbl);
-				} catch (final Exception e) {
-					LOGGER.error(e.getMessage(), e);
-				}
-			}
-		}
 		scenarioViewer.setAutoExpandLevel(GridTreeViewer.ALL_LEVELS);
 		scenarioViewer.setInput(scenarioTracker);
 		scenarioViewer.expandAll();
@@ -328,7 +330,6 @@ public class DataBrowser extends ViewPart {
 		dataViewer.setInput(root);
 
 		getSite().setSelectionProvider(dataViewer);
-		contextMenuExtensions = DataBrowserContextMenuExtensionUtil.getContextMenuExtensions();
 
 		final MenuManager dataMgr = new MenuManager();
 		dataViewer.getControl().addMenuDetectListener(new MenuDetectListener() {
