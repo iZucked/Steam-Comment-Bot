@@ -4,14 +4,15 @@
  */
 package com.mmxlabs.lngdataserver.integration.reports.inventory;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class InventoryExportModel {
 	List<InventoryInput> input = null;
 	List<InventoryOutput> output = null;
 	List<InventoryLevelPerDay> levels = null;
-	int minVolume = 0;
-	int maxVolume = 0;
+	public int minVolume = 0;
+	public int maxVolume = 0;
 
 	public List<InventoryInput> getInput() {
 		return input;
