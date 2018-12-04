@@ -28,5 +28,5 @@ Import-Package: org.slf4j,
 Export-Package: com.mmxlabs.lngdataserver.server,
  com.mmxlabs.lngdataserver.server.preferences
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Activator: com.mmxlabs.lngdataserver.server.internal.Activator
+Bundle-Activator: com.mmxlabs.lngdataserver.server.DataServerActivator
 Automatic-Module-Name: com.mmxlabs.lngdataserver.server

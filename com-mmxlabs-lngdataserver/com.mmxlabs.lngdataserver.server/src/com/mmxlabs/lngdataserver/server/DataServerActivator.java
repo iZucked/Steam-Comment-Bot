@@ -2,19 +2,17 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.server.internal;
+package com.mmxlabs.lngdataserver.server;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
-
-public class Activator extends AbstractUIPlugin {
+public class DataServerActivator extends AbstractUIPlugin {
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.server"; //$NON-NLS-1$
 
-	private static Activator plugin;
+	private static DataServerActivator plugin;
 
 	@Override
 	public void start(final BundleContext context) throws Exception {
@@ -33,7 +31,7 @@ public class Activator extends AbstractUIPlugin {
 		super.stop(context);
 	}
 
-	public static Activator getDefault() {
+	public static DataServerActivator getDefault() {
 		return plugin;
 	}
 

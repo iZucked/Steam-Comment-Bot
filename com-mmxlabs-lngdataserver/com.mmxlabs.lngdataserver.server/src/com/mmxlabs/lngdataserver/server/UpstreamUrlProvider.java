@@ -29,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.server.dialogs.AuthDetailsPromptDialog;
-import com.mmxlabs.lngdataserver.server.internal.Activator;
 import com.mmxlabs.lngdataserver.server.preferences.StandardDateRepositoryPreferenceConstants;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
@@ -64,8 +63,8 @@ public class UpstreamUrlProvider {
 	private String currentBaseURL;
 
 	private UpstreamUrlProvider() {
-		if (Activator.getDefault() != null) {
-			preferenceStore = Activator.getDefault().getPreferenceStore();
+		if (DataServerActivator.getDefault() != null) {
+			preferenceStore = DataServerActivator.getDefault().getPreferenceStore();
 		} else {
 			preferenceStore = new PreferenceStore();
 		}
@@ -73,7 +72,10 @@ public class UpstreamUrlProvider {
 
 		baseCaseServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY));
 		teamServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY));
+System.out.println("BC " + baseCaseServiceEnabled);
+String baseUrl = preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_URL_KEY);
 
+System.out.println("Base URl " + baseUrl);
 		// Schedule a "is alive" check every minute....
 		scheduler.scheduleAtFixedRate(this::testUpstreamAvailability, 1, 1, TimeUnit.MINUTES);
 		// ... and do one now as first invocation can be a bit delayed.
@@ -94,6 +96,8 @@ public class UpstreamUrlProvider {
 			break;
 		case StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY:
 			baseCaseServiceEnabled = Boolean.TRUE.equals(event.getNewValue());
+			System.out.println("BC " + baseCaseServiceEnabled);
+
 			fireServiceChangedListeners(IUpstreamServiceChangedListener.Service.BaseCaseWorkspace);
 			break;
 		case StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY:
