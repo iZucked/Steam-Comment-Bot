@@ -26,4 +26,5 @@ Export-Package: com.mmxlabs.lngdataserver.integration.reports.cargo,
  com.mmxlabs.lngdataserver.integration.reports.cargocontract,
  com.mmxlabs.lngdataserver.integration.reports.inventory,
  com.mmxlabs.lngdataserver.integration.reports.longshort,
+ com.mmxlabs.lngdataserver.integration.reports.nominations,
  com.mmxlabs.lngdataserver.integration.reports.schedule
