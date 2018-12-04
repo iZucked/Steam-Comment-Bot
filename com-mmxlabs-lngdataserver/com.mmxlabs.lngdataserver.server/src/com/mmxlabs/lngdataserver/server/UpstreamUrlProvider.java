@@ -72,10 +72,7 @@ public class UpstreamUrlProvider {
 
 		baseCaseServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY));
 		teamServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY));
-System.out.println("BC " + baseCaseServiceEnabled);
-String baseUrl = preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_URL_KEY);
 
-System.out.println("Base URl " + baseUrl);
 		// Schedule a "is alive" check every minute....
 		scheduler.scheduleAtFixedRate(this::testUpstreamAvailability, 1, 1, TimeUnit.MINUTES);
 		// ... and do one now as first invocation can be a bit delayed.
@@ -96,8 +93,6 @@ System.out.println("Base URl " + baseUrl);
 			break;
 		case StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY:
 			baseCaseServiceEnabled = Boolean.TRUE.equals(event.getNewValue());
-			System.out.println("BC " + baseCaseServiceEnabled);
-
 			fireServiceChangedListeners(IUpstreamServiceChangedListener.Service.BaseCaseWorkspace);
 			break;
 		case StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY:
