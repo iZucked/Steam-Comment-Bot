@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
@@ -49,16 +50,17 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 public class ReportTester {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ReportTester.class);
+	private static final UnaryOperator<String> stripWhitespace = s -> s.replaceAll("\\s+", "").replaceAll("\r\n", "").replaceAll("\n", "");
 
-	public static void testReportsWithElement(final ScenarioModelRecord instance, @NonNull IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
-			final String shortName, final String extension, String elementID, @Nullable Consumer<ScenarioModelRecord> preAction) throws Exception {
+	public static void testReportsWithElement(final ScenarioModelRecord instance, @NonNull final IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
+			final String shortName, final String extension, final String elementID, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
 		testReports(instance, scenarioDataProvider, scenarioURL, reportID, shortName, extension, (t) -> {
 
 			Object target = null;
-			ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
-			Schedule schedule = scheduleModel.getSchedule();
+			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
+			final Schedule schedule = scheduleModel.getSchedule();
 			if (schedule != null) {
-				for (CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+				for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 					if (elementID.equals(cargoAllocation.getName())) {
 						target = cargoAllocation;
 						break;
@@ -87,8 +89,8 @@ public class ReportTester {
 		});
 	}
 
-	public static void testReports(final @NonNull ScenarioModelRecord modelRecord, @NonNull IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
-			final String shortName, final String extension, @Nullable Consumer<ScenarioModelRecord> preAction) throws Exception {
+	public static void testReports(final @NonNull ScenarioModelRecord modelRecord, @NonNull final IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
+			final String shortName, final String extension, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
 
 		Assume.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
@@ -98,15 +100,15 @@ public class ReportTester {
 		testReports_NoEvaluate(modelRecord, scenarioDataProvider, scenarioURL, reportID, shortName, extension, preAction);
 	}
 
-	public static void testReports_NoEvaluate(final @NonNull ScenarioModelRecord modelRecord, @NonNull IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
-			final String shortName, final String extension, @Nullable Consumer<ScenarioModelRecord> preAction) throws Exception {
+	public static void testReports_NoEvaluate(final @NonNull ScenarioModelRecord modelRecord, @NonNull final IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
+			final String shortName, final String extension, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
 
 		if (preAction != null) {
 			preAction.accept(modelRecord);
 		}
 
 		final ReportTesterHelper reportTester = new ReportTesterHelper();
-		ScenarioResult scenarioResult = new ScenarioResult(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
+		final ScenarioResult scenarioResult = new ScenarioResult(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
 		final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
 
 		Assert.assertNotNull(reportContents);
@@ -140,16 +142,13 @@ public class ReportTester {
 					}
 				}
 			}
-			if (!expectedOutputBuilder.toString().equals(actualContents)) {
-				LOG.warn("Expected " + expectedOutputBuilder.toString());
-				LOG.warn("Actual " + actualContents);
-			}
-			Assert.assertEquals(expectedOutputBuilder.toString(), actualContents);
+			doValidate(actualContents, expectedOutputBuilder);
+
 		}
 
 	}
 
-	public static void testPinDiffReports(final URL pinScenarioURL, URL refScenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
+	public static void testPinDiffReports(final URL pinScenarioURL, final URL refScenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
 
 		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(pinScenarioURL, (pinModelRecord, pinScenarioDataProvider) -> {
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(refScenarioURL, (refModelRecord, refScenarioDataProvider) -> {
@@ -160,16 +159,16 @@ public class ReportTester {
 		});
 	}
 
-	public static void testPinDiffReports(final ScenarioModelRecord pinInstance, IScenarioDataProvider pinModelDataProvider, ScenarioModelRecord refInstance,
-			IScenarioDataProvider refModelDataProvider, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
+	public static void testPinDiffReports(final ScenarioModelRecord pinInstance, final IScenarioDataProvider pinModelDataProvider, final ScenarioModelRecord refInstance,
+			final IScenarioDataProvider refModelDataProvider, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
 		Assume.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
 		// A side-effect is the initial evaluation.
 
 		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(pinModelDataProvider, true, pinRunner -> {
-			ScenarioResult pinResult = new ScenarioResult(pinInstance, ScenarioModelUtil.getScheduleModel(pinRunner.getScenarioDataProvider()));
+			final ScenarioResult pinResult = new ScenarioResult(pinInstance, ScenarioModelUtil.getScheduleModel(pinRunner.getScenarioDataProvider()));
 			LNGScenarioRunnerCreator.withLegacyEvaluationRunner(refModelDataProvider, true, refRunner -> {
-				ScenarioResult refResult = new ScenarioResult(refInstance, ScenarioModelUtil.getScheduleModel(refRunner.getScenarioDataProvider()));
+				final ScenarioResult refResult = new ScenarioResult(refInstance, ScenarioModelUtil.getScheduleModel(refRunner.getScenarioDataProvider()));
 
 				final ReportTesterHelper reportTester = new ReportTesterHelper();
 				final String result[] = new String[1];
@@ -209,31 +208,27 @@ public class ReportTester {
 							}
 						}
 					}
-					if (!expectedOutputBuilder.toString().equals(actualContents)) {
-						LOG.warn("Expected " + expectedOutputBuilder.toString());
-						LOG.warn("Actual " + actualContents);
-					}
-					Assert.assertEquals(expectedOutputBuilder.toString(), actualContents);
+					doValidate(actualContents, expectedOutputBuilder);
 				}
 
 			});
 		});
 	}
 
-	public static void testActionPlanReport(final URL baseScenarioURL, List<URL> scenarioURLs, final String reportID, final String shortName, final String extension) throws Exception {
+	public static void testActionPlanReport(final URL baseScenarioURL, final List<URL> scenarioURLs, final String reportID, final String shortName, final String extension) throws Exception {
 
-		CheckedConsumer<List<Pair<ScenarioModelRecord, IScenarioDataProvider>>, Exception> executeTestConsumer = orderedInstances -> {
+		final CheckedConsumer<List<Pair<ScenarioModelRecord, IScenarioDataProvider>>, Exception> executeTestConsumer = orderedInstances -> {
 
 			ReportTester.testActionPlanReport(orderedInstances, baseScenarioURL, ReportTesterHelper.ACTIONPLAN_REPORT_ID, ReportTesterHelper.ACTIONPLAN_REPORT_SHORTNAME, "html");
 		};
 
-		List<Pair<ScenarioModelRecord, IScenarioDataProvider>> orderedInstances = new LinkedList<>();
+		final List<Pair<ScenarioModelRecord, IScenarioDataProvider>> orderedInstances = new LinkedList<>();
 		final CheckedBiConsumer<Integer, CheckedBiConsumer, Exception> generateDataConsumer = (index, action) -> {
 			if (index == scenarioURLs.size()) {
 				executeTestConsumer.accept(orderedInstances);
 				return;
 			}
-			URL url = scenarioURLs.get(index);
+			final URL url = scenarioURLs.get(index);
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(url, (instance, scenarioDataProvider) -> {
 				orderedInstances.add(new Pair<>(instance, scenarioDataProvider));
 				action.accept(index + 1, action);
@@ -246,7 +241,7 @@ public class ReportTester {
 			final String extension) throws Exception {
 		Assume.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
-		CheckedConsumer<List<ScenarioResult>, Exception> c = orderedResults -> {
+		final CheckedConsumer<List<ScenarioResult>, Exception> c = orderedResults -> {
 
 			final ReportTesterHelper reportTester = new ReportTesterHelper();
 
@@ -283,35 +278,42 @@ public class ReportTester {
 						}
 					}
 				}
-				if (!expectedOutputBuilder.toString().equals(actualContents)) {
-					LOG.warn("Expected " + expectedOutputBuilder.toString());
-					LOG.warn("Actual " + actualContents);
-				}
-				Assert.assertEquals(expectedOutputBuilder.toString(), actualContents);
+
+				doValidate(actualContents, expectedOutputBuilder);
 			}
 		};
 
-		List<ScenarioResult> orderedResults = new LinkedList<>();
+		final List<ScenarioResult> orderedResults = new LinkedList<>();
 		final CheckedBiConsumer<Integer, CheckedBiConsumer, Exception> f = (a, b) -> {
 			if (a == orderedInstances.size()) {
 				c.accept(orderedResults);
 				return;
 			}
 
-			Pair<ScenarioModelRecord, IScenarioDataProvider> p = orderedInstances.get(a);
-			IScenarioDataProvider scenarioDataProvider = p.getSecond();
+			final Pair<ScenarioModelRecord, IScenarioDataProvider> p = orderedInstances.get(a);
+			final IScenarioDataProvider scenarioDataProvider = p.getSecond();
 			try {
 				LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, false, pinRunner -> {
 					// Perform eval
 				});
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				throw new RuntimeException(e);
 			}
-			ScenarioResult result = new ScenarioResult(p.getFirst(), ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
+			final ScenarioResult result = new ScenarioResult(p.getFirst(), ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
 			orderedResults.add(result);
 
 			b.accept(a + 1, b);
 		};
 		f.accept(0, f);
+	}
+
+	private static void doValidate(final String actualContents, final StringBuilder expectedOutputBuilder) {
+		final String expectedOutput = expectedOutputBuilder.toString();
+		final boolean valid = stripWhitespace.apply(expectedOutput).equals(stripWhitespace.apply(actualContents));
+		if (!valid) {
+			LOG.warn("Expected " + expectedOutput);
+			LOG.warn("Actual " + actualContents);
+			Assert.assertEquals(stripWhitespace.apply(expectedOutput), stripWhitespace.apply(actualContents));
+		}
 	}
 }
