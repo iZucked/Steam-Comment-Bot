@@ -61,9 +61,9 @@ public final class CapacityEvaluatedStateChecker implements IEvaluatedStateConst
 
 		// State does not need to be kept, but needed for unit testing
 		totalSoftViolations = 0;
-		currentViolatedSlots = new HashSet<IPortSlot>();
-		triggeredViolations = new ArrayList<CapacityViolationType>();
-		allViolations = new ArrayList<CapacityViolationType>();
+		currentViolatedSlots = new HashSet<>();
+		triggeredViolations = new ArrayList<>();
+		allViolations = new ArrayList<>();
 
 		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
 			final List<@NonNull IPortSlot> slots = volumeAllocatedSequence.getSequenceSlots();
