@@ -85,25 +85,23 @@ public class OptimiserResultVerifier {
 
 	public static final class OptimiserResultChecker {
 		private final OptimiserResultVerifier verifier;
-		private final List<Function<SolutionData, Boolean>> checkers =
-				new LinkedList<Function<SolutionData,Boolean>>();
+		private final List<Function<SolutionData, Boolean>> checkers = new LinkedList<>();
 		private int solutionIndex = -1;
 
 		public OptimiserResultChecker(OptimiserResultVerifier verifier) {
 			this.verifier = verifier;
 		}
-		
+
 		public OptimiserResultChecker(OptimiserResultVerifier verifier, int solutionIndex) {
 			this.verifier = verifier;
 			this.solutionIndex = solutionIndex;
 		}
 
-		
 		public OptimiserResultVerifier build() {
-			checkers.forEach(c->addCheckerToFinalResult(c));
+			checkers.forEach(c -> addCheckerToFinalResult(c));
 			return this.verifier;
 		}
-		
+
 		private void addCheckerToFinalResult(Function<SolutionData, Boolean> checker) {
 			if (solutionIndex == -1) {
 				verifier.addAnySolutionChecker(checker);
@@ -111,38 +109,38 @@ public class OptimiserResultVerifier {
 				verifier.addSpecificSolutionChecker(solutionIndex, checker);
 			}
 		}
-		
+
 		public void addChecker(Function<SolutionData, Boolean> checker) {
 			checkers.add(checker);
 		}
-		
+
 		public VesselVerifier withCargo(final String loadName, final String dischargeName) {
-			
+
 			final CargoModelFinder finder = verifier.scenarioModelFinder.getCargoModelFinder();
 			final LoadSlot loadSlot = finder.findLoadSlot(loadName);
 			final DischargeSlot dischargeSlot = finder.findDischargeSlot(dischargeName);
-			
+
 			final Function<SolutionData, Pair<SolutionData, IResource>> p = (s) -> {
-				
+
 				final ISequenceElement l = s.getOptimiserDataMapper().getElementFor(loadSlot);
 				final ISequenceElement d = s.getOptimiserDataMapper().getElementFor(dischargeSlot);
-				
+
 				final Pair<IResource, Integer> a = s.getLookupManager().lookup(l);
 				final Pair<IResource, Integer> b = s.getLookupManager().lookup(d);
-				
+
 				if (a != null && b != null) {
 					if (a.getFirst() != null && a.getFirst() == b.getFirst()) {
 						if (a.getSecond() + 1 == b.getSecond()) {
 							return new Pair<>(s, a.getFirst());
 						}
 					}
-					
+
 				}
 				return null;
 			};
 			return new VesselVerifier(this, p);
 		}
-		
+
 		/**
 		 * Ensure load slot has been allocated in some way
 		 * 
@@ -196,7 +194,7 @@ public class OptimiserResultVerifier {
 			};
 			return new VesselVerifier(this, p);
 		}
-		
+
 		/**
 		 * Ensure vessel event has been allocated in some way
 		 * 
@@ -224,7 +222,6 @@ public class OptimiserResultVerifier {
 			return new VesselVerifier(this, p);
 		}
 
-
 		public OptimiserResultChecker withUnusedSlot(final String name) {
 
 			final CargoModelFinder finder = verifier.scenarioModelFinder.getCargoModelFinder();
@@ -246,7 +243,7 @@ public class OptimiserResultVerifier {
 			this.addChecker(p);
 			return this;
 		}
-		
+
 		public OptimiserResultChecker withCargoCount(final int count, boolean ignoreRoundTrips) {
 
 			final Function<SolutionData, Boolean> p = (s) -> {
@@ -261,7 +258,7 @@ public class OptimiserResultVerifier {
 			this.addChecker(p);
 			return this;
 		}
-		
+
 		public OptimiserResultChecker pnlDelta(final long initialValue, final long expectedChange, final long delta) {
 			verifier.needsSchedule = true;
 
@@ -307,16 +304,15 @@ public class OptimiserResultVerifier {
 			return this;
 		}
 	}
-	
+
 	public OptimiserResultChecker withAnySolutionResultChecker() {
 		return new OptimiserResultChecker(this);
 	}
-	
+
 	public OptimiserResultChecker withSolutionResultChecker(int solution) {
 		return new OptimiserResultChecker(this, solution);
 	}
 
-	
 	public OptimiserResultVerifier withMultipleSolutionCount(final int count) {
 
 		final Function<List<SolutionData>, Boolean> p = (s) -> {
@@ -326,7 +322,6 @@ public class OptimiserResultVerifier {
 		return this;
 	}
 
-
 	public static class VesselVerifier {
 		private final Function<SolutionData, Pair<SolutionData, IResource>> result;
 		private final OptimiserResultChecker resultChecker;
@@ -335,7 +330,7 @@ public class OptimiserResultVerifier {
 			this.resultChecker = verifier;
 			this.result = result;
 		}
-		
+
 		public OptimiserResultChecker any() {
 			final Function<Pair<SolutionData, IResource>, Boolean> v = p -> {
 				if (p == null || p.getSecond() == null) {
@@ -472,10 +467,10 @@ public class OptimiserResultVerifier {
 		}
 
 		checkAnySolutionsCheckers(errorHandler, data);
-		
+
 		checkMultipleSolutionCheckers(errorHandler, data);
 	}
-	
+
 	public void verifyOptimisationResults(final IMultiStateResult result, final Consumer<String> errorHandler) {
 
 		final List<NonNullPair<ISequences, Map<String, Object>>> solutions = result.getSolutions();
@@ -489,18 +484,19 @@ public class OptimiserResultVerifier {
 		}
 
 		checkAnySolutionsCheckers(errorHandler, data);
-		
+
 		checkMultipleSolutionCheckers(errorHandler, data);
-		
+
 		checkSpecificSolutionCheckers(errorHandler, data);
 	}
 
 	private void checkSpecificSolutionCheckers(final Consumer<String> errorHandler, final List<SolutionData> data) {
 		boolean failed = false;
-		List<Integer> keySet = new LinkedList<>(specificSolutionChecks.keySet())
-				.stream().sorted().collect(Collectors.toList());
+		List<Integer> keySet = new LinkedList<>(specificSolutionChecks.keySet()).stream() //
+				.sorted() //
+				.collect(Collectors.toList());
 		for (Integer solutionIndex : keySet) {
-			if (solutionIndex >= data.size() ) {
+			if (solutionIndex >= data.size()) {
 				failed = true;
 				break;
 			}
@@ -544,7 +540,6 @@ public class OptimiserResultVerifier {
 		}
 	}
 
-
 	public void verifyCargoCountInOptimisationResultWithoutNominals(final int solution, final int cargoCount, final IMultiStateResult result, final Consumer<String> errorHandler) {
 
 		final List<NonNullPair<ISequences, Map<String, Object>>> solutions = result.getSolutions();
@@ -564,11 +559,11 @@ public class OptimiserResultVerifier {
 			errorHandler.accept(String.format("Cargo count: expected %s but was %s", cargoCount, totalLoadsOnSequences));
 		}
 	}
-	
+
 	private void addAnySolutionChecker(Function<SolutionData, Boolean> check) {
 		anySolutionChecks.add(check);
 	}
-	
+
 	private void addSpecificSolutionChecker(int solutionIndex, Function<SolutionData, Boolean> check) {
 		specificSolutionChecks.compute(solutionIndex, (k, v) -> {
 			List<Function<SolutionData, Boolean>> solutionCheckers = v;
@@ -579,6 +574,5 @@ public class OptimiserResultVerifier {
 			return solutionCheckers;
 		});
 	}
-
 
 }
