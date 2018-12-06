@@ -81,7 +81,7 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 
 	}
 
-	protected Image createImage(String path) {
+	protected Image createImage(final String path) {
 		final ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor(path);
 		return imageDescriptor.createImage();
 	}
@@ -166,7 +166,7 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 		};
 	}
 
-	protected <T> Function<Object, @Nullable T> createFirstPurchaseTransformer(Class<T> cls, final Function<SlotAllocation, T> func) {
+	protected <T> Function<Object, @Nullable T> createFirstPurchaseTransformer(final Class<T> cls, final Function<SlotAllocation, T> func) {
 		return createMappingFunction(cls, object -> {
 			try {
 				if (object instanceof CargoAllocation) {
@@ -220,7 +220,7 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 		};
 	}
 
-	protected <T> Function<Object, @Nullable T> createFirstSaleTransformer(Class<T> cls, final Function<SlotAllocation, T> func) {
+	protected <T> Function<Object, @Nullable T> createFirstSaleTransformer(final Class<T> cls, final Function<SlotAllocation, T> func) {
 		return createMappingFunction(cls, object -> {
 			try {
 				if (object instanceof CargoAllocation) {
@@ -273,7 +273,7 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 		};
 	}
 
-	protected <T> Function<Object, @Nullable T> createFullLegTransformer2(Class<T> resultType, final int index, final TriFunction<SlotVisit, Journey, Idle, T> func) {
+	protected <T> Function<Object, @Nullable T> createFullLegTransformer2(final Class<T> resultType, final int index, final TriFunction<SlotVisit, Journey, Idle, T> func) {
 		return createMappingFunction(resultType, object -> {
 			try {
 				if (object instanceof CargoAllocation) {
@@ -317,7 +317,7 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 		});
 	}
 
-	protected <T> Function<Object, @Nullable T> createFullLegTransformer(Class<T> resultType, final int index, final BiFunction<Journey, Idle, T> func) {
+	protected <T> Function<Object, @Nullable T> createFullLegTransformer(final Class<T> resultType, final int index, final BiFunction<Journey, Idle, T> func) {
 		return createMappingFunction(resultType, object -> {
 			try {
 				if (object instanceof CargoAllocation) {
@@ -381,7 +381,7 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 
 			@Override
 			public @Nullable String render(final Object object) {
-				boolean deltaCol = (object instanceof DeltaPair || object instanceof List<?>);
+				final boolean deltaCol = (object instanceof DeltaPair || object instanceof List<?>);
 				@Nullable
 				final T value = deltaCol ? getAbsValue(object) : getRawValue(object);
 				if (value != null) {
@@ -424,19 +424,28 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 		if (type == Integer.class) {
 			int acc = 0;
 			for (final DeltaPair cargoAllocation : cargoAllocations) {
-				acc += (int) getFromCargoAllocationPair(type, f, cargoAllocation);
+				final Integer v = (Integer) getFromCargoAllocationPair(type, f, cargoAllocation);
+				if (v != null) {
+					acc += (int) v;
+				}
 			}
 			return type.cast(acc);
 		} else if (type == Double.class) {
 			double acc = 0;
 			for (final DeltaPair cargoAllocation : cargoAllocations) {
-				acc += (double) getFromCargoAllocationPair(type, f, cargoAllocation);
+				final Double v = (Double) getFromCargoAllocationPair(type, f, cargoAllocation);
+				if (v != null) {
+					acc += (double) v;
+				}
 			}
 			return type.cast(acc);
 		} else if (type == Long.class) {
 			long acc = 0;
 			for (final DeltaPair cargoAllocation : cargoAllocations) {
-				acc += (long) getFromCargoAllocationPair(type, f, cargoAllocation);
+				final Long v = (Long) getFromCargoAllocationPair(type, f, cargoAllocation);
+				if (v != null) {
+					acc += (long) v;
+				}
 			}
 			return type.cast(acc);
 		}

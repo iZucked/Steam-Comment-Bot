@@ -36,8 +36,6 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		}
 	}
 
-
-
 	public static final DecimalFormat DollarsFormat = new DecimalFormat("##,###,###,###");
 	public static final DecimalFormat VolumeMMBtuFormat = new DecimalFormat("##,###,###,###");
 	public static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat("###.###");
@@ -195,19 +193,28 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		if (type == Integer.class) {
 			int acc = 0;
 			for (final DeltaPair cargoAllocation : cargoAllocations) {
-				acc += (int) getFromCargoAllocationPair(type, f, cargoAllocation);
+				Integer v = (Integer) getFromCargoAllocationPair(type, f, cargoAllocation);
+				if (v != null) {
+					acc += (int) v;
+				}
 			}
 			return type.cast(acc);
 		} else if (type == Double.class) {
 			double acc = 0;
 			for (final DeltaPair cargoAllocation : cargoAllocations) {
-				acc += (double) getFromCargoAllocationPair(type, f, cargoAllocation);
+				Double v = (Double) getFromCargoAllocationPair(type, f, cargoAllocation);
+				if (v != null) {
+					acc += (double) v;
+				}
 			}
 			return type.cast(acc);
 		} else if (type == Long.class) {
 			long acc = 0;
 			for (final DeltaPair cargoAllocation : cargoAllocations) {
-				acc += (long) getFromCargoAllocationPair(type, f, cargoAllocation);
+				Long v = (Long) getFromCargoAllocationPair(type, f, cargoAllocation);
+				if (v != null) {
+					acc += (long) v;
+				}
 			}
 			return type.cast(acc);
 		}
