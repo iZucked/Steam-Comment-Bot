@@ -1633,6 +1633,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			{
 				// Address new A -> B wiring
 				if (dischargeSide != null && dischargeSide.dischargeSlot != null) {
+					if (loadSide.loadSlot.isLocked() || dischargeSide.dischargeSlot.isLocked()) {
+						// Slots are not permitted to be wired together
+						return;
+					}
 					final Cargo c;
 					if (loadSide.cargo == null) {
 						// New Cargo
@@ -1711,12 +1715,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 			}
 		}
-
 		cargoesToRemove.removeAll(cargoesToKeep);
-		// if (cargoesToRemove.size() > 0 ||slotsToRemove.size() > 0) {
-		// final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioEditingLocation.getScenarioDataProvider());
-		// analyticsModel.setViabilityModel(null);
-		// }
+
 		final Set<Object> allObjectsToDelete = new HashSet<>();
 		allObjectsToDelete.addAll(cargoesToRemove);
 		slotsToRemove.removeAll(slotsToKeep);
@@ -1728,7 +1728,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			currentWiringCommand.append(c);
 		}
 		// Append delete command
-		currentWiringCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), allObjectsToDelete));
+		if (!allObjectsToDelete.isEmpty()) {
+			currentWiringCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), allObjectsToDelete));
+		}
 
 		executeCurrentWiringCommand(currentWiringCommand);
 
