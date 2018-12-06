@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer.ui;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -421,6 +422,54 @@ public class SequenceHelper {
 		}
 
 		assert o_resource != null;
+
+		@NonNull
+		final IModifiableSequence modifiableSequence = sequences.getModifiableSequence(o_resource);
+		modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
+
+		{
+			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(loadSlot, IPortSlot.class);
+			final ISequenceElement element = portSlotProvider.getElement(o_slot);
+			modifiableSequence.add(element);
+		}
+		{
+			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(dischargeSlot, IPortSlot.class);
+			final ISequenceElement element = portSlotProvider.getElement(o_slot);
+			modifiableSequence.add(element);
+		}
+
+		modifiableSequence.add(startEndRequirementProvider.getEndElement(o_resource));
+
+		return sequences;
+	}
+
+	public static @NonNull ISequences createJustFOBDESSequences(final @NonNull Injector injector, final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
+		@NonNull
+		final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
+
+		@NonNull
+		final ModelEntityMap modelEntityMap = injector.getInstance(ModelEntityMap.class);
+
+		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
+		final IVirtualVesselSlotProvider virtualVesselSlotProvider = injector.getInstance(IVirtualVesselSlotProvider.class);
+		final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+		final IStartEndRequirementProvider startEndRequirementProvider = injector.getInstance(IStartEndRequirementProvider.class);
+
+		IResource o_resource = null;
+		if (loadSlot.isDESPurchase()) {
+			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(loadSlot, IPortSlot.class);
+			final ISequenceElement element = portSlotProvider.getElement(o_slot);
+			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
+			o_resource = vesselProvider.getResource(vesselAvailability);
+		} else if (dischargeSlot.isFOBSale()) {
+			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(dischargeSlot, IPortSlot.class);
+			final ISequenceElement element = portSlotProvider.getElement(o_slot);
+			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
+			o_resource = vesselProvider.getResource(vesselAvailability);
+		}
+
+		assert o_resource != null;
+		final ModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(o_resource));
 
 		@NonNull
 		final IModifiableSequence modifiableSequence = sequences.getModifiableSequence(o_resource);
