@@ -1516,10 +1516,10 @@ public class LNGScenarioTransformer {
 					final ZonedDateTime portWindowStart = spotSlot.getWindowStart().atStartOfDay(ZoneId.of(port.getTimeZoneId()));
 					final ZonedDateTime portWindowEnd = portWindowStart.plusHours(spotSlot.getWindowSizeInHours());
 					// Re-check against opt start date.
-					final int trimmedPortWindowStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
-							Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(portWindowStart)));
+					// final int trimmedPortWindowStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
+					// Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(portWindowStart)));
 
-					final ITimeWindow tw = TimeWindowMaker.createInclusiveInclusive(trimmedPortWindowStart, dateHelper.convertTime(portWindowEnd), 0, false);
+					final ITimeWindow tw = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(portWindowStart), dateHelper.convertTime(portWindowEnd), 0, false);
 
 					marketPortsMap.put(port, tw);
 				}
@@ -1579,11 +1579,11 @@ public class LNGScenarioTransformer {
 					// Re-use the real date objects to map back to integer timezones to avoid mismatching windows caused by half hour timezone shifts
 					final ZonedDateTime portWindowStart = spotLoadSlot.getWindowStart().atStartOfDay(ZoneId.of(port.getTimeZoneId()));
 					final ZonedDateTime portWindowEnd = portWindowStart.plusHours(spotLoadSlot.getWindowSizeInHours());
-					// Re-check against opt start date.
-					final int trimmedPortWindowStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
-							Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(portWindowStart)));
+					// // Re-check against opt start date.
+					// final int trimmedPortWindowStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
+					// Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(portWindowStart)));
 
-					final ITimeWindow tw = TimeWindowMaker.createInclusiveInclusive(trimmedPortWindowStart, dateHelper.convertTime(portWindowEnd), 0, false);
+					final ITimeWindow tw = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(portWindowStart), dateHelper.convertTime(portWindowEnd), 0, false);
 
 					marketPortsMap.put(port, tw);
 				}
