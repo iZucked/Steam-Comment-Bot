@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -28,6 +27,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
@@ -49,6 +49,7 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 				|| deletedObject instanceof Cargo //
 				|| deletedObject instanceof Vessel //
 				|| deletedObject instanceof Slot //
+				|| deletedObject instanceof SpotMarket //
 				|| deletedObject instanceof Port //
 				|| deletedObject instanceof VesselAvailability) {
 			setContext(Boolean.FALSE);
