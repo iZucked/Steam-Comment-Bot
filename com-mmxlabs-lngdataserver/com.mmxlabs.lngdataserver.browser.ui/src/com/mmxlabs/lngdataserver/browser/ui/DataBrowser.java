@@ -247,16 +247,16 @@ public class DataBrowser extends ViewPart {
 		GridViewerHelper.configureLookAndFeel(scenarioViewer);
 		scenarioViewer.getGrid().setLinesVisible(true);
 		scenarioViewer.getGrid().setHeaderVisible(true);
-		scenarioViewer.setContentProvider(new ScenarioContentProvider());
+		scenarioViewer.setContentProvider(new LocalScenarioServiceContentProvider());
 		scenarioViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 		final GridViewerColumn c1 = new GridViewerColumn(scenarioViewer, SWT.NONE);
 		c1.setLabelProvider(new ScenarioLabelProvider(0, null));
 		c1.getColumn().setTree(true);
-		c1.getColumn().setWidth(200);
+		c1.getColumn().setWidth(250);
 		GridViewerHelper.configureLookAndFeel(c1);
 
 		scenarioViewer.setAutoExpandLevel(GridTreeViewer.ALL_LEVELS);
-		scenarioViewer.setInput(scenarioTracker);
+		scenarioViewer.setInput(scenarioTracker.getService());
 		scenarioViewer.expandAll();
 		final MenuManager scenarioMgr = new MenuManager();
 		scenarioViewer.getControl().addMenuDetectListener(new MenuDetectListener() {
@@ -573,64 +573,4 @@ public class DataBrowser extends ViewPart {
 		}
 	}
 
-	class ScenarioContentProvider extends AdapterFactoryContentProvider implements ITreeContentProvider {
-
-		public ScenarioContentProvider() {
-			super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
-		}
-
-		@Override
-		public Object[] getElements(final Object inputElement) {
-
-			if (inputElement instanceof ServiceTracker<?, ?>) {
-				final Object service = ((ServiceTracker) inputElement).getService();
-				if (service instanceof ScenarioServiceRegistry) {
-					final ScenarioServiceRegistry registry = (ScenarioServiceRegistry) service;
-					final List<ScenarioService> localServices = new LinkedList<>();
-					for (final ScenarioService ss : registry.getScenarioModel().getScenarioServices()) {
-						if (ss.isLocal()) {
-							localServices.add(ss);
-						}
-					}
-					return localServices.toArray();
-				}
-			}
-			return new Object[0];
-		}
-
-		@Override
-		public Object[] getChildren(final Object parentElement) {
-			final LinkedList<Object> result = new LinkedList<>();
-
-			if (parentElement instanceof Container) {
-				for (final Object element : ((Container) parentElement).getElements()) {
-					if (element instanceof ScenarioInstance) {
-						result.add(element);
-					} else if (element instanceof Container) {
-						final Container container = (Container) element;
-						if (!container.getElements().isEmpty()) {
-							result.add(element);
-						}
-					}
-
-				}
-			}
-
-			return result.toArray();
-		}
-
-		@Override
-		public boolean hasChildren(final Object element) {
-			if (!(element instanceof Container)) {
-				return false;
-			}
-			final Container container = (Container) element;
-			return !(container.getElements().isEmpty());
-		}
-
-		@Override
-		public Object getParent(final Object element) {
-			return null;
-		}
-	}
 }
