@@ -72,6 +72,32 @@ public class MicroTestUtils {
 		return failedCheckers.isEmpty() ? null : failedCheckers;
 	}
 
+	/**
+	 * Returns null on success, or returns the failing constraint checkers.
+	 * 
+	 * @param rawSequences
+	 * @return
+	 */
+	public static List<IConstraintChecker> validateConstraintCheckersWithoutNewUnit(@NonNull final Injector injector, @NonNull final ISequences rawSequences) {
+
+		final List<IConstraintChecker> constraintCheckers = injector.getInstance(Key.get(new TypeLiteral<List<IConstraintChecker>>() {
+		}));
+		final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
+
+		final List<IConstraintChecker> failedCheckers = new LinkedList<>();
+		// // Apply sequence manipulators
+		final IModifiableSequences fullSequences = sequencesManipulator.createManipulatedSequences(rawSequences);
+
+		// Apply hard constraint checkers
+		for (final IConstraintChecker checker : constraintCheckers) {
+			if (!checker.checkConstraints(fullSequences, null)) {
+				checker.checkConstraints(fullSequences, null);
+				failedCheckers.add(checker);
+			}
+		}
+		return failedCheckers.isEmpty() ? null : failedCheckers;
+	}
+
 	public static Injector createEvaluationInjector(@NonNull final LNGDataTransformer dataTransformer) {
 
 		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, dataTransformer.getInitialSequences(), dataTransformer.getInitialSequences(),
@@ -245,7 +271,7 @@ public class MicroTestUtils {
 		Assert.fail("Slot not found");
 		throw new IllegalStateException();
 	}
-	
+
 	public static @NonNull EndEvent findVesselEndEvent(@NonNull final LNGScenarioModel lngScenarioModel) {
 
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
