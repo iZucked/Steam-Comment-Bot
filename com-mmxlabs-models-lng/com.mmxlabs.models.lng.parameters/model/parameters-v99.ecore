@@ -21,6 +21,8 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="similarityMode" eType="#//SimilarityMode"
         defaultValueLiteral="OFF"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nominalADP" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cleanStateOptimisation"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="floatingDaysLimit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"

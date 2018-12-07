@@ -791,6 +791,132 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSlot_WindowNominationCounterparty() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(36);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_WindowNominationComment() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(37);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_VolumeNominationDate() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(38);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_VolumeNominationDone() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(39);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_VolumeNominationCounterparty() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(40);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_VolumeNominationComment() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(41);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_VesselNominationDate() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(42);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_VesselNominationDone() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(43);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_VesselNominationCounterparty() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(44);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_VesselNominationComment() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(45);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_PortNominationDate() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(46);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_PortNominationDone() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(47);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_PortNominationCounterparty() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(48);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_PortNominationComment() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(49);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getSlot__GetSlotOrDelegateDuration() {
 		return slotEClass.getEOperations().get(0);
 	}
@@ -981,7 +1107,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EOperation getSlot__GetSlotOrDelegateWindowNominationDate() {
-		return slotEClass.getEOperations().get(20);
+		return slotEClass.getEOperations().get(22);
 	}
 
 	/**
@@ -990,7 +1116,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EOperation getSlot__GetSlotOrDelegateDivertible() {
-		return slotEClass.getEOperations().get(21);
+		return slotEClass.getEOperations().get(20);
 	}
 
 	/**
@@ -999,7 +1125,70 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EOperation getSlot__GetSlotOrDelegateShippingDaysRestriction() {
-		return slotEClass.getEOperations().get(22);
+		return slotEClass.getEOperations().get(21);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getSlot__GetSlotOrDelegateVesselNominationDate() {
+		return slotEClass.getEOperations().get(23);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getSlot__GetSlotOrDelegateVolumeNominationDate() {
+		return slotEClass.getEOperations().get(24);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getSlot__GetSlotOrDelegatePortNominationDate() {
+		return slotEClass.getEOperations().get(25);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getSlot__GetSlotOrDelegateWindowNominationCounterparty() {
+		return slotEClass.getEOperations().get(26);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getSlot__GetSlotOrDelegateVesselNominationCounterparty() {
+		return slotEClass.getEOperations().get(27);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getSlot__GetSlotOrDelegateVolumeNominationCounterparty() {
+		return slotEClass.getEOperations().get(28);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getSlot__GetSlotOrDelegatePortNominationCounterparty() {
+		return slotEClass.getEOperations().get(29);
 	}
 
 	/**
@@ -2671,6 +2860,20 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(slotEClass, SLOT__LOCKED);
 		createEAttribute(slotEClass, SLOT__WINDOW_NOMINATION_DATE);
 		createEAttribute(slotEClass, SLOT__WINDOW_NOMINATION_IS_DONE);
+		createEAttribute(slotEClass, SLOT__WINDOW_NOMINATION_COUNTERPARTY);
+		createEAttribute(slotEClass, SLOT__WINDOW_NOMINATION_COMMENT);
+		createEAttribute(slotEClass, SLOT__VOLUME_NOMINATION_DATE);
+		createEAttribute(slotEClass, SLOT__VOLUME_NOMINATION_DONE);
+		createEAttribute(slotEClass, SLOT__VOLUME_NOMINATION_COUNTERPARTY);
+		createEAttribute(slotEClass, SLOT__VOLUME_NOMINATION_COMMENT);
+		createEAttribute(slotEClass, SLOT__VESSEL_NOMINATION_DATE);
+		createEAttribute(slotEClass, SLOT__VESSEL_NOMINATION_DONE);
+		createEAttribute(slotEClass, SLOT__VESSEL_NOMINATION_COUNTERPARTY);
+		createEAttribute(slotEClass, SLOT__VESSEL_NOMINATION_COMMENT);
+		createEAttribute(slotEClass, SLOT__PORT_NOMINATION_DATE);
+		createEAttribute(slotEClass, SLOT__PORT_NOMINATION_DONE);
+		createEAttribute(slotEClass, SLOT__PORT_NOMINATION_COUNTERPARTY);
+		createEAttribute(slotEClass, SLOT__PORT_NOMINATION_COMMENT);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_DURATION);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_MIN_QUANTITY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_MAX_QUANTITY);
@@ -2691,9 +2894,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(slotEClass, SLOT___GET_SLOT_CONTRACT_PARAMS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_COUNTERPARTY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_CN);
-		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_VESSEL_NOMINATION_DATE);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_VOLUME_NOMINATION_DATE);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_DATE);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_COUNTERPARTY);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_VESSEL_NOMINATION_COUNTERPARTY);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_VOLUME_NOMINATION_COUNTERPARTY);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY);
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CV);
@@ -3050,7 +3260,21 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getSlot_NominatedVessel(), theFleetPackage.getVessel(), null, "nominatedVessel", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Locked(), ecorePackage.getEBoolean(), "locked", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_WindowNominationDate(), theDateTimePackage.getLocalDate(), "windowNominationDate", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlot_WindowNominationIsDone(), ecorePackage.getEBoolean(), "windowNominationIsDone", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_WindowNominationIsDone(), ecorePackage.getEBoolean(), "windowNominationIsDone", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_WindowNominationCounterparty(), ecorePackage.getEBoolean(), "windowNominationCounterparty", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_WindowNominationComment(), ecorePackage.getEString(), "windowNominationComment", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_VolumeNominationDate(), theDateTimePackage.getLocalDate(), "volumeNominationDate", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_VolumeNominationDone(), ecorePackage.getEBoolean(), "volumeNominationDone", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_VolumeNominationCounterparty(), ecorePackage.getEBoolean(), "volumeNominationCounterparty", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_VolumeNominationComment(), ecorePackage.getEString(), "volumeNominationComment", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_VesselNominationDate(), theDateTimePackage.getLocalDate(), "vesselNominationDate", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_VesselNominationDone(), ecorePackage.getEBoolean(), "vesselNominationDone", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_VesselNominationCounterparty(), ecorePackage.getEBoolean(), "vesselNominationCounterparty", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_VesselNominationComment(), ecorePackage.getEString(), "vesselNominationComment", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_PortNominationDate(), theDateTimePackage.getLocalDate(), "portNominationDate", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_PortNominationDone(), ecorePackage.getEBoolean(), "portNominationDone", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_PortNominationCounterparty(), ecorePackage.getEBoolean(), "portNominationCounterparty", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_PortNominationComment(), ecorePackage.getEString(), "portNominationComment", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrDelegateDuration(), ecorePackage.getEInt(), "getSlotOrDelegateDuration", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -3092,11 +3316,25 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEOperation(getSlot__GetSlotOrDelegateCN(), ecorePackage.getEString(), "getSlotOrDelegateCN", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEOperation(getSlot__GetSlotOrDelegateWindowNominationDate(), theDateTimePackage.getLocalDate(), "getSlotOrDelegateWindowNominationDate", 0, 1, IS_UNIQUE, IS_ORDERED);
-
 		initEOperation(getSlot__GetSlotOrDelegateDivertible(), ecorePackage.getEBoolean(), "getSlotOrDelegateDivertible", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrDelegateShippingDaysRestriction(), ecorePackage.getEInt(), "getSlotOrDelegateShippingDaysRestriction", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetSlotOrDelegateWindowNominationDate(), theDateTimePackage.getLocalDate(), "getSlotOrDelegateWindowNominationDate", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetSlotOrDelegateVesselNominationDate(), theDateTimePackage.getLocalDate(), "getSlotOrDelegateVesselNominationDate", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetSlotOrDelegateVolumeNominationDate(), theDateTimePackage.getLocalDate(), "getSlotOrDelegateVolumeNominationDate", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetSlotOrDelegatePortNominationDate(), theDateTimePackage.getLocalDate(), "getSlotOrDelegatePortNominationDate", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetSlotOrDelegateWindowNominationCounterparty(), ecorePackage.getEBoolean(), "getSlotOrDelegateWindowNominationCounterparty", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetSlotOrDelegateVesselNominationCounterparty(), ecorePackage.getEBoolean(), "getSlotOrDelegateVesselNominationCounterparty", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetSlotOrDelegateVolumeNominationCounterparty(), ecorePackage.getEBoolean(), "getSlotOrDelegateVolumeNominationCounterparty", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetSlotOrDelegatePortNominationCounterparty(), ecorePackage.getEBoolean(), "getSlotOrDelegatePortNominationCounterparty", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

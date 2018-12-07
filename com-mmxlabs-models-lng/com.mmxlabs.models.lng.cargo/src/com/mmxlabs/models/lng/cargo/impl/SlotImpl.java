@@ -92,6 +92,20 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowNominationDate <em>Window Nomination Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isWindowNominationIsDone <em>Window Nomination Is Done</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isWindowNominationCounterparty <em>Window Nomination Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowNominationComment <em>Window Nomination Comment</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getVolumeNominationDate <em>Volume Nomination Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isVolumeNominationDone <em>Volume Nomination Done</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isVolumeNominationCounterparty <em>Volume Nomination Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getVolumeNominationComment <em>Volume Nomination Comment</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getVesselNominationDate <em>Vessel Nomination Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isVesselNominationDone <em>Vessel Nomination Done</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isVesselNominationCounterparty <em>Vessel Nomination Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getVesselNominationComment <em>Vessel Nomination Comment</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPortNominationDate <em>Port Nomination Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isPortNominationDone <em>Port Nomination Done</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isPortNominationCounterparty <em>Port Nomination Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPortNominationComment <em>Port Nomination Comment</em>}</li>
  * </ul>
  *
  * @generated
@@ -911,13 +925,347 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	protected boolean windowNominationIsDone = WINDOW_NOMINATION_IS_DONE_EDEFAULT;
 
 	/**
-	 * This is true if the Window Nomination Is Done attribute has been set.
+	 * The default value of the '{@link #isWindowNominationCounterparty() <em>Window Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isWindowNominationCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean WINDOW_NOMINATION_COUNTERPARTY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isWindowNominationCounterparty() <em>Window Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isWindowNominationCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean windowNominationCounterparty = WINDOW_NOMINATION_COUNTERPARTY_EDEFAULT;
+
+	/**
+	 * This is true if the Window Nomination Counterparty attribute has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean windowNominationIsDoneESet;
+	protected boolean windowNominationCounterpartyESet;
+
+	/**
+	 * The default value of the '{@link #getWindowNominationComment() <em>Window Nomination Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowNominationComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String WINDOW_NOMINATION_COMMENT_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getWindowNominationComment() <em>Window Nomination Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowNominationComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected String windowNominationComment = WINDOW_NOMINATION_COMMENT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVolumeNominationDate() <em>Volume Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeNominationDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate VOLUME_NOMINATION_DATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getVolumeNominationDate() <em>Volume Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeNominationDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate volumeNominationDate = VOLUME_NOMINATION_DATE_EDEFAULT;
+
+	/**
+	 * This is true if the Volume Nomination Date attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean volumeNominationDateESet;
+
+	/**
+	 * The default value of the '{@link #isVolumeNominationDone() <em>Volume Nomination Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVolumeNominationDone()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean VOLUME_NOMINATION_DONE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isVolumeNominationDone() <em>Volume Nomination Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVolumeNominationDone()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean volumeNominationDone = VOLUME_NOMINATION_DONE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isVolumeNominationCounterparty() <em>Volume Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVolumeNominationCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean VOLUME_NOMINATION_COUNTERPARTY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isVolumeNominationCounterparty() <em>Volume Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVolumeNominationCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean volumeNominationCounterparty = VOLUME_NOMINATION_COUNTERPARTY_EDEFAULT;
+
+	/**
+	 * This is true if the Volume Nomination Counterparty attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean volumeNominationCounterpartyESet;
+
+	/**
+	 * The default value of the '{@link #getVolumeNominationComment() <em>Volume Nomination Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeNominationComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String VOLUME_NOMINATION_COMMENT_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getVolumeNominationComment() <em>Volume Nomination Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeNominationComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected String volumeNominationComment = VOLUME_NOMINATION_COMMENT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVesselNominationDate() <em>Vessel Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselNominationDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate VESSEL_NOMINATION_DATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getVesselNominationDate() <em>Vessel Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselNominationDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate vesselNominationDate = VESSEL_NOMINATION_DATE_EDEFAULT;
+
+	/**
+	 * This is true if the Vessel Nomination Date attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean vesselNominationDateESet;
+
+	/**
+	 * The default value of the '{@link #isVesselNominationDone() <em>Vessel Nomination Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVesselNominationDone()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean VESSEL_NOMINATION_DONE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isVesselNominationDone() <em>Vessel Nomination Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVesselNominationDone()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean vesselNominationDone = VESSEL_NOMINATION_DONE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isVesselNominationCounterparty() <em>Vessel Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVesselNominationCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean VESSEL_NOMINATION_COUNTERPARTY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isVesselNominationCounterparty() <em>Vessel Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVesselNominationCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean vesselNominationCounterparty = VESSEL_NOMINATION_COUNTERPARTY_EDEFAULT;
+
+	/**
+	 * This is true if the Vessel Nomination Counterparty attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean vesselNominationCounterpartyESet;
+
+	/**
+	 * The default value of the '{@link #getVesselNominationComment() <em>Vessel Nomination Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselNominationComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String VESSEL_NOMINATION_COMMENT_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getVesselNominationComment() <em>Vessel Nomination Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselNominationComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected String vesselNominationComment = VESSEL_NOMINATION_COMMENT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPortNominationDate() <em>Port Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortNominationDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate PORT_NOMINATION_DATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPortNominationDate() <em>Port Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortNominationDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate portNominationDate = PORT_NOMINATION_DATE_EDEFAULT;
+
+	/**
+	 * This is true if the Port Nomination Date attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean portNominationDateESet;
+
+	/**
+	 * The default value of the '{@link #isPortNominationDone() <em>Port Nomination Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPortNominationDone()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean PORT_NOMINATION_DONE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isPortNominationDone() <em>Port Nomination Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPortNominationDone()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean portNominationDone = PORT_NOMINATION_DONE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isPortNominationCounterparty() <em>Port Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPortNominationCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean PORT_NOMINATION_COUNTERPARTY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isPortNominationCounterparty() <em>Port Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPortNominationCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean portNominationCounterparty = PORT_NOMINATION_COUNTERPARTY_EDEFAULT;
+
+	/**
+	 * This is true if the Port Nomination Counterparty attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean portNominationCounterpartyESet;
+
+	/**
+	 * The default value of the '{@link #getPortNominationComment() <em>Port Nomination Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortNominationComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String PORT_NOMINATION_COMMENT_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPortNominationComment() <em>Port Nomination Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortNominationComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected String portNominationComment = PORT_NOMINATION_COMMENT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -2226,10 +2574,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	public void setWindowNominationIsDone(boolean newWindowNominationIsDone) {
 		boolean oldWindowNominationIsDone = windowNominationIsDone;
 		windowNominationIsDone = newWindowNominationIsDone;
-		boolean oldWindowNominationIsDoneESet = windowNominationIsDoneESet;
-		windowNominationIsDoneESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE, oldWindowNominationIsDone, windowNominationIsDone, !oldWindowNominationIsDoneESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE, oldWindowNominationIsDone, windowNominationIsDone));
 	}
 
 	/**
@@ -2237,13 +2583,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void unsetWindowNominationIsDone() {
-		boolean oldWindowNominationIsDone = windowNominationIsDone;
-		boolean oldWindowNominationIsDoneESet = windowNominationIsDoneESet;
-		windowNominationIsDone = WINDOW_NOMINATION_IS_DONE_EDEFAULT;
-		windowNominationIsDoneESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE, oldWindowNominationIsDone, WINDOW_NOMINATION_IS_DONE_EDEFAULT, oldWindowNominationIsDoneESet));
+	public boolean isWindowNominationCounterparty() {
+		return windowNominationCounterparty;
 	}
 
 	/**
@@ -2251,8 +2592,459 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isSetWindowNominationIsDone() {
-		return windowNominationIsDoneESet;
+	public void setWindowNominationCounterparty(boolean newWindowNominationCounterparty) {
+		boolean oldWindowNominationCounterparty = windowNominationCounterparty;
+		windowNominationCounterparty = newWindowNominationCounterparty;
+		boolean oldWindowNominationCounterpartyESet = windowNominationCounterpartyESet;
+		windowNominationCounterpartyESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_NOMINATION_COUNTERPARTY, oldWindowNominationCounterparty, windowNominationCounterparty, !oldWindowNominationCounterpartyESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetWindowNominationCounterparty() {
+		boolean oldWindowNominationCounterparty = windowNominationCounterparty;
+		boolean oldWindowNominationCounterpartyESet = windowNominationCounterpartyESet;
+		windowNominationCounterparty = WINDOW_NOMINATION_COUNTERPARTY_EDEFAULT;
+		windowNominationCounterpartyESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__WINDOW_NOMINATION_COUNTERPARTY, oldWindowNominationCounterparty, WINDOW_NOMINATION_COUNTERPARTY_EDEFAULT, oldWindowNominationCounterpartyESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetWindowNominationCounterparty() {
+		return windowNominationCounterpartyESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getWindowNominationComment() {
+		return windowNominationComment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setWindowNominationComment(String newWindowNominationComment) {
+		String oldWindowNominationComment = windowNominationComment;
+		windowNominationComment = newWindowNominationComment;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_NOMINATION_COMMENT, oldWindowNominationComment, windowNominationComment));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LocalDate getVolumeNominationDate() {
+		return volumeNominationDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeNominationDate(LocalDate newVolumeNominationDate) {
+		LocalDate oldVolumeNominationDate = volumeNominationDate;
+		volumeNominationDate = newVolumeNominationDate;
+		boolean oldVolumeNominationDateESet = volumeNominationDateESet;
+		volumeNominationDateESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VOLUME_NOMINATION_DATE, oldVolumeNominationDate, volumeNominationDate, !oldVolumeNominationDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetVolumeNominationDate() {
+		LocalDate oldVolumeNominationDate = volumeNominationDate;
+		boolean oldVolumeNominationDateESet = volumeNominationDateESet;
+		volumeNominationDate = VOLUME_NOMINATION_DATE_EDEFAULT;
+		volumeNominationDateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__VOLUME_NOMINATION_DATE, oldVolumeNominationDate, VOLUME_NOMINATION_DATE_EDEFAULT, oldVolumeNominationDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetVolumeNominationDate() {
+		return volumeNominationDateESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isVolumeNominationDone() {
+		return volumeNominationDone;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeNominationDone(boolean newVolumeNominationDone) {
+		boolean oldVolumeNominationDone = volumeNominationDone;
+		volumeNominationDone = newVolumeNominationDone;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VOLUME_NOMINATION_DONE, oldVolumeNominationDone, volumeNominationDone));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isVolumeNominationCounterparty() {
+		return volumeNominationCounterparty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeNominationCounterparty(boolean newVolumeNominationCounterparty) {
+		boolean oldVolumeNominationCounterparty = volumeNominationCounterparty;
+		volumeNominationCounterparty = newVolumeNominationCounterparty;
+		boolean oldVolumeNominationCounterpartyESet = volumeNominationCounterpartyESet;
+		volumeNominationCounterpartyESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VOLUME_NOMINATION_COUNTERPARTY, oldVolumeNominationCounterparty, volumeNominationCounterparty, !oldVolumeNominationCounterpartyESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetVolumeNominationCounterparty() {
+		boolean oldVolumeNominationCounterparty = volumeNominationCounterparty;
+		boolean oldVolumeNominationCounterpartyESet = volumeNominationCounterpartyESet;
+		volumeNominationCounterparty = VOLUME_NOMINATION_COUNTERPARTY_EDEFAULT;
+		volumeNominationCounterpartyESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__VOLUME_NOMINATION_COUNTERPARTY, oldVolumeNominationCounterparty, VOLUME_NOMINATION_COUNTERPARTY_EDEFAULT, oldVolumeNominationCounterpartyESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetVolumeNominationCounterparty() {
+		return volumeNominationCounterpartyESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getVolumeNominationComment() {
+		return volumeNominationComment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeNominationComment(String newVolumeNominationComment) {
+		String oldVolumeNominationComment = volumeNominationComment;
+		volumeNominationComment = newVolumeNominationComment;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VOLUME_NOMINATION_COMMENT, oldVolumeNominationComment, volumeNominationComment));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LocalDate getVesselNominationDate() {
+		return vesselNominationDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVesselNominationDate(LocalDate newVesselNominationDate) {
+		LocalDate oldVesselNominationDate = vesselNominationDate;
+		vesselNominationDate = newVesselNominationDate;
+		boolean oldVesselNominationDateESet = vesselNominationDateESet;
+		vesselNominationDateESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VESSEL_NOMINATION_DATE, oldVesselNominationDate, vesselNominationDate, !oldVesselNominationDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetVesselNominationDate() {
+		LocalDate oldVesselNominationDate = vesselNominationDate;
+		boolean oldVesselNominationDateESet = vesselNominationDateESet;
+		vesselNominationDate = VESSEL_NOMINATION_DATE_EDEFAULT;
+		vesselNominationDateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__VESSEL_NOMINATION_DATE, oldVesselNominationDate, VESSEL_NOMINATION_DATE_EDEFAULT, oldVesselNominationDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetVesselNominationDate() {
+		return vesselNominationDateESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isVesselNominationDone() {
+		return vesselNominationDone;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVesselNominationDone(boolean newVesselNominationDone) {
+		boolean oldVesselNominationDone = vesselNominationDone;
+		vesselNominationDone = newVesselNominationDone;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VESSEL_NOMINATION_DONE, oldVesselNominationDone, vesselNominationDone));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isVesselNominationCounterparty() {
+		return vesselNominationCounterparty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVesselNominationCounterparty(boolean newVesselNominationCounterparty) {
+		boolean oldVesselNominationCounterparty = vesselNominationCounterparty;
+		vesselNominationCounterparty = newVesselNominationCounterparty;
+		boolean oldVesselNominationCounterpartyESet = vesselNominationCounterpartyESet;
+		vesselNominationCounterpartyESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VESSEL_NOMINATION_COUNTERPARTY, oldVesselNominationCounterparty, vesselNominationCounterparty, !oldVesselNominationCounterpartyESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetVesselNominationCounterparty() {
+		boolean oldVesselNominationCounterparty = vesselNominationCounterparty;
+		boolean oldVesselNominationCounterpartyESet = vesselNominationCounterpartyESet;
+		vesselNominationCounterparty = VESSEL_NOMINATION_COUNTERPARTY_EDEFAULT;
+		vesselNominationCounterpartyESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__VESSEL_NOMINATION_COUNTERPARTY, oldVesselNominationCounterparty, VESSEL_NOMINATION_COUNTERPARTY_EDEFAULT, oldVesselNominationCounterpartyESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetVesselNominationCounterparty() {
+		return vesselNominationCounterpartyESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getVesselNominationComment() {
+		return vesselNominationComment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVesselNominationComment(String newVesselNominationComment) {
+		String oldVesselNominationComment = vesselNominationComment;
+		vesselNominationComment = newVesselNominationComment;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VESSEL_NOMINATION_COMMENT, oldVesselNominationComment, vesselNominationComment));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LocalDate getPortNominationDate() {
+		return portNominationDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortNominationDate(LocalDate newPortNominationDate) {
+		LocalDate oldPortNominationDate = portNominationDate;
+		portNominationDate = newPortNominationDate;
+		boolean oldPortNominationDateESet = portNominationDateESet;
+		portNominationDateESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_NOMINATION_DATE, oldPortNominationDate, portNominationDate, !oldPortNominationDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetPortNominationDate() {
+		LocalDate oldPortNominationDate = portNominationDate;
+		boolean oldPortNominationDateESet = portNominationDateESet;
+		portNominationDate = PORT_NOMINATION_DATE_EDEFAULT;
+		portNominationDateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__PORT_NOMINATION_DATE, oldPortNominationDate, PORT_NOMINATION_DATE_EDEFAULT, oldPortNominationDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetPortNominationDate() {
+		return portNominationDateESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isPortNominationDone() {
+		return portNominationDone;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortNominationDone(boolean newPortNominationDone) {
+		boolean oldPortNominationDone = portNominationDone;
+		portNominationDone = newPortNominationDone;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_NOMINATION_DONE, oldPortNominationDone, portNominationDone));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isPortNominationCounterparty() {
+		return portNominationCounterparty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortNominationCounterparty(boolean newPortNominationCounterparty) {
+		boolean oldPortNominationCounterparty = portNominationCounterparty;
+		portNominationCounterparty = newPortNominationCounterparty;
+		boolean oldPortNominationCounterpartyESet = portNominationCounterpartyESet;
+		portNominationCounterpartyESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_NOMINATION_COUNTERPARTY, oldPortNominationCounterparty, portNominationCounterparty, !oldPortNominationCounterpartyESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetPortNominationCounterparty() {
+		boolean oldPortNominationCounterparty = portNominationCounterparty;
+		boolean oldPortNominationCounterpartyESet = portNominationCounterpartyESet;
+		portNominationCounterparty = PORT_NOMINATION_COUNTERPARTY_EDEFAULT;
+		portNominationCounterpartyESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__PORT_NOMINATION_COUNTERPARTY, oldPortNominationCounterparty, PORT_NOMINATION_COUNTERPARTY_EDEFAULT, oldPortNominationCounterpartyESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetPortNominationCounterparty() {
+		return portNominationCounterpartyESet;
+	}
+
+								/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getPortNominationComment() {
+		return portNominationComment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortNominationComment(String newPortNominationComment) {
+		String oldPortNominationComment = portNominationComment;
+		portNominationComment = newPortNominationComment;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_NOMINATION_COMMENT, oldPortNominationComment, portNominationComment));
 	}
 
 								/**
@@ -2585,6 +3377,69 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public LocalDate getSlotOrDelegateVesselNominationDate() {
+		return (LocalDate) eGetWithDefault(CargoPackage.Literals.SLOT__VESSEL_NOMINATION_DATE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public LocalDate getSlotOrDelegateVolumeNominationDate() {
+		return (LocalDate) eGetWithDefault(CargoPackage.Literals.SLOT__VOLUME_NOMINATION_DATE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public LocalDate getSlotOrDelegatePortNominationDate() {
+		return (LocalDate) eGetWithDefault(CargoPackage.Literals.SLOT__PORT_NOMINATION_DATE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public boolean getSlotOrDelegateWindowNominationCounterparty() {
+		return (boolean) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_NOMINATION_COUNTERPARTY);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public boolean getSlotOrDelegateVesselNominationCounterparty() {
+		return (boolean) eGetWithDefault(CargoPackage.Literals.SLOT__VESSEL_NOMINATION_COUNTERPARTY);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public boolean getSlotOrDelegateVolumeNominationCounterparty() {
+		return (boolean) eGetWithDefault(CargoPackage.Literals.SLOT__VOLUME_NOMINATION_COUNTERPARTY);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public boolean getSlotOrDelegatePortNominationCounterparty() {
+		return (boolean) eGetWithDefault(CargoPackage.Literals.SLOT__PORT_NOMINATION_COUNTERPARTY);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -2717,6 +3572,34 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getWindowNominationDate();
 			case CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE:
 				return isWindowNominationIsDone();
+			case CargoPackage.SLOT__WINDOW_NOMINATION_COUNTERPARTY:
+				return isWindowNominationCounterparty();
+			case CargoPackage.SLOT__WINDOW_NOMINATION_COMMENT:
+				return getWindowNominationComment();
+			case CargoPackage.SLOT__VOLUME_NOMINATION_DATE:
+				return getVolumeNominationDate();
+			case CargoPackage.SLOT__VOLUME_NOMINATION_DONE:
+				return isVolumeNominationDone();
+			case CargoPackage.SLOT__VOLUME_NOMINATION_COUNTERPARTY:
+				return isVolumeNominationCounterparty();
+			case CargoPackage.SLOT__VOLUME_NOMINATION_COMMENT:
+				return getVolumeNominationComment();
+			case CargoPackage.SLOT__VESSEL_NOMINATION_DATE:
+				return getVesselNominationDate();
+			case CargoPackage.SLOT__VESSEL_NOMINATION_DONE:
+				return isVesselNominationDone();
+			case CargoPackage.SLOT__VESSEL_NOMINATION_COUNTERPARTY:
+				return isVesselNominationCounterparty();
+			case CargoPackage.SLOT__VESSEL_NOMINATION_COMMENT:
+				return getVesselNominationComment();
+			case CargoPackage.SLOT__PORT_NOMINATION_DATE:
+				return getPortNominationDate();
+			case CargoPackage.SLOT__PORT_NOMINATION_DONE:
+				return isPortNominationDone();
+			case CargoPackage.SLOT__PORT_NOMINATION_COUNTERPARTY:
+				return isPortNominationCounterparty();
+			case CargoPackage.SLOT__PORT_NOMINATION_COMMENT:
+				return getPortNominationComment();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -2843,6 +3726,48 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE:
 				setWindowNominationIsDone((Boolean)newValue);
 				return;
+			case CargoPackage.SLOT__WINDOW_NOMINATION_COUNTERPARTY:
+				setWindowNominationCounterparty((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__WINDOW_NOMINATION_COMMENT:
+				setWindowNominationComment((String)newValue);
+				return;
+			case CargoPackage.SLOT__VOLUME_NOMINATION_DATE:
+				setVolumeNominationDate((LocalDate)newValue);
+				return;
+			case CargoPackage.SLOT__VOLUME_NOMINATION_DONE:
+				setVolumeNominationDone((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__VOLUME_NOMINATION_COUNTERPARTY:
+				setVolumeNominationCounterparty((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__VOLUME_NOMINATION_COMMENT:
+				setVolumeNominationComment((String)newValue);
+				return;
+			case CargoPackage.SLOT__VESSEL_NOMINATION_DATE:
+				setVesselNominationDate((LocalDate)newValue);
+				return;
+			case CargoPackage.SLOT__VESSEL_NOMINATION_DONE:
+				setVesselNominationDone((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__VESSEL_NOMINATION_COUNTERPARTY:
+				setVesselNominationCounterparty((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__VESSEL_NOMINATION_COMMENT:
+				setVesselNominationComment((String)newValue);
+				return;
+			case CargoPackage.SLOT__PORT_NOMINATION_DATE:
+				setPortNominationDate((LocalDate)newValue);
+				return;
+			case CargoPackage.SLOT__PORT_NOMINATION_DONE:
+				setPortNominationDone((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__PORT_NOMINATION_COUNTERPARTY:
+				setPortNominationCounterparty((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__PORT_NOMINATION_COMMENT:
+				setPortNominationComment((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -2963,7 +3888,49 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				unsetWindowNominationDate();
 				return;
 			case CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE:
-				unsetWindowNominationIsDone();
+				setWindowNominationIsDone(WINDOW_NOMINATION_IS_DONE_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__WINDOW_NOMINATION_COUNTERPARTY:
+				unsetWindowNominationCounterparty();
+				return;
+			case CargoPackage.SLOT__WINDOW_NOMINATION_COMMENT:
+				setWindowNominationComment(WINDOW_NOMINATION_COMMENT_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__VOLUME_NOMINATION_DATE:
+				unsetVolumeNominationDate();
+				return;
+			case CargoPackage.SLOT__VOLUME_NOMINATION_DONE:
+				setVolumeNominationDone(VOLUME_NOMINATION_DONE_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__VOLUME_NOMINATION_COUNTERPARTY:
+				unsetVolumeNominationCounterparty();
+				return;
+			case CargoPackage.SLOT__VOLUME_NOMINATION_COMMENT:
+				setVolumeNominationComment(VOLUME_NOMINATION_COMMENT_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__VESSEL_NOMINATION_DATE:
+				unsetVesselNominationDate();
+				return;
+			case CargoPackage.SLOT__VESSEL_NOMINATION_DONE:
+				setVesselNominationDone(VESSEL_NOMINATION_DONE_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__VESSEL_NOMINATION_COUNTERPARTY:
+				unsetVesselNominationCounterparty();
+				return;
+			case CargoPackage.SLOT__VESSEL_NOMINATION_COMMENT:
+				setVesselNominationComment(VESSEL_NOMINATION_COMMENT_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__PORT_NOMINATION_DATE:
+				unsetPortNominationDate();
+				return;
+			case CargoPackage.SLOT__PORT_NOMINATION_DONE:
+				setPortNominationDone(PORT_NOMINATION_DONE_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__PORT_NOMINATION_COUNTERPARTY:
+				unsetPortNominationCounterparty();
+				return;
+			case CargoPackage.SLOT__PORT_NOMINATION_COMMENT:
+				setPortNominationComment(PORT_NOMINATION_COMMENT_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -3049,7 +4016,35 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__WINDOW_NOMINATION_DATE:
 				return isSetWindowNominationDate();
 			case CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE:
-				return isSetWindowNominationIsDone();
+				return windowNominationIsDone != WINDOW_NOMINATION_IS_DONE_EDEFAULT;
+			case CargoPackage.SLOT__WINDOW_NOMINATION_COUNTERPARTY:
+				return isSetWindowNominationCounterparty();
+			case CargoPackage.SLOT__WINDOW_NOMINATION_COMMENT:
+				return WINDOW_NOMINATION_COMMENT_EDEFAULT == null ? windowNominationComment != null : !WINDOW_NOMINATION_COMMENT_EDEFAULT.equals(windowNominationComment);
+			case CargoPackage.SLOT__VOLUME_NOMINATION_DATE:
+				return isSetVolumeNominationDate();
+			case CargoPackage.SLOT__VOLUME_NOMINATION_DONE:
+				return volumeNominationDone != VOLUME_NOMINATION_DONE_EDEFAULT;
+			case CargoPackage.SLOT__VOLUME_NOMINATION_COUNTERPARTY:
+				return isSetVolumeNominationCounterparty();
+			case CargoPackage.SLOT__VOLUME_NOMINATION_COMMENT:
+				return VOLUME_NOMINATION_COMMENT_EDEFAULT == null ? volumeNominationComment != null : !VOLUME_NOMINATION_COMMENT_EDEFAULT.equals(volumeNominationComment);
+			case CargoPackage.SLOT__VESSEL_NOMINATION_DATE:
+				return isSetVesselNominationDate();
+			case CargoPackage.SLOT__VESSEL_NOMINATION_DONE:
+				return vesselNominationDone != VESSEL_NOMINATION_DONE_EDEFAULT;
+			case CargoPackage.SLOT__VESSEL_NOMINATION_COUNTERPARTY:
+				return isSetVesselNominationCounterparty();
+			case CargoPackage.SLOT__VESSEL_NOMINATION_COMMENT:
+				return VESSEL_NOMINATION_COMMENT_EDEFAULT == null ? vesselNominationComment != null : !VESSEL_NOMINATION_COMMENT_EDEFAULT.equals(vesselNominationComment);
+			case CargoPackage.SLOT__PORT_NOMINATION_DATE:
+				return isSetPortNominationDate();
+			case CargoPackage.SLOT__PORT_NOMINATION_DONE:
+				return portNominationDone != PORT_NOMINATION_DONE_EDEFAULT;
+			case CargoPackage.SLOT__PORT_NOMINATION_COUNTERPARTY:
+				return isSetPortNominationCounterparty();
+			case CargoPackage.SLOT__PORT_NOMINATION_COMMENT:
+				return PORT_NOMINATION_COMMENT_EDEFAULT == null ? portNominationComment != null : !PORT_NOMINATION_COMMENT_EDEFAULT.equals(portNominationComment);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -3165,12 +4160,26 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSlotOrDelegateCounterparty();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_CN:
 				return getSlotOrDelegateCN();
-			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE:
-				return getSlotOrDelegateWindowNominationDate();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE:
 				return getSlotOrDelegateDivertible();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION:
 				return getSlotOrDelegateShippingDaysRestriction();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE:
+				return getSlotOrDelegateWindowNominationDate();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VESSEL_NOMINATION_DATE:
+				return getSlotOrDelegateVesselNominationDate();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VOLUME_NOMINATION_DATE:
+				return getSlotOrDelegateVolumeNominationDate();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_DATE:
+				return getSlotOrDelegatePortNominationDate();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_COUNTERPARTY:
+				return getSlotOrDelegateWindowNominationCounterparty();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VESSEL_NOMINATION_COUNTERPARTY:
+				return getSlotOrDelegateVesselNominationCounterparty();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VOLUME_NOMINATION_COUNTERPARTY:
+				return getSlotOrDelegateVolumeNominationCounterparty();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY:
+				return getSlotOrDelegatePortNominationCounterparty();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -3243,7 +4252,35 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		result.append(", windowNominationDate: ");
 		if (windowNominationDateESet) result.append(windowNominationDate); else result.append("<unset>");
 		result.append(", windowNominationIsDone: ");
-		if (windowNominationIsDoneESet) result.append(windowNominationIsDone); else result.append("<unset>");
+		result.append(windowNominationIsDone);
+		result.append(", windowNominationCounterparty: ");
+		if (windowNominationCounterpartyESet) result.append(windowNominationCounterparty); else result.append("<unset>");
+		result.append(", windowNominationComment: ");
+		result.append(windowNominationComment);
+		result.append(", volumeNominationDate: ");
+		if (volumeNominationDateESet) result.append(volumeNominationDate); else result.append("<unset>");
+		result.append(", volumeNominationDone: ");
+		result.append(volumeNominationDone);
+		result.append(", volumeNominationCounterparty: ");
+		if (volumeNominationCounterpartyESet) result.append(volumeNominationCounterparty); else result.append("<unset>");
+		result.append(", volumeNominationComment: ");
+		result.append(volumeNominationComment);
+		result.append(", vesselNominationDate: ");
+		if (vesselNominationDateESet) result.append(vesselNominationDate); else result.append("<unset>");
+		result.append(", vesselNominationDone: ");
+		result.append(vesselNominationDone);
+		result.append(", vesselNominationCounterparty: ");
+		if (vesselNominationCounterpartyESet) result.append(vesselNominationCounterparty); else result.append("<unset>");
+		result.append(", vesselNominationComment: ");
+		result.append(vesselNominationComment);
+		result.append(", portNominationDate: ");
+		if (portNominationDateESet) result.append(portNominationDate); else result.append("<unset>");
+		result.append(", portNominationDone: ");
+		result.append(portNominationDone);
+		result.append(", portNominationCounterparty: ");
+		if (portNominationCounterpartyESet) result.append(portNominationCounterparty); else result.append("<unset>");
+		result.append(", portNominationComment: ");
+		result.append(portNominationComment);
 		result.append(')');
 		return result.toString();
 	}
@@ -3351,6 +4388,141 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 							final TimePeriod wnUnits = ((Contract) contract).getWindowNominationSizeUnits();
 							if (wnUnits == null) return result;
 							result = NominationUtils.computeNewDate(getWindowStart(), wnUnits, -wnSize);
+						}
+					}
+					return result;
+					
+				}	
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__VOLUME_NOMINATION_DATE) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = null;
+					final Contract contract = (Contract) getContract();
+					if (contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_SIZE)) {
+							final int wnSize = ((Contract) contract).getVolumeNominationSize();
+							final TimePeriod wnUnits = ((Contract) contract).getVolumeNominationSizeUnits();
+							if (wnUnits == null) return result;
+							result = NominationUtils.computeNewDate(getWindowStart(), wnUnits, -wnSize);
+						}
+					}
+					return result;
+					
+				}	
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__VESSEL_NOMINATION_DATE) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = null;
+					final Contract contract = (Contract) getContract();
+					if (contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_SIZE)) {
+							final int wnSize = ((Contract) contract).getVesselNominationSize();
+							final TimePeriod wnUnits = ((Contract) contract).getVesselNominationSizeUnits();
+							if (wnUnits == null) return result;
+							result = NominationUtils.computeNewDate(getWindowStart(), wnUnits, -wnSize);
+						}
+					}
+					return result;
+					
+				}	
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__PORT_NOMINATION_DATE) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = null;
+					final Contract contract = (Contract) getContract();
+					if (contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_SIZE)) {
+							final int wnSize = ((Contract) contract).getPortNominationSize();
+							final TimePeriod wnUnits = ((Contract) contract).getPortNominationSizeUnits();
+							if (wnUnits == null) return result;
+							result = NominationUtils.computeNewDate(getWindowStart(), wnUnits, -wnSize);
+						}
+					}
+					return result;
+					
+				}	
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_COUNTERPARTY) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = null;
+					final Contract contract = (Contract) getContract();
+					if (contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_COUNTERPARTY)) {
+							result = ((Contract) contract).isWindowNominationCounterparty();
+						}
+					}
+					return result;
+					
+				}	
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__VESSEL_NOMINATION_COUNTERPARTY) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = null;
+					final Contract contract = (Contract) getContract();
+					if (contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_COUNTERPARTY)) {
+							result = ((Contract) contract).isVesselNominationCounterparty();
+						}
+					}
+					return result;
+					
+				}	
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__VOLUME_NOMINATION_COUNTERPARTY) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = null;
+					final Contract contract = (Contract) getContract();
+					if (contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_COUNTERPARTY)) {
+							result = ((Contract) contract).isVolumeNominationCounterparty();
+						}
+					}
+					return result;
+					
+				}	
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__PORT_NOMINATION_COUNTERPARTY) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = null;
+					final Contract contract = (Contract) getContract();
+					if (contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_COUNTERPARTY)) {
+							result = ((Contract) contract).isPortNominationCounterparty();
 						}
 					}
 					return result;

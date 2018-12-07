@@ -52,12 +52,6 @@ public class ContractEditorPane extends ScenarioTableViewerPane {
 				return super.render(object);
 			}
 		}, CommercialPackage.eINSTANCE.getContract_PriceInfo());
-		
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			addTypicalColumn("Date Nom", new NumericAttributeManipulator(CommercialPackage.eINSTANCE.getContract_WindowNominationSize(), getEditingDomain()));
-			addTypicalColumn("Date Nom Units", new TextualEnumAttributeManipulator(CommercialPackage.eINSTANCE.getContract_WindowNominationSizeUnits(), getEditingDomain(),
-				(e) -> mapName((TimePeriod) e)));
-		}
 
 		defaultSetTitle("Contracts");
 	}
@@ -70,21 +64,6 @@ public class ContractEditorPane extends ScenarioTableViewerPane {
 	@Override
 	public void defaultSetTitle(final String string) {
 		super.defaultSetTitle(string);
-	}
-	
-	private static String mapName(final TimePeriod units) {
-
-		switch (units) {
-		case DAYS:
-			return "Days";
-		case HOURS:
-			return "Hours";
-		case MONTHS:
-			return "Months";
-		default:
-			break;
-		}
-		return units.getName();
 	}
 
 }

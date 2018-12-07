@@ -119,6 +119,20 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_lockedEditor(detailComposite, topClass);
 		add_windowNominationDateEditor(detailComposite, topClass);
 		add_windowNominationIsDoneEditor(detailComposite, topClass);
+		add_windowNominationCounterpartyEditor(detailComposite, topClass);
+		add_windowNominationCommentEditor(detailComposite, topClass);
+		add_volumeNominationDateEditor(detailComposite, topClass);
+		add_volumeNominationDoneEditor(detailComposite, topClass);
+		add_volumeNominationCounterpartyEditor(detailComposite, topClass);
+		add_volumeNominationCommentEditor(detailComposite, topClass);
+		add_vesselNominationDateEditor(detailComposite, topClass);
+		add_vesselNominationDoneEditor(detailComposite, topClass);
+		add_vesselNominationCounterpartyEditor(detailComposite, topClass);
+		add_vesselNominationCommentEditor(detailComposite, topClass);
+		add_portNominationDateEditor(detailComposite, topClass);
+		add_portNominationDoneEditor(detailComposite, topClass);
+		add_portNominationCounterpartyEditor(detailComposite, topClass);
+		add_portNominationCommentEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -285,6 +299,160 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	protected void add_windowNominationIsDoneEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		if (LicenseFeatures.isPermitted("features:nominations")) {
 			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_NOMINATION_IS_DONE));
+		}
+	}
+
+	/**
+	 * Create the editor for the windowNominationCounterparty feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_windowNominationCounterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_NOMINATION_COUNTERPARTY));
+		}
+	}
+
+	/**
+	 * Create the editor for the windowNominationComment feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_windowNominationCommentEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_NOMINATION_COMMENT));
+		}
+	}
+
+	/**
+	 * Create the editor for the volumeNominationDate feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_volumeNominationDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__VOLUME_NOMINATION_DATE));
+		}
+	}
+
+	/**
+	 * Create the editor for the volumeNominationDone feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_volumeNominationDoneEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__VOLUME_NOMINATION_DONE));
+		}
+	}
+
+	/**
+	 * Create the editor for the volumeNominationCounterparty feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_volumeNominationCounterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__VOLUME_NOMINATION_COUNTERPARTY));
+		}
+	}
+
+	/**
+	 * Create the editor for the volumeNominationComment feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_volumeNominationCommentEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__VOLUME_NOMINATION_COMMENT));
+		}
+	}
+
+	/**
+	 * Create the editor for the vesselNominationDate feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_vesselNominationDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__VESSEL_NOMINATION_DATE));
+		}
+	}
+
+	/**
+	 * Create the editor for the vesselNominationDone feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_vesselNominationDoneEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__VESSEL_NOMINATION_DONE));
+		}
+	}
+
+	/**
+	 * Create the editor for the vesselNominationCounterparty feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_vesselNominationCounterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__VESSEL_NOMINATION_COUNTERPARTY));
+		}
+	}
+
+	/**
+	 * Create the editor for the vesselNominationComment feature on Slot
+	 * 
+	 * @generated NOT
+	 */
+	protected void add_vesselNominationCommentEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__VESSEL_NOMINATION_COMMENT));
+		}
+	}
+
+	/**
+	 * Create the editor for the portNominationDate feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_portNominationDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_NOMINATION_DATE));
+		}
+	}
+
+	/**
+	 * Create the editor for the portNominationDone feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_portNominationDoneEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_NOMINATION_DONE));
+		}
+	}
+
+	/**
+	 * Create the editor for the portNominationCounterparty feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_portNominationCounterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_NOMINATION_COUNTERPARTY));
+		}
+	}
+
+	/**
+	 * Create the editor for the portNominationComment feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_portNominationCommentEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_NOMINATION_COMMENT));
 		}
 	}
 
