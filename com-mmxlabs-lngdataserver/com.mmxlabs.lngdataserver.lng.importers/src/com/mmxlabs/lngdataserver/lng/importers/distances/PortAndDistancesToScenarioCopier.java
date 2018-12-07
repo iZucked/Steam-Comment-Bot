@@ -372,21 +372,25 @@ public class PortAndDistancesToScenarioCopier {
 					}
 
 					if (distance < 0.0 || distance == Double.MAX_VALUE) {
+						// Is canal distance valid?
 						continue;
 					}
 
 					Double direct_distance = directMatrix.get(new Pair<>(from, to));
-					if (direct_distance == null) {
-						continue;
-					}
-					if (direct_distance == 0.0) {
+					if (direct_distance == null || direct_distance == 0.0) {
+						// No direct? skip canal distance
 						continue;
 					}
 					if (direct_distance != null && direct_distance > 0.0 && direct_distance < distance) {
-						distance = direct_distance;
+						// Canal distance is greater than canal distance
+						// Skip - but note some code assumes if a laden canal distance is present, 
+						// there is a ballast distance also. 
+						// distance = direct_distance;
+						continue;
 					}
 
 					if (distance >= 20000) {
+						// Distance is silly
 						continue;
 					}
 					final RouteLine rl = PortFactoryImpl.eINSTANCE.createRouteLine();
