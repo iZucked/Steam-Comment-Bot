@@ -8,7 +8,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
-import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 
 /**
  */

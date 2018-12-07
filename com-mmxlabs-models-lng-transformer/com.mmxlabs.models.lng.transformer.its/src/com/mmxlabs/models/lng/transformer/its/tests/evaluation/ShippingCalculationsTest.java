@@ -873,7 +873,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenario);
 		cargoModel.getVesselAvailabilities().clear();
 
-		cargoModel.getCargoes().forEach(c -> c.setVesselAssignmentType(null));
 		// Cannot null as final
 		// msc.vessel = null;
 		// msc.vesselAvailability = null;
@@ -890,8 +889,12 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		charterModel.setName("market-" + msc.vessel.getName());
 
 		charterModel.setVessel(msc.vessel);
+		charterModel.setEnabled(true);
 		charterModel.setSpotCharterCount(1);
 		charterModel.setCharterInRate("" + charterRatePerDay);
+		
+		cargoModel.getCargoes().forEach(c -> c.setVesselAssignmentType(charterModel));
+		cargoModel.getCargoes().forEach(c -> c.setSpotIndex(0));
 
 		// Spot charter-in vessels have fewer voyages
 		final SequenceTester checker;

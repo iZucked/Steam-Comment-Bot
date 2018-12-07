@@ -30,7 +30,6 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
@@ -42,8 +41,8 @@ import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
-import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
+import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.SimpleInitialSequenceBuilder;
 
 /**
  * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures. This is a {@link PrivateModule} to avoid "leakage" into the parent injector
@@ -58,12 +57,6 @@ public class LNGInitialSequencesModule extends PrivateModule {
 
 	@Override
 	protected void configure() {
-		// if (Platform.isRunning()) {
-		// bind(IConstraintCheckerRegistry.class).toProvider(service(IConstraintCheckerRegistry.class).single());
-		// }
-		//
-		// install(new ConstraintCheckerInstantiatorModule());
-		// install(new OptimiserContextModule());
 
 		if (Platform.isRunning()) {
 			bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());
@@ -71,10 +64,10 @@ public class LNGInitialSequencesModule extends PrivateModule {
 
 		install(new FitnessFunctionInstantiatorModule());
 
-		// install(new LocalSearchOptimiserModule());
-		// install(new LinearFitnessEvaluatorModule());
-
 		bind(IFitnessHelper.class).to(FitnessHelper.class);
+
+		bind(SimpleInitialSequenceBuilder.class).in(Singleton.class);
+		bind(IInitialSequenceBuilder.class).to(SimpleInitialSequenceBuilder.class);
 
 		bind(IOptimisationTransformer.class).to(OptimisationTransformer.class).in(Singleton.class);
 	}
@@ -90,17 +83,10 @@ public class LNGInitialSequencesModule extends PrivateModule {
 
 	@Provides
 	@Singleton
-	private IInitialSequenceBuilder provideIInitialSequenceBuilder(@NonNull final Injector injector, @NonNull final List<IPairwiseConstraintChecker> pairwiseCheckers) {
-		final IInitialSequenceBuilder builder = new ConstrainedInitialSequenceBuilder(pairwiseCheckers);
-		injector.injectMembers(builder);
-		return builder;
-	}
-
-	@Provides
-	@Singleton
 	@Named(KEY_GENERATED_RAW_SEQUENCES)
 	@Exposed
-	private ISequences provideInitialSequences(@NonNull final IOptimisationTransformer optimisationTransformer, @NonNull final IPhaseOptimisationData data, @NonNull final ModelEntityMap modelEntityMap) {
+	private ISequences provideInitialSequences(@NonNull final IOptimisationTransformer optimisationTransformer, @NonNull final IPhaseOptimisationData data,
+			@NonNull final ModelEntityMap modelEntityMap) {
 
 		final ISequences sequences = optimisationTransformer.createInitialSequences(data, modelEntityMap);
 

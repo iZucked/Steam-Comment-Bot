@@ -16,6 +16,7 @@ import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
@@ -86,7 +87,7 @@ public class SuboptimalScenarioTester {
 		final int numOfClassOne = 2;
 
 		// createVessels creates and adds the vessels to the scenario.
-		csc.addVesselSimple("classOne", numOfClassOne, fuelPrice, 25, 1000000, 10, 10, 0, 500, false);
+		VesselAvailability[] charters = csc.addVesselSimple("classOne", numOfClassOne, fuelPrice, 25, 1000000, 10, 10, 0, 500, false);
 
 		final LocalDateTime cargoStart = LocalDateTime.now();
 
@@ -97,6 +98,9 @@ public class SuboptimalScenarioTester {
 		// make sure they can be rewired
 		smallToLargeCargo.setAllowRewiring(true);
 		largeToSmallCargo.setAllowRewiring(true);
+
+		smallToLargeCargo.setVesselAssignmentType(charters[0]);
+		largeToSmallCargo.setVesselAssignmentType(charters[1]);
 
 		// set up one cargo with a small load allowance and a large discharge allowance
 		smallToLargeCargo.getSlots().get(0).setMaxQuantity(smallQty);
@@ -119,9 +123,9 @@ public class SuboptimalScenarioTester {
 	 * Runs the optimiser on the scenario and tests whether the optimised wiring matches a specified expected wiring.
 	 * 
 	 * @param loadPorts
-	 *                           A list of load ports for the expected wiring, in the same order as the discharge ports they should be wired to.
+	 *            A list of load ports for the expected wiring, in the same order as the discharge ports they should be wired to.
 	 * @param dischargePorts
-	 *                           A list of discharge ports for the expected wiring, in the same order as the load ports they should be wired to.
+	 *            A list of discharge ports for the expected wiring, in the same order as the load ports they should be wired to.
 	 */
 	public void testExpectedWiringProduced(final Port[] loadPorts, final Port[] dischargePorts) {
 		Assert.assertEquals("Load port and discharge port lists should have same length", loadPorts.length, dischargePorts.length);
@@ -228,7 +232,7 @@ public class SuboptimalScenarioTester {
 	 * 
 	 * @param expectedResult
 	 * @param checker
-	 *                           A new instance of the constraint checker (must be new since this method injects it with dependencies).
+	 *            A new instance of the constraint checker (must be new since this method injects it with dependencies).
 	 */
 	// TODO: rewrite to take a constraint checker factory instead of a constraint checker, so that the expected parameter does not have weird not-initialised semantics
 	public void testConstraintChecker(final boolean expectedResult, final AbstractPairwiseConstraintChecker checker) {

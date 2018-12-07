@@ -66,6 +66,7 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
+				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -109,6 +110,7 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 				.withVolumeLimits(5_000, 15_000, VolumeUnits.M3)//
 				.build() //
 				//
+				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -155,6 +157,7 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
+				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -201,6 +204,7 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
+				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -245,6 +249,7 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
+				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -293,6 +298,7 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
+				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -332,6 +338,7 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
+				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -373,6 +380,7 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
+				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {

@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,7 +105,25 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		 * reordered
 		 */
 		log.debug("Creating advice for sequence builder");
-		final IModifiableSequences advice = new ModifiableSequences(data.getResources());
+		
+		// Heads now contains the head of every chunk that has to go together.
+				// We need to pull out all the chunks and sort out their rules
+				final List<@NonNull IResource> resources = new ArrayList<>(data.getResources());
+				Collections.sort(resources, (o1, o2) -> {
+					final IVesselAvailability vesselAvailability1 = vesselProvider.getVesselAvailability(o1);
+					final IVesselAvailability vesselAvailability2 = vesselProvider.getVesselAvailability(o2);
+					final VesselInstanceType vit1 = vesselAvailability1.getVesselInstanceType();
+					final VesselInstanceType vit2 = vesselAvailability2.getVesselInstanceType();
+
+					int x = vit1.compareTo(vit2);
+					if (x == 0) {
+						x = ((Integer) vesselAvailability1.getVessel().getMaxSpeed()).compareTo(vesselAvailability2.getVessel().getMaxSpeed());
+					}
+					return x;
+				});
+
+		
+		final IModifiableSequences advice = new ModifiableSequences(resources);
 
 		/**
 		 * This map will be used to try and place elements which aren't in the advice above onto particular resources, if possible.

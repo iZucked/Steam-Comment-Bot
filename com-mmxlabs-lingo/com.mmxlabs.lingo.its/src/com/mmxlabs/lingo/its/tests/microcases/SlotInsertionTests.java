@@ -346,6 +346,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		@NonNull
 		final Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo1.setAllowRewiring(true);
+		cargo1.setVesselAssignmentType(vesselAvailability);
 
 		final LoadSlot load_FOB2 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase2", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8) //
 				.withOptional(true) //
@@ -391,6 +392,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		@NonNull
 		final Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo1.setAllowRewiring(true);
+		cargo1.setVesselAssignmentType(vesselAvailability);
 
 		final DischargeSlot discharge_DES2 = cargoModelBuilder.makeDESSale("DES_Sale2", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7") //
 				.withOptional(true) //
@@ -442,6 +444,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		@NonNull
 		final Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo1.setAllowRewiring(true);
+		cargo1.setVesselAssignmentType(vesselAvailability1);
 
 		final LoadSlot load_FOB2 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase2", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8) //
 				.withOptional(true)//

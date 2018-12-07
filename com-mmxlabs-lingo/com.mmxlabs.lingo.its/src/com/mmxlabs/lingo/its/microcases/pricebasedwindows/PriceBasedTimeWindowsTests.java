@@ -807,7 +807,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withPricingEvent(PricingEvent.START_DISCHARGE, null) //
 				.build() //
 				//
-				.withVesselAssignment(charterInMarket, 1, 1) //
+				.withVesselAssignment(charterInMarket, 0, 1) //
 				.build();
 
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2018, 8, 1), LocalDate.of(2019, 1, 1));

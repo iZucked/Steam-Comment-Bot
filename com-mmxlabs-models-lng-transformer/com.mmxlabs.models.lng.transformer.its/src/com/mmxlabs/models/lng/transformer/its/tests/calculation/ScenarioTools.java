@@ -332,12 +332,14 @@ public class ScenarioTools {
 				.withDurationInDays(charterOutTimeDays) //
 				.withAvailableHeelOptions(0, heelLimit, cvValue, Double.toString(dischargePrice))//
 				.withRepositioningFee(0) //
+				.withVesselAssignment(vessels[0], 1) //
 				.build();
 
 		// Set up dry dock to cause journey
 		final DryDockEvent dryDockJourney = csc.getScenarioModelBuilder().getCargoModelBuilder() //
 				.makeDryDockEvent("DryDock", dryDockJourneyStartDate, dryDockJourneyStartDate, B) //
 				.withDurationInDays(0) //
+				.withVesselAssignment(vessels[0], 2) //
 				.build();
 
 		return csc.getScenarioDataProvider();

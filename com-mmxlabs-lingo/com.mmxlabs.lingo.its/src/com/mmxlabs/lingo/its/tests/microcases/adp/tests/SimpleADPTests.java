@@ -41,6 +41,8 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 
 public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 
+	private VesselAvailability defaultVesselAvailability;
+
 	@Test
 	public void testEvaluateDoesNotUpair() {
 
@@ -59,6 +61,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		final Cargo testCargo = cargoModelBuilder.makeCargo() ///
 				.makeFOBPurchase("F1", LocalDate.of(2018, 11, 1), purchaseContract.getPreferredPort(), purchaseContract, null, null).build() //
 				.makeDESSale("D1", LocalDate.of(2018, 12, 1), salesContract.getPreferredPort(), salesContract, null, null).build() //
+				.withVesselAssignment(defaultVesselAvailability, 1) //
 				.build();
 
 		final Slot load = testCargo.getSlots().get(0);
@@ -479,14 +482,14 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		defaultCharterInMarket.setNominal(true);
 		defaultCharterInMarket.setEnabled(false);
 
-		@SuppressWarnings("unused")
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vesselMedium, entity) //
+		defaultVesselAvailability = cargoModelBuilder.makeVesselAvailability(vesselMedium, entity) //
 				.withStartWindow(LocalDateTime.of(2018, 10, 1, 0, 0)) //
 				.withStartHeel(1_000, 3_000, 22.6, "5") //
 				.withEndWindow(LocalDateTime.of(2019, 10, 1, 0, 0)) //
 				.withEndHeel(0, 5_000, EVesselTankState.EITHER, "7") //
 				.withCharterRate("50000") //
 				.build();
+		
 		final PurchaseContract purchaseContract = commercialModelBuilder.makeExpressionPurchaseContract("Purchase A", entity, "5");
 		purchaseContract.setMaxQuantity(3_000_000);
 		purchaseContract.setVolumeLimitsUnit(VolumeUnits.MMBTU);
