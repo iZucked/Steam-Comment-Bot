@@ -48,7 +48,7 @@ public class PortAndDistancesToScenarioCopier {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PortAndDistancesToScenarioCopier.class);
 
-	public static Command getUpdateCommand(final @NonNull EditingDomain editingDomain, final @NonNull PortModel portModel, final @NonNull DistancesVersion version) {
+	public static Command getUpdateCommand(final @NonNull EditingDomain editingDomain, final @NonNull PortModel portModel, final @NonNull DistancesVersion version, boolean updatePortNames) {
 
 		final CompoundCommand cmd = new CompoundCommand("Update ports");
 
@@ -95,7 +95,7 @@ public class PortAndDistancesToScenarioCopier {
 			idToPort.put(mmxId, oldPort);
 
 			// Only update name if not set
-			if (oldPort.getName() == null || oldPort.getName().isEmpty()) {
+			if (updatePortNames || (oldPort.getName() == null || oldPort.getName().isEmpty())) {
 				cmd.append(SetCommand.create(editingDomain, oldPort, MMXCorePackage.Literals.NAMED_OBJECT__NAME, versionLocation.getName()));
 			}
 			cmd.append(SetCommand.create(editingDomain, oldPort.getLocation(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, versionLocation.getName()));

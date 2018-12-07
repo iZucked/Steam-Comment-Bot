@@ -590,7 +590,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 						super.execute();
 						final PortModel pm = ScenarioModelUtil.getPortModel(target);
 						final EditingDomain editingDomain = target.getEditingDomain();
-						final Command command1 = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, pm, distancesVersion);
+						final Command command1 = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, pm, distancesVersion, true);
 						appendAndExecute(command1);
 						final Command command2 = PortsToScenarioCopier.getUpdateCommand(editingDomain, pm, portsVersion);
 						appendAndExecute(command2);

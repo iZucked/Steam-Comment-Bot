@@ -57,7 +57,7 @@ public class CopyDistancesToScenarioTests {
 		final PortModel portModel = PortFactory.eINSTANCE.createPortModel();
 		final EditingDomain editingDomain = createEditingDomain(portModel);
 
-		final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, originalVersion);
+		final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, originalVersion, true);
 		editingDomain.getCommandStack().execute(updateCommand);
 
 		final DistancesVersion derivedVersion = DistancesFromScenarioCopier.generateVersion(portModel);
@@ -122,7 +122,7 @@ public class CopyDistancesToScenarioTests {
 		final DistancesVersion versionB = mapper.readerFor(DistancesVersion.class).readValue(inputB);
 		prepareVersionModel(versionB);
 
-		final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, versionB);
+		final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, versionB, true);
 		editingDomain.getCommandStack().execute(updateCommand);
 		Collections.sort(versionB.getLocations(), (a, b) -> a.getMmxId().compareTo(b.getMmxId()));
 		final String expectedResult = serialise(mapper, versionB);
@@ -139,7 +139,7 @@ public class CopyDistancesToScenarioTests {
 		// Canal distances currently re-created during import
 		for (Route route : portModel.getRoutes()) {
 			if (route.getRouteOption() != RouteOption.DIRECT) {
-//				Assert.assertTrue(route.getLines().isEmpty());
+				// Assert.assertTrue(route.getLines().isEmpty());
 			}
 		}
 		Assert.assertNull(portToRemove.eContainer());
@@ -159,7 +159,7 @@ public class CopyDistancesToScenarioTests {
 		{
 			final String inputA = DataLoader.importData("v1.0.10.25_1.json");
 			final DistancesVersion versionA = mapper.readerFor(DistancesVersion.class).readValue(inputA);
-			final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, versionA);
+			final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, versionA, true);
 			editingDomain.getCommandStack().execute(updateCommand);
 		}
 
@@ -169,7 +169,7 @@ public class CopyDistancesToScenarioTests {
 		final DistancesVersion versionB = mapper.readerFor(DistancesVersion.class).readValue(inputB);
 		prepareVersionModel(versionB);
 
-		final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, versionB);
+		final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, versionB, true);
 		editingDomain.getCommandStack().execute(updateCommand);
 
 		final String expectedResult = serialise(mapper, versionB);

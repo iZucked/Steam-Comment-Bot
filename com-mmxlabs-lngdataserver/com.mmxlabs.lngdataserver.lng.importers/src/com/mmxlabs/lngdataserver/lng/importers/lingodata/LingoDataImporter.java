@@ -75,7 +75,7 @@ public class LingoDataImporter {
 		try (ModelReference modelReference = modelRecord.aquireReference(LingoDataImporter.class.getSimpleName())) {
 			modelReference.executeWithLock(true, () -> {
 				try {
-					importDistances(pDistanceEntry, baseURI, uc, modelReference);
+					importDistances(pDistanceEntry, baseURI, uc, modelReference, false);
 					importPorts(pPortEntry, baseURI, uc, modelReference);
 				} catch (final IOException e) {
 					e.printStackTrace();
@@ -84,7 +84,7 @@ public class LingoDataImporter {
 		}
 	}
 
-	private void importDistances(final Entry entry, final String baseURI, final URIConverter uc, final ModelReference modelReference) throws IOException {
+	private void importDistances(final Entry entry, final String baseURI, final URIConverter uc, final ModelReference modelReference, boolean updatePortNames) throws IOException {
 		if (entry == null) {
 			return;
 		}
@@ -95,7 +95,7 @@ public class LingoDataImporter {
 
 			final PortModel portModel = ScenarioModelUtil.getPortModel((LNGScenarioModel) modelReference.getInstance());
 			final EditingDomain editingDomain = modelReference.getEditingDomain();
-			final Command command = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, version);
+			final Command command = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, version, updatePortNames);
 
 			if (!command.canExecute()) {
 				throw new RuntimeException("Unable to execute command");

@@ -89,7 +89,7 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 
 										final PortModel portModel = ScenarioModelUtil.getPortModel((LNGScenarioModel) modelReference.getInstance());
 										final EditingDomain editingDomain = modelReference.getEditingDomain();
-										final Command command = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, version);
+										final Command command = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, version, false);
 
 										if (!command.canExecute()) {
 											throw new RuntimeException("Unable to execute command");

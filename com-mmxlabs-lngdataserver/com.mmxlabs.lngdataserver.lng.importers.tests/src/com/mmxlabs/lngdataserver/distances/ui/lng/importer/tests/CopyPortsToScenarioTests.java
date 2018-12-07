@@ -54,7 +54,7 @@ public class CopyPortsToScenarioTests {
 		{
 			final String distInput = DataLoader.importData("v1.0.11.250_7.json");
 			final DistancesVersion versionA = mapper.readerFor(DistancesVersion.class).readValue(distInput);
-			final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, versionA);
+			final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, versionA, true);
 			editingDomain.getCommandStack().execute(updateCommand);
 		}
 		final Command updateCommand = PortsToScenarioCopier.getUpdateCommand(editingDomain, portModel, originalVersion);
@@ -85,7 +85,7 @@ public class CopyPortsToScenarioTests {
 			{
 				final String distInput = DataLoader.importData("v1.0.11.250_7.json");
 				final DistancesVersion versionA = mapper.readerFor(DistancesVersion.class).readValue(distInput);
-				final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, versionA);
+				final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, versionA, true);
 				editingDomain.getCommandStack().execute(updateCommand);
 			}
 			{
