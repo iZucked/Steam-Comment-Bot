@@ -86,6 +86,8 @@ public class LightWeightSchedulerOptimiserUnit {
 
 	private CleanStateOptimisationStage stage;
 
+	private @NonNull CleanableExecutorService executorService;
+
 	@NonNull
 	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final LNGScenarioToOptimiserBridge optimiserBridge, @NonNull final String stage,
 			@NonNull final UserSettings userSettings, @NonNull final CleanStateOptimisationStage stageSettings, final int progressTicks, @NonNull final CleanableExecutorService executorService,
@@ -173,6 +175,7 @@ public class LightWeightSchedulerOptimiserUnit {
 		this.userSettings = userSettings;
 		this.stage = stage;
 		this.constraintAndFitnessSettings = constraintAndFitnessSettings;
+		this.executorService = executorService;
 		this.hints = hints;
 	}
 
@@ -320,7 +323,7 @@ public class LightWeightSchedulerOptimiserUnit {
 		try {
 
 			final LightWeightSchedulerOptimiser calculator = stage2Injector.getInstance(LightWeightSchedulerOptimiser.class);
-			final Pair<ISequences, Long> result = calculator.optimise(pnlVessel, monitor);
+			final Pair<ISequences, Long> result = calculator.optimise(pnlVessel, executorService, monitor);
 
 			final List<NonNullPair<ISequences, Map<String, Object>>> solutions = new LinkedList<>();
 			solutions.add(new NonNullPair<>(result.getFirst(), new HashMap<>()));

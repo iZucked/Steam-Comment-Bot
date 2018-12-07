@@ -7,6 +7,9 @@ package com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 
 /**
  * Optimiser for lightweight cargo scheduling
@@ -16,5 +19,5 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public interface ILightWeightSequenceOptimiser {
 	List<List<Integer>> optimise(ILightWeightOptimisationData lightWeightOptimisationData, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions,
-			IProgressMonitor monitor);
+			@NonNull CleanableExecutorService executorService, IProgressMonitor monitor);
 }

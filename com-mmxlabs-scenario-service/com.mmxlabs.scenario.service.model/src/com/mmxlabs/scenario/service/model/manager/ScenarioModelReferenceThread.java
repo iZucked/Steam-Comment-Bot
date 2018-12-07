@@ -21,7 +21,7 @@ public class ScenarioModelReferenceThread extends Thread {
 	private final IScenarioDataProvider scenarioDataProvider;
 
 	public ScenarioModelReferenceThread(final String name, final ScenarioModelRecord modelRecord, final Consumer<IScenarioDataProvider> action) {
-		super(name);
+		super(new ThreadGroup(name), name);
 		this.scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ModelReferenceThread:1");
 		this.action = action;
 	}

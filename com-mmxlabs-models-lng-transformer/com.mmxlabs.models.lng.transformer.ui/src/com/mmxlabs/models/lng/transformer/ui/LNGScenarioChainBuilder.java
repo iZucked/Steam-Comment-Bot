@@ -6,7 +6,7 @@ package com.mmxlabs.models.lng.transformer.ui;
 
 import java.util.OptionalLong;
 import java.util.Set;
-import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.NamedExecutorService;
 import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -45,7 +46,7 @@ public class LNGScenarioChainBuilder {
 	 * @param scenarioToOptimiserBridge
 	 * @param optimiserSettings
 	 * @param executorService
-	 *            Optional (for now) {@link CleanableExecutorService} for parallelisation
+	 *                                      Optional (for now) {@link CleanableExecutorService} for parallelisation
 	 * @param initialHints
 	 * @return
 	 */
@@ -69,7 +70,7 @@ public class LNGScenarioChainBuilder {
 
 			BiConsumer<LNGScenarioToOptimiserBridge, String> exportCallback = (bridge, name) -> {
 				SolutionSetExporterUnit.exportMultipleSolutions(builder, 1, bridge, () -> {
-					OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
+					final OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
 					options.setName(name);
 					options.setUserSettings(EcoreUtil.copy(dataTransformer.getUserSettings()));
 					return options;
@@ -78,7 +79,7 @@ public class LNGScenarioChainBuilder {
 
 			if (!optimisationPlan.getStages().isEmpty()) {
 
-				UserSettings userSettings = optimisationPlan.getUserSettings();
+				final UserSettings userSettings = optimisationPlan.getUserSettings();
 				for (final OptimisationStage stage : optimisationPlan.getStages()) {
 					BiConsumer<LNGScenarioToOptimiserBridge, String> callback;
 					if (stage instanceof ParallelOptimisationStage<?>) {
@@ -104,7 +105,7 @@ public class LNGScenarioChainBuilder {
 			// TODO: Remove this step if we can get rid of the IAnnotatedSolutions.
 			boolean breakeven = false;
 			BreakEvenOptimisationStage beStage = null;
-			for (OptimisationStage stage : optimisationPlan.getStages()) {
+			for (final OptimisationStage stage : optimisationPlan.getStages()) {
 				if (stage instanceof BreakEvenOptimisationStage) {
 					breakeven = true;
 					beStage = (BreakEvenOptimisationStage) stage;
@@ -127,9 +128,10 @@ public class LNGScenarioChainBuilder {
 		return createExecutorService(cores);
 	}
 
+
 	@NonNull
 	public static CleanableExecutorService createExecutorService(final int nThreads) {
-		return new SimpleCleanableExecutorService(Executors.newFixedThreadPool(nThreads));
+		return new SimpleCleanableExecutorService(NamedExecutorService.createFixedPool(nThreads));
 	}
 
 	public static int getNumberOfAvailableCores() {
