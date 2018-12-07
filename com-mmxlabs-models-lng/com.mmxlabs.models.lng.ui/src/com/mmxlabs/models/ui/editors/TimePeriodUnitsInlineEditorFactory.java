@@ -20,7 +20,10 @@ public class TimePeriodUnitsInlineEditorFactory implements IInlineEditorFactory 
 
 		ArrayList<Object> objectsList = new ArrayList<>();
 		for (final TimePeriod type : TimePeriod.values()) {
-			if ((type == TimePeriod.HOURS) && (feature == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS)) {
+			if ((type == TimePeriod.HOURS) && (feature == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS
+					|| feature == CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_SIZE_UNITS
+					|| feature == CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_SIZE_UNITS
+					|| feature == CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_SIZE_UNITS)) {
 				continue;
 			}
 			final String name;

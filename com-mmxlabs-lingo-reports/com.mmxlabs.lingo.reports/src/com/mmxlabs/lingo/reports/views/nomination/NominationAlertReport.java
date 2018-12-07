@@ -158,8 +158,8 @@ public class NominationAlertReport extends AbstractReportView {
 		createColumn(sortingSupport, "Type", rowData -> rowData.type, rowData -> rowData.type);
 		createColumn(sortingSupport, "Date", rowData -> Formatters.asLocalDateFormatter.render(rowData.date), rowData -> rowData.date);
 		createColumn(sortingSupport, "Nomination Type", rowData -> rowData.nominationType, rowData -> rowData.nominationType);
-		//createColumn(sortingSupport, "Current nomination", rowData -> rowData.nomination, rowData -> rowData.nomination);
 		createColumn(sortingSupport, "Nominate by", rowData -> Formatters.asLocalDateFormatter.render(rowData.nominateBy), rowData -> rowData.nominateBy);
+		createColumn(null, "Remark", rowData -> rowData.nominationComment, rowData -> rowData.nominationComment);
 
 		viewer.getGrid().setLinesVisible(true);
 
@@ -205,7 +205,9 @@ public class NominationAlertReport extends AbstractReportView {
 				}
 			}
 		});
-		tv.addSortableColumn(viewer, column, column.getColumn());
+		if (tv != null) {
+			tv.addSortableColumn(viewer, column, column.getColumn());
+		}
 
 		final IComparableProvider provider = (o) -> sortFunction.apply((RowData) o);
 		column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, provider);

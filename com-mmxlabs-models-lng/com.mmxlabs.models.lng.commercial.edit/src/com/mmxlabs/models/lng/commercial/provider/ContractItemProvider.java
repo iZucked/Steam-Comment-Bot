@@ -75,6 +75,16 @@ public class ContractItemProvider
 			addCancellationExpressionPropertyDescriptor(object);
 			addWindowNominationSizePropertyDescriptor(object);
 			addWindowNominationSizeUnitsPropertyDescriptor(object);
+			addWindowNominationCounterpartyPropertyDescriptor(object);
+			addVesselNominationSizePropertyDescriptor(object);
+			addVesselNominationSizeUnitsPropertyDescriptor(object);
+			addVesselNominationCounterpartyPropertyDescriptor(object);
+			addVolumeNominationSizePropertyDescriptor(object);
+			addVolumeNominationSizeUnitsPropertyDescriptor(object);
+			addVolumeNominationCounterpartyPropertyDescriptor(object);
+			addPortNominationSizePropertyDescriptor(object);
+			addPortNominationSizeUnitsPropertyDescriptor(object);
+			addPortNominationCounterpartyPropertyDescriptor(object);
 			addDivertiblePropertyDescriptor(object);
 			addShippingDaysRestrictionPropertyDescriptor(object);
 		}
@@ -478,6 +488,28 @@ public class ContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Window Nomination Counterparty feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWindowNominationCounterpartyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_windowNominationCounterparty_feature"),
+				 getString("_UI_Contract_windowNominationCounterparty_description"),
+				 CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_COUNTERPARTY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Divertible feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -517,6 +549,204 @@ public class ContractItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Vessel Nomination Size feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselNominationSizePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_vesselNominationSize_feature"),
+				 getString("_UI_Contract_vesselNominationSize_description"),
+				 CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_SIZE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Vessel Nomination Size Units feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselNominationSizeUnitsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_vesselNominationSizeUnits_feature"),
+				 getString("_UI_Contract_vesselNominationSizeUnits_description"),
+				 CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_SIZE_UNITS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Vessel Nomination Counterparty feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselNominationCounterpartyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_vesselNominationCounterparty_feature"),
+				 getString("_UI_Contract_vesselNominationCounterparty_description"),
+				 CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_COUNTERPARTY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume Nomination Size feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeNominationSizePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_volumeNominationSize_feature"),
+				 getString("_UI_Contract_volumeNominationSize_description"),
+				 CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_SIZE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume Nomination Size Units feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeNominationSizeUnitsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_volumeNominationSizeUnits_feature"),
+				 getString("_UI_Contract_volumeNominationSizeUnits_description"),
+				 CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_SIZE_UNITS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume Nomination Counterparty feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeNominationCounterpartyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_volumeNominationCounterparty_feature"),
+				 getString("_UI_Contract_volumeNominationCounterparty_description"),
+				 CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_COUNTERPARTY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Port Nomination Size feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortNominationSizePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_portNominationSize_feature"),
+				 getString("_UI_Contract_portNominationSize_description"),
+				 CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_SIZE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Port Nomination Size Units feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortNominationSizeUnitsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_portNominationSizeUnits_feature"),
+				 getString("_UI_Contract_portNominationSizeUnits_description"),
+				 CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_SIZE_UNITS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Port Nomination Counterparty feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortNominationCounterpartyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_portNominationCounterparty_feature"),
+				 getString("_UI_Contract_portNominationCounterparty_description"),
+				 CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_COUNTERPARTY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -738,6 +968,16 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE:
 			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
+			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_COUNTERPARTY:
+			case CommercialPackage.CONTRACT__VESSEL_NOMINATION_SIZE:
+			case CommercialPackage.CONTRACT__VESSEL_NOMINATION_SIZE_UNITS:
+			case CommercialPackage.CONTRACT__VESSEL_NOMINATION_COUNTERPARTY:
+			case CommercialPackage.CONTRACT__VOLUME_NOMINATION_SIZE:
+			case CommercialPackage.CONTRACT__VOLUME_NOMINATION_SIZE_UNITS:
+			case CommercialPackage.CONTRACT__VOLUME_NOMINATION_COUNTERPARTY:
+			case CommercialPackage.CONTRACT__PORT_NOMINATION_SIZE:
+			case CommercialPackage.CONTRACT__PORT_NOMINATION_SIZE_UNITS:
+			case CommercialPackage.CONTRACT__PORT_NOMINATION_COUNTERPARTY:
 			case CommercialPackage.CONTRACT__DIVERTIBLE:
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

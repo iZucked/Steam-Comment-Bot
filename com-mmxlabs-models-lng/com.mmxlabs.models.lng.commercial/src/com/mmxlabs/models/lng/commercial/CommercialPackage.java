@@ -524,13 +524,103 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__WINDOW_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
 
 	/**
+	 * The feature id for the '<em><b>Window Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__WINDOW_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__VESSEL_NOMINATION_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__VESSEL_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__VESSEL_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
+
+	/**
+	 * The feature id for the '<em><b>Volume Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__VOLUME_NOMINATION_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
+
+	/**
+	 * The feature id for the '<em><b>Volume Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__VOLUME_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
+
+	/**
+	 * The feature id for the '<em><b>Volume Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__VOLUME_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 30;
+
+	/**
+	 * The feature id for the '<em><b>Port Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__PORT_NOMINATION_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 31;
+
+	/**
+	 * The feature id for the '<em><b>Port Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__PORT_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 32;
+
+	/**
+	 * The feature id for the '<em><b>Port Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__PORT_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 33;
+
+	/**
 	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__DIVERTIBLE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
+	int CONTRACT__DIVERTIBLE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 34;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
@@ -539,7 +629,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
+	int CONTRACT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 35;
 
 	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
@@ -548,7 +638,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
+	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 36;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -793,6 +883,96 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__WINDOW_NOMINATION_SIZE_UNITS = CONTRACT__WINDOW_NOMINATION_SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Window Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__WINDOW_NOMINATION_COUNTERPARTY = CONTRACT__WINDOW_NOMINATION_COUNTERPARTY;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__VESSEL_NOMINATION_SIZE = CONTRACT__VESSEL_NOMINATION_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__VESSEL_NOMINATION_SIZE_UNITS = CONTRACT__VESSEL_NOMINATION_SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__VESSEL_NOMINATION_COUNTERPARTY = CONTRACT__VESSEL_NOMINATION_COUNTERPARTY;
+
+	/**
+	 * The feature id for the '<em><b>Volume Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__VOLUME_NOMINATION_SIZE = CONTRACT__VOLUME_NOMINATION_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Volume Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__VOLUME_NOMINATION_SIZE_UNITS = CONTRACT__VOLUME_NOMINATION_SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Volume Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__VOLUME_NOMINATION_COUNTERPARTY = CONTRACT__VOLUME_NOMINATION_COUNTERPARTY;
+
+	/**
+	 * The feature id for the '<em><b>Port Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__PORT_NOMINATION_SIZE = CONTRACT__PORT_NOMINATION_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Port Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__PORT_NOMINATION_SIZE_UNITS = CONTRACT__PORT_NOMINATION_SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Port Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__PORT_NOMINATION_COUNTERPARTY = CONTRACT__PORT_NOMINATION_COUNTERPARTY;
 
 	/**
 	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
@@ -1091,6 +1271,96 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int PURCHASE_CONTRACT__WINDOW_NOMINATION_SIZE_UNITS = CONTRACT__WINDOW_NOMINATION_SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Window Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__WINDOW_NOMINATION_COUNTERPARTY = CONTRACT__WINDOW_NOMINATION_COUNTERPARTY;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__VESSEL_NOMINATION_SIZE = CONTRACT__VESSEL_NOMINATION_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__VESSEL_NOMINATION_SIZE_UNITS = CONTRACT__VESSEL_NOMINATION_SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__VESSEL_NOMINATION_COUNTERPARTY = CONTRACT__VESSEL_NOMINATION_COUNTERPARTY;
+
+	/**
+	 * The feature id for the '<em><b>Volume Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__VOLUME_NOMINATION_SIZE = CONTRACT__VOLUME_NOMINATION_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Volume Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__VOLUME_NOMINATION_SIZE_UNITS = CONTRACT__VOLUME_NOMINATION_SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Volume Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__VOLUME_NOMINATION_COUNTERPARTY = CONTRACT__VOLUME_NOMINATION_COUNTERPARTY;
+
+	/**
+	 * The feature id for the '<em><b>Port Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__PORT_NOMINATION_SIZE = CONTRACT__PORT_NOMINATION_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Port Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__PORT_NOMINATION_SIZE_UNITS = CONTRACT__PORT_NOMINATION_SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Port Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__PORT_NOMINATION_COUNTERPARTY = CONTRACT__PORT_NOMINATION_COUNTERPARTY;
 
 	/**
 	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
@@ -2308,6 +2578,17 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getContract_WindowNominationSizeUnits();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#isWindowNominationCounterparty <em>Window Nomination Counterparty</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Window Nomination Counterparty</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#isWindowNominationCounterparty()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_WindowNominationCounterparty();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#isDivertible <em>Divertible</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2328,6 +2609,105 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getContract_ShippingDaysRestriction();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getVesselNominationSize <em>Vessel Nomination Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Vessel Nomination Size</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getVesselNominationSize()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_VesselNominationSize();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getVesselNominationSizeUnits <em>Vessel Nomination Size Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Vessel Nomination Size Units</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getVesselNominationSizeUnits()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_VesselNominationSizeUnits();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#isVesselNominationCounterparty <em>Vessel Nomination Counterparty</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Vessel Nomination Counterparty</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#isVesselNominationCounterparty()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_VesselNominationCounterparty();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getVolumeNominationSize <em>Volume Nomination Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Nomination Size</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getVolumeNominationSize()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_VolumeNominationSize();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getVolumeNominationSizeUnits <em>Volume Nomination Size Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Nomination Size Units</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getVolumeNominationSizeUnits()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_VolumeNominationSizeUnits();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#isVolumeNominationCounterparty <em>Volume Nomination Counterparty</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Nomination Counterparty</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#isVolumeNominationCounterparty()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_VolumeNominationCounterparty();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getPortNominationSize <em>Port Nomination Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Port Nomination Size</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getPortNominationSize()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_PortNominationSize();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getPortNominationSizeUnits <em>Port Nomination Size Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Port Nomination Size Units</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getPortNominationSizeUnits()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_PortNominationSizeUnits();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#isPortNominationCounterparty <em>Port Nomination Counterparty</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Port Nomination Counterparty</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#isPortNominationCounterparty()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_PortNominationCounterparty();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getContractYearStart <em>Contract Year Start</em>}'.
@@ -3156,6 +3536,14 @@ public interface CommercialPackage extends EPackage {
 		EAttribute CONTRACT__WINDOW_NOMINATION_SIZE_UNITS = eINSTANCE.getContract_WindowNominationSizeUnits();
 
 		/**
+		 * The meta object literal for the '<em><b>Window Nomination Counterparty</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__WINDOW_NOMINATION_COUNTERPARTY = eINSTANCE.getContract_WindowNominationCounterparty();
+
+		/**
 		 * The meta object literal for the '<em><b>Divertible</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3170,6 +3558,78 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONTRACT__SHIPPING_DAYS_RESTRICTION = eINSTANCE.getContract_ShippingDaysRestriction();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Nomination Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__VESSEL_NOMINATION_SIZE = eINSTANCE.getContract_VesselNominationSize();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Nomination Size Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__VESSEL_NOMINATION_SIZE_UNITS = eINSTANCE.getContract_VesselNominationSizeUnits();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Nomination Counterparty</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__VESSEL_NOMINATION_COUNTERPARTY = eINSTANCE.getContract_VesselNominationCounterparty();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Nomination Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__VOLUME_NOMINATION_SIZE = eINSTANCE.getContract_VolumeNominationSize();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Nomination Size Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__VOLUME_NOMINATION_SIZE_UNITS = eINSTANCE.getContract_VolumeNominationSizeUnits();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Nomination Counterparty</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__VOLUME_NOMINATION_COUNTERPARTY = eINSTANCE.getContract_VolumeNominationCounterparty();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Nomination Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__PORT_NOMINATION_SIZE = eINSTANCE.getContract_PortNominationSize();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Nomination Size Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__PORT_NOMINATION_SIZE_UNITS = eINSTANCE.getContract_PortNominationSizeUnits();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Nomination Counterparty</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__PORT_NOMINATION_COUNTERPARTY = eINSTANCE.getContract_PortNominationCounterparty();
 
 		/**
 		 * The meta object literal for the '<em><b>Contract Year Start</b></em>' attribute feature.

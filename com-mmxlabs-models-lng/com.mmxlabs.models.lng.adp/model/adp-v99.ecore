@@ -18,9 +18,16 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ContractProfile">
     <eTypeParameters name="T">
-      <eBounds eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"/>
+      <eBounds eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot">
+        <eTypeArguments eTypeParameter="#//ContractProfile/U"/>
+      </eBounds>
     </eTypeParameters>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="contract" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"/>
+    <eTypeParameters name="U">
+      <eBounds eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"/>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contract">
+      <eGenericType eTypeParameter="#//ContractProfile/U"/>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contractCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="custom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
@@ -30,6 +37,7 @@
         containment="true">
       <eGenericType eClassifier="#//SubContractProfile">
         <eTypeArguments eTypeParameter="#//ContractProfile/T"/>
+        <eTypeArguments eTypeParameter="#//ContractProfile/U"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
@@ -38,16 +46,23 @@
   <eClassifiers xsi:type="ecore:EClass" name="PurchaseContractProfile">
     <eGenericSuperTypes eClassifier="#//ContractProfile">
       <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
+      <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PurchaseContract"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SalesContractProfile">
     <eGenericSuperTypes eClassifier="#//ContractProfile">
       <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
+      <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SalesContract"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SubContractProfile">
     <eTypeParameters name="T">
-      <eBounds eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"/>
+      <eBounds eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot">
+        <eTypeArguments eTypeParameter="#//SubContractProfile/U"/>
+      </eBounds>
+    </eTypeParameters>
+    <eTypeParameters name="U">
+      <eBounds eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"/>
     </eTypeParameters>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contractType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//ContractType"/>
@@ -120,26 +135,20 @@
   <eClassifiers xsi:type="ecore:EClass" name="SupplyFromFlow" eSuperTypes="#//FlowType"/>
   <eClassifiers xsi:type="ecore:EClass" name="DeliverToFlow" eSuperTypes="#//FlowType"/>
   <eClassifiers xsi:type="ecore:EClass" name="SupplyFromProfileFlow" eSuperTypes="#//SupplyFromFlow">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="profile">
-      <eGenericType eClassifier="#//ContractProfile">
-        <eTypeArguments/>
-      </eGenericType>
-    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="profile" eType="#//PurchaseContractProfile"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subProfile">
       <eGenericType eClassifier="#//SubContractProfile">
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PurchaseContract"/>
       </eGenericType>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DeliverToProfileFlow" eSuperTypes="#//DeliverToFlow">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="profile">
-      <eGenericType eClassifier="#//ContractProfile">
-        <eTypeArguments/>
-      </eGenericType>
-    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="profile" eType="#//SalesContractProfile"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subProfile">
       <eGenericType eClassifier="#//SubContractProfile">
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SalesContract"/>
       </eGenericType>
     </eStructuralFeatures>
   </eClassifiers>

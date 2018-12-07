@@ -67,6 +67,20 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowNominationDate <em>Window Nomination Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isWindowNominationIsDone <em>Window Nomination Is Done</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isWindowNominationCounterparty <em>Window Nomination Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowNominationComment <em>Window Nomination Comment</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getVolumeNominationDate <em>Volume Nomination Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isVolumeNominationDone <em>Volume Nomination Done</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isVolumeNominationCounterparty <em>Volume Nomination Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getVolumeNominationComment <em>Volume Nomination Comment</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getVesselNominationDate <em>Vessel Nomination Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isVesselNominationDone <em>Vessel Nomination Done</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isVesselNominationCounterparty <em>Vessel Nomination Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getVesselNominationComment <em>Vessel Nomination Comment</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPortNominationDate <em>Port Nomination Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isPortNominationDone <em>Port Nomination Done</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isPortNominationCounterparty <em>Port Nomination Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPortNominationComment <em>Port Nomination Comment</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot()
@@ -1592,11 +1606,9 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Window Nomination Is Done</em>' attribute.
-	 * @see #isSetWindowNominationIsDone()
-	 * @see #unsetWindowNominationIsDone()
 	 * @see #setWindowNominationIsDone(boolean)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowNominationIsDone()
-	 * @model unique="false" unsettable="true"
+	 * @model unique="false"
 	 * @generated
 	 */
 	boolean isWindowNominationIsDone();
@@ -1606,35 +1618,563 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Window Nomination Is Done</em>' attribute.
-	 * @see #isSetWindowNominationIsDone()
-	 * @see #unsetWindowNominationIsDone()
 	 * @see #isWindowNominationIsDone()
 	 * @generated
 	 */
 	void setWindowNominationIsDone(boolean value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isWindowNominationIsDone <em>Window Nomination Is Done</em>}' attribute.
+	 * Returns the value of the '<em><b>Window Nomination Counterparty</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Window Nomination Counterparty</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #isSetWindowNominationIsDone()
-	 * @see #isWindowNominationIsDone()
-	 * @see #setWindowNominationIsDone(boolean)
+	 * @return the value of the '<em>Window Nomination Counterparty</em>' attribute.
+	 * @see #isSetWindowNominationCounterparty()
+	 * @see #unsetWindowNominationCounterparty()
+	 * @see #setWindowNominationCounterparty(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowNominationCounterparty()
+	 * @model unique="false" unsettable="true"
 	 * @generated
 	 */
-	void unsetWindowNominationIsDone();
+	boolean isWindowNominationCounterparty();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isWindowNominationIsDone <em>Window Nomination Is Done</em>}' attribute is set.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isWindowNominationCounterparty <em>Window Nomination Counterparty</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Window Nomination Is Done</em>' attribute is set.
-	 * @see #unsetWindowNominationIsDone()
-	 * @see #isWindowNominationIsDone()
-	 * @see #setWindowNominationIsDone(boolean)
+	 * @param value the new value of the '<em>Window Nomination Counterparty</em>' attribute.
+	 * @see #isSetWindowNominationCounterparty()
+	 * @see #unsetWindowNominationCounterparty()
+	 * @see #isWindowNominationCounterparty()
 	 * @generated
 	 */
-	boolean isSetWindowNominationIsDone();
+	void setWindowNominationCounterparty(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isWindowNominationCounterparty <em>Window Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetWindowNominationCounterparty()
+	 * @see #isWindowNominationCounterparty()
+	 * @see #setWindowNominationCounterparty(boolean)
+	 * @generated
+	 */
+	void unsetWindowNominationCounterparty();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isWindowNominationCounterparty <em>Window Nomination Counterparty</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Window Nomination Counterparty</em>' attribute is set.
+	 * @see #unsetWindowNominationCounterparty()
+	 * @see #isWindowNominationCounterparty()
+	 * @see #setWindowNominationCounterparty(boolean)
+	 * @generated
+	 */
+	boolean isSetWindowNominationCounterparty();
+
+	/**
+	 * Returns the value of the '<em><b>Window Nomination Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Window Nomination Comment</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Window Nomination Comment</em>' attribute.
+	 * @see #setWindowNominationComment(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowNominationComment()
+	 * @model unique="false"
+	 * @generated
+	 */
+	String getWindowNominationComment();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowNominationComment <em>Window Nomination Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Nomination Comment</em>' attribute.
+	 * @see #getWindowNominationComment()
+	 * @generated
+	 */
+	void setWindowNominationComment(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Volume Nomination Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume Nomination Date</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume Nomination Date</em>' attribute.
+	 * @see #isSetVolumeNominationDate()
+	 * @see #unsetVolumeNominationDate()
+	 * @see #setVolumeNominationDate(LocalDate)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_VolumeNominationDate()
+	 * @model unique="false" unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getVolumeNominationDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getVolumeNominationDate <em>Volume Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume Nomination Date</em>' attribute.
+	 * @see #isSetVolumeNominationDate()
+	 * @see #unsetVolumeNominationDate()
+	 * @see #getVolumeNominationDate()
+	 * @generated
+	 */
+	void setVolumeNominationDate(LocalDate value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getVolumeNominationDate <em>Volume Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetVolumeNominationDate()
+	 * @see #getVolumeNominationDate()
+	 * @see #setVolumeNominationDate(LocalDate)
+	 * @generated
+	 */
+	void unsetVolumeNominationDate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getVolumeNominationDate <em>Volume Nomination Date</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Volume Nomination Date</em>' attribute is set.
+	 * @see #unsetVolumeNominationDate()
+	 * @see #getVolumeNominationDate()
+	 * @see #setVolumeNominationDate(LocalDate)
+	 * @generated
+	 */
+	boolean isSetVolumeNominationDate();
+
+	/**
+	 * Returns the value of the '<em><b>Volume Nomination Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume Nomination Done</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume Nomination Done</em>' attribute.
+	 * @see #setVolumeNominationDone(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_VolumeNominationDone()
+	 * @model unique="false"
+	 * @generated
+	 */
+	boolean isVolumeNominationDone();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isVolumeNominationDone <em>Volume Nomination Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume Nomination Done</em>' attribute.
+	 * @see #isVolumeNominationDone()
+	 * @generated
+	 */
+	void setVolumeNominationDone(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Volume Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume Nomination Counterparty</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume Nomination Counterparty</em>' attribute.
+	 * @see #isSetVolumeNominationCounterparty()
+	 * @see #unsetVolumeNominationCounterparty()
+	 * @see #setVolumeNominationCounterparty(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_VolumeNominationCounterparty()
+	 * @model unique="false" unsettable="true"
+	 * @generated
+	 */
+	boolean isVolumeNominationCounterparty();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isVolumeNominationCounterparty <em>Volume Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume Nomination Counterparty</em>' attribute.
+	 * @see #isSetVolumeNominationCounterparty()
+	 * @see #unsetVolumeNominationCounterparty()
+	 * @see #isVolumeNominationCounterparty()
+	 * @generated
+	 */
+	void setVolumeNominationCounterparty(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isVolumeNominationCounterparty <em>Volume Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetVolumeNominationCounterparty()
+	 * @see #isVolumeNominationCounterparty()
+	 * @see #setVolumeNominationCounterparty(boolean)
+	 * @generated
+	 */
+	void unsetVolumeNominationCounterparty();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isVolumeNominationCounterparty <em>Volume Nomination Counterparty</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Volume Nomination Counterparty</em>' attribute is set.
+	 * @see #unsetVolumeNominationCounterparty()
+	 * @see #isVolumeNominationCounterparty()
+	 * @see #setVolumeNominationCounterparty(boolean)
+	 * @generated
+	 */
+	boolean isSetVolumeNominationCounterparty();
+
+	/**
+	 * Returns the value of the '<em><b>Volume Nomination Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume Nomination Comment</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume Nomination Comment</em>' attribute.
+	 * @see #setVolumeNominationComment(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_VolumeNominationComment()
+	 * @model unique="false"
+	 * @generated
+	 */
+	String getVolumeNominationComment();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getVolumeNominationComment <em>Volume Nomination Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume Nomination Comment</em>' attribute.
+	 * @see #getVolumeNominationComment()
+	 * @generated
+	 */
+	void setVolumeNominationComment(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Nomination Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Nomination Date</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Nomination Date</em>' attribute.
+	 * @see #isSetVesselNominationDate()
+	 * @see #unsetVesselNominationDate()
+	 * @see #setVesselNominationDate(LocalDate)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_VesselNominationDate()
+	 * @model unique="false" unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getVesselNominationDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getVesselNominationDate <em>Vessel Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel Nomination Date</em>' attribute.
+	 * @see #isSetVesselNominationDate()
+	 * @see #unsetVesselNominationDate()
+	 * @see #getVesselNominationDate()
+	 * @generated
+	 */
+	void setVesselNominationDate(LocalDate value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getVesselNominationDate <em>Vessel Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetVesselNominationDate()
+	 * @see #getVesselNominationDate()
+	 * @see #setVesselNominationDate(LocalDate)
+	 * @generated
+	 */
+	void unsetVesselNominationDate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getVesselNominationDate <em>Vessel Nomination Date</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Vessel Nomination Date</em>' attribute is set.
+	 * @see #unsetVesselNominationDate()
+	 * @see #getVesselNominationDate()
+	 * @see #setVesselNominationDate(LocalDate)
+	 * @generated
+	 */
+	boolean isSetVesselNominationDate();
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Nomination Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Nomination Done</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Nomination Done</em>' attribute.
+	 * @see #setVesselNominationDone(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_VesselNominationDone()
+	 * @model unique="false"
+	 * @generated
+	 */
+	boolean isVesselNominationDone();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isVesselNominationDone <em>Vessel Nomination Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel Nomination Done</em>' attribute.
+	 * @see #isVesselNominationDone()
+	 * @generated
+	 */
+	void setVesselNominationDone(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Nomination Counterparty</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Nomination Counterparty</em>' attribute.
+	 * @see #isSetVesselNominationCounterparty()
+	 * @see #unsetVesselNominationCounterparty()
+	 * @see #setVesselNominationCounterparty(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_VesselNominationCounterparty()
+	 * @model unique="false" unsettable="true"
+	 * @generated
+	 */
+	boolean isVesselNominationCounterparty();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isVesselNominationCounterparty <em>Vessel Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel Nomination Counterparty</em>' attribute.
+	 * @see #isSetVesselNominationCounterparty()
+	 * @see #unsetVesselNominationCounterparty()
+	 * @see #isVesselNominationCounterparty()
+	 * @generated
+	 */
+	void setVesselNominationCounterparty(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isVesselNominationCounterparty <em>Vessel Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetVesselNominationCounterparty()
+	 * @see #isVesselNominationCounterparty()
+	 * @see #setVesselNominationCounterparty(boolean)
+	 * @generated
+	 */
+	void unsetVesselNominationCounterparty();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isVesselNominationCounterparty <em>Vessel Nomination Counterparty</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Vessel Nomination Counterparty</em>' attribute is set.
+	 * @see #unsetVesselNominationCounterparty()
+	 * @see #isVesselNominationCounterparty()
+	 * @see #setVesselNominationCounterparty(boolean)
+	 * @generated
+	 */
+	boolean isSetVesselNominationCounterparty();
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Nomination Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Nomination Comment</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Nomination Comment</em>' attribute.
+	 * @see #setVesselNominationComment(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_VesselNominationComment()
+	 * @model unique="false"
+	 * @generated
+	 */
+	String getVesselNominationComment();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getVesselNominationComment <em>Vessel Nomination Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel Nomination Comment</em>' attribute.
+	 * @see #getVesselNominationComment()
+	 * @generated
+	 */
+	void setVesselNominationComment(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Port Nomination Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Nomination Date</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Nomination Date</em>' attribute.
+	 * @see #isSetPortNominationDate()
+	 * @see #unsetPortNominationDate()
+	 * @see #setPortNominationDate(LocalDate)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_PortNominationDate()
+	 * @model unique="false" unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getPortNominationDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPortNominationDate <em>Port Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Nomination Date</em>' attribute.
+	 * @see #isSetPortNominationDate()
+	 * @see #unsetPortNominationDate()
+	 * @see #getPortNominationDate()
+	 * @generated
+	 */
+	void setPortNominationDate(LocalDate value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPortNominationDate <em>Port Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPortNominationDate()
+	 * @see #getPortNominationDate()
+	 * @see #setPortNominationDate(LocalDate)
+	 * @generated
+	 */
+	void unsetPortNominationDate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPortNominationDate <em>Port Nomination Date</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Port Nomination Date</em>' attribute is set.
+	 * @see #unsetPortNominationDate()
+	 * @see #getPortNominationDate()
+	 * @see #setPortNominationDate(LocalDate)
+	 * @generated
+	 */
+	boolean isSetPortNominationDate();
+
+	/**
+	 * Returns the value of the '<em><b>Port Nomination Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Nomination Done</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Nomination Done</em>' attribute.
+	 * @see #setPortNominationDone(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_PortNominationDone()
+	 * @model unique="false"
+	 * @generated
+	 */
+	boolean isPortNominationDone();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isPortNominationDone <em>Port Nomination Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Nomination Done</em>' attribute.
+	 * @see #isPortNominationDone()
+	 * @generated
+	 */
+	void setPortNominationDone(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Port Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Nomination Counterparty</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Nomination Counterparty</em>' attribute.
+	 * @see #isSetPortNominationCounterparty()
+	 * @see #unsetPortNominationCounterparty()
+	 * @see #setPortNominationCounterparty(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_PortNominationCounterparty()
+	 * @model unique="false" unsettable="true"
+	 * @generated
+	 */
+	boolean isPortNominationCounterparty();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isPortNominationCounterparty <em>Port Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Nomination Counterparty</em>' attribute.
+	 * @see #isSetPortNominationCounterparty()
+	 * @see #unsetPortNominationCounterparty()
+	 * @see #isPortNominationCounterparty()
+	 * @generated
+	 */
+	void setPortNominationCounterparty(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isPortNominationCounterparty <em>Port Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPortNominationCounterparty()
+	 * @see #isPortNominationCounterparty()
+	 * @see #setPortNominationCounterparty(boolean)
+	 * @generated
+	 */
+	void unsetPortNominationCounterparty();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isPortNominationCounterparty <em>Port Nomination Counterparty</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Port Nomination Counterparty</em>' attribute is set.
+	 * @see #unsetPortNominationCounterparty()
+	 * @see #isPortNominationCounterparty()
+	 * @see #setPortNominationCounterparty(boolean)
+	 * @generated
+	 */
+	boolean isSetPortNominationCounterparty();
+
+	/**
+	 * Returns the value of the '<em><b>Port Nomination Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Nomination Comment</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Nomination Comment</em>' attribute.
+	 * @see #setPortNominationComment(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_PortNominationComment()
+	 * @model unique="false"
+	 * @generated
+	 */
+	String getPortNominationComment();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPortNominationComment <em>Port Nomination Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Nomination Comment</em>' attribute.
+	 * @see #getPortNominationComment()
+	 * @generated
+	 */
+	void setPortNominationComment(String value);
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1821,6 +2361,62 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	int getSlotOrDelegateShippingDaysRestriction();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getSlotOrDelegateVesselNominationDate();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getSlotOrDelegateVolumeNominationDate();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getSlotOrDelegatePortNominationDate();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean getSlotOrDelegateWindowNominationCounterparty();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean getSlotOrDelegateVesselNominationCounterparty();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean getSlotOrDelegateVolumeNominationCounterparty();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean getSlotOrDelegatePortNominationCounterparty();
 
 } // end of  Slot
 

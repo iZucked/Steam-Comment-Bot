@@ -106,7 +106,6 @@ public class NominationAlertReportTransformer {
 			this.date = slot.getWindowStart();
 			this.nomination = "";
 			this.nominateBy = null;
-			this.nominationComment = ""; //none yet
 			this.pinned = pinned;
 			
 			switch (nType) {
@@ -114,22 +113,27 @@ public class NominationAlertReportTransformer {
 				this.nominationType = slot instanceof LoadSlot ? "Buy window" : "Sell window";
 				this.nomination = Formatters.asLocalDateFormatter.render(slot.getWindowStartWithSlotOrPortTime().toLocalDate());
 				this.nominateBy = slot.getSlotOrDelegateWindowNominationDate();
+				this.nominationComment = slot.getWindowNominationComment() != null ? slot.getWindowNominationComment() : "";
 				}
 				break;
 			case SLOT_DATE_1:{
 				this.nominationType = slot instanceof LoadSlot ? "Buy window" : "Sell window";
 				this.nomination = Formatters.asLocalDateFormatter.render(slot.getWindowStartWithSlotOrPortTime().toLocalDate());
 				this.nominateBy = LocalDate.now();
+				this.nominationComment = "";
 				}
 				break;
 			case SLOT_DATE_2:{
 				this.nominationType = slot instanceof LoadSlot ? "Buy window" : "Sell window";
 				this.nomination = Formatters.asLocalDateFormatter.render(slot.getWindowStartWithSlotOrPortTime().toLocalDate());
 				this.nominateBy = LocalDate.now();
+				this.nominationComment = "";
 				}
 				break;
 			case VESSEL:{
 				this.nominationType = "Vessel";
+				this.nominateBy = slot.getSlotOrDelegateVesselNominationDate();
+				this.nominationComment = slot.getVesselNominationComment() != null ? slot.getVesselNominationComment() : "";
 				if (c == null) break;
 				VesselAssignmentType vat = c.getVesselAssignmentType();
 				if (vat == null) break;
@@ -138,14 +142,12 @@ public class NominationAlertReportTransformer {
 					Vessel v = va.getVessel();
 					if (v == null) break;
 					this.nomination = v.getName();
-					this.nominateBy = LocalDate.now();
 					break;
 				} else if (vat instanceof CharterInMarket) {
 					CharterInMarket cim = (CharterInMarket) vat;
 					Vessel v = cim.getVessel();
 					if (v == null) break;
 					this.nomination = v.getName();
-					this.nominateBy = LocalDate.now();
 					break;
 				} else if (vat instanceof CharterInMarketOverride) {
 					CharterInMarketOverride cimo = (CharterInMarketOverride) vat;
@@ -154,29 +156,30 @@ public class NominationAlertReportTransformer {
 					Vessel v = cim.getVessel();
 					if (v == null) break;
 					this.nomination = v.getName();
-					this.nominateBy = LocalDate.now();
 					break;
 				}
 				this.nomination = "";
-				this.nominateBy = LocalDate.now();
 				}
 				break;
 			case VOLUME:{
-				this.nominationType = "Volume";
+				this.nominationType = slot instanceof LoadSlot ? "Load volume" : "Discharge volume";
 				this.nomination = getFormattedVolume(slot);
-				this.nominateBy = LocalDate.now();
+				this.nominateBy = slot.getSlotOrDelegateVolumeNominationDate();
+				this.nominationComment = slot.getVolumeNominationComment() != null ? slot.getVolumeNominationComment() : "";
 				}
 				break;
 			case PORT:{
-				this.nominationType = "Port";
+				this.nominationType = slot instanceof LoadSlot ? "Source port" : "Destination port";
+				this.nominateBy = slot.getSlotOrDelegatePortNominationDate();
+				this.nominationComment = slot.getPortNominationComment() != null ? slot.getPortNominationComment() : "";
 				final Port p = slot.getPort();
 				if (p == null) break;
 				this.nomination = p.getName();
-				this.nominateBy = LocalDate.now();
 			}
 				break;
 			default:
 				this.nominationType = "";
+				this.nominationComment = "";
 				break;
 			}
 			if (this.nominateBy != null) {
@@ -261,45 +264,24 @@ public class NominationAlertReportTransformer {
 					final RowData r = new RowData(scenario, s, pinned, NominationType.SLOT_DATE_0);
 					result.add(r);
 				}
-				/**
-				 * Code which will be used once/if we extend the model to include 
-				 * numerous slot date narrowing
-				 * vessel nomination is definitely required by M
-				 * volume nomination is definitely required by L and RWE
-				 * port nomination is definitely required by M
-				// here we will second window narrowing nomination
-				if (!s.isWindowNominationIsDone()
-				&& s.getSlotOrDelegateWindowNominationDate() != null) {
-					final RowData r = new RowData(scenario, s, pinned, NominationType.SLOT_DATE_1);
-					result.add(r);
-				}
-				// here we add third window narrowing nomination
-				if (!s.isWindowNominationIsDone()
-				&& s.getSlotOrDelegateWindowNominationDate() != null) {
-					final RowData r = new RowData(scenario, s, pinned, NominationType.SLOT_DATE_2);
-					result.add(r);
-				}
 				// here we add vessel nomination
-				if (!s.isWindowNominationIsDone()
-				&& s.getSlotOrDelegateWindowNominationDate() != null) {
-					if (s.getCargo() != null && s instanceof LoadSlot) {
-						final RowData r = new RowData(scenario, s, pinned, NominationType.VESSEL);
-						result.add(r);
-					}
+				if (!s.isVesselNominationDone()
+				&& s.getSlotOrDelegateVesselNominationDate() != null) {
+					final RowData r = new RowData(scenario, s, pinned, NominationType.VESSEL);
+					result.add(r);
 				}
 				// here we add volume nomination
-				if (!s.isWindowNominationIsDone()
-				&& s.getSlotOrDelegateWindowNominationDate() != null) {
+				if (!s.isVolumeNominationDone()
+				&& s.getSlotOrDelegateVolumeNominationDate() != null) {
 					final RowData r = new RowData(scenario, s, pinned, NominationType.VOLUME);
 					result.add(r);
 				}
 				// here we add volume nomination
-				if (!s.isWindowNominationIsDone()
-				&& s.getSlotOrDelegateWindowNominationDate() != null) {
+				if (!s.isPortNominationDone()
+				&& s.getSlotOrDelegatePortNominationDate() != null) {
 					final RowData r = new RowData(scenario, s, pinned, NominationType.PORT);
 					result.add(r);
 				}
-				 */
 			}
 		}
 		
