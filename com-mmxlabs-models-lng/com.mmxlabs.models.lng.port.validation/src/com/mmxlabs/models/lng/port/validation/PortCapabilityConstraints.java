@@ -44,14 +44,8 @@ public class PortCapabilityConstraints extends AbstractModelConstraint {
 					break;
 				case LOAD:
 					if (port.getLoadDuration() < 1) {
-
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Load ports must have a load duration"));
 						dsd.addEObjectAndFeature(port, PortPackage.eINSTANCE.getPort_LoadDuration());
-						failures.add(dsd);
-					}
-					if (port.getCvValue() < 0.0000001) {
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Load ports must have a CV value"));
-						dsd.addEObjectAndFeature(port, PortPackage.eINSTANCE.getPort_CvValue());
 						failures.add(dsd);
 					}
 					break;
