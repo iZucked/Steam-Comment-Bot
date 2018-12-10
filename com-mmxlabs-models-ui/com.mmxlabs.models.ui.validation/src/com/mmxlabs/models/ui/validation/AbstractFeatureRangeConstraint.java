@@ -19,9 +19,9 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 /**
  */
 public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiConstraint {
-	protected Map<EStructuralFeature, Double> minValues = new HashMap<EStructuralFeature, Double>();
-	protected Map<EStructuralFeature, Double> maxValues = new HashMap<EStructuralFeature, Double>();
-	protected Map<EStructuralFeature, String> featureLabels = new HashMap<EStructuralFeature, String>();
+	protected Map<EStructuralFeature, Double> minValues = new HashMap<>();
+	protected Map<EStructuralFeature, Double> maxValues = new HashMap<>();
+	protected Map<EStructuralFeature, String> featureLabels = new HashMap<>();
 
 	public AbstractFeatureRangeConstraint() {
 		createConstraints();
@@ -53,7 +53,7 @@ public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiC
 	 * @return
 	 */
 	private Collection<EStructuralFeature> getConstrainedFeatures() {
-		final HashSet<EStructuralFeature> result = new HashSet<EStructuralFeature>(minValues.keySet());
+		final HashSet<EStructuralFeature> result = new HashSet<>(minValues.keySet());
 		result.addAll(maxValues.keySet());
 		return result;
 	}
@@ -79,12 +79,12 @@ public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiC
 	 * @param feature
 	 * @return
 	 */
-	abstract protected boolean shouldValidateFeature(EObject object, EStructuralFeature feature);
+	protected abstract boolean shouldValidateFeature(EObject object, EStructuralFeature feature);
 
 	/**
 	 * Implementing classes should set their constraints here, via setRange() calls.
 	 */
-	abstract protected void createConstraints();
+	protected abstract void createConstraints();
 
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
