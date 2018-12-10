@@ -236,11 +236,11 @@ public final class ScenarioModelRecord extends ModelRecord {
 	 * @param referenceID
 	 * @return
 	 */
-	public IScenarioDataProvider aquireScenarioDataProvider(final String referenceID) {
+	public @NonNull IScenarioDataProvider aquireScenarioDataProvider(final String referenceID) {
 		return new ModelRecordScenarioDataProvider(this, referenceID, new NullProgressMonitor());
 	}
 
-	public IScenarioDataProvider aquireScenarioDataProvider(final String referenceID, IProgressMonitor progressMonitor) {
+	public @NonNull IScenarioDataProvider aquireScenarioDataProvider(final String referenceID, IProgressMonitor progressMonitor) {
 		return new ModelRecordScenarioDataProvider(this, referenceID, progressMonitor);
 	}
 
