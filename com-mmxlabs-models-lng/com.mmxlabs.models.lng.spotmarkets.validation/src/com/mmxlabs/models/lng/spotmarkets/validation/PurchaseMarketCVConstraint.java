@@ -24,7 +24,7 @@ public class PurchaseMarketCVConstraint extends AbstractModelConstraint {
 			final DESPurchaseMarket market = (DESPurchaseMarket) target;
 
 			if (market.getCv() < 1.0) {
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("CV value it too low."));
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("CV value is too low."));
 				dsd.addEObjectAndFeature(market, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_Cv());
 				return dsd;
 			} else if (market.getCv() > 40.0) {
@@ -37,7 +37,7 @@ public class PurchaseMarketCVConstraint extends AbstractModelConstraint {
 			final FOBPurchasesMarket market = (FOBPurchasesMarket) target;
 
 			if (market.getCv() < 1.0) {
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("CV value it too low."));
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("CV value is too low."));
 				dsd.addEObjectAndFeature(market, SpotMarketsPackage.eINSTANCE.getFOBPurchasesMarket_Cv());
 				return dsd;
 			} else if (market.getCv() > 40.0) {
