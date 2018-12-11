@@ -105,7 +105,7 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 					final ExecutorService executor = Executors.newFixedThreadPool(1);
 					try {
 						executor.submit(() -> {
-							final MTMModel model = MTMUtils.createModelFromScenario(scenarioModel, "mtm");
+							final MTMModel model = MTMUtils.createModelFromScenario(scenarioModel, "mtm", true);
 							MTMSandboxEvaluator.evaluate(sdp, scenarioInstance, model);
 
 							RunnerHelper.asyncExec(() -> {

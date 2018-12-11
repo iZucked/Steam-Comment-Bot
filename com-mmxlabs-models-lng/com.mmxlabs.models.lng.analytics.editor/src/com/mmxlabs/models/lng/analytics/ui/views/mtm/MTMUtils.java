@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -23,21 +24,21 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 
 public final class MTMUtils {
-	public static MTMModel createModelFromScenario(final @NonNull LNGScenarioModel sm, final @NonNull String name) {
+	public static MTMModel createModelFromScenario(final @NonNull LNGScenarioModel sm, final @NonNull String name, final boolean allowCargoes) {
 		final MTMModel model = AnalyticsFactory.eINSTANCE.createMTMModel();
 		model.setName(name);
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sm);
 		final SpotMarketsModel spotModel = ScenarioModelUtil.getSpotMarketsModel(sm);
 
 		for (final LoadSlot slot : cargoModel.getLoadSlots()) {
-			if (slot.getCargo() == null) {
+			if (allowSlot(slot, allowCargoes)) {
 				final BuyReference buy = AnalyticsFactory.eINSTANCE.createBuyReference();
 				buy.setSlot(slot);
 				model.getBuys().add(buy);
 			}
 		}
 		for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
-			if (slot.getCargo() == null) {
+			if (allowSlot(slot, allowCargoes)) {
 				final SellReference sale = AnalyticsFactory.eINSTANCE.createSellReference();
 				sale.setSlot(slot);
 				model.getSells().add(sale);
@@ -82,5 +83,12 @@ public final class MTMUtils {
 				row.setBuyOption(bo);
 				model.getRows().add(row);
 		}
+	}
+	
+	public static boolean allowSlot(final Slot slot, final boolean allowCargoes) {
+		if (allowCargoes) {
+			return true;
+		}
+		return slot.getCargo() != null ? false : true;
 	}
 }
