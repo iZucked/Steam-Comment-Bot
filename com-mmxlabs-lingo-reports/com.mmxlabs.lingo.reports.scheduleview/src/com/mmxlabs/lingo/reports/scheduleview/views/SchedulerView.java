@@ -27,7 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 
 import javax.inject.Inject;
 
@@ -44,7 +44,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
@@ -63,7 +62,10 @@ import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
 import org.eclipse.nebula.widgets.ganttchart.GanttGroup;
 import org.eclipse.nebula.widgets.ganttchart.GanttSection;
 import org.eclipse.nebula.widgets.ganttchart.IColorManager;
+import org.eclipse.nebula.widgets.ganttchart.ILegendItem;
+import org.eclipse.nebula.widgets.ganttchart.ILegendProvider;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
+import org.eclipse.nebula.widgets.ganttchart.LegendItemImpl;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
@@ -83,6 +85,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.actions.PackAction;
@@ -90,6 +93,8 @@ import com.mmxlabs.ganttviewer.actions.SaveFullImageAction;
 import com.mmxlabs.ganttviewer.actions.ZoomInAction;
 import com.mmxlabs.ganttviewer.actions.ZoomOutAction;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lingo.reports.ColourPalette;
+import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.diff.DiffSelectionAdapter;
@@ -129,6 +134,7 @@ import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -189,8 +195,21 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	private final boolean showConnections = System.getProperty("schedulechart.showConnections") != null || LicenseFeatures.isPermitted("features:schedulechart-showConnections");
 
 	@Nullable
-	ISelectedDataProvider currentSelectedDataProvider = null;
-	
+	private ISelectedDataProvider currentSelectedDataProvider = null;
+	private static final List<ILegendItem> legendItems = Lists.newArrayList( //
+			new LegendItemImpl("Laden travel/idle", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourPalette.ColourElements.Background),
+					ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Idle, ColourPalette.ColourElements.Background)),
+			new LegendItemImpl("Ballast travel/idle", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Journey, ColourPalette.ColourElements.Background),
+					ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Idle, ColourPalette.ColourElements.Background)),
+			new LegendItemImpl("Port visit, late", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Load, ColourPalette.ColourElements.Background),
+					ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Load, ColourPalette.ColourElements.Background)),
+			new LegendItemImpl("Charter out real/generated", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_CharterOut, ColourPalette.ColourElements.Background),
+					ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourPalette.ColourElements.Background)),
+			new LegendItemImpl("Dry-dock", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_DryDock, ColourPalette.ColourElements.Background)),
+			new LegendItemImpl("Maintenance", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_Maintenance, ColourPalette.ColourElements.Background))
+
+	);
+
 	/**
 	 * The constructor.
 	 */
@@ -239,7 +258,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		e4Context = (IEclipseContext) getSite().getService(IEclipseContext.class);
+		e4Context = getSite().getService(IEclipseContext.class);
 		this.scenarioComparisonService = e4Context.getActive(ScenarioComparisonService.class);
 		this.selectedScenariosService = e4Context.getActive(SelectedScenariosService.class);
 		this.scenarioChangeSetService = e4Context.getActive(ScenarioChangeSetService.class);
@@ -248,7 +267,471 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		Activator.getDefault().getInjector().injectMembers(this);
 
 		// Gantt Chart settings object
-		final ISettings settings = new AbstractSettings() {
+		final ISettings settings = createGanttSettings();
+		final IColorManager colourManager = createGanttColourManager();
+
+		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings, colourManager) {
+
+			@Override
+			protected void setSelectionToWidget(@SuppressWarnings("rawtypes") final List l, final boolean reveal) {
+
+				if (showConnections) {
+
+					ganttChart.getGanttComposite().getGanttConnections().clear();
+
+					final BiPredicate<SlotAllocation, SlotAllocation> differentSequenceChecker = (r1, r2) -> {
+						final SlotVisit v1 = r1.getSlotVisit();
+						final SlotVisit v2 = r2.getSlotVisit();
+						if (v1 == null || v2 == null) {
+							return false;
+						}
+						final Sequence s1 = v1.getSequence();
+						final Sequence s2 = v2.getSequence();
+						if (s1 == null && s2 == null) {
+							return true;
+						}
+						return !s1.getName().equals(s2.getName());
+					};
+
+					final Collection<ChangeSetTableRow> csRows = scenarioChangeSetService.getSelectedChangeSetRows();
+					{
+						if (csRows != null) {
+
+							final Color lineColour = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
+
+							for (final ChangeSetTableRow csRow : csRows) {
+								{
+									final SlotAllocation oldAllocation = csRow.getLhsBefore() != null ? csRow.getLhsBefore().getLoadAllocation() : null;
+									final SlotAllocation newAllocation = csRow.getLhsAfter() != null ? csRow.getLhsAfter().getLoadAllocation() : null;
+
+									if (oldAllocation != null && newAllocation != null) {
+
+										if (differentSequenceChecker.test(oldAllocation, newAllocation)) {
+											final GanttEvent oldEvent = internalMap.get(oldAllocation.getSlotVisit());
+											final GanttEvent newEvent = internalMap.get(newAllocation.getSlotVisit());
+
+											if (oldEvent != null && newEvent != null) {
+												ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
+											}
+										}
+									}
+								}
+								{
+									final SlotAllocation oldAllocation = csRow.getRhsBefore() != null ? csRow.getRhsBefore().getDischargeAllocation() : null;
+									final SlotAllocation newAllocation = csRow.getRhsAfter() != null ? csRow.getRhsAfter().getDischargeAllocation() : null;
+
+									if (oldAllocation != null && newAllocation != null) {
+										if (differentSequenceChecker.test(oldAllocation, newAllocation)) {
+
+											final GanttEvent oldEvent = internalMap.get(oldAllocation.getSlotVisit());
+											final GanttEvent newEvent = internalMap.get(newAllocation.getSlotVisit());
+
+											if (oldEvent != null && newEvent != null) {
+												ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				final ArrayList<GanttEvent> selectedEvents;
+				final Set<GanttSection> selectedSections = new HashSet<>();
+				if (l != null) {
+					// Use the internalMap to obtain the list of events we are selecting
+					selectedEvents = new ArrayList<>(l.size());
+					if (!l.isEmpty()) {
+						for (final Object ge : ganttChart.getGanttComposite().getEvents()) {
+							final GanttEvent ganttEvent = (GanttEvent) ge;
+							ganttEvent.setStatusAlpha(130);
+							final Event evt = (Event) ganttEvent.getData();
+							if (table != null) {
+								// Change alpha for pinned elements
+								if (currentSelectedDataProvider != null) {
+									if (currentSelectedDataProvider.isPinnedObject(evt)) {
+										ganttEvent.setStatusAlpha(50);
+									}
+								}
+							}
+						}
+					}
+					for (final Object obj : l) {
+						if (obj != null) {
+							if (internalMap.containsKey(obj)) {
+								final GanttEvent ge = internalMap.get(obj);
+								selectedEvents.add(ge);
+								if (ge.getGanttSection() != null) {
+									selectedSections.add(ge.getGanttSection());
+								}
+								ge.setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), obj));
+
+							} else if (getComparer() != null) {
+								for (final Map.Entry<Object, GanttEvent> e : internalMap.entrySet()) {
+									if (getComparer().equals(e.getKey(), obj)) {
+										final GanttEvent ge = internalMap.get(e.getKey());
+										selectedEvents.add(ge);
+										if (ge.getGanttSection() != null) {
+											selectedSections.add(ge.getGanttSection());
+										}
+										e.getValue().setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), e.getKey()));
+										ge.setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), e.getKey()));
+									}
+								}
+							}
+						}
+					}
+				} else {
+					// Clear selection
+					selectedEvents = new ArrayList<>(0);
+				}
+				if (scenarioComparisonService != null && scenarioComparisonService.getDiffOptions().isFilterSelectedSequences()) {
+					final Iterator<GanttSection> itr = new ArrayList<GanttSection>(ganttChart.getGanttComposite().getGanttSections()).iterator();// .iterator();
+					while (itr.hasNext()) {
+						final GanttSection ganttSection = itr.next();
+						final Set<GanttEvent> events = new HashSet<>(ganttSection.getEvents());
+						for (final Object o : ganttSection.getEvents()) {
+							if (o instanceof GanttGroup) {
+								final GanttGroup ganttGroup = (GanttGroup) o;
+								events.addAll(ganttGroup.getEventMembers());
+							}
+						}
+
+						events.retainAll(selectedEvents);
+						if (events.isEmpty()) {
+							ganttSection.setVisible(false);
+						} else {
+							boolean visible = true;
+							final Object d = ganttSection.getData();
+							if (d instanceof Sequence) {
+								final Sequence sequence = (Sequence) d;
+								if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
+									visible = false;
+									if (selectedSections.contains(ganttSection)) {
+										visible = true;
+									}
+								}
+							}
+
+							ganttSection.setVisible(visible);
+						}
+					}
+				} else {
+					final Iterator<GanttSection> itr = new ArrayList<>(ganttChart.getGanttComposite().getGanttSections()).iterator();
+					while (itr.hasNext()) {
+						final GanttSection ganttSection = itr.next();
+						boolean visible = true;
+
+						final Object d = ganttSection.getData();
+						if (d instanceof Sequence) {
+							final Sequence sequence = (Sequence) d;
+							if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
+								visible = false;
+								if (selectedSections.contains(ganttSection)) {
+									visible = true;
+								}
+							}
+						}
+						ganttSection.setVisible(visible);
+					}
+				}
+				ganttChart.getGanttComposite().setSelection(selectedEvents);
+				if (selectedEvents.isEmpty() == false) {
+					final GanttEvent sel = selectedEvents.get(0);
+					if (!ganttChart.getGanttComposite().isEventVisible(sel, ganttChart.getGanttComposite().getBounds())) {
+						ganttChart.getGanttComposite().showEvent(sel, SWT.CENTER);
+					}
+				}
+				ganttChart.getGanttComposite().heavyRedraw();
+			}
+
+		};
+
+		viewer.getGanttChart().getGanttComposite().setLegendProvider(() -> legendItems);
+
+		// make sure this viewer is listening to preference changes
+		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
+		prefs.addPreferenceChangeListener(this);
+
+		final EMFScheduleContentProvider contentProvider = new EMFScheduleContentProvider() {
+
+			@Override
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+				super.inputChanged(viewer, oldInput, newInput);
+				clearInputEquivalents();
+			}
+
+			@Override
+			public Object[] getElements(final Object inputElement) {
+				final Object[] result = super.getElements(inputElement);
+				return result;
+			}
+
+			@Override
+			public Object[] getChildren(final Object parent) {
+
+				Object[] result = super.getChildren(parent);
+				if (parent instanceof Sequence && numberOfSchedules > 1 && currentlyPinned) {
+					final List<EObject> objects = new LinkedList<>();
+					for (final Map.Entry<String, List<EObject>> e : allObjectsByKey.entrySet()) {
+						EObject ref = null;
+						final LinkedHashSet<EObject> objectsToAdd = new LinkedHashSet<>();
+
+						// Find ref...
+						for (final EObject ca : e.getValue()) {
+							if (pinnedObjects.contains(ca)) {
+								ref = ca;
+								break;
+							}
+						}
+
+						if (ref == null) {
+							// No ref found, so add all
+							objectsToAdd.addAll(e.getValue());
+						} else {
+							for (final EObject ca : e.getValue()) {
+								if (ca == ref) {
+									continue;
+								}
+								if (e.getValue().size() != numberOfSchedules) {
+									// Different number of elements, so add all!
+									// This means something has been removed/added
+									objectsToAdd.addAll(e.getValue());
+								} else if (isElementDifferent(ref, ca)) {
+									// There is a data difference, so add
+									objectsToAdd.addAll(e.getValue());
+								}
+							}
+						}
+						for (final EObject eObj : objectsToAdd) {
+							if (eObj.eContainer() == parent) {
+								objects.add(eObj);
+
+							}
+						}
+
+					}
+					result = objects.toArray();
+				}
+				if (result != null) {
+					for (final Object event : result) {
+						if (event instanceof SlotVisit) {
+							final SlotVisit slotVisit = (SlotVisit) event;
+							setInputEquivalents(event, Arrays.asList(new Object[] { slotVisit.getSlotAllocation(), slotVisit.getSlotAllocation().getSlot(),
+									slotVisit.getSlotAllocation().getCargoAllocation() /* , slotVisit.getSlotAllocation().getCargoAllocation().getInputCargo() */ }));
+
+							// } else if (event instanceof Idle) {
+							// setInputEquivalents(event, Arrays.asList(new Object[] { ((Idle) event).getSlotAllocation().getCargoAllocation() }));
+
+						} else if (event instanceof CargoAllocation) {
+							final CargoAllocation allocation = (CargoAllocation) event;
+
+							final List<Object> equivalents = new ArrayList<Object>();
+							for (final SlotAllocation sa : allocation.getSlotAllocations()) {
+								equivalents.add(sa.getSlotVisit());
+								equivalents.add(sa.getSlot());
+							}
+							equivalents.addAll(allocation.getEvents());
+							// equivalents.add(allocation.getInputCargo());
+
+							setInputEquivalents(allocation, equivalents);
+
+						} else if (event instanceof VesselEventVisit) {
+							setInputEquivalents(event, Arrays.asList(new Object[] { ((VesselEventVisit) event).getVesselEvent() }));
+						} else {
+							setInputEquivalents(event, Collections.emptyList());
+						}
+					}
+				}
+				return result;
+			}
+
+			@Override
+			public IScenarioDataProvider getScenarioDataProviderFor(final Object obj) {
+				if (obj instanceof EObject) {
+					final EObject eObject = (EObject) obj;
+
+					if (currentSelectedDataProvider != null) {
+						@Nullable
+						final ScenarioResult scenarioResult = currentSelectedDataProvider.getScenarioResult(eObject);
+						if (scenarioResult != null) {
+							return scenarioResult.getScenarioDataProvider();
+						}
+					}
+
+				}
+				return null;
+			}
+		};
+		viewer.setContentProvider(contentProvider);
+		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer, memento, selectedScenariosService);
+
+		for (final ISchedulerViewColourSchemeExtension ext : this.colourSchemeExtensions) {
+			final IScheduleViewColourScheme cs = ext.createInstance();
+			final String ID = ext.getID();
+			cs.setID(ID);
+			if (ext.isHighlighter().equalsIgnoreCase("true")) {
+				labelProvider.addHighlighter(ID, cs);
+			} else {
+				labelProvider.addColourScheme(ID, cs);
+			}
+		}
+
+		viewer.setLabelProvider(labelProvider);
+		// TODO: Hook up action to alter sort behaviour
+		// Then refresh
+		// E.g. mode?
+		// Move into separate class
+		viewerComparator = new ScenarioViewerComparator(selectedScenariosService);
+		viewer.setComparator(viewerComparator);
+
+		viewer.setComparer(new IElementComparer() {
+			@Override
+			public int hashCode(final Object element) {
+				return element.hashCode();
+			}
+
+			@Override
+			public boolean equals(Object a, Object b) {
+				if (!contents.contains(a) && equivalents.containsKey(a)) {
+					a = equivalents.get(a);
+				}
+				if (!contents.contains(b) && equivalents.containsKey(b)) {
+					b = equivalents.get(b);
+				}
+				return Equality.isEqual(a, b);
+			}
+		});
+
+		viewer.setInput(getViewSite());
+
+		selectedScenariosService.addListener(selectedScenariosServiceListener);
+		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
+		scenarioChangeSetService.addListener(scenarioChangeSetListener);
+		// Create the help context id for the viewer's control. This is in the
+		// format of pluginid.contextId
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_ScheduleChart");
+
+		makeActions();
+		hookContextMenu();
+		contributeToActionBars();
+
+		getSite().setSelectionProvider(viewer);
+		// Get e4 selection service!
+		final ESelectionService service = getSite().getService(ESelectionService.class);
+		service.addPostSelectionListener(this);
+
+		final String colourScheme = memento.getString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME);
+		labelProvider.setScheme(colourScheme);
+
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener);
+		scenarioChangeSetService.triggerListener(scenarioChangeSetListener);
+	}
+
+	private IColorManager createGanttColourManager() {
+		return new DefaultColorManager() {
+
+			@Override
+			public boolean useAlphaDrawing() {
+				return true;
+			};
+
+			@Override
+			public Color getTextColor() {
+				return ColorCache.getBlack();
+			}
+
+			@Override
+			public Color getActiveSessionBarColorLeft() {
+				return getHeaderColour();
+
+			}
+
+			@Override
+			public Color getActiveSessionBarColorRight() {
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getNonActiveSessionBarColorLeft() {
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getNonActiveSessionBarColorRight() {
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getTextHeaderBackgroundColorTop() {
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getTopHorizontalLinesColor() {
+				return getDividerColour();
+			}
+
+			@Override
+			public Color getTextHeaderBackgroundColorBottom() {
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getSaturdayTextColor() {
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getTimeHeaderBackgroundColorBottom() {
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getTimeHeaderBackgroundColorTop() {
+
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getWeekTimeDividerColor() {
+				return getDividerColour();
+			}
+
+			@Override
+			public Color getYearTimeDividerColor() {
+				return getDividerColour();
+			}
+
+			@Override
+			public Color getWeekDividerLineColor() {
+				return getDividerColour();
+			}
+
+			@Override
+			public Color getMonthTimeDividerColor() {
+				return getDividerColour();
+			}
+
+			@Override
+			public Color getHourTimeDividerColor() {
+				return getDividerColour();
+			}
+
+			private Color getHeaderColour() {
+				return TableColourPalette.getInstance().getColourFor(TableItems.ColumnHeaders, ColourElements.Background);
+			}
+
+			private Color getDividerColour() {
+				return TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background);
+			}
+
+		};
+	}
+
+	private ISettings createGanttSettings() {
+		return new AbstractSettings() {
 			@Override
 			public boolean enableResizing() {
 				return false;
@@ -369,514 +852,6 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 				return 22;
 			}
 		};
-
-		final IColorManager colourManager = new DefaultColorManager() {
-
-			@Override
-			public boolean useAlphaDrawing() {
-				return true;
-			};
-
-			@Override
-			public Color getTextColor() {
-				return ColorCache.getBlack();
-			}
-
-			@Override
-			public Color getActiveSessionBarColorLeft() {
-				return getHeaderColour();
-
-			}
-
-			@Override
-			public Color getActiveSessionBarColorRight() {
-				return getHeaderColour();
-			}
-
-			@Override
-			public Color getNonActiveSessionBarColorLeft() {
-				return getHeaderColour();
-			}
-
-			@Override
-			public Color getNonActiveSessionBarColorRight() {
-				return getHeaderColour();
-			}
-
-			@Override
-			public Color getTextHeaderBackgroundColorTop() {
-				return getHeaderColour();
-			}
-
-			@Override
-			public Color getTopHorizontalLinesColor() {
-				return getDividerColour();
-			}
-
-			@Override
-			public Color getTextHeaderBackgroundColorBottom() {
-				return getHeaderColour();
-			}
-
-			@Override
-			public Color getSaturdayTextColor() {
-				return getHeaderColour();
-			}
-
-			@Override
-			public Color getTimeHeaderBackgroundColorBottom() {
-				return getHeaderColour();
-			}
-
-			@Override
-			public Color getTimeHeaderBackgroundColorTop() {
-
-				return getHeaderColour();
-			}
-
-			@Override
-			public Color getWeekTimeDividerColor() {
-				return getDividerColour();
-			}
-
-			@Override
-			public Color getYearTimeDividerColor() {
-				return getDividerColour();
-			}
-
-			@Override
-			public Color getWeekDividerLineColor() {
-				return getDividerColour();
-			}
-
-			@Override
-			public Color getMonthTimeDividerColor() {
-				return getDividerColour();
-			}
-
-			@Override
-			public Color getHourTimeDividerColor() {
-				return getDividerColour();
-			}
-
-			private Color getHeaderColour() {
-				return TableColourPalette.getInstance().getColourFor(TableItems.ColumnHeaders, ColourElements.Background);
-			}
-
-			private Color getDividerColour() {
-				return TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background);
-			}
-
-		};
-
-		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings, colourManager) {
-			// @Override
-			// protected synchronized void inputChanged(final Object input, final Object oldInput) {
-			// super.inputChanged(input, oldInput);
-			//
-			// final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
-			// final boolean oldInputEmpty = (oldInput == null)
-			// || ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
-			//
-			// if (inputEmpty != oldInputEmpty) {
-			//
-			// if (packAction != null) {
-			// packAction.run();
-			// }
-			// }
-			// }
-
-			@Override
-			protected void setSelectionToWidget(@SuppressWarnings("rawtypes") final List l, final boolean reveal) {
-
-				if (showConnections) {
-
-					ganttChart.getGanttComposite().getGanttConnections().clear();
-
-					final BiFunction<SlotAllocation, SlotAllocation, Boolean> differentSequenceChecker = (r1, r2) -> {
-						final SlotVisit v1 = r1.getSlotVisit();
-						final SlotVisit v2 = r2.getSlotVisit();
-						if (v1 == null || v2 == null) {
-							return false;
-						}
-						final Sequence s1 = v1.getSequence();
-						final Sequence s2 = v2.getSequence();
-						if (s1 == null && s2 == null) {
-							return true;
-						}
-						return !s1.getName().equals(s2.getName());
-					};
-
-					final boolean isDiffToBase = scenarioChangeSetService.isDiffToBase();
-					// final ChangeSet changeSet = scenarioChangeSetService.getChangeSet();
-					final Collection<ChangeSetTableRow> csRows = scenarioChangeSetService.getSelectedChangeSetRows();
-					{
-						if (csRows != null) {
-							// final List<ChangeSetRow> csRows;
-							// if (isDiffToBase) {
-							// csRows = changeSet.getChangeSetRowsToBase();
-							// } else {
-							// csRows = changeSet.getChangeSetRowsToPrevious();
-							// }
-							final Color lineColour = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
-
-							for (final ChangeSetTableRow csRow : csRows) {
-								{
-									final SlotAllocation oldAllocation = csRow.getLhsBefore() != null ? csRow.getLhsBefore().getLoadAllocation() : null;
-									final SlotAllocation newAllocation = csRow.getLhsAfter() != null ? csRow.getLhsAfter().getLoadAllocation() : null;
-
-									if (oldAllocation != null && newAllocation != null) {
-
-										if (differentSequenceChecker.apply(oldAllocation, newAllocation)) {
-											final GanttEvent oldEvent = internalMap.get(oldAllocation.getSlotVisit());
-											final GanttEvent newEvent = internalMap.get(newAllocation.getSlotVisit());
-
-											if (oldEvent != null && newEvent != null) {
-												ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
-											}
-										}
-									}
-								}
-								// TODO: Test this still works!
-								{
-									// ChangeSetTableRow rhsWiringLink = csRow.getPreviousRHS();
-									// if (rhsWiringLink != null)
-									{
-										final SlotAllocation oldAllocation = csRow.getRhsBefore() != null ? csRow.getRhsBefore().getDischargeAllocation() : null;
-										final SlotAllocation newAllocation = csRow.getRhsAfter() != null ? csRow.getRhsAfter().getDischargeAllocation() : null;
-
-										if (oldAllocation != null && newAllocation != null) {
-											if (differentSequenceChecker.apply(oldAllocation, newAllocation)) {
-
-												final GanttEvent oldEvent = internalMap.get(oldAllocation.getSlotVisit());
-												final GanttEvent newEvent = internalMap.get(newAllocation.getSlotVisit());
-
-												if (oldEvent != null && newEvent != null) {
-													ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
-												}
-											}
-										}
-									}
-									// ChangeSetTableRow lhsWiringLink = csRow.getNextLHS();
-									// if (lhsWiringLink != null) {
-									// final SlotAllocation newAllocation = lhsWiringLink.getNewDischargeAllocation();
-									// final SlotAllocation oldAllocation = csRow.getOriginalDischargeAllocation();
-									//
-									// if (oldAllocation != null && newAllocation != null) {
-									// if (differentSequenceChecker.apply(oldAllocation, newAllocation)) {
-									//
-									// final GanttEvent oldEvent = internalMap.get(oldAllocation.getSlotVisit());
-									// final GanttEvent newEvent = internalMap.get(newAllocation.getSlotVisit());
-									//
-									// if (oldEvent != null && newEvent != null) {
-									// ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
-									// }
-									// }
-									// }
-									// }
-								}
-							}
-						}
-					}
-				}
-				final ArrayList<GanttEvent> selectedEvents;
-				final Set<GanttSection> selectedSections = new HashSet<>();
-				if (l != null) {
-					// Use the internalMap to obtain the list of events we are selecting
-					selectedEvents = new ArrayList<GanttEvent>(l.size());
-					if (!l.isEmpty()) {
-						for (final Object ge : ganttChart.getGanttComposite().getEvents()) {
-							final GanttEvent ganttEvent = (GanttEvent) ge;
-							ganttEvent.setStatusAlpha(130);
-							final Event evt = (Event) ganttEvent.getData();
-							if (table != null) {
-								// Change alpha for pinned elements
-								if (currentSelectedDataProvider != null) {
-									if (currentSelectedDataProvider.isPinnedObject(evt)) {
-										ganttEvent.setStatusAlpha(50);
-									}
-								}
-							}
-						}
-					}
-					for (final Object obj : l) {
-						if (obj != null) {
-							if (internalMap.containsKey(obj)) {
-								final GanttEvent ge = internalMap.get(obj);
-								selectedEvents.add(ge);
-								if (ge.getGanttSection() != null) {
-									selectedSections.add(ge.getGanttSection());
-								}
-								ge.setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), obj));
-
-							} else if (getComparer() != null) {
-								for (final Map.Entry<Object, GanttEvent> e : internalMap.entrySet()) {
-									if (getComparer().equals(e.getKey(), obj)) {
-										final GanttEvent ge = internalMap.get(e.getKey());
-										selectedEvents.add(ge);
-										if (ge.getGanttSection() != null) {
-											selectedSections.add(ge.getGanttSection());
-										}
-										e.getValue().setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), e.getKey()));
-										ge.setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), e.getKey()));
-									}
-								}
-							}
-						}
-					}
-				} else {
-					// Clear selection
-					selectedEvents = new ArrayList<GanttEvent>(0);
-				}
-				if (scenarioComparisonService != null && scenarioComparisonService.getDiffOptions().isFilterSelectedSequences()) {
-					// final Set<GanttSection> selectedSections = new HashSet<>();
-					// for (final GanttEvent event : selectedEvents) {
-					// selectedSections.add(event.getGanttSection());
-					// }
-					final Iterator<GanttSection> itr = new ArrayList<GanttSection>(ganttChart.getGanttComposite().getGanttSections()).iterator();// .iterator();
-					while (itr.hasNext()) {
-						final GanttSection ganttSection = itr.next();
-						final Set<GanttEvent> events = new HashSet<>(ganttSection.getEvents());
-						for (final Object o : ganttSection.getEvents()) {
-							if (o instanceof GanttGroup) {
-								final GanttGroup ganttGroup = (GanttGroup) o;
-								events.addAll(ganttGroup.getEventMembers());
-							}
-						}
-
-						events.retainAll(selectedEvents);
-						if (events.isEmpty()) {
-							ganttSection.setVisible(false);
-						} else {
-							boolean visible = true;
-							final Object d = ganttSection.getData();
-							if (d instanceof Sequence) {
-								final Sequence sequence = (Sequence) d;
-								if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
-									visible = false;
-									if (selectedSections.contains(ganttSection)) {
-										visible = true;
-									}
-								}
-							}
-
-							ganttSection.setVisible(visible);
-						}
-					}
-				} else {
-					final Iterator<GanttSection> itr = new ArrayList<GanttSection>(ganttChart.getGanttComposite().getGanttSections()).iterator();
-					while (itr.hasNext()) {
-						final GanttSection ganttSection = itr.next();
-						boolean visible = true;
-
-						final Object d = ganttSection.getData();
-						if (d instanceof Sequence) {
-							final Sequence sequence = (Sequence) d;
-							if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
-								visible = false;
-								if (selectedSections.contains(ganttSection)) {
-									visible = true;
-								}
-							}
-						}
-						ganttSection.setVisible(visible);
-					}
-				}
-				ganttChart.getGanttComposite().setSelection(selectedEvents);
-				if (selectedEvents.isEmpty() == false) {
-					final GanttEvent sel = selectedEvents.get(0);
-					if (!ganttChart.getGanttComposite().isEventVisible(sel, ganttChart.getGanttComposite().getBounds())) {
-						ganttChart.getGanttComposite().showEvent(sel, SWT.CENTER);
-					}
-				}
-				ganttChart.getGanttComposite().heavyRedraw();
-			}
-		};
-
-		// make sure this viewer is listening to preference changes
-		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
-		prefs.addPreferenceChangeListener(this);
-
-		// viewer.setContentProvider(new AnnotatedScheduleContentProvider());
-		// viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
-
-		final EMFScheduleContentProvider contentProvider = new EMFScheduleContentProvider() {
-
-			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-				super.inputChanged(viewer, oldInput, newInput);
-				clearInputEquivalents();
-			}
-
-			@Override
-			public Object[] getElements(final Object inputElement) {
-				final Object[] result = super.getElements(inputElement);
-				return result;
-			}
-
-			@Override
-			public Object[] getChildren(final Object parent) {
-
-				Object[] result = super.getChildren(parent);
-				if (parent instanceof Sequence && numberOfSchedules > 1 && currentlyPinned) {
-					final List<EObject> objects = new LinkedList<EObject>();
-					for (final Map.Entry<String, List<EObject>> e : allObjectsByKey.entrySet()) {
-						EObject ref = null;
-						final LinkedHashSet<EObject> objectsToAdd = new LinkedHashSet<EObject>();
-
-						// Find ref...
-						for (final EObject ca : e.getValue()) {
-							if (pinnedObjects.contains(ca)) {
-								ref = ca;
-								break;
-							}
-						}
-
-						if (ref == null) {
-							// No ref found, so add all
-							objectsToAdd.addAll(e.getValue());
-						} else {
-							for (final EObject ca : e.getValue()) {
-								if (ca == ref) {
-									continue;
-								}
-								if (e.getValue().size() != numberOfSchedules) {
-									// Different number of elements, so add all!
-									// This means something has been removed/added
-									objectsToAdd.addAll(e.getValue());
-								} else if (isElementDifferent(ref, ca)) {
-									// There is a data difference, so add
-									objectsToAdd.addAll(e.getValue());
-								}
-							}
-						}
-						for (final EObject eObj : objectsToAdd) {
-							if (eObj.eContainer() == parent) {
-								objects.add(eObj);
-
-							}
-						}
-
-					}
-					result = objects.toArray();
-				}
-				if (result != null) {
-					for (final Object event : result) {
-						if (event instanceof SlotVisit) {
-							final SlotVisit slotVisit = (SlotVisit) event;
-							setInputEquivalents(event, Arrays.asList(new Object[] { slotVisit.getSlotAllocation(), slotVisit.getSlotAllocation().getSlot(),
-									slotVisit.getSlotAllocation().getCargoAllocation() /* , slotVisit.getSlotAllocation().getCargoAllocation().getInputCargo() */ }));
-
-							// } else if (event instanceof Idle) {
-							// setInputEquivalents(event, Arrays.asList(new Object[] { ((Idle) event).getSlotAllocation().getCargoAllocation() }));
-
-						} else if (event instanceof CargoAllocation) {
-							final CargoAllocation allocation = (CargoAllocation) event;
-
-							final List<Object> equivalents = new ArrayList<Object>();
-							for (final SlotAllocation sa : allocation.getSlotAllocations()) {
-								equivalents.add(sa.getSlotVisit());
-								equivalents.add(sa.getSlot());
-							}
-							equivalents.addAll(allocation.getEvents());
-							// equivalents.add(allocation.getInputCargo());
-
-							setInputEquivalents(allocation, equivalents);
-
-						} else if (event instanceof VesselEventVisit) {
-							setInputEquivalents(event, Arrays.asList(new Object[] { ((VesselEventVisit) event).getVesselEvent() }));
-						} else {
-							setInputEquivalents(event, Collections.emptyList());
-						}
-					}
-				}
-				return result;
-			}
-
-			@Override
-			public IScenarioDataProvider getScenarioDataProviderFor(final Object obj) {
-				if (obj instanceof EObject) {
-					final EObject eObject = (EObject) obj;
-
-					if (currentSelectedDataProvider != null) {
-						@Nullable
-						final
-						ScenarioResult scenarioResult = currentSelectedDataProvider.getScenarioResult(eObject);
-						if (scenarioResult != null) {
-							return scenarioResult.getScenarioDataProvider();
-						}
-					}
-
-				}
-				return null;
-			}
-		};
-		viewer.setContentProvider(contentProvider);
-		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer, memento, selectedScenariosService);
-
-		for (final ISchedulerViewColourSchemeExtension ext : this.colourSchemeExtensions) {
-			final IScheduleViewColourScheme cs = ext.createInstance();
-			final String ID = ext.getID();
-			cs.setID(ID);
-			if (ext.isHighlighter().equalsIgnoreCase("true")) {
-				labelProvider.addHighlighter(ID, cs);
-			} else {
-				labelProvider.addColourScheme(ID, cs);
-			}
-		}
-
-		viewer.setLabelProvider(labelProvider);
-		// TODO: Hook up action to alter sort behaviour
-		// Then refresh
-		// E.g. mode?
-		// Move into separate class
-		viewerComparator = new ScenarioViewerComparator(selectedScenariosService);
-		viewer.setComparator(viewerComparator);
-
-		viewer.setComparer(new IElementComparer() {
-			@Override
-			public int hashCode(final Object element) {
-				return element.hashCode();
-			}
-
-			@Override
-			public boolean equals(Object a, Object b) {
-				if (!contents.contains(a) && equivalents.containsKey(a)) {
-					a = equivalents.get(a);
-				}
-				if (!contents.contains(b) && equivalents.containsKey(b)) {
-					b = equivalents.get(b);
-				}
-				return Equality.isEqual(a, b);
-			}
-		});
-
-		viewer.setInput(getViewSite());
-
-		selectedScenariosService.addListener(selectedScenariosServiceListener);
-		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
-		scenarioChangeSetService.addListener(scenarioChangeSetListener);
-		// Create the help context id for the viewer's control. This is in the
-		// format of pluginid.contextId
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_ScheduleChart");
-
-		makeActions();
-		hookContextMenu();
-		contributeToActionBars();
-
-		getSite().setSelectionProvider(viewer);
-		// Get e4 selection service!
-		final ESelectionService service = getSite().getService(ESelectionService.class);
-		service.addPostSelectionListener(this);
-
-		final String colourScheme = memento.getString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME);
-		// if (colourScheme != null) {
-		labelProvider.setScheme(colourScheme);
-		// }
-
-		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
-		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener);
-		scenarioChangeSetService.triggerListener(scenarioChangeSetListener);
 	}
 
 	@Override
@@ -899,12 +874,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	private void hookContextMenu() {
 		final MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			@Override
-			public void menuAboutToShow(final IMenuManager manager) {
-				SchedulerView.this.fillContextMenu(manager);
-			}
-		});
+		menuMgr.addMenuListener(manager -> SchedulerView.this.fillContextMenu(manager));
 		final Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);
@@ -920,7 +890,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
 		manager.add(saveFullImageAction);
-
+		manager.add(toggleLegend);
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
@@ -954,6 +924,12 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 			colourSchemeAction = new ColourSchemeAction(this, (EMFScheduleLabelProvider) (viewer.getLabelProvider()), viewer);
 		}
+		toggleLegend = new RunnableAction("Legend", SWT.CHECK, () -> {
+			boolean b = viewer.getGanttChart().getGanttComposite().isShowLegend();
+			viewer.getGanttChart().getGanttComposite().setShowLegend(!b);
+			viewer.getGanttChart().getGanttComposite().redraw();
+		});
+		toggleLegend.setChecked(viewer.getGanttChart().getGanttComposite().isShowLegend());
 
 		sortModeAction = new SortModeAction(this, viewer, (EMFScheduleLabelProvider) viewer.getLabelProvider(), viewerComparator);
 
@@ -1057,7 +1033,6 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 					}
 				};
 
-				// a.setActionDefinitionId(mode.toString());
 				final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
 				actionContributionItem.fill(menu, -1);
 
@@ -1087,11 +1062,10 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		if (table == null) {
 			if (selection instanceof IStructuredSelection) {
 				final IStructuredSelection sel = (IStructuredSelection) selection;
-				List<Object> objects = new ArrayList<Object>(sel.toList().size());
+				List<Object> objects = new ArrayList<>(sel.toList().size());
 				for (final Object o : sel.toList()) {
 					if (o instanceof CargoAllocation) {
 						final CargoAllocation allocation = (CargoAllocation) o;
-						// objects.add(allocation.getInputCargo());
 						objects.addAll(allocation.getEvents());
 						for (final SlotAllocation sa : allocation.getSlotAllocations()) {
 							objects.add(sa.getSlotVisit());
@@ -1113,8 +1087,8 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		}
 	}
 
-	private final HashMap<Object, Object> equivalents = new HashMap<Object, Object>();
-	private final HashSet<Object> contents = new HashSet<Object>();
+	private final HashMap<Object, Object> equivalents = new HashMap<>();
+	private final HashSet<Object> contents = new HashSet<>();
 
 	protected void setInputEquivalents(final Object input, final Collection<Object> objectEquivalents) {
 		for (final Object o : objectEquivalents) {
@@ -1138,8 +1112,8 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		final Set<Object> newSelection = new HashSet<Object>(selectedObjects.size());
 		for (final Object o : selectedObjects) {
 			newSelection.add(o);
-			if (o instanceof Slot) {
-				final Slot slot = (Slot) o;
+			if (o instanceof Slot<?>) {
+				final Slot<?> slot = (Slot<?>) o;
 				final Object object = equivalents.get(slot);
 				if (object instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) object;
@@ -1161,7 +1135,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			}
 		}
 		newSelection.retainAll(contents);
-		return new ArrayList<Object>(newSelection);
+		return new ArrayList<>(newSelection);
 
 	}
 
@@ -1199,7 +1173,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			@Override
 			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
 
-				final List<Event> interestingEvents = new LinkedList<Event>();
+				final List<Event> interestingEvents = new LinkedList<>();
 				for (final Sequence sequence : schedule.getSequences()) {
 					for (final Event event : sequence.getEvents()) {
 						if (event instanceof StartEvent) {
@@ -1358,4 +1332,6 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			ViewerHelper.refresh(viewer, true);
 		}
 	};
+
+	private RunnableAction toggleLegend;
 }

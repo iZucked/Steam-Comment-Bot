@@ -37,13 +37,14 @@ public final class ColourPalette {
 	private static final RGB Vessel_Ballast_Journey = Gas_Blue;
 	private static final RGB Vessel_Charter_Out = VesselEvent_Purple;
 	private static final RGB Vessel_Dry_Dock = VesselEvent_Brown;
+	private static final RGB Vessel_Maintenance = new RGB(221, 220, 221);
 	private static final RGB Vessel_Generated_Charter_Out = VesselEvent_LightPurple;
 	private static final RGB Vessel_Laden_Idle = Light_Green;
 	private static final RGB Vessel_Laden_Journey = Green;
 	private static final RGB Warning_Orange = new RGB(255, 120, 25);
 	private static final RGB Warning_Yellow = new RGB(255, 255, 25);
-	
-	private static final RGB Red= new RGB(255, 0, 0);
+
+	private static final RGB Red = new RGB(255, 0, 0);
 
 	// experimental/currently unused
 	// static final RGB VesselEvent_Brown = new RGB(120, 125, 60);
@@ -104,7 +105,7 @@ public final class ColourPalette {
 		setItemColour(ColourPaletteItems.Voyage_Cooldown, ColourElements.Background, Slot_White);
 
 		setItemColour(ColourPaletteItems.Event_CharterOut, ColourElements.Background, Vessel_Charter_Out);
-		// setColour(ColourPaletteItems.Event_Maintenence, ColourElements.Background, Vessel_Maintenance);
+		setItemColour(ColourPaletteItems.Event_Maintenance, ColourElements.Background, Vessel_Maintenance);
 		setItemColour(ColourPaletteItems.Event_DryDock, ColourElements.Background, Vessel_Dry_Dock);
 
 		setItemColour(ColourPaletteItems.Event_Locked, ColourElements.Border, Locked_White);
@@ -127,7 +128,7 @@ public final class ColourPalette {
 		setItemColour(ColourPaletteItems.SHORT, ColourElements.Background, Orange);
 
 		setItemColour(ColourPaletteItems.Voyage_Tight_Warning, ColourElements.Background, Warning_Yellow);
-		
+
 		setItemColour(ColourPaletteItems.Inventory_Breach, ColourElements.Background, Red);
 	}
 
@@ -145,7 +146,7 @@ public final class ColourPalette {
 		Voyage_Ballast_Journey, Voyage_Ballast_Idle,
 		Voyage_Cooldown,
 		Voyage_GeneratedCharterOut,
-		Event_DryDock, Event_Maintenence, Event_CharterOut,
+		Event_DryDock, Event_Maintenance, Event_CharterOut,
 		
 		Event_Locked,
 		

@@ -1,0 +1,10 @@
+package org.eclipse.nebula.widgets.ganttchart;
+
+import org.eclipse.swt.graphics.Color;
+
+public interface ILegendItem {
+
+	String getDescription();
+
+	Color[] getColours();
+}

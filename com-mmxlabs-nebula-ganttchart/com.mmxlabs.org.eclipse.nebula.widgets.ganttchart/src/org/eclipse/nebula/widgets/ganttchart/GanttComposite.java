@@ -26,6 +26,7 @@ import org.eclipse.nebula.widgets.ganttchart.undoredo.GanttUndoRedoManager;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.ClusteredCommand;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.IUndoRedoCommand;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -40,6 +41,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
@@ -314,6 +316,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	private int _daysToAppendForEndOfDay;
 
 	private int _lastSectionColumnWidth;
+
+	private boolean showLegend = false;
+
+	private ILegendProvider legendProvider = null;
 
 	static {
 		final String osProperty = System.getProperty("os.name");
@@ -685,7 +691,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Hides all layers of the given value and redraws the event area.
 	 * 
 	 * @param layer
-	 *            Layer to hide.
+	 *                  Layer to hide.
 	 */
 	public void hideLayer(final int layer) {
 		if (!_hiddenLayers.contains(new Integer(layer))) {
@@ -697,7 +703,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Shows all layers of the given value and redraws the event area.
 	 * 
 	 * @param layer
-	 *            Layer to show.
+	 *                  Layer to show.
 	 */
 	public void showLayer(final int layer) {
 		final boolean removed = _hiddenLayers.remove(new Integer(layer));
@@ -743,9 +749,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * settings, those values will still be used, so it may be wise to turn them off if you are doing layer blending.
 	 * 
 	 * @param layer
-	 *            Layer to set opacity on
+	 *                    Layer to set opacity on
 	 * @param opacity
-	 *            Opacity between 0 and 255
+	 *                    Opacity between 0 and 255
 	 */
 	public void setLayerOpacity(final int layer, final int opacity) {
 
@@ -768,7 +774,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Returns the layer opacity for a layer.
 	 * 
 	 * @param layer
-	 *            Layer to get opacity for
+	 *                  Layer to get opacity for
 	 * @return Layer opacity, -1 if layer has no opacity set.
 	 */
 	public int getLayerOpacity(final int layer) {
@@ -783,7 +789,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Setting a fixed row height override causes all rows to be the set height regardless of individual row heights set on items themselves and all settings.
 	 * 
 	 * @param height
-	 *            Height to set. Set to zero to turn off.
+	 *                   Height to set. Set to zero to turn off.
 	 */
 	public void setFixedRowHeightOverride(final int height) {
 		_fixedRowHeight = height;
@@ -793,7 +799,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Setting a fixed event spacer overrides all individual event space settings on chart items and all settings.
 	 * 
 	 * @param height
-	 *            Height to set. Set to zero to turn off.
+	 *                   Height to set. Set to zero to turn off.
 	 */
 	public void setEventSpacerOverride(final int height) {
 		_eventSpacer = height;
@@ -803,7 +809,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Setting this to true will force horizontal lines to draw despite what may be set in the settings.
 	 * 
 	 * @param drawHorizontal
-	 *            true to draw horizontal lines.
+	 *                           true to draw horizontal lines.
 	 */
 	public void setDrawHorizontalLinesOverride(final boolean drawHorizontal) {
 		_drawHorizontalLines = drawHorizontal;
@@ -813,7 +819,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Setting this to true will force vertical lines to draw despite what may be set in the settings.
 	 * 
 	 * @param drawVertical
-	 *            true to draw vertical lines.
+	 *                         true to draw vertical lines.
 	 */
 	public void setDrawVerticalLinesOverride(final boolean drawVertical) {
 		_drawVerticalLines = drawVertical;
@@ -823,7 +829,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Sets the selection to be a specific GanttEvent. This method will cause a redraw.
 	 * 
 	 * @param event
-	 *            GanttEvent to select
+	 *                  GanttEvent to select
 	 */
 	public void setSelection(final GanttEvent event) {
 		_selectedEvents.clear();
@@ -836,7 +842,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * will cause a redraw.
 	 * 
 	 * @param list
-	 *            List of GanttEvents to select
+	 *                 List of GanttEvents to select
 	 */
 	public void setSelection(final List list) {
 		if (!_multiSelect) {
@@ -852,7 +858,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Adds a GanttGroup to the chart.
 	 * 
 	 * @param group
-	 *            Group to add
+	 *                  Group to add
 	 */
 	public void addGroup(final GanttGroup group) {
 		internalAddGroup(-1, group);
@@ -871,7 +877,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Removes a GanttGroup from the chart.
 	 * 
 	 * @param group
-	 *            Group to remove
+	 *                  Group to remove
 	 */
 	public void removeGroup(final GanttGroup group) {
 		internalRemoveGroup(group);
@@ -881,7 +887,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Adds a GanttSection to the chart.
 	 * 
 	 * @param section
-	 *            Section to add
+	 *                    Section to add
 	 */
 	public void addSection(final GanttSection section) {
 		internalAddSection(section);
@@ -891,7 +897,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Removes a GanttSection from the chart.
 	 * 
 	 * @param section
-	 *            Section to remove
+	 *                    Section to remove
 	 */
 	public void removeSection(final GanttSection section) {
 		internalRemoveSection(section);
@@ -1244,13 +1250,61 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		calculateVerticalInsertLocations();
 		drawVerticalInsertMarkers(gc);
+
+		if (showLegend && legendProvider != null) {
+			final List<ILegendItem> legendItems = legendProvider.getLegendItems();
+			final int rows = legendItems.size();
+			if (rows > 0) {
+				final int maxColours = legendItems.stream().map(ILegendItem::getColours).mapToInt(a -> a.length).max().getAsInt();
+				final int maxLength = legendItems.stream().map(ILegendItem::getDescription).mapToInt(d -> gc.stringExtent(d).x).max().getAsInt();
+
+				final int stringHeight = gc.getFontMetrics().getHeight();
+
+				final int size = 8;
+
+				int legendWidth = 1 + maxColours * size + 8 + maxLength;
+				int legendHeight = 1 + rows * stringHeight;
+
+				int xpos = getBounds().width - legendWidth - 4;
+				int ypos = 0;
+
+				gc.setBackground(ColorCache.getColor(ColorCache.BLACK));
+				gc.fillRectangle(new Rectangle(xpos, ypos, 2 + legendWidth, 2 + legendHeight));
+
+				gc.setBackground(ColorCache.getColor(ColorCache.WHITE));
+				gc.fillRectangle(new Rectangle(xpos + 1, ypos + 1, legendWidth, legendHeight));
+
+				xpos++;
+				ypos++;
+
+				final int colOffset = (stringHeight / 2) - (size / 2);
+
+				gc.setForeground(ColorCache.getColor(ColorCache.BLACK));
+				for (int r = 0; r < rows; ++r) {
+					final ILegendItem item = legendItems.get(r);
+					int c = 0;
+
+					for (final Color rgb : item.getColours()) {
+						gc.setBackground(ColorCache.getColor(ColorCache.BLACK));
+						gc.fillRectangle(new Rectangle(xpos + size * c + 2, colOffset + ypos + r * stringHeight, 2 + size, 2 + size));
+
+						gc.setBackground(rgb);
+						gc.fillRectangle(new Rectangle(xpos + 1 + size * c + 2, colOffset + ypos + 1 + r * stringHeight, size, size));
+						++c;
+					}
+					gc.setBackground(ColorCache.getColor(ColorCache.WHITE));
+					gc.drawString(item.getDescription(), xpos + maxColours * size + 8, ypos + r * stringHeight);
+
+				}
+			}
+		}
 	}
 
 	/**
 	 * Flag whether to show planned dates or not. This will override any settings value and will cause a redraw.
 	 * 
 	 * @param showPlanned
-	 *            true to show planned dates
+	 *                        true to show planned dates
 	 */
 	public void setShowPlannedDates(final boolean showPlanned) {
 		if (_showPlannedDates == showPlanned) {
@@ -1540,11 +1594,11 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Sets the top visible item in the chart and scrolls to show it.
 	 * 
 	 * @param ge
-	 *            Event to show
+	 *                    Event to show
 	 * @param yOffset
-	 *            y offset modifier
+	 *                    y offset modifier
 	 * @param side
-	 *            one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>
+	 *                    one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>
 	 */
 	public void setTopItem(final GanttEvent ge, final int yOffset, final int side) {
 
@@ -1572,9 +1626,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Sets the top visible item in the chart and scrolls to show it.
 	 * 
 	 * @param ge
-	 *            Event to show
+	 *                 Event to show
 	 * @param side
-	 *            one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>
+	 *                 one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>
 	 */
 	public void setTopItem(final GanttEvent ge, final int side) {
 		setTopItem(ge, 0, side);
@@ -1584,9 +1638,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Scrolls the chart to the selected item regardless if it is visible or not.
 	 * 
 	 * @param ge
-	 *            GanttEvent to scroll to.
+	 *                 GanttEvent to scroll to.
 	 * @param side
-	 *            one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>
+	 *                 one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>
 	 */
 	public void showEvent(final GanttEvent ge, final int side) {
 		// TODO: Side doesn't work.. missing something
@@ -2999,11 +3053,11 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Fetches a dot-concatenated string that will fit the given space. Newlines are not taken into account.
 	 * 
 	 * @param gc
-	 *            GC
+	 *                 GC
 	 * @param area
-	 *            Area to fit text in
+	 *                 Area to fit text in
 	 * @param text
-	 *            Text to fit in area
+	 *                 Text to fit in area
 	 * @return String concatenated string with ellipsis at end
 	 */
 	private String getStringToDisplay(final GC gc, final Rectangle area, final String text) {
@@ -3574,9 +3628,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Adds a connection between two GanttEvents. ge1 will connect to ge2.
 	 * 
 	 * @param source
-	 *            Source event
+	 *                   Source event
 	 * @param target
-	 *            Target event
+	 *                   Target event
 	 */
 	public void addDependency(final GanttEvent source, final GanttEvent target) {
 		addDependency(source, target, null);
@@ -3586,11 +3640,11 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Adds a connection between two GanttEvents. <code>Source</code> will connect to <code>Target</code>.
 	 * 
 	 * @param source
-	 *            Source event
+	 *                   Source event
 	 * @param target
-	 *            Target event
+	 *                   Target event
 	 * @param Color
-	 *            to use to draw connection. Set null to use default color from Settings.
+	 *                   to use to draw connection. Set null to use default color from Settings.
 	 */
 	public void addDependency(final GanttEvent source, final GanttEvent target, final Color color) {
 		checkWidget();
@@ -3621,7 +3675,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Returns true if the given event is connected to another.
 	 * 
 	 * @param ge
-	 *            GanttEvent to check
+	 *               GanttEvent to check
 	 * @return true if the GanttEvent is connected
 	 */
 	public boolean isConnected(final GanttEvent ge) {
@@ -3639,9 +3693,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Checks whether two events are connected to each other.
 	 * 
 	 * @param source
-	 *            Source event
+	 *                   Source event
 	 * @param target
-	 *            Target event
+	 *                   Target event
 	 * @return true if a connection exists
 	 */
 	public boolean isConnected(final GanttEvent source, final GanttEvent target) {
@@ -3659,9 +3713,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Same as addDependency().
 	 * 
 	 * @param source
-	 *            Source event
+	 *                   Source event
 	 * @param target
-	 *            Target event
+	 *                   Target event
 	 */
 	public void addConnection(final GanttEvent source, final GanttEvent target) {
 		addDependency(source, target, null);
@@ -3671,11 +3725,11 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Same as addDependency().
 	 * 
 	 * @param source
-	 *            Source event
+	 *                   Source event
 	 * @param target
-	 *            Target event
+	 *                   Target event
 	 * @param Color
-	 *            to use to draw connection. Set null to use defaults.
+	 *                   to use to draw connection. Set null to use defaults.
 	 */
 	public void addConnection(final GanttEvent source, final GanttEvent target, final Color color) {
 		addDependency(source, target, color);
@@ -4453,7 +4507,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Moves calendar to the current date/time.
 	 * 
 	 * @param side
-	 *            one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>
+	 *                 one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>
 	 */
 	public void jumpToToday(final int side) {
 		checkWidget();
@@ -4512,11 +4566,11 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Moves the calendar to a particular event date horizontally. To move to an event completely, you may use {@link #setTopItem(GanttEvent)} or {@link #setTopItem(GanttEvent, int)}.
 	 * 
 	 * @param event
-	 *            Event to move to
+	 *                  Event to move to
 	 * @param start
-	 *            true if to jump to the start date, false if to jump to the end date.
+	 *                  true if to jump to the start date, false if to jump to the end date.
 	 * @param side
-	 *            one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>
+	 *                  one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>
 	 */
 	public void jumpToEvent(final GanttEvent event, final boolean start, final int side) {
 		final Calendar cal = getToday();
@@ -4616,11 +4670,11 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * 
 	 * @see GanttComposite#setDate(Calendar, int)
 	 * @param date
-	 *            Date
+	 *                         Date
 	 * @param side
-	 *            one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>
+	 *                         one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>
 	 * @param clearMinutes
-	 *            true if to clear minutes, seconds, milliseconds
+	 *                         true if to clear minutes, seconds, milliseconds
 	 */
 	public void setDate(final Calendar date, final int side, final boolean clearMinutes) {
 		internalSetDate(date, side, clearMinutes, true);
@@ -4631,9 +4685,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * magic, but sets the date "purely". This method will clear minutes, seconds and milliseconds and set them to zero. If you do not wish this, use {@link #setDate(Calendar, int, boolean)}
 	 * 
 	 * @param date
-	 *            Date
+	 *                 Date
 	 * @param side
-	 *            one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>
+	 *                 one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>
 	 */
 	public void setDate(final Calendar date, final int side) {
 		internalSetDate(date, side, true, true);
@@ -4726,9 +4780,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Sets the new date of the calendar and redraws. This method will apply any offsets and other date magic that is set in the Settings.
 	 * 
 	 * @param date
-	 *            Date to set
+	 *                        Date to set
 	 * @param applyOffset
-	 *            whether to apply the settings offset
+	 *                        whether to apply the settings offset
 	 * @see #setDate(Calendar)
 	 * @see #setDate(Calendar, int)
 	 * @see #setDate(Calendar, int, boolean)
@@ -4758,9 +4812,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Re-indexes an event to a new index.
 	 * 
 	 * @param event
-	 *            GanttEvent to reindex
+	 *                     GanttEvent to reindex
 	 * @param newIndex
-	 *            new index
+	 *                     new index
 	 */
 	public void reindex(final GanttEvent event, final int newIndex) {
 		_ganttEvents.remove(event);
@@ -4772,9 +4826,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Re-indexes a GanttSection to a new index.
 	 * 
 	 * @param section
-	 *            GanttSection to reindex
+	 *                     GanttSection to reindex
 	 * @param newIndex
-	 *            new index
+	 *                     new index
 	 */
 	public void reindex(final GanttSection section, final int newIndex) {
 		_ganttSections.remove(section);
@@ -4786,9 +4840,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Re-indexes a GanttGroup to a new index.
 	 * 
 	 * @param group
-	 *            GanttGroup to reindex
+	 *                     GanttGroup to reindex
 	 * @param newIndex
-	 *            new index
+	 *                     new index
 	 */
 	public void reindex(final GanttGroup group, final int newIndex) {
 		checkWidget();
@@ -4801,7 +4855,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Adds a GanttPhase to the chart.
 	 * 
 	 * @param phase
-	 *            GanttPhase to add
+	 *                  GanttPhase to add
 	 */
 	public void addPhase(final GanttPhase phase) {
 		checkWidget();
@@ -4812,7 +4866,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Removes a GanttPhase from the chart.
 	 * 
 	 * @param phase
-	 *            GanttPhase to remove
+	 *                  GanttPhase to remove
 	 */
 	public void removePhase(final GanttPhase phase) {
 		removePhase(phase, true);
@@ -4822,7 +4876,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Adds a {@link GanttSpecialDateRange} to the chart.
 	 * 
 	 * @param range
-	 *            {@link GanttSpecialDateRange} to add.
+	 *                  {@link GanttSpecialDateRange} to add.
 	 */
 	public void addSpecialDateRange(final GanttSpecialDateRange range) {
 		addSpecialDateRange(range, true);
@@ -4832,7 +4886,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Removes a {@link GanttSpecialDateRange} to the chart and redraws.
 	 * 
 	 * @param range
-	 *            {@link GanttSpecialDateRange} to remove
+	 *                  {@link GanttSpecialDateRange} to remove
 	 */
 	public void removeSpecialDateRange(final GanttSpecialDateRange range) {
 		removeSpecialDateRange(range, true);
@@ -4842,9 +4896,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Removes a {@link GanttSpecialDateRange} to the chart and redraws.
 	 * 
 	 * @param range
-	 *            {@link GanttSpecialDateRange} to remove
+	 *                   {@link GanttSpecialDateRange} to remove
 	 * @param redraw
-	 *            true to redraw
+	 *                   true to redraw
 	 */
 	public void removeSpecialDateRange(final GanttSpecialDateRange range, final boolean redraw) {
 		checkWidget();
@@ -4868,9 +4922,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Adds a {@link GanttSpecialDateRange} and optionally redraws.
 	 * 
 	 * @param range
-	 *            {@link GanttSpecialDateRange} to add
+	 *                   {@link GanttSpecialDateRange} to add
 	 * @param redraw
-	 *            true to redraw
+	 *                   true to redraw
 	 */
 	public void addSpecialDateRange(final GanttSpecialDateRange range, final boolean redraw) {
 		checkWidget();
@@ -4887,9 +4941,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Adds a GanttPhase to the chart with optional redraw call.
 	 * 
 	 * @param phase
-	 *            GanttPhase to add
+	 *                   GanttPhase to add
 	 * @param redraw
-	 *            true to redraw
+	 *                   true to redraw
 	 */
 	public void addPhase(final GanttPhase phase, final boolean redraw) {
 		checkWidget();
@@ -4906,9 +4960,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Removes a GanttPhase from the chart with optional redraw call.
 	 * 
 	 * @param phase
-	 *            GanttPhase to remove
+	 *                   GanttPhase to remove
 	 * @param redraw
-	 *            true to redraw
+	 *                   true to redraw
 	 */
 	public void removePhase(final GanttPhase phase, final boolean redraw) {
 		checkWidget();
@@ -4931,7 +4985,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Adds a GanttEvent to the chart.
 	 * 
 	 * @param event
-	 *            GanttEvent
+	 *                  GanttEvent
 	 */
 	public void addEvent(final GanttEvent event) {
 		checkWidget();
@@ -4942,9 +4996,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Adds an event at a given index.
 	 * 
 	 * @param event
-	 *            GanttEvent
+	 *                  GanttEvent
 	 * @param index
-	 *            index
+	 *                  index
 	 */
 	public void addEvent(final GanttEvent event, final int index) {
 		checkWidget();
@@ -4960,9 +5014,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Adds an GanttEvent to the chart and redraws.
 	 * 
 	 * @param event
-	 *            GanttEvent
+	 *                   GanttEvent
 	 * @param redraw
-	 *            true if to redraw chart
+	 *                   true if to redraw chart
 	 */
 	public void addEvent(final GanttEvent event, final boolean redraw) {
 		checkWidget();
@@ -4980,7 +5034,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Removes a GanttEvent from the chart.
 	 * 
 	 * @param event
-	 *            GanttEvent to remove
+	 *                  GanttEvent to remove
 	 * @return true if removed
 	 */
 	public boolean removeEvent(final GanttEvent event) {
@@ -5108,7 +5162,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Checks whether the chart has a given event.
 	 * 
 	 * @param event
-	 *            GanttEvent
+	 *                  GanttEvent
 	 * @return true if event exists
 	 */
 	public boolean hasEvent(final GanttEvent event) {
@@ -5311,9 +5365,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Checks whether a certain event is visible in the current bounds.
 	 * 
 	 * @param event
-	 *            GanttEvent
+	 *                   GanttEvent
 	 * @param bounds
-	 *            Bounds
+	 *                   Bounds
 	 * @return true if event is visible
 	 */
 	public boolean isEventVisible(final GanttEvent event, final Rectangle bounds) {
@@ -5488,7 +5542,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Returns the starting x position for a given date in the current view.
 	 * 
 	 * @param date
-	 *            Date
+	 *                 Date
 	 * @return x position, -1 should it for some reason not be found
 	 */
 	public int getStartingXForEventDate(final Calendar date) {
@@ -5534,7 +5588,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Returns the starting x for a given date.
 	 * 
 	 * @param date
-	 *            Calendar date
+	 *                 Calendar date
 	 * @return x position or -1 if it for some reason should not be found
 	 */
 	public int getStartingXFor(final Calendar date) {
@@ -5656,7 +5710,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Sets a list of header dates that should be the selected dates. This list must be a list of Calendars.
 	 * 
 	 * @param dates
-	 *            List of Calendar objects representing selected header dates.
+	 *                  List of Calendar objects representing selected header dates.
 	 */
 	public void setSelectedHeaderDates(final List dates) {
 		_selHeaderDates = dates;
@@ -5667,7 +5721,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Selects a region of events.
 	 * 
 	 * @param rect
-	 *            Rectangle of region to select
+	 *                 Rectangle of region to select
 	 * @param me
 	 */
 	private void doMultiSelect(final Rectangle rect, final MouseEvent me) {
@@ -6179,9 +6233,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Returns a section that corresponds to where the given event is currently hovering over
 	 * 
 	 * @param event
-	 *            Event to check
+	 *                                            Event to check
 	 * @param accountForVerticalDragDirection
-	 *            whether to account for if user is dragging up or down when returning section, if user is between two sections this may play a part
+	 *                                            whether to account for if user is dragging up or down when returning section, if user is between two sections this may play a part
 	 * @return Section it is over or null if none
 	 */
 	private GanttSection getSectionForVerticalDND(final GanttEvent event, final boolean accountForVerticalDragDirection) {
@@ -6243,9 +6297,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Returns a list of all surrounding vertical events to a given event. If a GanttSection is given, only the events in that section will be used in calculating.
 	 * 
 	 * @param event
-	 *            Event to get surrounding events for
+	 *                    Event to get surrounding events for
 	 * @param section
-	 *            GanttSection optional (pass null for using all events)
+	 *                    GanttSection optional (pass null for using all events)
 	 * @return 2-size array with entry 0 being the top event and entry 1 being the bottom event. Any or all can be null.
 	 */
 	private List getSurroundingVerticalEvents(final GanttEvent event, final GanttSection section) {
@@ -6881,7 +6935,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Deals with figuring out what direction we are auto-scrolling in, if any.
 	 * 
 	 * @param event
-	 *            MouseEvent
+	 *                  MouseEvent
 	 */
 	private void doAutoScroll(final MouseEvent event) {
 		if (event.x < _mainBounds.x) {
@@ -6981,7 +7035,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Gets the X for a given date.
 	 * 
 	 * @param date
-	 *            Date
+	 *                 Date
 	 * @return x position or -1 if date was not found
 	 */
 	public int getXForDate(final Date date) {
@@ -6996,7 +7050,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Gets the x position where the given date starts in the current visible area.
 	 * 
 	 * @param cal
-	 *            Calendar
+	 *                Calendar
 	 * @return -1 if date was not found
 	 */
 	public int getXForDate(final Calendar cal) {
@@ -7036,7 +7090,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Gets the date for a given x position.
 	 * 
 	 * @param x
-	 *            x location
+	 *              x location
 	 * @return Calendar of date
 	 */
 	public Calendar getDateAt(final int x) {
@@ -7122,7 +7176,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Draws a dotted vertical marker at the given date. It will get removed on repaint, so make sure it's drawn as often as needed.
 	 * 
 	 * @param date
-	 *            Date to draw it at
+	 *                 Date to draw it at
 	 */
 	public void drawMarker(final Date date) {
 		checkWidget();
@@ -8056,7 +8110,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Sets the current view.
 	 * 
 	 * @param view
-	 *            View
+	 *                 View
 	 */
 	public void setView(final int view) {
 		_currentView = view;
@@ -8212,7 +8266,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Returns the chart as an image for the given bounds.
 	 * 
 	 * @param bounds
-	 *            Rectangle bounds
+	 *                   Rectangle bounds
 	 * @return Image of chart
 	 */
 	public Image getImage(final Rectangle bounds) {
@@ -8468,7 +8522,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Sets the zoom level. If the new level is zoomed in from the previous set zoom level a zoom in event will be reported, otherwise a zoom out.
 	 * 
 	 * @param level
-	 *            Level to set
+	 *                  Level to set
 	 */
 	public void setZoomLevel(final int level) {
 		if (level == _zoomLevel)
@@ -8616,7 +8670,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Adds a listener that will be notified of Gantt events.
 	 * 
 	 * @param listener
-	 *            Listener
+	 *                     Listener
 	 */
 	public void addGanttEventListener(final IGanttEventListener listener) {
 		checkWidget();
@@ -8630,7 +8684,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Removes a listener from being notified of Gantt events.
 	 * 
 	 * @param listener
-	 *            Listener
+	 *                     Listener
 	 */
 	public void removeGanttEventListener(final IGanttEventListener listener) {
 		checkWidget();
@@ -8645,7 +8699,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * Sets whether to use advanced tooltips or not. This method will override the settings implementation with the same name.
 	 * 
 	 * @param useAdvancedTooltips
-	 *            true whether to use advanced tooltips.
+	 *                                true whether to use advanced tooltips.
 	 */
 	public void setUseAdvancedTooltips(final boolean useAdvancedTooltips) {
 		_useAdvTooltips = useAdvancedTooltips;
@@ -8793,7 +8847,23 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		return todaySupplier;
 	}
 
-	public void setTodaySupplier(Supplier<Calendar> todaySupplier) {
+	public void setTodaySupplier(final Supplier<Calendar> todaySupplier) {
 		this.todaySupplier = todaySupplier;
+	}
+
+	public boolean isShowLegend() {
+		return showLegend;
+	}
+
+	public void setShowLegend(final boolean showLegend) {
+		this.showLegend = showLegend;
+	}
+
+	public ILegendProvider getLegendProvider() {
+		return legendProvider;
+	}
+
+	public void setLegendProvider(final ILegendProvider legendProvider) {
+		this.legendProvider = legendProvider;
 	}
 }

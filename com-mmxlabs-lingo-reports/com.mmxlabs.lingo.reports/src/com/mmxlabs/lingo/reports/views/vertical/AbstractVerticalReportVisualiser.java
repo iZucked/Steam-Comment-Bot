@@ -117,7 +117,7 @@ public abstract class AbstractVerticalReportVisualiser {
 				return colourPalette.getColourFor(ColourPaletteItems.Event_DryDock, ColourElements.Background);
 			}
 			if (vesselEvent instanceof MaintenanceEvent) {
-				return colourPalette.getColourFor(ColourPaletteItems.Event_Maintenence, ColourElements.Background);
+				return colourPalette.getColourFor(ColourPaletteItems.Event_Maintenance, ColourElements.Background);
 			}
 		}
 		if (event instanceof GeneratedCharterOut) {
