@@ -65,19 +65,24 @@ public class RouteImporter {
 					} else {
 						try {
 							final int distance = nai.stringToInt(entry.getValue(), PortPackage.Literals.ROUTE_LINE__DISTANCE);
-							final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
-							line.setDistance(distance);
-							row.get(entry.getKey());
-							context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_To(), reader.getCasedColumnName(entry.getKey()), context));
-							lines.add(line);
-						} catch (final ParseException nfe) {
-							try {
-								final double distance = nai.stringToDouble(entry.getValue(), PortPackage.Literals.ROUTE_LINE__DISTANCE);
+							if(distance >= 0) {
 								final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
-								line.setDistance((int) distance);
+								line.setDistance(distance);
 								row.get(entry.getKey());
 								context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_To(), reader.getCasedColumnName(entry.getKey()), context));
 								lines.add(line);
+							}
+						} catch (final ParseException nfe) {
+							try {
+								final double distance = nai.stringToDouble(entry.getValue(), PortPackage.Literals.ROUTE_LINE__DISTANCE);
+								if(distance >= 0) {
+									final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
+									line.setDistance((int) distance);
+									row.get(entry.getKey());
+									context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_To(), reader.getCasedColumnName(entry.getKey()), context));
+									lines.add(line);
+									
+								}
 							} catch (final ParseException nfe2) {
 								if (entry.getValue().isEmpty() == false) {
 									fromName = entry.getValue();
