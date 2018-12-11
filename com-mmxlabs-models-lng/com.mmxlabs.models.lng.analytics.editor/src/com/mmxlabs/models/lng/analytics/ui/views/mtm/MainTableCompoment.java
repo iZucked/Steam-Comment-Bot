@@ -174,11 +174,16 @@ public class MainTableCompoment {
 		}
 		String vName = cim.getName();
 		if (result.getEarliestETA() != null) {
-				r = String.format("%s %s \n %s %s", //
-						formatDate(result.getEarliestETA()), //
-						formatPrice(result.getEarliestPrice()),
+			r = String.format("%s %s \n", //
+					formatDate(result.getEarliestETA()), //
+					formatPrice(result.getEarliestPrice()));
+			if (result.getShippingCost() > 0.0) {
+				r += String.format("%s %s", //
 						vName,
 						formatPrice(result.getShippingCost()));
+			} else {
+				r += "Non-shipped";
+			}
 		}
 		return r;
 	}
