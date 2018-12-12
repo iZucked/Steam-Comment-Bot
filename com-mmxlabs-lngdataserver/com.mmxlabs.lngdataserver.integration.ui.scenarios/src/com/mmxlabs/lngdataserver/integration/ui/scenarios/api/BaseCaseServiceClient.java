@@ -188,7 +188,12 @@ public class BaseCaseServiceClient {
 		BaseCaseRecord record = new BaseCaseRecord();
 		record.uuid = versionObject.getString("uuid");
 		record.creator = versionObject.getString("creator");
-		record.originalName = versionObject.getString("originalName");
+		if(!versionObject.isNull("originalName")) {
+			record.originalName = versionObject.getString("originalName");
+		}
+		else {
+			record.originalName = record.uuid;			
+		}
 
 		final String creationDate = versionObject.getString("creationDate");
 		record.creationDate = Instant.parse(creationDate);
