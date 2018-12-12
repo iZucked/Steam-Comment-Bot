@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -45,29 +46,23 @@ public final class MTMUtils {
 			}
 		}
 		for (final CharterInMarket cim : spotModel.getCharterInMarkets()) {
-			if (cim != null) {
-				if (cim.isEnabled() && cim.isNominal() && cim.isMtm() && cim.getVessel() != null) {
-					model.getNominalMarkets().add(cim);
-				}
+			if (cim != null && cim.isEnabled() && cim.isNominal() && cim.isMtm() && cim.getVessel() != null) {
+				model.getNominalMarkets().add(cim);
 			}
 		}
 		final SpotMarketGroup smgDS = spotModel.getDesSalesSpotMarket();
 		if (smgDS != null) {
 			for (final SpotMarket spotMarket : smgDS.getMarkets()) {
-				if (spotMarket != null) {
-					if (spotMarket.isEnabled() && spotMarket.isMtm()) {
-						model.getMarkets().add(spotMarket);
-					}
+				if (spotMarket != null && spotMarket.isMtm()) {
+					model.getMarkets().add(spotMarket);
 				}
 			}
 		}
 		final SpotMarketGroup smgFS = spotModel.getFobSalesSpotMarket();
 		if (smgFS != null) {
 			for (final SpotMarket spotMarket : smgFS.getMarkets()) {
-				if (spotMarket != null) {
-					if (spotMarket.isEnabled() && spotMarket.isMtm()) {
-						model.getMarkets().add(spotMarket);
-					}
+				if (spotMarket != null && spotMarket.isMtm()) {
+					model.getMarkets().add(spotMarket);
 				}
 			}
 		}
@@ -86,6 +81,9 @@ public final class MTMUtils {
 	}
 	
 	public static boolean allowSlot(final Slot slot, final boolean allowCargoes) {
+		if (slot instanceof SpotSlot) {
+			return false;
+		}
 		if (allowCargoes) {
 			return true;
 		}
