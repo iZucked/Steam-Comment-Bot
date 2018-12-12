@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lngdataserver.lng.importers.distances;
 
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,11 +25,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.integration.distances.model.GeographicPoint;
 import com.mmxlabs.lngdataserver.integration.distances.model.Identifier;
 import com.mmxlabs.lngdataserver.integration.distances.model.Routes;
 import com.mmxlabs.lngdataserver.integration.distances.model.RoutingPoint;
-import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.OtherIdentifiers;
@@ -83,6 +84,8 @@ public class PortAndDistancesToScenarioCopier {
 			} else {
 				oldPort = PortFactory.eINSTANCE.createPort();
 				oldPort.setLocation(PortFactory.eINSTANCE.createLocation());
+				oldPort.getLocation().setMmxId(mmxId);
+				oldPort.setName(versionLocation.getName());
 				oldPort.getLocation().setMmxId(mmxId);
 
 				oldPort.setDefaultWindowSize(1);
@@ -268,11 +271,13 @@ public class PortAndDistancesToScenarioCopier {
 					}
 				}
 			}
+			// validateDirectRoutes(directMatrix);
 
 			{
 				final Route canalRoute = routeMap.get(RouteOption.SUEZ);
 				if (canalRoute != null) {
 					final List<RouteLine> toAdd = createCanalRoutes(allPorts, suezDistance, suezA, suezB, directMatrix);
+					// validateCanalRoutes(toAdd, directMatrix);
 					if (!toAdd.isEmpty()) {
 						cmd.append(AddCommand.create(editingDomain, canalRoute, PortPackage.Literals.ROUTE__LINES, toAdd));
 					}
@@ -282,6 +287,7 @@ public class PortAndDistancesToScenarioCopier {
 				final Route canalRoute = routeMap.get(RouteOption.PANAMA);
 				if (canalRoute != null) {
 					final List<RouteLine> toAdd = createCanalRoutes(allPorts, panamaDistance, panamaA, panamaB, directMatrix);
+					// validateCanalRoutes(toAdd, directMatrix);
 					if (!toAdd.isEmpty()) {
 						cmd.append(AddCommand.create(editingDomain, canalRoute, PortPackage.Literals.ROUTE__LINES, toAdd));
 					}
@@ -292,6 +298,42 @@ public class PortAndDistancesToScenarioCopier {
 		cmd.append(SetCommand.create(editingDomain, portModel, PortPackage.Literals.PORT_MODEL__DISTANCE_DATA_VERSION, version.getIdentifier()));
 
 		return cmd;
+
+	}
+
+	private static void validateDirectRoutes(Map<Pair<Port, Port>, Double> directMatrix) {
+		Collection<Pair<Port, Port>> existing = new HashSet<>();
+		Collection<Pair<Port, Port>> lookingFor = new HashSet<>();
+		for (Pair<Port, Port> rl : directMatrix.keySet()) {
+			if (directMatrix.get(rl) < 0.0) {
+				continue;
+			}
+			existing.add(Pair.of(rl.getFirst(), rl.getSecond()));
+			lookingFor.add(Pair.of(rl.getSecond(), rl.getFirst()));
+		}
+		lookingFor.removeAll(existing);
+		for (Pair<Port, Port> p : lookingFor) {
+			System.out.printf("%s -> %s. %f %f\n", p.getFirst().getName(), p.getSecond().getName(), directMatrix.get(p), directMatrix.get(new Pair<>(p.getSecond(), p.getFirst())));
+		}
+		assert lookingFor.isEmpty();
+
+	}
+
+	private static void validateCanalRoutes(List<RouteLine> toAdd, Map<Pair<Port, Port>, Double> directMatrix) {
+		Collection<Pair<Port, Port>> existing = new HashSet<>();
+		Collection<Pair<Port, Port>> lookingFor = new HashSet<>();
+		Map<Pair<Port, Port>, RouteLine> m = new HashMap<>();
+		for (RouteLine rl : toAdd) {
+			existing.add(Pair.of(rl.getFrom(), rl.getTo()));
+			lookingFor.add(Pair.of(rl.getTo(), rl.getFrom()));
+			m.put(Pair.of(rl.getTo(), rl.getFrom()), rl);
+		}
+		lookingFor.removeAll(existing);
+		for (Pair<Port, Port> p : lookingFor) {
+			System.out.printf("%s -> %s. %f %f %f\n", p.getFirst().getName(), p.getSecond().getName(), directMatrix.get(p), directMatrix.get(new Pair<>(p.getSecond(), p.getFirst())),
+					m.get(p).getDistance());
+		}
+		assert lookingFor.isEmpty();
 
 	}
 
