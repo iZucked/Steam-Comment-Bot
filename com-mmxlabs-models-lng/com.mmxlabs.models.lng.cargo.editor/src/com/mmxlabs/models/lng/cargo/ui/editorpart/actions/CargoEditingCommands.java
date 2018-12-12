@@ -30,6 +30,8 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
@@ -46,8 +48,6 @@ import com.mmxlabs.models.ui.registries.IModelFactoryRegistry;
 public class CargoEditingCommands {
 
 	private final @NonNull EditingDomain editingDomain;
-
-	// private final @NonNull LNGScenarioModel scenarioModel;
 
 	private final @NonNull IModelFactoryRegistry modelFactoryRegistry;
 
@@ -75,14 +75,10 @@ public class CargoEditingCommands {
 	public <T> T createObject(final EClass clz, final EReference reference, final EObject container) {
 		final List<IModelFactory> factories = modelFactoryRegistry.getModelFactories(clz);
 
-		// TODO: Pre-generate and link to UI
-		// TODO: Add FOB/DES etc as explicit slot types.
 		final IModelFactory factory = factories.get(0);
 		final Collection<? extends ISetting> settings = factory.createInstance(rootObject, container, reference, null);
-		if (settings.isEmpty() == false) {
-
+		if (!settings.isEmpty()) {
 			for (final ISetting setting : settings) {
-
 				return (T) setting.getInstance();
 			}
 		}
@@ -113,7 +109,7 @@ public class CargoEditingCommands {
 			final FOBPurchasesMarket fobPurchasesMarket = (FOBPurchasesMarket) market;
 			newLoad.setPort((Port) fobPurchasesMarket.getNotionalPort());
 		}
-		// newLoad.setContract((Contract) market.getContract());
+
 		newLoad.setOptional(true);
 		newLoad.setName("");
 
@@ -125,7 +121,7 @@ public class CargoEditingCommands {
 	/**
 	 * @param transferPort
 	 */
-	public void insertShipToShipSlots(final List<Command> setCommands, final Slot sourceSlot, final CargoModel cargoModel, final Port transferPort) {
+	public void insertShipToShipSlots(final List<Command> setCommands, final Slot<?> sourceSlot, final CargoModel cargoModel, final Port transferPort) {
 
 		final Cargo sourceCargo = sourceSlot.getCargo();
 
@@ -149,26 +145,23 @@ public class CargoEditingCommands {
 		// Bind STS Slots
 		transferLoad.setTransferFrom(transferDischarge);
 
-		final boolean sourceIsLoad;
-		final Slot newCargoLoad;
-		final Slot newCargoDischarge;
-		final Slot sourceReplacementSlot;
+		final Slot<PurchaseContract> newCargoLoad;
+		final Slot<SalesContract> newCargoDischarge;
+		final Slot<?> sourceReplacementSlot;
 
 		final String sourceSlotName = sourceSlot.getName();
 		final String sourceRelationName; // string describing the transfer relation to the source slot
 
 		if (sourceSlot instanceof LoadSlot) {
-			sourceIsLoad = true;
 			sourceRelationName = "from";
-			newCargoLoad = sourceSlot;
+			newCargoLoad = (LoadSlot) sourceSlot;
 			newCargoDischarge = transferDischarge;
 			sourceReplacementSlot = transferLoad;
 
 		} else if (sourceSlot instanceof DischargeSlot) {
-			sourceIsLoad = false;
 			sourceRelationName = "to";
 			newCargoLoad = transferLoad;
-			newCargoDischarge = sourceSlot;
+			newCargoDischarge = (DischargeSlot) sourceSlot;
 			sourceReplacementSlot = transferDischarge;
 		} else {
 			// ?
@@ -254,7 +247,7 @@ public class CargoEditingCommands {
 			deleteCommands.add(DeleteCommand.create(editingDomain, dischargeSlot.getCargo()));
 
 			// Optional market slots can be removed.
-			for (final Slot s : dischargeSlot.getCargo().getSlots()) {
+			for (final Slot<?> s : dischargeSlot.getCargo().getSlots()) {
 				if (s instanceof LoadSlot) {
 					final LoadSlot oldSlot = (LoadSlot) s;
 					if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
@@ -269,7 +262,7 @@ public class CargoEditingCommands {
 		if (cargo != null) {
 
 			// Clear existing discharge slots
-			for (final Slot slot : cargo.getSlots()) {
+			for (final Slot<?> slot : cargo.getSlots()) {
 				if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot2 = (DischargeSlot) slot;
 					setCommands.add(SetCommand.create(editingDomain, dischargeSlot2, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
@@ -289,7 +282,7 @@ public class CargoEditingCommands {
 			setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getCargo_AllowRewiring(), Boolean.TRUE));
 
 			// Optional market slots can be removed.
-			for (final Slot s : cargo.getSlots()) {
+			for (final Slot<?> s : cargo.getSlots()) {
 				if (s instanceof DischargeSlot) {
 					final DischargeSlot oldSlot = (DischargeSlot) s;
 					if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
@@ -313,19 +306,15 @@ public class CargoEditingCommands {
 
 		cargoModel.getLoadSlots().forEach(s -> {
 			final Cargo c = s.getCargo();
-			if (c != null) {
-				if (!cargoModel.getCargoes().contains(c)) {
-					throw new IllegalStateException(String.format("Inconsistent data model - slot %s has uncontained cargo reference", s.getName()));
-				}
+			if (c != null && !cargoModel.getCargoes().contains(c)) {
+				throw new IllegalStateException(String.format("Inconsistent data model - slot %s has uncontained cargo reference", s.getName()));
 			}
 		});
 
 		cargoModel.getDischargeSlots().forEach(s -> {
 			final Cargo c = s.getCargo();
-			if (c != null) {
-				if (!cargoModel.getCargoes().contains(c)) {
-					throw new IllegalStateException(String.format("Inconsistent data model - slot %s has uncontained cargo reference", s.getName()));
-				}
+			if (c != null && !cargoModel.getCargoes().contains(c)) {
+				throw new IllegalStateException(String.format("Inconsistent data model - slot %s has uncontained cargo reference", s.getName()));
 			}
 		});
 
