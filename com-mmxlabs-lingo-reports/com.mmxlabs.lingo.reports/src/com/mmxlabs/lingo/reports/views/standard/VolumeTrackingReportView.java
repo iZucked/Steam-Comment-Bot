@@ -83,14 +83,11 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 
 		Month gasYearMonth = DEFAULT_MONTH;
 		Contract contract = sa.getContract();
-		if (contract != null && contract.getStartDate() != null) {
-			Month month = contract.getStartDate().getMonth();
-			if (month != null) {
-				gasYearMonth = month;
-			}
+		if (contract != null) {
+			gasYearMonth = Month.of(1 + contract.getContractYearStart());
 		}
 
-		// subtract one year from the reported year for dates prior to october
+		// subtract one year from the reported year for dates prior to october ( or whatever month it is)
 		final int yearOffset = (utc.getMonthValue() < gasYearMonth.getValue()) ? -1 : 0;
 
 		return Year.of(utc.getYear() + yearOffset);
