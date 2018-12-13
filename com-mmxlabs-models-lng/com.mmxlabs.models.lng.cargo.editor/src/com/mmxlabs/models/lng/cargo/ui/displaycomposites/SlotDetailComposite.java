@@ -241,7 +241,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		
 		// FM - put separately to allow feature enablement
 		if (LicenseFeatures.isPermitted("features:nominations")) {
-			esNomination = new ExpandableSet("Nomination", this);
+			esNomination = new ExpandableSet("Nominations", this);
 			{
 				nominationFeatures = new ArrayList<EStructuralFeature[]>();
 				nominationFeatures.add(new EStructuralFeature[] {WindowNomination, WindowNominationCounterparty, WindowNominationIsDone});
@@ -337,7 +337,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 						} else if(feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_COMMENT) {
 							final Label label = editor.getLabel();
 							if (label != null) {
-								label.setText("Remark");
+								label.setText("Remarks");
 							}
 							editor.setLabel(null);
 						} else {
@@ -373,7 +373,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 						} else if(feature == CargoPackage.Literals.SLOT__VESSEL_NOMINATION_COMMENT) {
 							final Label label = editor.getLabel();
 							if (label != null) {
-								label.setText("Remark");
+								label.setText("Remarks");
 							}
 							editor.setLabel(null);
 						} else {
@@ -409,7 +409,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 						} else if(feature == CargoPackage.Literals.SLOT__VOLUME_NOMINATION_COMMENT) {
 							final Label label = editor.getLabel();
 							if (label != null) {
-								label.setText("Remark");
+								label.setText("Remarks");
 							}
 							editor.setLabel(null);
 						} else {
@@ -445,7 +445,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 						} else if(feature == CargoPackage.Literals.SLOT__PORT_NOMINATION_COMMENT) {
 							final Label label = editor.getLabel();
 							if (label != null) {
-								label.setText("Remark");
+								label.setText("Remarks");
 							}
 							editor.setLabel(null);
 						} else {
