@@ -39,32 +39,29 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 				EObject obj = null;
 				EStructuralFeature feature = null;
 				String message = null;
-				boolean multipleAvailabilityError = false;
 				if (target instanceof SlotVisit) {
-					SlotAllocation allocation = ((SlotVisit) target).getSlotAllocation();
+					final SlotAllocation allocation = ((SlotVisit) target).getSlotAllocation();
 					if (allocation != null) {
 						obj = allocation.getSlot();
 						message = String.format(Constants.GENERATED_SCHEDULE_LABEL + " Vessel reaches %s late in schedule.", ((Slot) obj).getName());
 						feature = CargoPackage.Literals.SLOT__WINDOW_START;
 					}
 				} else if (target instanceof VesselEventVisit) {
-					VesselEvent ve = ((VesselEventVisit) target).getVesselEvent();
+					final VesselEvent ve = ((VesselEventVisit) target).getVesselEvent();
 					message = String.format(Constants.GENERATED_SCHEDULE_LABEL + " Vessel reaches %s late in schedule.", ve.getName());
 					obj = ve;
 					feature = CargoPackage.Literals.VESSEL_EVENT__START_BY;
 				} else if (target instanceof EndEvent) {
-					EndEvent event = (EndEvent) target;
+					final EndEvent event = (EndEvent) target;
 					obj = event.getSequence().getVesselAvailability();
 					feature = CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY;
 					message = Constants.GENERATED_SCHEDULE_LABEL + " Schedule has vessel travelling after it is no longer available.";
-					multipleAvailabilityError = true;
 				} else {
 					message = Constants.GENERATED_SCHEDULE_LABEL + " Late arrival in schedule.";
 				}
 
 				if (message != null) {
-					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message),
-							multipleAvailabilityError ? IStatus.ERROR : IStatus.WARNING);
+					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message), IStatus.WARNING);
 					if (obj != null) {
 						failure.addEObjectAndFeature(obj, feature);
 					}
