@@ -161,7 +161,7 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAdaptable {
 
 	private static final String COLUMN_VISIBILITY_KEY = "BulkTradesTablePane.COLUMN_VISIBILITY_KEY";
-	
+
 	private Iterable<ITradesTableContextMenuExtension> contextMenuExtensions;
 
 	@Inject(optional = true)
@@ -189,8 +189,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	private Table table;
 	private final CargoPackage cargoPkg = CargoPackage.eINSTANCE;
 	private final EMFReportColumnManager columnManager = new EMFReportColumnManager();
-	
-	//todayHandler
+
+	// todayHandler
 	private EventHandler todayHandler;
 
 	private final Map<EObject, Row> rowDataToRow = new HashMap<>();
@@ -264,6 +264,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		}
 		super.dispose();
 	}
+
 	// FM - properties -
 	private final EPackage customRowPackage = createCustomisedRowEcore();
 	private final ColumnFilters columnFilters;
@@ -302,9 +303,9 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 		// set up snap-to-today
 		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-		this.todayHandler = event -> snapTo((LocalDate)  event.getProperty(IEventBroker.DATA));
-	    eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
-		
+		this.todayHandler = event -> snapTo((LocalDate) event.getProperty(IEventBroker.DATA));
+		eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
+
 		extendRowModel();
 		createColumns();
 		buildRowTransformerHandlers(rowTransformerHandlers);
@@ -312,7 +313,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		buildToolbar();
 		setInitialState();
 	}
-	
+
 	private void snapTo(final LocalDate property) {
 		if (scenarioViewer == null) {
 			return;
@@ -325,7 +326,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		if (count <= 0) {
 			return;
 		}
-		
+
 		final GridItem[] items = grid.getItems();
 		int pos = -1;
 		for (GridItem item : items) {
@@ -435,16 +436,17 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		//
 		toolbar.update(true);
 	}
+
 	private ColumnBlockManager getBlockManager() {
 		return columnBlockManager;
 	}
 
 	private void setInitialState() {
-		//hide all
+		// hide all
 		for (final String blockId : getBlockManager().getBlockIDOrder()) {
 			getBlockManager().getBlockByID(blockId).setUserVisible(false);
 		}
-		//init from file the settings
+		// init from file the settings
 		int numberOfVisibleColumns = columnBlockManager.initFromPreferences(COLUMN_VISIBILITY_KEY, preferenceStore);
 		if (numberOfVisibleColumns == 0) {
 			for (final String blockId : getBlockManager().getBlockIDOrder()) {
@@ -453,16 +455,16 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		}
 		scenarioViewer.refresh();
 	}
-	
+
 	private void setState(List<ColumnBlock> list) {
 		if (list != null) {
-			if(!list.isEmpty()) {
-				//hide all
+			if (!list.isEmpty()) {
+				// hide all
 				for (final String blockId : getBlockManager().getBlockIDOrder()) {
 					getBlockManager().getBlockByID(blockId).setUserVisible(false);
 				}
-				//init from file the settings
-				for (final ColumnBlock cb: list) {
+				// init from file the settings
+				for (final ColumnBlock cb : list) {
 					cb.setUserVisible(true);
 				}
 				scenarioViewer.refresh();
@@ -473,7 +475,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 	private List<ITradesBasedFilterHandler> getFiltersList(final Set<ITradesBasedFilterHandler> allColumnFilterHandlers) {
 		if (allColumnFilterHandlers.isEmpty()) {
-			return Collections.<ITradesBasedFilterHandler>emptyList();
+			return Collections.<ITradesBasedFilterHandler> emptyList();
 		}
 		final List<ITradesBasedFilterHandler> filters = new LinkedList<>(allColumnFilterHandlers);
 		return filters;
@@ -717,7 +719,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		}
 		resetTable(table); // Clear rows and cache
 		final HashSet<Slot> slotsInCargo = new HashSet<>();
-		final Map<Slot,SlotAllocation> slots = new HashMap<Slot, SlotAllocation>();
+		final Map<Slot, SlotAllocation> slots = new HashMap<Slot, SlotAllocation>();
 		for (final SlotAllocation sa : slotAllocs) {
 			if (sa.getSlot() != null) {
 				slots.put(sa.getSlot(), sa);
@@ -911,7 +913,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 		scenarioViewer.getGrid().recalculateHeader();
 		setColumnsImmovable();
-		
+
 		columnBlockManager.initFromPreferences(COLUMN_VISIBILITY_KEY, preferenceStore);
 	}
 
@@ -1134,8 +1136,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			}
 
 			/**
-			 * Overridden method to convert internal RowData objects into a collection of
-			 * EMF Objects
+			 * Overridden method to convert internal RowData objects into a collection of EMF Objects
 			 */
 			protected void updateSelection(final ISelection selection) {
 
@@ -1267,9 +1268,6 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				final Object data = item.getData();
 				if (data instanceof Row) {
 
-					// final RowData rowDataItem = (RowData) data;
-					// final int idx = rootData.getRows().indexOf(rowDataItem);
-
 					final Row row = (Row) data;
 					if (menu == null) {
 						menu = mgr.createContextMenu(scenarioViewer.getGrid());
@@ -1348,23 +1346,39 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				final GridColumn column = grid.getColumn(mousePoint);
 
 				final IStructuredSelection selection = (IStructuredSelection) getScenarioViewer().getSelection();
-				final GridItem[] items = grid.getSelection();
 
 				if (selection.size() <= 1) {
 					populateSingleSelectionMenu(grid.getItem(mousePoint), column);
 				} else {
 					final Set<Cargo> cargoes = new HashSet<>();
+					final Set<LoadSlot> loads = new HashSet<>();
+					final Set<DischargeSlot> discharges = new HashSet<>();
+					String blockType = null;
+					final ColumnHandler handler = (ColumnHandler) column.getData(ColumnHandler.COLUMN_HANDLER);
+					if (handler != null) {
+						blockType = handler.block.getblockType();
+					}
+					boolean loadSide = ITradesColumnFactory.isLoadGroup(blockType);
+					boolean dischargeSide = ITradesColumnFactory.isDischargeGroup(blockType);
 					for (final Object item : selection.toList()) {
-						final Cargo cargo = ((Row) item).getCargo();
+						Row row = (Row) item;
+						final Cargo cargo = row.getCargo();
 						if (cargo != null) {
 							cargoes.add(cargo);
 						}
+						if (loadSide && row.getLoadSlot() != null) {
+							loads.add(row.getLoadSlot());
+						}
+						if (dischargeSide && row.getDischargeSlot() != null) {
+							discharges.add(row.getDischargeSlot());
+						}
 					}
-					populateMultipleSelectionMenu(cargoes, selection);
+
+					populateMultipleSelectionMenu(cargoes, loads, discharges, selection);
 				}
 			}
 
-			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes, final IStructuredSelection selection) {
+			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes, Set<LoadSlot> loads, Set<DischargeSlot> discharges, final IStructuredSelection selection) {
 				if (menu == null) {
 					menu = mgr.createContextMenu(scenarioViewer.getGrid());
 				}
@@ -1376,7 +1390,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 						item.dispose();
 					}
 				}
-				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes);
+				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes, loads, discharges);
 				listener.menuAboutToShow(mgr);
 
 				if (contextMenuExtensions != null) {
@@ -1531,7 +1545,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		/**
 		 * Subclasses should fill their menu with actions here.
 		 * 
-		 * @param menu the menu which is about to be displayed
+		 * @param menu
+		 *                 the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
 			{
@@ -1596,7 +1611,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 						newCargo.setAllowRewiring(true);
 						final CompoundCommand cmd = new CompoundCommand("Cargo");
-						setCommands.forEach(c -> cmd.append(c));
+						setCommands.forEach(cmd::append);
 
 						// scenarioViewer .getSortingSupport().setSortOnlyOnSelect(false);
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);

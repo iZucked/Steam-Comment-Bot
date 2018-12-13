@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
@@ -240,18 +239,18 @@ public class CargoEditingCommands {
 		return newDischarge;
 	}
 
-	public void runWiringUpdate(final List<Command> setCommands, final List<Command> deleteCommands, final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
+	public void runWiringUpdate(final List<Command> setCommands, final List<EObject> deleteObjects, final @NonNull LoadSlot loadSlot, final @Nullable DischargeSlot dischargeSlot) {
 
 		// Discharge has an existing slot, so remove the cargo & wiring
-		if (dischargeSlot.getCargo() != null) {
-			deleteCommands.add(DeleteCommand.create(editingDomain, dischargeSlot.getCargo()));
+		if (dischargeSlot != null && dischargeSlot.getCargo() != null) {
+			deleteObjects.add(dischargeSlot.getCargo());
 
 			// Optional market slots can be removed.
 			for (final Slot<?> s : dischargeSlot.getCargo().getSlots()) {
 				if (s instanceof LoadSlot) {
 					final LoadSlot oldSlot = (LoadSlot) s;
 					if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
-						deleteCommands.add(DeleteCommand.create(editingDomain, oldSlot));
+						deleteObjects.add(oldSlot);
 					}
 				}
 			}
@@ -264,33 +263,34 @@ public class CargoEditingCommands {
 			// Clear existing discharge slots
 			for (final Slot<?> slot : cargo.getSlots()) {
 				if (slot instanceof DischargeSlot) {
-					final DischargeSlot dischargeSlot2 = (DischargeSlot) slot;
-					setCommands.add(SetCommand.create(editingDomain, dischargeSlot2, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
-				}
-			}
-			setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
-
-			if (cargo != null && dischargeSlot.isFOBSale()) {
-				// Cargo assignments should be removed.
-				setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType(), SetCommand.UNSET_VALUE));
-				setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_Locked(), Boolean.FALSE));
-				setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_SequenceHint(), SetCommand.UNSET_VALUE));
-				setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_SpotIndex(), SetCommand.UNSET_VALUE));
-			}
-
-			// Force allow re-wiring on a change
-			setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getCargo_AllowRewiring(), Boolean.TRUE));
-
-			// Optional market slots can be removed.
-			for (final Slot<?> s : cargo.getSlots()) {
-				if (s instanceof DischargeSlot) {
-					final DischargeSlot oldSlot = (DischargeSlot) s;
+					final DischargeSlot oldSlot = (DischargeSlot) slot;
+					setCommands.add(SetCommand.create(editingDomain, oldSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+					// Optional market slots can be removed.
 					if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
-						deleteCommands.add(DeleteCommand.create(editingDomain, oldSlot));
+						deleteObjects.add(oldSlot);
 					}
 				}
 			}
-		} else {
+
+			if (dischargeSlot != null) {
+				setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
+
+				if (cargo != null && dischargeSlot.isFOBSale()) {
+					// Cargo assignments should be removed.
+					setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType(), SetCommand.UNSET_VALUE));
+					setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_Locked(), Boolean.FALSE));
+					setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_SequenceHint(), SetCommand.UNSET_VALUE));
+					setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_SpotIndex(), SetCommand.UNSET_VALUE));
+				}
+
+				// Force allow re-wiring on a change
+				setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getCargo_AllowRewiring(), Boolean.TRUE));
+			} else {
+				setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+				deleteObjects.add(cargo);
+			}
+
+		} else if (dischargeSlot != null) {
 			cargo = createNewCargo(setCommands, cargoModel);
 			setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
 			setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));

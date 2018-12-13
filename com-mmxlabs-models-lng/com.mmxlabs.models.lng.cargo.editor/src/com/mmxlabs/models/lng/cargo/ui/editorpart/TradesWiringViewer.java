@@ -669,17 +669,28 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					populateSingleSelectionMenu(grid.getItem(mousePoint), column);
 				} else {
 					final Set<Cargo> cargoes = new HashSet<>();
+					final Set<LoadSlot> loads = new HashSet<>();
+					final Set<DischargeSlot> discharges = new HashSet<>();
+					boolean loadSide = loadColumns.contains(column);
+					boolean dischargeSide = dischargeColumns.contains(column);
 					for (final Object item : selection.toList()) {
-						final Cargo cargo = ((RowData) item).cargo;
+						RowData row = (RowData) item;
+						final Cargo cargo = row.cargo;
 						if (cargo != null) {
 							cargoes.add(cargo);
 						}
+						if (loadSide && row.getLoadSlot() != null) {
+							loads.add(row.getLoadSlot());
+						}
+						if (dischargeSide && row.getDischargeSlot() != null) {
+							discharges.add(row.getDischargeSlot());
+						}
 					}
-					populateMultipleSelectionMenu(cargoes, selection);
+					populateMultipleSelectionMenu(cargoes, loads, discharges, selection);
 				}
 			}
 
-			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes, final IStructuredSelection selection) {
+			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes, Set<LoadSlot> loads, Set<DischargeSlot> discharges, final IStructuredSelection selection) {
 				if (menu == null) {
 					menu = mgr.createContextMenu(scenarioViewer.getGrid());
 				}
@@ -691,7 +702,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						item.dispose();
 					}
 				}
-				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes);
+				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes, loads, discharges);
 				listener.menuAboutToShow(mgr);
 
 				if (contextMenuExtensions != null) {
@@ -1618,7 +1629,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final boolean createComplexCargo = ctrlPressed && LicenseFeatures.isPermitted("features:complex-cargo");
 
 		final List<Command> setCommands = new LinkedList<>();
-		// final List<Command> deleteCommands = new LinkedList<>();
 
 		final CargoModel cargoModel = getScenarioModel().getCargoModel();
 
@@ -2020,7 +2030,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 * A holder for a menu list of filter actions on different fields for the trades wiring table.
 		 * 
 		 * @param label
-		 *            The label to show in the UI for this menu.
+		 *                  The label to show in the UI for this menu.
 		 */
 		public FilterMenuAction(final String label) {
 			super(label);
@@ -2160,13 +2170,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 * An action which updates the filter on the trades wiring table and refreshes the table.
 		 * 
 		 * @param label
-		 *            The label to associate with this action (the feature from the cargo row it represents).
+		 *                          The label to associate with this action (the feature from the cargo row it represents).
 		 * @param sourceObject
-		 *            The source object in the EMF model which holds the list of possible values for the filter.
+		 *                          The source object in the EMF model which holds the list of possible values for the filter.
 		 * @param sourceFeature
-		 *            The EMF feature of the source object where the list of possible values resides.
+		 *                          The EMF feature of the source object where the list of possible values resides.
 		 * @param filterPath
-		 *            The path within a cargo row object of the field which the table is being filtered on.
+		 *                          The path within a cargo row object of the field which the table is being filtered on.
 		 */
 		public FilterAction(final String label, final EObject sourceObject, final EStructuralFeature sourceFeature, final IEMFPath filterPath) {
 			super(label);
@@ -2215,7 +2225,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 * Subclasses should fill their menu with actions here.
 		 * 
 		 * @param menu
-		 *            the menu which is about to be displayed
+		 *                 the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
 			{
@@ -2526,7 +2536,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 * Subclasses should fill their menu with actions here.
 		 * 
 		 * @param menu
-		 *            the menu which is about to be displayed
+		 *                 the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
 

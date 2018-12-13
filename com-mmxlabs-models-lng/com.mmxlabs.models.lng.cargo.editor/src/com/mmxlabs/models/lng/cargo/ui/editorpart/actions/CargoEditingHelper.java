@@ -9,9 +9,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
@@ -40,9 +43,8 @@ public class CargoEditingHelper {
 	private final LNGScenarioModel scenarioModel;
 
 	private final EditingDomain editingDomain;
-	private final boolean verifyChanges = true;
+	private static final boolean VERIFY_CHANGES = true;
 
-	// private CargoModel cargoModel;
 	public CargoEditingHelper(final @NonNull EditingDomain editingDomain, final @NonNull LNGScenarioModel lngScenarioModel) {
 		this.editingDomain = editingDomain;
 		this.scenarioModel = lngScenarioModel;
@@ -69,7 +71,7 @@ public class CargoEditingHelper {
 
 		editingDomain.getCommandStack().execute(cc);
 
-		if (verifyChanges) {
+		if (VERIFY_CHANGES) {
 			assert slot.getNominatedVessel() == vessel;
 		}
 
@@ -80,7 +82,7 @@ public class CargoEditingHelper {
 	public void assignCargoToSpotCharterIn(@NonNull final String description, @NonNull final Cargo cargo, @NonNull final CharterInMarket charterInMarket, final int spotIndex) {
 
 		// Validate shipped cargo
-		for (final Slot slot : cargo.getSlots()) {
+		for (final Slot<?> slot : cargo.getSlots()) {
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				assert !loadSlot.isDESPurchase();
@@ -98,7 +100,7 @@ public class CargoEditingHelper {
 
 		editingDomain.getCommandStack().execute(cc);
 
-		if (verifyChanges) {
+		if (VERIFY_CHANGES) {
 			assert cargo.getVesselAssignmentType() == charterInMarket;
 			assert cargo.getSpotIndex() == spotIndex;
 		}
@@ -118,7 +120,7 @@ public class CargoEditingHelper {
 			assert false;
 		}
 
-		if (verifyChanges) {
+		if (VERIFY_CHANGES) {
 			assert cargo.getVesselAssignmentType() == vesselAssignmentType;
 			assert cargo.getSpotIndex() == spotIndex;
 		}
@@ -127,7 +129,7 @@ public class CargoEditingHelper {
 	public void assignCargoToVesselAvailability(@NonNull final String description, @NonNull final Cargo cargo, @NonNull final VesselAvailability vesselAvailability) {
 
 		// Validate shipped cargo
-		for (final Slot slot : cargo.getSlots()) {
+		for (final Slot<?> slot : cargo.getSlots()) {
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				assert !loadSlot.isDESPurchase();
@@ -145,7 +147,7 @@ public class CargoEditingHelper {
 
 		editingDomain.getCommandStack().execute(cc);
 
-		if (verifyChanges) {
+		if (VERIFY_CHANGES) {
 			assert cargo.getVesselAssignmentType() == vesselAvailability;
 			assert cargo.getSpotIndex() == -1;
 		}
@@ -156,7 +158,7 @@ public class CargoEditingHelper {
 	public void unassignCargoAssignment(@NonNull final String description, @NonNull final Cargo cargo) {
 
 		// Validate shipped cargo
-		for (final Slot slot : cargo.getSlots()) {
+		for (final Slot<?> slot : cargo.getSlots()) {
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				assert !loadSlot.isDESPurchase();
@@ -174,7 +176,7 @@ public class CargoEditingHelper {
 
 		editingDomain.getCommandStack().execute(cc);
 
-		if (verifyChanges) {
+		if (VERIFY_CHANGES) {
 			assert cargo.getVesselAssignmentType() == null;
 			assert cargo.getSpotIndex() == -1;
 		}
@@ -190,7 +192,7 @@ public class CargoEditingHelper {
 		assert cc.canExecute();
 
 		editingDomain.getCommandStack().execute(cc);
-		if (verifyChanges) {
+		if (VERIFY_CHANGES) {
 			assert vesselEvent.getVesselAssignmentType() == vesselAvailability;
 			assert vesselEvent.getSpotIndex() == -1;
 		}
@@ -206,7 +208,7 @@ public class CargoEditingHelper {
 		assert cc.canExecute();
 
 		editingDomain.getCommandStack().execute(cc);
-		if (verifyChanges) {
+		if (VERIFY_CHANGES) {
 			assert vesselEvent.getVesselAssignmentType() == null;
 			assert vesselEvent.getSpotIndex() == -1;
 		}
@@ -227,10 +229,10 @@ public class CargoEditingHelper {
 		assert cc.canExecute();
 		editingDomain.getCommandStack().execute(cc);
 
-		if (verifyChanges) {
+		if (VERIFY_CHANGES) {
 			for (final Cargo cargo : cargoes) {
-				assert cargo.isAllowRewiring() == false;
-				assert cargo.isLocked() == true;
+				assert !cargo.isAllowRewiring();
+				assert cargo.isLocked();
 			}
 		}
 
@@ -252,10 +254,10 @@ public class CargoEditingHelper {
 		assert cc.canExecute();
 		editingDomain.getCommandStack().execute(cc);
 
-		if (verifyChanges) {
+		if (VERIFY_CHANGES) {
 			for (final Cargo cargo : cargoes) {
-				assert cargo.isAllowRewiring() == true;
-				assert cargo.isLocked() == false;
+				assert cargo.isAllowRewiring();
+				assert !cargo.isLocked();
 			}
 		}
 
@@ -270,8 +272,8 @@ public class CargoEditingHelper {
 		assert cc.canExecute();
 		editingDomain.getCommandStack().execute(cc);
 
-		if (verifyChanges) {
-			assert vesselEvent.isLocked() == true;
+		if (VERIFY_CHANGES) {
+			assert vesselEvent.isLocked();
 		}
 
 		verifyModel();
@@ -284,8 +286,8 @@ public class CargoEditingHelper {
 
 		assert cc.canExecute();
 		editingDomain.getCommandStack().execute(cc);
-		if (verifyChanges) {
-			assert vesselEvent.isLocked() == false;
+		if (VERIFY_CHANGES) {
+			assert !vesselEvent.isLocked();
 		}
 		verifyModel();
 	}
@@ -295,25 +297,25 @@ public class CargoEditingHelper {
 		final Cargo loadCargo = loadSlot.getCargo();
 		final Cargo dischargeCargo = dischargeSlot.getCargo();
 
-		final List<Command> setCommands = new LinkedList<Command>();
-		final List<Command> deleteCommands = new LinkedList<Command>();
+		final List<Command> setCommands = new LinkedList<>();
+		final List<EObject> deleteObjects = new LinkedList<>();
 
-		cec.runWiringUpdate(setCommands, deleteCommands, loadSlot, dischargeSlot);
+		cec.runWiringUpdate(setCommands, deleteObjects, loadSlot, dischargeSlot);
 
 		final CompoundCommand currentWiringCommand = new CompoundCommand(description);
 		// Process set before delete
 		for (final Command c : setCommands) {
 			currentWiringCommand.append(c);
 		}
-		for (final Command c : deleteCommands) {
-			currentWiringCommand.append(c);
+		if (!deleteObjects.isEmpty()) {
+			currentWiringCommand.append(DeleteCommand.create(editingDomain, deleteObjects));
 		}
 
 		assert currentWiringCommand.canExecute();
 
 		editingDomain.getCommandStack().execute(currentWiringCommand);
 
-		if (verifyChanges) {
+		if (VERIFY_CHANGES) {
 
 			if (loadCargo != null) {
 				// Re-use existing cargo
@@ -340,8 +342,8 @@ public class CargoEditingHelper {
 	}
 
 	public void convertToFOBPurchase(@NonNull final String description, @NonNull final LoadSlot loadSlot) {
-		assert loadSlot.isDESPurchase() == true;
-		assert loadSlot.getSlotOrDelegateDivertible() == true;
+		assert loadSlot.isDESPurchase();
+		assert loadSlot.getSlotOrDelegateDivertible();
 
 		final CompoundCommand cc = new CompoundCommand(description);
 		cc.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE, Boolean.FALSE));
@@ -350,8 +352,8 @@ public class CargoEditingHelper {
 
 		assert cc.canExecute();
 		editingDomain.getCommandStack().execute(cc);
-		if (verifyChanges) {
-			assert loadSlot.isDESPurchase() == false;
+		if (VERIFY_CHANGES) {
+			assert !loadSlot.isDESPurchase();
 			assert loadSlot.getNominatedVessel() == null;
 			assert loadSlot.getSlotOrDelegateShippingDaysRestriction() == 0;
 		}
@@ -360,7 +362,7 @@ public class CargoEditingHelper {
 	}
 
 	public void convertToDESPurchase(@NonNull final String description, @NonNull final LoadSlot loadSlot) {
-		assert loadSlot.isDESPurchase() == false;
+		assert !loadSlot.isDESPurchase();
 
 		final CompoundCommand cc = new CompoundCommand(description);
 		cc.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE, Boolean.TRUE));
@@ -374,13 +376,13 @@ public class CargoEditingHelper {
 		assert cc.canExecute();
 		editingDomain.getCommandStack().execute(cc);
 
-		if (verifyChanges) {
-			assert loadSlot.isDESPurchase() == true;
-			assert loadSlot.getSlotOrDelegateDivertible() == true;
+		if (VERIFY_CHANGES) {
+			assert loadSlot.isDESPurchase();
+			assert loadSlot.getSlotOrDelegateDivertible();
 			if (cargo != null) {
 				assert cargo.getVesselAssignmentType() == null;
 				assert cargo.getSpotIndex() == -1;
-				assert cargo.isLocked() == false;
+				assert !cargo.isLocked();
 			}
 		}
 
@@ -388,8 +390,8 @@ public class CargoEditingHelper {
 	}
 
 	public void convertToDESSale(@NonNull final String description, @NonNull final DischargeSlot dischargeSlot) {
-		assert dischargeSlot.isFOBSale() == true;
-		assert dischargeSlot.getSlotOrDelegateDivertible() == true;
+		assert dischargeSlot.isFOBSale();
+		assert dischargeSlot.getSlotOrDelegateDivertible();
 
 		final CompoundCommand cc = new CompoundCommand(description);
 		cc.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE, Boolean.FALSE));
@@ -398,8 +400,8 @@ public class CargoEditingHelper {
 
 		assert cc.canExecute();
 		editingDomain.getCommandStack().execute(cc);
-		if (verifyChanges) {
-			assert dischargeSlot.isFOBSale() == false;
+		if (VERIFY_CHANGES) {
+			assert !dischargeSlot.isFOBSale();
 			assert dischargeSlot.getNominatedVessel() == null;
 			assert dischargeSlot.getSlotOrDelegateShippingDaysRestriction() == 0;
 		}
@@ -408,7 +410,7 @@ public class CargoEditingHelper {
 	}
 
 	public void convertToFOBSale(@NonNull final String description, @NonNull final DischargeSlot dischargeSlot) {
-		assert dischargeSlot.isFOBSale() == false;
+		assert !dischargeSlot.isFOBSale();
 
 		final CompoundCommand cc = new CompoundCommand(description);
 		cc.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE, Boolean.TRUE));
@@ -422,13 +424,13 @@ public class CargoEditingHelper {
 		assert cc.canExecute();
 		editingDomain.getCommandStack().execute(cc);
 
-		if (verifyChanges) {
-			assert dischargeSlot.isFOBSale() == true;
-			assert dischargeSlot.getSlotOrDelegateDivertible() == true;
+		if (VERIFY_CHANGES) {
+			assert dischargeSlot.isFOBSale();
+			assert dischargeSlot.getSlotOrDelegateDivertible();
 			if (cargo != null) {
 				assert cargo.getVesselAssignmentType() == null;
 				assert cargo.getSpotIndex() == -1;
-				assert cargo.isLocked() == false;
+				assert !cargo.isLocked();
 			}
 		}
 
@@ -439,12 +441,39 @@ public class CargoEditingHelper {
 		cec.verifyCargoModel(ScenarioModelUtil.getCargoModel(scenarioModel));
 	}
 
-	public <T extends SpotSlot & Slot> void setSpotSlotWindow(@NonNull final T slot, @NonNull final LocalDate cal, Collection<Command> setComands) {
+	public <T extends SpotSlot & Slot<?>> void setSpotSlotWindow(@NonNull final T slot, @NonNull final LocalDate cal, Collection<Command> setComands) {
 		// Set back to start of month
 		setComands.add(SetCommand.create(editingDomain, slot, CargoPackage.Literals.SLOT__WINDOW_START, cal.withDayOfMonth(1)));
 		setComands.add(SetCommand.create(editingDomain, slot, CargoPackage.Literals.SLOT__WINDOW_START_TIME, 0));
 
 		setComands.add(SetCommand.create(editingDomain, slot, CargoPackage.Literals.SLOT__WINDOW_SIZE, 1));
 		setComands.add(SetCommand.create(editingDomain, slot, CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS, TimePeriod.MONTHS));
+	}
+
+	public void unpairCargoes(String description, @NonNull Set<Cargo> cargoes) {
+		final List<Command> setCommands = new LinkedList<>();
+		final List<EObject> deleteObjects = new LinkedList<>();
+		for (Cargo cargo : cargoes) {
+			LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
+			cec.runWiringUpdate(setCommands, deleteObjects, loadSlot, null);
+		}
+
+		final CompoundCommand currentWiringCommand = new CompoundCommand(description);
+		// Process set before delete
+		for (final Command c : setCommands) {
+			currentWiringCommand.append(c);
+		}
+		if (!deleteObjects.isEmpty()) {
+			currentWiringCommand.append(DeleteCommand.create(editingDomain, deleteObjects));
+		}
+
+		if (currentWiringCommand.isEmpty()) {
+			return;
+		}
+		assert currentWiringCommand.canExecute();
+
+		editingDomain.getCommandStack().execute(currentWiringCommand);
+
+		verifyModel();
 	}
 }
