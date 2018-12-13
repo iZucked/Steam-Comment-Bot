@@ -443,7 +443,7 @@ public class ScenarioUtils {
 			objectives.add(createObjective("cargo-scheduler-group-profit", 1));
 
 			objectives.add(createObjective(CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 1));
-			objectives.add(createObjective(CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 0.1));
+			objectives.add(createObjective(CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 0.0));
 			objectives.add(createObjective(NonOptionalSlotFitnessCoreFactory.NAME, 3_000_000));
 			objectives.add(createObjective("SimilarityFitnessCore", 1.0));
 		}

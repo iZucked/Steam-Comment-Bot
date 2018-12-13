@@ -22,6 +22,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.fitness.components.CapacityComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IdleTimeComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ProfitAndLossAllocationComponent;
@@ -54,6 +55,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	private void init() {
 		final List<ICargoSchedulerFitnessComponent> localComponents = new ArrayList<>(8);
 		localComponents.add(new LatenessComponent(CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, this));
+		localComponents.add(new CapacityComponent(CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, this));
 		localComponents.add(new IdleTimeComponent(CargoSchedulerFitnessCoreFactory.IDLE_TIME_HOURS_COMPONENT_NAME, this));
 		localComponents.add(new ProfitAndLossAllocationComponent(CargoSchedulerFitnessCoreFactory.PROFIT_COMPONENT_NAME, this));
 
