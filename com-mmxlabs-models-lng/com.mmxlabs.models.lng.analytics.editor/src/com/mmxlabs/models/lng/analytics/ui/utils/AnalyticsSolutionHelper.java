@@ -21,11 +21,11 @@ public class AnalyticsSolutionHelper {
 	public static String generateName(final SlotInsertionOptions plan) {
 
 		final List<String> names = new LinkedList<>();
-		for (final Slot s : plan.getSlotsInserted()) {
+		for (final Slot<?> s : plan.getSlotsInserted()) {
 			names.add(s.getName());
 		}
 
-		return "Insert: " + Joiner.on(", ").join(names);
+		return "Optionise: " + Joiner.on(", ").join(names);
 	}
 
 	public static String generateInsertionName(final List<? extends NamedObject> objects) {
@@ -36,7 +36,7 @@ public class AnalyticsSolutionHelper {
 		}
 		while (names.remove(null))
 			;
-		return "Insert: \"" + Joiner.on(", ").join(names) + "\"";
+		return "Optionise: \"" + Joiner.on(", ").join(names) + "\"";
 	}
 
 	public static String generateName(final ActionableSetPlan plan) {
