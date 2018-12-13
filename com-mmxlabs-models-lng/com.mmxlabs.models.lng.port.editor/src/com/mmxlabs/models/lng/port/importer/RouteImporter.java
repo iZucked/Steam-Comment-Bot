@@ -50,7 +50,7 @@ public class RouteImporter {
 		try {
 			context.pushReader(reader);
 			Map<String, String> row = null;
-			final LinkedList<RouteLine> lines = new LinkedList<RouteLine>();
+			final LinkedList<RouteLine> lines = new LinkedList<>();
 			while (null != (row = reader.readRow(true))) {
 				// TODO: Should we not look up from "from" key?
 				String fromName = null;
@@ -59,13 +59,13 @@ public class RouteImporter {
 						continue;
 					}
 					if ("from".equals(entry.getKey())) {
-						if (entry.getValue().isEmpty() == false) {
+						if (!entry.getValue().isEmpty()) {
 							fromName = entry.getValue();
 						}
 					} else {
 						try {
 							final int distance = nai.stringToInt(entry.getValue(), PortPackage.Literals.ROUTE_LINE__DISTANCE);
-							if(distance >= 0) {
+							if (distance >= 0) {
 								final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
 								line.setDistance(distance);
 								row.get(entry.getKey());
@@ -75,16 +75,16 @@ public class RouteImporter {
 						} catch (final ParseException nfe) {
 							try {
 								final double distance = nai.stringToDouble(entry.getValue(), PortPackage.Literals.ROUTE_LINE__DISTANCE);
-								if(distance >= 0) {
+								if (distance >= 0) {
 									final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
 									line.setDistance((int) distance);
 									row.get(entry.getKey());
 									context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_To(), reader.getCasedColumnName(entry.getKey()), context));
 									lines.add(line);
-									
+
 								}
 							} catch (final ParseException nfe2) {
-								if (entry.getValue().isEmpty() == false) {
+								if (!entry.getValue().isEmpty()) {
 									fromName = entry.getValue();
 								}
 							}
@@ -143,22 +143,18 @@ public class RouteImporter {
 		for (final RouteLine line : r.getLines()) {
 			Map<String, String> row = rows.get(line.getFrom().getName());
 			if (row == null) {
-				row = new TreeMap<>(new Comparator<String>() {
-					@Override
-					public int compare(final String o1, final String o2) {
-
-						// Always sort name column first
-						if (FROM.equals(o1) && FROM.equals(o2)) {
-							return 0;
-						}
-						if (FROM.equals(o1)) {
-							return -1;
-						} else if (FROM.equals(o2)) {
-							return 1;
-						}
-
-						return o1.compareTo(o2);
+				row = new TreeMap<>((o1, o2) -> {
+					// Always sort name column first
+					if (FROM.equals(o1) && FROM.equals(o2)) {
+						return 0;
 					}
+					if (FROM.equals(o1)) {
+						return -1;
+					} else if (FROM.equals(o2)) {
+						return 1;
+					}
+
+					return o1.compareTo(o2);
 				});
 				row.put(FROM, line.getFrom().getName());
 				rows.put(line.getFrom().getName(), row);
@@ -167,11 +163,12 @@ public class RouteImporter {
 				row.put(line.getFrom().getName(), "");
 
 			}
-
-			row.put(line.getTo().getName(), nai.doubleToString(line.getDistance(), PortPackage.Literals.ROUTE_LINE__DISTANCE));
+			// Do not export negative distances.
+			if (line.getDistance() >= 0.0) {
+				row.put(line.getTo().getName(), nai.doubleToString(line.getDistance(), PortPackage.Literals.ROUTE_LINE__DISTANCE));
+			}
 		}
 
-		final ArrayList<Map<String, String>> result = new ArrayList<>(rows.values());
-		return result;
+		return new ArrayList<>(rows.values());
 	}
 }
