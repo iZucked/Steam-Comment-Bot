@@ -114,18 +114,18 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	/**
 	 * This is the list of all input objects passed in for editing
 	 */
-	private final List<EObject> inputs = new ArrayList<EObject>();
+	private final List<EObject> inputs = new ArrayList<>();
 
 	private EObject duplicate = null;
 
 	/**
 	 * A map from duplicated input objects to original input objects
 	 */
-	private final Map<EObject, EObject> duplicateToOriginal = new HashMap<EObject, EObject>();
+	private final Map<EObject, EObject> duplicateToOriginal = new HashMap<>();
 	/**
 	 * A map from original input objects to duplicated ones.
 	 */
-	private final Map<EObject, EObject> originalToDuplicate = new HashMap<EObject, EObject>();
+	private final Map<EObject, EObject> originalToDuplicate = new HashMap<>();
 
 	/**
 	 * The objects which are currently being edited (duplicates)
@@ -227,7 +227,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		final EObject original = input;
 		if (!originalToDuplicate.containsKey(original)) {
 			// Use a set to avoid duplicates in the list
-			final Set<EObject> range = new LinkedHashSet<EObject>(displayCompositeFactory.getExternalEditingRange(rootObject, original));
+			final Set<EObject> range = new LinkedHashSet<>(displayCompositeFactory.getExternalEditingRange(rootObject, original));
 			range.add(original);
 			// range is the full set of objects which the display composite
 			// might touch; we need to duplicate all of these
@@ -235,10 +235,10 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			// however, there is a possibility that two things will have overlapping range
 			// so we don't want to duplicate again if that happens.
 
-			final ArrayList<EObject> reducedRange = new ArrayList<EObject>(range);
+			final ArrayList<EObject> reducedRange = new ArrayList<>(range);
 
 			final Iterator<EObject> iterator = reducedRange.iterator();
-			final ArrayList<Pair<Integer, EObject>> alreadyDuplicated = new ArrayList<Pair<Integer, EObject>>();
+			final ArrayList<Pair<Integer, EObject>> alreadyDuplicated = new ArrayList<>();
 			int index = 0;
 
 			while (iterator.hasNext()) {
@@ -314,7 +314,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	 * Construct a new detail composite dialog, with style.
 	 * 
 	 * @param style
-	 *                  - turns style bits on or off (since "&"ed with current); e.g. "~SWT.MAX" removes min/max button.
+	 *            - turns style bits on or off (since "&"ed with current); e.g. "~SWT.MAX" removes min/max button.
 	 */
 	public DetailCompositeDialog(final Shell parentShell, final ICommandHandler commandHandler, final int style) {
 		this(parentShell, commandHandler);
@@ -394,12 +394,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		enableButtons();
 		updateEditor();
 		resizeAndCenter(false);
-		getShell().getDisplay().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				resizeAndCenter(false);
-			}
-		});
+		getShell().getDisplay().asyncExec(() -> resizeAndCenter(false));
 	}
 
 	private void checkButtonEnablement(final boolean enabled) {
@@ -419,9 +414,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		this.observablesManager = new ObservablesManager();
 
 		// This call means we do not need to manually manage our databinding objects lifecycle manually.
-		observablesManager.runAndCollect(() -> {
-			doCreateFormContent();
-		});
+		observablesManager.runAndCollect(this::doCreateFormContent);
+
 		getShell().layout(true, true);
 	}
 

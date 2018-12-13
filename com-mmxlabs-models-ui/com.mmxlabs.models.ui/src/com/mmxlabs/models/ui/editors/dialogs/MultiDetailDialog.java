@@ -32,6 +32,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -115,13 +116,6 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		this.rootObject = root;
 	}
 
-	private void disableControls() {
-		for (final IInlineEditor c : controlsToDisable) {
-			c.setEditorEnabled(false);
-		}
-		controlsToDisable.clear();
-	}
-
 	@Override
 	public void create() {
 		super.create();
@@ -141,7 +135,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		this.observablesManager = new ObservablesManager();
 
 		// This call means we do not need to manually manage our databinding objects lifecycle manually.
-		observablesManager.runAndCollect(() -> doCreateFormContent());
+		observablesManager.runAndCollect(this::doCreateFormContent);
 
 	}
 
@@ -191,6 +185,13 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		resizeAndCenter(false);
 	}
 
+	private void disableControls() {
+		for (final IInlineEditor c : controlsToDisable) {
+			c.setEditorEnabled(false);
+		}
+		controlsToDisable.clear();
+	}
+
 	/**
 	 */
 	@Override
@@ -204,7 +205,12 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		form.setText("");
 		toolkit.decorateFormHeading(form.getForm());
 		{
-			final GridLayout layout = new GridLayout(1, true);
+			final GridLayout layout = GridLayoutFactory.swtDefaults() //
+					.numColumns(1) //
+					.equalWidth(true) //
+					.margins(0, 0) //
+					.extendedMargins(0, 0, 0, 0) //
+					.create();
 			form.getBody().setLayout(layout);
 		}
 		final Composite c = managedForm.getForm().getBody();
@@ -320,7 +326,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		proxyCounterparts.put(proxy, originals);
 		for (final EReference reference : proxy.eClass().getEAllContainments()) {
 			if (!reference.isMany()) {
-				final ArrayList<EObject> subOriginals = new ArrayList<EObject>(originals.size());
+				final ArrayList<EObject> subOriginals = new ArrayList<>(originals.size());
 				for (final EObject original : originals) {
 					subOriginals.add((EObject) original.eGet(reference));
 				}
@@ -342,7 +348,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 				final Object newValue = (!feature.isUnsettable() || proxy.eIsSet(feature)) ? proxy.eGet(feature) : SetCommand.UNSET_VALUE;
 				boolean isContainment = false;
 				if (feature instanceof EReference) {
-					EReference eReference = (EReference) feature;
+					final EReference eReference = (EReference) feature;
 					if (eReference.isContainment()) {
 						isContainment = true;
 
@@ -352,8 +358,8 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 					Object value = newValue;
 					if (isContainment) {
 						if (feature.isMany()) {
-							List<EObject> l = new LinkedList<>();
-							for (Object o : (List<?>) newValue) {
+							final List<EObject> l = new LinkedList<>();
+							for (final Object o : (List<?>) newValue) {
 								l.add(EcoreUtil.copy((EObject) o));
 							}
 							value = l;
@@ -434,18 +440,22 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 				if (m == null) {
 					return;
 				}
-				final Object mValue = m.eGet(feature);
+				Object mValue = SetCommand.UNSET_VALUE;
+				if (m.eIsSet(feature)) {
+					mValue = m.eGet(feature);
+				}
 				if (!gotValue) {
 					gotValue = true;
 					value = mValue;
 				} else {
-					if (Equality.isEqual(value, mValue) == false) {
+					if (!Equality.isEqual(value, mValue)) {
 						continue attribute_loop;
 					}
 				}
 			}
-
-			target.eSet(feature, value);
+			if (value != SetCommand.UNSET_VALUE) {
+				target.eSet(feature, value);
+			}
 		}
 
 		// now do contained objects
@@ -519,7 +529,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 					// Check for secondary override feature.
 					Pair<EObject, EStructuralFeature> l_pair2 = null;
 					if (pair.getSecond() != null) {
-						for (EStructuralFeature f : pair.getSecond().getEContainingClass().getEAllAttributes()) {
+						for (final EStructuralFeature f : pair.getSecond().getEContainingClass().getEAllAttributes()) {
 							if (f.getName().equals(pair.getSecond().getName() + "Override")) {
 								l_pair2 = new Pair<>(null, f);
 							}
