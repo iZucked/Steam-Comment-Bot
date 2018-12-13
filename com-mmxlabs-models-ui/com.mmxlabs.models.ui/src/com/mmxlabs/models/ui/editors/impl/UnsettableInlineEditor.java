@@ -144,6 +144,8 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 							if (overrideToggleFeature != null) {
 								commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), input, overrideToggleFeature, Boolean.TRUE), input, overrideToggleFeature);
 							}
+							// Apply a set command otherwise the display value may not be the value stored in eobject
+							commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), input, feature, getValue()), input, feature);
 							setControlEnabled(inner, true);
 						} else {
 							unsetValue();
@@ -320,7 +322,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		if (setButton != null) {
 			setButton.setEnabled(controlsEnabled);
 			if (inner != null) {
-				inner.setEnabled(!canOverride() || setButton.getSelection());
+				inner.setEnabled(controlsEnabled && (setButton.getSelection() || !canOverride()));
 			}
 		} else if (inner != null) {
 			inner.setEnabled(controlsEnabled);
