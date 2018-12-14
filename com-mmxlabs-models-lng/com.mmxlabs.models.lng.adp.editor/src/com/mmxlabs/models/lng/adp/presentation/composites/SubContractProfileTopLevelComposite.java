@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -54,7 +55,6 @@ import com.mmxlabs.models.lng.adp.ext.IDistributionModelFactory;
 import com.mmxlabs.models.lng.adp.ext.ISubProfileConstraintFactory;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editors.DetailToolbarManager;
 import com.mmxlabs.models.ui.editors.HoverActionHelper;
@@ -131,15 +131,8 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 		topLevel.display(dialogContext, root, object, range, dbc);
 
 		{
-
-			// Initialise middle composite
-			// middleComposite = toolkit.createComposite(this, SWT.BORDER);
-
-			final int numChildren = createChildOtherCompsiteSection(dialogContext, root, object, range, dbc, eClass, this);
-
-			// // We know there are n slots, so n columns
-			// middleComposite.setLayout(new GridLayout(numChildren + 1, false));
-			// middleComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+			// Initialise child composites
+			createChildOtherCompsiteSection(dialogContext, root, object, range, dbc, eClass, this);
 		}
 		{
 
@@ -175,8 +168,9 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 								final DistributionModel distributionModel = factory.createInstance();
 								final Command command = SetCommand.create(getCommandHandler().getEditingDomain(), contractProfile, ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL,
 										distributionModel);
+
+								// This should trigger the adapter to re-display the content
 								getCommandHandler().handleCommand(command, contractProfile, ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL);
-								dialogContext.getDialogController().relayout();
 							}
 						}
 					}
@@ -258,7 +252,6 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 
 			contractProfile.eAdapters().add(adapter);
 		}
-
 	}
 
 	protected int createChildOtherCompsiteSection(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range,
@@ -418,10 +411,9 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 	}
 
 	EObject oldValue = null;
-	final Adapter adapter = new MMXContentAdapter() {
-
+	final Adapter adapter = new AdapterImpl() {
 		@Override
-		public void reallyNotifyChanged(final Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
 				return;
 			}
@@ -436,6 +428,8 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 						}
 
 						distributionModelSelector.refresh();
+						dialogContext.getDialogController().relayout();
+
 					}
 				} else {
 					SubContractProfileTopLevelComposite.this.removeAdapter();
@@ -464,7 +458,9 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 	}
 
 	private IDistributionModelFactory getCurrentFactory(final SubContractProfile<?, ?> profile) {
-
+		if (profile == null) {
+			return null;
+		}
 		for (final IDistributionModelFactory ft : distributionFactories) {
 			if (ft.isMatchForCurrent(profile)) {
 				return ft;
@@ -476,10 +472,11 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 	private List<IDistributionModelFactory> getFactoriesFor(final SubContractProfile<?, ?> profile) {
 
 		final List<IDistributionModelFactory> l = new LinkedList<>();
-
-		for (final IDistributionModelFactory ft : distributionFactories) {
-			if (ft.validFor(profile)) {
-				l.add(ft);
+		if (profile != null) {
+			for (final IDistributionModelFactory ft : distributionFactories) {
+				if (ft.validFor(profile)) {
+					l.add(ft);
+				}
 			}
 		}
 		return l;
@@ -492,5 +489,4 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 			distributionModelValidationWrapper.processValidation(status);
 		}
 	}
-
 }
