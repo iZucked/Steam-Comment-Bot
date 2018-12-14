@@ -13,9 +13,11 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
+import com.mmxlabs.models.datetime.ui.formatters.LocalDateTimeTextFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
+import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -36,9 +38,9 @@ public class SensibleAvailabilityDateConstraint extends AbstractModelMultiConstr
 			final VesselAvailability vesselAvailability = (VesselAvailability) object;
 			for (EStructuralFeature feature : availabilityDateFields) {
 				final LocalDateTime date = (LocalDateTime) object.eGet(feature);
-				if (date != null && date.isBefore(earliestDate)) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus(vesselAvailability.getVessel().getName(), feature.getName(), earliestDate.toString()));
+				if (date != null && date.isBefore(earliestDate)) {					
+					final String msg = String.format("Vessel '%s': '%s' date is before %s.", vesselAvailability.getVessel().getName(), feature.getName(), LocalDateTimeTextFormatter.format(earliestDate));
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 					status.addEObjectAndFeature(object, feature);
 					failures.add(status);
 				}

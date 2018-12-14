@@ -33,8 +33,10 @@ public class VesselEventDateConstraint extends AbstractModelConstraint {
 			final LocalDateTime end = vesselEvent.getStartBy();
 
 			if (start == null || end == null) {
-				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselEvent.getName()));
-				if (start == null) {
+				final String msg = String.format("Vessel event '%s': Start and end dates must both be set.", vesselEvent.getName());
+                final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
+
+                if (start == null) {
 					dcsd.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartAfter());
 				}
 				if (end == null) {
@@ -43,7 +45,8 @@ public class VesselEventDateConstraint extends AbstractModelConstraint {
 				return dcsd;
 			} else {
 				if (start.isAfter(end)) {
-					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselEvent.getName()));
+					final String msg = String.format("Vessel event '%s': Start date must be on or before the end date.", vesselEvent.getName());
+					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 					dcsd.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartAfter());
 					dcsd.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartBy());
 					return dcsd;

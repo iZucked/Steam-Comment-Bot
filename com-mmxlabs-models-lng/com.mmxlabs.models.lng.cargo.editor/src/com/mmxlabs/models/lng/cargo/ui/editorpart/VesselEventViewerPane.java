@@ -74,8 +74,8 @@ public class VesselEventViewerPane extends ScenarioTableViewerPane {
 		});
 
 		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Earliest Start", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_StartAfter(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Latest Start", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_StartBy(), jointModelEditor.getEditingDomain()));
+		addTypicalColumn("Start after", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_StartAfter(), jointModelEditor.getEditingDomain()));
+		addTypicalColumn("Start by", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_StartBy(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Port", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getVesselEvent_Port(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Duration", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_DurationInDays(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Vessel", new AssignmentManipulator(jointModelEditor));

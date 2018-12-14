@@ -129,7 +129,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  [Slot|{0}] {1}
+                  {0}
                </message>
                <description>
                   Every slot's minimum and maximum volume should be non-negative, and the minimum should not exceed the maximum.
@@ -484,7 +484,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Vessel {0}'s {1} date is earlier than {2}.
+                  {0}
                </message>
                <description>
                   Vessel availability dates must be within a sensible range.
@@ -502,7 +502,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  {0} {1} date is earlier than {2}.
+                  {0}
                </message>
                <description>
                   Vessel event dates must be within a sensible range.
@@ -556,7 +556,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Vessel Event {0} has invalid start and end dates - they must both be set, and the start date must not be after the end date.
+                  {0}
                </message>
                <description>
                   The start end end window of a vessel event must be set and consistent.
@@ -574,7 +574,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Vessel Event {0} has no duration set.
+                  {0}
                </message>
                <description>
                   The event duration must be greater than zero.

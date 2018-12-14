@@ -26,13 +26,11 @@ public class VesselEventDurationConstraint extends AbstractModelConstraint {
 		final EObject target = ctx.getTarget();
 		if (target instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) target;
-
 			final int duration = vesselEvent.getDurationInDays();
-
-			if (duration < 1) {
-				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselEvent.getName()));
+			if (duration < 1) {				
+				final String msg = String.format("Vessel event '%s' has no duration set.", vesselEvent.getName());
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 				dcsd.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_DurationInDays());
-
 				return dcsd;
 			}
 		}

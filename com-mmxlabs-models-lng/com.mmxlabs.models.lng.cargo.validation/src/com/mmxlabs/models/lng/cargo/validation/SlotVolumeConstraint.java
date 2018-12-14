@@ -53,14 +53,14 @@ public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 				checkSensibleValues(ctx, failures, slot, name);
 				if (slot.isSetOperationalTolerance()) {
 					if (slot.getOperationalTolerance() < 0.0) {
-						final String failureMessage = String.format("operational tolerance is less than zero");
+						final String failureMessage = String.format("Operational tolerance is less than zero");
 
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(), failureMessage));
 						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE);
 						failures.add(dsd);
 					}
 					if (slot.getOperationalTolerance() > 1.0) {
-						final String failureMessage = String.format("operational tolerance is greater than 100%%");
+						final String failureMessage = String.format("Operational tolerance is greater than 100%");
 
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(), failureMessage));
 						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE);
@@ -93,20 +93,21 @@ public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 
 	private void testVolumeValueConstraint(IValidationContext ctx, List<IStatus> failures, final Slot slot, String name) {
 		// TODO return some placeholders for the error message
+	 String slotName = "Slot '" + name + "': ";
 		if (slot.getSlotOrDelegateMinQuantity() < 0) {
-			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(name, "Negative min volume"));
+			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slotName + "Negative min volume."));
 
 			dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 			failures.add(dsd);
 		}
 		if (slot.getSlotOrDelegateMaxQuantity() < 0) {
-			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(name, "Negative max volume"));
+			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slotName + "Negative max volume."));
 
 			dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 			failures.add(dsd);
 		}
 		if (slot.getSlotOrDelegateMinQuantity() > slot.getSlotOrDelegateMaxQuantity()) {
-			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(name, "Min volume greater than max volume."));
+			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slotName + "Min volume greater than max volume."));
 
 			dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 

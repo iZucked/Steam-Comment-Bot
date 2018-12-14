@@ -36,8 +36,8 @@ public class SensibleEventDateConstraint extends AbstractModelMultiConstraint {
 			for (final EStructuralFeature feature : eventDateFields) {
 				final LocalDateTime date = (LocalDateTime) object.eGet(feature);
 				if (date != null && date.isBefore(earliestDate)) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus(event.getName(), feature.getName(), earliestDate.toString()));
+					String msg = String.format("'%s': '%s' date is before %s.", event.getName(), feature.getName(), earliestDate.toString());
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 					status.addEObjectAndFeature(object, feature);
 					failures.add(status);
 				}
