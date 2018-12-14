@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.adp.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -32,7 +33,8 @@ public class ADPModelConstraint extends AbstractModelMultiConstraint {
 			ADPModel adpModel = (ADPModel) target;
 
 			DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
-					.withName("ADP Model");
+					.withName("ADP Model") //
+					.withTag(ValidationConstants.TAG_ADP);
 
 			if (adpModel.getYearStart() == null) {
 				factory.copyName() //

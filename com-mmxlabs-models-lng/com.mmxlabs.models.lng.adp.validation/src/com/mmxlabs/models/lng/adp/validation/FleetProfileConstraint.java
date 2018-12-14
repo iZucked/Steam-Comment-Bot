@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.FleetProfile;
+import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -28,7 +29,8 @@ public class FleetProfileConstraint extends AbstractModelMultiConstraint {
 			final FleetProfile profile = (FleetProfile) target;
 
 			DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
-					.withName("ADP Fleet profile");
+					.withName("ADP Fleet profile") //
+					.withTag(ValidationConstants.TAG_ADP);
 
 			if (profile.getDefaultNominalMarket() == null) {
 				factory.copyName() //

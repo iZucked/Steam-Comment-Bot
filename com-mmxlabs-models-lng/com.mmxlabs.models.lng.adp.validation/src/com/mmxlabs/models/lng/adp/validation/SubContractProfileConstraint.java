@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
+import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -44,7 +45,9 @@ public class SubContractProfileConstraint extends AbstractModelMultiConstraint {
 				}
 
 			}
-			final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus().withTypedName("ADP profile", name);
+			final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
+					.withTypedName("ADP profile", name) //
+					.withTag(ValidationConstants.TAG_ADP);
 
 			if (subContractProfile.getDistributionModel() == null) {
 				factory.copyName() //
