@@ -2,16 +2,18 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.integration.client.pricing.model;
+package com.mmxlabs.lngdataserver.integration.pricing.model;
+
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Id;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Id;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@name")
@@ -27,7 +29,6 @@ public abstract class Curve {
 	@ApiModelProperty(required = true)
 	private CurveType type;
 	private String description;
-	private String version;
 	private String unit;
 	private String currency;
 
@@ -35,11 +36,10 @@ public abstract class Curve {
 
 	}
 
-	protected Curve(String name, CurveType type, String description, String version, String unit, String currency) {
+	protected Curve(String name, CurveType type, String description, String unit, String currency) {
 		this.name = name;
 		this.type = type;
 		this.description = description;
-		this.version = version;
 		this.unit = unit;
 		this.currency = currency;
 	}
@@ -74,14 +74,6 @@ public abstract class Curve {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
 	}
 
 	public String getUnit() {

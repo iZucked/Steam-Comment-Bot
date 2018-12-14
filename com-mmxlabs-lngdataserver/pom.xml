@@ -39,7 +39,6 @@
 		<module>com.mmxlabs.lngdataserver.feature</module>
 
 		<module>com.mmxlabs.lngdataserver.data.distances</module>
-		<module>com.mmxlabs.lngdataserver.integration.pricing.tests</module>
 		<module>com.mmxlabs.lngdataserver.lng.importers.tests</module>
 	</modules>
 

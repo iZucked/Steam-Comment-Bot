@@ -25,7 +25,7 @@ public class PortsRepository extends AbstractDataRepository<PortsVersion> {
 
 	@Override
 	protected String getSyncVersionEndpoint() {
-		return "/ports/sync/versions";
+		return "/ports/sync/versions/";
 	}
 
 	@Override

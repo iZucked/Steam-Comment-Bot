@@ -15,10 +15,10 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
-import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingUploadClient;
+import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
-import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -58,9 +58,9 @@ public class PricingFromScenarioImportWizard extends Wizard implements IImportWi
 								LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
 
 								PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
-								Version version = PricingFromScenarioCopier.generateVersion(pricingModel);
+								PricingVersion version = PricingFromScenarioCopier.generateVersion(pricingModel);
 								try {
-									PricingClient.saveVersion(url, version);
+									PricingUploadClient.saveVersion(url, version);
 								} catch (IOException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();

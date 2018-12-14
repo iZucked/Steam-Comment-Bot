@@ -2,55 +2,49 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.integration.client.pricing.model;
+package com.mmxlabs.lngdataserver.integration.pricing.model;
+
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
-import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
-
-import java.util.List;
-
 
 @Entity
 @ApiModel(parent = Curve.class)
-public class DataCurve extends Curve{
+public class ExpressionCurve extends Curve {
 
-    @Embedded
-    private List<CurvePoint> curve;
+    private String expression;
 
     @JsonCreator
-    public DataCurve(
+    public ExpressionCurve(
             @JsonProperty(value = "name", required = true) String name,
             @JsonProperty(value = "type", required = true) CurveType curveType,
             @JsonProperty(value = "description") String description,
-            @JsonProperty(value = "version") String version,
-            @JsonProperty(value = "unit", required = true) String unit,
-            @JsonProperty(value = "currency", required = true) String currency,
-            @JsonProperty(value = "curve") List<CurvePoint> curve
+            @JsonProperty(value = "unit") String unit,
+            @JsonProperty(value = "currency") String currency,
+            @JsonProperty(value = "expression") String expression
     ) {
         super(
                 name,
                 curveType,
                 description,
-                version,
                 unit,
                 currency
         );
-        this.curve = curve;
+        this.expression = expression;
     }
 
-    public DataCurve() {
+    public ExpressionCurve() {
         super();
         // jackson
     }
 
-    public List<CurvePoint> getCurve() {
-        return curve;
+    public String getExpression() {
+        return expression;
     }
 
-    public void setCurve(List<CurvePoint> curve) {
-        this.curve = curve;
+    public void setExpression(String expression) {
+        this.expression = expression;
     }
 }

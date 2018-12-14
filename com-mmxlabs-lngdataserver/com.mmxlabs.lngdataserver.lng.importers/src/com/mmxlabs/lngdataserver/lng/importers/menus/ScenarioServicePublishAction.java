@@ -24,12 +24,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
-import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
 import com.mmxlabs.lngdataserver.integration.distances.DistanceUploaderClient;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.integration.ports.PortsUploaderClient;
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
-import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingUploadClient;
+import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.ReportsServiceClient;
@@ -337,10 +337,10 @@ public class ScenarioServicePublishAction {
 		final String url = BackEndUrlProvider.INSTANCE.getUrl();
 		String versionId = null;
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
-		final Version version = PricingFromScenarioCopier.generateVersion(pricingModel);
+		final PricingVersion version = PricingFromScenarioCopier.generateVersion(pricingModel);
 
 		try {
-			final boolean res = PricingClient.saveVersion(url, version);
+			final boolean res = PricingUploadClient.saveVersion(url, version);
 			if (res) {
 				versionId = version.getIdentifier();
 			}

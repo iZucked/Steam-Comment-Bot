@@ -10,7 +10,6 @@ import java.util.List;
 import com.mmxlabs.lngdataserver.integration.reports.nominations.Nominations.NominationType;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 

@@ -233,12 +233,17 @@ public class PortAndDistancesToScenarioCopier {
 		{
 
 			final Map<Pair<Port, Port>, Double> directMatrix = new HashMap<>();
+
 			{
 				final Route route = routeMap.get(RouteOption.DIRECT);
 				if (route != null) {
 
 					final List<RouteLine> toAdd = new LinkedList<>();
 					final Routes routes = version.getRoutes();
+
+					final Map<Pair<Port, Port>, RouteLine> directMatrixLookup = new HashMap<>();
+					List<Pair<Port, Port>> toCheck = new LinkedList<>();
+
 					for (final Map.Entry<String, com.mmxlabs.lngdataserver.integration.distances.model.Route> e : routes.getRoutes().entrySet()) {
 						final String key = e.getKey();
 						final String ports[] = key.split(">");
@@ -263,6 +268,22 @@ public class PortAndDistancesToScenarioCopier {
 							toAdd.add(rl);
 
 							directMatrix.put(new Pair<>(rl.getFrom(), rl.getTo()), rl.getDistance());
+							directMatrixLookup.put(new Pair<>(rl.getFrom(), rl.getTo()), rl);
+
+							if (distance < 1.0) {
+								toCheck.add(new Pair<>(rl.getFrom(), rl.getTo()));
+							}
+						}
+					}
+
+					for (Pair<Port, Port> p : toCheck) {
+						Pair<Port, Port> rev = new Pair<>(p.getSecond(), p.getFirst());
+						RouteLine altRouteLine = directMatrixLookup.get(rev);
+						if (altRouteLine != null) {
+							if (altRouteLine.getDistance() >= 0.0) {
+								// Found alternative
+								
+							}
 						}
 					}
 
@@ -383,8 +404,8 @@ public class PortAndDistancesToScenarioCopier {
 					}
 					if (direct_distance != null && direct_distance > 0.0 && direct_distance < distance) {
 						// Canal distance is greater than canal distance
-						// Skip - but note some code assumes if a laden canal distance is present, 
-						// there is a ballast distance also. 
+						// Skip - but note some code assumes if a laden canal distance is present,
+						// there is a ballast distance also.
 						// distance = direct_distance;
 						continue;
 					}

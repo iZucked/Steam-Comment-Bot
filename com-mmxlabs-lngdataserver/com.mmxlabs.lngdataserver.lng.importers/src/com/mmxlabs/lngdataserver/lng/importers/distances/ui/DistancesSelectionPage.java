@@ -5,7 +5,6 @@
 package com.mmxlabs.lngdataserver.lng.importers.distances.ui;
 
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;

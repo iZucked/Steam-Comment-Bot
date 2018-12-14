@@ -4,13 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.integration.distances.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.mongodb.morphia.annotations.Reference;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * @author robert.erdin@gmail.com created on 22/01/17.
  */

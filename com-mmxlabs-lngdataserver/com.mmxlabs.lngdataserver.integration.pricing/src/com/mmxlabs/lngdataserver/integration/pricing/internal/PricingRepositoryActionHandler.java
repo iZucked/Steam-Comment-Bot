@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.lngdataserver.integration.pricing.internal;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -47,16 +47,21 @@ public class PricingRepositoryActionHandler implements IDataBrowserActionsHandle
 
 	@Override
 	public boolean supportsDelete() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean delete(String version) {
-		try {
-			return repository.deleteVersion(version);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		return false;
+	}
+
+	@Override
+	public boolean supportsSetCurrent() {
+		return false;
+	}
+
+	@Override
+	public boolean setCurrent(String version) {
 		return false;
 	}
 
@@ -101,31 +106,11 @@ public class PricingRepositoryActionHandler implements IDataBrowserActionsHandle
 
 	@Override
 	public boolean supportsRename() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean rename(String oldVersion, String newVersion) {
-		try {
-			return repository.renameVersion(oldVersion, newVersion);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	@Override
-	public boolean supportsSetCurrent() {
-		return true;
-	}
-
-	@Override
-	public boolean setCurrent(String version) {
-		try {
-			return repository.setCurrentVersion(version);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		return false;
 	}
 
@@ -140,22 +125,24 @@ public class PricingRepositoryActionHandler implements IDataBrowserActionsHandle
 		RunnerHelper.asyncExec(() -> {
 			dataRoot.getChildren().clear();
 			if (versions != null) {
-				for (final DataVersion v : versions) {
-					if ("initial_version".equals(v.getFullIdentifier())) {
-						continue;
-					}
-					final Node version = BrowserFactory.eINSTANCE.createLeaf();
-					version.setParent(dataRoot);
-					version.setDisplayName(v.getFullIdentifier());
-					version.setVersionIdentifier(v.getIdentifier());
-					version.setPublished(v.isPublished());
-					
-					if (v.isCurrent()) {
-						RunnerHelper.asyncExec(c -> dataRoot.setCurrent(version));
-					}
-
-					dataRoot.getChildren().add(version);
-				}
+				boolean first = true;
+				// Only display the n most recent versions.
+				versions.stream() //
+						.filter(v -> !("initial_version".equals(v.getFullIdentifier()))) //
+						.sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt())) //
+						.limit(10)//
+						.forEach(v -> {
+							final Node version = BrowserFactory.eINSTANCE.createLeaf();
+							version.setParent(dataRoot);
+							version.setDisplayName(v.getFullIdentifier());
+							version.setVersionIdentifier(v.getIdentifier());
+							version.setPublished(v.isPublished());
+//							if (first) {
+//								dataRoot.setCurrent(version);
+//							}
+//							first = false;
+							dataRoot.getChildren().add(version);
+						});
 			}
 		});
 		return true;

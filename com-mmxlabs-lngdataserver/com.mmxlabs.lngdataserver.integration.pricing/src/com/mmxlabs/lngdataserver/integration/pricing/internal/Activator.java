@@ -31,7 +31,7 @@ public class Activator extends AbstractUIPlugin {
 	private static Activator plugin;
 
 	private final CompositeNode pricingDataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
-	private PricingRepository pricingRepository = null;
+	private PricingRepository repository = null;
 
 	private boolean active;
 
@@ -57,8 +57,8 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
-		pricingRepository = PricingRepository.INSTANCE;
-		pricingDataRoot.setActionHandler(new PricingRepositoryActionHandler(pricingRepository, pricingDataRoot));
+		repository = PricingRepository.INSTANCE;
+		pricingDataRoot.setActionHandler(new PricingRepositoryActionHandler(repository, pricingDataRoot));
 
 		active = true;
 		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
@@ -71,9 +71,9 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(final BundleContext context) throws Exception {
-		if (pricingRepository != null) {
-			pricingRepository.stopListeningForNewLocalVersions();
-			pricingRepository = null;
+		if (repository != null) {
+			repository.stopListeningForNewLocalVersions();
+			repository = null;
 		}
 		pricingDataRoot.setActionHandler(null);
 		pricingDataRoot.getChildren().clear();
@@ -98,11 +98,11 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public PricingRepository getPricingRepository() {
-		return pricingRepository;
+		return repository;
 	}
 
 	private void loadVersions() {
-		while (!pricingRepository.isReady() && active) {
+		while (!repository.isReady() && active) {
 			try {
 				LOGGER.debug("Pricing back-end not ready yet...");
 				Thread.sleep(1000);
@@ -122,19 +122,11 @@ public class Activator extends AbstractUIPlugin {
 			}
 
 			// register consumer to update on new version
-			pricingRepository.registerLocalVersionListener(v -> pricingDataRoot.getActionHandler().refreshLocal());
-			pricingRepository.startListenForNewLocalVersions();
+			repository.registerLocalVersionListener(() -> pricingDataRoot.getActionHandler().refreshLocal());
+			repository.startListenForNewLocalVersions();
 
-			pricingRepository.registerUpstreamVersionListener(v -> {
-				RunnerHelper.asyncExec(c -> {
-					try {
-						pricingRepository.syncUpstreamVersion(v.getIdentifier());
-					} catch (final Exception e) {
-						e.printStackTrace();
-					}
-				});
-			});
-			pricingRepository.startListenForNewUpstreamVersions();
+			repository.registerDefaultUpstreamVersionListener();
+			repository.startListenForNewUpstreamVersions();
 		}
 	}
 }

@@ -15,7 +15,6 @@ import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.integration.distances.DistanceRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
-import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -116,18 +115,10 @@ public class Activator extends AbstractUIPlugin {
 				LOGGER.error("Error retrieving distance versions");
 			}
 			// register consumer to update on new version
-			repository.registerLocalVersionListener(v -> dataRoot.getActionHandler().refreshLocal());
+			repository.registerLocalVersionListener(() -> dataRoot.getActionHandler().refreshLocal());
 			repository.startListenForNewLocalVersions();
 
-			repository.registerUpstreamVersionListener(v -> {
-				RunnerHelper.asyncExec(c -> {
-					try {
-						repository.syncUpstreamVersion(v.getIdentifier());
-					} catch (final Exception e) {
-						e.printStackTrace();
-					}
-				});
-			});
+			repository.registerDefaultUpstreamVersionListener();
 			repository.startListenForNewUpstreamVersions();
 		}
 	}

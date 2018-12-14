@@ -29,7 +29,7 @@ import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.IDataRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
-
+import com.mmxlabs.rcp.common.RunnerHelper;
 import okhttp3.Credentials;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -58,8 +58,8 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 
 	protected boolean listenForNewLocalVersions;
 	protected boolean listenForNewUpstreamVersions;
-	protected final List<Consumer<DataVersion>> newLocalVersionCallbacks = new LinkedList<>();
-	protected final List<Consumer<DataVersion>> newUpstreamVersionCallbacks = new LinkedList<>();
+	protected final List<Runnable> newLocalVersionCallbacks = new LinkedList<>();
+	protected final List<Runnable> newUpstreamVersionCallbacks = new LinkedList<>();
 
 	protected Thread localVersionThread;
 	protected Thread upstreamVersionThread;
@@ -86,7 +86,7 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 	public AbstractDataRepository(String repoType, Class<T> dataVersionType) {
 		this.type = repoType;
 		this.dataVersionType = dataVersionType;
-		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(this::doHandleUpstreamURLChange);
+		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(this::handleUpstreamURLChange);
 	}
 
 	protected String getUpstreamUrl() {
@@ -108,15 +108,10 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 				final CompletableFuture<Boolean> newVersionFuture = waitForNewLocalVersion();
 				try {
 					if (newVersionFuture != null) {
+						newLocalVersionCallbacks.forEach(Runnable::run);
 						final Boolean newVersionAvailable = newVersionFuture.get();
 						if (Boolean.TRUE == newVersionAvailable) {
-							final List<DataVersion> versions = getLocalVersions();
-							for (final DataVersion v : versions) {
-								if ("initial_version".equals(v.getFullIdentifier())) {
-									continue;
-								}
-								newLocalVersionCallbacks.forEach(c -> c.accept(v));
-							}
+							newLocalVersionCallbacks.forEach(Runnable::run);
 						}
 					}
 				} catch (final InterruptedException e) {
@@ -155,15 +150,10 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 					if (newVersionFuture == null) {
 						return;
 					}
+					newUpstreamVersionCallbacks.forEach(Runnable::run);
 					final Boolean versionAvailable = newVersionFuture.get();
 					if (versionAvailable == Boolean.TRUE) {
-						final List<DataVersion> versions = getUpstreamVersions();
-						for (final DataVersion v : versions) {
-							if ("initial_version".equals(v.getFullIdentifier())) {
-								continue;
-							}
-							newUpstreamVersionCallbacks.forEach(c -> c.accept(v));
-						}
+						newUpstreamVersionCallbacks.forEach(Runnable::run);
 					}
 				} catch (final InterruptedException e) {
 					if (!listenForNewUpstreamVersions) {
@@ -204,13 +194,31 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 	}
 
 	@Override
-	public void registerLocalVersionListener(final Consumer<DataVersion> versionConsumer) {
+	public void registerLocalVersionListener(final Runnable versionConsumer) {
 		newLocalVersionCallbacks.add(versionConsumer);
 	}
 
 	@Override
-	public void registerUpstreamVersionListener(final Consumer<DataVersion> versionConsumer) {
+	public void registerUpstreamVersionListener(final Runnable versionConsumer) {
 		newUpstreamVersionCallbacks.add(versionConsumer);
+	}
+
+	public Runnable registerDefaultUpstreamVersionListener() {
+		final Runnable runnable = () -> RunnerHelper.asyncExec(c -> {
+			try {
+				updateAvailable().forEach(v -> {
+					try {
+						syncUpstreamVersion(v.getIdentifier());
+					} catch (final Exception e) {
+						e.printStackTrace();
+					}
+				});
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+		});
+		registerUpstreamVersionListener(runnable);
+		return runnable;
 	}
 
 	protected com.squareup.okhttp.Authenticator getAuthenticator() {
@@ -307,13 +315,12 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 		final RequestBody body = RequestBody.create(JSON, json);
 		final Request postRequest = new Request.Builder().url(BackEndUrlProvider.INSTANCE.getUrl() + getSyncVersionEndpoint()).post(body).build();
 		try (final Response postResponse = CLIENT.newCall(postRequest).execute()) {
-			// TODO: Check return code etc
 			return postResponse.isSuccessful();
 		}
 	}
 
 	protected CompletableFuture<Boolean> waitForNewLocalVersion() {
-		return notifyOnNewVersion(true);
+		return notifyOnNewVersion(false);
 	}
 
 	protected CompletableFuture<Boolean> waitForNewUpstreamVersion() {
@@ -326,32 +333,23 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 		if (baseUrl == null || baseUrl.isEmpty()) {
 			return null;
 		}
-
 		final String url = baseUrl + getVersionNotificationEndpoint();
 		LOG.debug("Calling url {}", url);
-		final CompletableFuture<Boolean> completableFuture = CompletableFuture.supplyAsync(() -> {
+		return CompletableFuture.supplyAsync(() -> {
 			final Request.Builder requestBuilder = upstream ? createUpstreamRequestBuilder(url)
 					: new Request.Builder() //
 							.url(url);
 			final Request request = requestBuilder.build();
-			Response response = null;
-			try {
-				response = LONG_POLLING_CLIENT.newCall(request).execute();
+			try (Response response = LONG_POLLING_CLIENT.newCall(request).execute()) {
 				if (response.isSuccessful()) {
-					// Version newVersion = new ObjectMapper().readValue(response.body().byteStream(), Version.class);
 					return Boolean.TRUE;
 				}
 				return Boolean.FALSE;
 			} catch (final IOException e) {
 				LOG.error("Error waiting for new version");
 				throw new RuntimeException("Error waiting for new version");
-			} finally {
-				if (response != null) {
-					response.body().close();
-				}
 			}
 		});
-		return completableFuture;
 	}
 
 	protected abstract String getVersionNotificationEndpoint();
@@ -432,7 +430,10 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 				final String body = response.body().string();
 				throw new RuntimeException("Error making request to " + baseUrl + ". Reason " + response.message() + " Response body is " + body);
 			} else {
-				final List<T> hubVersions = new ObjectMapper().readValue(response.body().byteStream(), TYPE_VERSIONS_LIST);
+				final ObjectMapper mapper = new ObjectMapper();
+				mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+				List<T> hubVersions = mapper.readValue(response.body().byteStream(), mapper.getTypeFactory().constructCollectionType(List.class, dataVersionType));
+				// final List<T> hubVersions = new ObjectMapper().readValues(esponse.body().byteStream(), TYPE_VERSIONS_LIST);
 				return hubVersions.stream() //
 						.map(this::wrap) //
 						.filter(v -> v.getIdentifier() != null) //
@@ -468,7 +469,8 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 
 	public T getLocalVersion(String versionTag) throws IOException {
 		String url = getSyncVersionEndpoint();
-		final Request request = new Request.Builder().url(url + versionTag).build();
+		String baseURL = BackEndUrlProvider.INSTANCE.getUrl();
+		final Request request = new Request.Builder().url(baseURL + url + versionTag).build();
 		try (Response response = CLIENT.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				final String body = response.body().string();

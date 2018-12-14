@@ -145,7 +145,7 @@ public class WebNavigatorView extends ViewPart {
 		if (version != "") {
 			url = BackEndUrlProvider.INSTANCE.getUrl() + Activator.URL_PREFIX + "#/" + type + "/" + version + "?apiBaseUrl=" + encodedBackend;
 		}
-		System.out.println("DISTANCE calling: " + url);
+		System.out.println("Navigator calling: " + url);
 		return url;
 	}
 

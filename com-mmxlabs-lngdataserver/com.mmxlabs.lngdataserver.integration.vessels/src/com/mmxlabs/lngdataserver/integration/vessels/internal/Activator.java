@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.integration.vessels.internal;
 
-import java.util.List;
-import java.util.Objects;
-
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -15,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
-import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.integration.vessels.VesselsRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
@@ -35,7 +31,7 @@ public class Activator extends AbstractUIPlugin {
 	private static Activator plugin;
 
 	private final CompositeNode vesselsDataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
-	private VesselsRepository vesselsRepository;
+	private VesselsRepository repository;
 	private boolean active;
 
 	/**
@@ -60,8 +56,8 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
-		vesselsRepository = VesselsRepository.INSTANCE;
-		vesselsDataRoot.setActionHandler(new VesselsRepositoryActionHandler(vesselsRepository, vesselsDataRoot));
+		repository = VesselsRepository.INSTANCE;
+		vesselsDataRoot.setActionHandler(new VesselsRepositoryActionHandler(repository, vesselsDataRoot));
 
 		active = true;
 		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
@@ -74,9 +70,9 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		if (vesselsRepository != null) {
-			vesselsRepository.stopListeningForNewLocalVersions();
-			vesselsRepository = null;
+		if (repository != null) {
+			repository.stopListeningForNewLocalVersions();
+			repository = null;
 		}
 		vesselsDataRoot.setActionHandler(null);
 		vesselsDataRoot.getChildren().clear();
@@ -103,7 +99,7 @@ public class Activator extends AbstractUIPlugin {
 	//
 	private void loadVersions() {
 
-		while (!vesselsRepository.isReady() && active) {
+		while (!repository.isReady() && active) {
 			try {
 				LOGGER.debug("Vessel back-end not ready yet...");
 				Thread.sleep(1000);
@@ -127,19 +123,11 @@ public class Activator extends AbstractUIPlugin {
 			}
 
 			// register consumer to update on new version
-			vesselsRepository.registerLocalVersionListener(v -> vesselsDataRoot.getActionHandler().refreshLocal());
-			vesselsRepository.startListenForNewLocalVersions();
+			repository.registerLocalVersionListener(() -> vesselsDataRoot.getActionHandler().refreshLocal());
+			repository.startListenForNewLocalVersions();
 
-			vesselsRepository.registerUpstreamVersionListener(v -> {
-				RunnerHelper.asyncExec(c -> {
-					try {
-						vesselsRepository.syncUpstreamVersion(v.getIdentifier());
-					} catch (final Exception e) {
-						e.printStackTrace();
-					}
-				});
-			});
-			vesselsRepository.startListenForNewUpstreamVersions();
+			repository.registerDefaultUpstreamVersionListener();
+			repository.startListenForNewUpstreamVersions();
 		}
 	}
 }

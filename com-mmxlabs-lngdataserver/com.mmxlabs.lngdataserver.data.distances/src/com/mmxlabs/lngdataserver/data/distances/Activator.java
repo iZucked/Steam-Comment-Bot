@@ -7,8 +7,6 @@ package com.mmxlabs.lngdataserver.data.distances;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
-
 public class Activator implements BundleActivator {
 
 	@Override

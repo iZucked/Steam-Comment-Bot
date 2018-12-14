@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.integration.ports.internal;
 
-import java.util.List;
-import java.util.Objects;
-
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -15,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
-import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
@@ -122,18 +118,10 @@ public class Activator extends AbstractUIPlugin {
 			}
 
 			// register consumer to update on new version
-			repository.registerLocalVersionListener(v -> dataRoot.getActionHandler().refreshLocal());
+			repository.registerLocalVersionListener(() -> dataRoot.getActionHandler().refreshLocal());
 			repository.startListenForNewLocalVersions();
 
-			repository.registerUpstreamVersionListener(v -> {
-				RunnerHelper.asyncExec(c -> {
-					try {
-						repository.syncUpstreamVersion(v.getIdentifier());
-					} catch (final Exception e) {
-						e.printStackTrace();
-					}
-				});
-			});
+			repository.registerDefaultUpstreamVersionListener();
 			repository.startListenForNewUpstreamVersions();
 		}
 	}

@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.integration.reports.inventory;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class InventoryExportModel {

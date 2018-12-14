@@ -23,10 +23,10 @@ import org.eclipse.ui.PlatformUI;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExtension;
-import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
 import com.mmxlabs.lngdataserver.integration.ports.PortsUploaderClient;
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
-import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingUploadClient;
+import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 //import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.ScenarioServicePublishAction;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
@@ -161,9 +161,9 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				final LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
 
 				final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
-				final Version version = PricingFromScenarioCopier.generateVersion(pricingModel);
+				final PricingVersion version = PricingFromScenarioCopier.generateVersion(pricingModel);
 				try {
-					PricingClient.saveVersion(url, version);
+					PricingUploadClient.saveVersion(url, version);
 				} catch (final IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

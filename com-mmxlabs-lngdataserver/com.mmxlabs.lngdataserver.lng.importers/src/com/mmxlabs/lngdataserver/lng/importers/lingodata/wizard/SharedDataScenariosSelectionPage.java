@@ -55,7 +55,7 @@ public class SharedDataScenariosSelectionPage extends WizardPage {
 		CommercialData("Contracts && Entities"), //
 		SpotCargoMarketsData("Cargo Markets"), //
 		SpotCharterMarketsData("Charter Markets"), //
-		// PricingData("Price Curves")
+		 PricingData("Price Curves"),
 		ADPData("ADP") //
 		;
 
@@ -444,16 +444,12 @@ public class SharedDataScenariosSelectionPage extends WizardPage {
 
 		// when a parent element checkbox is clicked in the tree, propagate the change
 		// to its descendants
-		scenarioTreeViewer.addCheckStateListener(new ICheckStateListener() {
-
-			@Override
-			public void checkStateChanged(final CheckStateChangedEvent event) {
-				final Object element = event.getElement();
-				if (!(element instanceof ScenarioInstance)) {
-					scenarioTreeViewer.setSubtreeChecked(element, event.getChecked());
-				}
-				dialogChanged();
+		scenarioTreeViewer.addCheckStateListener(event -> {
+			final Object element = event.getElement();
+			if (!(element instanceof ScenarioInstance)) {
+				scenarioTreeViewer.setSubtreeChecked(element, event.getChecked());
 			}
+			dialogChanged();
 		});
 
 		// This will be current if available or selected

@@ -6,6 +6,7 @@ package com.mmxlabs.lngdataserver.lng.importers.port.ui;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.Command;
@@ -62,13 +63,15 @@ public class PortsToScenarioImportWizard extends Wizard implements IImportWizard
 
 					@Override
 					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-						monitor.beginTask("Copy ports", scenarioSelectionPage.getSelectedScenarios().size() * 3);
+						final List<ScenarioInstance> selectedScenarios = scenarioSelectionPage.getSelectedScenarios();
+
+						monitor.beginTask("Copy ports", selectedScenarios.size() * 3);
 
 						try {
 							final PortsRepository portsRepository = PortsRepository.INSTANCE;
 
 							final PortsVersion version = portsRepository.getLocalVersion(versionTag);
-							for (final ScenarioInstance scenarioInstance : scenarioSelectionPage.getSelectedScenarios()) {
+							for (final ScenarioInstance scenarioInstance : selectedScenarios) {
 
 								final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 								try (ModelReference modelReference = modelRecord.aquireReference(PortsToScenarioImportWizard.class.getSimpleName())) {
@@ -99,7 +102,6 @@ public class PortsToScenarioImportWizard extends Wizard implements IImportWizard
 							e.printStackTrace();
 
 						}
-
 					}
 				});
 			} catch (final InvocationTargetException e) {
@@ -111,7 +113,6 @@ public class PortsToScenarioImportWizard extends Wizard implements IImportWizard
 			}
 		}
 		return true;
-
 	}
 
 	@Override

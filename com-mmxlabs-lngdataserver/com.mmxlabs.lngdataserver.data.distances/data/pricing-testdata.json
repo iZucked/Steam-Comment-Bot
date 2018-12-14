@@ -1,0 +1,49 @@
+{
+  "identifier" : "testdata",
+  "createdAt" : "2018-10-26T10:54:45.000",
+  "curves" : {
+    "HH" : {
+      "@name" : "DataCurve",
+      "name" : "HH",
+      "type" : "COMMODITY",
+      "unit" : "m3",
+      "currency" : "USD",
+      "curve" : [ {
+        "date" : [ 2017, 1, 1 ],
+        "value" : 7.1
+      }, {
+        "date" : [ 2017, 2, 1 ],
+        "value" : 7.2
+      } ]
+    },
+    "II" : {
+      "@name" : "DataCurve",
+      "name" : "II",
+      "type" : "COMMODITY",
+      "unit" : "m3",
+      "currency" : "USD",
+      "curve" : [ {
+        "date" : [ 2017, 1, 1 ],
+        "value" : 7.3
+      }, {
+        "date" : [ 2017, 2, 1 ],
+        "value" : 7.4
+      } ]
+    }
+    },
+    "II" : {
+      "@name" : "DataCurve",
+      "name" : "II",
+      "type" : "CURRENCY",
+      "unit" : "m3",
+      "currency" : "USD",
+      "curve" : [ {
+        "date" : [ 2017, 1, 1 ],
+        "value" : 7.3
+      }, {
+        "date" : [ 2017, 2, 1 ],
+        "value" : 7.4
+      } ]
+    }
+  }
+}

@@ -51,13 +51,16 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
+import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
 import com.mmxlabs.lngdataserver.lng.exporters.distances.DistancesFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.vessels.VesselsFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedDataScenariosSelectionPage.DataOptions;
 import com.mmxlabs.lngdataserver.lng.importers.port.PortsToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.pricing.PricingToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.vessels.VesselsToScenarioCopier;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -68,6 +71,7 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -170,11 +174,15 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 			try (final IScenarioDataProvider sdp = sourceModelRecord.aquireScenarioDataProvider("SharedScenarioDataImportWizard:1")) {
 				final PortModel portModel = ScenarioModelUtil.getPortModel(sdp);
 				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(sdp);
+				final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(sdp);
 
 				for (final DataOptions option : dataOptions) {
 					switch (option) {
 					case PortData:
 						dataToUpdater.put(DataOptions.PortData, createPortAndDistanceUpdater(portModel));
+						break;
+					case PricingData:
+						dataToUpdater.put(DataOptions.PricingData, createPricingUpdater(pricingModel));
 						break;
 					case FleetDatabase:
 						dataToUpdater.put(DataOptions.FleetDatabase, createFleetUpdater(fleetModel));
@@ -550,24 +558,53 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 						final Command command1 = VesselsToScenarioCopier.getUpdateCommand(editingDomain, fm, pm, vesselsVersion);
 						appendAndExecute(command1);
 
-						final VesselsVersion vv = VesselsFromScenarioCopier.generateVersion(fm);
+						if (false) {
+							final VesselsVersion vv = VesselsFromScenarioCopier.generateVersion(fm);
 
-						String actualJSON;
-						try {
-							actualJSON = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(vv);
-							if (!expectedJSON.equals(actualJSON)) {
-								Files.write(expectedJSON, new File("C:/users/sg/desktop/a.txt"), Charsets.UTF_8);
-								Files.write(actualJSON, new File("C:/users/sg/desktop/b.txt"), Charsets.UTF_8);
-								System.out.println("Actual");
-								System.out.println(actualJSON);
-								System.out.println("Expected");
-								System.out.println(expectedJSON);
+							String actualJSON;
+							try {
+								actualJSON = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(vv);
+								if (!expectedJSON.equals(actualJSON)) {
+									Files.write(expectedJSON, new File("C:/users/sg/desktop/a.txt"), Charsets.UTF_8);
+									Files.write(actualJSON, new File("C:/users/sg/desktop/b.txt"), Charsets.UTF_8);
+									System.out.println("Actual");
+									System.out.println(actualJSON);
+									System.out.println("Expected");
+									System.out.println(expectedJSON);
+								}
+							} catch (final Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
 							}
-						} catch (final Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
 						}
+					}
+				});
+			};
+		}
 
+		private BiConsumer<CompoundCommand, IScenarioDataProvider> createPricingUpdater(final PricingModel pricingModel) throws JsonProcessingException {
+			final PricingVersion pricingVersion = PricingFromScenarioCopier.generateVersion(pricingModel);
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.findAndRegisterModules();
+			mapper.registerModule(new Jdk8Module());
+			final String expectedJSON = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(pricingModel);
+			return (cmd, target) -> {
+				cmd.append(new CompoundCommand() {
+
+					@Override
+					protected boolean prepare() {
+						super.prepare();
+						return true;
+					}
+
+					@Override
+					public void execute() {
+						super.execute();
+						final PricingModel pm = ScenarioModelUtil.getPricingModel(target);
+						final EditingDomain editingDomain = target.getEditingDomain();
+						final Command command1 = PricingToScenarioCopier.getUpdateCommand(editingDomain, pm, pricingVersion);
+						appendAndExecute(command1);
 					}
 				});
 			};

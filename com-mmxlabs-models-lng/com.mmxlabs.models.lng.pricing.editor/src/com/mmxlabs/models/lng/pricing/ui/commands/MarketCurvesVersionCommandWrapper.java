@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
+import com.mmxlabs.models.lng.pricing.impl.DataIndexImpl;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -78,9 +79,10 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 				return true;
 			}
 
+			@Override
 			public void execute() {
 				if (changedRef[0]) {
-					String newID = "private-" + EcoreUtil.generateUUID();
+					String newID = EcoreUtil.generateUUID();
 					System.out.println("Generate Pricing Model Version ID " + newID);
 					final Command cmd = SetCommand.create(editingDomain, pricingModel, PricingPackage.Literals.PRICING_MODEL__MARKET_CURVE_DATA_VERSION, newID);
 					appendAndExecute(cmd);
@@ -96,6 +98,9 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
+				if (notification.isTouch()) {
+					return;
+				}
 				if (notification.getNotifier() instanceof NamedIndexContainer) {
 					changedRef[0] = true;
 				} else if (notification.getNotifier() instanceof Index) {
@@ -118,8 +123,8 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 					changedRef[0] = true;
 				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES) {
 					changedRef[0] = true;
-				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES) {
-					changedRef[0] = true;
+//				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES) {
+//					changedRef[0] = true;
 				}
 
 				// Reset!
@@ -149,7 +154,7 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 							addAdapter(notifier);
 						}
 					}
-				} else if (target instanceof NamedIndexContainer) {
+				} else if (target instanceof NamedIndexContainer || target instanceof DataIndexImpl) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						addAdapter(notifier);
@@ -178,7 +183,7 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 							removeAdapter(notifier, false, true);
 						}
 					}
-				} else if (target instanceof NamedIndexContainer) {
+				} else if (target instanceof NamedIndexContainer || target instanceof DataIndexImpl) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						removeAdapter(notifier, false, true);

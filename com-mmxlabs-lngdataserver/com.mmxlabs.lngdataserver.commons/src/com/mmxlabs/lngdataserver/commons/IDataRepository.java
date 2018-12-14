@@ -12,7 +12,7 @@ public interface IDataRepository {
 	List<DataVersion> getLocalVersions();
 
 	List<DataVersion> getUpstreamVersions();
-	
+
 	boolean isReady();
 
 	boolean syncUpstreamVersion(final String version) throws Exception;
@@ -29,8 +29,8 @@ public interface IDataRepository {
 
 	void stopListeningForNewUpstreamVersions();
 
-	void registerLocalVersionListener(final Consumer<DataVersion> versionConsumer);
+	void registerLocalVersionListener(final Runnable versionConsumer);
 
-	void registerUpstreamVersionListener(final Consumer<DataVersion> versionConsumer);
+	void registerUpstreamVersionListener(final Runnable versionConsumer);
 
 }

@@ -15,12 +15,12 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.integration.client.pricing.model.Curve;
-import com.mmxlabs.lngdataserver.integration.client.pricing.model.CurvePoint;
-import com.mmxlabs.lngdataserver.integration.client.pricing.model.CurveType;
-import com.mmxlabs.lngdataserver.integration.client.pricing.model.DataCurve;
-import com.mmxlabs.lngdataserver.integration.client.pricing.model.ExpressionCurve;
-import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
+import com.mmxlabs.lngdataserver.integration.pricing.model.Curve;
+import com.mmxlabs.lngdataserver.integration.pricing.model.CurvePoint;
+import com.mmxlabs.lngdataserver.integration.pricing.model.CurveType;
+import com.mmxlabs.lngdataserver.integration.pricing.model.DataCurve;
+import com.mmxlabs.lngdataserver.integration.pricing.model.ExpressionCurve;
+import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -76,9 +76,9 @@ public class PricingFromScenarioCopier {
 		return curve;
 	};
 
-	public static Version generateVersion(PricingModel pricingModel) {
+	public static PricingVersion generateVersion(PricingModel pricingModel) {
 
-		Version version = new Version();
+		PricingVersion version = new PricingVersion();
 
 		pricingModel.getCurrencyIndices().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.CURRENCY);
