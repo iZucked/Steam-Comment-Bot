@@ -35,4 +35,6 @@ public interface IDetailConstraintStatus extends IConstraintStatus {
 	 */
 	Collection<EStructuralFeature> getFeaturesForEObject(EObject object);
 
+	ValidationGroup getTag();
+
 }

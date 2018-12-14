@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -62,12 +63,16 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
 						dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+						dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+
 						failures.add(dsd);
 					} else if (loadSlot.getSlotOrDelegateShippingDaysRestriction() == 0) {
 						final String message = String.format("DES Purchase|%s shipping days restriction is set to zero - unable to ship anywhere!", loadSlot.getName());
 						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
 						dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+						dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+
 						failures.add(dsd);
 					}
 				} else if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy) {
@@ -201,6 +206,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 										dsd.addEObjectAndFeature(desPurchase, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
 										failures.add(dsd);
+										dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
 										// No point going further!
 										return Activator.PLUGIN_ID;
 									}
@@ -220,6 +226,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 										dsd.addEObjectAndFeature(desPurchase, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+										dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+
 										failures.add(dsd);
 									}
 								}
@@ -297,6 +305,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 										dsd.addEObjectAndFeature(fobSale, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
 										failures.add(dsd);
+										dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+
 										// No point going further!
 										return Activator.PLUGIN_ID;
 									}
@@ -316,9 +326,11 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 										dsd.addEObjectAndFeature(fobSale, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+										dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+
 										failures.add(dsd);
 									}
-									
+
 									cargoDateConstraint(fobPurchase, fobSale, loadDurationInHours + ladenTimeInHours, ctx, failures);
 								}
 							}
@@ -331,18 +343,18 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 
 		return Activator.PLUGIN_ID;
 	}
-	
+
 	private void cargoDateConstraint(LoadSlot load, DischargeSlot discharge, int ladenTravelTimeInHours, final IValidationContext ctx, final List<IStatus> failures) {
 		ZonedDateTime windowStartWithSlotOrPortTime = load.getWindowStartWithSlotOrPortTime();
 		ZonedDateTime windowEndWithSlotOrPortTime = discharge.getWindowEndWithSlotOrPortTime();
 		long maxTime = ChronoUnit.HOURS.between(windowStartWithSlotOrPortTime, windowEndWithSlotOrPortTime);
 		if (maxTime < ladenTravelTimeInHours) {
-			final DetailConstraintStatusFactory baseFactory = DetailConstraintStatusFactory.makeStatus().withTypedName("Purchase",load.getName());
-			failures.add(baseFactory
-					.withObjectAndFeature(load.getCargo(), CargoPackage.eINSTANCE.getCargoModel_Cargoes()) //
-					.withMessage((ladenTravelTimeInHours - maxTime) > ladenTravelTimeInHours ? (String.format("is paired with a sale at %s. However the slot windows are incompatible", discharge.getName())) : 
-						(String.format("is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s", discharge.getName(), TravelTimeUtils.formatHours(ladenTravelTimeInHours), TravelTimeUtils.formatHours(ladenTravelTimeInHours - maxTime)) 
-						)) //
+			final DetailConstraintStatusFactory baseFactory = DetailConstraintStatusFactory.makeStatus().withTypedName("Purchase", load.getName());
+			failures.add(baseFactory.withObjectAndFeature(load.getCargo(), CargoPackage.eINSTANCE.getCargoModel_Cargoes()) //
+					.withMessage(
+							(ladenTravelTimeInHours - maxTime) > ladenTravelTimeInHours ? (String.format("is paired with a sale at %s. However the slot windows are incompatible", discharge.getName()))
+									: (String.format("is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s", discharge.getName(),
+											TravelTimeUtils.formatHours(ladenTravelTimeInHours), TravelTimeUtils.formatHours(ladenTravelTimeInHours - maxTime)))) //
 					.withSeverity(IStatus.WARNING) //
 					.make(ctx));
 		}

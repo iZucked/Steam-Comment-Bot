@@ -43,7 +43,24 @@ public class ValidationStatusColumnLabelProvider extends ColumnLabelProvider {
 
 	@Override
 	public Image getImage(Object element) {
+		if (element instanceof GroupedValidationStatusContentProvider.Node) {
+			GroupedValidationStatusContentProvider.Node node = (GroupedValidationStatusContentProvider.Node) element;
 
+			int severity = IStatus.OK;
+			for (IStatus s : node.status) {
+				if (s.getSeverity() > severity) {
+					severity = s.getSeverity();
+				}
+			}
+
+			if (severity == IStatus.ERROR) {
+				return imgError;
+			} else if (severity == IStatus.WARNING) {
+				return imgWarn;
+			} else if (severity == IStatus.INFO) {
+				return imgInfo;
+			}
+		}
 		if (element instanceof Map.Entry) {
 			Map.Entry entry = (Map.Entry) element;
 			element = entry.getValue();
@@ -65,7 +82,9 @@ public class ValidationStatusColumnLabelProvider extends ColumnLabelProvider {
 
 	@Override
 	public String getText(final Object element) {
-
+		if (element instanceof GroupedValidationStatusContentProvider.Node) {
+			return ((GroupedValidationStatusContentProvider.Node) element).desc;
+		}
 		if (element instanceof Map.Entry) {
 			Map.Entry entry = (Map.Entry) element;
 			Object key = entry.getKey();

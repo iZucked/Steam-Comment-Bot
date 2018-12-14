@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -25,7 +26,7 @@ public class NegativePriceConstraint extends AbstractModelMultiConstraint {
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-		if (!ScheduleModelValidationHelper.isMainScheduleModel(target)){
+		if (!ScheduleModelValidationHelper.isMainScheduleModel(target)) {
 			return Activator.PLUGIN_ID;
 		}
 		if (target instanceof SlotVisit) {
@@ -37,7 +38,7 @@ public class NegativePriceConstraint extends AbstractModelMultiConstraint {
 			if (allocation != null) {
 				obj = allocation.getSlot();
 				if (allocation.getPrice() < 0) {
-					message = String.format(Constants.GENERATED_SCHEDULE_LABEL + " Slot %s has a negative price of -$%s", ((Slot) obj).getName(), allocation.getPrice()*-1);
+					message = String.format(" Slot %s has a negative price of -$%s", ((Slot<?>) obj).getName(), allocation.getPrice() * -1);
 					feature = CargoPackage.Literals.SLOT__CARGO;
 				}
 			}
@@ -47,6 +48,8 @@ public class NegativePriceConstraint extends AbstractModelMultiConstraint {
 				if (obj != null) {
 					failure.addEObjectAndFeature(obj, feature);
 				}
+				failure.setTag(ValidationConstants.TAG_EVALUATED_SCHEDULE);
+
 				statuses.add(failure);
 			}
 

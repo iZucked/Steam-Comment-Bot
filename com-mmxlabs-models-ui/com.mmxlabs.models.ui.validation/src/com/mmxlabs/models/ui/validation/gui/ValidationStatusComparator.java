@@ -19,6 +19,20 @@ public class ValidationStatusComparator extends ViewerComparator {
 	@Override
 	public int compare(final Viewer viewer, final Object e1, final Object e2) {
 
+		if (e1 instanceof GroupedValidationStatusContentProvider.Node && e2 instanceof GroupedValidationStatusContentProvider.Node) {
+
+			final GroupedValidationStatusContentProvider.Node s1 = (GroupedValidationStatusContentProvider.Node) e1;
+			final GroupedValidationStatusContentProvider.Node s2 = (GroupedValidationStatusContentProvider.Node) e2;
+
+			int c = s1.group.getPriority() - s2.group.getPriority();
+			if (c == 0) {
+				c = s1.desc.compareTo(s2.desc);
+			}
+
+			if (c != 0) {
+				return c;
+			}
+		}
 		if (e1 instanceof IStatus && e2 instanceof IStatus) {
 
 			final IStatus s1 = (IStatus) e1;

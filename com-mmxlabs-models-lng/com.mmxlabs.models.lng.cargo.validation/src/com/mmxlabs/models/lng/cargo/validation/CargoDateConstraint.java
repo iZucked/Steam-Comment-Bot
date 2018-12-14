@@ -36,6 +36,7 @@ import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -78,6 +79,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 					(IConstraintStatus) ctx.createFailureStatus(" [Cargo|" + cargo.getLoadName() + "] Load is after discharge (note timezone)."), severity);
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
+			status.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+
 			failures.add(status);
 		}
 	}
@@ -157,6 +160,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'", "infinity", formatHours(availableTime));
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, severity);
 					dsd.addEObjectAndFeature(from, CargoPackage.eINSTANCE.getSlot_Port());
+
 					failures.add(dsd);
 				} else {
 					if (minTime > availableTime) {
@@ -167,11 +171,15 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 						if (diff < totalFlex) {
 							severity = IStatus.WARNING;
 						}
+						int finalSeverity = (cargo.isAllowRewiring()) ? IStatus.WARNING : severity;
+						String extraInfo = cargo.isAllowRewiring() ? "" : " - cargo is locked";
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'", formatHours(minTime - availableTime)),
-								(cargo.isAllowRewiring()) ? IStatus.WARNING : severity);
+								(IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'", formatHours(minTime - availableTime) + extraInfo),
+								finalSeverity	);
 						dsd.addEObjectAndFeature(from, CargoPackage.eINSTANCE.getSlot_WindowStart());
 						dsd.addEObjectAndFeature(to, CargoPackage.eINSTANCE.getSlot_WindowStart());
+						dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+
 						failures.add(dsd);
 					}
 
@@ -196,6 +204,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 							String.format("[Cargo|%s] Travel time is excessive (%d days); %d is a sensible maximum.", "'" + cargo.getLoadName() + "'", availableTime / 24L, SENSIBLE_TRAVEL_TIME)),
 					severity);
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
+			status.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+
 			failures.add(status);
 		}
 
@@ -271,6 +281,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					(IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getLoadName() + "] purchase is after sale"), severity);
 			status.addEObjectAndFeature(from, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			status.addEObjectAndFeature(to, CargoPackage.eINSTANCE.getSlot_WindowStart());
+			status.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+
 			failures.add(status);
 		} else {
 			ServiceHelper.withCheckedServiceConsumer(IShippingDaysRestrictionSpeedProvider.class, shippingDaysSpeedProvider -> {
@@ -289,6 +301,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
 					dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
+					dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+
 					failures.add(dsd);
 				}
 			});

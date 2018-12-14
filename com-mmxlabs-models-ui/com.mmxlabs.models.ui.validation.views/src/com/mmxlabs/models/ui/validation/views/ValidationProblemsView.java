@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.ui.validation.views;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -17,7 +16,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -44,7 +42,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.models.ui.validation.gui.FlatValidationStatusContentProvider;
+import com.mmxlabs.models.ui.validation.gui.GroupedValidationStatusContentProvider;
 import com.mmxlabs.models.ui.validation.gui.IValidationStatusGoto;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusColumnLabelProvider;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusComparator;
@@ -53,8 +51,8 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioValidationListener;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 
 public class ValidationProblemsView extends ViewPart {
@@ -102,7 +100,7 @@ public class ValidationProblemsView extends ViewPart {
 				map.clear();
 				editorPart = (IEditorPart) part;
 				final IEditorInput editorInput = editorPart.getEditorInput();
-				final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
+				final ScenarioInstance scenarioInstance = editorInput.getAdapter(ScenarioInstance.class);
 				ScenarioModelRecord modelRecord = null;
 				if (scenarioInstance != null) {
 					modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
@@ -135,7 +133,7 @@ public class ValidationProblemsView extends ViewPart {
 			if (part instanceof IEditorPart) {
 				editorPart = (IEditorPart) part;
 				final IEditorInput editorInput = editorPart.getEditorInput();
-				final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
+				final ScenarioInstance scenarioInstance = editorInput.getAdapter(ScenarioInstance.class);
 				map.clear();
 
 				if (scenarioInstance == null) {
@@ -183,7 +181,6 @@ public class ValidationProblemsView extends ViewPart {
 		@Override
 		public void validationChanged(@NonNull final ScenarioModelRecord modelRecord, @NonNull final IStatus status) {
 			// final ScenarioInstance instance = (ScenarioInstance)
-			// notification.getNotifier();
 			if (modelRecord.getValidationStatusSeverity() == IStatus.OK) {
 				statusMap.remove(modelRecord);
 			} else {
@@ -198,10 +195,9 @@ public class ValidationProblemsView extends ViewPart {
 		viewer = new TreeViewer(parent);
 
 		viewer.getTree().setLinesVisible(true);
-		// viewer.getTree().setHeaderVisible(true);
 		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
 
-		final FlatValidationStatusContentProvider contentProvider = new FlatValidationStatusContentProvider();
+		final GroupedValidationStatusContentProvider contentProvider = new GroupedValidationStatusContentProvider();
 		viewer.setContentProvider(contentProvider);
 		viewer.setLabelProvider(new ValidationStatusLabelProvider());
 		viewer.setComparator(new ValidationStatusComparator());
@@ -240,16 +236,11 @@ public class ValidationProblemsView extends ViewPart {
 						}
 					}
 					if (element instanceof ScenarioModelRecord) {
-						try {
-							final IStatus status = (IStatus) iStructuredSelection.getFirstElement();
-							final ScenarioModelRecord record = (ScenarioModelRecord) element;
-							openEditor(map.get(record), status);
-							openViews(map.get(record), status);
-						} catch (final PartInitException e) {
-							log.error(e.getMessage(), e);
-						}
+						final IStatus status = (IStatus) iStructuredSelection.getFirstElement();
+						final ScenarioModelRecord record = (ScenarioModelRecord) element;
+						openEditor(map.get(record), status);
+						openViews(map.get(record), status);
 					}
-
 				}
 			}
 		});
@@ -294,7 +285,7 @@ public class ValidationProblemsView extends ViewPart {
 		}
 	}
 
-	public void openEditor(final ScenarioInstance scenarioInstance, final IStatus status) throws PartInitException {
+	public void openEditor(final ScenarioInstance scenarioInstance, final IStatus status) {
 
 		final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
 
@@ -308,7 +299,7 @@ public class ValidationProblemsView extends ViewPart {
 
 			}
 			if (gotor == null) {
-				gotor = (IValidationStatusGoto) editorPart.getAdapter(IValidationStatusGoto.class);
+				gotor = editorPart.getAdapter(IValidationStatusGoto.class);
 			}
 
 			if (gotor != null) {
@@ -325,38 +316,32 @@ public class ValidationProblemsView extends ViewPart {
 
 				final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 				try {
-					dialog.run(false, false, new IRunnableWithProgress() {
-						@Override
-						public void run(final IProgressMonitor monitor) {
-							monitor.beginTask("Opening editor", IProgressMonitor.UNKNOWN);
-							try {
-								final IEditorPart editor = activePage.openEditor(editorInput, descriptor.getId());
+					dialog.run(false, false, monitor -> {
+						monitor.beginTask("Opening editor", IProgressMonitor.UNKNOWN);
+						try {
+							final IEditorPart editor = activePage.openEditor(editorInput, descriptor.getId());
 
-								IValidationStatusGoto gotor = null;
-								if (editor instanceof IValidationStatusGoto) {
-									gotor = (IValidationStatusGoto) editor;
-								}
-								if (gotor == null) {
-									gotor = (IValidationStatusGoto) editor.getAdapter(IValidationStatusGoto.class);
-								}
-
-								if (gotor != null) {
-									gotor.openStatus(status);
-								}
-								monitor.worked(1);
-							} catch (final PartInitException e) {
-								log.error(e.getMessage(), e);
-							} finally {
-								monitor.done();
+							IValidationStatusGoto gotor = null;
+							if (editor instanceof IValidationStatusGoto) {
+								gotor = (IValidationStatusGoto) editor;
 							}
+							if (gotor == null) {
+								gotor = editor.getAdapter(IValidationStatusGoto.class);
+							}
+
+							if (gotor != null) {
+								gotor.openStatus(status);
+							}
+							monitor.worked(1);
+						} catch (final PartInitException e) {
+							log.error(e.getMessage(), e);
+						} finally {
+							monitor.done();
 						}
 					});
-				} catch (final InvocationTargetException e) {
-					log.error(e.getMessage(), e);
-				} catch (final InterruptedException e) {
+				} catch (final Exception e) {
 					log.error(e.getMessage(), e);
 				}
-
 			}
 		}
 	}
@@ -377,7 +362,7 @@ public class ValidationProblemsView extends ViewPart {
 
 			}
 			if (gotor == null) {
-				gotor = (IValidationStatusGoto) view.getAdapter(IValidationStatusGoto.class);
+				gotor = view.getAdapter(IValidationStatusGoto.class);
 			}
 
 			if (gotor != null) {

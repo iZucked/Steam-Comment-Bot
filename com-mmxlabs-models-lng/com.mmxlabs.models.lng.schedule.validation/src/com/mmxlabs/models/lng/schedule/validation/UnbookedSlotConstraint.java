@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
@@ -99,7 +100,7 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 			// }
 			if (southboundExcessRelaxedBookings > canalBookings.getFlexibleBookingAmountSouthbound()) {
 				DetailConstraintStatusFactory f = DetailConstraintStatusFactory.makeStatus() //
-						.withPrefix("[Evaluated State] ") //
+						.withTag(ValidationConstants.TAG_EVALUATED_SCHEDULE) //
 						.withMessage(String.format("Panama canal: There are %d unbooked southbound voyages but only %d are permitted (%s over).", southboundExcessRelaxedBookings,
 								canalBookings.getFlexibleBookingAmountSouthbound(), southboundExcessRelaxedBookings - canalBookings.getFlexibleBookingAmountSouthbound())) //
 						.withObjectAndFeature(canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND) //
@@ -124,7 +125,7 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 						if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.STRICT || journey.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
 
 							DetailConstraintStatusFactory f = DetailConstraintStatusFactory.makeStatus() //
-									.withPrefix("[Evaluated State]") //
+									.withTag(ValidationConstants.TAG_EVALUATED_SCHEDULE) //
 									.withMessage("Panama canal voyage without a booking") //
 									.withObjectAndFeature(journey, SchedulePackage.Literals.JOURNEY__CANAL_BOOKING) //
 							;

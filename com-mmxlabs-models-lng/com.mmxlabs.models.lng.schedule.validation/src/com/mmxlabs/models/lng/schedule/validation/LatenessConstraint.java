@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
+import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -43,21 +44,21 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 					final SlotAllocation allocation = ((SlotVisit) target).getSlotAllocation();
 					if (allocation != null) {
 						obj = allocation.getSlot();
-						message = String.format(Constants.GENERATED_SCHEDULE_LABEL + " Vessel reaches %s late in schedule.", ((Slot) obj).getName());
+						message = String.format("Vessel reaches %s late in schedule.", ((Slot) obj).getName());
 						feature = CargoPackage.Literals.SLOT__WINDOW_START;
 					}
 				} else if (target instanceof VesselEventVisit) {
 					final VesselEvent ve = ((VesselEventVisit) target).getVesselEvent();
-					message = String.format(Constants.GENERATED_SCHEDULE_LABEL + " Vessel reaches %s late in schedule.", ve.getName());
+					message = String.format("Vessel reaches %s late in schedule.", ve.getName());
 					obj = ve;
 					feature = CargoPackage.Literals.VESSEL_EVENT__START_BY;
 				} else if (target instanceof EndEvent) {
 					final EndEvent event = (EndEvent) target;
 					obj = event.getSequence().getVesselAvailability();
 					feature = CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY;
-					message = Constants.GENERATED_SCHEDULE_LABEL + " Schedule has vessel travelling after it is no longer available.";
+					message = "Schedule has vessel travelling after it is no longer available.";
 				} else {
-					message = Constants.GENERATED_SCHEDULE_LABEL + " Late arrival in schedule.";
+					message = "Late arrival in schedule.";
 				}
 
 				if (message != null) {
@@ -65,6 +66,8 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 					if (obj != null) {
 						failure.addEObjectAndFeature(obj, feature);
 					}
+					failure.setTag(ValidationConstants.TAG_EVALUATED_SCHEDULE);
+
 					statuses.add(failure);
 				}
 

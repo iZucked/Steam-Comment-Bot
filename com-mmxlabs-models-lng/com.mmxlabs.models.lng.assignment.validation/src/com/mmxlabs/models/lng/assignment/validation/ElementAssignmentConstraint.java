@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -72,9 +73,11 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 
 							if (!charterInMarket.isNominal()) {
 								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
-										(IConstraintStatus) ctx.createFailureStatus("Cargo " + cargo.getLoadName() + " has nominal vessel assignment but the charter market does not permit nominal vessels."), IStatus.ERROR);
+										(IConstraintStatus) ctx
+												.createFailureStatus("Cargo " + cargo.getLoadName() + " has nominal vessel assignment but the charter market does not permit nominal vessels."),
+										IStatus.ERROR);
 								failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
-
+								failure.setTag(ValidationConstants.TAG_NOMINAL_VESSELS);
 								failures.add(failure);
 							} else {
 								final MMXRootObject rootObject = extraContext.getRootObject();
@@ -89,7 +92,7 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 												final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
 														(IConstraintStatus) ctx.createFailureStatus("Cargo " + cargo.getLoadName() + " has nominal vessel assignment in the prompt."), IStatus.WARNING);
 												failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
-
+												failure.setTag(ValidationConstants.TAG_NOMINAL_VESSELS);
 												failures.add(failure);
 											}
 										}

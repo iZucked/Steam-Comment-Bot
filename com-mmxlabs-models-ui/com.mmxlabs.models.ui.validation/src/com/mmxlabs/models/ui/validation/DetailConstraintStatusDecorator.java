@@ -33,10 +33,10 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 
 	private final IConstraintStatus status;
 	private final int severity;
-	private final Map<EObject, Collection<EStructuralFeature>> objectMap = new HashMap<EObject, Collection<EStructuralFeature>>();
+	private final Map<EObject, Collection<EStructuralFeature>> objectMap = new HashMap<>();
 	private @Nullable String name;
 	private @Nullable String baseMessage;
-	private @Nullable Object tag;
+	private @Nullable ValidationGroup tag;
 
 	public DetailConstraintStatusDecorator(final IConstraintStatus status) {
 		this(status, status.getSeverity());
@@ -150,7 +150,7 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 		return baseMessage;
 	}
 
-	public void setTag(@Nullable Object tag) {
+	public void setTag(@Nullable ValidationGroup tag) {
 		this.tag = tag;
 	}
 
@@ -159,7 +159,7 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 	 * 
 	 * @return
 	 */
-	public @Nullable Object getTag() {
+	public @Nullable ValidationGroup getTag() {
 		return tag;
 	}
 }

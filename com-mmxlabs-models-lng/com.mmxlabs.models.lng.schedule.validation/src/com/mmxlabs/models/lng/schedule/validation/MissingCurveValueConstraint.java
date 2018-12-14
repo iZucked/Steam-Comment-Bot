@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -33,7 +34,7 @@ public class MissingCurveValueConstraint extends AbstractModelMultiConstraint {
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-		if (!ScheduleModelValidationHelper.isMainScheduleModel(target)){
+		if (!ScheduleModelValidationHelper.isMainScheduleModel(target)) {
 			return Activator.PLUGIN_ID;
 		}
 		if (target instanceof Sequence) {
@@ -60,10 +61,12 @@ public class MissingCurveValueConstraint extends AbstractModelMultiConstraint {
 						final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 						if (date == null || date.isAfter(startDate)) {
 							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-									(IConstraintStatus) ctx.createFailureStatus(String.format("[Evaluated schedule] Charter |'%s': There is no charter cost pricing data before %s %04d for curve %s",
-											vesselName, date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())));
+									(IConstraintStatus) ctx.createFailureStatus(String.format("Charter |'%s': There is no charter cost pricing data before %s %04d for curve %s", vesselName,
+											date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())));
 
 							dcsd.addEObjectAndFeature(vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__TIME_CHARTER_RATE);
+							dcsd.setTag(ValidationConstants.TAG_EVALUATED_SCHEDULE);
+
 							statuses.add(dcsd);
 						}
 					}
@@ -77,11 +80,13 @@ public class MissingCurveValueConstraint extends AbstractModelMultiConstraint {
 						@Nullable
 						final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 						if (date == null || date.isAfter(startDate)) {
-							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
-									.createFailureStatus(String.format("[Evaluated schedule][Charter-in Market|%s] There is no charter cost pricing data before %s %04d for curve %s",
+							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus(String.format("[Charter-in Market|%s] There is no charter cost pricing data before %s %04d for curve %s",
 											charterInMarket.getName(), date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())));
 
 							dcsd.addEObjectAndFeature(charterInMarket, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__CHARTER_IN_RATE);
+							dcsd.setTag(ValidationConstants.TAG_EVALUATED_SCHEDULE);
+
 							statuses.add(dcsd);
 						}
 					}

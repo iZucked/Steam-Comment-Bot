@@ -33,7 +33,7 @@ public class DetailConstraintStatusFactory {
 	private @NonNull String message = "";
 	private @Nullable String name;
 	private @Nullable String prefix;
-	private @Nullable Object tag;
+	private @Nullable ValidationGroup tag;
 
 	private DetailConstraintStatusFactory() {
 
@@ -161,7 +161,7 @@ public class DetailConstraintStatusFactory {
 		return defaultName;
 	}
 
-	public DetailConstraintStatusFactory withTag(final Object tag) {
+	public DetailConstraintStatusFactory withTag(final ValidationGroup tag) {
 		this.tag = tag;
 
 		return this;
