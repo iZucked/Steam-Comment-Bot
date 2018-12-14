@@ -13,8 +13,8 @@ public final class ValidationConstants {
 
 	}
 
-	public static final ValidationGroup TAG_TRAVEL_TIME = new ValidationGroup("Travel time", 100);
-	public static final ValidationGroup TAG_VOLUME = new ValidationGroup("Volume", 200);
-	public static final ValidationGroup TAG_NOMINAL_VESSELS = new ValidationGroup("Nominal cargoes", 300);
-	public static final ValidationGroup TAG_EVALUATED_SCHEDULE = new ValidationGroup("Last evaluated schedule", Integer.MAX_VALUE);
+	public static final ValidationGroup TAG_TRAVEL_TIME = new ValidationGroup("Travel time", (short) 100);
+	public static final ValidationGroup TAG_VOLUME = new ValidationGroup("Volume", (short) 200);
+	public static final ValidationGroup TAG_NOMINAL_VESSELS = new ValidationGroup("Nominal cargoes", (short) 300);
+	public static final ValidationGroup TAG_EVALUATED_SCHEDULE = new ValidationGroup("Last evaluated schedule", Short.MAX_VALUE, true);
 }

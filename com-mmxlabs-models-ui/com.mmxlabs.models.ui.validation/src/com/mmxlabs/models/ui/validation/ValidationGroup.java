@@ -6,10 +6,16 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 public final class ValidationGroup {
 	private final String description;
 	private final int priority;
+	private final boolean ignoreError;
 
-	public ValidationGroup(final String description, final int priority) {
+	public ValidationGroup(final String description, final short priority) {
+		this(description, priority, false);
+	}
+
+	public ValidationGroup(final String description, final short priority, boolean ignoreError) {
 		this.description = description;
 		this.priority = priority;
+		this.ignoreError = ignoreError;
 	}
 
 	public String getDescription() {
@@ -23,5 +29,9 @@ public final class ValidationGroup {
 	@Override
 	public String toString() {
 		return getDescription();
+	}
+
+	public boolean isIgnoreError() {
+		return ignoreError;
 	}
 }

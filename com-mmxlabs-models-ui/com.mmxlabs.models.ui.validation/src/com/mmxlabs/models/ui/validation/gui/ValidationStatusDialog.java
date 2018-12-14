@@ -74,12 +74,13 @@ public class ValidationStatusDialog extends Dialog {
 
 		viewer.getTree().setLinesVisible(true);
 
-		viewer.setContentProvider(new FlatValidationStatusContentProvider());
+		viewer.setContentProvider(new GroupedValidationStatusContentProvider());
 		viewer.setLabelProvider(new ValidationStatusLabelProvider());
 		viewer.setComparator(new ValidationStatusComparator());
 
 		viewer.setInput(status);
-
+		viewer.expandAll();
+		
 		// Sometimes the message is too long for the table, so show full text in the text field at the bottom of the dialog
 		final Text text = new Text(composite, SWT.BORDER | SWT.WRAP);
 		{
@@ -87,19 +88,15 @@ public class ValidationStatusDialog extends Dialog {
 			gdText.heightHint = 50;
 			text.setLayoutData(gdText);
 		}
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		viewer.addSelectionChangedListener(event -> {
 
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-				if (event.getSelection() instanceof IStructuredSelection) {
-					final IStructuredSelection iStructuredSelection = (IStructuredSelection) event.getSelection();
-					final Object o = iStructuredSelection.getFirstElement();
-					if (o instanceof IStatus) {
-						final IStatus status = (IStatus) o;
-						text.setText(status.getMessage());
-					}
+			if (event.getSelection() instanceof IStructuredSelection) {
+				final IStructuredSelection iStructuredSelection = (IStructuredSelection) event.getSelection();
+				final Object o = iStructuredSelection.getFirstElement();
+				if (o instanceof IStatus) {
+					final IStatus ss = (IStatus) o;
+					text.setText(ss.getMessage());
 				}
-
 			}
 		});
 

@@ -54,6 +54,30 @@ public class GroupedValidationStatusContentProvider implements ITreeContentProvi
 				}
 			}
 			return values.toArray();
+
+		} else if (inputElement instanceof IStatus) {
+			final IStatus status = (IStatus) inputElement;
+			if (status.isMultiStatus()) {
+				final List<IStatus> ret = expand(status);
+
+				final Map<ValidationGroup, List<IStatus>> l = ret.stream() //
+						.collect(Collectors.groupingBy(GroupedValidationStatusContentProvider::getGroup));
+				final List<Node> nodes = new LinkedList<>();
+				for (final Map.Entry<ValidationGroup, List<IStatus>> e : l.entrySet()) {
+					final Node node = new Node();
+					node.group = e.getKey();
+					node.status = e.getValue();
+					if (node.group == defaultGroup) {
+						node.desc = "General";
+					} else {
+						node.desc = node.group.toString();
+					}
+					nodes.add(node);
+				}
+				return nodes.toArray();
+			} else {
+				return new Object[] { status };
+			}
 			// } else if (inputElement instanceof IStatus) {
 			// final IStatus status = (IStatus) inputElement;
 			//
@@ -181,19 +205,24 @@ public class GroupedValidationStatusContentProvider implements ITreeContentProvi
 
 	};
 
-	static ValidationGroup defaultGroup = new ValidationGroup("General", 0);
+	private static ValidationGroup urgentGroup = new ValidationGroup("Urgent", Short.MIN_VALUE);
+	private static ValidationGroup defaultGroup = new ValidationGroup("General", (short) 0);
 
 	private static ValidationGroup getGroup(final IStatus status) {
 
+		final boolean isUrgent = status.getSeverity() >= IStatus.ERROR;
 		if (status instanceof IDetailConstraintStatus) {
 			final IDetailConstraintStatus dcs = (IDetailConstraintStatus) status;
 			final ValidationGroup tag = dcs.getTag();
 			if (tag != null) {
+				if (isUrgent && !tag.isIgnoreError()) {
+					return urgentGroup;
+				}
 				return tag;
 			}
 
 		}
 
-		return defaultGroup;
+		return isUrgent ? urgentGroup : defaultGroup;
 	}
 }
