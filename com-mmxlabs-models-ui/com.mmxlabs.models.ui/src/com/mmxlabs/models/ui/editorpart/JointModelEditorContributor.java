@@ -105,12 +105,24 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 
 	@Override
 	public void contributeToToolBar(final IToolBarManager toolBarManager) {
+		// Editor actions go here
+		toolBarManager.add(new GroupMarker("autoevaluategroup"));
+		toolBarManager.add(new GroupMarker("forkgroup"));
+		toolBarManager.add(new GroupMarker("evaluategroup2"));
+		toolBarManager.add(new GroupMarker("evaluategroup3"));
+		toolBarManager.add(new GroupMarker("optimisationgroup"));
+		toolBarManager.add(new GroupMarker("additions-end"));
 		super.contributeToToolBar(toolBarManager);
 	}
 	
 	@Override
 	public void contributeToCoolBar(ICoolBarManager coolBarManager) {
 //		coolBarManager.add(new GroupMarker("additions"));
+		coolBarManager.add(new GroupMarker("autoevaluategroup"));
+		coolBarManager.add(new GroupMarker("forkgroup"));
+		coolBarManager.add(new GroupMarker("evaluategroup2"));
+		coolBarManager.add(new GroupMarker("evaluategroup3"));
+		coolBarManager.add(new GroupMarker("optimisationgroup"));
 		coolBarManager.add(new GroupMarker("additions-end"));
 		super.contributeToCoolBar(coolBarManager);
 	}

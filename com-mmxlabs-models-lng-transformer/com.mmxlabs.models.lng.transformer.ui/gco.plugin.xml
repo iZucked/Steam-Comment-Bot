@@ -21,7 +21,7 @@
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.togglecharterout"
                   label="Toggle charter outs"
                   style="toggle"
-                  toolbarPath="additions"
+                  toolbarPath="evaluategroup2"
                   tooltip="Toggle charter out generation">
             </action>
          </editorContribution>

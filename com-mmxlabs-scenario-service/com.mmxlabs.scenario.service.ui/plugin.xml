@@ -715,7 +715,7 @@
                id="com.mmxlabs.scenario.service.ui.togglePin"
                label="Toggle pin for this scenario"
                style="toggle"
-               toolbarPath="additions"
+               toolbarPath="forkgroup"
                tooltip="Use this scenario as the pin for comparison">
          </action>
       </editorContribution>

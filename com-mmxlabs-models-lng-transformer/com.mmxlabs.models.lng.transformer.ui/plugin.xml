@@ -301,7 +301,7 @@
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.stop"
                   label="Stop Optimisation"
                   style="push"
-                  toolbarPath="additions"
+                  toolbarPath="optimisationgroup"
                   tooltip="Terminate optimisation">
             </action>
             <action
@@ -311,7 +311,7 @@
                   icon="icons/elcl16/resume_co.gif"
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.play"
                   label="Start Optimisation"
-                  toolbarPath="additions"
+                  toolbarPath="optimisationgroup"
                   tooltip="Start an optimisation">
             </action>
             <action
@@ -321,7 +321,7 @@
                   icon="icons/evaluate_schedule2.png"
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.action3"
                   label="Evaluate"
-                  toolbarPath="additions"
+                  toolbarPath="evaluategroup3"
                   tooltip="Evaluate scenario">
             </action>
             <action
@@ -330,7 +330,7 @@
                   id="com.mmxlabs.scenario.service.ui.autoeval"
                   label="Auto-evaluate on/off"
                   style="toggle"
-                  toolbarPath="additions">
+                  toolbarPath="autoevaluategroup">
             </action>
             <action
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ForkScenarioEditorActionDelegate"
@@ -339,7 +339,7 @@
                   id="com.mmxlabs.scenario.service.ui.fork"
                   label="Fork"
                   style="push"
-                  toolbarPath="additions"
+                  toolbarPath="forkgroup"
                   tooltip="Fork scenario and continue editing">
             </action>
          </editorContribution>
