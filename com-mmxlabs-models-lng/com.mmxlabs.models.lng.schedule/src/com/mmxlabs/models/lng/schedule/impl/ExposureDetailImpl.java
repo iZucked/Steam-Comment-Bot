@@ -575,7 +575,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (indexName: ");
 		result.append(indexName);
 		result.append(", date: ");

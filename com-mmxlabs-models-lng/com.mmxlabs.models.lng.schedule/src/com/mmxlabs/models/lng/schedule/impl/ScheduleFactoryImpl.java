@@ -142,6 +142,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.BALLAST_BONUS_FEE_DETAILS: return createBallastBonusFeeDetails();
 			case SchedulePackage.LUMP_SUM_CONTRACT_DETAILS: return createLumpSumContractDetails();
 			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS: return createNotionalJourneyContractDetails();
+			case SchedulePackage.CHARTER_AVAILABLE_TO_EVENT: return createCharterAvailableToEvent();
+			case SchedulePackage.CHARTER_AVAILABLE_FROM_EVENT: return createCharterAvailableFromEvent();
 			case SchedulePackage.CANAL_BOOKING_EVENT: return createCanalBookingEvent();
 			case SchedulePackage.INVENTORY_EVENTS: return createInventoryEvents();
 			case SchedulePackage.INVENTORY_CHANGE_EVENT: return createInventoryChangeEvent();
@@ -566,6 +568,26 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public NotionalJourneyContractDetails createNotionalJourneyContractDetails() {
 		NotionalJourneyContractDetailsImpl notionalJourneyContractDetails = new NotionalJourneyContractDetailsImpl();
 		return notionalJourneyContractDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterAvailableToEvent createCharterAvailableToEvent() {
+		CharterAvailableToEventImpl charterAvailableToEvent = new CharterAvailableToEventImpl();
+		return charterAvailableToEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterAvailableFromEvent createCharterAvailableFromEvent() {
+		CharterAvailableFromEventImpl charterAvailableFromEvent = new CharterAvailableFromEventImpl();
+		return charterAvailableFromEvent;
 	}
 
 	/**

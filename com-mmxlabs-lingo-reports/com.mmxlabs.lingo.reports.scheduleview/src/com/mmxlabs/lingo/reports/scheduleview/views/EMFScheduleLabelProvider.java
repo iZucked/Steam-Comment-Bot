@@ -8,6 +8,7 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstant
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME;
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Canals;
 
+import java.sql.SQLClientInfoException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -50,6 +51,8 @@ import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.PortModelLabeller;
 import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
+import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -209,10 +212,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			}
 			text = seqText;
 		} else if (element instanceof InventoryEvents) {
-			InventoryEvents inventoryEvents = (InventoryEvents) element;
+			final InventoryEvents inventoryEvents = (InventoryEvents) element;
 			return inventoryEvents.getFacility().getName();
 		} else if (element instanceof InventoryChangeEvent) {
-			InventoryChangeEvent event = (InventoryChangeEvent) element;
+			final InventoryChangeEvent event = (InventoryChangeEvent) element;
 			// return event.to String();
 		}
 		return text;
@@ -297,6 +300,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(date);
 	}
 
+	private String dateOnlyToString(final ZonedDateTime date) {
+		return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(date);
+	}
+
 	private String dateToString(final LocalDate date, final String defaultString) {
 		if (date == null) {
 			return defaultString;
@@ -313,6 +320,16 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	@Override
 	public String getToolTipText(final Object element) {
+		if (element instanceof CharterAvailableFromEvent) {
+			final CharterAvailableFromEvent evt = (CharterAvailableFromEvent) element;
+			final String start = dateToString(evt.getStart());
+			return "";//String.format("%s available from %s", evt.getLinkedSequence().getName(), start);
+		}
+		if (element instanceof CharterAvailableToEvent) {
+			final CharterAvailableToEvent evt = (CharterAvailableToEvent) element;
+			final String start = dateToString(evt.getStart());
+			return "";//String.format("%s available until %s", evt.getLinkedSequence().getName(), start);
+		}
 
 		if (element instanceof Sequence) {
 			return getText(element);
@@ -348,7 +365,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 						tt.append(" \n");
 					}
 					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
-					Sequence sequence = slotVisit.getSequence();
+					final Sequence sequence = slotVisit.getSequence();
 					if (slotAllocation != null && sequence != null) {
 						final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 						if (cargoAllocation != null && cargoAllocation.getSlotAllocations().size() == 2) {
@@ -501,7 +518,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			tt.append(eventText);
 			return tt.toString();
 		} else if (element instanceof InventoryChangeEvent) {
-			InventoryChangeEvent evt = (InventoryChangeEvent) element;
+			final InventoryChangeEvent evt = (InventoryChangeEvent) element;
 			final StringBuilder tt = new StringBuilder();
 			tt.append("Date: " + dateToString(evt.getDate(), "") + "\n");
 
@@ -519,6 +536,17 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	@Override
 	public String getToolTipTitle(final Object element) {
 
+		if (element instanceof CharterAvailableFromEvent) {
+			final CharterAvailableFromEvent evt = (CharterAvailableFromEvent) element;
+			final String start = dateOnlyToString(evt.getStart());
+			return String.format("%s available from %s", evt.getLinkedSequence().getName(), start);
+		}
+		if (element instanceof CharterAvailableToEvent) {
+			final CharterAvailableToEvent evt = (CharterAvailableToEvent) element;
+			final String start = dateOnlyToString(evt.getStart());
+			return String.format("%s available until %s", evt.getLinkedSequence().getName(), start);
+		}
+		
 		String port = null;
 		if (element instanceof Event) {
 			final Port portObj = ((Event) element).getPort();
@@ -563,10 +591,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			return (port == null) ? "" : ("At " + port + " ") + (sv.getSlotAllocation().getSlot() instanceof LoadSlot ? "(Load)" : "(Discharge)"); // + displayTypeName;
 
 		} else if (element instanceof InventoryChangeEvent) {
-			InventoryChangeEvent evt = (InventoryChangeEvent) element;
+			final InventoryChangeEvent evt = (InventoryChangeEvent) element;
 			if (evt.eContainer() instanceof InventoryEvents) {
-				InventoryEvents inventoryEvents = (InventoryEvents) evt.eContainer();
-				Inventory facility = inventoryEvents.getFacility();
+				final InventoryEvents inventoryEvents = (InventoryEvents) evt.eContainer();
+				final Inventory facility = inventoryEvents.getFacility();
 				if (facility != null) {
 					return "Inventory at " + facility.getName();
 				}
@@ -598,22 +626,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		}
 
 		if (c == null && currentScheme != null) {
-
 			c = currentScheme.getBackground(element);
-			// if (viewer.getSelection().isEmpty() == false) {
-			// final ISelection selection = viewer.getSelection();
-			// if (selection instanceof IStructuredSelection) {
-			// if (((IStructuredSelection) selection).toList().contains(
-			// element)) {
-			// // darken selection
-			// final float scaf = 0.8f;
-			// return ColorCache.getColor(
-			// (int) (color.getRed() * scaf),
-			// (int) (color.getGreen() * scaf),
-			// (int) (color.getBlue() * scaf));
-			// }
-			// }
-			// }
 		}
 		return c;
 	}

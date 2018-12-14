@@ -323,7 +323,7 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (fuel: ");
 		result.append(fuel);
 		result.append(", cost: ");

@@ -331,7 +331,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (profitAndLoss: ");
 		result.append(profitAndLoss);
 		result.append(", profitAndLossPreTax: ");

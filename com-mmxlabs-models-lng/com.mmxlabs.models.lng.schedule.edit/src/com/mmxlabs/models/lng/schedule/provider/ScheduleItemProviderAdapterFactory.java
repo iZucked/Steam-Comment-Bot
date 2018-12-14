@@ -893,6 +893,52 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CharterAvailableToEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterAvailableToEventItemProvider charterAvailableToEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.CharterAvailableToEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterAvailableToEventAdapter() {
+		if (charterAvailableToEventItemProvider == null) {
+			charterAvailableToEventItemProvider = new CharterAvailableToEventItemProvider(this);
+		}
+
+		return charterAvailableToEventItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterAvailableFromEventItemProvider charterAvailableFromEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterAvailableFromEventAdapter() {
+		if (charterAvailableFromEventItemProvider == null) {
+			charterAvailableFromEventItemProvider = new CharterAvailableFromEventItemProvider(this);
+		}
+
+		return charterAvailableFromEventItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CanalBookingEvent} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1168,6 +1214,8 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (ballastBonusFeeDetailsItemProvider != null) ballastBonusFeeDetailsItemProvider.dispose();
 		if (lumpSumContractDetailsItemProvider != null) lumpSumContractDetailsItemProvider.dispose();
 		if (notionalJourneyContractDetailsItemProvider != null) notionalJourneyContractDetailsItemProvider.dispose();
+		if (charterAvailableToEventItemProvider != null) charterAvailableToEventItemProvider.dispose();
+		if (charterAvailableFromEventItemProvider != null) charterAvailableFromEventItemProvider.dispose();
 		if (canalBookingEventItemProvider != null) canalBookingEventItemProvider.dispose();
 		if (inventoryEventsItemProvider != null) inventoryEventsItemProvider.dispose();
 		if (inventoryChangeEventItemProvider != null) inventoryChangeEventItemProvider.dispose();

@@ -52,6 +52,8 @@ public final class ColourPalette {
 	private static final RGB VesselEvent_Green = new RGB(0, 225, 150);
 	private static final RGB VesselEvent_Green2 = new RGB(80, 180, 50);
 	private static final RGB VesselEvent_Green3 = new RGB(50, 200, 80);
+
+	private static final RGB Vessel_Charter_Range = new RGB(0, 0, 0);
 	//
 
 	public static final RGB Black = new RGB(0, 0, 0);
@@ -130,6 +132,9 @@ public final class ColourPalette {
 		setItemColour(ColourPaletteItems.Voyage_Tight_Warning, ColourElements.Background, Warning_Yellow);
 
 		setItemColour(ColourPaletteItems.Inventory_Breach, ColourElements.Background, Red);
+		
+		setItemColour(ColourPaletteItems.Charter_Range, ColourElements.Background, Vessel_Charter_Range);
+		setItemColour(ColourPaletteItems.Charter_Range, ColourElements.Foreground, Vessel_Charter_Range);
 	}
 
 	public enum ColourElements {
@@ -154,7 +159,9 @@ public final class ColourPalette {
 		
 		Voyage_Tight_Warning, 
 		
-		Inventory_Breach
+		Inventory_Breach,
+		
+		Charter_Range
 	}
 	// @formatter:on	
 	private final Map<RGB, Color> colourMap = new HashMap<>();

@@ -415,6 +415,24 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case SchedulePackage.CHARTER_AVAILABLE_TO_EVENT: {
+				CharterAvailableToEvent charterAvailableToEvent = (CharterAvailableToEvent)theEObject;
+				T result = caseCharterAvailableToEvent(charterAvailableToEvent);
+				if (result == null) result = caseEvent(charterAvailableToEvent);
+				if (result == null) result = caseMMXObject(charterAvailableToEvent);
+				if (result == null) result = caseITimezoneProvider(charterAvailableToEvent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.CHARTER_AVAILABLE_FROM_EVENT: {
+				CharterAvailableFromEvent charterAvailableFromEvent = (CharterAvailableFromEvent)theEObject;
+				T result = caseCharterAvailableFromEvent(charterAvailableFromEvent);
+				if (result == null) result = caseEvent(charterAvailableFromEvent);
+				if (result == null) result = caseMMXObject(charterAvailableFromEvent);
+				if (result == null) result = caseITimezoneProvider(charterAvailableFromEvent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case SchedulePackage.CANAL_BOOKING_EVENT: {
 				CanalBookingEvent canalBookingEvent = (CanalBookingEvent)theEObject;
 				T result = caseCanalBookingEvent(canalBookingEvent);
@@ -1004,6 +1022,36 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNotionalJourneyContractDetails(NotionalJourneyContractDetails object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Charter Available To Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Charter Available To Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCharterAvailableToEvent(CharterAvailableToEvent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Charter Available From Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Charter Available From Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCharterAvailableFromEvent(CharterAvailableFromEvent object) {
 		return null;
 	}
 

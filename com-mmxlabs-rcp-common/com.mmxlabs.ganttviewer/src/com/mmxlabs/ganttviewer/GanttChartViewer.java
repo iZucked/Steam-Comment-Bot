@@ -54,8 +54,8 @@ public class GanttChartViewer extends StructuredViewer {
 
 	protected final GanttChart ganttChart;
 
-	protected final Map<Object, GanttEvent> internalMap = new HashMap<Object, GanttEvent>();
-	protected final Map<GanttEvent, Object> internalReverseMap = new HashMap<GanttEvent, Object>();
+	protected final Map<Object, GanttEvent> internalMap = new HashMap<>();
+	protected final Map<GanttEvent, Object> internalReverseMap = new HashMap<>();
 
 	private final IGanttEventListener ganttEventListener;
 
@@ -204,7 +204,7 @@ public class GanttChartViewer extends StructuredViewer {
 		final ArrayList<GanttEvent> selectedEvents;
 		if (l != null) {
 			// Use the internalMap to obtain the list of events we are selecting
-			selectedEvents = new ArrayList<GanttEvent>(l.size());
+			selectedEvents = new ArrayList<>(l.size());
 			for (final Object obj : l) {
 				if (obj != null) {
 					if (internalMap.containsKey(obj)) {
@@ -212,7 +212,6 @@ public class GanttChartViewer extends StructuredViewer {
 					} else if (getComparer() != null) {
 						for (final Map.Entry<Object, GanttEvent> e : internalMap.entrySet()) {
 							if (getComparer().equals(e.getKey(), obj)) {
-
 								selectedEvents.add(internalMap.get(e.getKey()));
 							}
 						}
@@ -221,10 +220,10 @@ public class GanttChartViewer extends StructuredViewer {
 			}
 		} else {
 			// Clear selection
-			selectedEvents = new ArrayList<GanttEvent>(0);
+			selectedEvents = new ArrayList<>(0);
 		}
 		ganttChart.getGanttComposite().setSelection(selectedEvents);
-		if (selectedEvents.isEmpty() == false) {
+		if (!selectedEvents.isEmpty()) {
 			final GanttEvent sel = selectedEvents.get(0);
 			if (!ganttChart.getGanttComposite().isEventVisible(sel, ganttChart.getGanttComposite().getBounds())) {
 				ganttChart.getGanttComposite().showEvent(sel, SWT.CENTER);
@@ -235,14 +234,10 @@ public class GanttChartViewer extends StructuredViewer {
 	@Override
 	protected synchronized void inputChanged(final Object input, final Object oldInput) {
 
-		// TODO: Extract into separate method
-
 		// Clear existing data
 		ganttChart.getGanttComposite().clearChart();
 		internalMap.clear();
 		internalReverseMap.clear();
-
-		// if (oldInput != null) {
 		//
 		// Process content and label providers to get some content
 		final IContentProvider contentProvider = getContentProvider();
@@ -266,7 +261,7 @@ public class GanttChartViewer extends StructuredViewer {
 			// Each resource to map to a GanntSection
 			try {
 
-				Map<Object, GanttEvent> eventMap = new HashMap<Object, GanttEvent>();
+				final Map<Object, GanttEvent> eventMap = new HashMap<>();
 
 				for (final Object r : resources) {
 					final String rName = getLabelProviderText(labelProvider, r);
@@ -275,7 +270,7 @@ public class GanttChartViewer extends StructuredViewer {
 					section.setImage(img);
 					section.setData(r);
 					section.setVisible(isVisibleByDefault(contentProvider, r));
-					final Map<String, GanttGroup> ganttGroups = new TreeMap<String, GanttGroup>();
+					final Map<String, GanttGroup> ganttGroups = new TreeMap<>();
 
 					if (treeContentProvider.hasChildren(r)) {
 						final GanttGroup defaultGroup = new GanttGroup(ganttChart);
@@ -285,9 +280,7 @@ public class GanttChartViewer extends StructuredViewer {
 						for (final Object c : children) {
 
 							final String cName = getLabelProviderText(labelProvider, c);
-
 							final Image image = getLabelProviderImage(labelProvider, c);
-
 							final String ganttGroup = getGanttGroup(treeContentProvider, c);
 
 							// Get date/time information from content provider
@@ -375,10 +368,10 @@ public class GanttChartViewer extends StructuredViewer {
 					layer++;
 				}
 				if (contentProvider instanceof IGanttChartContentProvider) {
-					IGanttChartContentProvider cp = (IGanttChartContentProvider) contentProvider;
+					final IGanttChartContentProvider cp = (IGanttChartContentProvider) contentProvider;
 
-					for (Object c : eventMap.keySet()) {
-						Object elementDependency = cp.getElementDependency(c);
+					for (final Object c : eventMap.keySet()) {
+						final Object elementDependency = cp.getElementDependency(c);
 						if (elementDependency != null) {
 							ganttChart.addDependency(eventMap.get(c), eventMap.get(elementDependency));
 						}
@@ -393,7 +386,7 @@ public class GanttChartViewer extends StructuredViewer {
 		}
 	}
 
-	protected String getGanttGroup(IContentProvider provider, Object c) {
+	protected String getGanttGroup(final IContentProvider provider, final Object c) {
 		if (provider instanceof IGanttChartContentProvider) {
 			return ((IGanttChartContentProvider) provider).getGroupIdentifier(c);
 		}
@@ -440,10 +433,7 @@ public class GanttChartViewer extends StructuredViewer {
 				return null;
 			}
 
-			final AdvancedTooltip toolTip = new AdvancedTooltip(title, text, image);
-
-			return toolTip;
-
+			return new AdvancedTooltip(title, text, image);
 		}
 
 		return null;

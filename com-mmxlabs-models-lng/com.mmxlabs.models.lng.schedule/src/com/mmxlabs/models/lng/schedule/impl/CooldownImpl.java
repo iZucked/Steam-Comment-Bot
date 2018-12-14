@@ -339,7 +339,7 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (volume: ");
 		result.append(volume);
 		result.append(", cost: ");

@@ -63,7 +63,6 @@ import org.eclipse.nebula.widgets.ganttchart.GanttGroup;
 import org.eclipse.nebula.widgets.ganttchart.GanttSection;
 import org.eclipse.nebula.widgets.ganttchart.IColorManager;
 import org.eclipse.nebula.widgets.ganttchart.ILegendItem;
-import org.eclipse.nebula.widgets.ganttchart.ILegendProvider;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.nebula.widgets.ganttchart.LegendItemImpl;
 import org.eclipse.swt.SWT;
@@ -110,14 +109,14 @@ import com.mmxlabs.lingo.reports.services.ScenarioChangeSetService;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
+import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -142,8 +141,6 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 	private static final String SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION = "SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION";
 
-	// public static final String = "";
-
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -155,8 +152,6 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 	private Action colourSchemeAction;
 
-	// private ISelectionListener selectionListener;
-
 	private PackAction packAction;
 
 	private SaveFullImageAction saveFullImageAction;
@@ -166,12 +161,9 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	private ScenarioViewerComparator viewerComparator;
 
 	private IMemento memento;
-	private IMemento highlightMemento;
 
 	@Inject
 	private Iterable<ISchedulerViewColourSchemeExtension> colourSchemeExtensions;
-
-	private final List<IScheduleViewColourScheme> colourSchemes = new ArrayList<>();
 
 	private HighlightAction highlightAction;
 
@@ -179,9 +171,9 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 	private int numberOfSchedules;
 
-	private final Map<String, List<EObject>> allObjectsByKey = new LinkedHashMap<String, List<EObject>>();
+	private final Map<String, List<EObject>> allObjectsByKey = new LinkedHashMap<>();
 
-	private final Set<EObject> pinnedObjects = new LinkedHashSet<EObject>();
+	private final Set<EObject> pinnedObjects = new LinkedHashSet<>();
 
 	private IEclipseContext e4Context;
 	private ScenarioComparisonService scenarioComparisonService;
@@ -223,14 +215,6 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		}
 		this.memento = memento;
 
-		// check that it's the right memento - and non-null?...
-
-		// set defaults from preference store for missing settings...
-		// for (String key : memento.getAttributeKeys()) { // need list from Constants and then the right getString/Boolean call below...
-		// if(memento.getString(key) == null){
-		// memento.putString(key, Activator.getDefault().getPreferenceStore().getString(key));
-		// }
-		// }
 		if (memento != null) {
 			if (memento.getString(SCHEDULER_VIEW_COLOUR_SCHEME) == null) {
 				memento.putString(SCHEDULER_VIEW_COLOUR_SCHEME, Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_COLOUR_SCHEME));
@@ -241,7 +225,6 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			if (memento.getChild(Highlight_) == null) {
 				memento.createChild(Highlight_);
 			}
-			highlightMemento = memento.getChild(Highlight_);
 		}
 		super.init(site, memento);
 	}
@@ -386,7 +369,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 					selectedEvents = new ArrayList<>(0);
 				}
 				if (scenarioComparisonService != null && scenarioComparisonService.getDiffOptions().isFilterSelectedSequences()) {
-					final Iterator<GanttSection> itr = new ArrayList<GanttSection>(ganttChart.getGanttComposite().getGanttSections()).iterator();// .iterator();
+					final Iterator<GanttSection> itr = new ArrayList<>(ganttChart.getGanttComposite().getGanttSections()).iterator();
 					while (itr.hasNext()) {
 						final GanttSection ganttSection = itr.next();
 						final Set<GanttEvent> events = new HashSet<>(ganttSection.getEvents());
@@ -436,7 +419,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 					}
 				}
 				ganttChart.getGanttComposite().setSelection(selectedEvents);
-				if (selectedEvents.isEmpty() == false) {
+				if (!selectedEvents.isEmpty()) {
 					final GanttEvent sel = selectedEvents.get(0);
 					if (!ganttChart.getGanttComposite().isEventVisible(sel, ganttChart.getGanttComposite().getBounds())) {
 						ganttChart.getGanttComposite().showEvent(sel, SWT.CENTER);
@@ -466,6 +449,16 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 				final Object[] result = super.getElements(inputElement);
 				return result;
 			}
+
+			public int getEventHeight(Object element) {
+				if (element instanceof CharterAvailableFromEvent) {
+					return 20;
+				} else if (element instanceof CharterAvailableToEvent) {
+					return 20;
+				}
+				return -1;
+
+			};
 
 			@Override
 			public Object[] getChildren(final Object parent) {
@@ -1209,7 +1202,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			if (allObjectsByKey.containsKey(key)) {
 				l = allObjectsByKey.get(key);
 			} else {
-				l = new LinkedList<EObject>();
+				l = new LinkedList<>();
 				allObjectsByKey.put(key, l);
 			}
 
@@ -1245,32 +1238,21 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	}
 
 	@NonNull
-	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
-
-		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
-			final Runnable r = new Runnable() {
-				@Override
-				public void run() {
-					SchedulerView.this.currentSelectedDataProvider = selectedDataProvider;
-					final List<Object> rowElements = new LinkedList<>();
-					final IScenarioInstanceElementCollector elementCollector = getElementCollector();
-					elementCollector.beginCollecting(pinned != null);
-					if (pinned != null) {
-						rowElements.addAll(elementCollector.collectElements(pinned, true));
-					}
-					for (final ScenarioResult other : others) {
-						rowElements.addAll(elementCollector.collectElements(other, false));
-					}
-					elementCollector.endCollecting();
-					ViewerHelper.setInput(viewer, true, rowElements);
-
-					// setInput(rowElements);
-					// packAction.run();
-				}
-			};
-			RunnerHelper.exec(r, block);
-		}
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = (selectedDataProvider, pinned, others, block) -> {
+		RunnerHelper.exec(() -> {
+			SchedulerView.this.currentSelectedDataProvider = selectedDataProvider;
+			final List<Object> rowElements = new LinkedList<>();
+			final IScenarioInstanceElementCollector elementCollector = getElementCollector();
+			elementCollector.beginCollecting(pinned != null);
+			if (pinned != null) {
+				rowElements.addAll(elementCollector.collectElements(pinned, true));
+			}
+			for (final ScenarioResult other : others) {
+				rowElements.addAll(elementCollector.collectElements(other, false));
+			}
+			elementCollector.endCollecting();
+			ViewerHelper.setInput(viewer, true, rowElements);
+		}, block);
 	};
 
 	private final IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
@@ -1325,13 +1307,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		}
 	};
 
-	private final IScenarioChangeSetListener scenarioChangeSetListener = new IScenarioChangeSetListener() {
-		@Override
-		public void changeSetChanged(@Nullable final ChangeSetTableRoot changeSetRoot, @Nullable final ChangeSetTableGroup changeSet, @Nullable final Collection<ChangeSetTableRow> changeSetRows,
-				final boolean diffToBase) {
-			ViewerHelper.refresh(viewer, true);
-		}
-	};
+	private final IScenarioChangeSetListener scenarioChangeSetListener = (a, b, c, d) -> ViewerHelper.refresh(viewer, true);
 
 	private RunnableAction toggleLegend;
 }

@@ -330,6 +330,24 @@ public interface ScheduleFactory extends EFactory {
 	NotionalJourneyContractDetails createNotionalJourneyContractDetails();
 
 	/**
+	 * Returns a new object of class '<em>Charter Available To Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Charter Available To Event</em>'.
+	 * @generated
+	 */
+	CharterAvailableToEvent createCharterAvailableToEvent();
+
+	/**
+	 * Returns a new object of class '<em>Charter Available From Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Charter Available From Event</em>'.
+	 * @generated
+	 */
+	CharterAvailableFromEvent createCharterAvailableFromEvent();
+
+	/**
 	 * Returns a new object of class '<em>Canal Booking Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

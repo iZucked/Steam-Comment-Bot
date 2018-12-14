@@ -257,6 +257,14 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createNotionalJourneyContractDetailsAdapter();
 			}
 			@Override
+			public Adapter caseCharterAvailableToEvent(CharterAvailableToEvent object) {
+				return createCharterAvailableToEventAdapter();
+			}
+			@Override
+			public Adapter caseCharterAvailableFromEvent(CharterAvailableFromEvent object) {
+				return createCharterAvailableFromEventAdapter();
+			}
+			@Override
 			public Adapter caseCanalBookingEvent(CanalBookingEvent object) {
 				return createCanalBookingEventAdapter();
 			}
@@ -831,6 +839,34 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createNotionalJourneyContractDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.CharterAvailableToEvent <em>Charter Available To Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.CharterAvailableToEvent
+	 * @generated
+	 */
+	public Adapter createCharterAvailableToEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent <em>Charter Available From Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent
+	 * @generated
+	 */
+	public Adapter createCharterAvailableFromEventAdapter() {
 		return null;
 	}
 

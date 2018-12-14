@@ -160,6 +160,7 @@ public class ScheduleActionBarContributor
 	 */
 	@Override
 	public void contributeToToolBar(IToolBarManager toolBarManager) {
+		super.contributeToToolBar(toolBarManager);
 		toolBarManager.add(new Separator("schedule-settings"));
 		toolBarManager.add(new Separator("schedule-additions"));
 	}

@@ -704,7 +704,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (spotIndex: ");
 		if (spotIndexESet) result.append(spotIndex); else result.append("<unset>");
 		result.append(", sequenceType: ");

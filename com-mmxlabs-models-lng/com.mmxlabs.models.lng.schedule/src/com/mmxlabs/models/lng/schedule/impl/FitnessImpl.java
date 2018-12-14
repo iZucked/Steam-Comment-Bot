@@ -152,7 +152,7 @@ public class FitnessImpl extends NamedObjectImpl implements Fitness {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (fitnessValue: ");
 		result.append(fitnessValue);
 		result.append(')');

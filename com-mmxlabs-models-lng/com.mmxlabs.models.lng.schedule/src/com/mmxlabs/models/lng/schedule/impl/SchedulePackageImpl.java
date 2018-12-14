@@ -28,6 +28,8 @@ import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
+import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityPNLDetails;
@@ -348,6 +350,20 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass charterAvailableToEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass charterAvailableFromEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass canalBookingEventEClass = null;
 
 	/**
@@ -476,7 +492,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link SchedulePackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -490,7 +506,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		if (isInited) return (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
 
 		// Obtain or create and register package
-		SchedulePackageImpl theSchedulePackage = (SchedulePackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof SchedulePackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new SchedulePackageImpl());
+		Object registeredSchedulePackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		SchedulePackageImpl theSchedulePackage = registeredSchedulePackage instanceof SchedulePackageImpl ? (SchedulePackageImpl)registeredSchedulePackage : new SchedulePackageImpl();
 
 		isInited = true;
 
@@ -514,7 +531,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		// Mark meta-data to indicate it can't be changed
 		theSchedulePackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(SchedulePackage.eNS_URI, theSchedulePackage);
 		return theSchedulePackage;
@@ -2191,6 +2207,42 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getCharterAvailableToEvent() {
+		return charterAvailableToEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCharterAvailableToEvent_LinkedSequence() {
+		return (EReference)charterAvailableToEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCharterAvailableFromEvent() {
+		return charterAvailableFromEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCharterAvailableFromEvent_LinkedSequence() {
+		return (EReference)charterAvailableFromEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCanalBookingEvent() {
 		return canalBookingEventEClass;
 	}
@@ -2769,6 +2821,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__ROUTE_TAKEN);
 		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST);
 
+		charterAvailableToEventEClass = createEClass(CHARTER_AVAILABLE_TO_EVENT);
+		createEReference(charterAvailableToEventEClass, CHARTER_AVAILABLE_TO_EVENT__LINKED_SEQUENCE);
+
+		charterAvailableFromEventEClass = createEClass(CHARTER_AVAILABLE_FROM_EVENT);
+		createEReference(charterAvailableFromEventEClass, CHARTER_AVAILABLE_FROM_EVENT__LINKED_SEQUENCE);
+
 		canalBookingEventEClass = createEClass(CANAL_BOOKING_EVENT);
 		createEReference(canalBookingEventEClass, CANAL_BOOKING_EVENT__LINKED_SEQUENCE);
 		createEReference(canalBookingEventEClass, CANAL_BOOKING_EVENT__LINKED_JOURNEY);
@@ -2906,6 +2964,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		matchingContractDetailsEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		lumpSumContractDetailsEClass.getESuperTypes().add(this.getMatchingContractDetails());
 		notionalJourneyContractDetailsEClass.getESuperTypes().add(this.getMatchingContractDetails());
+		charterAvailableToEventEClass.getESuperTypes().add(this.getEvent());
+		charterAvailableFromEventEClass.getESuperTypes().add(this.getEvent());
 		canalBookingEventEClass.getESuperTypes().add(this.getEvent());
 
 		// Initialize classes, features, and operations; add parameters
@@ -3143,6 +3203,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getNotionalJourneyContractDetails_RouteTaken(), ecorePackage.getEString(), "routeTaken", "", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalJourneyContractDetails_CanalCost(), ecorePackage.getEInt(), "canalCost", "0", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(charterAvailableToEventEClass, CharterAvailableToEvent.class, "CharterAvailableToEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCharterAvailableToEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, CharterAvailableToEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(charterAvailableFromEventEClass, CharterAvailableFromEvent.class, "CharterAvailableFromEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCharterAvailableFromEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, CharterAvailableFromEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(canalBookingEventEClass, CanalBookingEvent.class, "CanalBookingEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCanalBookingEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, CanalBookingEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCanalBookingEvent_LinkedJourney(), this.getJourney(), null, "linkedJourney", null, 0, 1, CanalBookingEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3240,36 +3306,36 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	protected void createExpressionTypeAnnotations() {
-		String source = "http://www.mmxlabs.com/models/pricing/expressionType";	
+		String source = "http://www.mmxlabs.com/models/pricing/expressionType";
 		addAnnotation
-		  (getBallastBonusFeeDetails_Fee(), 
-		   source, 
+		  (getBallastBonusFeeDetails_Fee(),
+		   source,
 		   new String[] {
-			 "type", "commodity"
-		   });	
+			   "type", "commodity"
+		   });
 		addAnnotation
-		  (getMatchingContractDetails_MatchedPort(), 
-		   source, 
+		  (getMatchingContractDetails_MatchedPort(),
+		   source,
 		   new String[] {
-			 "type", "basefuel"
-		   });	
+			   "type", "basefuel"
+		   });
 		addAnnotation
-		  (getLumpSumContractDetails_LumpSum(), 
-		   source, 
+		  (getLumpSumContractDetails_LumpSum(),
+		   source,
 		   new String[] {
-			 "type", "commodity"
-		   });	
+			   "type", "commodity"
+		   });
 		addAnnotation
-		  (getNotionalJourneyContractDetails_ReturnPort(), 
-		   source, 
+		  (getNotionalJourneyContractDetails_ReturnPort(),
+		   source,
 		   new String[] {
-			 "type", "basefuel"
-		   });	
+			   "type", "basefuel"
+		   });
 		addAnnotation
-		  (getNotionalJourneyContractDetails_RouteTaken(), 
-		   source, 
+		  (getNotionalJourneyContractDetails_RouteTaken(),
+		   source,
 		   new String[] {
-			 "type", "basefuel"
+			   "type", "basefuel"
 		   });
 	}
 
