@@ -172,10 +172,24 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 							severity = IStatus.WARNING;
 						}
 						int finalSeverity = (cargo.isAllowRewiring()) ? IStatus.WARNING : severity;
-						String extraInfo = cargo.isAllowRewiring() ? "" : " - cargo is locked";
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'", formatHours(minTime - availableTime) + extraInfo),
-								finalSeverity	);
+						String extraInfo = cargo.isAllowRewiring() ? "" : " - and cargo is locked";
+
+												
+						final String msg = String.format("'" + cargo.getLoadName() + "': Travel time is too short (by " + TravelTimeUtils.formatShortHours(minTime - availableTime) 
+								+ ")" + extraInfo);
+						
+						final String message = String.format("'%s': Laden leg to %s is too long by %s (%s vs. %s available)." + extraInfo,
+								from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(minTime - availableTime),
+								TravelTimeUtils.formatShortHours(minTime), TravelTimeUtils.formatShortHours(availableTime) );
+
+						
+						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, finalSeverity);
+
+						
+//						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+//								(IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'", formatHours(minTime - availableTime) + extraInfo),
+//								finalSeverity	);
 						dsd.addEObjectAndFeature(from, CargoPackage.eINSTANCE.getSlot_WindowStart());
 						dsd.addEObjectAndFeature(to, CargoPackage.eINSTANCE.getSlot_WindowStart());
 						dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
@@ -187,7 +201,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			}
 		}
 	}
-
+	
 	/**
 	 * Validate that a ridiculous amount of time has not been allocated
 	 * 
@@ -295,7 +309,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 //					final String message = String.format("Purchase %s is being shipped to %s but the laden leg (%s travel, %s loading) is greater than the shortest journey by %s.",
 //							from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(travelTime),TravelTimeUtils.formatShortHours(slotDur),
 //							TravelTimeUtils.formatHours((travelTime + slotDur) - windowLength));
-					final String message = String.format("[Purchase '%s'] Laden leg to %s is too long: %s loading, %s travel is %s more than the %s available.",
+					final String message = String.format("Purchase '%s': Laden leg to %s is too long: %s loading, %s travel is %s more than the %s available.",
 							from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(slotDur), TravelTimeUtils.formatShortHours(travelTime), 
 							TravelTimeUtils.formatShortHours((travelTime + slotDur) - windowLength), TravelTimeUtils.formatShortHours(windowLength));
 					final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
