@@ -6,8 +6,15 @@ package com.mmxlabs.models.lng.analytics.ui.liveeval.internal;
 
 import java.util.concurrent.ForkJoinPool;
 
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.State;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Preferences;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 
 import com.mmxlabs.models.lng.analytics.ui.liveeval.ILiveEvaluatorService;
 import com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator;
@@ -28,6 +35,14 @@ public class LiveEvaluatorServiceListener implements ILiveEvaluatorService, IPos
 	@Override
 	public void setLiveEvaluatorEnabled(final boolean enabled) {
 		this.enabled = enabled;
+
+		final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		preferenceStore.setValue("LiveEvaluatorEnabled", enabled);
+	}
+
+	@Override
+	public boolean isLiveEvaluatorEnabled() {
+		return enabled;
 	}
 
 	public IScenarioInstanceEvaluator getScenarioInstanceEvaluator() {
@@ -84,6 +99,10 @@ public class LiveEvaluatorServiceListener implements ILiveEvaluatorService, IPos
 	}
 
 	public void start() {
+
+		final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		setLiveEvaluatorEnabled(preferenceStore.getBoolean("LiveEvaluatorEnabled"));
+
 		SSDataManager.Instance.registerChangeHook(this, SSDataManager.PostChangeHookPhase.EVALUATION);
 	}
 

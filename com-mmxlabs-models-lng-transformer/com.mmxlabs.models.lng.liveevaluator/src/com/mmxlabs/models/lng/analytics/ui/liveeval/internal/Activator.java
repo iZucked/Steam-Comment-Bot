@@ -4,13 +4,13 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.liveeval.internal;
 
-import org.eclipse.core.runtime.Plugin;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The main plugin class to be used in the desktop.
  */
-public class Activator extends Plugin {
+public class Activator extends AbstractUIPlugin {
 
 	// The shared instance.
 	private static Activator plugin;
