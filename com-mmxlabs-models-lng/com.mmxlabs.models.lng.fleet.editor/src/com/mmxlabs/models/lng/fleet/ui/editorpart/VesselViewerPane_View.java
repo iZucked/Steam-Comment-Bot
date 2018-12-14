@@ -10,15 +10,20 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -30,8 +35,10 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
@@ -42,6 +49,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
@@ -49,11 +57,13 @@ import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class VesselViewerPane_View extends ScenarioTableViewerPane {
 
 	private final IScenarioEditingLocation scenarioEditingLocation;
+	private Action newVesselFromReferenceAction;
 
 	public VesselViewerPane_View(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
@@ -63,10 +73,10 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
-		
+
 		getToolBarManager().appendToGroup("edit", new BaseFuelEditorAction());
 		getToolBarManager().update(true);
-		
+
 		final EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
 		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain));
 
@@ -110,6 +120,55 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 		getToolBarManager().update(true);
 
 		setTitle("Vessels", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
+
+		viewer.addSelectionChangedListener(e -> {
+			if (newVesselFromReferenceAction != null) {
+				boolean active = false;
+				final ISelection selection = viewer.getSelection();
+				if (selection instanceof IStructuredSelection) {
+					final IStructuredSelection ss = (IStructuredSelection) selection;
+					if (ss.size() == 1) {
+						final Object firstElement = ss.getFirstElement();
+						if (firstElement instanceof Vessel) {
+							final Vessel vessel = (Vessel) firstElement;
+							active = vessel.getReference() == null;
+						}
+					}
+				}
+				newVesselFromReferenceAction.setEnabled(active);
+			}
+		});
+	}
+
+	@Override
+	protected Action createAddAction(final EReference containment) {
+
+		newVesselFromReferenceAction = new RunnableAction("Vessel from reference", () -> {
+
+			final ISelection selection = viewer.getSelection();
+			if (selection instanceof IStructuredSelection) {
+				final IStructuredSelection ss = (IStructuredSelection) selection;
+				final Object firstElement = ss.getFirstElement();
+				if (firstElement instanceof Vessel) {
+					final Vessel reference = (Vessel) firstElement;
+
+					final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
+					vessel.setLadenAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
+					vessel.setBallastAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
+					vessel.setReference(reference);
+					final CompoundCommand cmd = new CompoundCommand("New vessel");
+					cmd.append(AddCommand.create(getEditingDomain(), ScenarioModelUtil.getFleetModel(getJointModelEditorPart().getScenarioDataProvider()), FleetPackage.Literals.FLEET_MODEL__VESSELS,
+							Collections.singleton(vessel)));
+					final CommandStack commandStack = getEditingDomain().getCommandStack();
+					commandStack.execute(cmd);
+					DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getJointModelEditorPart(), vessel, commandStack.getMostRecentCommand());
+				}
+			}
+		});
+
+		final Action duplicateAction = createDuplicateAction();
+		final Action[] extraActions = duplicateAction == null ? new Action[] { newVesselFromReferenceAction } : new Action[] { newVesselFromReferenceAction, duplicateAction };
+		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), extraActions);
 	}
 
 	class BaseFuelEditorAction extends AbstractMenuLockableAction {
