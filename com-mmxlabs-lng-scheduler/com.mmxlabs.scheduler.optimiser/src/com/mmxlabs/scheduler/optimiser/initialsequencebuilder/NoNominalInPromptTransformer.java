@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.ILockedCargoProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -36,6 +37,9 @@ public class NoNominalInPromptTransformer {
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
+
+	@Inject
+	private ILockedCargoProvider lockedCargoProvider;
 
 	public @NonNull ISequences run(@NonNull final ISequences rawSequences) {
 
@@ -101,6 +105,12 @@ public class NoNominalInPromptTransformer {
 					@NonNull
 					final IModifiableSequence modifiableSequence = newSequences.getModifiableSequence(resource);
 					for (final ISequenceElement e : elementsToRemove) {
+						final IPortSlot portSlot = portSlotProvider.getPortSlot(e);
+						if (lockedCargoProvider.isLockedSlot(portSlot)) {
+							// This should be ok as the *whole* cargo should be removed.
+							continue;
+						}
+
 						modifiableSequence.remove(e);
 						newSequences.getModifiableUnusedElements().add(e);
 					}

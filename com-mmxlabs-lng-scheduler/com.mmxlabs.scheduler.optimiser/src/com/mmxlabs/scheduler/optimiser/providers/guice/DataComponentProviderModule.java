@@ -61,8 +61,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ILockedCargoProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ILockedCargoProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotConstraintDataProviderEditor;
@@ -117,6 +117,8 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselCharterInRateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultAllowedVesselProvider;
@@ -124,6 +126,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExtraIdleTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultFOBDESCompatibilityProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLockedCargoProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultMaxSlotConstraintDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
@@ -421,6 +424,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultLongTermVesselSlotCountFitnessProvider.class).in(Singleton.class);
 		bind(IVesselSlotCountFitnessProvider.class).to(DefaultLongTermVesselSlotCountFitnessProvider.class);
 		bind(IVesselSlotCountFitnessProviderEditor.class).to(DefaultLongTermVesselSlotCountFitnessProvider.class);
+		
+		bind(DefaultLockedCargoProviderEditor.class).in(Singleton.class);
+		bind(ILockedCargoProvider.class).to(DefaultLockedCargoProviderEditor.class);
+		bind(ILockedCargoProviderEditor.class).to(DefaultLockedCargoProviderEditor.class);
 
 	}
 }

@@ -122,7 +122,7 @@ public class CargoMaker {
 
 	public CargoMaker withAssignmentFlags(final boolean allowRewiring, final boolean lockedToAssignment) {
 
-		assert !lockedToAssignment || (allowRewiring && lockedToAssignment);
+		assert !lockedToAssignment || (!allowRewiring && lockedToAssignment);
 		cargo.setLocked(lockedToAssignment);
 		cargo.setAllowRewiring(allowRewiring);
 

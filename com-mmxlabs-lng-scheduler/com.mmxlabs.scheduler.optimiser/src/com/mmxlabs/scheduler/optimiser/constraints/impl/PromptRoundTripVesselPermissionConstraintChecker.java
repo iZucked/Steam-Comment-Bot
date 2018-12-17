@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.ILockedCargoProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProvider;
@@ -50,6 +51,9 @@ public class PromptRoundTripVesselPermissionConstraintChecker implements IPairwi
 
 	@Inject
 	private IPromptPeriodProvider promptPeriodProvider;
+
+	@Inject
+	private ILockedCargoProvider lockedCargoProvider;
 
 	@NonNull
 	private final String name;
@@ -161,7 +165,9 @@ public class PromptRoundTripVesselPermissionConstraintChecker implements IPairwi
 			final ITimeWindow timeWindow = portSlot.getTimeWindow();
 
 			if (timeWindow != null && (timeWindow.getInclusiveStart() < endOfPromptPeriod)) {
-				return false;
+				if (!lockedCargoProvider.isLockedSlot(portSlot)) {
+					return false;
+				}
 			}
 		}
 		return true;

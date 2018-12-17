@@ -326,7 +326,7 @@ public class EMFUtils {
 			containedElements.add(element);
 
 			for (final EReference ref : element.eClass().getEAllReferences()) {
-				// Tree iterator will decend here
+				// Tree iterator will descend here
 				if (ref.isContainment()) {
 					continue;
 				}

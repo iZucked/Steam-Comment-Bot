@@ -563,6 +563,52 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 	}
 
+	@Test
+	@Category({ MicroTest.class })
+	public void testromptLockedNominalInPromptNotOpened() throws Exception {
+
+		// Create the required basic elements
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "200000", 0);
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "7") //
+				.withOptional(true) //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.withOptional(true) //
+				.withCancellationFee("300000") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, true) //
+				.build();
+
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2016, 12, 5));
+
+		evaluateWithLSOTest(true, plan -> {
+			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
+			ScenarioUtils.setLSOStageIterations(plan, 0);
+			ScenarioUtils.setHillClimbStageIterations(plan, 0);
+		}, null, scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+			// Check cargo still exists
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+
+			Assert.assertSame(charterInMarket_1, cargo1.getVesselAssignmentType());
+			Assert.assertEquals(-1, cargo1.getSpotIndex());
+		}, null);
+	}
+
 	/**
 	 * Test that BugzId: 2304 has been fixed.
 	 * 

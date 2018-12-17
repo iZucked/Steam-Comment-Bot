@@ -194,6 +194,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ILockedCargoProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
@@ -332,6 +333,10 @@ public class LNGScenarioTransformer {
 	@Inject
 	@NonNull
 	private IPromptPeriodProviderEditor promptPeriodProviderEditor;
+	
+	@Inject
+	@NonNull
+	private ILockedCargoProviderEditor lockedCargoProviderEditor;
 
 	/**
 	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
@@ -1078,6 +1083,9 @@ public class LNGScenarioTransformer {
 
 				if (isNominalVessel && vesselAvailability != null) {
 					builder.bindSlotsToRoundTripVessel(vesselAvailability, allOptimiserSlots.toArray(new IPortSlot[allOptimiserSlots.size()]));
+				}
+				if (cargo.isLocked()) {
+					lockedCargoProviderEditor.addLockedCargo(allOptimiserSlots);
 				}
 			} else if (assignableElement instanceof VesselEvent) {
 				if (freezeElements) {
