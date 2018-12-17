@@ -130,8 +130,7 @@ public class ExportScheduleHelper {
 
 		// Clear any insertion plans - assume no longer relevant
 		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
-		analyticsModel.getOptimisations().clear();
-		analyticsModel.getOptionModels().clear();
+		LNGSchedulerJobUtils.clearAnalyticsResults(analyticsModel);
 
 		if (modelCustomiser != null) {
 			modelCustomiser.accept(scenarioModel, schedule);

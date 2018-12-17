@@ -39,6 +39,7 @@ import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -620,5 +621,18 @@ public class LNGSchedulerJobUtils {
 			extraAnnotations.put(OptimiserConstants.G_AI_runtime, annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_runtime, Long.class));
 		}
 		return extraAnnotations;
+	}
+
+	/**
+	 * Clear all surplus data in the analytics model WITHOUT using a command
+	 * 
+	 * @param analyticsModel
+	 */
+	public static void clearAnalyticsResults(@NonNull AnalyticsModel analyticsModel) {
+		analyticsModel.getOptimisations().clear();
+		analyticsModel.getOptionModels().clear();
+
+		analyticsModel.setViabilityModel(null);
+		analyticsModel.setMtmModel(null);
 	}
 }

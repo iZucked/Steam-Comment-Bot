@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -67,8 +68,7 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 							try {
 								final String finalNewName = ScenarioServiceModelUtils.getNewForkName(instance, false);
 								if (finalNewName != null) {
-									
-									
+
 									final ScenarioInstance fork = ScenarioServiceModelUtils.fork(instance, finalNewName, new NullProgressMonitor());
 
 									stripScenario(fork);
@@ -93,18 +93,15 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 
 	}
 
-	private void stripScenario(ScenarioInstance scenarioInstance) throws IOException {
+	private void stripScenario(final ScenarioInstance scenarioInstance) throws IOException {
 		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
 		try (IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ForkScenarioCommandHandler:stripScenario")) {
 			final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
-			AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
-
+			final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
 			// Strip optimisation result
-			analyticsModel.getOptionModels().clear();
-			analyticsModel.getOptimisations().clear();
-			analyticsModel.setViabilityModel(null);
+			LNGSchedulerJobUtils.clearAnalyticsResults(analyticsModel);
 
 			scenarioDataProvider.getModelReference().save();
 		}

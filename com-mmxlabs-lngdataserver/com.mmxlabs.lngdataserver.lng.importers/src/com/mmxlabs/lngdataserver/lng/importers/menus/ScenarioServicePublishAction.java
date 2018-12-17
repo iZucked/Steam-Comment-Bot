@@ -53,6 +53,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -129,8 +130,7 @@ public class ScenarioServicePublishAction {
 				final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
 
 				// Strip optimisation result
-				analyticsModel.getOptionModels().clear();
-				analyticsModel.getOptimisations().clear();
+				LNGSchedulerJobUtils.clearAnalyticsResults(analyticsModel);
 
 				scenarioDataProvider = SimpleScenarioDataProvider.make(EcoreUtil.copy(modelRecord.getManifest()), scenarioModel);
 

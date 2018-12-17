@@ -91,6 +91,7 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.Position;
 import com.mmxlabs.models.lng.transformer.period.extensions.IPeriodTransformerExtension;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.scenario.service.model.manager.ClonedScenarioDataProvider;
@@ -361,7 +362,7 @@ public class PeriodTransformer {
 
 		// Remove schedule model
 		output.getScheduleModel().setSchedule(null);
-		output.getAnalyticsModel().getOptimisations().clear();
+		LNGSchedulerJobUtils.clearAnalyticsResults(output.getAnalyticsModel());
 
 		// Clear this date as we have fixed everything and it will conflict with rules in schedule transformer.
 		output.unsetSchedulingEndDate();
@@ -757,7 +758,7 @@ public class PeriodTransformer {
 	 * @param endConditionMap
 	 * @param slotAllocationMap
 	 * @param lockedCargoes
-	 *                                    TODO
+	 *            TODO
 	 */
 	public void checkIfRemovedSlotsAreStillNeeded(final @NonNull Set<Slot<?>> seenSlots, final @NonNull Collection<Slot<?>> slotsToRemove, final @NonNull Collection<Cargo> cargoesToRemove,
 			final @NonNull List<VesselAvailability> newVesselAvailabilities, final @NonNull Map<AssignableElement, PortVisit> startConditionMap,
