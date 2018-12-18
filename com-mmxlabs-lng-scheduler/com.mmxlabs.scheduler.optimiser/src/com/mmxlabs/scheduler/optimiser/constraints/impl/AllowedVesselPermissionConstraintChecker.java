@@ -95,6 +95,11 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 		}
 		boolean valid = true;
 		for (final IResource resource : loopResources) {
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			// Ignore compatibility on non-shipped cargoes
+			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+				continue;
+			}
 			final ISequence sequence = sequences.getSequence(resource);
 			if (!checkSequence(sequence, resource, messages)) {
 				if (messages == null) {
