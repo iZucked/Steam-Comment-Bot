@@ -38,7 +38,7 @@ public interface IConstraintChecker {
 	 * @param sequences
 	 * @return Returns true if all constraints are satisfied.
 	 */
-	boolean checkConstraints(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources);
+	boolean checkConstraints(@NonNull ISequences fullSequences, @Nullable Collection<@NonNull IResource> changedResources);
 
 	/**
 	 * Check the {@link ISequences} object for constraint violations. Returns true if all constraints are satisfied. Returns false on a constraint violation. This version of {@link #checkConstraints}
@@ -49,7 +49,7 @@ public interface IConstraintChecker {
 	 *            List which may be used to store constraint violation messages.
 	 * @return Returns true if all constraints are satisfied.
 	 */
-	boolean checkConstraints(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources, @Nullable List<String> messages);
+	boolean checkConstraints(@NonNull ISequences fullSequences, @Nullable Collection<@NonNull IResource> changedResources, @Nullable List<String> messages);
 
 	/**
 	 * Provide the {@link IConstraintChecker} with the {@link IOptimisationData} object, where it can obtain it's source data.

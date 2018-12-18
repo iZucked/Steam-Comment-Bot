@@ -5,19 +5,24 @@
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
-import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -34,25 +39,32 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @author Simon Goodall
  *
  */
-public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecker {
+public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecker, IInitialSequencesConstraintChecker {
+
+	private enum Mode {
+		Record, Apply
+	}
 
 	@NonNull
 	private final String name;
 
 	@Inject
-	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
 	private int maxLadenDuration = 60 * 24;
 
+	private Set<IPortSlot> whitelistedSlots = new HashSet<>();
+	
+	@Inject(optional = true) // Marked as optional as this constraint checker is active in the initial sequence builder where we do not have an existing initial solution.
+	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
+	@Nullable
+	private ISequences initialSequences;
 	public LadenLegLimitConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
@@ -64,25 +76,29 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+	public boolean checkConstraints(@NonNull final ISequences fullSequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+		return checkConstraints(fullSequences, changedResources, Mode.Apply);
+	}
+
+	private boolean checkConstraints(@NonNull final ISequences fullSequences, @Nullable final Collection<@NonNull IResource> changedResources, Mode mode) {
 
 		final Collection<@NonNull IResource> loopResources;
 		if (changedResources == null) {
-			loopResources = sequences.getResources();
+			loopResources = fullSequences.getResources();
 		} else {
 			loopResources = changedResources;
 		}
 
 		for (final IResource resource : loopResources) {
-			final ISequence sequence = sequences.getSequence(resource);
-			if (!checkSequence(sequence, resource)) {
+			final ISequence sequence = fullSequences.getSequence(resource);
+			if (!checkSequence(sequence, resource, mode)) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
+	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, Mode mode) {
 		final Iterator<ISequenceElement> iter = sequence.iterator();
 		ISequenceElement prev = null;
 		ISequenceElement cur = null;
@@ -94,7 +110,7 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 			prev = cur;
 			cur = iter.next();
 			if (prev != null && cur != null) {
-				if (!checkPairwiseConstraint(prev, cur, resource, maxSpeed)) {
+				if (!checkPairwiseConstraint(prev, cur, resource, maxSpeed, mode)) {
 					return false;
 				}
 			}
@@ -104,26 +120,26 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 
 	@Override
 	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
-		return checkConstraints(sequences, changedResources);
+		return checkConstraints(sequences, changedResources, Mode.Apply);
 	}
 
-	@Override
 	/**
 	 * Can element 2 be reached from element 1 in accordance with time windows under the best possible circumstances, if using the given resource to service them
 	 * 
 	 * @param e1
 	 * @param e2
 	 * @param resource
-	 *            the vessel in question
+	 *                     the vessel in question
 	 * @return
 	 */
+	@Override
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
-		return checkPairwiseConstraint(first, second, resource, vesselAvailability.getVessel().getMaxSpeed());
+		return checkPairwiseConstraint(first, second, resource, vesselAvailability.getVessel().getMaxSpeed(), Mode.Apply);
 	}
 
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed, Mode mode) {
 
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
@@ -147,11 +163,17 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 			}
 			assert tw1.getExclusiveEnd() != Integer.MAX_VALUE;
 			if (tw2.getInclusiveStart() - tw1.getExclusiveEnd() > maxLadenDuration) {
-				return false;
+				// Violation! Check whitelist to see if we can ignore it.
+				if (mode == Mode.Apply && !whitelistedSlots.contains(slot1)) {
+					return false;
+				} else if (mode == Mode.Record) {
+					whitelistedSlots.add(slot1);
+				}
 			}
 		}
 
 		return true;
+
 	}
 
 	@Override
@@ -165,5 +187,11 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 
 	public void setMaxLadenDuration(int maxLadenDuration) {
 		this.maxLadenDuration = maxLadenDuration;
+	}
+
+	@Override
+	public void sequencesAccepted(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences) {
+		whitelistedSlots.clear();
+		checkConstraints(fullSequences, null, Mode.Record);
 	}
 }
