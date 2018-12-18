@@ -79,6 +79,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 			this.forkScenarioDataProvider = forkRecord.aquireScenarioDataProvider("AbstractLNGRunMultipleForkedJobsControl:1");
 			this.runner = LNGOptimisationBuilder.begin(forkScenarioDataProvider, fork) //
 					.withOptimisationPlan(optimisationPlan) //
+					.withOptimiseHint() //
 					.withHints(hints) //
 					.buildDefaultRunner().getScenarioRunner();
 			this.lock = forkScenarioDataProvider.getModelReference().getLock();

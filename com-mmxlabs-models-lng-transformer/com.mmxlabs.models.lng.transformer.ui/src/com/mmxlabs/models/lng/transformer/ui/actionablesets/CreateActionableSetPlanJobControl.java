@@ -102,7 +102,9 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 		plan.setSolutionBuilderSettings(ScenarioUtils.createDefaultSolutionBuilderSettings());
 
 		scenarioRunner = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
-				.withOptimisationPlan(plan).withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
+				.withOptimisationPlan(plan) //
+				.withOptimiseHint() //
+				.withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
 				.buildDefaultRunner() //
 				.getScenarioRunner();
 

@@ -138,6 +138,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 		final LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
 				.withOptimisationPlan(LNGScenarioRunnerUtils.createDefaultOptimisationPlan()) //
 				.withOptimiserInjectorService(extraService) //
+				.withOptimiseHint() //
 				.withHints(hints) //
 				.buildDefaultRunner();
 
