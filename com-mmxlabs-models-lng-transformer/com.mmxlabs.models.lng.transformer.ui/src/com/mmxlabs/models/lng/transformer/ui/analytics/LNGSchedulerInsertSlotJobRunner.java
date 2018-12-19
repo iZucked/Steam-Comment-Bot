@@ -136,7 +136,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 		// TODO: Only disable caches if we do a break-even (caches *should* be ok otherwise?)
 		final String[] hints = isBreakEven ? hint_with_breakeven : hint_without_breakeven;
 		final LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
-				.withOptimisationPlan(LNGScenarioRunnerUtils.createDefaultOptimisationPlan()) //
+				.withOptimisationPlan(plan) //
 				.withOptimiserInjectorService(extraService) //
 				.withOptimiseHint() //
 				.withHints(hints) //
