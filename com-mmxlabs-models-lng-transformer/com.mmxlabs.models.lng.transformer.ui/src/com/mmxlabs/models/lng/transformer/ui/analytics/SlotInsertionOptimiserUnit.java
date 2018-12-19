@@ -423,7 +423,7 @@ public class SlotInsertionOptimiserUnit {
 
 					final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 					// Categories solutions
-					final Map<Record, List<Pair<ISequences, Long>>> m = results.parallelStream().distinct() //
+					final Map<Record, List<Pair<ISequences, Long>>> m = results.stream() //
 							.collect(Collectors.groupingBy(p -> {
 								final Record record = new Record();
 
