@@ -409,7 +409,9 @@ public class SlotInsertionOptimiserUnit {
 				if (monitor.isCanceled()) {
 					return null;
 				}
-
+				if (results.isEmpty()) {
+					throw new UserFeedbackException("No feasible solutions found.");
+				}
 				// Reduce result to unique solutions
 				results = results.parallelStream().distinct().collect(Collectors.toList());
 
