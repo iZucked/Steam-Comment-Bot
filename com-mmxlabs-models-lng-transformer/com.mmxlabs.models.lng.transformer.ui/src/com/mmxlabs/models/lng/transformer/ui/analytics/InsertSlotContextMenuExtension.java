@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,6 +38,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
@@ -64,6 +66,10 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 	@Override
 	public void contributeToMenu(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final Slot slot, @NonNull final MenuManager menuManager) {
 
+		if (slot instanceof SpotSlot) {
+			return;
+		}
+
 		if (!LicenseFeatures.isPermitted("features:options-suggester")) {
 			return;
 		}
@@ -79,7 +85,11 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			menuManager.add(action);
 			return;
 		} else {
-			final List<Slot<?>> slots = slot.getCargo().getSortedSlots();
+			final List<Slot<?>> slots = filterSpotSlots(slot.getCargo().getSortedSlots());
+			if (slots.isEmpty()) {
+				return;
+			}
+			
 			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
 
 			for (final Slot<?> slot2 : slots) {
@@ -129,7 +139,9 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 				}
 			}
 
-			if (noCargoSelected && slots.size() > 0) {
+			slots = filterSpotSlots(slots);
+			
+			if (noCargoSelected && !slots.isEmpty()) {
 				if (slots.size() != 2 || (slots.size() == 2
 						&& !(slots.stream().filter(s -> (s instanceof LoadSlot)).findAny().isPresent() && slots.stream().filter(s -> (s instanceof DischargeSlot)).findAny().isPresent()))) {
 					slots = Lists.newArrayList(slots.get(0));
@@ -169,7 +181,10 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			}
 
 			if (cargoes.size() == 1) {
-				final List<Slot<?>> slots = cargoes.stream().flatMap(c -> c.getSortedSlots().stream()).collect(Collectors.toList());
+				final List<Slot<?>> slots = filterSpotSlots(cargoes.stream().flatMap(c -> c.getSortedSlots().stream()).collect(Collectors.toList()));
+				if (slots.isEmpty()) {
+					return;
+				}
 				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
 
 				for (final Slot<?> slot : slots) {
@@ -191,6 +206,17 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 				return;
 			}
 		}
+	}
+
+	private List<Slot<?>> filterSpotSlots(Collection<Slot<?>> slots) {
+		final List<Slot<?>> l = new LinkedList<>();
+		for (Slot<?> s : slots) {
+			if (s instanceof SpotSlot) {
+				continue;
+			}
+			l.add(s);
+		}
+		return l;
 	}
 
 	private static class InsertSlotAction extends Action {
