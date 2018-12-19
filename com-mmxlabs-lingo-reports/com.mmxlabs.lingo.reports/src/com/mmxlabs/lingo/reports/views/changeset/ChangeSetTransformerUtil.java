@@ -1195,8 +1195,14 @@ public final class ChangeSetTransformerUtil {
 					if (beforeGroup.getMembers().size() == 1) {
 						final ChangeSetRowData beforeData = beforeGroup.getMembers().get(0);
 						final ChangeSetRowData afterData = afterGroup.getMembers().get(0);
+
+						// Start / end events are not structural changes.
 						if ((beforeData.getLhsEvent() instanceof StartEvent || beforeData.getLhsEvent() instanceof EndEvent)
 								|| (afterData.getLhsEvent() instanceof StartEvent || afterData.getLhsEvent() instanceof EndEvent)) {
+							continue;
+						}
+						// GCO are not structural changes.
+						if ((beforeData.getLhsEvent() instanceof GeneratedCharterOut) || (afterData.getLhsEvent() instanceof GeneratedCharterOut)) {
 							continue;
 						}
 					}
