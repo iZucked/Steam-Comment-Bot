@@ -21,7 +21,7 @@ public class ScenarioModelReferenceThread extends Thread {
 	private final IScenarioDataProvider scenarioDataProvider;
 
 	public ScenarioModelReferenceThread(final String name, final ScenarioModelRecord modelRecord, final Consumer<IScenarioDataProvider> action) {
-		super(new ThreadGroup(name), name);
+		super(createThreadGroup(name), name);
 		this.scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ModelReferenceThread:1");
 		this.action = action;
 	}
@@ -38,5 +38,12 @@ public class ScenarioModelReferenceThread extends Thread {
 			action = null;
 			scenarioDataProvider.close();
 		}
+	}
+
+	private static ThreadGroup createThreadGroup(final String name) {
+		final ThreadGroup threadGroup = new ThreadGroup(name);
+		// Set daemon flag to auto-clean up when all child threads exit
+		threadGroup.setDaemon(true);
+		return threadGroup;
 	}
 }
