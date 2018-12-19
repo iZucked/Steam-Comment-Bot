@@ -82,7 +82,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 
 				if (System.getProperty("lingo.suppress.dialogs") == null) {
 					RunnerHelper.asyncExec((display) -> {
-						MessageDialog.openError(display.getActiveShell(), "Error", e.getMessage());
+						MessageDialog.openInformation(display.getActiveShell(), getName(), e.getMessage());
 					});
 				} else {
 					throw e;
