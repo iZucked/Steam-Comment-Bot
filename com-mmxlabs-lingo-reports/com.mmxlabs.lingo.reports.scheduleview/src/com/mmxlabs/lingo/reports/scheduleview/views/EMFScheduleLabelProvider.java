@@ -8,7 +8,6 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstant
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME;
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Canals;
 
-import java.sql.SQLClientInfoException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -55,6 +54,7 @@ import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -323,12 +323,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		if (element instanceof CharterAvailableFromEvent) {
 			final CharterAvailableFromEvent evt = (CharterAvailableFromEvent) element;
 			final String start = dateToString(evt.getStart());
-			return "";//String.format("%s available from %s", evt.getLinkedSequence().getName(), start);
+			return "";// String.format("%s available from %s", evt.getLinkedSequence().getName(), start);
 		}
 		if (element instanceof CharterAvailableToEvent) {
 			final CharterAvailableToEvent evt = (CharterAvailableToEvent) element;
 			final String start = dateToString(evt.getStart());
-			return "";//String.format("%s available until %s", evt.getLinkedSequence().getName(), start);
+			return "";// String.format("%s available until %s", evt.getLinkedSequence().getName(), start);
 		}
 
 		if (element instanceof Sequence) {
@@ -402,7 +402,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				// if (!journey.getRoute().equalsIgnoreCase(RouteOption.DIRECT.getName())) {
 				eventText.append(String.format("%.1f knots", journey.getSpeed()));
 				for (final FuelQuantity fq : journey.getFuels()) {
-					eventText.append(String.format(" | %s", fq.getFuel().toString()));
+					eventText.append(String.format(" | %s", mapFuel(fq.getFuel())));
 				}
 				final RouteOption routeOption = journey.getRouteOption();
 
@@ -496,7 +496,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				final Idle idle = (Idle) element;
 				eventText.append("Idle time: " + durationTime);
 				for (final FuelQuantity fq : idle.getFuels()) {
-					eventText.append(String.format("\n%s\n", fq.getFuel().toString()));
+					eventText.append(String.format("\n%s\n", mapFuel(fq.getFuel())));
 				}
 			} else if (element instanceof GeneratedCharterOut) {
 				eventText.append(" \n");
@@ -504,7 +504,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			} else if (element instanceof FuelUsage) {
 				final FuelUsage fuel = (FuelUsage) element;
 				for (final FuelQuantity fq : fuel.getFuels()) {
-					eventText.append(String.format("%s: %,d %s | $%,d\n", fq.getFuel().toString(), fq.getAmounts().get(0).getQuantity(), fq.getAmounts().get(0).getUnit().toString(), fq.getCost()));
+					eventText.append(String.format("%s: %,d %s | $%,d\n", mapFuel(fq.getFuel()), fq.getAmounts().get(0).getQuantity(), fq.getAmounts().get(0).getUnit().toString(), fq.getCost()));
 				}
 			}
 
@@ -546,7 +546,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			final String start = dateOnlyToString(evt.getStart());
 			return String.format("%s available until %s", evt.getLinkedSequence().getName(), start);
 		}
-		
+
 		String port = null;
 		if (element instanceof Event) {
 			final Port portObj = ((Event) element).getPort();
@@ -698,5 +698,24 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 		return null;
 
+	}
+
+	private String mapFuel(Fuel fuel) {
+		if (fuel == null) {
+			return "";
+		}
+
+		switch (fuel) {
+		case BASE_FUEL:
+			return "base fuel";
+		case FBO:
+			return "FBO";
+		case NBO:
+			return "NBO";
+		case PILOT_LIGHT:
+			return "pilot light";
+		default:
+			return fuel.toString();
+		}
 	}
 }
