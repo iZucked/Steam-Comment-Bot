@@ -94,7 +94,6 @@ public class LNGEvaluationModule extends AbstractModule {
 
 		// Needed for LegalSequencingChecker
 		if (Platform.isRunning()) {
-			// bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());
 			bind(IConstraintCheckerRegistry.class).toProvider(service(IConstraintCheckerRegistry.class).single());
 			bind(IEvaluationProcessRegistry.class).toProvider(service(IEvaluationProcessRegistry.class).single());
 			bind(IEvaluatedStateConstraintCheckerRegistry.class).toProvider(service(IEvaluatedStateConstraintCheckerRegistry.class).single());

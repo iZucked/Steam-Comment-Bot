@@ -22,7 +22,7 @@ public final class SlotClassifier {
 	};
 
 	public static @NonNull
-	SlotType classify(@NonNull final Slot slot) {
+	SlotType classify(@NonNull final Slot<?> slot) {
 
 		if (slot instanceof LoadSlot) {
 			// "It's a buy!"

@@ -12,7 +12,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -43,26 +42,21 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class EvaluationHelper {
 
 	@Inject
-	@NonNull
 	private List<IConstraintChecker> constraintCheckers;
 
 	@Inject
-	@NonNull
 	private List<IEvaluationProcess> evaluationProcesses;
+
 	@Inject
-	@NonNull
 	private List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers;
 
 	@Inject
-	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	@NonNull
 	private ISequencesManipulator sequenceManipulator;
 
 	@Inject
-	@NonNull
 	private IPhaseOptimisationData phaseOptimisationData;
 
 	private final boolean isReevaluating;
@@ -170,6 +164,7 @@ public class EvaluationHelper {
 
 	public @Nullable Pair<@NonNull VolumeAllocatedSequences, @NonNull IEvaluationState> evaluateSequences(@NonNull final ISequences currentRawSequences, @NonNull final ISequences currentFullSequences,
 			final boolean checkEvaluatedStateCheckers) {
+
 		final IEvaluationState evaluationState = new EvaluationState();
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 			if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, currentFullSequences, evaluationState)) {
@@ -192,8 +187,8 @@ public class EvaluationHelper {
 	}
 
 	public @Nullable ProfitAndLossSequences evaluateSequences(@NonNull final ISequences currentFullSequences, @NonNull final Pair<@NonNull VolumeAllocatedSequences, @NonNull IEvaluationState> p) {
-		@NonNull
-		final IEvaluationState evaluationState = p.getSecond();
+
+		final @NonNull IEvaluationState evaluationState = p.getSecond();
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 			if (!evaluationProcess.evaluate(Phase.Final_Evaluation, currentFullSequences, evaluationState)) {
 				return null;
