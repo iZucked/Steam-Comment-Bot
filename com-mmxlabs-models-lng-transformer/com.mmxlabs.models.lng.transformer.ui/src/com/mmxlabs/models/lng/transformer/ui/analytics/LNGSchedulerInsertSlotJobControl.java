@@ -31,7 +31,6 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 	private final IScenarioDataProvider scenarioDataProvider;
 
 	private final LNGSchedulerInsertSlotJobRunner runner;
-	private final CleanableExecutorService executorService;
 	private SlotInsertionOptions slotInsertionPlan;
 	private String taskName;
 
@@ -59,14 +58,11 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 			// }
 		}
 
-		// TODO: This should be static / central service?
-		executorService = LNGScenarioChainBuilder.createExecutorService();
-
 		final List<Slot<?>> targetSlots = jobDescriptor.getTargetSlots();
 		final List<VesselEvent> targetEvents = jobDescriptor.getTargetEvents();
 		final UserSettings userSettings = jobDescriptor.getUserSettings();
 		this.taskName = jobDescriptor.getJobName();
-		runner = new LNGSchedulerInsertSlotJobRunner(executorService, scenarioInstance, scenarioDataProvider, editingDomain, userSettings, targetSlots, targetEvents);
+		runner = new LNGSchedulerInsertSlotJobRunner(scenarioInstance, scenarioDataProvider, editingDomain, userSettings, targetSlots, targetEvents);
 
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 	}
@@ -90,7 +86,9 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 
 	@Override
 	public void dispose() {
-		executorService.shutdownNow();
+		if (runner != null) {
+			runner.dispose();
+		}
 
 		if (scenarioDataProvider != null) {
 			scenarioDataProvider.close();

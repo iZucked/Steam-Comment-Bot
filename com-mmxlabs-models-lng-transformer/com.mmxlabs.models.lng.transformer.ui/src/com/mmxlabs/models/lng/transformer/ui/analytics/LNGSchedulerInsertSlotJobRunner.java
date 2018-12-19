@@ -97,8 +97,8 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 	private InsertionOptimisationStage insertionStage;
 
-	public LNGSchedulerInsertSlotJobRunner(final CleanableExecutorService executorService, @Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider,
-			final EditingDomain editingDomain, final UserSettings userSettings, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents) {
+	public LNGSchedulerInsertSlotJobRunner(@Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider, final EditingDomain editingDomain,
+			final UserSettings userSettings, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents) {
 
 		this.originalScenarioDataProvider = scenarioDataProvider;
 		this.originalEditingDomain = editingDomain;
@@ -281,4 +281,11 @@ public class LNGSchedulerInsertSlotJobRunner {
 	public LNGScenarioRunner getLNGScenarioRunner() {
 		return scenarioRunner;
 	}
+
+	public void dispose() {
+		if (scenarioRunner != null) {
+			scenarioRunner.getExecutorService().shutdownNow();
+		}
+	}
+
 }

@@ -77,10 +77,9 @@ public class AbstractSlotInsertionTests {
 			}
 		}
 
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
+		final LNGSchedulerInsertSlotJobRunner runner = new LNGSchedulerInsertSlotJobRunner(null, scenarioDataProvider, LNGSchedulerJobUtils.createLocalEditingDomain(), userSettings, targetSlots,
+				targetEvents);
 		try {
-			final LNGSchedulerInsertSlotJobRunner runner = new LNGSchedulerInsertSlotJobRunner(executorService, null, scenarioDataProvider, LNGSchedulerJobUtils.createLocalEditingDomain(),
-					userSettings, targetSlots, targetEvents);
 			runner.setIteration(iterations);
 			runner.prepare();
 
@@ -88,7 +87,7 @@ public class AbstractSlotInsertionTests {
 
 			solutionChecker.accept(runner.getLNGScenarioRunner(), results);
 		} finally {
-			executorService.shutdownNow();
+			runner.dispose();
 		}
 	}
 
