@@ -689,7 +689,7 @@ public class ChangeSetView extends ViewPart {
 				return true;
 			}
 		};
-//		insertionPlanFilter = new InsertionPlanGrouperAndFilter();
+		// insertionPlanFilter = new InsertionPlanGrouperAndFilter();
 		filters[1] = insertionPlanFilter;
 
 		viewer.setFilters(filters);
@@ -721,11 +721,11 @@ public class ChangeSetView extends ViewPart {
 					g2 = (ChangeSetTableGroup) e2;
 				}
 				if (g1 != null && g2 != null) {
-//					if (insertionPlanFilter.getUserFilters().isEmpty()) {
-						if (!Objects.equal(g1.getGroupObject(), g2.getGroupObject())) {
-							return Double.compare(g2.getGroupSortValue(), g1.getGroupSortValue());
+					// if (insertionPlanFilter.getUserFilters().isEmpty()) {
+					if (!Objects.equal(g1.getGroupObject(), g2.getGroupObject())) {
+						return Double.compare(g2.getGroupSortValue(), g1.getGroupSortValue());
 
-//						}
+						// }
 					}
 					return -Double.compare(g2.getSortValue(), g1.getSortValue());
 				}
@@ -1228,7 +1228,7 @@ public class ChangeSetView extends ViewPart {
 								idx = root.getGroups().indexOf(changeSetTableGroup);
 							}
 							final String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
- 
+
 							helper.addAction(new ExportChangeAction(changeSetTableGroup, name));
 							showMenu = true;
 						}
@@ -1338,13 +1338,16 @@ public class ChangeSetView extends ViewPart {
 		} else if (plan instanceof SlotInsertionOptions) {
 			final SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) plan;
 			setViewMode(ViewMode.INSERTIONS);
+			int insertedObjects = slotInsertionOptions.getSlotsInserted().size() + slotInsertionOptions.getEventsInserted().size();
+			insertionPlanFilter.setMaxComplexity(2 + 2 * insertedObjects);
+
 			setNewDataData(target, (monitor, targetSlotId) -> {
 
 				NamedObject pTargetSlot = null;
 				if (!slotInsertionOptions.getSlotsInserted().isEmpty()) {
-					Slot targetSlot = slotInsertionOptions.getSlotsInserted().get(0);
+					Slot<?> targetSlot = slotInsertionOptions.getSlotsInserted().get(0);
 					if (slotId != null) {
-						for (final Slot s : slotInsertionOptions.getSlotsInserted()) {
+						for (final Slot<?> s : slotInsertionOptions.getSlotsInserted()) {
 							if (slotId.equals(s.getName())) {
 								targetSlot = s;
 								break;
