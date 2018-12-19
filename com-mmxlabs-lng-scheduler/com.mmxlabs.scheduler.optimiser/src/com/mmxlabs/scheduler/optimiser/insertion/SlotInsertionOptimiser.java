@@ -22,7 +22,6 @@ import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
-import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
