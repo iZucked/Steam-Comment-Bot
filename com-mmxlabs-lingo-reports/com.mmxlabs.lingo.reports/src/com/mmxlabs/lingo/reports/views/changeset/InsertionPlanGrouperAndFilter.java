@@ -360,6 +360,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			}
 
 			final Map<ChangeSetMetadata, List<ChangeSetTableGroup>> grouper = new LinkedHashMap<>();
+			int minComplexity = Integer.MAX_VALUE;
 			for (final ChangeSetTableGroup tableGroup : tableRoot.getGroups()) {
 				final Pair<String, Object> p = getDestination(tableGroup, target);
 				final String label = p.getFirst();
@@ -368,14 +369,24 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				key.changeCount = tableGroup.getComplexity();
 				tableGroup.setDescription(label);
 				grouper.computeIfAbsent(key, k -> new LinkedList<ChangeSetTableGroup>()).add(tableGroup);
+				if (tableGroup.getComplexity() > 0) {
+					minComplexity = Math.min(minComplexity, tableGroup.getComplexity());
+				}
 			}
+			// Make sure at least one level of complexity is included.
+			int adjustedMaxComplexity = getMaxComplexity();
+			adjustedMaxComplexity = Math.max(1, Math.min(minComplexity, maxComplexity));
 			for (final Map.Entry<ChangeSetMetadata, List<ChangeSetTableGroup>> e : grouper.entrySet()) {
 				final List<ChangeSetTableGroup> groups = e.getValue();
 				Collections.sort(groups, (a, b) -> Long.compare(b.getDeltaMetrics().getPnlDelta(), a.getDeltaMetrics().getPnlDelta()));
 				boolean first = true;
 				double sortValue = 0.0;
 				for (final ChangeSetTableGroup g : groups) {
-					if (g.getComplexity() > getMaxComplexity()) {
+					// Filter out no-change solutions. We can get here e.g. because of charter out generation.
+					if (g.getComplexity() == 0) {
+						continue;
+					}
+					if (g.getComplexity() > adjustedMaxComplexity) {
 						continue;
 					}
 					g.setGroupAlternative(!first);
@@ -1156,17 +1167,16 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 	public boolean isUnexpandedInsertionGroup(ChangeSetTableGroup changeSetTableGroup) {
 
-        if (!insertionModeActive) {
-            return false;
-        }
+		if (!insertionModeActive) {
+			return false;
+		}
 
-//        if (userFilters.isEmpty()) {
-            if (!expandedGroups.contains(changeSetTableGroup.getGroupObject())) {
-                return true;
-            }
-//        }
-        return false;
-    }
+		if (!expandedGroups.contains(changeSetTableGroup.getGroupObject())) {
+			return true;
+		}
+
+		return false;
+	}
 
 	private Pair<String, Object> getDestination(final ChangeSetTableGroup tableGroup, final Object target) {
 		final ChangeSet changeSet = tableGroup.getChangeSet();
