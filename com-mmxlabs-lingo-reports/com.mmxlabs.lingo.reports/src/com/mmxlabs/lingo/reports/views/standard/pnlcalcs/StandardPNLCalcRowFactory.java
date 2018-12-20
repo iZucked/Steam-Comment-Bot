@@ -4,55 +4,35 @@
  */
 package com.mmxlabs.lingo.reports.views.standard.pnlcalcs;
 
-import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 
 import com.google.common.collect.Sets;
-import com.mmxlabs.common.util.TriFunction;
-import com.mmxlabs.lingo.reports.views.standard.econs.CargoAllocationPair;
-import com.mmxlabs.lingo.reports.views.standard.econs.DeltaPair;
-import com.mmxlabs.lingo.reports.views.standard.econs.VesselEventVisitPair;
 import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
-import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
-import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
-import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.SlotAllocationType;
-import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.ui.tabular.BaseFormatter;
-import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 
@@ -116,10 +96,11 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 		// rows.add(createRow(200, "Real shipping cost", false, "$", "", true, createShippingCosts((fu) -> getShippingCost(StandardPNLCalcRowFactory::getShippingCost(fuelCostFunc) )));
 
 		Function<FuelUsage, Integer> fuelCostFunc = (fu) -> getFuelCost(fu, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
-		Function<SlotVisit, Integer> portCostFunc = (sv) -> sv.getPortCost();
+		Function<SlotVisit, Integer> portCostFunc = SlotVisit::getPortCost;
 		Function<Object, Integer> func2 = (object) -> getShippingCost(object, portCostFunc, fuelCostFunc);
 
 		rows.add(createRow(200, "Real shipping cost", false, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, func2))));
+		rows.add(createRow(205, "PNL", false, "$", "", false, createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardPNLCalcRowFactory::getPNLValue))));
 
 		// Spacer
 		rows.add(createRow(210, "", false, "", "", false, createEmptyFormatter()));
@@ -361,6 +342,26 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 		default:
 			break;
 
+		}
+		return null;
+	}
+	
+	/**
+	 * Get total cargo PNL value
+	 * 
+	 * @param container
+	 * @param entity
+	 * @return
+	 */
+	private static Integer getPNLValue(final Object object) {
+		if (object instanceof ProfitAndLossContainer) {
+			final ProfitAndLossContainer container = (ProfitAndLossContainer) object;
+			final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
+			if (groupProfitAndLoss == null) {
+				return null;
+			}
+			// Rounding!
+			return (int) groupProfitAndLoss.getProfitAndLoss();
 		}
 		return null;
 	}
