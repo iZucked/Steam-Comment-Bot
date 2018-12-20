@@ -10,12 +10,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
@@ -49,6 +51,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilityWindowTrimmer;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -56,7 +59,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 import com.mmxlabs.scheduler.optimiser.scheduling.ICustomTimeWindowTrimmer;
 
 public class ScheduleSpecificationHelper {
-	private final List<BiConsumer<LNGScenarioToOptimiserBridge, Injector>> jobs = new LinkedList<>();
+	private final List<BiFunction<LNGScenarioToOptimiserBridge, Injector, Command>> jobs = new LinkedList<>();
 	private final List<VesselAvailability> extraAvailabilities = new LinkedList<>();
 	private final List<CharterInMarketOverride> extraCharterInMarketOverrides = new LinkedList<>();
 	private final List<CharterInMarket> extraCharterInMarkets = new LinkedList<>();
@@ -91,7 +94,7 @@ public class ScheduleSpecificationHelper {
 		}
 	}
 
-	public void addJobs(BiConsumer<LNGScenarioToOptimiserBridge, Injector> job) {
+	public void addJobs(BiFunction<LNGScenarioToOptimiserBridge, Injector, Command> job) {
 		jobs.add(job);
 	}
 
@@ -225,13 +228,14 @@ public class ScheduleSpecificationHelper {
 								}
 							})//
 							.make(extraInjectorService), //
+			 
 					true, // evaluation only?
 					hints.toArray(new String[hints.size()]) // Hints? No Caching?
 			);
 			// Probably need to bring in the evaluation modules
 			final Collection<IOptimiserInjectorService> services = bridge.getDataTransformer().getModuleServices();
 
-			// FIXME: Disable main break even evalRuator
+			// FIXME: Disable main break even evaluator
 			// FIXME: Disable caches!
 
 			final List<Module> modules = new LinkedList<>();
@@ -249,8 +253,12 @@ public class ScheduleSpecificationHelper {
 			ExecutorService executor = LNGScenarioChainBuilder.createExecutorService();
 			try {
 				List<Future<?>> futures = new ArrayList<>(jobs.size());
+				CompoundCommand cmd = new CompoundCommand();
 				jobs.forEach(c -> futures.add(executor.submit(() -> {
-					c.accept(bridge, injector);
+					Command cc = c.apply(bridge, injector);
+					if (cc != null) {
+						cmd.append(cc);
+					}
 					monitor.worked(1);
 				})));
 				futures.forEach(f -> {
@@ -261,6 +269,9 @@ public class ScheduleSpecificationHelper {
 						e.printStackTrace();
 					}
 				});
+				if (!cmd.isEmpty()) {
+					RunnerHelper.syncExecDisplayOptional(() -> editingDomain.getCommandStack().execute(cmd));
+				}
 			} finally {
 				executor.shutdownNow();
 			}

@@ -18,10 +18,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
@@ -39,6 +41,7 @@ import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
+import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator.BreakEvenMode;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -132,7 +135,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 		for (final Pair<BaseCase, ScheduleSpecification> p : baseCases) {
 
-			final BiConsumer<LNGScenarioToOptimiserBridge, Injector> job = (bridge, injector) -> {
+			final BiFunction<LNGScenarioToOptimiserBridge, Injector, Command> job = (bridge, injector) -> {
 				final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
 				final ISequences base = transformer.createSequences(p.getSecond(), bridge.getDataTransformer());
 				Long be_pnl = null;
@@ -144,6 +147,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					resultHandler.accept(p.getFirst(), schedule);
 				} catch (final Throwable e) {
 				}
+				return null;
 			};
 			helper.addJobs(job);
 		}

@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -34,6 +35,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
@@ -104,17 +106,25 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
+import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.lng.transformer.ui.analytics.EvaluateSolutionSetHelper;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -289,7 +299,7 @@ public class ChangeSetView extends ViewPart {
 
 			columnHelper.updateVesselColumns(vesselnames);
 
-			for (GridColumn gc : viewer.getGrid().getColumns()) {
+			for (final GridColumn gc : viewer.getGrid().getColumns()) {
 				gc.setWidth(gc.getWidth());
 			}
 			// Force header size recalculation
@@ -512,6 +522,7 @@ public class ChangeSetView extends ViewPart {
 	protected boolean showNegativePNLChangesMenu = false;
 
 	private ActionContributionItem toggleDiffToBaseActionItem;
+	private RunnableAction reEvaluateAction;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -923,6 +934,71 @@ public class ChangeSetView extends ViewPart {
 		{
 			final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
 			getViewSite().getActionBars().getToolBarManager().add(packAction);
+		}
+		if (false) {
+			
+			// Re-evaluate requires selecting a group
+			// Undo() does not trigger view to refresh
+			
+			reEvaluateAction = new RunnableAction("Re-evaluate", () -> {
+
+				final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+
+				final Iterator<?> itr = selection.iterator();
+				while (itr.hasNext()) {
+					final Object obj = itr.next();
+					if (obj instanceof ChangeSetTableGroup) {
+						final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) obj;
+						final ScenarioResult result = changeSetTableGroup.getCurrentScenario();
+
+						final EvaluateSolutionSetHelper helper = new EvaluateSolutionSetHelper(result.getScenarioDataProvider());
+						final List<LoadSlot> extraLoads = new LinkedList<>();
+						final List<DischargeSlot> extraDischarges = new LinkedList<>();
+						final AnalyticsSolution solution = currentViewState.lastSolution;
+						UserSettings userSettings = null;
+						if (solution != null) {
+							final UUIDObject object = solution.getSolution();
+							if (object instanceof AbstractSolutionSet) {
+								final AbstractSolutionSet options = (AbstractSolutionSet) object;
+								options.getExtraSlots().stream().filter(s -> s instanceof LoadSlot).forEach(s -> extraLoads.add((LoadSlot) s));
+								options.getExtraSlots().stream().filter(s -> s instanceof DischargeSlot).forEach(s -> extraDischarges.add((DischargeSlot) s));
+							}
+
+							helper.processSolution(ScenarioModelUtil.getScheduleModel(result.getScenarioDataProvider()));
+
+							if (object instanceof AbstractSolutionSet) {
+								final AbstractSolutionSet abstractSolutionSet = (AbstractSolutionSet) object;
+								userSettings = abstractSolutionSet.getUserSettings();
+								for (final SolutionOption opt : abstractSolutionSet.getOptions()) {
+									helper.processSolution(opt.getScheduleModel());
+								}
+							}
+						}
+						if (userSettings == null) {
+							userSettings = result.getTypedRoot(LNGScenarioModel.class).getUserSettings();
+						}
+						final ProgressMonitorDialog dialog = new ProgressMonitorDialog(getSite().getShell());
+						try {
+							final UserSettings copy = EcoreUtil.copy(userSettings);
+							dialog.run(true, false, (monitor) -> {
+								helper.generateResults(result.getScenarioInstance(), copy, result.getScenarioDataProvider().getEditingDomain(), extraLoads, extraDischarges, monitor);
+								final ViewState viewState = currentViewState;
+
+								if (viewState != null) {
+									final String id = viewState.getTargetSlotID();
+									RunnerHelper.asyncExec(() -> openAnalyticsSolution(viewState.lastSolution, id));
+								}
+							});
+						} catch (final Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+				}
+			});
+			getViewSite().getActionBars().getToolBarManager().add(reEvaluateAction);
+
 		}
 		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
@@ -1338,7 +1414,7 @@ public class ChangeSetView extends ViewPart {
 		} else if (plan instanceof SlotInsertionOptions) {
 			final SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) plan;
 			setViewMode(ViewMode.INSERTIONS);
-			int insertedObjects = slotInsertionOptions.getSlotsInserted().size() + slotInsertionOptions.getEventsInserted().size();
+			final int insertedObjects = slotInsertionOptions.getSlotsInserted().size() + slotInsertionOptions.getEventsInserted().size();
 			insertionPlanFilter.setMaxComplexity(2 + 2 * insertedObjects);
 
 			setNewDataData(target, (monitor, targetSlotId) -> {

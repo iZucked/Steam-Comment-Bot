@@ -15,7 +15,6 @@ import java.util.List;
 import javax.inject.Singleton;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Exposed;
@@ -43,76 +42,9 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 public class ADPScenarioModuleHelper {
-	//
-	// @Override
-	// public boolean runADPModel(@Nullable final ScenarioInstance scenarioInstance, //
-	// @NonNull final IScenarioDataProvider scenarioDataProvider, //
-	// @NonNull final ADPModel adpModel, //
-	// @NonNull final IProgressMonitor progressMonitor //
-	// ) {
-	// final long start = System.currentTimeMillis();
-	//
-	// final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
-	//
-	// userSettings.setCleanStateOptimisation(true);
-	//
-	// OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, scenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
-	// optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
-	//
-	// // DEBUGGING
-	// // DO NOT COMMIT
-	// ScenarioUtils.setLSOStageIterations(optimisationPlan, 1_000);
-	// ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 1_000);
-	//
-	// final List<String> hints = new LinkedList<>();
-	// // TODO: Add hints
-	// hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
-	//
-	// final String[] initialHints = hints.toArray(new String[hints.size()]);
-	// // final CharterInMarket defaultMarket = adpModel.getFleetProfile().getDefaultNominalMarket();
-	//
-	// // Generate internal data
-	// final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService();
-	// try {
-	//
-	// final LNGScenarioToOptimiserBridge bridge = new LNGScenarioToOptimiserBridge(scenarioDataProvider, //
-	// scenarioInstance, //
-	// userSettings, //
-	// optimisationPlan.getSolutionBuilderSettings(), //
-	// scenarioDataProvider.getEditingDomain(), //
-	// null, // Bootstrap module
-	// OptimiserInjectorServiceMaker.begin()//
-	// .withModuleBindInstance(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, ADPModel.class, adpModel)//
-	// .withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, createExtraDataModule(adpModel))//
-	// // .withModuleOverride(IOptimiserInjectorService.ModuleType.Module_InitialSolution, createInitialSolutionModule(adpModel, defaultMarket))//
-	// .make(), //
-	// true, false, //
-	// initialHints // Hints? No Caching?
-	// );
-	// // Probably need to bring in the evaluation modules
-	// final Collection<IOptimiserInjectorService> services = bridge.getDataTransformer().getModuleServices();
-	//
-	// final ISequences initialSequences = bridge.getDataTransformer().getInitialSequences();
-	//
-	// // FIXME: Create ADP chain
-	// final IChainRunner chainRunner = LNGScenarioChainBuilder.createADPOptimisationChain(optimisationPlan.getResultName(), bridge.getDataTransformer(), bridge, optimisationPlan,
-	// executorService, new MultiStateResult(initialSequences, new HashMap<>()), initialHints);
-	//
-	// LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, scenarioInstance, bridge, chainRunner, null);
-	//
-	// final IMultiStateResult result = scenarioRunner.runWithProgress(progressMonitor);
-	// return result != null;
-	//
-	// } catch (final InfeasibleSolutionException e) {
-	// throw e;
-	// } catch (final Exception e) {
-	// e.printStackTrace();
-	// throw new RuntimeException(e);
-	// } finally {
-	// executorService.shutdownNow();
-	// System.out.println("done in:" + (System.currentTimeMillis() - start));
-	// }
-	// }
+	private ADPScenarioModuleHelper() {
+
+	}
 
 	public static @NonNull Module createExtraDataModule(final @NonNull ADPModel adpModel) {
 

@@ -12,13 +12,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
@@ -38,13 +43,14 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.transformer.DefaultScheduleSpecificationBuilder;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificationHelper;
+import com.mmxlabs.models.lng.transformer.ui.common.ScheduleToSequencesTransformer;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -52,23 +58,51 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class EvaluateSolutionSetHelper {
 	final ScheduleSpecificationHelper scheduleSpecificationHelper;
+	private @NonNull EditingDomain editingDomain;
 
 	public EvaluateSolutionSetHelper(final IScenarioDataProvider scenarioDataProvider) {
 		this.scheduleSpecificationHelper = new ScheduleSpecificationHelper(scenarioDataProvider);
+		this.editingDomain = scenarioDataProvider.getEditingDomain();
+	}
+
+	public void processSolution(ScheduleModel scheduleModel) {
+		if (scheduleModel != null && scheduleModel.getSchedule() != null) {
+			final BiFunction<LNGScenarioToOptimiserBridge, Injector, Command> r = (bridge, injector) -> {
+				final ScheduleToSequencesTransformer transformer = injector.getInstance(ScheduleToSequencesTransformer.class);
+				final ISequences base = transformer.createSequences(scheduleModel.getSchedule(), bridge.getDataTransformer());
+
+				try {
+					final Schedule base_schedule = bridge.createSchedule(base, Collections.emptyMap());
+					CompoundCommand cmd = new CompoundCommand();
+					cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE, base_schedule));
+					cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
+					return cmd;
+				} catch (final Throwable e) {
+
+				}
+				return null;
+			};
+
+			scheduleSpecificationHelper.addJobs(r);
+		}
 	}
 
 	public void processSolution(final ScheduleSpecification scheduleSpecification, ScheduleModel scheduleModel) {
 		if (scheduleSpecification != null) {
-			final BiConsumer<LNGScenarioToOptimiserBridge, Injector> r = (bridge, injector) -> {
+			final BiFunction<LNGScenarioToOptimiserBridge, Injector, Command> r = (bridge, injector) -> {
 				final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
 				final ISequences base = transformer.createSequences(scheduleSpecification, bridge.getDataTransformer());
 
 				try {
 					final Schedule base_schedule = bridge.createSchedule(base, Collections.emptyMap());
-					scheduleModel.setSchedule(base_schedule);
+					CompoundCommand cmd = new CompoundCommand();
+					cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE, base_schedule));
+					cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
+					return cmd;
 				} catch (final Throwable e) {
 
 				}
+				return null;
 			};
 
 			scheduleSpecificationHelper.addJobs(r);
@@ -229,25 +263,25 @@ public class EvaluateSolutionSetHelper {
 		};
 	}
 
-	public void evaluteBaseCase() {
+	public void evaluateBaseCase() {
 
 		// Construct a new set of sequences for the initial state.
 		// Note: In this mode, the data transformer initial sequences are not correct as they will contain *ALL* additional data.
 
-		final BiConsumer<LNGScenarioToOptimiserBridge, Injector> r = (bridge, injector) -> {
-
-			DefaultScheduleSpecificationBuilder builder = new DefaultScheduleSpecificationBuilder();
-			ScheduleSpecification scheduleSpecification = builder.buildScheduleSpecification(bridge.getScenarioDataProvider(), null);
-
-			final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
-			final ISequences base = transformer.createSequences(scheduleSpecification, bridge.getDataTransformer());
+		final BiFunction<LNGScenarioToOptimiserBridge, Injector, Command> r = (bridge, injector) -> {
+			final ScheduleToSequencesTransformer transformer = injector.getInstance(ScheduleToSequencesTransformer.class);
+			ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(bridge.getScenarioDataProvider());
+			final ISequences base = transformer.createSequences(scheduleModel.getSchedule(), bridge.getDataTransformer());
 			try {
 				final Schedule base_schedule = bridge.createSchedule(base, Collections.emptyMap());
-				ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(bridge.getScenarioDataProvider());
-				scheduleModel.setSchedule(base_schedule);
+				CompoundCommand cmd = new CompoundCommand();
+				cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE, base_schedule));
+				cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
+				return cmd;
 			} catch (final Throwable e) {
 
 			}
+			return null;
 		};
 
 		scheduleSpecificationHelper.addJobs(r);
