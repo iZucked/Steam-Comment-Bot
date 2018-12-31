@@ -74,7 +74,7 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 			return getSequenceLabel(sequence);
 		} else if (object instanceof Vessel) {
 			Vessel vessel = (Vessel) object;
-			return AssignmentLabelProvider.getLabelFor(vessel);
+			return AssignmentLabelProvider.getLabelFor(vessel, true);
 		}
 
 
@@ -84,7 +84,7 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 	private String getSequenceLabel(final Sequence sequence) {
 		if (sequence.isSetCharterInMarket()) {
 			final CharterInMarket charterInMarket = sequence.getCharterInMarket();
-			return AssignmentLabelProvider.getLabelFor(charterInMarket, sequence.getSpotIndex());
+			return AssignmentLabelProvider.getLabelFor(charterInMarket, sequence.getSpotIndex(), true);
 		} else if (sequence.isSetVesselAvailability()) {
 			final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
 			return AssignmentLabelProvider.getLabelFor(vesselAvailability);

@@ -66,7 +66,7 @@ public class ScheduleReportJSONGenerator {
 			String vesselName;
 
 			if (sequence.isSpotVessel()) {
-				vesselName = AssignmentLabelProvider.getLabelFor(sequence.getCharterInMarket(), sequence.getSpotIndex());
+				vesselName = AssignmentLabelProvider.getLabelFor(sequence.getCharterInMarket(), sequence.getSpotIndex(), true);
 			} else {
 				if (sequence.getVesselAvailability() != null) {
 					vesselName = AssignmentLabelProvider.getLabelFor(sequence.getVesselAvailability());

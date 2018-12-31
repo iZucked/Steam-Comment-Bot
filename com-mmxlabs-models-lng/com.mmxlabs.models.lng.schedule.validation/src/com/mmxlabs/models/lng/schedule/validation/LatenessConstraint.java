@@ -15,6 +15,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.ui.util.AssignmentLabelProvider;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -22,6 +23,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -46,11 +48,13 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 					String tmp = "";
 					if (seq.isSetVesselAvailability() && seq.getVesselAvailability() != null) {
 			            tmp = seq.getVesselAvailability().getVessel().getName();
-					} else if (seq.isSetCharterInMarket() && seq.getVesselAvailability() != null) {
-			        	tmp = "" + seq.getCharterInMarket().getName();
+						tmp = AssignmentLabelProvider.getLabelFor(seq.getVesselAvailability().getVessel(), false);
+					} else if (seq.isSetCharterInMarket() && seq.getCharterInMarket() != null) {
+						CharterInMarket cim = seq.getCharterInMarket();
+						tmp = AssignmentLabelProvider.getLabelFor(cim, seq.getSpotIndex(), false);
 					}		        
-					if(tmp.isEmpty()) tmp ="Vessel... ";
-					
+					if(tmp.isEmpty()) tmp ="Vessel";
+							
 					if (allocation != null) {
 						obj = allocation.getSlot();
 						message = String.format("%s is %s hrs late to reach %s in schedule.", tmp, LatenessUtils.getLatenessInHours((SlotVisit) target), ((Slot) obj).getName());

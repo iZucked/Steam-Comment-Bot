@@ -88,7 +88,7 @@ public class AssignmentManipulator implements ICellRenderer, ICellManipulator, I
 					spotIndex = assignableElement.getSpotIndex();
 				}
 
-				p.setFirst(AssignmentLabelProvider.getLabelFor(charterInMarket, spotIndex));
+				p.setFirst(AssignmentLabelProvider.getLabelFor(charterInMarket, spotIndex, true));
 			}
 		});
 

@@ -20,9 +20,14 @@ public class AssignmentLabelProvider {
 		return "";
 	}
 	
-	public static String getLabelFor(final Vessel vessel) {
+	public static String getLabelFor(final Vessel vessel, boolean showVolume) {
 		if (vessel != null) {
-			return String.format("%s (%dk)", vessel.getName(), vessel.getVesselOrDelegateCapacity() / 1000);
+			if(showVolume) {
+				return String.format("%s (%dk)", vessel.getName(), vessel.getVesselOrDelegateCapacity() / 1000);
+			}
+			else {
+				return String.format("%s", vessel.getName());
+			}
 		}
 		return "";
 	}
@@ -31,12 +36,12 @@ public class AssignmentLabelProvider {
 		
 		final CharterInMarket charterInMarket = charterInMarketOverride.getCharterInMarket();
 		if (charterInMarket != null) {
-			return getLabelFor(charterInMarket, charterInMarketOverride.getSpotIndex()) + " Override";
+			return getLabelFor(charterInMarket, charterInMarketOverride.getSpotIndex(), true) + " Override";
 		}
 		return "";
 	}
 
-	public static String getLabelFor(final CharterInMarket charterInMarket, int spotIndex) {
+	public static String getLabelFor(final CharterInMarket charterInMarket, int spotIndex, boolean showVolume) {
 		Vessel vessel = charterInMarket.getVessel();
 		int capacity = vessel == null ? 0 : vessel.getVesselOrDelegateCapacity();
 		String type;
@@ -47,6 +52,11 @@ public class AssignmentLabelProvider {
 		} else {
 			type = "market";
 		}
-		return String.format("%s (%dk) (%s)", charterInMarket.getName(), capacity / 1000, type);
+		if(showVolume) {
+			return String.format("%s (%dk) (%s)", charterInMarket.getName(), capacity / 1000, type);
+		}
+		else {
+			return String.format("%s (%s)", charterInMarket.getName(), type);
+		}
 	}
 }

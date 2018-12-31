@@ -45,7 +45,7 @@ public final class AssignmentInlineEditor extends ReferenceInlineEditor {
 				p.setFirst(AssignmentLabelProvider.getLabelFor(charterInMarketOverride));
 			} else if (p.getSecond() instanceof CharterInMarket) {
 				final CharterInMarket charterInMarket = (CharterInMarket) p.getSecond();
-				p.setFirst(AssignmentLabelProvider.getLabelFor(charterInMarket, -2));
+				p.setFirst(AssignmentLabelProvider.getLabelFor(charterInMarket, -2, true));
 			}
 		});
 
