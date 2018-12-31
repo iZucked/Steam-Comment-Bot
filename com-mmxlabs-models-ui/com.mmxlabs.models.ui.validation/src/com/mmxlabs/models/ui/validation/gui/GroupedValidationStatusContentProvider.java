@@ -72,6 +72,7 @@ public class GroupedValidationStatusContentProvider implements ITreeContentProvi
 					} else {
 						node.desc = node.group.toString();
 					}
+					parentsMap.put(node, status);
 					nodes.add(node);
 				}
 				return nodes.toArray();
@@ -125,6 +126,9 @@ public class GroupedValidationStatusContentProvider implements ITreeContentProvi
 		}
 		if (parentElement instanceof Node) {
 			final Node node = (Node) parentElement;
+			for (Object o : node.status) {
+				parentsMap.put(o, node);
+			}
 			return node.status.toArray();
 		}
 		if (parentElement instanceof IStatus) {
@@ -145,6 +149,7 @@ public class GroupedValidationStatusContentProvider implements ITreeContentProvi
 						node.desc = node.group.toString();
 					}
 					nodes.add(node);
+						parentsMap.put(node, status);
 				}
 				return nodes.toArray();
 			} else {
