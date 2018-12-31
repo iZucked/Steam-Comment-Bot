@@ -42,9 +42,18 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 				String message = null;
 				if (target instanceof SlotVisit) {
 					final SlotAllocation allocation = ((SlotVisit) target).getSlotAllocation();
+					Sequence seq = allocation.getCargoAllocation().getSequence();
+					String tmp = "";
+					if (seq.isSetVesselAvailability() && seq.getVesselAvailability() != null) {
+			            tmp = seq.getVesselAvailability().getVessel().getName();
+					} else if (seq.isSetCharterInMarket() && seq.getVesselAvailability() != null) {
+			        	tmp = "" + seq.getCharterInMarket().getName();
+					}		        
+					if(tmp.isEmpty()) tmp ="Vessel... ";
+					
 					if (allocation != null) {
 						obj = allocation.getSlot();
-						message = String.format("Vessel reaches %s late in schedule.", ((Slot) obj).getName());
+						message = String.format("%s is %s hrs late to reach %s in schedule.", tmp, LatenessUtils.getLatenessInHours((SlotVisit) target), ((Slot) obj).getName());
 						feature = CargoPackage.Literals.SLOT__WINDOW_START;
 					}
 				} else if (target instanceof VesselEventVisit) {
