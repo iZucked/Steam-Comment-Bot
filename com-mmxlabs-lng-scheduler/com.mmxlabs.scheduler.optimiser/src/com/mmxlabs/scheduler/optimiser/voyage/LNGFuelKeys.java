@@ -10,6 +10,9 @@ import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 
 @NonNullByDefault
 public final class LNGFuelKeys {
+	private LNGFuelKeys() {
+
+	}
 
 	public static final FuelKey Cooldown_In_m3 = new FuelKey(FuelComponent.Cooldown, FuelUnit.M3, IBaseFuel.LNG);
 
@@ -37,8 +40,15 @@ public final class LNGFuelKeys {
 			{ NBO_In_m3, NBO_In_mmBtu }, //
 			{ FBO_In_m3, FBO_In_mmBtu } //
 	};
+	public static final FuelKey[] Travel_LNG = { //
+			NBO_In_m3, NBO_In_mmBtu, NBO_In_MT, //
+			FBO_In_m3, FBO_In_mmBtu, FBO_In_MT //
+	};
+	public static final FuelKey[] Idle_LNG = { //
+			IdleNBO_In_m3, IdleNBO_In_mmBtu, IdleNBO_In_MT, //
+	};
 	public static final FuelKey[] Travel_LNG_In_m3 = { NBO_In_m3, FBO_In_m3 };
-	
+
 	public static final FuelKey[][] Idle_LNG_In_m3_mmBtu_Pair = { //
 			{ IdleNBO_In_m3, IdleNBO_In_mmBtu } //
 	};
