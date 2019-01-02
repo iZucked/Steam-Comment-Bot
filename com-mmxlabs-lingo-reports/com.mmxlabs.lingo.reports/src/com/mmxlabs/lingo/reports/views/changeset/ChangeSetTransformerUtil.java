@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.ToLongFunction;
 
 import org.eclipse.emf.ecore.EObject;
@@ -48,18 +49,21 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -74,6 +78,10 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
 public final class ChangeSetTransformerUtil {
+
+	private ChangeSetTransformerUtil() {
+
+	}
 
 	/**
 	 * Data structure to hold element ID to row mappings.
@@ -105,7 +113,6 @@ public final class ChangeSetTransformerUtil {
 		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
 			targets.add(openSlotAllocation);
 		}
-
 		for (final Sequence sequence : schedule.getSequences()) {
 			if (sequence.getSequenceType() == SequenceType.VESSEL //
 					|| sequence.getSequenceType() == SequenceType.ROUND_TRIP //
@@ -132,6 +139,10 @@ public final class ChangeSetTransformerUtil {
 						// Keep going!
 					} else if (event instanceof GeneratedCharterOut) {
 						// Keep going!
+					} else if (event instanceof CharterLengthEvent) {
+						continue;
+					} else if (event instanceof GroupedCharterLengthEvent) {
+						// Keep going!
 					} else if (event instanceof SlotVisit) {
 						// Already processed
 						continue;
@@ -152,6 +163,7 @@ public final class ChangeSetTransformerUtil {
 				}
 			}
 		}
+
 		return targets;
 	}
 
@@ -164,7 +176,37 @@ public final class ChangeSetTransformerUtil {
 	public static @NonNull MappingModel generateMappingModel(final @NonNull Collection<EObject> targets) {
 
 		final MappingModel mappingModel = new MappingModel();
+		final Map<Sequence, GroupedCharterLengthEvent> extraEvents = new HashMap<>();
+		// Split this code out as it is used in two places.
+		final Consumer<Event> eventMapper = event -> {
+			// Assume we are a valid event to include if we get here
+			final ChangeSetRowDataGroup group = ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup();
+			mappingModel.groups.add(group);
 
+			final ChangeSetRowData row = ChangesetFactory.eINSTANCE.createChangeSetRowData();
+			group.getMembers().add(row);
+
+			final String eventName = event.name();
+
+			// NOTE: GCO ARE NEVER EQUIV, BREAKS CONSISTENT SORTING IN CHANGE SET VIEW
+
+			final String key = EquivalanceGroupBuilder.getElementKey(event);
+			// TODO: Unique name?
+			mappingModel.lhsRowMap.put(key, row);
+
+			row.setLhsName(eventName);
+			row.setLhsEvent(event);
+
+			if (event instanceof ProfitAndLossContainer) {
+				row.setLhsGroupProfitAndLoss((ProfitAndLossContainer) event);
+			}
+			if (event instanceof EventGrouping) {
+				row.setEventGrouping((EventGrouping) event);
+			}
+			row.setVesselName(ChangeSetTransformerUtil.getName(event.getSequence()));
+			row.setVesselShortName(ChangeSetTransformerUtil.getShortName(event.getSequence()));
+			row.setVesselType(ChangeSetTransformerUtil.getVesselType(event.getSequence()));
+		};
 		for (final EObject target : targets) {
 			if (target instanceof CargoAllocation) {
 				final CargoAllocation cargoAllocation = (CargoAllocation) target;
@@ -249,7 +291,7 @@ public final class ChangeSetTransformerUtil {
 				final ChangeSetRowData row = ChangesetFactory.eINSTANCE.createChangeSetRowData();
 				group.getMembers().add(row);
 
-				final Slot slot = openSlotAllocation.getSlot();
+				final Slot<?> slot = openSlotAllocation.getSlot();
 
 				final String key = ChangeSetTransformerUtil.getKeyName(openSlotAllocation);
 				final String name = ChangeSetTransformerUtil.getRowName(slot);
@@ -273,7 +315,6 @@ public final class ChangeSetTransformerUtil {
 
 					if (slot instanceof SpotDischargeSlot) {
 						final String mKey = getMarketSlotKey((SpotDischargeSlot) slot);
-
 						mappingModel.rhsRowMarketMap.computeIfAbsent(mKey, k -> new LinkedList<>()).add(row);
 					}
 					mappingModel.rhsRowMap.put(key, row);
@@ -281,35 +322,32 @@ public final class ChangeSetTransformerUtil {
 			} else if (target instanceof Event) {
 				final Event event = (Event) target;
 
-				// Assume we are a valid event to include if we get here
-				final ChangeSetRowDataGroup group = ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup();
-				mappingModel.groups.add(group);
-
-				final ChangeSetRowData row = ChangesetFactory.eINSTANCE.createChangeSetRowData();
-				group.getMembers().add(row);
-
-				final String eventName = event.name();
-
-				// NOTE: GCO ARE NEVER EQUIV, BREAKS CONSISTENT SORTING IN CHANGE SET VIEW
-
-				final String key = EquivalanceGroupBuilder.getElementKey(event);
-				// TODO: Unique name?
-				mappingModel.lhsRowMap.put(key, row);
-
-				row.setLhsName(eventName);
-				row.setLhsEvent(event);
-
-				if (event instanceof ProfitAndLossContainer) {
-					row.setLhsGroupProfitAndLoss((ProfitAndLossContainer) event);
+				if (event instanceof CharterLengthEvent) {
+					// Record these events so we can group them up later
+					final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) event;
+					extraEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents().add(charterLengthEvent);
+				} else {
+					eventMapper.accept(event);
 				}
-				if (event instanceof EventGrouping) {
-					row.setEventGrouping((EventGrouping) event);
-				}
-				row.setVesselName(ChangeSetTransformerUtil.getName(event.getSequence()));
-				row.setVesselShortName(ChangeSetTransformerUtil.getShortName(event.getSequence()));
-				row.setVesselType(ChangeSetTransformerUtil.getVesselType(event.getSequence()));
-
 			}
+		}
+
+		for (final GroupedCharterLengthEvent cle : extraEvents.values()) {
+			long pnl1 = 0L;
+			long pnl2 = 0L;
+			for (final Event e : cle.getEvents()) {
+				final CharterLengthEvent c = (CharterLengthEvent) e;
+				pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
+				pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
+				cle.setLinkedSequence(c.getSequence());
+			}
+			final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
+			groupProfitAndLoss.setProfitAndLoss(pnl1);
+			groupProfitAndLoss.setProfitAndLossPreTax(pnl2);
+			cle.setGroupProfitAndLoss(groupProfitAndLoss);
+
+			// Create an entry for the new grouped item
+			eventMapper.accept(cle);
 		}
 
 		return mappingModel;
@@ -546,7 +584,7 @@ public final class ChangeSetTransformerUtil {
 
 							if (afterDataList != null) {
 
-								for (ChangeSetRowData d : afterDataList) {
+								for (final ChangeSetRowData d : afterDataList) {
 									if (d.getRhsLink() != null) {
 										// Assert false?
 										continue;
@@ -602,7 +640,7 @@ public final class ChangeSetTransformerUtil {
 	 * @param seenRows
 	 */
 	private static @NonNull List<ChangeSetRow> generateRowData(final MappingModel beforeMapping, final MappingModel afterMapping) {
-		final List<ChangeSetRow> rows = new LinkedList<ChangeSetRow>();
+		final List<ChangeSetRow> rows = new LinkedList<>();
 
 		final Set<String> lhsKeys = new LinkedHashSet<>();
 		lhsKeys.addAll(beforeMapping.lhsRowMap.keySet());
@@ -1085,7 +1123,7 @@ public final class ChangeSetTransformerUtil {
 			}
 
 			for (final OpenSlotAllocation openSlotAllocation : toSchedule.getOpenSlotAllocations()) {
-				GroupProfitAndLoss groupProfitAndLoss = openSlotAllocation.getGroupProfitAndLoss();
+				final GroupProfitAndLoss groupProfitAndLoss = openSlotAllocation.getGroupProfitAndLoss();
 				if (groupProfitAndLoss != null) {
 					pnl += groupProfitAndLoss.getProfitAndLoss();
 				}
@@ -1138,46 +1176,6 @@ public final class ChangeSetTransformerUtil {
 		changeSet.setCurrentMetrics(currentMetrics);
 	}
 
-	/**
-	 * Find elements that we are interested in showing in the view.
-	 * 
-	 * @param schedule
-	 * @param interestingEvents
-	 * @param allEvents
-	 */
-	public static void extractElements(final @Nullable Schedule schedule, final Collection<EObject> interestingEvents, final Collection<EObject> allEvents) {
-		if (schedule == null) {
-			return;
-		}
-
-		for (final Sequence sequence : schedule.getSequences()) {
-			for (final Event event : sequence.getEvents()) {
-				boolean includeEvent = false;
-				if (event instanceof SlotVisit) {
-					includeEvent = true;
-				} else if (event instanceof VesselEventVisit) {
-					includeEvent = true;
-				} else if (event instanceof GeneratedCharterOut) {
-					includeEvent = true;
-
-				} else if (event instanceof StartEvent) {
-					includeEvent = true;
-				} else if (event instanceof EndEvent) {
-					includeEvent = true;
-				}
-				if (includeEvent) {
-					interestingEvents.add(event);
-				}
-				allEvents.add(event);
-			}
-		}
-
-		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
-			interestingEvents.add(openSlotAllocation);
-			allEvents.add(openSlotAllocation);
-		}
-	}
-
 	public static boolean isSet(@Nullable final String str) {
 		return str != null && !str.isEmpty();
 	}
@@ -1203,6 +1201,12 @@ public final class ChangeSetTransformerUtil {
 						}
 						// GCO are not structural changes.
 						if ((beforeData.getLhsEvent() instanceof GeneratedCharterOut) || (afterData.getLhsEvent() instanceof GeneratedCharterOut)) {
+							continue;
+						}
+						if ((beforeData.getLhsEvent() instanceof CharterLengthEvent) || (afterData.getLhsEvent() instanceof CharterLengthEvent)) {
+							continue;
+						}
+						if ((beforeData.getLhsEvent() instanceof GroupedCharterLengthEvent) || (afterData.getLhsEvent() instanceof GroupedCharterLengthEvent)) {
 							continue;
 						}
 					}

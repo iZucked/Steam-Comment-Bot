@@ -275,6 +275,20 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case SchedulePackage.CHARTER_LENGTH_EVENT: {
+				CharterLengthEvent charterLengthEvent = (CharterLengthEvent)theEObject;
+				T result = caseCharterLengthEvent(charterLengthEvent);
+				if (result == null) result = casePortVisit(charterLengthEvent);
+				if (result == null) result = caseProfitAndLossContainer(charterLengthEvent);
+				if (result == null) result = caseEventGrouping(charterLengthEvent);
+				if (result == null) result = caseFuelUsage(charterLengthEvent);
+				if (result == null) result = caseEvent(charterLengthEvent);
+				if (result == null) result = caseCapacityViolationsHolder(charterLengthEvent);
+				if (result == null) result = caseMMXObject(charterLengthEvent);
+				if (result == null) result = caseITimezoneProvider(charterLengthEvent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case SchedulePackage.COOLDOWN: {
 				Cooldown cooldown = (Cooldown)theEObject;
 				T result = caseCooldown(cooldown);
@@ -424,6 +438,15 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case SchedulePackage.CANAL_BOOKING_EVENT: {
+				CanalBookingEvent canalBookingEvent = (CanalBookingEvent)theEObject;
+				T result = caseCanalBookingEvent(canalBookingEvent);
+				if (result == null) result = caseEvent(canalBookingEvent);
+				if (result == null) result = caseMMXObject(canalBookingEvent);
+				if (result == null) result = caseITimezoneProvider(canalBookingEvent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case SchedulePackage.CHARTER_AVAILABLE_FROM_EVENT: {
 				CharterAvailableFromEvent charterAvailableFromEvent = (CharterAvailableFromEvent)theEObject;
 				T result = caseCharterAvailableFromEvent(charterAvailableFromEvent);
@@ -433,12 +456,14 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case SchedulePackage.CANAL_BOOKING_EVENT: {
-				CanalBookingEvent canalBookingEvent = (CanalBookingEvent)theEObject;
-				T result = caseCanalBookingEvent(canalBookingEvent);
-				if (result == null) result = caseEvent(canalBookingEvent);
-				if (result == null) result = caseMMXObject(canalBookingEvent);
-				if (result == null) result = caseITimezoneProvider(canalBookingEvent);
+			case SchedulePackage.GROUPED_CHARTER_LENGTH_EVENT: {
+				GroupedCharterLengthEvent groupedCharterLengthEvent = (GroupedCharterLengthEvent)theEObject;
+				T result = caseGroupedCharterLengthEvent(groupedCharterLengthEvent);
+				if (result == null) result = caseEvent(groupedCharterLengthEvent);
+				if (result == null) result = caseEventGrouping(groupedCharterLengthEvent);
+				if (result == null) result = caseProfitAndLossContainer(groupedCharterLengthEvent);
+				if (result == null) result = caseMMXObject(groupedCharterLengthEvent);
+				if (result == null) result = caseITimezoneProvider(groupedCharterLengthEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -587,6 +612,21 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseGeneratedCharterOut(GeneratedCharterOut object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Charter Length Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Charter Length Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCharterLengthEvent(CharterLengthEvent object) {
 		return null;
 	}
 
@@ -1052,6 +1092,21 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCharterAvailableFromEvent(CharterAvailableFromEvent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Grouped Charter Length Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Grouped Charter Length Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseGroupedCharterLengthEvent(GroupedCharterLengthEvent object) {
 		return null;
 	}
 

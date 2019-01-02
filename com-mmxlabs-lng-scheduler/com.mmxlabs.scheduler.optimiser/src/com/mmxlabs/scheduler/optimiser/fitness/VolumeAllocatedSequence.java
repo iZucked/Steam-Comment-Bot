@@ -20,6 +20,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumerPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplier;
@@ -438,7 +439,10 @@ public class VolumeAllocatedSequence {
 				final VoyageOptions options = voyageDetails.getOptions();
 				// Cooldown performed even though not permitted
 				if (!options.getAllowCooldown() && voyageDetails.isCooldownPerformed()) {
-					isForcedCooldown = true;
+					// Record as forced cooldown (unless this is on a charter length, then it is not a "forced" violation)
+					if (!(options.getFromPortSlot() instanceof IGeneratedCharterLengthEventPortSlot)) {
+						isForcedCooldown = true;
+					}
 				}
 				{
 					final SlotRecord record = getOrCreateSlotRecord(options.getFromPortSlot());

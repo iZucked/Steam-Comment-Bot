@@ -66,6 +66,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -375,7 +376,9 @@ public class CargoEconsReportComponent implements IAdaptable {
 					obj = ScheduleModelUtils.getSegmentStart((Event) obj);
 				}
 
-				if (obj instanceof VesselEventVisit) {
+				if (obj instanceof CharterLengthEvent) {
+					validObjects.add(obj);
+				} else if (obj instanceof VesselEventVisit) {
 					validObjects.add(obj);
 				} else if (obj instanceof CargoAllocation) {
 					validObjects.add(obj);
@@ -641,6 +644,9 @@ public class CargoEconsReportComponent implements IAdaptable {
 			if (object instanceof CargoAllocation) {
 				name = ((CargoAllocation) object).getName();
 			}
+			if (object instanceof CharterLengthEvent) {
+				name = ((CharterLengthEvent) object).name();
+			}
 
 			if (object instanceof DeltaPair) {
 				name = ((DeltaPair) object).getName();
@@ -698,7 +704,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 		}
 
 		// Create the row object
-		final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
+		final List<CargoEconsReportRow> rows = new LinkedList<>();
 		ServiceHelper.withAllServices(IEconsRowFactory.class, null, factory -> {
 			rows.addAll(factory.createRows(options, validObjects));
 			return true;
@@ -818,6 +824,25 @@ public class CargoEconsReportComponent implements IAdaptable {
 				@Nullable
 				final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(vesselEventVisit)) {
+					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
+					gvc.getColumn().setImage(pinImage);
+				}
+			} else if (selectedObject instanceof CharterLengthEvent) {
+				final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) selectedObject;
+
+				final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(charterLengthEvent.name());
+				final GridColumn gc = new GridColumn(gridColumnGroup, SWT.NONE);
+				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+				GridViewerHelper.configureLookAndFeel(gvc);
+				// Mark column for disposal on selection change
+				dataColumns.add(gvc);
+
+				gvc.getColumn().setText("");
+				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
+				gvc.getColumn().setWidth(100);
+				@Nullable
+				final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(charterLengthEvent)) {
 					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
 					gvc.getColumn().setImage(pinImage);
 				}

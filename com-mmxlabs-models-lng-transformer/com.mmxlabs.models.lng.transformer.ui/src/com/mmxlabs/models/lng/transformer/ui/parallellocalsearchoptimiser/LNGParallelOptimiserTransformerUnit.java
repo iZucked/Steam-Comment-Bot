@@ -54,11 +54,7 @@ public class LNGParallelOptimiserTransformerUnit extends AbstractLNGOptimiserTra
 			@Nullable final CleanableExecutorService executorService, final int progressTicks) {
 		@NonNull
 		final Collection<@NonNull String> hints = new HashSet<>(chainBuilder.getDataTransformer().getHints());
-		if (userSettings.isGenerateCharterOuts()) {
-			hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-		} else {
-			hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-		}
+		LNGTransformerHelper.updatHintsFromUserSettings(userSettings, hints);
 		hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 		return AbstractLNGOptimiserTransformerUnit.chain(chainBuilder, stage, userSettings, executorService, progressTicks, hints, (initialSequences, inputState, monitor) -> {

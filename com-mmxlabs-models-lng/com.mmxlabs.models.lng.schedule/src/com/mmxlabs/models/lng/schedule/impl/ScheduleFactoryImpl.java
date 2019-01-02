@@ -124,6 +124,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.SLOT_VISIT: return createSlotVisit();
 			case SchedulePackage.VESSEL_EVENT_VISIT: return createVesselEventVisit();
 			case SchedulePackage.GENERATED_CHARTER_OUT: return createGeneratedCharterOut();
+			case SchedulePackage.CHARTER_LENGTH_EVENT: return createCharterLengthEvent();
 			case SchedulePackage.COOLDOWN: return createCooldown();
 			case SchedulePackage.FUEL_USAGE: return createFuelUsage();
 			case SchedulePackage.FUEL_QUANTITY: return createFuelQuantity();
@@ -143,8 +144,9 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.LUMP_SUM_CONTRACT_DETAILS: return createLumpSumContractDetails();
 			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS: return createNotionalJourneyContractDetails();
 			case SchedulePackage.CHARTER_AVAILABLE_TO_EVENT: return createCharterAvailableToEvent();
-			case SchedulePackage.CHARTER_AVAILABLE_FROM_EVENT: return createCharterAvailableFromEvent();
 			case SchedulePackage.CANAL_BOOKING_EVENT: return createCanalBookingEvent();
+			case SchedulePackage.CHARTER_AVAILABLE_FROM_EVENT: return createCharterAvailableFromEvent();
+			case SchedulePackage.GROUPED_CHARTER_LENGTH_EVENT: return createGroupedCharterLengthEvent();
 			case SchedulePackage.INVENTORY_EVENTS: return createInventoryEvents();
 			case SchedulePackage.INVENTORY_CHANGE_EVENT: return createInventoryChangeEvent();
 			case SchedulePackage.PAPER_DEAL_ALLOCATION: return createPaperDealAllocation();
@@ -298,6 +300,16 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public GeneratedCharterOut createGeneratedCharterOut() {
 		GeneratedCharterOutImpl generatedCharterOut = new GeneratedCharterOutImpl();
 		return generatedCharterOut;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterLengthEvent createCharterLengthEvent() {
+		CharterLengthEventImpl charterLengthEvent = new CharterLengthEventImpl();
+		return charterLengthEvent;
 	}
 
 	/**
@@ -588,6 +600,16 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public CharterAvailableFromEvent createCharterAvailableFromEvent() {
 		CharterAvailableFromEventImpl charterAvailableFromEvent = new CharterAvailableFromEventImpl();
 		return charterAvailableFromEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public GroupedCharterLengthEvent createGroupedCharterLengthEvent() {
+		GroupedCharterLengthEventImpl groupedCharterLengthEvent = new GroupedCharterLengthEventImpl();
+		return groupedCharterLengthEvent;
 	}
 
 	/**

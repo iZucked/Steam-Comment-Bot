@@ -103,15 +103,10 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 
 				@NonNull
 				final Collection<@NonNull String> hints = new HashSet<>(dataTransformer.getHints());
-				if (userSettings.isGenerateCharterOuts()) {
-					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				} else {
-					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				}
+				LNGTransformerHelper.updatHintsFromUserSettings(userSettings, hints);
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 				monitor.beginTask("", 100 * seeds.length);
-				final List<Future<IMultiStateResult>> results = new ArrayList<>(seeds.length);
 				try {
 						final LocalSearchOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
 						copyStageSettings.setSeed(seeds[0]);

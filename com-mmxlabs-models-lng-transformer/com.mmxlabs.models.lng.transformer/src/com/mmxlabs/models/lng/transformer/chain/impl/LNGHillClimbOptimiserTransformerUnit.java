@@ -90,11 +90,7 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 
 				@NonNull
 				Collection<@NonNull String> hints = new HashSet<>(dataTransformer.getHints());
-				if (userSettings.isGenerateCharterOuts()) {
-					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				} else {
-					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				}
+				LNGTransformerHelper.updatHintsFromUserSettings(userSettings, hints);
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 				final int numTasks = climbAll ? inputState.getSolutions().size() : 1;

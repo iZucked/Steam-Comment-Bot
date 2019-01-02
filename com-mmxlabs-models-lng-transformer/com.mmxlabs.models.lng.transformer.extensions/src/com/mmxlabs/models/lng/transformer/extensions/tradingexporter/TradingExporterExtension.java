@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -45,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -135,7 +137,7 @@ public class TradingExporterExtension implements IExporterExtension {
 								}
 							}
 						} else if (slot instanceof IDischargeOption) {
-							final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
+							final Slot<?> modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
 
 							OpenSlotAllocation openSlotAllocation = null;
 							for (final OpenSlotAllocation allocation : outputSchedule.getOpenSlotAllocations()) {
@@ -161,6 +163,11 @@ public class TradingExporterExtension implements IExporterExtension {
 						} else if (slot instanceof IVesselEventPortSlot) {
 							if (slot instanceof IGeneratedCharterOutVesselEventPortSlot) {
 								final GeneratedCharterOut gco = portSlotEventProvider.getEventFromPortSlot(slot, GeneratedCharterOut.class);
+								if (gco != null) {
+									setPandLentries(profitAndLossWithTimeCharter, gco);
+								}
+							} else if (slot instanceof IGeneratedCharterLengthEventPortSlot) {
+								final CharterLengthEvent gco = portSlotEventProvider.getEventFromPortSlot(slot, CharterLengthEvent.class);
 								if (gco != null) {
 									setPandLentries(profitAndLossWithTimeCharter, gco);
 								}
@@ -222,7 +229,7 @@ public class TradingExporterExtension implements IExporterExtension {
 					if (charterInMarket == null && vesselAvailability == null) {
 						continue;
 					}
-					
+
 					boolean correctVessel = false;
 					if (charterInMarket != null) {
 						@Nullable
@@ -314,7 +321,7 @@ public class TradingExporterExtension implements IExporterExtension {
 
 		final Collection<IProfitAndLossEntry> entries = profitAndLoss.getEntries();
 
-		final Map<BaseEntityBook, int[]> groupProfitMap = new HashMap<BaseEntityBook, int[]>();
+		final Map<BaseEntityBook, int[]> groupProfitMap = new HashMap<>();
 
 		// We may see the same entity multiple times - so aggregate results
 		for (final IProfitAndLossEntry entry : entries) {

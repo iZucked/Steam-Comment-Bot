@@ -157,6 +157,10 @@ public final class OptimisationHelper {
 	public static final String SWTBOT_CHARTEROUTGENERATION_ON = SWTBOT_CHARTEROUTGENERATION_PREFIX + ".On";
 	public static final String SWTBOT_CHARTEROUTGENERATION_OFF = SWTBOT_CHARTEROUTGENERATION_PREFIX + ".Off";
 
+	public static final String SWTBOT_CHARTERLENGTH_PREFIX = "swtbot.charterlength";
+	public static final String SWTBOT_CHARTERLENGTH_ON = SWTBOT_CHARTERLENGTH_PREFIX + ".On";
+	public static final String SWTBOT_CHARTERLENGTH_OFF = SWTBOT_CHARTERLENGTH_PREFIX + ".Off";
+
 	public static final String SWTBOT_SIMILARITY_PREFIX = "swtbot.similaritymode";
 	public static final String SWTBOT_SIMILARITY_PREFIX_OFF = SWTBOT_SIMILARITY_PREFIX + ".Off";
 	public static final String SWTBOT_SIMILARITY_PREFIX_LOW = SWTBOT_SIMILARITY_PREFIX + ".Low";
@@ -576,6 +580,20 @@ public final class OptimisationHelper {
 				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 				choiceData.addChoice("Off", Boolean.FALSE);
 				choiceData.addChoice("On", Boolean.TRUE);
+				choiceData.enabled = LicenseFeatures.isPermitted("features:charter-length");
+				if (choiceData.enabled == false) {
+					// if not enabled make sure to set setting to false
+					copy.setWithCharterLength(false);
+				}
+				dialog.addOption(DataSection.Toggles, null, editingDomain, "Charter Length: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CHARTERLENGTH_PREFIX,
+						ParametersPackage.eINSTANCE.getUserSettings_WithCharterLength());
+				optionAdded = true;
+				enabledOptionAdded = true;
+			}
+			{
+				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+				choiceData.addChoice("Off", Boolean.FALSE);
+				choiceData.addChoice("On", Boolean.TRUE);
 				dialog.addOption(DataSection.Toggles, null, editingDomain, "Spot cargo markets: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX,
 						ParametersPackage.eINSTANCE.getUserSettings_WithSpotCargoMarkets());
 				optionAdded = true;
@@ -935,6 +953,20 @@ public final class OptimisationHelper {
 				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 				choiceData.addChoice("Off", Boolean.FALSE);
 				choiceData.addChoice("On", Boolean.TRUE);
+				choiceData.enabled = LicenseFeatures.isPermitted("features:charter-length");
+				if (choiceData.enabled == false) {
+					// if not enabled make sure to set setting to false
+					copy.setWithCharterLength(false);
+				}
+				dialog.addOption(DataSection.Toggles, null, editingDomain, "Charter Length: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CHARTERLENGTH_PREFIX,
+						ParametersPackage.eINSTANCE.getUserSettings_WithCharterLength());
+				optionAdded = true;
+				enabledOptionAdded = true;
+			}
+			{
+				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+				choiceData.addChoice("Off", Boolean.FALSE);
+				choiceData.addChoice("On", Boolean.TRUE);
 				dialog.addOption(DataSection.Toggles, null, editingDomain, "Spot cargo markets: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX,
 						ParametersPackage.eINSTANCE.getUserSettings_WithSpotCargoMarkets());
 				optionAdded = true;
@@ -1215,6 +1247,9 @@ public final class OptimisationHelper {
 		if (!LicenseFeatures.isPermitted("features:optimisation-similarity")) {
 			copy.setSimilarityMode(SimilarityMode.OFF);
 		}
+		if (!LicenseFeatures.isPermitted("features:charter-length")) {
+			copy.setWithCharterLength(false);
+		}
 	}
 
 	/**
@@ -1248,6 +1283,7 @@ public final class OptimisationHelper {
 		to.setShippingOnly(from.isShippingOnly());
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
 		to.setWithSpotCargoMarkets(from.isWithSpotCargoMarkets());
+		to.setWithCharterLength(from.isWithCharterLength());
 		to.setAdpOptimisation(from.isAdpOptimisation());
 		to.setCleanStateOptimisation(from.isCleanStateOptimisation());
 		to.setNominalADP(from.isNominalADP());

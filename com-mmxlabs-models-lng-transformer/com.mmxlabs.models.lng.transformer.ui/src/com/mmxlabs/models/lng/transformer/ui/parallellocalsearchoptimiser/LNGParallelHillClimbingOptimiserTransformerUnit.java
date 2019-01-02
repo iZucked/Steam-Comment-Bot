@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
 
 import javax.inject.Singleton;
 
@@ -66,15 +65,12 @@ public class LNGParallelHillClimbingOptimiserTransformerUnit extends AbstractLNG
 			@Nullable final CleanableExecutorService executorService, final int progressTicks) {
 		@NonNull
 		final Collection<@NonNull String> hints = new HashSet<>(chainBuilder.getDataTransformer().getHints());
-		if (userSettings.isGenerateCharterOuts()) {
-			hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-		} else {
-			hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-		}
+		LNGTransformerHelper.updatHintsFromUserSettings(userSettings, hints);
 		hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 		return AbstractLNGOptimiserTransformerUnit.chain(chainBuilder, stage, userSettings, executorService, progressTicks, hints, (initialSequences, inputState, monitor) -> {
-			LNGParallelHillClimbingOptimiserTransformerUnit unit = new LNGParallelHillClimbingOptimiserTransformerUnit(chainBuilder.getDataTransformer(), stage, userSettings, stageSettings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints, executorService);
+			LNGParallelHillClimbingOptimiserTransformerUnit unit = new LNGParallelHillClimbingOptimiserTransformerUnit(chainBuilder.getDataTransformer(), stage, userSettings, stageSettings,
+					initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints, executorService);
 			return unit.run(monitor);
 		});
 	}
@@ -107,7 +103,7 @@ public class LNGParallelHillClimbingOptimiserTransformerUnit extends AbstractLNG
 			return optimiser;
 		}
 	}
-	
+
 	@Override
 	protected List<Module> createModules(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings,
 			@NonNull final HillClimbOptimisationStage stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
@@ -121,7 +117,8 @@ public class LNGParallelHillClimbingOptimiserTransformerUnit extends AbstractLNG
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_AnnealingSettingsModule(stageSettings.getSeed(), stageSettings.getAnnealingSettings()), services,
 				IOptimiserInjectorService.ModuleType.Module_OptimisationParametersModule, hints));
 
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(CollectionsUtil.makeLinkedList(new LNGOptimisationModule()), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
+		modules.addAll(
+				LNGTransformerHelper.getModulesWithOverrides(CollectionsUtil.makeLinkedList(new LNGOptimisationModule()), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
 
 		modules.add(new AbstractModule() {
 
@@ -129,13 +126,14 @@ public class LNGParallelHillClimbingOptimiserTransformerUnit extends AbstractLNG
 			protected void configure() {
 				bind(CleanableExecutorService.class).toInstance(executorService);
 			}
-			
+
 			@Provides
 			@Singleton
 			ProcessorAgnosticParallelLSO buildParallelLSOOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
-					@NonNull final List<@NonNull IFitnessComponent> fitnessComponents, @NonNull final IMoveGenerator moveGenerator, @Named(LocalSearchOptimiserModule.LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations,
-					@NonNull final List<IConstraintChecker> constraintCheckers, @NonNull final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers,
-					@NonNull final List<IEvaluationProcess> evaluationProcesses, @Named(LocalSearchOptimiserModule.RANDOM_SEED) final long seed) {
+					@NonNull final List<@NonNull IFitnessComponent> fitnessComponents, @NonNull final IMoveGenerator moveGenerator,
+					@Named(LocalSearchOptimiserModule.LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations, @NonNull final List<IConstraintChecker> constraintCheckers,
+					@NonNull final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<IEvaluationProcess> evaluationProcesses,
+					@Named(LocalSearchOptimiserModule.RANDOM_SEED) final long seed) {
 
 				final ProcessorAgnosticParallelLSO lso = new ProcessorAgnosticParallelLSO();
 				final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator(new GreedyThresholder(), fitnessComponents, evaluationProcesses);
@@ -146,11 +144,11 @@ public class LNGParallelHillClimbingOptimiserTransformerUnit extends AbstractLNG
 				return lso;
 			}
 
-			private void setLSO(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator, @NonNull final IMoveGenerator moveGenerator,
-					@NonNull final IFitnessEvaluator fitnessEvaluator, final int numberOfIterations, @NonNull final List<@NonNull IConstraintChecker> constraintCheckers,
-					@NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses,
-					@NonNull final LocalSearchOptimiser lso, final long seed) {
-				
+			private void setLSO(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
+					@NonNull final IMoveGenerator moveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator, final int numberOfIterations,
+					@NonNull final List<@NonNull IConstraintChecker> constraintCheckers, @NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers,
+					@NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses, @NonNull final LocalSearchOptimiser lso, final long seed) {
+
 				injector.injectMembers(lso);
 				lso.setNumberOfIterations(numberOfIterations);
 
@@ -167,9 +165,8 @@ public class LNGParallelHillClimbingOptimiserTransformerUnit extends AbstractLNG
 				lso.setRandom(new Random(seed));
 
 			}
-		}
-		);
-		
+		});
+
 		modules.add(new AbstractModule() {
 
 			@Override
@@ -192,10 +189,10 @@ public class LNGParallelHillClimbingOptimiserTransformerUnit extends AbstractLNG
 			}
 
 		});
-		
+
 		return modules;
 	}
-	
+
 	protected void threadCleanup(PerChainUnitScopeImpl scope) {
 		for (final Thread thread : threadCache.keySet()) {
 			scope.exit(thread);

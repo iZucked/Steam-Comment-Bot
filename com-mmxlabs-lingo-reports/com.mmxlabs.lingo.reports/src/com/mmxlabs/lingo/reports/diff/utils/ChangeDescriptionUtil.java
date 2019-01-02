@@ -15,9 +15,11 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 
 public class ChangeDescriptionUtil {
@@ -114,6 +116,35 @@ public class ChangeDescriptionUtil {
 					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
 					return String.format("Cancelled '%s'", row.getOpenDischargeSlotAllocation().getSlot().getName());
 				}
+				if (row.getTarget() instanceof CharterLengthEvent && referenceRow.getTarget() instanceof CharterLengthEvent) {
+					final CharterLengthEvent rowTarget = (CharterLengthEvent) row.getTarget();
+					final CharterLengthEvent referenceTarget = (CharterLengthEvent) referenceRow.getTarget();
+					if (rowTarget.getDuration() > referenceTarget.getDuration()) {
+						CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
+						return String.format("Charter length duration increased by %.1f days", ((double) (rowTarget.getDuration() - referenceTarget.getDuration())) / 24.0);
+					} else if (rowTarget.getDuration() < referenceTarget.getDuration()) {
+						CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
+						return String.format("Charter length duration decreased by %.1f days", ((double) (referenceTarget.getDuration() - rowTarget.getDuration())) / 24.0);
+					}
+				} else if (row.getTarget() instanceof GroupedCharterLengthEvent && referenceRow.getTarget() instanceof GroupedCharterLengthEvent) {
+					final GroupedCharterLengthEvent rowTarget = (GroupedCharterLengthEvent) row.getTarget();
+					final GroupedCharterLengthEvent referenceTarget = (GroupedCharterLengthEvent) referenceRow.getTarget();
+					int durationA = getEventGroupingDuration(rowTarget);
+					int durationB = getEventGroupingDuration(referenceTarget);
+					if (durationA > durationB) {
+						CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
+						return String.format("Charter length duration increased by %.1f days", ((double) (durationA - durationB)) / 24.0);
+					} else if (durationA < durationB) {
+						CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
+						return String.format("Charter length duration decreased by %.1f days", ((double) (durationB - durationA)) / 24.0);
+					}
+				} else if (referenceRow.getTarget() instanceof CharterLengthEvent) {
+					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
+					return "Removed charter length";
+				} else if (referenceRow.getTarget() instanceof GroupedCharterLengthEvent) {
+					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
+					return "Removed charter length";
+				}
 				if (row.getTarget() instanceof GeneratedCharterOut && referenceRow.getTarget() instanceof GeneratedCharterOut) {
 					final GeneratedCharterOut rowTarget = (GeneratedCharterOut) row.getTarget();
 					final GeneratedCharterOut referenceTarget = (GeneratedCharterOut) referenceRow.getTarget();
@@ -173,6 +204,14 @@ public class ChangeDescriptionUtil {
 					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.CHARTERING);
 					return "Added charter out";
 				}
+				if (row.getTarget() instanceof CharterLengthEvent) {
+					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
+					return "Added charter length";
+				}
+				if (row.getTarget() instanceof GroupedCharterLengthEvent) {
+					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
+					return "Added charter length";
+				}
 			}
 		} else {
 			if (row.getLhsLink() == null) {
@@ -182,6 +221,14 @@ public class ChangeDescriptionUtil {
 				if (row.getTarget() instanceof GeneratedCharterOut) {
 					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.CHARTERING);
 					return "Removed charter out";
+				}
+				if (row.getTarget() instanceof CharterLengthEvent) {
+					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
+					return "Removed charter length";
+				}
+				if (row.getTarget() instanceof GroupedCharterLengthEvent) {
+					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
+					return "Removed charter length";
 				}
 			}
 		}

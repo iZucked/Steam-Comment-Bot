@@ -30,16 +30,16 @@ public class MigrateToV100 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 98;
-	}
-
-	@Override
-	public int getScenarioDestinationVersion() {
 		return 99;
 	}
 
 	@Override
-	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
+	public int getScenarioDestinationVersion() {
+		return 100;
+	}
 
+	@Override
+	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
+		// No data change needed
 	}
 }

@@ -34,10 +34,10 @@ public final class IndexedPortSlotEditor implements IPortSlotProviderEditor {
 
 	@Override
 	public final ISequenceElement getElement(final @NonNull IPortSlot portSlot) {
-		if (portSlot.getPortType() == PortType.GeneratedCharterOut) {
+		if (portSlot.getPortType() == PortType.GeneratedCharterOut || portSlot.getPortType() == PortType.GeneratedCharterLength) {
 			return new WrappedSequenceElement(portSlot);
-
 		}
+
 		return elements.get(portSlot);
 	}
 

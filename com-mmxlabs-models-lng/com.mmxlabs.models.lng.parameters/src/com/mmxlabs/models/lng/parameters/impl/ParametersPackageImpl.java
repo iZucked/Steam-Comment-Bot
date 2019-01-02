@@ -371,8 +371,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EAttribute getUserSettings_WithSpotCargoMarkets() {
+	public EAttribute getUserSettings_WithCharterLength() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -381,8 +380,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EAttribute getUserSettings_BuildActionSets() {
+	public EAttribute getUserSettings_CharterLengthDays() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -392,7 +390,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getUserSettings_SimilarityMode() {
+	public EAttribute getUserSettings_WithSpotCargoMarkets() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -401,7 +399,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUserSettings_NominalADP() {
+	@Override
+	public EAttribute getUserSettings_BuildActionSets() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -411,8 +410,27 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getUserSettings_CleanStateOptimisation() {
+	public EAttribute getUserSettings_SimilarityMode() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUserSettings_NominalADP() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getUserSettings_CleanStateOptimisation() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -422,7 +440,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 */
 	@Override
 	public EAttribute getUserSettings_FloatingDaysLimit() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(9);
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -431,7 +449,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	public EAttribute getUserSettings_AdpOptimisation() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(10);
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -1164,6 +1182,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		createEAttribute(userSettingsEClass, USER_SETTINGS__PERIOD_END);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__SHIPPING_ONLY);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__GENERATE_CHARTER_OUTS);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__WITH_CHARTER_LENGTH);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__CHARTER_LENGTH_DAYS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__WITH_SPOT_CARGO_MARKETS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__BUILD_ACTION_SETS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__SIMILARITY_MODE);
@@ -1335,6 +1355,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEAttribute(getUserSettings_PeriodEnd(), theDateTimePackage.getYearMonth(), "periodEnd", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_ShippingOnly(), ecorePackage.getEBoolean(), "shippingOnly", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_GenerateCharterOuts(), ecorePackage.getEBoolean(), "generateCharterOuts", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_WithCharterLength(), ecorePackage.getEBoolean(), "withCharterLength", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_CharterLengthDays(), ecorePackage.getEInt(), "charterLengthDays", "0", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_WithSpotCargoMarkets(), ecorePackage.getEBoolean(), "withSpotCargoMarkets", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_BuildActionSets(), ecorePackage.getEBoolean(), "buildActionSets", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_SimilarityMode(), this.getSimilarityMode(), "similarityMode", "OFF", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

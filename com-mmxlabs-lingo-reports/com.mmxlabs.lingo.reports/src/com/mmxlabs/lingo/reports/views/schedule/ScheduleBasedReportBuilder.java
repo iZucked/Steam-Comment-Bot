@@ -34,17 +34,20 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
@@ -68,6 +71,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 	public static final OptionInfo ROW_FILTER_SHORT_CARGOES = new OptionInfo("ROW_FILTER_SHORT_CARGOES", "Shorts");
 	public static final OptionInfo ROW_FILTER_VESSEL_START_ROW = new OptionInfo("ROW_FILTER_VESSEL_START_ROW", "Start ballast legs");
 	public static final OptionInfo ROW_FILTER_VESSEL_END_ROW = new OptionInfo("ROW_FILTER_VESSEL_END_ROW", "End event legs");
+	public static final OptionInfo ROW_FILTER_VESSEL_CHARTER_LENGTH = new OptionInfo("ROW_FILTER_VESSEL_CHARTER_LENGTH", "Charter length");
 	public static final OptionInfo ROW_FILTER_VESSEL_EVENT_ROW = new OptionInfo("ROW_FILTER_VESSEL_EVENT_ROW", "Vessel Events");
 	public static final OptionInfo ROW_FILTER_CHARTER_OUT_ROW = new OptionInfo("ROW_FILTER_CHARTER_OUT_ROW", "Charter Outs (Virtual)");
 	public static final OptionInfo ROW_FILTER_CARGO_ROW = new OptionInfo("ROW_FILTER_CARGO_ROW", "Cargoes");
@@ -85,7 +89,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 
 		/** All filters (note this order is also used in the {@link ConfigurableScheduleReportView} dialog */
 		ROW_FILTER_ALL = new OptionInfo[] { ROW_FILTER_CARGO_ROW, ROW_FILTER_LONG_CARGOES, ROW_FILTER_SHORT_CARGOES, ROW_FILTER_VESSEL_EVENT_ROW, ROW_FILTER_CHARTER_OUT_ROW,
-				ROW_FILTER_VESSEL_START_ROW, ROW_FILTER_VESSEL_END_ROW };
+				ROW_FILTER_VESSEL_CHARTER_LENGTH, ROW_FILTER_VESSEL_START_ROW, ROW_FILTER_VESSEL_END_ROW };
 
 	}
 
@@ -145,6 +149,10 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 			return rowFilterInfo.contains(ROW_FILTER_VESSEL_EVENT_ROW.id);
 		} else if (event instanceof GeneratedCharterOut) {
 			return rowFilterInfo.contains(ROW_FILTER_CHARTER_OUT_ROW.id);
+		} else if (event instanceof CharterLengthEvent) {
+			return rowFilterInfo.contains(ROW_FILTER_VESSEL_CHARTER_LENGTH.id);
+		} else if (event instanceof GroupedCharterLengthEvent) {
+			return rowFilterInfo.contains(ROW_FILTER_VESSEL_CHARTER_LENGTH.id);
 		} else if (event instanceof SlotVisit) {
 			final SlotVisit slotVisit = (SlotVisit) event;
 			if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
@@ -155,7 +163,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 	}
 
 	public List<ICustomRelatedSlotHandler> getCustomRelatedSlotHandlers() {
-		final List<ICustomRelatedSlotHandler> l = new LinkedList<ICustomRelatedSlotHandler>();
+		final List<ICustomRelatedSlotHandler> l = new LinkedList<>();
 		if (customRelatedSlotHandlers != null) {
 			for (final ICustomRelatedSlotHandlerExtension h : customRelatedSlotHandlers) {
 				l.add(h.getInstance());
@@ -178,7 +186,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 		if (obj instanceof EObject) {
 			final EObject eObj = (EObject) obj;
 			if (eObj.eIsSet(cargoAllocationRef)) {
-				return new Pair<EObject, CargoAllocation>(eObj, (CargoAllocation) eObj.eGet(cargoAllocationRef));
+				return new Pair<>(eObj, (CargoAllocation) eObj.eGet(cargoAllocationRef));
 			}
 		}
 		return null;
@@ -186,7 +194,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 
 	// //// P&L Columns
 
-	private final List<String> entityColumnNames = new ArrayList<String>();
+	private final List<String> entityColumnNames = new ArrayList<>();
 
 	private IAdaptable adaptableReport;
 
@@ -258,19 +266,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 				return blockManager.createColumn(block, title, new IntegerFormatter() {
 					@Override
 					public Integer getIntValue(final Object object) {
-						ProfitAndLossContainer container = null;
-
-						if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut
-								|| object instanceof OpenSlotAllocation || object instanceof EndEvent) {
-							container = (ProfitAndLossContainer) object;
-						}
-						if (object instanceof SlotVisit) {
-							final SlotVisit slotVisit = (SlotVisit) object;
-							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-								container = slotVisit.getSlotAllocation().getCargoAllocation();
-							}
-						}
-
+						final ProfitAndLossContainer container = ScheduleModelUtils.getProfitAndLossContainer(object);
 						return getEntityPNLEntry(container, null, bookContainmentFeature);
 					}
 				}, ScheduleReportPackage.Literals.ROW__TARGET);
@@ -331,19 +327,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 		return blockManager.createColumn(blockManager.getBlockByID(blockId), title, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
-				ProfitAndLossContainer container = null;
-
-				if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut
-						|| object instanceof OpenSlotAllocation) {
-					container = (ProfitAndLossContainer) object;
-				}
-				if (object instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) object;
-					if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-						container = slotVisit.getSlotAllocation().getCargoAllocation();
-					}
-				}
-
+				ProfitAndLossContainer container = ScheduleModelUtils.getProfitAndLossContainer(object);
 				return getEntityPNLEntry(container, entityKey, bookContainmentFeature);
 			}
 		}, false, ScheduleReportPackage.Literals.ROW__TARGET);

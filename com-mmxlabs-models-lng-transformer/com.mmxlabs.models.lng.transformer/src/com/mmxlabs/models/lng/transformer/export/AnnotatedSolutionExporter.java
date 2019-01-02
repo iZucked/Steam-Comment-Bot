@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -47,12 +48,12 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.IOutputScheduleProcessor;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.export.exporters.CharterLengthEventExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.CooldownExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.GeneratedCharterOutEventExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.IdleEventExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.JourneyEventExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.VisitEventExporter;
-import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
@@ -62,9 +63,11 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.SplitCharterOutVesselEventEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.SplitCharterOutVesselEventStartPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
@@ -79,6 +82,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -116,6 +120,9 @@ public class AnnotatedSolutionExporter {
 
 	@Inject
 	private GeneratedCharterOutEventExporter gcoDetailsExporter;
+
+	@Inject
+	private CharterLengthEventExporter charterLengthEventExporter;
 
 	@Inject
 	private CooldownExporter cooldownDetailsExporter;
@@ -187,7 +194,7 @@ public class AnnotatedSolutionExporter {
 			final ISequence sequence = annotatedSolution.getFullSequences().getSequence(resource);
 			final VolumeAllocatedSequence scheduledSequence = scheduledSequences.getScheduledSequenceForResource(resource);
 			assert scheduledSequence != null;
-			
+
 			switch (vesselAvailability.getVesselInstanceType()) {
 			case TIME_CHARTER:
 			case FLEET:
@@ -327,7 +334,10 @@ public class AnnotatedSolutionExporter {
 						eventGrouping = (VesselEventVisit) event;
 						eventGrouping.getEvents().add(event);
 					} else if (event instanceof GeneratedCharterOut) {
-						eventGrouping = (EventGrouping) event;
+						eventGrouping = (GeneratedCharterOut) event;
+						eventGrouping.getEvents().add(event);
+					} else if (event instanceof CharterLengthEvent) {
+						eventGrouping = (CharterLengthEvent) event;
 						eventGrouping.getEvents().add(event);
 					} else {
 						eventGrouping = null;
@@ -345,7 +355,7 @@ public class AnnotatedSolutionExporter {
 		for (final ISequenceElement element : annotatedSolution.getFullSequences().getUnusedElements()) {
 			assert element != null;
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
-			
+
 			if (slot.getPortType() == PortType.Load || slot.getPortType() == PortType.Discharge) {
 				final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
 				if (slot != null) {
@@ -358,7 +368,7 @@ public class AnnotatedSolutionExporter {
 				output.getUnusedElements().add(modelSlot);
 				final Map<String, IElementAnnotation> annotations = elementAnnotations.getAnnotations(element);
 				openSlotExporter.export(element, annotations);
-			} 
+			}
 			// mtmExporter.export(element, annotations);
 		}
 
@@ -406,8 +416,7 @@ public class AnnotatedSolutionExporter {
 			}
 		} catch (final ConfigurationException e) {
 		}
-		
-		
+
 		return output;
 	}
 
@@ -521,6 +530,7 @@ public class AnnotatedSolutionExporter {
 
 		boolean exportingRedirectedCharterOut = false;
 		PortDetails redirectedCharterOutStart = null;
+		CharterLengthEvent charterLengthEvent = null;
 
 		while (vpi.hasNextObject()) {
 
@@ -533,6 +543,8 @@ public class AnnotatedSolutionExporter {
 			if (e instanceof PortDetails) {
 				final PortDetails details = (PortDetails) e;
 				final IPortSlot currentPortSlot = details.getOptions().getPortSlot();
+
+				charterLengthEvent = null;
 
 				if (currentPortSlot instanceof SplitCharterOutVesselEventStartPortSlot) {
 					redirectedCharterOutStart = details;
@@ -550,7 +562,11 @@ public class AnnotatedSolutionExporter {
 					// Not found the end yet, continue.
 					continue;
 				}
+
 				final PortVisit event = portDetailsExporter.export(details, scheduledSequence, annotatedSolution, output);
+				if (event instanceof CharterLengthEvent) {
+					charterLengthEvent = (CharterLengthEvent) event;
+				}
 				if (event != null) {
 					// Heel tracking
 					{
@@ -611,8 +627,18 @@ public class AnnotatedSolutionExporter {
 					lastEvent = journey;
 				}
 
-				if (!details.getOptions().isCharterOutIdleTime()) {
+				if (charterLengthEvent != null) {
+					charterLengthEventExporter.update(charterLengthEvent, details, scheduledSequence, voyage_currentTime);
+					// Heel tracking
+					final HeelRecord heelRecord = scheduledSequence.getNextIdleHeelRecord(details.getOptions().getFromPortSlot());
+					if (heelRecord != null) {
+						charterLengthEvent.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
+						charterLengthEvent.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
+					}
+					charterLengthEvent.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(charterRatePerDay, details.getIdleTime()) / 24L));
+					lastEvent = charterLengthEvent;
 
+				} else if (!details.getOptions().isCharterOutIdleTime()) {
 					final Idle idle = idleDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 					if (idle != null) {
 						events.add(idle);
@@ -626,7 +652,6 @@ public class AnnotatedSolutionExporter {
 						idle.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(charterRatePerDay, details.getIdleTime()) / 24L));
 						lastEvent = idle;
 					}
-
 				} else {
 					final GeneratedCharterOut event = gcoDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 					if (event != null) {

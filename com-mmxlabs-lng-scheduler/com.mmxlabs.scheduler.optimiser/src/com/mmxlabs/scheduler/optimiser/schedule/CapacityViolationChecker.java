@@ -45,8 +45,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
  * 
  * It is currently (2013/12/03) expected to be used in the {@link ScheduleCalculator} class.
  * 
- * TODO: This needs to be updated once the Heel Tracking branch is merged in to consider the remaining heel from the previous voyage.
- * 
  * @author Simon Goodall
  * 
  */

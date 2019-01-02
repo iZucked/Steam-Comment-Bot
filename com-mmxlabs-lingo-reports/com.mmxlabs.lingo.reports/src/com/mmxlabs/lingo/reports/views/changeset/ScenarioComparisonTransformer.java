@@ -31,11 +31,13 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
@@ -55,7 +57,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ScenarioComparisonTransformer {
 
-	public ChangeSetRoot createDataModel(  final Map<EObject, Set<EObject>> equivalancesMap, @NonNull final Table table,
+	public ChangeSetRoot createDataModel(final Map<EObject, Set<EObject>> equivalancesMap, @NonNull final Table table,
 			@NonNull final ScenarioResult from, @NonNull final ScenarioResult to, final IProgressMonitor monitor) {
 		monitor.beginTask("Opening change sets", 1);
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
@@ -92,11 +94,11 @@ public class ScenarioComparisonTransformer {
 					final ChangeSet changeSet = createChangeSet(root, from, to);
 
 					// Before
-					Set<EObject> beforeTargets = new LinkedHashSet<EObject>();
+					Set<EObject> beforeTargets = new LinkedHashSet<>();
 					for (final CycleGroup cycleGroup : g.getGroups()) {
 						beforeTargets.addAll(processCycleGroup(cycleGroup, 0));
 					}
-					Set<EObject> afterTargets = new LinkedHashSet<EObject>();
+					Set<EObject> afterTargets = new LinkedHashSet<>();
 					for (final CycleGroup cycleGroup : g.getGroups()) {
 						afterTargets.addAll(processCycleGroup(cycleGroup, 1));
 					}
@@ -115,9 +117,9 @@ public class ScenarioComparisonTransformer {
 				for (final CycleGroup cycleGroup : table.getCycleGroups()) {
 
 					// Before
-					Set<EObject> beforeTargets = new LinkedHashSet< >();
+					Set<EObject> beforeTargets = new LinkedHashSet<>();
 					beforeTargets.addAll(processCycleGroup(cycleGroup, 0));
-					Set<EObject> afterTargets = new LinkedHashSet< >();
+					Set<EObject> afterTargets = new LinkedHashSet<>();
 					afterTargets.addAll(processCycleGroup(cycleGroup, 1));
 
 					// Generate the row data
@@ -224,6 +226,10 @@ public class ScenarioComparisonTransformer {
 					targets.add(event);
 				} else if (event instanceof GeneratedCharterOut) {
 					targets.add(event);
+				} else if (event instanceof CharterLengthEvent) {
+					targets.add(event);
+				} else if (event instanceof GroupedCharterLengthEvent) {
+					targets.add(event);
 				} else {
 					Sequence sequence = event.getSequence();
 					if (sequence.getSequenceType() == SequenceType.VESSEL //
@@ -250,6 +256,10 @@ public class ScenarioComparisonTransformer {
 							// Keep going!
 						} else if (event instanceof GeneratedCharterOut) {
 							// Keep going!
+						} else if (event instanceof CharterLengthEvent) {
+							targets.add(event);
+						} else if (event instanceof GroupedCharterLengthEvent) {
+							targets.add(event);
 						} else if (event instanceof SlotVisit) {
 							// Already processed
 							continue;

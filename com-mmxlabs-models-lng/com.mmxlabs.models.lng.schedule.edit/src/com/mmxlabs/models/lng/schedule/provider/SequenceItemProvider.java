@@ -307,6 +307,11 @@ public class SequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createCharterLengthEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
 				 ScheduleFactory.eINSTANCE.createCooldown()));
 
 		newChildDescriptors.add
@@ -317,12 +322,17 @@ public class SequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createCanalBookingEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
 				 ScheduleFactory.eINSTANCE.createCharterAvailableFromEvent()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
-				 ScheduleFactory.eINSTANCE.createCanalBookingEvent()));
+				 ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()));
 
 		newChildDescriptors.add
 			(createChildParameter

@@ -17,8 +17,11 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -50,6 +53,26 @@ public class ScheduleDiffUtils {
 				return true;
 			}
 			if (pinnedCharterOut.getRevenue() != otherCharterOut.getRevenue()) {
+				return true;
+			}
+			// Specific to each scenario/schedule so always mark as different.
+			return false;
+		}
+		if (pinnedObject instanceof CharterLengthEvent || otherObject instanceof CharterLengthEvent) {
+			final CharterLengthEvent pinnedCharterOut = (CharterLengthEvent) pinnedObject;
+			final CharterLengthEvent otherCharterOut = (CharterLengthEvent) otherObject;
+
+			if (pinnedCharterOut.getDuration() != otherCharterOut.getDuration()) {
+				return true;
+			}
+			// Specific to each scenario/schedule so always mark as different.
+			return false;
+		}
+		if (pinnedObject instanceof GroupedCharterLengthEvent || otherObject instanceof GroupedCharterLengthEvent) {
+			final GroupedCharterLengthEvent pinnedCharterOut = (GroupedCharterLengthEvent) pinnedObject;
+			final GroupedCharterLengthEvent otherCharterOut = (GroupedCharterLengthEvent) otherObject;
+
+			if (getEventGroupingDuration(pinnedCharterOut) != getEventGroupingDuration(otherCharterOut)) {
 				return true;
 			}
 			// Specific to each scenario/schedule so always mark as different.
@@ -335,4 +358,12 @@ public class ScheduleDiffUtils {
 		this.checkNextPortDifferences = checkNextPortDifferences;
 	}
 
+	public static int getEventGroupingDuration(final EventGrouping eventGrouping) {
+		int duration = 0;
+		for (final Event event : eventGrouping.getEvents()) {
+			duration += event.getDuration();
+		}
+
+		return duration;
+	}
 }

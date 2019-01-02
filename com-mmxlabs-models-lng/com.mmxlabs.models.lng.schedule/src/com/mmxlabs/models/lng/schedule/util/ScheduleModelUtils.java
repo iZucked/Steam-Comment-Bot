@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
@@ -25,7 +26,9 @@ import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -51,6 +54,8 @@ public class ScheduleModelUtils {
 		if (event instanceof VesselEventVisit) {
 			return true;
 		} else if (event instanceof GeneratedCharterOut) {
+			return true;
+		} else if (event instanceof CharterLengthEvent) {
 			return true;
 		} else if (event instanceof StartEvent) {
 			return true;
@@ -136,6 +141,9 @@ public class ScheduleModelUtils {
 		} else if (scheduleModelObject instanceof GeneratedCharterOut) {
 			final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) scheduleModelObject;
 			return generatedCharterOut;
+		} else if (scheduleModelObject instanceof CharterLengthEvent) {
+			final CharterLengthEvent charterLength = (CharterLengthEvent) scheduleModelObject;
+			return charterLength;
 		} else if (scheduleModelObject instanceof EndEvent) {
 			final EndEvent endEvent = (EndEvent) scheduleModelObject;
 			return endEvent;
@@ -211,5 +219,25 @@ public class ScheduleModelUtils {
 			return cargoIDs.equals(allocationIDs);
 		}
 		return false;
+	}
+
+	public static @Nullable ProfitAndLossContainer getProfitAndLossContainer(Object object) {
+		ProfitAndLossContainer container = null;
+
+		if (object instanceof CargoAllocation //
+				|| object instanceof VesselEventVisit //
+				|| object instanceof StartEvent //
+				|| object instanceof GeneratedCharterOut //
+				|| object instanceof CharterLengthEvent //
+				|| object instanceof OpenSlotAllocation //
+				|| object instanceof EndEvent) {
+			container = (ProfitAndLossContainer) object;
+		} else if (object instanceof SlotVisit) {
+			final SlotVisit slotVisit = (SlotVisit) object;
+			if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+				container = slotVisit.getSlotAllocation().getCargoAllocation();
+			}
+		}
+		return container;
 	}
 }

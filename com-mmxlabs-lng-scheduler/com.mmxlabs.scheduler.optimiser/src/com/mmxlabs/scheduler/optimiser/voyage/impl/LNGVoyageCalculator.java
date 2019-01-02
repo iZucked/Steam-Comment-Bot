@@ -12,7 +12,9 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.name.Named;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -69,6 +71,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 	@Inject
 	private IPortCooldownDataProvider portCooldownDataProvider;
+
+	// See default binding in LNGTransformerModule
+	@Inject
+	@Named(SchedulerConstants.COOLDOWN_MIN_IDLE_HOURS)
+	private int hoursBeforeCooldownsNoLongerForced;
 
 	/**
 	 * Calculate the fuel requirements between a pair of {@link IPortSlot}s. The {@link VoyageOptions} provides the specific choices to evaluate for this voyage (e.g. fuel choice, route, ...).
@@ -1062,10 +1069,18 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		if (toPortSlot instanceof IHeelOptionConsumerPortSlot) {
 			final IHeelOptionConsumerPortSlot endPortSlot = (IHeelOptionConsumerPortSlot) toPortSlot;
 			if (endPortSlot.getHeelOptionsConsumer().getExpectedTankState() == VesselTankState.MUST_BE_COLD) {
-				expectedRemainingHeelRangeInM3_Plus_Safety_Heel[0] = endPortSlot.getHeelOptionsConsumer().getMinimumHeelAcceptedInM3();
-				expectedRemainingHeelRangeInM3_Plus_Safety_Heel[1] = endPortSlot.getHeelOptionsConsumer().getMaximumHeelAcceptedInM3();
-				expectedRemainingHeelRangeInM3_Plus_Safety_Heel[2] = endPortSlot.getHeelOptionsConsumer().getMinimumHeelAcceptedInM3();
-
+				// If we are in charter-length mode and idle is long, ignore lower bound of heel.
+				if (lastVoyageDetailsElement.getOptions().getVesselState() == VesselState.Ballast //
+						&& lastVoyageDetailsElement.getIdleTime() > hoursBeforeCooldownsNoLongerForced //
+						&& (endHeelState == STATE_WARM || endHeelState == STATE_COLD_COOLDOWN)) {
+					expectedRemainingHeelRangeInM3_Plus_Safety_Heel[0] = 0;
+					expectedRemainingHeelRangeInM3_Plus_Safety_Heel[1] = 0;
+					expectedRemainingHeelRangeInM3_Plus_Safety_Heel[2] = 0;
+				} else {
+					expectedRemainingHeelRangeInM3_Plus_Safety_Heel[0] = endPortSlot.getHeelOptionsConsumer().getMinimumHeelAcceptedInM3();
+					expectedRemainingHeelRangeInM3_Plus_Safety_Heel[1] = endPortSlot.getHeelOptionsConsumer().getMaximumHeelAcceptedInM3();
+					expectedRemainingHeelRangeInM3_Plus_Safety_Heel[2] = endPortSlot.getHeelOptionsConsumer().getMinimumHeelAcceptedInM3();
+				}
 			} else if (endPortSlot.getHeelOptionsConsumer().getExpectedTankState() == VesselTankState.MUST_BE_WARM) {
 				expectedRemainingHeelRangeInM3_Plus_Safety_Heel[0] = 0;
 				expectedRemainingHeelRangeInM3_Plus_Safety_Heel[1] = 0;
@@ -1260,9 +1275,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 				final VoyageDetails details = (VoyageDetails) sequence[i];
 
-				// TODO: Original check also looked at the should be cold requirement - not really needed?
-				if (!details.getOptions().getAllowCooldown() && details.isCooldownPerformed()) {
-					++cooldownViolations;
+				if (details.getIdleTime() <= hoursBeforeCooldownsNoLongerForced) {
+					// TODO: Original check also looked at the should be cold requirement - not really needed?
+					if (!details.getOptions().getAllowCooldown() && details.isCooldownPerformed()) {
+						++cooldownViolations;
+					}
 				}
 			} else {
 				assert sequence[i] instanceof PortDetails;

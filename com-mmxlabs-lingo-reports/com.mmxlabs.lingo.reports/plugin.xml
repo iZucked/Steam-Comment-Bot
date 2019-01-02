@@ -943,6 +943,10 @@
       <FleetBasedColumn
             handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.fleet.cooldowncosts">
+      </FleetBasedColumn>
+      <FleetBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.fleet.charterlength">
       </FleetBasedColumn>      
    </extension>
    <extension

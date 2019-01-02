@@ -11,6 +11,7 @@ import com.mmxlabs.lingo.reports.views.headline.HeadlineReportView.ColumnType;
 import com.mmxlabs.lingo.reports.views.headline.extensions.HeadlineValueExtenderExtensionUtil;
 import com.mmxlabs.lingo.reports.views.headline.extensions.IHeadlineValueExtender;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
@@ -34,7 +35,7 @@ class HeadlineReportTransformer {
 	public static class RowData {
 
 		public RowData(final String scheduleName, final Long totalPNL, final Long totalPaperPNL, final Long tradingPNL, final Long shippingPNL, final Long upside, final Long upstreamDownstreamPNL,
-				final Long mtmPnl, final Long idleTime, final Long gcoTime, final Long gcoRevenue, final Long capacityViolationCount, final Long latenessIncludingFlex,
+				final Long mtmPnl, final Long idleTime, final Long gcoTime, final Long gcoRevenue, final Long charterLength, final Long capacityViolationCount, final Long latenessIncludingFlex,
 				final Long latenessExcludingFlex, Long purchaseCost, Long salesRevenue) {
 			super();
 			this.scheduleName = scheduleName;
@@ -48,6 +49,7 @@ class HeadlineReportTransformer {
 			this.idleTime = idleTime;
 			this.gcoTime = gcoTime;
 			this.gcoRevenue = gcoRevenue;
+			this.charterLength = charterLength;
 			this.capacityViolationCount = capacityViolationCount;
 			this.latenessIncludingFlex = latenessIncludingFlex;
 			this.latenessExcludingFlex = latenessExcludingFlex;
@@ -68,6 +70,7 @@ class HeadlineReportTransformer {
 			this.idleTime = null;
 			this.gcoTime = null;
 			this.gcoRevenue = null;
+			this.charterLength = null;
 			this.capacityViolationCount = null;
 			this.latenessIncludingFlex = null;
 			this.latenessExcludingFlex = null;
@@ -87,6 +90,7 @@ class HeadlineReportTransformer {
 		public final Long idleTime;
 		public final Long gcoTime;
 		public final Long gcoRevenue;
+		public final Long charterLength;
 		public final Long capacityViolationCount;
 		public final Long latenessIncludingFlex;
 		public final Long latenessExcludingFlex;
@@ -103,6 +107,7 @@ class HeadlineReportTransformer {
 		long totalIdleHours = 0L;
 		long totalGCOHours = 0L;
 		long totalGCORevenue = 0L;
+		long totalCharterLength = 0L;
 
 		for (final Sequence seq : schedule.getSequences()) {
 
@@ -117,6 +122,10 @@ class HeadlineReportTransformer {
 				if (evt instanceof Idle) {
 					final Idle idle = (Idle) evt;
 					totalIdleHours += idle.getDuration();
+				}
+				if (evt instanceof CharterLengthEvent) {
+					final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) evt;
+					totalCharterLength += charterLengthEvent.getDuration();
 				}
 			}
 		}
@@ -152,12 +161,12 @@ class HeadlineReportTransformer {
 				.mapToDouble(e -> e.getValue()) //
 				.sum());
 		ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
-		return augment(schedule, scenarioResult, totalSalesRevenue, totalPurchaseCost, totalMtMPNL, totalIdleHours, totalGCOHours, totalGCORevenue, totalPaperPNL, totalTradingPNL, totalShippingPNL,
+		return augment(schedule, scenarioResult, totalSalesRevenue, totalPurchaseCost, totalMtMPNL, totalIdleHours, totalGCOHours, totalGCORevenue, totalCharterLength, totalPaperPNL, totalTradingPNL, totalShippingPNL,
 				totalUpstreamPNL, totalUpside, totalLatenessHoursExcludingFlex, totalLatenessHoursIncludingFlex, totalCapacityViolationCount, modelRecord);
 	}
 
 	private @NonNull RowData augment(@NonNull final Schedule schedule, @NonNull final ScenarioResult scenarioResult, long totalSalesRevenue, long totalPurchaseCost, long totalMtMPNL,
-			long totalIdleHours, long totalGCOHours, long totalGCORevenue, long totalPaperPNL, long totalTradingPNL, long totalShippingPNL, long totalUpstreamPNL, long totalUpside,
+			long totalIdleHours, long totalGCOHours, long totalGCORevenue, long totalCharterLength, long totalPaperPNL, long totalTradingPNL, long totalShippingPNL, long totalUpstreamPNL, long totalUpside,
 			long totalLatenessHoursExcludingFlex, long totalLatenessHoursIncludingFlex, long totalCapacityViolationCount, ScenarioModelRecord modelRecord) {
 
 		long totalPNL = totalTradingPNL + totalShippingPNL + totalUpstreamPNL;
@@ -182,6 +191,9 @@ class HeadlineReportTransformer {
 						break;
 					case VALUE_IDLE_DAYS:
 						totalIdleHours += extra;
+						break;
+					case VALUE_CHARTER_LENGTH_DAYS:
+						totalCharterLength += extra;
 						break;
 					case VALUE_PNL:
 						totalPNL += extra;
@@ -218,6 +230,6 @@ class HeadlineReportTransformer {
 		}
 
 		return new RowData(modelRecord.getName(), totalPNL, totalPaperPNL, totalTradingPNL, totalShippingPNL, totalUpside, totalUpstreamPNL, totalMtMPNL, totalIdleHours, totalGCOHours,
-				totalGCORevenue, totalCapacityViolationCount, totalLatenessHoursIncludingFlex, totalLatenessHoursExcludingFlex, totalPurchaseCost, totalSalesRevenue);
+				totalGCORevenue, totalCharterLength, totalCapacityViolationCount, totalLatenessHoursIncludingFlex, totalLatenessHoursExcludingFlex, totalPurchaseCost, totalSalesRevenue);
 	}
 }

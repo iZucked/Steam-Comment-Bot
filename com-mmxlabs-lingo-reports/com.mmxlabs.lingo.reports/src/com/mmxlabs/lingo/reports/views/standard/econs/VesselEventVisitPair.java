@@ -29,7 +29,7 @@ public class VesselEventVisitPair extends DeltaPair {
 		return second;
 	}
 
-	static public List<VesselEventVisitPair> generateVesselEventPair(final List<VesselEventVisit> vesselEventVisits) {
+	public static List<VesselEventVisitPair> generateVesselEventPair(final List<VesselEventVisit> vesselEventVisits) {
 		Collections.sort(vesselEventVisits, (a, b) -> a.name().compareTo(b.name()));
 		final List<VesselEventVisitPair> pairs = new ArrayList<>();
 		// Edge case, only one lonely element in the list

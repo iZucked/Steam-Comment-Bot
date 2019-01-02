@@ -15,6 +15,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
+import com.google.inject.name.Names;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
@@ -23,6 +24,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
@@ -34,7 +36,9 @@ import com.mmxlabs.scheduler.optimiser.schedule.ProfitAndLossCalculator;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultBreakEvenEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterLengthEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.CharterLengthEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.CleanStateIdleTimeEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.DefaultGeneratedCharterOutEvaluator;
 
@@ -78,20 +82,19 @@ public class LNGEvaluationModule extends AbstractModule {
 			}
 
 			// GCO and Clean state are not compatible with each other
-			if (!isCleanState && LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
+			if (!isCleanState && LicenseFeatures.isPermitted("features:optimisation-charter-out-generation") && hints.contains(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS)) {
+				bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
+			}
 
-				for (final String hint : hints) {
-					if (LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS.equals(hint)) {
-						bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
-						break;
-					}
-				}
+			if (LicenseFeatures.isPermitted("features:break-evens") && !hints.contains(HINT_PORTFOLIO_BREAKEVEN)) {
+				bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
+			}
+
+			if (LicenseFeatures.isPermitted("features:charter-length") && hints.contains(LNGTransformerHelper.HINT_CHARTER_LENGTH)) {
+				// See LNGTransformerModule for parameters
+				bind(IGeneratedCharterLengthEvaluator.class).to(CharterLengthEvaluator.class);
 			}
 		}
-		if (LicenseFeatures.isPermitted("features:break-evens") && !hints.contains(HINT_PORTFOLIO_BREAKEVEN)) {
-			bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
-		}
-
 		// Needed for LegalSequencingChecker
 		if (Platform.isRunning()) {
 			bind(IConstraintCheckerRegistry.class).toProvider(service(IConstraintCheckerRegistry.class).single());

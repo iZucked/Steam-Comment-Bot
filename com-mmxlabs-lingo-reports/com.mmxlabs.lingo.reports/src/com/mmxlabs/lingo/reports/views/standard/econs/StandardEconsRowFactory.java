@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -55,6 +56,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		boolean containsCargo = false;
 		boolean containsEvent = false;
 		boolean containsCharterOut = false;
+		boolean containsCharterLength = false;
 		boolean containsCooldown = false;
 		if (targets == null || targets.isEmpty()) {
 			containsCargo = true;
@@ -69,6 +71,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 							break;
 						}
 					}
+				}
+				if (target instanceof CharterLengthEvent) {
+					containsCharterLength = true;
 				}
 				if (target instanceof VesselEventVisit) {
 					final VesselEventVisit vesselEventVisit = (VesselEventVisit) target;
@@ -98,7 +103,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		rows.add(createRow(70, "    Canal", true, "$", "", true, createShippingCanalCosts(options, true)));
 		rows.add(createRow(80, "    Boil-off", true, "$", "", true, createShippingBOGTotal(options, true), createBOGColourProvider(options)));
 		rows.add(createRow(90, "    Charter Cost", true, "$", "", true, createShippingCharterCosts(options, true), createCharterFeesColourProvider(options)));
-		{
+		if (containsCargo) {
 			final CargoEconsReportRow row = createRow(91, "    $/mmBtu", true, "$", "", true, createShippingCostsByMMBTU(options, true));
 			row.tooltip = () -> {
 				switch (options.marginBy) {
@@ -447,23 +452,11 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	}
 
 	private static int genericShippingBOGTotalHelper(final Object object) {
-		if (object instanceof CargoAllocation) {
+		if (object instanceof EventGrouping) {
 			int cost = 0;
 
-			final CargoAllocation cargoAllocation = (CargoAllocation) object;
-			for (final Event event : cargoAllocation.getEvents()) {
-				if (event instanceof FuelUsage) {
-					final FuelUsage fuelUsage = (FuelUsage) event;
-					cost += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
-				}
-			}
-			return cost;
-		} else if (object instanceof VesselEventVisit) {
-
-			final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
-
-			int cost = 0;
-			for (final Event event : cargoAllocation.getEvents()) {
+			final EventGrouping grouping = (EventGrouping) object;
+			for (final Event event : grouping.getEvents()) {
 				if (event instanceof FuelUsage) {
 					final FuelUsage fuelUsage = (FuelUsage) event;
 					cost += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
@@ -481,26 +474,16 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private static int genericShippingBunkersTotalHelper(final Object object) {
 
-		if (object instanceof CargoAllocation) {
+		if (object instanceof EventGrouping) {
 			int cost = 0;
-			final CargoAllocation cargoAllocation = (CargoAllocation) object;
-			for (final Event event : cargoAllocation.getEvents()) {
+			final EventGrouping grouping = (EventGrouping) object;
+			for (final Event event : grouping.getEvents()) {
 				if (event instanceof FuelUsage) {
 					final FuelUsage fuelUsage = (FuelUsage) event;
 					cost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
 				}
 			}
 
-			return cost;
-		} else if (object instanceof VesselEventVisit) {
-			final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
-			int cost = 0;
-			for (final Event event : cargoAllocation.getEvents()) {
-				if (event instanceof FuelUsage) {
-					final FuelUsage fuelUsage = (FuelUsage) event;
-					cost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
-				}
-			}
 			return cost;
 		}
 		return 0;
@@ -512,27 +495,17 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private static int genericShippingPortCostsHelper(final Object object) {
 
-		if (object instanceof CargoAllocation) {
-			final CargoAllocation cargoAllocation = (CargoAllocation) object;
+		if (object instanceof EventGrouping) {
+			final EventGrouping grouping = (EventGrouping) object;
 
 			int cost = 0;
-			for (final Event event : cargoAllocation.getEvents()) {
+			for (final Event event : grouping.getEvents()) {
 				if (event instanceof PortVisit) {
 					final PortVisit portVisit = (PortVisit) event;
 					cost += portVisit.getPortCost();
 				}
 			}
 
-			return cost;
-		} else if (object instanceof VesselEventVisit) {
-			final VesselEventVisit vesselEventVisit = (VesselEventVisit) object;
-			int cost = 0;
-			for (final Event event : vesselEventVisit.getEvents()) {
-				if (event instanceof PortVisit) {
-					final PortVisit portVisit = (PortVisit) event;
-					cost += portVisit.getPortCost();
-				}
-			}
 			return cost;
 		}
 		return 0;
@@ -544,21 +517,11 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	}
 
 	private static int genericShippingCanalCostsHelper(final Object object) {
-		if (object instanceof CargoAllocation) {
-			final CargoAllocation cargoAllocation = (CargoAllocation) object;
+		if (object instanceof EventGrouping) {
+			final EventGrouping grouping = (EventGrouping) object;
 
 			int cost = 0;
-			for (final Event event : cargoAllocation.getEvents()) {
-				if (event instanceof Journey) {
-					final Journey journey = (Journey) event;
-					cost += journey.getToll();
-				}
-			}
-			return cost;
-		} else if (object instanceof VesselEventVisit) {
-			final VesselEventVisit vesselEventVisit = (VesselEventVisit) object;
-			int cost = 0;
-			for (final Event event : vesselEventVisit.getEvents()) {
+			for (final Event event : grouping.getEvents()) {
 				if (event instanceof Journey) {
 					final Journey journey = (Journey) event;
 					cost += journey.getToll();
@@ -575,19 +538,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private static int genericShippingCharterCostsHelper(final Object object) {
 
-		if (object instanceof CargoAllocation) {
-			final CargoAllocation cargoAllocation = (CargoAllocation) object;
+		if (object instanceof EventGrouping) {
+			final EventGrouping grouping = (EventGrouping) object;
 			int cost = 0;
-			for (final Event event : cargoAllocation.getEvents()) {
-				cost += event.getCharterCost();
-			}
-			return cost;
-		}
-
-		if (object instanceof VesselEventVisit) {
-			final VesselEventVisit vesselEventVisit = (VesselEventVisit) object;
-			int cost = 0;
-			for (final Event event : vesselEventVisit.getEvents()) {
+			for (final Event event : grouping.getEvents()) {
 				cost += event.getCharterCost();
 			}
 			return cost;
@@ -755,6 +709,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		} else if (object instanceof VesselEventVisit) {
 			sequence = ((VesselEventVisit) object).getSequence();
 			events = ((VesselEventVisit) object).getEvents();
+		} else if (object instanceof CharterLengthEvent) {
+			sequence = ((CharterLengthEvent) object).getSequence();
+			events = ((CharterLengthEvent) object).getEvents();
 		}
 
 		if (sequence == null || events == null) {

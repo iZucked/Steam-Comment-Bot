@@ -95,6 +95,7 @@ public class LNGCleanStateOptimiserTransformerUnit implements ILNGStateTransform
 				@NonNull
 				final Collection<@NonNull String> hints = new HashSet<>(dataTransformer.getHints());
 				hints.add(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
+				hints.add(LNGTransformerHelper.HINT_CHARTER_LENGTH);
 				hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
 
 				monitor.beginTask("", 100 * seeds.length);

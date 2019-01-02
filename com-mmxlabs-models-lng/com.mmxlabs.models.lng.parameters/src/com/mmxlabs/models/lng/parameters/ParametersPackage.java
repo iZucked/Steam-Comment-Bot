@@ -107,13 +107,31 @@ public interface ParametersPackage extends EPackage {
 	int USER_SETTINGS__GENERATE_CHARTER_OUTS = 3;
 
 	/**
+	 * The feature id for the '<em><b>With Charter Length</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__WITH_CHARTER_LENGTH = 4;
+
+	/**
+	 * The feature id for the '<em><b>Charter Length Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__CHARTER_LENGTH_DAYS = 5;
+
+	/**
 	 * The feature id for the '<em><b>With Spot Cargo Markets</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__WITH_SPOT_CARGO_MARKETS = 4;
+	int USER_SETTINGS__WITH_SPOT_CARGO_MARKETS = 6;
 
 	/**
 	 * The feature id for the '<em><b>Build Action Sets</b></em>' attribute.
@@ -122,7 +140,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__BUILD_ACTION_SETS = 5;
+	int USER_SETTINGS__BUILD_ACTION_SETS = 7;
 
 	/**
 	 * The feature id for the '<em><b>Similarity Mode</b></em>' attribute.
@@ -131,7 +149,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__SIMILARITY_MODE = 6;
+	int USER_SETTINGS__SIMILARITY_MODE = 8;
 
 	/**
 	 * The feature id for the '<em><b>Nominal ADP</b></em>' attribute.
@@ -140,7 +158,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__NOMINAL_ADP = 7;
+	int USER_SETTINGS__NOMINAL_ADP = 9;
 
 	/**
 	 * The feature id for the '<em><b>Clean State Optimisation</b></em>' attribute.
@@ -149,7 +167,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__CLEAN_STATE_OPTIMISATION = 8;
+	int USER_SETTINGS__CLEAN_STATE_OPTIMISATION = 10;
 
 	/**
 	 * The feature id for the '<em><b>Floating Days Limit</b></em>' attribute.
@@ -158,7 +176,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__FLOATING_DAYS_LIMIT = 9;
+	int USER_SETTINGS__FLOATING_DAYS_LIMIT = 11;
 
 	/**
 	 * The feature id for the '<em><b>Adp Optimisation</b></em>' attribute.
@@ -167,7 +185,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__ADP_OPTIMISATION = 10;
+	int USER_SETTINGS__ADP_OPTIMISATION = 12;
 
 	/**
 	 * The number of structural features of the '<em>User Settings</em>' class.
@@ -176,7 +194,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS_FEATURE_COUNT = 11;
+	int USER_SETTINGS_FEATURE_COUNT = 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -1523,6 +1541,28 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getUserSettings_GenerateCharterOuts();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isWithCharterLength <em>With Charter Length</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>With Charter Length</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isWithCharterLength()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_WithCharterLength();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getCharterLengthDays <em>Charter Length Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Charter Length Days</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#getCharterLengthDays()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_CharterLengthDays();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isWithSpotCargoMarkets <em>With Spot Cargo Markets</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2416,6 +2456,22 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute USER_SETTINGS__GENERATE_CHARTER_OUTS = eINSTANCE.getUserSettings_GenerateCharterOuts();
+
+		/**
+		 * The meta object literal for the '<em><b>With Charter Length</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__WITH_CHARTER_LENGTH = eINSTANCE.getUserSettings_WithCharterLength();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter Length Days</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__CHARTER_LENGTH_DAYS = eINSTANCE.getUserSettings_CharterLengthDays();
 
 		/**
 		 * The meta object literal for the '<em><b>With Spot Cargo Markets</b></em>' attribute feature.

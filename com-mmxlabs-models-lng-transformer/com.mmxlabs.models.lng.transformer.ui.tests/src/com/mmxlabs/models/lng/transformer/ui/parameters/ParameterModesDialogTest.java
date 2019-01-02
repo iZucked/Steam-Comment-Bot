@@ -55,7 +55,7 @@ public class ParameterModesDialogTest {
 	@BeforeClass
 	public static void init() {
 		// Enable these features for the dialog test
-		LicenseFeatures.initialiseFeatureEnablements("optimisation-charter-out-generation", "optimisation-period", "optimisation-similarity", "optimisation-actionset");
+		LicenseFeatures.initialiseFeatureEnablements("optimisation-charter-out-generation", "optimisation-period", "optimisation-similarity", "optimisation-actionset", "charter-length");
 	}
 
 	@BeforeClass
@@ -133,6 +133,29 @@ public class ParameterModesDialogTest {
 			Assert.assertFalse(u.isGenerateCharterOuts());
 			OptimisationHelper.mergeFields(u, settings);
 			Assert.assertFalse(settings.isGenerateCharterOuts());
+		});
+	}
+	@Test
+	public void testSetCharterLength_On() throws Exception {
+		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		settings.setWithCharterLength(false);
+		
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTEROUTGENERATION_ON).click(), u -> {
+			Assert.assertTrue(u.isWithCharterLength());
+			OptimisationHelper.mergeFields(u, settings);
+			Assert.assertTrue(settings.isWithCharterLength());
+		});
+	}
+	
+	@Test
+	public void testSetCharterLength_Off() throws Exception {
+		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		settings.setWithCharterLength(true);
+		
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTEROUTGENERATION_OFF).click(), u -> {
+			Assert.assertFalse(u.isWithCharterLength());
+			OptimisationHelper.mergeFields(u, settings);
+			Assert.assertFalse(settings.isWithCharterLength());
 		});
 	}
 

@@ -52,6 +52,7 @@ import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -81,15 +82,15 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  */
 public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGanttChartToolTipProvider, IGanttChartColourProvider {
 
-	private final Map<String, IScheduleViewColourScheme> colourSchemesById = new HashMap<String, IScheduleViewColourScheme>();
-	private final List<IScheduleViewColourScheme> colourSchemes = new ArrayList<IScheduleViewColourScheme>();
+	private final Map<String, IScheduleViewColourScheme> colourSchemesById = new HashMap<>();
+	private final List<IScheduleViewColourScheme> colourSchemes = new ArrayList<>();
 
-	private final List<IScheduleViewColourScheme> highlighters = new ArrayList<IScheduleViewColourScheme>();
-	private final Map<String, IScheduleViewColourScheme> highlightersById = new HashMap<String, IScheduleViewColourScheme>();
+	private final List<IScheduleViewColourScheme> highlighters = new ArrayList<>();
+	private final Map<String, IScheduleViewColourScheme> highlightersById = new HashMap<>();
 
 	private IScheduleViewColourScheme currentScheme = null;
 
-	private final List<IScheduleViewColourScheme> currentHighlighters = new ArrayList<IScheduleViewColourScheme>();
+	private final List<IScheduleViewColourScheme> currentHighlighters = new ArrayList<>();
 
 	private final GanttChartViewer viewer;
 
@@ -135,7 +136,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		} else if (element instanceof CombinedSequence) {
 			if (element instanceof CombinedSequence) {
 				final CombinedSequence combinedSequence = (CombinedSequence) element;
-				if (combinedSequence.getSequences().size() > 0) {
+				if (!combinedSequence.getSequences().isEmpty()) {
 					final Sequence sequence = combinedSequence.getSequences().get(0);
 					@Nullable
 					final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
@@ -393,7 +394,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			final int days = event.getDuration() / 24;
 			final int hours = event.getDuration() % 24;
 			final String durationTime = days + " day" + (days > 1 || days == 0 ? "s" : "") + ", " + hours + " hour" + (hours > 1 || hours == 0 ? "s" : "");
-
+		
 			// build event specific text
 			if (element instanceof Journey) {
 				eventText.append("Travel time: " + durationTime + " \n");
@@ -498,9 +499,16 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				for (final FuelQuantity fq : idle.getFuels()) {
 					eventText.append(String.format("\n%s\n", mapFuel(fq.getFuel())));
 				}
+			} else if (element instanceof CharterLengthEvent) {
+				final CharterLengthEvent idle = (CharterLengthEvent) element;
+				eventText.append("Duration: " + durationTime);
+				for (final FuelQuantity fq : idle.getFuels()) {
+					eventText.append(String.format("\n%s\n", mapFuel(fq.getFuel())));
+				}
 			} else if (element instanceof GeneratedCharterOut) {
 				eventText.append(" \n");
 				eventText.append("Duration: " + durationTime);
+
 			} else if (element instanceof FuelUsage) {
 				final FuelUsage fuel = (FuelUsage) element;
 				for (final FuelQuantity fq : fuel.getFuels()) {

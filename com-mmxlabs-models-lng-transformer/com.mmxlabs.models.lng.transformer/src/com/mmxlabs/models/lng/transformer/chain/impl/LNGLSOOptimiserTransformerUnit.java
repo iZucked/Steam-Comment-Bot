@@ -90,11 +90,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 
 				@NonNull
 				final Collection<@NonNull String> hints = new HashSet<>(dataTransformer.getHints());
-				if (userSettings.isGenerateCharterOuts()) {
-					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				} else {
-					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				}
+				LNGTransformerHelper.updatHintsFromUserSettings(userSettings, hints);
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 				monitor.beginTask("", 100 * seeds.length);
@@ -236,11 +232,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 				
 				@NonNull
 				final Collection<@NonNull String> hints = new HashSet<>(dataTransformer.getHints());
-				if (userSettings.isGenerateCharterOuts()) {
-					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				} else {
-					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				}
+				LNGTransformerHelper.updatHintsFromUserSettings(userSettings, hints);
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 				
 				monitor.beginTask("", 100 * seeds.length);

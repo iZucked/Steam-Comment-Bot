@@ -84,11 +84,7 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 
 				@NonNull
 				Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
-				if (userSettings.isGenerateCharterOuts()) {
-					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				} else {
-					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				}
+				LNGTransformerHelper.updatHintsFromUserSettings(userSettings, hints);
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 				t = new ActionableSetsTransformerUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(), inputState, hints);

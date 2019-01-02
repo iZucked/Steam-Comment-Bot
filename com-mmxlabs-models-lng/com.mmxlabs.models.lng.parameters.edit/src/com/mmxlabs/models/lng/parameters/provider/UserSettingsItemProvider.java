@@ -70,6 +70,8 @@ public class UserSettingsItemProvider
 			addPeriodEndPropertyDescriptor(object);
 			addShippingOnlyPropertyDescriptor(object);
 			addGenerateCharterOutsPropertyDescriptor(object);
+			addWithCharterLengthPropertyDescriptor(object);
+			addCharterLengthDaysPropertyDescriptor(object);
 			addWithSpotCargoMarketsPropertyDescriptor(object);
 			addBuildActionSetsPropertyDescriptor(object);
 			addSimilarityModePropertyDescriptor(object);
@@ -165,6 +167,50 @@ public class UserSettingsItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the With Charter Length feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWithCharterLengthPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UserSettings_withCharterLength_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_withCharterLength_feature", "_UI_UserSettings_type"),
+				 ParametersPackage.Literals.USER_SETTINGS__WITH_CHARTER_LENGTH,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Charter Length Days feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCharterLengthDaysPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UserSettings_charterLengthDays_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_charterLengthDays_feature", "_UI_UserSettings_type"),
+				 ParametersPackage.Literals.USER_SETTINGS__CHARTER_LENGTH_DAYS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -366,6 +412,8 @@ public class UserSettingsItemProvider
 			case ParametersPackage.USER_SETTINGS__PERIOD_END:
 			case ParametersPackage.USER_SETTINGS__SHIPPING_ONLY:
 			case ParametersPackage.USER_SETTINGS__GENERATE_CHARTER_OUTS:
+			case ParametersPackage.USER_SETTINGS__WITH_CHARTER_LENGTH:
+			case ParametersPackage.USER_SETTINGS__CHARTER_LENGTH_DAYS:
 			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
 			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
 			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:

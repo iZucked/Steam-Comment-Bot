@@ -54,6 +54,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterLengthEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -102,6 +103,9 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 	@com.google.inject.Inject(optional = true)
 	private IGeneratedCharterOutEvaluator generatedCharterOutEvaluator;
+
+	@com.google.inject.Inject(optional = true)
+	private IGeneratedCharterLengthEvaluator generatedCharterLengthEvaluator;
 
 	@Inject
 	private ICharterRateCalculator charterRateCalculator;
@@ -857,6 +861,36 @@ public class VoyagePlanner implements IVoyagePlanner {
 				planSet = true;
 			}
 		}
+		
+		if (!planSet && generatedCharterLengthEvaluator != null) {
+			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterLengthEvaluator.processSchedule(vesselStartTime, heelVolumeRangeInM3, vesselAvailability, plan,
+					portTimesRecord);
+			if (lp != null) {
+				for (final Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> p : lp) {
+					final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, p.getFirst());
+					voyagePlansList.add(evalData.plan);
+					
+					if (p.getSecond() instanceof IAllocationAnnotation) {
+						evalData.allocation = (IAllocationAnnotation) p.getSecond();
+					}
+					evalData.portTimesRecord = p.getSecond();
+					
+					if (evalData.allocation != null) {
+						evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
+						evalData.startHeelVolumeInM3 = evalData.allocation.getStartHeelVolumeInM3();
+						
+					} else {
+						evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
+						evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
+					}
+					plans.add(evalData);
+					evalData.setIgnoreEndSet(true);
+				}
+				planSet = true;
+			}
+		}
+		
+
 
 		// Execute custom logic to manipulate the schedule and choices
 		if (breakEvenEvaluator != null) {

@@ -24,6 +24,7 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.ShiftFunctionMapper;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.common.time.Months;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -102,7 +103,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 	public static final String COMMERCIAL_VOLUME_OVERCAPACITY = "COMMERCIAL_VOLUME_OVERCAPACITY";
 
-	private final static int DEFAULT_VPO_CACHE_SIZE = 20_000;
+	private static final int DEFAULT_VPO_CACHE_SIZE = 20_000;
 
 	public static final String EARLIEST_AND_LATEST_TIMES = "earliest-and-latest-times";
 
@@ -121,7 +122,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private final @NonNull LNGScenarioModel scenario;
 
-	public final static String MONTH_ALIGNED_INTEGER_INTERVAL_CURVE = "MonthAlignedIntegerCurve";
+	public static final String MONTH_ALIGNED_INTEGER_INTERVAL_CURVE = "MonthAlignedIntegerCurve";
 
 	private final boolean shippingOnly;
 
@@ -131,6 +132,7 @@ public class LNGTransformerModule extends AbstractModule {
 	private final boolean portfolioBreakEven;
 
 	private final boolean withNoNominalsInPrompt;
+	private final boolean withCharterLength;
 
 	private @NonNull UserSettings userSettings;
 
@@ -147,6 +149,7 @@ public class LNGTransformerModule extends AbstractModule {
 		this.portfolioBreakEven = hints.contains(LNGTransformerHelper.HINT_PORTFOLIO_BREAKEVEN);
 		this.withSpotCargoMarkets = hints.contains(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS);
 		this.withNoNominalsInPrompt = hints.contains(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT);
+		this.withCharterLength = hints.contains(LNGTransformerHelper.HINT_CHARTER_LENGTH);
 		assert scenario != null;
 	}
 
@@ -169,7 +172,6 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(LNGScenarioModel.class).toInstance(scenario);
 		bind(IScenarioDataProvider.class).toInstance(scenarioDataProvider);
-		// bind(OptimiserSettings.class).toInstance(optimiserSettings);
 
 		bind(LNGScenarioTransformer.class).in(Singleton.class);
 
@@ -229,6 +231,14 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(CacheMode.Off);
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(CacheMode.Off);
 
+		// Default two weeks idle time.
+		if (LicenseFeatures.isPermitted("features:charter-length") && withCharterLength) {
+			bind(int.class).annotatedWith(Names.named(SchedulerConstants.CHARTER_LENGTH_MIN_IDLE_HOURS)).toInstance(14 * 24);
+			bind(int.class).annotatedWith(Names.named(SchedulerConstants.COOLDOWN_MIN_IDLE_HOURS)).toInstance(14 * 24);
+		} else {
+			bind(int.class).annotatedWith(Names.named(SchedulerConstants.CHARTER_LENGTH_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);
+			bind(int.class).annotatedWith(Names.named(SchedulerConstants.COOLDOWN_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);
+		}
 	}
 
 	@Provides
@@ -239,10 +249,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	private IBoilOffHelper provideInPortBoilOffHelper(@NonNull final Injector injector, @Named(COMMERCIAL_VOLUME_OVERCAPACITY) final boolean toggle) {
-		final InPortBoilOffHelper helper = new InPortBoilOffHelper(toggle);
-		// injector.injectMembers(helper);
-
-		return helper;
+		return new InPortBoilOffHelper(toggle);
 	}
 
 	@Provides
@@ -307,9 +314,7 @@ public class LNGTransformerModule extends AbstractModule {
 	@Provides
 	@Singleton
 	private IOptimisationData provideOptimisationData(@NonNull final LNGScenarioTransformer lngScenarioTransformer, @NonNull final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
-		final IOptimisationData optimisationData = lngScenarioTransformer.createOptimisationData(modelEntityMap);
-
-		return optimisationData;
+		return lngScenarioTransformer.createOptimisationData(modelEntityMap);
 	}
 
 	@Singleton
@@ -341,11 +346,9 @@ public class LNGTransformerModule extends AbstractModule {
 	@Named(MONTH_ALIGNED_INTEGER_INTERVAL_CURVE)
 	private IIntegerIntervalCurve provideMonthAlignedIIntegerIntervalCurve(@NonNull final DateAndCurveHelper dateAndCurveHelper, @NonNull final IntegerIntervalCurveHelper integerIntervalCurveHelper) {
 
-		final IIntegerIntervalCurve months = integerIntervalCurveHelper.getMonthAlignedIntegerIntervalCurve(
-				integerIntervalCurveHelper.getPreviousMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getEarliestTime())),
+		return integerIntervalCurveHelper.getMonthAlignedIntegerIntervalCurve(//
+				integerIntervalCurveHelper.getPreviousMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getEarliestTime())), //
 				integerIntervalCurveHelper.getNextMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getLatestTime())), 0);
-
-		return months;
 	}
 
 	@Provides

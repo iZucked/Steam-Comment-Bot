@@ -27,9 +27,11 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -91,6 +93,11 @@ public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 					findSelectionElement((VesselEvent) a, adaptedObjects);
 				} else if (a instanceof GeneratedCharterOut) {
 					adaptedObjects.add(a);
+				} else if (a instanceof CharterLengthEvent) {
+					adaptedObjects.add(a);
+				} else if (a instanceof GroupedCharterLengthEvent) {
+					GroupedCharterLengthEvent groupedCharterLengthEvent = (GroupedCharterLengthEvent) a;
+					adaptedObjects.addAll(groupedCharterLengthEvent.getEvents());
 				}
 			}
 			return adaptedObjects;

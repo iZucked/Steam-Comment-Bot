@@ -24,6 +24,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodEnd <em>Period End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isShippingOnly <em>Shipping Only</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isWithCharterLength <em>With Charter Length</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getCharterLengthDays <em>Charter Length Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isWithSpotCargoMarkets <em>With Spot Cargo Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isBuildActionSets <em>Build Action Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getSimilarityMode <em>Similarity Mode</em>}</li>
@@ -197,6 +199,60 @@ public interface UserSettings extends EObject {
 	 * @generated
 	 */
 	void setGenerateCharterOuts(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>With Charter Length</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>With Charter Length</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>With Charter Length</em>' attribute.
+	 * @see #setWithCharterLength(boolean)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_WithCharterLength()
+	 * @model default="false"
+	 * @generated
+	 */
+	boolean isWithCharterLength();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#isWithCharterLength <em>With Charter Length</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>With Charter Length</em>' attribute.
+	 * @see #isWithCharterLength()
+	 * @generated
+	 */
+	void setWithCharterLength(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Charter Length Days</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter Length Days</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter Length Days</em>' attribute.
+	 * @see #setCharterLengthDays(int)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_CharterLengthDays()
+	 * @model default="0"
+	 * @generated
+	 */
+	int getCharterLengthDays();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#getCharterLengthDays <em>Charter Length Days</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter Length Days</em>' attribute.
+	 * @see #getCharterLengthDays()
+	 * @generated
+	 */
+	void setCharterLengthDays(int value);
 
 	/**
 	 * Returns the value of the '<em><b>With Spot Cargo Markets</b></em>' attribute.

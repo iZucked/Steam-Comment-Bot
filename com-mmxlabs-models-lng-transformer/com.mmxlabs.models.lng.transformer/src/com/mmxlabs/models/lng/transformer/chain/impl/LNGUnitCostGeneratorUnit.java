@@ -92,6 +92,7 @@ public class LNGUnitCostGeneratorUnit implements ILNGStateTransformerUnit {
 				final Collection<@NonNull String> hints = new HashSet<>(dataTransformer.getHints());
 				hints.add(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 				hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
+				hints.remove(LNGTransformerHelper.HINT_CHARTER_LENGTH);
 
 				monitor.beginTask("", 100 * seeds.length);
 				final List<Future<IMultiStateResult>> results = new ArrayList<>(seeds.length);

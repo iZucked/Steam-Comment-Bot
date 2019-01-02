@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityPNLDetails;
@@ -46,6 +47,7 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
@@ -141,6 +143,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass generatedCharterOutEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass charterLengthEventEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -358,6 +367,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass charterAvailableFromEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass groupedCharterLengthEventEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -957,6 +973,33 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EAttribute getGeneratedCharterOut_Revenue() {
 		return (EAttribute)generatedCharterOutEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCharterLengthEvent() {
+		return charterLengthEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterLengthEvent_Duration() {
+		return (EAttribute)charterLengthEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterLengthEvent_Laden() {
+		return (EAttribute)charterLengthEventEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -2243,6 +2286,24 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getGroupedCharterLengthEvent() {
+		return groupedCharterLengthEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getGroupedCharterLengthEvent_LinkedSequence() {
+		return (EReference)groupedCharterLengthEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCanalBookingEvent() {
 		return canalBookingEventEClass;
 	}
@@ -2721,6 +2782,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		generatedCharterOutEClass = createEClass(GENERATED_CHARTER_OUT);
 		createEAttribute(generatedCharterOutEClass, GENERATED_CHARTER_OUT__REVENUE);
 
+		charterLengthEventEClass = createEClass(CHARTER_LENGTH_EVENT);
+		createEAttribute(charterLengthEventEClass, CHARTER_LENGTH_EVENT__DURATION);
+		createEAttribute(charterLengthEventEClass, CHARTER_LENGTH_EVENT__LADEN);
+
 		cooldownEClass = createEClass(COOLDOWN);
 		createEAttribute(cooldownEClass, COOLDOWN__VOLUME);
 		createEAttribute(cooldownEClass, COOLDOWN__COST);
@@ -2824,12 +2889,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		charterAvailableToEventEClass = createEClass(CHARTER_AVAILABLE_TO_EVENT);
 		createEReference(charterAvailableToEventEClass, CHARTER_AVAILABLE_TO_EVENT__LINKED_SEQUENCE);
 
-		charterAvailableFromEventEClass = createEClass(CHARTER_AVAILABLE_FROM_EVENT);
-		createEReference(charterAvailableFromEventEClass, CHARTER_AVAILABLE_FROM_EVENT__LINKED_SEQUENCE);
-
 		canalBookingEventEClass = createEClass(CANAL_BOOKING_EVENT);
 		createEReference(canalBookingEventEClass, CANAL_BOOKING_EVENT__LINKED_SEQUENCE);
 		createEReference(canalBookingEventEClass, CANAL_BOOKING_EVENT__LINKED_JOURNEY);
+
+		charterAvailableFromEventEClass = createEClass(CHARTER_AVAILABLE_FROM_EVENT);
+		createEReference(charterAvailableFromEventEClass, CHARTER_AVAILABLE_FROM_EVENT__LINKED_SEQUENCE);
+
+		groupedCharterLengthEventEClass = createEClass(GROUPED_CHARTER_LENGTH_EVENT);
+		createEReference(groupedCharterLengthEventEClass, GROUPED_CHARTER_LENGTH_EVENT__LINKED_SEQUENCE);
 
 		inventoryEventsEClass = createEClass(INVENTORY_EVENTS);
 		createEReference(inventoryEventsEClass, INVENTORY_EVENTS__FACILITY);
@@ -2952,6 +3020,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		generatedCharterOutEClass.getESuperTypes().add(this.getPortVisit());
 		generatedCharterOutEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 		generatedCharterOutEClass.getESuperTypes().add(this.getEventGrouping());
+		charterLengthEventEClass.getESuperTypes().add(this.getPortVisit());
+		charterLengthEventEClass.getESuperTypes().add(this.getProfitAndLossContainer());
+		charterLengthEventEClass.getESuperTypes().add(this.getEventGrouping());
+		charterLengthEventEClass.getESuperTypes().add(this.getFuelUsage());
 		cooldownEClass.getESuperTypes().add(this.getEvent());
 		cooldownEClass.getESuperTypes().add(this.getFuelUsage());
 		capacityViolationsHolderEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
@@ -2965,8 +3037,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		lumpSumContractDetailsEClass.getESuperTypes().add(this.getMatchingContractDetails());
 		notionalJourneyContractDetailsEClass.getESuperTypes().add(this.getMatchingContractDetails());
 		charterAvailableToEventEClass.getESuperTypes().add(this.getEvent());
-		charterAvailableFromEventEClass.getESuperTypes().add(this.getEvent());
 		canalBookingEventEClass.getESuperTypes().add(this.getEvent());
+		charterAvailableFromEventEClass.getESuperTypes().add(this.getEvent());
+		groupedCharterLengthEventEClass.getESuperTypes().add(this.getEvent());
+		groupedCharterLengthEventEClass.getESuperTypes().add(this.getEventGrouping());
+		groupedCharterLengthEventEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3102,6 +3177,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(generatedCharterOutEClass, GeneratedCharterOut.class, "GeneratedCharterOut", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getGeneratedCharterOut_Revenue(), ecorePackage.getEInt(), "revenue", null, 1, 1, GeneratedCharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(charterLengthEventEClass, CharterLengthEvent.class, "CharterLengthEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCharterLengthEvent_Duration(), ecorePackage.getEInt(), "duration", null, 0, 1, CharterLengthEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterLengthEvent_Laden(), ecorePackage.getEBoolean(), "laden", null, 1, 1, CharterLengthEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(cooldownEClass, Cooldown.class, "Cooldown", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCooldown_Volume(), ecorePackage.getEInt(), "volume", null, 1, 1, Cooldown.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCooldown_Cost(), ecorePackage.getEInt(), "cost", null, 1, 1, Cooldown.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3206,12 +3285,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(charterAvailableToEventEClass, CharterAvailableToEvent.class, "CharterAvailableToEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterAvailableToEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, CharterAvailableToEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(charterAvailableFromEventEClass, CharterAvailableFromEvent.class, "CharterAvailableFromEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCharterAvailableFromEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, CharterAvailableFromEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(canalBookingEventEClass, CanalBookingEvent.class, "CanalBookingEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCanalBookingEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, CanalBookingEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCanalBookingEvent_LinkedJourney(), this.getJourney(), null, "linkedJourney", null, 0, 1, CanalBookingEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(charterAvailableFromEventEClass, CharterAvailableFromEvent.class, "CharterAvailableFromEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCharterAvailableFromEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, CharterAvailableFromEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(groupedCharterLengthEventEClass, GroupedCharterLengthEvent.class, "GroupedCharterLengthEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getGroupedCharterLengthEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, GroupedCharterLengthEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(inventoryEventsEClass, InventoryEvents.class, "InventoryEvents", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getInventoryEvents_Facility(), theCargoPackage.getInventory(), null, "facility", null, 0, 1, InventoryEvents.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

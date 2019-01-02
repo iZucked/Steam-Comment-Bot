@@ -10,12 +10,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
-
-import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -48,17 +44,10 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
-import com.mmxlabs.optimiser.core.fitness.IMultiObjectiveFitnessEvaluator;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
-import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
@@ -77,11 +66,7 @@ public class LNGParallelMultiObjectiveOptimiserTransformerUnit extends AbstractL
 			@Nullable final CleanableExecutorService executorService, final int progressTicks, final boolean singleSolution) {
 		@NonNull
 		final Collection<@NonNull String> hints = new HashSet<>(chainBuilder.getDataTransformer().getHints());
-		if (userSettings.isGenerateCharterOuts()) {
-			hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-		} else {
-			hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-		}
+		LNGTransformerHelper.updatHintsFromUserSettings(userSettings, hints);
 		hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 		return AbstractLNGOptimiserTransformerUnit.chain(chainBuilder, stage, userSettings, executorService, progressTicks, hints, (initialSequences, inputState, monitor) -> {

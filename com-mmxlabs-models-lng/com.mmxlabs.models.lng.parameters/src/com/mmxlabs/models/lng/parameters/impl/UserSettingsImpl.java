@@ -32,6 +32,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getPeriodEnd <em>Period End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isShippingOnly <em>Shipping Only</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isWithCharterLength <em>With Charter Length</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getCharterLengthDays <em>Charter Length Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isWithSpotCargoMarkets <em>With Spot Cargo Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isBuildActionSets <em>Build Action Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getSimilarityMode <em>Similarity Mode</em>}</li>
@@ -141,6 +143,46 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * @ordered
 	 */
 	protected boolean generateCharterOuts = GENERATE_CHARTER_OUTS_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isWithCharterLength() <em>With Charter Length</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isWithCharterLength()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean WITH_CHARTER_LENGTH_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isWithCharterLength() <em>With Charter Length</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isWithCharterLength()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean withCharterLength = WITH_CHARTER_LENGTH_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCharterLengthDays() <em>Charter Length Days</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterLengthDays()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CHARTER_LENGTH_DAYS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getCharterLengthDays() <em>Charter Length Days</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterLengthDays()
+	 * @generated
+	 * @ordered
+	 */
+	protected int charterLengthDays = CHARTER_LENGTH_DAYS_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isWithSpotCargoMarkets() <em>With Spot Cargo Markets</em>}' attribute.
@@ -448,6 +490,48 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isWithCharterLength() {
+		return withCharterLength;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setWithCharterLength(boolean newWithCharterLength) {
+		boolean oldWithCharterLength = withCharterLength;
+		withCharterLength = newWithCharterLength;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__WITH_CHARTER_LENGTH, oldWithCharterLength, withCharterLength));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getCharterLengthDays() {
+		return charterLengthDays;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCharterLengthDays(int newCharterLengthDays) {
+		int oldCharterLengthDays = charterLengthDays;
+		charterLengthDays = newCharterLengthDays;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__CHARTER_LENGTH_DAYS, oldCharterLengthDays, charterLengthDays));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean isWithSpotCargoMarkets() {
 		return withSpotCargoMarkets;
 	}
@@ -610,6 +694,10 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return isShippingOnly();
 			case ParametersPackage.USER_SETTINGS__GENERATE_CHARTER_OUTS:
 				return isGenerateCharterOuts();
+			case ParametersPackage.USER_SETTINGS__WITH_CHARTER_LENGTH:
+				return isWithCharterLength();
+			case ParametersPackage.USER_SETTINGS__CHARTER_LENGTH_DAYS:
+				return getCharterLengthDays();
 			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
 				return isWithSpotCargoMarkets();
 			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
@@ -647,6 +735,12 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return;
 			case ParametersPackage.USER_SETTINGS__GENERATE_CHARTER_OUTS:
 				setGenerateCharterOuts((Boolean)newValue);
+				return;
+			case ParametersPackage.USER_SETTINGS__WITH_CHARTER_LENGTH:
+				setWithCharterLength((Boolean)newValue);
+				return;
+			case ParametersPackage.USER_SETTINGS__CHARTER_LENGTH_DAYS:
+				setCharterLengthDays((Integer)newValue);
 				return;
 			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
 				setWithSpotCargoMarkets((Boolean)newValue);
@@ -693,6 +787,12 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 			case ParametersPackage.USER_SETTINGS__GENERATE_CHARTER_OUTS:
 				setGenerateCharterOuts(GENERATE_CHARTER_OUTS_EDEFAULT);
 				return;
+			case ParametersPackage.USER_SETTINGS__WITH_CHARTER_LENGTH:
+				setWithCharterLength(WITH_CHARTER_LENGTH_EDEFAULT);
+				return;
+			case ParametersPackage.USER_SETTINGS__CHARTER_LENGTH_DAYS:
+				setCharterLengthDays(CHARTER_LENGTH_DAYS_EDEFAULT);
+				return;
 			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
 				setWithSpotCargoMarkets(WITH_SPOT_CARGO_MARKETS_EDEFAULT);
 				return;
@@ -734,6 +834,10 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return shippingOnly != SHIPPING_ONLY_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__GENERATE_CHARTER_OUTS:
 				return generateCharterOuts != GENERATE_CHARTER_OUTS_EDEFAULT;
+			case ParametersPackage.USER_SETTINGS__WITH_CHARTER_LENGTH:
+				return withCharterLength != WITH_CHARTER_LENGTH_EDEFAULT;
+			case ParametersPackage.USER_SETTINGS__CHARTER_LENGTH_DAYS:
+				return charterLengthDays != CHARTER_LENGTH_DAYS_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
 				return withSpotCargoMarkets != WITH_SPOT_CARGO_MARKETS_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
@@ -770,6 +874,10 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 		result.append(shippingOnly);
 		result.append(", generateCharterOuts: ");
 		result.append(generateCharterOuts);
+		result.append(", withCharterLength: ");
+		result.append(withCharterLength);
+		result.append(", charterLengthDays: ");
+		result.append(charterLengthDays);
 		result.append(", withSpotCargoMarkets: ");
 		result.append(withSpotCargoMarkets);
 		result.append(", buildActionSets: ");

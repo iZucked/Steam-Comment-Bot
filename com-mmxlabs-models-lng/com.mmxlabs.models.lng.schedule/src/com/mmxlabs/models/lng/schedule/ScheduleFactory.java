@@ -96,6 +96,15 @@ public interface ScheduleFactory extends EFactory {
 	GeneratedCharterOut createGeneratedCharterOut();
 
 	/**
+	 * Returns a new object of class '<em>Charter Length Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Charter Length Event</em>'.
+	 * @generated
+	 */
+	CharterLengthEvent createCharterLengthEvent();
+
+	/**
 	 * Returns a new object of class '<em>Fuel Usage</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -346,6 +355,15 @@ public interface ScheduleFactory extends EFactory {
 	 * @generated
 	 */
 	CharterAvailableFromEvent createCharterAvailableFromEvent();
+
+	/**
+	 * Returns a new object of class '<em>Grouped Charter Length Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Grouped Charter Length Event</em>'.
+	 * @generated
+	 */
+	GroupedCharterLengthEvent createGroupedCharterLengthEvent();
 
 	/**
 	 * Returns a new object of class '<em>Canal Booking Event</em>'.

@@ -1228,18 +1228,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 					int addnPNL = 0;
 
-					ProfitAndLossContainer container = null;
-
-					if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut
-							|| object instanceof OpenSlotAllocation || object instanceof EndEvent) {
-						container = (ProfitAndLossContainer) object;
-					}
-					if (object instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) object;
-						if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-							container = slotVisit.getSlotAllocation().getCargoAllocation();
-						}
-					}
+					ProfitAndLossContainer container = ScheduleModelUtils.getProfitAndLossContainer(object);
 
 					if (container != null) {
 

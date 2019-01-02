@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.util.TypeLiterals;
@@ -51,6 +52,7 @@ public class LNGTransformerHelper {
 	public static final @NonNull String HINT_OPTIMISE_BREAKDOWN = "hint-lngtransformer-optimise-breakdown";
 
 	public static final @NonNull String HINT_GENERATE_CHARTER_OUTS = "hint-lngtransformer-generate-charter-outs";
+	public static final @NonNull String HINT_CHARTER_LENGTH = "hint-lngtransformer-charter-length";
 	public static final @NonNull String HINT_CLEAN_STATE_EVALUATOR = "hint-lngtransformer-clean-state-evaluator";
 
 	public static final @NonNull String HINT_SHIPPING_ONLY = "hint-lngtransformer-shipping-only";
@@ -79,6 +81,11 @@ public class LNGTransformerHelper {
 		if (userSettings.isGenerateCharterOuts()) {
 			if (LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
 				hints.add(HINT_GENERATE_CHARTER_OUTS);
+			}
+		}
+		if (userSettings.isWithCharterLength()) {
+			if (LicenseFeatures.isPermitted("features:charter-length")) {
+				hints.add(HINT_CHARTER_LENGTH);
 			}
 		}
 		if (userSettings.isShippingOnly()) {
@@ -215,6 +222,21 @@ public class LNGTransformerHelper {
 		}
 
 		return services;
+	}
+	
+	@NonNullByDefault
+	public static void updatHintsFromUserSettings(UserSettings userSettings, Collection<String> hints) {
+ 
+		if (userSettings.isGenerateCharterOuts()) {
+			hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
+		} else {
+			hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
+		}
+		if (userSettings. isWithCharterLength()) {
+			hints.add(LNGTransformerHelper.HINT_CHARTER_LENGTH);
+		} else {
+			hints.remove(LNGTransformerHelper.HINT_CHARTER_LENGTH);
+		}
 	}
 
 }

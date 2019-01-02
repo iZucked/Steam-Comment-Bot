@@ -15,6 +15,7 @@ import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -108,6 +109,8 @@ public class EventGroupPropertySource implements IPropertySource {
 			displayName += "End";
 		} else if (evt instanceof GeneratedCharterOut) {
 			displayName += "Generated Charter Out";
+		} else if (evt instanceof CharterLengthEvent) {
+			displayName += "Charter length";
 		} else {
 			displayName += "Event";
 		}
@@ -150,6 +153,8 @@ public class EventGroupPropertySource implements IPropertySource {
 		} else if (event instanceof EndEvent) {
 			return true;
 		} else if (event instanceof GeneratedCharterOut) {
+			return true;
+		} else if (event instanceof CharterLengthEvent) {
 			return true;
 		} else if (event instanceof SlotVisit && ((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
 			return true;

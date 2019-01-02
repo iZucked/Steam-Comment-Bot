@@ -46,12 +46,16 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -222,6 +226,8 @@ public class ScenarioComparisonServiceTransformer {
 				if (enableDiffTools) {
 					diffProcessors.add(new GCOCycleGroupingProcessor());
 					diffProcessors.add(new LadenVoyageProcessor());
+					// Enable to link charter length to ballast idle
+					// diffProcessors.add(new BallastChaterLengthAndIdleVoyageProcessor());
 					diffProcessors.add(new EventGroupingOverlapProcessor());
 					diffProcessors.add(new StartEventProcessor());
 					diffProcessors.add(new CooldownBindingProcessor());
@@ -280,7 +286,6 @@ public class ScenarioComparisonServiceTransformer {
 					equivalancesMap = new HashMap<>();
 					final List<EObject> uniqueElements = new LinkedList<>();
 					equivalanceGroupBuilder.populateEquivalenceGroups(perScenarioElementsByKeyMap, equivalancesMap, uniqueElements, elementToRowMap);
-
 					// Display unique rows.
 					for (final EObject element : uniqueElements) {
 						final Row row = elementToRowMap.get(element);
@@ -338,7 +343,6 @@ public class ScenarioComparisonServiceTransformer {
 											}
 										}
 									}
-
 								}
 							}
 
@@ -399,14 +403,25 @@ public class ScenarioComparisonServiceTransformer {
 			}
 
 		};
+
 	}
 
 	public List<Row> generateRows(final Table dataModelInstance, final ScenarioResult scenarioResult, final Schedule schedule, final boolean isPinned) {
+		final Map<Sequence, GroupedCharterLengthEvent> extraEvents = new HashMap<>();
 
 		final List<EObject> interestingEvents = new LinkedList<>();
 		final Set<EObject> allEvents = new HashSet<>();
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
+				if (event instanceof CharterLengthEvent) {
+//					final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) event;
+//					extraEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents().add(charterLengthEvent);
+//					continue;
+					interestingEvents.add(event);
+					allEvents.add(event);
+continue;
+				}
+
 				if (showEvent(event)) {
 					interestingEvents.add(event);
 				}
@@ -418,6 +433,22 @@ public class ScenarioComparisonServiceTransformer {
 			interestingEvents.add(openSlotAllocation);
 			allEvents.add(openSlotAllocation);
 		}
+		for (final GroupedCharterLengthEvent cle : extraEvents.values()) {
+			long pnl1 = 0L;
+			long pnl2 = 0L;
+			for (final Event e : cle.getEvents()) {
+				final CharterLengthEvent c = (CharterLengthEvent) e;
+				pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
+				pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
+				cle.setLinkedSequence(c.getSequence());
+			}
+			final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
+			groupProfitAndLoss.setProfitAndLoss(pnl1);
+			groupProfitAndLoss.setProfitAndLossPreTax(pnl2);
+			cle.setGroupProfitAndLoss(groupProfitAndLoss);
+		}
+		allEvents.addAll(extraEvents.values());
+		interestingEvents.addAll(extraEvents.values());
 
 		return generateRows(dataModelInstance, scenarioResult, schedule, interestingEvents, allEvents, isPinned);
 	}
@@ -619,6 +650,13 @@ public class ScenarioComparisonServiceTransformer {
 			final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) a;
 			equivalents.add(generatedCharterOut);
 			equivalents.addAll(generatedCharterOut.getEvents());
+		} else if (a instanceof CharterLengthEvent) {
+			final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) a;
+			equivalents.add(charterLengthEvent);
+			equivalents.addAll(charterLengthEvent.getEvents());
+		} else if (a instanceof GroupedCharterLengthEvent) {
+			final GroupedCharterLengthEvent charterLengthEvent = (GroupedCharterLengthEvent) a;
+			equivalents.addAll(charterLengthEvent.getEvents());
 		} else if (a instanceof StartEvent) {
 			final StartEvent startEvent = (StartEvent) a;
 			equivalents.addAll(startEvent.getEvents());
@@ -735,6 +773,8 @@ public class ScenarioComparisonServiceTransformer {
 		} else if (event instanceof VesselEventVisit) {
 			return true;
 		} else if (event instanceof GeneratedCharterOut) {
+			return true;
+		} else if (event instanceof CharterLengthEvent) {
 			return true;
 		} else if (event instanceof SlotVisit) {
 			final SlotVisit slotVisit = (SlotVisit) event;

@@ -101,6 +101,7 @@ public class HeadlineReportView extends ViewPart {
 				"features:headline-sales-revenue"), //
 		LABEL_EQUITY(ColumnType.Label, "Equity", null, "features:report-equity-book"), VALUE_EQUITY(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:report-equity-book"), //
 		LABEL_IDLE_DAYS(ColumnType.Label, "Idle", null, "features:headline-idle-days"), VALUE_IDLE_DAYS(ColumnType.Value, 24000l, KPIReportTransformer.TYPE_TIME, "features:headline-idle-days"), //
+		LABEL_CHARTER_LENGTH_DAYS(ColumnType.Label, "Charter Length", null, "features:headline-charter-length"), VALUE_CHARTER_LENGTH_DAYS(ColumnType.Value, 24000l, KPIReportTransformer.TYPE_TIME, "features:headline-charter-length"), //
 		LABEL_GCO(ColumnType.Label, "Charter Out (virt)", null, "features:optimisation-charter-out-generation"), VALUE_GCO_DAYS(ColumnType.Value, 2400l, KPIReportTransformer.TYPE_TIME,
 				"features:optimisation-charter-out-generation"), VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:optimisation-charter-out-generation"), //
 		LABEL_PURCHASE_COST(ColumnType.Label, "P. Cost", null, "features:headline-purchase-cost"), VALUE_PURCHASE_COST(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST,
@@ -244,6 +245,8 @@ public class HeadlineReportView extends ViewPart {
 				return d.latenessExcludingFlex;
 			case VALUE_IDLE_DAYS:
 				return d.idleTime;
+			case VALUE_CHARTER_LENGTH_DAYS:
+				return d.charterLength;
 			case VALUE_PNL:
 				return d.totalPNL;
 			case VALUE_SHIPPING:
@@ -371,6 +374,13 @@ public class HeadlineReportView extends ViewPart {
 					}
 					break;
 				case VALUE_IDLE_DAYS:
+					// if (pinD == null) {
+					color = SWT.COLOR_BLACK;
+					// } else {
+					// color = (d.idleTime - pinD.idleTime) <= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+					// }
+					break;
+				case VALUE_CHARTER_LENGTH_DAYS:
 					// if (pinD == null) {
 					color = SWT.COLOR_BLACK;
 					// } else {

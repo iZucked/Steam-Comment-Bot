@@ -31,6 +31,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.lingo.reports.internal.Activator;
+import com.mmxlabs.lingo.reports.views.fleet.formatters.CharterLengthDaysFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterDaysFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterRevenueFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
@@ -113,6 +114,10 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 
 			if (formatter instanceof GeneratedCharterRevenueFormatter) {
 				valuePinned = Integer.valueOf(0);
+			}
+			
+			if (formatter instanceof CharterLengthDaysFormatter) {
+				valuePinned = Double.valueOf(0.0);
 			}
 
 			if (valuePrevious instanceof Integer || valuePinned instanceof Integer) {

@@ -16,7 +16,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 public final class SchedulerConstants {
 
 	// Caching constants - used in injection framework
-	public static final String Key_VoyagePlanOptimiserCache = "cache-voyage-plan-optimiser";	
+	public static final String Key_VoyagePlanOptimiserCache = "cache-voyage-plan-optimiser";
 	public static final String Key_ArrivalTimeCache = "cache-arrival-times";
 	public static final String Key_VolumeAllocationCache = "cache-volume-allocation";
 	public static final String Key_VolumeAllocatedSequenceCache = "cache-volume-allocated-sequence";
@@ -43,9 +43,19 @@ public final class SchedulerConstants {
 
 	public static final String Key_UsePriceBasedWindowTrimming = "scheduler-use-price-based-window-trimming";
 	public static final String Key_UseCanalSlotBasedWindowTrimming = "scheduler-use-canal-slot-based-window-trimming";
-	
+
 	/**
-	 * When there is not other information available, use this capacity limit. 
+	 * When there is not other information available, use this capacity limit.
 	 */
 	public static final String KEY_DEFAULT_MAX_VOLUME_IN_M3 = "default-max-volume-in-m3";
+
+	/**
+	 * Constant linked to an integer hours of idle time before converting ballast idle to charter length
+	 */
+	public static final String CHARTER_LENGTH_MIN_IDLE_HOURS = "charter-length-min-idle-hours";
+
+	/**
+	 * Constant linked to an integer hours of idle time before a forced cooldown is no longer classed as "forced" (i.e. no longer a violation)
+	 */
+	public static final String COOLDOWN_MIN_IDLE_HOURS = "cooldown-min-idle-hours";
 }

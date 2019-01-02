@@ -272,6 +272,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CharterLengthEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterLengthEventItemProvider charterLengthEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.CharterLengthEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterLengthEventAdapter() {
+		if (charterLengthEventItemProvider == null) {
+			charterLengthEventItemProvider = new CharterLengthEventItemProvider(this);
+		}
+
+		return charterLengthEventItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.FuelUsage} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -939,6 +962,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected GroupedCharterLengthEventItemProvider groupedCharterLengthEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createGroupedCharterLengthEventAdapter() {
+		if (groupedCharterLengthEventItemProvider == null) {
+			groupedCharterLengthEventItemProvider = new GroupedCharterLengthEventItemProvider(this);
+		}
+
+		return groupedCharterLengthEventItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CanalBookingEvent} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1196,6 +1242,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (slotVisitItemProvider != null) slotVisitItemProvider.dispose();
 		if (vesselEventVisitItemProvider != null) vesselEventVisitItemProvider.dispose();
 		if (generatedCharterOutItemProvider != null) generatedCharterOutItemProvider.dispose();
+		if (charterLengthEventItemProvider != null) charterLengthEventItemProvider.dispose();
 		if (cooldownItemProvider != null) cooldownItemProvider.dispose();
 		if (fuelUsageItemProvider != null) fuelUsageItemProvider.dispose();
 		if (fuelQuantityItemProvider != null) fuelQuantityItemProvider.dispose();
@@ -1215,8 +1262,9 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (lumpSumContractDetailsItemProvider != null) lumpSumContractDetailsItemProvider.dispose();
 		if (notionalJourneyContractDetailsItemProvider != null) notionalJourneyContractDetailsItemProvider.dispose();
 		if (charterAvailableToEventItemProvider != null) charterAvailableToEventItemProvider.dispose();
-		if (charterAvailableFromEventItemProvider != null) charterAvailableFromEventItemProvider.dispose();
 		if (canalBookingEventItemProvider != null) canalBookingEventItemProvider.dispose();
+		if (charterAvailableFromEventItemProvider != null) charterAvailableFromEventItemProvider.dispose();
+		if (groupedCharterLengthEventItemProvider != null) groupedCharterLengthEventItemProvider.dispose();
 		if (inventoryEventsItemProvider != null) inventoryEventsItemProvider.dispose();
 		if (inventoryChangeEventItemProvider != null) inventoryChangeEventItemProvider.dispose();
 		if (paperDealAllocationItemProvider != null) paperDealAllocationItemProvider.dispose();

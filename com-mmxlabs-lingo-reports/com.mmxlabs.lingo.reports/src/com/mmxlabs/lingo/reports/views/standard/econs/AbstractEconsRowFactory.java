@@ -16,6 +16,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -114,6 +115,9 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			if (object instanceof CargoAllocation) {
 				final CargoAllocation cargoAllocation = (CargoAllocation) object;
 				return helper.apply(cargoAllocation);
+			} else if (object instanceof CharterLengthEvent) {
+				final CharterLengthEvent charterLength = (CharterLengthEvent) object;
+				return helper.apply(charterLength);
 			} else if (object instanceof MarketAllocation) {
 				final MarketAllocation marketAllocation = (MarketAllocation) object;
 				return helper.apply(marketAllocation);

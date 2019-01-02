@@ -11,6 +11,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 public class PortSlotEventProvider implements IPortSlotEventProvider {
+
 	private final Map<Pair<IPortSlot, Class<?>>, Object> portSlotToEventMap = new HashMap<>();
 
 	@Override

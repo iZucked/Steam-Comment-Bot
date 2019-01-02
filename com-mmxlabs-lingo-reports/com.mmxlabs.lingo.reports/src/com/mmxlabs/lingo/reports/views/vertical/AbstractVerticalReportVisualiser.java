@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -123,6 +124,9 @@ public abstract class AbstractVerticalReportVisualiser {
 		if (event instanceof GeneratedCharterOut) {
 			return colourPalette.getColourFor(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourElements.Background);
 		}
+		if (event instanceof CharterLengthEvent) {
+			return colourPalette.getColourFor(ColourPaletteItems.Voyage_CharterLength, ColourElements.Background);
+		}
 
 		if (event instanceof Idle) {
 			if (((Idle) event).isLaden()) {
@@ -197,6 +201,8 @@ public abstract class AbstractVerticalReportVisualiser {
 
 		} else if (event instanceof GeneratedCharterOut) {
 			return "GCO";
+		} else if (event instanceof CharterLengthEvent) {
+			return "Length";
 		} else if (event instanceof StartEvent) {
 			final Port port = event.getPort();
 			if (port != null) {

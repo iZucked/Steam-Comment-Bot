@@ -177,6 +177,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createGeneratedCharterOutAdapter();
 			}
 			@Override
+			public Adapter caseCharterLengthEvent(CharterLengthEvent object) {
+				return createCharterLengthEventAdapter();
+			}
+			@Override
 			public Adapter caseCooldown(Cooldown object) {
 				return createCooldownAdapter();
 			}
@@ -261,12 +265,16 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createCharterAvailableToEventAdapter();
 			}
 			@Override
+			public Adapter caseCanalBookingEvent(CanalBookingEvent object) {
+				return createCanalBookingEventAdapter();
+			}
+			@Override
 			public Adapter caseCharterAvailableFromEvent(CharterAvailableFromEvent object) {
 				return createCharterAvailableFromEventAdapter();
 			}
 			@Override
-			public Adapter caseCanalBookingEvent(CanalBookingEvent object) {
-				return createCanalBookingEventAdapter();
+			public Adapter caseGroupedCharterLengthEvent(GroupedCharterLengthEvent object) {
+				return createGroupedCharterLengthEventAdapter();
 			}
 			@Override
 			public Adapter caseInventoryEvents(InventoryEvents object) {
@@ -433,6 +441,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createGeneratedCharterOutAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.CharterLengthEvent <em>Charter Length Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.CharterLengthEvent
+	 * @generated
+	 */
+	public Adapter createCharterLengthEventAdapter() {
 		return null;
 	}
 
@@ -867,6 +889,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCharterAvailableFromEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent <em>Grouped Charter Length Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent
+	 * @generated
+	 */
+	public Adapter createGroupedCharterLengthEventAdapter() {
 		return null;
 	}
 

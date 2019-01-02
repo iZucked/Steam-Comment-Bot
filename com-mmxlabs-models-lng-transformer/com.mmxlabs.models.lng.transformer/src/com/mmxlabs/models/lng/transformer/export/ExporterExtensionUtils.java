@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityPNLDetails;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -41,6 +42,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossSlotDetailsAnnotation;
+import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -104,27 +106,26 @@ public class ExporterExtensionUtils {
 			}
 		} else if (slot instanceof IVesselEventPortSlot) {
 
-			if (slot instanceof IVesselEventPortSlot) {
-				if (slot instanceof IGeneratedCharterOutVesselEventPortSlot) {
-					final GeneratedCharterOut gco = portSlotEventProvider.getEventFromPortSlot(slot, GeneratedCharterOut.class);
-					return gco;
-				} else {
-					final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = modelEntityMap.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
-					VesselEventVisit visit = null;
-					//
-					for (final Sequence sequence : outputSchedule.getSequences()) {
-						for (final Event event : sequence.getEvents()) {
-							if (event instanceof VesselEventVisit) {
-								if (((VesselEventVisit) event).getVesselEvent() == modelEvent) {
-									visit = (VesselEventVisit) event;
-								}
+			if (slot instanceof IGeneratedCharterOutVesselEventPortSlot) {
+				final GeneratedCharterOut gco = portSlotEventProvider.getEventFromPortSlot(slot, GeneratedCharterOut.class);
+				return gco;
+			} else if (slot instanceof IGeneratedCharterLengthEventPortSlot) {
+				return portSlotEventProvider.getEventFromPortSlot(slot, CharterLengthEvent.class);
+			} else {
+				final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = modelEntityMap.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
+				VesselEventVisit visit = null;
+				//
+				for (final Sequence sequence : outputSchedule.getSequences()) {
+					for (final Event event : sequence.getEvents()) {
+						if (event instanceof VesselEventVisit) {
+							if (((VesselEventVisit) event).getVesselEvent() == modelEvent) {
+								visit = (VesselEventVisit) event;
 							}
 						}
 					}
-					return visit;
 				}
+				return visit;
 			}
-
 		} else if (slot.getPortType() == PortType.Start) {
 			final StartEvent startEvent = findStartEvent(element, modelEntityMap, outputSchedule, annotatedSolution, vesselProvider);
 			return startEvent;
@@ -330,7 +331,7 @@ public class ExporterExtensionUtils {
 		}
 		throw new IllegalStateException();
 	}
-	
+
 	@NonNull
 	public static CanalEntry mapCanalEntry(@NonNull final ECanalEntry canalEntry) {
 		switch (canalEntry) {

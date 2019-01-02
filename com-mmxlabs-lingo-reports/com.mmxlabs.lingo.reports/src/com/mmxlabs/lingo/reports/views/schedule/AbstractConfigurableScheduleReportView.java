@@ -394,6 +394,9 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 								case "endevents":
 									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_VESSEL_END_ROW.id);
 									break;
+								case "charterlength":
+									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_VESSEL_CHARTER_LENGTH.id);
+									break;
 								}
 							}
 						}

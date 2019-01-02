@@ -37,8 +37,9 @@ public final class ColourPalette {
 	private static final RGB Vessel_Ballast_Journey = Gas_Blue;
 	private static final RGB Vessel_Charter_Out = VesselEvent_Purple;
 	private static final RGB Vessel_Dry_Dock = VesselEvent_Brown;
-	private static final RGB Vessel_Maintenance = new RGB(221, 220, 221);
+	private static final RGB Vessel_Maintenance = VesselEvent_Brown;
 	private static final RGB Vessel_Generated_Charter_Out = VesselEvent_LightPurple;
+	private static final RGB Vessel_Charter_Length = new RGB(80, 80, 80);
 	private static final RGB Vessel_Laden_Idle = Light_Green;
 	private static final RGB Vessel_Laden_Journey = Green;
 	private static final RGB Warning_Orange = new RGB(255, 120, 25);
@@ -66,7 +67,7 @@ public final class ColourPalette {
 	private static ColourPalette instance;
 	private static final Map<String, ColourPalette> namedInstances = new HashMap<>();
 
-	public synchronized static ColourPalette getInstance() {
+	public static synchronized ColourPalette getInstance() {
 		if (instance == null) {
 			instance = new ColourPalette();
 		}
@@ -99,6 +100,7 @@ public final class ColourPalette {
 		setItemColour(ColourPaletteItems.Voyage_Ballast_Idle, ColourElements.Background, Vessel_Ballast_Idle);
 
 		setItemColour(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourElements.Background, Vessel_Generated_Charter_Out);
+		setItemColour(ColourPaletteItems.Voyage_CharterLength, ColourElements.Background, Vessel_Charter_Length);
 
 		setItemColour(ColourPaletteItems.Voyage_Discharge, ColourElements.Background, Slot_White);
 		setItemColour(ColourPaletteItems.Voyage_Load, ColourElements.Background, Slot_White);
@@ -132,7 +134,7 @@ public final class ColourPalette {
 		setItemColour(ColourPaletteItems.Voyage_Tight_Warning, ColourElements.Background, Warning_Yellow);
 
 		setItemColour(ColourPaletteItems.Inventory_Breach, ColourElements.Background, Red);
-		
+
 		setItemColour(ColourPaletteItems.Charter_Range, ColourElements.Background, Vessel_Charter_Range);
 		setItemColour(ColourPaletteItems.Charter_Range, ColourElements.Foreground, Vessel_Charter_Range);
 	}
@@ -151,6 +153,7 @@ public final class ColourPalette {
 		Voyage_Ballast_Journey, Voyage_Ballast_Idle,
 		Voyage_Cooldown,
 		Voyage_GeneratedCharterOut,
+		Voyage_CharterLength,
 		Event_DryDock, Event_Maintenance, Event_CharterOut,
 		
 		Event_Locked,

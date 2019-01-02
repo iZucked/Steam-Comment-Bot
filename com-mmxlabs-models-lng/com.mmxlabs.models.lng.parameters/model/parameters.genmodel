@@ -20,6 +20,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/periodEnd"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/shippingOnly"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/generateCharterOuts"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/withCharterLength"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/charterLengthDays"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/withSpotCargoMarkets"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/buildActionSets"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/similarityMode"/>

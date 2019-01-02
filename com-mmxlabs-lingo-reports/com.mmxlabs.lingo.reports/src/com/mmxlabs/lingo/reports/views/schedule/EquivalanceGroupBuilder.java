@@ -30,10 +30,12 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
@@ -395,12 +397,22 @@ public class EquivalanceGroupBuilder {
 			// See start of #checkElementEquivalence
 			// Equivalence is really overlapping event time on a resource, element name (currently) encode the previous cargo/event ID which may change.
 			return element.eClass().getName() + "-" + ((Event) element).name() + "-" + element.hashCode();
+		} else if (element instanceof CharterLengthEvent) {
+			// Add in hash code to keep elements unique.
+			// See start of #checkElementEquivalence
+			// Equivalence is really overlapping event time on a resource, element name (currently) encode the previous cargo/event ID which may change.
+			return element.eClass().getName() + "-" + ((Event) element).name() + "-" + element.hashCode();
+		} else if (element instanceof GroupedCharterLengthEvent) {
+			// Add in hash code to keep elements unique.
+			// See start of #checkElementEquivalence
+			// Equivalence is really overlapping event time on a resource, element name (currently) encode the previous cargo/event ID which may change.
+			return element.eClass().getName() + "-" + ((Event) element).name();
 		} else if (element instanceof Event) {
 			return element.eClass().getName() + "-" + ((Event) element).name();
 		}
 		if (element instanceof Slot) {
 			String prefix = "";
-			final Slot slot = (Slot) element;
+			final Slot<?> slot = (Slot<?>) element;
 			prefix = getSlotTypePrefix(slot);
 			if (slot instanceof SpotSlot) {
 				return prefix + "-" + getSpotSlotSuffix(slot);
