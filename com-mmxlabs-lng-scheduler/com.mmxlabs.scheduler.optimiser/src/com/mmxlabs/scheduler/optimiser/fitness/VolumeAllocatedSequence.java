@@ -29,12 +29,10 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanner;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
@@ -334,7 +332,6 @@ public class VolumeAllocatedSequence {
 			firstObject = false;
 
 			final Object e = vpi.nextObject();
-
 			//
 			final int currentTime = vpi.getCurrentTime();
 			final VoyagePlan currentPlan = vpi.getCurrentPlan();
@@ -343,7 +340,6 @@ public class VolumeAllocatedSequence {
 			assert currentPlan.getStartingHeelInM3() >= 0;
 			assert currentPlan.getRemainingHeelInM3() >= 0;
 
-			final long charterRatePerDay = currentPlan.getCharterInRatePerDay();
 			if (resetCurrentHeel) {
 				currentHeelInM3 = currentPlan.getStartingHeelInM3();
 			}
