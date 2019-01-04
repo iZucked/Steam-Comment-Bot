@@ -4,8 +4,13 @@
  */
 package com.mmxlabs.models.lng.adp.validation;
 
+import java.time.YearMonth;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import org.eclipse.core.internal.localstore.IsSynchronizedVisitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
@@ -15,6 +20,9 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.PeriodDistribution;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
@@ -51,6 +59,33 @@ public class PeriodDistributionConstraint extends AbstractModelMultiConstraint {
 							.withObjectAndFeature(periodDistribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__MIN_CARGOES) //
 							.withObjectAndFeature(periodDistribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__MAX_CARGOES) //
 							.withMessage("Min cargoes is greater than max cargoes") //
+							.make(ctx, statuses);
+				}
+			}
+			if (periodDistribution.isSetMinCargoes()) {
+				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(extraContext.getScenarioDataProvider());
+				Map<YearMonth, Long> counts;
+				if (profile.getContract() instanceof PurchaseContract) {
+					counts = cargoModel.getLoadSlots().stream() //
+							.filter(s -> s.getContract() == profile.getContract())//
+							.map(s -> YearMonth.from(s.getWindowStart())) //
+							.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+				} else {
+					counts = cargoModel.getDischargeSlots().stream() //
+							.filter(s -> s.getContract() == profile.getContract())//
+							.map(s -> YearMonth.from(s.getWindowStart())) //
+							.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+				}
+
+				long sum = 0;
+				for (final YearMonth ym : periodDistribution.getRange()) {
+					sum += counts.getOrDefault(ym, 0L);
+				}
+				if (periodDistribution.getMinCargoes() > sum) {
+					factory.copyName() //
+							.withObjectAndFeature(periodDistribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__MIN_CARGOES) //
+							.withObjectAndFeature(periodDistribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__MAX_CARGOES) //
+							.withFormattedMessage("Min cargoes is %d but only %d cargoes in the period", periodDistribution.getMinCargoes(), sum) //
 							.make(ctx, statuses);
 				}
 			}
