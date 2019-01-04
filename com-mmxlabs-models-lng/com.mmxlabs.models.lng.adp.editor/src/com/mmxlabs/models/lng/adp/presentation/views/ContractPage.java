@@ -24,8 +24,6 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -46,8 +44,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.collect.Lists;
@@ -97,9 +97,12 @@ public class ContractPage extends ADPComposite {
 
 	private ScenarioTableViewer previewViewer;
 
-	public ContractPage(final Composite parent, final int style, final ADPEditorData editorData) {
+	private IActionBars actionBars;
+
+	public ContractPage(final Composite parent, final int style, final ADPEditorData editorData, IActionBars actionBars) {
 		super(parent, style);
 		this.editorData = editorData;
+		this.actionBars = actionBars;
 		this.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(0, 0).create());
 
 		// Top Toolbar
@@ -252,6 +255,9 @@ public class ContractPage extends ADPComposite {
 						}
 					};
 					deleteSlotAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
+					if (actionBars != null) {
+						actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteSlotAction);
+					}
 					removeButtonManager.getToolbarManager().add(deleteSlotAction);
 					{
 						Action packAction = new Action("Pack") {
@@ -318,27 +324,21 @@ public class ContractPage extends ADPComposite {
 		previewViewer.addTypicalColumn("Units", quantityGroup,
 				new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit(), editorData.getEditingDomain(), (e) -> mapName((VolumeUnits) e)));
 
-		previewViewer.addDoubleClickListener(new IDoubleClickListener() {
-
-			@Override
-			public void doubleClick(final DoubleClickEvent event) {
-				final ISelection selection = previewViewer.getSelection();
-				if (selection instanceof IStructuredSelection) {
-					final IStructuredSelection ss = (IStructuredSelection) selection;
-					DetailCompositeDialogUtil.editSelection(editorData, ss);
-					if (previewViewer != null) {
-						previewViewer.refresh();
-					}
-				}
+		previewViewer.addDoubleClickListener(event -> {
+			final ISelection selection = previewViewer.getSelection();
+			if (selection instanceof IStructuredSelection) {
+				final IStructuredSelection ss = (IStructuredSelection) selection;
+				DetailCompositeDialogUtil.editSelection(editorData, ss);
+				previewViewer.refresh();
 			}
 		});
 
-		previewViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-				deleteSlotAction.setEnabled(!event.getSelection().isEmpty());
+		previewViewer.addSelectionChangedListener(event -> {
+			// Update global action on selection change.
+			if (actionBars != null) {
+				actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteSlotAction);
 			}
+			deleteSlotAction.setEnabled(!event.getSelection().isEmpty());
 		});
 		deleteSlotAction.setEnabled(false);
 		return previewViewer;

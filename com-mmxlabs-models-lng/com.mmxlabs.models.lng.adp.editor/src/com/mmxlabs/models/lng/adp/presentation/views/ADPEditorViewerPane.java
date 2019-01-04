@@ -149,7 +149,7 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		{
 			final CTabItem tabItem = new CTabItem(folder, SWT.NONE);
 			tabItem.setText("Contracts");
-			final ContractPage page = new ContractPage(folder, SWT.NONE, editorData);
+			final ContractPage page = new ContractPage(folder, SWT.NONE, editorData, actionBars);
 			page.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
 			pages.add(page);
@@ -409,5 +409,11 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 			folder.setSelection(0);
 			((ContractPage) pages.get(0)).setSelectedProfile((ContractProfile<?, ?>) target);
 		}
+	}
+	
+	@Override
+	public void updateActionBars() {
+		// TODO Auto-generated method stub
+		super.updateActionBars();
 	}
 }
