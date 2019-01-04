@@ -235,13 +235,13 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 				if (pinData != null) {
 					for (final Map.Entry<Year, Long> e : pinData.volumes.entrySet()) {
 						final long val = volumes.getOrDefault(e.getKey(), 0L);
-						volumes.put(e.getKey(), val + e.getValue());
+						volumes.put(e.getKey(), val - e.getValue());
 					}
 				}
 				if (otherData != null) {
 					for (final Map.Entry<Year, Long> e : otherData.volumes.entrySet()) {
 						final long val = volumes.getOrDefault(e.getKey(), 0L);
-						volumes.put(e.getKey(), val - e.getValue());
+						volumes.put(e.getKey(), val + e.getValue());
 					}
 				}
 
