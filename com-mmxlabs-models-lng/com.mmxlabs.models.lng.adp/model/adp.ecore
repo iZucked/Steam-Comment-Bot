@@ -79,7 +79,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="CustomSubProfileAttributes" abstract="true"
       interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="DistributionModel" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
-    <eOperations name="getModelOrContractVolumePerCargo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getModelOrContractVolumePerCargo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eOperations name="getModelOrContractVolumeUnit" eType="#//LNGVolumeUnit"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumePerCargo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
         unsettable="true"/>

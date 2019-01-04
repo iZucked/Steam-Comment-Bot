@@ -218,21 +218,21 @@ public abstract class DistributionModelImpl extends MMXObjectImpl implements Dis
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public int getModelOrContractVolumePerCargo() {
-		return (Integer) eGetWithDefault(ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_PER_CARGO);
+	public double getModelOrContractVolumePerCargo() {
+		return (Double) eGetWithDefault(ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_PER_CARGO);
 
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public LNGVolumeUnit getModelOrContractVolumeUnit() {
 		return (LNGVolumeUnit) eGetWithDefault(ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_UNIT);
 
 	}
-
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

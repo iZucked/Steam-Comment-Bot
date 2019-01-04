@@ -143,7 +143,7 @@ public interface DistributionModel extends MMXObject {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	int getModelOrContractVolumePerCargo();
+	double getModelOrContractVolumePerCargo();
 
 	/**
 	 * <!-- begin-user-doc -->

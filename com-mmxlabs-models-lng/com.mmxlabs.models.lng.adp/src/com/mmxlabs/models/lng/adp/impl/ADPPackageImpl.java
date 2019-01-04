@@ -1567,7 +1567,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEAttribute(getDistributionModel_VolumePerCargo(), ecorePackage.getEDouble(), "volumePerCargo", null, 0, 1, DistributionModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDistributionModel_VolumeUnit(), this.getLNGVolumeUnit(), "volumeUnit", null, 0, 1, DistributionModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEOperation(getDistributionModel__GetModelOrContractVolumePerCargo(), ecorePackage.getEInt(), "getModelOrContractVolumePerCargo", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getDistributionModel__GetModelOrContractVolumePerCargo(), ecorePackage.getEDouble(), "getModelOrContractVolumePerCargo", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getDistributionModel__GetModelOrContractVolumeUnit(), this.getLNGVolumeUnit(), "getModelOrContractVolumeUnit", 0, 1, IS_UNIQUE, IS_ORDERED);
 
