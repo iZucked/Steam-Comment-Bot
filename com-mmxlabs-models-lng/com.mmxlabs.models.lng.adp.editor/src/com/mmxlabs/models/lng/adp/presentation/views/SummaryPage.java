@@ -4,12 +4,14 @@
  */
 package com.mmxlabs.models.lng.adp.presentation.views;
 
+import java.awt.font.TextLayout.CaretPolicy;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -22,12 +24,15 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.handlers.DisplayHelpHandler;
 
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -35,6 +40,7 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class SummaryPage extends ADPComposite {
 
@@ -48,6 +54,21 @@ public class SummaryPage extends ADPComposite {
 	private GridTableViewer purchasesViewer;
 
 	private GridTableViewer salesViewer;
+
+	/**
+	 * Adapter to list to changes in number of slots on the cargo model.
+	 */
+	private final AdapterImpl cargoAdapter = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
+			if (msg.isTouch()) {
+				return;
+			}
+			if (msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS || msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS) {
+				RunnerHelper.asyncExec(() -> refresh());
+			}
+		}
+	};
 
 	public SummaryPage(final Composite parent, final int style, final ADPEditorData editorData) {
 		super(parent, style);
@@ -181,6 +202,14 @@ public class SummaryPage extends ADPComposite {
 			purchasesViewer.setInput(null);
 			salesViewer.setInput(null);
 		}
+
+		if (scenarioModel != null) {
+			final CargoModel cargoModel = scenarioModel.getCargoModel();
+			releaseAdaptersRunnable = () -> {
+				cargoModel.eAdapters().remove(cargoAdapter);
+			};
+			cargoModel.eAdapters().add(cargoAdapter);
+		}
 	}
 
 	@Override
@@ -222,4 +251,5 @@ public class SummaryPage extends ADPComposite {
 		col.getColumn().setWidth(100);
 		col.getColumn().setText(name);
 	}
+
 }
