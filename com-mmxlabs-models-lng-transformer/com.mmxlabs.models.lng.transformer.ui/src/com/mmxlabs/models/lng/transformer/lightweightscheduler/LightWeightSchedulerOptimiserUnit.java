@@ -133,6 +133,10 @@ public class LightWeightSchedulerOptimiserUnit {
 					final IMultiStateResult result;
 					if (userSettings.isNominalADP()) {
 						ISequences seq = t.computeNominalADP(initialSequencesContainer.getSequences(), monitor);
+						if (seq == null) {
+							throw new InfeasibleSolutionException("No feasible solution found");
+						}
+						
 						result = new MultiStateResult(seq, new HashMap<>());
 					} else {
 						result = t.runAll(initialSequencesContainer.getSequences(), monitor);
