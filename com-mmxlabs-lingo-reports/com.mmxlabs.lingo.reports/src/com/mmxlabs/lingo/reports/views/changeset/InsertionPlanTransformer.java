@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import com.mmxlabs.lingo.reports.services.ScenarioNotEvaluatedException;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -30,6 +31,9 @@ public class InsertionPlanTransformer {
 		// Hacky - compare to evaluated state
 		AnalyticsModel analyticsModel = (AnalyticsModel) plan.eContainer();
 		LNGScenarioModel scenarioModel = (LNGScenarioModel) analyticsModel.eContainer();
+		if (scenarioModel.getScheduleModel().getSchedule() == null) {
+			throw new ScenarioNotEvaluatedException("Unable to perform comparison, scenario needs to be evaluated");
+		}
 		ScenarioResult base = new ScenarioResult(scenarioInstance, scenarioModel.getScheduleModel());
 
 		for (final SolutionOption option : plan.getOptions()) {

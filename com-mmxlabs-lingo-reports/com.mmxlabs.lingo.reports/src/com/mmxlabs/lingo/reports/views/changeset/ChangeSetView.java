@@ -41,6 +41,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
@@ -81,6 +82,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.service.event.EventHandler;
 
 import com.google.common.base.Objects;
+import com.google.inject.spi.Message;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.internal.Activator;
@@ -89,6 +91,7 @@ import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonServiceTransformer;
+import com.mmxlabs.lingo.reports.services.ScenarioNotEvaluatedException;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
@@ -932,15 +935,19 @@ public class ChangeSetView extends ViewPart {
 			getViewSite().getActionBars().getToolBarManager().add(filterMenu);
 		}
 		{
+
 			final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
+
 			getViewSite().getActionBars().getToolBarManager().add(packAction);
 		}
 		if (false) {
-			
+
 			// Re-evaluate requires selecting a group
 			// Undo() does not trigger view to refresh
-			
-			reEvaluateAction = new RunnableAction("Re-evaluate", () -> {
+
+			reEvaluateAction = new RunnableAction("Re-evaluate", () ->
+
+			{
 
 				final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 
@@ -997,9 +1004,11 @@ public class ChangeSetView extends ViewPart {
 					}
 				}
 			});
+
 			getViewSite().getActionBars().getToolBarManager().add(reEvaluateAction);
 
 		}
+
 		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
 
@@ -1049,7 +1058,13 @@ public class ChangeSetView extends ViewPart {
 							try {
 								runnable.run(new NullProgressMonitor());
 							} catch (InvocationTargetException | InterruptedException e) {
-								e.printStackTrace();
+								Throwable cause = e.getCause();
+								if (cause instanceof ScenarioNotEvaluatedException) {
+									MessageDialog.openError(activeShell, "Error opening result", cause.getMessage());
+								} else {
+									MessageDialog.openError(activeShell, "Error opening result", e.getMessage());
+									e.printStackTrace();
+								}
 							}
 						});
 					}
@@ -1057,7 +1072,13 @@ public class ChangeSetView extends ViewPart {
 					runnable.run(new NullProgressMonitor());
 				}
 			} catch (InvocationTargetException | InterruptedException e) {
-				e.printStackTrace();
+				Throwable cause = e.getCause();
+				if (cause instanceof ScenarioNotEvaluatedException) {
+					MessageDialog.openError(activeShell, "Error opening result", cause.getMessage());
+				} else {
+					MessageDialog.openError(activeShell, "Error opening result", e.getMessage());
+					e.printStackTrace();
+				}
 			}
 		}
 	}
