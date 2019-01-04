@@ -22,7 +22,7 @@ public class ActionSetTransformer {
 
 		// Try forks
 		{
-			final Container c = (ScenarioInstance) instance;
+			final Container c = instance;
 			boolean foundBase = false;
 			int i = 1;
 			while (true) {
