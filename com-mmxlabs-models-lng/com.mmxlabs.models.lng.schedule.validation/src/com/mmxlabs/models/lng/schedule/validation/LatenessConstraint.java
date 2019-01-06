@@ -87,6 +87,53 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 			}
 		}
 
+		
+//		if (target instanceof Event && target.eContainer() instanceof Sequence) {
+//			if (LatenessUtils.isLateExcludingFlex((Event) target)) {
+//				EObject obj = null;
+//				EStructuralFeature feature = null;
+//				String message = null;
+//				String vessel = "Vessel";
+//				if (target instanceof SlotVisit) {
+//					final SlotAllocation allocation = ((SlotVisit) target).getSlotAllocation();
+//					Sequence seq = allocation.getCargoAllocation().getSequence();
+//					vessel = getVesselNamefromSequence(vessel, seq);		        							
+//					if (allocation != null) {
+//						message = String.format("%s is %s hrs late to reach %s.", vessel, LatenessUtils.getLatenessInHours((SlotVisit) target), ((Slot) obj).getName());
+//						obj = allocation.getSlot();
+//						feature = CargoPackage.Literals.SLOT__WINDOW_START;
+//					}
+//				} else if (target instanceof VesselEventVisit) {
+//					final VesselEvent ve = ((VesselEventVisit) target).getVesselEvent();
+//					VesselAssignmentType vat = ve.getVesselAssignmentType();
+//					if (vat instanceof VesselAvailability) {
+//						VesselAvailability va = (VesselAvailability) vat;
+//						vessel = va.getVessel().getName();
+//					}
+//					message = String.format("%s reaches '%s' late.", vessel, ve.getName());
+//					obj = ve;
+//					feature = CargoPackage.Literals.VESSEL_EVENT__START_BY;
+//				} else if (target instanceof EndEvent) {
+//					final EndEvent event = (EndEvent) target;
+//					vessel = getVesselNamefromSequence(vessel, event.getSequence());
+//					message = String.format("%s is travelling after it is no longer available.", vessel);
+//					obj = event.getSequence().getVesselAvailability();
+//					feature = CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY;
+//				} else {
+//					message = "Late arrival in schedule.";
+//				}
+//
+//				if (message != null) {
+//					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message), IStatus.WARNING);
+//					if (obj != null) {
+//						failure.addEObjectAndFeature(obj, feature);
+//					}
+//					failure.setTag(ValidationConstants.TAG_EVALUATED_SCHEDULE);
+//					statuses.add(failure);
+//				}
+//			}
+//		}
+
 		return Activator.PLUGIN_ID;
 	}
 }
