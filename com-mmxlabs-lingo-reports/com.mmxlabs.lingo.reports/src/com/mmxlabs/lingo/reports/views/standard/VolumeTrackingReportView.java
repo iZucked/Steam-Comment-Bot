@@ -8,11 +8,13 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.time.ZonedDateTime;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -62,12 +64,14 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		public final Map<Year, Long> volumes;
 		public final Schedule schedule;
 		private final boolean purchase;
+		public final Month adpMonth;		
 
-		public VolumeData(final ScenarioResult scenarioResult, final Schedule schedule, final boolean purchase, final String contract, final Map<Year, Long> volumes) {
+		public VolumeData(final ScenarioResult scenarioResult, final Schedule schedule, final boolean purchase, final String contract, final Month adpMonth, final Map<Year, Long> volumes) {
 			this.scenarioResult = scenarioResult;
 			this.schedule = schedule;
 			this.purchase = purchase;
 			this.contract = contract;
+			this.adpMonth = adpMonth;
 			this.volumes = volumes;
 		}
 	}
@@ -91,6 +95,17 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		final int yearOffset = (utc.getMonthValue() < gasYearMonth.getValue()) ? -1 : 0;
 
 		return Year.of(utc.getYear() + yearOffset);
+	}
+
+	private Month getGasYearMonth(SlotAllocation sa) {
+
+		Month gasYearMonth = DEFAULT_MONTH;
+		Contract contract = sa.getContract();
+		if (contract != null) {
+			gasYearMonth = Month.of(1 + contract.getContractYearStart());
+		}
+
+		return gasYearMonth;
 	}
 
 	@Override
@@ -169,6 +184,9 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 				final Map<String, Map<Year, Long>> purchaseVolumes = new HashMap<>();
 				final Map<String, Map<Year, Long>> salesVolumes = new HashMap<>();
 
+				final Map<String, Month> purchaseADPMonth = new HashMap<>();
+				final Map<String, Month> salesADPMonth = new HashMap<>();
+
 				for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 					for (final SlotAllocation sa : ca.getSlotAllocations()) {
 						final long volume;
@@ -205,16 +223,18 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 						final Year year = getGasYear(sa, sa.getSlotVisit().getStart());
 						if (sa.getSlotAllocationType() == SlotAllocationType.PURCHASE) {
 							purchaseVolumes.computeIfAbsent(contractName, k -> new HashMap<>()).merge(year, volume, Long::sum);
+							purchaseADPMonth.put(contractName, getGasYearMonth(sa));
 						} else if (sa.getSlotAllocationType() == SlotAllocationType.SALE) {
 							salesVolumes.computeIfAbsent(contractName, k -> new HashMap<>()).merge(year, volume, Long::sum);
+							salesADPMonth.put(contractName, getGasYearMonth(sa));
 						}
 					}
 				}
 				for (final Map.Entry<String, Map<Year, Long>> e : purchaseVolumes.entrySet()) {
-					output.add(new VolumeData(scenarioResult, schedule, true, e.getKey(), e.getValue()));
+					output.add(new VolumeData(scenarioResult, schedule, true, e.getKey(), purchaseADPMonth.getOrDefault(e.getKey(), DEFAULT_MONTH), e.getValue()));
 				}
 				for (final Map.Entry<String, Map<Year, Long>> e : salesVolumes.entrySet()) {
-					output.add(new VolumeData(scenarioResult, schedule, false, e.getKey(), e.getValue()));
+					output.add(new VolumeData(scenarioResult, schedule, false, e.getKey(), salesADPMonth.getOrDefault(e.getKey(), DEFAULT_MONTH), e.getValue()));
 				}
 
 				return output;
@@ -224,7 +244,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 
 				final VolumeData modelData = pinData != null ? pinData : otherData;
 				final Map<Year, Long> volumes = new HashMap<>();
-				final VolumeData newData = new VolumeData(null, null, modelData.purchase, modelData.contract, volumes);
+				final VolumeData newData = new VolumeData(null, null, modelData.purchase, modelData.contract, modelData.adpMonth, volumes);
 
 				if (pinData != null) {
 					pinData.volumes.entrySet().forEach(e -> volumes.merge(e.getKey(), -e.getValue(), Long::sum));
@@ -284,6 +304,22 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 					@Override
 					public int compare(final VolumeData o1, final VolumeData o2) {
 						return o1.contract.compareTo(o2.contract);
+					}
+				});
+				result.add(new ColumnManager<VolumeData>("Month") {
+					@Override
+					public String getTooltip() {
+						return "Contract start month";
+					}
+
+					@Override
+					public String getColumnText(final VolumeData data) {
+						return data.adpMonth.getDisplayName(TextStyle.SHORT, Locale.getDefault());
+					}
+
+					@Override
+					public int compare(final VolumeData o1, final VolumeData o2) {
+						return o1.adpMonth.compareTo(o2.adpMonth);
 					}
 				});
 
