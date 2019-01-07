@@ -64,7 +64,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		public final Map<Year, Long> volumes;
 		public final Schedule schedule;
 		private final boolean purchase;
-		public final Month adpMonth;		
+		public final Month adpMonth;
 
 		public VolumeData(final ScenarioResult scenarioResult, final Schedule schedule, final boolean purchase, final String contract, final Month adpMonth, final Map<Year, Long> volumes) {
 			this.scenarioResult = scenarioResult;
@@ -328,6 +328,12 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 					while (!year.isAfter(dateRange.getSecond())) {
 						final Year fYear = year;
 						result.add(new ColumnManager<VolumeData>(String.format("%d", fYear.getValue())) {
+
+							@Override
+							public String getTooltip() {
+								return String.format("Contract year starting in %04d", fYear.getValue());
+							}
+
 							@Override
 							public String getColumnText(final VolumeData data) {
 								final long result = data.volumes.containsKey(fYear) ? data.volumes.get(fYear) : 0;
