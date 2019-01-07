@@ -63,11 +63,13 @@ public abstract class AbstractSimpleTabularReportTransformer<T> {
 		public boolean isTree() {
 			return false;
 		}
+
+		public String getTooltip() {
+			return null;
+		}
 	}
 
-	abstract public List<ColumnManager<T>> getColumnManagers(@NonNull ISelectedDataProvider selectedDataProvider);
-
-	// abstract public @NonNull List<@NonNull T> createData(@NonNull Schedule schedule, @NonNull LNGScenarioModel rootObject);
+	public abstract List<ColumnManager<T>> getColumnManagers(@NonNull ISelectedDataProvider selectedDataProvider);
 
 	@NonNullByDefault
 	public abstract List<@NonNull T> createData(@Nullable Pair<Schedule, ScenarioResult> pinnedPair, List<Pair<Schedule, ScenarioResult>> otherPairs);

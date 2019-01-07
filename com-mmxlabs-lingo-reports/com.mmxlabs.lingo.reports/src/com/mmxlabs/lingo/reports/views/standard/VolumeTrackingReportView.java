@@ -189,7 +189,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 						final Contract contract = sa.getContract();
 						final String contractName;
 						if (contract == null) {
-							final Slot slot = sa.getSlot();
+							final Slot<?> slot = sa.getSlot();
 							if (slot instanceof LoadSlot) {
 								contractName = "Other purchases";
 							} else if (slot instanceof DischargeSlot) {
@@ -204,15 +204,9 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 						assert contractName != null;
 						final Year year = getGasYear(sa, sa.getSlotVisit().getStart());
 						if (sa.getSlotAllocationType() == SlotAllocationType.PURCHASE) {
-							final Map<Year, Long> m = purchaseVolumes.getOrDefault(contractName, new HashMap<>());
-							final long newValue = m.getOrDefault(year, 0L) + volume;
-							m.put(year, newValue);
-							purchaseVolumes.put(contractName, m);
+							purchaseVolumes.computeIfAbsent(contractName, k -> new HashMap<>()).merge(year, volume, Long::sum);
 						} else if (sa.getSlotAllocationType() == SlotAllocationType.SALE) {
-							final Map<Year, Long> m = salesVolumes.getOrDefault(contractName, new HashMap<>());
-							final long newValue = m.getOrDefault(year, 0L) + volume;
-							m.put(year, newValue);
-							salesVolumes.put(contractName, m);
+							salesVolumes.computeIfAbsent(contractName, k -> new HashMap<>()).merge(year, volume, Long::sum);
 						}
 					}
 				}
@@ -233,16 +227,10 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 				final VolumeData newData = new VolumeData(null, null, modelData.purchase, modelData.contract, volumes);
 
 				if (pinData != null) {
-					for (final Map.Entry<Year, Long> e : pinData.volumes.entrySet()) {
-						final long val = volumes.getOrDefault(e.getKey(), 0L);
-						volumes.put(e.getKey(), val - e.getValue());
-					}
+					pinData.volumes.entrySet().forEach(e -> volumes.merge(e.getKey(), -e.getValue(), Long::sum));
 				}
 				if (otherData != null) {
-					for (final Map.Entry<Year, Long> e : otherData.volumes.entrySet()) {
-						final long val = volumes.getOrDefault(e.getKey(), 0L);
-						volumes.put(e.getKey(), val + e.getValue());
-					}
+					otherData.volumes.entrySet().forEach(e -> volumes.merge(e.getKey(), e.getValue(), Long::sum));
 				}
 
 				return newData;

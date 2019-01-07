@@ -144,9 +144,6 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	public class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
 
-		public ViewLabelProvider() {
-		}
-
 		@Override
 		public void dispose() {
 			for (final ColumnManager<T> manager : columnManagers) {
@@ -190,7 +187,6 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		@SuppressWarnings("unchecked")
 		@Override
 		public Color getForeground(final Object obj, final int index) {
-			// TODO Auto-generated method stub
 			return columnManagers.get(index).getForeground((T) obj);
 		}
 	}
@@ -208,12 +204,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		column.addSelectionListener(new SelectionAdapter() {
 			{
 				final SelectionAdapter self = this;
-				column.addDisposeListener(new DisposeListener() {
-					@Override
-					public void widgetDisposed(final DisposeEvent e) {
-						column.removeSelectionListener(self);
-					}
-				});
+				column.addDisposeListener(e -> column.removeSelectionListener(self));
 			}
 
 			@Override
@@ -238,7 +229,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		ViewerHelper.refresh(viewer, true);
 	}
 
-	final List<GridViewerColumn> viewerColumns = new ArrayList<GridViewerColumn>();
+	final List<GridViewerColumn> viewerColumns = new ArrayList<>();
 
 	/**
 	 * This is a callback that will allow us to create the viewer and initialise it.
@@ -246,7 +237,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
+		selectedScenariosService = getSite().getService(SelectedScenariosService.class);
 
 		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		viewer.getGrid().setRowHeaderRenderer(new RowHeaderRenderer());
@@ -291,29 +282,6 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 
-		// viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
-		// private boolean hasPin = false;
-		// private int numberOfSchedules;
-		//
-		// @Override
-		// public void beginCollecting(boolean pinDiffMode) {
-		// hasPin = false;
-		// numberOfSchedules = 0;
-		// }
-		//
-		// @Override
-		// public void endCollecting() {
-		// setShowColumns(hasPin, numberOfSchedules);
-		// }
-		//
-		// @Override
-		// protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
-		// hasPin = hasPin || pinned;
-		// ++numberOfSchedules;
-		// return Collections.singleton(schedule);
-		// }
-		// });
-
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
@@ -324,19 +292,14 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	 * 
 	 * @return
 	 */
-	abstract protected AbstractSimpleTabularReportContentProvider<T> createContentProvider();
+	protected abstract AbstractSimpleTabularReportContentProvider<T> createContentProvider();
 
-	abstract protected AbstractSimpleTabularReportTransformer<T> createTransformer();
+	protected abstract AbstractSimpleTabularReportTransformer<T> createTransformer();
 
 	private void hookContextMenu() {
 		final MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			@Override
-			public void menuAboutToShow(final IMenuManager manager) {
-				fillContextMenu(manager);
-			}
-		});
+		menuMgr.addMenuListener(manager -> fillContextMenu(manager));
 		final Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);
@@ -349,7 +312,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	}
 
 	private void fillLocalPullDown(final IMenuManager manager) {
-//		manager.add(new Separator());
+		// manager.add(new Separator());
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
@@ -399,6 +362,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		for (final ColumnManager<T> cv : columnManagers) {
 			final String name = cv.getName();
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+			gvc.getColumn().setHeaderTooltip(cv.getTooltip());
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			viewerColumns.add(gvc);
 			final GridColumn gc = gvc.getColumn();
