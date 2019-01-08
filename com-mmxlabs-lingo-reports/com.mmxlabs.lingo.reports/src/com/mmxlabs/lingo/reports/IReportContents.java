@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports;
 
+@FunctionalInterface
 public interface IReportContents {
 
 	String getStringContents();
