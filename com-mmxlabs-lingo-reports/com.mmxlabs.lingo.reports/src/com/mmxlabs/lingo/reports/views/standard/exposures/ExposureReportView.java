@@ -479,14 +479,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			util.setRowHeadersIncluded(true);
 			util.setShowBackgroundColours(true);
 			final String contents = util.convert();
-			return (T) new IReportContents() {
-
-				@Override
-				public String getStringContents() {
-					return contents;
-				}
-			};
-
+			return adapter.cast((IReportContents) () -> contents);
 		}
 		return super.getAdapter(adapter);
 	}
