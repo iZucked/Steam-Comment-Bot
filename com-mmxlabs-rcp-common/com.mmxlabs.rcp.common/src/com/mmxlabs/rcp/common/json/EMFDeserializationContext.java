@@ -5,7 +5,9 @@
 package com.mmxlabs.rcp.common.json;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -30,9 +32,14 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 		final List<Runnable> actions = new LinkedList<>();
 		final Map<Pair<String, String>, Object> nameMap = new HashMap<>();
 		final Map<Pair<String, String>, Object> idMap = new HashMap<>();
+		final Collection<EStructuralFeature> ignoredFeatures = new HashSet<>();
 	}
 
 	private final State state;
+
+	public void ignoreFeature(final EStructuralFeature feature) {
+		state.ignoredFeatures.add(feature);
+	}
 
 	public void registerType(final Object value) {
 
@@ -54,7 +61,7 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 					}
 				}
 			}
-			String type = String.format("%s/%s", eObject.eClass().getEPackage().getNsURI(), eObject.eClass().getName());
+			final String type = String.format("%s/%s", eObject.eClass().getEPackage().getNsURI(), eObject.eClass().getName());
 			registerType(type, id, name, eObject);
 		}
 	}
@@ -82,6 +89,11 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 	}
 
 	public void deferLookup(final JSONReference ref, final EObject owner, final EReference feature) {
+
+		// Check the ignored features list
+		if (state.ignoredFeatures.contains(feature)) {
+			return;
+		}
 
 		if (feature.isMany()) {
 			state.actions.add(() -> ((List) owner.eGet(feature)).add(lookupType(ref)));
