@@ -70,7 +70,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	private SelectedScenariosService selectedScenariosService;
 
 	private final ArrayList<ColumnManager<T>> sortColumns = new ArrayList<ColumnManager<T>>();
-	private final ArrayList<ColumnManager<T>> columnManagers = new ArrayList<ColumnManager<T>>();
+	protected final ArrayList<ColumnManager<T>> columnManagers = new ArrayList<ColumnManager<T>>();
 
 	private boolean inverseSort = false;
 
