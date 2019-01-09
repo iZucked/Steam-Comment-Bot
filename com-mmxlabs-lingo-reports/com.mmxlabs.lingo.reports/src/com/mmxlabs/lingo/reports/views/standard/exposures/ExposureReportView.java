@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.standard.exposures;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,6 +37,9 @@ import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransform
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
@@ -49,6 +53,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -56,6 +61,205 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  */
 
 public class ExposureReportView extends SimpleTabularReportView<IndexExposureData> implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
+
+	//-------------------------------------Transformer class starts-------------------------------------
+	private final class ExposureData extends AbstractSimpleTabularReportTransformer<IndexExposureData> {
+		@Override
+		public List<ColumnManager<IndexExposureData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
+			final ArrayList<ColumnManager<IndexExposureData>> result = new ArrayList<ColumnManager<IndexExposureData>>();
+
+			if (selectedDataProvider.getScenarioResults().size() > 1 && selectedDataProvider.getPinnedScenarioResult() == null) {
+				result.add(new ColumnManager<IndexExposureData>("Scenario") {
+
+					@Override
+					public String getColumnText(final IndexExposureData data) {
+						final ScenarioResult scenarioResult = data.scenarioResult;
+						if (scenarioResult != null) {
+							final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
+							if (modelRecord != null) {
+								return modelRecord.getName();
+							}
+						}
+						return null;
+					}
+
+					@Override
+					public int compare(final IndexExposureData o1, final IndexExposureData o2) {
+						final String s1 = getColumnText(o1);
+						final String s2 = getColumnText(o2);
+						if (s1 == null) {
+							return -1;
+						}
+						if (s2 == null) {
+							return 1;
+						}
+						return s1.compareTo(s2);
+					}
+
+					@Override
+					public boolean isTree() {
+						return false;
+					}
+				});
+			}
+			
+			result.add(new ColumnManager<IndexExposureData>("Date") {
+				@Override
+				public String getColumnText(final IndexExposureData data) {
+					if (data.isChild) {
+						return data.childName;
+					}
+					return String.format("%04d-%02d", data.date.getYear(), data.date.getMonthValue());
+				}
+
+				@Override
+				public int compare(final IndexExposureData o1, final IndexExposureData o2) {
+					if (o1.isChild && o2.isChild) {
+						return o1.childName.compareTo(o2.childName);
+					} else if(!o1.isChild && !o2.isChild) {
+						return o1.date.compareTo(o2.date);
+					}
+					return o1.hashCode() - o2.hashCode();
+				}
+
+				@Override
+				public boolean isTree() {
+					return true;
+				}
+			});
+			
+			for (final ScenarioResult sr : selectedDataProvider.getScenarioResults()) {
+				final IScenarioDataProvider sdp = sr.getScenarioDataProvider();
+				final PricingModel pm = ScenarioModelUtil.getPricingModel(sdp);
+				final EList<CommodityIndex> indices = pm.getCommodityIndices();
+				
+				for (final CommodityIndex index : indices) {
+					String indexName = index.getName();
+					result.add(new ColumnManager<IndexExposureData>(indexName) {
+						@Override
+						public String getColumnText(final IndexExposureData data) {
+							if (data.scenarioResult.equals(sr) && data.exposures.containsKey(indexName)) {
+								final double result = data.exposures.get(indexName);
+								return String.format("%,.01f", result);
+							}
+							return "";
+						}
+
+						@Override
+						public int compare(final IndexExposureData o1, final IndexExposureData o2) {
+							final double result1 = o1.exposures.containsKey(indexName) ? o1.exposures.get(indexName) : 0;
+							final double result2 = o2.exposures.containsKey(indexName) ? o2.exposures.get(indexName) : 0;
+							return Double.compare(result1, result2);
+						}
+					});
+				}
+				String indexName = "Physical";
+				result.add(new ColumnManager<IndexExposureData>(indexName) {
+					@Override
+					public String getColumnText(final IndexExposureData data) {
+						if (data.scenarioResult.equals(sr) && data.exposures.containsKey(indexName)) {
+							final double result = data.exposures.get(indexName);
+							return String.format("%,.01f", result);
+						}
+						return "";
+					}
+
+					@Override
+					public int compare(final IndexExposureData o1, final IndexExposureData o2) {
+						final double result1 = o1.exposures.containsKey(indexName) ? o1.exposures.get(indexName) : 0;
+						final double result2 = o2.exposures.containsKey(indexName) ? o2.exposures.get(indexName) : 0;
+						return Double.compare(result1, result2);
+					}
+				});
+				
+			}
+			
+			return result;
+		}
+
+		@Override
+		public @NonNull List<@NonNull IndexExposureData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair,
+				@NonNull final List<@NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult>> otherPairs) {
+			dateRange.setBoth(null, null);
+
+			final List<IndexExposureData> output = new LinkedList<>();
+
+			if (pinnedPair != null && otherPairs.size() == 1) {
+				// Pin/Diff mode
+				final List<IndexExposureData> ref = createData(pinnedPair.getFirst(), pinnedPair.getSecond());
+
+				final Pair<@NonNull Schedule, @NonNull ScenarioResult> p = otherPairs.get(0);
+				final List<IndexExposureData> other = createData(p.getFirst(), p.getSecond());
+
+				LOOP_REF_DATA: for (final IndexExposureData refData : ref) {
+					final Iterator<IndexExposureData> otherIterator = other.iterator();
+					while (otherIterator.hasNext()) {
+						final IndexExposureData otherData = otherIterator.next();
+						if (Equality.isEqual(refData.date, otherData.date)) { //indexName
+
+							output.add(createDiffData(refData, otherData));
+							otherIterator.remove();
+							continue LOOP_REF_DATA;
+						}
+					}
+					output.add(createDiffData(refData, null));
+
+				}
+				for (final IndexExposureData otherData : other) {
+					output.add(createDiffData(null, otherData));
+
+				}
+			} else {
+				if (pinnedPair != null) {
+					output.addAll(createData(pinnedPair.getFirst(), pinnedPair.getSecond()));
+				}
+				for (final Pair<@NonNull Schedule, @NonNull ScenarioResult> p : otherPairs) {
+					output.addAll(createData(p.getFirst(), p.getSecond()));
+				}
+			}
+			for (final IndexExposureData d : output) {
+				final YearMonth ym = d.date;
+					if (dateRange.getFirst() == null || ym.isBefore(dateRange.getFirst())) {
+						dateRange.setFirst(ym);
+					}
+					if (dateRange.getSecond() == null || ym.isAfter(dateRange.getSecond())) {
+						dateRange.setSecond(ym);
+					}
+			}
+
+			return output;
+		}
+
+		public List<IndexExposureData> createData(final @NonNull Schedule schedule, final @NonNull ScenarioResult scenarioResult) {
+			final List<IndexExposureData> output = new LinkedList<>();
+
+			final LocalDate earliest = getEarliestScenarioDate(scenarioResult.getScenarioDataProvider());
+			final LocalDate latest = getLatestScenarioDate(scenarioResult.getScenarioDataProvider());
+			
+			final YearMonth ymStart = YearMonth.from(earliest);
+			final YearMonth ymEnd = YearMonth.from(latest);
+			
+			final LNGScenarioModel rootObject = scenarioResult.getTypedRoot(LNGScenarioModel.class);
+			if (rootObject == null) {
+				return output;
+			}
+			final PricingModel pm = ScenarioModelUtil.getPricingModel(rootObject);
+			final EList<CommodityIndex> indices = pm.getCommodityIndices();
+
+			List<Object> selected = (!selectionMode || selection == null) ? Collections.emptyList() : SelectionHelper.convertToList(selection, Object.class);
+			selected = selected.stream().filter(s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation || s instanceof PaperDeal)
+					.collect(Collectors.toList());
+
+			for (YearMonth cym = ymStart; cym.isBefore(ymEnd); cym = cym.plusMonths(1)) {
+				IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, mode, selected);
+				if (exposuresByMonth.exposures.size() != 0.0) {
+					output.add(exposuresByMonth);
+				}
+			}
+			return output;
+		}
+	}
+	//-------------------------------------Transformer class ends----------------------------------------
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -137,236 +341,38 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 	@Override
 	protected AbstractSimpleTabularReportTransformer<IndexExposureData> createTransformer() {
-		return new AbstractSimpleTabularReportTransformer<IndexExposureData>() {
-
-			@Override
-			public List<ColumnManager<IndexExposureData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
-				final ArrayList<ColumnManager<IndexExposureData>> result = new ArrayList<ColumnManager<IndexExposureData>>();
-
-				if (selectedDataProvider.getScenarioResults().size() > 1 && selectedDataProvider.getPinnedScenarioResult() == null) {
-					result.add(new ColumnManager<IndexExposureData>("Scenario") {
-
-						@Override
-						public String getColumnText(final IndexExposureData data) {
-							final ScenarioResult scenarioResult = data.scenarioResult;
-							if (scenarioResult != null) {
-								final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
-								if (modelRecord != null) {
-									return modelRecord.getName();
-								}
-							}
-							return null;
-						}
-
-						@Override
-						public int compare(final IndexExposureData o1, final IndexExposureData o2) {
-							final String s1 = getColumnText(o1);
-							final String s2 = getColumnText(o2);
-							if (s1 == null) {
-								return -1;
-							}
-							if (s2 == null) {
-								return 1;
-							}
-							return s1.compareTo(s2);
-						}
-
-						@Override
-						public boolean isTree() {
-							return false;
-						}
-					});
-				}
-
-				result.add(new ColumnManager<IndexExposureData>("Index") {
-					@Override
-					public String getColumnText(final IndexExposureData data) {
-						return data.indexName;
-					}
-
-					@Override
-					public int compare(final IndexExposureData o1, final IndexExposureData o2) {
-						return o1.indexName.compareTo(o2.indexName);
-					}
-
-					@Override
-					public boolean isTree() {
-						return true;
-					}
-				});
-
-				result.add(new ColumnManager<IndexExposureData>("Units") {
-					@Override
-					public String getColumnText(final IndexExposureData data) {
-
-						if (mode == ValueMode.VOLUME_MMBTU) {
-							return "mmBtu";
-						} else if (mode == ValueMode.NATIVE_VALUE) {
-							return data.currencyUnit;
-
-						} else if (mode == ValueMode.VOLUME_NATIVE) {
-							return data.volumeUnit;
-						}
-						return "";
-					}
-
-					@Override
-					public int compare(final IndexExposureData o1, final IndexExposureData o2) {
-						final String s1 = getColumnText(o1);
-						final String s2 = getColumnText(o2);
-						if (s1 == null) {
-							return -1;
-						}
-						if (s2 == null) {
-							return 1;
-						}
-						return s1.compareTo(s2);
-					}
-				});
-
-				if (dateRange != null && dateRange.getFirst() != null) {
-					YearMonth date = dateRange.getFirst();
-					while (!date.isAfter(dateRange.getSecond())) {
-						final YearMonth fDate = date;
-						result.add(new ColumnManager<IndexExposureData>(String.format("%04d-%02d", date.getYear(), date.getMonthValue())) {
-							@Override
-							public String getColumnText(final IndexExposureData data) {
-								if (data.exposures.containsKey(fDate)) {
-									final double result = data.exposures.get(fDate);
-									return String.format("%,.01f", result);
-
-								}
-								return "";
-							}
-
-							@Override
-							public int compare(final IndexExposureData o1, final IndexExposureData o2) {
-								final double result1 = o1.exposures.containsKey(fDate) ? o1.exposures.get(fDate) : 0;
-								final double result2 = o2.exposures.containsKey(fDate) ? o2.exposures.get(fDate) : 0;
-								return Double.compare(result1, result2);
-							}
-						});
-
-						date = date.plusMonths(1);
-					}
-				}
-				return result;
-			}
-
-			@Override
-			public @NonNull List<@NonNull IndexExposureData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair,
-					@NonNull final List<@NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult>> otherPairs) {
-				dateRange.setBoth(null, null);
-
-				final List<IndexExposureData> output = new LinkedList<>();
-
-				if (pinnedPair != null && otherPairs.size() == 1) {
-					// Pin/Diff mode
-					final List<IndexExposureData> ref = createData(pinnedPair.getFirst(), pinnedPair.getSecond());
-
-					final Pair<@NonNull Schedule, @NonNull ScenarioResult> p = otherPairs.get(0);
-					final List<IndexExposureData> other = createData(p.getFirst(), p.getSecond());
-
-					LOOP_REF_DATA: for (final IndexExposureData refData : ref) {
-						final Iterator<IndexExposureData> otherIterator = other.iterator();
-						while (otherIterator.hasNext()) {
-							final IndexExposureData otherData = otherIterator.next();
-							if (Equality.isEqual(refData.indexName, otherData.indexName)) {
-
-								output.add(createDiffData(refData, otherData));
-								otherIterator.remove();
-								continue LOOP_REF_DATA;
-							}
-						}
-						output.add(createDiffData(refData, null));
-
-					}
-					for (final IndexExposureData otherData : other) {
-						output.add(createDiffData(null, otherData));
-
-					}
-				} else {
-					if (pinnedPair != null) {
-						output.addAll(createData(pinnedPair.getFirst(), pinnedPair.getSecond()));
-					}
-					for (final Pair<@NonNull Schedule, @NonNull ScenarioResult> p : otherPairs) {
-						output.addAll(createData(p.getFirst(), p.getSecond()));
-					}
-				}
-				for (final IndexExposureData d : output) {
-					for (final YearMonth ym : d.exposures.keySet()) {
-						if (dateRange.getFirst() == null || ym.isBefore(dateRange.getFirst())) {
-							dateRange.setFirst(ym);
-						}
-						if (dateRange.getSecond() == null || ym.isAfter(dateRange.getSecond())) {
-							dateRange.setSecond(ym);
-						}
-					}
-				}
-
-				return output;
-			}
-
-			public List<IndexExposureData> createData(final @NonNull Schedule schedule, final @NonNull ScenarioResult scenarioResult) {
-				final List<IndexExposureData> output = new LinkedList<>();
-
-				final LNGScenarioModel rootObject = scenarioResult.getTypedRoot(LNGScenarioModel.class);
-				if (rootObject == null) {
-					return output;
-				}
-				final PricingModel pm = ScenarioModelUtil.getPricingModel(rootObject);
-				final EList<CommodityIndex> indices = pm.getCommodityIndices();
-
-				List<Object> selected = (!selectionMode || selection == null) ? Collections.emptyList() : SelectionHelper.convertToList(selection, Object.class);
-				selected = selected.stream().filter(s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation || s instanceof PaperDeal)
-						.collect(Collectors.toList());
-
-				for (final CommodityIndex index : indices) {
-					assert index != null;
-					IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, index, ScenarioModelUtil.getPricingModel(rootObject), mode, selected);
-					if (exposuresByMonth.exposures.size() != 0.0) {
-						output.add(exposuresByMonth);
-					}
-				}
-				IndexExposureData exposuresByMonth = ExposuresTransformer.getPhysicalExposuresByMonth(scenarioResult, schedule, ScenarioModelUtil.getPricingModel(rootObject), mode, selected);
-				if (exposuresByMonth.exposures.size() != 0.0) {
-					output.add(exposuresByMonth);
-				}
-				return output;
-			}
-
-		};
+		return new ExposureData();
 	}
 
 	protected @NonNull IndexExposureData createDiffData(final IndexExposureData pinData, final IndexExposureData otherData) {
 
 		final IndexExposureData modelData = pinData != null ? pinData : otherData;
-		final Map<YearMonth, Double> exposuresByMonth = new HashMap<>();
+		final Map<String, Double> exposuresByMonth = new HashMap<>();
 
-		Collection<String> keys = new LinkedHashSet<>();
-		Map<String, IndexExposureData> pinChildren = new HashMap<>();
-		Map<String, IndexExposureData> otherChildren = new HashMap<>();
+		Collection<YearMonth> keys = new LinkedHashSet<>();
+		Map<YearMonth, IndexExposureData> pinChildren = new HashMap<>();
+		Map<YearMonth, IndexExposureData> otherChildren = new HashMap<>();
 		if (pinData != null) {
-			for (final Map.Entry<YearMonth, Double> e : pinData.exposures.entrySet()) {
+			for (final Map.Entry<String, Double> e : pinData.exposures.entrySet()) {
 				final double val = exposuresByMonth.getOrDefault(e.getKey(), 0.0);
 				exposuresByMonth.put(e.getKey(), val + e.getValue());
 			}
 			if (pinData.children != null) {
 				for (IndexExposureData d : pinData.children) {
-					keys.add(d.indexName);
-					pinChildren.put(d.indexName, d);
+					keys.add(d.date);
+					pinChildren.put(d.date, d);
 				}
 			}
 		}
 		if (otherData != null) {
-			for (final Map.Entry<YearMonth, Double> e : otherData.exposures.entrySet()) {
+			for (final Map.Entry<String, Double> e : otherData.exposures.entrySet()) {
 				final double val = exposuresByMonth.getOrDefault(e.getKey(), 0.0);
 				exposuresByMonth.put(e.getKey(), val - e.getValue());
 			}
 			if (otherData.children != null) {
 				for (IndexExposureData d : otherData.children) {
-					keys.add(d.indexName);
-					otherChildren.put(d.indexName, d);
+					keys.add(d.date);
+					otherChildren.put(d.date, d);
 				}
 			}
 		}
@@ -374,7 +380,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		List<IndexExposureData> newChildren = null;
 		if (!keys.isEmpty()) {
 			newChildren = new ArrayList<>(keys.size());
-			for (String key : keys) {
+			for (YearMonth key : keys) {
 				IndexExposureData childDiffData = createDiffData(pinChildren.get(key), otherChildren.get(key));
 				for (Double value : childDiffData.exposures.values()) {
 					if (value.doubleValue() != 0.0) {
@@ -385,9 +391,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 			}
 		}
-		final IndexExposureData newData = new IndexExposureData(null, null, modelData.indexName, null, exposuresByMonth, newChildren, modelData.currencyUnit, modelData.volumeUnit);
 
-		return newData;
+		return new IndexExposureData(null, null, modelData.date, exposuresByMonth, newChildren);
 	}
 
 	@Override
@@ -402,6 +407,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				mode = Exposures.ValueMode.values()[modeIdx];
 				setUnitsActionText(this);
 				getViewSite().getActionBars().updateActionBars();
+				//columnManagers.get(modeIdx)
 				ExposureReportView.this.refresh();
 
 			}
@@ -483,5 +489,51 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 		}
 		return super.getAdapter(adapter);
+	}
+	
+	private LocalDate getEarliestScenarioDate(final IScenarioDataProvider sdp) {
+		LocalDate result = LocalDate.now();
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
+
+		LocalDate erl = result;
+		
+		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
+			if (erl.isAfter(ls.getWindowStart())) {
+				erl = ls.getWindowStart();
+			}
+		}
+		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
+			if (erl.isAfter(ds.getWindowStart())) {
+				erl = ds.getWindowStart();
+			}
+		}
+		if (erl.isBefore(result)) {
+			result = erl;
+		}
+
+		return result;
+	}
+
+	private LocalDate getLatestScenarioDate(final IScenarioDataProvider sdp) {
+		LocalDate result = LocalDate.now();
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
+
+		LocalDate erl = result;
+
+		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
+			if (erl.isBefore(ls.getWindowEndWithSlotOrPortTime().toLocalDate())) {
+				erl = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+			}
+		}
+		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
+			if (erl.isBefore(ds.getWindowEndWithSlotOrPortTime().toLocalDate())) {
+				erl = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+			}
+		}
+		if (erl.isAfter(result)) {
+			result = erl;
+		}
+
+		return result;
 	}
 }

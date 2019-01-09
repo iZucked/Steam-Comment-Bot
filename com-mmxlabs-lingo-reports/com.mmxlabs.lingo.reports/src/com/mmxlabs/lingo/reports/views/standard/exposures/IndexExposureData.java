@@ -13,7 +13,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.types.DealType;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -21,56 +20,62 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 /**
  */
 public class IndexExposureData {
-	public final String indexName;
-	public final @NonNull Map<YearMonth, Double> exposures;
+	public final YearMonth date;
+	public final String childName;
+	public final @NonNull Map<String, Double> exposures;
+	public boolean isChild = false;
+	public final List<IndexExposureData> children;
 	public final ScenarioResult scenarioResult;
 	public final Schedule schedule;
-	public final String currencyUnit;
-	public final String volumeUnit;
-	public final List<IndexExposureData> children;
 
 	public IndexExposureData(ScenarioResult scenarioResult, //
 			final Schedule schedule, //
-			final String name, //
-			final NamedIndexContainer<?> index, //
-			final @NonNull Map<YearMonth, Double> exposuresByMonth, //
-			final @Nullable Map<Pair<DealType, String>, Map<YearMonth, Double>> dealExposuresByMonth, //
-			final String currencyUnit, final String volumeUnit) {
+			final YearMonth date,
+			final @NonNull Map<String, Double> exposuresByMonth, //
+			final @Nullable Map<String, Map<String, Double>> dealExposuresByMonth) {
 		this.scenarioResult = scenarioResult;
 		this.schedule = schedule;
-		this.indexName = name == null ? "" : name;
+		this.date = date;
 		this.exposures = exposuresByMonth;
-		this.currencyUnit = currencyUnit;
-		this.volumeUnit = volumeUnit;
+		this.childName = "";
 		this.children = makeChildren(dealExposuresByMonth);
 	}
-
-	public IndexExposureData(ScenarioResult scenarioResult, //
+	
+	public IndexExposureData(final ScenarioResult scenarioResult, //
 			final Schedule schedule, //
-			final String name, //
-			final NamedIndexContainer<?> index, //
-			final @NonNull Map<YearMonth, Double> exposuresByMonth, //
-			final @Nullable List<IndexExposureData> children, //
-			final String currencyUnit, final String volumeUnit) {
+			final YearMonth date, //
+			final @NonNull Map<String, Double> exposuresByMonth, //
+			final @Nullable List<IndexExposureData> children) {
 		this.scenarioResult = scenarioResult;
 		this.schedule = schedule;
-		this.indexName = name == null ? "" : name;
+		this.date = date;
 		this.exposures = exposuresByMonth;
-		this.currencyUnit = currencyUnit;
-		this.volumeUnit = volumeUnit;
+		this.childName = "";
 		this.children = children;
 	}
-
-	private List<IndexExposureData> makeChildren(Map<Pair<DealType, String>, Map<YearMonth, Double>> dealExposuresByMonth) {
+	
+	public IndexExposureData(final ScenarioResult scenarioResult, //
+			final Schedule schedule, //
+			final String childName, //
+			final @NonNull Map<String, Double> exposuresByMonth) {
+		this.date = null;
+		this.scenarioResult = scenarioResult;
+		this.schedule = schedule;
+		this.childName = childName;
+		this.isChild = true;
+		this.exposures = exposuresByMonth;
+		this.children = null;
+	}
+	
+	private List<IndexExposureData> makeChildren(final Map<String, Map<String, Double>> dealExposuresByMonth) {
 		if (dealExposuresByMonth != null) {
 			List<IndexExposureData> children = new LinkedList<IndexExposureData>();
-			for (Map.Entry<Pair<DealType, String>, Map<YearMonth, Double>> e : dealExposuresByMonth.entrySet()) {
-				IndexExposureData child = new IndexExposureData(scenarioResult, schedule, e.getKey().getSecond(), null, e.getValue(), (List<IndexExposureData>) null, currencyUnit, volumeUnit);
+			for (Map.Entry<String, Map<String, Double>> e : dealExposuresByMonth.entrySet()) {
+				IndexExposureData child = new IndexExposureData(scenarioResult, schedule, e.getKey(), e.getValue());
 				children.add(child);
 			}
 			return children;
 		}
 		return null;
 	}
-
 }
