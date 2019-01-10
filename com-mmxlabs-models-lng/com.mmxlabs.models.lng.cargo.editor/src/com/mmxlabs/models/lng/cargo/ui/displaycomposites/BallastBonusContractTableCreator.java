@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
+import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
@@ -50,7 +51,7 @@ public class BallastBonusContractTableCreator {
 		eViewer.setAutoResizeable(false);
 		eViewer.setSorter(null);
 
-		eViewer.addTypicalColumn("Redelivery ports", new MultipleReferenceManipulator(CommercialPackage.eINSTANCE.getBallastBonusContractLine_RedeliveryPorts(), sel.getReferenceValueProviderCache(),
+		eViewer.addTypicalColumn("Redelivery ports", new MultiplePortReferenceManipulator(CommercialPackage.eINSTANCE.getBallastBonusContractLine_RedeliveryPorts(), sel.getReferenceValueProviderCache(),
 				sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 
 			@Override

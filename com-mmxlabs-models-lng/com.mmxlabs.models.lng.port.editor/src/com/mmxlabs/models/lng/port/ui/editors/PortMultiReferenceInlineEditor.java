@@ -46,7 +46,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 public class PortMultiReferenceInlineEditor extends UnsettableInlineEditor {
 
 	/** @see MultipleReferenceManipulator */
-	private final static int MAX_DISPLAY_LENGTH = 32;
+	private static final int MAX_DISPLAY_LENGTH = 32;
 	private static final int MIN_DISPLAY_NAMES = 2;
 
 	private IReferenceValueProvider valueProvider;
@@ -202,11 +202,10 @@ public class PortMultiReferenceInlineEditor extends UnsettableInlineEditor {
 	protected Object getInitialUnsetValue() {
 		return Collections.emptyList();
 	}
-	
+
 	@Override
 	protected boolean updateOnChangeToFeature(final Object changedFeature) {
 		return super.updateOnChangeToFeature(changedFeature);
-		
-			
-		}
+
+	}
 }

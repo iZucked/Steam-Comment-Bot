@@ -12,10 +12,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -66,12 +64,7 @@ public class BallastBonusContractDetailComposite extends DefaultDetailComposite 
 		this.toolkit = toolkit;
 		this.resizeAction = resizeAction;
 
-		addDisposeListener(new DisposeListener() {
-			@Override
-			public void widgetDisposed(final DisposeEvent e) {
-				removeAdapter();
-			}
-		});
+		addDisposeListener(e -> removeAdapter());
 		toolkit.adapt(this);
 		setLayout(new GridLayout(1, true));
 		gridData = new GridData(SWT.FILL, SWT.BEGINNING, true, true);
@@ -89,7 +82,7 @@ public class BallastBonusContractDetailComposite extends DefaultDetailComposite 
 
 		ballastBonusCheckbox = toolkit.createButton(ballastCheckbox, null, SWT.CHECK | SWT.LEFT);
 		ballastBonusCheckbox.setSelection(false);
-		ballastBonusCheckbox.addSelectionListener(new SelectionListener() {
+		ballastBonusCheckbox.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -104,10 +97,6 @@ public class BallastBonusContractDetailComposite extends DefaultDetailComposite 
 					dialogContext.getDialogController().rebuild(true);
 					resizeAction.run();
 				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
 	}
