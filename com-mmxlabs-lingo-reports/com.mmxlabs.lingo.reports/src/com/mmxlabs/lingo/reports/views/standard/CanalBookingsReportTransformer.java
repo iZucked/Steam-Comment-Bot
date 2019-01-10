@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -102,19 +101,10 @@ public class CanalBookingsReportTransformer {
 
 		final ModelDistanceProvider modelDistanceProvider = scenarioResult.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 
-		final LocalDate promptDate = scenarioModel.getPromptPeriodStart();
-		LocalDate strictDate;
-		LocalDate relaxedDate;
-
 		final Set<CanalBookingSlot> existingBookings = new LinkedHashSet<>();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 		if (cargoModel.getCanalBookings() != null) {
 			cargoModel.getCanalBookings().getCanalBookingSlots().forEach(booking -> existingBookings.add(booking));
-			strictDate = promptDate.plusDays(cargoModel.getCanalBookings().getStrictBoundaryOffsetDays());
-			relaxedDate = promptDate.plusDays(cargoModel.getCanalBookings().getRelaxedBoundaryOffsetDays());
-		} else {
-			strictDate = promptDate;
-			relaxedDate = promptDate;
 		}
 
 		final List<RowData> result = new LinkedList<>();

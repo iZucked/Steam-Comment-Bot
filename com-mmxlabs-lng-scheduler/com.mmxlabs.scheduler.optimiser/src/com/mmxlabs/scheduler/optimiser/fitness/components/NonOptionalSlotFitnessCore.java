@@ -14,8 +14,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -62,11 +60,6 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	}
 
 	@Override
-	public void dispose() {
-
-	}
-
-	@Override
 	@NonNull
 	public Collection<IFitnessComponent> getFitnessComponents() {
 		return CollectionsUtil.<IFitnessComponent> makeArrayList(this);
@@ -84,23 +77,11 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 		return true;
 	}
 
-	@Override
-	public void accepted(@NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
-
-	}
-
-	@Override
-	public void annotate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
-
-	}
-
 	private void evaluation(@NonNull final ISequences sequences) {
 		int fitness = 0;
-		for (final ISequenceElement element : sequences.getUnusedElements()) {
-			if (interestingElements.contains(element)) {
-				++fitness;
-			}
-		}
+		fitness += (int) sequences.getUnusedElements().stream() //
+				.filter(interestingElements::contains) //
+				.count();
 
 		for (final IResource resource : sequences.getResources()) {
 			if (vesselProvider.getVesselAvailability(resource).getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {

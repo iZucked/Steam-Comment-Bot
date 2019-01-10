@@ -35,7 +35,8 @@ public interface ICargoSchedulerFitnessComponent extends ICargoFitnessComponent 
 	 * @param resource
 	 *            the resource for the next sequence
 	 */
-	void startSequence(@NonNull IResource resource);
+	default void startSequence(@NonNull IResource resource) {
+	}
 
 	/**
 	 * Consider the next voyageplan - note that the contents of the given plan will be presented to nextObject after this

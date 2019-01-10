@@ -51,7 +51,7 @@ public class IOTesterCSV {
 
 		final ITestDataProvider testCaseProvider = new CSVTestDataProvider(url);
 		testCaseProvider.execute(testCase -> {
-			final EList<Fitness> originalFitnesses = IOTestUtil.ScenarioModeltoFitnessList(testCase);
+			final EList<Fitness> originalFitnesses = IOTestUtil.scenarioModeltoFitnessList(testCase);
 			final long[] originalArray = IOTestUtil.fitnessListToArrayValues(originalFitnesses);
 			final File restoredFile = IOTestUtil.exportTestCase(testCase);
 
@@ -61,7 +61,7 @@ public class IOTesterCSV {
 
 				final ITestDataProvider restoredCaseProvider = new CSVTestDataProvider(restoredURL);
 				restoredCaseProvider.execute(restoredCase -> {
-					final EList<Fitness> restoredFitnesses = IOTestUtil.ScenarioModeltoFitnessList(restoredCase);
+					final EList<Fitness> restoredFitnesses = IOTestUtil.scenarioModeltoFitnessList(restoredCase);
 					final long[] restoredArray = IOTestUtil.fitnessListToArrayValues(restoredFitnesses);
 					Assert.assertArrayEquals(originalArray, restoredArray);
 				});

@@ -9,14 +9,11 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -29,9 +26,6 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
-
-	@Inject
-	private IVesselProvider vesselProvider;
 
 	private long accumulator = 0;
 
@@ -47,10 +41,6 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	public void startEvaluation(@NonNull final ProfitAndLossSequences profitAndLossSequences) {
 		this.profitAndLossSequences = profitAndLossSequences;
 		accumulator = 0;
-	}
-
-	@Override
-	public void startSequence(final IResource resource) {
 	}
 
 	@Override
@@ -74,11 +64,10 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	@Override
 	public boolean evaluateUnusedSlots(@NonNull final List<@NonNull ISequenceElement> unusedElements, @NonNull final ProfitAndLossSequences profitAndLossSequences) {
 
-		for (final ISequenceElement element : unusedElements) {
-			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
-			assert portSlot != null;
-			accumulator -= profitAndLossSequences.getUnusedSlotGroupValue(portSlot);
-		}
+		accumulator -= unusedElements.stream() //
+				.map(portSlotProvider::getPortSlot) //
+				.mapToLong(profitAndLossSequences::getUnusedSlotGroupValue) //
+				.sum();
 
 		return true;
 	}

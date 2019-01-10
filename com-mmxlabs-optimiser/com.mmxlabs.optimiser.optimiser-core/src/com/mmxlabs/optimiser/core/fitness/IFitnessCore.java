@@ -60,12 +60,15 @@ public interface IFitnessCore {
 	 * @param fullSequences
 	 * @param affectedResources
 	 */
-	void accepted(@NonNull ISequences fullSequences, @Nullable Collection<IResource> affectedResources);
+	default void accepted(@NonNull ISequences fullSequences, @Nullable Collection<IResource> affectedResources) {
+
+	}
 
 	/**
 	 * Clean up resources once the {@link IFitnessCore} is no longer required.
 	 */
-	void dispose();
+	default void dispose() {
+	}
 
 	/**
 	 * Add annotations of the given sequences to the associated {@link IAnnotatedSolution}. Performs a full evaluation, but should <em>not</em> change the fitness stored in the associated components
@@ -75,5 +78,6 @@ public interface IFitnessCore {
 	 * @param solution
 	 *            annotated solution for these sequences
 	 */
-	void annotate(@NonNull final ISequences fullSequences, @NonNull IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution);
+	default void annotate(@NonNull final ISequences fullSequences, @NonNull IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
+	}
 }

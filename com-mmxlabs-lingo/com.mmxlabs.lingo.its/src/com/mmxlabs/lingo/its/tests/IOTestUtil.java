@@ -25,35 +25,8 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class IOTestUtil {
-
-	// public static String[] ListToArray(final EList<CargoAllocation> originalCargoAllocations) {
-	//
-	// final int size = originalCargoAllocations.size();
-	// final String[] array = new String[size];
-	//
-	// int i = 0;
-	// for (final CargoAllocation temp : originalCargoAllocations) {
-	// array[i] = (temp.getName());
-	// i += 1;
-	// }
-	// return array;
-	//
-	// }
-
-	// public static ArrayList makeSlotAllocationArray(final EList<CargoAllocation> originalCargoAllocations) {
-	//
-	// final ArrayList output = new ArrayList();
-	//
-	// for (final CargoAllocation ca : originalCargoAllocations) {
-	// final EList<SlotAllocation> allocations = ca.getSlotAllocations();
-	//
-	// for (final SlotAllocation sa : allocations) {
-	// output.add(sa.getPort().getLocation());
-	// // output.add(sa.getSlot().getCargo().getLoadName());
-	// }
-	// }
-	// return output;
-	// }
+	private IOTestUtil() {
+	}
 
 	/**
 	 * Converts EList<Fitness> into long[] without headers for easy comparison.
@@ -94,40 +67,8 @@ public class IOTestUtil {
 
 	public static URL directoryFileToURL(final File directory) throws MalformedURLException {
 
-		final URL url = directory.toURI().toURL();
-
-		return url;
+		return directory.toURI().toURL();
 	}
-
-	// /**
-	// * Takes the URL of a scenario and returns the associated LNGScenarioModel
-	// *
-	// * @param url
-	// * - URL of the scenario files
-	// * @return - LNGScenarioModel object created from the target files
-	// * @throws MalformedURLException
-	// */
-	// public static LNGScenarioModel URLtoScenarioCSV(final URL url) throws MalformedURLException {
-	//
-	// final CSVTestDataProvider csv_tdp = new CSVTestDataProvider(url);
-	//
-	// final LNGScenarioModel testCase = csv_tdp.getScenarioModel();
-	//
-	// return testCase;
-	//
-	// }
-	//
-	// public static LNGScenarioModel URLtoScenarioLiNGO(final URL url) throws Exception {
-	//
-	// final AbstractOptimisationResultTester AORT = new AbstractOptimisationResultTester();
-	//
-	// final ScenarioInstance instance = AORT.loadScenario(url);
-	//
-	// final LNGScenarioModel testCase = (LNGScenarioModel) instance.getInstance();
-	//
-	// return testCase;
-	//
-	// }
 
 	/**
 	 * Produces an EList of the fitnesses from the passed LNGScenerioModel
@@ -136,34 +77,34 @@ public class IOTestUtil {
 	 *            - LNGScenarioModel to acquire fitnesses of
 	 * @return - EList<Fitness> of the associated fitnesses.
 	 */
-	public static EList<Fitness> ScenarioModeltoFitnessList(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+	public static EList<Fitness> scenarioModeltoFitnessList(@NonNull final IScenarioDataProvider scenarioDataProvider) {
 
 		final OptimisationPlan optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
 
+		// Run twice as some fitnesses are based on initial state which may not exist straight after csv reimport
 		LNGScenarioRunnerCreator.withOptimisationRunner(scenarioDataProvider, optimisationPlan, runner -> {
 			// We just want to evaluate with fitnesses...
 		});
-		ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
+		LNGScenarioRunnerCreator.withOptimisationRunner(scenarioDataProvider, optimisationPlan, runner -> {
+			// We just want to evaluate with fitnesses...
+		});
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
 		final Schedule schedule = scheduleModel.getSchedule();
 
 		Assert.assertNotNull(schedule);
 
-		final EList<Fitness> fitnesses = schedule.getFitnesses();
-
-		return fitnesses;
+		return schedule.getFitnesses();
 	}
 
-	public static Schedule ScenarioModeltoSchedule(final IScenarioDataProvider scenarioDataProvider) {
+	public static Schedule scenarioModeltoSchedule(final @NonNull IScenarioDataProvider scenarioDataProvider) {
 
 		final OptimisationPlan optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
 		LNGScenarioRunnerCreator.withOptimisationRunner(scenarioDataProvider, optimisationPlan, runner -> {
 			// We just want to evaluate with fitnesses...
 		});
-		ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
 
-		final Schedule schedule = scheduleModel.getSchedule();
-
-		return schedule;
+		return scheduleModel.getSchedule();
 	}
 
 	/**
@@ -174,7 +115,7 @@ public class IOTestUtil {
 	 * @return - URL by which to locate the temporary directory
 	 * @throws MalformedURLException
 	 */
-	public static File exportTestCase(final IScenarioDataProvider model) throws MalformedURLException {
+	public static File exportTestCase(final IScenarioDataProvider model) {
 
 		final ExportCSVWizard ECSVW = new ExportCSVWizard();
 

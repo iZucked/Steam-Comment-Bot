@@ -53,7 +53,7 @@ public class IOTesterLiNGO {
 		final ITestDataProvider testCaseProvider = new LiNGOTestDataProvider(url);
 		testCaseProvider.execute(testCase -> {
 
-			EList<Fitness> originalFitnesses = IOTestUtil.ScenarioModeltoFitnessList(testCase);
+			EList<Fitness> originalFitnesses = IOTestUtil.scenarioModeltoFitnessList(testCase);
 			long[] originalArray = IOTestUtil.fitnessListToArrayValues(originalFitnesses);
 			File restoredFile = IOTestUtil.exportTestCase(testCase);
 
@@ -62,7 +62,7 @@ public class IOTesterLiNGO {
 				URL restoredURL = IOTestUtil.directoryFileToURL(restoredFile);
 				final ITestDataProvider restoredCaseProvider = new CSVTestDataProvider(restoredURL);
 				restoredCaseProvider.execute(restoredCase -> {
-					EList<Fitness> restoredFitnesses = IOTestUtil.ScenarioModeltoFitnessList(restoredCase);
+					EList<Fitness> restoredFitnesses = IOTestUtil.scenarioModeltoFitnessList(restoredCase);
 					long[] restoredArray = IOTestUtil.fitnessListToArrayValues(restoredFitnesses);
 					Assert.assertArrayEquals(originalArray, restoredArray);
 				});
