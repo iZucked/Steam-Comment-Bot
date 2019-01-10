@@ -13,30 +13,23 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import com.google.common.base.Objects;
+
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CooldownBindingProcessor;
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleDiffProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleGroupUtils;
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.EventGroupingOverlapProcessor;
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.GCOCycleGroupingProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.IDiffProcessor;
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.LadenVoyageProcessor;
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.StartEventProcessor;
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.StructuralDifferencesProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -170,7 +163,7 @@ public class ScenarioComparisonServiceTransformer {
 	}
 
 	@NonNull
-	public static TransformResult transform(final ScenarioResult pinned, final Collection<ScenarioResult> others, @NonNull ISelectedDataProvider selectedDataProvider,
+	public static TransformResult transform(final ScenarioResult pinned, final Collection<ScenarioResult> others, final @NonNull ISelectedDataProvider selectedDataProvider,
 			final ScheduleDiffUtils scheduleDiffUtils, final List<ICustomRelatedSlotHandler> customRelatedSlotHandlers) {
 
 		final Table table = ScheduleReportFactory.eINSTANCE.createTable();
@@ -213,7 +206,7 @@ public class ScenarioComparisonServiceTransformer {
 				table.setPinnedScenario(null);
 
 				diffProcessors.clear();
-
+/** 2019-01 disable diff processors
 				// Also if number of scenarios is 0 or 1
 				final boolean enableDiffTools = LicenseFeatures.isPermitted("features:difftools");
 				if (enableDiffTools) {
@@ -227,10 +220,11 @@ public class ScenarioComparisonServiceTransformer {
 					diffProcessors.add(new StartEventProcessor());
 					diffProcessors.add(new CooldownBindingProcessor());
 				}
+**/
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
 				this.isPinned |= isPinned;
 
 				numberOfSchedules++;
@@ -304,9 +298,9 @@ public class ScenarioComparisonServiceTransformer {
 							{
 								if (referenceRow.getLhsLink() == null && referenceRow.getName() != null && !referenceRow.getName().isEmpty()) {
 
-									for (Row row : table.getRows()) {
+									for (final Row row : table.getRows()) {
 										if (!row.isReference()) {
-											if (Objects.equal(referenceRow.getName(), row.getName())) {
+											if (Objects.equals(referenceRow.getName(), row.getName())) {
 
 												if (referenceRow.getOpenLoadSlotAllocation() != null
 														|| (referenceRow.getLoadAllocation() != null && !(referenceRow.getLoadAllocation().getSlot() instanceof SpotSlot))) {
@@ -325,10 +319,9 @@ public class ScenarioComparisonServiceTransformer {
 									}
 								}
 								if (referenceRow.getRhsLink() == null && referenceRow.getName2() != null && !referenceRow.getName2().isEmpty()) {
-
-									for (Row row : table.getRows()) {
+									for (final Row row : table.getRows()) {
 										if (!row.isReference()) {
-											if (Objects.equal(referenceRow.getName2(), row.getName2())) {
+											if (Objects.equals(referenceRow.getName2(), row.getName2())) {
 												if (referenceRow.getOpenDischargeSlotAllocation() != null
 														|| (referenceRow.getDischargeAllocation() != null && !(referenceRow.getDischargeAllocation().getSlot() instanceof SpotSlot))) {
 													assert row.getRhsLink() == null;
@@ -346,14 +339,14 @@ public class ScenarioComparisonServiceTransformer {
 							// Bind all rows linked by LHS/RHS definitions.
 							final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
 							{
-								Row row = referenceRow.getLhsLink();
+								final Row row = referenceRow.getLhsLink();
 								if (row != null) {
 									row.setVisible(true);
 									CycleGroupUtils.addToOrMergeCycleGroup(table, row, cycleGroup);
 
-									RowGroup rowGroup = row.getRowGroup();
+									final RowGroup rowGroup = row.getRowGroup();
 									if (rowGroup != null) {
-										for (Row r : rowGroup.getRows()) {
+										for (final Row r : rowGroup.getRows()) {
 											r.setVisible(true);
 											CycleGroupUtils.addToOrMergeCycleGroup(table, r, cycleGroup);
 										}
@@ -361,23 +354,19 @@ public class ScenarioComparisonServiceTransformer {
 								}
 							}
 							{
-								Row row = referenceRow.getRhsLink();
+								final Row row = referenceRow.getRhsLink();
 								if (row != null) {
 									row.setVisible(true);
 									CycleGroupUtils.addToOrMergeCycleGroup(table, row, cycleGroup);
 
-									RowGroup rowGroup = row.getRowGroup();
+									final RowGroup rowGroup = row.getRowGroup();
 									if (rowGroup != null) {
-										for (Row r : rowGroup.getRows()) {
+										for (final Row r : rowGroup.getRows()) {
 											r.setVisible(true);
 											CycleGroupUtils.addToOrMergeCycleGroup(table, r, cycleGroup);
 										}
 									}
 								}
-							}
-							// Bind all rows in group
-							{
-
 							}
 						}
 					}
@@ -385,6 +374,18 @@ public class ScenarioComparisonServiceTransformer {
 					// // Run diff processes.
 					for (final IDiffProcessor diffProcessor : diffProcessors) {
 						diffProcessor.runDiffProcess(table, referenceElements, uniqueElements, equivalancesMap, elementToRowMap);
+					}
+
+					// 2019/01 Do not keep individual cycle groups.
+					{
+						UserGroup userGroup = null;
+						for (CycleGroup cg : new LinkedList<>(table.getCycleGroups())) {
+							if (userGroup == null) {
+								userGroup = CycleGroupUtils.createOrReturnUserGroup(table, cg);
+							} else {
+								CycleGroupUtils.addToOrMergeUserGroup(table, cg, userGroup);
+							}
+						}
 					}
 					renumberCycleGroups(table);
 				}
@@ -396,8 +397,8 @@ public class ScenarioComparisonServiceTransformer {
 
 	public List<Row> generateRows(final Table dataModelInstance, final ScenarioResult scenarioResult, final Schedule schedule, final boolean isPinned) {
 
-		final List<EObject> interestingEvents = new LinkedList<EObject>();
-		final Set<EObject> allEvents = new HashSet<EObject>();
+		final List<EObject> interestingEvents = new LinkedList<>();
+		final Set<EObject> allEvents = new HashSet<>();
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
 				if (showEvent(event)) {
@@ -417,7 +418,7 @@ public class ScenarioComparisonServiceTransformer {
 
 	public List<Row> generateRows(final Table tableModelInstance, final ScenarioResult scenarioResult, final Schedule schedule, final List<EObject> interestingElements, final Set<EObject> allElements,
 			final boolean isReferenceSchedule) {
-		final List<Row> rows = new ArrayList<Row>(interestingElements.size());
+		final List<Row> rows = new ArrayList<>(interestingElements.size());
 
 		if (isReferenceSchedule) {
 			this.referenceElements = new LinkedList<>();
@@ -429,8 +430,8 @@ public class ScenarioComparisonServiceTransformer {
 				final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 
 				// Build up list of slots assigned to cargo, sorting into loads and discharges
-				final List<SlotAllocation> loadSlots = new ArrayList<SlotAllocation>();
-				final List<SlotAllocation> dischargeSlots = new ArrayList<SlotAllocation>();
+				final List<SlotAllocation> loadSlots = new ArrayList<>();
+				final List<SlotAllocation> dischargeSlots = new ArrayList<>();
 				for (final SlotAllocation slot : cargoAllocation.getSlotAllocations()) {
 					if (slot.getSlot() instanceof LoadSlot) {
 						loadSlots.add(slot);
@@ -634,7 +635,7 @@ public class ScenarioComparisonServiceTransformer {
 		}
 
 		equivalents.stream()//
-				.filter(e -> e != null)// Filter out nulls
+				.filter(Objects::nonNull)// Filter out nulls
 				.forEach(e -> row.getInputEquivalents().add(e));
 	}
 

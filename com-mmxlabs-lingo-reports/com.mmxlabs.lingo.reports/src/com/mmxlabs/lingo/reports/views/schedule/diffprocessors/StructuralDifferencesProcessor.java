@@ -49,7 +49,6 @@ public class StructuralDifferencesProcessor implements IDiffProcessor {
 			for (final EObject equivalent : equivalents) {
 				if (scheduleDiffUtils.isElementDifferent(referenceElement, equivalent)) {
 					showRows = true;
-					// scheduleDiffUtils.isElementDifferent(referenceElement, equivalent);
 					break;
 				}
 			}
