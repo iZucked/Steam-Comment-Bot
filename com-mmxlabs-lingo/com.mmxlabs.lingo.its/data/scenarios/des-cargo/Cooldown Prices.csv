@@ -1,2 +1,2 @@
 ports,expression,kind
-All ports,NBP,CooldownPrice
+CapGroup:All LOAD Ports,NBP,CooldownPrice

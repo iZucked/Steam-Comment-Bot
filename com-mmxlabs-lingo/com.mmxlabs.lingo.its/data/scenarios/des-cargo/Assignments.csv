@@ -1,18 +1,18 @@
-spotIndex,vesselassignment,assignedObjects
-,Bluesky,"cargo-1, cargo-31, cargo-41, cargo-76"
-,Methane Becki Anne,"cargo-70, cargo-48, cargo-16, cargo-66"
-,Methane Heather Sally,"cargo-21, Dry Dock, cargo-78, cargo-28"
-,Methane Julia Louise,"cargo-32, cargo-71, cargo-9, cargo-20"
-,Methane Lydon Volney,"cargo-39, cargo-22, cargo-12, cargo-30"
-,Methane Princess,"cargo-24, cargo-50, cargo-60"
-0,STEAM-138,
-0,STEAM-145,
-0,TFDE-170,
-0,STEAM-126,
-0,STEAM-145.8,
-0,STEAM-154.8,
-0,STEAM-138.2,
-0,STEAM-165,
-0,STEAM-152,
-0,STEAM-152.3,
-0,STEAM-149.7,
+charterindex,spotIndex,vesselassignment,assignedObjects
+1,,Bluesky,"load-cargo-1, load-cargo-31, load-cargo-41, load-cargo-76"
+1,,Methane Becki Anne,"load-cargo-70, load-cargo-48, load-cargo-16, load-cargo-66"
+1,,Methane Heather Sally,"load-cargo-21, Dry Dock, load-cargo-78, load-cargo-28"
+1,,Methane Julia Louise,"load-cargo-32, load-cargo-71, load-cargo-9, load-cargo-20"
+1,,Methane Lydon Volney,"load-cargo-39, load-cargo-22, load-cargo-12, load-cargo-30"
+1,,Methane Princess,"load-cargo-24, load-cargo-50, load-cargo-60"
+,0,STEAM-138,
+,0,STEAM-145,
+,0,TFDE-170,
+,0,STEAM-126,
+,0,STEAM-145.8,
+,0,STEAM-154.8,
+,0,STEAM-138.2,
+,0,STEAM-165,
+,0,STEAM-152,
+,0,STEAM-152.3,
+,0,STEAM-149.7,
