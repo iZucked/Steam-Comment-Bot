@@ -38,8 +38,8 @@ public class ADPActivatorModule extends PeaberryActivationModule {
 		bindService(PreDefinedSlotGenerator.class).export();
 
 		// Profile Constraints
-		bindService(MinCargoProfileConstraintFactory.class).export();
-		bindService(MaxCargoProfileConstraintFactory.class).export();
+//		bindService(MinCargoProfileConstraintFactory.class).export();
+//		bindService(MaxCargoProfileConstraintFactory.class).export();
 		bindService(PeriodDistributionProfileConstraintFactory.class).export();
 
 		// Sub Profile Constraints
