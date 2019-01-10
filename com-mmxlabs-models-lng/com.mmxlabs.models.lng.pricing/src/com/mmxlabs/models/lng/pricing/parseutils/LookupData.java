@@ -37,8 +37,8 @@ public class LookupData {
 		final LookupData lookupData = new LookupData();
 		lookupData.pricingModel = pricingModel;
 
-		pricingModel.getCommodityIndices().forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), idx));
-		pricingModel.getCurrencyIndices().forEach(idx -> lookupData.currencyMap.put(idx.getName().toLowerCase(), idx));
+		pricingModel.getCommodityIndices().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), idx));
+		pricingModel.getCurrencyIndices().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.currencyMap.put(idx.getName().toLowerCase(), idx));
 		pricingModel.getCharterIndices().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.charterMap.put(idx.getName().toLowerCase(), idx));
 		pricingModel.getBaseFuelPrices().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.baseFuelMap.put(idx.getName().toLowerCase(), idx));
 		pricingModel.getConversionFactors().forEach(f -> lookupData.conversionMap.put(PriceIndexUtils.createConversionFactorName(f).toLowerCase(), f));
