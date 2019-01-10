@@ -23,7 +23,7 @@ import com.mmxlabs.optimiser.lso.IMoveGenerator;
  */
 public final class MultiObjectiveOptimiserJob implements Callable<MultiObjectiveJobState> {
 	private final long seed;
-	private @NonNull final Injector injector;
+	private final @NonNull Injector injector;
 	private @NonNull ILookupManager stateManager;
 	private @NonNull ISequences rawSequences;
 	private @NonNull IMoveGenerator moveGenerator;
@@ -43,12 +43,7 @@ public final class MultiObjectiveOptimiserJob implements Callable<MultiObjective
 	public MultiObjectiveJobState call() {
 		try {
 			final SimpleMultiObjectiveLSOMover mover = injector.getInstance(SimpleMultiObjectiveLSOMover.class);
-			try {
-				return mover.search(new ModifiableSequences(rawSequences), stateManager, new Random(seed), moveGenerator, seed, failedInitialConstraintCheckers);
-			} catch (final Throwable e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
+			return mover.search(new ModifiableSequences(rawSequences), stateManager, new Random(seed), moveGenerator, seed, failedInitialConstraintCheckers);
 		} catch (final Throwable e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
