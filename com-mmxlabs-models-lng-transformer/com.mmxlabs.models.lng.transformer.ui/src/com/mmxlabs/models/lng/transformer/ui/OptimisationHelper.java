@@ -161,6 +161,10 @@ public final class OptimisationHelper {
 	public static final String SWTBOT_CHARTERLENGTH_ON = SWTBOT_CHARTERLENGTH_PREFIX + ".On";
 	public static final String SWTBOT_CHARTERLENGTH_OFF = SWTBOT_CHARTERLENGTH_PREFIX + ".Off";
 
+	public static final String SWTBOT_DUAL_MODE_PREFIX = "swtbot.dualmode";
+	public static final String SWTBOT_DUAL_MODE_ON = SWTBOT_DUAL_MODE_PREFIX + ".On";
+	public static final String SWTBOT_DUAL_MODE_OFF = SWTBOT_DUAL_MODE_PREFIX + ".Off";
+
 	public static final String SWTBOT_SIMILARITY_PREFIX = "swtbot.similaritymode";
 	public static final String SWTBOT_SIMILARITY_PREFIX_OFF = SWTBOT_SIMILARITY_PREFIX + ".Off";
 	public static final String SWTBOT_SIMILARITY_PREFIX_LOW = SWTBOT_SIMILARITY_PREFIX + ".Low";
@@ -949,6 +953,21 @@ public final class OptimisationHelper {
 			// optionAdded = true;
 			// enabledOptionAdded = true;
 			// }
+
+			if (LicenseFeatures.isPermitted("features:trader-based-insertions")) {
+				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+				choiceData.addChoice("Off", Boolean.FALSE);
+				choiceData.addChoice("On", Boolean.TRUE);
+				choiceData.enabled = LicenseFeatures.isPermitted("features:trader-based-insertions");
+				if (!choiceData.enabled) {
+					// if not enabled make sure to set setting to false
+					copy.setDualMode(false);
+				}
+				dialog.addOption(DataSection.Toggles, null, editingDomain, "Dual mode: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_DUAL_MODE_PREFIX,
+						ParametersPackage.eINSTANCE.getUserSettings_DualMode());
+				optionAdded = true;
+				enabledOptionAdded = true;
+			}
 			{
 				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 				choiceData.addChoice("Off", Boolean.FALSE);
@@ -1250,6 +1269,9 @@ public final class OptimisationHelper {
 		if (!LicenseFeatures.isPermitted("features:charter-length")) {
 			copy.setWithCharterLength(false);
 		}
+		if (!LicenseFeatures.isPermitted("features:trader-based-insertions")) {
+			copy.setDualMode(false);
+		}
 	}
 
 	/**
@@ -1287,6 +1309,7 @@ public final class OptimisationHelper {
 		to.setAdpOptimisation(from.isAdpOptimisation());
 		to.setCleanStateOptimisation(from.isCleanStateOptimisation());
 		to.setNominalADP(from.isNominalADP());
+		to.setDualMode(from.isDualMode());
 
 		if (from.getSimilarityMode() != null) {
 			to.setSimilarityMode(from.getSimilarityMode());

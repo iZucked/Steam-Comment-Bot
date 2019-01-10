@@ -6,6 +6,8 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model;
 
+import com.mmxlabs.models.lng.analytics.ChangeDescription;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -29,6 +31,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToAlternativeBase <em>Change Set Rows To Alternative Base</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentMetrics <em>Current Metrics</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeDescription <em>Change Description</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getUserSettings <em>User Settings</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet()
@@ -275,5 +279,57 @@ public interface ChangeSet extends EObject {
 	 * @generated
 	 */
 	void setDescription(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Change Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Change Description</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Change Description</em>' attribute.
+	 * @see #setChangeDescription(ChangeDescription)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_ChangeDescription()
+	 * @model dataType="com.mmxlabs.lingo.reports.views.changeset.model.ChangeDescription"
+	 * @generated
+	 */
+	ChangeDescription getChangeDescription();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeDescription <em>Change Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Change Description</em>' attribute.
+	 * @see #getChangeDescription()
+	 * @generated
+	 */
+	void setChangeDescription(ChangeDescription value);
+
+	/**
+	 * Returns the value of the '<em><b>User Settings</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>User Settings</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>User Settings</em>' attribute.
+	 * @see #setUserSettings(UserSettings)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_UserSettings()
+	 * @model dataType="com.mmxlabs.lingo.reports.views.changeset.model.UserSettings"
+	 * @generated
+	 */
+	UserSettings getUserSettings();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getUserSettings <em>User Settings</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>User Settings</em>' attribute.
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	void setUserSettings(UserSettings value);
 
 } // ChangeSet

@@ -188,13 +188,22 @@ public interface ParametersPackage extends EPackage {
 	int USER_SETTINGS__ADP_OPTIMISATION = 12;
 
 	/**
+	 * The feature id for the '<em><b>Dual Mode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__DUAL_MODE = 13;
+
+	/**
 	 * The number of structural features of the '<em>User Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS_FEATURE_COUNT = 13;
+	int USER_SETTINGS_FEATURE_COUNT = 14;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -1640,6 +1649,17 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getUserSettings_AdpOptimisation();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isDualMode <em>Dual Mode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Dual Mode</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isDualMode()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_DualMode();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.Objective <em>Objective</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2528,6 +2548,14 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute USER_SETTINGS__ADP_OPTIMISATION = eINSTANCE.getUserSettings_AdpOptimisation();
+
+		/**
+		 * The meta object literal for the '<em><b>Dual Mode</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__DUAL_MODE = eINSTANCE.getUserSettings_DualMode();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.

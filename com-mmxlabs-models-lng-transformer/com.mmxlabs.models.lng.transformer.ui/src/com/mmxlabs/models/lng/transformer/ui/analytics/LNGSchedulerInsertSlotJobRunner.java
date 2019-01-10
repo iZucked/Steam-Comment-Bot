@@ -269,8 +269,12 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 		slotInsertionOptions.setName(AnalyticsSolutionHelper.generateName(slotInsertionOptions));
 
+		// TODO: Take from user settings?
+		final boolean dualModeInsertions = userSettings.isDualMode();
+
 		final OptionalLong portfolioBreakEvenTarget = performBreakEven ? OptionalLong.of(targetPNL) : OptionalLong.empty();
-		final IChainLink link = SolutionSetExporterUnit.exportMultipleSolutions(null, 1, scenarioRunner.getScenarioToOptimiserBridge(), () -> slotInsertionOptions, portfolioBreakEvenTarget);
+		final IChainLink link = SolutionSetExporterUnit.exportMultipleSolutions(null, 1, scenarioRunner.getScenarioToOptimiserBridge(), () -> slotInsertionOptions, dualModeInsertions,
+				portfolioBreakEvenTarget);
 
 		final SequencesContainer initialSequencesContainer = new SequencesContainer(scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().getInitialResult().getBestSolution());
 		link.run(initialSequencesContainer, results, monitor);

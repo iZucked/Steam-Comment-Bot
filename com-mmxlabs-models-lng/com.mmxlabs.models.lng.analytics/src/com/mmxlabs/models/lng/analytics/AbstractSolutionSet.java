@@ -23,6 +23,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#isHasDualModeSolutions <em>Has Dual Mode Solutions</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#isPortfolioBreakEvenMode <em>Portfolio Break Even Mode</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getUserSettings <em>User Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraSlots <em>Extra Slots</em>}</li>
@@ -36,6 +37,32 @@ import org.eclipse.emf.common.util.EList;
  * @generated
  */
 public interface AbstractSolutionSet extends UUIDObject, NamedObject {
+	/**
+	 * Returns the value of the '<em><b>Has Dual Mode Solutions</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Has Dual Mode Solutions</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Has Dual Mode Solutions</em>' attribute.
+	 * @see #setHasDualModeSolutions(boolean)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAbstractSolutionSet_HasDualModeSolutions()
+	 * @model
+	 * @generated
+	 */
+	boolean isHasDualModeSolutions();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#isHasDualModeSolutions <em>Has Dual Mode Solutions</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Has Dual Mode Solutions</em>' attribute.
+	 * @see #isHasDualModeSolutions()
+	 * @generated
+	 */
+	void setHasDualModeSolutions(boolean value);
+
 	/**
 	 * Returns the value of the '<em><b>Portfolio Break Even Mode</b></em>' attribute.
 	 * <!-- begin-user-doc -->

@@ -15,6 +15,8 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
+import com.mmxlabs.models.lng.analytics.ChangeDescription;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -32,7 +34,8 @@ public class ScheduleResultListTransformer {
 			ScenarioResult prev = null;
 			for (final ScenarioResult current : stages) {
 				if (prev != null) {
-					root.getChangeSets().add(buildDiffToBaseChangeSet(stages.get(0), prev, current));
+					ChangeSet changeSet = buildDiffToBaseChangeSet(stages.get(0), prev, current, null, null);
+					root.getChangeSets().add(changeSet);
 				}
 				prev = current;
 				monitor.worked(1);
@@ -46,17 +49,24 @@ public class ScheduleResultListTransformer {
 
 	}
 
-	public ChangeSet buildSingleChangeChangeSet(final ScenarioResult base, final ScenarioResult current) {
-		return buildDiffToBaseChangeSet(null, base, current, null);
-	}
-	
-	public ChangeSet buildDiffToBaseChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current) {
-		return buildDiffToBaseChangeSet(base, prev, current, null);
+	public ChangeSet buildSingleChangeChangeSet(final ScenarioResult base, final ScenarioResult current, ChangeDescription changeDescription, UserSettings userSettings) {
+		return buildDiffToBaseChangeSet(null, base, current, changeDescription, userSettings, null);
 	}
 
-	public ChangeSet buildDiffToBaseChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current, @Nullable NamedObject targetToSortFirst) {
+	public ChangeSet buildSingleChangeChangeSet(final ScenarioResult base, final ScenarioResult current, ChangeDescription changeDescription, UserSettings userSettings,
+			@Nullable NamedObject targetToSortFirst) {
+		return buildDiffToBaseChangeSet(null, base, current, changeDescription, userSettings, targetToSortFirst);
+	}
+
+	public ChangeSet buildDiffToBaseChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current, ChangeDescription changeDescription, UserSettings userSettings) {
+		return buildDiffToBaseChangeSet(base, prev, current, changeDescription, userSettings, null);
+	}
+
+	public ChangeSet buildDiffToBaseChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current, ChangeDescription changeDescription, UserSettings userSettings,
+			@Nullable NamedObject targetToSortFirst) {
 
 		final ChangeSet changeSet = ChangesetFactory.eINSTANCE.createChangeSet();
+		changeSet.setChangeDescription(changeDescription);
 		changeSet.setBaseScenario(prev);
 		changeSet.setCurrentScenario(current);
 		generateDifferences(prev, current, changeSet, false, targetToSortFirst);
@@ -69,11 +79,13 @@ public class ScheduleResultListTransformer {
 	}
 
 	public ChangeSet buildParallelDiffChangeSet(final ScenarioResult base, final ScenarioResult current, final ScenarioResult altBase, final ScenarioResult altCurrent,
-			@Nullable NamedObject targetToSortFirst) {
+			ChangeDescription changeDescription, UserSettings userSettings, @Nullable NamedObject targetToSortFirst) {
 
 		final ChangeSet changeSet = ChangesetFactory.eINSTANCE.createChangeSet();
 		changeSet.setBaseScenario(base);
 		changeSet.setCurrentScenario(current);
+		changeSet.setChangeDescription(changeDescription);
+		changeSet.setUserSettings(userSettings);
 
 		generateDifferences(base, current, changeSet, false, targetToSortFirst);
 		if (altBase != null && altCurrent != null) {

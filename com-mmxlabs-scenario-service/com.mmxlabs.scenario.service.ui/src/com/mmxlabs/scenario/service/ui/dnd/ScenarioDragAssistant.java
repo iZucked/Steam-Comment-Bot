@@ -324,7 +324,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 							final boolean handled = handler.copy(scenarioFragment, scenarioInstance);
 							return !handled;
 						});
-					}else if (e instanceof IChangeSource) {
+					} else if (e instanceof IChangeSource) {
 						IChangeSource iChangeSource = (IChangeSource) e;
 						ServiceHelper.withAllServices(IScenarioInstanceChangeHandler.class, null, handler -> {
 							final boolean handled = handler.applyChange(scenarioInstance, iChangeSource);

@@ -1192,6 +1192,52 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.DualModeSolutionOption} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DualModeSolutionOptionItemProvider dualModeSolutionOptionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.DualModeSolutionOption}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDualModeSolutionOptionAdapter() {
+		if (dualModeSolutionOptionItemProvider == null) {
+			dualModeSolutionOptionItemProvider = new DualModeSolutionOptionItemProvider(this);
+		}
+
+		return dualModeSolutionOptionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SolutionOptionMicroCaseItemProvider solutionOptionMicroCaseItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSolutionOptionMicroCaseAdapter() {
+		if (solutionOptionMicroCaseItemProvider == null) {
+			solutionOptionMicroCaseItemProvider = new SolutionOptionMicroCaseItemProvider(this);
+		}
+
+		return solutionOptionMicroCaseItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1356,6 +1402,8 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (slotInsertionOptionsItemProvider != null) slotInsertionOptionsItemProvider.dispose();
 		if (solutionOptionItemProvider != null) solutionOptionItemProvider.dispose();
 		if (optimisationResultItemProvider != null) optimisationResultItemProvider.dispose();
+		if (dualModeSolutionOptionItemProvider != null) dualModeSolutionOptionItemProvider.dispose();
+		if (solutionOptionMicroCaseItemProvider != null) solutionOptionMicroCaseItemProvider.dispose();
 		if (changeDescriptionItemProvider != null) changeDescriptionItemProvider.dispose();
 		if (openSlotChangeItemProvider != null) openSlotChangeItemProvider.dispose();
 		if (cargoChangeItemProvider != null) cargoChangeItemProvider.dispose();

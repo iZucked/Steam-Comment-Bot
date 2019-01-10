@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -44,6 +45,7 @@ import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IOpenListener;
@@ -64,6 +66,10 @@ import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -82,7 +88,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.service.event.EventHandler;
 
 import com.google.common.base.Objects;
-import com.google.inject.spi.Message;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.internal.Activator;
@@ -111,9 +116,12 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
+import com.mmxlabs.models.lng.analytics.DualModeSolutionOption;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
+import com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase;
+import com.mmxlabs.models.lng.analytics.ui.ChangeDescriptionSource;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -124,6 +132,8 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.transformer.ui.analytics.EvaluateSolutionSetHelper;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -137,6 +147,7 @@ import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.common.dnd.BasicDragSource;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -255,7 +266,6 @@ public class ChangeSetView extends ViewPart {
 
 	private InsertionPlanGrouperAndFilter insertionPlanFilter;
 
-	private boolean showAlternativeChangeModel = false;
 	private boolean showNonStructuralChanges = false;
 	private boolean showRelatedChangesMenus = false;
 	private boolean showUserFilterMenus = false;
@@ -519,12 +529,14 @@ public class ChangeSetView extends ViewPart {
 	private final Queue<Runnable> postCreateActions = new ConcurrentLinkedQueue<>();
 	private boolean viewCreated = false;
 
-	protected boolean showToggleDiffToBaseAction = false;
+	private boolean showAlternativeChangeModel = false; // Is the alt P&L base mode active?
+	protected boolean showToggleAltPNLBaseAction = false; // Is the alt P&L button active/visible?
+	private Action toggleAltPNLBaseAction;
+	private ActionContributionItem toggleAltPNLBaseActionItem;
 	protected boolean showGroupByMenu = false;
 	protected boolean showChangeTargetMenu = false;
 	protected boolean showNegativePNLChangesMenu = false;
 
-	private ActionContributionItem toggleDiffToBaseActionItem;
 	private RunnableAction reEvaluateAction;
 
 	@Override
@@ -789,7 +801,7 @@ public class ChangeSetView extends ViewPart {
 
 		makeActions();
 
-		setViewMode(ViewMode.COMPARE);
+		setViewMode(ViewMode.COMPARE, false);
 
 		{
 			// final MenuManager mgr = new MenuManager();
@@ -831,6 +843,49 @@ public class ChangeSetView extends ViewPart {
 			}
 
 		}
+
+		// Experimental change drag and drop
+		if (false) {
+			final DragSource source = new DragSource(viewer.getControl(), DND.DROP_MOVE);
+			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+			source.setTransfer(types);
+			source.addDragListener(new BasicDragSource(viewer) {
+				@Override
+				public void dragStart(final DragSourceEvent event) {
+					// Grab selection now as the viewer selection can change (especially if it is also a drop target)
+					final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+					Object element = selection.getFirstElement();
+					if (element instanceof ChangeSetTableRow) {
+						element = ((ChangeSetTableRow) element).eContainer();
+					}
+					int idx = 0;
+					ChangeSetTableGroup changeSetTableGroup = null;
+					if (element instanceof ChangeSetTableGroup) {
+						changeSetTableGroup = (ChangeSetTableGroup) element;
+						final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
+						if (root != null) {
+							idx = root.getGroups().indexOf(changeSetTableGroup);
+						}
+						element = changeSetTableGroup.getChangeSet();
+					}
+					if (element instanceof ChangeSet) {
+						final ChangeSet changeSet = (ChangeSet) element;
+
+						final String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
+
+						this.selection = new StructuredSelection(new ChangeDescriptionSource(name, changeSet.getChangeDescription(), null));
+						final LocalSelectionTransfer transfer = LocalSelectionTransfer.getTransfer();
+						// if (transfer.isSupportedType(event.dataType)) {
+						transfer.setSelection(this.selection);
+						transfer.setSelectionSetTime(event.time & 0xFFFF);
+						// }
+					} else {
+						event.doit = false;
+					}
+
+				}
+			});
+		}
 	}
 
 	public void makeActions() {
@@ -841,17 +896,19 @@ public class ChangeSetView extends ViewPart {
 			getViewSite().getActionBars().getToolBarManager().add(copyAction);
 		}
 		{
-			toggleDiffToBaseAction = new RunnableAction("Show all changes to base", SWT.PUSH, () -> {
+			toggleAltPNLBaseAction = new RunnableAction("Change Mode", SWT.PUSH, () -> {
 				doToggleDiffToBase();
 			});
-			toggleDiffToBaseAction.setToolTipText("Toggle comparing to base or previous case");
-			toggleDiffToBaseAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/compare_to_base.gif"));
+			toggleAltPNLBaseAction.setToolTipText("Toggle comparing to base or previous case");
+			toggleAltPNLBaseAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/compare_to_base.gif"));
 			final GroupMarker group = new GroupMarker("diffToBaseGroup");
 			getViewSite().getActionBars().getToolBarManager().add(group);
-			toggleDiffToBaseActionItem = new ActionContributionItem(toggleDiffToBaseAction);
-			if (showToggleDiffToBaseAction) {
-				getViewSite().getActionBars().getToolBarManager().appendToGroup("diffToBaseGroup", toggleDiffToBaseActionItem);
+			toggleAltPNLBaseActionItem = new ActionContributionItem(toggleAltPNLBaseAction);
+			if (showToggleAltPNLBaseAction) {
+				getViewSite().getActionBars().getToolBarManager().appendToGroup("diffToBaseGroup", toggleAltPNLBaseActionItem);
 			}
+			toggleAltPNLBaseAction.setToolTipText(altPNLToolTipBase + " Currently " + altPNLToolTipBaseMode[showAlternativeChangeModel ? 1 : 0]);
+
 		}
 
 		{
@@ -935,19 +992,11 @@ public class ChangeSetView extends ViewPart {
 			getViewSite().getActionBars().getToolBarManager().add(filterMenu);
 		}
 		{
-
 			final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
-
 			getViewSite().getActionBars().getToolBarManager().add(packAction);
 		}
 		if (false) {
-
-			// Re-evaluate requires selecting a group
-			// Undo() does not trigger view to refresh
-
-			reEvaluateAction = new RunnableAction("Re-evaluate", () ->
-
-			{
+			reEvaluateAction = new RunnableAction("Re-evaluate", () -> {
 
 				final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 
@@ -977,7 +1026,27 @@ public class ChangeSetView extends ViewPart {
 								final AbstractSolutionSet abstractSolutionSet = (AbstractSolutionSet) object;
 								userSettings = abstractSolutionSet.getUserSettings();
 								for (final SolutionOption opt : abstractSolutionSet.getOptions()) {
-									helper.processSolution(opt.getScheduleModel());
+									helper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
+									if (opt instanceof DualModeSolutionOption) {
+										final DualModeSolutionOption dualModeSolutionOption = (DualModeSolutionOption) opt;
+
+										final SolutionOptionMicroCase base = dualModeSolutionOption.getMicroBaseCase();
+										if (base != null) {
+											// Re-evaluate from schedule
+											helper.processSolution(base.getScheduleModel());
+											// (Experimental version) Re-evaluate from change specification)
+											// helper.processSolution(base.getScheduleSpecification(), base.getScheduleModel());
+										}
+
+										final SolutionOptionMicroCase target = dualModeSolutionOption.getMicroTargetCase();
+										if (target != null) {
+											// Re-evaluate from schedule
+											helper.processSolution(target.getScheduleModel());
+											// (Experimental version) Re-evaluate from change specification)
+											// helper.processSolution(target.getScheduleSpecification(), target.getScheduleModel());
+										}
+
+									}
 								}
 							}
 						}
@@ -1004,7 +1073,6 @@ public class ChangeSetView extends ViewPart {
 					}
 				}
 			});
-
 			getViewSite().getActionBars().getToolBarManager().add(reEvaluateAction);
 
 		}
@@ -1058,7 +1126,7 @@ public class ChangeSetView extends ViewPart {
 							try {
 								runnable.run(new NullProgressMonitor());
 							} catch (InvocationTargetException | InterruptedException e) {
-								Throwable cause = e.getCause();
+								final Throwable cause = e.getCause();
 								if (cause instanceof ScenarioNotEvaluatedException) {
 									MessageDialog.openError(activeShell, "Error opening result", cause.getMessage());
 								} else {
@@ -1072,7 +1140,7 @@ public class ChangeSetView extends ViewPart {
 					runnable.run(new NullProgressMonitor());
 				}
 			} catch (InvocationTargetException | InterruptedException e) {
-				Throwable cause = e.getCause();
+				final Throwable cause = e.getCause();
 				if (cause instanceof ScenarioNotEvaluatedException) {
 					MessageDialog.openError(activeShell, "Error opening result", cause.getMessage());
 				} else {
@@ -1200,8 +1268,9 @@ public class ChangeSetView extends ViewPart {
 
 	private void doToggleDiffToBase() {
 		showAlternativeChangeModel = !showAlternativeChangeModel;
-		if (toggleDiffToBaseAction != null) {
-			toggleDiffToBaseAction.setChecked(showAlternativeChangeModel);
+		if (toggleAltPNLBaseAction != null) {
+			toggleAltPNLBaseAction.setChecked(showAlternativeChangeModel);
+			toggleAltPNLBaseAction.setToolTipText(altPNLToolTipBase + " Currently " + altPNLToolTipBaseMode[showAlternativeChangeModel ? 1 : 0]);
 		}
 		final ViewState viewState = currentViewState;
 		if (viewState != null) {
@@ -1238,7 +1307,7 @@ public class ChangeSetView extends ViewPart {
 
 	public void openOldStlyeActionSets(final ScenarioInstance target) {
 		setPartName("Action Sets");
-		setViewMode(ViewMode.OLD_ACTION_SET);
+		setViewMode(ViewMode.OLD_ACTION_SET, false);
 		setNewDataData(target, (monitor, targetSlotId) -> {
 			final ActionSetTransformer transformer = new ActionSetTransformer();
 			return new ViewState(transformer.createDataModel(target, monitor), SortMode.BY_GROUP);
@@ -1325,8 +1394,21 @@ public class ChangeSetView extends ViewPart {
 								idx = root.getGroups().indexOf(changeSetTableGroup);
 							}
 							final String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
-
-							helper.addAction(new ExportChangeAction(changeSetTableGroup, name));
+							boolean showSimple = true;
+							if (showAlternativeChangeModel) {
+								final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
+								if (scenarioResult.getResultRoot() instanceof ScheduleModel) {
+									final ScheduleModel scheduleModel = (ScheduleModel) scenarioResult.getResultRoot();
+									if (scheduleModel.eContainer() instanceof SolutionOptionMicroCase) {
+										final BiConsumer<LNGScenarioModel, Schedule> modelCustomiser = EvaluateSolutionSetHelper.createModelCustomiser();
+										helper.addAction(new ExportChangeAction(changeSetTableGroup, name, true, modelCustomiser));
+										showSimple = false;
+									}
+								}
+							}
+							if (showSimple) {
+								helper.addAction(new ExportChangeAction(changeSetTableGroup, name, null));
+							}
 							showMenu = true;
 						}
 						// Experimental code to generate a sandbox scenario.
@@ -1334,7 +1416,7 @@ public class ChangeSetView extends ViewPart {
 							// This does not work as insertion scenario is read-only. Data model is also
 							// unstable (not sure if containment works right.
 							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
-							helper.addAction(new CreateSandboxAction(changeSetTableGroup));
+							helper.addAction(new CreateSandboxAction(changeSetTableGroup, changeSetTableGroup.getDescription()));
 							showMenu = true;
 						}
 					}
@@ -1386,9 +1468,17 @@ public class ChangeSetView extends ViewPart {
 	};
 
 	private Action copyAction;
-	private Action toggleDiffToBaseAction;
 
 	private AbstractMenuAction filterMenu;
+
+	private final String altPNLToolTipBase_Default = "Toggle full or simple change mode";
+	private final String altPNLToolTipBase_Insertions = "Toggle full or simple change mode";
+	private String altPNLToolTipBase = altPNLToolTipBase_Default;
+
+	private final String[] altPNLToolTipBaseMode_Default = { "Default", "Alt" };
+	private final String[] altPNLToolTipBaseMode_ActionPlan = { "Previous", "Base" };
+	private final String[] altPNLToolTipBaseMode_Insertions = { "Full", "Simpl" };
+	private String[] altPNLToolTipBaseMode = altPNLToolTipBaseMode_Default;
 
 	private EventHandler eventHandler;;
 
@@ -1416,7 +1506,7 @@ public class ChangeSetView extends ViewPart {
 
 		// Do something?
 		if (plan instanceof OptimisationResult) {
-			setViewMode(ViewMode.GENERIC);
+			setViewMode(ViewMode.GENERIC, false);
 			setNewDataData(target, (monitor, targetSlotId) -> {
 				final OptimisationResultPlanTransformer transformer = new OptimisationResultPlanTransformer();
 				// Sorting by Group as the label provider uses the provided ordering for indexing
@@ -1425,7 +1515,7 @@ public class ChangeSetView extends ViewPart {
 				return viewState;
 			}, slotId);
 		} else if (plan instanceof ActionableSetPlan) {
-			setViewMode(ViewMode.NEW_ACTION_SET);
+			setViewMode(ViewMode.NEW_ACTION_SET, false);
 			setNewDataData(target, (monitor, targetSlotId) -> {
 				final ActionableSetPlanTransformer transformer = new ActionableSetPlanTransformer();
 				final ViewState viewState = new ViewState(transformer.createDataModel(target, (ActionableSetPlan) plan, monitor), SortMode.BY_GROUP);
@@ -1434,7 +1524,7 @@ public class ChangeSetView extends ViewPart {
 			}, slotId);
 		} else if (plan instanceof SlotInsertionOptions) {
 			final SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) plan;
-			setViewMode(ViewMode.INSERTIONS);
+			setViewMode(ViewMode.INSERTIONS, slotInsertionOptions.isHasDualModeSolutions());
 			final int insertedObjects = slotInsertionOptions.getSlotsInserted().size() + slotInsertionOptions.getEventsInserted().size();
 			insertionPlanFilter.setMaxComplexity(2 + 2 * insertedObjects);
 
@@ -1541,7 +1631,7 @@ public class ChangeSetView extends ViewPart {
 		return currentViewState;
 	}
 
-	private void setViewMode(final ViewMode viewMode) {
+	private void setViewMode(final ViewMode viewMode, final boolean dualPNLMode) {
 		// Defaults
 		this.viewMode = viewMode;
 		handleEvents = false;
@@ -1556,7 +1646,9 @@ public class ChangeSetView extends ViewPart {
 		showGroupByMenu = false;
 		showChangeTargetMenu = false;
 		showNegativePNLChangesMenu = false;
-		showToggleDiffToBaseAction = false;
+		showToggleAltPNLBaseAction = false;
+		altPNLToolTipBase = altPNLToolTipBase_Default;
+		altPNLToolTipBaseMode = altPNLToolTipBaseMode_Default;
 
 		switch (viewMode) {
 		case COMPARE:
@@ -1574,13 +1666,19 @@ public class ChangeSetView extends ViewPart {
 			showGroupByMenu = true;
 			showChangeTargetMenu = true;
 			showNegativePNLChangesMenu = true;
-			showAlternativeChangeModel = false;
+			showToggleAltPNLBaseAction = dualPNLMode;
+			altPNLToolTipBase = altPNLToolTipBase_Insertions;
+			altPNLToolTipBaseMode = altPNLToolTipBaseMode_Insertions;
 			break;
 		case NEW_ACTION_SET:
-			showToggleDiffToBaseAction = true;
+			showToggleAltPNLBaseAction = true;
+			altPNLToolTipBase = altPNLToolTipBase_Default;
+			altPNLToolTipBaseMode = altPNLToolTipBaseMode_ActionPlan;
 			break;
 		case OLD_ACTION_SET:
-			showToggleDiffToBaseAction = true;
+			showToggleAltPNLBaseAction = true;
+			altPNLToolTipBase = altPNLToolTipBase_Default;
+			altPNLToolTipBaseMode = altPNLToolTipBaseMode_ActionPlan;
 			break;
 		case GENERIC:
 			showAlternativeChangeModel = false;
@@ -1591,14 +1689,16 @@ public class ChangeSetView extends ViewPart {
 			break;
 		}
 
-		if (toggleDiffToBaseAction != null) {
-			toggleDiffToBaseAction.setChecked(showAlternativeChangeModel);
-			getViewSite().getActionBars().getToolBarManager().remove(toggleDiffToBaseActionItem);
-			if (showToggleDiffToBaseAction) {
-				getViewSite().getActionBars().getToolBarManager().appendToGroup("diffToBaseGroup", toggleDiffToBaseActionItem);
+		if (toggleAltPNLBaseAction != null) {
+			toggleAltPNLBaseAction.setChecked(showAlternativeChangeModel);
+			getViewSite().getActionBars().getToolBarManager().remove(toggleAltPNLBaseActionItem);
+			if (showToggleAltPNLBaseAction) {
+				getViewSite().getActionBars().getToolBarManager().appendToGroup("diffToBaseGroup", toggleAltPNLBaseActionItem);
+				toggleAltPNLBaseAction.setToolTipText(altPNLToolTipBase + " Currently " + altPNLToolTipBaseMode[showAlternativeChangeModel ? 1 : 0]);
 			}
 			getViewSite().getActionBars().getToolBarManager().update(true);
 		}
+		columnHelper.showAlternativePNLColumn(dualPNLMode);
 
 		if (viewMode == ViewMode.INSERTIONS) {
 			columnHelper.showCompareColumns(false);

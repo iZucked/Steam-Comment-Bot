@@ -42,6 +42,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#isHasDualModeSolutions <em>Has Dual Mode Solutions</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#isPortfolioBreakEvenMode <em>Portfolio Break Even Mode</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getUserSettings <em>User Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getExtraSlots <em>Extra Slots</em>}</li>
@@ -71,6 +72,26 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isHasDualModeSolutions() <em>Has Dual Mode Solutions</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHasDualModeSolutions()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean HAS_DUAL_MODE_SOLUTIONS_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isHasDualModeSolutions() <em>Has Dual Mode Solutions</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHasDualModeSolutions()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean hasDualModeSolutions = HAS_DUAL_MODE_SOLUTIONS_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isPortfolioBreakEvenMode() <em>Portfolio Break Even Mode</em>}' attribute.
@@ -170,6 +191,27 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ABSTRACT_SOLUTION_SET__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isHasDualModeSolutions() {
+		return hasDualModeSolutions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHasDualModeSolutions(boolean newHasDualModeSolutions) {
+		boolean oldHasDualModeSolutions = hasDualModeSolutions;
+		hasDualModeSolutions = newHasDualModeSolutions;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS, oldHasDualModeSolutions, hasDualModeSolutions));
 	}
 
 	/**
@@ -333,6 +375,8 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 		switch (featureID) {
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__NAME:
 				return getName();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS:
+				return isHasDualModeSolutions();
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE:
 				return isPortfolioBreakEvenMode();
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__USER_SETTINGS:
@@ -358,6 +402,9 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 		switch (featureID) {
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__NAME:
 				setName((String)newValue);
+				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS:
+				setHasDualModeSolutions((Boolean)newValue);
 				return;
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE:
 				setPortfolioBreakEvenMode((Boolean)newValue);
@@ -391,6 +438,9 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS:
+				setHasDualModeSolutions(HAS_DUAL_MODE_SOLUTIONS_EDEFAULT);
+				return;
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE:
 				setPortfolioBreakEvenMode(PORTFOLIO_BREAK_EVEN_MODE_EDEFAULT);
 				return;
@@ -420,6 +470,8 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 		switch (featureID) {
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS:
+				return hasDualModeSolutions != HAS_DUAL_MODE_SOLUTIONS_EDEFAULT;
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE:
 				return portfolioBreakEvenMode != PORTFOLIO_BREAK_EVEN_MODE_EDEFAULT;
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__USER_SETTINGS:
@@ -478,6 +530,8 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", hasDualModeSolutions: ");
+		result.append(hasDualModeSolutions);
 		result.append(", portfolioBreakEvenMode: ");
 		result.append(portfolioBreakEvenMode);
 		result.append(')');

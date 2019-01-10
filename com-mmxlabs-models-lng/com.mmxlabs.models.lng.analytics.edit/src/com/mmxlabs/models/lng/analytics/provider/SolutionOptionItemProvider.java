@@ -86,6 +86,8 @@ public class SolutionOptionItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
+			childrenFeatures.add(AnalyticsPackage.Literals.SOLUTION_OPTION__CHANGE_DESCRIPTION);
+			childrenFeatures.add(AnalyticsPackage.Literals.SOLUTION_OPTION__SCHEDULE_SPECIFICATION);
 			childrenFeatures.add(AnalyticsPackage.Literals.SOLUTION_OPTION__SCHEDULE_MODEL);
 		}
 		return childrenFeatures;
@@ -139,6 +141,8 @@ public class SolutionOptionItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(SolutionOption.class)) {
+			case AnalyticsPackage.SOLUTION_OPTION__CHANGE_DESCRIPTION:
+			case AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_SPECIFICATION:
 			case AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_MODEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -156,6 +160,16 @@ public class SolutionOptionItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.SOLUTION_OPTION__CHANGE_DESCRIPTION,
+				 AnalyticsFactory.eINSTANCE.createChangeDescription()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.SOLUTION_OPTION__SCHEDULE_SPECIFICATION,
+				 CargoFactory.eINSTANCE.createScheduleSpecification()));
 
 		newChildDescriptors.add
 			(createChildParameter

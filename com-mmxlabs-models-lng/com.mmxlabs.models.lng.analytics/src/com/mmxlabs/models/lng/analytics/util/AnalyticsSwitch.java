@@ -326,6 +326,19 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.DUAL_MODE_SOLUTION_OPTION: {
+				DualModeSolutionOption dualModeSolutionOption = (DualModeSolutionOption)theEObject;
+				T result = caseDualModeSolutionOption(dualModeSolutionOption);
+				if (result == null) result = caseSolutionOption(dualModeSolutionOption);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE: {
+				SolutionOptionMicroCase solutionOptionMicroCase = (SolutionOptionMicroCase)theEObject;
+				T result = caseSolutionOptionMicroCase(solutionOptionMicroCase);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case AnalyticsPackage.CHANGE_DESCRIPTION: {
 				ChangeDescription changeDescription = (ChangeDescription)theEObject;
 				T result = caseChangeDescription(changeDescription);
@@ -1264,6 +1277,36 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseOptimisationResult(OptimisationResult object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Dual Mode Solution Option</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Dual Mode Solution Option</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDualModeSolutionOption(DualModeSolutionOption object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Solution Option Micro Case</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Solution Option Micro Case</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSolutionOptionMicroCase(SolutionOptionMicroCase object) {
 		return null;
 	}
 

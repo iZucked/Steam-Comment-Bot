@@ -313,7 +313,7 @@ public class LNGScenarioToOptimiserBridge {
 		return copiedOriginalScenario;
 	}
 
-	private ISequences getTransformedOriginalRawSequences(final ISequences rawSequences) {
+	public ISequences getTransformedOriginalRawSequences(final ISequences rawSequences) {
 		// TODO: Wrap this in the period exporter
 		if (periodExporter == null) {
 			return rawSequences;
@@ -360,6 +360,10 @@ public class LNGScenarioToOptimiserBridge {
 
 	public @NonNull LNGDataTransformer getDataTransformer() {
 		return optimiserDataTransformer;
+	}
+	
+	public @NonNull LNGDataTransformer getFullDataTransformer() {
+		return originalDataTransformer;
 	}
 
 	/**

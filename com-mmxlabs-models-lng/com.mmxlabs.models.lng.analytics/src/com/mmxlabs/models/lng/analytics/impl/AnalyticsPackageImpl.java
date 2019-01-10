@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.CargoChange;
 import com.mmxlabs.models.lng.analytics.Change;
 import com.mmxlabs.models.lng.analytics.ChangeDescription;
+import com.mmxlabs.models.lng.analytics.DualModeSolutionOption;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
@@ -62,6 +63,7 @@ import com.mmxlabs.models.lng.analytics.SlotDescriptor;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.SlotType;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
+import com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase;
 import com.mmxlabs.models.lng.analytics.SpotMarketSlotDescriptor;
 import com.mmxlabs.models.lng.analytics.VesselAllocationDescriptor;
 import com.mmxlabs.models.lng.analytics.VesselEventChange;
@@ -466,6 +468,20 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass optimisationResultEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass dualModeSolutionOptionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass solutionOptionMicroCaseEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1525,7 +1541,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getAbstractSolutionSet_PortfolioBreakEvenMode() {
+	public EAttribute getAbstractSolutionSet_HasDualModeSolutions() {
 		return (EAttribute)abstractSolutionSetEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -1534,25 +1550,16 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getAbstractSolutionSet_PortfolioBreakEvenMode() {
+		return (EAttribute)abstractSolutionSetEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getAbstractSolutionSet_UserSettings() {
-		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getAbstractSolutionSet_Options() {
-		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getAbstractSolutionSet_ExtraSlots() {
 		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -1561,8 +1568,26 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAbstractSolutionSet_BaseOption() {
+	public EReference getAbstractSolutionSet_Options() {
+		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAbstractSolutionSet_ExtraSlots() {
 		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAbstractSolutionSet_BaseOption() {
+		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -2299,8 +2324,26 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSolutionOption_ScheduleModel() {
+	public EReference getSolutionOption_ChangeDescription() {
 		return (EReference)solutionOptionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSolutionOption_ScheduleSpecification() {
+		return (EReference)solutionOptionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSolutionOption_ScheduleModel() {
+		return (EReference)solutionOptionEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -2310,6 +2353,78 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	public EClass getOptimisationResult() {
 		return optimisationResultEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getDualModeSolutionOption() {
+		return dualModeSolutionOptionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getDualModeSolutionOption_MicroBaseCase() {
+		return (EReference)dualModeSolutionOptionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getDualModeSolutionOption_MicroTargetCase() {
+		return (EReference)dualModeSolutionOptionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSolutionOptionMicroCase() {
+		return solutionOptionMicroCaseEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSolutionOptionMicroCase_ScheduleSpecification() {
+		return (EReference)solutionOptionMicroCaseEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSolutionOptionMicroCase_ScheduleModel() {
+		return (EReference)solutionOptionMicroCaseEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSolutionOptionMicroCase_ExtraVesselAvailabilities() {
+		return (EReference)solutionOptionMicroCaseEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSolutionOptionMicroCase_CharterInMarketOverrides() {
+		return (EReference)solutionOptionMicroCaseEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -2645,6 +2760,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(existingCharterMarketOptionEClass, EXISTING_CHARTER_MARKET_OPTION__SPOT_INDEX);
 
 		abstractSolutionSetEClass = createEClass(ABSTRACT_SOLUTION_SET);
+		createEAttribute(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS);
 		createEAttribute(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE);
 		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__USER_SETTINGS);
 		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__EXTRA_SLOTS);
@@ -2658,9 +2774,21 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(slotInsertionOptionsEClass, SLOT_INSERTION_OPTIONS__EVENTS_INSERTED);
 
 		solutionOptionEClass = createEClass(SOLUTION_OPTION);
+		createEReference(solutionOptionEClass, SOLUTION_OPTION__CHANGE_DESCRIPTION);
+		createEReference(solutionOptionEClass, SOLUTION_OPTION__SCHEDULE_SPECIFICATION);
 		createEReference(solutionOptionEClass, SOLUTION_OPTION__SCHEDULE_MODEL);
 
 		optimisationResultEClass = createEClass(OPTIMISATION_RESULT);
+
+		dualModeSolutionOptionEClass = createEClass(DUAL_MODE_SOLUTION_OPTION);
+		createEReference(dualModeSolutionOptionEClass, DUAL_MODE_SOLUTION_OPTION__MICRO_BASE_CASE);
+		createEReference(dualModeSolutionOptionEClass, DUAL_MODE_SOLUTION_OPTION__MICRO_TARGET_CASE);
+
+		solutionOptionMicroCaseEClass = createEClass(SOLUTION_OPTION_MICRO_CASE);
+		createEReference(solutionOptionMicroCaseEClass, SOLUTION_OPTION_MICRO_CASE__SCHEDULE_SPECIFICATION);
+		createEReference(solutionOptionMicroCaseEClass, SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL);
+		createEReference(solutionOptionMicroCaseEClass, SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES);
+		createEReference(solutionOptionMicroCaseEClass, SOLUTION_OPTION_MICRO_CASE__CHARTER_IN_MARKET_OVERRIDES);
 
 		changeDescriptionEClass = createEClass(CHANGE_DESCRIPTION);
 		createEReference(changeDescriptionEClass, CHANGE_DESCRIPTION__CHANGES);
@@ -2827,6 +2955,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		actionableSetPlanEClass.getESuperTypes().add(this.getAbstractSolutionSet());
 		slotInsertionOptionsEClass.getESuperTypes().add(this.getAbstractSolutionSet());
 		optimisationResultEClass.getESuperTypes().add(this.getAbstractSolutionSet());
+		dualModeSolutionOptionEClass.getESuperTypes().add(this.getSolutionOption());
 		openSlotChangeEClass.getESuperTypes().add(this.getChange());
 		cargoChangeEClass.getESuperTypes().add(this.getChange());
 		vesselEventChangeEClass.getESuperTypes().add(this.getChange());
@@ -2989,6 +3118,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getExistingCharterMarketOption_SpotIndex(), ecorePackage.getEInt(), "spotIndex", null, 0, 1, ExistingCharterMarketOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(abstractSolutionSetEClass, AbstractSolutionSet.class, "AbstractSolutionSet", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAbstractSolutionSet_HasDualModeSolutions(), ecorePackage.getEBoolean(), "hasDualModeSolutions", null, 0, 1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAbstractSolutionSet_PortfolioBreakEvenMode(), ecorePackage.getEBoolean(), "portfolioBreakEvenMode", null, 0, 1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractSolutionSet_UserSettings(), theParametersPackage.getUserSettings(), null, "userSettings", null, 0, 1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractSolutionSet_ExtraSlots(), theCargoPackage.getSlot(), null, "extraSlots", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3002,9 +3132,21 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getSlotInsertionOptions_EventsInserted(), theCargoPackage.getVesselEvent(), null, "eventsInserted", null, 0, -1, SlotInsertionOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(solutionOptionEClass, SolutionOption.class, "SolutionOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSolutionOption_ChangeDescription(), this.getChangeDescription(), null, "changeDescription", null, 0, 1, SolutionOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSolutionOption_ScheduleSpecification(), theCargoPackage.getScheduleSpecification(), null, "scheduleSpecification", null, 0, 1, SolutionOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSolutionOption_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, SolutionOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(optimisationResultEClass, OptimisationResult.class, "OptimisationResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(dualModeSolutionOptionEClass, DualModeSolutionOption.class, "DualModeSolutionOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getDualModeSolutionOption_MicroBaseCase(), this.getSolutionOptionMicroCase(), null, "microBaseCase", null, 0, 1, DualModeSolutionOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDualModeSolutionOption_MicroTargetCase(), this.getSolutionOptionMicroCase(), null, "microTargetCase", null, 0, 1, DualModeSolutionOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(solutionOptionMicroCaseEClass, SolutionOptionMicroCase.class, "SolutionOptionMicroCase", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSolutionOptionMicroCase_ScheduleSpecification(), theCargoPackage.getScheduleSpecification(), null, "scheduleSpecification", null, 0, 1, SolutionOptionMicroCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSolutionOptionMicroCase_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, SolutionOptionMicroCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSolutionOptionMicroCase_ExtraVesselAvailabilities(), theCargoPackage.getVesselAvailability(), null, "extraVesselAvailabilities", null, 0, -1, SolutionOptionMicroCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSolutionOptionMicroCase_CharterInMarketOverrides(), theCargoPackage.getCharterInMarketOverride(), null, "charterInMarketOverrides", null, 0, -1, SolutionOptionMicroCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(changeDescriptionEClass, ChangeDescription.class, "ChangeDescription", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getChangeDescription_Changes(), this.getChange(), null, "changes", null, 0, -1, ChangeDescription.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

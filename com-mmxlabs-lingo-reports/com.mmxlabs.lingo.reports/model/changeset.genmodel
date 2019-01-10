@@ -17,6 +17,7 @@
       <genEnumLiterals ecoreEnumLiteral="changeset.ecore#//ChangeSetVesselType/DES"/>
     </genEnums>
     <genDataTypes ecoreDataType="changeset.ecore#//ScenarioResult"/>
+    <genDataTypes ecoreDataType="changeset.ecore#//ChangeDescription"/>
     <genClasses ecoreClass="changeset.ecore#//ChangeSetRoot">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRoot/changeSets"/>
     </genClasses>
@@ -31,6 +32,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/changeSetRowsToAlternativeBase"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/currentMetrics"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSet/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSet/changeDescription"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//Metrics">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//Metrics/pnl"/>

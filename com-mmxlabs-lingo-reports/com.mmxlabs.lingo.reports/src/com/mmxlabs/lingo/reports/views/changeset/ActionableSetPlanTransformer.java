@@ -4,15 +4,14 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
+import com.mmxlabs.models.lng.analytics.ChangeDescription;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -22,27 +21,34 @@ public class ActionableSetPlanTransformer {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 
-		final List<ScenarioResult> stages = new LinkedList<>();
-		if (plan.getBaseOption() != null) {
-			stages.add(new ScenarioResult(scenarioInstance, plan.getBaseOption().getScheduleModel()));
-		}
-		// Assuming first option is the base.
-		for (final SolutionOption option : plan.getOptions()) {
-			stages.add(new ScenarioResult(scenarioInstance, option.getScheduleModel()));
-		}
-
 		try {
+			monitor.beginTask("Opening action plans", plan.getOptions().size());
 			final ScheduleResultListTransformer transformer = new ScheduleResultListTransformer();
-			monitor.beginTask("Opening action plans", stages.size());
-			ScenarioResult prev = null;
-			for (final ScenarioResult current : stages) {
-				if (prev != null) {
-					root.getChangeSets().add(transformer.buildDiffToBaseChangeSet(stages.get(0), prev, current));
+			final UserSettings userSettings = plan.getUserSettings();
+
+			ScenarioResult base = null;
+
+			boolean first = true;
+			if (plan.getBaseOption() != null) {
+				base = new ScenarioResult(scenarioInstance, plan.getBaseOption().getScheduleModel());
+				first = false;
+			}
+
+			// Assuming first option is the base.
+			ScenarioResult prev = base;
+			for (final SolutionOption option : plan.getOptions()) {
+				final ScenarioResult current = new ScenarioResult(scenarioInstance, option.getScheduleModel());
+				if (first) {
+					base = current;
+					first = false;
+				} else {
+					final ChangeDescription changeDescription = option.getChangeDescription();
+					root.getChangeSets().add(transformer.buildDiffToBaseChangeSet(base, prev, current, changeDescription, userSettings));
 				}
 				prev = current;
 				monitor.worked(1);
-
 			}
+
 		} finally {
 			monitor.done();
 		}

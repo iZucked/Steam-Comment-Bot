@@ -5,8 +5,10 @@
 package com.mmxlabs.lingo.reports.views.changeset.actions;
 
 import java.util.Collections;
+import java.util.function.BiConsumer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.ui.PartInitException;
@@ -15,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
@@ -24,17 +28,25 @@ public class ExportChangeAction extends Action {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExportChangeAction.class);
 	private final ChangeSetTableGroup changeSetTableGroup;
-	private final String label;
+	private BiConsumer<LNGScenarioModel, Schedule> modelCustomiser;
+	private boolean bothCases;
+	private String label;
 
-	public ExportChangeAction(final ChangeSetTableGroup changeSetTableGroup, final String label) {
-		super("Export solution");
+	public ExportChangeAction(ChangeSetTableGroup changeSetTableGroup, String label, @Nullable BiConsumer<LNGScenarioModel, Schedule> modelCustomiser) {
+		this(changeSetTableGroup, label, false, modelCustomiser);
+	}
+
+	public ExportChangeAction(ChangeSetTableGroup changeSetTableGroup, String label, boolean bothCases, @Nullable BiConsumer<LNGScenarioModel, Schedule> modelCustomiser) {
+		super(bothCases ? "Export mini scenarios " : "Export solution");
 		this.changeSetTableGroup = changeSetTableGroup;
 		this.label = label;
+		this.bothCases = bothCases;
+		this.modelCustomiser = modelCustomiser;
 	}
 
 	@Override
 	public void run() {
-		final ScenarioInstance fork[] = new ScenarioInstance[1];
+		final ScenarioInstance fork[] = new ScenarioInstance[2];
 		final String name = ScenarioServiceModelUtils.openNewNameForForkPrompt(label, label, Collections.emptySet());
 		if (name == null) {
 			return;
@@ -44,7 +56,12 @@ public class ExportChangeAction extends Action {
 			dialog.run(true, false, monitor -> {
 				monitor.beginTask("Export solution", IProgressMonitor.UNKNOWN);
 				try {
-					fork[0] = ExportScheduleHelper.export(changeSetTableGroup.getCurrentScenario(), name, false, null);
+					if (bothCases) {
+						fork[0] = ExportScheduleHelper.export(changeSetTableGroup.getCurrentScenario(), name + "-After", false, modelCustomiser);
+						fork[1] = ExportScheduleHelper.export(changeSetTableGroup.getBaseScenario(), name + "-Before", false, modelCustomiser);
+					} else {
+						fork[0] = ExportScheduleHelper.export(changeSetTableGroup.getCurrentScenario(), name, false, modelCustomiser);
+					}
 				} catch (final Exception e1) {
 					LOGGER.error(e1.getMessage(), e1);
 				} finally {

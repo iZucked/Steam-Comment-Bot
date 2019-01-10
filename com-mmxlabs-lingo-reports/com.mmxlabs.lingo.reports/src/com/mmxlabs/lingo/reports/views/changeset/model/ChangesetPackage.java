@@ -200,13 +200,31 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET__DESCRIPTION = 9;
 
 	/**
+	 * The feature id for the '<em><b>Change Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET__CHANGE_DESCRIPTION = 10;
+
+	/**
+	 * The feature id for the '<em><b>User Settings</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET__USER_SETTINGS = 11;
+
+	/**
 	 * The number of structural features of the '<em>Change Set</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_FEATURE_COUNT = 10;
+	int CHANGE_SET_FEATURE_COUNT = 12;
 
 	/**
 	 * The number of operations of the '<em>Change Set</em>' class.
@@ -1104,6 +1122,28 @@ public interface ChangesetPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '<em>Change Description</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.ChangeDescription
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getChangeDescription()
+	 * @generated
+	 */
+	int CHANGE_DESCRIPTION = 12;
+
+
+	/**
+	 * The meta object id for the '<em>User Settings</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getUserSettings()
+	 * @generated
+	 */
+	int USER_SETTINGS = 13;
+
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot <em>Change Set Root</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1502,6 +1542,28 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getChangeSet_Description();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeDescription <em>Change Description</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Change Description</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeDescription()
+	 * @see #getChangeSet()
+	 * @generated
+	 */
+	EAttribute getChangeSet_ChangeDescription();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getUserSettings <em>User Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>User Settings</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getUserSettings()
+	 * @see #getChangeSet()
+	 * @generated
+	 */
+	EAttribute getChangeSet_UserSettings();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getDischargeAllocation <em>Discharge Allocation</em>}'.
@@ -2127,6 +2189,28 @@ public interface ChangesetPackage extends EPackage {
 	EDataType getScenarioResult();
 
 	/**
+	 * Returns the meta object for data type '{@link com.mmxlabs.models.lng.analytics.ChangeDescription <em>Change Description</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Change Description</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ChangeDescription
+	 * @model instanceClass="com.mmxlabs.models.lng.analytics.ChangeDescription"
+	 * @generated
+	 */
+	EDataType getChangeDescription();
+
+	/**
+	 * Returns the meta object for data type '{@link com.mmxlabs.models.lng.parameters.UserSettings <em>User Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>User Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings
+	 * @model instanceClass="com.mmxlabs.models.lng.parameters.UserSettings"
+	 * @generated
+	 */
+	EDataType getUserSettings();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2256,6 +2340,22 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHANGE_SET__DESCRIPTION = eINSTANCE.getChangeSet_Description();
+
+		/**
+		 * The meta object literal for the '<em><b>Change Description</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET__CHANGE_DESCRIPTION = eINSTANCE.getChangeSet_ChangeDescription();
+
+		/**
+		 * The meta object literal for the '<em><b>User Settings</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET__USER_SETTINGS = eINSTANCE.getChangeSet_UserSettings();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.MetricsImpl <em>Metrics</em>}' class.
@@ -2924,6 +3024,26 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EDataType SCENARIO_RESULT = eINSTANCE.getScenarioResult();
+
+		/**
+		 * The meta object literal for the '<em>Change Description</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.ChangeDescription
+		 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getChangeDescription()
+		 * @generated
+		 */
+		EDataType CHANGE_DESCRIPTION = eINSTANCE.getChangeDescription();
+
+		/**
+		 * The meta object literal for the '<em>User Settings</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.UserSettings
+		 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getUserSettings()
+		 * @generated
+		 */
+		EDataType USER_SETTINGS = eINSTANCE.getUserSettings();
 
 	}
 

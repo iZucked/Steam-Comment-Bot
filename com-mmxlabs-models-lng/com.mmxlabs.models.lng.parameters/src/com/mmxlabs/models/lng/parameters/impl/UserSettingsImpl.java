@@ -41,6 +41,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isCleanStateOptimisation <em>Clean State Optimisation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isAdpOptimisation <em>Adp Optimisation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isDualMode <em>Dual Mode</em>}</li>
  * </ul>
  *
  * @generated
@@ -323,6 +324,26 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * @ordered
 	 */
 	protected boolean adpOptimisation = ADP_OPTIMISATION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isDualMode() <em>Dual Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDualMode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DUAL_MODE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDualMode() <em>Dual Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDualMode()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean dualMode = DUAL_MODE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -683,6 +704,27 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isDualMode() {
+		return dualMode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDualMode(boolean newDualMode) {
+		boolean oldDualMode = dualMode;
+		dualMode = newDualMode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__DUAL_MODE, oldDualMode, dualMode));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -712,6 +754,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return getFloatingDaysLimit();
 			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION:
 				return isAdpOptimisation();
+			case ParametersPackage.USER_SETTINGS__DUAL_MODE:
+				return isDualMode();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -762,6 +806,9 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return;
 			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION:
 				setAdpOptimisation((Boolean)newValue);
+				return;
+			case ParametersPackage.USER_SETTINGS__DUAL_MODE:
+				setDualMode((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -814,6 +861,9 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION:
 				setAdpOptimisation(ADP_OPTIMISATION_EDEFAULT);
 				return;
+			case ParametersPackage.USER_SETTINGS__DUAL_MODE:
+				setDualMode(DUAL_MODE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -852,6 +902,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return floatingDaysLimit != FLOATING_DAYS_LIMIT_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION:
 				return adpOptimisation != ADP_OPTIMISATION_EDEFAULT;
+			case ParametersPackage.USER_SETTINGS__DUAL_MODE:
+				return dualMode != DUAL_MODE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -892,6 +944,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 		result.append(floatingDaysLimit);
 		result.append(", adpOptimisation: ");
 		result.append(adpOptimisation);
+		result.append(", dualMode: ");
+		result.append(dualMode);
 		result.append(')');
 		return result.toString();
 	}

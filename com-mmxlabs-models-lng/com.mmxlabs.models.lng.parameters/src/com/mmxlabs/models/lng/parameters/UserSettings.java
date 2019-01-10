@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanStateOptimisation <em>Clean State Optimisation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isAdpOptimisation <em>Adp Optimisation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isDualMode <em>Dual Mode</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings()
@@ -445,5 +446,31 @@ public interface UserSettings extends EObject {
 	 * @generated
 	 */
 	void setAdpOptimisation(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Dual Mode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Dual Mode</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Dual Mode</em>' attribute.
+	 * @see #setDualMode(boolean)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_DualMode()
+	 * @model
+	 * @generated
+	 */
+	boolean isDualMode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#isDualMode <em>Dual Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Dual Mode</em>' attribute.
+	 * @see #isDualMode()
+	 * @generated
+	 */
+	void setDualMode(boolean value);
 
 } // UserSettings

@@ -60,6 +60,7 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addHasDualModeSolutionsPropertyDescriptor(object);
 			addPortfolioBreakEvenModePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -83,6 +84,28 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Has Dual Mode Solutions feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHasDualModeSolutionsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AbstractSolutionSet_hasDualModeSolutions_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AbstractSolutionSet_hasDualModeSolutions_feature", "_UI_AbstractSolutionSet_type"),
+				 AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -181,6 +204,7 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 
 		switch (notification.getFeatureID(AbstractSolutionSet.class)) {
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__NAME:
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS:
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
@@ -237,8 +261,18 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__BASE_OPTION,
+				 AnalyticsFactory.eINSTANCE.createDualModeSolutionOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__OPTIONS,
 				 AnalyticsFactory.eINSTANCE.createSolutionOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__OPTIONS,
+				 AnalyticsFactory.eINSTANCE.createDualModeSolutionOption()));
 	}
 
 	/**

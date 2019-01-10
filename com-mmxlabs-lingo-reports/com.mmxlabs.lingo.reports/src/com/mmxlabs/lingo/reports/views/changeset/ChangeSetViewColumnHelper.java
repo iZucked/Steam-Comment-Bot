@@ -247,10 +247,24 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("P&L (m)");
 			gvc.getColumn().setWidth(75);
-			gvc.setLabelProvider(createPNLDeltaLabelProvider());
+			gvc.setLabelProvider(createPNLDeltaLabelProvider(false));
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(true);
+
+		}
+		// if (showAlternativePNLBase)
+		{
+			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
+			altPNLBaseColumn = new GridViewerColumn(viewer, gc);
+			altPNLBaseColumn.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+			altPNLBaseColumn.getColumn().setText("P&L Alt (m)");
+			altPNLBaseColumn.getColumn().setWidth(75);
+			altPNLBaseColumn.setLabelProvider(createPNLDeltaLabelProvider(true));
+			altPNLBaseColumn.getColumn().setCellRenderer(createCellRenderer());
+			altPNLBaseColumn.getColumn().setDetail(true);
+			altPNLBaseColumn.getColumn().setSummary(true);
+			altPNLBaseColumn.getColumn().setVisible(showAlternativePNLBase);
 
 		}
 		// {
@@ -1152,7 +1166,7 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
-	private CellLabelProvider createPNLDeltaLabelProvider() {
+	private CellLabelProvider createPNLDeltaLabelProvider(final boolean showAlt) {
 		return new CellLabelProvider() {
 
 			@Override
@@ -1163,35 +1177,65 @@ public class ChangeSetViewColumnHelper {
 
 					cell.setFont(boldFont);
 
-					final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
-					final DeltaMetrics metrics = changeSet.getDeltaMetrics();
-					if (metrics != null) {
-						double delta = metrics.getPnlDelta();
+					ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
+					if (showAlt) {
+						changeSet = changeSet.getLinkedGroup();
+					}
+					if (changeSet != null) {					
+						final DeltaMetrics metrics = changeSet.getDeltaMetrics();
+						if (metrics != null) {
+							double delta = metrics.getPnlDelta();
 
-						delta = delta / 1000000.0;
-						if (Math.abs(delta) < 0.0001) {
-							delta = 0;
-						}
-						if (delta == 0) {
-							cell.setText("0.00");
-						} else {
-							if (textualVesselMarkers) {
-								cell.setText(String.format("%s%,.3G", metrics.getPnlDelta() < 0 ? "↓" : "↑", Math.abs(delta)));
-							} else {
-								cell.setText(String.format("%,.3G", Math.abs(delta)));
+							delta = delta / 1000000.0;
+							if (Math.abs(delta) < 0.0001) {
+								delta = 0;
 							}
-
-							if (metrics.getPnlDelta() < 0) {
-								cell.setImage(imageRedArrowDown);
+							if (delta == 0) {
+								cell.setText("0.00");
 							} else {
-								cell.setImage(imageGreenArrowUp);
+								if (textualVesselMarkers) {
+									cell.setText(String.format("%s%,.3G", metrics.getPnlDelta() < 0 ? "↓" : "↑", Math.abs(delta)));
+								} else {
+									cell.setText(String.format("%,.3G", Math.abs(delta)));
+								}
+	
+								if (metrics.getPnlDelta() < 0) {
+									cell.setImage(imageRedArrowDown);
+								} else {
+									cell.setImage(imageGreenArrowUp);
+								}
 							}
 						}
 					}
 				}
 				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow change = (ChangeSetTableRow) element;
-
+					ChangeSetTableRow change = (ChangeSetTableRow) element;
+					if (showAlt && change.eContainer() instanceof ChangeSetTableGroup) {
+						ChangeSetTableGroup thisGroup = (ChangeSetTableGroup) change.eContainer();
+						ChangeSetTableGroup altGroup = thisGroup.getLinkedGroup();
+						if (altGroup != null) {
+							boolean checkLHS = change.getLhsName() != null && change.getLhsName().isEmpty();
+							String name = checkLHS ? change.getLhsName() : change.getRhsName();
+							change = null;
+							if (name != null) {
+								for (ChangeSetTableRow row : altGroup.getRows()) {
+									if (checkLHS) {
+										if (name.equals(row.getLhsName())) {
+											change = row;
+											break;
+										}
+									} else {
+										if (name.equals(row.getRhsName())) {
+											change = row;
+											break;
+										}
+									}
+								}
+							}
+						} else {
+							change = null;
+						}
+					}
 					final long f = ChangeSetKPIUtil.getPNL(change, ResultType.Before);
 					final long t = ChangeSetKPIUtil.getPNL(change, ResultType.After);
 
@@ -2217,6 +2261,13 @@ public class ChangeSetViewColumnHelper {
 			return violationColumn.getColumn();
 		}
 		return null;
+	}
+
+	public void showAlternativePNLColumn(boolean showAlternativePNLBase) {
+		this.showAlternativePNLBase = showAlternativePNLBase;
+		if (altPNLBaseColumn != null) {
+			RunnerHelper.asyncExec(() -> altPNLBaseColumn.getColumn().setVisible(this.showAlternativePNLBase));
+		}
 	}
 
 	public static @NonNull BiFunction<ChangeSetTableGroup, Integer, String> getDefaultLabelProvider() {

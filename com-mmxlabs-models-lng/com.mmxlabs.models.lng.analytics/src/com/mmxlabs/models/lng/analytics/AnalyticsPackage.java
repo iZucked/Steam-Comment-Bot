@@ -1614,13 +1614,22 @@ s	 * <!-- end-user-doc -->
 	int ABSTRACT_SOLUTION_SET__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Has Dual Mode Solutions</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Portfolio Break Even Mode</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>User Settings</b></em>' containment reference.
@@ -1629,7 +1638,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_SOLUTION_SET__USER_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int ABSTRACT_SOLUTION_SET__USER_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
@@ -1638,7 +1647,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_SOLUTION_SET__EXTRA_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int ABSTRACT_SOLUTION_SET__EXTRA_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Base Option</b></em>' containment reference.
@@ -1647,7 +1656,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_SOLUTION_SET__BASE_OPTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int ABSTRACT_SOLUTION_SET__BASE_OPTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Options</b></em>' containment reference list.
@@ -1656,7 +1665,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_SOLUTION_SET__OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int ABSTRACT_SOLUTION_SET__OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Abstract Solution Set</em>' class.
@@ -1665,7 +1674,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_SOLUTION_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int ABSTRACT_SOLUTION_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl <em>Actionable Set Plan</em>}' class.
@@ -1703,6 +1712,15 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int ACTIONABLE_SET_PLAN__NAME = ABSTRACT_SOLUTION_SET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Has Dual Mode Solutions</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__HAS_DUAL_MODE_SOLUTIONS = ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS;
 
 	/**
 	 * The feature id for the '<em><b>Portfolio Break Even Mode</b></em>' attribute.
@@ -1796,6 +1814,15 @@ s	 * <!-- end-user-doc -->
 	int SLOT_INSERTION_OPTIONS__NAME = ABSTRACT_SOLUTION_SET__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Has Dual Mode Solutions</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__HAS_DUAL_MODE_SOLUTIONS = ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS;
+
+	/**
 	 * The feature id for the '<em><b>Portfolio Break Even Mode</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1878,13 +1905,31 @@ s	 * <!-- end-user-doc -->
 	int SOLUTION_OPTION = 33;
 
 	/**
+	 * The feature id for the '<em><b>Change Description</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOLUTION_OPTION__CHANGE_DESCRIPTION = 0;
+
+	/**
+	 * The feature id for the '<em><b>Schedule Specification</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOLUTION_OPTION__SCHEDULE_SPECIFICATION = 1;
+
+	/**
 	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SOLUTION_OPTION__SCHEDULE_MODEL = 0;
+	int SOLUTION_OPTION__SCHEDULE_MODEL = 2;
 
 	/**
 	 * The number of structural features of the '<em>Solution Option</em>' class.
@@ -1893,7 +1938,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SOLUTION_OPTION_FEATURE_COUNT = 1;
+	int SOLUTION_OPTION_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ChangeDescriptionImpl <em>Change Description</em>}' class.
@@ -1903,7 +1948,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChangeDescription()
 	 * @generated
 	 */
-	int CHANGE_DESCRIPTION = 35;
+	int CHANGE_DESCRIPTION = 37;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ChangeImpl <em>Change</em>}' class.
@@ -1913,7 +1958,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChange()
 	 * @generated
 	 */
-	int CHANGE = 36;
+	int CHANGE = 38;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OpenSlotChangeImpl <em>Open Slot Change</em>}' class.
@@ -1923,7 +1968,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOpenSlotChange()
 	 * @generated
 	 */
-	int OPEN_SLOT_CHANGE = 37;
+	int OPEN_SLOT_CHANGE = 39;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CargoChangeImpl <em>Cargo Change</em>}' class.
@@ -1933,7 +1978,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoChange()
 	 * @generated
 	 */
-	int CARGO_CHANGE = 38;
+	int CARGO_CHANGE = 40;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventChangeImpl <em>Vessel Event Change</em>}' class.
@@ -1943,7 +1988,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventChange()
 	 * @generated
 	 */
-	int VESSEL_EVENT_CHANGE = 39;
+	int VESSEL_EVENT_CHANGE = 41;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventDescriptorImpl <em>Vessel Event Descriptor</em>}' class.
@@ -1953,7 +1998,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventDescriptor()
 	 * @generated
 	 */
-	int VESSEL_EVENT_DESCRIPTOR = 40;
+	int VESSEL_EVENT_DESCRIPTOR = 42;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotDescriptorImpl <em>Slot Descriptor</em>}' class.
@@ -1963,7 +2008,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotDescriptor()
 	 * @generated
 	 */
-	int SLOT_DESCRIPTOR = 41;
+	int SLOT_DESCRIPTOR = 43;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.RealSlotDescriptorImpl <em>Real Slot Descriptor</em>}' class.
@@ -1973,7 +2018,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getRealSlotDescriptor()
 	 * @generated
 	 */
-	int REAL_SLOT_DESCRIPTOR = 42;
+	int REAL_SLOT_DESCRIPTOR = 44;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SpotMarketSlotDescriptorImpl <em>Spot Market Slot Descriptor</em>}' class.
@@ -1983,7 +2028,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSpotMarketSlotDescriptor()
 	 * @generated
 	 */
-	int SPOT_MARKET_SLOT_DESCRIPTOR = 43;
+	int SPOT_MARKET_SLOT_DESCRIPTOR = 45;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselAllocationDescriptorImpl <em>Vessel Allocation Descriptor</em>}' class.
@@ -1993,7 +2038,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselAllocationDescriptor()
 	 * @generated
 	 */
-	int VESSEL_ALLOCATION_DESCRIPTOR = 44;
+	int VESSEL_ALLOCATION_DESCRIPTOR = 46;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketVesselAllocationDescriptorImpl <em>Market Vessel Allocation Descriptor</em>}' class.
@@ -2003,7 +2048,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketVesselAllocationDescriptor()
 	 * @generated
 	 */
-	int MARKET_VESSEL_ALLOCATION_DESCRIPTOR = 45;
+	int MARKET_VESSEL_ALLOCATION_DESCRIPTOR = 47;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.FleetVesselAllocationDescriptorImpl <em>Fleet Vessel Allocation Descriptor</em>}' class.
@@ -2013,7 +2058,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFleetVesselAllocationDescriptor()
 	 * @generated
 	 */
-	int FLEET_VESSEL_ALLOCATION_DESCRIPTOR = 46;
+	int FLEET_VESSEL_ALLOCATION_DESCRIPTOR = 48;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PositionDescriptorImpl <em>Position Descriptor</em>}' class.
@@ -2023,7 +2068,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPositionDescriptor()
 	 * @generated
 	 */
-	int POSITION_DESCRIPTOR = 47;
+	int POSITION_DESCRIPTOR = 49;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptimisationResultImpl <em>Optimisation Result</em>}' class.
@@ -2061,6 +2106,15 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int OPTIMISATION_RESULT__NAME = ABSTRACT_SOLUTION_SET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Has Dual Mode Solutions</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT__HAS_DUAL_MODE_SOLUTIONS = ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS;
 
 	/**
 	 * The feature id for the '<em><b>Portfolio Break Even Mode</b></em>' attribute.
@@ -2115,6 +2169,125 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int OPTIMISATION_RESULT_FEATURE_COUNT = ABSTRACT_SOLUTION_SET_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.DualModeSolutionOptionImpl <em>Dual Mode Solution Option</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.DualModeSolutionOptionImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDualModeSolutionOption()
+	 * @generated
+	 */
+	int DUAL_MODE_SOLUTION_OPTION = 35;
+
+	/**
+	 * The feature id for the '<em><b>Change Description</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DUAL_MODE_SOLUTION_OPTION__CHANGE_DESCRIPTION = SOLUTION_OPTION__CHANGE_DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Schedule Specification</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DUAL_MODE_SOLUTION_OPTION__SCHEDULE_SPECIFICATION = SOLUTION_OPTION__SCHEDULE_SPECIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DUAL_MODE_SOLUTION_OPTION__SCHEDULE_MODEL = SOLUTION_OPTION__SCHEDULE_MODEL;
+
+	/**
+	 * The feature id for the '<em><b>Micro Base Case</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DUAL_MODE_SOLUTION_OPTION__MICRO_BASE_CASE = SOLUTION_OPTION_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Micro Target Case</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DUAL_MODE_SOLUTION_OPTION__MICRO_TARGET_CASE = SOLUTION_OPTION_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Dual Mode Solution Option</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DUAL_MODE_SOLUTION_OPTION_FEATURE_COUNT = SOLUTION_OPTION_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionMicroCaseImpl <em>Solution Option Micro Case</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.SolutionOptionMicroCaseImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSolutionOptionMicroCase()
+	 * @generated
+	 */
+	int SOLUTION_OPTION_MICRO_CASE = 36;
+
+	/**
+	 * The feature id for the '<em><b>Schedule Specification</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOLUTION_OPTION_MICRO_CASE__SCHEDULE_SPECIFICATION = 0;
+
+	/**
+	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL = 1;
+
+	/**
+	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES = 2;
+
+	/**
+	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOLUTION_OPTION_MICRO_CASE__CHARTER_IN_MARKET_OVERRIDES = 3;
+
+	/**
+	 * The number of structural features of the '<em>Solution Option Micro Case</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOLUTION_OPTION_MICRO_CASE_FEATURE_COUNT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Changes</b></em>' containment reference list.
@@ -2439,7 +2612,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityModel()
 	 * @generated
 	 */
-	int VIABILITY_MODEL = 48;
+	int VIABILITY_MODEL = 50;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2521,7 +2694,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityRow()
 	 * @generated
 	 */
-	int VIABILITY_ROW = 49;
+	int VIABILITY_ROW = 51;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -2630,7 +2803,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityResult()
 	 * @generated
 	 */
-	int VIABILITY_RESULT = 50;
+	int VIABILITY_RESULT = 52;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -2712,7 +2885,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMModel()
 	 * @generated
 	 */
-	int MTM_MODEL = 51;
+	int MTM_MODEL = 53;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2803,7 +2976,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMResult()
 	 * @generated
 	 */
-	int MTM_RESULT = 52;
+	int MTM_RESULT = 54;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -2876,7 +3049,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMRow()
 	 * @generated
 	 */
-	int MTM_ROW = 53;
+	int MTM_ROW = 55;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -2976,7 +3149,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 54;
+	int VOLUME_MODE = 56;
 
 
 	/**
@@ -2987,7 +3160,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotType()
 	 * @generated
 	 */
-	int SLOT_TYPE = 55;
+	int SLOT_TYPE = 57;
 
 
 	/**
@@ -4128,6 +4301,17 @@ s	 * <!-- end-user-doc -->
 	EClass getAbstractSolutionSet();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#isHasDualModeSolutions <em>Has Dual Mode Solutions</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Has Dual Mode Solutions</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet#isHasDualModeSolutions()
+	 * @see #getAbstractSolutionSet()
+	 * @generated
+	 */
+	EAttribute getAbstractSolutionSet_HasDualModeSolutions();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#isPortfolioBreakEvenMode <em>Portfolio Break Even Mode</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5052,6 +5236,28 @@ s	 * <!-- end-user-doc -->
 	EClass getSolutionOption();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SolutionOption#getChangeDescription <em>Change Description</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Change Description</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SolutionOption#getChangeDescription()
+	 * @see #getSolutionOption()
+	 * @generated
+	 */
+	EReference getSolutionOption_ChangeDescription();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SolutionOption#getScheduleSpecification <em>Schedule Specification</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Schedule Specification</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SolutionOption#getScheduleSpecification()
+	 * @see #getSolutionOption()
+	 * @generated
+	 */
+	EReference getSolutionOption_ScheduleSpecification();
+
+	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SolutionOption#getScheduleModel <em>Schedule Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5071,6 +5277,92 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EClass getOptimisationResult();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.DualModeSolutionOption <em>Dual Mode Solution Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Dual Mode Solution Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.DualModeSolutionOption
+	 * @generated
+	 */
+	EClass getDualModeSolutionOption();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.DualModeSolutionOption#getMicroBaseCase <em>Micro Base Case</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Micro Base Case</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.DualModeSolutionOption#getMicroBaseCase()
+	 * @see #getDualModeSolutionOption()
+	 * @generated
+	 */
+	EReference getDualModeSolutionOption_MicroBaseCase();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.DualModeSolutionOption#getMicroTargetCase <em>Micro Target Case</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Micro Target Case</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.DualModeSolutionOption#getMicroTargetCase()
+	 * @see #getDualModeSolutionOption()
+	 * @generated
+	 */
+	EReference getDualModeSolutionOption_MicroTargetCase();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase <em>Solution Option Micro Case</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Solution Option Micro Case</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase
+	 * @generated
+	 */
+	EClass getSolutionOptionMicroCase();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getScheduleSpecification <em>Schedule Specification</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Schedule Specification</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getScheduleSpecification()
+	 * @see #getSolutionOptionMicroCase()
+	 * @generated
+	 */
+	EReference getSolutionOptionMicroCase_ScheduleSpecification();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getScheduleModel <em>Schedule Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Schedule Model</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getScheduleModel()
+	 * @see #getSolutionOptionMicroCase()
+	 * @generated
+	 */
+	EReference getSolutionOptionMicroCase_ScheduleModel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getExtraVesselAvailabilities <em>Extra Vessel Availabilities</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Extra Vessel Availabilities</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getExtraVesselAvailabilities()
+	 * @see #getSolutionOptionMicroCase()
+	 * @generated
+	 */
+	EReference getSolutionOptionMicroCase_ExtraVesselAvailabilities();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Charter In Market Overrides</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getCharterInMarketOverrides()
+	 * @see #getSolutionOptionMicroCase()
+	 * @generated
+	 */
+	EReference getSolutionOptionMicroCase_CharterInMarketOverrides();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getPartialCase <em>Partial Case</em>}'.
@@ -6185,6 +6477,14 @@ s	 * <!-- end-user-doc -->
 		EClass ABSTRACT_SOLUTION_SET = eINSTANCE.getAbstractSolutionSet();
 
 		/**
+		 * The meta object literal for the '<em><b>Has Dual Mode Solutions</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS = eINSTANCE.getAbstractSolutionSet_HasDualModeSolutions();
+
+		/**
 		 * The meta object literal for the '<em><b>Portfolio Break Even Mode</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6917,6 +7217,22 @@ s	 * <!-- end-user-doc -->
 		EClass SOLUTION_OPTION = eINSTANCE.getSolutionOption();
 
 		/**
+		 * The meta object literal for the '<em><b>Change Description</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SOLUTION_OPTION__CHANGE_DESCRIPTION = eINSTANCE.getSolutionOption_ChangeDescription();
+
+		/**
+		 * The meta object literal for the '<em><b>Schedule Specification</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SOLUTION_OPTION__SCHEDULE_SPECIFICATION = eINSTANCE.getSolutionOption_ScheduleSpecification();
+
+		/**
 		 * The meta object literal for the '<em><b>Schedule Model</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6933,6 +7249,74 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EClass OPTIMISATION_RESULT = eINSTANCE.getOptimisationResult();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.DualModeSolutionOptionImpl <em>Dual Mode Solution Option</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.DualModeSolutionOptionImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDualModeSolutionOption()
+		 * @generated
+		 */
+		EClass DUAL_MODE_SOLUTION_OPTION = eINSTANCE.getDualModeSolutionOption();
+
+		/**
+		 * The meta object literal for the '<em><b>Micro Base Case</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DUAL_MODE_SOLUTION_OPTION__MICRO_BASE_CASE = eINSTANCE.getDualModeSolutionOption_MicroBaseCase();
+
+		/**
+		 * The meta object literal for the '<em><b>Micro Target Case</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DUAL_MODE_SOLUTION_OPTION__MICRO_TARGET_CASE = eINSTANCE.getDualModeSolutionOption_MicroTargetCase();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionMicroCaseImpl <em>Solution Option Micro Case</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.SolutionOptionMicroCaseImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSolutionOptionMicroCase()
+		 * @generated
+		 */
+		EClass SOLUTION_OPTION_MICRO_CASE = eINSTANCE.getSolutionOptionMicroCase();
+
+		/**
+		 * The meta object literal for the '<em><b>Schedule Specification</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SOLUTION_OPTION_MICRO_CASE__SCHEDULE_SPECIFICATION = eINSTANCE.getSolutionOptionMicroCase_ScheduleSpecification();
+
+		/**
+		 * The meta object literal for the '<em><b>Schedule Model</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL = eINSTANCE.getSolutionOptionMicroCase_ScheduleModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES = eINSTANCE.getSolutionOptionMicroCase_ExtraVesselAvailabilities();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter In Market Overrides</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SOLUTION_OPTION_MICRO_CASE__CHARTER_IN_MARKET_OVERRIDES = eINSTANCE.getSolutionOptionMicroCase_CharterInMarketOverrides();
 
 		/**
 		 * The meta object literal for the '<em><b>Partial Case</b></em>' containment reference feature.

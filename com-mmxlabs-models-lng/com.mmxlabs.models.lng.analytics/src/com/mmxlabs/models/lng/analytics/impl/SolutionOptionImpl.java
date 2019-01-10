@@ -30,12 +30,32 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl#getChangeDescription <em>Change Description</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl#getScheduleSpecification <em>Schedule Specification</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl#getScheduleModel <em>Schedule Model</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class SolutionOptionImpl extends EObjectImpl implements SolutionOption {
+	/**
+	 * The cached value of the '{@link #getChangeDescription() <em>Change Description</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getChangeDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected ChangeDescription changeDescription;
+	/**
+	 * The cached value of the '{@link #getScheduleSpecification() <em>Schedule Specification</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScheduleSpecification()
+	 * @generated
+	 * @ordered
+	 */
+	protected ScheduleSpecification scheduleSpecification;
 	/**
 	 * The cached value of the '{@link #getScheduleModel() <em>Schedule Model</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -63,6 +83,92 @@ public class SolutionOptionImpl extends EObjectImpl implements SolutionOption {
 	@Override
 	protected EClass eStaticClass() {
 		return AnalyticsPackage.Literals.SOLUTION_OPTION;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ChangeDescription getChangeDescription() {
+		return changeDescription;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetChangeDescription(ChangeDescription newChangeDescription, NotificationChain msgs) {
+		ChangeDescription oldChangeDescription = changeDescription;
+		changeDescription = newChangeDescription;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SOLUTION_OPTION__CHANGE_DESCRIPTION, oldChangeDescription, newChangeDescription);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setChangeDescription(ChangeDescription newChangeDescription) {
+		if (newChangeDescription != changeDescription) {
+			NotificationChain msgs = null;
+			if (changeDescription != null)
+				msgs = ((InternalEObject)changeDescription).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.SOLUTION_OPTION__CHANGE_DESCRIPTION, null, msgs);
+			if (newChangeDescription != null)
+				msgs = ((InternalEObject)newChangeDescription).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.SOLUTION_OPTION__CHANGE_DESCRIPTION, null, msgs);
+			msgs = basicSetChangeDescription(newChangeDescription, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SOLUTION_OPTION__CHANGE_DESCRIPTION, newChangeDescription, newChangeDescription));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ScheduleSpecification getScheduleSpecification() {
+		return scheduleSpecification;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetScheduleSpecification(ScheduleSpecification newScheduleSpecification, NotificationChain msgs) {
+		ScheduleSpecification oldScheduleSpecification = scheduleSpecification;
+		scheduleSpecification = newScheduleSpecification;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_SPECIFICATION, oldScheduleSpecification, newScheduleSpecification);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setScheduleSpecification(ScheduleSpecification newScheduleSpecification) {
+		if (newScheduleSpecification != scheduleSpecification) {
+			NotificationChain msgs = null;
+			if (scheduleSpecification != null)
+				msgs = ((InternalEObject)scheduleSpecification).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_SPECIFICATION, null, msgs);
+			if (newScheduleSpecification != null)
+				msgs = ((InternalEObject)newScheduleSpecification).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_SPECIFICATION, null, msgs);
+			msgs = basicSetScheduleSpecification(newScheduleSpecification, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_SPECIFICATION, newScheduleSpecification, newScheduleSpecification));
 	}
 
 	/**
@@ -116,6 +222,10 @@ public class SolutionOptionImpl extends EObjectImpl implements SolutionOption {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case AnalyticsPackage.SOLUTION_OPTION__CHANGE_DESCRIPTION:
+				return basicSetChangeDescription(null, msgs);
+			case AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_SPECIFICATION:
+				return basicSetScheduleSpecification(null, msgs);
 			case AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_MODEL:
 				return basicSetScheduleModel(null, msgs);
 		}
@@ -130,6 +240,10 @@ public class SolutionOptionImpl extends EObjectImpl implements SolutionOption {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case AnalyticsPackage.SOLUTION_OPTION__CHANGE_DESCRIPTION:
+				return getChangeDescription();
+			case AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_SPECIFICATION:
+				return getScheduleSpecification();
 			case AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_MODEL:
 				return getScheduleModel();
 		}
@@ -144,6 +258,12 @@ public class SolutionOptionImpl extends EObjectImpl implements SolutionOption {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case AnalyticsPackage.SOLUTION_OPTION__CHANGE_DESCRIPTION:
+				setChangeDescription((ChangeDescription)newValue);
+				return;
+			case AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_SPECIFICATION:
+				setScheduleSpecification((ScheduleSpecification)newValue);
+				return;
 			case AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_MODEL:
 				setScheduleModel((ScheduleModel)newValue);
 				return;
@@ -159,6 +279,12 @@ public class SolutionOptionImpl extends EObjectImpl implements SolutionOption {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case AnalyticsPackage.SOLUTION_OPTION__CHANGE_DESCRIPTION:
+				setChangeDescription((ChangeDescription)null);
+				return;
+			case AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_SPECIFICATION:
+				setScheduleSpecification((ScheduleSpecification)null);
+				return;
 			case AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_MODEL:
 				setScheduleModel((ScheduleModel)null);
 				return;
@@ -174,6 +300,10 @@ public class SolutionOptionImpl extends EObjectImpl implements SolutionOption {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case AnalyticsPackage.SOLUTION_OPTION__CHANGE_DESCRIPTION:
+				return changeDescription != null;
+			case AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_SPECIFICATION:
+				return scheduleSpecification != null;
 			case AnalyticsPackage.SOLUTION_OPTION__SCHEDULE_MODEL:
 				return scheduleModel != null;
 		}

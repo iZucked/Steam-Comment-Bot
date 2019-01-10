@@ -71,12 +71,22 @@ public class AbstractSolutionSetComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_hasDualModeSolutionsEditor(detailComposite, topClass);
 		add_portfolioBreakEvenModeEditor(detailComposite, topClass);
 		add_userSettingsEditor(detailComposite, topClass);
 		add_extraSlotsEditor(detailComposite, topClass);
 		add_baseOptionEditor(detailComposite, topClass);
 		add_optionsEditor(detailComposite, topClass);
 	}
+	/**
+	 * Create the editor for the hasDualModeSolutions feature on AbstractSolutionSet
+	 *
+	 * @generated
+	 */
+	protected void add_hasDualModeSolutionsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS));
+	}
+
 	/**
 	 * Create the editor for the portfolioBreakEvenMode feature on AbstractSolutionSet
 	 *

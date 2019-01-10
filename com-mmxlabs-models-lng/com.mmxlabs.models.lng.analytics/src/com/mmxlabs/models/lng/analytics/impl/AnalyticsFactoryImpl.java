@@ -93,6 +93,8 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS: return createSlotInsertionOptions();
 			case AnalyticsPackage.SOLUTION_OPTION: return createSolutionOption();
 			case AnalyticsPackage.OPTIMISATION_RESULT: return createOptimisationResult();
+			case AnalyticsPackage.DUAL_MODE_SOLUTION_OPTION: return createDualModeSolutionOption();
+			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE: return createSolutionOptionMicroCase();
 			case AnalyticsPackage.CHANGE_DESCRIPTION: return createChangeDescription();
 			case AnalyticsPackage.OPEN_SLOT_CHANGE: return createOpenSlotChange();
 			case AnalyticsPackage.CARGO_CHANGE: return createCargoChange();
@@ -630,6 +632,26 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public OptimisationResult createOptimisationResult() {
 		OptimisationResultImpl optimisationResult = new OptimisationResultImpl();
 		return optimisationResult;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DualModeSolutionOption createDualModeSolutionOption() {
+		DualModeSolutionOptionImpl dualModeSolutionOption = new DualModeSolutionOptionImpl();
+		return dualModeSolutionOption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SolutionOptionMicroCase createSolutionOptionMicroCase() {
+		SolutionOptionMicroCaseImpl solutionOptionMicroCase = new SolutionOptionMicroCaseImpl();
+		return solutionOptionMicroCase;
 	}
 
 	/**

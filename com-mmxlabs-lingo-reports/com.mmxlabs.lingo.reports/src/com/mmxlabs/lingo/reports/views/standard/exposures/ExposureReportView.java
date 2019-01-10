@@ -15,6 +15,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -63,7 +64,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ExposureReportView extends SimpleTabularReportView<IndexExposureData> implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
-	//-------------------------------------Transformer class starts-------------------------------------
+	// -------------------------------------Transformer class starts-------------------------------------
 	private final class ExposureData extends AbstractSimpleTabularReportTransformer<IndexExposureData> {
 		@Override
 		public List<ColumnManager<IndexExposureData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
@@ -103,7 +104,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					}
 				});
 			}
-			
+
 			result.add(new ColumnManager<IndexExposureData>("Date") {
 				@Override
 				public String getColumnText(final IndexExposureData data) {
@@ -117,7 +118,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				public int compare(final IndexExposureData o1, final IndexExposureData o2) {
 					if (o1.isChild && o2.isChild) {
 						return o1.childName.compareTo(o2.childName);
-					} else if(!o1.isChild && !o2.isChild) {
+					} else if (!o1.isChild && !o2.isChild) {
 						return o1.date.compareTo(o2.date);
 					}
 					return o1.hashCode() - o2.hashCode();
@@ -128,18 +129,18 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					return true;
 				}
 			});
-			
+
 			for (final ScenarioResult sr : selectedDataProvider.getScenarioResults()) {
 				final IScenarioDataProvider sdp = sr.getScenarioDataProvider();
 				final PricingModel pm = ScenarioModelUtil.getPricingModel(sdp);
 				final EList<CommodityIndex> indices = pm.getCommodityIndices();
-				
+
 				for (final CommodityIndex index : indices) {
 					String indexName = index.getName();
 					result.add(new ColumnManager<IndexExposureData>(indexName) {
 						@Override
 						public String getColumnText(final IndexExposureData data) {
-							if (data.scenarioResult.equals(sr) && data.exposures.containsKey(indexName)) {
+							if (Objects.equals(data.scenarioResult, sr) && data.exposures.containsKey(indexName)) {
 								final double result = data.exposures.get(indexName);
 								return String.format("%,.01f", result);
 							}
@@ -158,7 +159,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				result.add(new ColumnManager<IndexExposureData>(indexName) {
 					@Override
 					public String getColumnText(final IndexExposureData data) {
-						if (data.scenarioResult.equals(sr) && data.exposures.containsKey(indexName)) {
+						if (Objects.equals(data.scenarioResult, sr) && data.exposures.containsKey(indexName)) {
 							final double result = data.exposures.get(indexName);
 							return String.format("%,.01f", result);
 						}
@@ -172,9 +173,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 						return Double.compare(result1, result2);
 					}
 				});
-				
+
 			}
-			
+
 			return result;
 		}
 
@@ -196,7 +197,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					final Iterator<IndexExposureData> otherIterator = other.iterator();
 					while (otherIterator.hasNext()) {
 						final IndexExposureData otherData = otherIterator.next();
-						if (Equality.isEqual(refData.date, otherData.date)) { //indexName
+						if (Equality.isEqual(refData.date, otherData.date)) { // indexName
 
 							output.add(createDiffData(refData, otherData));
 							otherIterator.remove();
@@ -220,12 +221,12 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			}
 			for (final IndexExposureData d : output) {
 				final YearMonth ym = d.date;
-					if (dateRange.getFirst() == null || ym.isBefore(dateRange.getFirst())) {
-						dateRange.setFirst(ym);
-					}
-					if (dateRange.getSecond() == null || ym.isAfter(dateRange.getSecond())) {
-						dateRange.setSecond(ym);
-					}
+				if (dateRange.getFirst() == null || ym.isBefore(dateRange.getFirst())) {
+					dateRange.setFirst(ym);
+				}
+				if (dateRange.getSecond() == null || ym.isAfter(dateRange.getSecond())) {
+					dateRange.setSecond(ym);
+				}
 			}
 
 			return output;
@@ -236,10 +237,10 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 			final LocalDate earliest = getEarliestScenarioDate(scenarioResult.getScenarioDataProvider());
 			final LocalDate latest = getLatestScenarioDate(scenarioResult.getScenarioDataProvider());
-			
+
 			final YearMonth ymStart = YearMonth.from(earliest);
 			final YearMonth ymEnd = YearMonth.from(latest);
-			
+
 			final LNGScenarioModel rootObject = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 			if (rootObject == null) {
 				return output;
@@ -260,7 +261,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			return output;
 		}
 	}
-	//-------------------------------------Transformer class ends----------------------------------------
+	// -------------------------------------Transformer class ends----------------------------------------
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -408,7 +409,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				mode = Exposures.ValueMode.values()[modeIdx];
 				setUnitsActionText(this);
 				getViewSite().getActionBars().updateActionBars();
-				//columnManagers.get(modeIdx)
+				// columnManagers.get(modeIdx)
 				ExposureReportView.this.refresh();
 
 			}
@@ -484,13 +485,13 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		return super.getAdapter(adapter);
 	}
-	
+
 	private LocalDate getEarliestScenarioDate(final IScenarioDataProvider sdp) {
 		LocalDate result = LocalDate.now();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 
 		LocalDate erl = result;
-		
+
 		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
 			if (erl.isAfter(ls.getWindowStart())) {
 				erl = ls.getWindowStart();
@@ -531,47 +532,20 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		return result;
 	}
 	/*
-	private Regions getRegion(final Slot slot) {
-		
-		final Port port = slot.getPort();
-		
-		if (port != null) {
-			final String country = port.getLocation().getCountry().toLowerCase();
-			switch(country) {
-			case "japan":
-			case "korea":
-			case "china":
-			case "taiwan":
-				return Regions.JKCT;
-			case "spain":
-				return Regions.MED;
-			case "india":
-			case "pakistan":
-			case "bangladesh":
-				return Regions.IND;
-			case "kuwait":
-				return Regions.ME;
-			case "belgium":
-				return Regions.NWE;
-			default:
-				return Regions.Other;
-			}
-		}
-		return Regions.Other;
-	}
-	
-	private enum Regions{
-		JKCT("JKCT"), MED("Med"), IND("India"), ME("Middle East"), NWE("North West Europe"), Other("Other");
-		
-		private String name;
-
-		private Regions(final String name) {
-			this.name = name;
-		}
-
-		@Override
-		public String toString() {
-			return name;
-		}
-	}*/
+	 * private Regions getRegion(final Slot slot) {
+	 * 
+	 * final Port port = slot.getPort();
+	 * 
+	 * if (port != null) { final String country = port.getLocation().getCountry().toLowerCase(); switch(country) { case "japan": case "korea": case "china": case "taiwan": return Regions.JKCT; case
+	 * "spain": return Regions.MED; case "india": case "pakistan": case "bangladesh": return Regions.IND; case "kuwait": return Regions.ME; case "belgium": return Regions.NWE; default: return
+	 * Regions.Other; } } return Regions.Other; }
+	 * 
+	 * private enum Regions{ JKCT("JKCT"), MED("Med"), IND("India"), ME("Middle East"), NWE("North West Europe"), Other("Other");
+	 * 
+	 * private String name;
+	 * 
+	 * private Regions(final String name) { this.name = name; }
+	 * 
+	 * @Override public String toString() { return name; } }
+	 */
 }

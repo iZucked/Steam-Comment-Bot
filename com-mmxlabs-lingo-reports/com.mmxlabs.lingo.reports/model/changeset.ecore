@@ -22,6 +22,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="currentMetrics" eType="#//Metrics"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="changeDescription" eType="#//ChangeDescription"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userSettings" eType="#//UserSettings"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Metrics">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="pnl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
@@ -133,4 +135,6 @@
     <eLiterals name="FOB" value="3"/>
     <eLiterals name="DES" value="4"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ChangeDescription" instanceClassName="com.mmxlabs.models.lng.analytics.ChangeDescription"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="UserSettings" instanceClassName="com.mmxlabs.models.lng.parameters.UserSettings"/>
 </ecore:EPackage>

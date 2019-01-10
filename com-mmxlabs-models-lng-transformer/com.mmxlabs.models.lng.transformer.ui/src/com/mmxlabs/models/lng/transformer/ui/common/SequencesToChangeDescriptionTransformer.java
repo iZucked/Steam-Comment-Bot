@@ -7,9 +7,11 @@ package com.mmxlabs.models.lng.transformer.ui.common;
 import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.inject.Singleton;
@@ -40,6 +42,7 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
@@ -66,31 +69,30 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class SequencesToChangeDescriptionTransformer {
-	final ScheduleSpecificationHelper scheduleSpecificationHelper;
 	private @NonNull final LNGDataTransformer dataTransformer;
 	private Function<ISequences, ChangeDescription> generateChangeDescription;
 
-	public SequencesToChangeDescriptionTransformer(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {
-		this.dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
-		this.scheduleSpecificationHelper = new ScheduleSpecificationHelper(scenarioToOptimiserBridge.getScenarioDataProvider());
+	public SequencesToChangeDescriptionTransformer(final LNGDataTransformer dataTransformer) {
+		this.dataTransformer = dataTransformer;
 	}
 
 	private Function<ISequences, ChangeDescription> createChangeDescriptionFunction(final ISequences baseSolution) {
 
 		// Create a small injector to check hold of the IMoveHandlerHelper instance.
-		final Injector injector = dataTransformer.getInjector().createChildInjector(new InitialSequencesModule(baseSolution), new InputSequencesModule(baseSolution), new PhaseOptimisationDataModule(), new SequencesManipulatorModule(), new AbstractModule() {
+		final Injector injector = dataTransformer.getInjector().createChildInjector(new InitialSequencesModule(baseSolution), new InputSequencesModule(baseSolution), new PhaseOptimisationDataModule(),
+				new SequencesManipulatorModule(), new AbstractModule() {
 
-			@Override
-			protected void configure() {
-				bind(MoveHelper.class).in(Singleton.class);
-				bind(IMoveHelper.class).to(MoveHelper.class);
+					@Override
+					protected void configure() {
+						bind(MoveHelper.class).in(Singleton.class);
+						bind(IMoveHelper.class).to(MoveHelper.class);
 
-				bind(boolean.class).annotatedWith(Names.named(MoveHelper.LEGACY_CHECK_RESOURCE)).toInstance(Boolean.FALSE);
+						bind(boolean.class).annotatedWith(Names.named(MoveHelper.LEGACY_CHECK_RESOURCE)).toInstance(Boolean.FALSE);
 
-				bind(MoveHandlerHelper.class).in(Singleton.class);
-				bind(IMoveHandlerHelper.class).to(MoveHandlerHelper.class);
-			}
-		});
+						bind(MoveHandlerHelper.class).in(Singleton.class);
+						bind(IMoveHandlerHelper.class).to(MoveHandlerHelper.class);
+					}
+				});
 
 		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 		final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
@@ -146,7 +148,7 @@ public class SequencesToChangeDescriptionTransformer {
 						IPortSlot seq_e_portSlot = portSlotProvider.getPortSlot(seq_e);
 						if (seq_e_portType == PortType.Load //
 								|| seq_e_portType == PortType.Discharge) {
-							Slot slot = dataTransformer.getModelEntityMap().getModelObjectNullChecked(seq_e_portSlot, Slot.class);
+							Slot<?> slot = dataTransformer.getModelEntityMap().getModelObjectNullChecked(seq_e_portSlot, Slot.class);
 							lastID = slot.getName();
 						} else {
 							VesselEvent event = dataTransformer.getModelEntityMap().getModelObjectNullChecked(seq_e_portSlot, VesselEvent.class);
@@ -193,11 +195,15 @@ public class SequencesToChangeDescriptionTransformer {
 							) {
 								// Cargo change
 								final CargoChange change = AnalyticsFactory.eINSTANCE.createCargoChange();
+
+								List<Slot<?>> cargoSlots = new LinkedList<>();
+								List<Consumer<List<Slot<?>>>> postSlotActions = new LinkedList<>();
+
 								for (final ISequenceElement element : elementList) {
 
 									final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
-									final Slot slot = dataTransformer.getModelEntityMap().getModelObject(portSlot, Slot.class);
-									SlotType slotType = null;
+									final Slot<?> slot = dataTransformer.getModelEntityMap().getModelObject(portSlot, Slot.class);
+									final SlotType slotType;
 									if (slot instanceof LoadSlot) {
 										final LoadSlot loadSlot = (LoadSlot) slot;
 										slotType = loadSlot.isDESPurchase() ? SlotType.DES_PURCHASE : SlotType.FOB_PURCHASE;
@@ -205,7 +211,7 @@ public class SequencesToChangeDescriptionTransformer {
 										final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 										slotType = dischargeSlot.isFOBSale() ? SlotType.FOB_SALE : SlotType.DES_SALE;
 									} else {
-										assert false;
+										throw new IllegalStateException();
 									}
 									assert slotType != null;
 
@@ -214,8 +220,19 @@ public class SequencesToChangeDescriptionTransformer {
 										slotDescriptor.setMarketName(((SpotSlot) slot).getMarket().getName());
 										slotDescriptor.setDate(YearMonth.from(slot.getWindowStart()));
 										slotDescriptor.setSlotType(slotType);
-										// TODO: This may not always be correct! Really need the PortVisit!
-										slotDescriptor.setPortName(slot.getPort().getName());
+										if (slot.getPort() != null) {
+											slotDescriptor.setPortName(slot.getPort().getName());
+										} else {
+											postSlotActions.add(slots -> {
+												if (slotType == SlotType.DES_PURCHASE) {
+													slotDescriptor.setPortName(slots.get(1).getPort().getName());
+												} else if (slotType == SlotType.FOB_SALE) {
+													slotDescriptor.setPortName(slots.get(0).getPort().getName());
+												} else {
+													throw new IllegalStateException();
+												}
+											});
+										}
 										change.getSlotDescriptors().add(slotDescriptor);
 									} else {
 										final RealSlotDescriptor slotDescriptor = AnalyticsFactory.eINSTANCE.createRealSlotDescriptor();
@@ -223,12 +240,17 @@ public class SequencesToChangeDescriptionTransformer {
 										slotDescriptor.setSlotType(slotType);
 										change.getSlotDescriptors().add(slotDescriptor);
 									}
-								}
 
+									cargoSlots.add(slot);
+								}
+								postSlotActions.forEach(a -> a.accept(cargoSlots));
 								change.setVesselAllocation(vesselDescriptor);
 
 								// TODO: Fill in details
 								PositionDescriptor positionDescriptor = AnalyticsFactory.eINSTANCE.createPositionDescriptor();
+								if (currentLastID == null || currentLastID.isEmpty()) {
+									int ii = 0;
+								}
 								positionDescriptor.setAfter(currentLastID);
 								change.setPosition(positionDescriptor); //
 								lastPositionDescriptor = positionDescriptor;
@@ -246,6 +268,9 @@ public class SequencesToChangeDescriptionTransformer {
 
 								// TODO: Fill in details
 								PositionDescriptor positionDescriptor = AnalyticsFactory.eINSTANCE.createPositionDescriptor();
+								if (currentLastID == null || currentLastID.isEmpty()) {
+									int ii = 0;
+								}
 								positionDescriptor.setAfter(currentLastID);
 								change.setPosition(positionDescriptor); //
 								lastPositionDescriptor = positionDescriptor;

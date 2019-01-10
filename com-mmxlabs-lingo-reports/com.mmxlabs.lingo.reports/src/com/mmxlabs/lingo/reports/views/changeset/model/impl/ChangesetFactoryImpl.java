@@ -7,6 +7,8 @@
 package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.*;
+import com.mmxlabs.models.lng.analytics.ChangeDescription;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -94,6 +96,10 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 				return createChangeSetVesselTypeFromString(eDataType, initialValue);
 			case ChangesetPackage.SCENARIO_RESULT:
 				return createScenarioResultFromString(eDataType, initialValue);
+			case ChangesetPackage.CHANGE_DESCRIPTION:
+				return createChangeDescriptionFromString(eDataType, initialValue);
+			case ChangesetPackage.USER_SETTINGS:
+				return createUserSettingsFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -111,6 +117,10 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 				return convertChangeSetVesselTypeToString(eDataType, instanceValue);
 			case ChangesetPackage.SCENARIO_RESULT:
 				return convertScenarioResultToString(eDataType, instanceValue);
+			case ChangesetPackage.CHANGE_DESCRIPTION:
+				return convertChangeDescriptionToString(eDataType, instanceValue);
+			case ChangesetPackage.USER_SETTINGS:
+				return convertUserSettingsToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -251,6 +261,42 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 	 * @generated
 	 */
 	public String convertScenarioResultToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ChangeDescription createChangeDescriptionFromString(EDataType eDataType, String initialValue) {
+		return (ChangeDescription)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertChangeDescriptionToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public UserSettings createUserSettingsFromString(EDataType eDataType, String initialValue) {
+		return (UserSettings)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertUserSettingsToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 

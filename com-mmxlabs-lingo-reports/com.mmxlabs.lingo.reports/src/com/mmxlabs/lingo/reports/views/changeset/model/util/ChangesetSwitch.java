@@ -10,8 +10,6 @@ import com.mmxlabs.lingo.reports.views.changeset.model.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
@@ -32,7 +30,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage
  * @generated
  */
-public class ChangesetSwitch<@Nullable T> extends Switch<T> {
+public class ChangesetSwitch<T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

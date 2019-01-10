@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.Command;
@@ -67,16 +68,18 @@ public class EvaluateSolutionSetHelper {
 
 	public void processSolution(ScheduleModel scheduleModel) {
 		if (scheduleModel != null && scheduleModel.getSchedule() != null) {
-			final BiFunction<LNGScenarioToOptimiserBridge, Injector, Command> r = (bridge, injector) -> {
+			final BiFunction<LNGScenarioToOptimiserBridge, Injector, Supplier<Command>> r = (bridge, injector) -> {
 				final ScheduleToSequencesTransformer transformer = injector.getInstance(ScheduleToSequencesTransformer.class);
 				final ISequences base = transformer.createSequences(scheduleModel.getSchedule(), bridge.getDataTransformer());
 
 				try {
 					final Schedule base_schedule = bridge.createSchedule(base, Collections.emptyMap());
-					CompoundCommand cmd = new CompoundCommand();
-					cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE, base_schedule));
-					cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
-					return cmd;
+					return () -> {
+						CompoundCommand cmd = new CompoundCommand();
+						cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE, base_schedule));
+						cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
+						return cmd;
+					};
 				} catch (final Throwable e) {
 
 				}
@@ -89,16 +92,18 @@ public class EvaluateSolutionSetHelper {
 
 	public void processSolution(final ScheduleSpecification scheduleSpecification, ScheduleModel scheduleModel) {
 		if (scheduleSpecification != null) {
-			final BiFunction<LNGScenarioToOptimiserBridge, Injector, Command> r = (bridge, injector) -> {
+			final BiFunction<LNGScenarioToOptimiserBridge, Injector, Supplier<Command>> r = (bridge, injector) -> {
 				final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
 				final ISequences base = transformer.createSequences(scheduleSpecification, bridge.getDataTransformer());
 
 				try {
-					final Schedule base_schedule = bridge.createSchedule(base, Collections.emptyMap());
-					CompoundCommand cmd = new CompoundCommand();
-					cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE, base_schedule));
-					cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
-					return cmd;
+					final Schedule baseSchedule = bridge.createSchedule(base, Collections.emptyMap());
+					return () -> {
+						CompoundCommand cmd = new CompoundCommand();
+						cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE, baseSchedule));
+						cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
+						return cmd;
+					};
 				} catch (final Throwable e) {
 
 				}
@@ -268,16 +273,18 @@ public class EvaluateSolutionSetHelper {
 		// Construct a new set of sequences for the initial state.
 		// Note: In this mode, the data transformer initial sequences are not correct as they will contain *ALL* additional data.
 
-		final BiFunction<LNGScenarioToOptimiserBridge, Injector, Command> r = (bridge, injector) -> {
+		final BiFunction<LNGScenarioToOptimiserBridge, Injector, Supplier<Command>> r = (bridge, injector) -> {
 			final ScheduleToSequencesTransformer transformer = injector.getInstance(ScheduleToSequencesTransformer.class);
 			ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(bridge.getScenarioDataProvider());
 			final ISequences base = transformer.createSequences(scheduleModel.getSchedule(), bridge.getDataTransformer());
 			try {
 				final Schedule base_schedule = bridge.createSchedule(base, Collections.emptyMap());
-				CompoundCommand cmd = new CompoundCommand();
-				cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE, base_schedule));
-				cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
-				return cmd;
+				return () -> {
+					CompoundCommand cmd = new CompoundCommand();
+					cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE, base_schedule));
+					cmd.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
+					return cmd;
+				};
 			} catch (final Throwable e) {
 
 			}

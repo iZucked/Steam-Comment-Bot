@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import javax.inject.Singleton;
 
@@ -135,7 +136,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 		for (final Pair<BaseCase, ScheduleSpecification> p : baseCases) {
 
-			final BiFunction<LNGScenarioToOptimiserBridge, Injector, Command> job = (bridge, injector) -> {
+			final BiFunction<LNGScenarioToOptimiserBridge, Injector, Supplier<Command>> job = (bridge, injector) -> {
 				final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
 				final ISequences base = transformer.createSequences(p.getSecond(), bridge.getDataTransformer());
 				Long be_pnl = null;

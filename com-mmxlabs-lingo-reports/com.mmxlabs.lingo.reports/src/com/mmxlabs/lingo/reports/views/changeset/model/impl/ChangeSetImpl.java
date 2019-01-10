@@ -23,6 +23,8 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
+import com.mmxlabs.models.lng.analytics.ChangeDescription;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
@@ -43,6 +45,8 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getChangeSetRowsToAlternativeBase <em>Change Set Rows To Alternative Base</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getCurrentMetrics <em>Current Metrics</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getChangeDescription <em>Change Description</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getUserSettings <em>User Settings</em>}</li>
  * </ul>
  *
  * @generated
@@ -197,6 +201,46 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * @ordered
 	 */
 	protected String description = DESCRIPTION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getChangeDescription() <em>Change Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getChangeDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final ChangeDescription CHANGE_DESCRIPTION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getChangeDescription() <em>Change Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getChangeDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected ChangeDescription changeDescription = CHANGE_DESCRIPTION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getUserSettings() <em>User Settings</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUserSettings()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final UserSettings USER_SETTINGS_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getUserSettings() <em>User Settings</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUserSettings()
+	 * @generated
+	 * @ordered
+	 */
+	protected UserSettings userSettings = USER_SETTINGS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -480,6 +524,48 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ChangeDescription getChangeDescription() {
+		return changeDescription;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setChangeDescription(ChangeDescription newChangeDescription) {
+		ChangeDescription oldChangeDescription = changeDescription;
+		changeDescription = newChangeDescription;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__CHANGE_DESCRIPTION, oldChangeDescription, changeDescription));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public UserSettings getUserSettings() {
+		return userSettings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setUserSettings(UserSettings newUserSettings) {
+		UserSettings oldUserSettings = userSettings;
+		userSettings = newUserSettings;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__USER_SETTINGS, oldUserSettings, userSettings));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -525,6 +611,10 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				return getCurrentMetrics();
 			case ChangesetPackage.CHANGE_SET__DESCRIPTION:
 				return getDescription();
+			case ChangesetPackage.CHANGE_SET__CHANGE_DESCRIPTION:
+				return getChangeDescription();
+			case ChangesetPackage.CHANGE_SET__USER_SETTINGS:
+				return getUserSettings();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -570,6 +660,12 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 			case ChangesetPackage.CHANGE_SET__DESCRIPTION:
 				setDescription((String)newValue);
 				return;
+			case ChangesetPackage.CHANGE_SET__CHANGE_DESCRIPTION:
+				setChangeDescription((ChangeDescription)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET__USER_SETTINGS:
+				setUserSettings((UserSettings)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -612,6 +708,12 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 			case ChangesetPackage.CHANGE_SET__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case ChangesetPackage.CHANGE_SET__CHANGE_DESCRIPTION:
+				setChangeDescription(CHANGE_DESCRIPTION_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET__USER_SETTINGS:
+				setUserSettings(USER_SETTINGS_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -644,6 +746,10 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				return currentMetrics != null;
 			case ChangesetPackage.CHANGE_SET__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+			case ChangesetPackage.CHANGE_SET__CHANGE_DESCRIPTION:
+				return CHANGE_DESCRIPTION_EDEFAULT == null ? changeDescription != null : !CHANGE_DESCRIPTION_EDEFAULT.equals(changeDescription);
+			case ChangesetPackage.CHANGE_SET__USER_SETTINGS:
+				return USER_SETTINGS_EDEFAULT == null ? userSettings != null : !USER_SETTINGS_EDEFAULT.equals(userSettings);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -668,6 +774,10 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 		result.append(altCurrentScenario);
 		result.append(", description: ");
 		result.append(description);
+		result.append(", changeDescription: ");
+		result.append(changeDescription);
+		result.append(", userSettings: ");
+		result.append(userSettings);
 		result.append(')');
 		return result.toString();
 	}

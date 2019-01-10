@@ -12,11 +12,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -59,7 +61,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 import com.mmxlabs.scheduler.optimiser.scheduling.ICustomTimeWindowTrimmer;
 
 public class ScheduleSpecificationHelper {
-	private final List<BiFunction<LNGScenarioToOptimiserBridge, Injector, Command>> jobs = new LinkedList<>();
+	private final List<BiFunction<LNGScenarioToOptimiserBridge, Injector, Supplier<Command>>> jobs = new LinkedList<>();
 	private final List<VesselAvailability> extraAvailabilities = new LinkedList<>();
 	private final List<CharterInMarketOverride> extraCharterInMarketOverrides = new LinkedList<>();
 	private final List<CharterInMarket> extraCharterInMarkets = new LinkedList<>();
@@ -94,7 +96,7 @@ public class ScheduleSpecificationHelper {
 		}
 	}
 
-	public void addJobs(BiFunction<LNGScenarioToOptimiserBridge, Injector, Command> job) {
+	public void addJobs(BiFunction<LNGScenarioToOptimiserBridge, Injector, Supplier<Command>> job) {
 		jobs.add(job);
 	}
 
@@ -228,7 +230,7 @@ public class ScheduleSpecificationHelper {
 								}
 							})//
 							.make(extraInjectorService), //
-			 
+
 					true, // evaluation only?
 					hints.toArray(new String[hints.size()]) // Hints? No Caching?
 			);
@@ -253,11 +255,11 @@ public class ScheduleSpecificationHelper {
 			ExecutorService executor = LNGScenarioChainBuilder.createExecutorService();
 			try {
 				List<Future<?>> futures = new ArrayList<>(jobs.size());
-				CompoundCommand cmd = new CompoundCommand();
+				List<Supplier<Command>> commandSuppliers = new LinkedList<>();
 				jobs.forEach(c -> futures.add(executor.submit(() -> {
-					Command cc = c.apply(bridge, injector);
+					Supplier<Command> cc = c.apply(bridge, injector);
 					if (cc != null) {
-						cmd.append(cc);
+						commandSuppliers.add(cc);
 					}
 					monitor.worked(1);
 				})));
@@ -269,8 +271,19 @@ public class ScheduleSpecificationHelper {
 						e.printStackTrace();
 					}
 				});
-				if (!cmd.isEmpty()) {
-					RunnerHelper.syncExecDisplayOptional(() -> editingDomain.getCommandStack().execute(cmd));
+				if (!commandSuppliers.isEmpty()) {
+					CommandStack commandStack = editingDomain.getCommandStack();
+					CompoundCommand cmd = new CompoundCommand();
+					for (Supplier<Command> s : commandSuppliers) {
+						Command c = s.get();
+						if (c != null) {
+							cmd.append(c);
+						}
+					}
+					RunnerHelper.syncExecDisplayOptional(() -> {
+						CommandStack commandStack1 = editingDomain.getCommandStack();
+						commandStack.execute(cmd);
+					});
 				}
 			} finally {
 				executor.shutdownNow();

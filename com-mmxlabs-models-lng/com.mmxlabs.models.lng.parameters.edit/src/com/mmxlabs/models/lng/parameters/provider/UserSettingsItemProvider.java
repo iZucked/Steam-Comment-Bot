@@ -79,6 +79,7 @@ public class UserSettingsItemProvider
 			addCleanStateOptimisationPropertyDescriptor(object);
 			addFloatingDaysLimitPropertyDescriptor(object);
 			addAdpOptimisationPropertyDescriptor(object);
+			addDualModePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -370,6 +371,28 @@ public class UserSettingsItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Dual Mode feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDualModePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UserSettings_dualMode_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_dualMode_feature", "_UI_UserSettings_type"),
+				 ParametersPackage.Literals.USER_SETTINGS__DUAL_MODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns UserSettings.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -421,6 +444,7 @@ public class UserSettingsItemProvider
 			case ParametersPackage.USER_SETTINGS__CLEAN_STATE_OPTIMISATION:
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION:
+			case ParametersPackage.USER_SETTINGS__DUAL_MODE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

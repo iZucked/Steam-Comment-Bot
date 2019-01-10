@@ -28,9 +28,11 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.models.datetime.DateTimePackage;
+import com.mmxlabs.models.lng.analytics.ChangeDescription;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -129,6 +131,20 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	private EDataType scenarioResultEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType changeDescriptionEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType userSettingsEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -318,6 +334,24 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 */
 	public EAttribute getChangeSet_Description() {
 		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getChangeSet_ChangeDescription() {
+		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getChangeSet_UserSettings() {
+		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -1054,6 +1088,24 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EDataType getChangeDescription() {
+		return changeDescriptionEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EDataType getUserSettings() {
+		return userSettingsEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ChangesetFactory getChangesetFactory() {
 		return (ChangesetFactory)getEFactoryInstance();
 	}
@@ -1091,6 +1143,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEReference(changeSetEClass, CHANGE_SET__CHANGE_SET_ROWS_TO_ALTERNATIVE_BASE);
 		createEReference(changeSetEClass, CHANGE_SET__CURRENT_METRICS);
 		createEAttribute(changeSetEClass, CHANGE_SET__DESCRIPTION);
+		createEAttribute(changeSetEClass, CHANGE_SET__CHANGE_DESCRIPTION);
+		createEAttribute(changeSetEClass, CHANGE_SET__USER_SETTINGS);
 
 		metricsEClass = createEClass(METRICS);
 		createEAttribute(metricsEClass, METRICS__PNL);
@@ -1184,6 +1238,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 
 		// Create data types
 		scenarioResultEDataType = createEDataType(SCENARIO_RESULT);
+		changeDescriptionEDataType = createEDataType(CHANGE_DESCRIPTION);
+		userSettingsEDataType = createEDataType(USER_SETTINGS);
 	}
 
 	/**
@@ -1234,6 +1290,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEReference(getChangeSet_ChangeSetRowsToAlternativeBase(), this.getChangeSetRow(), null, "changeSetRowsToAlternativeBase", null, 0, -1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSet_CurrentMetrics(), this.getMetrics(), null, "currentMetrics", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSet_Description(), ecorePackage.getEString(), "description", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSet_ChangeDescription(), this.getChangeDescription(), "changeDescription", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSet_UserSettings(), this.getUserSettings(), "userSettings", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(metricsEClass, Metrics.class, "Metrics", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMetrics_Pnl(), ecorePackage.getELong(), "pnl", null, 0, 1, Metrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1332,6 +1390,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 
 		// Initialize data types
 		initEDataType(scenarioResultEDataType, ScenarioResult.class, "ScenarioResult", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(changeDescriptionEDataType, ChangeDescription.class, "ChangeDescription", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(userSettingsEDataType, UserSettings.class, "UserSettings", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

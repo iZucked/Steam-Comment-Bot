@@ -245,6 +245,7 @@
     <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
       <details key="nonUniqueChildren" value="true"/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hasDualModeSolutions" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="portfolioBreakEvenMode"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="userSettings" eType="ecore:EClass ../../com.mmxlabs.models.lng.parameters/model/parameters.ecore#//UserSettings"
@@ -272,10 +273,34 @@
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselEvent"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SolutionOption">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="changeDescription" eType="#//ChangeDescription"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scheduleSpecification"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//ScheduleSpecification"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="scheduleModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ScheduleModel"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OptimisationResult" eSuperTypes="#//AbstractSolutionSet"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DualModeSolutionOption" eSuperTypes="#//SolutionOption">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="microBaseCase" eType="#//SolutionOptionMicroCase"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="microTargetCase" eType="#//SolutionOptionMicroCase"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SolutionOptionMicroCase">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scheduleSpecification"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//ScheduleSpecification"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scheduleModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ScheduleModel"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extraVesselAvailabilities"
+        upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarketOverrides"
+        upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//CharterInMarketOverride"
+        containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ChangeDescription">
     <eStructuralFeatures xsi:type="ecore:EReference" name="changes" upperBound="-1"
         eType="#//Change" containment="true"/>

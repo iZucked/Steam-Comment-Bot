@@ -121,7 +121,7 @@ public class LNGScenarioChainUnitFactory {
 						options.setName(name);
 						options.setUserSettings(EcoreUtil.copy(userSettings));
 						return options;
-					}, OptionalLong.empty());
+					},  false, OptionalLong.empty());
 				};
 			}
 		} else if (template instanceof LocalSearchOptimisationStage) {
@@ -189,7 +189,7 @@ public class LNGScenarioChainUnitFactory {
 						options.setUserSettings(EcoreUtil.copy(userSettings));
 						options.setName(name);
 						return options;
-					}, OptionalLong.empty());
+					}, false, OptionalLong.empty());
 				};
 			}
 		} else if (template instanceof ResetInitialSequencesStage) {

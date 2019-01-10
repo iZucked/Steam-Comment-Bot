@@ -67,8 +67,28 @@ public class SolutionOptionComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_changeDescriptionEditor(detailComposite, topClass);
+		add_scheduleSpecificationEditor(detailComposite, topClass);
 		add_scheduleModelEditor(detailComposite, topClass);
 	}
+	/**
+	 * Create the editor for the changeDescription feature on SolutionOption
+	 *
+	 * @generated
+	 */
+	protected void add_changeDescriptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SOLUTION_OPTION__CHANGE_DESCRIPTION));
+	}
+
+	/**
+	 * Create the editor for the scheduleSpecification feature on SolutionOption
+	 *
+	 * @generated
+	 */
+	protected void add_scheduleSpecificationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SOLUTION_OPTION__SCHEDULE_SPECIFICATION));
+	}
+
 	/**
 	 * Create the editor for the scheduleModel feature on SolutionOption
 	 *

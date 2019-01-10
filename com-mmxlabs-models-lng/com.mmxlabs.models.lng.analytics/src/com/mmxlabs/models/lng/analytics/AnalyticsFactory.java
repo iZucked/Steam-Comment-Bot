@@ -304,6 +304,24 @@ public interface AnalyticsFactory extends EFactory {
 	OptimisationResult createOptimisationResult();
 
 	/**
+	 * Returns a new object of class '<em>Dual Mode Solution Option</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Dual Mode Solution Option</em>'.
+	 * @generated
+	 */
+	DualModeSolutionOption createDualModeSolutionOption();
+
+	/**
+	 * Returns a new object of class '<em>Solution Option Micro Case</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Solution Option Micro Case</em>'.
+	 * @generated
+	 */
+	SolutionOptionMicroCase createSolutionOptionMicroCase();
+
+	/**
 	 * Returns a new object of class '<em>Change Description</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

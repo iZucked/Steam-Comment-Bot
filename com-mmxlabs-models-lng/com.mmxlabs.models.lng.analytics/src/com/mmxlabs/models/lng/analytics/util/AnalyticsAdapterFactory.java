@@ -217,6 +217,14 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createOptimisationResultAdapter();
 			}
 			@Override
+			public Adapter caseDualModeSolutionOption(DualModeSolutionOption object) {
+				return createDualModeSolutionOptionAdapter();
+			}
+			@Override
+			public Adapter caseSolutionOptionMicroCase(SolutionOptionMicroCase object) {
+				return createSolutionOptionMicroCaseAdapter();
+			}
+			@Override
 			public Adapter caseChangeDescription(ChangeDescription object) {
 				return createChangeDescriptionAdapter();
 			}
@@ -1077,6 +1085,34 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createOptimisationResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.DualModeSolutionOption <em>Dual Mode Solution Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.DualModeSolutionOption
+	 * @generated
+	 */
+	public Adapter createDualModeSolutionOptionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase <em>Solution Option Micro Case</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase
+	 * @generated
+	 */
+	public Adapter createSolutionOptionMicroCaseAdapter() {
 		return null;
 	}
 

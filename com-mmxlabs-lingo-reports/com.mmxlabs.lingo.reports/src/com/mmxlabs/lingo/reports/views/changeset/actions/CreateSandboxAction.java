@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
@@ -53,7 +52,6 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -62,91 +60,45 @@ public class CreateSandboxAction extends Action {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExportChangeAction.class);
 	private final ChangeSetTableGroup changeSetTableGroup;
+	private String name;
 
-	public CreateSandboxAction(final ChangeSetTableGroup changeSetTableGroup) {
+	public CreateSandboxAction(final ChangeSetTableGroup changeSetTableGroup, String name) {
 		super("Create sandbox");
 		this.changeSetTableGroup = changeSetTableGroup;
+		this.name = name;
 	}
 
 	@Override
 	public void run() {
 
-		final Map<EObject, EObject> childToBaseMapping = new HashMap<>();
-
-		// TODO: Create sandbox on base case (need mapping to original slots,markets, vessels etc)
-		// TODO: Market slots!
-		// TODO: Create better shipping bits
-		// TODO: Needs better fleet model
-		// TODO: Need to fix cargo sort order for sandbox!
-
 		final OptionAnalysisModel newModel = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
-		newModel.setName("Insertion plan");
+		if (name != null && !name.isEmpty()) {
+			newModel.setName(name);
+		} else {
+			newModel.setName("Insertion sandbox");
+		}
 
 		final Map<LoadSlot, BuyOption> buyOptions = new HashMap<>();
 		final Map<DischargeSlot, SellOption> sellOptions = new HashMap<>();
 		final Map<Pair<CharterInMarket, Integer>, ExistingCharterMarketOption> roundTripMap = new HashMap<>();
-		// Map from copy scenario so instance in original! (Thus do search once).
-		final Map<VesselAvailability, VesselAvailability> vesselAvailMap = new HashMap<>();
 		final Map<VesselAvailability, ExistingVesselAvailability> vesselAvailOptionMap = new HashMap<>();
 		final Function<VesselAvailability, ExistingVesselAvailability> availOptionComputer = (va) -> {
 			final ExistingVesselAvailability opt = AnalyticsFactory.eINSTANCE.createExistingVesselAvailability();
 			opt.setVesselAvailability(va);
-
 			newModel.getShippingTemplates().add(opt);
-
 			return opt;
 		};
-		final ScenarioResult baseScenarioResult = changeSetTableGroup.getChangeSet().getBaseScenario();
+		final ScenarioResult baseScenarioResult = changeSetTableGroup.getBaseScenario();
 		final LNGScenarioModel scenarioModel = baseScenarioResult.getTypedRoot(LNGScenarioModel.class);
 		assert scenarioModel != null;
-		final Function<VesselAvailability, VesselAvailability> availMapperComputer = (va) -> {
-
-			@NonNull
-			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
-			for (final VesselAvailability this_va : cargoModel.getVesselAvailabilities()) {
-				if (!this_va.getVessel().getName().contentEquals(va.getVessel().getName())) {
-					continue;
-				}
-				if (!java.util.Objects.equals(this_va.getCharterNumber(), va.getCharterNumber())) {
-					continue;
-				}
-				// Assume if the above is a match, then this is pretty likely to be a match,
-				return this_va;
-			}
-			return null;
-		};
 
 		final BaseCase baseCase = AnalyticsFactory.eINSTANCE.createBaseCase();
 		baseCase.setKeepExistingScenario(true);
 		baseCase.setProfitAndLoss(ScheduleModelKPIUtils.getScheduleProfitAndLoss(ScenarioModelUtil.getScheduleModel(scenarioModel).getSchedule()));
 
-		final Map<String, LoadSlot> baseLoadSlotMap = ScenarioModelUtil.getCargoModel(scenarioModel) //
-				.getLoadSlots().stream() //
-				.collect(Collectors.toMap(s -> s.getName(), s -> s));
-		final Map<String, DischargeSlot> baseDischargeSlotMap = ScenarioModelUtil.getCargoModel(scenarioModel) //
-				.getDischargeSlots().stream() //
-				.collect(Collectors.toMap(s -> s.getName(), s -> s));
-
-		final Map<String, SpotMarket> dpMarkets = ScenarioModelUtil.getSpotMarketsModel(scenarioModel) //
-				.getDesPurchaseSpotMarket().getMarkets().stream() //
-				.collect(Collectors.toMap(s -> s.getName(), s -> s));
-		final Map<String, SpotMarket> dsMarkets = ScenarioModelUtil.getSpotMarketsModel(scenarioModel) //
-				.getDesSalesSpotMarket().getMarkets().stream() //
-				.collect(Collectors.toMap(s -> s.getName(), s -> s));
-		final Map<String, SpotMarket> fsMarkets = ScenarioModelUtil.getSpotMarketsModel(scenarioModel) //
-				.getFobSalesSpotMarket().getMarkets().stream() //
-				.collect(Collectors.toMap(s -> s.getName(), s -> s));
-		final Map<String, SpotMarket> fpMarkets = ScenarioModelUtil.getSpotMarketsModel(scenarioModel) //
-				.getFobPurchasesSpotMarket().getMarkets().stream() //
-				.collect(Collectors.toMap(s -> s.getName(), s -> s));
-
-		final Map<String, CharterInMarket> charterInMarkets = ScenarioModelUtil.getSpotMarketsModel(scenarioModel) //
-				.getCharterInMarkets().stream() //
-				.collect(Collectors.toMap(s -> s.getName(), s -> s));
-
 		for (final ChangeSetTableRow row : changeSetTableGroup.getRows()) {
 			final BaseCaseRow bRow = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-			if (row.isWiringChange()) {
+			if (row.isWiringChange() || row.isVesselChange()) {
 				{
 					final ChangeSetRowData lhsData = row.getLhsAfter();
 					if (lhsData != null) {
@@ -158,9 +110,9 @@ public class CreateSandboxAction extends Action {
 									final SpotSlot spotSlot = (SpotSlot) slot;
 									final BuyMarket ref = AnalyticsFactory.eINSTANCE.createBuyMarket();
 									if (slot.isDESPurchase()) {
-										ref.setMarket(dpMarkets.get(spotSlot.getMarket().getName()));
+										ref.setMarket(spotSlot.getMarket());
 									} else {
-										ref.setMarket(fpMarkets.get(spotSlot.getMarket().getName()));
+										ref.setMarket(spotSlot.getMarket());
 									}
 									bRow.setBuyOption(ref);
 
@@ -169,7 +121,7 @@ public class CreateSandboxAction extends Action {
 								} else {
 
 									final BuyReference ref = AnalyticsFactory.eINSTANCE.createBuyReference();
-									ref.setSlot(baseLoadSlotMap.get(slot.getName()));
+									ref.setSlot(slot);
 									bRow.setBuyOption(ref);
 
 									newModel.getBuys().add(ref);
@@ -186,7 +138,7 @@ public class CreateSandboxAction extends Action {
 								final Sequence sequence = originalLoadAllocation.getSlotVisit().getSequence();
 								if (sequence != null) {
 									if (sequence.getCharterInMarket() != null) {
-										final CharterInMarket charterInMarket = charterInMarkets.get(sequence.getCharterInMarket().getName());
+										final CharterInMarket charterInMarket = sequence.getCharterInMarket();
 										final Pair<CharterInMarket, Integer> key = new Pair<CharterInMarket, Integer>(charterInMarket, sequence.getSpotIndex());
 										if (roundTripMap.containsKey(key)) {
 											final ExistingCharterMarketOption opt = roundTripMap.get(key);
@@ -202,8 +154,8 @@ public class CreateSandboxAction extends Action {
 
 									} else if (sequence.getVesselAvailability() != null) {
 										final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-										final VesselAvailability key = vesselAvailMap.computeIfAbsent(vesselAvailability, availMapperComputer);
-										final ExistingVesselAvailability opt = vesselAvailOptionMap.computeIfAbsent(key, availOptionComputer);
+										// final VesselAvailability key = vesselAvailMap.computeIfAbsent(vesselAvailability, availMapperComputer);
+										final ExistingVesselAvailability opt = vesselAvailOptionMap.computeIfAbsent(vesselAvailability, availOptionComputer);
 										bRow.setShipping(opt);
 									}
 								}
@@ -221,9 +173,9 @@ public class CreateSandboxAction extends Action {
 								final SpotSlot spotSlot = (SpotSlot) slot;
 								final SellMarket ref = AnalyticsFactory.eINSTANCE.createSellMarket();
 								if (slot.isFOBSale()) {
-									ref.setMarket(fsMarkets.get(spotSlot.getMarket().getName()));
+									ref.setMarket(spotSlot.getMarket());
 								} else {
-									ref.setMarket(dsMarkets.get(spotSlot.getMarket().getName()));
+									ref.setMarket(spotSlot.getMarket());
 								}
 								bRow.setSellOption(ref);
 
@@ -231,7 +183,7 @@ public class CreateSandboxAction extends Action {
 								sellOptions.put(slot, ref);
 							} else {
 								final SellReference ref = AnalyticsFactory.eINSTANCE.createSellReference();
-								ref.setSlot(baseDischargeSlotMap.get(slot.getName()));
+								ref.setSlot(slot);
 								bRow.setSellOption(ref);
 
 								newModel.getSells().add(ref);
@@ -240,9 +192,14 @@ public class CreateSandboxAction extends Action {
 						}
 					}
 				}
-
-				baseCase.getBaseCase().add(bRow);
-			} else if (row.isVesselChange()) {
+				if (bRow.getBuyOption() instanceof BuyMarket && bRow.getSellOption() == null) {
+					// Do not add
+				} else if (bRow.getBuyOption() == null && bRow.getSellOption() instanceof SellMarket) {
+					// Do not add
+				} else if (bRow.getBuyOption() != null || bRow.getSellOption() != null) {
+					baseCase.getBaseCase().add(bRow);
+				}
+				// } else if (row.isVesselChange()) {
 				// baseCase.getBaseCase().add(bRow);
 			}
 		}
@@ -252,7 +209,7 @@ public class CreateSandboxAction extends Action {
 		partialCase.setKeepExistingScenario(true);
 		for (final ChangeSetTableRow row : changeSetTableGroup.getRows()) {
 			final PartialCaseRow pRow = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
-			if (row.isWiringChange()) {
+			if (row.isWiringChange() || row.isVesselChange()) {
 
 				{
 					final ChangeSetRowData lhsData = row.getLhsAfter();
@@ -268,9 +225,9 @@ public class CreateSandboxAction extends Action {
 										final SpotSlot spotSlot = (SpotSlot) slot;
 										final BuyMarket ref = AnalyticsFactory.eINSTANCE.createBuyMarket();
 										if (slot.isDESPurchase()) {
-											ref.setMarket(dpMarkets.get(spotSlot.getMarket().getName()));
+											ref.setMarket(spotSlot.getMarket());
 										} else {
-											ref.setMarket(fpMarkets.get(spotSlot.getMarket().getName()));
+											ref.setMarket(spotSlot.getMarket());
 										}
 										pRow.getBuyOptions().add(ref);
 
@@ -278,7 +235,7 @@ public class CreateSandboxAction extends Action {
 										buyOptions.put(slot, ref);
 									} else {
 										final BuyReference ref = AnalyticsFactory.eINSTANCE.createBuyReference();
-										ref.setSlot(baseLoadSlotMap.get(slot.getName()));
+										ref.setSlot(slot);
 										pRow.getBuyOptions().add(ref);
 										buyOptions.put(slot, ref);
 									}
@@ -301,9 +258,9 @@ public class CreateSandboxAction extends Action {
 										final SpotSlot spotSlot = (SpotSlot) slot;
 										final SellMarket ref = AnalyticsFactory.eINSTANCE.createSellMarket();
 										if (slot.isFOBSale()) {
-											ref.setMarket(fsMarkets.get(spotSlot.getMarket().getName()));
+											ref.setMarket(spotSlot.getMarket());
 										} else {
-											ref.setMarket(dsMarkets.get(spotSlot.getMarket().getName()));
+											ref.setMarket(spotSlot.getMarket());
 										}
 										pRow.getSellOptions().add(ref);
 
@@ -311,7 +268,7 @@ public class CreateSandboxAction extends Action {
 										sellOptions.put(slot, ref);
 									} else {
 										final SellReference ref = AnalyticsFactory.eINSTANCE.createSellReference();
-										ref.setSlot(baseDischargeSlotMap.get(slot.getName()));
+										ref.setSlot(slot);
 										pRow.getSellOptions().add(ref);
 
 										newModel.getSells().add(ref);
@@ -331,7 +288,7 @@ public class CreateSandboxAction extends Action {
 							final Sequence sequence = originalLoadAllocation.getSlotVisit().getSequence();
 							if (sequence != null) {
 								if (sequence.getCharterInMarket() != null) {
-									final CharterInMarket charterInMarket = charterInMarkets.get(sequence.getCharterInMarket().getName());
+									final CharterInMarket charterInMarket = sequence.getCharterInMarket();
 									final Pair<CharterInMarket, Integer> key = new Pair<CharterInMarket, Integer>(charterInMarket, sequence.getSpotIndex());
 									if (roundTripMap.containsKey(key)) {
 										final ExistingCharterMarketOption opt = roundTripMap.get(key);
@@ -347,8 +304,8 @@ public class CreateSandboxAction extends Action {
 
 								} else if (sequence.getVesselAvailability() != null) {
 									final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-									final VesselAvailability key = vesselAvailMap.computeIfAbsent(vesselAvailability, availMapperComputer);
-									final ExistingVesselAvailability opt = vesselAvailOptionMap.computeIfAbsent(key, availOptionComputer);
+									// final VesselAvailability key = vesselAvailMap.computeIfAbsent(vesselAvailability, availMapperComputer);
+									final ExistingVesselAvailability opt = vesselAvailOptionMap.computeIfAbsent(vesselAvailability, availOptionComputer);
 									pRow.getShipping().add(opt);
 								}
 							}
@@ -360,7 +317,7 @@ public class CreateSandboxAction extends Action {
 					partialCase.getPartialCase().add(pRow);
 				}
 
-			} else if (row.isVesselChange()) {
+				// } else if (row.isVesselChange()) {
 
 				// partialCase.getPartialCase().add(pRow);
 			}
@@ -371,7 +328,7 @@ public class CreateSandboxAction extends Action {
 		try (ModelReference ref = modelRecord.aquireReference("ChangeSetView:ContextMenuManager")) {
 			final EditingDomain editingDomain = ref.getEditingDomain();
 			final CompoundCommand cmd = new CompoundCommand("Create sandbox");
-			if (true) {
+			if (false) {
 				cmd.append(AddCommand.create(editingDomain, ((LNGScenarioModel) ref.getInstance()).getAnalyticsModel(), AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels(), newModel));
 				editingDomain.getCommandStack().execute(cmd);
 			} else {
@@ -403,8 +360,9 @@ public class CreateSandboxAction extends Action {
 				} catch (IOException e) {
 
 				}
-				modelRecord.getScenarioInstance().setReadonly(readOnly);
-				updates.forEach(r -> r.run());
+				// Re-eanble read-only
+				// modelRecord.getScenarioInstance().setReadonly(readOnly);
+				// updates.forEach(r -> r.run());
 			}
 		}
 	}

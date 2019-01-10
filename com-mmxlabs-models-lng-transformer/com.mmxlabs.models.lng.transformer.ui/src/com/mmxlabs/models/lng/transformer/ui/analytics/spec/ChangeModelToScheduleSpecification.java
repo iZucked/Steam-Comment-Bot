@@ -13,15 +13,12 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.management.RuntimeErrorException;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.CargoChange;
 import com.mmxlabs.models.lng.analytics.Change;
 import com.mmxlabs.models.lng.analytics.ChangeDescription;
@@ -328,6 +325,7 @@ public class ChangeModelToScheduleSpecification {
 					newSlotSpecification.setSlot(slot);
 					newEvents.add(newSlotSpecification);
 				}
+				
 				if (vesselAllocation == null) {
 					// Non-shipped.
 					final NonShippedCargoSpecification nonShippedCargoSpecification = CargoFactory.eINSTANCE.createNonShippedCargoSpecification();
@@ -522,6 +520,11 @@ public class ChangeModelToScheduleSpecification {
 		}
 		
 		if (!leftOvers .isEmpty()) {
+			// We got here because; it looks like the period transformer has extracted all cargoes off the vessel and put two on.
+			// Thus the full sequence has multiple carfoes but the positional descriptor does not know about removed cargoes.
+			// Maybe we need to run on FULL sequences not just the period?
+			
+			
 			Iterator<BooleanSupplier> itr = leftOvers.iterator();
 			while (itr.hasNext()) {
 				BooleanSupplier supplier = itr.next();

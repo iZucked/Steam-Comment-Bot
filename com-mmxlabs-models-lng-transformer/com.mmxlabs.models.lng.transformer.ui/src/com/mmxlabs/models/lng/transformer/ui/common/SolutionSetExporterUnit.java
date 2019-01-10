@@ -11,22 +11,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.OptionalLong;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jdt.	annotation.NonNull;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.DualModeSolutionOption;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
@@ -39,6 +49,8 @@ import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.ui.analytics.TraderBasedInsertionHelper;
+import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ChangeModelToScheduleSpecification;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
@@ -53,7 +65,7 @@ public class SolutionSetExporterUnit {
 	private static final Logger LOG = LoggerFactory.getLogger(SolutionSetExporterUnit.class);
 
 	public static IChainLink exportMultipleSolutions(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge,
-			final Supplier<AbstractSolutionSet> solutionSetFactory, final OptionalLong portfolioBreakEvenTarget) {
+			final Supplier<AbstractSolutionSet> solutionSetFactory, final boolean dualPNLMode, final OptionalLong portfolioBreakEvenTarget) {
 
 		final IChainLink link = new IChainLink() {
 
@@ -61,6 +73,14 @@ public class SolutionSetExporterUnit {
 			public @NonNull IMultiStateResult run(@NonNull final SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState, @NonNull final IProgressMonitor monitor) {
 				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = inputState.getSolutions();
 
+				SequencesToChangeDescriptionTransformer changeTransformer = new SequencesToChangeDescriptionTransformer(scenarioToOptimiserBridge.getFullDataTransformer());
+				ChangeModelToScheduleSpecification specificationTransformer = new ChangeModelToScheduleSpecification(scenarioToOptimiserBridge.getScenarioDataProvider(), null);
+				// build this on the raw transformed seq
+				{
+					ISequences s = scenarioToOptimiserBridge.getTransformedOriginalRawSequences(initialSequences.getSequencesPair().getFirst());
+
+					changeTransformer.prepareFromBase(s);
+				}
 				solutions.add(0, initialSequences.getSequencesPair());
 				monitor.beginTask("Export", solutions.size());
 
@@ -69,7 +89,17 @@ public class SolutionSetExporterUnit {
 				SequencesUndoSpotHelper spotUndoHelper = injector.getInstance(SequencesUndoSpotHelper.class);
 
 				try {
+
+					TraderBasedInsertionHelper helper = null;
+					if (dualPNLMode) {
+						helper = new TraderBasedInsertionHelper(scenarioToOptimiserBridge.getScenarioDataProvider(), scenarioToOptimiserBridge);
+					}
+					if (helper != null) {
+						helper.prepareFromBase(solutions.get(0).getFirst());
+					}
+
 					final AbstractSolutionSet plan = solutionSetFactory.get();
+					plan.setHasDualModeSolutions(dualPNLMode);
 					boolean firstSolution = true;
 					for (final NonNullPair<ISequences, Map<String, Object>> changeSet : solutions) {
 						if (changeSet.getFirst() == null) {
@@ -110,9 +140,25 @@ public class SolutionSetExporterUnit {
 								}
 							}
 
-							final SolutionOption option = AnalyticsFactory.eINSTANCE.createSolutionOption();
+							final SolutionOption option = helper == null ? AnalyticsFactory.eINSTANCE.createSolutionOption() : AnalyticsFactory.eINSTANCE.createDualModeSolutionOption();
+
+							ISequences s = scenarioToOptimiserBridge.getTransformedOriginalRawSequences(changeSet.getFirst());
+							option.setChangeDescription(changeTransformer.generateChangeDescription(s));
+							try {
+								Pair<ScheduleSpecification, ExtraDataProvider> p = specificationTransformer.buildScheduleSpecification(option.getChangeDescription());
+								option.setScheduleSpecification(p.getFirst());
+								plan.getExtraSlots().addAll(p.getSecond().extraLoads);
+								plan.getExtraSlots().addAll(p.getSecond().extraDischarges);
+							} catch (Throwable t) {
+								changeTransformer.generateChangeDescription(changeSet.getFirst());
+
+							}
+
 							option.setScheduleModel(scheduleModel);
 
+							if (!firstSolution && helper != null) {
+								helper.processSolution((DualModeSolutionOption) option, sequences, scheduleModel);
+							}
 							if (firstSolution) {
 								firstSolution = false;
 								plan.setBaseOption(option);
@@ -125,7 +171,20 @@ public class SolutionSetExporterUnit {
 
 						monitor.worked(1);
 					}
+					if (helper != null) {
 
+						List<LoadSlot> extraLoads = plan.getExtraSlots().stream() //
+								.filter(s -> s instanceof LoadSlot) //
+								.map(s -> (LoadSlot) s) //
+								.collect(Collectors.toList());
+						List<DischargeSlot> extraDischarges = plan.getExtraSlots().stream() //
+								.filter(s -> s instanceof DischargeSlot) //
+								.map(s -> (DischargeSlot) s) //
+								.collect(Collectors.toList());
+						UserSettings userSettings = EcoreUtil.copy(plan.getUserSettings());
+						EditingDomain originalEditingDomain = scenarioToOptimiserBridge.getScenarioDataProvider().getEditingDomain();
+						helper.generateResults(scenarioToOptimiserBridge.getScenarioInstance(), userSettings, originalEditingDomain, extraLoads, extraDischarges);
+					}
 					RunnerHelper.syncExecDisplayOptional(() -> {
 						final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioToOptimiserBridge.getScenarioDataProvider());
 						analyticsModel.getOptimisations().add(plan);
