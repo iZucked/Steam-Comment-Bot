@@ -45,30 +45,30 @@
 		</FleetBasedColumn>
 	</extension>
 	<extension point="com.mmxlabs.lingo.reports.ScheduleBasedColumn">
-		<ScheduleBasedColumn
-			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group_pnldelta">
-		</ScheduleBasedColumn>
-		<ScheduleBasedColumn
-			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation">
-		</ScheduleBasedColumn>
-		<ScheduleBasedColumn
-			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group">
-		</ScheduleBasedColumn>
-		<ScheduleBasedColumn
-			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring">
-		</ScheduleBasedColumn>
-		<ScheduleBasedColumn
-			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_lateness">
-		</ScheduleBasedColumn>
-		<ScheduleBasedColumn
-			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_capacity_violation">
-		</ScheduleBasedColumn>
+<!-- 		<ScheduleBasedColumn -->
+<!-- 			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory" -->
+<!-- 			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group_pnldelta"> -->
+<!-- 		</ScheduleBasedColumn> -->
+<!-- 		<ScheduleBasedColumn -->
+<!-- 			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory" -->
+<!-- 			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation"> -->
+<!-- 		</ScheduleBasedColumn> -->
+<!-- 		<ScheduleBasedColumn -->
+<!-- 			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory" -->
+<!-- 			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group"> -->
+<!-- 		</ScheduleBasedColumn> -->
+<!-- 		<ScheduleBasedColumn -->
+<!-- 			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory" -->
+<!-- 			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring"> -->
+<!-- 		</ScheduleBasedColumn> -->
+<!-- 		<ScheduleBasedColumn -->
+<!-- 			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory" -->
+<!-- 			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_lateness"> -->
+<!-- 		</ScheduleBasedColumn> -->
+<!-- 		<ScheduleBasedColumn -->
+<!-- 			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory" -->
+<!-- 			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_capacity_violation"> -->
+<!-- 		</ScheduleBasedColumn> -->
 		<ScheduleBasedColumn
 			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
 			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevvessel">
