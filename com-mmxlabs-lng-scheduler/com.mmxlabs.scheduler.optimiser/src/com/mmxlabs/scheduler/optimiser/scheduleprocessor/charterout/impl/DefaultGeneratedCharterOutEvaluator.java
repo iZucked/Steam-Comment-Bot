@@ -402,7 +402,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// now update port slot
 		final GeneratedCharterOutVesselEventPortSlot charterOutPortSlot = new GeneratedCharterOutVesselEventPortSlot(
 
-				/* ID */ String.format("gco-%s-%s", originalBallast.getOptions().getFromPortSlot().getPort(), originalBallast.getOptions().getToPortSlot().getPort()), //
+				/* ID */ String.format("gco-%s-%s", originalBallast.getOptions().getFromPortSlot().getId(), originalBallast.getOptions().getToPortSlot().getId()), //
 				/* time window */ null, //
 				/* Start / End Port */ charterOutOption.getPort(), //
 				/* Hire Revenue */ charterOutOption.getMaxCharteringRevenue(), //
