@@ -40,7 +40,9 @@ public class LNGScenarioRunnerUtils {
 	}
 
 	/**
-	 * Use the {@link IParameterModesRegistry} to extend the existing settings object.
+	 * Use the {@link IParameterModesRegistry} to extend and customise the existing settings object.
+	 * 
+	 * Extending adds in e.g. client specific constraints. Customising is intended to change settings such as iterations.
 	 * 
 	 * @param optimiserSettings
 	 * @return

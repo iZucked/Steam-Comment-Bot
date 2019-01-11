@@ -9,6 +9,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 
 /**
+ * An extender is intended to add in client specific constraints, fitnesses that should always be present in an optimisation.
  */
 public interface IParameterModeExtender {
 
