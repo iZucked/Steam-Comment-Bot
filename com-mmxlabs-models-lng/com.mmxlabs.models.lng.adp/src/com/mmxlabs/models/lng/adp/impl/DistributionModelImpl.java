@@ -340,7 +340,7 @@ public abstract class DistributionModelImpl extends MMXObjectImpl implements Dis
 		 if (ADPPackage.eINSTANCE.getDistributionModel_VolumePerCargo() == feature) {
 			final Contract c = getContract();
 			if (c != null) {
-				return new DelegateInformation(null, null, c.getMaxQuantity());
+				return new DelegateInformation(null, null, (double) c.getMaxQuantity());
 			}
 		} else if (ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_UNIT == feature) {
 			Contract c = getContract();
