@@ -20,7 +20,7 @@ import com.mmxlabs.rcp.common.internal.Activator;
  * @author Simon Goodall
  * 
  */
-public class CopyGridToHtmlClipboardAction extends Action {
+public class CopyGridToHtmlClipboardAction extends Action{
 
 	private CopyGridToHtmlStringUtil util;
 	private Runnable preOperation;
@@ -85,5 +85,4 @@ public class CopyGridToHtmlClipboardAction extends Action {
 	public void setShowBackgroundColours(boolean showBackgroundColours) {
 		util.setShowBackgroundColours(showBackgroundColours);
 	}
-
 }

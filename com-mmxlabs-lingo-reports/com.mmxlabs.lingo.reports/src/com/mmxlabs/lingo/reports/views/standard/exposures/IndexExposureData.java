@@ -12,9 +12,7 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.types.DealType;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**

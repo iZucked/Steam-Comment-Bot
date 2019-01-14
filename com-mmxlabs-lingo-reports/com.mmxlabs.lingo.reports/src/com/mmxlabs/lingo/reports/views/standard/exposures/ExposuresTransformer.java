@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures.ValueMode;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -20,7 +19,6 @@ import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.types.DealType;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ExposuresTransformer {

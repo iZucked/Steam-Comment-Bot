@@ -15,6 +15,7 @@ import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -37,6 +38,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -73,6 +75,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -84,6 +87,7 @@ import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
+import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
@@ -593,7 +597,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	protected GridTableViewer viewer;
 
 	private Action packColumnsAction;
-	private Action copyTableAction;
+	private CopyGridToHtmlClipboardAction copyTableAction;
 
 	private final String helpContextId;
 
@@ -739,6 +743,61 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	private void makeActions() {
 		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false, () -> setCopyPasteMode(true), () -> setCopyPasteMode(false));
+		//copyTableAction.setShowBackgroundColours(true);
+		
+		IAdditionalAttributeProvider aap = new IAdditionalAttributeProvider() {
+			
+			@Override
+			public @NonNull String getTopLeftCellUpperText() {
+				return "";
+			}
+			
+			@Override
+			public @NonNull String getTopLeftCellText() {
+				return "";
+			}
+			
+			@Override
+			public @NonNull String getTopLeftCellLowerText() {
+				return "";
+			}
+			
+			@Override
+			public @NonNull String @Nullable [] getAdditionalRowHeaderAttributes(@NonNull GridItem item) {
+				return null;
+			}
+			
+			@Override
+			public @NonNull String @Nullable [] getAdditionalPreRows() {
+				return null;
+			}
+			
+			@Override
+			public @NonNull String @Nullable [] getAdditionalHeaderAttributes(GridColumn column) {
+				return null;
+			}
+			
+			@Override
+			public @NonNull String @Nullable [] getAdditionalAttributes(@NonNull GridItem item, int columnIdx) {
+				final List<String> res = new ArrayList<String>();
+				
+				if (item.getData() instanceof Row) {
+					final Row row = (Row) item.getData();
+					final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
+					if (openSlotAllocation != null) {
+						res.add("bgcolor = '#AAD1B7'");
+					}
+					final OpenSlotAllocation odsa = row.getOpenDischargeSlotAllocation();
+					if (odsa != null) {
+						res.add("bgcolor = '#FBD4B9'");
+					}
+				}
+				
+				return res.toArray(new String[res.size()]);
+			}
+		};
+		copyTableAction.setAdditionalAttributeProvider(aap);
+		
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
 
