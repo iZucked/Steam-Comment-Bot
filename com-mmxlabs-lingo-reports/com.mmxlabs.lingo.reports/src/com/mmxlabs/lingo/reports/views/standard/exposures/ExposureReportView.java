@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures.ValueMode;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -536,4 +537,48 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 		return result;
 	}
+	/*
+	private Regions getRegion(final Slot slot) {
+		
+		final Port port = slot.getPort();
+		
+		if (port != null) {
+			final String country = port.getLocation().getCountry().toLowerCase();
+			switch(country) {
+			case "japan":
+			case "korea":
+			case "china":
+			case "taiwan":
+				return Regions.JKCT;
+			case "spain":
+				return Regions.MED;
+			case "india":
+			case "pakistan":
+			case "bangladesh":
+				return Regions.IND;
+			case "kuwait":
+				return Regions.ME;
+			case "belgium":
+				return Regions.NWE;
+			default:
+				return Regions.Other;
+			}
+		}
+		return Regions.Other;
+	}
+	
+	private enum Regions{
+		JKCT("JKCT"), MED("Med"), IND("India"), ME("Middle East"), NWE("North West Europe"), Other("Other");
+		
+		private String name;
+
+		private Regions(final String name) {
+			this.name = name;
+		}
+
+		@Override
+		public String toString() {
+			return name;
+		}
+	}*/
 }
