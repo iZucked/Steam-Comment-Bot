@@ -830,7 +830,7 @@ public class CompareViewTests {
 					// table.setOptions(EcoreUtil.copy(diffOptions));
 					// selectedDataProvider, pinned, others.iterator().next(), table, result.rootObjects, result.equivalancesMap);
 					final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
-					final ChangeSetRoot root = transformer.createDataModel(selectedDataProvider, result.equivalancesMap, table, pinnedResult, otherResult, new NullProgressMonitor());
+					final ChangeSetRoot root = transformer.createDataModel( result.equivalancesMap, table, pinnedResult, otherResult, new NullProgressMonitor());
 
 					resultChecker.accept(root);
 

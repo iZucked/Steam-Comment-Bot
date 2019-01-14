@@ -55,7 +55,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ScenarioComparisonTransformer {
 
-	public ChangeSetRoot createDataModel(final ISelectedDataProvider selectedDataProvider, final Map<EObject, Set<EObject>> equivalancesMap, @NonNull final Table table,
+	public ChangeSetRoot createDataModel(  final Map<EObject, Set<EObject>> equivalancesMap, @NonNull final Table table,
 			@NonNull final ScenarioResult from, @NonNull final ScenarioResult to, final IProgressMonitor monitor) {
 		monitor.beginTask("Opening change sets", 1);
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
@@ -115,9 +115,9 @@ public class ScenarioComparisonTransformer {
 				for (final CycleGroup cycleGroup : table.getCycleGroups()) {
 
 					// Before
-					Set<EObject> beforeTargets = new LinkedHashSet<EObject>();
+					Set<EObject> beforeTargets = new LinkedHashSet< >();
 					beforeTargets.addAll(processCycleGroup(cycleGroup, 0));
-					Set<EObject> afterTargets = new LinkedHashSet<EObject>();
+					Set<EObject> afterTargets = new LinkedHashSet< >();
 					afterTargets.addAll(processCycleGroup(cycleGroup, 1));
 
 					// Generate the row data

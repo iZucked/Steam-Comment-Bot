@@ -163,7 +163,7 @@ public class ChangeSetView extends ViewPart {
 		public final Collection<Slot> allTargetSlots = new HashSet<>();
 
 		public final SortMode displaySortMode;
-		public Consumer<ChangeSetTableRoot> postProcess = (cs) -> {
+		public Consumer<ChangeSetTableRoot> postProcess = cs -> {
 		};
 
 		public ViewState(final ChangeSetRoot root, final SortMode displaySortMode) {
@@ -232,7 +232,7 @@ public class ChangeSetView extends ViewPart {
 					scheduleDiffUtils.setCheckSpotMarketDifferences(true);
 					scheduleDiffUtils.setCheckNextPortDifferences(true);
 					final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
-					final ChangeSetRoot newRoot = transformer.createDataModel(selectedDataProvider, equivalancesMap, table, pin, other, monitor);
+					final ChangeSetRoot newRoot = transformer.createDataModel(equivalancesMap, table, pin, other, monitor);
 
 					return new ViewState(newRoot, SortMode.BY_GROUP);
 				}, null);
@@ -470,7 +470,7 @@ public class ChangeSetView extends ViewPart {
 						ChangeSetView.this.setNewDataData(pin, (monitor, targetSlotId) -> {
 
 							final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
-							final ChangeSetRoot newRoot = transformer.createDataModel(selectedDataProvider, result.equivalancesMap, table, pin, other, monitor);
+							final ChangeSetRoot newRoot = transformer.createDataModel(result.equivalancesMap, table, pin, other, monitor);
 
 							return new ViewState(newRoot, SortMode.BY_GROUP);
 						}, false, null);

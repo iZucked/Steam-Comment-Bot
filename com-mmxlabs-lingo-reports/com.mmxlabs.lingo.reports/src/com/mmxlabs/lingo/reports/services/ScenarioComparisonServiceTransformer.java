@@ -28,8 +28,10 @@ import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
+import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleDiffProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleGroupUtils;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.IDiffProcessor;
+import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.StructuralDifferencesProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -206,6 +208,10 @@ public class ScenarioComparisonServiceTransformer {
 				table.setPinnedScenario(null);
 
 				diffProcessors.clear();
+				diffProcessors.add(new CycleDiffProcessor(new LinkedList<>()));
+
+				diffProcessors.add(new StructuralDifferencesProcessor(scheduleDiffUtils));
+
 /** 2019-01 disable diff processors
 				// Also if number of scenarios is 0 or 1
 				final boolean enableDiffTools = LicenseFeatures.isPermitted("features:difftools");
