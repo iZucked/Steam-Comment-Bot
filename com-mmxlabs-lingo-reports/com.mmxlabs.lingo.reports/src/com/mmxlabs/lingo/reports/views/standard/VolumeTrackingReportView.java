@@ -44,7 +44,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  * @author Simon McGregor
  */
 public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrackingReportView.VolumeData> {
-	private static final Month DEFAULT_MONTH = Month.OCTOBER;
+	private static final Month DEFAULT_MONTH = Month.JANUARY;
 
 	private final Pair<Year, Year> dateRange = new Pair<>();
 
