@@ -44,7 +44,7 @@ public class InsertionPlanTransformer {
 				final LNGScenarioModel scenarioModel = (LNGScenarioModel) analyticsModel.eContainer();
 				if (scenarioModel.getScheduleModel().getSchedule() == null) {
 					throw new ScenarioNotEvaluatedException("Unable to perform comparison, scenario needs to be evaluated");
-				}				
+				}
 				base = new ScenarioResult(scenarioInstance, scenarioModel.getScheduleModel());
 
 				first = false;

@@ -112,6 +112,10 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.MTM_MODEL: return createMTMModel();
 			case AnalyticsPackage.MTM_RESULT: return createMTMResult();
 			case AnalyticsPackage.MTM_ROW: return createMTMRow();
+			case AnalyticsPackage.BREAK_EVEN_ANALYSIS_MODEL: return createBreakEvenAnalysisModel();
+			case AnalyticsPackage.BREAK_EVEN_ANALYSIS_ROW: return createBreakEvenAnalysisRow();
+			case AnalyticsPackage.BREAK_EVEN_ANALYSIS_RESULT_SET: return createBreakEvenAnalysisResultSet();
+			case AnalyticsPackage.BREAK_EVEN_ANALYSIS_RESULT: return createBreakEvenAnalysisResult();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -612,6 +616,46 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public MTMRow createMTMRow() {
 		MTMRowImpl mtmRow = new MTMRowImpl();
 		return mtmRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BreakEvenAnalysisModel createBreakEvenAnalysisModel() {
+		BreakEvenAnalysisModelImpl breakEvenAnalysisModel = new BreakEvenAnalysisModelImpl();
+		return breakEvenAnalysisModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BreakEvenAnalysisRow createBreakEvenAnalysisRow() {
+		BreakEvenAnalysisRowImpl breakEvenAnalysisRow = new BreakEvenAnalysisRowImpl();
+		return breakEvenAnalysisRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BreakEvenAnalysisResultSet createBreakEvenAnalysisResultSet() {
+		BreakEvenAnalysisResultSetImpl breakEvenAnalysisResultSet = new BreakEvenAnalysisResultSetImpl();
+		return breakEvenAnalysisResultSet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BreakEvenAnalysisResult createBreakEvenAnalysisResult() {
+		BreakEvenAnalysisResultImpl breakEvenAnalysisResult = new BreakEvenAnalysisResultImpl();
+		return breakEvenAnalysisResult;
 	}
 
 	/**

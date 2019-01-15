@@ -1146,6 +1146,98 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BreakEvenAnalysisModelItemProvider breakEvenAnalysisModelItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBreakEvenAnalysisModelAdapter() {
+		if (breakEvenAnalysisModelItemProvider == null) {
+			breakEvenAnalysisModelItemProvider = new BreakEvenAnalysisModelItemProvider(this);
+		}
+
+		return breakEvenAnalysisModelItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BreakEvenAnalysisRowItemProvider breakEvenAnalysisRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBreakEvenAnalysisRowAdapter() {
+		if (breakEvenAnalysisRowItemProvider == null) {
+			breakEvenAnalysisRowItemProvider = new BreakEvenAnalysisRowItemProvider(this);
+		}
+
+		return breakEvenAnalysisRowItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResultSet} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BreakEvenAnalysisResultSetItemProvider breakEvenAnalysisResultSetItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResultSet}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBreakEvenAnalysisResultSetAdapter() {
+		if (breakEvenAnalysisResultSetItemProvider == null) {
+			breakEvenAnalysisResultSetItemProvider = new BreakEvenAnalysisResultSetItemProvider(this);
+		}
+
+		return breakEvenAnalysisResultSetItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BreakEvenAnalysisResultItemProvider breakEvenAnalysisResultItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBreakEvenAnalysisResultAdapter() {
+		if (breakEvenAnalysisResultItemProvider == null) {
+			breakEvenAnalysisResultItemProvider = new BreakEvenAnalysisResultItemProvider(this);
+		}
+
+		return breakEvenAnalysisResultItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SolutionOption} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1421,6 +1513,10 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (mtmModelItemProvider != null) mtmModelItemProvider.dispose();
 		if (mtmResultItemProvider != null) mtmResultItemProvider.dispose();
 		if (mtmRowItemProvider != null) mtmRowItemProvider.dispose();
+		if (breakEvenAnalysisModelItemProvider != null) breakEvenAnalysisModelItemProvider.dispose();
+		if (breakEvenAnalysisRowItemProvider != null) breakEvenAnalysisRowItemProvider.dispose();
+		if (breakEvenAnalysisResultSetItemProvider != null) breakEvenAnalysisResultSetItemProvider.dispose();
+		if (breakEvenAnalysisResultItemProvider != null) breakEvenAnalysisResultItemProvider.dispose();
 	}
 
 }

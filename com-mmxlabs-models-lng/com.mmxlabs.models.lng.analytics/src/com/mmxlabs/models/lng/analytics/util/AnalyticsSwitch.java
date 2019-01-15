@@ -342,6 +342,7 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 			case AnalyticsPackage.CHANGE_DESCRIPTION: {
 				ChangeDescription changeDescription = (ChangeDescription)theEObject;
 				T result = caseChangeDescription(changeDescription);
+				if (result == null) result = caseChangeSource(changeDescription);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -463,6 +464,39 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 			case AnalyticsPackage.MTM_ROW: {
 				MTMRow mtmRow = (MTMRow)theEObject;
 				T result = caseMTMRow(mtmRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.CHANGE_SOURCE: {
+				IChangeSource changeSource = (IChangeSource)theEObject;
+				T result = caseChangeSource(changeSource);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.BREAK_EVEN_ANALYSIS_MODEL: {
+				BreakEvenAnalysisModel breakEvenAnalysisModel = (BreakEvenAnalysisModel)theEObject;
+				T result = caseBreakEvenAnalysisModel(breakEvenAnalysisModel);
+				if (result == null) result = caseAbstractAnalysisModel(breakEvenAnalysisModel);
+				if (result == null) result = caseNamedObject(breakEvenAnalysisModel);
+				if (result == null) result = caseMMXObject(breakEvenAnalysisModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.BREAK_EVEN_ANALYSIS_ROW: {
+				BreakEvenAnalysisRow breakEvenAnalysisRow = (BreakEvenAnalysisRow)theEObject;
+				T result = caseBreakEvenAnalysisRow(breakEvenAnalysisRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.BREAK_EVEN_ANALYSIS_RESULT_SET: {
+				BreakEvenAnalysisResultSet breakEvenAnalysisResultSet = (BreakEvenAnalysisResultSet)theEObject;
+				T result = caseBreakEvenAnalysisResultSet(breakEvenAnalysisResultSet);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.BREAK_EVEN_ANALYSIS_RESULT: {
+				BreakEvenAnalysisResult breakEvenAnalysisResult = (BreakEvenAnalysisResult)theEObject;
+				T result = caseBreakEvenAnalysisResult(breakEvenAnalysisResult);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1247,6 +1281,81 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseMTMRow(MTMRow object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Change Source</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Change Source</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseChangeSource(IChangeSource object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Break Even Analysis Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Break Even Analysis Model</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBreakEvenAnalysisModel(BreakEvenAnalysisModel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Break Even Analysis Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Break Even Analysis Row</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBreakEvenAnalysisRow(BreakEvenAnalysisRow object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Break Even Analysis Result Set</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Break Even Analysis Result Set</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBreakEvenAnalysisResultSet(BreakEvenAnalysisResultSet object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Break Even Analysis Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Break Even Analysis Result</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBreakEvenAnalysisResult(BreakEvenAnalysisResult object) {
 		return null;
 	}
 

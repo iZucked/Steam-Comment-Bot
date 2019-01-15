@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView"
+            icon="icons/sandbox.gif"
+            id="com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView"
+            name="Sandbox"
+            restorable="true">
+      </view>
+      <view
+            class="com.mmxlabs.models.lng.analytics.ui.views.breakeven.BreakEvenModellerView"
+            icon="icons/sandbox.gif"
+            id="com.mmxlabs.models.lng.analytics.ui.views.breakeven.BreakEvenModellerView"
+            name="Break-Even Sandbox"
+            restorable="true">
+      </view>
+   </extension>
+</plugin>

@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;

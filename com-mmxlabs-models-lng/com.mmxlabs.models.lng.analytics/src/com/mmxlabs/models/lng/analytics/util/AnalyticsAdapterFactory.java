@@ -301,6 +301,26 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createMTMRowAdapter();
 			}
 			@Override
+			public Adapter caseChangeSource(IChangeSource object) {
+				return createChangeSourceAdapter();
+			}
+			@Override
+			public Adapter caseBreakEvenAnalysisModel(BreakEvenAnalysisModel object) {
+				return createBreakEvenAnalysisModelAdapter();
+			}
+			@Override
+			public Adapter caseBreakEvenAnalysisRow(BreakEvenAnalysisRow object) {
+				return createBreakEvenAnalysisRowAdapter();
+			}
+			@Override
+			public Adapter caseBreakEvenAnalysisResultSet(BreakEvenAnalysisResultSet object) {
+				return createBreakEvenAnalysisResultSetAdapter();
+			}
+			@Override
+			public Adapter caseBreakEvenAnalysisResult(BreakEvenAnalysisResult object) {
+				return createBreakEvenAnalysisResultAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -1057,6 +1077,76 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMTMRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.scenario.service.ui.dnd.IChangeSource <em>Change Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.scenario.service.ui.dnd.IChangeSource
+	 * @generated
+	 */
+	public Adapter createChangeSourceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel <em>Break Even Analysis Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel
+	 * @generated
+	 */
+	public Adapter createBreakEvenAnalysisModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow <em>Break Even Analysis Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow
+	 * @generated
+	 */
+	public Adapter createBreakEvenAnalysisRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResultSet <em>Break Even Analysis Result Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResultSet
+	 * @generated
+	 */
+	public Adapter createBreakEvenAnalysisResultSetAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult <em>Break Even Analysis Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult
+	 * @generated
+	 */
+	public Adapter createBreakEvenAnalysisResultAdapter() {
 		return null;
 	}
 

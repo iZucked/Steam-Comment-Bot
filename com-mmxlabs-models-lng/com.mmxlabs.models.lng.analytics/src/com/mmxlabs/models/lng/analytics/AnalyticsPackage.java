@@ -126,13 +126,22 @@ public interface AnalyticsPackage extends EPackage {
 	int ANALYTICS_MODEL__MTM_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Breakeven Models</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYTICS_MODEL__BREAKEVEN_MODELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYTICS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int ANALYTICS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}' class.
@@ -2290,13 +2299,32 @@ s	 * <!-- end-user-doc -->
 	int SOLUTION_OPTION_MICRO_CASE_FEATURE_COUNT = 4;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.scenario.service.ui.dnd.IChangeSource <em>Change Source</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.scenario.service.ui.dnd.IChangeSource
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChangeSource()
+	 * @generated
+	 */
+	int CHANGE_SOURCE = 56;
+
+	/**
+	 * The number of structural features of the '<em>Change Source</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SOURCE_FEATURE_COUNT = 0;
+
+	/**
 	 * The feature id for the '<em><b>Changes</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_DESCRIPTION__CHANGES = 0;
+	int CHANGE_DESCRIPTION__CHANGES = CHANGE_SOURCE_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Change Description</em>' class.
@@ -2305,7 +2333,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_DESCRIPTION_FEATURE_COUNT = 1;
+	int CHANGE_DESCRIPTION_FEATURE_COUNT = CHANGE_SOURCE_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Change</em>' class.
@@ -3142,6 +3170,271 @@ s	 * <!-- end-user-doc -->
 	int MTM_ROW_FEATURE_COUNT = 9;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisModelImpl <em>Break Even Analysis Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisModelImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisModel()
+	 * @generated
+	 */
+	int BREAK_EVEN_ANALYSIS_MODEL = 57;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_MODEL__EXTENSIONS = ABSTRACT_ANALYSIS_MODEL__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_MODEL__NAME = ABSTRACT_ANALYSIS_MODEL__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Buys</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_MODEL__BUYS = ABSTRACT_ANALYSIS_MODEL__BUYS;
+
+	/**
+	 * The feature id for the '<em><b>Sells</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_MODEL__SELLS = ABSTRACT_ANALYSIS_MODEL__SELLS;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Templates</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_MODEL__SHIPPING_TEMPLATES = ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES;
+
+	/**
+	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_MODEL__ROWS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Markets</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_MODEL__MARKETS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Break Even Analysis Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_MODEL_FEATURE_COUNT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisRowImpl <em>Break Even Analysis Row</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisRowImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisRow()
+	 * @generated
+	 */
+	int BREAK_EVEN_ANALYSIS_ROW = 58;
+
+	/**
+	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_ROW__BUY_OPTION = 0;
+
+	/**
+	 * The feature id for the '<em><b>Sell Option</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_ROW__SELL_OPTION = 1;
+
+	/**
+	 * The feature id for the '<em><b>Shipping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_ROW__SHIPPING = 2;
+
+	/**
+	 * The feature id for the '<em><b>Lhs Results</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_ROW__LHS_RESULTS = 3;
+
+	/**
+	 * The feature id for the '<em><b>Rhs Results</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_ROW__RHS_RESULTS = 4;
+
+	/**
+	 * The feature id for the '<em><b>Lhs Based On</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_ROW__LHS_BASED_ON = 5;
+
+	/**
+	 * The feature id for the '<em><b>Rhs Based On</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_ROW__RHS_BASED_ON = 6;
+
+	/**
+	 * The number of structural features of the '<em>Break Even Analysis Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_ROW_FEATURE_COUNT = 7;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisResultSetImpl <em>Break Even Analysis Result Set</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisResultSetImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResultSet()
+	 * @generated
+	 */
+	int BREAK_EVEN_ANALYSIS_RESULT_SET = 59;
+
+	/**
+	 * The feature id for the '<em><b>Based On</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_RESULT_SET__BASED_ON = 0;
+
+	/**
+	 * The feature id for the '<em><b>Results</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_RESULT_SET__RESULTS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_RESULT_SET__PRICE = 2;
+
+	/**
+	 * The number of structural features of the '<em>Break Even Analysis Result Set</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_RESULT_SET_FEATURE_COUNT = 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisResultImpl <em>Break Even Analysis Result</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisResultImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResult()
+	 * @generated
+	 */
+	int BREAK_EVEN_ANALYSIS_RESULT = 60;
+
+	/**
+	 * The feature id for the '<em><b>Target</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_RESULT__TARGET = 0;
+
+	/**
+	 * The feature id for the '<em><b>Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_RESULT__PRICE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Eta</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_RESULT__ETA = 2;
+
+	/**
+	 * The feature id for the '<em><b>Reference Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_RESULT__REFERENCE_PRICE = 3;
+
+	/**
+	 * The number of structural features of the '<em>Break Even Analysis Result</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_RESULT_FEATURE_COUNT = 4;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3149,7 +3442,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 56;
+	int VOLUME_MODE = 61;
 
 
 	/**
@@ -3160,7 +3453,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotType()
 	 * @generated
 	 */
-	int SLOT_TYPE = 57;
+	int SLOT_TYPE = 62;
 
 
 	/**
@@ -3216,6 +3509,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getAnalyticsModel_MtmModel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getBreakevenModels <em>Breakeven Models</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Breakeven Models</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getBreakevenModels()
+	 * @see #getAnalyticsModel()
+	 * @generated
+	 */
+	EReference getAnalyticsModel_BreakevenModels();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}'.
@@ -5226,6 +5530,233 @@ s	 * <!-- end-user-doc -->
 	EAttribute getMTMRow_StartVolume();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.ui.dnd.IChangeSource <em>Change Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Change Source</em>'.
+	 * @see com.mmxlabs.scenario.service.ui.dnd.IChangeSource
+	 * @model instanceClass="com.mmxlabs.scenario.service.ui.dnd.IChangeSource"
+	 * @generated
+	 */
+	EClass getChangeSource();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel <em>Break Even Analysis Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Break Even Analysis Model</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel
+	 * @generated
+	 */
+	EClass getBreakEvenAnalysisModel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel#getRows <em>Rows</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Rows</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel#getRows()
+	 * @see #getBreakEvenAnalysisModel()
+	 * @generated
+	 */
+	EReference getBreakEvenAnalysisModel_Rows();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel#getMarkets <em>Markets</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Markets</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel#getMarkets()
+	 * @see #getBreakEvenAnalysisModel()
+	 * @generated
+	 */
+	EReference getBreakEvenAnalysisModel_Markets();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow <em>Break Even Analysis Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Break Even Analysis Row</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow
+	 * @generated
+	 */
+	EClass getBreakEvenAnalysisRow();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow#getBuyOption <em>Buy Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Buy Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow#getBuyOption()
+	 * @see #getBreakEvenAnalysisRow()
+	 * @generated
+	 */
+	EReference getBreakEvenAnalysisRow_BuyOption();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow#getSellOption <em>Sell Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Sell Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow#getSellOption()
+	 * @see #getBreakEvenAnalysisRow()
+	 * @generated
+	 */
+	EReference getBreakEvenAnalysisRow_SellOption();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow#getShipping <em>Shipping</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Shipping</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow#getShipping()
+	 * @see #getBreakEvenAnalysisRow()
+	 * @generated
+	 */
+	EReference getBreakEvenAnalysisRow_Shipping();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow#getLhsResults <em>Lhs Results</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Lhs Results</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow#getLhsResults()
+	 * @see #getBreakEvenAnalysisRow()
+	 * @generated
+	 */
+	EReference getBreakEvenAnalysisRow_LhsResults();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow#getRhsResults <em>Rhs Results</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Rhs Results</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow#getRhsResults()
+	 * @see #getBreakEvenAnalysisRow()
+	 * @generated
+	 */
+	EReference getBreakEvenAnalysisRow_RhsResults();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow#getLhsBasedOn <em>Lhs Based On</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Lhs Based On</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow#getLhsBasedOn()
+	 * @see #getBreakEvenAnalysisRow()
+	 * @generated
+	 */
+	EReference getBreakEvenAnalysisRow_LhsBasedOn();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow#getRhsBasedOn <em>Rhs Based On</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Rhs Based On</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow#getRhsBasedOn()
+	 * @see #getBreakEvenAnalysisRow()
+	 * @generated
+	 */
+	EReference getBreakEvenAnalysisRow_RhsBasedOn();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResultSet <em>Break Even Analysis Result Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Break Even Analysis Result Set</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResultSet
+	 * @generated
+	 */
+	EClass getBreakEvenAnalysisResultSet();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResultSet#getBasedOn <em>Based On</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Based On</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResultSet#getBasedOn()
+	 * @see #getBreakEvenAnalysisResultSet()
+	 * @generated
+	 */
+	EReference getBreakEvenAnalysisResultSet_BasedOn();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResultSet#getResults <em>Results</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Results</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResultSet#getResults()
+	 * @see #getBreakEvenAnalysisResultSet()
+	 * @generated
+	 */
+	EReference getBreakEvenAnalysisResultSet_Results();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResultSet#getPrice <em>Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResultSet#getPrice()
+	 * @see #getBreakEvenAnalysisResultSet()
+	 * @generated
+	 */
+	EAttribute getBreakEvenAnalysisResultSet_Price();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult <em>Break Even Analysis Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Break Even Analysis Result</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult
+	 * @generated
+	 */
+	EClass getBreakEvenAnalysisResult();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult#getTarget <em>Target</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Target</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult#getTarget()
+	 * @see #getBreakEvenAnalysisResult()
+	 * @generated
+	 */
+	EReference getBreakEvenAnalysisResult_Target();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult#getPrice <em>Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult#getPrice()
+	 * @see #getBreakEvenAnalysisResult()
+	 * @generated
+	 */
+	EAttribute getBreakEvenAnalysisResult_Price();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult#getEta <em>Eta</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Eta</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult#getEta()
+	 * @see #getBreakEvenAnalysisResult()
+	 * @generated
+	 */
+	EAttribute getBreakEvenAnalysisResult_Eta();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult#getReferencePrice <em>Reference Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Reference Price</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult#getReferencePrice()
+	 * @see #getBreakEvenAnalysisResult()
+	 * @generated
+	 */
+	EAttribute getBreakEvenAnalysisResult_ReferencePrice();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SolutionOption <em>Solution Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5611,6 +6142,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ANALYTICS_MODEL__MTM_MODEL = eINSTANCE.getAnalyticsModel_MtmModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Breakeven Models</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ANALYTICS_MODEL__BREAKEVEN_MODELS = eINSTANCE.getAnalyticsModel_BreakevenModels();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}' class.
@@ -7205,6 +7744,184 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute MTM_ROW__START_VOLUME = eINSTANCE.getMTMRow_StartVolume();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.ui.dnd.IChangeSource <em>Change Source</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.scenario.service.ui.dnd.IChangeSource
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChangeSource()
+		 * @generated
+		 */
+		EClass CHANGE_SOURCE = eINSTANCE.getChangeSource();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisModelImpl <em>Break Even Analysis Model</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisModelImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisModel()
+		 * @generated
+		 */
+		EClass BREAK_EVEN_ANALYSIS_MODEL = eINSTANCE.getBreakEvenAnalysisModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Rows</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BREAK_EVEN_ANALYSIS_MODEL__ROWS = eINSTANCE.getBreakEvenAnalysisModel_Rows();
+
+		/**
+		 * The meta object literal for the '<em><b>Markets</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BREAK_EVEN_ANALYSIS_MODEL__MARKETS = eINSTANCE.getBreakEvenAnalysisModel_Markets();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisRowImpl <em>Break Even Analysis Row</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisRowImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisRow()
+		 * @generated
+		 */
+		EClass BREAK_EVEN_ANALYSIS_ROW = eINSTANCE.getBreakEvenAnalysisRow();
+
+		/**
+		 * The meta object literal for the '<em><b>Buy Option</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BREAK_EVEN_ANALYSIS_ROW__BUY_OPTION = eINSTANCE.getBreakEvenAnalysisRow_BuyOption();
+
+		/**
+		 * The meta object literal for the '<em><b>Sell Option</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BREAK_EVEN_ANALYSIS_ROW__SELL_OPTION = eINSTANCE.getBreakEvenAnalysisRow_SellOption();
+
+		/**
+		 * The meta object literal for the '<em><b>Shipping</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BREAK_EVEN_ANALYSIS_ROW__SHIPPING = eINSTANCE.getBreakEvenAnalysisRow_Shipping();
+
+		/**
+		 * The meta object literal for the '<em><b>Lhs Results</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BREAK_EVEN_ANALYSIS_ROW__LHS_RESULTS = eINSTANCE.getBreakEvenAnalysisRow_LhsResults();
+
+		/**
+		 * The meta object literal for the '<em><b>Rhs Results</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BREAK_EVEN_ANALYSIS_ROW__RHS_RESULTS = eINSTANCE.getBreakEvenAnalysisRow_RhsResults();
+
+		/**
+		 * The meta object literal for the '<em><b>Lhs Based On</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BREAK_EVEN_ANALYSIS_ROW__LHS_BASED_ON = eINSTANCE.getBreakEvenAnalysisRow_LhsBasedOn();
+
+		/**
+		 * The meta object literal for the '<em><b>Rhs Based On</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BREAK_EVEN_ANALYSIS_ROW__RHS_BASED_ON = eINSTANCE.getBreakEvenAnalysisRow_RhsBasedOn();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisResultSetImpl <em>Break Even Analysis Result Set</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisResultSetImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResultSet()
+		 * @generated
+		 */
+		EClass BREAK_EVEN_ANALYSIS_RESULT_SET = eINSTANCE.getBreakEvenAnalysisResultSet();
+
+		/**
+		 * The meta object literal for the '<em><b>Based On</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BREAK_EVEN_ANALYSIS_RESULT_SET__BASED_ON = eINSTANCE.getBreakEvenAnalysisResultSet_BasedOn();
+
+		/**
+		 * The meta object literal for the '<em><b>Results</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BREAK_EVEN_ANALYSIS_RESULT_SET__RESULTS = eINSTANCE.getBreakEvenAnalysisResultSet_Results();
+
+		/**
+		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BREAK_EVEN_ANALYSIS_RESULT_SET__PRICE = eINSTANCE.getBreakEvenAnalysisResultSet_Price();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisResultImpl <em>Break Even Analysis Result</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisResultImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResult()
+		 * @generated
+		 */
+		EClass BREAK_EVEN_ANALYSIS_RESULT = eINSTANCE.getBreakEvenAnalysisResult();
+
+		/**
+		 * The meta object literal for the '<em><b>Target</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BREAK_EVEN_ANALYSIS_RESULT__TARGET = eINSTANCE.getBreakEvenAnalysisResult_Target();
+
+		/**
+		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BREAK_EVEN_ANALYSIS_RESULT__PRICE = eINSTANCE.getBreakEvenAnalysisResult_Price();
+
+		/**
+		 * The meta object literal for the '<em><b>Eta</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BREAK_EVEN_ANALYSIS_RESULT__ETA = eINSTANCE.getBreakEvenAnalysisResult_Eta();
+
+		/**
+		 * The meta object literal for the '<em><b>Reference Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BREAK_EVEN_ANALYSIS_RESULT__REFERENCE_PRICE = eINSTANCE.getBreakEvenAnalysisResult_ReferencePrice();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl <em>Solution Option</em>}' class.

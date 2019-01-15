@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collection;
 
+import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
@@ -31,6 +32,10 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 		if (object instanceof ViabilityRow) {
 			final ViabilityRow row = (ViabilityRow) object;
 			final SellOption sell = row.getSellOption();
+			return render(sell);
+		} else if (object instanceof BreakEvenAnalysisRow) {
+			final BreakEvenAnalysisRow partialCaseRow = (BreakEvenAnalysisRow) object;
+			final SellOption sell = partialCaseRow.getSellOption();
 			return render(sell);
 		} else if (object instanceof PartialCaseRow) {
 			final PartialCaseRow partialCaseRow = (PartialCaseRow) object;

@@ -631,6 +631,7 @@ public class LNGSchedulerJobUtils {
 	public static void clearAnalyticsResults(@NonNull AnalyticsModel analyticsModel) {
 		analyticsModel.getOptimisations().clear();
 		analyticsModel.getOptionModels().clear();
+		analyticsModel.getBreakevenModels().clear();
 
 		analyticsModel.setViabilityModel(null);
 		analyticsModel.setMtmModel(null);

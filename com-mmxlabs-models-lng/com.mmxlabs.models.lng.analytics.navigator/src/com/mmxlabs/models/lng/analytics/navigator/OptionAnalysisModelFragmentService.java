@@ -24,6 +24,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -121,6 +122,9 @@ public class OptionAnalysisModelFragmentService {
 				for (final OptionAnalysisModel plan : analyticsModel.getOptionModels()) {
 					createFragment(plan);
 				}
+				for (final BreakEvenAnalysisModel plan : analyticsModel.getBreakevenModels()) {
+					createFragment(plan);
+				}
 				analyticsModel.eAdapters().add(ModelAdapter.this);
 			}
 			this.scenarioModel = scenarioModel;
@@ -135,6 +139,9 @@ public class OptionAnalysisModelFragmentService {
 
 					analyticsModel.eAdapters().remove(ModelAdapter.this);
 					for (final OptionAnalysisModel plan : analyticsModel.getOptionModels()) {
+						removeFragment(plan);
+					}
+					for (final BreakEvenAnalysisModel plan : analyticsModel.getBreakevenModels()) {
 						removeFragment(plan);
 					}
 
@@ -167,6 +174,18 @@ public class OptionAnalysisModelFragmentService {
 			}
 
 			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels()) {
+				if (notification.getEventType() == Notification.ADD) {
+					final EObject eObj = (EObject) notification.getNewValue();
+					if (eObj instanceof NamedObject) {
+						createFragment((NamedObject) eObj);
+					}
+				} else if (notification.getEventType() == Notification.REMOVE) {
+					final EObject eObj = (EObject) notification.getOldValue();
+					removeFragment(eObj);
+				}
+				// TODO: Handle ADD_/REMOVE_MANY ?
+			}
+			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_BreakevenModels()) {
 				if (notification.getEventType() == Notification.ADD) {
 					final EObject eObj = (EObject) notification.getNewValue();
 					if (eObj instanceof NamedObject) {

@@ -96,7 +96,7 @@ public class ScheduleSpecificationTransformer {
 				final CharterInMarket e_charterInMarket = (CharterInMarket) vesselAllocation;
 				final int spotIndex = vesselSpecificiation.getSpotIndex();
 				final ISpotCharterInMarket o_market = mem.getOptimiserObjectNullChecked(e_charterInMarket, ISpotCharterInMarket.class);
-
+				final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);
 				for (final IResource o_resource : optimisationData.getResources()) {
 					final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
 					final ISpotCharterInMarket spotCharterInMarket = o_vesselAvailability.getSpotCharterInMarket();
@@ -110,10 +110,16 @@ public class ScheduleSpecificationTransformer {
 					resource = o_resource;
 					break;
 				}
-				int ii = 0;
-				 
 			} else {
 				assert false;
+			}
+			
+//			FIXME HERE
+//			ALSO TEST THE REVALUATION
+//			ADD TO PROGRESS MONITOR!
+			if (resource == null && vesselSpecificiation.getEvents().isEmpty()) {
+				// HACK! - why is the nominal vessel here anyway? not a nominal market
+				continue;
 			}
 			assert resource != null;
 

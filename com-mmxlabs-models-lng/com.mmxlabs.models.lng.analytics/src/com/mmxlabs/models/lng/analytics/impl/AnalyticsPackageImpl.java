@@ -22,6 +22,10 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
+import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult;
+import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResultSet;
+import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow;
 import com.mmxlabs.models.lng.analytics.BreakEvenResult;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
@@ -460,6 +464,41 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass changeSourceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass breakEvenAnalysisModelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass breakEvenAnalysisRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass breakEvenAnalysisResultSetEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass breakEvenAnalysisResultEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass solutionOptionEClass = null;
 
 	/**
@@ -615,6 +654,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	public EReference getAnalyticsModel_MtmModel() {
 		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAnalyticsModel_BreakevenModels() {
+		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -2315,6 +2363,195 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getChangeSource() {
+		return changeSourceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getBreakEvenAnalysisModel() {
+		return breakEvenAnalysisModelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBreakEvenAnalysisModel_Rows() {
+		return (EReference)breakEvenAnalysisModelEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBreakEvenAnalysisModel_Markets() {
+		return (EReference)breakEvenAnalysisModelEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getBreakEvenAnalysisRow() {
+		return breakEvenAnalysisRowEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBreakEvenAnalysisRow_BuyOption() {
+		return (EReference)breakEvenAnalysisRowEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBreakEvenAnalysisRow_SellOption() {
+		return (EReference)breakEvenAnalysisRowEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBreakEvenAnalysisRow_Shipping() {
+		return (EReference)breakEvenAnalysisRowEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBreakEvenAnalysisRow_LhsResults() {
+		return (EReference)breakEvenAnalysisRowEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBreakEvenAnalysisRow_RhsResults() {
+		return (EReference)breakEvenAnalysisRowEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBreakEvenAnalysisRow_LhsBasedOn() {
+		return (EReference)breakEvenAnalysisRowEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBreakEvenAnalysisRow_RhsBasedOn() {
+		return (EReference)breakEvenAnalysisRowEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getBreakEvenAnalysisResultSet() {
+		return breakEvenAnalysisResultSetEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBreakEvenAnalysisResultSet_BasedOn() {
+		return (EReference)breakEvenAnalysisResultSetEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBreakEvenAnalysisResultSet_Results() {
+		return (EReference)breakEvenAnalysisResultSetEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBreakEvenAnalysisResultSet_Price() {
+		return (EAttribute)breakEvenAnalysisResultSetEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getBreakEvenAnalysisResult() {
+		return breakEvenAnalysisResultEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBreakEvenAnalysisResult_Target() {
+		return (EReference)breakEvenAnalysisResultEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBreakEvenAnalysisResult_Price() {
+		return (EAttribute)breakEvenAnalysisResultEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBreakEvenAnalysisResult_Eta() {
+		return (EAttribute)breakEvenAnalysisResultEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBreakEvenAnalysisResult_ReferencePrice() {
+		return (EAttribute)breakEvenAnalysisResultEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getSolutionOption() {
 		return solutionOptionEClass;
 	}
@@ -2614,6 +2851,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__OPTIMISATIONS);
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__VIABILITY_MODEL);
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__MTM_MODEL);
+		createEReference(analyticsModelEClass, ANALYTICS_MODEL__BREAKEVEN_MODELS);
 
 		buyOptionEClass = createEClass(BUY_OPTION);
 
@@ -2885,6 +3123,32 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(mtmRowEClass, MTM_ROW__REFERENCE_PRICE);
 		createEAttribute(mtmRowEClass, MTM_ROW__START_VOLUME);
 
+		changeSourceEClass = createEClass(CHANGE_SOURCE);
+
+		breakEvenAnalysisModelEClass = createEClass(BREAK_EVEN_ANALYSIS_MODEL);
+		createEReference(breakEvenAnalysisModelEClass, BREAK_EVEN_ANALYSIS_MODEL__ROWS);
+		createEReference(breakEvenAnalysisModelEClass, BREAK_EVEN_ANALYSIS_MODEL__MARKETS);
+
+		breakEvenAnalysisRowEClass = createEClass(BREAK_EVEN_ANALYSIS_ROW);
+		createEReference(breakEvenAnalysisRowEClass, BREAK_EVEN_ANALYSIS_ROW__BUY_OPTION);
+		createEReference(breakEvenAnalysisRowEClass, BREAK_EVEN_ANALYSIS_ROW__SELL_OPTION);
+		createEReference(breakEvenAnalysisRowEClass, BREAK_EVEN_ANALYSIS_ROW__SHIPPING);
+		createEReference(breakEvenAnalysisRowEClass, BREAK_EVEN_ANALYSIS_ROW__LHS_RESULTS);
+		createEReference(breakEvenAnalysisRowEClass, BREAK_EVEN_ANALYSIS_ROW__RHS_RESULTS);
+		createEReference(breakEvenAnalysisRowEClass, BREAK_EVEN_ANALYSIS_ROW__LHS_BASED_ON);
+		createEReference(breakEvenAnalysisRowEClass, BREAK_EVEN_ANALYSIS_ROW__RHS_BASED_ON);
+
+		breakEvenAnalysisResultSetEClass = createEClass(BREAK_EVEN_ANALYSIS_RESULT_SET);
+		createEReference(breakEvenAnalysisResultSetEClass, BREAK_EVEN_ANALYSIS_RESULT_SET__BASED_ON);
+		createEReference(breakEvenAnalysisResultSetEClass, BREAK_EVEN_ANALYSIS_RESULT_SET__RESULTS);
+		createEAttribute(breakEvenAnalysisResultSetEClass, BREAK_EVEN_ANALYSIS_RESULT_SET__PRICE);
+
+		breakEvenAnalysisResultEClass = createEClass(BREAK_EVEN_ANALYSIS_RESULT);
+		createEReference(breakEvenAnalysisResultEClass, BREAK_EVEN_ANALYSIS_RESULT__TARGET);
+		createEAttribute(breakEvenAnalysisResultEClass, BREAK_EVEN_ANALYSIS_RESULT__PRICE);
+		createEAttribute(breakEvenAnalysisResultEClass, BREAK_EVEN_ANALYSIS_RESULT__ETA);
+		createEAttribute(breakEvenAnalysisResultEClass, BREAK_EVEN_ANALYSIS_RESULT__REFERENCE_PRICE);
+
 		// Create enums
 		volumeModeEEnum = createEEnum(VOLUME_MODE);
 		slotTypeEEnum = createEEnum(SLOT_TYPE);
@@ -2956,6 +3220,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		slotInsertionOptionsEClass.getESuperTypes().add(this.getAbstractSolutionSet());
 		optimisationResultEClass.getESuperTypes().add(this.getAbstractSolutionSet());
 		dualModeSolutionOptionEClass.getESuperTypes().add(this.getSolutionOption());
+		changeDescriptionEClass.getESuperTypes().add(this.getChangeSource());
 		openSlotChangeEClass.getESuperTypes().add(this.getChange());
 		cargoChangeEClass.getESuperTypes().add(this.getChange());
 		vesselEventChangeEClass.getESuperTypes().add(this.getChange());
@@ -2965,6 +3230,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		fleetVesselAllocationDescriptorEClass.getESuperTypes().add(this.getVesselAllocationDescriptor());
 		viabilityModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
 		mtmModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
+		breakEvenAnalysisModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(analyticsModelEClass, AnalyticsModel.class, "AnalyticsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2972,6 +3238,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getAnalyticsModel_Optimisations(), this.getAbstractSolutionSet(), null, "optimisations", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAnalyticsModel_ViabilityModel(), this.getViabilityModel(), null, "viabilityModel", null, 0, 1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAnalyticsModel_MtmModel(), this.getMTMModel(), null, "mtmModel", null, 0, 1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAnalyticsModel_BreakevenModels(), this.getBreakEvenAnalysisModel(), null, "breakevenModels", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(buyOptionEClass, BuyOption.class, "BuyOption", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -3242,6 +3509,32 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getMTMRow_Eta(), theDateTimePackage.getLocalDate(), "eta", null, 0, 1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMTMRow_ReferencePrice(), ecorePackage.getEDouble(), "referencePrice", null, 0, 1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMTMRow_StartVolume(), ecorePackage.getELong(), "startVolume", null, 0, 1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(changeSourceEClass, IChangeSource.class, "ChangeSource", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(breakEvenAnalysisModelEClass, BreakEvenAnalysisModel.class, "BreakEvenAnalysisModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBreakEvenAnalysisModel_Rows(), this.getBreakEvenAnalysisRow(), null, "rows", null, 0, -1, BreakEvenAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBreakEvenAnalysisModel_Markets(), theSpotMarketsPackage.getSpotMarket(), null, "markets", null, 0, -1, BreakEvenAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(breakEvenAnalysisRowEClass, BreakEvenAnalysisRow.class, "BreakEvenAnalysisRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBreakEvenAnalysisRow_BuyOption(), this.getBuyOption(), null, "buyOption", null, 0, 1, BreakEvenAnalysisRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBreakEvenAnalysisRow_SellOption(), this.getSellOption(), null, "sellOption", null, 0, 1, BreakEvenAnalysisRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBreakEvenAnalysisRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, 1, BreakEvenAnalysisRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBreakEvenAnalysisRow_LhsResults(), this.getBreakEvenAnalysisResultSet(), null, "lhsResults", null, 0, -1, BreakEvenAnalysisRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBreakEvenAnalysisRow_RhsResults(), this.getBreakEvenAnalysisResultSet(), null, "rhsResults", null, 0, -1, BreakEvenAnalysisRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBreakEvenAnalysisRow_LhsBasedOn(), this.getBreakEvenAnalysisResult(), null, "lhsBasedOn", null, 0, 1, BreakEvenAnalysisRow.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBreakEvenAnalysisRow_RhsBasedOn(), this.getBreakEvenAnalysisResult(), null, "rhsBasedOn", null, 0, 1, BreakEvenAnalysisRow.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(breakEvenAnalysisResultSetEClass, BreakEvenAnalysisResultSet.class, "BreakEvenAnalysisResultSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBreakEvenAnalysisResultSet_BasedOn(), this.getBreakEvenAnalysisResult(), null, "basedOn", null, 0, 1, BreakEvenAnalysisResultSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBreakEvenAnalysisResultSet_Results(), this.getBreakEvenAnalysisResult(), null, "results", null, 0, -1, BreakEvenAnalysisResultSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBreakEvenAnalysisResultSet_Price(), ecorePackage.getEDouble(), "price", null, 0, 1, BreakEvenAnalysisResultSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(breakEvenAnalysisResultEClass, BreakEvenAnalysisResult.class, "BreakEvenAnalysisResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBreakEvenAnalysisResult_Target(), ecorePackage.getEObject(), null, "target", null, 0, 1, BreakEvenAnalysisResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBreakEvenAnalysisResult_Price(), ecorePackage.getEDouble(), "price", null, 0, 1, BreakEvenAnalysisResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBreakEvenAnalysisResult_Eta(), theDateTimePackage.getLocalDate(), "eta", null, 0, 1, BreakEvenAnalysisResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBreakEvenAnalysisResult_ReferencePrice(), ecorePackage.getEDouble(), "referencePrice", null, 0, 1, BreakEvenAnalysisResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(volumeModeEEnum, VolumeMode.class, "VolumeMode");

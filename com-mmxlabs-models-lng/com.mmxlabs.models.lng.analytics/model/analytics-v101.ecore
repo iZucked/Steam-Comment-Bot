@@ -14,6 +14,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mtmModel" eType="#//MTMModel"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="breakevenModels" upperBound="-1"
+        eType="#//BreakEvenAnalysisModel" containment="true"/>        
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BuyOption" abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="SellOption" abstract="true" interface="true"/>
@@ -426,4 +428,37 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startVolume" unique="false"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeSource" instanceClassName="com.mmxlabs.scenario.service.ui.dnd.IChangeSource"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BreakEvenAnalysisModel" eSuperTypes="#//AbstractAnalysisModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//BreakEvenAnalysisRow"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="markets" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BreakEvenAnalysisRow">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buyOption" eType="#//BuyOption"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sellOption" eType="#//SellOption"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" eType="#//ShippingOption"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhsResults" upperBound="-1"
+        eType="#//BreakEvenAnalysisResultSet" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsResults" upperBound="-1"
+        eType="#//BreakEvenAnalysisResultSet" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhsBasedOn" eType="#//BreakEvenAnalysisResult"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsBasedOn" eType="#//BreakEvenAnalysisResult"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BreakEvenAnalysisResultSet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="basedOn" eType="#//BreakEvenAnalysisResult"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="results" upperBound="-1"
+        eType="#//BreakEvenAnalysisResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BreakEvenAnalysisResult">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eta" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referencePrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>  
 </ecore:EPackage>

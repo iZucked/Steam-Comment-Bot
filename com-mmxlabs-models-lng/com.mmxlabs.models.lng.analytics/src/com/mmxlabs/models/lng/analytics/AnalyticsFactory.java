@@ -475,6 +475,42 @@ public interface AnalyticsFactory extends EFactory {
 	MTMRow createMTMRow();
 
 	/**
+	 * Returns a new object of class '<em>Break Even Analysis Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Break Even Analysis Model</em>'.
+	 * @generated
+	 */
+	BreakEvenAnalysisModel createBreakEvenAnalysisModel();
+
+	/**
+	 * Returns a new object of class '<em>Break Even Analysis Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Break Even Analysis Row</em>'.
+	 * @generated
+	 */
+	BreakEvenAnalysisRow createBreakEvenAnalysisRow();
+
+	/**
+	 * Returns a new object of class '<em>Break Even Analysis Result Set</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Break Even Analysis Result Set</em>'.
+	 * @generated
+	 */
+	BreakEvenAnalysisResultSet createBreakEvenAnalysisResultSet();
+
+	/**
+	 * Returns a new object of class '<em>Break Even Analysis Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Break Even Analysis Result</em>'.
+	 * @generated
+	 */
+	BreakEvenAnalysisResult createBreakEvenAnalysisResult();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

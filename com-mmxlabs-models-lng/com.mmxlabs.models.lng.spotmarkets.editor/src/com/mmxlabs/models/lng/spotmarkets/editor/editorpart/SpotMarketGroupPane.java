@@ -16,6 +16,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
@@ -83,11 +84,13 @@ public class SpotMarketGroupPane extends ScenarioTableViewerPane {
 			break;
 		}
 
-		final DragSource source = new DragSource(getScenarioViewer().getControl(), DND.DROP_MOVE);
-		final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
-		source.setTransfer(types);
-
-		source.addDragListener(new BasicDragSource(viewer));
+		// Currently only needed for break-even table
+		if (LicenseFeatures.isPermitted("features:break-even-table")) {
+			final DragSource source = new DragSource(getScenarioViewer().getControl(), DND.DROP_MOVE);
+			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+			source.setTransfer(types);
+			source.addDragListener(new BasicDragSource(viewer));
+		}
 
 	}
 

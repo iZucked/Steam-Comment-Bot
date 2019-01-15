@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
 import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
@@ -35,6 +36,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getOptimisations <em>Optimisations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getViabilityModel <em>Viability Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getMtmModel <em>Mtm Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getBreakevenModels <em>Breakeven Models</em>}</li>
  * </ul>
  *
  * @generated
@@ -79,6 +81,16 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * @ordered
 	 */
 	protected MTMModel mtmModel;
+
+	/**
+	 * The cached value of the '{@link #getBreakevenModels() <em>Breakeven Models</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBreakevenModels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<BreakEvenAnalysisModel> breakevenModels;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -214,6 +226,18 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<BreakEvenAnalysisModel> getBreakevenModels() {
+		if (breakevenModels == null) {
+			breakevenModels = new EObjectContainmentEList<BreakEvenAnalysisModel>(BreakEvenAnalysisModel.class, this, AnalyticsPackage.ANALYTICS_MODEL__BREAKEVEN_MODELS);
+		}
+		return breakevenModels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -225,6 +249,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return basicSetViabilityModel(null, msgs);
 			case AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL:
 				return basicSetMtmModel(null, msgs);
+			case AnalyticsPackage.ANALYTICS_MODEL__BREAKEVEN_MODELS:
+				return ((InternalEList<?>)getBreakevenModels()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -245,6 +271,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return getViabilityModel();
 			case AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL:
 				return getMtmModel();
+			case AnalyticsPackage.ANALYTICS_MODEL__BREAKEVEN_MODELS:
+				return getBreakevenModels();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -272,6 +300,10 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 			case AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL:
 				setMtmModel((MTMModel)newValue);
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__BREAKEVEN_MODELS:
+				getBreakevenModels().clear();
+				getBreakevenModels().addAll((Collection<? extends BreakEvenAnalysisModel>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -296,6 +328,9 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 			case AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL:
 				setMtmModel((MTMModel)null);
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__BREAKEVEN_MODELS:
+				getBreakevenModels().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -316,6 +351,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return viabilityModel != null;
 			case AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL:
 				return mtmModel != null;
+			case AnalyticsPackage.ANALYTICS_MODEL__BREAKEVEN_MODELS:
+				return breakevenModels != null && !breakevenModels.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

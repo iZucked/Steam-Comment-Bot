@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.analytics.ui.views.formatters;
 
 import java.util.Collection;
 
+import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
@@ -34,6 +35,10 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 		} else if (object instanceof ViabilityRow) {
 			final ViabilityRow row = (ViabilityRow) object;
 			final ShippingOption shipping = row.getShipping();
+			return render(shipping);
+		} else if (object instanceof BreakEvenAnalysisRow) {
+			final BreakEvenAnalysisRow partialCaseRow = (BreakEvenAnalysisRow) object;
+			final ShippingOption shipping = partialCaseRow.getShipping();
 			return render(shipping);
 		} else if (object instanceof PartialCaseRow) {
 			final PartialCaseRow partialCaseRow = (PartialCaseRow) object;

@@ -74,7 +74,8 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 			if (getContext() == Boolean.FALSE) {
 				if (System.getProperty("lingo.suppress.dialogs") == null) {
 					{
-						if (!analyticsModel.getOptimisations().isEmpty() 
+						if (!analyticsModel.getOptimisations().isEmpty()
+								|| !analyticsModel.getBreakevenModels().isEmpty() 
 								|| analyticsModel.getViabilityModel() != null 
 								|| analyticsModel.getMtmModel() != null) {
 
@@ -106,6 +107,9 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 			}
 			if (!analyticsModel.getOptimisations().isEmpty()) {
 				delete.addAll(analyticsModel.getOptimisations());
+			}
+			if (!analyticsModel.getBreakevenModels().isEmpty()) {
+				delete.addAll(analyticsModel.getBreakevenModels());
 			}
 
 			if (delete.isEmpty()) {

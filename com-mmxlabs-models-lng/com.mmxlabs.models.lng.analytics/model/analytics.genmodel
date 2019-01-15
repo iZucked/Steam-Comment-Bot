@@ -24,6 +24,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/optimisations"/>
       <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/viabilityModel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/mtmModel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/breakevenModels"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//BuyOption"/>
     <genClasses ecoreClass="analytics.ecore#//SellOption"/>
@@ -166,6 +167,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//ExistingCharterMarketOption/spotIndex"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//AbstractSolutionSet">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//AbstractSolutionSet/hasDualModeSolutions"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//AbstractSolutionSet/portfolioBreakEvenMode"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractSolutionSet/userSettings"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractSolutionSet/extraSlots"/>
@@ -178,9 +180,21 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SlotInsertionOptions/eventsInserted"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//SolutionOption">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SolutionOption/changeDescription"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SolutionOption/scheduleSpecification"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SolutionOption/scheduleModel"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//OptimisationResult"/>
+    <genClasses ecoreClass="analytics.ecore#//DualModeSolutionOption">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//DualModeSolutionOption/microBaseCase"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//DualModeSolutionOption/microTargetCase"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//SolutionOptionMicroCase">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SolutionOptionMicroCase/scheduleSpecification"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SolutionOptionMicroCase/scheduleModel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SolutionOptionMicroCase/extraVesselAvailabilities"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SolutionOptionMicroCase/charterInMarketOverrides"/>
+    </genClasses>
     <genClasses ecoreClass="analytics.ecore#//ChangeDescription">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ChangeDescription/changes"/>
     </genClasses>
@@ -273,6 +287,31 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMRow/eta"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMRow/referencePrice"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMRow/startVolume"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="analytics.ecore#//ChangeSource"/>
+    <genClasses ecoreClass="analytics.ecore#//BreakEvenAnalysisModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//BreakEvenAnalysisModel/rows"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BreakEvenAnalysisModel/markets"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//BreakEvenAnalysisRow">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BreakEvenAnalysisRow/buyOption"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BreakEvenAnalysisRow/sellOption"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BreakEvenAnalysisRow/shipping"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//BreakEvenAnalysisRow/lhsResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//BreakEvenAnalysisRow/rhsResults"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BreakEvenAnalysisRow/lhsBasedOn"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BreakEvenAnalysisRow/rhsBasedOn"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//BreakEvenAnalysisResultSet">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BreakEvenAnalysisResultSet/basedOn"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//BreakEvenAnalysisResultSet/results"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BreakEvenAnalysisResultSet/price"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//BreakEvenAnalysisResult">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BreakEvenAnalysisResult/target"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BreakEvenAnalysisResult/price"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BreakEvenAnalysisResult/eta"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BreakEvenAnalysisResult/referencePrice"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
