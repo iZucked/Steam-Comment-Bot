@@ -195,8 +195,7 @@ public class SlotInsertionOptimiserUnit {
 		return run(slotsToInsert, eventsToInsert, stage.getIterations(), monitor);
 	}
 
-	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert,   int tries, @NonNull final IProgressMonitor monitor) {
- tries = 10_00;
+	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, final int tries, @NonNull final IProgressMonitor monitor) {
 		try {
 
 			@NonNull
