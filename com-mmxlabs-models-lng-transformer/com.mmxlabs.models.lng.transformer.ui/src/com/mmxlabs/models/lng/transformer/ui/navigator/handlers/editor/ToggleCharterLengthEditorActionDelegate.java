@@ -26,7 +26,7 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
-public class ToggleCharterOutEditorActionDelegate extends ActionDelegate implements IEditorActionDelegate {
+public class ToggleCharterLengthEditorActionDelegate extends ActionDelegate implements IEditorActionDelegate {
 	protected IEditorPart targetEditor;
 	protected IAction action;
 	protected LNGScenarioModel currentModel;
@@ -43,7 +43,7 @@ public class ToggleCharterOutEditorActionDelegate extends ActionDelegate impleme
 			if (msg.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings()) {
 				updateState();
 			}
-			if (msg.getFeature() == ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts()) {
+			if (msg.getFeature() == ParametersPackage.eINSTANCE.getUserSettings_WithCharterLength()) {
 				updateState();
 			}
 		};
@@ -65,7 +65,6 @@ public class ToggleCharterOutEditorActionDelegate extends ActionDelegate impleme
 		currentSettings = null;
 
 		this.editingDomain = null;
-		this.currentModel = null;
 		this.targetEditor = targetEditor;
 		this.action = action;
 
@@ -74,10 +73,10 @@ public class ToggleCharterOutEditorActionDelegate extends ActionDelegate impleme
 			if (editorInput instanceof IScenarioServiceEditorInput) {
 				final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
 				final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
-				@NonNull
-				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 
-				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("ToggleCharterOutEditorActionDelegate")) {
+				final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+
+				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("ToggleCharterLengthEditorActionDelegate")) {
 					this.currentModel = sdp.getTypedScenario(LNGScenarioModel.class);
 					this.currentSettings = currentModel.getUserSettings();
 					this.editingDomain = sdp.getEditingDomain();
@@ -97,7 +96,7 @@ public class ToggleCharterOutEditorActionDelegate extends ActionDelegate impleme
 		if (currentSettings != null) {
 			currentSettings.eAdapters().add(notificationAdapter);
 			action.setEnabled(true);
-			action.setChecked(currentSettings.isGenerateCharterOuts());
+			action.setChecked(currentSettings.isWithCharterLength());
 		} else {
 			action.setEnabled(false);
 			action.setChecked(false);
@@ -116,14 +115,14 @@ public class ToggleCharterOutEditorActionDelegate extends ActionDelegate impleme
 		if (editingDomain == null || currentModel == null) {
 			return;
 		}
-		final CompoundCommand cmd = new CompoundCommand("Toggle charter out generation");
+		final CompoundCommand cmd = new CompoundCommand("Toggle charter length");
 
 		UserSettings settings = currentModel.getUserSettings();
 		if (settings == null) {
 			settings = ScenarioUtils.createDefaultUserSettings();
 			cmd.append(SetCommand.create(editingDomain, currentModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), settings));
 		}
-		cmd.append(SetCommand.create(editingDomain, settings, ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts(), !settings.isGenerateCharterOuts()));
+		cmd.append(SetCommand.create(editingDomain, settings, ParametersPackage.eINSTANCE.getUserSettings_WithCharterLength(), !settings.isWithCharterLength()));
 
 		editingDomain.getCommandStack().execute(cmd);
 	}

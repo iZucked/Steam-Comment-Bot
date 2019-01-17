@@ -407,6 +407,10 @@
          <PluginXMLEnablement
                feature="actionable-set-optimiser"
                plugin.xml="actionable-set-optimiser.plugin.xml">
+         </PluginXMLEnablement>
+         <PluginXMLEnablement
+               feature="charter-length"
+               plugin.xml="charter-length.plugin.xml">
          </PluginXMLEnablement>         
       </extension>
       <extension

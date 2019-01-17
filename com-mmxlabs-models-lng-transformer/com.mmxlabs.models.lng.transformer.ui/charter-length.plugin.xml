@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<!-- Copyright (C) Minimax Labs Ltd., 2010 - 2015 All rights reserved. -->
+<?eclipse version="3.4"?>
+<plugin>
+ <extension
+            point="org.eclipse.ui.editorActions">
+         <editorContribution
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.editorContributions"
+               targetID="com.mmxlabs.models.lng.demo.scneditor">
+            <action
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ToggleCharterLengthEditorActionDelegate"
+                  definitionId="com.mmxlabs.commands.optimisation.togglecharterlength"
+                  disabledIcon="icons/ch_out_deact.png"
+                  icon="icons/ch_out.png"
+                  id="com.mmxlabs.shiplingo.platform.models.optimisation.togglecharterlength"
+                  label="Toggle charter length"
+                  style="toggle"
+                  toolbarPath="evaluategroup2"
+                  tooltip="Toggle charter length">
+            </action>
+         </editorContribution>
+      </extension>
+</plugin>
