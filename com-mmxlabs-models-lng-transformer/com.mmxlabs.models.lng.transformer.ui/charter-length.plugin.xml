@@ -16,8 +16,8 @@
             <action
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ToggleCharterLengthEditorActionDelegate"
                   definitionId="com.mmxlabs.commands.optimisation.togglecharterlength"
-                  disabledIcon="icons/ch_out_deact.png"
-                  icon="icons/ch_out.png"
+                  disabledIcon="icons/ch_length_deact.png"
+                  icon="icons/ch_length.png"
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.togglecharterlength"
                   label="Toggle charter length"
                   style="toggle"
