@@ -151,7 +151,7 @@ public class NominatedVesselInlineEditor extends UnsettableInlineEditor {
 
 		helper.clearActions();
 		if (input instanceof Slot) {
-			final int split = 3;
+			final int split = 15;
 			final Slot<?> slot = (Slot<?>) input;
 			if (allowedValues.size() > split) {
 				int counter = 0;
