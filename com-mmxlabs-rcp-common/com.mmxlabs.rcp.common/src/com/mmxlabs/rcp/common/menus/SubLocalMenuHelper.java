@@ -27,8 +27,9 @@ public class SubLocalMenuHelper {
 		this.menuActions.clear();
 	}
 
-	public void addAction(final @NonNull IAction action) {
+	public IAction addAction(final @NonNull IAction action) {
 		this.menuActions.add(new ActionMenuType(action));
+		return action;
 	}
 
 	public void addSubMenu(final @NonNull SubLocalMenuHelper subMenuType) {
