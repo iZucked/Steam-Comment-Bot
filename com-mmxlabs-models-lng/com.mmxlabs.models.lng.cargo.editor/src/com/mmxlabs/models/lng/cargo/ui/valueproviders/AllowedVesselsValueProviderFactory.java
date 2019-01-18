@@ -69,7 +69,7 @@ public class AllowedVesselsValueProviderFactory implements IReferenceValueProvid
 					final List<Pair<String, EObject>> vesselGroupResult = vesselGroupProvider.getAllowedValues(target, field);
 
 					// create list to populate
-					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();
+					final ArrayList<Pair<String, EObject>> result = new ArrayList<>();
 
 					// filter the globally permissible values by the settings for this cargo
 					for (final Pair<String, EObject> pair : vesselResult) {
@@ -129,9 +129,6 @@ public class AllowedVesselsValueProviderFactory implements IReferenceValueProvid
 					return new Comparator<Pair<String, ?>>() {
 						@Override
 						public int compare(final Pair<String, ?> o1, final Pair<String, ?> o2) {
-							final Object v1 = o1.getSecond();
-							final Object v2 = o2.getSecond();
-
 							return o1.getFirst().compareTo(o2.getFirst());
 						}
 
