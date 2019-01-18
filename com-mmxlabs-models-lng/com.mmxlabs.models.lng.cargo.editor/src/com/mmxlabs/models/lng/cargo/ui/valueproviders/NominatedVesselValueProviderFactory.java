@@ -54,27 +54,27 @@ public class NominatedVesselValueProviderFactory implements IReferenceValueProvi
 				final List<Pair<String, EObject>> baseResult = delegateFactory.getAllowedValues(target, field);
 
 				if (target instanceof Slot) {
-					final Slot slot = (Slot) target;
+					final Slot<?> slot = (Slot<?>) target;
 					boolean noVesselsAllowed = false;
-					final List<AVesselSet<Vessel>> allowedVessels = new ArrayList<>();
+//					final List<AVesselSet<Vessel>> allowedVessels = new ArrayList<>();
 					// we only want to filter vessels if we are assigning them (i.e. don't do this if we are selecting vessels to add to the restricted list)
-					if (field == CargoPackage.Literals.SLOT__NOMINATED_VESSEL) {
-						noVesselsAllowed = AssignmentEditorHelper.compileAllowedVessels(allowedVessels, slot);
-					}
+//					if (field == CargoPackage.Literals.SLOT__NOMINATED_VESSEL) {
+//						noVesselsAllowed = AssignmentEditorHelper.compileAllowedVessels(allowedVessels, slot);
+//					}
 
 					final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<>();
 					// filter the global list by the object's allowed values
-					if (allowedVessels != null) {
-
-						// Expand out VesselGroups
-						for (final AVesselSet<Vessel> s : allowedVessels) {
-							if (s instanceof Vessel) {
-								expandedVessels.add(s);
-							} else {
-								expandedVessels.addAll(SetUtils.getObjects(s));
-							}
-						}
-					}
+//					if (allowedVessels != null) {
+//
+//						// Expand out VesselGroups
+//						for (final AVesselSet<Vessel> s : allowedVessels) {
+//							if (s instanceof Vessel) {
+//								expandedVessels.add(s);
+//							} else {
+//								expandedVessels.addAll(SetUtils.getObjects(s));
+//							}
+//						}
+//					}
 					// create list to populate
 					final ArrayList<Pair<String, EObject>> result = new ArrayList<>();
 					final Pair<String, EObject> none = getEmptyObject();
