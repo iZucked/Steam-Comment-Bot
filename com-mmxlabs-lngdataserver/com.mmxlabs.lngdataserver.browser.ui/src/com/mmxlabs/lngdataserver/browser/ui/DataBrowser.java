@@ -229,7 +229,7 @@ public class DataBrowser extends ViewPart {
 				if (notification.getFeature() == BrowserPackage.Literals.COMPOSITE_NODE__CURRENT) {
 					ViewerHelper.refresh(scenarioViewer, false);
 				}
-				ViewerHelper.runIfViewerValid(dataViewer, false, v -> v.expandAll());
+				ViewerHelper.runIfViewerValid(dataViewer, false, dataViewer::expandAll);
 			}
 		});
 		dataViewer.expandAll();

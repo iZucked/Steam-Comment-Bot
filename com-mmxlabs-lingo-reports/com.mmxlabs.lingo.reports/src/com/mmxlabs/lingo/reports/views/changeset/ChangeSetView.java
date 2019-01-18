@@ -1287,12 +1287,12 @@ public class ChangeSetView extends ViewPart {
 
 	private void doShowStructuralChangesToggle() {
 		showNonStructuralChanges = !showNonStructuralChanges;
-		ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+		ViewerHelper.refreshThen(viewer, true, AbstractTreeViewer::expandAll);
 	}
 
 	private void doShowNegativePNLToggle() {
 		showNegativePNLChanges = !showNegativePNLChanges;
-		ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+		ViewerHelper.refreshThen(viewer, true, AbstractTreeViewer::expandAll);
 	}
 
 	private void doSwitchGroupByModel(final GroupMode mode) {
@@ -1365,12 +1365,12 @@ public class ChangeSetView extends ViewPart {
 								if (insertionPlanFilter.getExpandedGroups().contains(changeSetTableGroup.getGroupObject())) {
 									helper.addAction(new RunnableAction("Hide similar", () -> {
 										insertionPlanFilter.getExpandedGroups().remove(changeSetTableGroup.getGroupObject());
-										ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+										ViewerHelper.refreshThen(viewer, true, AbstractTreeViewer::expandAll);
 									}));
 								} else {
 									helper.addAction(new RunnableAction("Show similar", () -> {
 										insertionPlanFilter.getExpandedGroups().add(changeSetTableGroup.getGroupObject());
-										ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+										ViewerHelper.refreshThen(viewer, true, AbstractTreeViewer::expandAll);
 									}));
 								}
 							}
