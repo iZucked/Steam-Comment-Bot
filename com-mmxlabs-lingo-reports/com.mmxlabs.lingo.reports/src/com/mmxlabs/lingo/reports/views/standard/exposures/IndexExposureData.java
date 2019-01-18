@@ -65,6 +65,19 @@ public class IndexExposureData {
 		this.children = null;
 	}
 	
+	public static IndexExposureData flatten(List<IndexExposureData> data) {
+		if (data.isEmpty()){
+			return null;
+		}
+		final IndexExposureData temp = data.get(0);
+		for (IndexExposureData ied : data) {
+			if (ied.equals(temp)) continue;
+			temp.exposures.putAll(ied.exposures);
+			temp.children.addAll(ied.children);
+		}
+		return temp;
+	}
+	
 	private List<IndexExposureData> makeChildren(final Map<String, Map<String, Double>> dealExposuresByMonth) {
 		if (dealExposuresByMonth != null) {
 			List<IndexExposureData> children = new LinkedList<IndexExposureData>();

@@ -36,7 +36,7 @@ import com.mmxlabs.models.lng.spotmarkets.editor.formatters.LocalDateTextFormatt
 
 /**
  * Based on PromptToolbarEditor
- * @author farukh
+ * @author FM
  *
  */
 public class CharterOutParametersToolbarEditor extends ControlContribution {

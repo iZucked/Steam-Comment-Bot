@@ -12,19 +12,21 @@
   <extension
          point="org.eclipse.ui.views">
       <view
-            name="Exposures"
-            icon="icons/cview16/exec_statistic_view.gif"
-            category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.standard.exposures.ExposureReportView"
-            id="com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView">
-      </view>
-      <view
             name="Exposure Details"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.exposures.ExposureDetailReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.ExposureDetailReportView">
       </view>
-	</extension>
-
+   </extension>
+   <extension
+         point="com.mmxlabs.rcp.common.ReplaceableView">
+      <ReplaceableView
+            name="Exposures"
+            icon="icons/cview16/exec_statistic_view.gif"
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.standard.exposures.ExposureReportView"
+            viewId="com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView">
+      </ReplaceableView>
+   </extension>
 </plugin>

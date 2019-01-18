@@ -45,7 +45,6 @@ import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures.ValueMode;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -245,8 +244,6 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			if (rootObject == null) {
 				return output;
 			}
-			final PricingModel pm = ScenarioModelUtil.getPricingModel(rootObject);
-			final EList<CommodityIndex> indices = pm.getCommodityIndices();
 
 			List<Object> selected = (!selectionMode || selection == null) ? Collections.emptyList() : SelectionHelper.convertToList(selection, Object.class);
 			selected = selected.stream().filter(s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation || s instanceof PaperDeal)
@@ -279,12 +276,12 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		super.dispose();
 	}
 
-	private final Pair<YearMonth, YearMonth> dateRange = new Pair<>();
+	protected final Pair<YearMonth, YearMonth> dateRange = new Pair<>();
 
-	private Exposures.ValueMode mode = ValueMode.VOLUME_MMBTU;
-	private boolean selectionMode = false;
+	protected Exposures.ValueMode mode = ValueMode.VOLUME_MMBTU;
+	protected boolean selectionMode = false;
 
-	private ISelection selection;
+	protected ISelection selection;
 
 	public ExposureReportView() {
 		super("com.mmxlabs.lingo.doc.Reports_IndexExposures");
@@ -485,8 +482,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		return super.getAdapter(adapter);
 	}
-
-	private LocalDate getEarliestScenarioDate(final IScenarioDataProvider sdp) {
+	
+	protected LocalDate getEarliestScenarioDate(final IScenarioDataProvider sdp) {
 		LocalDate result = LocalDate.now();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 
@@ -509,7 +506,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		return result;
 	}
 
-	private LocalDate getLatestScenarioDate(final IScenarioDataProvider sdp) {
+	protected LocalDate getLatestScenarioDate(final IScenarioDataProvider sdp) {
 		LocalDate result = LocalDate.now();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 
