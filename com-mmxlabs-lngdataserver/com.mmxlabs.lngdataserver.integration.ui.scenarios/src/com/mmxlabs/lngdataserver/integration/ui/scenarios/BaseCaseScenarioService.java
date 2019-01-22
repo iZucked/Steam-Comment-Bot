@@ -18,24 +18,22 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.BaseCaseScenarioUpdater;
-import com.mmxlabs.scenario.service.manifest.Manifest;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.BaseCaseVersionsProviderService;
 import com.mmxlabs.scenario.service.model.Container;
-import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 
 public class BaseCaseScenarioService extends AbstractScenarioService {
 
 	private static final Logger log = LoggerFactory.getLogger(BaseCaseScenarioService.class);
 
-	public BaseCaseScenarioService() {
+	public BaseCaseScenarioService( BaseCaseVersionsProviderService versionsProviderService) {
 		super("Base case");
+		this.versionsProviderService = versionsProviderService;
 	}
 
 	/**
@@ -53,6 +51,8 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 	private BaseCaseServiceClient client;
 
 	private BaseCaseScenarioUpdater updater;
+
+	private BaseCaseVersionsProviderService versionsProviderService;
 
 	@Override
 	public ScenarioInstance copyInto(Container parent, ScenarioModelRecord tmpRecord, String name, @Nullable IProgressMonitor progressMonitor) throws Exception {
@@ -112,7 +112,7 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 
 			getServiceModel();
 			setReady();
-			this.updater = new BaseCaseScenarioUpdater(serviceModel, baseCaseFolder, client);
+			this.updater = new BaseCaseScenarioUpdater(serviceModel, baseCaseFolder, client, versionsProviderService);
 			updater.start();
 		}).start();
 	}
@@ -137,40 +137,5 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 	@Override
 	public String getSerivceID() {
 		return "base-case-" + serviceName;
-	}
-
-	private ScenarioInstance constructInstance(File f) {
-		URI archiveURI = URI.createFileURI(f.getAbsolutePath());
-		final Manifest manifest = ScenarioStorageUtil.loadManifest(f, getScenarioCipherProvider());
-		if (manifest != null) {
-			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-			scenarioInstance.setReadonly(true);
-			scenarioInstance.setUuid(manifest.getUUID());
-
-			scenarioInstance.setRootObjectURI(archiveURI.toString());
-
-			final String scenarioname = f.getName().replaceFirst("\\.lingo$", "");
-			scenarioInstance.setName(scenarioname);
-			scenarioInstance.setVersionContext(manifest.getVersionContext());
-			scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
-
-			scenarioInstance.setClientVersionContext(manifest.getClientVersionContext());
-			scenarioInstance.setClientScenarioVersion(manifest.getClientScenarioVersion());
-
-			final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
-			scenarioInstance.setMetadata(meta);
-			meta.setContentType(manifest.getScenarioType());
-
-			ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, true, false, false, getScenarioCipherProvider());
-			if (modelRecord != null) {
-				modelRecord.setName(scenarioInstance.getName());
-				modelRecord.setScenarioInstance(scenarioInstance);
-				SSDataManager.Instance.register(scenarioInstance, modelRecord);
-				scenarioInstance.setRootObjectURI(archiveURI.toString());
-			}
-
-			return scenarioInstance;
-		}
-		return null;
 	}
 }

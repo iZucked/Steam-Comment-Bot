@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.2",
  com.fasterxml.jackson.core.jackson-core;bundle-version="2.9.2",
  com.fasterxml.jackson.datatype.jackson-datatype-jsr310;bundle-version="2.9.2",
- com.mmxlabs.rcp.common
+ com.mmxlabs.rcp.common,
+ com.mmxlabs.scenario.service.model
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: com.squareup.okhttp,
  okhttp3,

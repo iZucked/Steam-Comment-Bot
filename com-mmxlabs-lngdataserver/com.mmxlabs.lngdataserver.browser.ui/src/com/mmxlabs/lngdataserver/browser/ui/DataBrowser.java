@@ -48,6 +48,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +67,9 @@ import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.browser.provider.BrowserItemProviderAdapterFactory;
 import com.mmxlabs.lngdataserver.browser.ui.context.DataBrowserContextMenuExtensionUtil;
 import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExtension;
+import com.mmxlabs.lngdataserver.commons.IBaseCaseVersionsProvider;
 import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -87,9 +90,15 @@ public class DataBrowser extends ViewPart {
 	private CompositeNode root;
 	private final Set<Node> selectedNodes = new HashSet<>();
 	private Predicate<ScenarioInstance> selectedScenarioChecker = null;
+	private final Predicate<ScenarioInstance> baseCaseScenarioChecker = null;
 
 	private ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> scenarioTracker;
+	private ServiceTracker<IBaseCaseVersionsProvider, IBaseCaseVersionsProvider> baseCaseVersionsTracker;
 	private Iterable<IDataBrowserContextMenuExtension> contextMenuExtensions;
+
+	private final IBaseCaseVersionsProvider.IBaseCaseChanged baseChangedListener = () -> {
+		ViewerHelper.refresh(scenarioViewer, false);
+	};
 
 	private final ISelectionChangedListener scenarioSelectionListener = event -> {
 		final ISelection selection = scenarioViewer.getSelection();
@@ -163,11 +172,58 @@ public class DataBrowser extends ViewPart {
 		scenarioViewer.refresh(true);
 	};
 
+	private DataBrowserLabelProvider dataLabelProvider;
+
 	@Override
 	public void createPartControl(final Composite parent) {
 		final Bundle bundle = FrameworkUtil.getBundle(DataBrowser.class);
-		scenarioTracker = new ServiceTracker<>(bundle.getBundleContext(), ScenarioServiceRegistry.class, null);
+		scenarioTracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(bundle.getBundleContext(), ScenarioServiceRegistry.class, null) {
+			@Override
+			public ScenarioServiceRegistry addingService(final ServiceReference<ScenarioServiceRegistry> reference) {
+				final ScenarioServiceRegistry reg = super.addingService(reference);
+				ViewerHelper.setInput(scenarioViewer, false, reg);
+				ViewerHelper.runIfViewerValid(scenarioViewer, false, () -> scenarioViewer.expandToLevel(2));
+
+				return reg;
+			}
+
+			@Override
+			public void removedService(ServiceReference<ScenarioServiceRegistry> reference, ScenarioServiceRegistry service) {
+				ViewerHelper.setInput(scenarioViewer, false, (Object) null);
+				super.removedService(reference, service);
+			}
+		};
 		scenarioTracker.open();
+
+		baseCaseVersionsTracker = new ServiceTracker<IBaseCaseVersionsProvider, IBaseCaseVersionsProvider>(bundle.getBundleContext(), IBaseCaseVersionsProvider.class, null) {
+			@Override
+			public IBaseCaseVersionsProvider addingService(final ServiceReference<IBaseCaseVersionsProvider> reference) {
+				final IBaseCaseVersionsProvider provider = super.addingService(reference);
+				provider.addChangedListener(baseChangedListener);
+				ViewerHelper.refresh(scenarioViewer, false);
+				if (dataLabelProvider != null) {
+					dataLabelProvider.setBaseCaseProvider(provider);
+					ViewerHelper.refresh(dataViewer, false);
+				}
+				return provider;
+			}
+
+			@Override
+			public void removedService(final ServiceReference<IBaseCaseVersionsProvider> reference, final IBaseCaseVersionsProvider provider) {
+				provider.removeChangedListener(baseChangedListener);
+				super.removedService(reference, provider);
+				if (dataLabelProvider != null) {
+					dataLabelProvider.setBaseCaseProvider(null);
+					ViewerHelper.refresh(dataViewer, false);
+				}
+				ViewerHelper.refresh(scenarioViewer, false);
+			}
+		};
+		baseCaseVersionsTracker.open();
+		final IBaseCaseVersionsProvider s = baseCaseVersionsTracker.getService();
+		if (s != null) {
+			s.addChangedListener(baseChangedListener);
+		}
 
 		final SashForm sash = new SashForm(parent, SWT.SMOOTH | SWT.VERTICAL);
 		sash.setSashWidth(3);
@@ -192,17 +248,6 @@ public class DataBrowser extends ViewPart {
 				try {
 					final CompositeNode dataRoot = dataExtension.getDataRoot();
 					root.getChildren().add(dataRoot);
-
-					final GridViewerColumn c2 = new GridViewerColumn(scenarioViewer, SWT.NONE);
-					c2.setLabelProvider(new ScenarioLabelProvider(1, dataRoot));
-					c2.getColumn().setWidth(30);
-					GridViewerHelper.configureLookAndFeel(c2);
-
-					// Hacky renaming...
-					final String lbl_base = dataRoot.getDisplayName();
-					// Note this is a regex string!
-					final String lbl = lbl_base.replaceAll(" \\(loading...\\)", "");
-					c2.getColumn().setText(lbl);
 				} catch (final Exception e) {
 					LOGGER.error(e.getMessage(), e);
 				}
@@ -242,15 +287,23 @@ public class DataBrowser extends ViewPart {
 		scenarioViewer.getGrid().setHeaderVisible(true);
 		scenarioViewer.setContentProvider(new LocalScenarioServiceContentProvider());
 		scenarioViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
-		final GridViewerColumn c1 = new GridViewerColumn(scenarioViewer, SWT.NONE);
-		c1.setLabelProvider(new ScenarioLabelProvider(0, null));
-		c1.getColumn().setTree(true);
-		c1.getColumn().setWidth(250);
-		GridViewerHelper.configureLookAndFeel(c1);
-
+		{
+			final GridViewerColumn c1 = new GridViewerColumn(scenarioViewer, SWT.NONE);
+			c1.setLabelProvider(new ScenarioLabelProvider(0));
+			c1.getColumn().setTree(true);
+			c1.getColumn().setWidth(250);
+			GridViewerHelper.configureLookAndFeel(c1);
+		}
+		{
+			final GridViewerColumn c2 = new GridViewerColumn(scenarioViewer, SWT.NONE);
+			c2.setLabelProvider(new ScenarioLabelProvider(1));
+			c2.getColumn().setWidth(60);
+			GridViewerHelper.configureLookAndFeel(c2);
+			c2.getColumn().setText("Status");
+		}
 		scenarioViewer.setAutoExpandLevel(GridTreeViewer.ALL_LEVELS);
 		scenarioViewer.setInput(scenarioTracker.getService());
-		scenarioViewer.expandAll();
+		scenarioViewer.expandToLevel(2);
 		final MenuManager scenarioMgr = new MenuManager();
 		scenarioViewer.getControl().addMenuDetectListener(new MenuDetectListener() {
 
@@ -291,6 +344,7 @@ public class DataBrowser extends ViewPart {
 						itemsAdded |= ext.contributeToScenarioMenu(treeSelection, scenarioMgr);
 					}
 				}
+
 				if (itemsAdded) {
 					menu.setVisible(true);
 				}
@@ -313,7 +367,9 @@ public class DataBrowser extends ViewPart {
 		dataCol1.getColumn().setTree(true);
 		dataCol1.getColumn().setWidth(300);
 
-		dataCol1.setLabelProvider(new DataBrowserLabelProvider(createNewAdapterFactory(), selectedNodes));
+		dataLabelProvider = new DataBrowserLabelProvider(createNewAdapterFactory(), selectedNodes);
+		dataCol1.setLabelProvider(dataLabelProvider);
+		dataLabelProvider.setBaseCaseProvider(baseCaseVersionsTracker.getService());
 		GridViewerHelper.configureLookAndFeel(dataCol1);
 
 		GridViewerHelper.configureLookAndFeel(dataViewer);
@@ -458,6 +514,10 @@ public class DataBrowser extends ViewPart {
 		if (scenarioTracker != null) {
 			scenarioTracker.close();
 		}
+		if (baseCaseVersionsTracker != null) {
+			baseCaseVersionsTracker.getService().removeChangedListener(baseChangedListener);
+			baseCaseVersionsTracker.close();
+		}
 
 		super.dispose();
 	}
@@ -499,11 +559,9 @@ public class DataBrowser extends ViewPart {
 
 		private final AdapterFactoryLabelProvider lp;
 		private final int columnIdx;
-		private final CompositeNode compositeNode;
 
-		public ScenarioLabelProvider(final int columnIdx, final CompositeNode compositeNode) {
+		public ScenarioLabelProvider(final int columnIdx) {
 			this.columnIdx = columnIdx;
-			this.compositeNode = compositeNode;
 			lp = new AdapterFactoryLabelProvider(createNewScenarioModelAdapterFactory());
 		}
 
@@ -513,28 +571,20 @@ public class DataBrowser extends ViewPart {
 
 				if (object instanceof ScenarioInstance) {
 					final ScenarioInstance scenarioInstance = (ScenarioInstance) object;
+
+					if ("1-1 base".equals(scenarioInstance.getName())) {
+						int ii = 0;
+					}
 					final Manifest mf = scenarioInstance.getManifest();
 					if (mf != null) {
 
-						final Node latest = compositeNode.getCurrent();
-						if (latest == null) {
+						if (needUpdateToBase(mf)) {
+							return "↑";
+						} else {
 							return "";
-						}
-						final String versionId = latest.getDisplayName();
-						if (versionId == null || versionId.toLowerCase().contains("loading")) {
-							return "";
-						}
-						for (final ModelArtifact modelArtifact : mf.getModelDependencies()) {
-							if (Objects.equals(modelArtifact.getKey(), compositeNode.getType())) {
-								if (versionId.equals(modelArtifact.getDataVersion())) {
-									return "";
-								} else {
-									return "X";
-								}
-							}
 						}
 					}
-					return "X";
+					return "↑";
 
 				}
 
@@ -564,6 +614,29 @@ public class DataBrowser extends ViewPart {
 			}
 			return null;
 		}
+	}
+
+	private boolean needUpdateToBase(final Manifest mf) {
+
+		final IBaseCaseVersionsProvider provider = baseCaseVersionsTracker.getService();
+		if (provider == null) {
+			return false;
+		}
+		final String versionId = provider.getPricingVersion();
+		if (versionId == null) {
+			return false;
+		}
+
+		for (final ModelArtifact modelArtifact : mf.getModelDependencies()) {
+			if (Objects.equals(modelArtifact.getKey(), LNGScenarioSharedModelTypes.MARKET_CURVES.getID())) {
+				if (versionId.equals(modelArtifact.getDataVersion())) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+		}
+		return true;
 	}
 
 }

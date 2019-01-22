@@ -70,7 +70,7 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 			.readTimeout(Integer.MAX_VALUE, TimeUnit.MILLISECONDS) //
 			.build();
 
-	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss+00:00");
+//	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss+00:00");
 
 	private String type;
 
@@ -79,9 +79,9 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 	protected final TypeReference<List<T>> TYPE_VERSIONS_LIST = new TypeReference<List<T>>() {
 	};
 
-	protected static LocalDateTime fromDateTimeAtUTC(final String dateTime) {
-		return LocalDateTime.parse(dateTime, DATE_FORMATTER);
-	}
+//	protected static LocalDateTime fromDateTimeAtUTC(final String dateTime) {
+//		return LocalDateTime.parse(dateTime, DATE_FORMATTER);
+//	}
 
 	public AbstractDataRepository(String repoType, Class<T> dataVersionType) {
 		this.type = repoType;
@@ -430,10 +430,8 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 				final String body = response.body().string();
 				throw new RuntimeException("Error making request to " + baseUrl + ". Reason " + response.message() + " Response body is " + body);
 			} else {
-				final ObjectMapper mapper = new ObjectMapper();
-				mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+				final ObjectMapper mapper = createObjectMapper();
 				List<T> hubVersions = mapper.readValue(response.body().byteStream(), mapper.getTypeFactory().constructCollectionType(List.class, dataVersionType));
-				// final List<T> hubVersions = new ObjectMapper().readValues(esponse.body().byteStream(), TYPE_VERSIONS_LIST);
 				return hubVersions.stream() //
 						.map(this::wrap) //
 						.filter(v -> v.getIdentifier() != null) //
@@ -442,6 +440,12 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 						.collect(Collectors.toList());
 			}
 		}
+	}
+
+	protected ObjectMapper createObjectMapper() {
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		return mapper;
 	}
 
 	protected abstract String getVersionsURL();

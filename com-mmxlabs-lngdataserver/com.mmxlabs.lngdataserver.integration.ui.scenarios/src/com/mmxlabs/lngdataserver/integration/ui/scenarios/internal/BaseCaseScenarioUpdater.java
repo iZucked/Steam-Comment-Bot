@@ -46,6 +46,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 public class BaseCaseScenarioUpdater {
 
 	private final BaseCaseServiceClient client;
+	private final BaseCaseVersionsProviderService baseCaseVersionsProviderService;
 
 	private final ExecutorService taskExecutor;
 
@@ -58,10 +59,11 @@ public class BaseCaseScenarioUpdater {
 
 	private Thread updateThread;
 
-	public BaseCaseScenarioUpdater(final ScenarioService modelRoot, final File basePath, final BaseCaseServiceClient client) {
+	public BaseCaseScenarioUpdater(final ScenarioService modelRoot, final File basePath, final BaseCaseServiceClient client, BaseCaseVersionsProviderService baseCaseVersionsProviderService) {
 		this.modelRoot = modelRoot;
 		this.basePath = basePath;
 		this.client = client;
+		this.baseCaseVersionsProviderService = baseCaseVersionsProviderService;
 		taskExecutor = Executors.newSingleThreadExecutor();
 		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(detailChangedListener);
 	}
@@ -149,6 +151,7 @@ public class BaseCaseScenarioUpdater {
 				RunnerHelper.syncExecDisplayOptional(() -> {
 					instance.setName(name);
 					parent.getElements().add(instance);
+					baseCaseVersionsProviderService.setBaseCase(instance, record.pricingVersionUUID);
 				});
 			}
 		}

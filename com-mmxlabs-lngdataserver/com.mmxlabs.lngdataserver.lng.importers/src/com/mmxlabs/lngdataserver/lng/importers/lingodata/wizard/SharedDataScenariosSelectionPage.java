@@ -11,9 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
-import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -33,6 +31,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
+import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.DataOptions;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
@@ -48,27 +47,7 @@ public class SharedDataScenariosSelectionPage extends WizardPage {
 	protected RadioSelectionGroup scenarioSelectionGroup;
 	protected CheckboxTreeViewer scenarioTreeViewer;
 
-	// Note: Order is both display and *required* execution order
-	public enum DataOptions {
-		PortData("Ports"), //
-		FleetDatabase("Vessels"), //
-		CommercialData("Contracts && Entities"), //
-		SpotCargoMarketsData("Cargo Markets"), //
-		SpotCharterMarketsData("Charter Markets"), //
-		 PricingData("Price Curves"),
-		ADPData("ADP") //
-		;
-
-		private DataOptions(final String name) {
-			this.name = name;
-		}
-
-		private final String name;
-
-		public String getName() {
-			return name;
-		}
-	}
+	
 
 	private final Set<DataOptions> selectedDataOptions = EnumSet.noneOf(DataOptions.class);
 

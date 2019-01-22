@@ -14,6 +14,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
+import com.mmxlabs.lngdataserver.commons.IBaseCaseVersionsProvider;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.BaseCaseScenarioService;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.SharedWorkspaceScenarioService;
 import com.mmxlabs.lngdataserver.server.IUpstreamServiceChangedListener;
@@ -30,22 +31,18 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
-	@SuppressWarnings("unchecked")
+
+	private ServiceRegistration<IBaseCaseVersionsProvider> baseCaseVersionsProviderServiceRegistration = null;
 	private ServiceRegistration<IScenarioService> baseCaseServiceRegistration = null;
 	private ServiceRegistration<IScenarioService> teamServiceRegistration = null;
 
+	private BaseCaseVersionsProviderService baseCaseVersionsProviderService = null;
 	private BaseCaseScenarioService baseCaseService = null;
 	private SharedWorkspaceScenarioService teamService = null;
 
 	private ServiceTracker<IScenarioCipherProvider, IScenarioCipherProvider> scenarioCipherProviderTracker = null;
 
 	private IUpstreamServiceChangedListener listener = serviceType -> updateService(serviceType);
-
-	/**
-	 * The constructor
-	 */
-	public Activator() {
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -59,6 +56,9 @@ public class Activator extends AbstractUIPlugin {
 
 		// Ensure something has triggered this class load.
 		UpstreamUrlProvider.INSTANCE.isAvailable();
+
+		baseCaseVersionsProviderService = new BaseCaseVersionsProviderService();
+		baseCaseVersionsProviderServiceRegistration = getBundle().getBundleContext().registerService(IBaseCaseVersionsProvider.class, baseCaseVersionsProviderService, new Hashtable<>());
 
 		scenarioCipherProviderTracker = new ServiceTracker<IScenarioCipherProvider, IScenarioCipherProvider>(context, IScenarioCipherProvider.class, null) {
 			@Override
@@ -91,6 +91,7 @@ public class Activator extends AbstractUIPlugin {
 		UpstreamUrlProvider.INSTANCE.registerServiceChangedLister(listener);
 		updateService(IUpstreamServiceChangedListener.Service.BaseCaseWorkspace);
 		updateService(IUpstreamServiceChangedListener.Service.TeamWorkspace);
+
 	}
 
 	/*
@@ -110,6 +111,11 @@ public class Activator extends AbstractUIPlugin {
 		if (scenarioCipherProviderTracker != null) {
 			scenarioCipherProviderTracker.close();
 			scenarioCipherProviderTracker = null;
+		}
+		
+		if (baseCaseVersionsProviderServiceRegistration != null) {
+			baseCaseVersionsProviderServiceRegistration.unregister();
+			baseCaseVersionsProviderServiceRegistration = null;
 		}
 
 	}
@@ -141,7 +147,7 @@ public class Activator extends AbstractUIPlugin {
 				// Already enabled
 				return;
 			}
-			baseCaseService = new BaseCaseScenarioService();
+			baseCaseService = new BaseCaseScenarioService(baseCaseVersionsProviderService);
 
 			if (scenarioCipherProviderTracker != null) {
 
@@ -181,7 +187,7 @@ public class Activator extends AbstractUIPlugin {
 				teamService = null;
 				return;
 			}
-			
+
 			final Hashtable<String, String> props = new Hashtable<>();
 			// used internally by eclipse/OSGi
 			props.put("component.id", teamService.getSerivceID());

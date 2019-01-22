@@ -185,16 +185,17 @@ public class BaseCaseServiceClient {
 
 	public BaseCaseRecord parseScenariosJSONData(final String jsonData) {
 		final JSONObject versionObject = new JSONObject(jsonData);
-		BaseCaseRecord record = new BaseCaseRecord();
+		final BaseCaseRecord record = new BaseCaseRecord();
 		record.uuid = versionObject.getString("uuid");
 		record.creator = versionObject.getString("creator");
-		if(!versionObject.isNull("originalName")) {
+		if (!versionObject.isNull("originalName")) {
 			record.originalName = versionObject.getString("originalName");
+		} else {
+			record.originalName = record.uuid;
 		}
-		else {
-			record.originalName = record.uuid;			
+		if (!versionObject.isNull("pricingVersionUUID")) {
+			record.pricingVersionUUID = versionObject.getString("pricingVersionUUID");
 		}
-
 		final String creationDate = versionObject.getString("creationDate");
 		record.creationDate = Instant.parse(creationDate);
 		return record;

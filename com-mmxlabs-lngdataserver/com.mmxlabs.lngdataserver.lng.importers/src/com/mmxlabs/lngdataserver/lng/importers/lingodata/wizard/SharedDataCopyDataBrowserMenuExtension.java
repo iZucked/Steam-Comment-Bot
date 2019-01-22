@@ -6,6 +6,8 @@ package com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.EnumSet;
+import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.MenuManager;
@@ -17,6 +19,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExtension;
+import com.mmxlabs.lngdataserver.commons.IBaseCaseVersionsProvider;
+import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.DataOptions;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -25,6 +30,31 @@ public class SharedDataCopyDataBrowserMenuExtension implements IDataBrowserConte
 	public boolean contributeToScenarioMenu(@NonNull TreeSelection selection, @NonNull MenuManager menuManager) {
 
 		boolean itemsAdded = false;
+		if (selection.size() == 1) {
+			final Object firstElement = selection.getFirstElement();
+			if (firstElement instanceof ScenarioInstance) {
+				final ScenarioInstance scenarioInstance = (ScenarioInstance) firstElement;
+
+				itemsAdded |= ServiceHelper.<IBaseCaseVersionsProvider, Boolean> withService(IBaseCaseVersionsProvider.class, p -> {
+					ScenarioInstance baseCase = p.getBaseCase();
+					if (baseCase != null) {
+						final Set<DataOptions> options = EnumSet.of(DataOptions.PricingData);
+						menuManager.add(new RunnableAction("Update from base case", () -> {
+							final ImportFromBaseImportWizard wizard = new ImportFromBaseImportWizard(baseCase, scenarioInstance, options);
+							wizard.init(PlatformUI.getWorkbench(), StructuredSelection.EMPTY);
+							wizard.setForcePreviousAndNextButtons(true);
+							final Shell parent = PlatformUI.getWorkbench().getDisplay().getActiveShell();
+							final WizardDialog dialog = new WizardDialog(parent, wizard);
+							dialog.create();
+							dialog.open();
+						}));
+						return true;
+					}
+					return false;
+				});
+
+			}
+		}
 		if (false && selection.size() == 1) {
 			final Object firstElement = selection.getFirstElement();
 			if (firstElement instanceof ScenarioInstance) {

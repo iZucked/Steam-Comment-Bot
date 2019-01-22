@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lngdataserver.browser.ui;
 
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -16,6 +17,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.PlatformUI;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
+import com.mmxlabs.lngdataserver.commons.IBaseCaseVersionsProvider;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 
 public class DataBrowserLabelProvider extends ColumnLabelProvider implements IColorProvider {
 
@@ -25,6 +28,16 @@ public class DataBrowserLabelProvider extends ColumnLabelProvider implements ICo
 
 	private Image img_published;
 	private Image img_local;
+
+	private IBaseCaseVersionsProvider baseCaseProvider;
+
+	public IBaseCaseVersionsProvider getBaseCaseProvider() {
+		return baseCaseProvider;
+	}
+
+	public void setBaseCaseProvider(IBaseCaseVersionsProvider baseCaseProvider) {
+		this.baseCaseProvider = baseCaseProvider;
+	}
 
 	public DataBrowserLabelProvider(final AdapterFactory adapterFactory, final Set<Node> selectedNodes) {
 		lp = new AdapterFactoryLabelProvider(adapterFactory);
@@ -73,8 +86,12 @@ public class DataBrowserLabelProvider extends ColumnLabelProvider implements ICo
 			String prefix = "";
 			if (node.eContainer() instanceof CompositeNode) {
 				final CompositeNode compositeNode = (CompositeNode) node.eContainer();
-				if (compositeNode.getCurrent() == node) {
-					prefix = "** ";
+
+				if (compositeNode.getType() == LNGScenarioSharedModelTypes.MARKET_CURVES.getID()) {
+					if (baseCaseProvider != null && Objects.equals(node.getVersionIdentifier(), baseCaseProvider.getPricingVersion())) {
+						prefix = "** ";
+
+					}
 				}
 			}
 			return prefix + node.getDisplayName();
