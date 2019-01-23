@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
@@ -59,9 +60,6 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 	public static final String ChangeSetViewCreatorService_Topic = "create-change-set-view";
 
 	private static final Logger log = LoggerFactory.getLogger(InsertSlotContextMenuExtension.class);
-
-	public InsertSlotContextMenuExtension() {
-	}
 
 	@Override
 	public void contributeToMenu(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final Slot slot, @NonNull final MenuManager menuManager) {
@@ -89,7 +87,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			if (slots.isEmpty()) {
 				return;
 			}
-			
+
 			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
 
 			for (final Slot<?> slot2 : slots) {
@@ -137,10 +135,29 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 						}
 					}
 				}
+				else	if (obj instanceof Row) {
+					final Row rowData = (Row) obj;
+					final LoadSlot load = rowData.getLoadSlot();
+					if (load != null) {
+						if (load.getCargo() != null) {
+							noCargoSelected = false;
+						} else {
+							slots.add(load);
+						}
+					}
+					final DischargeSlot discharge = rowData.getDischargeSlot();
+					if (discharge != null) {
+						if (discharge.getCargo() != null) {
+							noCargoSelected = false;
+						} else {
+							slots.add(discharge);
+						}
+					}
+				}
 			}
 
 			slots = filterSpotSlots(slots);
-			
+
 			if (noCargoSelected && !slots.isEmpty()) {
 				if (slots.size() != 2 || (slots.size() == 2
 						&& !(slots.stream().filter(s -> (s instanceof LoadSlot)).findAny().isPresent() && slots.stream().filter(s -> (s instanceof DischargeSlot)).findAny().isPresent()))) {
