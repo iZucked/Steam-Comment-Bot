@@ -23,6 +23,7 @@
 		<module>com.mmxlabs.lngdataserver.commons</module>
 		<module>com.mmxlabs.lngdataserver.server</module>
 
+		<module>com.mmxlabs.lngdataserver.integration.general</module>
 		<module>com.mmxlabs.lngdataserver.integration.vessels</module>
 		<module>com.mmxlabs.lngdataserver.integration.ports</module>
 		<module>com.mmxlabs.lngdataserver.integration.distances</module>
