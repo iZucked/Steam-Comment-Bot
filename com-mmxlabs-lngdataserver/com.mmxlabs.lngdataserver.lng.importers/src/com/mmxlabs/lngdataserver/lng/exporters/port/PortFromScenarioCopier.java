@@ -76,7 +76,7 @@ public class PortFromScenarioCopier {
 
 		String portDataVersion = portModel.getPortDataVersion();
 		if (portDataVersion == null) {
-			portDataVersion = "private-" + EcoreUtil.generateUUID();
+			portDataVersion = EcoreUtil.generateUUID();
 			portModel.setPortDataVersion(portDataVersion);
 		}
 		version.setIdentifier(portDataVersion);

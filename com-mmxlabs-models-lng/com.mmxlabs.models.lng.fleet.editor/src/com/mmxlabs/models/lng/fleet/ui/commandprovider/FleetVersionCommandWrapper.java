@@ -77,7 +77,7 @@ public class FleetVersionCommandWrapper implements IWrappedCommandProvider {
 
 			public void execute() {
 				if (changedRef[0]) {
-					String newID = "private-" + EcoreUtil.generateUUID();
+					String newID = EcoreUtil.generateUUID();
 					System.out.println("Generate Fleet Model Version ID " + newID);
 					final Command cmd = SetCommand.create(editingDomain, fleetModel, FleetPackage.Literals.FLEET_MODEL__FLEET_DATA_VERSION, newID);
 					appendAndExecute(cmd);

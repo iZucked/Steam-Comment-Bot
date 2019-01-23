@@ -75,7 +75,7 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 
 			public void execute() {
 				if (changedRef[0]) {
-					String newID = "private-" + EcoreUtil.generateUUID();
+					String newID = EcoreUtil.generateUUID();
 					System.out.println("Generate Port Version ID " + newID);
 					final Command cmd = SetCommand.create(editingDomain, portModel, PortPackage.Literals.PORT_MODEL__PORT_DATA_VERSION, newID);
 					appendAndExecute(cmd);

@@ -149,7 +149,7 @@ public class VesselsFromScenarioCopier {
 
 		String fleetDataVersion = fleetModel.getFleetDataVersion();
 		if (fleetDataVersion == null) {
-			fleetDataVersion = "private-" + EcoreUtil.generateUUID();
+			fleetDataVersion = EcoreUtil.generateUUID();
 			fleetModel.setFleetDataVersion(fleetDataVersion);
 		}
 		version.setIdentifier(fleetDataVersion);

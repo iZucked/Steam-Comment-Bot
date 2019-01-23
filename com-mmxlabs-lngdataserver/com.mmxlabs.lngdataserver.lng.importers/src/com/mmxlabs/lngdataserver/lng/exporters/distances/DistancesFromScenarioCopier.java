@@ -151,7 +151,7 @@ public class DistancesFromScenarioCopier {
 
 		String distanceDataVersion = portModel.getDistanceDataVersion();
 		if (distanceDataVersion == null) {
-			distanceDataVersion = "private-" + EcoreUtil.generateUUID();
+			distanceDataVersion = EcoreUtil.generateUUID();
 			portModel.setDistanceDataVersion(distanceDataVersion);
 		}
 		version.setIdentifier(distanceDataVersion);
