@@ -110,7 +110,7 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.charterlength":
 			if (LicenseFeatures.isPermitted("features:charter-length")) {
-				columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Charter length", "Total Charter length in days", ColumnType.NORMAL,
+				columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Length", "Total Charter length in days", ColumnType.NORMAL,
 						new CharterLengthDaysFormatter(true, false)));
 			}
 			break;
