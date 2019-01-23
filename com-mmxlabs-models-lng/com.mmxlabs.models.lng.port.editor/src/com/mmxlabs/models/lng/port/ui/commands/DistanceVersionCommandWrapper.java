@@ -22,6 +22,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.OtherIdentifiers;
 import com.mmxlabs.models.lng.port.Port;
@@ -78,7 +79,7 @@ public class DistanceVersionCommandWrapper implements IWrappedCommandProvider {
 
 			public void execute() {
 				if (changedRef[0]) {
-					String newID = "private-" + EcoreUtil.generateUUID();
+					String newID = EcoreUtil.generateUUID();
 					System.out.println("Generate Distance Version ID " + newID);
 					final Command cmd = SetCommand.create(editingDomain, portModel, PortPackage.Literals.PORT_MODEL__DISTANCE_DATA_VERSION, newID);
 					appendAndExecute(cmd);
@@ -96,16 +97,24 @@ public class DistanceVersionCommandWrapper implements IWrappedCommandProvider {
 				super.notifyChanged(notification);
 				if (notification.getNotifier() instanceof RouteLine) {
 					changedRef[0] = true;
+				} else if (notification.getNotifier() instanceof Location) {
+					changedRef[0] = true;
+				} else if (notification.getNotifier() instanceof OtherIdentifiers) {
+					changedRef[0] = true;
+				} else if (notification.getNotifier() instanceof Route) {
+					changedRef[0] = true;
+				} else if (notification.getNotifier() instanceof EntryPoint) {
+					changedRef[0] = true;
 				} else if (notification.getFeature() == PortPackage.Literals.ROUTE__LINES) {
+					changedRef[0] = true;
+				} else if (notification.getFeature() == PortPackage.Literals.PORT__LOCATION) {
 					changedRef[0] = true;
 				} else if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__ROUTES) {
 					changedRef[0] = true;
 				} else if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__PORTS) {
 					// Add or remove is a change.
 					changedRef[0] = true;
-				} else if (notification.getNotifier() instanceof Location) {
-					changedRef[0] = true;
-				} 
+				}
 
 				// Reset!
 				if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__DISTANCE_DATA_VERSION) {
