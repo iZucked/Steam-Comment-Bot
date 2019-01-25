@@ -435,6 +435,7 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 				return hubVersions.stream() //
 						.map(this::wrap) //
 						.filter(v -> v.getIdentifier() != null) //
+						.filter(v -> v.getCreatedAt() != null) //
 						.sorted((v1, v2) -> v2.getCreatedAt().compareTo(v1.getCreatedAt())) //
 						.map(v -> new DataVersion(v.getIdentifier(), v.getCreatedAt(), false, false)) //
 						.collect(Collectors.toList());
