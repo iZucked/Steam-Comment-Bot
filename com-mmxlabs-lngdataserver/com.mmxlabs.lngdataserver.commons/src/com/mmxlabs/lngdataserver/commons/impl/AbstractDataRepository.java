@@ -72,9 +72,9 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 
 //	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss+00:00");
 
-	private String type;
+	private final String type;
 
-	private Class<T> dataVersionType;
+	private final Class<T> dataVersionType;
 
 	protected final TypeReference<List<T>> TYPE_VERSIONS_LIST = new TypeReference<List<T>>() {
 	};
@@ -83,7 +83,7 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 //		return LocalDateTime.parse(dateTime, DATE_FORMATTER);
 //	}
 
-	public AbstractDataRepository(String repoType, Class<T> dataVersionType) {
+	public AbstractDataRepository(final String repoType, final Class<T> dataVersionType) {
 		this.type = repoType;
 		this.dataVersionType = dataVersionType;
 		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(this::handleUpstreamURLChange);
@@ -138,7 +138,7 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 		if (!canWaitForNewUpstreamVersion()) {
 			return;
 		}
-		String upstreamUrl = getUpstreamUrl();
+		final String upstreamUrl = getUpstreamUrl();
 		if (upstreamUrl == null || upstreamUrl.trim().isEmpty()) {
 			// No URL, do not try and connect
 			return;
@@ -230,7 +230,7 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 			}
 
 			@Override
-			public com.squareup.okhttp.Request authenticateProxy(Proxy proxy, com.squareup.okhttp.Response response) throws IOException {
+			public com.squareup.okhttp.Request authenticateProxy(final Proxy proxy, final com.squareup.okhttp.Response response) throws IOException {
 				return null;
 			}
 		};
@@ -264,7 +264,7 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 	}
 
 	public boolean hasUpstream() {
-		String upstreamUrl = getUpstreamUrl();
+		final String upstreamUrl = getUpstreamUrl();
 		return upstreamUrl != null && !upstreamUrl.isEmpty();
 	}
 
@@ -356,15 +356,15 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 
 	protected abstract String getSyncVersionEndpoint();
 
-	public boolean hasLocalVersion(String version) {
+	public boolean hasLocalVersion(final String version) {
 		if (version == null || version.isEmpty()) {
 			return false;
 		}
 
-		List<DataVersion> versions = getLocalVersions();
+		final List<DataVersion> versions = getLocalVersions();
 
 		if (versions != null) {
-			for (DataVersion v : versions) {
+			for (final DataVersion v : versions) {
 				if (version.equals(v.getIdentifier())) {
 					return true;
 				}
@@ -379,10 +379,10 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 			return false;
 		}
 
-		List<DataVersion> versions = getUpstreamVersions();
+		final List<DataVersion> versions = getUpstreamVersions();
 
 		if (versions != null) {
-			for (DataVersion v : versions) {
+			for (final DataVersion v : versions) {
 				if (version.equals(v.getIdentifier())) {
 					return true;
 				}
@@ -417,7 +417,7 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 		try {
 			return getVersions(UpstreamUrlProvider.INSTANCE.getBaseURL(), UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
 		} catch (final Exception e) {
-			String msg = String.format("Error fetching upstream %s versions", type.toLowerCase());
+			final String msg = String.format("Error fetching upstream %s versions", type.toLowerCase());
 			LOG.error(msg + e.getMessage());
 			throw new RuntimeException(msg, e);
 		}
@@ -431,7 +431,7 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 				throw new RuntimeException("Error making request to " + baseUrl + ". Reason " + response.message() + " Response body is " + body);
 			} else {
 				final ObjectMapper mapper = createObjectMapper();
-				List<T> hubVersions = mapper.readValue(response.body().byteStream(), mapper.getTypeFactory().constructCollectionType(List.class, dataVersionType));
+				final List<T> hubVersions = mapper.readValue(response.body().byteStream(), mapper.getTypeFactory().constructCollectionType(List.class, dataVersionType));
 				return hubVersions.stream() //
 						.map(this::wrap) //
 						.filter(v -> v.getIdentifier() != null) //
@@ -456,7 +456,7 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 		try {
 			return getVersions(BackEndUrlProvider.INSTANCE.getUrl(), null, null);
 		} catch (final Exception e) {
-			String msg = String.format("Error fetching local %s versions", type.toLowerCase());
+			final String msg = String.format("Error fetching local %s versions", type.toLowerCase());
 
 			LOG.error(msg + e.getMessage());
 			throw new RuntimeException(msg, e);
@@ -471,9 +471,9 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished())).collect(Collectors.toList());
 	}
 
-	public T getLocalVersion(String versionTag) throws IOException {
-		String url = getSyncVersionEndpoint();
-		String baseURL = BackEndUrlProvider.INSTANCE.getUrl();
+	public T getLocalVersion(final String versionTag) throws IOException {
+		final String url = getSyncVersionEndpoint();
+		final String baseURL = BackEndUrlProvider.INSTANCE.getUrl();
 		final Request request = new Request.Builder().url(baseURL + url + versionTag).build();
 		try (Response response = CLIENT.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
