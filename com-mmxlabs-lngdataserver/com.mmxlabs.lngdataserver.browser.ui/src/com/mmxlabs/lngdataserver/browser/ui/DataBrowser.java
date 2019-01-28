@@ -572,12 +572,8 @@ public class DataBrowser extends ViewPart {
 				if (object instanceof ScenarioInstance) {
 					final ScenarioInstance scenarioInstance = (ScenarioInstance) object;
 
-					if ("1-1 base".equals(scenarioInstance.getName())) {
-						int ii = 0;
-					}
 					final Manifest mf = scenarioInstance.getManifest();
 					if (mf != null) {
-
 						if (needUpdateToBase(mf)) {
 							return "↑";
 						} else {
