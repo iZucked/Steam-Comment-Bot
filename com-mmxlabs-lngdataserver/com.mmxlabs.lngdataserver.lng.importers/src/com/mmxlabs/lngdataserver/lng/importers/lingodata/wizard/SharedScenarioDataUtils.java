@@ -34,7 +34,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,6 +59,11 @@ import com.mmxlabs.lngdataserver.lng.importers.port.PortsToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.pricing.PricingToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.vessels.VesselsToScenarioCopier;
 import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -100,7 +104,9 @@ public final class SharedScenarioDataUtils {
 		CommercialData("Contracts && Entities"), //
 		SpotCargoMarketsData("Cargo Markets"), //
 		SpotCharterMarketsData("Charter Markets"), //
-		PricingData("Price Curves"), ADPData("ADP") //
+		PricingData("Price Curves"), //
+		ADPData("ADP"), //
+		CargoData("Cargoes") //		
 		;
 
 		private DataOptions(final String name) {
@@ -163,6 +169,9 @@ public final class SharedScenarioDataUtils {
 						case ADPData:
 							dataToUpdater.put(DataOptions.ADPData, createADPUpdater(sdp));
 							break;
+						case CargoData:
+							dataToUpdater.put(DataOptions.CargoData, createCargoUpdater(sdp));
+							break;							
 						default:
 							break;
 
@@ -774,5 +783,83 @@ public final class SharedScenarioDataUtils {
 			}
 			cmd.appendAndExecute(AddCommand.create(target.getEditingDomain(), oldCM, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS, newMarkets));
 		}
+	}
+	
+
+	private static BiConsumer<CompoundCommand, IScenarioDataProvider> createCargoUpdater(final IScenarioDataProvider sdp) throws JsonProcessingException {
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
+		if (cargoModel == null) {
+			return (a, b) -> {
+			};
+		}
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.registerModule(new EMFJacksonModule());
+		final String loadsJSON = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(cargoModel.getLoadSlots());
+		final String dischargesJSON = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(cargoModel.getDischargeSlots());
+		final String cargoesJSON = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(cargoModel.getCargoes());
+
+		System.out.println(loadsJSON);
+		System.out.println(dischargesJSON);
+		System.out.println(cargoesJSON);
+		
+		return (cmd, target) -> {
+			cmd.append(new CompoundCommand() {
+
+				@Override
+				protected boolean prepare() {
+					super.prepare();
+					return true;
+				}
+
+				@Override
+				public void execute() {
+					final EMFDeserializationContext ctx = new EMFDeserializationContext(BeanDeserializerFactory.instance);
+					// Ignore back reference
+					ctx.ignoreFeature(CargoPackage.Literals.SLOT__CARGO);
+
+					final PortModel pm = ScenarioModelUtil.getPortModel(target);
+					pm.getPorts().forEach(ctx::registerType);
+					pm.getPortGroups().forEach(ctx::registerType);
+					pm.getPortCountryGroups().forEach(ctx::registerType);
+
+					final FleetModel fm = ScenarioModelUtil.getFleetModel(target);
+					fm.getVessels().forEach(ctx::registerType);
+					fm.getVesselGroups().forEach(ctx::registerType);
+
+					final CommercialModel cm = ScenarioModelUtil.getCommercialModel(target);
+					cm.getPurchaseContracts().forEach(ctx::registerType);
+					cm.getSalesContracts().forEach(ctx::registerType);
+					cm.getEntities().forEach(ctx::registerType);
+
+					final SpotMarketsModel smm = ScenarioModelUtil.getSpotMarketsModel(target);
+					smm.getCharterInMarkets().forEach(ctx::registerType);
+					smm.getDesPurchaseSpotMarket().getMarkets().forEach(ctx::registerType);
+					smm.getDesSalesSpotMarket().getMarkets().forEach(ctx::registerType);
+					smm.getFobPurchasesSpotMarket().getMarkets().forEach(ctx::registerType);
+					smm.getFobSalesSpotMarket().getMarkets().forEach(ctx::registerType);
+
+					// ANYTHING ELSE?
+					
+					final ObjectMapper mapper = new ObjectMapper(null, null, ctx);
+					mapper.registerModule(new EMFJacksonModule());
+
+					try {
+						final List<LoadSlot> newLoads = mapper.readValue(loadsJSON,  new TypeReference<List<LoadSlot>>() {});
+						final List<DischargeSlot> newDischarges= mapper.readValue(dischargesJSON,  new TypeReference<List<DischargeSlot>>() {});
+						final List<Cargo> newCargoes = mapper.readValue(cargoesJSON,  new TypeReference<List<Cargo>>() {});
+						ctx.runDeferredActions();
+						final EditingDomain editingDomain = target.getEditingDomain();
+						// Renumber spots
+						// Copy slots
+						// Copy cargoes
+						// Check back references.
+//						appendAndExecute(SetCommand.create(editingDomain, target.getScenario(), LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModel(), newCargoModel));
+					} catch (final Exception e1) {
+						e1.printStackTrace();
+						appendAndExecute(UnexecutableCommand.INSTANCE);
+					}
+				}
+			});
+		};
 	}
 }
