@@ -50,7 +50,9 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.ExposureDetail;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
@@ -234,11 +236,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		public List<IndexExposureData> createData(final @NonNull Schedule schedule, final @NonNull ScenarioResult scenarioResult) {
 			final List<IndexExposureData> output = new LinkedList<>();
 
-			final LocalDate earliest = getEarliestScenarioDate(scenarioResult.getScenarioDataProvider());
-			final LocalDate latest = getLatestScenarioDate(scenarioResult.getScenarioDataProvider());
-
-			final YearMonth ymStart = YearMonth.from(earliest);
-			final YearMonth ymEnd = YearMonth.from(latest);
+			final YearMonth ymStart = getEarliestExposureDate(scenarioResult.getScenarioDataProvider());
+			final YearMonth ymEnd = getLatestExposureDate(scenarioResult.getScenarioDataProvider());
 
 			final LNGScenarioModel rootObject = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 			if (rootObject == null) {
@@ -483,66 +482,41 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		return super.getAdapter(adapter);
 	}
 	
-	protected LocalDate getEarliestScenarioDate(final IScenarioDataProvider sdp) {
-		LocalDate result = LocalDate.now();
-		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
-
-		LocalDate erl = result;
-
-		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
-			if (erl.isAfter(ls.getWindowStart())) {
-				erl = ls.getWindowStart();
+	protected YearMonth getEarliestExposureDate(final IScenarioDataProvider sdp) {
+		YearMonth result = YearMonth.now();
+		
+		final ScheduleModel sm = ScenarioModelUtil.getScheduleModel(sdp);
+		final Schedule schedule = sm.getSchedule();
+		if (schedule != null) {
+			for(final CargoAllocation ca : schedule.getCargoAllocations()) {
+				for(final SlotAllocation sa : ca.getSlotAllocations()) {
+					for (final ExposureDetail detail : sa.getExposures()) {
+						if (detail.getDate().isBefore(result)) {
+							result = detail.getDate();
+						}
+					}
+				}
 			}
 		}
-		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
-			if (erl.isAfter(ds.getWindowStart())) {
-				erl = ds.getWindowStart();
-			}
-		}
-		if (erl.isBefore(result)) {
-			result = erl;
-		}
-
-		return result;
+		return result;		
 	}
-
-	protected LocalDate getLatestScenarioDate(final IScenarioDataProvider sdp) {
-		LocalDate result = LocalDate.now();
-		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
-
-		LocalDate erl = result;
-
-		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
-			if (erl.isBefore(ls.getWindowEndWithSlotOrPortTime().toLocalDate())) {
-				erl = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+	
+	protected YearMonth getLatestExposureDate(final IScenarioDataProvider sdp) {
+		YearMonth result = YearMonth.now();
+		
+		final ScheduleModel sm = ScenarioModelUtil.getScheduleModel(sdp);
+		final Schedule schedule = sm.getSchedule();
+		if (schedule != null) {
+			for(final CargoAllocation ca : schedule.getCargoAllocations()) {
+				for(final SlotAllocation sa : ca.getSlotAllocations()) {
+					for (final ExposureDetail detail : sa.getExposures()) {
+						if (detail.getDate().isAfter(result)) {
+							result = detail.getDate();
+						}
+					}
+				}
 			}
 		}
-		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
-			if (erl.isBefore(ds.getWindowEndWithSlotOrPortTime().toLocalDate())) {
-				erl = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
-			}
-		}
-		if (erl.isAfter(result)) {
-			result = erl;
-		}
-
-		return result;
+		return result;		
 	}
-	/*
-	 * private Regions getRegion(final Slot slot) {
-	 * 
-	 * final Port port = slot.getPort();
-	 * 
-	 * if (port != null) { final String country = port.getLocation().getCountry().toLowerCase(); switch(country) { case "japan": case "korea": case "china": case "taiwan": return Regions.JKCT; case
-	 * "spain": return Regions.MED; case "india": case "pakistan": case "bangladesh": return Regions.IND; case "kuwait": return Regions.ME; case "belgium": return Regions.NWE; default: return
-	 * Regions.Other; } } return Regions.Other; }
-	 * 
-	 * private enum Regions{ JKCT("JKCT"), MED("Med"), IND("India"), ME("Middle East"), NWE("North West Europe"), Other("Other");
-	 * 
-	 * private String name;
-	 * 
-	 * private Regions(final String name) { this.name = name; }
-	 * 
-	 * @Override public String toString() { return name; } }
-	 */
 }
