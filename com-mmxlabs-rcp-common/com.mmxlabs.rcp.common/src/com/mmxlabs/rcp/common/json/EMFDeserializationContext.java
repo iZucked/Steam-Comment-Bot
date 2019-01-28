@@ -85,7 +85,8 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 			return nameValue;
 		}
 
-		throw new IllegalArgumentException();
+		return null;
+
 	}
 
 	public void deferLookup(final JSONReference ref, final EObject owner, final EReference feature) {
@@ -95,12 +96,23 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 			return;
 		}
 
-		if (feature.isMany()) {
-			state.actions.add(() -> ((List) owner.eGet(feature)).add(lookupType(ref)));
+		Object referenceObject = lookupType(ref);
+		if (referenceObject == null) {
+			if (true) {
+				throw new IllegalArgumentException();
+			} else {
+				System.out.println("Unknown reference " + ref.getName() + "  " + ref.getGlobalId() + " " + ref.getClassType());
+			}
 		} else {
-			state.actions.add(() -> owner.eSet(feature, lookupType(ref)));
-		}
 
+			if (feature.isMany()) {
+				state.actions.add(() -> ((List) owner.eGet(feature)).add(referenceObject));
+			} else {
+				state.actions.add(() -> {
+					owner.eSet(feature, referenceObject);
+				});
+			}
+		}
 	}
 
 	public void runDeferredActions() {
