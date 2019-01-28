@@ -224,8 +224,8 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 	protected com.squareup.okhttp.Authenticator getAuthenticator() {
 		return new com.squareup.okhttp.Authenticator() {
 			@Override
-			public com.squareup.okhttp.Request authenticate(Proxy proxy, com.squareup.okhttp.Response response) throws IOException {
-				String credential = Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
+			public com.squareup.okhttp.Request authenticate(final Proxy proxy, final com.squareup.okhttp.Response response) throws IOException {
+				final String credential = Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
 				return response.request().newBuilder().header(CONST_AUTHORIZATION, credential).build();
 			}
 
