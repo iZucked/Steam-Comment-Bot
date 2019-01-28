@@ -40,7 +40,7 @@ public class EMFDeserializer<T extends EObject> extends StdDeserializer<T> {
 	}
 
 	@Override
-	public T deserialize(final JsonParser jp, final DeserializationContext dc) throws IOException, JsonProcessingException {
+	public T deserialize(final JsonParser jp, final DeserializationContext dc) throws IOException {
 		final EFactory eFactoryInstance = eClass.getEPackage().getEFactoryInstance();
 		final JsonNode node = jp.getCodec().readTree(jp);
 
@@ -125,7 +125,9 @@ public class EMFDeserializer<T extends EObject> extends StdDeserializer<T> {
 
 			}
 		}
-
+		if (ctx != null) {
+			ctx.registerType(result);
+		}
 		return result;
 
 	}
