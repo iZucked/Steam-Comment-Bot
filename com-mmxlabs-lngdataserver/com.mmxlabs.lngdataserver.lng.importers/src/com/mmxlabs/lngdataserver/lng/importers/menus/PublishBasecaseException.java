@@ -15,6 +15,7 @@ public class PublishBasecaseException extends RuntimeException {
 		FAILED_TO_EVALUATE, //
 		FAILED_TO_SAVE, //
 		FAILED_TO_UPLOAD_BASECASE, //
+		FAILED_TO_UPLOAD_BACKING_DATA, //
 		FAILED_TO_UPLOAD_REPORT, //
 		FAILED_TO_GENERATE_REPORT, //
 		FAILED_TO_MAKE_CURRENT,//

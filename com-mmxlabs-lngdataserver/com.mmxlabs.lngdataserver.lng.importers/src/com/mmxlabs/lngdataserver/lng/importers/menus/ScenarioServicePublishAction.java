@@ -89,6 +89,9 @@ public class ScenarioServicePublishAction {
 				case FAILED_TO_GENERATE_REPORT:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), "Error publishing", e.getMessage() + " Unable to publish as base case.");
 					break;
+				case FAILED_TO_UPLOAD_BACKING_DATA:
+					MessageDialog.openError(Display.getDefault().getActiveShell(), "Error publishing", "Error uploading refernce data. Unable to publish as base case.");
+					break;
 				case FAILED_TO_UPLOAD_REPORT:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), "Error publishing", e.getMessage() + " Unable to publish as base case.");
 					break;
