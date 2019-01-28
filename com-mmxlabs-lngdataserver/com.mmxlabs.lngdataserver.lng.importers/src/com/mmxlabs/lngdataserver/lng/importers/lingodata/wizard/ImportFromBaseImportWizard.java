@@ -6,16 +6,18 @@ package com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
+import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.ImportFromBaseSelectionPage.DataOptionGroup;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.DataOptions;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.UpdateJob;
-import com.mmxlabs.rcp.common.wizards.MessagePage;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class ImportFromBaseImportWizard extends Wizard implements IImportWizard {
@@ -24,14 +26,14 @@ public class ImportFromBaseImportWizard extends Wizard implements IImportWizard 
 
 	private ScenarioInstance destination;
 
-	private Set<DataOptions> options;
+	private List<DataOptionGroup> data;
 
-	public ImportFromBaseImportWizard(final ScenarioInstance baseCase, final ScenarioInstance destination, Set<DataOptions> options) {
+	public ImportFromBaseImportWizard(final ScenarioInstance baseCase, final ScenarioInstance destination, List<DataOptionGroup> data) {
 		super();
 		this.baseCase = baseCase;
 		this.destination = destination;
-		this.options = options;
 		this.setNeedsProgressMonitor(true);
+		this.data = data;
 	}
 
 	/*
@@ -41,8 +43,11 @@ public class ImportFromBaseImportWizard extends Wizard implements IImportWizard 
 	 */
 	@Override
 	public boolean performFinish() {
+		Set<DataOptions> options = data.stream() //
+				.filter(e -> (e.enabled && e.selected)) //
+				.flatMap(e -> e.options.stream())//
+				.collect(Collectors.toSet());
 
-		
 		final UpdateJob job = new UpdateJob(options, baseCase, Collections.singletonList(destination), true);
 
 		try {
@@ -69,12 +74,14 @@ public class ImportFromBaseImportWizard extends Wizard implements IImportWizard 
 
 	@Override
 	public boolean canFinish() {
-		return true;
+		return data.stream() //
+				.filter(e -> (e.enabled && e.selected && e.needsUpdate)) //
+				.count() > 0;
 	}
 
 	@Override
 	public void addPages() {
 		super.addPages();
-		addPage(new MessagePage("Import from base case", "Copy pricing data from base case."));
+		addPage(new ImportFromBaseSelectionPage("Import from base case", "Data to update.", data));
 	}
 }
