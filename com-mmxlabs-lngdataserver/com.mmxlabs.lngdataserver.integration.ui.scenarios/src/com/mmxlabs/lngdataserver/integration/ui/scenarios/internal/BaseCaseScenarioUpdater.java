@@ -151,7 +151,7 @@ public class BaseCaseScenarioUpdater {
 				RunnerHelper.syncExecDisplayOptional(() -> {
 					instance.setName(name);
 					parent.getElements().add(instance);
-					baseCaseVersionsProviderService.setBaseCase(instance, record.pricingVersionUUID);
+					baseCaseVersionsProviderService.setBaseCase(instance);
 				});
 			}
 		}

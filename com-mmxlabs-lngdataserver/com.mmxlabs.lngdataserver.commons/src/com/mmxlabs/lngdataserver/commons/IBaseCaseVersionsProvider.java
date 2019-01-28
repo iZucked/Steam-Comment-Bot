@@ -14,6 +14,15 @@ public interface IBaseCaseVersionsProvider {
 	String getPricingVersion();
 
 	@Nullable
+	String getFleetVersion();
+
+	@Nullable
+	String getPortsVersion();
+
+	@Nullable
+	String getDistancesVersion();
+
+	@Nullable
 	ScenarioInstance getBaseCase();
 
 	void addChangedListener(IBaseCaseChanged listener);
