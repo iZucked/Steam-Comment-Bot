@@ -18,7 +18,6 @@ import com.mmxlabs.common.caches.AbstractCache;
 import com.mmxlabs.common.caches.AbstractCache.IKeyEvaluator;
 import com.mmxlabs.common.caches.LHMCache;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -85,8 +84,9 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			this.startingTime = startingTime;
 			int slotix = 0;
 			int timeix = 0;
-			
-			int loadix = -1, dischargeix = -1;
+
+			int loadix = -1;
+			int dischargeix = -1;
 			for (final Object o : sequence) {
 				if (o instanceof PortOptions) {
 					PortOptions portOptions = (PortOptions) o;
@@ -130,18 +130,16 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		private int doHashCode() {
 			final int prime = 31;
 			int result = 1;
-			// result = prime * result + getOuterType().hashCode();
 			result = (prime * result) + Arrays.hashCode(slots);
 			result = (prime * result) + Arrays.hashCode(durations);
 			result = (prime * result) + Arrays.hashCode(voyageTimes);
 
-			// result = prime * result + loadPrice;
 			result = (prime * result) + dischargePrice;
 			result = (prime * result) + startCV;
 			result = (prime * result) + Arrays.hashCode(baseFuelPricesPerMT);
 			result = (prime * result) + (int) vesselCharterInRatePerDay;
 			result = (prime * result) + startingTime;
-			
+
 			result = (prime * result) + vessel.hashCode();
 
 			result = (prime * result) + Arrays.hashCode(startHeelRangeInM3);
@@ -186,17 +184,17 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		final IKeyEvaluator<@NonNull CacheKey, VoyagePlan> evaluator = new IKeyEvaluator<@NonNull CacheKey, VoyagePlan>() {
 
 			@Override
-			final public @NonNull Pair<@NonNull CacheKey, VoyagePlan> evaluate(final CacheKey arg) {
+			public final @NonNull Pair<@NonNull CacheKey, VoyagePlan> evaluate(final CacheKey arg) {
 
 				final VoyagePlan plan = delegate.optimise(arg.resource, arg.vessel, arg.startHeelRangeInM3, arg.baseFuelPricesPerMT, arg.vesselCharterInRatePerDay, arg.portTimesRecord, arg.sequence,
 						arg.choices, arg.startingTime);
 
 				plan.setCacheLocked(true);
 				// don't clone key
-				return new Pair<@NonNull CacheKey, VoyagePlan>(arg, plan);
+				return new Pair<>(arg, plan);
 			}
 		};
-		this.cache = new LHMCache<@NonNull CacheKey, VoyagePlan>("VPO", evaluator, cacheSize);
+		this.cache = new LHMCache<>("VPO", evaluator, cacheSize);
 	}
 
 	@Override
