@@ -39,10 +39,12 @@ public class BaseCaseServiceClient {
 
 	private final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 
-	// public String uploadBaseCase(File file, String portsVersionUUID, String vesselsVersionUUID, String pricingVersionUUID, String distancesVersionUUID) throws IOException {
 	public String uploadBaseCase(final File file, //
 			final String scenarioName, ///
 			final String pricingVersionUUID, //
+			final String portsVersionUUID, //
+			final String distancesVersionUUID, //
+			final String vesselsVersionUUID, //
 			final IProgressListener progressListener) throws IOException {
 		if (pricingVersionUUID == null) {
 			throw new IllegalArgumentException("Pricing version cannot be null");
@@ -50,9 +52,9 @@ public class BaseCaseServiceClient {
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("pricingVersionUUID", pricingVersionUUID) //
-				.addFormDataPart("portsVersionUUID", "") //
-				.addFormDataPart("vesselsVersionUUID", "") //
-				.addFormDataPart("distancesVersionUUID", "") //
+				.addFormDataPart("portsVersionUUID", portsVersionUUID) //
+				.addFormDataPart("vesselsVersionUUID", vesselsVersionUUID) //
+				.addFormDataPart("distancesVersionUUID", distancesVersionUUID) //
 				.addFormDataPart("basecase", scenarioName, RequestBody.create(mediaType, file)) //
 				.build();
 

@@ -33,4 +33,10 @@ public interface IDataRepository {
 
 	void registerUpstreamVersionListener(final Runnable versionConsumer);
 
+	boolean hasLocalVersion(String version);
+
+	boolean hasUpstreamVersion(String version);
+
+	boolean publishUpstreamVersion(String versionJSON) throws Exception;
+
 }

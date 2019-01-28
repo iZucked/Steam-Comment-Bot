@@ -70,18 +70,12 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 			.readTimeout(Integer.MAX_VALUE, TimeUnit.MILLISECONDS) //
 			.build();
 
-//	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss+00:00");
-
 	private final String type;
 
 	private final Class<T> dataVersionType;
 
 	protected final TypeReference<List<T>> TYPE_VERSIONS_LIST = new TypeReference<List<T>>() {
 	};
-
-//	protected static LocalDateTime fromDateTimeAtUTC(final String dateTime) {
-//		return LocalDateTime.parse(dateTime, DATE_FORMATTER);
-//	}
 
 	public AbstractDataRepository(final String repoType, final Class<T> dataVersionType) {
 		this.type = repoType;
@@ -319,6 +313,16 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 		}
 	}
 
+	@Override
+	public boolean publishUpstreamVersion(final String versionJSON) throws Exception {
+
+		final RequestBody body = RequestBody.create(JSON, versionJSON);
+		final Request postRequest = createUpstreamRequestBuilder(getUpstreamUrl() + getSyncVersionEndpoint()).post(body).build();
+		try (final Response postResponse = CLIENT.newCall(postRequest).execute()) {
+			return postResponse.isSuccessful();
+		}
+	}
+
 	protected CompletableFuture<Boolean> waitForNewLocalVersion() {
 		return notifyOnNewVersion(false);
 	}
@@ -374,7 +378,7 @@ public abstract class AbstractDataRepository<T> implements IDataRepository {
 		return false;
 	}
 
-	public boolean hasUpstreamVersion(String version) {
+	public boolean hasUpstreamVersion(final String version) {
 		if (version == null || version.isEmpty()) {
 			return false;
 		}
