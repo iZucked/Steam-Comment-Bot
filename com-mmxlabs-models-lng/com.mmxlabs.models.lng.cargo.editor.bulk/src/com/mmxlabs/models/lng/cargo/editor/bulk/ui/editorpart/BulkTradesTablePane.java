@@ -118,6 +118,7 @@ import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesRowTransformerFacto
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.LoadPortTradesBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.PurchaseContractTradesBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.SalesContractTradesBasedFilterHandler;
+import com.mmxlabs.models.lng.cargo.editor.bulk.views.TimePeriodTradesBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.TradesBasedColumnFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.VesselsTradesBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.PromptToolbarEditor;
@@ -156,6 +157,7 @@ import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.rcp.common.handlers.TodayHandler;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAdaptable {
@@ -941,27 +943,33 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 	protected void registerColumnFilterHandlers() {
 		{
-			PurchaseContractTradesBasedFilterHandler handler = new PurchaseContractTradesBasedFilterHandler();
+			final PurchaseContractTradesBasedFilterHandler handler = new PurchaseContractTradesBasedFilterHandler();
 			registerHandler(handler, true);
 		}
 		{
-			SalesContractTradesBasedFilterHandler handler = new SalesContractTradesBasedFilterHandler();
+			final SalesContractTradesBasedFilterHandler handler = new SalesContractTradesBasedFilterHandler();
 			registerHandler(handler, true);
 		}
 		{
-			VesselsTradesBasedFilterHandler handler = new VesselsTradesBasedFilterHandler();
+			final VesselsTradesBasedFilterHandler handler = new VesselsTradesBasedFilterHandler();
 			registerHandler(handler, true);
 		}
 		{
-			CargoTradesBasedFilterHandler handler = new CargoTradesBasedFilterHandler();
+			final CargoTradesBasedFilterHandler handler = new CargoTradesBasedFilterHandler();
 			registerHandler(handler, true);
 		}
 		{
-			DischargePortTradesBasedFilterHandler handler = new DischargePortTradesBasedFilterHandler();
+			final DischargePortTradesBasedFilterHandler handler = new DischargePortTradesBasedFilterHandler();
 			registerHandler(handler, true);
 		}
 		{
-			LoadPortTradesBasedFilterHandler handler = new LoadPortTradesBasedFilterHandler();
+			final LoadPortTradesBasedFilterHandler handler = new LoadPortTradesBasedFilterHandler();
+			registerHandler(handler, true);
+		}
+		{
+			final LocalDate scenarioStart = getEarliestScenarioDate(scenarioEditingLocation.getScenarioDataProvider());
+			final LocalDate scenarioEnd = getLatestScenarioDate(scenarioEditingLocation.getScenarioDataProvider());
+			final TimePeriodTradesBasedFilterHandler handler = new TimePeriodTradesBasedFilterHandler(scenarioStart, scenarioEnd);
 			registerHandler(handler, true);
 		}
 
@@ -1523,16 +1531,56 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		};
 	}
 
-	// private class AddAction extends DefaultMenuCreatorAction {
-	//
-	// public AddAction(final String label) {
-	// super(label);
-	// }
-	//
-	// protected void populate(final Menu menu) {
-	//
-	// }
-	// }
+	private LocalDate getEarliestScenarioDate(final IScenarioDataProvider sdp) {
+		LocalDate result = LocalDate.now();
+
+		//final IScenarioDataProvider sdp = scenarioEditingLocation.getScenarioDataProvider();
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
+
+		LocalDate erl = result;
+
+		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
+			if (erl.isAfter(ls.getWindowStart())) {
+				erl = ls.getWindowStart();
+			}
+		}
+		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
+			if (erl.isAfter(ds.getWindowStart())) {
+				erl = ds.getWindowStart();
+			}
+		}
+		if (erl.isBefore(result)) {
+			result = erl;
+		}
+
+		return result;
+	}
+
+	private LocalDate getLatestScenarioDate(final IScenarioDataProvider sdp) {
+		LocalDate result = LocalDate.now();
+
+		//final IScenarioDataProvider sdp = scenarioEditingLocation.getScenarioDataProvider();
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
+
+		LocalDate erl = result;
+
+		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
+			if (erl.isBefore(ls.getWindowEndWithSlotOrPortTime().toLocalDate())) {
+				erl = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+			}
+		}
+		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
+			if (erl.isBefore(ds.getWindowEndWithSlotOrPortTime().toLocalDate())) {
+				erl = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+			}
+		}
+		if (erl.isAfter(result)) {
+			result = erl;
+		}
+
+		return result;
+	}
+	
 	private class AddAction extends DefaultMenuCreatorAction {
 
 		private final Action[] actions;
