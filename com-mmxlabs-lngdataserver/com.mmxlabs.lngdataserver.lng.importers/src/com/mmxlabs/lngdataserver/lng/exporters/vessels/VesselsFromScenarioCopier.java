@@ -4,16 +4,16 @@
  */
 package com.mmxlabs.lngdataserver.lng.exporters.vessels;
 
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
-import org.eclipse.emf.ecore.util.EcoreUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortTypeConstants;
 import com.mmxlabs.lngdataserver.integration.vessels.model.FuelConsumption;
 import com.mmxlabs.lngdataserver.integration.vessels.model.Vessel;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselPortAttributes;
@@ -25,6 +25,8 @@ import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.mmxcore.VersionRecord;
+import com.mmxlabs.rcp.common.versions.VersionsUtil;
 
 public class VesselsFromScenarioCopier {
 
@@ -137,23 +139,22 @@ public class VesselsFromScenarioCopier {
 			if (lingo_vessel.isInaccessiblePortsOverride() || lingo_ReferenceVessel == null) {
 				final List<String> newPorts = new LinkedList<>();
 				for (final APortSet<Port> port : lingo_vessel.getInaccessiblePorts()) {
-					if (port instanceof Port) {
-						newPorts.add(((Port) port).getLocation().getMmxId());
-					} else {
-						// log error
-					}
+					newPorts.add(PortTypeConstants.encode(port));
 				}
 				vessel.setInaccessiblePorts(Optional.of(newPorts));
 			}
 		}
 
-		String fleetDataVersion = fleetModel.getFleetDataVersion();
-		if (fleetDataVersion == null) {
-			fleetDataVersion = EcoreUtil.generateUUID();
-			fleetModel.setFleetDataVersion(fleetDataVersion);
+		VersionRecord record = fleetModel.getFleetVersionRecord();
+		if (record == null || record.getVersion() == null) {
+			record = VersionsUtil.createNewRecord();
+			// FIXME: Command!
+			fleetModel.setFleetVersionRecord(record);
 		}
-		version.setIdentifier(fleetDataVersion);
-		version.setCreatedAt(LocalDateTime.now());
+		version.setIdentifier(record.getVersion());
+		version.setCreatedAt(record.getCreatedAt());
+		version.setCreatedBy(record.getCreatedBy());
+
 		vessels.sort((a, b) -> a.getName().compareTo(b.getName()));
 		version.setVessels(vessels);
 

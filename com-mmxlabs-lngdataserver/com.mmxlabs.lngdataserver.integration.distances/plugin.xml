@@ -15,4 +15,10 @@
 -->
 
 <plugin>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.mmxlabs.lngdataserver.integration.distances.internal.PluginStartup">
+      </startup>
+   </extension>
 </plugin>

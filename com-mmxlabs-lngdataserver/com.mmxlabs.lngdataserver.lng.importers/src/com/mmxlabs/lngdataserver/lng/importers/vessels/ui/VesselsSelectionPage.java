@@ -42,7 +42,6 @@ public class VesselsSelectionPage extends WizardPage {
 		final Combo combo = new Combo(container, SWT.READ_ONLY);
 
 		final VesselsRepository dr = VesselsRepository.INSTANCE;
-		dr.isReady();
 		dr.getLocalVersions().forEach(v -> combo.add(v.getIdentifier()));
 
 		combo.addSelectionListener(new SelectionAdapter() {

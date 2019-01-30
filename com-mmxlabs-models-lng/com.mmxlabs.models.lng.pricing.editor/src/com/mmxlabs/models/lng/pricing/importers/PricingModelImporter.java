@@ -12,7 +12,6 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.csv.CSVReader;
@@ -35,6 +34,7 @@ import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
+import com.mmxlabs.rcp.common.versions.VersionsUtil;
 
 /**
  */
@@ -145,7 +145,8 @@ public class PricingModelImporter implements ISubmodelImporter {
 			makeConversionFactor("MWh", "mmBtu", 0.293297, pricingModel);
 		}
 
-		pricingModel.setMarketCurveDataVersion(EcoreUtil.generateUUID());
+		pricingModel.setMarketCurvesVersionRecord(VersionsUtil.createNewRecord());
+		pricingModel.setSettledPricesVersionRecord(VersionsUtil.createNewRecord());
 
 		return pricingModel;
 	}

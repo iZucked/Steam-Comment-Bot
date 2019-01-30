@@ -14,7 +14,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.mmxlabs.lngdataserver.commons.IBaseCaseVersionsProvider;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.BaseCaseScenarioService;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.SharedWorkspaceScenarioService;
 import com.mmxlabs.lngdataserver.server.IUpstreamServiceChangedListener;
@@ -22,6 +21,8 @@ import com.mmxlabs.lngdataserver.server.IUpstreamServiceChangedListener.Service;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider;
+import com.mmxlabs.scenario.service.ui.IScenarioVersionService;
 
 public class Activator extends AbstractUIPlugin {
 	// The plug-in ID
@@ -33,16 +34,20 @@ public class Activator extends AbstractUIPlugin {
 	private static Activator plugin;
 
 	private ServiceRegistration<IBaseCaseVersionsProvider> baseCaseVersionsProviderServiceRegistration = null;
+	private ServiceRegistration<IScenarioVersionService> scenarioVersionsServiceRegistration = null;
 	private ServiceRegistration<IScenarioService> baseCaseServiceRegistration = null;
 	private ServiceRegistration<IScenarioService> teamServiceRegistration = null;
 
 	private BaseCaseVersionsProviderService baseCaseVersionsProviderService = null;
 	private BaseCaseScenarioService baseCaseService = null;
+
+	private ScenarioVersionsService scenarioVersionsService = null;
+
 	private SharedWorkspaceScenarioService teamService = null;
 
 	private ServiceTracker<IScenarioCipherProvider, IScenarioCipherProvider> scenarioCipherProviderTracker = null;
 
-	private IUpstreamServiceChangedListener listener = serviceType -> updateService(serviceType);
+	private IUpstreamServiceChangedListener listener = this::updateService;
 
 	/*
 	 * (non-Javadoc)
@@ -59,6 +64,9 @@ public class Activator extends AbstractUIPlugin {
 
 		baseCaseVersionsProviderService = new BaseCaseVersionsProviderService();
 		baseCaseVersionsProviderServiceRegistration = getBundle().getBundleContext().registerService(IBaseCaseVersionsProvider.class, baseCaseVersionsProviderService, new Hashtable<>());
+
+		scenarioVersionsService = new ScenarioVersionsService(baseCaseVersionsProviderService);
+		scenarioVersionsServiceRegistration = getBundle().getBundleContext().registerService(IScenarioVersionService.class, scenarioVersionsService, new Hashtable<>());
 
 		scenarioCipherProviderTracker = new ServiceTracker<IScenarioCipherProvider, IScenarioCipherProvider>(context, IScenarioCipherProvider.class, null) {
 			@Override
@@ -112,7 +120,12 @@ public class Activator extends AbstractUIPlugin {
 			scenarioCipherProviderTracker.close();
 			scenarioCipherProviderTracker = null;
 		}
-		
+
+		if (scenarioVersionsServiceRegistration != null) {
+			scenarioVersionsServiceRegistration.unregister();
+			scenarioVersionsServiceRegistration = null;
+		}
+
 		if (baseCaseVersionsProviderServiceRegistration != null) {
 			baseCaseVersionsProviderServiceRegistration.unregister();
 			baseCaseVersionsProviderServiceRegistration = null;

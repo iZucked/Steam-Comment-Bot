@@ -461,6 +461,61 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_RESULT_ROOT_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.mmxcore.impl.VersionRecordImpl <em>Version Record</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.mmxcore.impl.VersionRecordImpl
+	 * @see com.mmxlabs.models.mmxcore.impl.MMXCorePackageImpl#getVersionRecord()
+	 * @generated
+	 */
+	int VERSION_RECORD = 6;
+
+	/**
+	 * The feature id for the '<em><b>Created By</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VERSION_RECORD__CREATED_BY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Created At</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VERSION_RECORD__CREATED_AT = 1;
+
+	/**
+	 * The feature id for the '<em><b>Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VERSION_RECORD__VERSION = 2;
+
+	/**
+	 * The number of structural features of the '<em>Version Record</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VERSION_RECORD_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Version Record</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VERSION_RECORD_OPERATION_COUNT = 0;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.mmxcore.MMXObject <em>MMX Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -595,6 +650,49 @@ public interface MMXCorePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getMMXResultRoot();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.mmxcore.VersionRecord <em>Version Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Version Record</em>'.
+	 * @see com.mmxlabs.models.mmxcore.VersionRecord
+	 * @generated
+	 */
+	EClass getVersionRecord();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.mmxcore.VersionRecord#getCreatedBy <em>Created By</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Created By</em>'.
+	 * @see com.mmxlabs.models.mmxcore.VersionRecord#getCreatedBy()
+	 * @see #getVersionRecord()
+	 * @generated
+	 */
+	EAttribute getVersionRecord_CreatedBy();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.mmxcore.VersionRecord#getCreatedAt <em>Created At</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Created At</em>'.
+	 * @see com.mmxlabs.models.mmxcore.VersionRecord#getCreatedAt()
+	 * @see #getVersionRecord()
+	 * @generated
+	 */
+	EAttribute getVersionRecord_CreatedAt();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.mmxcore.VersionRecord#getVersion <em>Version</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Version</em>'.
+	 * @see com.mmxlabs.models.mmxcore.VersionRecord#getVersion()
+	 * @see #getVersionRecord()
+	 * @generated
+	 */
+	EAttribute getVersionRecord_Version();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -735,6 +833,40 @@ public interface MMXCorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass MMX_RESULT_ROOT = eINSTANCE.getMMXResultRoot();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.mmxcore.impl.VersionRecordImpl <em>Version Record</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.mmxcore.impl.VersionRecordImpl
+		 * @see com.mmxlabs.models.mmxcore.impl.MMXCorePackageImpl#getVersionRecord()
+		 * @generated
+		 */
+		EClass VERSION_RECORD = eINSTANCE.getVersionRecord();
+
+		/**
+		 * The meta object literal for the '<em><b>Created By</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VERSION_RECORD__CREATED_BY = eINSTANCE.getVersionRecord_CreatedBy();
+
+		/**
+		 * The meta object literal for the '<em><b>Created At</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VERSION_RECORD__CREATED_AT = eINSTANCE.getVersionRecord_CreatedAt();
+
+		/**
+		 * The meta object literal for the '<em><b>Version</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VERSION_RECORD__VERSION = eINSTANCE.getVersionRecord_Version();
 
 	}
 

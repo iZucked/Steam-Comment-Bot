@@ -26,10 +26,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.util.CheckedSupplier;
 import com.mmxlabs.lngdataserver.commons.IDataRepository;
-import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
-import com.mmxlabs.lngdataserver.integration.distances.DistanceRepository;
+import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
-import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
+import com.mmxlabs.lngdataserver.integration.general.model.bunkerfuels.BunkerFuelsRepository;
+import com.mmxlabs.lngdataserver.integration.general.model.bunkerfuels.BunkerFuelsVersion;
+import com.mmxlabs.lngdataserver.integration.general.model.financial.settled.SettledPricesRepository;
+import com.mmxlabs.lngdataserver.integration.general.model.financial.settled.SettledPricesVersion;
+import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortGroupsRepository;
+import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortGroupsVersion;
+import com.mmxlabs.lngdataserver.integration.general.model.vesselgroups.VesselGroupsRepository;
+import com.mmxlabs.lngdataserver.integration.general.model.vesselgroups.VesselGroupsVersion;
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
@@ -37,13 +43,16 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceCli
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.ReportsServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.ReportPublisherExtensionUtil;
-import com.mmxlabs.lngdataserver.integration.vessels.VesselsRepository;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
 import com.mmxlabs.lngdataserver.lng.exporters.distances.DistancesFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.vessels.VesselsFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.bunkerfuels.BunkerFuelsFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.financial.SettledPricesFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
+import com.mmxlabs.lngdataserver.lng.importers.portgroups.PortGroupsFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.vesselgroups.VesselGroupsFromScenarioCopier;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -56,9 +65,9 @@ import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
+import com.mmxlabs.models.migration.scenario.ScenarioMigrationException;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
@@ -84,6 +93,14 @@ public class ScenarioServicePublishAction {
 			if (cause instanceof PublishBasecaseException) {
 				final PublishBasecaseException publishBasecaseException = (PublishBasecaseException) cause;
 				switch (publishBasecaseException.getType()) {
+				case FAILED_UNKNOWN_ERROR:
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING,
+							"Failed to publish base case with unknown error. " + publishBasecaseException.getCause().getMessage());
+					break;
+				case FAILED_TO_MIGRATE:
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING,
+							"Failed to migrate the scenario to current data model version. Unable to publish as base case.");
+					break;
 				case FAILED_TO_EVALUATE:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, "Failed to evaluate the scenario. Unable to publish as base case.");
 					break;
@@ -116,10 +133,10 @@ public class ScenarioServicePublishAction {
 
 	}
 
-	public static void publishScenario(final ScenarioInstance scenarioInstance, final IProgressMonitor parent_progressMonitor) {
+	public static void publishScenario(final ScenarioInstance scenarioInstance, final IProgressMonitor parentProgressMonitor) {
 
-		parent_progressMonitor.beginTask("Publish base case", 1000);
-		final SubMonitor progressMonitor = SubMonitor.convert(parent_progressMonitor, 1000);
+		parentProgressMonitor.beginTask("Publish base case", 1000);
+		final SubMonitor progressMonitor = SubMonitor.convert(parentProgressMonitor, 1000);
 		try {
 			progressMonitor.subTask("Prepare base case");
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
@@ -161,6 +178,12 @@ public class ScenarioServicePublishAction {
 				} finally {
 					runnerBuilder.dispose();
 				}
+			} catch (RuntimeException e) {
+				if (e.getCause() instanceof ScenarioMigrationException) {
+					ScenarioMigrationException ee = (ScenarioMigrationException) e.getCause();
+					throw new PublishBasecaseException("Error evaluating scenario.", Type.FAILED_TO_MIGRATE, ee);
+				}
+				throw new PublishBasecaseException("Error evaluating scenario.", Type.FAILED_UNKNOWN_ERROR, e);
 			}
 
 			// CreateFile
@@ -200,6 +223,17 @@ public class ScenarioServicePublishAction {
 				throw new PublishBasecaseException("Error uploading scenario.", Type.FAILED_TO_UPLOAD_BACKING_DATA, e);
 			} finally {
 			}
+
+			if (false) {
+				try {
+					uploadSettledPrices(scenarioDataProvider);
+				} catch (final Exception e) {
+					System.out.println("Error uploading the basecase scenario");
+					e.printStackTrace();
+					throw new PublishBasecaseException("Error uploading scenario.", Type.FAILED_TO_UPLOAD_BACKING_DATA, e);
+				} finally {
+				}
+			}
 			// UploadFile
 			String response = null;
 			final SubMonitor uploadMonitor = progressMonitor.split(500);
@@ -208,7 +242,7 @@ public class ScenarioServicePublishAction {
 						pricingVersionUUID, //
 						distanceVersionUUID, portVersionUUID, //
 						fleetVersionUUID, //
-						wrapMonitor(uploadMonitor));
+						WrappedProgressMonitor.wrapMonitor(uploadMonitor));
 			} catch (final IOException e) {
 				System.out.println("Error uploading the basecase scenario");
 				e.printStackTrace();
@@ -279,56 +313,56 @@ public class ScenarioServicePublishAction {
 
 	private static @Nullable String checkPricingDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
-		final String version = pricingModel.getMarketCurveDataVersion();
+		final String version = pricingModel.getMarketCurvesVersionRecord().getVersion();
 		if (genericVersionUpload(PricingRepository.INSTANCE, version, () -> exportPricing(scenarioModel))) {
 			return version;
 		}
 		return null;
 	}
 
-	private static @Nullable String checkDistanceDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
-		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-		final String version = portModel.getDistanceDataVersion();
-		if (genericVersionUpload(DistanceRepository.INSTANCE, version, () -> exportDistances(scenarioModel))) {
-			return version;
-		}
-		return null;
-	}
+	// private static @Nullable String checkDistanceDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
+	// final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
+	// final String version = portModel.getDistanceDataVersion();
+	// if (genericVersionUpload(DistanceRepository.INSTANCE, version, () -> exportDistances(scenarioModel))) {
+	// return version;
+	// }
+	// return null;
+	// }
 
-	private static @Nullable String checkFleetDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
-		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
-		final String version = fleetModel.getFleetDataVersion();
-		if (genericVersionUpload(VesselsRepository.INSTANCE, version, () -> exportVessels(scenarioModel))) {
-			return version;
-		}
-		return null;
-	}
+	// private static @Nullable String checkFleetDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
+	// final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
+	// final String version = fleetModel.getFleetDataVersion();
+	// if (genericVersionUpload(VesselsRepository.INSTANCE, version, () -> exportVessels(scenarioModel))) {
+	// return version;
+	// }
+	// return null;
+	// }
 
-	private static @Nullable String checkPortDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
-		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-		final String version = portModel.getPortDataVersion();
-		if (genericVersionUpload(PortsRepository.INSTANCE, version, () -> exportPort(scenarioModel))) {
-			return version;
-		}
-		return null;
-	}
+	// private static @Nullable String checkPortDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
+	// final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
+	// final String version = portModel.getPortDataVersion();
+	// if (genericVersionUpload(PortsRepository.INSTANCE, version, () -> exportPort(scenarioModel))) {
+	// return version;
+	// }
+	// return null;
+	// }
 
-	private static String exportPricing(final LNGScenarioModel scenarioModel) throws IOException {
+	private static PricingVersion exportPricing(final LNGScenarioModel scenarioModel) throws IOException {
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
 		final PricingVersion version = PricingFromScenarioCopier.generateVersion(pricingModel);
-		return new ObjectMapper().writeValueAsString(version);
+		return version;
 	}
 
-	private static String exportDistances(final LNGScenarioModel scenarioModel) throws IOException {
+	private static DistancesVersion exportDistances(final LNGScenarioModel scenarioModel) throws IOException {
 		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 		final DistancesVersion version = DistancesFromScenarioCopier.generateVersion(portModel);
-		return new ObjectMapper().writeValueAsString(version);
+		return version;
 	}
 
-	private static String exportPort(final LNGScenarioModel scenarioModel) throws IOException {
+	private static PortsVersion exportPort(final LNGScenarioModel scenarioModel) throws IOException {
 		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 		final PortsVersion version = PortFromScenarioCopier.generateVersion(portModel);
-		return new ObjectMapper().writeValueAsString(version);
+		return version;
 	}
 
 	private static String exportVessels(final LNGScenarioModel scenarioModel) throws IOException {
@@ -338,44 +372,44 @@ public class ScenarioServicePublishAction {
 		return new ObjectMapper().writeValueAsString(version);
 	}
 
-	private static IProgressListener wrapMonitor(final IProgressMonitor monitor) {
-		if (monitor == null) {
-			return null;
-		}
-
-		return new IProgressListener() {
-			boolean firstCall = true;
-
-			@Override
-			public void update(final long bytesRead, final long contentLength, final boolean done) {
-				if (firstCall) {
-					int total = (int) (contentLength / 1000L);
-					if (total == 0) {
-						total = 1;
-					}
-					monitor.beginTask("Transfer", total);
-					firstCall = false;
-				}
-				final int worked = (int) (bytesRead / 1000L);
-				monitor.worked(worked);
-			}
-		};
-	}
-
-	private static boolean genericVersionUpload(final IDataRepository repository, final String versionID, final CheckedSupplier<String, IOException> doLocalExport) throws IOException {
-		final boolean hasUpstream = repository.hasUpstreamVersion(versionID);
+	private static <T> boolean genericVersionUpload(final IDataRepository<T> repository, final String uuid, final CheckedSupplier<T, IOException> doLocalExport) throws IOException {
+		final boolean hasUpstream = repository.hasUpstreamVersion(uuid);
 		if (hasUpstream) {
 			// Version already exists
 			return true;
 		} else {
 			// Publish
 			try {
-				repository.publishUpstreamVersion(doLocalExport.get());
+				repository.publishVersion(doLocalExport.get());
 				return true;
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 		}
 		return false;
+	}
+
+	private static void uploadSettledPrices(IScenarioDataProvider sdp) throws Exception {
+		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(sdp);
+		SettledPricesVersion version = SettledPricesFromScenarioCopier.generateVersion(pricingModel);
+		SettledPricesRepository.INSTANCE.publishVersion(version);
+	}
+
+	private static void uploadVesselGroups(IScenarioDataProvider sdp) throws Exception {
+		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(sdp);
+		VesselGroupsVersion version = VesselGroupsFromScenarioCopier.generateVersion(fleetModel);
+		VesselGroupsRepository.INSTANCE.publishVersion(version);
+	}
+
+	private static void uploadBunkerFuels(IScenarioDataProvider sdp) throws Exception {
+		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(sdp);
+		BunkerFuelsVersion version = BunkerFuelsFromScenarioCopier.generateVersion(fleetModel);
+		BunkerFuelsRepository.INSTANCE.publishVersion(version);
+	}
+
+	private static void uploadPortGroups(IScenarioDataProvider sdp) throws Exception {
+		final PortModel portModel = ScenarioModelUtil.getPortModel(sdp);
+		PortGroupsVersion version = PortGroupsFromScenarioCopier.generateVersion(portModel);
+		PortGroupsRepository.INSTANCE.publishVersion(version);
 	}
 }

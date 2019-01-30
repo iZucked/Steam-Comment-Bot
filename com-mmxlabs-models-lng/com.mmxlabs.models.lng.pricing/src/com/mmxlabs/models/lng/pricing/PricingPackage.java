@@ -133,22 +133,13 @@ public interface PricingPackage extends EPackage {
 	int PRICING_MODEL__CONVERSION_FACTORS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Market Curve Data Version</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_MODEL__MARKET_CURVE_DATA_VERSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
-
-	/**
 	 * The feature id for the '<em><b>Settled Prices</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL__SETTLED_PRICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int PRICING_MODEL__SETTLED_PRICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Market Indices</b></em>' containment reference list.
@@ -157,7 +148,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL__MARKET_INDICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int PRICING_MODEL__MARKET_INDICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Holiday Calendars</b></em>' containment reference list.
@@ -166,7 +157,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL__HOLIDAY_CALENDARS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int PRICING_MODEL__HOLIDAY_CALENDARS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Settle Strategies</b></em>' containment reference list.
@@ -175,7 +166,25 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL__SETTLE_STRATEGIES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int PRICING_MODEL__SETTLE_STRATEGIES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Market Curves Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICING_MODEL__MARKET_CURVES_VERSION_RECORD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Settled Prices Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -184,7 +193,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.IndexImpl <em>Index</em>}' class.
@@ -1966,17 +1975,6 @@ public interface PricingPackage extends EPackage {
 	EReference getPricingModel_ConversionFactors();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PricingModel#getMarketCurveDataVersion <em>Market Curve Data Version</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Market Curve Data Version</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getMarketCurveDataVersion()
-	 * @see #getPricingModel()
-	 * @generated
-	 */
-	EAttribute getPricingModel_MarketCurveDataVersion();
-
-	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getSettledPrices <em>Settled Prices</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2019,6 +2017,28 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPricingModel_SettleStrategies();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.PricingModel#getMarketCurvesVersionRecord <em>Market Curves Version Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Market Curves Version Record</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getMarketCurvesVersionRecord()
+	 * @see #getPricingModel()
+	 * @generated
+	 */
+	EReference getPricingModel_MarketCurvesVersionRecord();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.PricingModel#getSettledPricesVersionRecord <em>Settled Prices Version Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Settled Prices Version Record</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getSettledPricesVersionRecord()
+	 * @see #getPricingModel()
+	 * @generated
+	 */
+	EReference getPricingModel_SettledPricesVersionRecord();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.DataIndex <em>Data Index</em>}'.
@@ -3184,14 +3204,6 @@ public interface PricingPackage extends EPackage {
 		EReference PRICING_MODEL__CONVERSION_FACTORS = eINSTANCE.getPricingModel_ConversionFactors();
 
 		/**
-		 * The meta object literal for the '<em><b>Market Curve Data Version</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PRICING_MODEL__MARKET_CURVE_DATA_VERSION = eINSTANCE.getPricingModel_MarketCurveDataVersion();
-
-		/**
 		 * The meta object literal for the '<em><b>Settled Prices</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3222,6 +3234,22 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PRICING_MODEL__SETTLE_STRATEGIES = eINSTANCE.getPricingModel_SettleStrategies();
+
+		/**
+		 * The meta object literal for the '<em><b>Market Curves Version Record</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRICING_MODEL__MARKET_CURVES_VERSION_RECORD = eINSTANCE.getPricingModel_MarketCurvesVersionRecord();
+
+		/**
+		 * The meta object literal for the '<em><b>Settled Prices Version Record</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD = eINSTANCE.getPricingModel_SettledPricesVersionRecord();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.DataIndexImpl <em>Data Index</em>}' class.

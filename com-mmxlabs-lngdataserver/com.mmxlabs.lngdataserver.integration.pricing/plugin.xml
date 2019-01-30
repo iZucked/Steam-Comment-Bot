@@ -15,10 +15,10 @@
 -->
 
 <plugin>
-	 <extension
-	   point="com.mmxlabs.lngdataserver.browser.ui.DataBrowserExtension">
-		<DataBrowserExtension
-		      class="com.mmxlabs.lngdataserver.integration.pricing.PricingDataExtension">
-		</DataBrowserExtension>
-	 </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.mmxlabs.lngdataserver.integration.pricing.internal.PluginStartup">
+      </startup>
+   </extension>
 </plugin>

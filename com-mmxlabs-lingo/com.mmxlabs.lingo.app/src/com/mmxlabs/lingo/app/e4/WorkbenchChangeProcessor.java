@@ -26,7 +26,6 @@ public class WorkbenchChangeProcessor {
 		// Remove ADP view part
 		E4ModelHelper.removeViewPart("com.mmxlabs.models.lng.adp.presentation.views.ADPEditorView", application, modelService);
 
-		
 		// Added for 3.8.x to 3.9.0 changes
 		// Rename Diff Tools Perspective to Compare
 		for (final MWindow window : application.getChildren()) {
@@ -53,5 +52,7 @@ public class WorkbenchChangeProcessor {
 		if (!LicenseFeatures.isPermitted("features:exposures")) {
 			E4ModelHelper.removeViewPart("com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView", application, modelService);
 		}
+		// View no longer present
+		E4ModelHelper.removeViewPart("com.mmxlabs.lngdataserver.integration.ui.WebNavigatorView", application, modelService);
 	}
 }

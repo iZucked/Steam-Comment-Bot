@@ -99,6 +99,10 @@ public class MMXCoreAdapterFactory extends AdapterFactoryImpl {
 				return createMMXResultRootAdapter();
 			}
 			@Override
+			public Adapter caseVersionRecord(VersionRecord object) {
+				return createVersionRecordAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -200,6 +204,20 @@ public class MMXCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMMXResultRootAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.VersionRecord <em>Version Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.mmxcore.VersionRecord
+	 * @generated
+	 */
+	public Adapter createVersionRecordAdapter() {
 		return null;
 	}
 

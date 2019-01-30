@@ -197,7 +197,7 @@ public class ModelDistanceProvider extends EContentAdapter {
 	}
 
 	public String getVersion() {
-		return portModel.getDistanceDataVersion();
+		return portModel.getDistanceVersionRecord().getVersion();
 	}
 
 	@Override

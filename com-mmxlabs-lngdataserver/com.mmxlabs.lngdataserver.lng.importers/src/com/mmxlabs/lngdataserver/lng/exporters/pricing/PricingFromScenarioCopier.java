@@ -5,13 +5,11 @@
 package com.mmxlabs.lngdataserver.lng.exporters.pricing;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +22,8 @@ import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
+import com.mmxlabs.models.mmxcore.VersionRecord;
+import com.mmxlabs.rcp.common.versions.VersionsUtil;
 
 public class PricingFromScenarioCopier {
 
@@ -77,30 +77,36 @@ public class PricingFromScenarioCopier {
 		pricingModel.getCurrencyCurves().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.CURRENCY);
 			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
+			version.getCurveList().add(curve);
 		});
 
 		pricingModel.getBunkerFuelCurves().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.BASE_FUEL);
 			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
+			version.getCurveList().add(curve);
 		});
 
 		pricingModel.getCharterCurves().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.CHARTER);
 			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
+			version.getCurveList().add(curve);
 		});
 
 		pricingModel.getCommodityCurves().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.COMMODITY);
 			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
+			version.getCurveList().add(curve);
 		});
 
-		String marketCurveDataVersion = pricingModel.getMarketCurveDataVersion();
-		if (marketCurveDataVersion == null) {
-			marketCurveDataVersion = EcoreUtil.generateUUID();
-			pricingModel.setMarketCurveDataVersion(marketCurveDataVersion);
+		VersionRecord record = pricingModel.getMarketCurvesVersionRecord();
+		if (record == null || record.getVersion() == null) {
+			record = VersionsUtil.createNewRecord();
+			// FIXME: Command!
+			pricingModel.setMarketCurvesVersionRecord(record);
 		}
-		version.setIdentifier(marketCurveDataVersion);
-		version.setCreatedAt(LocalDateTime.now());
+		version.setIdentifier(record.getVersion());
+		version.setCreatedAt(record.getCreatedAt());
+		version.setCreatedBy(record.getCreatedBy());
 
 		return version;
 	}

@@ -4,58 +4,28 @@
  */
 package com.mmxlabs.lngdataserver.integration.ports;
 
-import java.time.LocalDateTime;
+import java.io.IOException;
 
-import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
+import com.mmxlabs.lngdataserver.integration.repo.AbstractGeneralDataRepository;
 
-public class PortsRepository extends AbstractDataRepository<PortsVersion> {
+public class PortsRepository extends AbstractGeneralDataRepository<PortsVersion> {
 
-	public static final PortsRepository INSTANCE = new PortsRepository();
+	public static final @NonNull PortsRepository INSTANCE = new PortsRepository();
 
 	private PortsRepository() {
-		super("Ports", PortsVersion.class);
-		doHandleUpstreamURLChange();
+		super(PortsTypeRecord.INSTANCE);
+		startListenForNewLocalVersions();
 	}
 
-	@Override
-	protected String getVersionsURL() {
-		return "/ports/versions";
+	public boolean publishVersion(final PortsVersion version) throws Exception {
+		final String json = PortsIO.write(version);
+		return uploadData(json);
 	}
 
-	@Override
-	protected String getSyncVersionEndpoint() {
-		return "/ports/sync/versions/";
-	}
-
-	@Override
-	protected String getVersionNotificationEndpoint() {
-		return "/ports/version_notification";
-	}
-
-	@Override
-	protected boolean canWaitForNewLocalVersion() {
-		return true;
-	}
-
-	@Override
-	protected boolean canWaitForNewUpstreamVersion() {
-		return true;
-	}
-
-	@Override
-	protected SimpleVersion wrap(final PortsVersion version) {
-		return new SimpleVersion() {
-
-			@Override
-			public String getIdentifier() {
-				return version.getIdentifier();
-			}
-
-			@Override
-			public LocalDateTime getCreatedAt() {
-				return version.getCreatedAt();
-			}
-		};
+	public PortsVersion getLocalVersion(final String uuid) throws Exception {
+		return doGetLocalVersion(uuid, PortsIO::read);
 	}
 }

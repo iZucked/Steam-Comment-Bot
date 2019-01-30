@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.fleet;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.mmxcore.VersionRecord;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,7 +20,9 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getVessels <em>Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getBaseFuels <em>Base Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselGroups <em>Vessel Groups</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getFleetDataVersion <em>Fleet Data Version</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getFleetVersionRecord <em>Fleet Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselGroupVersionRecord <em>Vessel Group Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getBunkerFuelsVersionRecord <em>Bunker Fuels Version Record</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFleetModel()
@@ -76,30 +79,82 @@ public interface FleetModel extends UUIDObject {
 	EList<VesselGroup> getVesselGroups();
 
 	/**
-	 * Returns the value of the '<em><b>Fleet Data Version</b></em>' attribute.
+	 * Returns the value of the '<em><b>Fleet Version Record</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Fleet Data Version</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Fleet Version Record</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Fleet Data Version</em>' attribute.
-	 * @see #setFleetDataVersion(String)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFleetModel_FleetDataVersion()
-	 * @model
+	 * @return the value of the '<em>Fleet Version Record</em>' containment reference.
+	 * @see #setFleetVersionRecord(VersionRecord)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFleetModel_FleetVersionRecord()
+	 * @model containment="true"
 	 * @generated
 	 */
-	String getFleetDataVersion();
+	VersionRecord getFleetVersionRecord();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.FleetModel#getFleetDataVersion <em>Fleet Data Version</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.FleetModel#getFleetVersionRecord <em>Fleet Version Record</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Fleet Data Version</em>' attribute.
-	 * @see #getFleetDataVersion()
+	 * @param value the new value of the '<em>Fleet Version Record</em>' containment reference.
+	 * @see #getFleetVersionRecord()
 	 * @generated
 	 */
-	void setFleetDataVersion(String value);
+	void setFleetVersionRecord(VersionRecord value);
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Group Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Group Version Record</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Group Version Record</em>' containment reference.
+	 * @see #setVesselGroupVersionRecord(VersionRecord)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFleetModel_VesselGroupVersionRecord()
+	 * @model containment="true"
+	 * @generated
+	 */
+	VersionRecord getVesselGroupVersionRecord();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselGroupVersionRecord <em>Vessel Group Version Record</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel Group Version Record</em>' containment reference.
+	 * @see #getVesselGroupVersionRecord()
+	 * @generated
+	 */
+	void setVesselGroupVersionRecord(VersionRecord value);
+
+	/**
+	 * Returns the value of the '<em><b>Bunker Fuels Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Bunker Fuels Version Record</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Bunker Fuels Version Record</em>' containment reference.
+	 * @see #setBunkerFuelsVersionRecord(VersionRecord)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFleetModel_BunkerFuelsVersionRecord()
+	 * @model containment="true"
+	 * @generated
+	 */
+	VersionRecord getBunkerFuelsVersionRecord();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.FleetModel#getBunkerFuelsVersionRecord <em>Bunker Fuels Version Record</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Bunker Fuels Version Record</em>' containment reference.
+	 * @see #getBunkerFuelsVersionRecord()
+	 * @generated
+	 */
+	void setBunkerFuelsVersionRecord(VersionRecord value);
 
 } // end of  FleetModel
 

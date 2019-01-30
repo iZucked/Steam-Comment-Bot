@@ -17,7 +17,6 @@ import org.eclipse.ui.IWorkbench;
 import com.mmxlabs.lngdataserver.integration.vessels.VesselsRepository;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
 import com.mmxlabs.lngdataserver.lng.exporters.vessels.VesselsFromScenarioCopier;
-import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -39,8 +38,6 @@ public class VesselsFromScenarioImportWizard extends Wizard implements IImportWi
 	@Override
 	public boolean performFinish() {
 
-		String url = BackEndUrlProvider.INSTANCE.getUrl();
-
 		try {
 			List<ScenarioInstance> selectedScenarios = scenarioSelectionPage.getSelectedScenarios();
 
@@ -59,9 +56,7 @@ public class VesselsFromScenarioImportWizard extends Wizard implements IImportWi
 								FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
 								VesselsVersion version = VesselsFromScenarioCopier.generateVersion(fleetModel);
 								try {
-									VesselsRepository repo = new VesselsRepository();
-									repo.isReady();
-									repo.publishVersion(version.getIdentifier());
+									VesselsRepository.INSTANCE.publishVersion(version);
 								} catch (Exception e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();

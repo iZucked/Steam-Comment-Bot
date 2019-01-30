@@ -23,9 +23,12 @@ public class ServiceCapabilitiesFlagsPropertyTester extends PropertyTester {
 				final ScenarioService scenarioService = (ScenarioService) container;
 				if (property.equals("forking")) {
 					return scenarioService.isSupportsForking();
-				}
-				else if (property.equals("import")) {
+				} else if (property.equals("import")) {
 					return scenarioService.isSupportsImport();
+				} else if (property.equals("local")) {
+					return scenarioService.isLocal();
+				} else if (property.equals("offline")) {
+					return scenarioService.isOffline();
 				}
 			}
 		}

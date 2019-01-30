@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.mmxcore.VersionRecord;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
@@ -38,9 +39,10 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getRoutes <em>Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getSpecialPortGroups <em>Special Port Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPortCountryGroups <em>Port Country Groups</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPortDataVersion <em>Port Data Version</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getDistanceDataVersion <em>Distance Data Version</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getContingencyMatrix <em>Contingency Matrix</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPortVersionRecord <em>Port Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPortGroupVersionRecord <em>Port Group Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getDistanceVersionRecord <em>Distance Version Record</em>}</li>
  * </ul>
  *
  * @generated
@@ -97,46 +99,6 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	protected EList<PortCountryGroup> portCountryGroups;
 
 	/**
-	 * The default value of the '{@link #getPortDataVersion() <em>Port Data Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortDataVersion()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String PORT_DATA_VERSION_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getPortDataVersion() <em>Port Data Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortDataVersion()
-	 * @generated
-	 * @ordered
-	 */
-	protected String portDataVersion = PORT_DATA_VERSION_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getDistanceDataVersion() <em>Distance Data Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDistanceDataVersion()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String DISTANCE_DATA_VERSION_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getDistanceDataVersion() <em>Distance Data Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDistanceDataVersion()
-	 * @generated
-	 * @ordered
-	 */
-	protected String distanceDataVersion = DISTANCE_DATA_VERSION_EDEFAULT;
-
-	/**
 	 * The cached value of the '{@link #getContingencyMatrix() <em>Contingency Matrix</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -145,6 +107,36 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * @ordered
 	 */
 	protected ContingencyMatrix contingencyMatrix;
+
+	/**
+	 * The cached value of the '{@link #getPortVersionRecord() <em>Port Version Record</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortVersionRecord()
+	 * @generated
+	 * @ordered
+	 */
+	protected VersionRecord portVersionRecord;
+
+	/**
+	 * The cached value of the '{@link #getPortGroupVersionRecord() <em>Port Group Version Record</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortGroupVersionRecord()
+	 * @generated
+	 * @ordered
+	 */
+	protected VersionRecord portGroupVersionRecord;
+
+	/**
+	 * The cached value of the '{@link #getDistanceVersionRecord() <em>Distance Version Record</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDistanceVersionRecord()
+	 * @generated
+	 * @ordered
+	 */
+	protected VersionRecord distanceVersionRecord;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -230,48 +222,6 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getPortDataVersion() {
-		return portDataVersion;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setPortDataVersion(String newPortDataVersion) {
-		String oldPortDataVersion = portDataVersion;
-		portDataVersion = newPortDataVersion;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT_MODEL__PORT_DATA_VERSION, oldPortDataVersion, portDataVersion));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getDistanceDataVersion() {
-		return distanceDataVersion;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDistanceDataVersion(String newDistanceDataVersion) {
-		String oldDistanceDataVersion = distanceDataVersion;
-		distanceDataVersion = newDistanceDataVersion;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION, oldDistanceDataVersion, distanceDataVersion));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public ContingencyMatrix getContingencyMatrix() {
 		return contingencyMatrix;
 	}
@@ -315,6 +265,135 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public VersionRecord getPortVersionRecord() {
+		return portVersionRecord;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetPortVersionRecord(VersionRecord newPortVersionRecord, NotificationChain msgs) {
+		VersionRecord oldPortVersionRecord = portVersionRecord;
+		portVersionRecord = newPortVersionRecord;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PortPackage.PORT_MODEL__PORT_VERSION_RECORD, oldPortVersionRecord, newPortVersionRecord);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortVersionRecord(VersionRecord newPortVersionRecord) {
+		if (newPortVersionRecord != portVersionRecord) {
+			NotificationChain msgs = null;
+			if (portVersionRecord != null)
+				msgs = ((InternalEObject)portVersionRecord).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PortPackage.PORT_MODEL__PORT_VERSION_RECORD, null, msgs);
+			if (newPortVersionRecord != null)
+				msgs = ((InternalEObject)newPortVersionRecord).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PortPackage.PORT_MODEL__PORT_VERSION_RECORD, null, msgs);
+			msgs = basicSetPortVersionRecord(newPortVersionRecord, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT_MODEL__PORT_VERSION_RECORD, newPortVersionRecord, newPortVersionRecord));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VersionRecord getPortGroupVersionRecord() {
+		return portGroupVersionRecord;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetPortGroupVersionRecord(VersionRecord newPortGroupVersionRecord, NotificationChain msgs) {
+		VersionRecord oldPortGroupVersionRecord = portGroupVersionRecord;
+		portGroupVersionRecord = newPortGroupVersionRecord;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PortPackage.PORT_MODEL__PORT_GROUP_VERSION_RECORD, oldPortGroupVersionRecord, newPortGroupVersionRecord);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortGroupVersionRecord(VersionRecord newPortGroupVersionRecord) {
+		if (newPortGroupVersionRecord != portGroupVersionRecord) {
+			NotificationChain msgs = null;
+			if (portGroupVersionRecord != null)
+				msgs = ((InternalEObject)portGroupVersionRecord).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PortPackage.PORT_MODEL__PORT_GROUP_VERSION_RECORD, null, msgs);
+			if (newPortGroupVersionRecord != null)
+				msgs = ((InternalEObject)newPortGroupVersionRecord).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PortPackage.PORT_MODEL__PORT_GROUP_VERSION_RECORD, null, msgs);
+			msgs = basicSetPortGroupVersionRecord(newPortGroupVersionRecord, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT_MODEL__PORT_GROUP_VERSION_RECORD, newPortGroupVersionRecord, newPortGroupVersionRecord));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VersionRecord getDistanceVersionRecord() {
+		return distanceVersionRecord;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetDistanceVersionRecord(VersionRecord newDistanceVersionRecord, NotificationChain msgs) {
+		VersionRecord oldDistanceVersionRecord = distanceVersionRecord;
+		distanceVersionRecord = newDistanceVersionRecord;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PortPackage.PORT_MODEL__DISTANCE_VERSION_RECORD, oldDistanceVersionRecord, newDistanceVersionRecord);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDistanceVersionRecord(VersionRecord newDistanceVersionRecord) {
+		if (newDistanceVersionRecord != distanceVersionRecord) {
+			NotificationChain msgs = null;
+			if (distanceVersionRecord != null)
+				msgs = ((InternalEObject)distanceVersionRecord).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PortPackage.PORT_MODEL__DISTANCE_VERSION_RECORD, null, msgs);
+			if (newDistanceVersionRecord != null)
+				msgs = ((InternalEObject)newDistanceVersionRecord).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PortPackage.PORT_MODEL__DISTANCE_VERSION_RECORD, null, msgs);
+			msgs = basicSetDistanceVersionRecord(newDistanceVersionRecord, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT_MODEL__DISTANCE_VERSION_RECORD, newDistanceVersionRecord, newDistanceVersionRecord));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -330,6 +409,12 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return ((InternalEList<?>)getPortCountryGroups()).basicRemove(otherEnd, msgs);
 			case PortPackage.PORT_MODEL__CONTINGENCY_MATRIX:
 				return basicSetContingencyMatrix(null, msgs);
+			case PortPackage.PORT_MODEL__PORT_VERSION_RECORD:
+				return basicSetPortVersionRecord(null, msgs);
+			case PortPackage.PORT_MODEL__PORT_GROUP_VERSION_RECORD:
+				return basicSetPortGroupVersionRecord(null, msgs);
+			case PortPackage.PORT_MODEL__DISTANCE_VERSION_RECORD:
+				return basicSetDistanceVersionRecord(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -352,12 +437,14 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return getSpecialPortGroups();
 			case PortPackage.PORT_MODEL__PORT_COUNTRY_GROUPS:
 				return getPortCountryGroups();
-			case PortPackage.PORT_MODEL__PORT_DATA_VERSION:
-				return getPortDataVersion();
-			case PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION:
-				return getDistanceDataVersion();
 			case PortPackage.PORT_MODEL__CONTINGENCY_MATRIX:
 				return getContingencyMatrix();
+			case PortPackage.PORT_MODEL__PORT_VERSION_RECORD:
+				return getPortVersionRecord();
+			case PortPackage.PORT_MODEL__PORT_GROUP_VERSION_RECORD:
+				return getPortGroupVersionRecord();
+			case PortPackage.PORT_MODEL__DISTANCE_VERSION_RECORD:
+				return getDistanceVersionRecord();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -391,14 +478,17 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				getPortCountryGroups().clear();
 				getPortCountryGroups().addAll((Collection<? extends PortCountryGroup>)newValue);
 				return;
-			case PortPackage.PORT_MODEL__PORT_DATA_VERSION:
-				setPortDataVersion((String)newValue);
-				return;
-			case PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION:
-				setDistanceDataVersion((String)newValue);
-				return;
 			case PortPackage.PORT_MODEL__CONTINGENCY_MATRIX:
 				setContingencyMatrix((ContingencyMatrix)newValue);
+				return;
+			case PortPackage.PORT_MODEL__PORT_VERSION_RECORD:
+				setPortVersionRecord((VersionRecord)newValue);
+				return;
+			case PortPackage.PORT_MODEL__PORT_GROUP_VERSION_RECORD:
+				setPortGroupVersionRecord((VersionRecord)newValue);
+				return;
+			case PortPackage.PORT_MODEL__DISTANCE_VERSION_RECORD:
+				setDistanceVersionRecord((VersionRecord)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -427,14 +517,17 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 			case PortPackage.PORT_MODEL__PORT_COUNTRY_GROUPS:
 				getPortCountryGroups().clear();
 				return;
-			case PortPackage.PORT_MODEL__PORT_DATA_VERSION:
-				setPortDataVersion(PORT_DATA_VERSION_EDEFAULT);
-				return;
-			case PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION:
-				setDistanceDataVersion(DISTANCE_DATA_VERSION_EDEFAULT);
-				return;
 			case PortPackage.PORT_MODEL__CONTINGENCY_MATRIX:
 				setContingencyMatrix((ContingencyMatrix)null);
+				return;
+			case PortPackage.PORT_MODEL__PORT_VERSION_RECORD:
+				setPortVersionRecord((VersionRecord)null);
+				return;
+			case PortPackage.PORT_MODEL__PORT_GROUP_VERSION_RECORD:
+				setPortGroupVersionRecord((VersionRecord)null);
+				return;
+			case PortPackage.PORT_MODEL__DISTANCE_VERSION_RECORD:
+				setDistanceVersionRecord((VersionRecord)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -458,32 +551,16 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return specialPortGroups != null && !specialPortGroups.isEmpty();
 			case PortPackage.PORT_MODEL__PORT_COUNTRY_GROUPS:
 				return portCountryGroups != null && !portCountryGroups.isEmpty();
-			case PortPackage.PORT_MODEL__PORT_DATA_VERSION:
-				return PORT_DATA_VERSION_EDEFAULT == null ? portDataVersion != null : !PORT_DATA_VERSION_EDEFAULT.equals(portDataVersion);
-			case PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION:
-				return DISTANCE_DATA_VERSION_EDEFAULT == null ? distanceDataVersion != null : !DISTANCE_DATA_VERSION_EDEFAULT.equals(distanceDataVersion);
 			case PortPackage.PORT_MODEL__CONTINGENCY_MATRIX:
 				return contingencyMatrix != null;
+			case PortPackage.PORT_MODEL__PORT_VERSION_RECORD:
+				return portVersionRecord != null;
+			case PortPackage.PORT_MODEL__PORT_GROUP_VERSION_RECORD:
+				return portGroupVersionRecord != null;
+			case PortPackage.PORT_MODEL__DISTANCE_VERSION_RECORD:
+				return distanceVersionRecord != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (portDataVersion: ");
-		result.append(portDataVersion);
-		result.append(", distanceDataVersion: ");
-		result.append(distanceDataVersion);
-		result.append(')');
-		return result.toString();
 	}
 
 } //PortModelImpl

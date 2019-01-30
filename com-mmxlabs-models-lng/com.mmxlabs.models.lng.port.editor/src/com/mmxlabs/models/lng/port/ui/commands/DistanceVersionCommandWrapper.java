@@ -5,20 +5,14 @@
 package com.mmxlabs.models.lng.port.ui.commands;
 
 import java.util.Iterator;
-import java.util.Objects;
 
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -33,62 +27,33 @@ import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.scenario.service.manifest.Manifest;
-import com.mmxlabs.scenario.service.manifest.ManifestFactory;
-import com.mmxlabs.scenario.service.manifest.ModelArtifact;
-import com.mmxlabs.scenario.service.manifest.StorageType;
-import com.mmxlabs.scenario.service.model.util.extpoint.IWrappedCommandProvider;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.scenario.service.model.util.extpoint.AbstractVersionCommandWrapper;
 
 /**
  * @author Simon Goodall
  * 
  */
-public class DistanceVersionCommandWrapper implements IWrappedCommandProvider {
+public class DistanceVersionCommandWrapper extends AbstractVersionCommandWrapper {
 
-	private EditingDomain editingDomain;
-	private final boolean[] changedRef = new boolean[1];
-	private final @NonNull Adapter adapter = createAdapter(changedRef);
-	private PortModel portModel;
-	private ModelArtifact modelArtifact;
+	private static final String TYPE_ID = LNGScenarioSharedModelTypes.DISTANCES.getID();
+	private static final EReference VERSION_FEATURE = PortPackage.Literals.PORT_MODEL__DISTANCE_VERSION_RECORD;
+
+	public DistanceVersionCommandWrapper() {
+		super(TYPE_ID, VERSION_FEATURE);
+	}
 
 	@Override
-	public @Nullable Command provideCommand(@NonNull final Command cmd, @NonNull final EditingDomain editingDomain) {
-
-		final CompoundCommand wrapped = new CompoundCommand(cmd.getLabel());
-
-		wrapped.append(cmd);
-		wrapped.append(createVersionCommand());
-
-		return wrapped;
-
+	protected @Nullable EObject getModelRoot(EObject obj) {
+		if (obj instanceof LNGScenarioModel) {
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) obj;
+			return ScenarioModelUtil.getPortModel(lngScenarioModel);
+		}
+		return null;
 	}
 
-	private Command createVersionCommand() {
-
-		return new CompoundCommand() {
-
-			@Override
-			public boolean canExecute() {
-				return true;
-			}
-
-			@Override
-			protected boolean prepare() {
-				return true;
-			}
-
-			public void execute() {
-				if (changedRef[0]) {
-					String newID = EcoreUtil.generateUUID();
-					System.out.println("Generate Distance Version ID " + newID);
-					final Command cmd = SetCommand.create(editingDomain, portModel, PortPackage.Literals.PORT_MODEL__DISTANCE_DATA_VERSION, newID);
-					appendAndExecute(cmd);
-				}
-			}
-		};
-	}
-
-	private @NonNull Adapter createAdapter(final boolean[] changedRef) {
+	@Override
+	protected @NonNull Adapter createAdapter(final boolean[] changedRef) {
 
 		return new EContentAdapter() {
 
@@ -117,7 +82,7 @@ public class DistanceVersionCommandWrapper implements IWrappedCommandProvider {
 				}
 
 				// Reset!
-				if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__DISTANCE_DATA_VERSION) {
+				if (notification.getFeature() == MMXCorePackage.Literals.VERSION_RECORD__VERSION) {
 
 					if (modelArtifact != null) {
 						modelArtifact.setDataVersion(notification.getNewStringValue());
@@ -134,6 +99,9 @@ public class DistanceVersionCommandWrapper implements IWrappedCommandProvider {
 			protected void setTarget(final EObject target) {
 				basicSetTarget(target);
 				if (target instanceof PortModel) {
+					PortModel portModel = (PortModel) target;
+					addAdapter(portModel.getDistanceVersionRecord());
+
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						if (notifier instanceof Route) {
@@ -168,6 +136,8 @@ public class DistanceVersionCommandWrapper implements IWrappedCommandProvider {
 			protected void unsetTarget(final EObject target) {
 				basicUnsetTarget(target);
 				if (target instanceof PortModel) {
+					PortModel portModel = (PortModel) target;
+					removeAdapter(portModel.getDistanceVersionRecord(), false, true);
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						if (notifier instanceof Route) {
@@ -191,67 +161,4 @@ public class DistanceVersionCommandWrapper implements IWrappedCommandProvider {
 			}
 		};
 	}
-
-	@Override
-	public void registerEditingDomain(final Manifest manifest, final EditingDomain editingDomain) {
-		if (this.editingDomain != null) {
-			throw new IllegalStateException("Editing domain already registered");
-		}
-
-		this.editingDomain = editingDomain;
-
-		if (this.editingDomain != null) {
-			for (final Resource r : this.editingDomain.getResourceSet().getResources()) {
-				for (final EObject obj : r.getContents()) {
-					if (obj instanceof LNGScenarioModel) {
-						final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) obj;
-						portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
-					}
-				}
-			}
-		}
-		modelArtifact = null;
-		if (portModel != null) {
-			portModel.eAdapters().add(adapter);
-			if (manifest != null) {
-				for (final ModelArtifact artifact : manifest.getModelDependencies()) {
-					if (LNGScenarioSharedModelTypes.DISTANCES.getID().equals(artifact.getKey())) {
-						if (artifact.getStorageType() == StorageType.INTERNAL) {
-							this.modelArtifact = artifact;
-							// Update version if needed.
-							if (!Objects.equals(this.modelArtifact.getDataVersion(), portModel.getDistanceDataVersion())) {
-								this.modelArtifact.setDataVersion(portModel.getDistanceDataVersion());
-							}
-							break;
-						}
-					}
-				}
-				if (modelArtifact == null) {
-					modelArtifact = ManifestFactory.eINSTANCE.createModelArtifact();
-					modelArtifact.setDataVersion(portModel.getDistanceDataVersion());
-					modelArtifact.setStorageType(StorageType.INTERNAL);
-					modelArtifact.setType("EOBJECT");
-					modelArtifact.setKey(LNGScenarioSharedModelTypes.DISTANCES.getID());
-					manifest.getModelDependencies().add(modelArtifact);
-				}
-			}
-		}
-	}
-
-	@Override
-	public void deregisterEditingDomain(final Manifest manifest, final EditingDomain editingDomain) {
-		if (this.editingDomain != editingDomain) {
-			throw new IllegalStateException("A different editing domain has been registered");
-		}
-
-		if (portModel != null) {
-			portModel.eAdapters().remove(adapter);
-			portModel = null;
-		}
-
-		modelArtifact = null;
-
-		this.editingDomain = null;
-	}
-
 }

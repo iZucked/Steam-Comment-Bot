@@ -12,7 +12,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//FleetModel/vessels"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//FleetModel/baseFuels"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//FleetModel/vesselGroups"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//FleetModel/fleetDataVersion"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//FleetModel/fleetVersionRecord"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//FleetModel/vesselGroupVersionRecord"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//FleetModel/bunkerFuelsVersionRecord"/>
     </genClasses>
     <genClasses ecoreClass="fleet.ecore#//BaseFuel">
       <genFeatures createChild="false" propertyDescription="The ratio relating 1 MT of this base fuel to 1 m3 of LNG"

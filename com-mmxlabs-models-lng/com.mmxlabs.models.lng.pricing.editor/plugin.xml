@@ -428,6 +428,9 @@
       <WrappedCommandExtension
             class="com.mmxlabs.models.lng.pricing.ui.commands.MarketCurvesVersionCommandWrapper">
       </WrappedCommandExtension>
+      <WrappedCommandExtension
+            class="com.mmxlabs.models.lng.pricing.ui.commands.SettledPricesVersionCommandWrapper">
+      </WrappedCommandExtension>
    </extension>
    <extension
          point="com.mmxlabs.license.features.PluginXMLEnablement">

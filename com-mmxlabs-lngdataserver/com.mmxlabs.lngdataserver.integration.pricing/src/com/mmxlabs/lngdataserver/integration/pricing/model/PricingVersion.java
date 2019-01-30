@@ -4,43 +4,49 @@
  */
 package com.mmxlabs.lngdataserver.integration.pricing.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Reference;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.mmxlabs.lngdataserver.integration.pricing.PricingVersionDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
+import com.mmxlabs.lngdataserver.commons.model.CreatedAtInstantDeserializer;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties({ "published", "current", "metaInformation" })
 public class PricingVersion {
 
-	@JsonDeserialize(using = PricingVersionDateDeserializer.class)
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss[.SSS]")
-	private LocalDateTime createdAt;
+	@JsonDeserialize(using = CreatedAtInstantDeserializer.class)
+	@JsonSerialize(using = InstantSerializer.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss[.SSS]", timezone = "UTC")
+	private Instant createdAt;
 
 	private String identifier;
 
-	@Reference
 	private Map<String, Curve> curves = new HashMap<>();
+
+	private List<Curve> curveList = new LinkedList<>();
+
+	private String createdBy;
 
 	public PricingVersion() {
 		// jackson
 	}
 
-	public LocalDateTime getCreatedAt() {
+	public Instant getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDateTime createdAt) {
+	public void setCreatedAt(Instant createdAt) {
 		this.createdAt = createdAt;
 	}
 
@@ -58,5 +64,21 @@ public class PricingVersion {
 
 	public void setCurves(Map<String, Curve> curves) {
 		this.curves = curves;
+	}
+
+	public List<Curve> getCurveList() {
+		return curveList;
+	}
+
+	public void setCurveList(List<Curve> curveList) {
+		this.curveList = curveList;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 }

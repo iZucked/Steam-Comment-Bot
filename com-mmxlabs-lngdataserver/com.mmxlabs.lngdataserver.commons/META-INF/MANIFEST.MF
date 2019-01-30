@@ -25,6 +25,5 @@ Import-Package: com.squareup.okhttp,
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.lngdataserver.commons,
  com.mmxlabs.lngdataserver.commons.http,
- com.mmxlabs.lngdataserver.commons.impl,
  com.mmxlabs.lngdataserver.commons.model
 Automatic-Module-Name: com.mmxlabs.lngdataserver.commons

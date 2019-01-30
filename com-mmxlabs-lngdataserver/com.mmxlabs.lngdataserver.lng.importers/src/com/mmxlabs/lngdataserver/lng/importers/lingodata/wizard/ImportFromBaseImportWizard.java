@@ -19,6 +19,8 @@ import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.ImportFromBaseSe
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.DataOptions;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.UpdateJob;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class ImportFromBaseImportWizard extends Wizard implements IImportWizard {
 
@@ -48,7 +50,10 @@ public class ImportFromBaseImportWizard extends Wizard implements IImportWizard 
 				.flatMap(e -> e.options.stream())//
 				.collect(Collectors.toSet());
 
-		final UpdateJob job = new UpdateJob(options, baseCase, Collections.singletonList(destination), true);
+		ScenarioModelRecord currentScenarioModelRecord = SSDataManager.Instance.getModelRecord(baseCase);
+		ScenarioModelRecord destinationScenarioModelRecord = SSDataManager.Instance.getModelRecord(destination);
+
+		final UpdateJob job = new UpdateJob(options, currentScenarioModelRecord, Collections.singletonList(destinationScenarioModelRecord), true);
 
 		try {
 			getContainer().run(true, true, job);

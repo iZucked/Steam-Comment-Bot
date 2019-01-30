@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
+import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedScenarioRecord;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspacePathUtils;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspaceServiceClient;
@@ -199,7 +199,7 @@ public class SharedScenarioUpdater {
 			final File f = new File(String.format("%s%s%s.lingo", basePath, File.separator, record.uuid));
 			if (!f.exists()) {
 				try {
-					if (!downloadScenario(record.uuid, f, null)) {
+					if (!downloadScenario(record.uuid, f)) {
 						// Something went wrong - reset lastModified to trigger another refresh
 						lastModified = Instant.EPOCH;
 						// Failed!
@@ -261,14 +261,14 @@ public class SharedScenarioUpdater {
 		}
 	}
 
-	private boolean downloadScenario(final String uuid, final File f, final IProgressListener progressListener) throws IOException {
+	private boolean downloadScenario(final String uuid, final File f) throws IOException {
 		final boolean[] ret = new boolean[1];
 		final Job background = new Job("Download shared team scenario") {
 
 			@Override
 			public IStatus run(final IProgressMonitor monitor) {
 				try {
-					ret[0] = client.downloadTo(uuid, f, wrapMonitor(monitor));
+					ret[0] = client.downloadTo(uuid, f, WrappedProgressMonitor.wrapMonitor(monitor));
 				} catch (final Exception e) {
 					// return Status.
 				} finally {
@@ -458,30 +458,6 @@ public class SharedScenarioUpdater {
 			}
 		}
 	};
-
-	private IProgressListener wrapMonitor(final IProgressMonitor monitor) {
-		if (monitor == null) {
-			return null;
-		}
-
-		return new IProgressListener() {
-			boolean firstCall = true;
-
-			@Override
-			public void update(final long bytesRead, final long contentLength, final boolean done) {
-				if (firstCall) {
-					int total = (int) (contentLength / 1000L);
-					if (total == 0) {
-						total = 1;
-					}
-					monitor.beginTask("Transfer", total);
-					firstCall = false;
-				}
-				final int worked = (int) (bytesRead / 1000L);
-				monitor.worked(worked);
-			}
-		};
-	}
 
 	public void pause() {
 		updateLock.lock();

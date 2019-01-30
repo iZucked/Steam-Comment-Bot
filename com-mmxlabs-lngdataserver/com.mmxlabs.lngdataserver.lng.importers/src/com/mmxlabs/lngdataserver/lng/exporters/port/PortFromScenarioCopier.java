@@ -4,13 +4,11 @@
  */
 package com.mmxlabs.lngdataserver.lng.exporters.port;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,13 +72,10 @@ public class PortFromScenarioCopier {
 
 		}
 
-		String portDataVersion = portModel.getPortDataVersion();
-		if (portDataVersion == null) {
-			portDataVersion = EcoreUtil.generateUUID();
-			portModel.setPortDataVersion(portDataVersion);
-		}
-		version.setIdentifier(portDataVersion);
-		version.setCreatedAt(LocalDateTime.now());
+		version.setIdentifier(portModel.getPortVersionRecord().getVersion());
+		version.setCreatedBy(portModel.getPortVersionRecord().getCreatedBy());
+		version.setCreatedAt(portModel.getPortVersionRecord().getCreatedAt());
+	 
 		version.setPorts(ports);
 
 		return version;

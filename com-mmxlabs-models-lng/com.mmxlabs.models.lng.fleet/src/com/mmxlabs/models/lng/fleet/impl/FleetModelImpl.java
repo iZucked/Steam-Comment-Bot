@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
+import com.mmxlabs.models.mmxcore.VersionRecord;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
@@ -32,7 +33,9 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getVessels <em>Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getBaseFuels <em>Base Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getVesselGroups <em>Vessel Groups</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getFleetDataVersion <em>Fleet Data Version</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getFleetVersionRecord <em>Fleet Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getVesselGroupVersionRecord <em>Vessel Group Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getBunkerFuelsVersionRecord <em>Bunker Fuels Version Record</em>}</li>
  * </ul>
  *
  * @generated
@@ -69,24 +72,34 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	protected EList<VesselGroup> vesselGroups;
 
 	/**
-	 * The default value of the '{@link #getFleetDataVersion() <em>Fleet Data Version</em>}' attribute.
+	 * The cached value of the '{@link #getFleetVersionRecord() <em>Fleet Version Record</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getFleetDataVersion()
+	 * @see #getFleetVersionRecord()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String FLEET_DATA_VERSION_EDEFAULT = null;
+	protected VersionRecord fleetVersionRecord;
 
 	/**
-	 * The cached value of the '{@link #getFleetDataVersion() <em>Fleet Data Version</em>}' attribute.
+	 * The cached value of the '{@link #getVesselGroupVersionRecord() <em>Vessel Group Version Record</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getFleetDataVersion()
+	 * @see #getVesselGroupVersionRecord()
 	 * @generated
 	 * @ordered
 	 */
-	protected String fleetDataVersion = FLEET_DATA_VERSION_EDEFAULT;
+	protected VersionRecord vesselGroupVersionRecord;
+
+	/**
+	 * The cached value of the '{@link #getBunkerFuelsVersionRecord() <em>Bunker Fuels Version Record</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBunkerFuelsVersionRecord()
+	 * @generated
+	 * @ordered
+	 */
+	protected VersionRecord bunkerFuelsVersionRecord;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -148,8 +161,8 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getFleetDataVersion() {
-		return fleetDataVersion;
+	public VersionRecord getFleetVersionRecord() {
+		return fleetVersionRecord;
 	}
 
 	/**
@@ -157,11 +170,119 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setFleetDataVersion(String newFleetDataVersion) {
-		String oldFleetDataVersion = fleetDataVersion;
-		fleetDataVersion = newFleetDataVersion;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_MODEL__FLEET_DATA_VERSION, oldFleetDataVersion, fleetDataVersion));
+	public NotificationChain basicSetFleetVersionRecord(VersionRecord newFleetVersionRecord, NotificationChain msgs) {
+		VersionRecord oldFleetVersionRecord = fleetVersionRecord;
+		fleetVersionRecord = newFleetVersionRecord;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_MODEL__FLEET_VERSION_RECORD, oldFleetVersionRecord, newFleetVersionRecord);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFleetVersionRecord(VersionRecord newFleetVersionRecord) {
+		if (newFleetVersionRecord != fleetVersionRecord) {
+			NotificationChain msgs = null;
+			if (fleetVersionRecord != null)
+				msgs = ((InternalEObject)fleetVersionRecord).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.FLEET_MODEL__FLEET_VERSION_RECORD, null, msgs);
+			if (newFleetVersionRecord != null)
+				msgs = ((InternalEObject)newFleetVersionRecord).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.FLEET_MODEL__FLEET_VERSION_RECORD, null, msgs);
+			msgs = basicSetFleetVersionRecord(newFleetVersionRecord, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_MODEL__FLEET_VERSION_RECORD, newFleetVersionRecord, newFleetVersionRecord));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VersionRecord getVesselGroupVersionRecord() {
+		return vesselGroupVersionRecord;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetVesselGroupVersionRecord(VersionRecord newVesselGroupVersionRecord, NotificationChain msgs) {
+		VersionRecord oldVesselGroupVersionRecord = vesselGroupVersionRecord;
+		vesselGroupVersionRecord = newVesselGroupVersionRecord;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_MODEL__VESSEL_GROUP_VERSION_RECORD, oldVesselGroupVersionRecord, newVesselGroupVersionRecord);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVesselGroupVersionRecord(VersionRecord newVesselGroupVersionRecord) {
+		if (newVesselGroupVersionRecord != vesselGroupVersionRecord) {
+			NotificationChain msgs = null;
+			if (vesselGroupVersionRecord != null)
+				msgs = ((InternalEObject)vesselGroupVersionRecord).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.FLEET_MODEL__VESSEL_GROUP_VERSION_RECORD, null, msgs);
+			if (newVesselGroupVersionRecord != null)
+				msgs = ((InternalEObject)newVesselGroupVersionRecord).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.FLEET_MODEL__VESSEL_GROUP_VERSION_RECORD, null, msgs);
+			msgs = basicSetVesselGroupVersionRecord(newVesselGroupVersionRecord, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_MODEL__VESSEL_GROUP_VERSION_RECORD, newVesselGroupVersionRecord, newVesselGroupVersionRecord));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VersionRecord getBunkerFuelsVersionRecord() {
+		return bunkerFuelsVersionRecord;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetBunkerFuelsVersionRecord(VersionRecord newBunkerFuelsVersionRecord, NotificationChain msgs) {
+		VersionRecord oldBunkerFuelsVersionRecord = bunkerFuelsVersionRecord;
+		bunkerFuelsVersionRecord = newBunkerFuelsVersionRecord;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD, oldBunkerFuelsVersionRecord, newBunkerFuelsVersionRecord);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBunkerFuelsVersionRecord(VersionRecord newBunkerFuelsVersionRecord) {
+		if (newBunkerFuelsVersionRecord != bunkerFuelsVersionRecord) {
+			NotificationChain msgs = null;
+			if (bunkerFuelsVersionRecord != null)
+				msgs = ((InternalEObject)bunkerFuelsVersionRecord).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD, null, msgs);
+			if (newBunkerFuelsVersionRecord != null)
+				msgs = ((InternalEObject)newBunkerFuelsVersionRecord).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD, null, msgs);
+			msgs = basicSetBunkerFuelsVersionRecord(newBunkerFuelsVersionRecord, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD, newBunkerFuelsVersionRecord, newBunkerFuelsVersionRecord));
 	}
 
 	/**
@@ -178,6 +299,12 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return ((InternalEList<?>)getBaseFuels()).basicRemove(otherEnd, msgs);
 			case FleetPackage.FLEET_MODEL__VESSEL_GROUPS:
 				return ((InternalEList<?>)getVesselGroups()).basicRemove(otherEnd, msgs);
+			case FleetPackage.FLEET_MODEL__FLEET_VERSION_RECORD:
+				return basicSetFleetVersionRecord(null, msgs);
+			case FleetPackage.FLEET_MODEL__VESSEL_GROUP_VERSION_RECORD:
+				return basicSetVesselGroupVersionRecord(null, msgs);
+			case FleetPackage.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD:
+				return basicSetBunkerFuelsVersionRecord(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -196,8 +323,12 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return getBaseFuels();
 			case FleetPackage.FLEET_MODEL__VESSEL_GROUPS:
 				return getVesselGroups();
-			case FleetPackage.FLEET_MODEL__FLEET_DATA_VERSION:
-				return getFleetDataVersion();
+			case FleetPackage.FLEET_MODEL__FLEET_VERSION_RECORD:
+				return getFleetVersionRecord();
+			case FleetPackage.FLEET_MODEL__VESSEL_GROUP_VERSION_RECORD:
+				return getVesselGroupVersionRecord();
+			case FleetPackage.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD:
+				return getBunkerFuelsVersionRecord();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -223,8 +354,14 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				getVesselGroups().clear();
 				getVesselGroups().addAll((Collection<? extends VesselGroup>)newValue);
 				return;
-			case FleetPackage.FLEET_MODEL__FLEET_DATA_VERSION:
-				setFleetDataVersion((String)newValue);
+			case FleetPackage.FLEET_MODEL__FLEET_VERSION_RECORD:
+				setFleetVersionRecord((VersionRecord)newValue);
+				return;
+			case FleetPackage.FLEET_MODEL__VESSEL_GROUP_VERSION_RECORD:
+				setVesselGroupVersionRecord((VersionRecord)newValue);
+				return;
+			case FleetPackage.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD:
+				setBunkerFuelsVersionRecord((VersionRecord)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -247,8 +384,14 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 			case FleetPackage.FLEET_MODEL__VESSEL_GROUPS:
 				getVesselGroups().clear();
 				return;
-			case FleetPackage.FLEET_MODEL__FLEET_DATA_VERSION:
-				setFleetDataVersion(FLEET_DATA_VERSION_EDEFAULT);
+			case FleetPackage.FLEET_MODEL__FLEET_VERSION_RECORD:
+				setFleetVersionRecord((VersionRecord)null);
+				return;
+			case FleetPackage.FLEET_MODEL__VESSEL_GROUP_VERSION_RECORD:
+				setVesselGroupVersionRecord((VersionRecord)null);
+				return;
+			case FleetPackage.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD:
+				setBunkerFuelsVersionRecord((VersionRecord)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -268,26 +411,14 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return baseFuels != null && !baseFuels.isEmpty();
 			case FleetPackage.FLEET_MODEL__VESSEL_GROUPS:
 				return vesselGroups != null && !vesselGroups.isEmpty();
-			case FleetPackage.FLEET_MODEL__FLEET_DATA_VERSION:
-				return FLEET_DATA_VERSION_EDEFAULT == null ? fleetDataVersion != null : !FLEET_DATA_VERSION_EDEFAULT.equals(fleetDataVersion);
+			case FleetPackage.FLEET_MODEL__FLEET_VERSION_RECORD:
+				return fleetVersionRecord != null;
+			case FleetPackage.FLEET_MODEL__VESSEL_GROUP_VERSION_RECORD:
+				return vesselGroupVersionRecord != null;
+			case FleetPackage.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD:
+				return bunkerFuelsVersionRecord != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (fleetDataVersion: ");
-		result.append(fleetDataVersion);
-		result.append(')');
-		return result.toString();
 	}
 
 } // end of FleetModelImpl

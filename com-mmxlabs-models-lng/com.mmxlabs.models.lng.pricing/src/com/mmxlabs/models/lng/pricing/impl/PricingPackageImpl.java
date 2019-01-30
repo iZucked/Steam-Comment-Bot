@@ -420,18 +420,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getPricingModel_MarketCurveDataVersion() {
-		return (EAttribute)pricingModelEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getPricingModel_SettledPrices() {
-		return (EReference)pricingModelEClass.getEStructuralFeatures().get(6);
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -441,7 +431,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 */
 	@Override
 	public EReference getPricingModel_MarketIndices() {
-		return (EReference)pricingModelEClass.getEStructuralFeatures().get(7);
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -451,7 +441,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 */
 	@Override
 	public EReference getPricingModel_HolidayCalendars() {
-		return (EReference)pricingModelEClass.getEStructuralFeatures().get(8);
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -461,7 +451,25 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 */
 	@Override
 	public EReference getPricingModel_SettleStrategies() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPricingModel_MarketCurvesVersionRecord() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPricingModel_SettledPricesVersionRecord() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -1521,11 +1529,12 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(pricingModelEClass, PRICING_MODEL__CHARTER_CURVES);
 		createEReference(pricingModelEClass, PRICING_MODEL__BUNKER_FUEL_CURVES);
 		createEReference(pricingModelEClass, PRICING_MODEL__CONVERSION_FACTORS);
-		createEAttribute(pricingModelEClass, PRICING_MODEL__MARKET_CURVE_DATA_VERSION);
 		createEReference(pricingModelEClass, PRICING_MODEL__SETTLED_PRICES);
 		createEReference(pricingModelEClass, PRICING_MODEL__MARKET_INDICES);
 		createEReference(pricingModelEClass, PRICING_MODEL__HOLIDAY_CALENDARS);
 		createEReference(pricingModelEClass, PRICING_MODEL__SETTLE_STRATEGIES);
+		createEReference(pricingModelEClass, PRICING_MODEL__MARKET_CURVES_VERSION_RECORD);
+		createEReference(pricingModelEClass, PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD);
 
 		dataIndexEClass = createEClass(DATA_INDEX);
 		createEReference(dataIndexEClass, DATA_INDEX__POINTS);
@@ -1736,11 +1745,12 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getPricingModel_CharterCurves(), this.getCharterCurve(), null, "charterCurves", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_BunkerFuelCurves(), this.getBunkerFuelCurve(), null, "bunkerFuelCurves", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_ConversionFactors(), this.getUnitConversion(), null, "conversionFactors", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPricingModel_MarketCurveDataVersion(), ecorePackage.getEString(), "marketCurveDataVersion", null, 0, 1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_SettledPrices(), this.getDatePointContainer(), null, "settledPrices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_MarketIndices(), this.getMarketIndex(), null, "marketIndices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_HolidayCalendars(), this.getHolidayCalendar(), null, "holidayCalendars", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_SettleStrategies(), this.getSettleStrategy(), null, "settleStrategies", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_MarketCurvesVersionRecord(), theMMXCorePackage.getVersionRecord(), null, "marketCurvesVersionRecord", null, 0, 1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_SettledPricesVersionRecord(), theMMXCorePackage.getVersionRecord(), null, "settledPricesVersionRecord", null, 0, 1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(dataIndexEClass, DataIndex.class, "DataIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(this.getIndexPoint());

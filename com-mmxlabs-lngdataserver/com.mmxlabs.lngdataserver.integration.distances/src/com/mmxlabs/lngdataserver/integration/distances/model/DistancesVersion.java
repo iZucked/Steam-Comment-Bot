@@ -4,18 +4,12 @@
  */
 package com.mmxlabs.lngdataserver.integration.distances.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Reference;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 /**
  * @author robert.erdin@gmail.com created on 03/02/17.
@@ -25,10 +19,11 @@ public class DistancesVersion {
 
 	private String identifier;
 
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss+00:00")
-	private LocalDateTime createdAt;
+	private String abcIdentifier;
+
+	private Instant createdAt;
+	
+	private String createdBy;
 
 	@Reference
 	private Routes routes = new Routes();
@@ -59,11 +54,11 @@ public class DistancesVersion {
 		this.identifier = identifier;
 	}
 
-	public LocalDateTime getCreatedAt() {
+	public Instant getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDateTime createdAt) {
+	public void setCreatedAt(Instant createdAt) {
 		this.createdAt = createdAt;
 	}
 
@@ -98,5 +93,21 @@ public class DistancesVersion {
 	@Override
 	public int hashCode() {
 		return identifier.hashCode();
+	}
+
+	public String getAbcIdentifier() {
+		return abcIdentifier;
+	}
+
+	public void setAbcIdentifier(String abcIdentifier) {
+		this.abcIdentifier = abcIdentifier;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 }

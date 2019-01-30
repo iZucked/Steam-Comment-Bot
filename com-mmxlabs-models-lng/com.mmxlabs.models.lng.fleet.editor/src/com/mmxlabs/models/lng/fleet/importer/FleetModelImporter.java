@@ -37,6 +37,7 @@ import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
+import com.mmxlabs.rcp.common.versions.VersionsUtil;
 
 /**
  */
@@ -140,7 +141,9 @@ public class FleetModelImporter implements ISubmodelImporter {
 			}
 		});
 
-		fleetModel.setFleetDataVersion("private-" + EcoreUtil.generateUUID());
+		fleetModel.setVesselGroupVersionRecord(VersionsUtil.createNewRecord());
+		fleetModel.setBunkerFuelsVersionRecord(VersionsUtil.createNewRecord());
+		fleetModel.setFleetVersionRecord(VersionsUtil.createNewRecord());
 
 		return fleetModel;
 	}

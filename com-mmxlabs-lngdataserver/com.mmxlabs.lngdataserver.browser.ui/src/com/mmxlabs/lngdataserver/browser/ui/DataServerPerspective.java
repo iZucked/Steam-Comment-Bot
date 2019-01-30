@@ -19,10 +19,10 @@ public class DataServerPerspective implements IPerspectiveFactory {
 
 		browserArea.addView(DataBrowser.ID);
 
-		editorsArea.addView("com.mmxlabs.lngdataserver.integration.ui.WebNavigatorView");
+//		editorsArea.addView("com.mmxlabs.lngdataserver.integration.ui.WebNavigatorView");
 
 		layout.addShowViewShortcut(DataBrowser.ID);
-		layout.addShowViewShortcut("com.mmxlabs.lngdataserver.integration.ui.WebNavigatorView");
+//		layout.addShowViewShortcut("com.mmxlabs.lngdataserver.integration.ui.WebNavigatorView");
 
 		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.editing");
 		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.analysis");

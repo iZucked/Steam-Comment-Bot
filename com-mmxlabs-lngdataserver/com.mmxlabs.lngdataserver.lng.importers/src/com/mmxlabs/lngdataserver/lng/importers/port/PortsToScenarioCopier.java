@@ -24,6 +24,8 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.VersionRecord;
 
 public class PortsToScenarioCopier {
 
@@ -93,11 +95,13 @@ public class PortsToScenarioCopier {
 					}
 					cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__CAPABILITIES, caps));
 				}
-
 			}
-
 		}
-		cc.append(SetCommand.create(editingDomain, portModel, PortPackage.Literals.PORT_MODEL__PORT_DATA_VERSION, version.getIdentifier()));
+
+		VersionRecord record = portModel.getPortVersionRecord();
+		cc.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__CREATED_BY, version.getCreatedBy()));
+		cc.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__CREATED_AT, version.getCreatedAt()));
+		cc.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__VERSION, version.getIdentifier()));
 
 		return cc;
 	}

@@ -27,6 +27,7 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.util.MMXCoreAdapterFactory;
 
@@ -204,6 +205,29 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.mmxcore.VersionRecord} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VersionRecordItemProvider versionRecordItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.mmxcore.VersionRecord}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVersionRecordAdapter() {
+		if (versionRecordItemProvider == null) {
+			versionRecordItemProvider = new VersionRecordItemProvider(this);
+		}
+
+		return versionRecordItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -337,6 +361,7 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 		if (uuidObjectItemProvider != null) uuidObjectItemProvider.dispose();
 		if (mmxRootObjectItemProvider != null) mmxRootObjectItemProvider.dispose();
 		if (mmxResultRootItemProvider != null) mmxResultRootItemProvider.dispose();
+		if (versionRecordItemProvider != null) versionRecordItemProvider.dispose();
 	}
 
 }

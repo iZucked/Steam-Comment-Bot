@@ -25,14 +25,25 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.navigator.NavigatorDecoratingLabelProvider;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
+import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider;
+import com.mmxlabs.scenario.service.ui.IScenarioVersionService;
 
 /**
  * Fork of the {@link NavigatorDecoratingLabelProvider} to override {@link #getColumnImage(Object, int)};
  */
 @SuppressWarnings("restriction")
-public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingStyledCellLabelProvider implements IPropertyChangeListener, ILabelProvider, IColorProvider, ITableLabelProvider, ITableFontProvider {
+public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingStyledCellLabelProvider
+		implements IPropertyChangeListener, ILabelProvider, IColorProvider, ITableLabelProvider, ITableFontProvider {
+
+	private Image bcImage;
 
 	private static class StyledLabelProviderAdapter implements IStyledLabelProvider, ITableLabelProvider, IColorProvider, IFontProvider, ITableFontProvider {
 
@@ -180,6 +191,9 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		}
 	}
 
+	private ServiceTracker<IScenarioVersionService, IScenarioVersionService> scenarioVersionsTracker;
+	private ServiceTracker<IBaseCaseVersionsProvider, IBaseCaseVersionsProvider> baseCaseTracker;
+
 	/**
 	 * Creates a {@link ScenarioServiceNavigatorDecoratingLabelProvider}
 	 * 
@@ -203,6 +217,10 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		setOwnerDrawEnabled(showColoredLabels());
 
 		super.initialize(viewer, column);
+
+		initTracker();
+
+		bcImage = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.scenario.service.ui", "icons/base-flag.png").createImage();
 	}
 
 	/*
@@ -215,6 +233,72 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		super.dispose();
 		PlatformUI.getPreferenceStore().removePropertyChangeListener(this);
 		JFaceResources.getColorRegistry().removeListener(this);
+
+		if (scenarioVersionsTracker != null) {
+			scenarioVersionsTracker.getService().removeChangedListener(changeListenerScenarios);
+			scenarioVersionsTracker.close();
+		}
+		if (baseCaseTracker != null) {
+			baseCaseTracker.getService().removeChangedListener(changeListenerBaseCase);
+			baseCaseTracker.close();
+		}
+		if (bcImage != null) {
+			bcImage.dispose();
+			bcImage = null;
+		}
+	}
+
+	private IScenarioVersionService.IChangedListener changeListenerScenarios = this::refresh;
+	private IBaseCaseVersionsProvider.IBaseCaseChanged changeListenerBaseCase = this::refresh;
+
+	private void initTracker() {
+		Bundle bundle = FrameworkUtil.getBundle(ScenarioServiceNavigatorDecoratingLabelProvider.class);
+		{
+			scenarioVersionsTracker = new ServiceTracker<IScenarioVersionService, IScenarioVersionService>(bundle.getBundleContext(), IScenarioVersionService.class, null) {
+				@Override
+				public IScenarioVersionService addingService(final ServiceReference<IScenarioVersionService> reference) {
+					final IScenarioVersionService provider = super.addingService(reference);
+					provider.addChangedListener(changeListenerScenarios);
+					RunnerHelper.asyncExec(ScenarioServiceNavigatorDecoratingLabelProvider.this::refresh);
+
+					return provider;
+				}
+
+				@Override
+				public void removedService(final ServiceReference<IScenarioVersionService> reference, final IScenarioVersionService provider) {
+					provider.removeChangedListener(changeListenerScenarios);
+					super.removedService(reference, provider);
+				}
+			};
+			scenarioVersionsTracker.open();
+			final IScenarioVersionService s2 = scenarioVersionsTracker.getService();
+			if (s2 != null) {
+				s2.addChangedListener(changeListenerScenarios);
+			}
+		}
+		{
+			baseCaseTracker = new ServiceTracker<IBaseCaseVersionsProvider, IBaseCaseVersionsProvider>(bundle.getBundleContext(), IBaseCaseVersionsProvider.class, null) {
+				@Override
+				public IBaseCaseVersionsProvider addingService(final ServiceReference<IBaseCaseVersionsProvider> reference) {
+					final IBaseCaseVersionsProvider provider = super.addingService(reference);
+					provider.addChangedListener(changeListenerBaseCase);
+					RunnerHelper.asyncExec(ScenarioServiceNavigatorDecoratingLabelProvider.this::refresh);
+
+					return provider;
+				}
+
+				@Override
+				public void removedService(final ServiceReference<IBaseCaseVersionsProvider> reference, final IBaseCaseVersionsProvider provider) {
+					provider.removeChangedListener(changeListenerBaseCase);
+					super.removedService(reference, provider);
+				}
+			};
+			baseCaseTracker.open();
+			final IBaseCaseVersionsProvider s2 = baseCaseTracker.getService();
+			if (s2 != null) {
+				s2.addChangedListener(changeListenerBaseCase);
+			}
+		}
 	}
 
 	private void refresh() {
@@ -270,6 +354,12 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		final Image image = ((StyledLabelProviderAdapter) getStyledStringProvider()).getColumnImage(element, columnIndex);
 
 		if (columnIndex == ScenarioServiceNavigator.COLUMN_NAME_IDX) {
+
+			IBaseCaseVersionsProvider service = baseCaseTracker.getService();
+			if (service != null && element == service.getBaseCase()) {
+				return bcImage;
+			}
+
 			if (this.getLabelDecorator() == null) {
 				return image;
 			}
@@ -295,6 +385,20 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	 */
 	@Override
 	public String getColumnText(final Object element, final int columnIndex) {
+
+		if (columnIndex == ScenarioServiceNavigator.COLUMN_STATUS_IDX) {
+			if (element instanceof ScenarioInstance) {
+				ScenarioInstance scenarioInstance = (ScenarioInstance) element;
+				IScenarioVersionService service = scenarioVersionsTracker.getService();
+				if (service != null) {
+					if (service.differentToBaseCase(scenarioInstance)) {
+						return "↑";
+					}
+				}
+			}
+			return "";
+		}
+
 		return ((StyledLabelProviderAdapter) getStyledStringProvider()).getColumnText(element, columnIndex);
 	}
 
@@ -302,7 +406,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	public Font getFont(final Object element, final int columnIndex) {
 		return ((StyledLabelProviderAdapter) getStyledStringProvider()).getFont(element, columnIndex);
 	}
-	
+
 	@Override
 	public Color getForeground(Object element) {
 		return ((StyledLabelProviderAdapter) getStyledStringProvider()).getForeground(element);

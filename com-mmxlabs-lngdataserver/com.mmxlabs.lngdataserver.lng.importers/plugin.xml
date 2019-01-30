@@ -33,4 +33,81 @@
                class="com.mmxlabs.lngdataserver.lng.importers.internal.PluginStartup">
          </startup>
       </extension>
+      
+      <extension
+      point="org.eclipse.ui.commands">
+   <command
+         defaultHandler="com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.PublishBaseCaseCommandHandler"
+         id="com.mmxlabs.datahub.basecase.publish"
+         name="Publish scenario as base case">
+   </command>
+   <command
+         defaultHandler="com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.CopyFromBaseCaseCommandHandler"
+         id="com.mmxlabs.datahub.basecase.syncwith"
+         name="Sync data with base case">
+   </command>
+</extension>
+<extension
+      point="org.eclipse.ui.menus">
+   <menuContribution
+         allPopups="false"
+         locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
+      <command
+            commandId="com.mmxlabs.datahub.basecase.publish"
+            style="push"
+            tooltip="Publish selected scenarios">
+         <visibleWhen
+               checkEnabled="false">
+            <and>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                     <not>
+                        <test
+                              forcePluginActivation="true"
+                              property="com.mmxlabs.scenario.service.ui.flags.readonly">
+                        </test>
+                     </not>
+                  </iterate>
+               </with>
+               <count
+                     value="1">
+               </count>
+            </and>
+         </visibleWhen>
+      </command>
+      <command
+            commandId="com.mmxlabs.datahub.basecase.syncwith"
+            style="push"
+            tooltip="Sync data with base case">
+             <visibleWhen
+               checkEnabled="false">
+            <and>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                     <not>
+                        <test
+                              forcePluginActivation="true"
+                              property="com.mmxlabs.scenario.service.ui.flags.readonly">
+                        </test>
+                     </not>
+                  </iterate>
+               </with>
+               <count
+                     value="1">
+               </count>
+            </and>
+         </visibleWhen>
+      </command>
+   </menuContribution>
+</extension>
 </plugin>

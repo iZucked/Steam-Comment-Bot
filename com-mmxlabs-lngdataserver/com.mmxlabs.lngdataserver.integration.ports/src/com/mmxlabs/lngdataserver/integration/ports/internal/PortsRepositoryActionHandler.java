@@ -4,11 +4,7 @@
  */
 package com.mmxlabs.lngdataserver.integration.ports.internal;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-
-import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
@@ -30,17 +26,17 @@ public class PortsRepositoryActionHandler implements IDataBrowserActionsHandler 
 
 	@Override
 	public boolean supportsPublish() {
-		return repository.hasUpstream();
+		return false;// repository.hasUpstream();
 	}
 
 	@Override
 	public boolean publish(String version) {
-		try {
-			repository.publishVersion(version);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// try {
+		// repository.publishVersion(version);
+		// return true;
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 		return false;
 	}
 
@@ -66,40 +62,40 @@ public class PortsRepositoryActionHandler implements IDataBrowserActionsHandler 
 
 	@Override
 	public boolean supportsSyncUpstream() {
-		return repository.hasUpstream();
+		return false;// repository.hasUpstream();
 	}
 
 	@Override
 	public boolean syncUpstream() {
-		IRunnableWithProgress r = (monitor) -> {
-			List<DataVersion> newVersions;
-			try {
-				newVersions = repository.updateAvailable();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-				return;
-			}
-
-			monitor.beginTask("Checking for ports updates", newVersions.size());
-			try {
-				for (DataVersion version : newVersions) {
-					try {
-						repository.syncUpstreamVersion(version.getIdentifier());
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					monitor.worked(1);
-				}
-			} finally {
-				monitor.done();
-			}
-		};
-		try {
-			PlatformUI.getWorkbench().getProgressService().run(true, false, r);
-			return true;
-		} catch (InvocationTargetException | InterruptedException e) {
-			e.printStackTrace();
-		}
+		// IRunnableWithProgress r = (monitor) -> {
+		// List<DataVersion> newVersions;
+		// try {
+		// newVersions = repository.updateAvailable();
+		// } catch (Exception e1) {
+		// e1.printStackTrace();
+		// return;
+		// }
+		//
+		// monitor.beginTask("Checking for ports updates", newVersions.size());
+		// try {
+		// for (DataVersion version : newVersions) {
+		// try {
+		// repository.syncUpstreamVersion(version.getIdentifier());
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		// monitor.worked(1);
+		// }
+		// } finally {
+		// monitor.done();
+		// }
+		// };
+		// try {
+		// PlatformUI.getWorkbench().getProgressService().run(true, false, r);
+		// return true;
+		// } catch (InvocationTargetException | InterruptedException e) {
+		// e.printStackTrace();
+		// }
 		return false;
 	}
 
@@ -115,7 +111,7 @@ public class PortsRepositoryActionHandler implements IDataBrowserActionsHandler 
 
 	@Override
 	public boolean supportsRefreshLocal() {
-		return repository.isReady();
+		return true;// repository.isReady();
 	}
 
 	@Override

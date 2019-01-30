@@ -4,62 +4,28 @@
  */
 package com.mmxlabs.lngdataserver.integration.distances;
 
-import java.time.LocalDateTime;
+import java.io.IOException;
 
-import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
+import com.mmxlabs.lngdataserver.integration.repo.AbstractGeneralDataRepository;
 
-/**
- * This implementation is not thread-safe.
- * 
- * @author Robert Erdin
- */
-public class DistanceRepository extends AbstractDataRepository<DistancesVersion> {
+public class DistanceRepository extends AbstractGeneralDataRepository<DistancesVersion> {
 
-	public static final DistanceRepository INSTANCE = new DistanceRepository();
+	public static final @NonNull DistanceRepository INSTANCE = new DistanceRepository();
 
 	private DistanceRepository() {
-		super("Distances", DistancesVersion.class);
-		doHandleUpstreamURLChange();
+		super(DistancesTypeRecord.INSTANCE);
+		startListenForNewLocalVersions();
 	}
 
-	protected String getVersionsURL() {
-		return "/distances/versions";
+	public boolean publishVersion(final DistancesVersion version) throws Exception {
+		final String json = DistancesIO.write(version);
+		return uploadData(json);
 	}
 
-	@Override
-	protected String getSyncVersionEndpoint() {
-		return "/distances/sync/versions/";
-	}
-
-	@Override
-	protected String getVersionNotificationEndpoint() {
-		return "/distances/version_notification";
-	}
-
-	@Override
-	protected boolean canWaitForNewLocalVersion() {
-		return true;
-	}
-
-	@Override
-	protected boolean canWaitForNewUpstreamVersion() {
-		return true;
-	}
-
-	@Override
-	protected SimpleVersion wrap(DistancesVersion version) {
-		return new SimpleVersion() {
-
-			@Override
-			public String getIdentifier() {
-				return version.getIdentifier();
-			}
-
-			@Override
-			public LocalDateTime getCreatedAt() {
-				return version.getCreatedAt();
-			}
-		};
+	public DistancesVersion getLocalVersion(final String uuid) throws Exception {
+		return doGetLocalVersion(uuid, DistancesIO::read);
 	}
 }

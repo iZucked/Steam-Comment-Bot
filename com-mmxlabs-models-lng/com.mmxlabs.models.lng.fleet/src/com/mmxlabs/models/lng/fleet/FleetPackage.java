@@ -126,13 +126,31 @@ public interface FleetPackage extends EPackage {
 	int FLEET_MODEL__VESSEL_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Fleet Data Version</b></em>' attribute.
+	 * The feature id for the '<em><b>Fleet Version Record</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL__FLEET_DATA_VERSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int FLEET_MODEL__FLEET_VERSION_RECORD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Group Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__VESSEL_GROUP_VERSION_RECORD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Bunker Fuels Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -141,7 +159,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.
@@ -1163,15 +1181,37 @@ public interface FleetPackage extends EPackage {
 	EReference getFleetModel_VesselGroups();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.FleetModel#getFleetDataVersion <em>Fleet Data Version</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.FleetModel#getFleetVersionRecord <em>Fleet Version Record</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Fleet Data Version</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getFleetDataVersion()
+	 * @return the meta object for the containment reference '<em>Fleet Version Record</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getFleetVersionRecord()
 	 * @see #getFleetModel()
 	 * @generated
 	 */
-	EAttribute getFleetModel_FleetDataVersion();
+	EReference getFleetModel_FleetVersionRecord();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselGroupVersionRecord <em>Vessel Group Version Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Vessel Group Version Record</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getVesselGroupVersionRecord()
+	 * @see #getFleetModel()
+	 * @generated
+	 */
+	EReference getFleetModel_VesselGroupVersionRecord();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.FleetModel#getBunkerFuelsVersionRecord <em>Bunker Fuels Version Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Bunker Fuels Version Record</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getBunkerFuelsVersionRecord()
+	 * @see #getFleetModel()
+	 * @generated
+	 */
+	EReference getFleetModel_BunkerFuelsVersionRecord();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.BaseFuel <em>Base Fuel</em>}'.
@@ -1728,12 +1768,28 @@ public interface FleetPackage extends EPackage {
 		EReference FLEET_MODEL__VESSEL_GROUPS = eINSTANCE.getFleetModel_VesselGroups();
 
 		/**
-		 * The meta object literal for the '<em><b>Fleet Data Version</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Fleet Version Record</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute FLEET_MODEL__FLEET_DATA_VERSION = eINSTANCE.getFleetModel_FleetDataVersion();
+		EReference FLEET_MODEL__FLEET_VERSION_RECORD = eINSTANCE.getFleetModel_FleetVersionRecord();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Group Version Record</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FLEET_MODEL__VESSEL_GROUP_VERSION_RECORD = eINSTANCE.getFleetModel_VesselGroupVersionRecord();
+
+		/**
+		 * The meta object literal for the '<em><b>Bunker Fuels Version Record</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD = eINSTANCE.getFleetModel_BunkerFuelsVersionRecord();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.

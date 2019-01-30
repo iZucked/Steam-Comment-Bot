@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.lng.importers.menus;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -23,9 +22,8 @@ import org.eclipse.ui.PlatformUI;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExtension;
-import com.mmxlabs.lngdataserver.integration.ports.PortsUploaderClient;
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
-import com.mmxlabs.lngdataserver.integration.pricing.PricingUploadClient;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 //import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.ScenarioServicePublishAction;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
@@ -35,7 +33,6 @@ import com.mmxlabs.lngdataserver.lng.importers.distances.ui.DistancesToScenarioI
 import com.mmxlabs.lngdataserver.lng.importers.port.ui.PortsToScenarioImportWizard;
 import com.mmxlabs.lngdataserver.lng.importers.pricing.ui.PricingToScenarioImportWizard;
 import com.mmxlabs.lngdataserver.lng.importers.vessels.ui.VesselsToScenarioImportWizard;
-import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -63,26 +60,27 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				final CompositeNode parentNode = (CompositeNode) node.eContainer();
 				if (parentNode != null) {
 					final String versionIdentifier = node.getVersionIdentifier();
-					if (Objects.equals(LNGScenarioSharedModelTypes.DISTANCES.getID(), parentNode.getType())) {
-						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
-							openWizard((currentInstance) -> new DistancesToScenarioImportWizard(versionIdentifier, currentInstance, true));
-						}));
-						itemsAdded = true;
-					} else if (Objects.equals(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), parentNode.getType())) {
+//					if (Objects.equals(LNGScenarioSharedModelTypes.DISTANCES.getID(), parentNode.getType())) {
+//						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
+//							openWizard((currentInstance) -> new DistancesToScenarioImportWizard(versionIdentifier, currentInstance, true));
+//						}));
+//						itemsAdded = true;
+//					} else
+						if (Objects.equals(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), parentNode.getType())) {
 						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
 							openWizard((currentInstance) -> new PricingToScenarioImportWizard(versionIdentifier, currentInstance, true));
 						}));
 						itemsAdded = true;
-					} else if (Objects.equals(LNGScenarioSharedModelTypes.FLEET.getID(), parentNode.getType())) {
-						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
-							openWizard((currentInstance) -> new VesselsToScenarioImportWizard(versionIdentifier, currentInstance, true));
-						}));
-						itemsAdded = true;
-					} else if (Objects.equals(LNGScenarioSharedModelTypes.LOCATIONS.getID(), parentNode.getType())) {
-						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
-							openWizard((currentInstance) -> new PortsToScenarioImportWizard(versionIdentifier, currentInstance, true));
-						}));
-						itemsAdded = true;
+//					} else if (Objects.equals(LNGScenarioSharedModelTypes.FLEET.getID(), parentNode.getType())) {
+//						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
+//							openWizard((currentInstance) -> new VesselsToScenarioImportWizard(versionIdentifier, currentInstance, true));
+//						}));
+//						itemsAdded = true;
+//					} else if (Objects.equals(LNGScenarioSharedModelTypes.LOCATIONS.getID(), parentNode.getType())) {
+//						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
+//							openWizard((currentInstance) -> new PortsToScenarioImportWizard(versionIdentifier, currentInstance, true));
+//						}));
+//						itemsAdded = true;
 					}
 				}
 			}
@@ -100,47 +98,43 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 			if (firstElement instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) firstElement;
 				final Manifest manifest = scenarioInstance.getManifest();
-				if (BackEndUrlProvider.INSTANCE.isAvailable()) {
-					if (UpstreamUrlProvider.INSTANCE.isAvailable()) {
-						menuManager.add(new RunnableAction("Publish scenario as current base case", () -> {
-							ScenarioServicePublishAction.publishScenario(scenarioInstance);
-						}));
-						itemsAdded = true;
-					}
-					if (manifest != null) {
-						for (final ModelArtifact modelArtifact : manifest.getModelDependencies()) {
-							// if (Objects.equals(LNGScenarioSharedModelTypes.DISTANCES.getID(), modelArtifact.getKey())) {
-							// String versionIdentifier = modelArtifact.getDataVersion();
-							// menuManager.add(new RunnableAction("Export distance data", () -> {
-							// openWizard((currentInstance) -> new DistancesFromScenarioImportWizard(versionIdentifier, currentInstance));
-							// }));
-							// itemsAdded = true;
-							// }
-							if (Objects.equals(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), modelArtifact.getKey())) {
-								menuManager.add(new RunnableAction("Export pricing data", () -> {
-									exportPricing(scenarioInstance);
-								}));
-								itemsAdded = true;
-							}
-							// if (Objects.equals(LNGScenarioSharedModelTypes.LOCATIONS.getID(), modelArtifact.getKey())) {
-							// menuManager.add(new RunnableAction("Export ports data", () -> {
-							// exportPorts(scenarioInstance);
-							// }));
-							// itemsAdded = true;
-							// }
+				if (UpstreamUrlProvider.INSTANCE.isAvailable()) {
+					menuManager.add(new RunnableAction("Publish scenario as current base case", () -> {
+						ScenarioServicePublishAction.publishScenario(scenarioInstance);
+					}));
+					itemsAdded = true;
+				}
+				if (manifest != null) {
+					for (final ModelArtifact modelArtifact : manifest.getModelDependencies()) {
+						// if (Objects.equals(LNGScenarioSharedModelTypes.DISTANCES.getID(), modelArtifact.getKey())) {
+						// String versionIdentifier = modelArtifact.getDataVersion();
+						// menuManager.add(new RunnableAction("Export distance data", () -> {
+						// openWizard((currentInstance) -> new DistancesFromScenarioImportWizard(versionIdentifier, currentInstance));
+						// }));
+						// itemsAdded = true;
+						// }
+//						if (Objects.equals(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), modelArtifact.getKey())) {
+//							menuManager.add(new RunnableAction("Export pricing data", () -> {
+//								exportPricing(scenarioInstance);
+//							}));
+//							itemsAdded = true;
+//						}
+						// if (Objects.equals(LNGScenarioSharedModelTypes.LOCATIONS.getID(), modelArtifact.getKey())) {
+						// menuManager.add(new RunnableAction("Export ports data", () -> {
+						// exportPorts(scenarioInstance);
+						// }));
+						// itemsAdded = true;
+						// }
 
-							// if (Objects.equals(LNGScenarioSharedModelTypes.FLEET.getID(), modelArtifact.getKey())) {
-							// menuManager.add(new RunnableAction("Export pricing data", () -> {
-							// exportVessels(scenarioInstance);
-							// }));
-							// itemsAdded = true;
-							// }
-						}
+						// if (Objects.equals(LNGScenarioSharedModelTypes.FLEET.getID(), modelArtifact.getKey())) {
+						// menuManager.add(new RunnableAction("Export pricing data", () -> {
+						// exportVessels(scenarioInstance);
+						// }));
+						// itemsAdded = true;
+						// }
 					}
 				}
-
 			}
-
 		}
 		if (!itemsAdded) {
 			final RunnableAction action = new RunnableAction("Please wait...", () -> {
@@ -154,7 +148,6 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 	}
 
 	private void exportPricing(final ScenarioInstance scenario) {
-		final String url = BackEndUrlProvider.INSTANCE.getUrl();
 		final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
 		try (ModelReference modelReference = modelRecord.aquireReference(PricingFromScenarioImportWizard.class.getSimpleName())) {
 			modelReference.executeWithLock(false, () -> {
@@ -163,8 +156,8 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
 				final PricingVersion version = PricingFromScenarioCopier.generateVersion(pricingModel);
 				try {
-					PricingUploadClient.saveVersion(url, version);
-				} catch (final IOException e) {
+					PricingRepository.INSTANCE.publishVersion(version);
+				} catch (final Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -173,7 +166,6 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 	}
 
 	private void exportPorts(final ScenarioInstance scenario) {
-		final String url = BackEndUrlProvider.INSTANCE.getUrl();
 		final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
 		try (ModelReference modelReference = modelRecord.aquireReference(PricingFromScenarioImportWizard.class.getSimpleName())) {
 			modelReference.executeWithLock(false, () -> {
@@ -182,7 +174,7 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 				final PortsVersion version = PortFromScenarioCopier.generateVersion(portModel);
 				try {
-					PortsUploaderClient.saveVersion(BackEndUrlProvider.INSTANCE.getUrl(), version);
+					// PortsUploaderClient.saveVersion(BackEndUrlProvider.INSTANCE.getUrl(), version);
 				} catch (final Exception e) {
 					e.printStackTrace();
 				}

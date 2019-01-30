@@ -200,7 +200,6 @@ public class TesterUtil {
 		matchEngineFactory.setRanking(20);
 		final IMatchEngine.Factory.Registry matchEngineRegistry = new MatchEngineFactoryRegistryImpl();
 		matchEngineRegistry.add(matchEngineFactory);
-
 		final EMFCompare comparator = EMFCompare.builder().setMatchEngineFactoryRegistry(matchEngineRegistry).build();
 		// Compare the two models
 		final IComparisonScope scope = new DefaultComparisonScope(left, right, null);

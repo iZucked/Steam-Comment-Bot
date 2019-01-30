@@ -9,13 +9,10 @@ import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.browser.BrowserFactory;
-import com.mmxlabs.lngdataserver.browser.CompositeNode;
-import com.mmxlabs.lngdataserver.browser.Node;
+import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lngdataserver.browser.util.DataBrowserNodeHandler;
 import com.mmxlabs.lngdataserver.integration.vessels.VesselsRepository;
-import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
-import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -30,19 +27,12 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	private final CompositeNode vesselsDataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
-	private VesselsRepository repository;
-	private boolean active;
+	private DataBrowserNodeHandler vesselsNodeHandler;
 
 	/**
 	 * The constructor
 	 */
 	public Activator() {
-		Node loading = BrowserFactory.eINSTANCE.createLeaf();
-		loading.setDisplayName("loading...");
-		vesselsDataRoot.setDisplayName("Vessels (loading...)");
-		vesselsDataRoot.setType(LNGScenarioSharedModelTypes.FLEET.getID());
-		vesselsDataRoot.getChildren().add(loading);
 
 	}
 
@@ -55,12 +45,12 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		if (LicenseFeatures.isPermitted("features:hub-sync-vessels")) {
+			vesselsNodeHandler = new DataBrowserNodeHandler("Vessels", LNGScenarioSharedModelTypes.FLEET.getID(), VesselsRepository.INSTANCE,
+					root -> new VesselsRepositoryActionHandler(VesselsRepository.INSTANCE, root));
 
-		repository = VesselsRepository.INSTANCE;
-		vesselsDataRoot.setActionHandler(new VesselsRepositoryActionHandler(repository, vesselsDataRoot));
-
-		active = true;
-		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
+			vesselsNodeHandler.start();
+		}
 	}
 
 	/*
@@ -70,17 +60,11 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		if (repository != null) {
-			repository.stopListeningForNewLocalVersions();
-			repository = null;
+		if (vesselsNodeHandler != null) {
+			vesselsNodeHandler.stop();
 		}
-		vesselsDataRoot.setActionHandler(null);
-		vesselsDataRoot.getChildren().clear();
-		vesselsDataRoot.setCurrent(null);
-
 		plugin = null;
 		super.stop(context);
-		active = false;
 	}
 
 	/**
@@ -90,44 +74,5 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static Activator getDefault() {
 		return plugin;
-	}
-
-	public CompositeNode getVesselsDataRoot() {
-		return vesselsDataRoot;
-	}
-
-	//
-	private void loadVersions() {
-
-		while (!repository.isReady() && active) {
-			try {
-				LOGGER.debug("Vessel back-end not ready yet...");
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				LOGGER.error(e.getMessage());
-				throw new RuntimeException(e);
-			}
-		}
-
-		if (active) {
-
-		}
-
-		if (active) {
-			LOGGER.debug("Vessel back-end ready, retrieving versions...");
-			try {
-				vesselsDataRoot.setDisplayName("Vessels");
-				vesselsDataRoot.getActionHandler().refreshLocal();
-			} catch (Exception e) {
-				LOGGER.error("Error retrieving vessels versions");
-			}
-
-			// register consumer to update on new version
-			repository.registerLocalVersionListener(() -> vesselsDataRoot.getActionHandler().refreshLocal());
-			repository.startListenForNewLocalVersions();
-
-			repository.registerDefaultUpstreamVersionListener();
-			repository.startListenForNewUpstreamVersions();
-		}
 	}
 }

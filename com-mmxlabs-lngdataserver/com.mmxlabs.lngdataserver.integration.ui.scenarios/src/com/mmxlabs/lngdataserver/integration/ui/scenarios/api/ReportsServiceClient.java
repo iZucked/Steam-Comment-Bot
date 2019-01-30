@@ -12,6 +12,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
+import com.mmxlabs.lngdataserver.server.HttpClientUtil;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
@@ -33,7 +34,7 @@ public class ReportsServiceClient {
 
 	private File baseCaseFolder;
 
-	private final OkHttpClient httpClient = new OkHttpClient.Builder() //
+	private final OkHttpClient httpClient = HttpClientUtil.basicBuilder() //
 			.build();
 
 	private final BaseCaseServiceClient baseCaseClient = new BaseCaseServiceClient();

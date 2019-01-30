@@ -67,6 +67,7 @@ public class MMXCoreFactoryImpl extends EFactoryImpl implements MMXCoreFactory {
 			case MMXCorePackage.UUID_OBJECT: return createUUIDObject();
 			case MMXCorePackage.MMX_ROOT_OBJECT: return createMMXRootObject();
 			case MMXCorePackage.MMX_RESULT_ROOT: return createMMXResultRoot();
+			case MMXCorePackage.VERSION_RECORD: return createVersionRecord();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -121,6 +122,16 @@ public class MMXCoreFactoryImpl extends EFactoryImpl implements MMXCoreFactory {
 	public MMXResultRoot createMMXResultRoot() {
 		MMXResultRootImpl mmxResultRoot = new MMXResultRootImpl();
 		return mmxResultRoot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VersionRecord createVersionRecord() {
+		VersionRecordImpl versionRecord = new VersionRecordImpl();
+		return versionRecord;
 	}
 
 	/**

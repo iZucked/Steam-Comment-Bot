@@ -60,10 +60,12 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 	public static final int COLUMN_NAME_IDX = 0;
 	public static final int COLUMN_SHOW_IDX = 1;
+	public static final int COLUMN_STATUS_IDX = 2;
 
 	private static final Logger log = LoggerFactory.getLogger(ScenarioServiceNavigator.class);
 
 	private final Image showColumnImage;
+	private final Image statusColumnImage;
 
 	protected AdapterFactoryEditingDomain editingDomain;
 
@@ -97,7 +99,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			if (part instanceof IEditorPart) {
 				final IEditorPart editorPart = (IEditorPart) part;
 				final IEditorInput editorInput = editorPart.getEditorInput();
-				final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
+				final ScenarioInstance scenarioInstance = editorInput.getAdapter(ScenarioInstance.class);
 				if (scenarioInstance != null) {
 					if (lastAutoSelection == scenarioInstance) {
 						lastAutoSelection = null;
@@ -116,7 +118,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			if (part instanceof IEditorPart) {
 				final IEditorPart editorPart = (IEditorPart) part;
 				final IEditorInput editorInput = editorPart.getEditorInput();
-				final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
+				final ScenarioInstance scenarioInstance = editorInput.getAdapter(ScenarioInstance.class);
 				if (scenarioInstance != null) {
 					lastAutoSelection = scenarioInstance;
 				}
@@ -162,11 +164,12 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	public ScenarioServiceNavigator() {
 		super();
 
-		tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(Activator.getDefault().getBundle().getBundleContext(), ScenarioServiceRegistry.class, null);
+		tracker = new ServiceTracker<>(Activator.getDefault().getBundle().getBundleContext(), ScenarioServiceRegistry.class, null);
 		tracker.open();
 
 		Activator.getDefault().getScenarioServiceSelectionProvider().addSelectionChangedListener(selectionChangedListener);
 		showColumnImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
+		statusColumnImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/base-flag.png").createImage();
 	}
 
 	@Override
@@ -175,6 +178,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		Activator.getDefault().getScenarioServiceSelectionProvider().removeSelectionChangedListener(selectionChangedListener);
 
 		showColumnImage.dispose();
+		statusColumnImage.dispose();
 
 		linkHelper.dispose();
 
@@ -209,6 +213,14 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		checkColumn.setWidth(30);
 		checkColumn.setResizable(false);
 
+		
+		final TreeColumn statusColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
+		statusColumn.setImage(statusColumnImage);
+		statusColumn.setToolTipText("In sync with base case");
+		statusColumn.setAlignment(SWT.CENTER);
+		statusColumn.setWidth(30);
+		statusColumn.setResizable(false);
+		
 		final Tree tree = viewer.getTree();
 		tree.addMouseListener(new MouseAdapter() {
 

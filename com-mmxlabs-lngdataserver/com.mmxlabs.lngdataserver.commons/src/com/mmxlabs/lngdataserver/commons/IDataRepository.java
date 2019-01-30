@@ -4,39 +4,42 @@
  */
 package com.mmxlabs.lngdataserver.commons;
 
-import java.util.List;
-import java.util.function.Consumer;
+public interface IDataRepository<T> {
 
-public interface IDataRepository {
+	boolean hasUpstreamVersion(String uuid);
 
-	List<DataVersion> getLocalVersions();
+	boolean publishVersion(T version) throws Exception;
 
-	List<DataVersion> getUpstreamVersions();
+//	void registerLocalVersionListener(Object object);
 
-	boolean isReady();
-
-	boolean syncUpstreamVersion(final String version) throws Exception;
-
-	boolean publishVersion(String version) throws Exception;
-
-	List<DataVersion> updateAvailable() throws Exception;
-
-	void startListenForNewLocalVersions();
-
-	void startListenForNewUpstreamVersions();
-
-	void stopListeningForNewLocalVersions();
-
-	void stopListeningForNewUpstreamVersions();
-
-	void registerLocalVersionListener(final Runnable versionConsumer);
-
-	void registerUpstreamVersionListener(final Runnable versionConsumer);
-
-	boolean hasLocalVersion(String version);
-
-	boolean hasUpstreamVersion(String version);
-
-	boolean publishUpstreamVersion(String versionJSON) throws Exception;
+	// List<DataVersion> getLocalVersions();
+	//
+	// List<DataVersion> getUpstreamVersions();
+	//
+	// boolean isReady();
+	//
+	// boolean syncUpstreamVersion(final String version) throws Exception;
+	//
+	// boolean publishVersion(String version) throws Exception;
+	//
+	// List<DataVersion> updateAvailable() throws Exception;
+	//
+	// void startListenForNewLocalVersions();
+	//
+	// void startListenForNewUpstreamVersions();
+	//
+	// void stopListeningForNewLocalVersions();
+	//
+	// void stopListeningForNewUpstreamVersions();
+	//
+	 void registerLocalVersionListener(final Runnable versionConsumer);
+	//
+	// void registerUpstreamVersionListener(final Runnable versionConsumer);
+	//
+	// boolean hasLocalVersion(String version);
+	//
+	// boolean hasUpstreamVersion(String version);
+	//
+	// boolean publishUpstreamVersion(String versionJSON) throws Exception;
 
 }

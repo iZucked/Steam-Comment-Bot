@@ -27,7 +27,7 @@ import java.util.Enumeration;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.ssl.internal.Activator;
 
 /**
@@ -69,7 +69,30 @@ public final class LicenseChecker {
 	private static final String CACERTS_PATH = System.getProperty("java.home") + File.separatorChar + "lib" + File.separatorChar + "security" + File.separatorChar + "cacerts"; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$
 	private static final String CACERTS_TYPE = "JKS"; //$NON-NLS-1$
 
-	public static LicenseState checkLicense() {
+	public static @Nullable Pair<KeyStore, char[]> loadLocalKeystore() throws Exception {
+
+		// Trigger license check to ensure the data store is created.
+		if (checkLicense() == LicenseState.Valid) {
+			final File trustStoreFile = Activator.getDefault().getBundle().getDataFile("local-truststore.jks");
+			final KeyStore keyStore = KeyStore.getInstance("JKS");
+			try (final InputStream astream = new FileInputStream(trustStoreFile)) {
+				keyStore.load(astream,  password.toCharArray());
+			}
+			return new Pair<>(keyStore, password.toCharArray());
+		}
+		return null;
+	}
+
+	private static LicenseState state = null;
+
+	public static synchronized LicenseState checkLicense() {
+		if (state == null) {
+			state = doCheckLicense();
+		}
+		return state;
+	}
+
+	public static synchronized LicenseState doCheckLicense() {
 
 		try {
 			// Load keystore
@@ -160,9 +183,7 @@ public final class LicenseChecker {
 
 					System.setProperty("javax.net.ssl.trustStore", trustStoreFile.toString());
 					System.setProperty("javax.net.ssl.trustStorePassword", password);
-
 					return LicenseState.Valid;
-
 				}
 			}
 

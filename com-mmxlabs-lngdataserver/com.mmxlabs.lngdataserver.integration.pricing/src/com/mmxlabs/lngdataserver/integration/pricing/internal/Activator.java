@@ -9,13 +9,10 @@ import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.browser.BrowserFactory;
-import com.mmxlabs.lngdataserver.browser.CompositeNode;
-import com.mmxlabs.lngdataserver.browser.Node;
+import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lngdataserver.browser.util.DataBrowserNodeHandler;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
-import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
-import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -30,20 +27,12 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	private final CompositeNode pricingDataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
-	private PricingRepository repository = null;
-
-	private boolean active;
+	private DataBrowserNodeHandler pricingNodeHandler;
 
 	/**
 	 * The constructor
 	 */
 	public Activator() {
-		final Node loading = BrowserFactory.eINSTANCE.createLeaf();
-		loading.setDisplayName("loading...");
-		pricingDataRoot.setDisplayName("Pricing (loading...)");
-		pricingDataRoot.setType(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
-		pricingDataRoot.getChildren().add(loading);
 
 	}
 
@@ -56,12 +45,11 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-
-		repository = PricingRepository.INSTANCE;
-		pricingDataRoot.setActionHandler(new PricingRepositoryActionHandler(repository, pricingDataRoot));
-
-		active = true;
-		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
+		if (LicenseFeatures.isPermitted("features:hub-sync-pricing")) {
+			pricingNodeHandler = new DataBrowserNodeHandler("Pricing", LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), PricingRepository.INSTANCE,
+					root -> new PricingRepositoryActionHandler(PricingRepository.INSTANCE, root));
+			pricingNodeHandler.start();
+		}
 	}
 
 	/*
@@ -71,17 +59,12 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(final BundleContext context) throws Exception {
-		if (repository != null) {
-			repository.stopListeningForNewLocalVersions();
-			repository = null;
+		if (pricingNodeHandler != null) {
+			pricingNodeHandler.stop();
 		}
-		pricingDataRoot.setActionHandler(null);
-		pricingDataRoot.getChildren().clear();
-		pricingDataRoot.setCurrent(null);
 
 		plugin = null;
 		super.stop(context);
-		active = false;
 	}
 
 	/**
@@ -91,42 +74,5 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static Activator getDefault() {
 		return plugin;
-	}
-
-	public CompositeNode getPricingDataRoot() {
-		return pricingDataRoot;
-	}
-
-	public PricingRepository getPricingRepository() {
-		return repository;
-	}
-
-	private void loadVersions() {
-		while (!repository.isReady() && active) {
-			try {
-				LOGGER.debug("Pricing back-end not ready yet...");
-				Thread.sleep(1000);
-			} catch (final InterruptedException e) {
-				LOGGER.error(e.getMessage());
-				throw new RuntimeException(e);
-			}
-		}
-		if (active) {
-			LOGGER.debug("Pricing back-end ready, retrieving versions...");
-			try {
-				pricingDataRoot.setDisplayName("Pricing");
-				pricingDataRoot.getChildren().clear();
-				pricingDataRoot.getActionHandler().refreshLocal();
-			} catch (final Exception e) {
-				LOGGER.error("Error retrieving pricing versions");
-			}
-
-			// register consumer to update on new version
-			repository.registerLocalVersionListener(() -> pricingDataRoot.getActionHandler().refreshLocal());
-			repository.startListenForNewLocalVersions();
-
-			repository.registerDefaultUpstreamVersionListener();
-			repository.startListenForNewUpstreamVersions();
-		}
 	}
 }

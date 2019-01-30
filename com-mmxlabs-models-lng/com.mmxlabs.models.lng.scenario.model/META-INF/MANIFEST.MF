@@ -31,5 +31,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.common.common-util,
  com.mmxlabs.scenario.service.model;visibility:=reexport,
  com.mmxlabs.scenario.service.util,
- com.google.guava
+ com.google.guava,
+ com.mmxlabs.rcp.common
 Bundle-ActivationPolicy: lazy

@@ -112,6 +112,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="portCountryGroups" upperBound="-1"
         eType="#//PortCountryGroup" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="portDataVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portGroupDataVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="distanceDataVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contingencyMatrix" eType="#//ContingencyMatrix"
         containment="true"/>

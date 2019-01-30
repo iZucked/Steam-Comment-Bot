@@ -4,15 +4,15 @@
  */
 package com.mmxlabs.lngdataserver.browser.ui;
 
-import static org.ops4j.peaberry.Peaberry.osgiModule;
-import static org.ops4j.peaberry.Peaberry.service;
-import static org.ops4j.peaberry.eclipse.EclipseRegistry.eclipseRegistry;
-import static org.ops4j.peaberry.util.TypeLiterals.iterable;
-
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.util.EContentAdapter;
@@ -20,18 +20,19 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.jface.window.Window;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
@@ -41,11 +42,11 @@ import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -53,12 +54,6 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Iterables;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.TypeLiteral;
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.BrowserPackage;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
@@ -67,17 +62,22 @@ import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.browser.provider.BrowserItemProviderAdapterFactory;
 import com.mmxlabs.lngdataserver.browser.ui.context.DataBrowserContextMenuExtensionUtil;
 import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExtension;
-import com.mmxlabs.lngdataserver.commons.IBaseCaseVersionsProvider;
+import com.mmxlabs.lngdataserver.browser.util.DataExtension;
 import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
-import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ModelArtifact;
+import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceAdapterFactory;
+import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider;
+import com.mmxlabs.scenario.service.ui.IScenarioVersionService;
 
 public class DataBrowser extends ViewPart {
 
@@ -85,18 +85,32 @@ public class DataBrowser extends ViewPart {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DataBrowser.class);
 
+	private Image bcImage;
+	private GridTableViewer baseCaseViewer;
 	private GridTreeViewer dataViewer;
 	private GridTreeViewer scenarioViewer;
 	private CompositeNode root;
 	private final Set<Node> selectedNodes = new HashSet<>();
 	private Predicate<ScenarioInstance> selectedScenarioChecker = null;
-	private final Predicate<ScenarioInstance> baseCaseScenarioChecker = null;
 
 	private ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> scenarioTracker;
+
 	private ServiceTracker<IBaseCaseVersionsProvider, IBaseCaseVersionsProvider> baseCaseVersionsTracker;
+
+	private ServiceTracker<IScenarioVersionService, IScenarioVersionService> scenarioVersionsTracker;
+
+	private ServiceTracker<DataExtension, DataExtension> dataExtensionTracker;
+
 	private Iterable<IDataBrowserContextMenuExtension> contextMenuExtensions;
 
 	private final IBaseCaseVersionsProvider.IBaseCaseChanged baseChangedListener = () -> {
+
+		ViewerHelper.setInput(baseCaseViewer, false, getBaseCaseList(baseCaseVersionsTracker.getService()));
+		ViewerHelper.refresh(dataViewer, false);
+		ViewerHelper.refresh(scenarioViewer, false);
+	};
+
+	private final IScenarioVersionService.IChangedListener scenarioVersionsChangedListener = () -> {
 		ViewerHelper.refresh(scenarioViewer, false);
 	};
 
@@ -177,6 +191,9 @@ public class DataBrowser extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 		final Bundle bundle = FrameworkUtil.getBundle(DataBrowser.class);
+
+		bcImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/base-flag.png").createImage();
+
 		scenarioTracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(bundle.getBundleContext(), ScenarioServiceRegistry.class, null) {
 			@Override
 			public ScenarioServiceRegistry addingService(final ServiceReference<ScenarioServiceRegistry> reference) {
@@ -205,6 +222,8 @@ public class DataBrowser extends ViewPart {
 					dataLabelProvider.setBaseCaseProvider(provider);
 					ViewerHelper.refresh(dataViewer, false);
 				}
+				ViewerHelper.setInput(baseCaseViewer, false, getBaseCaseList(provider));
+
 				return provider;
 			}
 
@@ -217,6 +236,8 @@ public class DataBrowser extends ViewPart {
 					ViewerHelper.refresh(dataViewer, false);
 				}
 				ViewerHelper.refresh(scenarioViewer, false);
+				ViewerHelper.setInput(baseCaseViewer, false, Collections.emptyList());
+
 			}
 		};
 		baseCaseVersionsTracker.open();
@@ -225,7 +246,30 @@ public class DataBrowser extends ViewPart {
 			s.addChangedListener(baseChangedListener);
 		}
 
-		final SashForm sash = new SashForm(parent, SWT.SMOOTH | SWT.VERTICAL);
+		scenarioVersionsTracker = new ServiceTracker<IScenarioVersionService, IScenarioVersionService>(bundle.getBundleContext(), IScenarioVersionService.class, null) {
+			@Override
+			public IScenarioVersionService addingService(final ServiceReference<IScenarioVersionService> reference) {
+				final IScenarioVersionService provider = super.addingService(reference);
+				provider.addChangedListener(scenarioVersionsChangedListener);
+				ViewerHelper.refresh(scenarioViewer, false);
+
+				return provider;
+			}
+
+			@Override
+			public void removedService(final ServiceReference<IScenarioVersionService> reference, final IScenarioVersionService provider) {
+				provider.removeChangedListener(scenarioVersionsChangedListener);
+				super.removedService(reference, provider);
+				ViewerHelper.refresh(scenarioViewer, false);
+			}
+		};
+		scenarioVersionsTracker.open();
+		final IScenarioVersionService s2 = scenarioVersionsTracker.getService();
+		if (s2 != null) {
+			s2.addChangedListener(scenarioVersionsChangedListener);
+		}
+
+		final SashForm sash = new SashForm(parent, SWT.SMOOTH | SWT.HORIZONTAL);
 		sash.setSashWidth(3);
 
 		// Change the colour used to paint the sashes
@@ -233,26 +277,14 @@ public class DataBrowser extends ViewPart {
 
 		contextMenuExtensions = DataBrowserContextMenuExtensionUtil.getContextMenuExtensions();
 
-		createScenarioViewer(parent, sash);
+		final SashForm navSash = new SashForm(sash, SWT.SMOOTH | SWT.VERTICAL);
+		navSash.setSashWidth(3);
+
+		createBaseCaseViewer(parent, navSash);
+		createScenarioViewer(parent, navSash);
 		createDataViewer(parent, sash);
-		sash.setWeights(new int[] { 60, 40 });
-
-		final Injector injector = Guice.createInjector(new DataExtensionsModule());
-		final Iterable<DataExtensionPoint> extensions = injector.getInstance(Key.get(new TypeLiteral<Iterable<DataExtensionPoint>>() {
-		}));
-		LOGGER.debug("Found {} extensions", Iterables.size(extensions));
-
-		for (final DataExtensionPoint extensionPoint : extensions) {
-			final DataExtension dataExtension = extensionPoint.getDataExtension();
-			if (dataExtension != null) {
-				try {
-					final CompositeNode dataRoot = dataExtension.getDataRoot();
-					root.getChildren().add(dataRoot);
-				} catch (final Exception e) {
-					LOGGER.error(e.getMessage(), e);
-				}
-			}
-		}
+		navSash.setWeights(new int[] { 10, 95 });
+		sash.setWeights(new int[] { 27, 73 });
 
 		scenarioViewer.addSelectionChangedListener(scenarioSelectionListener);
 		dataViewer.addSelectionChangedListener(nodeSelectionListener);
@@ -272,6 +304,99 @@ public class DataBrowser extends ViewPart {
 		});
 		dataViewer.expandAll();
 
+		dataExtensionTracker = new ServiceTracker<DataExtension, DataExtension>(bundle.getBundleContext(), DataExtension.class, null) {
+			@Override
+			public DataExtension addingService(final ServiceReference<DataExtension> reference) {
+				final DataExtension reg = super.addingService(reference);
+				final CompositeNode dataRoot = reg.getDataRoot();
+				RunnerHelper.asyncExec(() -> root.getChildren().add(dataRoot));
+				return reg;
+			}
+
+			@Override
+			public void removedService(ServiceReference<DataExtension> reference, DataExtension reg) {
+				final CompositeNode dataRoot = reg.getDataRoot();
+				RunnerHelper.asyncExec(() -> root.getChildren().remove(dataRoot));
+				super.removedService(reference, reg);
+			}
+		};
+		dataExtensionTracker.open();
+	}
+
+	private void createBaseCaseViewer(final Composite parent, final SashForm sash) {
+		final Composite sv = new Composite(sash, SWT.NONE);
+		sv.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		sv.setLayout(GridLayoutFactory.fillDefaults().create());
+		sv.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+		baseCaseViewer = new GridTableViewer(sv, SWT.SINGLE | SWT.V_SCROLL);
+		baseCaseViewer.setContentProvider(new ArrayContentProvider());
+		baseCaseViewer.getGrid().setBackgroundMode(SWT.INHERIT_NONE);
+		baseCaseViewer.getGrid().setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		GridViewerHelper.configureLookAndFeel(baseCaseViewer);
+		baseCaseViewer.getGrid().setLinesVisible(true);
+		baseCaseViewer.getGrid().setHeaderVisible(true);
+		baseCaseViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+		{
+			final GridViewerColumn c1 = new GridViewerColumn(baseCaseViewer, SWT.NONE);
+			c1.setLabelProvider(new ScenarioLabelProvider(0));
+			c1.getColumn().setText("Base case");
+			c1.getColumn().setWidth(450);
+			GridViewerHelper.configureLookAndFeel(c1);
+		}
+		// {
+		// final GridViewerColumn c2 = new GridViewerColumn(baseCaseViewer, SWT.NONE);
+		// c2.setLabelProvider(new ScenarioLabelProvider(1));
+		// c2.getColumn().setWidth(60);
+		// GridViewerHelper.configureLookAndFeel(c2);
+		// c2.getColumn().setText("Status");
+		// }
+
+		IBaseCaseVersionsProvider service2 = baseCaseVersionsTracker.getService();
+		if (service2 != null) {
+			ViewerHelper.setInput(baseCaseViewer, false, getBaseCaseList(service2));
+		}
+
+		final MenuManager scenarioMgr = new MenuManager();
+		baseCaseViewer.getControl().addMenuDetectListener(new MenuDetectListener() {
+
+			private Menu menu;
+
+			@Override
+			public void menuDetected(final MenuDetectEvent e) {
+
+				final ISelection selection = baseCaseViewer.getSelection();
+
+				if (selection.isEmpty()) {
+					return;
+				}
+
+				if (menu == null) {
+					menu = scenarioMgr.createContextMenu(baseCaseViewer.getControl());
+				}
+				final IContributionItem[] l = scenarioMgr.getItems();
+				scenarioMgr.removeAll();
+				for (final IContributionItem itm : l) {
+					itm.dispose();
+				}
+
+				final MenuItem[] items = menu.getItems();
+				for (int i = 0; i < items.length; i++) {
+					items[i].dispose();
+				}
+				boolean itemsAdded = false;
+
+				if (contextMenuExtensions != null) {
+					for (final IDataBrowserContextMenuExtension ext : contextMenuExtensions) {
+						// itemsAdded |= ext.contributeToBaseCaseMenu(treeSelection, scenarioMgr);
+					}
+				}
+
+				if (itemsAdded) {
+					menu.setVisible(true);
+				}
+			}
+		});
+//		baseCaseViewer.getControl().setEnabled(false);
 	}
 
 	private void createScenarioViewer(final Composite parent, final SashForm sash) {
@@ -291,7 +416,7 @@ public class DataBrowser extends ViewPart {
 			final GridViewerColumn c1 = new GridViewerColumn(scenarioViewer, SWT.NONE);
 			c1.setLabelProvider(new ScenarioLabelProvider(0));
 			c1.getColumn().setTree(true);
-			c1.getColumn().setWidth(250);
+			c1.getColumn().setWidth(400);
 			GridViewerHelper.configureLookAndFeel(c1);
 		}
 		{
@@ -421,48 +546,48 @@ public class DataBrowser extends ViewPart {
 						if (parentNode != null) {
 							final IDataBrowserActionsHandler actionHandler = parentNode.getActionHandler();
 							if (actionHandler != null) {
-								if (actionHandler.supportsRename()) {
-									dataMgr.add(new RunnableAction("Rename", () -> {
-										final IInputValidator validator = null;
-										final InputDialog dialog = new InputDialog(Display.getDefault().getActiveShell(), "Rename version " + selectedNode.getDisplayName(), "Choose new element name",
-												"", validator);
-										if (dialog.open() == Window.OK) {
-											dialog.getValue();
-										}
-
-										if (actionHandler.rename(selectedNode.getVersionIdentifier(), dialog.getValue())) {
-											selectedNode.setDisplayName(dialog.getValue());
-											selectedNode.setVersionIdentifier(dialog.getValue());
-										}
-									}));
-									itemsAdded = true;
-								} else {
-									dataMgr.add(new RunnableAction("Rename (Not suppported)", () -> {
-
-									}));
-									itemsAdded = true;
-								}
-								if (/* !selectedNode.isPublished() && */ actionHandler.supportsPublish()) {
-									dataMgr.add(new RunnableAction("Publish", () -> {
-										if (actionHandler.publish(selectedNode.getVersionIdentifier())) {
-											// selectedNode.setPublished(true);
-										}
-									}));
-									itemsAdded = true;
-								}
-								if (actionHandler.supportsDelete()) {
-									dataMgr.add(new RunnableAction("Delete", () -> {
-										if (actionHandler.delete(selectedNode.getVersionIdentifier())) {
-											parentNode.getChildren().remove(selectedNode);
-										}
-									}));
-									itemsAdded = true;
-								} else {
-									dataMgr.add(new RunnableAction("Delete (Not suppported)", () -> {
-
-									}));
-									itemsAdded = true;
-								}
+								// if (actionHandler.supportsRename()) {
+								// dataMgr.add(new RunnableAction("Rename", () -> {
+								// final IInputValidator validator = null;
+								// final InputDialog dialog = new InputDialog(Display.getDefault().getActiveShell(), "Rename version " + selectedNode.getDisplayName(), "Choose new element name",
+								// "", validator);
+								// if (dialog.open() == Window.OK) {
+								// dialog.getValue();
+								// }
+								//
+								// if (actionHandler.rename(selectedNode.getVersionIdentifier(), dialog.getValue())) {
+								// selectedNode.setDisplayName(dialog.getValue());
+								// selectedNode.setVersionIdentifier(dialog.getValue());
+								// }
+								// }));
+								// itemsAdded = true;
+								// } else {
+								// dataMgr.add(new RunnableAction("Rename (Not suppported)", () -> {
+								//
+								// }));
+								// itemsAdded = true;
+								// }
+								// if (/* !selectedNode.isPublished() && */ actionHandler.supportsPublish()) {
+								// dataMgr.add(new RunnableAction("Publish", () -> {
+								// if (actionHandler.publish(selectedNode.getVersionIdentifier())) {
+								// // selectedNode.setPublished(true);
+								// }
+								// }));
+								// itemsAdded = true;
+								// }
+								// if (actionHandler.supportsDelete()) {
+								// dataMgr.add(new RunnableAction("Delete", () -> {
+								// if (actionHandler.delete(selectedNode.getVersionIdentifier())) {
+								// parentNode.getChildren().remove(selectedNode);
+								// }
+								// }));
+								// itemsAdded = true;
+								// } else {
+								// dataMgr.add(new RunnableAction("Delete (Not suppported)", () -> {
+								//
+								// }));
+								// itemsAdded = true;
+								// }
 
 								// if (actionHandler.supportsSetCurrent()) {
 								// data_mgr.add(new RunnableAction("Set as Current", () -> {
@@ -518,7 +643,17 @@ public class DataBrowser extends ViewPart {
 			baseCaseVersionsTracker.getService().removeChangedListener(baseChangedListener);
 			baseCaseVersionsTracker.close();
 		}
-
+		if (scenarioVersionsTracker != null) {
+			scenarioVersionsTracker.getService().removeChangedListener(scenarioVersionsChangedListener);
+			scenarioVersionsTracker.close();
+		}
+		if (dataExtensionTracker != null) {
+			dataExtensionTracker.close();
+		}
+		if (bcImage != null) {
+			bcImage.dispose();
+			bcImage = null;
+		}
 		super.dispose();
 	}
 
@@ -547,14 +682,6 @@ public class DataBrowser extends ViewPart {
 		return factory;
 	}
 
-	private static class DataExtensionsModule extends AbstractModule {
-		@Override
-		protected void configure() {
-			install(osgiModule(FrameworkUtil.getBundle(Activator.class).getBundleContext(), eclipseRegistry()));
-			bind(iterable(DataExtensionPoint.class)).toProvider(service(DataExtensionPoint.class).multiple());
-		}
-	}
-
 	class ScenarioLabelProvider extends ColumnLabelProvider {
 
 		private final AdapterFactoryLabelProvider lp;
@@ -570,11 +697,10 @@ public class DataBrowser extends ViewPart {
 			if (columnIdx > 0) {
 
 				if (object instanceof ScenarioInstance) {
-					final ScenarioInstance scenarioInstance = (ScenarioInstance) object;
-
-					final Manifest mf = scenarioInstance.getManifest();
-					if (mf != null) {
-						if (needUpdateToBase(mf)) {
+					ScenarioInstance scenarioInstance = (ScenarioInstance) object;
+					IScenarioVersionService svs = scenarioVersionsTracker.getService();
+					if (svs != null) {
+						if (svs.differentToBaseCase(scenarioInstance)) {
 							return "↑";
 						} else {
 							return "";
@@ -586,7 +712,24 @@ public class DataBrowser extends ViewPart {
 
 				return "";
 			}
-			return lp.getText(object);
+			String text = lp.getText(object);
+			if (object instanceof ScenarioInstance) {
+
+				ScenarioInstance scenarioInstance = (ScenarioInstance) object;
+				final IScenarioService ss = SSDataManager.Instance.findScenarioService(scenarioInstance);
+				if (ss != null && !ss.getServiceModel().isLocal()) {
+					final Metadata metadata = scenarioInstance.getMetadata();
+					if (metadata != null) {
+						final Date created = metadata.getCreated();
+						if (created != null) {
+							final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+							format.setTimeZone(TimeZone.getTimeZone("UTC"));
+							text += " [" + format.format(created) + "]";// [" + metadata.getCreator() + "]";
+						}
+					}
+				}
+			}
+			return text;
 		}
 
 		@Override
@@ -606,33 +749,24 @@ public class DataBrowser extends ViewPart {
 		@Override
 		public Image getImage(final Object element) {
 			if (columnIdx == 0) {
+
+				IBaseCaseVersionsProvider service = baseCaseVersionsTracker.getService();
+				if (service != null && element == service.getBaseCase()) {
+					return bcImage;
+				}
+
 				return lp.getImage(element);
 			}
 			return null;
 		}
 	}
 
-	private boolean needUpdateToBase(final Manifest mf) {
-
-		final IBaseCaseVersionsProvider provider = baseCaseVersionsTracker.getService();
-		if (provider == null) {
-			return false;
+	private static @NonNull List<@Nullable ScenarioInstance> getBaseCaseList(final IBaseCaseVersionsProvider provider) {
+		ScenarioInstance baseCase = provider.getBaseCase();
+		if (baseCase != null) {
+			return Collections.singletonList(baseCase);
+		} else {
+			return Collections.emptyList();
 		}
-		final String versionId = provider.getPricingVersion();
-		if (versionId == null) {
-			return false;
-		}
-
-		for (final ModelArtifact modelArtifact : mf.getModelDependencies()) {
-			if (Objects.equals(modelArtifact.getKey(), LNGScenarioSharedModelTypes.MARKET_CURVES.getID())) {
-				if (versionId.equals(modelArtifact.getDataVersion())) {
-					return false;
-				} else {
-					return true;
-				}
-			}
-		}
-		return true;
 	}
-
 }

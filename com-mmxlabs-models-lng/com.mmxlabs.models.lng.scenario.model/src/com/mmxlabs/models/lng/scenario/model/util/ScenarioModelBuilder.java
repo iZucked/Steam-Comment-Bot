@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.scenario.model.util;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.UUID;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -32,6 +33,7 @@ import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
+import com.mmxlabs.rcp.common.versions.VersionsUtil;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
@@ -72,6 +74,16 @@ public final class ScenarioModelBuilder {
 		referenceModel.setSpotMarketsModel(SpotMarketsFactory.eINSTANCE.createSpotMarketsModel());
 
 		rootObject.setReferenceModel(referenceModel);
+		
+		// Initialise version UUIDs
+		referenceModel.getPortModel().setDistanceVersionRecord(VersionsUtil.createNewRecord());
+		referenceModel.getPortModel().setPortVersionRecord(VersionsUtil.createNewRecord());
+		referenceModel.getPortModel().setPortGroupVersionRecord(VersionsUtil.createNewRecord());
+		referenceModel.getFleetModel().setBunkerFuelsVersionRecord(VersionsUtil.createNewRecord());
+		referenceModel.getFleetModel().setFleetVersionRecord(VersionsUtil.createNewRecord());
+		referenceModel.getFleetModel().setVesselGroupVersionRecord(VersionsUtil.createNewRecord());
+		referenceModel.getPricingModel().setMarketCurvesVersionRecord(VersionsUtil.createNewRecord());
+		referenceModel.getPricingModel().setSettledPricesVersionRecord(VersionsUtil.createNewRecord());
 
 		return new ScenarioModelBuilder(rootObject);
 

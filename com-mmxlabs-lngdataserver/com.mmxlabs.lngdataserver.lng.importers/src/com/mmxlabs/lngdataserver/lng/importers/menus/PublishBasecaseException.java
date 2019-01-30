@@ -12,6 +12,8 @@ public class PublishBasecaseException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	public enum Type {
+		FAILED_UNKNOWN_ERROR, //
+		FAILED_TO_MIGRATE, //
 		FAILED_TO_EVALUATE, //
 		FAILED_TO_SAVE, //
 		FAILED_TO_UPLOAD_BASECASE, //

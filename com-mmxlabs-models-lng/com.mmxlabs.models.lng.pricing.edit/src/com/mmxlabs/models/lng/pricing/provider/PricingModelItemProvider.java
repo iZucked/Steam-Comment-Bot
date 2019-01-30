@@ -19,6 +19,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 /**
@@ -50,31 +51,8 @@ public class PricingModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addMarketCurveDataVersionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Market Curve Data Version feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addMarketCurveDataVersionPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_PricingModel_marketCurveDataVersion_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PricingModel_marketCurveDataVersion_feature", "_UI_PricingModel_type"),
-				 PricingPackage.Literals.PRICING_MODEL__MARKET_CURVE_DATA_VERSION,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -98,6 +76,8 @@ public class PricingModelItemProvider
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__MARKET_INDICES);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__HOLIDAY_CALENDARS);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__SETTLE_STRATEGIES);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD);
 		}
 		return childrenFeatures;
 	}
@@ -152,9 +132,6 @@ public class PricingModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(PricingModel.class)) {
-			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
 			case PricingPackage.PRICING_MODEL__CURRENCY_CURVES:
 			case PricingPackage.PRICING_MODEL__COMMODITY_CURVES:
 			case PricingPackage.PRICING_MODEL__CHARTER_CURVES:
@@ -164,6 +141,8 @@ public class PricingModelItemProvider
 			case PricingPackage.PRICING_MODEL__MARKET_INDICES:
 			case PricingPackage.PRICING_MODEL__HOLIDAY_CALENDARS:
 			case PricingPackage.PRICING_MODEL__SETTLE_STRATEGIES:
+			case PricingPackage.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD:
+			case PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -225,6 +204,39 @@ public class PricingModelItemProvider
 			(createChildParameter
 				(PricingPackage.Literals.PRICING_MODEL__SETTLE_STRATEGIES,
 				 PricingFactory.eINSTANCE.createSettleStrategy()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD,
+				 MMXCoreFactory.eINSTANCE.createVersionRecord()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD,
+				 MMXCoreFactory.eINSTANCE.createVersionRecord()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == PricingPackage.Literals.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD ||
+			childFeature == PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

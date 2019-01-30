@@ -149,12 +149,10 @@ public class DistancesFromScenarioCopier {
 			locations.add(versionLocation);
 		}
 
-		String distanceDataVersion = portModel.getDistanceDataVersion();
-		if (distanceDataVersion == null) {
-			distanceDataVersion = EcoreUtil.generateUUID();
-			portModel.setDistanceDataVersion(distanceDataVersion);
-		}
-		version.setIdentifier(distanceDataVersion);
+		version.setIdentifier(portModel.getDistanceVersionRecord().getVersion());
+		version.setCreatedBy(portModel.getDistanceVersionRecord().getCreatedBy());
+		version.setCreatedAt(portModel.getDistanceVersionRecord().getCreatedAt());
+
 		version.setLocations(locations);
 
 		version.setRoutes(routes);

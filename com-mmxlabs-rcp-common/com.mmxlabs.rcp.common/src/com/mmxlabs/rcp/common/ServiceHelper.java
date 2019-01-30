@@ -38,7 +38,7 @@ public final class ServiceHelper {
 	}
 
 	@SuppressWarnings("null")
-	public static <T, V, E extends Exception> V withCheckedOptionalService(final Class<T> cls, final CheckedFunction<T, V, E> withFunc) throws E {
+	public static <T, V, E extends Exception> V withCheckedOptionalService(final Class<T> cls, final CheckedFunction<@Nullable T, V, E> withFunc) throws E {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference != null) {

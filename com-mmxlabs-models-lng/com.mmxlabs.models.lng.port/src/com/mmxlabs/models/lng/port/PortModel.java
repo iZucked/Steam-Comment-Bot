@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.port;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.mmxcore.VersionRecord;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,9 +23,10 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getRoutes <em>Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getSpecialPortGroups <em>Special Port Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPortCountryGroups <em>Port Country Groups</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPortDataVersion <em>Port Data Version</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getDistanceDataVersion <em>Distance Data Version</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getContingencyMatrix <em>Contingency Matrix</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPortVersionRecord <em>Port Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPortGroupVersionRecord <em>Port Group Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getDistanceVersionRecord <em>Distance Version Record</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel()
@@ -113,58 +115,6 @@ public interface PortModel extends UUIDObject {
 	EList<PortCountryGroup> getPortCountryGroups();
 
 	/**
-	 * Returns the value of the '<em><b>Port Data Version</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Port Data Version</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Port Data Version</em>' attribute.
-	 * @see #setPortDataVersion(String)
-	 * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel_PortDataVersion()
-	 * @model
-	 * @generated
-	 */
-	String getPortDataVersion();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.PortModel#getPortDataVersion <em>Port Data Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Port Data Version</em>' attribute.
-	 * @see #getPortDataVersion()
-	 * @generated
-	 */
-	void setPortDataVersion(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Distance Data Version</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Distance Data Version</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Distance Data Version</em>' attribute.
-	 * @see #setDistanceDataVersion(String)
-	 * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel_DistanceDataVersion()
-	 * @model
-	 * @generated
-	 */
-	String getDistanceDataVersion();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.PortModel#getDistanceDataVersion <em>Distance Data Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Distance Data Version</em>' attribute.
-	 * @see #getDistanceDataVersion()
-	 * @generated
-	 */
-	void setDistanceDataVersion(String value);
-
-	/**
 	 * Returns the value of the '<em><b>Contingency Matrix</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -189,5 +139,83 @@ public interface PortModel extends UUIDObject {
 	 * @generated
 	 */
 	void setContingencyMatrix(ContingencyMatrix value);
+
+	/**
+	 * Returns the value of the '<em><b>Port Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Version Record</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Version Record</em>' containment reference.
+	 * @see #setPortVersionRecord(VersionRecord)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel_PortVersionRecord()
+	 * @model containment="true"
+	 * @generated
+	 */
+	VersionRecord getPortVersionRecord();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.PortModel#getPortVersionRecord <em>Port Version Record</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Version Record</em>' containment reference.
+	 * @see #getPortVersionRecord()
+	 * @generated
+	 */
+	void setPortVersionRecord(VersionRecord value);
+
+	/**
+	 * Returns the value of the '<em><b>Port Group Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Group Version Record</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Group Version Record</em>' containment reference.
+	 * @see #setPortGroupVersionRecord(VersionRecord)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel_PortGroupVersionRecord()
+	 * @model containment="true"
+	 * @generated
+	 */
+	VersionRecord getPortGroupVersionRecord();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.PortModel#getPortGroupVersionRecord <em>Port Group Version Record</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Group Version Record</em>' containment reference.
+	 * @see #getPortGroupVersionRecord()
+	 * @generated
+	 */
+	void setPortGroupVersionRecord(VersionRecord value);
+
+	/**
+	 * Returns the value of the '<em><b>Distance Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Distance Version Record</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Distance Version Record</em>' containment reference.
+	 * @see #setDistanceVersionRecord(VersionRecord)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel_DistanceVersionRecord()
+	 * @model containment="true"
+	 * @generated
+	 */
+	VersionRecord getDistanceVersionRecord();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.PortModel#getDistanceVersionRecord <em>Distance Version Record</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Distance Version Record</em>' containment reference.
+	 * @see #getDistanceVersionRecord()
+	 * @generated
+	 */
+	void setDistanceVersionRecord(VersionRecord value);
 
 } // PortModel

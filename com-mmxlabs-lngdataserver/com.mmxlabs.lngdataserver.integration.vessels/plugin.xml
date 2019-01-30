@@ -15,5 +15,10 @@
 -->
 
 <plugin>
-	 
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.mmxlabs.lngdataserver.integration.vessels.internal.PluginStartup">
+      </startup>
+   </extension>	 
 </plugin>

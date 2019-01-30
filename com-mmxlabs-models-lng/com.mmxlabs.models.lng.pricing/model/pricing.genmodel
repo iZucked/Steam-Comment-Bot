@@ -14,11 +14,12 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/charterCurves"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/bunkerFuelCurves"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/conversionFactors"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PricingModel/marketCurveDataVersion"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/settledPrices"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/marketIndices"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/holidayCalendars"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/settleStrategies"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/marketCurvesVersionRecord"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/settledPricesVersionRecord"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//DataIndex">
       <genTypeParameters ecoreTypeParameter="pricing.ecore#//DataIndex/Value"/>
@@ -146,9 +147,9 @@
     <genClasses image="false" ecoreClass="pricing.ecore#//AbstractYearMonthCurve">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//AbstractYearMonthCurve/currencyUnit"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//AbstractYearMonthCurve/volumeUnit"/>
-	  <genFeatures createChild="false" propertyDescription="If set, the price expression used to generate the curve data. This overrides any existing data."
+      <genFeatures createChild="false" propertyDescription="If set, the price expression used to generate the curve data. This overrides any existing data."
           ecoreFeature="ecore:EAttribute pricing.ecore#//AbstractYearMonthCurve/expression"/>
-	</genClasses>
+    </genClasses>
     <genClasses ecoreClass="pricing.ecore#//CommodityCurve">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//CommodityCurve/marketIndex"/>
     </genClasses>

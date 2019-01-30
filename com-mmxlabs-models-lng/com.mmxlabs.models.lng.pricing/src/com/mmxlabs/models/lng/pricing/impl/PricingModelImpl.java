@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
+import com.mmxlabs.models.mmxcore.VersionRecord;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
@@ -40,11 +41,12 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getCharterCurves <em>Charter Curves</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getBunkerFuelCurves <em>Bunker Fuel Curves</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getConversionFactors <em>Conversion Factors</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getMarketCurveDataVersion <em>Market Curve Data Version</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getSettledPrices <em>Settled Prices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getMarketIndices <em>Market Indices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getHolidayCalendars <em>Holiday Calendars</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getSettleStrategies <em>Settle Strategies</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getMarketCurvesVersionRecord <em>Market Curves Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getSettledPricesVersionRecord <em>Settled Prices Version Record</em>}</li>
  * </ul>
  *
  * @generated
@@ -101,26 +103,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	protected EList<UnitConversion> conversionFactors;
 
 	/**
-	 * The default value of the '{@link #getMarketCurveDataVersion() <em>Market Curve Data Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMarketCurveDataVersion()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String MARKET_CURVE_DATA_VERSION_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getMarketCurveDataVersion() <em>Market Curve Data Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMarketCurveDataVersion()
-	 * @generated
-	 * @ordered
-	 */
-	protected String marketCurveDataVersion = MARKET_CURVE_DATA_VERSION_EDEFAULT;
-
-	/**
 	 * The cached value of the '{@link #getSettledPrices() <em>Settled Prices</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -159,6 +141,26 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * @ordered
 	 */
 	protected EList<SettleStrategy> settleStrategies;
+
+	/**
+	 * The cached value of the '{@link #getMarketCurvesVersionRecord() <em>Market Curves Version Record</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMarketCurvesVersionRecord()
+	 * @generated
+	 * @ordered
+	 */
+	protected VersionRecord marketCurvesVersionRecord;
+
+	/**
+	 * The cached value of the '{@link #getSettledPricesVersionRecord() <em>Settled Prices Version Record</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSettledPricesVersionRecord()
+	 * @generated
+	 * @ordered
+	 */
+	protected VersionRecord settledPricesVersionRecord;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -250,29 +252,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * @generated
 	 */
 	@Override
-	public String getMarketCurveDataVersion() {
-		return marketCurveDataVersion;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setMarketCurveDataVersion(String newMarketCurveDataVersion) {
-		String oldMarketCurveDataVersion = marketCurveDataVersion;
-		marketCurveDataVersion = newMarketCurveDataVersion;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION, oldMarketCurveDataVersion, marketCurveDataVersion));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EList<DatePointContainer> getSettledPrices() {
 		if (settledPrices == null) {
 			settledPrices = new EObjectContainmentEList<DatePointContainer>(DatePointContainer.class, this, PricingPackage.PRICING_MODEL__SETTLED_PRICES);
@@ -324,6 +303,92 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public VersionRecord getMarketCurvesVersionRecord() {
+		return marketCurvesVersionRecord;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetMarketCurvesVersionRecord(VersionRecord newMarketCurvesVersionRecord, NotificationChain msgs) {
+		VersionRecord oldMarketCurvesVersionRecord = marketCurvesVersionRecord;
+		marketCurvesVersionRecord = newMarketCurvesVersionRecord;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PricingPackage.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD, oldMarketCurvesVersionRecord, newMarketCurvesVersionRecord);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMarketCurvesVersionRecord(VersionRecord newMarketCurvesVersionRecord) {
+		if (newMarketCurvesVersionRecord != marketCurvesVersionRecord) {
+			NotificationChain msgs = null;
+			if (marketCurvesVersionRecord != null)
+				msgs = ((InternalEObject)marketCurvesVersionRecord).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD, null, msgs);
+			if (newMarketCurvesVersionRecord != null)
+				msgs = ((InternalEObject)newMarketCurvesVersionRecord).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD, null, msgs);
+			msgs = basicSetMarketCurvesVersionRecord(newMarketCurvesVersionRecord, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD, newMarketCurvesVersionRecord, newMarketCurvesVersionRecord));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VersionRecord getSettledPricesVersionRecord() {
+		return settledPricesVersionRecord;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetSettledPricesVersionRecord(VersionRecord newSettledPricesVersionRecord, NotificationChain msgs) {
+		VersionRecord oldSettledPricesVersionRecord = settledPricesVersionRecord;
+		settledPricesVersionRecord = newSettledPricesVersionRecord;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD, oldSettledPricesVersionRecord, newSettledPricesVersionRecord);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSettledPricesVersionRecord(VersionRecord newSettledPricesVersionRecord) {
+		if (newSettledPricesVersionRecord != settledPricesVersionRecord) {
+			NotificationChain msgs = null;
+			if (settledPricesVersionRecord != null)
+				msgs = ((InternalEObject)settledPricesVersionRecord).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD, null, msgs);
+			if (newSettledPricesVersionRecord != null)
+				msgs = ((InternalEObject)newSettledPricesVersionRecord).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD, null, msgs);
+			msgs = basicSetSettledPricesVersionRecord(newSettledPricesVersionRecord, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD, newSettledPricesVersionRecord, newSettledPricesVersionRecord));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -345,6 +410,10 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return ((InternalEList<?>)getHolidayCalendars()).basicRemove(otherEnd, msgs);
 			case PricingPackage.PRICING_MODEL__SETTLE_STRATEGIES:
 				return ((InternalEList<?>)getSettleStrategies()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD:
+				return basicSetMarketCurvesVersionRecord(null, msgs);
+			case PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD:
+				return basicSetSettledPricesVersionRecord(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -367,8 +436,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return getBunkerFuelCurves();
 			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
 				return getConversionFactors();
-			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
-				return getMarketCurveDataVersion();
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
 				return getSettledPrices();
 			case PricingPackage.PRICING_MODEL__MARKET_INDICES:
@@ -377,6 +444,10 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return getHolidayCalendars();
 			case PricingPackage.PRICING_MODEL__SETTLE_STRATEGIES:
 				return getSettleStrategies();
+			case PricingPackage.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD:
+				return getMarketCurvesVersionRecord();
+			case PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD:
+				return getSettledPricesVersionRecord();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -410,9 +481,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				getConversionFactors().clear();
 				getConversionFactors().addAll((Collection<? extends UnitConversion>)newValue);
 				return;
-			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
-				setMarketCurveDataVersion((String)newValue);
-				return;
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
 				getSettledPrices().clear();
 				getSettledPrices().addAll((Collection<? extends DatePointContainer>)newValue);
@@ -428,6 +496,12 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 			case PricingPackage.PRICING_MODEL__SETTLE_STRATEGIES:
 				getSettleStrategies().clear();
 				getSettleStrategies().addAll((Collection<? extends SettleStrategy>)newValue);
+				return;
+			case PricingPackage.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD:
+				setMarketCurvesVersionRecord((VersionRecord)newValue);
+				return;
+			case PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD:
+				setSettledPricesVersionRecord((VersionRecord)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -456,9 +530,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
 				getConversionFactors().clear();
 				return;
-			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
-				setMarketCurveDataVersion(MARKET_CURVE_DATA_VERSION_EDEFAULT);
-				return;
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
 				getSettledPrices().clear();
 				return;
@@ -470,6 +541,12 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return;
 			case PricingPackage.PRICING_MODEL__SETTLE_STRATEGIES:
 				getSettleStrategies().clear();
+				return;
+			case PricingPackage.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD:
+				setMarketCurvesVersionRecord((VersionRecord)null);
+				return;
+			case PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD:
+				setSettledPricesVersionRecord((VersionRecord)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -493,8 +570,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return bunkerFuelCurves != null && !bunkerFuelCurves.isEmpty();
 			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
 				return conversionFactors != null && !conversionFactors.isEmpty();
-			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
-				return MARKET_CURVE_DATA_VERSION_EDEFAULT == null ? marketCurveDataVersion != null : !MARKET_CURVE_DATA_VERSION_EDEFAULT.equals(marketCurveDataVersion);
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
 				return settledPrices != null && !settledPrices.isEmpty();
 			case PricingPackage.PRICING_MODEL__MARKET_INDICES:
@@ -503,24 +578,12 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return holidayCalendars != null && !holidayCalendars.isEmpty();
 			case PricingPackage.PRICING_MODEL__SETTLE_STRATEGIES:
 				return settleStrategies != null && !settleStrategies.isEmpty();
+			case PricingPackage.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD:
+				return marketCurvesVersionRecord != null;
+			case PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD:
+				return settledPricesVersionRecord != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (marketCurveDataVersion: ");
-		result.append(marketCurveDataVersion);
-		result.append(')');
-		return result.toString();
 	}
 
 } // end of PricingModelImpl

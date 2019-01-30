@@ -1,0 +1,25 @@
+package com.mmxlabs.lngdataserver.integration.general.model.financial.settled;
+
+import java.util.LinkedList;
+import java.util.List;
+
+public class SettledPriceCurve {
+	private String name;
+	private List<SettledPriceEntry> entries = new LinkedList<>();
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<SettledPriceEntry> getEntries() {
+		return entries;
+	}
+
+	public void setEntries(List<SettledPriceEntry> entries) {
+		this.entries = entries;
+	}
+}

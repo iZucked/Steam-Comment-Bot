@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.pricing;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.mmxcore.VersionRecord;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,11 +22,12 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getCharterCurves <em>Charter Curves</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getBunkerFuelCurves <em>Bunker Fuel Curves</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getConversionFactors <em>Conversion Factors</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getMarketCurveDataVersion <em>Market Curve Data Version</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getSettledPrices <em>Settled Prices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getMarketIndices <em>Market Indices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getHolidayCalendars <em>Holiday Calendars</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getSettleStrategies <em>Settle Strategies</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getMarketCurvesVersionRecord <em>Market Curves Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getSettledPricesVersionRecord <em>Settled Prices Version Record</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel()
@@ -114,32 +116,6 @@ public interface PricingModel extends UUIDObject {
 	EList<UnitConversion> getConversionFactors();
 
 	/**
-	 * Returns the value of the '<em><b>Market Curve Data Version</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Market Curve Data Version</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Market Curve Data Version</em>' attribute.
-	 * @see #setMarketCurveDataVersion(String)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_MarketCurveDataVersion()
-	 * @model
-	 * @generated
-	 */
-	String getMarketCurveDataVersion();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.PricingModel#getMarketCurveDataVersion <em>Market Curve Data Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Market Curve Data Version</em>' attribute.
-	 * @see #getMarketCurveDataVersion()
-	 * @generated
-	 */
-	void setMarketCurveDataVersion(String value);
-
-	/**
 	 * Returns the value of the '<em><b>Settled Prices</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.DatePointContainer}.
 	 * <!-- begin-user-doc -->
@@ -202,6 +178,58 @@ public interface PricingModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<SettleStrategy> getSettleStrategies();
+
+	/**
+	 * Returns the value of the '<em><b>Market Curves Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Market Curves Version Record</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Market Curves Version Record</em>' containment reference.
+	 * @see #setMarketCurvesVersionRecord(VersionRecord)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_MarketCurvesVersionRecord()
+	 * @model containment="true"
+	 * @generated
+	 */
+	VersionRecord getMarketCurvesVersionRecord();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.PricingModel#getMarketCurvesVersionRecord <em>Market Curves Version Record</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Market Curves Version Record</em>' containment reference.
+	 * @see #getMarketCurvesVersionRecord()
+	 * @generated
+	 */
+	void setMarketCurvesVersionRecord(VersionRecord value);
+
+	/**
+	 * Returns the value of the '<em><b>Settled Prices Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Settled Prices Version Record</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Settled Prices Version Record</em>' containment reference.
+	 * @see #setSettledPricesVersionRecord(VersionRecord)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_SettledPricesVersionRecord()
+	 * @model containment="true"
+	 * @generated
+	 */
+	VersionRecord getSettledPricesVersionRecord();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.PricingModel#getSettledPricesVersionRecord <em>Settled Prices Version Record</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Settled Prices Version Record</em>' containment reference.
+	 * @see #getSettledPricesVersionRecord()
+	 * @generated
+	 */
+	void setSettledPricesVersionRecord(VersionRecord value);
 
 } // end of  PricingModel
 

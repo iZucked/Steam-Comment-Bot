@@ -43,9 +43,6 @@
 								<plugin id="org.apache.commons.codec" />
 								<plugin id="com.fasterxml.jackson.datatype.jackson-datatype-jsr310.source" />
 								<plugin id="com.fasterxml.jackson.datatype.jackson-datatype-jsr310" />
-								<plugin id="com.mmxlabs.lngdataservice.port-distances.client" />
-								<plugin id="com.mmxlabs.lngdataservice.ports.client" />
-								<plugin id="com.mmxlabs.lngdataservice.vessel.client" />
 							</excludes>
 							<labelSuffix></labelSuffix>
 						</configuration>

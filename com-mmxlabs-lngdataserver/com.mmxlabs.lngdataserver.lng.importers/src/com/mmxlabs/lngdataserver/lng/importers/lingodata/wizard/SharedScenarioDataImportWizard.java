@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
@@ -11,6 +14,8 @@ import org.eclipse.ui.IWorkbench;
 
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.UpdateJob;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class SharedScenarioDataImportWizard extends Wizard implements IImportWizard {
 
@@ -31,7 +36,11 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 	@Override
 	public boolean performFinish() {
 
-		final UpdateJob job = new UpdateJob(destinationPage.getSelectedDataOptions(), currentScenario, destinationPage.getSelectedScenarios(), false);
+		ScenarioModelRecord currentScenarioModelRecord = SSDataManager.Instance.getModelRecord(currentScenario);
+		List<ScenarioModelRecord> destinationScenarioModelRecords = destinationPage.getSelectedScenarios().stream() //
+				.map(SSDataManager.Instance::getModelRecord) //
+				.collect(Collectors.toList());
+		final UpdateJob job = new UpdateJob(destinationPage.getSelectedDataOptions(), currentScenarioModelRecord, destinationScenarioModelRecords, false);
 
 		try {
 			getContainer().run(true, true, job);

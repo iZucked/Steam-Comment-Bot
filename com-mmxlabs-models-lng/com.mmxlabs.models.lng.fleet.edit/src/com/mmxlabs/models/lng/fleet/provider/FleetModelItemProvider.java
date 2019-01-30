@@ -50,29 +50,75 @@ public class FleetModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addFleetDataVersionPropertyDescriptor(object);
+			addFleetVersionRecordPropertyDescriptor(object);
+			addVesselGroupVersionRecordPropertyDescriptor(object);
+			addBunkerFuelsVersionRecordPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Fleet Data Version feature.
+	 * This adds a property descriptor for the Fleet Version Record feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addFleetDataVersionPropertyDescriptor(Object object) {
+	protected void addFleetVersionRecordPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_FleetModel_fleetDataVersion_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_FleetModel_fleetDataVersion_feature", "_UI_FleetModel_type"),
-				 FleetPackage.Literals.FLEET_MODEL__FLEET_DATA_VERSION,
+				 getString("_UI_FleetModel_fleetVersionRecord_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_FleetModel_fleetVersionRecord_feature", "_UI_FleetModel_type"),
+				 FleetPackage.Literals.FLEET_MODEL__FLEET_VERSION_RECORD,
 				 true,
 				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Vessel Group Version Record feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselGroupVersionRecordPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_FleetModel_vesselGroupVersionRecord_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_FleetModel_vesselGroupVersionRecord_feature", "_UI_FleetModel_type"),
+				 FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUP_VERSION_RECORD,
+				 true,
 				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Bunker Fuels Version Record feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBunkerFuelsVersionRecordPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_FleetModel_bunkerFuelsVersionRecord_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_FleetModel_bunkerFuelsVersionRecord_feature", "_UI_FleetModel_type"),
+				 FleetPackage.Literals.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
@@ -146,9 +192,6 @@ public class FleetModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(FleetModel.class)) {
-			case FleetPackage.FLEET_MODEL__FLEET_DATA_VERSION:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
 			case FleetPackage.FLEET_MODEL__VESSELS:
 			case FleetPackage.FLEET_MODEL__BASE_FUELS:
 			case FleetPackage.FLEET_MODEL__VESSEL_GROUPS:

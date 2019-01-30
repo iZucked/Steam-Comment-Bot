@@ -27,7 +27,6 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.fasterxml.jackson.datatype.jackson-datatype-jsr310;bundle-version="2.9.2",
  com.mmxlabs.lngdataserver.lib.test;bundle-version="4.6.8",
  com.mmxlabs.lngdataserver.lib,
- com.mmxlabs.lngdataservice.l;bundle-version="1.3.2",
  com.google.guava,
  com.mmxlabs.lngdataserver.data.distances;bundle-version="4.6.8",
  com.mmxlabs.lngdataserver.integration.ports

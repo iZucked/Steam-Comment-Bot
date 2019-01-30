@@ -4,18 +4,13 @@
  */
 package com.mmxlabs.lngdataserver.integration.vessels.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.mongodb.morphia.annotations.Reference;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class VesselsVersion {
@@ -25,16 +20,14 @@ public class VesselsVersion {
 	@Reference
 	private List<Vessel> vessels = new ArrayList<>();
 
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss+00:00")
-	private LocalDateTime createdAt;
+	private Instant createdAt;
+	private String createdBy;
 
-	public LocalDateTime getCreatedAt() {
+	public Instant getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDateTime createdAt) {
+	public void setCreatedAt(Instant createdAt) {
 		this.createdAt = createdAt;
 	}
 
@@ -56,5 +49,13 @@ public class VesselsVersion {
 
 	public void setVessels(List<Vessel> vessels) {
 		this.vessels = vessels;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 }

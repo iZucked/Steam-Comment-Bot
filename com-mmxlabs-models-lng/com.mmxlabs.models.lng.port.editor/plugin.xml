@@ -277,6 +277,9 @@
       <WrappedCommandExtension
             class="com.mmxlabs.models.lng.port.ui.commands.DistanceVersionCommandWrapper">
       </WrappedCommandExtension>
+      <WrappedCommandExtension
+            class="com.mmxlabs.models.lng.port.ui.commands.PortGroupVersionCommandWrapper">
+      </WrappedCommandExtension>
    </extension>
    <extension
          point="com.mmxlabs.models.ui.displaycompositefactories">

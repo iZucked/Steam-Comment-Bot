@@ -98,7 +98,7 @@ public class ModelRecord {
 			assert data != null;
 
 			final ModelReference modelReference = new ModelReference(this, referenceID, data);
-			referencesList.add(new WeakReference<ModelReference>(modelReference));
+			referencesList.add(new WeakReference<>(modelReference));
 
 			if (triggerLoadCallback) {
 				runPostChangeHooks(PostChangeType.LOAD);

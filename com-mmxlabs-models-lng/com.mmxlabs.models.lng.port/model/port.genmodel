@@ -72,9 +72,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/routes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/specialPortGroups"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/portCountryGroups"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//PortModel/portDataVersion"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//PortModel/distanceDataVersion"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/contingencyMatrix"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/portVersionRecord"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/portGroupVersionRecord"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/distanceVersionRecord"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//CapabilityGroup">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//CapabilityGroup/capability"/>

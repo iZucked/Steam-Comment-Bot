@@ -28,7 +28,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.2",
  com.fasterxml.jackson.core.jackson-core;bundle-version="2.9.2",
  com.fasterxml.jackson.datatype.jackson-datatype-jsr310;bundle-version="2.9.2",
- org.eclipse.e4.core.services
+ org.eclipse.e4.core.services,
+ com.mmxlabs.models.mmxcore
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.rcp.common,
@@ -44,6 +45,8 @@ Export-Package: com.mmxlabs.rcp.common,
  com.mmxlabs.rcp.common.json,
  com.mmxlabs.rcp.common.loginject,
  com.mmxlabs.rcp.common.menus,
+ com.mmxlabs.rcp.common.user,
+ com.mmxlabs.rcp.common.versions,
  com.mmxlabs.rcp.common.viewfactory,
  com.mmxlabs.rcp.common.wizards
 Import-Package: javax.inject;version="1.0.0",

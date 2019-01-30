@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -43,10 +42,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerFactory;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
+import com.mmxlabs.lngdataserver.integration.general.model.bunkerfuels.BunkerFuelsVersion;
+import com.mmxlabs.lngdataserver.integration.general.model.financial.settled.SettledPricesVersion;
+import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortGroupsVersion;
+import com.mmxlabs.lngdataserver.integration.general.model.vesselgroups.VesselGroupsVersion;
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
@@ -54,9 +54,18 @@ import com.mmxlabs.lngdataserver.lng.exporters.distances.DistancesFromScenarioCo
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.vessels.VesselsFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.bunkerfuels.BunkerFuelsFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.bunkerfuels.BunkerFuelsToScenarioImporter;
 import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.financial.SettledPricesFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.financial.SettledPricesToScenarioImporter;
+import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.ImportFromBaseSelectionPage.DataOptionGroup;
 import com.mmxlabs.lngdataserver.lng.importers.port.PortsToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.portgroups.PortGroupsFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.portgroups.PortGroupsToScenarioImporter;
 import com.mmxlabs.lngdataserver.lng.importers.pricing.PricingToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.vesselgroups.VesselGroupsFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.vesselgroups.VesselGroupsToScenarioImporter;
 import com.mmxlabs.lngdataserver.lng.importers.vessels.VesselsToScenarioCopier;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -74,6 +83,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
@@ -84,11 +94,10 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.json.EMFDeserializationContext;
 import com.mmxlabs.rcp.common.json.EMFJacksonModule;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.MigrationForbiddenException;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider;
 
 public final class SharedScenarioDataUtils {
 	private static final Logger log = LoggerFactory.getLogger(SharedScenarioDataUtils.class);
@@ -105,8 +114,9 @@ public final class SharedScenarioDataUtils {
 		SpotCargoMarketsData("Cargo Markets"), //
 		SpotCharterMarketsData("Charter Markets"), //
 		PricingData("Price Curves"), //
+		// SettledPriceData("Settled Price Curves"), //
 		ADPData("ADP"), //
-		CargoData("Cargoes") //		
+		CargoData("Cargoes") //
 		;
 
 		private DataOptions(final String name) {
@@ -122,26 +132,25 @@ public final class SharedScenarioDataUtils {
 
 	public static class UpdateJob implements IRunnableWithProgress {
 
-		private final @NonNull ScenarioInstance sourceScenario;
-		private final List<ScenarioInstance> destinationScenarios;
+		private final @NonNull ScenarioModelRecord sourceModelRecord;
+		private final List<ScenarioModelRecord> destinationScenarioRecords;
 		private final Set<DataOptions> dataOptions;
 		private boolean copySourceIfNeeded;
 
-		public UpdateJob(final Set<DataOptions> enumSet, final @NonNull ScenarioInstance sourceScenario, final List<ScenarioInstance> destinationScenarios, boolean copyIfNeeded) {
+		public UpdateJob(final Set<DataOptions> enumSet, final @NonNull ScenarioModelRecord sourceScenario, final List<ScenarioModelRecord> destinationScenarios, boolean copyIfNeeded) {
 			this.dataOptions = enumSet;
-			this.sourceScenario = sourceScenario;
-			this.destinationScenarios = destinationScenarios;
-			this.copySourceIfNeeded = copySourceIfNeeded;
+			this.sourceModelRecord = sourceScenario;
+			this.destinationScenarioRecords = destinationScenarios;
+			this.copySourceIfNeeded = copyIfNeeded;
 		}
 
 		@Override
 		public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-			@NonNull
-			final ScenarioModelRecord sourceModelRecord = SSDataManager.Instance.getModelRecord(sourceScenario);
 
 			final Map<DataOptions, BiConsumer<CompoundCommand, IScenarioDataProvider>> dataToUpdater = new EnumMap<>(DataOptions.class);
 			try {
 				try (final IScenarioDataProvider sdp = sourceModelRecord.aquireScenarioDataProvider("SharedScenarioDataImportWizard:1")) {
+
 					final PortModel portModel = ScenarioModelUtil.getPortModel(sdp);
 					final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(sdp);
 					final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(sdp);
@@ -171,30 +180,28 @@ public final class SharedScenarioDataUtils {
 							break;
 						case CargoData:
 							dataToUpdater.put(DataOptions.CargoData, createCargoUpdater(sdp));
-							break;							
+							break;
 						default:
 							break;
 
 						}
 					}
 
-					String lbl = destinationScenarios.size() == 1 ? "Update scenario" : "Update scenarios";
-					monitor.beginTask(lbl, destinationScenarios.size());
+					String lbl = destinationScenarioRecords.size() == 1 ? "Update scenario" : "Update scenarios";
+					monitor.beginTask(lbl, destinationScenarioRecords.size());
 					try {
-						for (final ScenarioInstance destScenario : destinationScenarios) {
+						for (final ScenarioModelRecord destModelRecord : destinationScenarioRecords) {
 
 							if (monitor.isCanceled()) {
 								return;
 							}
 
-							monitor.subTask("Update " + destScenario.getName());
+							monitor.subTask("Update " + destModelRecord.getName());
 							// Do not import into self
-							if (destScenario == sourceScenario) {
+							if (destModelRecord == sourceModelRecord) {
 								monitor.worked(1);
 								continue;
 							}
-							@NonNull
-							final ScenarioModelRecord destModelRecord = SSDataManager.Instance.getModelRecord(destScenario);
 							final boolean autoSave = !destModelRecord.isLoaded();
 							try (final IScenarioDataProvider target = destModelRecord.aquireScenarioDataProvider("SharedScenarioDataImportWizard:2")) {
 								final boolean ranUpdate = sdp.getModelReference().executeWithTryLock(true, 10_000, () -> {
@@ -207,7 +214,7 @@ public final class SharedScenarioDataUtils {
 										}
 									}
 									if (!command.canExecute()) {
-										log.error("Update command failed for scenario " + destScenario.getName());
+										log.error("Update command failed for scenario " + destModelRecord.getName());
 										throw new RuntimeException("Unable to execute command");
 									}
 									RunnerHelper.syncExecDisplayOptional(() -> target.getCommandStack().execute(command));
@@ -215,12 +222,12 @@ public final class SharedScenarioDataUtils {
 										try {
 											target.getModelReference().save();
 										} catch (final IOException e) {
-											log.error("Unable to auto save " + destScenario.getName(), e);
+											log.error("Unable to auto save " + destModelRecord.getName(), e);
 										}
 									}
 								});
 								if (!ranUpdate) {
-									log.error("Unable to update scenario " + destScenario.getName());
+									log.error("Unable to update scenario " + destModelRecord.getName());
 								}
 							}
 							monitor.worked(1);
@@ -522,12 +529,10 @@ public final class SharedScenarioDataUtils {
 		}
 
 		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createFleetUpdater(final FleetModel fleetModel) throws JsonProcessingException {
+			final BunkerFuelsVersion bunkerFuelsVersion = BunkerFuelsFromScenarioCopier.generateVersion(fleetModel);
 			final VesselsVersion vesselsVersion = VesselsFromScenarioCopier.generateVersion(fleetModel);
+			final VesselGroupsVersion groupsVersion = VesselGroupsFromScenarioCopier.generateVersion(fleetModel);
 
-			final ObjectMapper mapper = new ObjectMapper();
-			mapper.findAndRegisterModules();
-			mapper.registerModule(new Jdk8Module());
-			final String expectedJSON = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(vesselsVersion);
 			return (cmd, target) -> {
 				cmd.append(new CompoundCommand() {
 
@@ -543,28 +548,14 @@ public final class SharedScenarioDataUtils {
 						final PortModel pm = ScenarioModelUtil.getPortModel(target);
 						final FleetModel fm = ScenarioModelUtil.getFleetModel(target);
 						final EditingDomain editingDomain = target.getEditingDomain();
-						final Command command1 = VesselsToScenarioCopier.getUpdateCommand(editingDomain, fm, pm, vesselsVersion);
+
+						final Command command1 = BunkerFuelsToScenarioImporter.getUpdateCommand(editingDomain, fm, bunkerFuelsVersion);
 						appendAndExecute(command1);
+						final Command command2 = VesselsToScenarioCopier.getUpdateCommand(editingDomain, fm, pm, vesselsVersion);
+						appendAndExecute(command2);
+						final Command command3 = VesselGroupsToScenarioImporter.getUpdateCommand(editingDomain, fm, groupsVersion);
+						appendAndExecute(command3);
 
-						if (false) {
-							final VesselsVersion vv = VesselsFromScenarioCopier.generateVersion(fm);
-
-							String actualJSON;
-							try {
-								actualJSON = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(vv);
-								if (!expectedJSON.equals(actualJSON)) {
-									Files.write(expectedJSON, new File("C:/users/sg/desktop/a.txt"), Charsets.UTF_8);
-									Files.write(actualJSON, new File("C:/users/sg/desktop/b.txt"), Charsets.UTF_8);
-									System.out.println("Actual");
-									System.out.println(actualJSON);
-									System.out.println("Expected");
-									System.out.println(expectedJSON);
-								}
-							} catch (final Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
 					}
 				});
 			};
@@ -572,10 +563,8 @@ public final class SharedScenarioDataUtils {
 
 		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createPricingUpdater(final PricingModel pricingModel) throws JsonProcessingException {
 			final PricingVersion pricingVersion = PricingFromScenarioCopier.generateVersion(pricingModel);
+			final SettledPricesVersion settledPricesVersion = SettledPricesFromScenarioCopier.generateVersion(pricingModel);
 
-			final ObjectMapper mapper = new ObjectMapper();
-			mapper.findAndRegisterModules();
-			mapper.registerModule(new Jdk8Module());
 			return (cmd, target) -> {
 				cmd.append(new CompoundCommand() {
 
@@ -592,6 +581,8 @@ public final class SharedScenarioDataUtils {
 						final EditingDomain editingDomain = target.getEditingDomain();
 						final Command command1 = PricingToScenarioCopier.getUpdateCommand(editingDomain, pm, pricingVersion);
 						appendAndExecute(command1);
+						final Command command2 = SettledPricesToScenarioImporter.getUpdateCommand(editingDomain, pm, settledPricesVersion);
+						appendAndExecute(command2);
 					}
 				});
 			};
@@ -600,6 +591,7 @@ public final class SharedScenarioDataUtils {
 		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createPortAndDistanceUpdater(final PortModel portModel) {
 			final DistancesVersion distancesVersion = DistancesFromScenarioCopier.generateVersion(portModel);
 			final PortsVersion portsVersion = PortFromScenarioCopier.generateVersion(portModel);
+			final PortGroupsVersion groupsVersion = PortGroupsFromScenarioCopier.generateVersion(portModel);
 			return (cmd, target) -> {
 				cmd.append(new CompoundCommand() {
 
@@ -618,6 +610,8 @@ public final class SharedScenarioDataUtils {
 						appendAndExecute(command1);
 						final Command command2 = PortsToScenarioCopier.getUpdateCommand(editingDomain, pm, portsVersion);
 						appendAndExecute(command2);
+						final Command command3 = PortGroupsToScenarioImporter.getUpdateCommand(editingDomain, pm, groupsVersion);
+						appendAndExecute(command3);
 					}
 				});
 			};
@@ -784,7 +778,6 @@ public final class SharedScenarioDataUtils {
 			cmd.appendAndExecute(AddCommand.create(target.getEditingDomain(), oldCM, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS, newMarkets));
 		}
 	}
-	
 
 	private static BiConsumer<CompoundCommand, IScenarioDataProvider> createCargoUpdater(final IScenarioDataProvider sdp) throws JsonProcessingException {
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
@@ -801,7 +794,7 @@ public final class SharedScenarioDataUtils {
 		System.out.println(loadsJSON);
 		System.out.println(dischargesJSON);
 		System.out.println(cargoesJSON);
-		
+
 		return (cmd, target) -> {
 			cmd.append(new CompoundCommand() {
 
@@ -839,21 +832,24 @@ public final class SharedScenarioDataUtils {
 					smm.getFobSalesSpotMarket().getMarkets().forEach(ctx::registerType);
 
 					// ANYTHING ELSE?
-					
+
 					final ObjectMapper mapper = new ObjectMapper(null, null, ctx);
 					mapper.registerModule(new EMFJacksonModule());
 
 					try {
-						final List<LoadSlot> newLoads = mapper.readValue(loadsJSON,  new TypeReference<List<LoadSlot>>() {});
-						final List<DischargeSlot> newDischarges= mapper.readValue(dischargesJSON,  new TypeReference<List<DischargeSlot>>() {});
-						final List<Cargo> newCargoes = mapper.readValue(cargoesJSON,  new TypeReference<List<Cargo>>() {});
+						final List<LoadSlot> newLoads = mapper.readValue(loadsJSON, new TypeReference<List<LoadSlot>>() {
+						});
+						final List<DischargeSlot> newDischarges = mapper.readValue(dischargesJSON, new TypeReference<List<DischargeSlot>>() {
+						});
+						final List<Cargo> newCargoes = mapper.readValue(cargoesJSON, new TypeReference<List<Cargo>>() {
+						});
 						ctx.runDeferredActions();
 						final EditingDomain editingDomain = target.getEditingDomain();
 						// Renumber spots
 						// Copy slots
 						// Copy cargoes
 						// Check back references.
-//						appendAndExecute(SetCommand.create(editingDomain, target.getScenario(), LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModel(), newCargoModel));
+						// appendAndExecute(SetCommand.create(editingDomain, target.getScenario(), LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModel(), newCargoModel));
 					} catch (final Exception e1) {
 						e1.printStackTrace();
 						appendAndExecute(UnexecutableCommand.INSTANCE);
@@ -861,5 +857,53 @@ public final class SharedScenarioDataUtils {
 				}
 			});
 		};
+	}
+
+	public static boolean checkPricingDataMatch(final IBaseCaseVersionsProvider provider, final Map<String, String> targetVersions) {
+		boolean settledOK = true;// checkMatch(LNGScenarioSharedModelTypes.SETTLED_PRICES.getID(), provider, targetVersions);
+		boolean marketOk = checkMatch(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), provider, targetVersions);
+
+		return marketOk && settledOK;
+	}
+
+	public static boolean checkFleetDataMatch(final IBaseCaseVersionsProvider provider, final Map<String, String> targetVersions) {
+
+		boolean fleetOK = checkMatch(LNGScenarioSharedModelTypes.FLEET.getID(), provider, targetVersions);
+		boolean vesselGroupsOK = checkMatch(LNGScenarioSharedModelTypes.VESSEL_GROUPS.getID(), provider, targetVersions);
+		boolean bunkerFuelsIO = checkMatch(LNGScenarioSharedModelTypes.BUNKER_FUELS.getID(), provider, targetVersions);
+
+		return fleetOK && vesselGroupsOK && bunkerFuelsIO;
+
+	}
+
+	public static boolean checkPortAndDistanceDataMatch(final IBaseCaseVersionsProvider provider, final Map<String, String> targetVersions) {
+
+		boolean distanceOk = checkMatch(LNGScenarioSharedModelTypes.DISTANCES.getID(), provider, targetVersions);
+		boolean portOk = checkMatch(LNGScenarioSharedModelTypes.LOCATIONS.getID(), provider, targetVersions);
+		boolean portGroupsOk = checkMatch(LNGScenarioSharedModelTypes.PORT_GROUPS.getID(), provider, targetVersions);
+
+		return portOk && distanceOk && portGroupsOk;
+	}
+
+	public static boolean checkMatch(String typeId, IBaseCaseVersionsProvider provider, Map<String, String> dataVersions) {
+		String baseCaseVersion = provider.getVersion(typeId);
+		if (baseCaseVersion == null) {
+			// No base case version, not much to do.
+			return true;
+		}
+		String version = dataVersions.get(typeId);
+		return version != null && Objects.equals(baseCaseVersion, version);
+	}
+	
+	public static List<DataOptionGroup> createGroups(IBaseCaseVersionsProvider p, Map<String, String > scenarioDataVersions){
+		final List<DataOptionGroup> groups = new LinkedList<>();
+		groups.add(new DataOptionGroup("Pricing", !SharedScenarioDataUtils.checkPricingDataMatch(p, scenarioDataVersions), true, true, DataOptions.PricingData));
+//		if (LicenseFeatures.isPermitted("features:hub-experimental")) {
+//			groups.add(new DataOptionGroup("Ports && Distances", !checkPortAndDistanceDataMatch(p, scenarioDataVersions), true, false, DataOptions.PortData));
+//			groups.add(new DataOptionGroup("Vessels", !checkFleetDataMatch(p, scenarioDataVersions), true, false, DataOptions.FleetDatabase));
+//			groups.add(new DataOptionGroup("Commercial", true, true, false, DataOptions.CommercialData));
+//			// groups.add(new DataOptionGroup("Misc", true, false, false));
+//		}
+		return groups;
 	}
 }

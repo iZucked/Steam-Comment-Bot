@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
 import com.mmxlabs.lngdataserver.commons.http.ProgressRequestBody;
 import com.mmxlabs.lngdataserver.commons.http.ProgressResponseBody;
+import com.mmxlabs.lngdataserver.server.HttpClientUtil;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
 import okhttp3.Credentials;
@@ -34,7 +35,7 @@ public class BaseCaseServiceClient {
 	private static final String BASECASE_DOWNLOAD_URL = "/scenarios/v1/basecase/";
 	private static final String BASECASE_CURRENT_URL = "/scenarios/v1/basecase/current";
 
-	private final OkHttpClient httpClient = new OkHttpClient.Builder() //
+	private final OkHttpClient httpClient = HttpClientUtil.basicBuilder()//
 			.build();
 
 	private final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");

@@ -17,7 +17,6 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.csv.CSVReader;
@@ -43,6 +42,7 @@ import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
+import com.mmxlabs.rcp.common.versions.VersionsUtil;
 
 /**
  */
@@ -293,8 +293,9 @@ public class PortModelImporter implements ISubmodelImporter {
 			}
 		}
 
-		result.setDistanceDataVersion(EcoreUtil.generateUUID());
-		result.setPortDataVersion(EcoreUtil.generateUUID());
+		result.setDistanceVersionRecord(VersionsUtil.createNewRecord());
+		result.setPortVersionRecord(VersionsUtil.createNewRecord());
+		result.setPortGroupVersionRecord(VersionsUtil.createNewRecord());
 
 		return result;
 	}

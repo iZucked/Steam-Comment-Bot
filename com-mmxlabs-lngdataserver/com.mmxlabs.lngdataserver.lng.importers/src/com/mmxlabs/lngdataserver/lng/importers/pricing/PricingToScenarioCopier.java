@@ -5,6 +5,7 @@
 package com.mmxlabs.lngdataserver.lng.importers.pricing;
 
 import java.time.YearMonth;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,6 +36,8 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.VersionRecord;
 
 public class PricingToScenarioCopier {
 
@@ -67,9 +70,16 @@ public class PricingToScenarioCopier {
 		pricingModel.getCurrencyCurves().forEach(existing::add);
 
 		final Set<AbstractYearMonthCurve> updated = new HashSet<>();
-		for (final Map.Entry<String, Curve> e : version.getCurves().entrySet()) {
-			final String name = e.getKey();
-			final Curve curve = e.getValue();
+
+		Collection<Curve> curves;
+		if (!version.getCurveList().isEmpty()) {
+			curves = version.getCurveList();
+		} else {
+			curves = version.getCurves().values();
+		}
+
+		for (final Curve curve : curves) {
+			final String name = curve.getName();
 
 			List<YearMonthPoint> points = new LinkedList<>();
 			String expression = null;
@@ -78,12 +88,14 @@ public class PricingToScenarioCopier {
 				expression = expressionCurve.getExpression();
 			} else if (curve instanceof DataCurve) {
 				final DataCurve dataCurve = (DataCurve) curve;
-				dataCurve.getCurve().forEach(point -> {
-					final YearMonthPoint indexPoint = PricingPackage.eINSTANCE.getPricingFactory().createYearMonthPoint();
-					indexPoint.setDate(YearMonth.of(point.getDate().getYear(), point.getDate().getMonthValue()));
-					indexPoint.setValue(point.getValue().doubleValue());
-					points.add(indexPoint);
-				});
+				if (dataCurve.getCurve() != null) {
+					dataCurve.getCurve().forEach(point -> {
+						final YearMonthPoint indexPoint = PricingPackage.eINSTANCE.getPricingFactory().createYearMonthPoint();
+						indexPoint.setDate(YearMonth.of(point.getDate().getYear(), point.getDate().getMonthValue()));
+						indexPoint.setValue(point.getValue().doubleValue());
+						points.add(indexPoint);
+					});
+				}
 			} else {
 				// Unknown
 				throw new IllegalArgumentException();
@@ -148,7 +160,10 @@ public class PricingToScenarioCopier {
 			cmd.append(DeleteCommand.create(editingDomain, existing));
 		}
 
-		cmd.append(SetCommand.create(editingDomain, pricingModel, PricingPackage.Literals.PRICING_MODEL__MARKET_CURVE_DATA_VERSION, version.getIdentifier()));
+		VersionRecord record = pricingModel.getMarketCurvesVersionRecord();
+		cmd.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__CREATED_BY, version.getCreatedBy()));
+		cmd.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__CREATED_AT, version.getCreatedAt()));
+		cmd.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__VERSION, version.getIdentifier()));
 
 		return cmd;
 	}

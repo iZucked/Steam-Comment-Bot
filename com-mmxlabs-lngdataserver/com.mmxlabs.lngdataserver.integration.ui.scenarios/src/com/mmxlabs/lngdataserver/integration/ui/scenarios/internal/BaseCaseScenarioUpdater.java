@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.URI;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
+import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseRecord;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
@@ -169,7 +170,7 @@ public class BaseCaseScenarioUpdater {
 
 			public IStatus main(final IProgressMonitor monitor) {
 				try {
-					ret[0] = client.downloadTo(uuid, f, wrapMonitor(monitor));
+					ret[0] = client.downloadTo(uuid, f, WrappedProgressMonitor.wrapMonitor(monitor));
 				} catch (final Exception e) {
 					// return Status.
 				} finally {
@@ -340,28 +341,5 @@ public class BaseCaseScenarioUpdater {
 			}
 		}
 	};
-
-	private IProgressListener wrapMonitor(final IProgressMonitor monitor) {
-		if (monitor == null) {
-			return null;
-		}
-
-		return new IProgressListener() {
-			boolean firstCall = true;
-
-			@Override
-			public void update(final long bytesRead, final long contentLength, final boolean done) {
-				if (firstCall) {
-					int total = (int) (contentLength / 1000L);
-					if (total == 0) {
-						total = 1;
-					}
-					monitor.beginTask("Transfer", total);
-					firstCall = false;
-				}
-				final int worked = (int) (bytesRead / 1000L);
-				monitor.worked(worked);
-			}
-		};
-	}
+ 
 }

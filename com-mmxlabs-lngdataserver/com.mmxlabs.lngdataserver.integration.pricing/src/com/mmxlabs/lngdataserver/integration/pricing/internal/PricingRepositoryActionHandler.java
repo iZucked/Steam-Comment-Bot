@@ -4,12 +4,7 @@
  */
 package com.mmxlabs.lngdataserver.integration.pricing.internal;
 
-import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDateTime;
 import java.util.List;
-
-import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
@@ -22,26 +17,26 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 public class PricingRepositoryActionHandler implements IDataBrowserActionsHandler {
 
 	private final PricingRepository repository;
-	private CompositeNode dataRoot;
+	private final CompositeNode dataRoot;
 
-	public PricingRepositoryActionHandler(PricingRepository repository, CompositeNode dataRoot) {
+	public PricingRepositoryActionHandler(final PricingRepository repository, final CompositeNode dataRoot) {
 		this.repository = repository;
 		this.dataRoot = dataRoot;
 	}
 
 	@Override
 	public boolean supportsPublish() {
-		return repository.hasUpstream();
+		return false;// repository.hasUpstream();
 	}
 
 	@Override
-	public boolean publish(String version) {
-		try {
-			repository.publishVersion(version);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public boolean publish(final String version) {
+		// try {
+		// repository.publishVersion(version);
+		// return true;
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 		return false;
 	}
 
@@ -51,7 +46,7 @@ public class PricingRepositoryActionHandler implements IDataBrowserActionsHandle
 	}
 
 	@Override
-	public boolean delete(String version) {
+	public boolean delete(final String version) {
 		return false;
 	}
 
@@ -61,46 +56,46 @@ public class PricingRepositoryActionHandler implements IDataBrowserActionsHandle
 	}
 
 	@Override
-	public boolean setCurrent(String version) {
+	public boolean setCurrent(final String version) {
 		return false;
 	}
 
 	@Override
 	public boolean supportsSyncUpstream() {
-		return repository.hasUpstream();
+		return false;// repository.hasUpstream();
 	}
 
 	@Override
 	public boolean syncUpstream() {
-		IRunnableWithProgress r = (monitor) -> {
-			List<DataVersion> newVersions;
-			try {
-				newVersions = repository.updateAvailable();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-				return;
-			}
-
-			monitor.beginTask("Checking for pricing updates", newVersions.size());
-			try {
-				for (DataVersion version : newVersions) {
-					try {
-						repository.syncUpstreamVersion(version.getIdentifier());
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					monitor.worked(1);
-				}
-			} finally {
-				monitor.done();
-			}
-		};
-		try {
-			PlatformUI.getWorkbench().getProgressService().run(true, false, r);
-			return true;
-		} catch (InvocationTargetException | InterruptedException e) {
-			e.printStackTrace();
-		}
+		// IRunnableWithProgress r = (monitor) -> {
+		// List<DataVersion> newVersions;
+		// try {
+		// newVersions = repository.updateAvailable();
+		// } catch (Exception e1) {
+		// e1.printStackTrace();
+		// return;
+		// }
+		//
+		// monitor.beginTask("Checking for pricing updates", newVersions.size());
+		// try {
+		// for (DataVersion version : newVersions) {
+		// try {
+		// repository.syncUpstreamVersion(version.getIdentifier());
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		// monitor.worked(1);
+		// }
+		// } finally {
+		// monitor.done();
+		// }
+		// };
+		// try {
+		// PlatformUI.getWorkbench().getProgressService().run(true, false, r);
+		// return true;
+		// } catch (InvocationTargetException | InterruptedException e) {
+		// e.printStackTrace();
+		// }
 		return false;
 	}
 
@@ -110,22 +105,22 @@ public class PricingRepositoryActionHandler implements IDataBrowserActionsHandle
 	}
 
 	@Override
-	public boolean rename(String oldVersion, String newVersion) {
+	public boolean rename(final String oldVersion, final String newVersion) {
 		return false;
 	}
 
 	@Override
 	public boolean supportsRefreshLocal() {
-		return repository.isReady();
+		return true;// repository.isReady();
 	}
 
 	@Override
 	public boolean refreshLocal() {
-		List<DataVersion> versions = repository.getLocalVersions();
+		final List<DataVersion> versions = repository.getLocalVersions();
 		RunnerHelper.asyncExec(() -> {
 			dataRoot.getChildren().clear();
 			if (versions != null) {
-				boolean first = true;
+				final boolean first = true;
 				// Only display the n most recent versions.
 				versions.stream() //
 						.filter(v -> !("initial_version".equals(v.getFullIdentifier()))) //
@@ -137,10 +132,10 @@ public class PricingRepositoryActionHandler implements IDataBrowserActionsHandle
 							version.setDisplayName(v.getFullIdentifier());
 							version.setVersionIdentifier(v.getIdentifier());
 							version.setPublished(v.isPublished());
-//							if (first) {
-//								dataRoot.setCurrent(version);
-//							}
-//							first = false;
+							// if (first) {
+							// dataRoot.setCurrent(version);
+							// }
+							// first = false;
 							dataRoot.getChildren().add(version);
 						});
 			}

@@ -707,31 +707,40 @@ public interface PortPackage extends EPackage {
 	int PORT_MODEL__PORT_COUNTRY_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Port Data Version</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_MODEL__PORT_DATA_VERSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Distance Data Version</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_MODEL__DISTANCE_DATA_VERSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
-
-	/**
 	 * The feature id for the '<em><b>Contingency Matrix</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_MODEL__CONTINGENCY_MATRIX = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int PORT_MODEL__CONTINGENCY_MATRIX = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Port Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__PORT_VERSION_RECORD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Port Group Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__PORT_GROUP_VERSION_RECORD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Distance Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__DISTANCE_VERSION_RECORD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -740,7 +749,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1773,28 +1782,6 @@ public interface PortPackage extends EPackage {
 	EReference getPortModel_PortCountryGroups();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.PortModel#getPortDataVersion <em>Port Data Version</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Port Data Version</em>'.
-	 * @see com.mmxlabs.models.lng.port.PortModel#getPortDataVersion()
-	 * @see #getPortModel()
-	 * @generated
-	 */
-	EAttribute getPortModel_PortDataVersion();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.PortModel#getDistanceDataVersion <em>Distance Data Version</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Distance Data Version</em>'.
-	 * @see com.mmxlabs.models.lng.port.PortModel#getDistanceDataVersion()
-	 * @see #getPortModel()
-	 * @generated
-	 */
-	EAttribute getPortModel_DistanceDataVersion();
-
-	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.PortModel#getContingencyMatrix <em>Contingency Matrix</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1804,6 +1791,39 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPortModel_ContingencyMatrix();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.PortModel#getPortVersionRecord <em>Port Version Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Port Version Record</em>'.
+	 * @see com.mmxlabs.models.lng.port.PortModel#getPortVersionRecord()
+	 * @see #getPortModel()
+	 * @generated
+	 */
+	EReference getPortModel_PortVersionRecord();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.PortModel#getPortGroupVersionRecord <em>Port Group Version Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Port Group Version Record</em>'.
+	 * @see com.mmxlabs.models.lng.port.PortModel#getPortGroupVersionRecord()
+	 * @see #getPortModel()
+	 * @generated
+	 */
+	EReference getPortModel_PortGroupVersionRecord();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.PortModel#getDistanceVersionRecord <em>Distance Version Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Distance Version Record</em>'.
+	 * @see com.mmxlabs.models.lng.port.PortModel#getDistanceVersionRecord()
+	 * @see #getPortModel()
+	 * @generated
+	 */
+	EReference getPortModel_DistanceVersionRecord();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.CapabilityGroup <em>Capability Group</em>}'.
@@ -2409,28 +2429,36 @@ public interface PortPackage extends EPackage {
 		EReference PORT_MODEL__PORT_COUNTRY_GROUPS = eINSTANCE.getPortModel_PortCountryGroups();
 
 		/**
-		 * The meta object literal for the '<em><b>Port Data Version</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PORT_MODEL__PORT_DATA_VERSION = eINSTANCE.getPortModel_PortDataVersion();
-
-		/**
-		 * The meta object literal for the '<em><b>Distance Data Version</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PORT_MODEL__DISTANCE_DATA_VERSION = eINSTANCE.getPortModel_DistanceDataVersion();
-
-		/**
 		 * The meta object literal for the '<em><b>Contingency Matrix</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference PORT_MODEL__CONTINGENCY_MATRIX = eINSTANCE.getPortModel_ContingencyMatrix();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Version Record</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_MODEL__PORT_VERSION_RECORD = eINSTANCE.getPortModel_PortVersionRecord();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Group Version Record</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_MODEL__PORT_GROUP_VERSION_RECORD = eINSTANCE.getPortModel_PortGroupVersionRecord();
+
+		/**
+		 * The meta object literal for the '<em><b>Distance Version Record</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_MODEL__DISTANCE_VERSION_RECORD = eINSTANCE.getPortModel_DistanceVersionRecord();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.CapabilityGroupImpl <em>Capability Group</em>}' class.

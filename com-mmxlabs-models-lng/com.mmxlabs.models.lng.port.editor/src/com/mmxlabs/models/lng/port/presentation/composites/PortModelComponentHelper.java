@@ -69,9 +69,10 @@ public class PortModelComponentHelper extends BaseComponentHelper {
 		add_routesEditor(detailComposite, topClass);
 		add_specialPortGroupsEditor(detailComposite, topClass);
 		add_portCountryGroupsEditor(detailComposite, topClass);
-		add_portDataVersionEditor(detailComposite, topClass);
-		add_distanceDataVersionEditor(detailComposite, topClass);
 		add_contingencyMatrixEditor(detailComposite, topClass);
+		add_portVersionRecordEditor(detailComposite, topClass);
+		add_portGroupVersionRecordEditor(detailComposite, topClass);
+		add_distanceVersionRecordEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the ports feature on PortModel
@@ -118,29 +119,38 @@ public class PortModelComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the portDataVersion feature on PortModel
-	 *
-	 * @generated
-	 */
-	protected void add_portDataVersionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__PORT_DATA_VERSION));
-	}
-
-	/**
-	 * Create the editor for the distanceDataVersion feature on PortModel
-	 *
-	 * @generated
-	 */
-	protected void add_distanceDataVersionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__DISTANCE_DATA_VERSION));
-	}
-
-	/**
 	 * Create the editor for the contingencyMatrix feature on PortModel
 	 *
 	 * @generated
 	 */
 	protected void add_contingencyMatrixEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__CONTINGENCY_MATRIX));
+	}
+
+	/**
+	 * Create the editor for the portVersionRecord feature on PortModel
+	 *
+	 * @generated
+	 */
+	protected void add_portVersionRecordEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__PORT_VERSION_RECORD));
+	}
+
+	/**
+	 * Create the editor for the portGroupVersionRecord feature on PortModel
+	 *
+	 * @generated
+	 */
+	protected void add_portGroupVersionRecordEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__PORT_GROUP_VERSION_RECORD));
+	}
+
+	/**
+	 * Create the editor for the distanceVersionRecord feature on PortModel
+	 *
+	 * @generated
+	 */
+	protected void add_distanceVersionRecordEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__DISTANCE_VERSION_RECORD));
 	}
 }

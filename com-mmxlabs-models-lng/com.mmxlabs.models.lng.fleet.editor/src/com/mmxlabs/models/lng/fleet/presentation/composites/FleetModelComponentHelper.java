@@ -67,7 +67,9 @@ public class FleetModelComponentHelper extends BaseComponentHelper {
 		add_vesselsEditor(detailComposite, topClass);
 		add_baseFuelsEditor(detailComposite, topClass);
 		add_vesselGroupsEditor(detailComposite, topClass);
-		add_fleetDataVersionEditor(detailComposite, topClass);
+		add_fleetVersionRecordEditor(detailComposite, topClass);
+		add_vesselGroupVersionRecordEditor(detailComposite, topClass);
+		add_bunkerFuelsVersionRecordEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vessels feature on FleetModel
@@ -96,11 +98,29 @@ public class FleetModelComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the fleetDataVersion feature on FleetModel
+	 * Create the editor for the fleetVersionRecord feature on FleetModel
 	 *
 	 * @generated
 	 */
-	protected void add_fleetDataVersionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.FLEET_MODEL__FLEET_DATA_VERSION));
+	protected void add_fleetVersionRecordEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.FLEET_MODEL__FLEET_VERSION_RECORD));
+	}
+
+	/**
+	 * Create the editor for the vesselGroupVersionRecord feature on FleetModel
+	 *
+	 * @generated
+	 */
+	protected void add_vesselGroupVersionRecordEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUP_VERSION_RECORD));
+	}
+
+	/**
+	 * Create the editor for the bunkerFuelsVersionRecord feature on FleetModel
+	 *
+	 * @generated
+	 */
+	protected void add_bunkerFuelsVersionRecordEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD));
 	}
 }

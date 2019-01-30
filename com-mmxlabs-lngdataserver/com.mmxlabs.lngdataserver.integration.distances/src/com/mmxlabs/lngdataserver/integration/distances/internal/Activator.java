@@ -9,11 +9,9 @@ import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.browser.BrowserFactory;
-import com.mmxlabs.lngdataserver.browser.CompositeNode;
-import com.mmxlabs.lngdataserver.browser.Node;
+import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lngdataserver.browser.util.DataBrowserNodeHandler;
 import com.mmxlabs.lngdataserver.integration.distances.DistanceRepository;
-import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 
 /**
@@ -29,19 +27,13 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	private final CompositeNode dataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
-	private DistanceRepository repository;
-	private boolean active;
+	private DataBrowserNodeHandler distancesNodeHandler;
 
 	/**
 	 * The constructor
 	 */
 	public Activator() {
-		final Node loading = BrowserFactory.eINSTANCE.createLeaf();
-		loading.setDisplayName("loading...");
-		dataRoot.setDisplayName("Distances (loading...)");
-		dataRoot.setType(LNGScenarioSharedModelTypes.DISTANCES.getID());
-		dataRoot.getChildren().add(loading);
+
 	}
 
 	/*
@@ -53,12 +45,11 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-
-		repository = DistanceRepository.INSTANCE;
-		dataRoot.setActionHandler(new DistanceRepositoryActionHandler(repository, dataRoot));
-
-		active = true;
-		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
+		if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
+			distancesNodeHandler = new DataBrowserNodeHandler("Distances", LNGScenarioSharedModelTypes.DISTANCES.getID(), DistanceRepository.INSTANCE,
+					root -> new DistanceRepositoryActionHandler(DistanceRepository.INSTANCE, root));
+			distancesNodeHandler.start();
+		}
 
 	}
 
@@ -69,17 +60,12 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(final BundleContext context) throws Exception {
-		if (repository != null) {
-			repository.stopListeningForNewLocalVersions();
-			repository = null;
+		if (distancesNodeHandler != null) {
+			distancesNodeHandler.stop();
 		}
-		dataRoot.setActionHandler(null);
-		dataRoot.getChildren().clear();
-		dataRoot.setCurrent(null);
 
 		plugin = null;
 		super.stop(context);
-		active = false;
 	}
 
 	/**
@@ -89,38 +75,6 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static Activator getDefault() {
 		return plugin;
-	}
-
-	public CompositeNode getDistancesDataRoot() {
-		return dataRoot;
-	}
-
-	private void loadVersions() {
-		while (!repository.isReady() && active) {
-			try {
-				LOGGER.debug("Distances back-end not ready yet...");
-				Thread.sleep(1000);
-			} catch (final InterruptedException e) {
-				LOGGER.error(e.getMessage());
-				throw new RuntimeException(e);
-			}
-		}
-		if (active) {
-			LOGGER.debug("Distances back-end ready, retrieving versions...");
-			try {
-				dataRoot.getChildren().clear();
-				dataRoot.setDisplayName("Distances");
-				dataRoot.getActionHandler().refreshLocal();
-			} catch (Exception e) {
-				LOGGER.error("Error retrieving distance versions");
-			}
-			// register consumer to update on new version
-			repository.registerLocalVersionListener(() -> dataRoot.getActionHandler().refreshLocal());
-			repository.startListenForNewLocalVersions();
-
-			repository.registerDefaultUpstreamVersionListener();
-			repository.startListenForNewUpstreamVersions();
-		}
 	}
 
 }

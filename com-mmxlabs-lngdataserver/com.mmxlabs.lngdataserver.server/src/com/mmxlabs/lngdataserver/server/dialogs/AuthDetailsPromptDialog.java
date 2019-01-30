@@ -86,12 +86,12 @@ public class AuthDetailsPromptDialog extends Dialog {
 	
 	@Override
 	protected void okPressed() {
-		if (!UpstreamUrlProvider.testUpstreamAvailability(url)) {
+		if (!UpstreamUrlProvider.INSTANCE.testUpstreamAvailability(url)) {
 			super.okPressed();
 			return;
 		}
 
-		if (!UpstreamUrlProvider.checkCredentials(url, nameField.getText(), passwordField.getText())) {
+		if (!UpstreamUrlProvider.INSTANCE.checkCredentials(url, nameField.getText(), passwordField.getText())) {
 			if (!errorLabelPresent) {
 
 				final Composite comp = this.getContents().getParent();

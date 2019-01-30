@@ -55,12 +55,19 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
  com.mmxlabs.models.lng.commercial,
  com.mmxlabs.models.lng.types,
  com.mmxlabs.models.lng.adp.editor,
- com.mmxlabs.models.lng.analytics
+ com.mmxlabs.models.lng.analytics,
+ com.mmxlabs.lngdataserver.lng.importers,
+ com.mmxlabs.lngdataserver.data.distances,
+ com.fasterxml.jackson.core.jackson-databind,
+ com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.2",
+ com.fasterxml.jackson.core.jackson-core;bundle-version="2.9.2",
+ com.fasterxml.jackson.datatype.jackson-datatype-jdk8;bundle-version="2.9.2",
+ com.fasterxml.jackson.datatype.jackson-datatype-jsr310;bundle-version="2.9.2",
+ com.mmxlabs.lngdataserver.integration.distances,
+ com.mmxlabs.models.lng.analytics.editor
 Bundle-ClassPath: data/,
  .
-Import-Package: com.mmxlabs.models.lng.analytics.ui.views.evaluators,
- com.mmxlabs.models.lng.analytics.ui.views.viability,
- org.slf4j;version="1.6.4"
+Import-Package: org.slf4j;version="1.6.4"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lingo.its.internal.Activator
 Export-Package: com.mmxlabs.lingo.its,

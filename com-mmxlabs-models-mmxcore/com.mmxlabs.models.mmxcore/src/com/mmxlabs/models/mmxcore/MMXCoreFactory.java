@@ -70,6 +70,15 @@ public interface MMXCoreFactory extends EFactory {
 	MMXResultRoot createMMXResultRoot();
 
 	/**
+	 * Returns a new object of class '<em>Version Record</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Version Record</em>'.
+	 * @generated
+	 */
+	VersionRecord createVersionRecord();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -4,15 +4,9 @@
  */
 package com.mmxlabs.lngdataserver.integration.ports.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 public class PortsVersion {
 
@@ -20,16 +14,15 @@ public class PortsVersion {
 
 	private List<Port> ports = new ArrayList<>();
 
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss+00:00")
-	private LocalDateTime createdAt;
+	private Instant createdAt;
 
-	public LocalDateTime getCreatedAt() {
+	private String createdBy;
+
+	public Instant getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(final LocalDateTime createdAt) {
+	public void setCreatedAt(final Instant createdAt) {
 		this.createdAt = createdAt;
 	}
 
@@ -47,5 +40,13 @@ public class PortsVersion {
 
 	public void setPorts(final List<Port> ports) {
 		this.ports = ports;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 }

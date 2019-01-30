@@ -8,7 +8,14 @@
         eType="#//BaseFuel" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselGroups" upperBound="-1"
         eType="#//VesselGroup" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fleetDataVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fleetVersionRecord" eType="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//VersionRecord"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselGroupVersionRecord"
+        eType="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//VersionRecord"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bunkerFuelsVersionRecord"
+        eType="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//VersionRecord"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BaseFuel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="equivalenceFactor" lowerBound="1"

@@ -17,6 +17,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
 import com.mmxlabs.lngdataserver.commons.http.ProgressRequestBody;
 import com.mmxlabs.lngdataserver.commons.http.ProgressResponseBody;
+import com.mmxlabs.lngdataserver.server.HttpClientUtil;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
 import okhttp3.Credentials;
@@ -40,7 +41,7 @@ public class SharedWorkspaceServiceClient {
 	private static final String SCENARIO_MOVE_URL = "/scenarios/v1/shared/move/";
 	private static final String SCENARIO_LAST_MODIFIED_URL = "/scenarios/v1/shared/lastModified";
 
-	private final OkHttpClient httpClient = new OkHttpClient.Builder() //
+	private final OkHttpClient httpClient = HttpClientUtil.basicBuilder() //
 			.build();
 
 	private final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");

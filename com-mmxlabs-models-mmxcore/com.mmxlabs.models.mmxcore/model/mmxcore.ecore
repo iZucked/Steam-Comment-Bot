@@ -30,4 +30,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MMXRootObject" eSuperTypes="#//UUIDObject"/>
   <eClassifiers xsi:type="ecore:EClass" name="MMXResultRoot"/>
+  <eClassifiers xsi:type="ecore:EClass" name="VersionRecord">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="createdBy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="createdAt" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
 </ecore:EPackage>

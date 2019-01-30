@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
+import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspacePathUtils;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspaceServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.SharedScenarioUpdater;
@@ -81,7 +82,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 			final File f = ScenarioStorageUtil.storeToTemporaryFile(tmpRecord);
 			try {
 				updater.pause();
-				final String uuid = client.uploadScenario(f, path, wrapMonitor(progressMonitor));
+				final String uuid = client.uploadScenario(f, path, WrappedProgressMonitor.wrapMonitor(progressMonitor));
 				if (uuid != null) {
 					final Path target = Paths.get(baseCaseFolder.getAbsolutePath(), String.format("%s.lingo", uuid));
 					Files.copy(f.toPath(), target);
@@ -372,30 +373,6 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 
 		}
 		return error;
-	}
-
-	private IProgressListener wrapMonitor(final IProgressMonitor monitor) {
-		if (monitor == null) {
-			return null;
-		}
-
-		return new IProgressListener() {
-			boolean firstCall = true;
-
-			@Override
-			public void update(final long bytesRead, final long contentLength, final boolean done) {
-				if (firstCall) {
-					int total = (int) (contentLength / 1000L);
-					if (total == 0) {
-						total = 1;
-					}
-					monitor.beginTask("Transfer", total);
-					firstCall = false;
-				}
-				final int worked = (int) (bytesRead / 1000L);
-				monitor.worked(worked);
-			}
-		};
 	}
 
 	@Override

@@ -48,7 +48,9 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.scheduler.optimiser;bundle-version="4.6.8",
  com.mmxlabs.models.lng.fleet,
  com.mmxlabs.lngdataserver.lib;bundle-version="4.6.8",
- com.mmxlabs.lngdataserver.integration.general
+ com.mmxlabs.lngdataserver.integration.general,
+ com.mmxlabs.license.features,
+ com.mmxlabs.models.migration.scenario
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.slf4j
 Bundle-ActivationPolicy: lazy
@@ -58,6 +60,7 @@ Export-Package: com.mmxlabs.lngdataserver.lng.exporters.distances,
  com.mmxlabs.lngdataserver.lng.exporters.pricing.ui,
  com.mmxlabs.lngdataserver.lng.exporters.vessels,
  com.mmxlabs.lngdataserver.lng.importers.distances,
+ com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard,
  com.mmxlabs.lngdataserver.lng.importers.port,
  com.mmxlabs.lngdataserver.lng.importers.pricing
 Bundle-Vendor: Minimax Labs Ltd.

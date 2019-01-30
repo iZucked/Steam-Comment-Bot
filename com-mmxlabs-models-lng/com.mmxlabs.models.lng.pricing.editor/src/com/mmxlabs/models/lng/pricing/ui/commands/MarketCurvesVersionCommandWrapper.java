@@ -5,20 +5,14 @@
 package com.mmxlabs.models.lng.pricing.ui.commands;
 
 import java.util.Iterator;
-import java.util.Objects;
 
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -30,63 +24,33 @@ import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.scenario.service.manifest.Manifest;
-import com.mmxlabs.scenario.service.manifest.ManifestFactory;
-import com.mmxlabs.scenario.service.manifest.ModelArtifact;
-import com.mmxlabs.scenario.service.manifest.StorageType;
-import com.mmxlabs.scenario.service.model.util.extpoint.IWrappedCommandProvider;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.scenario.service.model.util.extpoint.AbstractVersionCommandWrapper;
 
 /**
  * @author Simon Goodall
  * 
  */
-public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvider {
+public class MarketCurvesVersionCommandWrapper extends AbstractVersionCommandWrapper {
 
-	private EditingDomain editingDomain;
-	private final boolean[] changedRef = new boolean[1];
-	private final @NonNull Adapter adapter = createAdapter(changedRef);
-	private PricingModel pricingModel;
-	private ModelArtifact modelArtifact;
+	private static final String TYPE_ID = LNGScenarioSharedModelTypes.MARKET_CURVES.getID();
+	private static final EReference VERSION_FEATURE = PricingPackage.Literals.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD;
+
+	public MarketCurvesVersionCommandWrapper() {
+		super(TYPE_ID, VERSION_FEATURE);
+	}
 
 	@Override
-	public @Nullable Command provideCommand(@NonNull final Command cmd, @NonNull final EditingDomain editingDomain) {
-
-		final CompoundCommand wrapped = new CompoundCommand(cmd.getLabel());
-
-		wrapped.append(cmd);
-		wrapped.append(createVersionCommand());
-
-		return wrapped;
-
+	protected @Nullable EObject getModelRoot(EObject obj) {
+		if (obj instanceof LNGScenarioModel) {
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) obj;
+			return ScenarioModelUtil.getPricingModel(lngScenarioModel);
+		}
+		return null;
 	}
 
-	private Command createVersionCommand() {
-
-		return new CompoundCommand() {
-
-			@Override
-			public boolean canExecute() {
-				return true;
-			}
-
-			@Override
-			protected boolean prepare() {
-				return true;
-			}
-
-			@Override
-			public void execute() {
-				if (changedRef[0]) {
-					String newID = EcoreUtil.generateUUID();
-					System.out.println("Generate Pricing Model Version ID " + newID);
-					final Command cmd = SetCommand.create(editingDomain, pricingModel, PricingPackage.Literals.PRICING_MODEL__MARKET_CURVE_DATA_VERSION, newID);
-					appendAndExecute(cmd);
-				}
-			}
-		};
-	}
-
-	private @NonNull Adapter createAdapter(final boolean[] changedRef) {
+	@Override
+	protected @NonNull Adapter createAdapter(final boolean[] changedRef) {
 
 		return new EContentAdapter() {
 
@@ -113,7 +77,7 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 				}
 
 				// Reset!
-				if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__MARKET_CURVE_DATA_VERSION) {
+				if (notification.getFeature() == MMXCorePackage.Literals.VERSION_RECORD__VERSION) {
 
 					if (modelArtifact != null) {
 						modelArtifact.setDataVersion(notification.getNewStringValue());
@@ -130,6 +94,8 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 			protected void setTarget(final EObject target) {
 				basicSetTarget(target);
 				if (target instanceof PricingModel) {
+					PricingModel pricingModel = (PricingModel) target;
+					addAdapter(pricingModel.getMarketCurvesVersionRecord());
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						if (notifier instanceof AbstractYearMonthCurve //
@@ -152,6 +118,9 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 			protected void unsetTarget(final EObject target) {
 				basicUnsetTarget(target);
 				if (target instanceof PricingModel) {
+					PricingModel pricingModel = (PricingModel) target;
+					removeAdapter(pricingModel.getMarketCurvesVersionRecord(), false, true);
+
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						if (notifier instanceof AbstractYearMonthCurve //
@@ -168,67 +137,4 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 			}
 		};
 	}
-
-	@Override
-	public void registerEditingDomain(final Manifest manifest, final EditingDomain editingDomain) {
-		if (this.editingDomain != null) {
-			throw new IllegalStateException("Editing domain already registered");
-		}
-
-		this.editingDomain = editingDomain;
-
-		if (this.editingDomain != null) {
-			for (final Resource r : this.editingDomain.getResourceSet().getResources()) {
-				for (final EObject obj : r.getContents()) {
-					if (obj instanceof LNGScenarioModel) {
-						final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) obj;
-						pricingModel = ScenarioModelUtil.getPricingModel(lngScenarioModel);
-					}
-				}
-			}
-		}
-		modelArtifact = null;
-		if (pricingModel != null) {
-			pricingModel.eAdapters().add(adapter);
-			if (manifest != null) {
-				for (final ModelArtifact artifact : manifest.getModelDependencies()) {
-					if (LNGScenarioSharedModelTypes.MARKET_CURVES.getID().equals(artifact.getKey())) {
-						if (artifact.getStorageType() == StorageType.INTERNAL) {
-							this.modelArtifact = artifact;
-							// Update version if needed.
-							if (!Objects.equals(this.modelArtifact.getDataVersion(), pricingModel.getMarketCurveDataVersion())) {
-								this.modelArtifact.setDataVersion(pricingModel.getMarketCurveDataVersion());
-							}
-							break;
-						}
-					}
-				}
-				if (modelArtifact == null) {
-					modelArtifact = ManifestFactory.eINSTANCE.createModelArtifact();
-					modelArtifact.setDataVersion(pricingModel.getMarketCurveDataVersion());
-					modelArtifact.setStorageType(StorageType.INTERNAL);
-					modelArtifact.setType("EOBJECT");
-					modelArtifact.setKey(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
-					manifest.getModelDependencies().add(modelArtifact);
-				}
-			}
-		}
-	}
-
-	@Override
-	public void deregisterEditingDomain(final Manifest manifest, final EditingDomain editingDomain) {
-		if (this.editingDomain != editingDomain) {
-			throw new IllegalStateException("A different editing domain has been registered");
-		}
-
-		if (pricingModel != null) {
-			pricingModel.eAdapters().remove(adapter);
-			pricingModel = null;
-		}
-
-		modelArtifact = null;
-
-		this.editingDomain = null;
-	}
-
 }

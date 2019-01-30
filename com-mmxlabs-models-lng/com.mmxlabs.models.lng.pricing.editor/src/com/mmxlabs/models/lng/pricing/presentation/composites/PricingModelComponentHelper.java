@@ -69,11 +69,12 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 		add_charterCurvesEditor(detailComposite, topClass);
 		add_bunkerFuelCurvesEditor(detailComposite, topClass);
 		add_conversionFactorsEditor(detailComposite, topClass);
-		add_marketCurveDataVersionEditor(detailComposite, topClass);
 		add_settledPricesEditor(detailComposite, topClass);
 		add_marketIndicesEditor(detailComposite, topClass);
 		add_holidayCalendarsEditor(detailComposite, topClass);
 		add_settleStrategiesEditor(detailComposite, topClass);
+		add_marketCurvesVersionRecordEditor(detailComposite, topClass);
+		add_settledPricesVersionRecordEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the currencyCurves feature on PricingModel
@@ -121,15 +122,6 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the marketCurveDataVersion feature on PricingModel
-	 *
-	 * @generated
-	 */
-	protected void add_marketCurveDataVersionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__MARKET_CURVE_DATA_VERSION));
-	}
-
-	/**
 	 * Create the editor for the settledPrices feature on PricingModel
 	 *
 	 * @generated
@@ -163,5 +155,23 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_settleStrategiesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__SETTLE_STRATEGIES));
+	}
+
+	/**
+	 * Create the editor for the marketCurvesVersionRecord feature on PricingModel
+	 *
+	 * @generated
+	 */
+	protected void add_marketCurvesVersionRecordEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD));
+	}
+
+	/**
+	 * Create the editor for the settledPricesVersionRecord feature on PricingModel
+	 *
+	 * @generated
+	 */
+	protected void add_settledPricesVersionRecordEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD));
 	}
 }

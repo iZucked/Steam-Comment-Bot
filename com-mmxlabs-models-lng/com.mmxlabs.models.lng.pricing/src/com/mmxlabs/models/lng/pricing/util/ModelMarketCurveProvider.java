@@ -71,7 +71,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 	}
 
 	public String getVersion() {
-		return pricingModel.getMarketCurveDataVersion();
+		return pricingModel.getMarketCurvesVersionRecord().getVersion();
 	}
 
 	@Override

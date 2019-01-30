@@ -15,10 +15,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
-import com.mmxlabs.lngdataserver.commons.IBaseCaseVersionsProvider;
-import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
+import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider;
 
 public class DataBrowserLabelProvider extends ColumnLabelProvider implements IColorProvider {
 
@@ -28,6 +29,7 @@ public class DataBrowserLabelProvider extends ColumnLabelProvider implements ICo
 
 	private Image img_published;
 	private Image img_local;
+	private Image img_bc;
 
 	private IBaseCaseVersionsProvider baseCaseProvider;
 
@@ -46,6 +48,7 @@ public class DataBrowserLabelProvider extends ColumnLabelProvider implements ICo
 
 		img_published = Activator.createScaledImage("published");
 		img_local = Activator.createScaledImage("local");
+		img_bc = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/base-flag.png").createImage();
 	}
 
 	@Override
@@ -58,6 +61,10 @@ public class DataBrowserLabelProvider extends ColumnLabelProvider implements ICo
 			img_published.dispose();
 			img_published = null;
 		}
+		if (img_bc != null) {
+			img_bc.dispose();
+			img_bc = null;
+		}
 		super.dispose();
 	}
 
@@ -69,6 +76,17 @@ public class DataBrowserLabelProvider extends ColumnLabelProvider implements ICo
 		} else if (element instanceof Node) {
 			// figure out if published
 			final Node node = (Node) element;
+
+			if (node.eContainer() instanceof CompositeNode) {
+				final CompositeNode compositeNode = (CompositeNode) node.eContainer();
+
+				if (compositeNode.getType() != null) {
+					if (baseCaseProvider != null && Objects.equals(node.getVersionIdentifier(), baseCaseProvider.getVersion(compositeNode.getType()))) {
+						return img_bc;
+					}
+				}
+			}
+
 			if (node.isPublished()) {
 				return img_published;
 			} else {
@@ -84,16 +102,16 @@ public class DataBrowserLabelProvider extends ColumnLabelProvider implements ICo
 		if (element instanceof Node) {
 			final Node node = (Node) element;
 			String prefix = "";
-			if (node.eContainer() instanceof CompositeNode) {
-				final CompositeNode compositeNode = (CompositeNode) node.eContainer();
-
-				if (compositeNode.getType() == LNGScenarioSharedModelTypes.MARKET_CURVES.getID()) {
-					if (baseCaseProvider != null && Objects.equals(node.getVersionIdentifier(), baseCaseProvider.getPricingVersion())) {
-						prefix = "** ";
-
-					}
-				}
-			}
+			// if (node.eContainer() instanceof CompositeNode) {
+			// final CompositeNode compositeNode = (CompositeNode) node.eContainer();
+			//
+			// if (compositeNode.getType() != null) {
+			// if (baseCaseProvider != null && Objects.equals(node.getVersionIdentifier(), baseCaseProvider.getVersion(compositeNode.getType()))) {
+			// prefix = "** ";
+			//
+			// }
+			// }
+			// }
 			return prefix + node.getDisplayName();
 		}
 		return "Error displaying label";

@@ -141,13 +141,12 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 				final URL fileURL = FileLocator.toFileURL(url);
 				final URL propertiesFile = new URL(fileURL.toString().replaceAll(" ", "%20") + String.format(".%s.properties", Joiner.on(".").join(components)));
 				return new File(propertiesFile.toURI());
-			};
+			}
 
 			@Override
 			public URL getFitnessDataAsURL() throws java.io.IOException {
-				final URL propertiesFile = new URL(url.toString() + String.format(".%s.properties", Joiner.on(".").join(components)));
-				return propertiesFile;
-			};
+				return new URL(String.format("%s.%s.properties", url.toString(), Joiner.on(".").join(components)));
+			}
 		};
 		provider.execute(originalScenarioDataProvider -> {
 

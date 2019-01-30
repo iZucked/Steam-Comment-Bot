@@ -19,6 +19,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 /**
@@ -50,54 +51,8 @@ public class PortModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addPortDataVersionPropertyDescriptor(object);
-			addDistanceDataVersionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Port Data Version feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addPortDataVersionPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_PortModel_portDataVersion_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PortModel_portDataVersion_feature", "_UI_PortModel_type"),
-				 PortPackage.Literals.PORT_MODEL__PORT_DATA_VERSION,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Distance Data Version feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDistanceDataVersionPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_PortModel_distanceDataVersion_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PortModel_distanceDataVersion_feature", "_UI_PortModel_type"),
-				 PortPackage.Literals.PORT_MODEL__DISTANCE_DATA_VERSION,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -118,6 +73,9 @@ public class PortModelItemProvider
 			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__SPECIAL_PORT_GROUPS);
 			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__PORT_COUNTRY_GROUPS);
 			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__CONTINGENCY_MATRIX);
+			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__PORT_VERSION_RECORD);
+			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__PORT_GROUP_VERSION_RECORD);
+			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__DISTANCE_VERSION_RECORD);
 		}
 		return childrenFeatures;
 	}
@@ -172,16 +130,15 @@ public class PortModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(PortModel.class)) {
-			case PortPackage.PORT_MODEL__PORT_DATA_VERSION:
-			case PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
 			case PortPackage.PORT_MODEL__PORTS:
 			case PortPackage.PORT_MODEL__PORT_GROUPS:
 			case PortPackage.PORT_MODEL__ROUTES:
 			case PortPackage.PORT_MODEL__SPECIAL_PORT_GROUPS:
 			case PortPackage.PORT_MODEL__PORT_COUNTRY_GROUPS:
 			case PortPackage.PORT_MODEL__CONTINGENCY_MATRIX:
+			case PortPackage.PORT_MODEL__PORT_VERSION_RECORD:
+			case PortPackage.PORT_MODEL__PORT_GROUP_VERSION_RECORD:
+			case PortPackage.PORT_MODEL__DISTANCE_VERSION_RECORD:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -228,6 +185,45 @@ public class PortModelItemProvider
 			(createChildParameter
 				(PortPackage.Literals.PORT_MODEL__CONTINGENCY_MATRIX,
 				 PortFactory.eINSTANCE.createContingencyMatrix()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PortPackage.Literals.PORT_MODEL__PORT_VERSION_RECORD,
+				 MMXCoreFactory.eINSTANCE.createVersionRecord()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PortPackage.Literals.PORT_MODEL__PORT_GROUP_VERSION_RECORD,
+				 MMXCoreFactory.eINSTANCE.createVersionRecord()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PortPackage.Literals.PORT_MODEL__DISTANCE_VERSION_RECORD,
+				 MMXCoreFactory.eINSTANCE.createVersionRecord()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == PortPackage.Literals.PORT_MODEL__PORT_VERSION_RECORD ||
+			childFeature == PortPackage.Literals.PORT_MODEL__PORT_GROUP_VERSION_RECORD ||
+			childFeature == PortPackage.Literals.PORT_MODEL__DISTANCE_VERSION_RECORD;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

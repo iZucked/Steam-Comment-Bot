@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -742,4 +743,15 @@ public class ScenarioStorageUtil {
 		return null;
 	}
 
+	public static Map<String, String> extractScenarioDataVersions(final Manifest manifest) {
+
+		if (manifest != null) {
+			return manifest.getModelDependencies().stream() //
+					.filter(m -> m.getKey() != null) //
+					.filter(m -> m.getDataVersion() != null) //
+					.collect(Collectors.toMap(ModelArtifact::getKey, ModelArtifact::getDataVersion));
+
+		}
+		return null;
+	}
 }

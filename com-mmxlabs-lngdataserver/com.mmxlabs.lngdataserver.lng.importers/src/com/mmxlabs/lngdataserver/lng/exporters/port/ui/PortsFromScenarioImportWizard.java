@@ -14,10 +14,9 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
-import com.mmxlabs.lngdataserver.integration.ports.PortsUploaderClient;
+import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
-import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -57,7 +56,7 @@ public class PortsFromScenarioImportWizard extends Wizard implements IImportWiza
 								PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 								PortsVersion version = PortFromScenarioCopier.generateVersion(portModel);
 								try {
-									PortsUploaderClient.saveVersion(BackEndUrlProvider.INSTANCE.getUrl(), version);
+									PortsRepository.INSTANCE.publishVersion(version);
 								} catch (Exception e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();

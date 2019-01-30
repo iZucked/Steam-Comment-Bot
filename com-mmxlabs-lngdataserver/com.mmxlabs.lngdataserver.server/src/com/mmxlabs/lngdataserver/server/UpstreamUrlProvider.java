@@ -31,17 +31,18 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.lngdataserver.server.dialogs.AuthDetailsPromptDialog;
 import com.mmxlabs.lngdataserver.server.preferences.StandardDateRepositoryPreferenceConstants;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.user.IUserNameProvider;
 
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class UpstreamUrlProvider {
+public class UpstreamUrlProvider implements IUserNameProvider{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UpstreamUrlProvider.class);
 
-	private static final OkHttpClient CLIENT = new okhttp3.OkHttpClient();
+	private final OkHttpClient CLIENT = HttpClientUtil.basicBuilder().build();
 
 	// Avoids repeated error reporting
 	private static final ConcurrentHashMap<String, Object> reportedError = new ConcurrentHashMap<>();
@@ -143,7 +144,7 @@ public class UpstreamUrlProvider {
 		workspaceListeners.remove(listener);
 	}
 
-	public static boolean checkCredentials(final String url, final String username, final String password) {
+	public boolean checkCredentials(final String url, final String username, final String password) {
 
 		if (username == null || username.isEmpty()) {
 			return false;
@@ -251,7 +252,7 @@ public class UpstreamUrlProvider {
 		}
 	}
 
-	public static boolean testUpstreamAvailability(final String url) {
+	public boolean testUpstreamAvailability(final String url) {
 
 		if (url == null || url.isEmpty()) {
 			return false;

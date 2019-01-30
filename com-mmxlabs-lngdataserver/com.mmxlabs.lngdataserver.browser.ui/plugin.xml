@@ -7,7 +7,6 @@
 -->
 <?eclipse version="3.4"?>
 <plugin>
-	<extension-point id="DataBrowserExtension" name="DataBrowserExtension" schema="schema/DataBrowserExtension.exsd"/>
  <extension-point id="DataBrowserContextMenuExtension" name="DataBrowserContextMenuExtension" schema="schema/DataBrowserContextMenuExtension.exsd"/>
    <extension
          point="org.eclipse.ui.views">

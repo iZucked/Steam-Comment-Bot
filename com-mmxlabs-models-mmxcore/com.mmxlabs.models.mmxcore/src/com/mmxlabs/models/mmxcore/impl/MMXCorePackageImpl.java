@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.mmxcore.impl;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EOperation;
@@ -19,6 +20,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.mmxcore.VersionRecord;
 
 /**
  * <!-- begin-user-doc -->
@@ -70,6 +72,13 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	private EClass mmxResultRootEClass = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass versionRecordEClass = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -97,7 +106,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link MMXCorePackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -111,9 +120,13 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		if (isInited) return (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
 
 		// Obtain or create and register package
-		MMXCorePackageImpl theMMXCorePackage = (MMXCorePackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof MMXCorePackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new MMXCorePackageImpl());
+		Object registeredMMXCorePackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		MMXCorePackageImpl theMMXCorePackage = registeredMMXCorePackage instanceof MMXCorePackageImpl ? (MMXCorePackageImpl)registeredMMXCorePackage : new MMXCorePackageImpl();
 
 		isInited = true;
+
+		// Initialize simple dependencies
+		DateTimePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theMMXCorePackage.createPackageContents();
@@ -124,7 +137,6 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		// Mark meta-data to indicate it can't be changed
 		theMMXCorePackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(MMXCorePackage.eNS_URI, theMMXCorePackage);
 		return theMMXCorePackage;
@@ -254,6 +266,42 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getVersionRecord() {
+		return versionRecordEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getVersionRecord_CreatedBy() {
+		return (EAttribute)versionRecordEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getVersionRecord_CreatedAt() {
+		return (EAttribute)versionRecordEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getVersionRecord_Version() {
+		return (EAttribute)versionRecordEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public MMXCoreFactory getMMXCoreFactory() {
 		return (MMXCoreFactory)getEFactoryInstance();
 	}
@@ -295,6 +343,11 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		mmxRootObjectEClass = createEClass(MMX_ROOT_OBJECT);
 
 		mmxResultRootEClass = createEClass(MMX_RESULT_ROOT);
+
+		versionRecordEClass = createEClass(VERSION_RECORD);
+		createEAttribute(versionRecordEClass, VERSION_RECORD__CREATED_BY);
+		createEAttribute(versionRecordEClass, VERSION_RECORD__CREATED_AT);
+		createEAttribute(versionRecordEClass, VERSION_RECORD__VERSION);
 	}
 
 	/**
@@ -319,6 +372,9 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		setName(eNAME);
 		setNsPrefix(eNS_PREFIX);
 		setNsURI(eNS_URI);
+
+		// Obtain other dependent packages
+		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 
 		// Create type parameters
 
@@ -354,6 +410,11 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		initEClass(mmxRootObjectEClass, MMXRootObject.class, "MMXRootObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(mmxResultRootEClass, MMXResultRoot.class, "MMXResultRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(versionRecordEClass, VersionRecord.class, "VersionRecord", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getVersionRecord_CreatedBy(), ecorePackage.getEString(), "createdBy", null, 0, 1, VersionRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVersionRecord_CreatedAt(), theDateTimePackage.getInstant(), "createdAt", null, 0, 1, VersionRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVersionRecord_Version(), ecorePackage.getEString(), "version", null, 0, 1, VersionRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

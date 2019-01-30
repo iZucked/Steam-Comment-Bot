@@ -29,6 +29,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortTypeConstants;
 import com.mmxlabs.lngdataserver.integration.vessels.model.FuelConsumption;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselRouteParameters;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
@@ -44,6 +45,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.VersionRecord;
 
 public class VesselsToScenarioCopier {
 
@@ -65,10 +67,11 @@ public class VesselsToScenarioCopier {
 			vesselsByNameMap.put(vessel.getName(), vessel);
 		}
 
-		final Map<String, Port> portProvider = portModel.getPorts().stream() //
-				.filter(p -> p.getLocation() != null) //
-				.filter(p -> p.getLocation().getMmxId() != null) //
-				.collect(Collectors.toMap(p -> p.getLocation().getMmxId(), Function.identity()));
+		final Map<String, APortSet<Port>> portTypeMap = new HashMap<>();
+
+		portModel.getPorts().forEach(c -> portTypeMap.put(PortTypeConstants.PORT_PREFIX + c.getLocation().getMmxId(), c));
+		portModel.getPortCountryGroups().forEach(c -> portTypeMap.put(PortTypeConstants.COUNTRY_GROUP_PREFIX + c.getName(), c));
+		portModel.getPortGroups().forEach(c -> portTypeMap.put(PortTypeConstants.PORT_GROUP_PREFIX + c.getName(), c));
 
 		final Map<String, BaseFuel> baseFuels = new HashMap<>(fleetModel.getBaseFuels().stream() //
 				.collect(Collectors.toMap(BaseFuel::getName, Function.identity())));
@@ -199,12 +202,7 @@ public class VesselsToScenarioCopier {
 				final List<String> portIds = inaccessiblePorts.get();
 				final List<APortSet<Port>> mappedPorts = new LinkedList<>();
 				for (final String portMMXId : portIds) {
-					final Port p = portProvider.get(portMMXId);
-					if (p != null) {
-						mappedPorts.add(p);
-					} else {
-						// Log error
-					}
+					mappedPorts.add(portTypeMap.get(portMMXId));
 				}
 
 				cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS_OVERRIDE, Boolean.TRUE));
@@ -225,9 +223,14 @@ public class VesselsToScenarioCopier {
 		final Set<Vessel> vesselsToDelete = new HashSet<>(fleetModel.getVessels());
 		vesselsToDelete.removeAll(updatedVessels);
 
-		cc.append(DeleteCommand.create(editingDomain, vesselsToDelete));
+		if (!vesselsToDelete.isEmpty()) {
+			cc.append(DeleteCommand.create(editingDomain, vesselsToDelete));
+		}
 
-		cc.append(SetCommand.create(editingDomain, fleetModel, FleetPackage.Literals.FLEET_MODEL__FLEET_DATA_VERSION, vesselsVersion.getIdentifier()));
+		VersionRecord record = fleetModel.getFleetVersionRecord();
+		cc.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__CREATED_BY, vesselsVersion.getCreatedBy()));
+		cc.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__CREATED_AT, vesselsVersion.getCreatedAt()));
+		cc.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__VERSION, vesselsVersion.getIdentifier()));
 
 		return cc;
 	}
