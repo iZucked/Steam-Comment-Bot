@@ -43,32 +43,28 @@ public class Nominations {
 	
 	public Nominations(final Slot slot, final NominationType nType) {
 		this.slotId = slot.getName();
-		final Contract contract = slot.getContract();
-		final Cargo c = slot.getCargo();
-		if (c != null) {
-			for (Slot s : c.getSlots()) {
-				if (s instanceof DischargeSlot) {
-					DischargeSlot ds = (DischargeSlot)s;
-					if (ds.getContract() != null) {
-						this.buyer = ds.getContract().getName();
-					}
-					//override if the counter-party is set explicitly
-					if (ds.getSlotOrDelegateCounterparty() != null) {
-						this.buyer = ds.getSlotOrDelegateCounterparty();
-					}
-				}
+		if (slot instanceof DischargeSlot) {
+			DischargeSlot ds = (DischargeSlot) slot;
+			if (ds.getContract() != null) {
+				this.buyer = ds.getContract().getName();
+			} else if (ds.getSlotOrDelegateCounterparty() != null) {
+				this.buyer = ds.getSlotOrDelegateCounterparty();
+			}
+			if (ds.getSlotOrDelegateEntity() != null) {
+				this.seller = ds.getSlotOrDelegateEntity().getName();
+			}
+		} else if (slot instanceof LoadSlot) {
+			LoadSlot ls = (LoadSlot) slot;
+			if (ls.getContract() != null) {
+				this.seller = ls.getContract().getName();
+			} else if (ls.getSlotOrDelegateCounterparty() != null) {
+				this.seller = ls.getSlotOrDelegateCounterparty();
+			}
+			if (ls.getSlotOrDelegateEntity() != null) {
+				this.buyer = ls.getSlotOrDelegateEntity().getName();
 			}
 		}
-		BaseLegalEntity entity = null;
-		if (contract != null) {
-			entity = contract.getEntity();
-		}
-		if (slot.getSlotOrDelegateEntity()!= null){
-			entity = slot.getSlotOrDelegateEntity();
-		}
-		if (entity != null) {
-			this.seller = entity.getName();
-		}
+		final Cargo c = slot.getCargo();
 		this.cn = slot.getSlotOrDelegateCN();
 		this.type = slot instanceof LoadSlot ? "Buy" : "Sell"; //for now
 		this.date = slot.getWindowStart();
@@ -144,6 +140,25 @@ public class Nominations {
 			this.nomination = p.getName();
 		}
 			break;
+		case PORT_2:{
+			this.nominationType = slot instanceof LoadSlot ? "Discharge port" : "Load port";
+			this.nominateBy = slot.getSlotOrDelegatePortLoadNominationDate();
+			this.nominationComment = slot.getPortLoadNominationComment() != null ? slot.getPortLoadNominationComment() : "";
+			if (c == null) break;
+			Slot secondSlot = null;
+			for (final Slot s : c.getSlots()) {
+				if (slot instanceof LoadSlot && s instanceof DischargeSlot) {
+					secondSlot = s;
+				} else if (slot instanceof DischargeSlot && s instanceof LoadSlot) {
+					secondSlot = s;
+				}
+			}
+			if (secondSlot == null) break;
+			final Port p = secondSlot.getPort();
+			if (p == null) break;
+			this.nomination = p.getName();
+		}
+			break;
 		default:
 			this.nominationType = "";
 			this.nominationComment = "";
@@ -208,7 +223,7 @@ public class Nominations {
 	}
 	
 	public enum NominationType{
-		SLOT_DATE_0, SLOT_DATE_1, SLOT_DATE_2, VESSEL, VOLUME, PORT
+		SLOT_DATE_0, SLOT_DATE_1, SLOT_DATE_2, VESSEL, VOLUME, PORT, PORT_2
 	}
 
 	public String getBuyer() {
