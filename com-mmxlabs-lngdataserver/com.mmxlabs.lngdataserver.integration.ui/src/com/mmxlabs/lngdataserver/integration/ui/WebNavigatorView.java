@@ -30,6 +30,7 @@ public class WebNavigatorView extends ViewPart {
 
 	public static final String ID = "com.mmxlabs.lngdataserver.integration.ui.WebNavigatorView";
 
+	private boolean fastMode = false; // Fast mode is experimental and does not work reliably.
 	private Browser browser;
 	private ISelectionListener selectionListener;
 
@@ -90,19 +91,19 @@ public class WebNavigatorView extends ViewPart {
 				if (node.getParent() != null) {
 					if (node.getParent().getDisplayName().equals("Distances")) {
 						System.out.println("update received: " + node.getDisplayName());
-						updateURL(getUrl("distances", node.getVersionIdentifier()));
+						doUpdateURL("distances", node.getVersionIdentifier());
 					}
 					if (node.getParent().getDisplayName().equals("Pricing")) {
 						System.out.println("update received: " + node.getDisplayName());
-						updateURL(getUrl("pricing", node.getVersionIdentifier()));
+						doUpdateURL("pricing", node.getVersionIdentifier());
 					}
 					if (node.getParent().getDisplayName().equals("Vessels")) {
 						System.out.println("update received: " + node.getDisplayName());
-						updateURL(getUrl("vessels", node.getVersionIdentifier()));
+						doUpdateURL("vessels", node.getVersionIdentifier());
 					}
 					if (node.getParent().getDisplayName().equals("Ports")) {
 						System.out.println("update received: " + node.getDisplayName());
-						updateURL(getUrl("ports", node.getVersionIdentifier()));
+						doUpdateURL("ports", node.getVersionIdentifier());
 					}
 				}
 			}
@@ -149,9 +150,38 @@ public class WebNavigatorView extends ViewPart {
 		return url;
 	}
 
+	private String getUrlFragment(final String type, final String version) {
+		String encodedBackend;
+		try {
+			encodedBackend = URLEncoder.encode(BackEndUrlProvider.INSTANCE.getUrl(), "UTF-8");
+		} catch (final UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+		String url = "#/" + type + "?apiBaseUrl=" + encodedBackend;
+		if (version != "") {
+			url = "#/" + type + "/" + version + "?apiBaseUrl=" + encodedBackend;
+		}
+		// String url = BackEndUrlProvider.INSTANCE.getUrl() + Activator.URL_PREFIX + "#/" + type + "?apiBaseUrl=" + encodedBackend;
+		// if (version != "") {
+		// url = BackEndUrlProvider.INSTANCE.getUrl() + Activator.URL_PREFIX + "#/" + type + "/" + version + "?apiBaseUrl=" + encodedBackend;
+		// }
+		System.out.println("Navigator calling: " + url);
+		return url;
+	}
+
 	@Override
 	public void setFocus() {
 		browser.setFocus();
+	}
+
+	private void doUpdateURL(String type, String version) {
+		if (fastMode) {
+			// Switch to JavaScript based location updates. This allows Angular to take over and update page without reloading the whole page. Note this does require the angular side to work properly.
+			// Depending on how the routing if configured the data may or may not refresh without extra code.
+			updateUsingJavascript(getUrlFragment(type, version));
+		} else {
+			updateURL(getUrl(type, version));
+		}
 	}
 
 	/**
@@ -169,5 +199,10 @@ public class WebNavigatorView extends ViewPart {
 				nextUrl = url;
 			}
 		}
+	}
+
+	private void updateUsingJavascript(final String url) {
+
+		browser.execute(String.format("window.location='%s';", url));
 	}
 }
