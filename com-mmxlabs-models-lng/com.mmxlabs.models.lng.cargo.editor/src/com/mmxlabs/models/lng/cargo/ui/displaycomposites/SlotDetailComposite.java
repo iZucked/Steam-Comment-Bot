@@ -79,6 +79,10 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private static final EStructuralFeature PortNominationDone = CargoFeatures.getSlot_PortNominationDone();
 	private static final EStructuralFeature PortNominationCounterparty = CargoFeatures.getSlot_PortNominationCounterparty();
 	private static final EStructuralFeature PortNominationComment = CargoFeatures.getSlot_PortNominationComment();
+	private static final EStructuralFeature PortLoadNomination = CargoFeatures.getSlot_PortLoadNominationDate();
+	private static final EStructuralFeature PortLoadNominationDone = CargoFeatures.getSlot_PortLoadNominationDone();
+	private static final EStructuralFeature PortLoadNominationCounterparty = CargoFeatures.getSlot_PortLoadNominationCounterparty();
+	private static final EStructuralFeature PortLoadNominationComment = CargoFeatures.getSlot_PortLoadNominationComment();
 	private static final EStructuralFeature VolumeNomination = CargoFeatures.getSlot_VolumeNominationDate();
 	private static final EStructuralFeature VolumeNominationDone = CargoFeatures.getSlot_VolumeNominationDone();
 	private static final EStructuralFeature VolumeNominationCounterparty = CargoFeatures.getSlot_VolumeNominationCounterparty();
@@ -252,10 +256,13 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				nominationFeatures.add(new EStructuralFeature[] {VesselNominationComment});
 				nominationFeatures.add(new EStructuralFeature[] {PortNomination, PortNominationCounterparty, PortNominationDone});
 				nominationFeatures.add(new EStructuralFeature[] {PortNominationComment});
+				nominationFeatures.add(new EStructuralFeature[] {PortLoadNomination, PortLoadNominationCounterparty, PortLoadNominationDone});
+				nominationFeatures.add(new EStructuralFeature[] {PortLoadNominationComment});
 				nominationTitleFeatures = Sets.newHashSet(WindowNomination, WindowNominationCounterparty, WindowNominationIsDone, WindowNominationComment,
 						VolumeNomination, VolumeNominationCounterparty, VolumeNominationDone, VolumeNominationComment,
 						VesselNomination, VesselNominationCounterparty, VesselNominationDone, VesselNominationComment,
-						PortNomination, PortNominationCounterparty, PortNominationDone, PortNominationComment);
+						PortNomination, PortNominationCounterparty, PortNominationDone, PortNominationComment,
+						PortLoadNomination, PortLoadNominationCounterparty, PortLoadNominationDone, PortLoadNominationComment);
 				allFeatures.addAll(getAllFeatures(nominationFeatures));
 			}
 		}
@@ -443,6 +450,42 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 							}
 							editor.setLabel(null);
 						} else if(feature == CargoPackage.Literals.SLOT__PORT_NOMINATION_COMMENT) {
+							final Label label = editor.getLabel();
+							if (label != null) {
+								label.setText("Remarks");
+							}
+							editor.setLabel(null);
+						} else {
+							final Label label = editor.getLabel();
+							gd.widthHint = 10;
+							if (label != null) {
+								label.setText("Done");
+							}
+							editor.setLabel(null);
+						}
+						return gd;
+					}
+					if (feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DATE 
+							|| feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DONE
+							|| feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY
+							|| feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COMMENT) {
+						final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+						// 64 - magic constant from MultiDetailDialog
+						gd.widthHint = 100;
+
+						if (feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DATE) {
+							final Label label = editor.getLabel();
+							if (label != null) {
+								label.setText("Load Port");
+							}
+							editor.setLabel(null);
+						} else if(feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY) {
+							final Label label = editor.getLabel();
+							if (label != null) {
+								label.setText("CP");
+							}
+							editor.setLabel(null);
+						} else if(feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COMMENT) {
 							final Label label = editor.getLabel();
 							if (label != null) {
 								label.setText("Remarks");

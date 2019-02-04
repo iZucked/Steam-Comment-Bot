@@ -81,6 +81,10 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isPortNominationDone <em>Port Nomination Done</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isPortNominationCounterparty <em>Port Nomination Counterparty</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPortNominationComment <em>Port Nomination Comment</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPortLoadNominationDate <em>Port Load Nomination Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isPortLoadNominationDone <em>Port Load Nomination Done</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPortLoadNominationComment <em>Port Load Nomination Comment</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot()
@@ -2177,6 +2181,164 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	void setPortNominationComment(String value);
 
 	/**
+	 * Returns the value of the '<em><b>Port Load Nomination Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Load Nomination Date</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Load Nomination Date</em>' attribute.
+	 * @see #isSetPortLoadNominationDate()
+	 * @see #unsetPortLoadNominationDate()
+	 * @see #setPortLoadNominationDate(LocalDate)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_PortLoadNominationDate()
+	 * @model unique="false" unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getPortLoadNominationDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPortLoadNominationDate <em>Port Load Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Load Nomination Date</em>' attribute.
+	 * @see #isSetPortLoadNominationDate()
+	 * @see #unsetPortLoadNominationDate()
+	 * @see #getPortLoadNominationDate()
+	 * @generated
+	 */
+	void setPortLoadNominationDate(LocalDate value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPortLoadNominationDate <em>Port Load Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPortLoadNominationDate()
+	 * @see #getPortLoadNominationDate()
+	 * @see #setPortLoadNominationDate(LocalDate)
+	 * @generated
+	 */
+	void unsetPortLoadNominationDate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPortLoadNominationDate <em>Port Load Nomination Date</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Port Load Nomination Date</em>' attribute is set.
+	 * @see #unsetPortLoadNominationDate()
+	 * @see #getPortLoadNominationDate()
+	 * @see #setPortLoadNominationDate(LocalDate)
+	 * @generated
+	 */
+	boolean isSetPortLoadNominationDate();
+
+	/**
+	 * Returns the value of the '<em><b>Port Load Nomination Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Load Nomination Done</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Load Nomination Done</em>' attribute.
+	 * @see #setPortLoadNominationDone(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_PortLoadNominationDone()
+	 * @model unique="false"
+	 * @generated
+	 */
+	boolean isPortLoadNominationDone();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isPortLoadNominationDone <em>Port Load Nomination Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Load Nomination Done</em>' attribute.
+	 * @see #isPortLoadNominationDone()
+	 * @generated
+	 */
+	void setPortLoadNominationDone(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Port Load Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Load Nomination Counterparty</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Load Nomination Counterparty</em>' attribute.
+	 * @see #isSetPortLoadNominationCounterparty()
+	 * @see #unsetPortLoadNominationCounterparty()
+	 * @see #setPortLoadNominationCounterparty(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_PortLoadNominationCounterparty()
+	 * @model unique="false" unsettable="true"
+	 * @generated
+	 */
+	boolean isPortLoadNominationCounterparty();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Load Nomination Counterparty</em>' attribute.
+	 * @see #isSetPortLoadNominationCounterparty()
+	 * @see #unsetPortLoadNominationCounterparty()
+	 * @see #isPortLoadNominationCounterparty()
+	 * @generated
+	 */
+	void setPortLoadNominationCounterparty(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPortLoadNominationCounterparty()
+	 * @see #isPortLoadNominationCounterparty()
+	 * @see #setPortLoadNominationCounterparty(boolean)
+	 * @generated
+	 */
+	void unsetPortLoadNominationCounterparty();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Port Load Nomination Counterparty</em>' attribute is set.
+	 * @see #unsetPortLoadNominationCounterparty()
+	 * @see #isPortLoadNominationCounterparty()
+	 * @see #setPortLoadNominationCounterparty(boolean)
+	 * @generated
+	 */
+	boolean isSetPortLoadNominationCounterparty();
+
+	/**
+	 * Returns the value of the '<em><b>Port Load Nomination Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Load Nomination Comment</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Load Nomination Comment</em>' attribute.
+	 * @see #setPortLoadNominationComment(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_PortLoadNominationComment()
+	 * @model unique="false"
+	 * @generated
+	 */
+	String getPortLoadNominationComment();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPortLoadNominationComment <em>Port Load Nomination Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Load Nomination Comment</em>' attribute.
+	 * @see #getPortLoadNominationComment()
+	 * @generated
+	 */
+	void setPortLoadNominationComment(String value);
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
@@ -2368,6 +2530,14 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
+	LocalDate getSlotOrDelegatePortLoadNominationDate();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
 	LocalDate getSlotOrDelegateVesselNominationDate();
 
 	/**
@@ -2417,6 +2587,14 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	boolean getSlotOrDelegatePortNominationCounterparty();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean getSlotOrDelegatePortLoadNominationCounterparty();
 
 } // end of  Slot
 

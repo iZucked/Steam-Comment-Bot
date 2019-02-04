@@ -57,6 +57,9 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isPortNominationCounterparty <em>Port Nomination Counterparty</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isDivertible <em>Divertible</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPortLoadNominationSize <em>Port Load Nomination Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPortLoadNominationSizeUnits <em>Port Load Nomination Size Units</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract()
@@ -626,6 +629,87 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setShippingDaysRestriction(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Port Load Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Load Nomination Size</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Load Nomination Size</em>' attribute.
+	 * @see #setPortLoadNominationSize(int)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_PortLoadNominationSize()
+	 * @model unique="false"
+	 * @generated
+	 */
+	int getPortLoadNominationSize();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getPortLoadNominationSize <em>Port Load Nomination Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Load Nomination Size</em>' attribute.
+	 * @see #getPortLoadNominationSize()
+	 * @generated
+	 */
+	void setPortLoadNominationSize(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Port Load Nomination Size Units</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.TimePeriod}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Load Nomination Size Units</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Load Nomination Size Units</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @see #setPortLoadNominationSizeUnits(TimePeriod)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_PortLoadNominationSizeUnits()
+	 * @model unique="false"
+	 * @generated
+	 */
+	TimePeriod getPortLoadNominationSizeUnits();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getPortLoadNominationSizeUnits <em>Port Load Nomination Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Load Nomination Size Units</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @see #getPortLoadNominationSizeUnits()
+	 * @generated
+	 */
+	void setPortLoadNominationSizeUnits(TimePeriod value);
+
+	/**
+	 * Returns the value of the '<em><b>Port Load Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Load Nomination Counterparty</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Load Nomination Counterparty</em>' attribute.
+	 * @see #setPortLoadNominationCounterparty(boolean)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_PortLoadNominationCounterparty()
+	 * @model unique="false"
+	 * @generated
+	 */
+	boolean isPortLoadNominationCounterparty();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Load Nomination Counterparty</em>' attribute.
+	 * @see #isPortLoadNominationCounterparty()
+	 * @generated
+	 */
+	void setPortLoadNominationCounterparty(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Vessel Nomination Size</b></em>' attribute.

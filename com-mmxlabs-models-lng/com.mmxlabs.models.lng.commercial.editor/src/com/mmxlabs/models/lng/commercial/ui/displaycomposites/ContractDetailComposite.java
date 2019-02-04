@@ -69,6 +69,9 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getContract_PortNominationCounterparty()
 				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_PortNominationSize()
 				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_PortNominationSizeUnits()
+				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_PortLoadNominationCounterparty()
+				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_PortLoadNominationSize()
+				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_PortLoadNominationSizeUnits()
 				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_WindowNominationCounterparty()
 				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_WindowNominationSize()
 				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_WindowNominationSizeUnits()
@@ -242,6 +245,31 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 						}
 						editor.setLabel(null);
 					} else if (feature == CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_COUNTERPARTY){
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Counterparty");
+						}
+						editor.setLabel(null);
+					}else {
+						editor.setLabel(null);
+					}
+					return gd;
+				}
+				
+				if (feature == CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE 
+						|| feature == CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS
+						|| feature == CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					gd.horizontalSpan = 1;
+					if (feature == CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE) {
+						gd.horizontalSpan = 3;
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Load Port nomination");
+						}
+						editor.setLabel(null);
+					} else if (feature == CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY){
 						final Label label = editor.getLabel();
 						if (label != null) {
 							label.setText("Counterparty");

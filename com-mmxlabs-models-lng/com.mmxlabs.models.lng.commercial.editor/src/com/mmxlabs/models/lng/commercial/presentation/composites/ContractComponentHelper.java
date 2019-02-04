@@ -105,6 +105,9 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_portNominationCounterpartyEditor(detailComposite, topClass);
 		add_divertibleEditor(detailComposite, topClass);
 		add_shippingDaysRestrictionEditor(detailComposite, topClass);
+		add_portLoadNominationSizeEditor(detailComposite, topClass);
+		add_portLoadNominationSizeUnitsEditor(detailComposite, topClass);
+		add_portLoadNominationCounterpartyEditor(detailComposite, topClass);
 	}
 	
 	/**
@@ -207,6 +210,33 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__SHIPPING_DAYS_RESTRICTION);
 		editor.addNotificationChangedListener(new DivertibleContractInlineEditorChangedListener());
 		detailComposite.addInlineEditor(editor);
+	}
+
+	/**
+	 * Create the editor for the portLoadNominationSize feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_portLoadNominationSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE));
+	}
+
+	/**
+	 * Create the editor for the portLoadNominationSizeUnits feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_portLoadNominationSizeUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS));
+	}
+
+	/**
+	 * Create the editor for the portLoadNominationCounterparty feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_portLoadNominationCounterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY));
 	}
 
 	/**

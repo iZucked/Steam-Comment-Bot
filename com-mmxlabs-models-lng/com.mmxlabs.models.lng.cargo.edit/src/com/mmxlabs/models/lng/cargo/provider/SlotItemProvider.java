@@ -100,6 +100,10 @@ public class SlotItemProvider
 			addPortNominationDonePropertyDescriptor(object);
 			addPortNominationCounterpartyPropertyDescriptor(object);
 			addPortNominationCommentPropertyDescriptor(object);
+			addPortLoadNominationDatePropertyDescriptor(object);
+			addPortLoadNominationDonePropertyDescriptor(object);
+			addPortLoadNominationCounterpartyPropertyDescriptor(object);
+			addPortLoadNominationCommentPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -1227,6 +1231,94 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Port Load Nomination Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortLoadNominationDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_portLoadNominationDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_portLoadNominationDate_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Port Load Nomination Done feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortLoadNominationDonePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_portLoadNominationDone_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_portLoadNominationDone_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DONE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Port Load Nomination Counterparty feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortLoadNominationCounterpartyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_portLoadNominationCounterparty_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_portLoadNominationCounterparty_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Port Load Nomination Comment feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortLoadNominationCommentPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_portLoadNominationComment_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_portLoadNominationComment_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COMMENT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1306,6 +1398,10 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__PORT_NOMINATION_DONE:
 			case CargoPackage.SLOT__PORT_NOMINATION_COUNTERPARTY:
 			case CargoPackage.SLOT__PORT_NOMINATION_COMMENT:
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DATE:
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DONE:
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY:
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

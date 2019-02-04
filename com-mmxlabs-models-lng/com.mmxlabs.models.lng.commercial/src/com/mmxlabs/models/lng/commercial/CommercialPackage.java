@@ -632,13 +632,40 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 35;
 
 	/**
+	 * The feature id for the '<em><b>Port Load Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__PORT_LOAD_NOMINATION_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 36;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 37;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 38;
+
+	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 36;
+	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 39;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -991,6 +1018,33 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__SHIPPING_DAYS_RESTRICTION = CONTRACT__SHIPPING_DAYS_RESTRICTION;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__PORT_LOAD_NOMINATION_SIZE = CONTRACT__PORT_LOAD_NOMINATION_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS = CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY = CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY;
 
 	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
@@ -1379,6 +1433,33 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int PURCHASE_CONTRACT__SHIPPING_DAYS_RESTRICTION = CONTRACT__SHIPPING_DAYS_RESTRICTION;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__PORT_LOAD_NOMINATION_SIZE = CONTRACT__PORT_LOAD_NOMINATION_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS = CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY = CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -2611,6 +2692,39 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getContract_ShippingDaysRestriction();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getPortLoadNominationSize <em>Port Load Nomination Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Port Load Nomination Size</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getPortLoadNominationSize()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_PortLoadNominationSize();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getPortLoadNominationSizeUnits <em>Port Load Nomination Size Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Port Load Nomination Size Units</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getPortLoadNominationSizeUnits()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_PortLoadNominationSizeUnits();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Port Load Nomination Counterparty</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#isPortLoadNominationCounterparty()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_PortLoadNominationCounterparty();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getVesselNominationSize <em>Vessel Nomination Size</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3558,6 +3672,30 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONTRACT__SHIPPING_DAYS_RESTRICTION = eINSTANCE.getContract_ShippingDaysRestriction();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Load Nomination Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__PORT_LOAD_NOMINATION_SIZE = eINSTANCE.getContract_PortLoadNominationSize();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Load Nomination Size Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS = eINSTANCE.getContract_PortLoadNominationSizeUnits();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Load Nomination Counterparty</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY = eINSTANCE.getContract_PortLoadNominationCounterparty();
 
 		/**
 		 * The meta object literal for the '<em><b>Vessel Nomination Size</b></em>' attribute feature.

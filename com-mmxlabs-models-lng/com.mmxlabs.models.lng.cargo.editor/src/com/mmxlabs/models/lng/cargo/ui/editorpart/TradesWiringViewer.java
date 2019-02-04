@@ -145,6 +145,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -777,6 +778,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						evt = evt.getPreviousEvent();
 					}
 
+				} else if (a instanceof OpenSlotAllocation){
+					final OpenSlotAllocation osa = (OpenSlotAllocation) a;
+					final Slot s = osa.getSlot();
+					if (s != null) {
+						aSet.add(s);
+					}
 				} else {
 					aSet.add(a);
 				}
