@@ -140,7 +140,7 @@ public class ParameterModesDialogTest {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.setWithCharterLength(false);
 		
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTEROUTGENERATION_ON).click(), u -> {
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTERLENGTH_ON).click(), u -> {
 			Assert.assertTrue(u.isWithCharterLength());
 			OptimisationHelper.mergeFields(u, settings);
 			Assert.assertTrue(settings.isWithCharterLength());
@@ -152,7 +152,7 @@ public class ParameterModesDialogTest {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.setWithCharterLength(true);
 		
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTEROUTGENERATION_OFF).click(), u -> {
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTERLENGTH_OFF).click(), u -> {
 			Assert.assertFalse(u.isWithCharterLength());
 			OptimisationHelper.mergeFields(u, settings);
 			Assert.assertFalse(settings.isWithCharterLength());
