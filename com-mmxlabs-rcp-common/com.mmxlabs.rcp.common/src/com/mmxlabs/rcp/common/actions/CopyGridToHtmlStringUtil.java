@@ -130,7 +130,7 @@ public class CopyGridToHtmlStringUtil {
 			if (columnGroup == null) {
 				// No group? Then cell bottom row cell should fill both header rows
 				addCell(topRow, "th", column.getText(),
-						combineAttributes(new String[] { colourString, String.format("rowSpan='%d'", table.getColumnGroupCount() > 0 ? 2 : 1) }, getAdditionalHeaderAttributes(column)));
+						combineAttributes(new String[] { colourString, String.format(" rowSpan='%d' ", table.getColumnGroupCount() > 0 ? 2 : 1) }, getAdditionalHeaderAttributes(column)));
 				addCell(singleRow, "th", column.getText(), combineAttributes(new String[] { colourString }, getAdditionalHeaderAttributes(column)));
 			} else {
 				// Part of column group. Only add group if we have not previously seen it.
@@ -141,7 +141,7 @@ public class CopyGridToHtmlStringUtil {
 							groupCount++;
 						}
 					}
-					addCell(topRow, "th", columnGroup.getText(), combineAttributes(new String[] { colourString, String.format("colSpan=%d", groupCount) }, getAdditionalHeaderAttributes(column)));
+					addCell(topRow, "th", columnGroup.getText(), combineAttributes(new String[] { colourString, String.format(" colSpan=%d ", groupCount) }, getAdditionalHeaderAttributes(column)));
 				}
 				// Add in the bottom row info.
 				addCell(bottomRow, "th", column.getText(), combineAttributes(new String[] { colourString }, getAdditionalHeaderAttributes(column)));
@@ -225,7 +225,7 @@ public class CopyGridToHtmlStringUtil {
 					colourString = "";
 				}
 				addCell(sw, item.getText(colIdx),
-						combineAttributes(new String[] { colourString, String.format("rowSpan='%d'", 1 + item.getRowSpan(colIdx)), String.format("colSpan='%d'", 1 + item.getColumnSpan(colIdx)) },
+						combineAttributes(new String[] { colourString, String.format(" rowSpan='%d' ", 1 + item.getRowSpan(colIdx)), String.format(" colSpan='%d' ", 1 + item.getColumnSpan(colIdx)) },
 								getAdditionalAttributes(item, colIdx)));
 				// Increment col idx.
 				// FIXME: Does this work correctly for sortable columns? No existing reports to test against.
