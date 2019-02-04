@@ -38,10 +38,16 @@ public class NominationsJSONGenerator {
 					final Nominations r = new Nominations(s, NominationType.VOLUME);
 					result.add(r);
 				}
-				// here we add volume nomination
+				// here we add port nomination
 				if (!s.isPortNominationDone()
 				&& s.getSlotOrDelegatePortNominationDate() != null) {
 					final Nominations r = new Nominations(s, NominationType.PORT);
+					result.add(r);
+				}
+				// 
+				if (!s.isPortLoadNominationDone()
+				&& s.getSlotOrDelegatePortLoadNominationDate() != null) {
+					final Nominations r = new Nominations(s, NominationType.PORT_2);
 					result.add(r);
 				}
 			}

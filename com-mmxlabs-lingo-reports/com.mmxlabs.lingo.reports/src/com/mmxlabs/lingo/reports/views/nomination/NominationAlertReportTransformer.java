@@ -75,7 +75,6 @@ public class NominationAlertReportTransformer {
 			this.scenario = scenario;
 			this.slot = slot;
 			this.slotId = slot.getName();
-			final Contract contract = slot.getContract();
 			if (slot instanceof DischargeSlot) {
 				DischargeSlot ds = (DischargeSlot) slot;
 				if (ds.getContract() != null) {
@@ -174,6 +173,25 @@ public class NominationAlertReportTransformer {
 				this.nomination = p.getName();
 			}
 				break;
+			case PORT_2:{
+				this.nominationType = slot instanceof LoadSlot ? "Discharge port" : "Load port";
+				this.nominateBy = slot.getSlotOrDelegatePortLoadNominationDate();
+				this.nominationComment = slot.getPortLoadNominationComment() != null ? slot.getPortLoadNominationComment() : "";
+				if (c == null) break;
+				Slot secondSlot = null;
+				for (final Slot s : c.getSlots()) {
+					if (slot instanceof LoadSlot && s instanceof DischargeSlot) {
+						secondSlot = s;
+					} else if (slot instanceof DischargeSlot && s instanceof LoadSlot) {
+						secondSlot = s;
+					}
+				}
+				if (secondSlot == null) break;
+				final Port p = secondSlot.getPort();
+				if (p == null) break;
+				this.nomination = p.getName();
+			}
+				break;
 			default:
 				this.nominationType = "";
 				this.nominationComment = "";
@@ -243,7 +261,7 @@ public class NominationAlertReportTransformer {
 	}
 	
 	public enum NominationType{
-		SLOT_DATE_0, SLOT_DATE_1, SLOT_DATE_2, VESSEL, VOLUME, PORT
+		SLOT_DATE_0, SLOT_DATE_1, SLOT_DATE_2, VESSEL, VOLUME, PORT, PORT_2
 	}
 
 	@NonNull
@@ -282,17 +300,16 @@ public class NominationAlertReportTransformer {
 			final RowData r = new RowData(scenario, s, pinned, NominationType.VOLUME);
 			result.add(r);
 		}
-		// here we add volume nomination
+		// here we add port nomination
 		if (!s.isPortNominationDone()
 		&& s.getSlotOrDelegatePortNominationDate() != null) {
 			final RowData r = new RowData(scenario, s, pinned, NominationType.PORT);
 			result.add(r);
 		}
-		
-		// here we add volume nomination
+		// here we add paired slot port nomination
 		if (!s.isPortLoadNominationDone()
 		&& s.getSlotOrDelegatePortLoadNominationDate() != null) {
-			final RowData r = new RowData(scenario, s, pinned, NominationType.PORT);
+			final RowData r = new RowData(scenario, s, pinned, NominationType.PORT_2);
 			result.add(r);
 		}
 	}

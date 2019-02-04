@@ -476,7 +476,11 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 						if (feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DATE) {
 							final Label label = editor.getLabel();
 							if (label != null) {
-								label.setText("Load Port");
+								if (value instanceof LoadSlot) {
+									label.setText("Discharge Port");
+								} else if (value instanceof DischargeSlot) {
+									label.setText("Load Port");
+								}
 							}
 							editor.setLabel(null);
 						} else if(feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY) {
