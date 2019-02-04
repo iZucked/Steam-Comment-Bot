@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.editor.SlotContractRestrictionsWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselEditorWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselInlineEditor;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.VolumeInlineEditor;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -133,6 +134,10 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_portNominationDoneEditor(detailComposite, topClass);
 		add_portNominationCounterpartyEditor(detailComposite, topClass);
 		add_portNominationCommentEditor(detailComposite, topClass);
+		add_portLoadNominationDateEditor(detailComposite, topClass);
+		add_portLoadNominationDoneEditor(detailComposite, topClass);
+		add_portLoadNominationCounterpartyEditor(detailComposite, topClass);
+		add_portLoadNominationCommentEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -454,6 +459,42 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		if (LicenseFeatures.isPermitted("features:nominations")) {
 			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_NOMINATION_COMMENT));
 		}
+	}
+
+	/**
+	 * Create the editor for the portLoadNominationDate feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_portLoadNominationDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DATE));
+	}
+
+	/**
+	 * Create the editor for the portLoadNominationDone feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_portLoadNominationDoneEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DONE));
+	}
+
+	/**
+	 * Create the editor for the portLoadNominationCounterparty feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_portLoadNominationCounterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY));
+	}
+
+	/**
+	 * Create the editor for the portLoadNominationComment feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_portLoadNominationCommentEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COMMENT));
 	}
 
 	/**

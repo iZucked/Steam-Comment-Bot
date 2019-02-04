@@ -76,31 +76,28 @@ public class NominationAlertReportTransformer {
 			this.slot = slot;
 			this.slotId = slot.getName();
 			final Contract contract = slot.getContract();
-			final Cargo c = slot.getCargo();
-			if (c != null) {
-				for (Slot s : c.getSlots()) {
-					if (s instanceof DischargeSlot) {
-						DischargeSlot ds = (DischargeSlot)s;
-						if (ds.getContract() != null) {
-							this.buyer = ds.getContract().getName();
-						}
-						//override if the counter-party is set explicitly
-						if (ds.getSlotOrDelegateCounterparty() != null) {
-							this.buyer = ds.getSlotOrDelegateCounterparty();
-						}
-					}
+			if (slot instanceof DischargeSlot) {
+				DischargeSlot ds = (DischargeSlot) slot;
+				if (ds.getContract() != null) {
+					this.buyer = ds.getContract().getName();
+				} else if (ds.getSlotOrDelegateCounterparty() != null) {
+					this.buyer = ds.getSlotOrDelegateCounterparty();
+				}
+				if (ds.getSlotOrDelegateEntity() != null) {
+					this.seller = ds.getSlotOrDelegateEntity().getName();
+				}
+			} else if (slot instanceof LoadSlot) {
+				LoadSlot ls = (LoadSlot) slot;
+				if (ls.getContract() != null) {
+					this.seller = ls.getContract().getName();
+				} else if (ls.getSlotOrDelegateCounterparty() != null) {
+					this.seller = ls.getSlotOrDelegateCounterparty();
+				}
+				if (ls.getSlotOrDelegateEntity() != null) {
+					this.buyer = ls.getSlotOrDelegateEntity().getName();
 				}
 			}
-			BaseLegalEntity entity = null;
-			if (contract != null) {
-				entity = contract.getEntity();
-			}
-			if (slot.getSlotOrDelegateEntity()!= null){
-				entity = slot.getSlotOrDelegateEntity();
-			}
-			if (entity != null) {
-				this.seller = entity.getName();
-			}
+			final Cargo c = slot.getCargo();
 			this.cn = slot.getSlotOrDelegateCN();
 			this.type = slot instanceof LoadSlot ? "Buy" : "Sell"; //for now
 			this.date = slot.getWindowStart();
@@ -257,34 +254,46 @@ public class NominationAlertReportTransformer {
 		assert scenarioModel != null;
 		final CargoModel cargoModel = scenarioModel.getCargoModel();
 		assert cargoModel != null;
-		for (final Cargo c : cargoModel.getCargoes()) {
-			for (final Slot s : c.getSlots()) {
-				//Only picking up the slots which are not done, and have a window nomination date
-				if (!s.isWindowNominationIsDone() && s.getSlotOrDelegateWindowNominationDate() != null) {
-					final RowData r = new RowData(scenario, s, pinned, NominationType.SLOT_DATE_0);
-					result.add(r);
-				}
-				// here we add vessel nomination
-				if (!s.isVesselNominationDone()
-				&& s.getSlotOrDelegateVesselNominationDate() != null) {
-					final RowData r = new RowData(scenario, s, pinned, NominationType.VESSEL);
-					result.add(r);
-				}
-				// here we add volume nomination
-				if (!s.isVolumeNominationDone()
-				&& s.getSlotOrDelegateVolumeNominationDate() != null) {
-					final RowData r = new RowData(scenario, s, pinned, NominationType.VOLUME);
-					result.add(r);
-				}
-				// here we add volume nomination
-				if (!s.isPortNominationDone()
-				&& s.getSlotOrDelegatePortNominationDate() != null) {
-					final RowData r = new RowData(scenario, s, pinned, NominationType.PORT);
-					result.add(r);
-				}
-			}
+		for(final Slot s : cargoModel.getDischargeSlots()) {
+				doTransform(pinned, scenario, result, s);
+		}
+		for(final Slot s : cargoModel.getLoadSlots()) {
+			doTransform(pinned, scenario, result, s);
 		}
 		
 		return result;
+	}
+
+	private void doTransform(boolean pinned, final String scenario, List<RowData> result, final Slot s) {
+		//Only picking up the slots which are not done, and have a window nomination date
+		if (!s.isWindowNominationIsDone() && s.getSlotOrDelegateWindowNominationDate() != null) {
+			final RowData r = new RowData(scenario, s, pinned, NominationType.SLOT_DATE_0);
+			result.add(r);
+		}
+		// here we add vessel nomination
+		if (!s.isVesselNominationDone()
+		&& s.getSlotOrDelegateVesselNominationDate() != null) {
+			final RowData r = new RowData(scenario, s, pinned, NominationType.VESSEL);
+			result.add(r);
+		}
+		// here we add volume nomination
+		if (!s.isVolumeNominationDone()
+		&& s.getSlotOrDelegateVolumeNominationDate() != null) {
+			final RowData r = new RowData(scenario, s, pinned, NominationType.VOLUME);
+			result.add(r);
+		}
+		// here we add volume nomination
+		if (!s.isPortNominationDone()
+		&& s.getSlotOrDelegatePortNominationDate() != null) {
+			final RowData r = new RowData(scenario, s, pinned, NominationType.PORT);
+			result.add(r);
+		}
+		
+		// here we add volume nomination
+		if (!s.isPortLoadNominationDone()
+		&& s.getSlotOrDelegatePortLoadNominationDate() != null) {
+			final RowData r = new RowData(scenario, s, pinned, NominationType.PORT);
+			result.add(r);
+		}
 	}
 }

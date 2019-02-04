@@ -149,6 +149,10 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/portNominationCounterparty"/>
       <genFeatures createChild="false" propertyDescription="Port nomination remark"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/portNominationComment"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/portLoadNominationDate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/portLoadNominationDone"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/portLoadNominationCounterparty"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/portLoadNominationComment"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateDuration"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMinQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMaxQuantity"/>
@@ -171,6 +175,7 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateCN"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateDivertible"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateShippingDaysRestriction"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortLoadNominationDate"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWindowNominationDate"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVesselNominationDate"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVolumeNominationDate"/>
@@ -179,6 +184,7 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVesselNominationCounterparty"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVolumeNominationCounterparty"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortNominationCounterparty"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortLoadNominationCounterparty"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//LoadSlot">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/cargoCV"/>

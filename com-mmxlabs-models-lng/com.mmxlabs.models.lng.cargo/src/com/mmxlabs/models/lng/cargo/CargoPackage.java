@@ -896,13 +896,49 @@ public interface CargoPackage extends EPackage {
 	int SLOT__PORT_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 50;
 
 	/**
+	 * The feature id for the '<em><b>Port Load Nomination Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__PORT_LOAD_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 51;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__PORT_LOAD_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 52;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 53;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__PORT_LOAD_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 54;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 51;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 55;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1139,13 +1175,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 22;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Load Nomination Date</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 23;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Window Nomination Date</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 23;
+	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 24;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Vessel Nomination Date</em>' operation.
@@ -1154,7 +1199,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 24;
+	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 25;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Volume Nomination Date</em>' operation.
@@ -1163,7 +1208,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_VOLUME_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 25;
+	int SLOT___GET_SLOT_OR_DELEGATE_VOLUME_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 26;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Port Nomination Date</em>' operation.
@@ -1172,7 +1217,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 26;
+	int SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 27;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Window Nomination Counterparty</em>' operation.
@@ -1181,7 +1226,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 27;
+	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 28;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Vessel Nomination Counterparty</em>' operation.
@@ -1190,7 +1235,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 28;
+	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 29;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Volume Nomination Counterparty</em>' operation.
@@ -1199,7 +1244,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_VOLUME_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 29;
+	int SLOT___GET_SLOT_OR_DELEGATE_VOLUME_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 30;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Port Nomination Counterparty</em>' operation.
@@ -1208,7 +1253,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 30;
+	int SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 31;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Load Nomination Counterparty</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 32;
 
 	/**
 	 * The number of operations of the '<em>Slot</em>' class.
@@ -1217,7 +1271,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 31;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 33;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1697,6 +1751,42 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__PORT_NOMINATION_COMMENT = SLOT__PORT_NOMINATION_COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Port Load Nomination Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__PORT_LOAD_NOMINATION_DATE = SLOT__PORT_LOAD_NOMINATION_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__PORT_LOAD_NOMINATION_DONE = SLOT__PORT_LOAD_NOMINATION_DONE;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY = SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__PORT_LOAD_NOMINATION_COMMENT = SLOT__PORT_LOAD_NOMINATION_COMMENT;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1985,6 +2075,15 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Load Nomination Date</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_DATE = SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_DATE;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Window Nomination Date</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2055,6 +2154,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY = SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Load Nomination Counterparty</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_COUNTERPARTY = SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_COUNTERPARTY;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -2561,6 +2669,42 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__PORT_NOMINATION_COMMENT = SLOT__PORT_NOMINATION_COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Port Load Nomination Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__PORT_LOAD_NOMINATION_DATE = SLOT__PORT_LOAD_NOMINATION_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__PORT_LOAD_NOMINATION_DONE = SLOT__PORT_LOAD_NOMINATION_DONE;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY = SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__PORT_LOAD_NOMINATION_COMMENT = SLOT__PORT_LOAD_NOMINATION_COMMENT;
+
+	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2849,6 +2993,15 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Load Nomination Date</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_DATE = SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_DATE;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Window Nomination Date</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2919,6 +3072,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY = SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Load Nomination Counterparty</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_COUNTERPARTY = SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_COUNTERPARTY;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -3517,6 +3679,42 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__PORT_NOMINATION_COMMENT = LOAD_SLOT__PORT_NOMINATION_COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Port Load Nomination Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__PORT_LOAD_NOMINATION_DATE = LOAD_SLOT__PORT_LOAD_NOMINATION_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__PORT_LOAD_NOMINATION_DONE = LOAD_SLOT__PORT_LOAD_NOMINATION_DONE;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY = LOAD_SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__PORT_LOAD_NOMINATION_COMMENT = LOAD_SLOT__PORT_LOAD_NOMINATION_COMMENT;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3814,6 +4012,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = LOAD_SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Load Nomination Date</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_DATE = LOAD_SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_DATE;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Window Nomination Date</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3884,6 +4091,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY = LOAD_SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Load Nomination Counterparty</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_COUNTERPARTY = LOAD_SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_COUNTERPARTY;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -4400,6 +4616,42 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__PORT_NOMINATION_COMMENT = DISCHARGE_SLOT__PORT_NOMINATION_COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Port Load Nomination Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__PORT_LOAD_NOMINATION_DATE = DISCHARGE_SLOT__PORT_LOAD_NOMINATION_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__PORT_LOAD_NOMINATION_DONE = DISCHARGE_SLOT__PORT_LOAD_NOMINATION_DONE;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY = DISCHARGE_SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY;
+
+	/**
+	 * The feature id for the '<em><b>Port Load Nomination Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__PORT_LOAD_NOMINATION_COMMENT = DISCHARGE_SLOT__PORT_LOAD_NOMINATION_COMMENT;
+
+	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4698,6 +4950,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Load Nomination Date</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_DATE = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_DATE;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Window Nomination Date</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4768,6 +5029,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Load Nomination Counterparty</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_COUNTERPARTY = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_COUNTERPARTY;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -8368,6 +8638,50 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_PortNominationComment();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getPortLoadNominationDate <em>Port Load Nomination Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Port Load Nomination Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getPortLoadNominationDate()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_PortLoadNominationDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isPortLoadNominationDone <em>Port Load Nomination Done</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Port Load Nomination Done</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isPortLoadNominationDone()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_PortLoadNominationDone();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Port Load Nomination Counterparty</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isPortLoadNominationCounterparty()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_PortLoadNominationCounterparty();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getPortLoadNominationComment <em>Port Load Nomination Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Port Load Nomination Comment</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getPortLoadNominationComment()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_PortLoadNominationComment();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateDuration() <em>Get Slot Or Delegate Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8610,6 +8924,16 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrDelegateShippingDaysRestriction();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatePortLoadNominationDate() <em>Get Slot Or Delegate Port Load Nomination Date</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Port Load Nomination Date</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatePortLoadNominationDate()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegatePortLoadNominationDate();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateVesselNominationDate() <em>Get Slot Or Delegate Vessel Nomination Date</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8678,6 +9002,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getSlot__GetSlotOrDelegatePortNominationCounterparty();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatePortLoadNominationCounterparty() <em>Get Slot Or Delegate Port Load Nomination Counterparty</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Port Load Nomination Counterparty</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatePortLoadNominationCounterparty()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegatePortLoadNominationCounterparty();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -11042,6 +11376,38 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__PORT_NOMINATION_COMMENT = eINSTANCE.getSlot_PortNominationComment();
 
 		/**
+		 * The meta object literal for the '<em><b>Port Load Nomination Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__PORT_LOAD_NOMINATION_DATE = eINSTANCE.getSlot_PortLoadNominationDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Load Nomination Done</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__PORT_LOAD_NOMINATION_DONE = eINSTANCE.getSlot_PortLoadNominationDone();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Load Nomination Counterparty</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY = eINSTANCE.getSlot_PortLoadNominationCounterparty();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Load Nomination Comment</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__PORT_LOAD_NOMINATION_COMMENT = eINSTANCE.getSlot_PortLoadNominationComment();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Duration</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11226,6 +11592,14 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = eINSTANCE.getSlot__GetSlotOrDelegateShippingDaysRestriction();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Port Load Nomination Date</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_DATE = eINSTANCE.getSlot__GetSlotOrDelegatePortLoadNominationDate();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Vessel Nomination Date</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11280,6 +11654,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY = eINSTANCE.getSlot__GetSlotOrDelegatePortNominationCounterparty();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Port Load Nomination Counterparty</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_COUNTERPARTY = eINSTANCE.getSlot__GetSlotOrDelegatePortLoadNominationCounterparty();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

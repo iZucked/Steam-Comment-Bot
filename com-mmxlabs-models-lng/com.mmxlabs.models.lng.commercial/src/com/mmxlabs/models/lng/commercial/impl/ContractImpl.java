@@ -72,6 +72,9 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isPortNominationCounterparty <em>Port Nomination Counterparty</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isDivertible <em>Divertible</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPortLoadNominationSize <em>Port Load Nomination Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPortLoadNominationSizeUnits <em>Port Load Nomination Size Units</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}</li>
  * </ul>
  *
  * @generated
@@ -765,6 +768,66 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	protected int shippingDaysRestriction = SHIPPING_DAYS_RESTRICTION_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #getPortLoadNominationSize() <em>Port Load Nomination Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortLoadNominationSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PORT_LOAD_NOMINATION_SIZE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getPortLoadNominationSize() <em>Port Load Nomination Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortLoadNominationSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected int portLoadNominationSize = PORT_LOAD_NOMINATION_SIZE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPortLoadNominationSizeUnits() <em>Port Load Nomination Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortLoadNominationSizeUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final TimePeriod PORT_LOAD_NOMINATION_SIZE_UNITS_EDEFAULT = TimePeriod.HOURS;
+
+	/**
+	 * The cached value of the '{@link #getPortLoadNominationSizeUnits() <em>Port Load Nomination Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortLoadNominationSizeUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected TimePeriod portLoadNominationSizeUnits = PORT_LOAD_NOMINATION_SIZE_UNITS_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isPortLoadNominationCounterparty() <em>Port Load Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPortLoadNominationCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isPortLoadNominationCounterparty() <em>Port Load Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPortLoadNominationCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean portLoadNominationCounterparty = PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1283,6 +1346,69 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getPortLoadNominationSize() {
+		return portLoadNominationSize;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortLoadNominationSize(int newPortLoadNominationSize) {
+		int oldPortLoadNominationSize = portLoadNominationSize;
+		portLoadNominationSize = newPortLoadNominationSize;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE, oldPortLoadNominationSize, portLoadNominationSize));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public TimePeriod getPortLoadNominationSizeUnits() {
+		return portLoadNominationSizeUnits;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortLoadNominationSizeUnits(TimePeriod newPortLoadNominationSizeUnits) {
+		TimePeriod oldPortLoadNominationSizeUnits = portLoadNominationSizeUnits;
+		portLoadNominationSizeUnits = newPortLoadNominationSizeUnits == null ? PORT_LOAD_NOMINATION_SIZE_UNITS_EDEFAULT : newPortLoadNominationSizeUnits;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS, oldPortLoadNominationSizeUnits, portLoadNominationSizeUnits));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isPortLoadNominationCounterparty() {
+		return portLoadNominationCounterparty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortLoadNominationCounterparty(boolean newPortLoadNominationCounterparty) {
+		boolean oldPortLoadNominationCounterparty = portLoadNominationCounterparty;
+		portLoadNominationCounterparty = newPortLoadNominationCounterparty;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY, oldPortLoadNominationCounterparty, portLoadNominationCounterparty));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getVesselNominationSize() {
 		return vesselNominationSize;
 	}
@@ -1739,6 +1865,12 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return isDivertible();
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				return getShippingDaysRestriction();
+			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE:
+				return getPortLoadNominationSize();
+			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS:
+				return getPortLoadNominationSizeUnits();
+			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY:
+				return isPortLoadNominationCounterparty();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1863,6 +1995,15 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				setShippingDaysRestriction((Integer)newValue);
 				return;
+			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE:
+				setPortLoadNominationSize((Integer)newValue);
+				return;
+			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS:
+				setPortLoadNominationSizeUnits((TimePeriod)newValue);
+				return;
+			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY:
+				setPortLoadNominationCounterparty((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1983,6 +2124,15 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				setShippingDaysRestriction(SHIPPING_DAYS_RESTRICTION_EDEFAULT);
 				return;
+			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE:
+				setPortLoadNominationSize(PORT_LOAD_NOMINATION_SIZE_EDEFAULT);
+				return;
+			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS:
+				setPortLoadNominationSizeUnits(PORT_LOAD_NOMINATION_SIZE_UNITS_EDEFAULT);
+				return;
+			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY:
+				setPortLoadNominationCounterparty(PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -2067,6 +2217,12 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return divertible != DIVERTIBLE_EDEFAULT;
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				return shippingDaysRestriction != SHIPPING_DAYS_RESTRICTION_EDEFAULT;
+			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE:
+				return portLoadNominationSize != PORT_LOAD_NOMINATION_SIZE_EDEFAULT;
+			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS:
+				return portLoadNominationSizeUnits != PORT_LOAD_NOMINATION_SIZE_UNITS_EDEFAULT;
+			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY:
+				return portLoadNominationCounterparty != PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -2173,6 +2329,12 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(divertible);
 		result.append(", shippingDaysRestriction: ");
 		result.append(shippingDaysRestriction);
+		result.append(", portLoadNominationSize: ");
+		result.append(portLoadNominationSize);
+		result.append(", portLoadNominationSizeUnits: ");
+		result.append(portLoadNominationSizeUnits);
+		result.append(", portLoadNominationCounterparty: ");
+		result.append(portLoadNominationCounterparty);
 		result.append(')');
 		return result.toString();
 	}

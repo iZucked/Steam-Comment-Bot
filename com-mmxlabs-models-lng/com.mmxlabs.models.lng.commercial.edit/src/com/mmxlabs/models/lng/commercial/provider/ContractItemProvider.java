@@ -87,6 +87,9 @@ public class ContractItemProvider
 			addPortNominationCounterpartyPropertyDescriptor(object);
 			addDivertiblePropertyDescriptor(object);
 			addShippingDaysRestrictionPropertyDescriptor(object);
+			addPortLoadNominationSizePropertyDescriptor(object);
+			addPortLoadNominationSizeUnitsPropertyDescriptor(object);
+			addPortLoadNominationCounterpartyPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -554,6 +557,72 @@ public class ContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Port Load Nomination Size feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortLoadNominationSizePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_portLoadNominationSize_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_portLoadNominationSize_feature", "_UI_Contract_type"),
+				 CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Port Load Nomination Size Units feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortLoadNominationSizeUnitsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_portLoadNominationSizeUnits_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_portLoadNominationSizeUnits_feature", "_UI_Contract_type"),
+				 CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Port Load Nomination Counterparty feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortLoadNominationCounterpartyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_portLoadNominationCounterparty_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_portLoadNominationCounterparty_feature", "_UI_Contract_type"),
+				 CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Vessel Nomination Size feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -980,6 +1049,9 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__PORT_NOMINATION_COUNTERPARTY:
 			case CommercialPackage.CONTRACT__DIVERTIBLE:
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
+			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE:
+			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS:
+			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CommercialPackage.CONTRACT__PRICE_INFO:

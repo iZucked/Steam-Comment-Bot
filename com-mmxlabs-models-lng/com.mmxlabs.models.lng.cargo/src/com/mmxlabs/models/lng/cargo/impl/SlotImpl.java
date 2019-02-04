@@ -106,6 +106,10 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isPortNominationDone <em>Port Nomination Done</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isPortNominationCounterparty <em>Port Nomination Counterparty</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPortNominationComment <em>Port Nomination Comment</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPortLoadNominationDate <em>Port Load Nomination Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isPortLoadNominationDone <em>Port Load Nomination Done</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPortLoadNominationComment <em>Port Load Nomination Comment</em>}</li>
  * </ul>
  *
  * @generated
@@ -1266,6 +1270,104 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected String portNominationComment = PORT_NOMINATION_COMMENT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPortLoadNominationDate() <em>Port Load Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortLoadNominationDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate PORT_LOAD_NOMINATION_DATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPortLoadNominationDate() <em>Port Load Nomination Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortLoadNominationDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate portLoadNominationDate = PORT_LOAD_NOMINATION_DATE_EDEFAULT;
+
+	/**
+	 * This is true if the Port Load Nomination Date attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean portLoadNominationDateESet;
+
+	/**
+	 * The default value of the '{@link #isPortLoadNominationDone() <em>Port Load Nomination Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPortLoadNominationDone()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean PORT_LOAD_NOMINATION_DONE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isPortLoadNominationDone() <em>Port Load Nomination Done</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPortLoadNominationDone()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean portLoadNominationDone = PORT_LOAD_NOMINATION_DONE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isPortLoadNominationCounterparty() <em>Port Load Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPortLoadNominationCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isPortLoadNominationCounterparty() <em>Port Load Nomination Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPortLoadNominationCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean portLoadNominationCounterparty = PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT;
+
+	/**
+	 * This is true if the Port Load Nomination Counterparty attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean portLoadNominationCounterpartyESet;
+
+	/**
+	 * The default value of the '{@link #getPortLoadNominationComment() <em>Port Load Nomination Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortLoadNominationComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String PORT_LOAD_NOMINATION_COMMENT_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPortLoadNominationComment() <em>Port Load Nomination Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortLoadNominationComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected String portLoadNominationComment = PORT_LOAD_NOMINATION_COMMENT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -3052,6 +3154,140 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public LocalDate getPortLoadNominationDate() {
+		return portLoadNominationDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortLoadNominationDate(LocalDate newPortLoadNominationDate) {
+		LocalDate oldPortLoadNominationDate = portLoadNominationDate;
+		portLoadNominationDate = newPortLoadNominationDate;
+		boolean oldPortLoadNominationDateESet = portLoadNominationDateESet;
+		portLoadNominationDateESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_LOAD_NOMINATION_DATE, oldPortLoadNominationDate, portLoadNominationDate, !oldPortLoadNominationDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetPortLoadNominationDate() {
+		LocalDate oldPortLoadNominationDate = portLoadNominationDate;
+		boolean oldPortLoadNominationDateESet = portLoadNominationDateESet;
+		portLoadNominationDate = PORT_LOAD_NOMINATION_DATE_EDEFAULT;
+		portLoadNominationDateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__PORT_LOAD_NOMINATION_DATE, oldPortLoadNominationDate, PORT_LOAD_NOMINATION_DATE_EDEFAULT, oldPortLoadNominationDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetPortLoadNominationDate() {
+		return portLoadNominationDateESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isPortLoadNominationDone() {
+		return portLoadNominationDone;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortLoadNominationDone(boolean newPortLoadNominationDone) {
+		boolean oldPortLoadNominationDone = portLoadNominationDone;
+		portLoadNominationDone = newPortLoadNominationDone;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_LOAD_NOMINATION_DONE, oldPortLoadNominationDone, portLoadNominationDone));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isPortLoadNominationCounterparty() {
+		return portLoadNominationCounterparty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortLoadNominationCounterparty(boolean newPortLoadNominationCounterparty) {
+		boolean oldPortLoadNominationCounterparty = portLoadNominationCounterparty;
+		portLoadNominationCounterparty = newPortLoadNominationCounterparty;
+		boolean oldPortLoadNominationCounterpartyESet = portLoadNominationCounterpartyESet;
+		portLoadNominationCounterpartyESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY, oldPortLoadNominationCounterparty, portLoadNominationCounterparty, !oldPortLoadNominationCounterpartyESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetPortLoadNominationCounterparty() {
+		boolean oldPortLoadNominationCounterparty = portLoadNominationCounterparty;
+		boolean oldPortLoadNominationCounterpartyESet = portLoadNominationCounterpartyESet;
+		portLoadNominationCounterparty = PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT;
+		portLoadNominationCounterpartyESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY, oldPortLoadNominationCounterparty, PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT, oldPortLoadNominationCounterpartyESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetPortLoadNominationCounterparty() {
+		return portLoadNominationCounterpartyESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getPortLoadNominationComment() {
+		return portLoadNominationComment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortLoadNominationComment(String newPortLoadNominationComment) {
+		String oldPortLoadNominationComment = portLoadNominationComment;
+		portLoadNominationComment = newPortLoadNominationComment;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT, oldPortLoadNominationComment, portLoadNominationComment));
+	}
+
+								/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EList<AVesselSet<Vessel>> getAllowedVessels() {
 		if (allowedVessels == null) {
 			allowedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, CargoPackage.SLOT__ALLOWED_VESSELS);
@@ -3381,6 +3617,15 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	public LocalDate getSlotOrDelegatePortLoadNominationDate() {
+		return (LocalDate) eGetWithDefault(CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DATE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
 	public LocalDate getSlotOrDelegateVesselNominationDate() {
 		return (LocalDate) eGetWithDefault(CargoPackage.Literals.SLOT__VESSEL_NOMINATION_DATE);
 	}
@@ -3437,6 +3682,15 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	public boolean getSlotOrDelegatePortNominationCounterparty() {
 		return (boolean) eGetWithDefault(CargoPackage.Literals.SLOT__PORT_NOMINATION_COUNTERPARTY);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public boolean getSlotOrDelegatePortLoadNominationCounterparty() {
+		return (boolean) eGetWithDefault(CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY);
 	}
 
 	/**
@@ -3600,6 +3854,14 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isPortNominationCounterparty();
 			case CargoPackage.SLOT__PORT_NOMINATION_COMMENT:
 				return getPortNominationComment();
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DATE:
+				return getPortLoadNominationDate();
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DONE:
+				return isPortLoadNominationDone();
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY:
+				return isPortLoadNominationCounterparty();
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT:
+				return getPortLoadNominationComment();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -3768,6 +4030,18 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__PORT_NOMINATION_COMMENT:
 				setPortNominationComment((String)newValue);
 				return;
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DATE:
+				setPortLoadNominationDate((LocalDate)newValue);
+				return;
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DONE:
+				setPortLoadNominationDone((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY:
+				setPortLoadNominationCounterparty((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT:
+				setPortLoadNominationComment((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -3932,6 +4206,18 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__PORT_NOMINATION_COMMENT:
 				setPortNominationComment(PORT_NOMINATION_COMMENT_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DATE:
+				unsetPortLoadNominationDate();
+				return;
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DONE:
+				setPortLoadNominationDone(PORT_LOAD_NOMINATION_DONE_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY:
+				unsetPortLoadNominationCounterparty();
+				return;
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT:
+				setPortLoadNominationComment(PORT_LOAD_NOMINATION_COMMENT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -4045,6 +4331,14 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isSetPortNominationCounterparty();
 			case CargoPackage.SLOT__PORT_NOMINATION_COMMENT:
 				return PORT_NOMINATION_COMMENT_EDEFAULT == null ? portNominationComment != null : !PORT_NOMINATION_COMMENT_EDEFAULT.equals(portNominationComment);
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DATE:
+				return isSetPortLoadNominationDate();
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DONE:
+				return portLoadNominationDone != PORT_LOAD_NOMINATION_DONE_EDEFAULT;
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY:
+				return isSetPortLoadNominationCounterparty();
+			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT:
+				return PORT_LOAD_NOMINATION_COMMENT_EDEFAULT == null ? portLoadNominationComment != null : !PORT_LOAD_NOMINATION_COMMENT_EDEFAULT.equals(portLoadNominationComment);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -4164,6 +4458,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSlotOrDelegateDivertible();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION:
 				return getSlotOrDelegateShippingDaysRestriction();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_DATE:
+				return getSlotOrDelegatePortLoadNominationDate();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE:
 				return getSlotOrDelegateWindowNominationDate();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VESSEL_NOMINATION_DATE:
@@ -4180,6 +4476,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSlotOrDelegateVolumeNominationCounterparty();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY:
 				return getSlotOrDelegatePortNominationCounterparty();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_COUNTERPARTY:
+				return getSlotOrDelegatePortLoadNominationCounterparty();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -4281,6 +4579,14 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		if (portNominationCounterpartyESet) result.append(portNominationCounterparty); else result.append("<unset>");
 		result.append(", portNominationComment: ");
 		result.append(portNominationComment);
+		result.append(", portLoadNominationDate: ");
+		if (portLoadNominationDateESet) result.append(portLoadNominationDate); else result.append("<unset>");
+		result.append(", portLoadNominationDone: ");
+		result.append(portLoadNominationDone);
+		result.append(", portLoadNominationCounterparty: ");
+		if (portLoadNominationCounterpartyESet) result.append(portLoadNominationCounterparty); else result.append("<unset>");
+		result.append(", portLoadNominationComment: ");
+		result.append(portLoadNominationComment);
 		result.append(')');
 		return result.toString();
 	}
@@ -4464,7 +4770,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				}
 				
 				public Object getValue(final EObject object) {
-					Object result = null;
+					Object result = false;
 					final Contract contract = (Contract) getContract();
 					if (contract != null) {
 						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_COUNTERPARTY)) {
@@ -4482,7 +4788,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				}
 				
 				public Object getValue(final EObject object) {
-					Object result = null;
+					Object result = false;
 					final Contract contract = (Contract) getContract();
 					if (contract != null) {
 						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_COUNTERPARTY)) {
@@ -4500,7 +4806,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				}
 				
 				public Object getValue(final EObject object) {
-					Object result = null;
+					Object result = false;
 					final Contract contract = (Contract) getContract();
 					if (contract != null) {
 						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_COUNTERPARTY)) {
@@ -4518,10 +4824,28 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				}
 				
 				public Object getValue(final EObject object) {
-					Object result = null;
+					Object result = false;
 					final Contract contract = (Contract) getContract();
 					if (contract != null) {
 						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_COUNTERPARTY)) {
+							result = ((Contract) contract).isPortNominationCounterparty();
+						}
+					}
+					return result;
+					
+				}	
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = false;
+					final Contract contract = (Contract) getContract();
+					if (contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY)) {
 							result = ((Contract) contract).isPortNominationCounterparty();
 						}
 					}
