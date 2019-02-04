@@ -95,6 +95,7 @@ public class SpotMarketMaker {
 			@Nullable final Double cv) {
 
 		final FOBPurchasesMarket market = SpotMarketsFactory.eINSTANCE.createFOBPurchasesMarket();
+		market.setName(name);
 		market.setPricingEvent(PricingEvent.START_LOAD);
 		market.setNotionalPort(notionalPort);
 		market.setEntity(entity);
@@ -119,6 +120,7 @@ public class SpotMarketMaker {
 			@NonNull final String priceExpression, @Nullable final Double cv) {
 
 		final DESPurchaseMarket market = SpotMarketsFactory.eINSTANCE.createDESPurchaseMarket();
+		market.setName(name);
 		market.setPricingEvent(PricingEvent.START_LOAD);
 		market.getDestinationPorts().addAll(ports);
 		market.setEntity(entity);
@@ -143,6 +145,7 @@ public class SpotMarketMaker {
 			@NonNull final String priceExpression) {
 
 		final FOBSalesMarket market = SpotMarketsFactory.eINSTANCE.createFOBSalesMarket();
+		market.setName(name);
 		market.setPricingEvent(PricingEvent.START_LOAD);
 		market.getOriginPorts().addAll(ports);
 		market.setEntity(entity);
@@ -161,6 +164,7 @@ public class SpotMarketMaker {
 	public DESSaleSpotMarketMaker withDESSaleMarket(@NonNull final String name, @NonNull final Port notionalPort, @Nullable final BaseLegalEntity entity, @NonNull final String priceExpression) {
 
 		final DESSalesMarket market = SpotMarketsFactory.eINSTANCE.createDESSalesMarket();
+		market.setName(name);
 		market.setPricingEvent(PricingEvent.START_LOAD);
 		market.setNotionalPort(notionalPort);
 		market.setEntity(entity);
