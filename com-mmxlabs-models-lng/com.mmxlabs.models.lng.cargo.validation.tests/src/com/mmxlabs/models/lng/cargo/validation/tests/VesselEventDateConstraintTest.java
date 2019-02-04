@@ -18,6 +18,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Matchers;
 
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.validation.VesselEventDateConstraint;
@@ -111,7 +113,7 @@ public class VesselEventDateConstraintTest {
 			// when(resultStatus.getSeverity()).thenReturn(IStatus.OK);
 		} else {
 			when(vesselEvent.getName()).thenReturn(vesselEventID);
-			when(validationContext.createFailureStatus(vesselEventID)).thenReturn(resultStatus);
+			when(validationContext.createFailureStatus(ArgumentMatchers.anyString())).thenReturn(resultStatus);
 			when(resultStatus.getSeverity()).thenReturn(IStatus.ERROR);
 		}
 
