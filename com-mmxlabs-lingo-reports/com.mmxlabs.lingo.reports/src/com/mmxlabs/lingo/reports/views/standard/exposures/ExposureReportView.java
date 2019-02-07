@@ -137,7 +137,10 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				final EList<CommodityIndex> indices = pm.getCommodityIndices();
 
 				for (final CommodityIndex index : indices) {
-					String indexName = index.getName();
+					final String indexName = index.getName();
+					if (indexName == null) {
+						continue;
+					}
 					result.add(new ColumnManager<IndexExposureData>(indexName) {
 						@Override
 						public String getColumnText(final IndexExposureData data) {
@@ -156,7 +159,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 						}
 					});
 				}
-				String indexName = "Physical";
+				final String indexName = "Physical";
 				result.add(new ColumnManager<IndexExposureData>(indexName) {
 					@Override
 					public String getColumnText(final IndexExposureData data) {
@@ -249,7 +252,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					.collect(Collectors.toList());
 
 			for (YearMonth cym = ymStart; cym.isBefore(ymEnd); cym = cym.plusMonths(1)) {
-				IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, mode, selected);
+				final IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, mode, selected);
 				if (exposuresByMonth.exposures.size() != 0.0) {
 					output.add(exposuresByMonth);
 				}
@@ -299,7 +302,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			public Object[] getElements(final Object inputElement) {
 
 				if (inputElement instanceof Collection<?>) {
-					Collection<?> collection = (Collection<?>) inputElement;
+					final Collection<?> collection = (Collection<?>) inputElement;
 					return collection.toArray();
 				}
 				return new Object[0];
@@ -311,13 +314,13 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			}
 
 			@Override
-			public Object[] getChildren(Object parentElement) {
+			public Object[] getChildren(final Object parentElement) {
 				if (parentElement instanceof Collection<?>) {
-					Collection<?> collection = (Collection<?>) parentElement;
+					final Collection<?> collection = (Collection<?>) parentElement;
 					return collection.toArray();
 				}
 				if (parentElement instanceof IndexExposureData) {
-					IndexExposureData indexExposureData = (IndexExposureData) parentElement;
+					final IndexExposureData indexExposureData = (IndexExposureData) parentElement;
 					if (indexExposureData.children != null) {
 						return indexExposureData.children.toArray();
 					}
@@ -326,12 +329,12 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			}
 
 			@Override
-			public Object getParent(Object element) {
+			public Object getParent(final Object element) {
 				return null;
 			}
 
 			@Override
-			public boolean hasChildren(Object element) {
+			public boolean hasChildren(final Object element) {
 				return element instanceof Collection<?> || (element instanceof IndexExposureData && ((IndexExposureData) element).children != null);
 			}
 		};
@@ -347,16 +350,16 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		final IndexExposureData modelData = pinData != null ? pinData : otherData;
 		final Map<String, Double> exposuresByMonth = new HashMap<>();
 
-		Collection<YearMonth> keys = new LinkedHashSet<>();
-		Map<YearMonth, IndexExposureData> pinChildren = new HashMap<>();
-		Map<YearMonth, IndexExposureData> otherChildren = new HashMap<>();
+		final Collection<YearMonth> keys = new LinkedHashSet<>();
+		final Map<YearMonth, IndexExposureData> pinChildren = new HashMap<>();
+		final Map<YearMonth, IndexExposureData> otherChildren = new HashMap<>();
 		if (pinData != null) {
 			for (final Map.Entry<String, Double> e : pinData.exposures.entrySet()) {
 				final double val = exposuresByMonth.getOrDefault(e.getKey(), 0.0);
 				exposuresByMonth.put(e.getKey(), val + e.getValue());
 			}
 			if (pinData.children != null) {
-				for (IndexExposureData d : pinData.children) {
+				for (final IndexExposureData d : pinData.children) {
 					keys.add(d.date);
 					pinChildren.put(d.date, d);
 				}
@@ -368,7 +371,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				exposuresByMonth.put(e.getKey(), val - e.getValue());
 			}
 			if (otherData.children != null) {
-				for (IndexExposureData d : otherData.children) {
+				for (final IndexExposureData d : otherData.children) {
 					keys.add(d.date);
 					otherChildren.put(d.date, d);
 				}
@@ -378,9 +381,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		List<IndexExposureData> newChildren = null;
 		if (!keys.isEmpty()) {
 			newChildren = new ArrayList<>(keys.size());
-			for (YearMonth key : keys) {
-				IndexExposureData childDiffData = createDiffData(pinChildren.get(key), otherChildren.get(key));
-				for (Double value : childDiffData.exposures.values()) {
+			for (final YearMonth key : keys) {
+				final IndexExposureData childDiffData = createDiffData(pinChildren.get(key), otherChildren.get(key));
+				for (final Double value : childDiffData.exposures.values()) {
 					if (value.doubleValue() != 0.0) {
 						newChildren.add(childDiffData);
 						break;
