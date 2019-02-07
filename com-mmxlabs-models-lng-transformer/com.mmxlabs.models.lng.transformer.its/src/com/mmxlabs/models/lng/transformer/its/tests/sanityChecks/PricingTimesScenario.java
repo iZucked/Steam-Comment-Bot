@@ -17,7 +17,7 @@ import org.junit.Assert;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
@@ -80,7 +80,7 @@ public class PricingTimesScenario {
 
 	void addTestCommodityIndexes() {
 		// add a commodity index to the pricing model
-		final CommodityIndex ci1 = csc.addCommodityIndex(dischargePriceIndexedA);
+		final CommodityCurve ci1 = csc.addCommodityIndex(dischargePriceIndexedA);
 		csc.addDataToCommodity(ci1, createYearMonth(2014, Calendar.JANUARY), 4.0);
 		// csc.addDataToCommodity(ci1, createYearMonth(2014, 0, 13), 4.5);
 		// csc.addDataToCommodity(ci1, createYearMonth(2014, 0, 31), 7.0);
@@ -88,7 +88,7 @@ public class PricingTimesScenario {
 		csc.addDataToCommodity(ci1, createYearMonth(2014, Calendar.MAY), 8.0);
 
 		// add a second commodity index to the pricing model
-		final CommodityIndex ci2 = csc.addCommodityIndex(dischargePriceIndexedB);
+		final CommodityCurve ci2 = csc.addCommodityIndex(dischargePriceIndexedB);
 		csc.addDataToCommodity(ci2, createYearMonth(2014, Calendar.JANUARY), 6.0);
 		// csc.addDataToCommodity(ci2, createYearMonth(2014, 0, 13), 6.5);
 		// csc.addDataToCommodity(ci2, createYearMonth(2014, 0, 31), 8.0);
@@ -96,7 +96,7 @@ public class PricingTimesScenario {
 		csc.addDataToCommodity(ci2, createYearMonth(2014, Calendar.MAY), 10.0);
 
 		// add a commodity index explicitly in UTC
-		final CommodityIndex ci3 = csc.addCommodityIndex("UTC");
+		final CommodityCurve ci3 = csc.addCommodityIndex("UTC");
 		csc.addDataToCommodity(ci3, createYearMonth(2014, Calendar.JANUARY), 4.0);
 		// csc.addDataToCommodity(ci3, createYearMonth(2014, 0, 31), 5.0);
 		csc.addDataToCommodity(ci3, createYearMonth(2014, Calendar.FEBRUARY), 10.0);

@@ -64,46 +64,48 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_currencyIndicesEditor(detailComposite, topClass);
-		add_commodityIndicesEditor(detailComposite, topClass);
-		add_charterIndicesEditor(detailComposite, topClass);
-		add_baseFuelPricesEditor(detailComposite, topClass);
+		add_currencyCurvesEditor(detailComposite, topClass);
+		add_commodityCurvesEditor(detailComposite, topClass);
+		add_charterCurvesEditor(detailComposite, topClass);
+		add_bunkerFuelCurvesEditor(detailComposite, topClass);
 		add_conversionFactorsEditor(detailComposite, topClass);
 		add_marketCurveDataVersionEditor(detailComposite, topClass);
 		add_settledPricesEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the currencyIndices feature on PricingModel
+	 * Create the editor for the currencyCurves feature on PricingModel
 	 *
 	 * @generated
 	 */
-	protected void add_currencyIndicesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES));
+	protected void add_currencyCurvesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES));
 	}
 
 	/**
-	 * Create the editor for the commodityIndices feature on PricingModel
+	 * Create the editor for the commodityCurves feature on PricingModel
 	 *
 	 * @generated
 	 */
-	protected void add_commodityIndicesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES));
+	protected void add_commodityCurvesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES));
 	}
+
 	/**
-	 * Create the editor for the charterIndices feature on PricingModel
+	 * Create the editor for the charterCurves feature on PricingModel
 	 *
 	 * @generated
 	 */
-	protected void add_charterIndicesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES));
+	protected void add_charterCurvesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES));
 	}
+
 	/**
-	 * Create the editor for the baseFuelPrices feature on PricingModel
+	 * Create the editor for the bunkerFuelCurves feature on PricingModel
 	 *
 	 * @generated
 	 */
-	protected void add_baseFuelPricesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES));
+	protected void add_bunkerFuelCurvesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES));
 	}
 
 	/**

@@ -89,10 +89,10 @@ public class PricingModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__CONVERSION_FACTORS);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES);
 		}
@@ -152,10 +152,10 @@ public class PricingModelItemProvider
 			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case PricingPackage.PRICING_MODEL__CURRENCY_INDICES:
-			case PricingPackage.PRICING_MODEL__COMMODITY_INDICES:
-			case PricingPackage.PRICING_MODEL__CHARTER_INDICES:
-			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
+			case PricingPackage.PRICING_MODEL__CURRENCY_CURVES:
+			case PricingPackage.PRICING_MODEL__COMMODITY_CURVES:
+			case PricingPackage.PRICING_MODEL__CHARTER_CURVES:
+			case PricingPackage.PRICING_MODEL__BUNKER_FUEL_CURVES:
 			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
@@ -177,23 +177,23 @@ public class PricingModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES,
-				 PricingFactory.eINSTANCE.createCurrencyIndex()));
+				(PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES,
+				 PricingFactory.eINSTANCE.createCurrencyCurve()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES,
-				 PricingFactory.eINSTANCE.createCommodityIndex()));
+				(PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES,
+				 PricingFactory.eINSTANCE.createCommodityCurve()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES,
-				 PricingFactory.eINSTANCE.createCharterIndex()));
+				(PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES,
+				 PricingFactory.eINSTANCE.createCharterCurve()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES,
-				 PricingFactory.eINSTANCE.createBaseFuelIndex()));
+				(PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES,
+				 PricingFactory.eINSTANCE.createBunkerFuelCurve()));
 
 		newChildDescriptors.add
 			(createChildParameter

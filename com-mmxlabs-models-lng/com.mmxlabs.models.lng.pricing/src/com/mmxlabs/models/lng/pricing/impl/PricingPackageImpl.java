@@ -16,20 +16,20 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
+import com.mmxlabs.models.lng.pricing.CharterCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DatePoint;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.PortCost;
@@ -44,6 +44,8 @@ import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
 import com.mmxlabs.models.lng.pricing.SuezCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.SuezCanalTugBand;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
+import com.mmxlabs.models.lng.pricing.YearMonthPointContainer;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
@@ -94,13 +96,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass currencyIndexEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass routeCostEClass = null;
 
 	/**
@@ -130,34 +125,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	private EClass cooldownPriceEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass commodityIndexEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass charterIndexEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass baseFuelIndexEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass namedIndexContainerEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -237,6 +204,55 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	private EClass datePointEClass = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass yearMonthPointContainerEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass yearMonthPointEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass abstractYearMonthCurveEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass commodityCurveEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass charterCurveEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass bunkerFuelCurveEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass currencyCurveEClass = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -264,7 +280,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link PricingPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -278,7 +294,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		if (isInited) return (PricingPackage)EPackage.Registry.INSTANCE.getEPackage(PricingPackage.eNS_URI);
 
 		// Obtain or create and register package
-		PricingPackageImpl thePricingPackage = (PricingPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof PricingPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new PricingPackageImpl());
+		Object registeredPricingPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		PricingPackageImpl thePricingPackage = registeredPricingPackage instanceof PricingPackageImpl ? (PricingPackageImpl)registeredPricingPackage : new PricingPackageImpl();
 
 		isInited = true;
 
@@ -298,7 +315,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		// Mark meta-data to indicate it can't be changed
 		thePricingPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(PricingPackage.eNS_URI, thePricingPackage);
 		return thePricingPackage;
@@ -318,7 +334,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getPricingModel_CurrencyIndices() {
+	public EReference getPricingModel_CurrencyCurves() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -327,7 +343,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getPricingModel_CommodityIndices() {
+	public EReference getPricingModel_CommodityCurves() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -336,7 +352,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getPricingModel_CharterIndices() {
+	public EReference getPricingModel_CharterCurves() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -345,7 +361,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getPricingModel_BaseFuelPrices() {
+	public EReference getPricingModel_BunkerFuelCurves() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -446,15 +462,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 */
 	public EClass getIndex() {
 		return indexEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getCurrencyIndex() {
-		return currencyIndexEClass;
 	}
 
 	/**
@@ -608,69 +615,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 */
 	public EAttribute getCooldownPrice_Lumpsum() {
 		return (EAttribute)cooldownPriceEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getCommodityIndex() {
-		return commodityIndexEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getCharterIndex() {
-		return charterIndexEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getBaseFuelIndex() {
-		return baseFuelIndexEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getNamedIndexContainer() {
-		return namedIndexContainerEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getNamedIndexContainer_Data() {
-		return (EReference)namedIndexContainerEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getNamedIndexContainer_CurrencyUnit() {
-		return (EAttribute)namedIndexContainerEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getNamedIndexContainer_VolumeUnit() {
-		return (EAttribute)namedIndexContainerEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1110,6 +1054,123 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getYearMonthPointContainer() {
+		return yearMonthPointContainerEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getYearMonthPointContainer_Points() {
+		return (EReference)yearMonthPointContainerEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getYearMonthPoint() {
+		return yearMonthPointEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getYearMonthPoint_Date() {
+		return (EAttribute)yearMonthPointEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getYearMonthPoint_Value() {
+		return (EAttribute)yearMonthPointEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getAbstractYearMonthCurve() {
+		return abstractYearMonthCurveEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAbstractYearMonthCurve_CurrencyUnit() {
+		return (EAttribute)abstractYearMonthCurveEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAbstractYearMonthCurve_VolumeUnit() {
+		return (EAttribute)abstractYearMonthCurveEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAbstractYearMonthCurve_Expression() {
+		return (EAttribute)abstractYearMonthCurveEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCommodityCurve() {
+		return commodityCurveEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCharterCurve() {
+		return charterCurveEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getBunkerFuelCurve() {
+		return bunkerFuelCurveEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCurrencyCurve() {
+		return currencyCurveEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public PricingFactory getPricingFactory() {
 		return (PricingFactory)getEFactoryInstance();
 	}
@@ -1134,10 +1195,10 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		// Create classes and their features
 		pricingModelEClass = createEClass(PRICING_MODEL);
-		createEReference(pricingModelEClass, PRICING_MODEL__CURRENCY_INDICES);
-		createEReference(pricingModelEClass, PRICING_MODEL__COMMODITY_INDICES);
-		createEReference(pricingModelEClass, PRICING_MODEL__CHARTER_INDICES);
-		createEReference(pricingModelEClass, PRICING_MODEL__BASE_FUEL_PRICES);
+		createEReference(pricingModelEClass, PRICING_MODEL__CURRENCY_CURVES);
+		createEReference(pricingModelEClass, PRICING_MODEL__COMMODITY_CURVES);
+		createEReference(pricingModelEClass, PRICING_MODEL__CHARTER_CURVES);
+		createEReference(pricingModelEClass, PRICING_MODEL__BUNKER_FUEL_CURVES);
 		createEReference(pricingModelEClass, PRICING_MODEL__CONVERSION_FACTORS);
 		createEAttribute(pricingModelEClass, PRICING_MODEL__MARKET_CURVE_DATA_VERSION);
 		createEReference(pricingModelEClass, PRICING_MODEL__SETTLED_PRICES);
@@ -1153,19 +1214,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEAttribute(indexPointEClass, INDEX_POINT__VALUE);
 
 		indexEClass = createEClass(INDEX);
-
-		currencyIndexEClass = createEClass(CURRENCY_INDEX);
-
-		commodityIndexEClass = createEClass(COMMODITY_INDEX);
-
-		charterIndexEClass = createEClass(CHARTER_INDEX);
-
-		baseFuelIndexEClass = createEClass(BASE_FUEL_INDEX);
-
-		namedIndexContainerEClass = createEClass(NAMED_INDEX_CONTAINER);
-		createEReference(namedIndexContainerEClass, NAMED_INDEX_CONTAINER__DATA);
-		createEAttribute(namedIndexContainerEClass, NAMED_INDEX_CONTAINER__CURRENCY_UNIT);
-		createEAttribute(namedIndexContainerEClass, NAMED_INDEX_CONTAINER__VOLUME_UNIT);
 
 		costModelEClass = createEClass(COST_MODEL);
 		createEReference(costModelEClass, COST_MODEL__ROUTE_COSTS);
@@ -1247,6 +1295,26 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		datePointEClass = createEClass(DATE_POINT);
 		createEAttribute(datePointEClass, DATE_POINT__DATE);
 		createEAttribute(datePointEClass, DATE_POINT__VALUE);
+
+		yearMonthPointContainerEClass = createEClass(YEAR_MONTH_POINT_CONTAINER);
+		createEReference(yearMonthPointContainerEClass, YEAR_MONTH_POINT_CONTAINER__POINTS);
+
+		yearMonthPointEClass = createEClass(YEAR_MONTH_POINT);
+		createEAttribute(yearMonthPointEClass, YEAR_MONTH_POINT__DATE);
+		createEAttribute(yearMonthPointEClass, YEAR_MONTH_POINT__VALUE);
+
+		abstractYearMonthCurveEClass = createEClass(ABSTRACT_YEAR_MONTH_CURVE);
+		createEAttribute(abstractYearMonthCurveEClass, ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT);
+		createEAttribute(abstractYearMonthCurveEClass, ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT);
+		createEAttribute(abstractYearMonthCurveEClass, ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION);
+
+		commodityCurveEClass = createEClass(COMMODITY_CURVE);
+
+		charterCurveEClass = createEClass(CHARTER_CURVE);
+
+		bunkerFuelCurveEClass = createEClass(BUNKER_FUEL_CURVE);
+
+		currencyCurveEClass = createEClass(CURRENCY_CURVE);
 	}
 
 	/**
@@ -1284,7 +1352,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		ETypeParameter derivedIndexEClass_Value = addETypeParameter(derivedIndexEClass, "Value");
 		ETypeParameter indexPointEClass_Value = addETypeParameter(indexPointEClass, "Value");
 		ETypeParameter indexEClass_Value = addETypeParameter(indexEClass, "Value");
-		ETypeParameter namedIndexContainerEClass_Value = addETypeParameter(namedIndexContainerEClass, "Value");
 
 		// Set bounds for type parameters
 
@@ -1298,24 +1365,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g2 = createEGenericType(derivedIndexEClass_Value);
 		g1.getETypeArguments().add(g2);
 		derivedIndexEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getNamedIndexContainer());
-		g2 = createEGenericType(ecorePackage.getEDoubleObject());
-		g1.getETypeArguments().add(g2);
-		currencyIndexEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getNamedIndexContainer());
-		g2 = createEGenericType(ecorePackage.getEDoubleObject());
-		g1.getETypeArguments().add(g2);
-		commodityIndexEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getNamedIndexContainer());
-		g2 = createEGenericType(ecorePackage.getEIntegerObject());
-		g1.getETypeArguments().add(g2);
-		charterIndexEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getNamedIndexContainer());
-		g2 = createEGenericType(ecorePackage.getEDoubleObject());
-		g1.getETypeArguments().add(g2);
-		baseFuelIndexEClass.getEGenericSuperTypes().add(g1);
-		namedIndexContainerEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		namedIndexContainerEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		costModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		routeCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		baseFuelCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
@@ -1325,13 +1374,20 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		portsSplitExpressionMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		datePointContainerEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		datePointContainerEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		yearMonthPointContainerEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		yearMonthPointContainerEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		abstractYearMonthCurveEClass.getESuperTypes().add(this.getYearMonthPointContainer());
+		commodityCurveEClass.getESuperTypes().add(this.getAbstractYearMonthCurve());
+		charterCurveEClass.getESuperTypes().add(this.getAbstractYearMonthCurve());
+		bunkerFuelCurveEClass.getESuperTypes().add(this.getAbstractYearMonthCurve());
+		currencyCurveEClass.getESuperTypes().add(this.getAbstractYearMonthCurve());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(pricingModelEClass, PricingModel.class, "PricingModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getPricingModel_CurrencyIndices(), this.getCurrencyIndex(), null, "currencyIndices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPricingModel_CommodityIndices(), this.getCommodityIndex(), null, "commodityIndices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPricingModel_CharterIndices(), this.getCharterIndex(), null, "charterIndices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPricingModel_BaseFuelPrices(), this.getBaseFuelIndex(), null, "baseFuelPrices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_CurrencyCurves(), this.getCurrencyCurve(), null, "currencyCurves", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_CommodityCurves(), this.getCommodityCurve(), null, "commodityCurves", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_CharterCurves(), this.getCharterCurve(), null, "charterCurves", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_BunkerFuelCurves(), this.getBunkerFuelCurve(), null, "bunkerFuelCurves", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_ConversionFactors(), this.getUnitConversion(), null, "conversionFactors", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPricingModel_MarketCurveDataVersion(), ecorePackage.getEString(), "marketCurveDataVersion", null, 0, 1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_SettledPrices(), this.getDatePointContainer(), null, "settledPrices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1368,22 +1424,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		addEParameter(op, theDateTimePackage.getYearMonth(), "date", 1, 1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(indexEClass_Value);
 		initEOperation(op, g1);
-
-		initEClass(currencyIndexEClass, CurrencyIndex.class, "CurrencyIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(commodityIndexEClass, CommodityIndex.class, "CommodityIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(charterIndexEClass, CharterIndex.class, "CharterIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(baseFuelIndexEClass, BaseFuelIndex.class, "BaseFuelIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(namedIndexContainerEClass, NamedIndexContainer.class, "NamedIndexContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getIndex());
-		g2 = createEGenericType(namedIndexContainerEClass_Value);
-		g1.getETypeArguments().add(g2);
-		initEReference(getNamedIndexContainer_Data(), g1, null, "data", null, 1, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getNamedIndexContainer_CurrencyUnit(), ecorePackage.getEString(), "currencyUnit", null, 0, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getNamedIndexContainer_VolumeUnit(), ecorePackage.getEString(), "volumeUnit", null, 0, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(costModelEClass, CostModel.class, "CostModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCostModel_RouteCosts(), this.getRouteCost(), null, "routeCosts", null, 0, -1, CostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1482,6 +1522,29 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEAttribute(getDatePoint_Date(), theDateTimePackage.getLocalDate(), "date", null, 0, 1, DatePoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDatePoint_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, DatePoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(yearMonthPointContainerEClass, YearMonthPointContainer.class, "YearMonthPointContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getYearMonthPointContainer_Points(), this.getYearMonthPoint(), null, "points", null, 1, -1, YearMonthPointContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		op = addEOperation(yearMonthPointContainerEClass, ecorePackage.getEDoubleObject(), "valueForMonth", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, theDateTimePackage.getYearMonth(), "month", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(yearMonthPointEClass, YearMonthPoint.class, "YearMonthPoint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getYearMonthPoint_Date(), theDateTimePackage.getYearMonth(), "date", null, 0, 1, YearMonthPoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getYearMonthPoint_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, YearMonthPoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(abstractYearMonthCurveEClass, AbstractYearMonthCurve.class, "AbstractYearMonthCurve", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAbstractYearMonthCurve_CurrencyUnit(), ecorePackage.getEString(), "currencyUnit", null, 0, 1, AbstractYearMonthCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAbstractYearMonthCurve_VolumeUnit(), ecorePackage.getEString(), "volumeUnit", null, 0, 1, AbstractYearMonthCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAbstractYearMonthCurve_Expression(), ecorePackage.getEString(), "expression", null, 1, 1, AbstractYearMonthCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(commodityCurveEClass, CommodityCurve.class, "CommodityCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(charterCurveEClass, CharterCurve.class, "CharterCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(bunkerFuelCurveEClass, BunkerFuelCurve.class, "BunkerFuelCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(currencyCurveEClass, CurrencyCurve.class, "CurrencyCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
 		// Create resource
 		createResource(eNS_URI);
 
@@ -1499,163 +1562,163 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	protected void createNumberFormatAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/numberFormat";	
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";
 		addAnnotation
-		  (getRouteCost_LadenCost(), 
-		   source, 
+		  (getRouteCost_LadenCost(),
+		   source,
 		   new String[] {
-			 "unitPrefix", "$",
-			 "formatString", "##,###,##0"
-		   });	
-		addAnnotation
-		  (getRouteCost_BallastCost(), 
-		   source, 
-		   new String[] {
-			 "unitPrefix", "$",
-			 "formatString", "##,###,##0"
-		   });	
-		addAnnotation
-		  (getPortCost_ReferenceCapacity(), 
-		   source, 
-		   new String[] {
-			 "unit", "m\u00b3",
-			 "formatString", "#,###,##0"
-		   });	
-		addAnnotation
-		  (getPortCostEntry_Cost(), 
-		   source, 
-		   new String[] {
-			 "unitPrefix", "$",
-			 "formatString", "##,###,##0"
-		   });	
-		addAnnotation
-		  (getPanamaCanalTariff_MarkupRate(), 
-		   source, 
-		   new String[] {
-			 "scale", "100",
-			 "formatString", "##0.#",
-			 "unit", "%"
-		   });	
-		addAnnotation
-		  (getPanamaCanalTariffBand_LadenTariff(), 
-		   source, 
-		   new String[] {
-			 "unitPrefix", "$",
-			 "formatString", "#0.###"
-		   });	
-		addAnnotation
-		  (getPanamaCanalTariffBand_BallastTariff(), 
-		   source, 
-		   new String[] {
-			 "unitPrefix", "$",
-			 "formatString", "#0.###"
-		   });	
-		addAnnotation
-		  (getPanamaCanalTariffBand_BallastRoundtripTariff(), 
-		   source, 
-		   new String[] {
-			 "unitPrefix", "$",
-			 "formatString", "#0.###"
-		   });	
-		addAnnotation
-		  (getPanamaCanalTariffBand_BandStart(), 
-		   source, 
-		   new String[] {
-			 "unitSuffix", "m3\r\n",
-			 "formatString", "##,###,##0"
-		   });	
-		addAnnotation
-		  (getPanamaCanalTariffBand_BandEnd(), 
-		   source, 
-		   new String[] {
-			 "unitSuffix", "m3\r\n",
-			 "formatString", "##,###,##0"
-		   });	
-		addAnnotation
-		  (getSuezCanalTugBand_Tugs(), 
-		   source, 
-		   new String[] {
-			 "unitPrefix", "$",
-			 "formatString", "#0.###"
-		   });	
-		addAnnotation
-		  (getSuezCanalTugBand_BandStart(), 
-		   source, 
-		   new String[] {
-			 "unitSuffix", "m3\r\n",
-			 "formatString", "##,###,##0"
-		   });	
-		addAnnotation
-		  (getSuezCanalTugBand_BandEnd(), 
-		   source, 
-		   new String[] {
-			 "unitSuffix", "m3\r\n",
-			 "formatString", "##,###,##0"
-		   });	
-		addAnnotation
-		  (getSuezCanalTariff_TugCost(), 
-		   source, 
-		   new String[] {
-			 "unitPrefix", "$",
-			 "formatString", "##,###,##0"
-		   });	
-		addAnnotation
-		  (getSuezCanalTariff_FixedCosts(), 
-		   source, 
-		   new String[] {
-			 "unitPrefix", "$",
-			 "formatString", "##,###,##0"
-		   });	
-		addAnnotation
-		  (getSuezCanalTariff_DiscountFactor(), 
-		   source, 
-		   new String[] {
-			 "scale", "100",
-			 "formatString", "##0.#",
-			 "unit", "%"
-		   });	
-		addAnnotation
-		  (getSuezCanalTariffBand_LadenTariff(), 
-		   source, 
-		   new String[] {
-			 "unitPrefix", "SDR",
-			 "formatString", "#0.###"
-		   });	
-		addAnnotation
-		  (getSuezCanalTariffBand_BallastTariff(), 
-		   source, 
-		   new String[] {
-			 "unitPrefix", "SDR",
-			 "formatString", "#0.###"
-		   });	
-		addAnnotation
-		  (getSuezCanalTariffBand_BandStart(), 
-		   source, 
-		   new String[] {
-			 "unitSuffix", "m3\r\n",
-			 "formatString", "##,###,##0"
-		   });	
-		addAnnotation
-		  (getSuezCanalTariffBand_BandEnd(), 
-		   source, 
-		   new String[] {
-			 "unitSuffix", "m3\r\n",
-			 "formatString", "##,###,##0"
-		   });	
-		addAnnotation
-		  (getUnitConversion_Factor(), 
-		   source, 
-		   new String[] {
-			 "formatString", "######0.######"
+			   "unitPrefix", "$",
+			   "formatString", "##,###,##0"
 		   });
 		addAnnotation
-		  (getUnitConversion_Factor(), 
+		  (getRouteCost_BallastCost(),
+		   source,
+		   new String[] {
+			   "unitPrefix", "$",
+			   "formatString", "##,###,##0"
+		   });
+		addAnnotation
+		  (getPortCost_ReferenceCapacity(),
+		   source,
+		   new String[] {
+			   "unit", "m\u00b3",
+			   "formatString", "#,###,##0"
+		   });
+		addAnnotation
+		  (getPortCostEntry_Cost(),
+		   source,
+		   new String[] {
+			   "unitPrefix", "$",
+			   "formatString", "##,###,##0"
+		   });
+		addAnnotation
+		  (getPanamaCanalTariff_MarkupRate(),
+		   source,
+		   new String[] {
+			   "scale", "100",
+			   "formatString", "##0.#",
+			   "unit", "%"
+		   });
+		addAnnotation
+		  (getPanamaCanalTariffBand_LadenTariff(),
+		   source,
+		   new String[] {
+			   "unitPrefix", "$",
+			   "formatString", "#0.###"
+		   });
+		addAnnotation
+		  (getPanamaCanalTariffBand_BallastTariff(),
+		   source,
+		   new String[] {
+			   "unitPrefix", "$",
+			   "formatString", "#0.###"
+		   });
+		addAnnotation
+		  (getPanamaCanalTariffBand_BallastRoundtripTariff(),
+		   source,
+		   new String[] {
+			   "unitPrefix", "$",
+			   "formatString", "#0.###"
+		   });
+		addAnnotation
+		  (getPanamaCanalTariffBand_BandStart(),
+		   source,
+		   new String[] {
+			   "unitSuffix", "m3\r\n",
+			   "formatString", "##,###,##0"
+		   });
+		addAnnotation
+		  (getPanamaCanalTariffBand_BandEnd(),
+		   source,
+		   new String[] {
+			   "unitSuffix", "m3\r\n",
+			   "formatString", "##,###,##0"
+		   });
+		addAnnotation
+		  (getSuezCanalTugBand_Tugs(),
+		   source,
+		   new String[] {
+			   "unitPrefix", "$",
+			   "formatString", "#0.###"
+		   });
+		addAnnotation
+		  (getSuezCanalTugBand_BandStart(),
+		   source,
+		   new String[] {
+			   "unitSuffix", "m3\r\n",
+			   "formatString", "##,###,##0"
+		   });
+		addAnnotation
+		  (getSuezCanalTugBand_BandEnd(),
+		   source,
+		   new String[] {
+			   "unitSuffix", "m3\r\n",
+			   "formatString", "##,###,##0"
+		   });
+		addAnnotation
+		  (getSuezCanalTariff_TugCost(),
+		   source,
+		   new String[] {
+			   "unitPrefix", "$",
+			   "formatString", "##,###,##0"
+		   });
+		addAnnotation
+		  (getSuezCanalTariff_FixedCosts(),
+		   source,
+		   new String[] {
+			   "unitPrefix", "$",
+			   "formatString", "##,###,##0"
+		   });
+		addAnnotation
+		  (getSuezCanalTariff_DiscountFactor(),
+		   source,
+		   new String[] {
+			   "scale", "100",
+			   "formatString", "##0.#",
+			   "unit", "%"
+		   });
+		addAnnotation
+		  (getSuezCanalTariffBand_LadenTariff(),
+		   source,
+		   new String[] {
+			   "unitPrefix", "SDR",
+			   "formatString", "#0.###"
+		   });
+		addAnnotation
+		  (getSuezCanalTariffBand_BallastTariff(),
+		   source,
+		   new String[] {
+			   "unitPrefix", "SDR",
+			   "formatString", "#0.###"
+		   });
+		addAnnotation
+		  (getSuezCanalTariffBand_BandStart(),
+		   source,
+		   new String[] {
+			   "unitSuffix", "m3\r\n",
+			   "formatString", "##,###,##0"
+		   });
+		addAnnotation
+		  (getSuezCanalTariffBand_BandEnd(),
+		   source,
+		   new String[] {
+			   "unitSuffix", "m3\r\n",
+			   "formatString", "##,###,##0"
+		   });
+		addAnnotation
+		  (getUnitConversion_Factor(),
+		   source,
+		   new String[] {
+			   "formatString", "######0.######"
+		   });
+		addAnnotation
+		  (getUnitConversion_Factor(),
 		   new boolean[] { true },
 		   "http://www.mmxlabs.com/models/ui/numberFormat",
 		   new String[] {
-			 "scale", "100",
-			 "formatString", "##0.#",
-			 "unit", "%"
+			   "scale", "100",
+			   "formatString", "##0.#",
+			   "unit", "%"
 		   });
 	}
 
@@ -1666,18 +1729,18 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	protected void createExpressionTypeAnnotations() {
-		String source = "http://www.mmxlabs.com/models/pricing/expressionType";	
+		String source = "http://www.mmxlabs.com/models/pricing/expressionType";
 		addAnnotation
-		  (getBaseFuelCost_Expression(), 
-		   source, 
+		  (getBaseFuelCost_Expression(),
+		   source,
 		   new String[] {
-			 "type", "basefuel"
-		   });	
+			   "type", "basefuel"
+		   });
 		addAnnotation
-		  (getSuezCanalTariff_SdrToUSD(), 
-		   source, 
+		  (getSuezCanalTariff_SdrToUSD(),
+		   source,
 		   new String[] {
-			 "type", "currency"
+			   "type", "currency"
 		   });
 	}
 

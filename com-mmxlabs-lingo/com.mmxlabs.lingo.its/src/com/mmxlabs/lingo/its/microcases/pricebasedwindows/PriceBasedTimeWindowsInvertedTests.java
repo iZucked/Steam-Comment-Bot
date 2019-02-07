@@ -11,7 +11,6 @@ import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -33,7 +32,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
@@ -139,11 +138,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		final CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
+		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		final CommodityCurve hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
 		assert hh != null;
 		@NonNull
-		final CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
+		final CommodityCurve jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
 		assert jcc != null;
 		pricingModelBuilder.clearPointsOnCommodityIndex(hh);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
@@ -182,11 +181,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		final CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
+		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		final CommodityCurve hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
 		assert hh != null;
 		@NonNull
-		final CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
+		final CommodityCurve jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
 		assert jcc != null;
 		pricingModelBuilder.clearPointsOnCommodityIndex(hh);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
@@ -225,11 +224,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		final CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
+		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		final CommodityCurve hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
 		assert hh != null;
 		@NonNull
-		final CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
+		final CommodityCurve jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
 		assert jcc != null;
 		pricingModelBuilder.clearPointsOnCommodityIndex(hh);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
@@ -268,11 +267,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		final CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
+		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		final CommodityCurve hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
 		assert hh != null;
 		@NonNull
-		final CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
+		final CommodityCurve jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
 		assert jcc != null;
 		pricingModelBuilder.clearPointsOnCommodityIndex(hh);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
@@ -311,11 +310,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowSize(48, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		final CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
+		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		final CommodityCurve hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
 		assert hh != null;
 		@NonNull
-		final CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
+		final CommodityCurve jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
 		assert jcc != null;
 
 		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);
@@ -356,11 +355,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowSize(48, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		final CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
+		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		final CommodityCurve hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
 		assert hh != null;
 		@NonNull
-		final CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
+		final CommodityCurve jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
 		assert jcc != null;
 
 		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);

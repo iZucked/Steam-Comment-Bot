@@ -34,8 +34,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.parser.Node;
@@ -180,15 +179,15 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 				final RawTreeParser parser = new RawTreeParser();
 				try {
 
-					final Map<String, CommodityIndex> indexMap = pricingModel.getCommodityIndices().stream() //
-							.collect(Collectors.toMap(CommodityIndex::getName, Function.identity()));
+					final Map<String, CommodityCurve> indexMap = pricingModel.getCommodityCurves().stream() //
+							.collect(Collectors.toMap(CommodityCurve::getName, Function.identity()));
 
 					final IExpression<Node> parsed = parser.parse(priceExpression);
 					final List<Node> nodes = extract(parsed);
 					for (final Node n : nodes) {
 						if (indexMap.containsKey(n.token)) {
-							final CommodityIndex index = indexMap.get(n.token);
-							if (index.getData() instanceof DerivedIndex<?>) {
+							final CommodityCurve index = indexMap.get(n.token);
+							if (index.isSetExpression()) {
 								continue;
 							}
 							@Nullable

@@ -44,8 +44,7 @@ public class CharterMarketImporter extends DefaultClassImporter {
 				context.addProblem(context.createProblem("Unable to parse date " + row.get(START_DATE_KEY), true, true, true));
 				return new ImportResults(null);
 			}
-			final ImportResults results = new ImportResults(charterOutStartDate);
-			return results;
+			return new ImportResults(charterOutStartDate);
 		} else {
 
 			final String kind = row.get(KIND_KEY);

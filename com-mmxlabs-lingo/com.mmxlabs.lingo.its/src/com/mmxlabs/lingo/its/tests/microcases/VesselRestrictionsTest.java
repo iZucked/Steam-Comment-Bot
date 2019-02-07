@@ -17,7 +17,7 @@ import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -298,7 +298,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
-		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$", "day", 50_000);
+		final CharterCurve charterIndex1 = pricingModelBuilder.createCharterCurve("CharterIndex1", "$", "day", 50_000);
 		// final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel2, "50000", 1);

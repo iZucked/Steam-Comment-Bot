@@ -30,7 +30,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  */
 public class NullReferenceConstraint extends AbstractModelConstraint {
 	// TODO add any more refs to check here
-	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(PricingPackage.eINSTANCE.getBaseFuelCost_Fuel(), PricingPackage.eINSTANCE.getNamedIndexContainer_Data());
+	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(PricingPackage.eINSTANCE.getBaseFuelCost_Fuel());
 
 	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<EClass, Set<EReference>>();
 

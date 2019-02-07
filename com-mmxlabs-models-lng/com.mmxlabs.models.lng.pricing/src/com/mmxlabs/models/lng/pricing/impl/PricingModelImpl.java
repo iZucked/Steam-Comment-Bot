@@ -14,10 +14,10 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
+import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
+import com.mmxlabs.models.lng.pricing.CharterCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -32,10 +32,10 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getCurrencyIndices <em>Currency Indices</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getCommodityIndices <em>Commodity Indices</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getCharterIndices <em>Charter Indices</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getBaseFuelPrices <em>Base Fuel Prices</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getCurrencyCurves <em>Currency Curves</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getCommodityCurves <em>Commodity Curves</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getCharterCurves <em>Charter Curves</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getBunkerFuelCurves <em>Bunker Fuel Curves</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getConversionFactors <em>Conversion Factors</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getMarketCurveDataVersion <em>Market Curve Data Version</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getSettledPrices <em>Settled Prices</em>}</li>
@@ -45,44 +45,44 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  */
 public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	/**
-	 * The cached value of the '{@link #getCurrencyIndices() <em>Currency Indices</em>}' containment reference list.
+	 * The cached value of the '{@link #getCurrencyCurves() <em>Currency Curves</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCurrencyIndices()
+	 * @see #getCurrencyCurves()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<CurrencyIndex> currencyIndices;
+	protected EList<CurrencyCurve> currencyCurves;
 
 	/**
-	 * The cached value of the '{@link #getCommodityIndices() <em>Commodity Indices</em>}' containment reference list.
+	 * The cached value of the '{@link #getCommodityCurves() <em>Commodity Curves</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCommodityIndices()
+	 * @see #getCommodityCurves()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<CommodityIndex> commodityIndices;
+	protected EList<CommodityCurve> commodityCurves;
 
 	/**
-	 * The cached value of the '{@link #getCharterIndices() <em>Charter Indices</em>}' containment reference list.
+	 * The cached value of the '{@link #getCharterCurves() <em>Charter Curves</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCharterIndices()
+	 * @see #getCharterCurves()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<CharterIndex> charterIndices;
+	protected EList<CharterCurve> charterCurves;
 
 	/**
-	 * The cached value of the '{@link #getBaseFuelPrices() <em>Base Fuel Prices</em>}' containment reference list.
+	 * The cached value of the '{@link #getBunkerFuelCurves() <em>Bunker Fuel Curves</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getBaseFuelPrices()
+	 * @see #getBunkerFuelCurves()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<BaseFuelIndex> baseFuelPrices;
+	protected EList<BunkerFuelCurve> bunkerFuelCurves;
 
 	/**
 	 * The cached value of the '{@link #getConversionFactors() <em>Conversion Factors</em>}' containment reference list.
@@ -148,11 +148,11 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<CurrencyIndex> getCurrencyIndices() {
-		if (currencyIndices == null) {
-			currencyIndices = new EObjectContainmentEList<CurrencyIndex>(CurrencyIndex.class, this, PricingPackage.PRICING_MODEL__CURRENCY_INDICES);
+	public EList<CurrencyCurve> getCurrencyCurves() {
+		if (currencyCurves == null) {
+			currencyCurves = new EObjectContainmentEList<CurrencyCurve>(CurrencyCurve.class, this, PricingPackage.PRICING_MODEL__CURRENCY_CURVES);
 		}
-		return currencyIndices;
+		return currencyCurves;
 	}
 
 	/**
@@ -160,11 +160,11 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<CommodityIndex> getCommodityIndices() {
-		if (commodityIndices == null) {
-			commodityIndices = new EObjectContainmentEList<CommodityIndex>(CommodityIndex.class, this, PricingPackage.PRICING_MODEL__COMMODITY_INDICES);
+	public EList<CommodityCurve> getCommodityCurves() {
+		if (commodityCurves == null) {
+			commodityCurves = new EObjectContainmentEList<CommodityCurve>(CommodityCurve.class, this, PricingPackage.PRICING_MODEL__COMMODITY_CURVES);
 		}
-		return commodityIndices;
+		return commodityCurves;
 	}
 
 	/**
@@ -172,11 +172,11 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<CharterIndex> getCharterIndices() {
-		if (charterIndices == null) {
-			charterIndices = new EObjectContainmentEList<CharterIndex>(CharterIndex.class, this, PricingPackage.PRICING_MODEL__CHARTER_INDICES);
+	public EList<CharterCurve> getCharterCurves() {
+		if (charterCurves == null) {
+			charterCurves = new EObjectContainmentEList<CharterCurve>(CharterCurve.class, this, PricingPackage.PRICING_MODEL__CHARTER_CURVES);
 		}
-		return charterIndices;
+		return charterCurves;
 	}
 
 	/**
@@ -184,11 +184,11 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<BaseFuelIndex> getBaseFuelPrices() {
-		if (baseFuelPrices == null) {
-			baseFuelPrices = new EObjectContainmentEList<BaseFuelIndex>(BaseFuelIndex.class, this, PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES);
+	public EList<BunkerFuelCurve> getBunkerFuelCurves() {
+		if (bunkerFuelCurves == null) {
+			bunkerFuelCurves = new EObjectContainmentEList<BunkerFuelCurve>(BunkerFuelCurve.class, this, PricingPackage.PRICING_MODEL__BUNKER_FUEL_CURVES);
 		}
-		return baseFuelPrices;
+		return bunkerFuelCurves;
 	}
 
 	/**
@@ -244,14 +244,14 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case PricingPackage.PRICING_MODEL__CURRENCY_INDICES:
-				return ((InternalEList<?>)getCurrencyIndices()).basicRemove(otherEnd, msgs);
-			case PricingPackage.PRICING_MODEL__COMMODITY_INDICES:
-				return ((InternalEList<?>)getCommodityIndices()).basicRemove(otherEnd, msgs);
-			case PricingPackage.PRICING_MODEL__CHARTER_INDICES:
-				return ((InternalEList<?>)getCharterIndices()).basicRemove(otherEnd, msgs);
-			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
-				return ((InternalEList<?>)getBaseFuelPrices()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PRICING_MODEL__CURRENCY_CURVES:
+				return ((InternalEList<?>)getCurrencyCurves()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PRICING_MODEL__COMMODITY_CURVES:
+				return ((InternalEList<?>)getCommodityCurves()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PRICING_MODEL__CHARTER_CURVES:
+				return ((InternalEList<?>)getCharterCurves()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PRICING_MODEL__BUNKER_FUEL_CURVES:
+				return ((InternalEList<?>)getBunkerFuelCurves()).basicRemove(otherEnd, msgs);
 			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
 				return ((InternalEList<?>)getConversionFactors()).basicRemove(otherEnd, msgs);
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
@@ -268,14 +268,14 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PricingPackage.PRICING_MODEL__CURRENCY_INDICES:
-				return getCurrencyIndices();
-			case PricingPackage.PRICING_MODEL__COMMODITY_INDICES:
-				return getCommodityIndices();
-			case PricingPackage.PRICING_MODEL__CHARTER_INDICES:
-				return getCharterIndices();
-			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
-				return getBaseFuelPrices();
+			case PricingPackage.PRICING_MODEL__CURRENCY_CURVES:
+				return getCurrencyCurves();
+			case PricingPackage.PRICING_MODEL__COMMODITY_CURVES:
+				return getCommodityCurves();
+			case PricingPackage.PRICING_MODEL__CHARTER_CURVES:
+				return getCharterCurves();
+			case PricingPackage.PRICING_MODEL__BUNKER_FUEL_CURVES:
+				return getBunkerFuelCurves();
 			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
 				return getConversionFactors();
 			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
@@ -295,21 +295,21 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PricingPackage.PRICING_MODEL__CURRENCY_INDICES:
-				getCurrencyIndices().clear();
-				getCurrencyIndices().addAll((Collection<? extends CurrencyIndex>)newValue);
+			case PricingPackage.PRICING_MODEL__CURRENCY_CURVES:
+				getCurrencyCurves().clear();
+				getCurrencyCurves().addAll((Collection<? extends CurrencyCurve>)newValue);
 				return;
-			case PricingPackage.PRICING_MODEL__COMMODITY_INDICES:
-				getCommodityIndices().clear();
-				getCommodityIndices().addAll((Collection<? extends CommodityIndex>)newValue);
+			case PricingPackage.PRICING_MODEL__COMMODITY_CURVES:
+				getCommodityCurves().clear();
+				getCommodityCurves().addAll((Collection<? extends CommodityCurve>)newValue);
 				return;
-			case PricingPackage.PRICING_MODEL__CHARTER_INDICES:
-				getCharterIndices().clear();
-				getCharterIndices().addAll((Collection<? extends CharterIndex>)newValue);
+			case PricingPackage.PRICING_MODEL__CHARTER_CURVES:
+				getCharterCurves().clear();
+				getCharterCurves().addAll((Collection<? extends CharterCurve>)newValue);
 				return;
-			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
-				getBaseFuelPrices().clear();
-				getBaseFuelPrices().addAll((Collection<? extends BaseFuelIndex>)newValue);
+			case PricingPackage.PRICING_MODEL__BUNKER_FUEL_CURVES:
+				getBunkerFuelCurves().clear();
+				getBunkerFuelCurves().addAll((Collection<? extends BunkerFuelCurve>)newValue);
 				return;
 			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
 				getConversionFactors().clear();
@@ -334,17 +334,17 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PricingPackage.PRICING_MODEL__CURRENCY_INDICES:
-				getCurrencyIndices().clear();
+			case PricingPackage.PRICING_MODEL__CURRENCY_CURVES:
+				getCurrencyCurves().clear();
 				return;
-			case PricingPackage.PRICING_MODEL__COMMODITY_INDICES:
-				getCommodityIndices().clear();
+			case PricingPackage.PRICING_MODEL__COMMODITY_CURVES:
+				getCommodityCurves().clear();
 				return;
-			case PricingPackage.PRICING_MODEL__CHARTER_INDICES:
-				getCharterIndices().clear();
+			case PricingPackage.PRICING_MODEL__CHARTER_CURVES:
+				getCharterCurves().clear();
 				return;
-			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
-				getBaseFuelPrices().clear();
+			case PricingPackage.PRICING_MODEL__BUNKER_FUEL_CURVES:
+				getBunkerFuelCurves().clear();
 				return;
 			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
 				getConversionFactors().clear();
@@ -367,14 +367,14 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PricingPackage.PRICING_MODEL__CURRENCY_INDICES:
-				return currencyIndices != null && !currencyIndices.isEmpty();
-			case PricingPackage.PRICING_MODEL__COMMODITY_INDICES:
-				return commodityIndices != null && !commodityIndices.isEmpty();
-			case PricingPackage.PRICING_MODEL__CHARTER_INDICES:
-				return charterIndices != null && !charterIndices.isEmpty();
-			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
-				return baseFuelPrices != null && !baseFuelPrices.isEmpty();
+			case PricingPackage.PRICING_MODEL__CURRENCY_CURVES:
+				return currencyCurves != null && !currencyCurves.isEmpty();
+			case PricingPackage.PRICING_MODEL__COMMODITY_CURVES:
+				return commodityCurves != null && !commodityCurves.isEmpty();
+			case PricingPackage.PRICING_MODEL__CHARTER_CURVES:
+				return charterCurves != null && !charterCurves.isEmpty();
+			case PricingPackage.PRICING_MODEL__BUNKER_FUEL_CURVES:
+				return bunkerFuelCurves != null && !bunkerFuelCurves.isEmpty();
 			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
 				return conversionFactors != null && !conversionFactors.isEmpty();
 			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
@@ -394,7 +394,7 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (marketCurveDataVersion: ");
 		result.append(marketCurveDataVersion);
 		result.append(')');

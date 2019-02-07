@@ -11,16 +11,12 @@ import org.eclipse.emf.ecore.util.Switch;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PortsExpressionMap;
@@ -120,55 +116,6 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 			case PricingPackage.INDEX: {
 				Index<?> index = (Index<?>)theEObject;
 				T result = caseIndex(index);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.CURRENCY_INDEX: {
-				CurrencyIndex currencyIndex = (CurrencyIndex)theEObject;
-				T result = caseCurrencyIndex(currencyIndex);
-				if (result == null) result = caseNamedIndexContainer(currencyIndex);
-				if (result == null) result = caseUUIDObject(currencyIndex);
-				if (result == null) result = caseNamedObject(currencyIndex);
-				if (result == null) result = caseMMXObject(currencyIndex);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.COMMODITY_INDEX: {
-				CommodityIndex commodityIndex = (CommodityIndex)theEObject;
-				T result = caseCommodityIndex(commodityIndex);
-				if (result == null) result = caseNamedIndexContainer(commodityIndex);
-				if (result == null) result = caseUUIDObject(commodityIndex);
-				if (result == null) result = caseNamedObject(commodityIndex);
-				if (result == null) result = caseMMXObject(commodityIndex);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.CHARTER_INDEX: {
-				CharterIndex charterIndex = (CharterIndex)theEObject;
-				T result = caseCharterIndex(charterIndex);
-				if (result == null) result = caseNamedIndexContainer(charterIndex);
-				if (result == null) result = caseUUIDObject(charterIndex);
-				if (result == null) result = caseNamedObject(charterIndex);
-				if (result == null) result = caseMMXObject(charterIndex);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.BASE_FUEL_INDEX: {
-				BaseFuelIndex baseFuelIndex = (BaseFuelIndex)theEObject;
-				T result = caseBaseFuelIndex(baseFuelIndex);
-				if (result == null) result = caseNamedIndexContainer(baseFuelIndex);
-				if (result == null) result = caseUUIDObject(baseFuelIndex);
-				if (result == null) result = caseNamedObject(baseFuelIndex);
-				if (result == null) result = caseMMXObject(baseFuelIndex);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.NAMED_INDEX_CONTAINER: {
-				NamedIndexContainer<?> namedIndexContainer = (NamedIndexContainer<?>)theEObject;
-				T result = caseNamedIndexContainer(namedIndexContainer);
-				if (result == null) result = caseUUIDObject(namedIndexContainer);
-				if (result == null) result = caseNamedObject(namedIndexContainer);
-				if (result == null) result = caseMMXObject(namedIndexContainer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -280,6 +227,75 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case PricingPackage.YEAR_MONTH_POINT_CONTAINER: {
+				YearMonthPointContainer yearMonthPointContainer = (YearMonthPointContainer)theEObject;
+				T result = caseYearMonthPointContainer(yearMonthPointContainer);
+				if (result == null) result = caseUUIDObject(yearMonthPointContainer);
+				if (result == null) result = caseNamedObject(yearMonthPointContainer);
+				if (result == null) result = caseMMXObject(yearMonthPointContainer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.YEAR_MONTH_POINT: {
+				YearMonthPoint yearMonthPoint = (YearMonthPoint)theEObject;
+				T result = caseYearMonthPoint(yearMonthPoint);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.ABSTRACT_YEAR_MONTH_CURVE: {
+				AbstractYearMonthCurve abstractYearMonthCurve = (AbstractYearMonthCurve)theEObject;
+				T result = caseAbstractYearMonthCurve(abstractYearMonthCurve);
+				if (result == null) result = caseYearMonthPointContainer(abstractYearMonthCurve);
+				if (result == null) result = caseUUIDObject(abstractYearMonthCurve);
+				if (result == null) result = caseNamedObject(abstractYearMonthCurve);
+				if (result == null) result = caseMMXObject(abstractYearMonthCurve);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.COMMODITY_CURVE: {
+				CommodityCurve commodityCurve = (CommodityCurve)theEObject;
+				T result = caseCommodityCurve(commodityCurve);
+				if (result == null) result = caseAbstractYearMonthCurve(commodityCurve);
+				if (result == null) result = caseYearMonthPointContainer(commodityCurve);
+				if (result == null) result = caseUUIDObject(commodityCurve);
+				if (result == null) result = caseNamedObject(commodityCurve);
+				if (result == null) result = caseMMXObject(commodityCurve);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.CHARTER_CURVE: {
+				CharterCurve charterCurve = (CharterCurve)theEObject;
+				T result = caseCharterCurve(charterCurve);
+				if (result == null) result = caseAbstractYearMonthCurve(charterCurve);
+				if (result == null) result = caseYearMonthPointContainer(charterCurve);
+				if (result == null) result = caseUUIDObject(charterCurve);
+				if (result == null) result = caseNamedObject(charterCurve);
+				if (result == null) result = caseMMXObject(charterCurve);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.BUNKER_FUEL_CURVE: {
+				BunkerFuelCurve bunkerFuelCurve = (BunkerFuelCurve)theEObject;
+				T result = caseBunkerFuelCurve(bunkerFuelCurve);
+				if (result == null) result = caseAbstractYearMonthCurve(bunkerFuelCurve);
+				if (result == null) result = caseYearMonthPointContainer(bunkerFuelCurve);
+				if (result == null) result = caseUUIDObject(bunkerFuelCurve);
+				if (result == null) result = caseNamedObject(bunkerFuelCurve);
+				if (result == null) result = caseMMXObject(bunkerFuelCurve);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.CURRENCY_CURVE: {
+				CurrencyCurve currencyCurve = (CurrencyCurve)theEObject;
+				T result = caseCurrencyCurve(currencyCurve);
+				if (result == null) result = caseAbstractYearMonthCurve(currencyCurve);
+				if (result == null) result = caseYearMonthPointContainer(currencyCurve);
+				if (result == null) result = caseUUIDObject(currencyCurve);
+				if (result == null) result = caseNamedObject(currencyCurve);
+				if (result == null) result = caseMMXObject(currencyCurve);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -360,21 +376,6 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Currency Index</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Currency Index</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCurrencyIndex(CurrencyIndex object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Route Cost</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -446,66 +447,6 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCooldownPrice(CooldownPrice object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Commodity Index</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Commodity Index</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCommodityIndex(CommodityIndex object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Charter Index</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Charter Index</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCharterIndex(CharterIndex object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Base Fuel Index</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Base Fuel Index</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseBaseFuelIndex(BaseFuelIndex object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Named Index Container</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Named Index Container</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public <Value> T caseNamedIndexContainer(NamedIndexContainer<Value> object) {
 		return null;
 	}
 
@@ -671,6 +612,111 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseDatePoint(DatePoint object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Year Month Point Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Year Month Point Container</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseYearMonthPointContainer(YearMonthPointContainer object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Year Month Point</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Year Month Point</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseYearMonthPoint(YearMonthPoint object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Abstract Year Month Curve</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Abstract Year Month Curve</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAbstractYearMonthCurve(AbstractYearMonthCurve object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Commodity Curve</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Commodity Curve</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCommodityCurve(CommodityCurve object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Charter Curve</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Charter Curve</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCharterCurve(CharterCurve object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Bunker Fuel Curve</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Bunker Fuel Curve</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBunkerFuelCurve(BunkerFuelCurve object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Currency Curve</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Currency Curve</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCurrencyCurve(CurrencyCurve object) {
 		return null;
 	}
 

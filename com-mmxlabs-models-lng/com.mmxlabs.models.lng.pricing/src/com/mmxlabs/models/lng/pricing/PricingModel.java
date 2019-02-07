@@ -16,10 +16,10 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getCurrencyIndices <em>Currency Indices</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getCommodityIndices <em>Commodity Indices</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getCharterIndices <em>Charter Indices</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getBaseFuelPrices <em>Base Fuel Prices</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getCurrencyCurves <em>Currency Curves</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getCommodityCurves <em>Commodity Curves</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getCharterCurves <em>Charter Curves</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getBunkerFuelCurves <em>Bunker Fuel Curves</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getConversionFactors <em>Conversion Factors</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getMarketCurveDataVersion <em>Market Curve Data Version</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getSettledPrices <em>Settled Prices</em>}</li>
@@ -31,68 +31,68 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  */
 public interface PricingModel extends UUIDObject {
 	/**
-	 * Returns the value of the '<em><b>Currency Indices</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.CurrencyIndex}.
+	 * Returns the value of the '<em><b>Currency Curves</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.CurrencyCurve}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Currency Indices</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Currency Curves</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Currency Indices</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_CurrencyIndices()
+	 * @return the value of the '<em>Currency Curves</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_CurrencyCurves()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<CurrencyIndex> getCurrencyIndices();
+	EList<CurrencyCurve> getCurrencyCurves();
 
 	/**
-	 * Returns the value of the '<em><b>Commodity Indices</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.CommodityIndex}.
+	 * Returns the value of the '<em><b>Commodity Curves</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.CommodityCurve}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Commodity Indices</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Commodity Curves</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Commodity Indices</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_CommodityIndices()
+	 * @return the value of the '<em>Commodity Curves</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_CommodityCurves()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<CommodityIndex> getCommodityIndices();
+	EList<CommodityCurve> getCommodityCurves();
 
 	/**
-	 * Returns the value of the '<em><b>Charter Indices</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.CharterIndex}.
+	 * Returns the value of the '<em><b>Charter Curves</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.CharterCurve}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Charter Indices</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Charter Curves</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Charter Indices</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_CharterIndices()
+	 * @return the value of the '<em>Charter Curves</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_CharterCurves()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<CharterIndex> getCharterIndices();
+	EList<CharterCurve> getCharterCurves();
 
 	/**
-	 * Returns the value of the '<em><b>Base Fuel Prices</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.BaseFuelIndex}.
+	 * Returns the value of the '<em><b>Bunker Fuel Curves</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.BunkerFuelCurve}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Base Fuel Prices</em>' reference list isn't clear,
+	 * If the meaning of the '<em>Bunker Fuel Curves</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Base Fuel Prices</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_BaseFuelPrices()
+	 * @return the value of the '<em>Bunker Fuel Curves</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_BunkerFuelCurves()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<BaseFuelIndex> getBaseFuelPrices();
+	EList<BunkerFuelCurve> getBunkerFuelCurves();
 
 	/**
 	 * Returns the value of the '<em><b>Conversion Factors</b></em>' containment reference list.

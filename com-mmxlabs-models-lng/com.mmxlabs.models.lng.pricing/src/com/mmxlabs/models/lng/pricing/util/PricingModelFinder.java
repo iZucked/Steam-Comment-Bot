@@ -6,9 +6,9 @@ package com.mmxlabs.models.lng.pricing.util;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
+import com.mmxlabs.models.lng.pricing.CharterCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 
 public class PricingModelFinder {
@@ -24,9 +24,9 @@ public class PricingModelFinder {
 	}
 
 	@NonNull
-	public BaseFuelIndex findBaseFuelCurve(@NonNull final String name) {
+	public BunkerFuelCurve findBaseFuelCurve(@NonNull final String name) {
 
-		for (final BaseFuelIndex index : getPricingModel().getBaseFuelPrices()) {
+		for (final BunkerFuelCurve index : getPricingModel().getBunkerFuelCurves()) {
 			if (name.equals(index.getName())) {
 				return index;
 			}
@@ -36,9 +36,9 @@ public class PricingModelFinder {
 	}
 
 	@NonNull
-	public CommodityIndex findCommodityCurve(@NonNull final String name) {
+	public CommodityCurve findCommodityCurve(@NonNull final String name) {
 
-		for (final CommodityIndex index : getPricingModel().getCommodityIndices()) {
+		for (final CommodityCurve index : getPricingModel().getCommodityCurves()) {
 			if (name.equals(index.getName())) {
 				return index;
 			}
@@ -48,9 +48,9 @@ public class PricingModelFinder {
 	}
 
 	@NonNull
-	public CharterIndex findCharterCurve(@NonNull final String name) {
+	public CharterCurve findCharterCurve(@NonNull final String name) {
 
-		for (final CharterIndex index : getPricingModel().getCharterIndices()) {
+		for (final CharterCurve index : getPricingModel().getCharterCurves()) {
 			if (name.equals(index.getName())) {
 				return index;
 			}

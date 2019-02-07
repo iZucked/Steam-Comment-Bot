@@ -86,17 +86,15 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
+import com.mmxlabs.models.lng.pricing.CharterCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.Index;
-import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.PortCost;
@@ -107,6 +105,7 @@ import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
 import com.mmxlabs.models.lng.pricing.SuezCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.SuezCanalTugBand;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -333,7 +332,7 @@ public class LNGScenarioTransformer {
 	@Inject
 	@NonNull
 	private IPromptPeriodProviderEditor promptPeriodProviderEditor;
-	
+
 	@Inject
 	@NonNull
 	private ILockedCargoProviderEditor lockedCargoProviderEditor;
@@ -583,38 +582,32 @@ public class LNGScenarioTransformer {
 		 * First, create all the market curves (should these come through the builder?)
 		 */
 
-		final Association<CommodityIndex, ICurve> commodityIndexAssociation = new Association<>();
-		final Association<BaseFuelIndex, ICurve> baseFuelIndexAssociation = new Association<>();
-		final Association<CharterIndex, ILongCurve> charterIndexAssociation = new Association<>();
+		final Association<CommodityCurve, ICurve> commodityIndexAssociation = new Association<>();
+		final Association<BunkerFuelCurve, ICurve> baseFuelIndexAssociation = new Association<>();
+		final Association<CharterCurve, ILongCurve> charterIndexAssociation = new Association<>();
 
 		final PricingModel pricingModel = rootObject.getReferenceModel().getPricingModel();
 		// For each curve, register with the SeriesParser object
-		for (final CommodityIndex commodityIndex : pricingModel.getCommodityIndices()) {
-			final Index<Double> index = commodityIndex.getData();
-			assert index != null;
+		for (final CommodityCurve commodityIndex : pricingModel.getCommodityCurves()) {
 			final String name = commodityIndex.getName();
 			assert name != null;
-			registerIndex(name, index, commodityIndices);
+			registerIndex(name, commodityIndex, commodityIndices);
 		}
-		for (final BaseFuelIndex baseFuelIndex : pricingModel.getBaseFuelPrices()) {
-			final Index<Double> index = baseFuelIndex.getData();
-			registerIndex(baseFuelIndex.getName(), index, baseFuelIndices);
+		for (final BunkerFuelCurve baseFuelIndex : pricingModel.getBunkerFuelCurves()) {
+			registerIndex(baseFuelIndex.getName(), baseFuelIndex, baseFuelIndices);
 		}
-		for (final CharterIndex charterIndex : pricingModel.getCharterIndices()) {
-			final Index<Integer> index = charterIndex.getData();
-			registerIndex(charterIndex.getName(), index, charterIndices);
+		for (final CharterCurve charterIndex : pricingModel.getCharterCurves()) {
+			registerIndex(charterIndex.getName(), charterIndex, charterIndices);
 		}
 
 		// Currency is added to all the options
-		for (final CurrencyIndex currencyIndex : pricingModel.getCurrencyIndices()) {
-			final Index<Double> index = currencyIndex.getData();
-			assert index != null;
+		for (final CurrencyCurve currencyIndex : pricingModel.getCurrencyCurves()) {
 			final String name = currencyIndex.getName();
 			if (name != null) {
-				registerIndex(name, index, commodityIndices);
-				registerIndex(name, index, baseFuelIndices);
-				registerIndex(name, index, charterIndices);
-				registerIndex(name, index, currencyIndices);
+				registerIndex(name, currencyIndex, commodityIndices);
+				registerIndex(name, currencyIndex, baseFuelIndices);
+				registerIndex(name, currencyIndex, charterIndices);
+				registerIndex(name, currencyIndex, currencyIndices);
 			}
 		}
 
@@ -623,14 +616,14 @@ public class LNGScenarioTransformer {
 		}
 
 		// Now pre-compute our various curve data objects...
-		for (final CommodityIndex index : pricingModel.getCommodityIndices()) {
+		for (final CommodityCurve index : pricingModel.getCommodityCurves()) {
 			try {
 				final ISeries parsed = commodityIndices.getSeries(index.getName());
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 				curve.setDefaultValue(0);
 				final int[] changePoints = parsed.getChangePoints();
 				if (changePoints.length == 0) {
-					if (index instanceof DerivedIndex<?>) {
+					if (index.isSetExpression()) {
 						curve.setValueAfter(0, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
 					}
 				} else {
@@ -645,7 +638,7 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		for (final BaseFuelIndex index : pricingModel.getBaseFuelPrices()) {
+		for (final BunkerFuelCurve index : pricingModel.getBunkerFuelCurves()) {
 			try {
 				final ISeries parsed = baseFuelIndices.getSeries(index.getName());
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
@@ -667,7 +660,7 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		for (final CharterIndex index : pricingModel.getCharterIndices()) {
+		for (final CharterCurve index : pricingModel.getCharterCurves()) {
 			try {
 				final ISeries parsed = charterIndices.getSeries(index.getName());
 				final StepwiseLongCurve curve = new StepwiseLongCurve();
@@ -675,12 +668,12 @@ public class LNGScenarioTransformer {
 
 				final int[] changePoints = parsed.getChangePoints();
 				if (changePoints.length == 0) {
-					final long dailyCost = OptimiserUnitConvertor.convertToInternalDailyCost(parsed.evaluate(0).intValue());
+					final long dailyCost = OptimiserUnitConvertor.convertToInternalDailyCost(parsed.evaluate(0).doubleValue());
 					curve.setValueAfter(0, dailyCost);
 				} else {
 
 					for (final int i : parsed.getChangePoints()) {
-						final long dailyCost = OptimiserUnitConvertor.convertToInternalDailyCost(parsed.evaluate(i).intValue());
+						final long dailyCost = OptimiserUnitConvertor.convertToInternalDailyCost(parsed.evaluate(i).doubleValue());
 						curve.setValueAfter(i, dailyCost);
 					}
 				}
@@ -954,12 +947,14 @@ public class LNGScenarioTransformer {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void registerIndex(final String name, @NonNull final Index<? extends Number> index, @NonNull final SeriesParser indices) {
+	private void registerIndex(final String name, @NonNull final AbstractYearMonthCurve curve, @NonNull final SeriesParser indices) {
 		assert name != null;
-		if (index instanceof DataIndex) {
-			final DataIndex<? extends Number> di = (DataIndex<? extends Number>) index;
+		if (curve.isSetExpression()) {
+			indices.addSeriesExpression(name, curve.getExpression());
+
+		} else {
 			final SortedSet<Pair<YearMonth, Number>> vals = new TreeSet<>((o1, o2) -> o1.getFirst().compareTo(o2.getFirst()));
-			for (final IndexPoint<? extends Number> pt : di.getPoints()) {
+			for (final YearMonthPoint pt : curve.getPoints()) {
 				vals.add(new Pair<>(pt.getDate(), pt.getValue()));
 			}
 			final int[] times = new int[vals.size()];
@@ -970,8 +965,6 @@ public class LNGScenarioTransformer {
 				nums[k++] = e.getSecond();
 			}
 			indices.addSeriesData(name, times, nums);
-		} else if (index instanceof DerivedIndex) {
-			indices.addSeriesExpression(name, ((DerivedIndex) index).getExpression());
 		}
 	}
 
@@ -1177,7 +1170,7 @@ public class LNGScenarioTransformer {
 	 * Extract the cargoes from the scenario and add them to the given builder.
 	 * 
 	 * @param builder
-	 *                                 current builder. should already have ports/distances/vessels built
+	 *            current builder. should already have ports/distances/vessels built
 	 * @param indexAssociation
 	 * @param contractTransformers
 	 * @param modelEntityMap
@@ -2845,13 +2838,13 @@ public class LNGScenarioTransformer {
 	 * Create the distance matrix for the given builder.
 	 * 
 	 * @param builder
-	 *                              the builder we are working with
+	 *            the builder we are working with
 	 * @param portAssociation
-	 *                              an association between ports in the EMF model and IPorts in the builder
+	 *            an association between ports in the EMF model and IPorts in the builder
 	 * @param allPorts
-	 *                              the list of all IPorts constructed so far
+	 *            the list of all IPorts constructed so far
 	 * @param portIndices
-	 *                              a reverse-lookup for the ports in allPorts
+	 *            a reverse-lookup for the ports in allPorts
 	 * @param vesselAssociation
 	 * @throws IncompleteScenarioException
 	 */
@@ -3100,9 +3093,9 @@ public class LNGScenarioTransformer {
 	 * Construct the fleet model for the scenario
 	 * 
 	 * @param builder
-	 *                            a builder which has had its ports and distances instantiated
+	 *            a builder which has had its ports and distances instantiated
 	 * @param portAssociation
-	 *                            the Port <-> IPort association to connect EMF Ports with builder IPorts
+	 *            the Port <-> IPort association to connect EMF Ports with builder IPorts
 	 * @param modelEntityMap
 	 * @return
 	 */

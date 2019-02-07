@@ -35,11 +35,11 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
+import com.mmxlabs.models.lng.pricing.CharterCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.ExpressionAnnotationConstants;
 import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
@@ -319,7 +319,7 @@ public class PriceExpressionUtils {
 		return modelMarketCurveProvider.getSeriesParser(priceIndexType);
 	}
 
-	public static @Nullable YearMonth getEarliestCurveDate(final @NonNull NamedIndexContainer<?> index) {
+	public static @Nullable YearMonth getEarliestCurveDate(final @NonNull AbstractYearMonthCurve index) {
 		final ModelMarketCurveProvider modelMarketCurveProvider = getMarketCurveProvider();
 		return modelMarketCurveProvider.getEarliestDate(index);
 	}
@@ -371,20 +371,20 @@ public class PriceExpressionUtils {
 		return true;
 	}
 
-	public static Collection<@NonNull NamedIndexContainer<?>> getLinkedCurves(final String priceExpression) {
+	public static Collection<@NonNull AbstractYearMonthCurve> getLinkedCurves(final String priceExpression) {
 		final ModelMarketCurveProvider modelMarketCurveProvider = getMarketCurveProvider();
 		return modelMarketCurveProvider.getLinkedCurves(priceExpression);
 
 	}
 
-	public static PriceIndexType getPriceIndexType(NamedIndexContainer<?> namedIndexContainer) {
-		if (namedIndexContainer instanceof CommodityIndex) {
+	public static PriceIndexType getPriceIndexType(AbstractYearMonthCurve namedIndexContainer) {
+		if (namedIndexContainer instanceof CommodityCurve) {
 			return PriceIndexType.COMMODITY;
-		} else if (namedIndexContainer instanceof CurrencyIndex) {
+		} else if (namedIndexContainer instanceof CurrencyCurve) {
 			return PriceIndexType.CURRENCY;
-		} else if (namedIndexContainer instanceof CharterIndex) {
+		} else if (namedIndexContainer instanceof CharterCurve) {
 			return PriceIndexType.CHARTER;
-		} else if (namedIndexContainer instanceof BaseFuelIndex) {
+		} else if (namedIndexContainer instanceof BunkerFuelCurve) {
 			return PriceIndexType.BUNKERS;
 		}
 		return null;
@@ -393,17 +393,17 @@ public class PriceExpressionUtils {
 
 	public static void checkExpressionAgainstPricingDate(IValidationContext ctx, String priceExpression, Slot slot, LocalDate pricingDate,  EStructuralFeature feature, final List<IStatus> failures) {
 		final ModelMarketCurveProvider marketCurveProvider = PriceExpressionUtils.getMarketCurveProvider();
-		final List<Pair<NamedIndexContainer<?>, LocalDate>> linkedCurvesAndDate = marketCurveProvider.getLinkedCurvesAndDate(priceExpression, pricingDate);
+		final List<Pair<AbstractYearMonthCurve, LocalDate>> linkedCurvesAndDate = marketCurveProvider.getLinkedCurvesAndDate(priceExpression, pricingDate);
 
-		final Map<NamedIndexContainer<?>, LocalDate> result1 = linkedCurvesAndDate.stream()
+		final Map<AbstractYearMonthCurve, LocalDate> result1 = linkedCurvesAndDate.stream()
 				.collect(Collectors.toMap(Pair::getFirst, Pair::getSecond, (oldValue, newValue) -> (oldValue.isBefore(newValue) ? oldValue : newValue)));
 
-		for (final Map.Entry<NamedIndexContainer<?>, LocalDate> e : result1.entrySet()) {
-			final NamedIndexContainer<?> index = e.getKey();
+		for (final Map.Entry<AbstractYearMonthCurve, LocalDate> e : result1.entrySet()) {
+			final AbstractYearMonthCurve index = e.getKey();
 			String type = "index";
-			if (index instanceof CommodityIndex) {
+			if (index instanceof CommodityCurve) {
 				type = "commodity pricing";
-			} else if (index instanceof CurrencyIndex) {
+			} else if (index instanceof CurrencyCurve) {
 				type = "currency";
 			}
 			final @Nullable YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);

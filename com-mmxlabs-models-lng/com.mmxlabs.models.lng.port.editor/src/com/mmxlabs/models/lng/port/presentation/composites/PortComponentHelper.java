@@ -87,7 +87,6 @@ public class PortComponentHelper extends BaseComponentHelper {
 		add_defaultWindowSizeUnitsEditor(detailComposite, topClass);
 		add_minCvValueEditor(detailComposite, topClass);
 		add_maxCvValueEditor(detailComposite, topClass);
-		add_mmxIdEditor(detailComposite, topClass);
 	}
 
 	/**

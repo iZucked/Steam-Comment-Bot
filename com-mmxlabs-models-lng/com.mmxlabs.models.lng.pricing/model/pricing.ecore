@@ -3,14 +3,14 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="pricing" nsURI="http://www.mmxlabs.com/models/lng/pricing/1/"
     nsPrefix="lng.pricing">
   <eClassifiers xsi:type="ecore:EClass" name="PricingModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="currencyIndices" upperBound="-1"
-        eType="#//CurrencyIndex" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="commodityIndices" upperBound="-1"
-        eType="#//CommodityIndex" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="charterIndices" upperBound="-1"
-        eType="#//CharterIndex" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="baseFuelPrices" upperBound="-1"
-        eType="#//BaseFuelIndex" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currencyCurves" upperBound="-1"
+        eType="#//CurrencyCurve" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="commodityCurves" upperBound="-1"
+        eType="#//CommodityCurve" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterCurves" upperBound="-1"
+        eType="#//CharterCurve" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bunkerFuelCurves" upperBound="-1"
+        eType="#//BunkerFuelCurve" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="conversionFactors" upperBound="-1"
         eType="#//UnitConversion" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="marketCurveDataVersion"
@@ -60,36 +60,6 @@
       <eGenericType eTypeParameter="#//Index/Value"/>
       <eParameters name="date" lowerBound="1" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
     </eOperations>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CurrencyIndex">
-    <eGenericSuperTypes eClassifier="#//NamedIndexContainer">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
-    </eGenericSuperTypes>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CommodityIndex">
-    <eGenericSuperTypes eClassifier="#//NamedIndexContainer">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
-    </eGenericSuperTypes>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CharterIndex">
-    <eGenericSuperTypes eClassifier="#//NamedIndexContainer">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    </eGenericSuperTypes>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BaseFuelIndex">
-    <eGenericSuperTypes eClassifier="#//NamedIndexContainer">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
-    </eGenericSuperTypes>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="NamedIndexContainer" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
-    <eTypeParameters name="Value"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="data" lowerBound="1" containment="true">
-      <eGenericType eClassifier="#//Index">
-        <eTypeArguments eTypeParameter="#//NamedIndexContainer/Value"/>
-      </eGenericType>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currencyUnit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CostModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="routeCosts" upperBound="-1"
@@ -337,4 +307,26 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="YearMonthPointContainer" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eOperations name="valueForMonth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eParameters name="month" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="points" lowerBound="1"
+        upperBound="-1" eType="#//YearMonthPoint" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="YearMonthPoint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractYearMonthCurve" abstract="true"
+      eSuperTypes="#//YearMonthPointContainer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currencyUnit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" unsettable="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommodityCurve" eSuperTypes="#//AbstractYearMonthCurve"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CharterCurve" eSuperTypes="#//AbstractYearMonthCurve"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BunkerFuelCurve" eSuperTypes="#//AbstractYearMonthCurve"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CurrencyCurve" eSuperTypes="#//AbstractYearMonthCurve"/>
 </ecore:EPackage>

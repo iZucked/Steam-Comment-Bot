@@ -62,7 +62,7 @@ public class ExhaustiveLNGScenarioChecker extends ExhaustiveModelChecker {
 		result.add(MMXCorePackage.Literals.MMX_ROOT_OBJECT);
 		result.add(MMXCorePackage.Literals.NAMED_OBJECT);
 		result.add(MMXCorePackage.Literals.UUID_OBJECT);
-		result.add(PricingPackage.Literals.NAMED_INDEX_CONTAINER);
+//		result.add(PricingPackage.Literals.NAMED_INDEX_CONTAINER);
 		result.add(CommercialPackage.Literals.CONTRACT);
 		result.add(CargoPackage.Literals.VESSEL_EVENT);
 		result.add(TypesPackage.Literals.AVESSEL_SET);

@@ -36,8 +36,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -167,37 +166,36 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				assert load != null;
 				final long directCost = priceIntervalProviderHelper.getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, o_vessel.getNBORate(VesselState.Laden), o_vessel,
 						load.getCargoCVValue(), equivalenceFactor, lrd[0], 0, true);
-				
-				// Canal date 
-//				baseFuelPricesPerMT	(id=131)	->  [0, 0, 0, 0, 0, 1000000000]
-//				boiloffRateM3	200000	
-//				canalTransitTime	0	
-//				cv	23400000	
-//				distance	500	
-//				durationAtPort	0	
-//				equivalenceFactor	45600000	
-//				forceBaseFuel	false	
-//				includeIdleBunkerCosts	false	
-//				isLaden	true	
-//				salesPrice	10000000
-//				times	(id=126)	->    [1, 50]
-//				vessel	Vessel  (id=116)   ->  STEAM-145
-//				totalLegLengthInHours	49	
-//				nboSpeed	13175	
-//				naturalSpeed	10204	
-//				speed	13175	
-//				rateVoyage	102625	
-//				vesselTravelTimeInHours	37	
-//				idleTimeInHours	12	
 
-				
+				// Canal date
+				// baseFuelPricesPerMT (id=131) -> [0, 0, 0, 0, 0, 1000000000]
+				// boiloffRateM3 200000
+				// canalTransitTime 0
+				// cv 23400000
+				// distance 500
+				// durationAtPort 0
+				// equivalenceFactor 45600000
+				// forceBaseFuel false
+				// includeIdleBunkerCosts false
+				// isLaden true
+				// salesPrice 10000000
+				// times (id=126) -> [1, 50]
+				// vessel Vessel (id=116) -> STEAM-145
+				// totalLegLengthInHours 49
+				// nboSpeed 13175
+				// naturalSpeed 10204
+				// speed 13175
+				// rateVoyage 102625
+				// vesselTravelTimeInHours 37
+				// idleTimeInHours 12
+
 				final long canalCost = priceIntervalProviderHelper.getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, o_vessel.getNBORate(VesselState.Laden), o_vessel,
 						load.getCargoCVValue(), equivalenceFactor, lrd[1], 0, true);
 				/*
 				 * Test correct values are being calculated
 				 */
-				Assert.assertEquals(directCost, 156_740220L); //$156,740
-				Assert.assertEquals(canalCost,  593_205000L); //$593,205
+				Assert.assertEquals(directCost, 156_740220L); // $156,740
+				Assert.assertEquals(canalCost, 593_205000L); // $593,205
 				/*
 				 * Test correct route chosen
 				 */
@@ -238,16 +236,15 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		CommodityIndex hh = null;
-		for (final CommodityIndex commodityIndex : commodityIndices) {
+		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		CommodityCurve hh = null;
+		for (final CommodityCurve commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
 		}
 		assert hh != null;
-		final DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
-		hh_data.getPoints().clear();
+		hh.getPoints().clear();
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -314,16 +311,15 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		CommodityIndex hh = null;
-		for (final CommodityIndex commodityIndex : commodityIndices) {
+		final EList<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		CommodityCurve hh = null;
+		for (final CommodityCurve commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
 		}
 		assert hh != null;
-		final DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
-		hh_data.getPoints().clear();
+		hh.getPoints().clear();
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 9), 13.5);
@@ -393,16 +389,15 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		CommodityIndex hh = null;
-		for (final CommodityIndex commodityIndex : commodityIndices) {
+		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		CommodityCurve hh = null;
+		for (final CommodityCurve commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
 		}
 		assert hh != null;
-		final DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
-		hh_data.getPoints().clear();
+		hh.getPoints().clear();
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 9), 13.5);
@@ -469,16 +464,15 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowSize(24, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		CommodityIndex hh = null;
-		for (final CommodityIndex commodityIndex : commodityIndices) {
+		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		CommodityCurve hh = null;
+		for (final CommodityCurve commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
 		}
 		assert hh != null;
-		final DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
-		hh_data.getPoints().clear();
+		hh.getPoints().clear();
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 9), 13.5);
@@ -553,16 +547,15 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowSize(3, TimePeriod.MONTHS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		CommodityIndex hh = null;
-		for (final CommodityIndex commodityIndex : commodityIndices) {
+		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		CommodityCurve hh = null;
+		for (final CommodityCurve commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
 		}
 		assert hh != null;
-		final DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
-		hh_data.getPoints().clear();
+		hh.getPoints().clear();
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 9), salesPrice);
@@ -634,16 +627,15 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowSize(24000, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		CommodityIndex hh = null;
-		for (final CommodityIndex commodityIndex : commodityIndices) {
+		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		CommodityCurve hh = null;
+		for (final CommodityCurve commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
 		}
 		assert hh != null;
-		final DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
-		hh_data.getPoints().clear();
+		hh.getPoints().clear();
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 9), salesPrice);
@@ -712,16 +704,15 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		CommodityIndex hh = null;
-		for (final CommodityIndex commodityIndex : commodityIndices) {
+		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		CommodityCurve hh = null;
+		for (final CommodityCurve commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
 		}
 		assert hh != null;
-		final DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
-		hh_data.getPoints().clear();
+		hh.getPoints().clear();
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -812,7 +803,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2018, 8, 1), LocalDate.of(2019, 1, 1));
 
-		CommodityIndex testCurve = pricingModelBuilder.makeCommodityDataCurve("Test", "$", "mmbtu") //
+		CommodityCurve testCurve = pricingModelBuilder.makeCommodityDataCurve("Test", "$", "mmbtu") //
 				.addIndexPoint(YearMonth.of(2018, 1), 6.0) //
 				.addIndexPoint(YearMonth.of(2018, 12), 12.0) //
 				.build();

@@ -26,9 +26,8 @@ public class CharterIndexReferenceValueProviderFactory implements IReferenceValu
 			final PricingModel model = ScenarioModelUtil.getPricingModel(lngScenarioModel);
 			final EClass referenceClass = reference.getEReferenceType();
 
-			// TODO; there needs to be more cleverness involved here.
-			if (referenceClass == PricingPackage.eINSTANCE.getCharterIndex()) {
-				return new SimpleReferenceValueProvider(model, PricingPackage.eINSTANCE.getPricingModel_CharterIndices());
+			if (referenceClass == PricingPackage.eINSTANCE.getCharterCurve()) {
+				return new SimpleReferenceValueProvider(model, PricingPackage.eINSTANCE.getPricingModel_CharterCurves());
 			}
 		}
 

@@ -21,15 +21,12 @@ import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.common.time.Months;
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.Index;
-import com.mmxlabs.models.lng.pricing.IndexPoint;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 
 /**
  * 
@@ -90,28 +87,26 @@ public class PriceIndexUtils {
 		});
 
 		{
-			final List<NamedIndexContainer<? extends Number>> namedIndexContainerList = (List<NamedIndexContainer<? extends Number>>) pricingModel.eGet(reference);
-			for (final NamedIndexContainer<? extends Number> namedIndexContainer : namedIndexContainerList) {
-				if (namedIndexContainer.getName() == null) {
+			final List<AbstractYearMonthCurve> curves = (List<AbstractYearMonthCurve>) pricingModel.eGet(reference);
+			for (final AbstractYearMonthCurve curve : curves) {
+				if (curve.getName() == null) {
 					continue;
 				}
-				final Index<? extends Number> index = namedIndexContainer.getData();
-				if (index instanceof DataIndex) {
-					addSeriesDataFromDataIndex(indices, namedIndexContainer.getName(), dateZero, (DataIndex<? extends Number>) index);
-				} else if (index instanceof DerivedIndex) {
-					indices.addSeriesExpression(namedIndexContainer.getName(), ((DerivedIndex) index).getExpression());
+				if (curve.isSetExpression()) {
+					indices.addSeriesExpression(curve.getName(), curve.getExpression());
+				} else {
+					addSeriesDataFromDataIndex(indices, curve.getName(), dateZero, curve);
 				}
 			}
 		}
 		// Add in currency curves
-		if (reference != PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES) {
-			final List<CurrencyIndex> namedIndexContainerList = pricingModel.getCurrencyIndices();
-			for (final NamedIndexContainer<? extends Number> namedIndexContainer : namedIndexContainerList) {
-				final Index<? extends Number> index = namedIndexContainer.getData();
-				if (index instanceof DataIndex) {
-					addSeriesDataFromDataIndex(indices, namedIndexContainer.getName(), dateZero, (DataIndex<? extends Number>) index);
-				} else if (index instanceof DerivedIndex) {
-					indices.addSeriesExpression(namedIndexContainer.getName(), ((DerivedIndex) index).getExpression());
+		if (reference != PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES) {
+			final List<CurrencyCurve> curves = pricingModel.getCurrencyCurves();
+			for (final AbstractYearMonthCurve curve : curves) {
+				if (curve.isSetExpression()) {
+					indices.addSeriesExpression(curve.getName(), curve.getExpression());
+				} else {
+					addSeriesDataFromDataIndex(indices, curve.getName(), dateZero, curve);
 				}
 			}
 		}
@@ -139,13 +134,13 @@ public class PriceIndexUtils {
 	public static @NonNull SeriesParser getParserFor(final @NonNull PricingModel pricingModel, final @NonNull PriceIndexType priceIndexType) {
 		switch (priceIndexType) {
 		case BUNKERS:
-			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES);
+			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES);
 		case CHARTER:
-			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES);
+			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES);
 		case COMMODITY:
-			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES);
+			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES);
 		case CURRENCY:
-			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES);
+			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES);
 		default:
 			throw new IllegalArgumentException();
 		}
@@ -163,7 +158,7 @@ public class PriceIndexUtils {
 	 * @param index
 	 *            The index data to use.
 	 */
-	public static void addSeriesDataFromDataIndex(final SeriesParser parser, final String name, final YearMonth dateZero, final DataIndex<? extends Number> index) {
+	public static void addSeriesDataFromDataIndex(final SeriesParser parser, final String name, final YearMonth dateZero, final AbstractYearMonthCurve curve) {
 		final int[] times;
 		final Number[] values;
 
@@ -175,9 +170,9 @@ public class PriceIndexUtils {
 		}
 		// otherwise, we use the data from the DataIndex
 		else {
-			final SortedSet<Pair<YearMonth, Number>> vals = new TreeSet<Pair<YearMonth, Number>>(new Comparator<Pair<YearMonth, ?>>() {
+			final SortedSet<Pair<YearMonth, Double>> vals = new TreeSet<>(new Comparator<Pair<YearMonth, Double>>() {
 				@Override
-				public int compare(final Pair<YearMonth, ?> o1, final Pair<YearMonth, ?> o2) {
+				public int compare(final Pair<YearMonth, Double> o1, final Pair<YearMonth, Double> o2) {
 					// Add some null checks
 					if (o1 == null || o1.getFirst() == null) {
 						return -1;
@@ -188,13 +183,13 @@ public class PriceIndexUtils {
 					return o1.getFirst().compareTo(o2.getFirst());
 				}
 			});
-			for (final IndexPoint<? extends Number> pt : index.getPoints()) {
-				vals.add(new Pair<YearMonth, Number>(pt.getDate(), pt.getValue()));
+			for (final YearMonthPoint pt : curve.getPoints()) {
+				vals.add(new Pair<YearMonth, Double>(pt.getDate(), pt.getValue()));
 			}
 			times = new int[vals.size()];
 			values = new Number[vals.size()];
 			int k = 0;
-			for (final Pair<YearMonth, Number> e : vals) {
+			for (final Pair<YearMonth, Double> e : vals) {
 				if (e.getFirst() == null) {
 					// Handle nulls
 					continue;

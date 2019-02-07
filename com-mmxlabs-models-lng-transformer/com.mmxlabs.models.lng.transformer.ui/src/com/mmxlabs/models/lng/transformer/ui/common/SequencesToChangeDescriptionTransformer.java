@@ -217,7 +217,9 @@ public class SequencesToChangeDescriptionTransformer {
 
 									if (slot instanceof SpotSlot) {
 										final SpotMarketSlotDescriptor slotDescriptor = AnalyticsFactory.eINSTANCE.createSpotMarketSlotDescriptor();
-										slotDescriptor.setMarketName(((SpotSlot) slot).getMarket().getName());
+										String marketName = ((SpotSlot) slot).getMarket().getName();
+										assert marketName != null;
+										slotDescriptor.setMarketName(marketName);
 										slotDescriptor.setDate(YearMonth.from(slot.getWindowStart()));
 										slotDescriptor.setSlotType(slotType);
 										if (slot.getPort() != null) {

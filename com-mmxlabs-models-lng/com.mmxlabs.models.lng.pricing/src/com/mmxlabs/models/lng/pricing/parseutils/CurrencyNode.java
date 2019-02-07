@@ -6,19 +6,18 @@ package com.mmxlabs.models.lng.pricing.parseutils;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 
 @NonNullByDefault
 public class CurrencyNode extends AbstractMarkedUpNode {
 
-	private CurrencyIndex index;
+	private CurrencyCurve curve;
 
-	public CurrencyNode(CurrencyIndex index) {
-		this.index = index;
-
+	public CurrencyNode(CurrencyCurve curve) {
+		this.curve = curve;
 	}
 
-	public CurrencyIndex getIndex() {
-		return index;
+	public CurrencyCurve getCurve() {
+		return curve;
 	}
 }

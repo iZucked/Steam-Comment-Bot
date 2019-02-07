@@ -8,8 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.parser.IExpression;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.parser.Node;
 import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
 
@@ -33,20 +32,19 @@ public class Nodes {
 		if (parentNode.children.length == 0) {
 			// Leaf node, this should be an index or a value
 			if (lookupData.commodityMap.containsKey(parentNode.token.toLowerCase())) {
-				final CommodityIndex idx = lookupData.commodityMap.get(parentNode.token.toLowerCase());
+				final CommodityCurve curve = lookupData.commodityMap.get(parentNode.token.toLowerCase());
 
 				// Matched derived index...
-				if (idx.getData() instanceof DerivedIndex<?>) {
-					final DerivedIndex<?> derivedIndex = (DerivedIndex<?>) idx.getData();
+				if (curve.isSetExpression()) {
 					// Parse the expression
-					final IExpression<Node> parse = new RawTreeParser().parse(derivedIndex.getExpression());
+					final IExpression<Node> parse = new RawTreeParser().parse(curve.getExpression());
 					final Node p = parse.evaluate();
 					// Expand the parsed tree again if needed,
 					@Nullable
 					final Node expandNode = expandNode(p, lookupData);
 					// return the new sub-parse tree for the expression
 					if (expandNode != null) {
-						lookupData.expressionCache.put(derivedIndex.getExpression(), expandNode);
+						lookupData.expressionCache.put(curve.getExpression(), expandNode);
 						return expandNode;
 					}
 					return p;

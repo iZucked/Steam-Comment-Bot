@@ -5,8 +5,10 @@
 package com.mmxlabs.lingo.its.tests.microcases.commandproviders;
 
 import java.time.YearMonth;
+import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -23,19 +25,18 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
-import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
+import com.mmxlabs.models.lng.pricing.CharterCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.DatePoint;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -51,6 +52,31 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
  */
 @RunWith(value = ShiroRunner.class)
 public class MarketDataCommandProviderTest extends AbstractMicroTestCase {
+	enum ExpectedChange {
+		NONE, MARKET, SETTLED
+	}
+
+	class VersionData {
+		String market;
+
+		public VersionData(final PricingModel m) {
+			market = m.getMarketCurveDataVersion();
+
+			Assert.assertNotNull(market);
+		}
+	}
+
+	protected void checkAndUpdate(final PricingModel pricingModel, final VersionData currentVersion, final ExpectedChange... changeTypes) {
+		// None is just to make the API call easier.
+		final Set<ExpectedChange> changeTypesSet = EnumSet.of(ExpectedChange.NONE, changeTypes);
+		if (changeTypesSet.contains(ExpectedChange.MARKET)) {
+			Assert.assertNotEquals(currentVersion.market, pricingModel.getMarketCurveDataVersion());
+			currentVersion.market = pricingModel.getMarketCurveDataVersion();
+		}
+
+		// Lazy duplicated check here
+		Assert.assertEquals(currentVersion.market, pricingModel.getMarketCurveDataVersion());
+	}
 
 	@Test
 	@Category({ MicroTest.class })
@@ -59,8 +85,7 @@ public class MarketDataCommandProviderTest extends AbstractMicroTestCase {
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
 
 		PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
-		String currentVersion = pricingModel.getMarketCurveDataVersion();
-		Assert.assertNotNull(currentVersion);
+		VersionData currentVersion = new VersionData(pricingModel);
 
 		List<DatePointContainer> settledPrices = new LinkedList<>();
 		DatePointContainer curve1 = PricingFactory.eINSTANCE.createDatePointContainer();
@@ -68,24 +93,23 @@ public class MarketDataCommandProviderTest extends AbstractMicroTestCase {
 		settledPrices.add(curve1);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, pricingModel, PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES, settledPrices)));
-		Assert.assertEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.SETTLED);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, MMXCorePackage.Literals.NAMED_OBJECT__NAME, "name2")));
-		Assert.assertEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.SETTLED);
 		DatePoint dp = PricingFactory.eINSTANCE.createDatePoint();
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, curve1, PricingPackage.Literals.DATE_POINT_CONTAINER__POINTS, dp)));
-		Assert.assertEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.SETTLED);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, dp, PricingPackage.Literals.DATE_POINT__VALUE, 1.0)));
-		Assert.assertEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.SETTLED);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(DeleteCommand.create(domain, dp)));
-		Assert.assertEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.SETTLED);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(DeleteCommand.create(domain, curve1)));
-		Assert.assertEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.SETTLED);
 
 	}
 
@@ -96,26 +120,24 @@ public class MarketDataCommandProviderTest extends AbstractMicroTestCase {
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
 
 		PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
-		String currentVersion = pricingModel.getMarketCurveDataVersion();
-		Assert.assertNotNull(currentVersion);
+		VersionData currentVersion = new VersionData(pricingModel);
 
 		UnitConversion factor = PricingFactory.eINSTANCE.createUnitConversion();
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, pricingModel, PricingPackage.Literals.PRICING_MODEL__CONVERSION_FACTORS, factor)));
-		Assert.assertEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.NONE);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, factor, PricingPackage.Literals.UNIT_CONVERSION__FROM, "from")));
-		Assert.assertEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.NONE);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, factor, PricingPackage.Literals.UNIT_CONVERSION__TO, "to")));
-		Assert.assertEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.NONE);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, factor, PricingPackage.Literals.UNIT_CONVERSION__FACTOR, 1.0)));
-		Assert.assertEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.NONE);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(DeleteCommand.create(domain, factor)));
-		Assert.assertEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.NONE);
 	}
 
 	@Test
@@ -125,36 +147,26 @@ public class MarketDataCommandProviderTest extends AbstractMicroTestCase {
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
 
 		PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
-		String currentVersion = pricingModel.getMarketCurveDataVersion();
-		Assert.assertNotNull(currentVersion);
+		VersionData currentVersion = new VersionData(pricingModel);
 
-		CommodityIndex curve1 = PricingFactory.eINSTANCE.createCommodityIndex();
-		DerivedIndex<Double> dp = PricingFactory.eINSTANCE.createDerivedIndex();
-		curve1.setData(dp);
+		CommodityCurve curve1 = PricingFactory.eINSTANCE.createCommodityCurve();
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, pricingModel, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, curve1)));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, pricingModel, PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES, curve1)));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, MMXCorePackage.Literals.NAMED_OBJECT__NAME, "name2")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.NAMED_INDEX_CONTAINER__CURRENCY_UNIT, "name2")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT, "name2")));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT, "name2")));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.NAMED_INDEX_CONTAINER__VOLUME_UNIT, "name2")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
-
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, dp, PricingPackage.Literals.DERIVED_INDEX__EXPRESSION, "5")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION, "5")));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(DeleteCommand.create(domain, curve1)));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 	}
 
 	@Test
@@ -164,50 +176,38 @@ public class MarketDataCommandProviderTest extends AbstractMicroTestCase {
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
 
 		PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
-		String currentVersion = pricingModel.getMarketCurveDataVersion();
-		Assert.assertNotNull(currentVersion);
+		VersionData currentVersion = new VersionData(pricingModel);
 
-		CommodityIndex curve1 = PricingFactory.eINSTANCE.createCommodityIndex();
-		DataIndex<Double> dp = PricingFactory.eINSTANCE.createDataIndex();
-		curve1.setData(dp);
+		CommodityCurve curve1 = PricingFactory.eINSTANCE.createCommodityCurve();
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, pricingModel, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, curve1)));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, pricingModel, PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES, curve1)));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, MMXCorePackage.Literals.NAMED_OBJECT__NAME, "name2")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.NAMED_INDEX_CONTAINER__CURRENCY_UNIT, "name2")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT, "name2")));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.NAMED_INDEX_CONTAINER__VOLUME_UNIT, "name2")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT, "name2")));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		IndexPoint<Double> pt1 = PricingFactory.eINSTANCE.createIndexPoint();
+		YearMonthPoint pt1 = PricingFactory.eINSTANCE.createYearMonthPoint();
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, dp, PricingPackage.Literals.DATA_INDEX__POINTS, pt1)));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, curve1, PricingPackage.Literals.YEAR_MONTH_POINT_CONTAINER__POINTS, pt1)));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, pt1, PricingPackage.Literals.INDEX_POINT__VALUE, 1.0)));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, pt1, PricingPackage.Literals.YEAR_MONTH_POINT__VALUE, 1.0)));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, pt1, PricingPackage.Literals.INDEX_POINT__DATE, YearMonth.now())));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, pt1, PricingPackage.Literals.YEAR_MONTH_POINT__DATE, YearMonth.now())));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(DeleteCommand.create(domain, pt1)));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(DeleteCommand.create(domain, curve1)));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 	}
 
 	@Test
@@ -217,36 +217,28 @@ public class MarketDataCommandProviderTest extends AbstractMicroTestCase {
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
 
 		PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
-		String currentVersion = pricingModel.getMarketCurveDataVersion();
-		Assert.assertNotNull(currentVersion);
+		VersionData currentVersion = new VersionData(pricingModel);
 
-		CurrencyIndex curve1 = PricingFactory.eINSTANCE.createCurrencyIndex();
-		DerivedIndex<Double> dp = PricingFactory.eINSTANCE.createDerivedIndex();
-		curve1.setData(dp);
+		CurrencyCurve curve1 = PricingFactory.eINSTANCE.createCurrencyCurve();
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, pricingModel, PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES, curve1)));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, pricingModel, PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES, curve1)));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, MMXCorePackage.Literals.NAMED_OBJECT__NAME, "name2")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.NAMED_INDEX_CONTAINER__CURRENCY_UNIT, "name2")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT, "name2")));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.NAMED_INDEX_CONTAINER__VOLUME_UNIT, "name2")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT, "name2")));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, dp, PricingPackage.Literals.DERIVED_INDEX__EXPRESSION, "5")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION, "5")));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(DeleteCommand.create(domain, curve1)));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
+
 	}
 
 	@Test
@@ -256,36 +248,27 @@ public class MarketDataCommandProviderTest extends AbstractMicroTestCase {
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
 
 		PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
-		String currentVersion = pricingModel.getMarketCurveDataVersion();
-		Assert.assertNotNull(currentVersion);
+		VersionData currentVersion = new VersionData(pricingModel);
 
-		BaseFuelIndex curve1 = PricingFactory.eINSTANCE.createBaseFuelIndex();
-		DerivedIndex<Double> dp = PricingFactory.eINSTANCE.createDerivedIndex();
-		curve1.setData(dp);
+		BunkerFuelCurve curve1 = PricingFactory.eINSTANCE.createBunkerFuelCurve();
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, pricingModel, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, curve1)));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, pricingModel, PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES, curve1)));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, MMXCorePackage.Literals.NAMED_OBJECT__NAME, "name2")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.NAMED_INDEX_CONTAINER__CURRENCY_UNIT, "name2")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT, "name2")));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.NAMED_INDEX_CONTAINER__VOLUME_UNIT, "name2")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT, "name2")));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, dp, PricingPackage.Literals.DERIVED_INDEX__EXPRESSION, "5")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION, "5")));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(DeleteCommand.create(domain, curve1)));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 	}
 
 	@Test
@@ -295,36 +278,27 @@ public class MarketDataCommandProviderTest extends AbstractMicroTestCase {
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
 
 		PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
-		String currentVersion = pricingModel.getMarketCurveDataVersion();
-		Assert.assertNotNull(currentVersion);
+		VersionData currentVersion = new VersionData(pricingModel);
 
-		CharterIndex curve1 = PricingFactory.eINSTANCE.createCharterIndex();
-		DerivedIndex<Integer> dp = PricingFactory.eINSTANCE.createDerivedIndex();
-		curve1.setData(dp);
+		CharterCurve curve1 = PricingFactory.eINSTANCE.createCharterCurve();
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, pricingModel, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, curve1)));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, pricingModel, PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES, curve1)));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, MMXCorePackage.Literals.NAMED_OBJECT__NAME, "name2")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.NAMED_INDEX_CONTAINER__CURRENCY_UNIT, "name2")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT, "name2")));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.NAMED_INDEX_CONTAINER__VOLUME_UNIT, "name2")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT, "name2")));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, dp, PricingPackage.Literals.DERIVED_INDEX__EXPRESSION, "5")));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, curve1, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION, "5")));
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(DeleteCommand.create(domain, curve1)));
-		Assert.assertNotEquals(currentVersion, pricingModel.getMarketCurveDataVersion());
-		currentVersion = pricingModel.getMarketCurveDataVersion();
+		checkAndUpdate(pricingModel, currentVersion, ExpectedChange.MARKET);
 	}
 
 	private EditingDomain createEditingDomain(final LNGScenarioModel scenarioModel) {

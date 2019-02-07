@@ -22,16 +22,11 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.pricing.DatePoint;
-import com.mmxlabs.models.lng.pricing.DatePointContainer;
-import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.UnitConversion;
-import com.mmxlabs.models.lng.pricing.impl.DataIndexImpl;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -101,19 +96,19 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 				if (notification.isTouch()) {
 					return;
 				}
-				if (notification.getNotifier() instanceof NamedIndexContainer) {
+				if (notification.getNotifier() instanceof AbstractYearMonthCurve) {
 					changedRef[0] = true;
-				} else if (notification.getNotifier() instanceof Index) {
+				} else if (notification.getNotifier() instanceof YearMonthPoint) {
 					changedRef[0] = true;
 				} else if (notification.getNotifier() instanceof IndexPoint) {
 					changedRef[0] = true;
-				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES) {
+				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES) {
 					changedRef[0] = true;
-				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES) {
+				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES) {
 					changedRef[0] = true;
-				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES) {
+				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES) {
 					changedRef[0] = true;
-				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES) {
+				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES) {
 					changedRef[0] = true;
 				}
 
@@ -137,12 +132,12 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 				if (target instanceof PricingModel) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
-						if (notifier instanceof NamedIndexContainer //
+						if (notifier instanceof AbstractYearMonthCurve //
 						) {
 							addAdapter(notifier);
 						}
 					}
-				} else if (target instanceof NamedIndexContainer || target instanceof DataIndexImpl) {
+				} else if (target instanceof AbstractYearMonthCurve) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						addAdapter(notifier);
@@ -159,12 +154,12 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 				if (target instanceof PricingModel) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
-						if (notifier instanceof NamedIndexContainer //
+						if (notifier instanceof AbstractYearMonthCurve //
 						) {
 							removeAdapter(notifier, false, true);
 						}
 					}
-				} else if (target instanceof NamedIndexContainer || target instanceof DataIndexImpl) {
+				} else if (target instanceof AbstractYearMonthCurve) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						removeAdapter(notifier, false, true);

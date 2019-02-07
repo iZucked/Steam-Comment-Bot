@@ -6,18 +6,18 @@ package com.mmxlabs.models.lng.pricing.parseutils;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 
 @NonNullByDefault
 public class CommodityNode extends AbstractMarkedUpNode {
-	private CommodityIndex index;
+	private CommodityCurve curve;
 
-	public CommodityNode(CommodityIndex index) {
-		this.index = index;
+	public CommodityNode(CommodityCurve curve) {
+		this.curve = curve;
 
 	}
 
-	public CommodityIndex getIndex() {
-		return index;
+	public CommodityCurve getCurve() {
+		return curve;
 	}
 }

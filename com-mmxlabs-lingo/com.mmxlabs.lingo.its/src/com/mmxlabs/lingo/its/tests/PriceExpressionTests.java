@@ -15,36 +15,35 @@ import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 
 public class PriceExpressionTests {
 	@NonNull
-	final static CommodityIndex[] indicies = new CommodityIndex[] { makeBrent(), makeJKM_H1(), makeJKM_H2() };
+	final static CommodityCurve[] indicies = new CommodityCurve[] { makeBrent(), makeJKM_H1(), makeJKM_H2() };
 
-	private static CommodityIndex makeBrent() {
+	private static CommodityCurve makeBrent() {
 		return makeIndex("Brent", "$", "mmBtu", YearMonth.of(2017, 3), /* 2017 */ 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17, //
 				/* 2018 */ 56.2, 56.14, 56.04, 55.95, 55.86, 55.76, 55.67, 55.56, 55.46, 55.39, 55.34, 55.3 //
 		);
 	}
-	
-	private static CommodityIndex makeJKM_H1() {
+
+	private static CommodityCurve makeJKM_H1() {
 		return makeIndex("JKM_H1", "$", "mmBtu", YearMonth.of(2017, 3), /* 2017 */ 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17, //
 				/* 2018 */ 56.2, 56.14, 56.04, 55.95, 55.86, 55.76, 55.67, 55.56, 55.46, 55.39, 55.34, 55.3 //
 		);
 	}
 
-	private static CommodityIndex makeJKM_H2() {
+	private static CommodityCurve makeJKM_H2() {
 		return makeIndex("JKM_H2", "$", "mmBtu", YearMonth.of(2017, 3), /* 2017 */ 10, 20.47, 30.76, 40.01, 50.16, 60.26, 70.23, 80.28, 90.23, 100.17, //
 				/* 2018 */ 110.2, 120.14, 130.04, 140.95, 150.86, 160.76, 170.67, 180.56, 190.46, 200.39, 210.34, 220.3 //
 		);
 	}
-	
+
 	@Test
 	public void test_datedavg_3_0_1() {
 		Assert.assertEquals(55.373, parseExpression("DATEDAVG(Brent,3,0,1)", LocalDateTime.of(2017, 6, 1, 0, 0, 0)), 0.001);
@@ -111,12 +110,12 @@ public class PriceExpressionTests {
 		Assert.assertEquals(40.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 24, 0, 0, 0)), 0.001);
 		Assert.assertEquals(56.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 14, 23, 59, 0)), 0.001);
 	}
-	
+
 	private double parseExpression(final String expression, LocalDateTime time) {
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
 
-		for (final CommodityIndex idx : indicies) {
-			pricingModel.getCommodityIndices().add(idx);
+		for (final CommodityCurve idx : indicies) {
+			pricingModel.getCommodityCurves().add(idx);
 		}
 
 		final SeriesParser p = PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.COMMODITY);
@@ -127,27 +126,22 @@ public class PriceExpressionTests {
 		return unitPrice;
 	}
 
-	private static CommodityIndex makeIndex(final String name, final String currencyUnit, final String volumeUnit, final YearMonth startDate, final double... values) {
+	private static CommodityCurve makeIndex(final String name, final String currencyUnit, final String volumeUnit, final YearMonth startDate, final double... values) {
 
-		final DataIndex<Double> data = PricingFactory.eINSTANCE.createDataIndex();
-
-		YearMonth date = startDate;
-		for (final double v : values) {
-			final IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
-			pt.setDate(date);
-			pt.setValue(v);
-
-			data.getPoints().add(pt);
-			date = date.plusMonths(1);
-		}
-
-		final CommodityIndex index = PricingFactory.eINSTANCE.createCommodityIndex();
+		final CommodityCurve index = PricingFactory.eINSTANCE.createCommodityCurve();
 		index.setName(name);
-		index.setData(data);
 
 		index.setCurrencyUnit(currencyUnit);
 		index.setVolumeUnit(volumeUnit);
+		YearMonth date = startDate;
+		for (final double v : values) {
+			final YearMonthPoint pt = PricingFactory.eINSTANCE.createYearMonthPoint();
+			pt.setDate(date);
+			pt.setValue(v);
 
+			index.getPoints().add(pt);
+			date = date.plusMonths(1);
+		}
 		return index;
 	}
 

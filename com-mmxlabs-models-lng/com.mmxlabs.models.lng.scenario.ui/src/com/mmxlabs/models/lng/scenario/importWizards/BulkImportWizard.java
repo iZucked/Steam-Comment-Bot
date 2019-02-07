@@ -52,7 +52,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	private String importFilename;
 	private char csvSeparator;
 	private char decimalSeparator;
-	final private ScenarioInstance currentScenario;
+	private final ScenarioInstance currentScenario;
 	private final FieldChoice importedField;
 
 	public BulkImportWizard(final ScenarioInstance scenarioInstance, final FieldChoice fieldChoice, final String windowTitle) {
@@ -84,13 +84,11 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		bip.saveDirectorySetting();
 
 		final List<ScenarioInstance> scenarios = getSelectedScenarios();
-		final String importFilename = getImportFilename();
 
 		final FieldChoice importTarget = getImportedField();
 
 		if (scenarios != null && importFilename != null && !"".equals(importFilename)) {
 			final char separator = getCsvSeparator();
-			final char decimalSeparator = getDecimalSeparator();
 
 			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation() {
 				@Override
@@ -138,8 +136,8 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	void bulkImport(final FieldChoice importTarget, final List<ScenarioInstance> instances, final String filename, final char listSeparator, final char decimalSeparator,
 			final IProgressMonitor monitor) {
 		monitor.beginTask("Import", instances.size());
-		final Set<String> uniqueProblems = new HashSet<String>();
-		final List<String> allProblems = new ArrayList<String>();
+		final Set<String> uniqueProblems = new HashSet<>();
+		final List<String> allProblems = new ArrayList<>();
 		try {
 
 			for (final ScenarioInstance instance : instances) {
@@ -149,7 +147,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 				}
 
 				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
-				// 
+				//
 				modelRecord.execute(ref -> ref.executeWithLock(true, () -> {
 
 					if (importTarget != FieldChoice.CHOICE_ALL_INDICIES) {
@@ -278,19 +276,19 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) root;
 			switch (importTarget) {
 			case CHOICE_COMMODITY_INDICES: {
-				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, isMultipleDataTypesInput);
+				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES, isMultipleDataTypesInput);
 			}
 			case CHOICE_CARGOES: {
 				return new CargoImportAction(ihp, scenarioModel.getCargoModel(), CargoPackage.Literals.CARGO_MODEL__CARGOES);
 			}
 			case CHOICE_CHARTER_INDICES: {
-				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, isMultipleDataTypesInput);
+				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES, isMultipleDataTypesInput);
 			}
 			case CHOICE_CURRENCY_CURVES: {
-				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES, isMultipleDataTypesInput);
+				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES, isMultipleDataTypesInput);
 			}
 			case CHOICE_BASE_FUEL_CURVES: {
-				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, isMultipleDataTypesInput);
+				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES, isMultipleDataTypesInput);
 			}
 			}
 		}

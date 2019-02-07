@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -50,20 +49,17 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CostModel;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.Index;
-import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -589,22 +585,21 @@ public class DefaultScenarioCreator {
 	}
 
 	public class DefaultPricingCreator {
-		public CommodityIndex createDefaultCommodityIndex(final String name, final Double value) {
-			final DataIndex<Double> result = createIndex(value);
+		public CommodityCurve createDefaultCommodityIndex(final String name, final Double value) {
 			final PricingModel pricingModel = scenario.getReferenceModel().getPricingModel();
 
-			final CommodityIndex index = PricingFactory.eINSTANCE.createCommodityIndex();
-			index.setName(name);
-			index.setData(result);
+			final CommodityCurve curve = PricingFactory.eINSTANCE.createCommodityCurve();
+			createIndex(curve, value);
+			curve.setName(name);
 
-			pricingModel.getCommodityIndices().add(index);
+			pricingModel.getCommodityCurves().add(curve);
 
-			return index;
+			return curve;
 		}
 
-		private <T extends Number> DataIndex<T> createIndex(final T value) {
-			final IndexPoint<T> startPoint = PricingFactory.eINSTANCE.createIndexPoint();
-			final IndexPoint<T> endPoint = PricingFactory.eINSTANCE.createIndexPoint();
+		private void createIndex(AbstractYearMonthCurve curve, final double value) {
+			final YearMonthPoint startPoint = PricingFactory.eINSTANCE.createYearMonthPoint();
+			final YearMonthPoint endPoint = PricingFactory.eINSTANCE.createYearMonthPoint();
 
 			startPoint.setDate(YearMonth.of(1000, 1));
 			startPoint.setValue(value);
@@ -612,12 +607,9 @@ public class DefaultScenarioCreator {
 			endPoint.setDate(YearMonth.of(3000, 1));
 			endPoint.setValue(value);
 
-			final DataIndex<T> result = PricingFactory.eINSTANCE.createDataIndex();
+			curve.getPoints().add(startPoint);
+			curve.getPoints().add(endPoint);
 
-			result.getPoints().add(startPoint);
-			result.getPoints().add(endPoint);
-
-			return result;
 		}
 
 		public CharterOutMarket createDefaultCharterCostModel(final Vessel vessel, final Integer minDuration, final Integer price, final EList<Port> ports) {

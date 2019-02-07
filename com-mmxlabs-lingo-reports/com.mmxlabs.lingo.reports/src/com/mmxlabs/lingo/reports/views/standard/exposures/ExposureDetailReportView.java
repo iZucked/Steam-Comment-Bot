@@ -43,7 +43,7 @@ import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
@@ -75,33 +75,30 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 		viewer.getGrid().setHeaderVisible(true);
 		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
 
-		final GridViewerColumn gvc0 = createDealColumn("Deal");
+		createDealColumn("Deal");
 
-		final GridViewerColumn gvc1 = createColumn("Index", SchedulePackage.Literals.EXPOSURE_DETAIL__INDEX_NAME);
-		final GridViewerColumn gvc2 = createColumn("Month", SchedulePackage.Literals.EXPOSURE_DETAIL__DATE);
+		createColumn("Index", SchedulePackage.Literals.EXPOSURE_DETAIL__INDEX_NAME);
+		createColumn("Month", SchedulePackage.Literals.EXPOSURE_DETAIL__DATE);
 		final GridColumnGroup volumeGroup = createGroup("Volume");
 
-		// final GridViewerColumn gvc3 = createColumn("mmBtu", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_IN_MMBTU);
-		final GridViewerColumn gvc4 = createColumn("Native", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_IN_NATIVE_UNITS);
-		final GridViewerColumn gvc5 = createColumn("Unit", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_UNIT);
+		createColumn("Native", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_IN_NATIVE_UNITS);
+		createColumn("Unit", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_UNIT);
 
 		final GridColumnGroup currencyGroup = createGroup("Currency");
-		final GridViewerColumn gvc6 = createColumn("Price", currencyGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE);
-		final GridViewerColumn gvc7 = createColumn("Value", currencyGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__NATIVE_VALUE);
-		final GridViewerColumn gvc8 = createColumn("Unit", currencyGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__CURRENCY_UNIT);
+		createColumn("Price", currencyGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE);
+		createColumn("Value", currencyGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__NATIVE_VALUE);
+		createColumn("Unit", currencyGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__CURRENCY_UNIT);
 
 		viewer.setContentProvider(new ITreeContentProvider() {
 
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-				// TODO Auto-generated method stub
-
+				// Nothing to do
 			}
 
 			@Override
 			public void dispose() {
-				// TODO Auto-generated method stub
-
+				// Nothing to do
 			}
 
 			@Override
@@ -197,10 +194,10 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 			}
 		});
 
-		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
+		final ESelectionService service = getSite().getService(ESelectionService.class);
 		service.addPostSelectionListener(this);
 
-		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
+		selectedScenariosService = getSite().getService(SelectedScenariosService.class);
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 
 		makeActions();
@@ -286,7 +283,7 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 							} else if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
 								cell.setText(String.format("%,.3f", (Double) o));
 							} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
-								cell.setText(String.format("%,.1f", ((Double) o).doubleValue()));
+								cell.setText(String.format("%,.1f", (Double) o));
 							} else {
 								cell.setText(o.toString());
 							}
@@ -296,17 +293,16 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 							try {
 								final Object o = ((EObject) element).eGet(reference);
 								if (o instanceof Slot) {
-									final Slot slot = (Slot) o;
+									final Slot<?> slot = (Slot<?>) o;
 									cell.setText(slot.getName());
-								} else if (o instanceof NamedIndexContainer<?>) {
-									final NamedIndexContainer<?> idx = (NamedIndexContainer<?>) o;
+								} else if (o instanceof AbstractYearMonthCurve) {
+									final AbstractYearMonthCurve idx = (AbstractYearMonthCurve) o;
 									cell.setText(idx.getName());
 								} else if (element instanceof ExposureDetail) {
-									final ExposureDetail detail = (ExposureDetail) element;
 									if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
 										cell.setText(String.format("%,.3f", (Double) o));
 									} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
-										cell.setText(String.format("%,.1f", ((Double) o).doubleValue()));
+										cell.setText(String.format("%,.1f", (Double) o));
 									} else {
 										cell.setText(o.toString());
 									}
@@ -326,7 +322,7 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 
 	@Override
 	public void dispose() {
-		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
+		final ESelectionService service = getSite().getService(ESelectionService.class);
 		service.removePostSelectionListener(this);
 
 		selectedScenariosService.removeListener(selectedScenariosServiceListener);

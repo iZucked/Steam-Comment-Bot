@@ -30,11 +30,11 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
@@ -354,18 +354,16 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		}
 	}
 
-	public CommodityIndex addCommodityIndex(final String name) {
+	public CommodityCurve addCommodityIndex(final String name) {
 
 		return scenarioModelBuilder.getPricingModelBuilder().makeCommodityDataCurve(name, "currencyUnit", "volumeUnit").build();
 	}
 
-	public void addDataToCommodity(final CommodityIndex ci, final YearMonth date, final double value) {
-		final DataIndex<Double> di = (DataIndex<Double>) ci.getData();
-		final List<IndexPoint<Double>> points = di.getPoints();
-		final IndexPoint<Double> ip = PricingFactory.eINSTANCE.createIndexPoint();
+	public void addDataToCommodity(final CommodityCurve curve, final YearMonth date, final double value) {
+		final YearMonthPoint ip = PricingFactory.eINSTANCE.createYearMonthPoint();
 		ip.setDate(date);
 		ip.setValue(value);
-		points.add(ip);
+		curve.getPoints().add(ip);
 	}
 
 	/**

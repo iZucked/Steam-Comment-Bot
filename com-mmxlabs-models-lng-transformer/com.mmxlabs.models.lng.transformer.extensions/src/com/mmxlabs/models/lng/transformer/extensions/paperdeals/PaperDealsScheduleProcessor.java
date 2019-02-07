@@ -16,7 +16,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
@@ -77,7 +77,7 @@ public class PaperDealsScheduleProcessor implements IOutputScheduleProcessor {
 
 				final Map<LocalDate, Double> settledPrices = provider.getSettledPrices(paperDeal.getIndex());
 				final ISeries series = provider.getSeriesParser(PriceIndexType.COMMODITY).getSeries(paperDeal.getIndex());
-				final NamedIndexContainer<?> curveData = provider.getCurve(PriceIndexType.COMMODITY, paperDeal.getIndex());
+				final AbstractYearMonthCurve curveData = provider.getCurve(PriceIndexType.COMMODITY, paperDeal.getIndex());
 
 				start = paperDeal.getStartDate();
 				// Fixed price portion

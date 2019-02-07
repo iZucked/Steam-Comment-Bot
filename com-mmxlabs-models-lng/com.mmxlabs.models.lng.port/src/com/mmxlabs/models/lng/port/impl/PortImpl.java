@@ -47,7 +47,6 @@ import java.time.ZoneId;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDefaultWindowSizeUnits <em>Default Window Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMaxCvValue <em>Max Cv Value</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMmxId <em>Mmx Id</em>}</li>
  * </ul>
  *
  * @generated
@@ -310,26 +309,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected boolean maxCvValueESet;
-
-	/**
-	 * The default value of the '{@link #getMmxId() <em>Mmx Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMmxId()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String MMX_ID_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getMmxId() <em>Mmx Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMmxId()
-	 * @generated
-	 * @ordered
-	 */
-	protected String mmxId = MMX_ID_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -668,27 +647,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getMmxId() {
-		return mmxId;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setMmxId(String newMmxId) {
-		String oldMmxId = mmxId;
-		mmxId = newMmxId;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__MMX_ID, oldMmxId, mmxId));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public ZoneId getZoneId() {
@@ -776,8 +734,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return getMinCvValue();
 			case PortPackage.PORT__MAX_CV_VALUE:
 				return getMaxCvValue();
-			case PortPackage.PORT__MMX_ID:
-				return getMmxId();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -831,9 +787,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__MAX_CV_VALUE:
 				setMaxCvValue((Double)newValue);
 				return;
-			case PortPackage.PORT__MMX_ID:
-				setMmxId((String)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -885,9 +838,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__MAX_CV_VALUE:
 				unsetMaxCvValue();
 				return;
-			case PortPackage.PORT__MMX_ID:
-				setMmxId(MMX_ID_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -926,8 +876,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return isSetMinCvValue();
 			case PortPackage.PORT__MAX_CV_VALUE:
 				return isSetMaxCvValue();
-			case PortPackage.PORT__MMX_ID:
-				return MMX_ID_EDEFAULT == null ? mmxId != null : !MMX_ID_EDEFAULT.equals(mmxId);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -982,8 +930,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 		if (minCvValueESet) result.append(minCvValue); else result.append("<unset>");
 		result.append(", maxCvValue: ");
 		if (maxCvValueESet) result.append(maxCvValue); else result.append("<unset>");
-		result.append(", mmxId: ");
-		result.append(mmxId);
 		result.append(')');
 		return result.toString();
 	}

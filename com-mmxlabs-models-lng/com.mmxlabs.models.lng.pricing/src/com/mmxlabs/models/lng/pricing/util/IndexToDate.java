@@ -15,7 +15,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.parser.IExpression;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.parser.Node;
 import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
 import com.mmxlabs.models.lng.pricing.parseutils.CommodityNode;
@@ -75,10 +75,10 @@ public class IndexToDate {
 	}
 
 	static class IndexDateRecord {
-		NamedIndexContainer<?> index;
+		AbstractYearMonthCurve index;
 		LocalDate date;
 
-		IndexDateRecord(final NamedIndexContainer<?> index, final LocalDate date) {
+		IndexDateRecord(final AbstractYearMonthCurve index, final LocalDate date) {
 			this.index = index;
 			this.date = date;
 		}
@@ -195,15 +195,15 @@ public class IndexToDate {
 			}
 		} else if (node instanceof CommodityNode) {
 			final CommodityNode commodityNode = (CommodityNode) node;
-			return new IndexToDateRecords(new IndexDateRecord(commodityNode.getIndex(), date));
+			return new IndexToDateRecords(new IndexDateRecord(commodityNode.getCurve(), date));
 		} else if (node instanceof CurrencyNode) {
 			final CurrencyNode currencyNode = (CurrencyNode) node;
-			return new IndexToDateRecords(new IndexDateRecord(currencyNode.getIndex(), date));
+			return new IndexToDateRecords(new IndexDateRecord(currencyNode.getCurve(), date));
 		} else if (node instanceof ConversionNode) {
 			final ConversionNode conversionNode = (ConversionNode) node;
 			return new EmptyNode();
 		} else if (node instanceof MaxFunctionNode) {
-			if (node.getChildren().size() == 0) {
+			if (node.getChildren().isEmpty()) {
 				throw new IllegalStateException();
 			}
 
@@ -218,7 +218,7 @@ public class IndexToDate {
 					if (best == null) {
 						best = r;
 					} else {
-						best = merge(best, r, (c_0, c_1) -> new IndexDateRecord(c_0.index, c_0.date));
+						best = merge(best, r, (c0, c1) -> new IndexDateRecord(c0.index, c0.date));
 					}
 				}
 			}

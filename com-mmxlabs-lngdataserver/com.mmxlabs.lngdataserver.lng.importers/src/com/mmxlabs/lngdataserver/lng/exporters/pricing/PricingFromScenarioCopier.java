@@ -21,44 +21,38 @@ import com.mmxlabs.lngdataserver.integration.pricing.model.CurveType;
 import com.mmxlabs.lngdataserver.integration.pricing.model.DataCurve;
 import com.mmxlabs.lngdataserver.integration.pricing.model.ExpressionCurve;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.Index;
-import com.mmxlabs.models.lng.pricing.IndexPoint;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 
 public class PricingFromScenarioCopier {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PricingFromScenarioCopier.class);
 
-	private static Function<DerivedIndex<?>, ExpressionCurve> derivedTransformer = (idx) -> {
+	private static Function<AbstractYearMonthCurve, ExpressionCurve> derivedTransformer = (idx) -> {
 		ExpressionCurve out = new ExpressionCurve();
 		out.setExpression(idx.getExpression());
 		return out;
 	};
-	private static Function<DataIndex<?>, DataCurve> dataTransformer = (idx) -> {
+	private static Function<AbstractYearMonthCurve, DataCurve> dataTransformer = (idx) -> {
 		DataCurve out = new DataCurve();
 		List<CurvePoint> pts = new ArrayList<>(idx.getPoints().size());
-		for (IndexPoint<?> pt : idx.getPoints()) {
+		for (YearMonthPoint pt : idx.getPoints()) {
 			CurvePoint newPt = new CurvePoint();
 			newPt.setDate(pt.getDate().atDay(1));
-			newPt.setValue(BigDecimal.valueOf(((Number) pt.getValue()).doubleValue()));
+			newPt.setValue(BigDecimal.valueOf(pt.getValue()));
 			pts.add(newPt);
 		}
 		out.setCurve(pts);
 		return out;
 	};
 
-	private static BiFunction<NamedIndexContainer<?>, CurveType, Curve> curveTransformer = (idx, type) -> {
-		Index<?> data = idx.getData();
+	private static BiFunction<AbstractYearMonthCurve, CurveType, Curve> curveTransformer = (idx, type) -> {
 		Curve curve;
-		if (data instanceof DerivedIndex<?>) {
-			curve = derivedTransformer.apply((DerivedIndex<?>) data);
-		} else if (data instanceof DataIndex<?>) {
-			curve = dataTransformer.apply((DataIndex<?>) data);
+		if (idx.getExpression() != null) {
+			curve = derivedTransformer.apply(idx);
 		} else {
-			return null;
+			curve = dataTransformer.apply(idx);
 		}
 		curve.setName(idx.getName());
 		curve.setCurrency(idx.getCurrencyUnit());
@@ -80,22 +74,22 @@ public class PricingFromScenarioCopier {
 
 		PricingVersion version = new PricingVersion();
 
-		pricingModel.getCurrencyIndices().forEach(idx -> {
+		pricingModel.getCurrencyCurves().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.CURRENCY);
 			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
 		});
 
-		pricingModel.getBaseFuelPrices().forEach(idx -> {
+		pricingModel.getBunkerFuelCurves().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.BASE_FUEL);
 			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
 		});
 
-		pricingModel.getCharterIndices().forEach(idx -> {
+		pricingModel.getCharterCurves().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.CHARTER);
 			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
 		});
 
-		pricingModel.getCommodityIndices().forEach(idx -> {
+		pricingModel.getCommodityCurves().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.COMMODITY);
 			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
 		});

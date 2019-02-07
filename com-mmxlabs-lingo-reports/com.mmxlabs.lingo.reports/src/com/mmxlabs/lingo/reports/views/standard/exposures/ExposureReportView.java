@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.standard.exposures;
 
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,14 +37,11 @@ import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransform
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures.ValueMode;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -134,10 +130,13 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			for (final ScenarioResult sr : selectedDataProvider.getScenarioResults()) {
 				final IScenarioDataProvider sdp = sr.getScenarioDataProvider();
 				final PricingModel pm = ScenarioModelUtil.getPricingModel(sdp);
-				final EList<CommodityIndex> indices = pm.getCommodityIndices();
+				final EList<CommodityCurve> indices = pm.getCommodityCurves();
 
-				for (final CommodityIndex index : indices) {
+				for (final CommodityCurve index : indices) {
 					final String indexName = index.getName();
+					if (indexName == null) {
+						continue;
+					}
 					if (indexName == null) {
 						continue;
 					}
@@ -484,15 +483,15 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		return super.getAdapter(adapter);
 	}
-	
+
 	protected YearMonth getEarliestExposureDate(final IScenarioDataProvider sdp) {
 		YearMonth result = YearMonth.now();
-		
+
 		final ScheduleModel sm = ScenarioModelUtil.getScheduleModel(sdp);
 		final Schedule schedule = sm.getSchedule();
 		if (schedule != null) {
-			for(final CargoAllocation ca : schedule.getCargoAllocations()) {
-				for(final SlotAllocation sa : ca.getSlotAllocations()) {
+			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
+				for (final SlotAllocation sa : ca.getSlotAllocations()) {
 					for (final ExposureDetail detail : sa.getExposures()) {
 						if (detail.getDate().isBefore(result)) {
 							result = detail.getDate();
@@ -501,17 +500,17 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				}
 			}
 		}
-		return result;		
+		return result;
 	}
-	
+
 	protected YearMonth getLatestExposureDate(final IScenarioDataProvider sdp) {
 		YearMonth result = YearMonth.now();
-		
+
 		final ScheduleModel sm = ScenarioModelUtil.getScheduleModel(sdp);
 		final Schedule schedule = sm.getSchedule();
 		if (schedule != null) {
-			for(final CargoAllocation ca : schedule.getCargoAllocations()) {
-				for(final SlotAllocation sa : ca.getSlotAllocations()) {
+			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
+				for (final SlotAllocation sa : ca.getSlotAllocations()) {
 					for (final ExposureDetail detail : sa.getExposures()) {
 						if (detail.getDate().isAfter(result)) {
 							result = detail.getDate();
@@ -520,6 +519,6 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				}
 			}
 		}
-		return result;		
+		return result;
 	}
 }

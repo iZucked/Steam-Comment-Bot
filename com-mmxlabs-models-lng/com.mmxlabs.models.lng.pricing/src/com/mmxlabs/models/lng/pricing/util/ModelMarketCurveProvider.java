@@ -27,17 +27,14 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
+import com.mmxlabs.models.lng.pricing.CharterCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.DatePoint;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.Index;
-import com.mmxlabs.models.lng.pricing.IndexPoint;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.pricing.parser.Node;
 import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
 import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
@@ -54,7 +51,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 
 	private SoftReference<Map<@NonNull String, Map<@NonNull LocalDate, Double>>> settledPriceCache = new SoftReference<>(null);
 
-	private SoftReference<Map<@NonNull NamedIndexContainer<?>, @Nullable YearMonth>> earlyDateCache = new SoftReference<>(null);
+	private SoftReference<Map<@NonNull AbstractYearMonthCurve, @Nullable YearMonth>> earlyDateCache = new SoftReference<>(null);
 
 	private SoftReference<Map<@NonNull String, @Nullable LocalDate>> earlySettledDateCache = new SoftReference<>(null);
 
@@ -120,29 +117,27 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		return settledPrices;
 	}
 
-	public synchronized Map<@NonNull NamedIndexContainer<?>, @Nullable YearMonth> buildDateCache() {
-		final Map<@NonNull NamedIndexContainer<?>, @Nullable YearMonth> cacheObj = new HashMap<>();
+	public synchronized Map<@NonNull AbstractYearMonthCurve, @Nullable YearMonth> buildDateCache() {
+		final Map<@NonNull AbstractYearMonthCurve, @Nullable YearMonth> cacheObj = new HashMap<>();
 		earlyDateCache = new SoftReference<>(cacheObj);
-		final Function<NamedIndexContainer<?>, @Nullable YearMonth> finder = (curve) -> {
-			final Index<?> data = curve.getData();
-			if (data instanceof DataIndex<?>) {
-				final DataIndex<?> indexData = (DataIndex<?>) data;
-				final Optional<?> min = indexData.getPoints().stream() //
+		final Function<AbstractYearMonthCurve, @Nullable YearMonth> finder = (curve) -> {
+			if (!curve.isSetExpression()) {
+				final Optional<?> min = curve.getPoints().stream() //
 						.min((p1, p2) -> {
 							return p1.getDate().compareTo(p2.getDate());
 						});
 				// No data check
 				if (min.isPresent()) {
-					return ((IndexPoint) min.get()).getDate();
+					return ((YearMonthPoint) min.get()).getDate();
 				}
 			}
 			return null;
 		};
 
-		pricingModel.getCommodityIndices().forEach(c -> cacheObj.put(c, finder.apply(c)));
-		pricingModel.getCharterIndices().forEach(c -> cacheObj.put(c, finder.apply(c)));
-		pricingModel.getBaseFuelPrices().forEach(c -> cacheObj.put(c, finder.apply(c)));
-		pricingModel.getCurrencyIndices().forEach(c -> cacheObj.put(c, finder.apply(c)));
+		pricingModel.getCommodityCurves().forEach(c -> cacheObj.put(c, finder.apply(c)));
+		pricingModel.getCharterCurves().forEach(c -> cacheObj.put(c, finder.apply(c)));
+		pricingModel.getBunkerFuelCurves().forEach(c -> cacheObj.put(c, finder.apply(c)));
+		pricingModel.getCurrencyCurves().forEach(c -> cacheObj.put(c, finder.apply(c)));
 
 		return cacheObj;
 	}
@@ -195,9 +190,9 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 
 	}
 
-	public @Nullable YearMonth getEarliestDate(final @NonNull NamedIndexContainer<?> index) {
+	public @Nullable YearMonth getEarliestDate(final @NonNull AbstractYearMonthCurve index) {
 
-		Map<@NonNull NamedIndexContainer<?>, @Nullable YearMonth> map = earlyDateCache.get();
+		Map<@NonNull AbstractYearMonthCurve, @Nullable YearMonth> map = earlyDateCache.get();
 		if (map == null) {
 			map = buildDateCache();
 		}
@@ -213,7 +208,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		return map.getOrDefault(indexName.toLowerCase(), null);
 	}
 
-	public @NonNull Collection<@NonNull NamedIndexContainer<?>> getLinkedCurves(final String priceExpression) {
+	public @NonNull Collection<@NonNull AbstractYearMonthCurve> getLinkedCurves(final String priceExpression) {
 		if (priceExpression == null || priceExpression.trim().isEmpty()) {
 			return Collections.emptySet();
 		}
@@ -225,13 +220,13 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		}
 
 		final LookupData pLookupData = lookupData;
-		final @Nullable Collection<@NonNull NamedIndexContainer<?>> r = lookupData.expressionCache2.computeIfAbsent(priceExpression, key -> {
+		final @Nullable Collection<@NonNull AbstractYearMonthCurve> r = lookupData.expressionCache2.computeIfAbsent(priceExpression, key -> {
 			try {
 				// Parse the expression
 				final IExpression<Node> parse = new RawTreeParser().parse(key);
 				final Node p = parse.evaluate();
 				final Node node = expandNode(p, pLookupData);
-				final Collection<@NonNull NamedIndexContainer<?>> result = collectIndicies(node, pLookupData);
+				final Collection<@NonNull AbstractYearMonthCurve> result = collectIndicies(node, pLookupData);
 				if (result != null) {
 					return result;
 				}
@@ -248,7 +243,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 
 	}
 
-	public @NonNull List<Pair<NamedIndexContainer<?>, LocalDate>> getLinkedCurvesAndDate(final String priceExpression, LocalDate date) {
+	public @NonNull List<Pair<AbstractYearMonthCurve, LocalDate>> getLinkedCurvesAndDate(final String priceExpression, LocalDate date) {
 		if (priceExpression == null || priceExpression.trim().isEmpty()) {
 			return Collections.emptyList();
 		}
@@ -264,7 +259,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 			IIndexToDateNode n = IndexToDate.calculateIndicesToDate(priceExpression, date, pLookupData);
 			if (n instanceof IndexToDateRecords) {
 				IndexToDateRecords indexToDateRecords = (IndexToDateRecords) n;
-				List<Pair<NamedIndexContainer<?>, LocalDate>> result = new LinkedList<>();
+				List<Pair<AbstractYearMonthCurve, LocalDate>> result = new LinkedList<>();
 				for (IndexDateRecord rec : indexToDateRecords.records) {
 					result.add(new Pair<>(rec.index, rec.date));
 				}
@@ -286,20 +281,19 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		if (parentNode.children.length == 0) {
 			// Leaf node, this should be an index or a value
 			if (lookupData.commodityMap.containsKey(parentNode.token.toLowerCase())) {
-				final CommodityIndex idx = lookupData.commodityMap.get(parentNode.token.toLowerCase());
+				final CommodityCurve idx = lookupData.commodityMap.get(parentNode.token.toLowerCase());
 
 				// Matched derived index...
-				if (idx.getData() instanceof DerivedIndex<?>) {
-					final DerivedIndex<?> derivedIndex = (DerivedIndex<?>) idx.getData();
+				if (idx.isSetExpression()) {
 					// Parse the expression
-					final IExpression<Node> parse = new RawTreeParser().parse(derivedIndex.getExpression());
+					final IExpression<Node> parse = new RawTreeParser().parse(idx.getExpression());
 					final Node p = parse.evaluate();
 					// Expand the parsed tree again if needed,
 					@Nullable
 					final Node expandNode = expandNode(p, lookupData);
 					// return the new sub-parse tree for the expression
 					if (expandNode != null) {
-						lookupData.expressionCache.put(derivedIndex.getExpression(), expandNode);
+						lookupData.expressionCache.put(idx.getExpression(), expandNode);
 						return expandNode;
 					}
 					return p;
@@ -308,20 +302,19 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 				}
 			}
 			if (lookupData.charterMap.containsKey(parentNode.token.toLowerCase())) {
-				final CharterIndex idx = lookupData.charterMap.get(parentNode.token.toLowerCase());
+				final CharterCurve idx = lookupData.charterMap.get(parentNode.token.toLowerCase());
 
 				// Matched derived index...
-				if (idx.getData() instanceof DerivedIndex<?>) {
-					final DerivedIndex<?> derivedIndex = (DerivedIndex<?>) idx.getData();
+				if (idx.isSetExpression()) {
 					// Parse the expression
-					final IExpression<Node> parse = new RawTreeParser().parse(derivedIndex.getExpression());
+					final IExpression<Node> parse = new RawTreeParser().parse(idx.getExpression());
 					final Node p = parse.evaluate();
 					// Expand the parsed tree again if needed,
 					@Nullable
 					final Node expandNode = expandNode(p, lookupData);
 					// return the new sub-parse tree for the expression
 					if (expandNode != null) {
-						lookupData.expressionCache.put(derivedIndex.getExpression(), expandNode);
+						lookupData.expressionCache.put(idx.getExpression(), expandNode);
 						return expandNode;
 					}
 					return p;
@@ -330,20 +323,19 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 				}
 			}
 			if (lookupData.baseFuelMap.containsKey(parentNode.token.toLowerCase())) {
-				final BaseFuelIndex idx = lookupData.baseFuelMap.get(parentNode.token.toLowerCase());
+				final BunkerFuelCurve idx = lookupData.baseFuelMap.get(parentNode.token.toLowerCase());
 
 				// Matched derived index...
-				if (idx.getData() instanceof DerivedIndex<?>) {
-					final DerivedIndex<?> derivedIndex = (DerivedIndex<?>) idx.getData();
+				if (idx.isSetExpression()) {
 					// Parse the expression
-					final IExpression<Node> parse = new RawTreeParser().parse(derivedIndex.getExpression());
+					final IExpression<Node> parse = new RawTreeParser().parse(idx.getExpression());
 					final Node p = parse.evaluate();
 					// Expand the parsed tree again if needed,
 					@Nullable
 					final Node expandNode = expandNode(p, lookupData);
 					// return the new sub-parse tree for the expression
 					if (expandNode != null) {
-						lookupData.expressionCache.put(derivedIndex.getExpression(), expandNode);
+						lookupData.expressionCache.put(idx.getExpression(), expandNode);
 						return expandNode;
 					}
 					return p;
@@ -366,8 +358,8 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		}
 	}
 
-	public static Set<@NonNull NamedIndexContainer<?>> collectIndicies(@NonNull final Node parentNode, final LookupData lookupData) {
-		final Set<@NonNull NamedIndexContainer<?>> s = new HashSet<>();
+	public static Set<@NonNull AbstractYearMonthCurve> collectIndicies(@NonNull final Node parentNode, final LookupData lookupData) {
+		final Set<@NonNull AbstractYearMonthCurve> s = new HashSet<>();
 		// FIXME: Date shift!
 		if (parentNode.token.equalsIgnoreCase("SHIFT")) {
 			s.addAll(collectIndicies(parentNode.children[0], lookupData));
@@ -387,7 +379,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		return s;
 	}
 
-	public NamedIndexContainer<?> getCurve(PriceIndexType priceIndexType, String name) {
+	public AbstractYearMonthCurve getCurve(PriceIndexType priceIndexType, String name) {
 		LookupData lookupData = expressionToIndexUseCache.get();
 		if (lookupData == null) {
 			lookupData = LookupData.createLookupData(pricingModel);

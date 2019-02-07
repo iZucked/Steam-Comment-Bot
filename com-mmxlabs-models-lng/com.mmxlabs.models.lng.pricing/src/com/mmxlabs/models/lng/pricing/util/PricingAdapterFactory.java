@@ -12,15 +12,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PortsExpressionMap;
@@ -109,26 +105,6 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 				return createIndexAdapter();
 			}
 			@Override
-			public Adapter caseCurrencyIndex(CurrencyIndex object) {
-				return createCurrencyIndexAdapter();
-			}
-			@Override
-			public Adapter caseCommodityIndex(CommodityIndex object) {
-				return createCommodityIndexAdapter();
-			}
-			@Override
-			public Adapter caseCharterIndex(CharterIndex object) {
-				return createCharterIndexAdapter();
-			}
-			@Override
-			public Adapter caseBaseFuelIndex(BaseFuelIndex object) {
-				return createBaseFuelIndexAdapter();
-			}
-			@Override
-			public <Value> Adapter caseNamedIndexContainer(NamedIndexContainer<Value> object) {
-				return createNamedIndexContainerAdapter();
-			}
-			@Override
 			public Adapter caseCostModel(CostModel object) {
 				return createCostModelAdapter();
 			}
@@ -191,6 +167,34 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseDatePoint(DatePoint object) {
 				return createDatePointAdapter();
+			}
+			@Override
+			public Adapter caseYearMonthPointContainer(YearMonthPointContainer object) {
+				return createYearMonthPointContainerAdapter();
+			}
+			@Override
+			public Adapter caseYearMonthPoint(YearMonthPoint object) {
+				return createYearMonthPointAdapter();
+			}
+			@Override
+			public Adapter caseAbstractYearMonthCurve(AbstractYearMonthCurve object) {
+				return createAbstractYearMonthCurveAdapter();
+			}
+			@Override
+			public Adapter caseCommodityCurve(CommodityCurve object) {
+				return createCommodityCurveAdapter();
+			}
+			@Override
+			public Adapter caseCharterCurve(CharterCurve object) {
+				return createCharterCurveAdapter();
+			}
+			@Override
+			public Adapter caseBunkerFuelCurve(BunkerFuelCurve object) {
+				return createBunkerFuelCurveAdapter();
+			}
+			@Override
+			public Adapter caseCurrencyCurve(CurrencyCurve object) {
+				return createCurrencyCurveAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -291,76 +295,6 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createIndexAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.CurrencyIndex <em>Currency Index</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.pricing.CurrencyIndex
-	 * @generated
-	 */
-	public Adapter createCurrencyIndexAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.CommodityIndex <em>Commodity Index</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.pricing.CommodityIndex
-	 * @generated
-	 */
-	public Adapter createCommodityIndexAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.CharterIndex <em>Charter Index</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.pricing.CharterIndex
-	 * @generated
-	 */
-	public Adapter createCharterIndexAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.BaseFuelIndex <em>Base Fuel Index</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.pricing.BaseFuelIndex
-	 * @generated
-	 */
-	public Adapter createBaseFuelIndexAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer <em>Named Index Container</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.pricing.NamedIndexContainer
-	 * @generated
-	 */
-	public Adapter createNamedIndexContainerAdapter() {
 		return null;
 	}
 
@@ -585,6 +519,104 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDatePointAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.YearMonthPointContainer <em>Year Month Point Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.YearMonthPointContainer
+	 * @generated
+	 */
+	public Adapter createYearMonthPointContainerAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.YearMonthPoint <em>Year Month Point</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.YearMonthPoint
+	 * @generated
+	 */
+	public Adapter createYearMonthPointAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve <em>Abstract Year Month Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve
+	 * @generated
+	 */
+	public Adapter createAbstractYearMonthCurveAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.CommodityCurve <em>Commodity Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.CommodityCurve
+	 * @generated
+	 */
+	public Adapter createCommodityCurveAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.CharterCurve <em>Charter Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.CharterCurve
+	 * @generated
+	 */
+	public Adapter createCharterCurveAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.BunkerFuelCurve <em>Bunker Fuel Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.BunkerFuelCurve
+	 * @generated
+	 */
+	public Adapter createBunkerFuelCurveAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.CurrencyCurve <em>Currency Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.CurrencyCurve
+	 * @generated
+	 */
+	public Adapter createCurrencyCurveAdapter() {
 		return null;
 	}
 

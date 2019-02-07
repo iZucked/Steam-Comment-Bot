@@ -205,7 +205,7 @@ public class PortCostEntryImpl extends EObjectImpl implements PortCostEntry {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (activity: ");
 		result.append(activity);
 		result.append(", cost: ");

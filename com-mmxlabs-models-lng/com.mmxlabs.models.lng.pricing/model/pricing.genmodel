@@ -9,11 +9,13 @@
       multipleEditorPages="false" generateModelWizard="false" extensibleProviderFactory="true"
       childCreationExtenders="true" ecorePackage="pricing.ecore#/">
     <genClasses ecoreClass="pricing.ecore#//PricingModel">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/currencyIndices"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/commodityIndices"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/charterIndices"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/baseFuelPrices"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/currencyCurves"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/commodityCurves"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/charterCurves"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/bunkerFuelCurves"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/conversionFactors"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PricingModel/marketCurveDataVersion"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/settledPrices"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//DataIndex">
       <genTypeParameters ecoreTypeParameter="pricing.ecore#//DataIndex/Value"/>
@@ -41,16 +43,6 @@
         <genParameters ecoreParameter="pricing.ecore#//Index/getBackwardsValueForMonth/date"/>
       </genOperations>
     </genClasses>
-    <genClasses ecoreClass="pricing.ecore#//CurrencyIndex"/>
-    <genClasses ecoreClass="pricing.ecore#//CommodityIndex"/>
-    <genClasses ecoreClass="pricing.ecore#//CharterIndex"/>
-    <genClasses ecoreClass="pricing.ecore#//BaseFuelIndex"/>
-    <genClasses ecoreClass="pricing.ecore#//NamedIndexContainer">
-      <genTypeParameters ecoreTypeParameter="pricing.ecore#//NamedIndexContainer/Value"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//NamedIndexContainer/data"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//NamedIndexContainer/currencyUnit"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//NamedIndexContainer/volumeUnit"/>
-    </genClasses>
     <genClasses ecoreClass="pricing.ecore#//CostModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//CostModel/routeCosts"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//CostModel/portCosts"/>
@@ -60,21 +52,21 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//CostModel/suezCanalTariff"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//RouteCost">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//RouteCost/route"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//RouteCost/vesselClass"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//RouteCost/routeOption"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//RouteCost/vessels"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//RouteCost/ladenCost"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//RouteCost/ballastCost"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//BaseFuelCost">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//BaseFuelCost/fuel"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//BaseFuelCost/index"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//BaseFuelCost/expression"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//PortCost">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PortCost/ports"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PortCost/entries"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PortCost/referenceCapacity"/>
       <genOperations ecoreOperation="pricing.ecore#//PortCost/getPortCost">
-        <genParameters ecoreParameter="pricing.ecore#//PortCost/getPortCost/vesselClass"/>
+        <genParameters ecoreParameter="pricing.ecore#//PortCost/getPortCost/vessel"/>
         <genParameters ecoreParameter="pricing.ecore#//PortCost/getPortCost/activity"/>
       </genOperations>
     </genClasses>
@@ -85,18 +77,9 @@
     <genClasses ecoreClass="pricing.ecore#//CooldownPrice">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//CooldownPrice/lumpsum"/>
     </genClasses>
-    <genClasses ecoreClass="pricing.ecore#//PortsPriceMap">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PortsPriceMap/ports"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PortsPriceMap/index"/>
-    </genClasses>
     <genClasses ecoreClass="pricing.ecore#//PortsExpressionMap">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PortsExpressionMap/ports"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PortsExpressionMap/expression"/>
-    </genClasses>
-    <genClasses ecoreClass="pricing.ecore#//PortsSplitPriceMap">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PortsSplitPriceMap/ports"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PortsSplitPriceMap/indexH1"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PortsSplitPriceMap/indexH2"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//PortsSplitExpressionMap">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PortsSplitExpressionMap/ports"/>
@@ -105,7 +88,6 @@
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//PanamaCanalTariff">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PanamaCanalTariff/bands"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PanamaCanalTariff/availableFrom"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PanamaCanalTariff/markupRate"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//PanamaCanalTariffBand">
@@ -125,11 +107,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//SuezCanalTariff/bands"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//SuezCanalTariff/tugBands"/>
       <genFeatures createChild="false" propertyDescription="Cost per tug" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariff/tugCost"/>
-      <genFeatures createChild="false" propertyDescription="Mooring costs" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariff/mooringCost"/>
-      <genFeatures createChild="false" propertyDescription="Pilotage costs" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariff/pilotageCost"/>
-      <genFeatures createChild="false" propertyDescription="Misc costs" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariff/disbursements"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariff/fixedCosts"/>
       <genFeatures createChild="false" propertyDescription="LNG vessel discount factor"
           ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariff/discountFactor"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariff/sdrToUSD"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//SuezCanalTariffBand">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariffBand/ladenTariff"/>
@@ -142,5 +123,32 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//UnitConversion/to"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//UnitConversion/factor"/>
     </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//DatePointContainer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//DatePointContainer/points"/>
+    </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//DatePoint">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//DatePoint/date"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//DatePoint/value"/>
+    </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//YearMonthPointContainer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//YearMonthPointContainer/points"/>
+      <genOperations ecoreOperation="pricing.ecore#//YearMonthPointContainer/valueForMonth">
+        <genParameters ecoreParameter="pricing.ecore#//YearMonthPointContainer/valueForMonth/month"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//YearMonthPoint">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//YearMonthPoint/date"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//YearMonthPoint/value"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="pricing.ecore#//AbstractYearMonthCurve">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//AbstractYearMonthCurve/currencyUnit"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//AbstractYearMonthCurve/volumeUnit"/>
+      <genFeatures createChild="false" propertyDescription="If set, the price expression used to generate the curve data. This overrides any existing data."
+          ecoreFeature="ecore:EAttribute pricing.ecore#//AbstractYearMonthCurve/expression"/>
+    </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//CommodityCurve"/>
+    <genClasses ecoreClass="pricing.ecore#//CharterCurve"/>
+    <genClasses ecoreClass="pricing.ecore#//BunkerFuelCurve"/>
+    <genClasses ecoreClass="pricing.ecore#//CurrencyCurve"/>
   </genPackages>
 </genmodel:GenModel>

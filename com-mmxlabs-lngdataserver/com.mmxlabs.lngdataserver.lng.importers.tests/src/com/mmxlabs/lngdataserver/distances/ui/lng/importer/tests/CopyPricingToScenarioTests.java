@@ -7,7 +7,6 @@ package com.mmxlabs.lngdataserver.distances.ui.lng.importer.tests;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,30 +32,21 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.lngdataserver.data.distances.DataLoader;
-import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
-import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.model.Curve;
 import com.mmxlabs.lngdataserver.integration.pricing.model.CurvePoint;
 import com.mmxlabs.lngdataserver.integration.pricing.model.CurveType;
 import com.mmxlabs.lngdataserver.integration.pricing.model.DataCurve;
 import com.mmxlabs.lngdataserver.integration.pricing.model.ExpressionCurve;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
-import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.port.PortsToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.pricing.PricingToScenarioCopier;
-import com.mmxlabs.models.lng.port.PortFactory;
-import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.CharterCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.pricing.provider.PricingItemProviderAdapterFactory;
 
 public class CopyPricingToScenarioTests {
@@ -116,8 +106,8 @@ public class CopyPricingToScenarioTests {
 		final Command updateCommand = PricingToScenarioCopier.getUpdateCommand(editingDomain, pricingModel, originalVersion);
 		editingDomain.getCommandStack().execute(updateCommand);
 
-		Assert.assertEquals(2, pricingModel.getCommodityIndices().size());
-		Assert.assertEquals(1, pricingModel.getCurrencyIndices().size());
+		Assert.assertEquals(2, pricingModel.getCommodityCurves().size());
+		Assert.assertEquals(1, pricingModel.getCurrencyCurves().size());
 
 		final PricingVersion derivedVersion = PricingFromScenarioCopier.generateVersion(pricingModel);
 		// prepareVersionModel(derivedVersion);
@@ -133,32 +123,30 @@ public class CopyPricingToScenarioTests {
 	@Test
 	public void testCopyDistances() {
 
-		final List<CommodityIndex> commodityIndices = new ArrayList<>();
-		final List<CurrencyIndex> currencyIndices = new ArrayList<>();
+		final List<CommodityCurve> commodityIndices = new ArrayList<>();
+		final List<CurrencyCurve> currencyIndices = new ArrayList<>();
 
-		final CommodityIndex c1 = PricingPackage.eINSTANCE.getPricingFactory().createCommodityIndex();
+		final CommodityCurve c1 = PricingPackage.eINSTANCE.getPricingFactory().createCommodityCurve();
 		c1.setName("HH");
-		c1.setData(PricingPackage.eINSTANCE.getPricingFactory().createDataIndex());
 		commodityIndices.add(c1);
 
-		final CommodityIndex c2 = PricingPackage.eINSTANCE.getPricingFactory().createCommodityIndex();
+		final CommodityCurve c2 = PricingPackage.eINSTANCE.getPricingFactory().createCommodityCurve();
 		c2.setName("II");
-		c2.setData(PricingPackage.eINSTANCE.getPricingFactory().createDataIndex());
 		commodityIndices.add(c2);
 
-		final CurrencyIndex cu1 = PricingPackage.eINSTANCE.getPricingFactory().createCurrencyIndex();
+		final CurrencyCurve cu1 = PricingPackage.eINSTANCE.getPricingFactory().createCurrencyCurve();
 		cu1.setName("USD");
 		currencyIndices.add(cu1);
 
-		final CurrencyIndex cu2 = PricingPackage.eINSTANCE.getPricingFactory().createCurrencyIndex();
+		final CurrencyCurve cu2 = PricingPackage.eINSTANCE.getPricingFactory().createCurrencyCurve();
 		cu2.setName("EUR");
 		currencyIndices.add(cu2);
 
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
-		pricingModel.getCommodityIndices().addAll(commodityIndices);
-		pricingModel.getCurrencyIndices().addAll(currencyIndices);
+		pricingModel.getCommodityCurves().addAll(commodityIndices);
+		pricingModel.getCurrencyCurves().addAll(currencyIndices);
 
-		Assert.assertFalse(pricingModel.getCurrencyIndices().isEmpty());
+		Assert.assertFalse(pricingModel.getCurrencyCurves().isEmpty());
 
 		final EditingDomain ed = createLocalEditingDomain(pricingModel);
 
@@ -170,58 +158,54 @@ public class CopyPricingToScenarioTests {
 		Assert.assertTrue(updatePricingCommand.canExecute());
 		ed.getCommandStack().execute(updatePricingCommand);
 
-		final Optional<CommodityIndex> potentialHH = pricingModel.getCommodityIndices().stream().filter(i -> i.getName().equals("HH")).findAny();
+		final Optional<CommodityCurve> potentialHH = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("HH")).findAny();
 		Assert.assertTrue(potentialHH.isPresent());
 		Assert.assertEquals("USD", potentialHH.get().getCurrencyUnit());
 		Assert.assertEquals("m3", potentialHH.get().getVolumeUnit());
-		Assert.assertEquals(7.1, potentialHH.get().getData().getValueForMonth(YearMonth.of(2017, 1)), 0.01);
-		Assert.assertEquals(7.2, potentialHH.get().getData().getValueForMonth(YearMonth.of(2017, 2)), 0.01);
+		Assert.assertEquals(7.1, potentialHH.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
+		Assert.assertEquals(7.2, potentialHH.get().valueForMonth(YearMonth.of(2017, 2)), 0.01);
 
-		final Optional<CommodityIndex> potentialII = pricingModel.getCommodityIndices().stream().filter(i -> i.getName().equals("II")).findAny();
+		final Optional<CommodityCurve> potentialII = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("II")).findAny();
 		Assert.assertTrue(potentialII.isPresent());
 		Assert.assertEquals("USD", potentialII.get().getCurrencyUnit());
 		Assert.assertEquals("m3", potentialII.get().getVolumeUnit());
-		Assert.assertEquals(7.3, potentialII.get().getData().getValueForMonth(YearMonth.of(2017, 1)), 0.01);
-		Assert.assertEquals(7.4, potentialII.get().getData().getValueForMonth(YearMonth.of(2017, 2)), 0.01);
+		Assert.assertEquals(7.3, potentialII.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
+		Assert.assertEquals(7.4, potentialII.get().valueForMonth(YearMonth.of(2017, 2)), 0.01);
 
 		// Currency curve is no longer present
-		Assert.assertTrue(pricingModel.getCurrencyIndices().isEmpty());
+		Assert.assertTrue(pricingModel.getCurrencyCurves().isEmpty());
 
 	}
 
 	@Test
 	public void testPeriodInNames() {
 
-		final List<CommodityIndex> commodityIndices = new ArrayList<>();
-		final List<CurrencyIndex> currencyIndices = new ArrayList<>();
+		final List<CommodityCurve> commodityIndices = new ArrayList<>();
+		final List<CurrencyCurve> currencyIndices = new ArrayList<>();
 
-		final CommodityIndex c1 = PricingPackage.eINSTANCE.getPricingFactory().createCommodityIndex();
+		final CommodityCurve c1 = PricingPackage.eINSTANCE.getPricingFactory().createCommodityCurve();
 		c1.setName("HH.extra");
-		c1.setData(PricingPackage.eINSTANCE.getPricingFactory().createDataIndex());
 		commodityIndices.add(c1);
 
-		final CommodityIndex c2 = PricingPackage.eINSTANCE.getPricingFactory().createCommodityIndex();
+		final CommodityCurve c2 = PricingPackage.eINSTANCE.getPricingFactory().createCommodityCurve();
 		c2.setName("II.extra");
-		c2.setData(PricingPackage.eINSTANCE.getPricingFactory().createDataIndex());
 		commodityIndices.add(c2);
 
-		final CurrencyIndex cu1 = PricingPackage.eINSTANCE.getPricingFactory().createCurrencyIndex();
+		final CurrencyCurve cu1 = PricingPackage.eINSTANCE.getPricingFactory().createCurrencyCurve();
 		cu1.setName("USD.extra");
-		cu1.setData(PricingPackage.eINSTANCE.getPricingFactory().createDataIndex());
 
 		currencyIndices.add(cu1);
 
-		final CurrencyIndex cu2 = PricingPackage.eINSTANCE.getPricingFactory().createCurrencyIndex();
+		final CurrencyCurve cu2 = PricingPackage.eINSTANCE.getPricingFactory().createCurrencyCurve();
 		cu2.setName("EUR.extra");
-		cu2.setData(PricingPackage.eINSTANCE.getPricingFactory().createDataIndex());
 
 		currencyIndices.add(cu2);
 
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
-		pricingModel.getCommodityIndices().addAll(commodityIndices);
-		pricingModel.getCurrencyIndices().addAll(currencyIndices);
+		pricingModel.getCommodityCurves().addAll(commodityIndices);
+		pricingModel.getCurrencyCurves().addAll(currencyIndices);
 
-		Assert.assertFalse(pricingModel.getCurrencyIndices().isEmpty());
+		Assert.assertFalse(pricingModel.getCurrencyCurves().isEmpty());
 
 		final PricingVersion derivedVersion = PricingFromScenarioCopier.generateVersion(pricingModel);
 
@@ -236,22 +220,22 @@ public class CopyPricingToScenarioTests {
 		Assert.assertTrue(updatePricingCommand.canExecute());
 		ed.getCommandStack().execute(updatePricingCommand);
 
-		final Optional<CommodityIndex> potentialHH = pricingModel.getCommodityIndices().stream().filter(i -> i.getName().equals("HH.extra")).findAny();
+		final Optional<CommodityCurve> potentialHH = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("HH.extra")).findAny();
 		Assert.assertTrue(potentialHH.isPresent());
 		Assert.assertEquals("USD", potentialHH.get().getCurrencyUnit());
 		Assert.assertEquals("m3", potentialHH.get().getVolumeUnit());
-		Assert.assertEquals(7.1, potentialHH.get().getData().getValueForMonth(YearMonth.of(2017, 1)), 0.01);
-		Assert.assertEquals(7.2, potentialHH.get().getData().getValueForMonth(YearMonth.of(2017, 2)), 0.01);
+		Assert.assertEquals(7.1, potentialHH.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
+		Assert.assertEquals(7.2, potentialHH.get().valueForMonth(YearMonth.of(2017, 2)), 0.01);
 
-		final Optional<CommodityIndex> potentialII = pricingModel.getCommodityIndices().stream().filter(i -> i.getName().equals("II.extra")).findAny();
+		final Optional<CommodityCurve> potentialII = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("II.extra")).findAny();
 		Assert.assertTrue(potentialII.isPresent());
 		Assert.assertEquals("USD", potentialII.get().getCurrencyUnit());
 		Assert.assertEquals("m3", potentialII.get().getVolumeUnit());
-		Assert.assertEquals(7.3, potentialII.get().getData().getValueForMonth(YearMonth.of(2017, 1)), 0.01);
-		Assert.assertEquals(7.4, potentialII.get().getData().getValueForMonth(YearMonth.of(2017, 2)), 0.01);
+		Assert.assertEquals(7.3, potentialII.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
+		Assert.assertEquals(7.4, potentialII.get().valueForMonth(YearMonth.of(2017, 2)), 0.01);
 
 		// Currency curve is no longer present
-		Assert.assertTrue(pricingModel.getCurrencyIndices().isEmpty());
+		Assert.assertTrue(pricingModel.getCurrencyCurves().isEmpty());
 
 	}
 
@@ -264,57 +248,55 @@ public class CopyPricingToScenarioTests {
 		final Command updatePricingCommand = PricingToScenarioCopier.getUpdateCommand(ed, pricingModel, pricingVersion);
 		ed.getCommandStack().execute(updatePricingCommand);
 
-		final Optional<CommodityIndex> potentialHH = pricingModel.getCommodityIndices().stream().filter(i -> i.getName().equals("HH")).findAny();
+		final Optional<CommodityCurve> potentialHH = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("HH")).findAny();
 		Assert.assertTrue(potentialHH.isPresent());
-		Assert.assertEquals(7.1, potentialHH.get().getData().getValueForMonth(YearMonth.of(2017, 1)), 0.01);
+		Assert.assertEquals(7.1, potentialHH.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
 	}
 
 	@Test
 	public void testExistingPointsRemoved() {
-		final List<CommodityIndex> commodityIndices = new ArrayList<>();
-		final List<CurrencyIndex> currencyIndices = new ArrayList<>();
+		final List<CommodityCurve> commodityIndices = new ArrayList<>();
+		final List<CurrencyCurve> currencyIndices = new ArrayList<>();
 
-		final CommodityIndex c1 = PricingPackage.eINSTANCE.getPricingFactory().createCommodityIndex();
+		final CommodityCurve c1 = PricingPackage.eINSTANCE.getPricingFactory().createCommodityCurve();
 		c1.setName("HH");
-		c1.setData(PricingPackage.eINSTANCE.getPricingFactory().createDataIndex());
 		commodityIndices.add(c1);
 
-		final DataIndex<Double> c1Data = PricingPackage.eINSTANCE.getPricingFactory().createDataIndex();
-		final IndexPoint<Double> oldData1 = PricingPackage.eINSTANCE.getPricingFactory().createIndexPoint();
+		final YearMonthPoint oldData1 = PricingPackage.eINSTANCE.getPricingFactory().createYearMonthPoint();
 		oldData1.setDate(YearMonth.of(2017, 1));
 		oldData1.setValue(7.0d);
-		final IndexPoint<Double> oldData2 = PricingPackage.eINSTANCE.getPricingFactory().createIndexPoint();
+
+		final YearMonthPoint oldData2 = PricingPackage.eINSTANCE.getPricingFactory().createYearMonthPoint();
 		oldData2.setDate(YearMonth.of(2016, 12));
 		oldData2.setValue(6.9d);
-		c1Data.getPoints().add(oldData2);
-		c1Data.getPoints().add(oldData1);
-		c1.setData(c1Data);
 
-		final CommodityIndex c2 = PricingPackage.eINSTANCE.getPricingFactory().createCommodityIndex();
+		c1.getPoints().add(oldData2);
+		c1.getPoints().add(oldData1);
+
+		final CommodityCurve c2 = PricingPackage.eINSTANCE.getPricingFactory().createCommodityCurve();
 		c2.setName("II");
-		c2.setData(PricingPackage.eINSTANCE.getPricingFactory().createDataIndex());
 		commodityIndices.add(c2);
 
-		final CurrencyIndex cu1 = PricingPackage.eINSTANCE.getPricingFactory().createCurrencyIndex();
+		final CurrencyCurve cu1 = PricingPackage.eINSTANCE.getPricingFactory().createCurrencyCurve();
 		cu1.setName("USD");
 		currencyIndices.add(cu1);
 
-		final CurrencyIndex cu2 = PricingPackage.eINSTANCE.getPricingFactory().createCurrencyIndex();
+		final CurrencyCurve cu2 = PricingPackage.eINSTANCE.getPricingFactory().createCurrencyCurve();
 		cu2.setName("EUR");
 		currencyIndices.add(cu2);
 
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
-		pricingModel.getCommodityIndices().addAll(commodityIndices);
-		pricingModel.getCurrencyIndices().addAll(currencyIndices);
+		pricingModel.getCommodityCurves().addAll(commodityIndices);
+		pricingModel.getCurrencyCurves().addAll(currencyIndices);
 
 		final PricingVersion pricingVersion = createDefaultPricingVersion();
 		final EditingDomain ed = createLocalEditingDomain(pricingModel);
 
 		final Command updatePricingCommand = PricingToScenarioCopier.getUpdateCommand(ed, pricingModel, pricingVersion);
 
-		final Optional<CommodityIndex> potentialHH = pricingModel.getCommodityIndices().stream().filter(i -> i.getName().equals("HH")).findAny();
+		final Optional<CommodityCurve> potentialHH = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("HH")).findAny();
 		Assert.assertTrue(potentialHH.isPresent());
-		Assert.assertEquals(6.9, potentialHH.get().getData().getValueForMonth(YearMonth.of(2016, 12)), 0.01);
+		Assert.assertEquals(6.9, potentialHH.get().valueForMonth(YearMonth.of(2016, 12)), 0.01);
 
 		Assert.assertNotNull(updatePricingCommand);
 
@@ -322,8 +304,8 @@ public class CopyPricingToScenarioTests {
 		ed.getCommandStack().execute(updatePricingCommand);
 
 		Assert.assertTrue(potentialHH.isPresent());
-		Assert.assertEquals(7.1, potentialHH.get().getData().getValueForMonth(YearMonth.of(2017, 1)), 0.01);
-		Assert.assertNull(potentialHH.get().getData().getValueForMonth(YearMonth.of(2016, 12)));
+		Assert.assertEquals(7.1, potentialHH.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
+		Assert.assertNull(potentialHH.get().valueForMonth(YearMonth.of(2016, 12)));
 	}
 
 	@Test
@@ -341,10 +323,9 @@ public class CopyPricingToScenarioTests {
 		Assert.assertTrue(updatePricingCommand.canExecute());
 		ed.getCommandStack().execute(updatePricingCommand);
 
-		final Optional<CommodityIndex> potentialRel = pricingModel.getCommodityIndices().stream().filter(i -> i.getName().equals("REL_HH")).findAny();
+		final Optional<CommodityCurve> potentialRel = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("REL_HH")).findAny();
 		Assert.assertTrue(potentialRel.isPresent());
-		Assert.assertTrue(potentialRel.get().getData() instanceof DerivedIndex);
-		Assert.assertEquals("105%HH", ((DerivedIndex) potentialRel.get().getData()).getExpression());
+		Assert.assertEquals("105%HH", potentialRel.get().getExpression());
 	}
 
 	@Test
@@ -364,13 +345,13 @@ public class CopyPricingToScenarioTests {
 		Assert.assertTrue(updatePricingCommand.canExecute());
 		ed.getCommandStack().execute(updatePricingCommand);
 
-		final Optional<CharterIndex> potentialCool = pricingModel.getCharterIndices().stream().filter(i -> i.getName().equals("COOL")).findAny();
+		final Optional<CharterCurve> potentialCool = pricingModel.getCharterCurves().stream().filter(i -> i.getName().equals("COOL")).findAny();
 		Assert.assertTrue(potentialCool.isPresent());
-		Assert.assertEquals(8000, potentialCool.get().getData().getValueForMonth(YearMonth.of(2017, 1)).intValue());
+		Assert.assertEquals(8000, potentialCool.get().valueForMonth(YearMonth.of(2017, 1)).intValue());
 
-		final Optional<CommodityIndex> potentialHH = pricingModel.getCommodityIndices().stream().filter(i -> i.getName().equals("HH")).findAny();
+		final Optional<CommodityCurve> potentialHH = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("HH")).findAny();
 		Assert.assertTrue(potentialHH.isPresent());
-		Assert.assertEquals(7.1d, potentialHH.get().getData().getValueForMonth(YearMonth.of(2017, 1)).doubleValue(), 0.01);
+		Assert.assertEquals(7.1d, potentialHH.get().valueForMonth(YearMonth.of(2017, 1)).doubleValue(), 0.01);
 	}
 
 	private static PricingVersion createDefaultPricingVersion() {

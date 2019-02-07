@@ -301,7 +301,7 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (referenceCapacity: ");
 		if (referenceCapacityESet) result.append(referenceCapacity); else result.append("<unset>");
 		result.append(')');

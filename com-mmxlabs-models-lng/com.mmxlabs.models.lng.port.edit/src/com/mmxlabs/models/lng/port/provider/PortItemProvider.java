@@ -62,7 +62,6 @@ public class PortItemProvider
 			addDefaultWindowSizeUnitsPropertyDescriptor(object);
 			addMinCvValuePropertyDescriptor(object);
 			addMaxCvValuePropertyDescriptor(object);
-			addMmxIdPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -310,28 +309,6 @@ public class PortItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Mmx Id feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addMmxIdPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Port_mmxId_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_mmxId_feature", "_UI_Port_type"),
-				 PortPackage.Literals.PORT__MMX_ID,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Short Name feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -432,7 +409,6 @@ public class PortItemProvider
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE_UNITS:
 			case PortPackage.PORT__MIN_CV_VALUE:
 			case PortPackage.PORT__MAX_CV_VALUE:
-			case PortPackage.PORT__MMX_ID:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PortPackage.PORT__LOCATION:

@@ -6,12 +6,10 @@ package com.mmxlabs.lingo.its.microcases.pricebasedwindows;
 
 import java.net.MalformedURLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -31,10 +29,8 @@ import com.mmxlabs.lingo.its.tests.microcases.TimeWindowsTestsUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
@@ -122,7 +118,7 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 		spotMarketsModelBuilder = null;
 		pricingModelBuilder = null;
 		entity = null;
-		
+
 		super.destructor();
 	}
 
@@ -149,16 +145,15 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 				.withVesselAssignment(charterInMarket, 0, 0).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		CommodityIndex hh = null;
-		for (CommodityIndex commodityIndex : commodityIndices) {
+		List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		CommodityCurve hh = null;
+		for (CommodityCurve commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
 		}
 		assert hh != null;
-		DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
-		hh_data.getPoints().clear();
+		hh.getPoints().clear();
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -169,7 +164,8 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			@NonNull
 			IModifiableSequences initialSequences = new ModifiableSequences(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences());
-			ISequencesManipulator sequencesManipulator = scenarioToOptimiserBridge.getInjector().createChildInjector(new SequencesManipulatorModule(), new InitialPhaseOptimisationDataModule()).getInstance(ISequencesManipulator.class);
+			ISequencesManipulator sequencesManipulator = scenarioToOptimiserBridge.getInjector().createChildInjector(new SequencesManipulatorModule(), new InitialPhaseOptimisationDataModule())
+					.getInstance(ISequencesManipulator.class);
 			// ISequencesManipulator sequencesManipulator = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, ISequencesManipulator.class);
 			sequencesManipulator.manipulate(initialSequences);
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {

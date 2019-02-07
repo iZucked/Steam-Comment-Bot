@@ -22,27 +22,27 @@
 <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
     <displayCompositeFactory
-          eClass="com.mmxlabs.models.lng.pricing.CommodityIndex"
-          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.NamedIndexContainerCompositeFactory"
-          id="com.mmxlabs.models.lng.cargo.editor.CommodityIndexCompositeFactory"
+          eClass="com.mmxlabs.models.lng.pricing.CommodityCurve"
+          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.AbstractYearMonthCurveCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.CommodityCurveCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
     <displayCompositeFactory
-          eClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex"
-          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.NamedIndexContainerCompositeFactory"
-         id="com.mmxlabs.models.lng.cargo.editor.BaseFuelIndexCompositeFactory"
+          eClass="com.mmxlabs.models.lng.pricing.BunkerFuelCurve"
+          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.AbstractYearMonthCurveCompositeFactory"
+         id="com.mmxlabs.models.lng.cargo.editor.BnkerFuelCurveCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
     <displayCompositeFactory
-          eClass="com.mmxlabs.models.lng.pricing.CharterIndex"
-          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.NamedIndexContainerCompositeFactory"
-          id="com.mmxlabs.models.lng.cargo.editor.CharterIndexCompositeFactory"
+          eClass="com.mmxlabs.models.lng.pricing.CharterCurve"
+          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.AbstractYearMonthCurveCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.CharterCurveCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
     <displayCompositeFactory
-          eClass="com.mmxlabs.models.lng.pricing.CurrencyIndex"
-          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.NamedIndexContainerCompositeFactory"
-          id="com.mmxlabs.models.lng.cargo.editor.CurrencyIndexCompositeFactory"
+          eClass="com.mmxlabs.models.lng.pricing.CurrencyCurve"
+          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.AbstractYearMonthCurveCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.CurrencyCurveCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>    
 </extension>
@@ -72,6 +72,13 @@
 			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.IndexPointComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.pricing.IndexPoint" />
+			
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.YearMonthPoint"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.YearMonthPointComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.YearMonthPoint" />
+ 
 		
 		<componentHelper
 			id="com.mmxlabs.models.lng.pricing.helpers.Index"
@@ -104,28 +111,28 @@
         modelClass="com.mmxlabs.models.lng.pricing.PortCost">
   </componentHelper>
   <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CommodityIndexComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.presentation.composites.CommodityIndexComponentHelper"
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CommodityCurveComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.CommodityCurveComponentHelper"
         inheritable="true"        
-        modelClass="com.mmxlabs.models.lng.pricing.CommodityIndex">
+        modelClass="com.mmxlabs.models.lng.pricing.CommodityCurve">
   </componentHelper>
   <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CharterIndexComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.presentation.composites.CharterIndexComponentHelper"
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CharterCurveComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.CharterCurveComponentHelper"
         inheritable="true"
-        modelClass="com.mmxlabs.models.lng.pricing.CharterIndex">
+        modelClass="com.mmxlabs.models.lng.pricing.CharterCurve">
   </componentHelper>
   <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.BaseFuelIndexComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.presentation.composites.BaseFuelIndexComponentHelper"
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.BunkerFuelCurveComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.BunkerFuelCurveComponentHelper"
         inheritable="true"
-        modelClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex">
+        modelClass="com.mmxlabs.models.lng.pricing.BunkerFuelCurve">
   </componentHelper>
   <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.NamedIndexContainerComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.presentation.composites.NamedIndexContainerComponentHelper"
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.AbstractYearMonthCurveComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.AbstractYearMonthCurveComponentHelper"
         inheritable="true"
-        modelClass="com.mmxlabs.models.lng.pricing.NamedIndexContainer">
+        modelClass="com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve">
   </componentHelper>
   <componentHelper
         helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PortsExpressionMapComponentHelper"
@@ -134,16 +141,28 @@
         modelClass="com.mmxlabs.models.lng.pricing.PortsExpressionMap">
   </componentHelper>
   <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CurrencyIndexComponentHelper"
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CurrencyCurveComponentHelper"
         id="com.mmxlabs.models.lng.pricing.presentation.composites.CurrencyIndexComponentHelper"
         inheritable="true"
-        modelClass="com.mmxlabs.models.lng.pricing.CurrencyIndex">
+        modelClass="com.mmxlabs.models.lng.pricing.CurrencyCurve">
   </componentHelper>
   <componentHelper
         helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.UnitConversionComponentHelper"
         id="com.mmxlabs.models.lng.pricing.presentation.composites.UnitConversionComponentHelper"
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.pricing.UnitConversion">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.YearMonthPointComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.YearMonthPointComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.YearMonthPoint">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.YearMonthPointContainerComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.YearMonthPointContainerComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.YearMonthPointContainer">
   </componentHelper>
 		
 	</extension>
@@ -152,22 +171,22 @@
     <valueProvider
           factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.CharterIndexReferenceValueProviderFactory"
           id="com.mmxlabs.models.lng.pricing.ui.valueproviders.CharterIndexReferenceValueProviderFactory"
-          referenceEClass="com.mmxlabs.models.lng.pricing.CharterIndex">
+          referenceEClass="com.mmxlabs.models.lng.pricing.CharterCurve">
     </valueProvider>
     <valueProvider
           factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.CommodityIndexReferenceValueProviderFactory"
           id="com.mmxlabs.models.lng.pricing.ui.valueproviders.CommodityIndexReferenceValueProviderFactory"
-          referenceEClass="com.mmxlabs.models.lng.pricing.CommodityIndex">
+          referenceEClass="com.mmxlabs.models.lng.pricing.CommodityCurve">
     </valueProvider>
     <valueProvider
           factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.BaseFuelIndexReferenceValueProviderFactory"
           id="com.mmxlabs.models.lng.pricing.ui.valueproviders.BaseFuelIndexReferenceValueProviderFactory"
-          referenceEClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex">
+          referenceEClass="com.mmxlabs.models.lng.pricing.BunkerFuelCurve">
     </valueProvider>
     <valueProvider
           factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.CurrencyIndexReferenceValueProviderFactory"
           id="com.mmxlabs.models.lng.pricing.ui.valueproviders.CurrencyIndexReferenceValueProviderFactory"
-          referenceEClass="com.mmxlabs.models.lng.pricing.CurrencyIndex">
+          referenceEClass="com.mmxlabs.models.lng.pricing.CurrencyCurve">
     </valueProvider>
  </extension>
  <extension
@@ -203,25 +222,25 @@
     <classImporter
           ID="com.mmxlabs.models.lng.pricing.importers.CommodityIndexImporter"
           classImporterClass="com.mmxlabs.models.lng.pricing.importers.CommodityIndexImporter"
-          eClassName="com.mmxlabs.models.lng.pricing.CommodityIndex"
+          eClassName="com.mmxlabs.models.lng.pricing.CommodityCurve"
           inheritable="false">
     </classImporter>
     <classImporter
           ID="com.mmxlabs.models.lng.pricing.importers.BaseFuelIndexImporter"
           classImporterClass="com.mmxlabs.models.lng.pricing.importers.BaseFuelIndexImporter"
-          eClassName="com.mmxlabs.models.lng.pricing.BaseFuelIndex"
+          eClassName="com.mmxlabs.models.lng.pricing.BunkerFuelCurve"
           inheritable="false">
     </classImporter>
     <classImporter
           ID="com.mmxlabs.models.lng.pricing.importers.CharterIndexImporter"
           classImporterClass="com.mmxlabs.models.lng.pricing.importers.CharterIndexImporter"
-          eClassName="com.mmxlabs.models.lng.pricing.CharterIndex"
+          eClassName="com.mmxlabs.models.lng.pricing.CharterCurve"
           inheritable="false">
     </classImporter>
     <classImporter
           ID="com.mmxlabs.models.lng.pricing.importers.CurrencyIndexImporter"
           classImporterClass="com.mmxlabs.models.lng.pricing.importers.CurrencyIndexImporter"
-          eClassName="com.mmxlabs.models.lng.pricing.CurrencyIndex"
+          eClassName="com.mmxlabs.models.lng.pricing.CurrencyCurve"
           inheritable="false">
     </classImporter>
  </extension>
@@ -230,10 +249,8 @@
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.expressionFactory"
            factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Commodity Index Expression"
-          targetEClass="com.mmxlabs.models.lng.pricing.CommodityIndex"
-          replacementEReference="data"
-          replacementEClass="com.mmxlabs.models.lng.pricing.DerivedIndex">
+          label="Commodity Curve"
+          targetEClass="com.mmxlabs.models.lng.pricing.CommodityCurve">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.cooldownPricing"
@@ -257,33 +274,19 @@
           ID="com.mmxlabs.models.lng.pricing.editor.charterIndex"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Charter Index"
-          targetEClass="com.mmxlabs.models.lng.pricing.CharterIndex"
-          replacementEReference="data"
-          replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex">
+          targetEClass="com.mmxlabs.models.lng.pricing.CharterCurve">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.baseFuelIndex"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Base Fuel Index"
-          targetEClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex"
-          replacementEReference="data"
-          replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.pricing.editor.dataIndexFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Commodity Index"
-          replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex"
-          replacementEReference="data"
-          targetEClass="com.mmxlabs.models.lng.pricing.CommodityIndex">
+          label="Bunker Fuel Curve"
+          targetEClass="com.mmxlabs.models.lng.pricing.BunkerFuelCurve">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.currencyIndexFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Currency Index"
-          replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex"
-          replacementEReference="data"
-          targetEClass="com.mmxlabs.models.lng.pricing.CurrencyIndex">
+          label="Currency Curve"
+          targetEClass="com.mmxlabs.models.lng.pricing.CurrencyCurve">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.factory.UnitConversion"

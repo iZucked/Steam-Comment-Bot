@@ -28,17 +28,15 @@ import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.IndexPoint;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
+import com.mmxlabs.models.lng.pricing.CharterCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
@@ -264,24 +262,24 @@ public class ExposuresTest {
 		});
 	}
 
-	private static CommodityIndex makeBrent() {
+	private static CommodityCurve makeBrent() {
 		return makeIndex("Brent", "$", "bbl", YearMonth.of(2000, 1), 90);
 	}
 
-	private static CommodityIndex makeHH() {
+	private static CommodityCurve makeHH() {
 		return makeIndex("HH", "$", "mmBtu", YearMonth.of(2000, 1), 5);
 	}
 
-	private static CommodityIndex makeA(final double value) {
+	private static CommodityCurve makeA(final double value) {
 		return makeIndex("A", "$", "mmBtu", YearMonth.of(2000, 1), value);
 	}
 
 	private @NonNull final String expression;
 	private @NonNull final String indexName;
-	private @NonNull final NamedIndexContainer<?>[] indicies;
+	private @NonNull final AbstractYearMonthCurve[] indicies;
 	private @NonNull final ResultChecker checker;
 
-	public ExposuresTest(final String name, final String expression, final String indexName, final @NonNull ResultChecker expectedResult, final NamedIndexContainer<?>[] indicies) {
+	public ExposuresTest(final String name, final String expression, final String indexName, final @NonNull ResultChecker expectedResult, final AbstractYearMonthCurve[] indicies) {
 		this.checker = expectedResult;
 		this.indicies = indicies;
 		this.indexName = indexName;
@@ -293,15 +291,15 @@ public class ExposuresTest {
 
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
 
-		for (final NamedIndexContainer<?> idx : indicies) {
-			if (idx instanceof CommodityIndex) {
-				pricingModel.getCommodityIndices().add((CommodityIndex) idx);
-			} else if (idx instanceof CurrencyIndex) {
-				pricingModel.getCurrencyIndices().add((CurrencyIndex) idx);
-			} else if (idx instanceof CharterIndex) {
-				pricingModel.getCharterIndices().add((CharterIndex) idx);
-			} else if (idx instanceof BaseFuelIndex) {
-				pricingModel.getBaseFuelPrices().add((BaseFuelIndex) idx);
+		for (final AbstractYearMonthCurve idx : indicies) {
+			if (idx instanceof CommodityCurve) {
+				pricingModel.getCommodityCurves().add((CommodityCurve) idx);
+			} else if (idx instanceof CurrencyCurve) {
+				pricingModel.getCurrencyCurves().add((CurrencyCurve) idx);
+			} else if (idx instanceof CharterCurve) {
+				pricingModel.getCharterCurves().add((CharterCurve) idx);
+			} else if (idx instanceof BunkerFuelCurve) {
+				pricingModel.getBunkerFuelCurves().add((BunkerFuelCurve) idx);
 			} else {
 				Assert.fail();
 			}
@@ -326,13 +324,10 @@ public class ExposuresTest {
 	}
 
 	private void makeFXCurve(final String from, final String to, final double d, final PricingModel pricingModel) {
-		final CurrencyIndex factor = PricingFactory.eINSTANCE.createCurrencyIndex();
+		final CurrencyCurve factor = PricingFactory.eINSTANCE.createCurrencyCurve();
 		factor.setName(String.format("FX_%s_to_%s", from, to));
-		final DerivedIndex<Double> data = PricingFactory.eINSTANCE.createDerivedIndex();
-		data.setExpression(Double.toString(d));
-
-		factor.setData(data);
-		pricingModel.getCurrencyIndices().add(factor);
+		factor.setExpression(Double.toString(d));
+		pricingModel.getCurrencyCurves().add(factor);
 	}
 
 	private void makeConversionFactor(final String from, final String to, final double f, final PricingModel pricingModel) {
@@ -352,15 +347,11 @@ public class ExposuresTest {
 		}
 	}
 
-	private static CommodityIndex makeIndex(final String name, final String currencyUnit, final String volumeUnit, final String expression) {
+	private static CommodityCurve makeIndex(final String name, final String currencyUnit, final String volumeUnit, final String expression) {
 
-		final DerivedIndex<Double> data = PricingFactory.eINSTANCE.createDerivedIndex();
-
-		data.setExpression(expression);
-
-		final CommodityIndex index = PricingFactory.eINSTANCE.createCommodityIndex();
+		final CommodityCurve index = PricingFactory.eINSTANCE.createCommodityCurve();
 		index.setName(name);
-		index.setData(data);
+		index.setExpression(expression);
 
 		index.setCurrencyUnit(currencyUnit);
 		index.setVolumeUnit(volumeUnit);
@@ -368,19 +359,15 @@ public class ExposuresTest {
 		return index;
 	}
 
-	private static CommodityIndex makeIndex(final String name, final String currencyUnit, final String volumeUnit, final YearMonth date, final double value) {
+	private static CommodityCurve makeIndex(final String name, final String currencyUnit, final String volumeUnit, final YearMonth date, final double value) {
 
-		final DataIndex<Double> data = PricingFactory.eINSTANCE.createDataIndex();
-
-		final IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
+		final YearMonthPoint pt = PricingFactory.eINSTANCE.createYearMonthPoint();
 		pt.setDate(date);
 		pt.setValue(value);
 
-		data.getPoints().add(pt);
-
-		final CommodityIndex index = PricingFactory.eINSTANCE.createCommodityIndex();
+		final CommodityCurve index = PricingFactory.eINSTANCE.createCommodityCurve();
 		index.setName(name);
-		index.setData(data);
+		index.getPoints().add(pt);
 
 		index.setCurrencyUnit(currencyUnit);
 		index.setVolumeUnit(volumeUnit);
@@ -388,55 +375,48 @@ public class ExposuresTest {
 		return index;
 	}
 
-	private static CommodityIndex makeIndex(final String name, final String currencyUnit, final String volumeUnit, final YearMonth startDate, final double... values) {
+	private static CommodityCurve makeIndex(final String name, final String currencyUnit, final String volumeUnit, final YearMonth startDate, final double... values) {
 
-		final DataIndex<Double> data = PricingFactory.eINSTANCE.createDataIndex();
+		final CommodityCurve index = PricingFactory.eINSTANCE.createCommodityCurve();
+		index.setName(name);
+
+		index.setCurrencyUnit(currencyUnit);
+		index.setVolumeUnit(volumeUnit);
 
 		YearMonth date = startDate;
 		for (final double v : values) {
-			final IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
+			final YearMonthPoint pt = PricingFactory.eINSTANCE.createYearMonthPoint();
 			pt.setDate(date);
 			pt.setValue(v);
 
-			data.getPoints().add(pt);
+			index.getPoints().add(pt);
 			date = date.plusMonths(1);
 		}
-
-		final CommodityIndex index = PricingFactory.eINSTANCE.createCommodityIndex();
-		index.setName(name);
-		index.setData(data);
-
-		index.setCurrencyUnit(currencyUnit);
-		index.setVolumeUnit(volumeUnit);
 
 		return index;
 	}
 
-	private static CurrencyIndex makeCurrencyIndex(final String name, final String currencyUnit, final String volumeUnit, final YearMonth startDate, final double... values) {
+	private static CurrencyCurve makeCurrencyIndex(final String name, final String currencyUnit, final String volumeUnit, final YearMonth startDate, final double... values) {
 
-		final DataIndex<Double> data = PricingFactory.eINSTANCE.createDataIndex();
+		final CurrencyCurve index = PricingFactory.eINSTANCE.createCurrencyCurve();
+		index.setName(name);
 
+		index.setCurrencyUnit(currencyUnit);
+		index.setVolumeUnit(volumeUnit);
 		YearMonth date = startDate;
 		for (final double v : values) {
-			final IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
+			final YearMonthPoint pt = PricingFactory.eINSTANCE.createYearMonthPoint();
 			pt.setDate(date);
 			pt.setValue(v);
 
-			data.getPoints().add(pt);
+			index.getPoints().add(pt);
 			date = date.plusMonths(1);
 		}
-
-		final CurrencyIndex index = PricingFactory.eINSTANCE.createCurrencyIndex();
-		index.setName(name);
-		index.setData(data);
-
-		index.setCurrencyUnit(currencyUnit);
-		index.setVolumeUnit(volumeUnit);
 
 		return index;
 	}
 
-	private static NamedIndexContainer<?>[] indiciesOf(final NamedIndexContainer<?>... indicies) {
+	private static AbstractYearMonthCurve[] indiciesOf(final AbstractYearMonthCurve... indicies) {
 		return indicies;
 	}
 

@@ -26,8 +26,8 @@ public class BaseFuelIndexReferenceValueProviderFactory implements IReferenceVal
 			final PricingModel model = ScenarioModelUtil.getPricingModel(lngScenarioModel);
 			final EClass referenceClass = reference.getEReferenceType();
 
-			if (referenceClass == PricingPackage.eINSTANCE.getBaseFuelIndex()) {
-				return new SimpleReferenceValueProvider(model, PricingPackage.eINSTANCE.getPricingModel_BaseFuelPrices());
+			if (referenceClass == PricingPackage.eINSTANCE.getBunkerFuelCurve()) {
+				return new SimpleReferenceValueProvider(model, PricingPackage.eINSTANCE.getPricingModel_BunkerFuelCurves());
 			}
 		}
 

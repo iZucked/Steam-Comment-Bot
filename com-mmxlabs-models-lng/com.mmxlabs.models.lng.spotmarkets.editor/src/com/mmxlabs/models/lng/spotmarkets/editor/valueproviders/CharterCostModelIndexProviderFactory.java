@@ -32,7 +32,7 @@ public class CharterCostModelIndexProviderFactory implements IReferenceValueProv
 
 	public CharterCostModelIndexProviderFactory() {
 		// TODO: Should really look up from registry - but last attempt caused it to look up this class....recurse...
-		this.delegate = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(), PricingPackage.eINSTANCE.getCharterIndex());
+		this.delegate = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(), PricingPackage.eINSTANCE.getCharterCurve());
 	}
 
 	@Override

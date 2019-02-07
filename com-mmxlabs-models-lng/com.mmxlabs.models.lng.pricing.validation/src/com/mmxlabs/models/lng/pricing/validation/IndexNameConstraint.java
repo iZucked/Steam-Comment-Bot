@@ -14,7 +14,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -29,13 +29,13 @@ public class IndexNameConstraint extends AbstractModelMultiConstraint {
 	protected String validate(@NonNull IValidationContext ctx, @NonNull IExtraValidationContext extraValidationContext, @NonNull List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof CommodityIndex) {
-			final CommodityIndex index = (CommodityIndex) target;
+		if (target instanceof CommodityCurve) {
+			final CommodityCurve index = (CommodityCurve) target;
 
 			// Only check commodity indicies
 			if (extraValidationContext != null) {
 				final EReference containmentReference = extraValidationContext.getContainment(index);
-				if (containmentReference != PricingPackage.eINSTANCE.getPricingModel_CommodityIndices()) {
+				if (containmentReference != PricingPackage.eINSTANCE.getPricingModel_CommodityCurves()) {
 					return Activator.PLUGIN_ID;
 				}
 			}

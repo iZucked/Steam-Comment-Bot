@@ -60,51 +60,6 @@ public interface PricingFactory extends EFactory {
 	<Value> IndexPoint<Value> createIndexPoint();
 
 	/**
-	 * Returns a new object of class '<em>Currency Index</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Currency Index</em>'.
-	 * @generated
-	 */
-	CurrencyIndex createCurrencyIndex();
-
-	/**
-	 * Returns a new object of class '<em>Commodity Index</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Commodity Index</em>'.
-	 * @generated
-	 */
-	CommodityIndex createCommodityIndex();
-
-	/**
-	 * Returns a new object of class '<em>Charter Index</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Charter Index</em>'.
-	 * @generated
-	 */
-	CharterIndex createCharterIndex();
-
-	/**
-	 * Returns a new object of class '<em>Base Fuel Index</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Base Fuel Index</em>'.
-	 * @generated
-	 */
-	BaseFuelIndex createBaseFuelIndex();
-
-	/**
-	 * Returns a new object of class '<em>Named Index Container</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Named Index Container</em>'.
-	 * @generated
-	 */
-	<Value> NamedIndexContainer<Value> createNamedIndexContainer();
-
-	/**
 	 * Returns a new object of class '<em>Cost Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -247,6 +202,60 @@ public interface PricingFactory extends EFactory {
 	 * @generated
 	 */
 	DatePoint createDatePoint();
+
+	/**
+	 * Returns a new object of class '<em>Year Month Point Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Year Month Point Container</em>'.
+	 * @generated
+	 */
+	YearMonthPointContainer createYearMonthPointContainer();
+
+	/**
+	 * Returns a new object of class '<em>Year Month Point</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Year Month Point</em>'.
+	 * @generated
+	 */
+	YearMonthPoint createYearMonthPoint();
+
+	/**
+	 * Returns a new object of class '<em>Commodity Curve</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Commodity Curve</em>'.
+	 * @generated
+	 */
+	CommodityCurve createCommodityCurve();
+
+	/**
+	 * Returns a new object of class '<em>Charter Curve</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Charter Curve</em>'.
+	 * @generated
+	 */
+	CharterCurve createCharterCurve();
+
+	/**
+	 * Returns a new object of class '<em>Bunker Fuel Curve</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Bunker Fuel Curve</em>'.
+	 * @generated
+	 */
+	BunkerFuelCurve createBunkerFuelCurve();
+
+	/**
+	 * Returns a new object of class '<em>Currency Curve</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Currency Curve</em>'.
+	 * @generated
+	 */
+	CurrencyCurve createCurrencyCurve();
 
 	/**
 	 * Returns the package supported by this factory.

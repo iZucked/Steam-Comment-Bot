@@ -38,9 +38,9 @@ import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CostModel;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
@@ -143,7 +143,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 			if (earliestDate != null) {
 				final String timeCharterRate = availability.getTimeCharterRate();
 				if (timeCharterRate != null && !timeCharterRate.trim().isEmpty()) {
-					for (final NamedIndexContainer<?> index : PriceExpressionUtils.getLinkedCurves(timeCharterRate)) {
+					for (final AbstractYearMonthCurve index : PriceExpressionUtils.getLinkedCurves(timeCharterRate)) {
 						@Nullable
 						final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 						if (date == null || date.isAfter(earliestDate)) {
@@ -159,7 +159,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 
 				final String repositioningFee = availability.getRepositioningFee();
 				if (repositioningFee != null && !repositioningFee.trim().isEmpty()) {
-					for (final NamedIndexContainer<?> index : PriceExpressionUtils.getLinkedCurves(repositioningFee)) {
+					for (final AbstractYearMonthCurve index : PriceExpressionUtils.getLinkedCurves(repositioningFee)) {
 						@Nullable
 						final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 						if (date == null || date.isAfter(earliestDate)) {
@@ -197,7 +197,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 								final String priceExpression = baseFuelCost.getExpression();
 
 								if (priceExpression != null && !priceExpression.trim().isEmpty()) {
-									for (final NamedIndexContainer<?> index : PriceExpressionUtils.getLinkedCurves(priceExpression)) {
+									for (final AbstractYearMonthCurve index : PriceExpressionUtils.getLinkedCurves(priceExpression)) {
 										final @Nullable YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 										if (date == null) {
 											statuses.add(baseFactory.copyName() //

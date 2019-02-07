@@ -16,10 +16,10 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
+import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
+import com.mmxlabs.models.lng.pricing.CharterCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -79,10 +79,10 @@ public class PricingModelImporter implements ISubmodelImporter {
 	@Inject
 	private void registryInit() {
 		if (importerRegistry != null) {
-			commodityIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCommodityIndex());
-			charterIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCharterIndex());
-			baseFuelIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getBaseFuelIndex());
-			currencyIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCurrencyIndex());
+			commodityIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCommodityCurve());
+			charterIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCharterCurve());
+			baseFuelIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getBunkerFuelCurve());
+			currencyIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCurrencyCurve());
 			conversionFactorsImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getUnitConversion());
 			settledPricesImporter = new DatePointImporter();
 		}
@@ -128,7 +128,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 	}
 
 	private void importCommodityCurves(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
-		pricing.getCommodityIndices().addAll((Collection<? extends CommodityIndex>) commodityIndexImporter.importObjects(PricingPackage.eINSTANCE.getCommodityIndex(), csvReader, context));
+		pricing.getCommodityCurves().addAll((Collection<? extends CommodityCurve>) commodityIndexImporter.importObjects(PricingPackage.eINSTANCE.getCommodityCurve(), csvReader, context));
 	}
 
 	private void importSettledPrices(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
@@ -136,15 +136,15 @@ public class PricingModelImporter implements ISubmodelImporter {
 	}
 
 	private void importCurrencyCurves(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
-		pricing.getCurrencyIndices().addAll((Collection<? extends CurrencyIndex>) currencyIndexImporter.importObjects(PricingPackage.eINSTANCE.getCurrencyIndex(), csvReader, context));
+		pricing.getCurrencyCurves().addAll((Collection<? extends CurrencyCurve>) currencyIndexImporter.importObjects(PricingPackage.eINSTANCE.getCurrencyCurve(), csvReader, context));
 	}
 
 	private void importCharterCurves(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
-		pricing.getCharterIndices().addAll((Collection<? extends CharterIndex>) charterIndexImporter.importObjects(PricingPackage.eINSTANCE.getCharterIndex(), csvReader, context));
+		pricing.getCharterCurves().addAll((Collection<? extends CharterCurve>) charterIndexImporter.importObjects(PricingPackage.eINSTANCE.getCharterCurve(), csvReader, context));
 	}
 
 	private void importBaseFuelCurves(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
-		pricing.getBaseFuelPrices().addAll((Collection<? extends BaseFuelIndex>) baseFuelIndexImporter.importObjects(PricingPackage.eINSTANCE.getBaseFuelIndex(), csvReader, context));
+		pricing.getBunkerFuelCurves().addAll((Collection<? extends BunkerFuelCurve>) baseFuelIndexImporter.importObjects(PricingPackage.eINSTANCE.getBunkerFuelCurve(), csvReader, context));
 	}
 
 	private void importConversionFactors(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
@@ -154,10 +154,10 @@ public class PricingModelImporter implements ISubmodelImporter {
 	@Override
 	public void exportModel(final EObject model, final Map<String, Collection<Map<String, String>>> output, final IMMXExportContext context) {
 		final PricingModel pricing = (PricingModel) model;
-		output.put(PRICE_CURVE_KEY, commodityIndexImporter.exportObjects(pricing.getCommodityIndices(), context));
-		output.put(CHARTER_CURVE_KEY, charterIndexImporter.exportObjects(pricing.getCharterIndices(), context));
-		output.put(BASEFUEL_PRICING_KEY, baseFuelIndexImporter.exportObjects(pricing.getBaseFuelPrices(), context));
-		output.put(CURRENCY_CURVE_KEY, currencyIndexImporter.exportObjects(pricing.getCurrencyIndices(), context));
+		output.put(PRICE_CURVE_KEY, commodityIndexImporter.exportObjects(pricing.getCommodityCurves(), context));
+		output.put(CHARTER_CURVE_KEY, charterIndexImporter.exportObjects(pricing.getCharterCurves(), context));
+		output.put(BASEFUEL_PRICING_KEY, baseFuelIndexImporter.exportObjects(pricing.getBunkerFuelCurves(), context));
+		output.put(CURRENCY_CURVE_KEY, currencyIndexImporter.exportObjects(pricing.getCurrencyCurves(), context));
 		output.put(SETTLED_PRICES_KEY, settledPricesImporter.exportObjects(pricing.getSettledPrices(), context));
 		output.put(CONVERSION_FACTORS_KEY, conversionFactorsImporter.exportObjects(pricing.getConversionFactors(), context));
 	}

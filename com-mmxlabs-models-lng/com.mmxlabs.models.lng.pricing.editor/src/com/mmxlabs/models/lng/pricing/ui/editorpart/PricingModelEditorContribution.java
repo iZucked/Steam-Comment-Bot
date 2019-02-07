@@ -12,15 +12,15 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 
-import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
+import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
+import com.mmxlabs.models.lng.pricing.CharterCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -36,7 +36,7 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		{
 			indexPane = new IndexPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			indexPane.createControl(parent);
-			indexPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_BaseFuelPrices()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+			indexPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_BunkerFuelCurves()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 			indexPane.setInput(modelObject);
 
 			indexPage = editorPart.addPage(indexPane.getControl());
@@ -70,7 +70,10 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 
 			final EObject target = dcsd.getTarget();
-			if (target instanceof CommodityIndex || target instanceof CharterIndex || target instanceof BaseFuelIndex || target instanceof CurrencyIndex) {
+			if (target instanceof CommodityCurve || target instanceof CharterCurve || target instanceof BunkerFuelCurve || target instanceof CurrencyCurve) {
+				return true;
+			}
+			if (target instanceof YearMonthPoint) {
 				return true;
 			}
 			if (target instanceof IndexPoint) {
@@ -96,8 +99,8 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 
 			Object target = dcsd.getTarget();
 			// Be careful of Index as it can belong to various containers...
-			if (target instanceof IndexPoint<?>) {
-				target = ((IndexPoint<?>) target).eContainer();
+			if (target instanceof YearMonthPoint) {
+				target = ((YearMonthPoint) target).eContainer();
 			}
 
 			if (target instanceof PricingModel) {
@@ -106,7 +109,8 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 				}
 				return;
 			}
-			if (target instanceof CommodityIndex || target instanceof CharterIndex || target instanceof BaseFuelIndex || target instanceof CurrencyIndex) {
+			if (target instanceof CommodityCurve || target instanceof CharterCurve || target instanceof BunkerFuelCurve || target instanceof CurrencyCurve) {
+
 				if (indexPane != null) {
 					editorPart.setActivePage(indexPage);
 					indexPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);

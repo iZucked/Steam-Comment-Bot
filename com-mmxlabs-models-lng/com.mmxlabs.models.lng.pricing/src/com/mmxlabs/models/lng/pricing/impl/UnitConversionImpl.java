@@ -261,7 +261,7 @@ public class UnitConversionImpl extends EObjectImpl implements UnitConversion {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (from: ");
 		result.append(from);
 		result.append(", to: ");

@@ -409,7 +409,7 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (tugCost: ");
 		result.append(tugCost);
 		result.append(", fixedCosts: ");

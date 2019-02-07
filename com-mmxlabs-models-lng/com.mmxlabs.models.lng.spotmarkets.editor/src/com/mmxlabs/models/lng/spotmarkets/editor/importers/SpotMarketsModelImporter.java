@@ -114,10 +114,10 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 			SpotMarketGroup fobPurchaseGroup = null;
 			SpotMarketGroup fobSaleGroup = null;
 
-			final List<SpotMarket> desPurchaseMarkets = new LinkedList<SpotMarket>();
-			final List<SpotMarket> desSaleMarkets = new LinkedList<SpotMarket>();
-			final List<SpotMarket> fobPurchaseMarkets = new LinkedList<SpotMarket>();
-			final List<SpotMarket> fobSaleMarkets = new LinkedList<SpotMarket>();
+			final List<SpotMarket> desPurchaseMarkets = new LinkedList<>();
+			final List<SpotMarket> desSaleMarkets = new LinkedList<>();
+			final List<SpotMarket> fobPurchaseMarkets = new LinkedList<>();
+			final List<SpotMarket> fobSaleMarkets = new LinkedList<>();
 			for (final EObject market : markets) {
 
 				if (market instanceof SpotMarketGroup) {
@@ -210,7 +210,7 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 		}
 		{
 			// Group the SpotMarketGroup and SpotMarkets all into the same export file
-			final LinkedList<EObject> spotMarkets = new LinkedList<EObject>();
+			final LinkedList<EObject> spotMarkets = new LinkedList<>();
 			spotMarkets.add(spotMarketsModel.getDesPurchaseSpotMarket());
 			spotMarkets.add(spotMarketsModel.getDesSalesSpotMarket());
 			spotMarkets.add(spotMarketsModel.getFobPurchasesSpotMarket());

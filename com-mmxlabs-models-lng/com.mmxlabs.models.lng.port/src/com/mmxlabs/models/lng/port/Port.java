@@ -33,7 +33,6 @@ import java.time.ZoneId;
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDefaultWindowSizeUnits <em>Default Window Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getMaxCvValue <em>Max Cv Value</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.Port#getMmxId <em>Mmx Id</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getPort()
@@ -411,32 +410,6 @@ public interface Port extends APortSet<Port> {
 	 * @generated
 	 */
 	boolean isSetMaxCvValue();
-
-	/**
-	 * Returns the value of the '<em><b>Mmx Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Mmx Id</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Mmx Id</em>' attribute.
-	 * @see #setMmxId(String)
-	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_MmxId()
-	 * @model
-	 * @generated
-	 */
-	String getMmxId();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getMmxId <em>Mmx Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Mmx Id</em>' attribute.
-	 * @see #getMmxId()
-	 * @generated
-	 */
-	void setMmxId(String value);
 
 	/**
 	 * <!-- begin-user-doc -->

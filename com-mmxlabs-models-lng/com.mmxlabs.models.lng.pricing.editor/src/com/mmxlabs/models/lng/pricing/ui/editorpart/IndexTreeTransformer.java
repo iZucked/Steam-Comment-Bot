@@ -33,47 +33,25 @@ public class IndexTreeTransformer {
 	 * 
 	 */
 	public enum DataType {
-		Commodity("Commodity", false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, true, PriceIndexType.COMMODITY),
-
-		BaseFuel("Base Fuel", false, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false, PriceIndexType.BUNKERS),
-
-		Charter("Chartering", true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false, PriceIndexType.CHARTER),
-
-		Currency("Currency", false, PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false, PriceIndexType.CURRENCY);
+		Commodity("Commodity", false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES, true, PriceIndexType.COMMODITY), BaseFuel("Base Fuel", false,
+				PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES, false, PriceIndexType.BUNKERS), Charter("Chartering", true, PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES, false,
+						PriceIndexType.CHARTER), Currency("Currency", false, PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES, false, PriceIndexType.CURRENCY);
 
 		private final String name;
-		private final boolean useIntegers;
 		private final EReference containerFeature;
-		private final EReference indexFeature;
 		private final boolean expandedByDefault;
 
 		private final PriceIndexType priceIndexType;
 
-		private DataType(final String name, final boolean useIntegers, final EReference containerFeature, final EReference indexFeature, final boolean expandedByDefault,
-				PriceIndexType priceIndexType) {
+		private DataType(final String name, final boolean useIntegers, final EReference containerFeature, final boolean expandedByDefault, PriceIndexType priceIndexType) {
 			this.name = name;
-			this.useIntegers = useIntegers;
 			this.containerFeature = containerFeature;
-			this.indexFeature = indexFeature;
 			this.expandedByDefault = expandedByDefault;
 			this.priceIndexType = priceIndexType;
 		}
 
-		/**
-		 * Integer based or double based
-		 * 
-		 * @return
-		 */
-		public boolean useIntegers() {
-			return useIntegers;
-		}
-
 		public EReference getContainerFeature() {
 			return containerFeature;
-		}
-
-		public EReference getIndexFeature() {
-			return indexFeature;
 		}
 
 		public String getName() {

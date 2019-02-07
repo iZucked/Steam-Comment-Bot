@@ -15,8 +15,8 @@ import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
 
 import com.google.common.collect.Sets;
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
@@ -96,29 +96,29 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		final String contents = full_contents.substring(completeFrom, position);
 		final ArrayList<ContentProposal> list = new ArrayList<ContentProposal>();
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
-		final List<NamedIndexContainer<?>> curves = new LinkedList<>();
+		final List<AbstractYearMonthCurve> curves = new LinkedList<>();
 		for (final PriceIndexType type : types) {
 			switch (type) {
 			case BUNKERS:
-				curves.addAll(pricingModel.getBaseFuelPrices());
+				curves.addAll(pricingModel.getBunkerFuelCurves());
 				break;
 			case CHARTER:
-				curves.addAll(pricingModel.getCharterIndices());
+				curves.addAll(pricingModel.getCharterCurves());
 				break;
 			case COMMODITY:
-				curves.addAll(pricingModel.getCommodityIndices());
+				curves.addAll(pricingModel.getCommodityCurves());
 				break;
 			case CURRENCY:
-				curves.addAll(pricingModel.getCurrencyIndices());
+				curves.addAll(pricingModel.getCurrencyCurves());
 				break;
 			default:
 				return new IContentProposal[0];
 			}
 		}
-		for (final NamedIndexContainer<?> index : curves) {
+		for (final AbstractYearMonthCurve index : curves) {
 			final String proposal = index.getName();
 			String type = "";
-			if (index instanceof CurrencyIndex) {
+			if (index instanceof CurrencyCurve) {
 				type = " (currency conversion)";
 			}
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {

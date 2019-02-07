@@ -217,22 +217,13 @@ public interface PortPackage extends EPackage {
 	int PORT__MAX_CV_VALUE = TypesPackage.APORT_SET_FEATURE_COUNT + 12;
 
 	/**
-	 * The feature id for the '<em><b>Mmx Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT__MMX_ID = TypesPackage.APORT_SET_FEATURE_COUNT + 13;
-
-	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 14;
+	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 13;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1524,17 +1515,6 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_MaxCvValue();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getMmxId <em>Mmx Id</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Mmx Id</em>'.
-	 * @see com.mmxlabs.models.lng.port.Port#getMmxId()
-	 * @see #getPort()
-	 * @generated
-	 */
-	EAttribute getPort_MmxId();
-
-	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.port.Port#getZoneId() <em>Get Zone Id</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2227,14 +2207,6 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT__MAX_CV_VALUE = eINSTANCE.getPort_MaxCvValue();
-
-		/**
-		 * The meta object literal for the '<em><b>Mmx Id</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PORT__MMX_ID = eINSTANCE.getPort_MmxId();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Zone Id</b></em>' operation.

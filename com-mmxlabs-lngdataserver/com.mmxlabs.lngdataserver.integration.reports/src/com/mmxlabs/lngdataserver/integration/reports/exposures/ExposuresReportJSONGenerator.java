@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +20,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -38,18 +37,18 @@ public class ExposuresReportJSONGenerator {
 		}
 		return createTransformedData(schedule, scenarioDataProvider);
 	}
-	
-	public static List<ExposuresReportModel> createTransformedData(final @NonNull Schedule schedule, final @NonNull IScenarioDataProvider scenarioDataProvider){
+
+	public static List<ExposuresReportModel> createTransformedData(final @NonNull Schedule schedule, final @NonNull IScenarioDataProvider scenarioDataProvider) {
 
 		final PricingModel pm = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
-		final EList<CommodityIndex> indices = pm.getCommodityIndices();
-		List<IndexExposureData> temp = new LinkedList<IndexExposureData>();
-		
+		final List<CommodityCurve> indices = pm.getCommodityCurves();
+		List<IndexExposureData> temp = new LinkedList<>();
+
 		final YearMonth ymStart = YearMonth.from(getEarliestScenarioDate(scenarioDataProvider));
 		final YearMonth ymEnd = YearMonth.from(getLatestScenarioDate(scenarioDataProvider));
-		
+
 		for (YearMonth cym = ymStart; cym.isBefore(ymEnd); cym = cym.plusMonths(1)) {
-			IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(null, schedule, cym, Exposures.ValueMode.VOLUME_MMBTU,  Collections.emptyList());
+			IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(null, schedule, cym, Exposures.ValueMode.VOLUME_MMBTU, Collections.emptyList());
 			if (exposuresByMonth.exposures.size() != 0.0) {
 				temp.add(exposuresByMonth);
 			}
@@ -66,12 +65,12 @@ public class ExposuresReportJSONGenerator {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static LocalDate getEarliestScenarioDate(final IScenarioDataProvider sdp) {
 		LocalDate result = LocalDate.now();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 		LocalDate erl = result;
-		
+
 		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
 			if (erl.isAfter(ls.getWindowStart())) {
 				erl = ls.getWindowStart();

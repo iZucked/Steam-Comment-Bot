@@ -12,14 +12,10 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PortsExpressionMap;
@@ -77,11 +73,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.DATA_INDEX: return createDataIndex();
 			case PricingPackage.DERIVED_INDEX: return createDerivedIndex();
 			case PricingPackage.INDEX_POINT: return createIndexPoint();
-			case PricingPackage.CURRENCY_INDEX: return createCurrencyIndex();
-			case PricingPackage.COMMODITY_INDEX: return createCommodityIndex();
-			case PricingPackage.CHARTER_INDEX: return createCharterIndex();
-			case PricingPackage.BASE_FUEL_INDEX: return createBaseFuelIndex();
-			case PricingPackage.NAMED_INDEX_CONTAINER: return createNamedIndexContainer();
 			case PricingPackage.COST_MODEL: return createCostModel();
 			case PricingPackage.ROUTE_COST: return createRouteCost();
 			case PricingPackage.BASE_FUEL_COST: return createBaseFuelCost();
@@ -98,6 +89,12 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.UNIT_CONVERSION: return createUnitConversion();
 			case PricingPackage.DATE_POINT_CONTAINER: return createDatePointContainer();
 			case PricingPackage.DATE_POINT: return createDatePoint();
+			case PricingPackage.YEAR_MONTH_POINT_CONTAINER: return createYearMonthPointContainer();
+			case PricingPackage.YEAR_MONTH_POINT: return createYearMonthPoint();
+			case PricingPackage.COMMODITY_CURVE: return createCommodityCurve();
+			case PricingPackage.CHARTER_CURVE: return createCharterCurve();
+			case PricingPackage.BUNKER_FUEL_CURVE: return createBunkerFuelCurve();
+			case PricingPackage.CURRENCY_CURVE: return createCurrencyCurve();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -141,56 +138,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public <Value> IndexPoint<Value> createIndexPoint() {
 		IndexPointImpl<Value> indexPoint = new IndexPointImpl<Value>();
 		return indexPoint;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CurrencyIndex createCurrencyIndex() {
-		CurrencyIndexImpl currencyIndex = new CurrencyIndexImpl();
-		return currencyIndex;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CommodityIndex createCommodityIndex() {
-		CommodityIndexImpl commodityIndex = new CommodityIndexImpl();
-		return commodityIndex;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CharterIndex createCharterIndex() {
-		CharterIndexImpl charterIndex = new CharterIndexImpl();
-		return charterIndex;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public BaseFuelIndex createBaseFuelIndex() {
-		BaseFuelIndexImpl baseFuelIndex = new BaseFuelIndexImpl();
-		return baseFuelIndex;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public <Value> NamedIndexContainer<Value> createNamedIndexContainer() {
-		NamedIndexContainerImpl<Value> namedIndexContainer = new NamedIndexContainerImpl<Value>();
-		return namedIndexContainer;
 	}
 
 	/**
@@ -351,6 +298,66 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public DatePoint createDatePoint() {
 		DatePointImpl datePoint = new DatePointImpl();
 		return datePoint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public YearMonthPointContainer createYearMonthPointContainer() {
+		YearMonthPointContainerImpl yearMonthPointContainer = new YearMonthPointContainerImpl();
+		return yearMonthPointContainer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public YearMonthPoint createYearMonthPoint() {
+		YearMonthPointImpl yearMonthPoint = new YearMonthPointImpl();
+		return yearMonthPoint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CommodityCurve createCommodityCurve() {
+		CommodityCurveImpl commodityCurve = new CommodityCurveImpl();
+		return commodityCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterCurve createCharterCurve() {
+		CharterCurveImpl charterCurve = new CharterCurveImpl();
+		return charterCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BunkerFuelCurve createBunkerFuelCurve() {
+		BunkerFuelCurveImpl bunkerFuelCurve = new BunkerFuelCurveImpl();
+		return bunkerFuelCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CurrencyCurve createCurrencyCurve() {
+		CurrencyCurveImpl currencyCurve = new CurrencyCurveImpl();
+		return currencyCurve;
 	}
 
 	/**

@@ -26,8 +26,8 @@ public class CommodityIndexReferenceValueProviderFactory implements IReferenceVa
 			final PricingModel model = ScenarioModelUtil.getPricingModel(lngScenarioModel);
 			final EClass referenceClass = reference.getEReferenceType();
 
-			if (referenceClass == PricingPackage.eINSTANCE.getCommodityIndex()) {
-				return new SimpleReferenceValueProvider(model, PricingPackage.eINSTANCE.getPricingModel_CommodityIndices());
+			if (referenceClass == PricingPackage.eINSTANCE.getCommodityCurve()) {
+				return new SimpleReferenceValueProvider(model, PricingPackage.eINSTANCE.getPricingModel_CommodityCurves());
 			}
 		}
 

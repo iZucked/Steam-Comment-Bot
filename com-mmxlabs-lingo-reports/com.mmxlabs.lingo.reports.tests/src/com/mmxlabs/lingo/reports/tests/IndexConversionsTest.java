@@ -16,14 +16,12 @@ import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesOperatorExpression;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.pricing.parser.Node;
 import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
 import com.mmxlabs.models.lng.pricing.parseutils.IndexConversion;
@@ -37,13 +35,13 @@ import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 
 public class IndexConversionsTest {
 	@NonNull
-	final static CommodityIndex[] indicies = new CommodityIndex[] { makeHH() };
+	final static CommodityCurve[] indicies = new CommodityCurve[] { makeHH() };
 
-	private static CommodityIndex makeHH() {
+	private static CommodityCurve makeHH() {
 		return makeIndex("HH", "$", "mmBtu", YearMonth.of(2000, 1), 5);
 	}
 
-	private static CommodityIndex makeA(final double value) {
+	private static CommodityCurve makeA(final double value) {
 		return makeIndex("A", "$", "mmBtu", YearMonth.of(2000, 1), value);
 	}
 
@@ -60,14 +58,13 @@ public class IndexConversionsTest {
 		Form form = testExpression(expression);
 		assert form == Form.X_PLUS_C;
 	}
-	
+
 	@Test
 	public void test__X_PLUS_QM() {
 		final String expression = "HH+?";
 		Form form = testExpression(expression);
 		assert form == Form.X_PLUS_C;
 	}
-	
 
 	@Test
 	public void test__X_PLUS_C_COMPLEX() {
@@ -76,7 +73,6 @@ public class IndexConversionsTest {
 		assert form == Form.X_PLUS_C;
 	}
 
-	
 	@Test
 	public void test__M_X() {
 		final String expression = "5%HH";
@@ -104,7 +100,7 @@ public class IndexConversionsTest {
 		BreakEvenType breakEvenType = testExpressionForBreakEvenType(expression);
 		assert breakEvenType == BreakEvenType.INTERCEPT;
 	}
-	
+
 	@Test
 	public void test__BET_QM_X_PLUS_C() {
 		final String expression = "?%HH+?";
@@ -127,7 +123,7 @@ public class IndexConversionsTest {
 		MarkedUpNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10.0);
 		Assert.assertEquals("(((10.0)-(5.0))/(1.0%(HH)))", IndexConversion.getExpression(testGraphRearrangement));
 	}
-	
+
 	@Test
 	public void test__GraphRearrangement__MX_PLUS_C_2() {
 		final String expression = "100%HH+?";
@@ -135,7 +131,7 @@ public class IndexConversionsTest {
 		MarkedUpNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10.0);
 		Assert.assertEquals("((10.0)-(100.0%(HH)))", IndexConversion.getExpression(testGraphRearrangement));
 	}
-	
+
 	@Test
 	public void test__expressionCreation() {
 		final String expression = "115%HH+5";
@@ -155,7 +151,7 @@ public class IndexConversionsTest {
 		double parseExpression = parseExpression(rearrangedExpression);
 		Assert.assertEquals(140, parseExpression, 0.0);
 	}
-	
+
 	@Test
 	public void test__calculation_MX_PLUS_Q() {
 		final String expression = "100%(HH*FX_EURO_to_USD*mwh_to_mmBtu)+?";
@@ -180,32 +176,31 @@ public class IndexConversionsTest {
 		Assert.assertEquals(5.0, parseExpression, 0.001);
 	}
 
-	
 	private Form testExpression(final String expression) {
 		final MarkedUpNode markedUpNode = getParentMarkedUpNode(expression);
 		Form form = IndexConversion.getForm(markedUpNode);
 		return form;
 	}
-	
+
 	private BreakEvenType testExpressionForBreakEvenType(final String expression) {
 		final MarkedUpNode markedUpNode = getParentMarkedUpNode(expression);
 		BreakEvenType breakEvenType = IndexConversion.getBreakEvenType(markedUpNode);
 		return breakEvenType;
 	}
-	
+
 	private @Nullable MarkedUpNode testGraphRearrangement(final String expression, Form form, double price) {
 		final MarkedUpNode markedUpNode = getParentMarkedUpNode(expression);
 		System.out.println(IndexConversion.getExpression(markedUpNode));
-		@Nullable MarkedUpNode rearrangedGraph = IndexConversion.rearrangeGraph(price, markedUpNode, form);
+		@Nullable
+		MarkedUpNode rearrangedGraph = IndexConversion.rearrangeGraph(price, markedUpNode, form);
 		return rearrangedGraph;
 	}
-
 
 	private MarkedUpNode getParentMarkedUpNode(final String expression) {
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
 
-		for (final CommodityIndex idx : indicies) {
-			pricingModel.getCommodityIndices().add(idx);
+		for (final CommodityCurve idx : indicies) {
+			pricingModel.getCommodityCurves().add(idx);
 		}
 
 		makeConversionFactor("therm", "mmbtu", 10, pricingModel);
@@ -224,24 +219,24 @@ public class IndexConversionsTest {
 		final MarkedUpNode markedUpNode = Nodes.markupNodes(node, lookupData);
 		return markedUpNode;
 	}
-	
+
 	private double parseExpression(final String expression) {
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
-		
-		for (final CommodityIndex idx : indicies) {
-			pricingModel.getCommodityIndices().add(idx);
+
+		for (final CommodityCurve idx : indicies) {
+			pricingModel.getCommodityCurves().add(idx);
 		}
-		
+
 		makeConversionFactor("therm", "mmbtu", 10, pricingModel);
 		makeConversionFactor("bbl", "mmbtu", 0.180136, pricingModel);
 		makeConversionFactor("mwh", "mmbtu", 0.293297, pricingModel);
-		
+
 		makeFXCurve("p", "USD", 1.3 / 100.0, pricingModel);
 		makeFXCurve("EURO", "USD", 1.111, pricingModel);
-		
+
 		@NonNull
 		final LookupData lookupData = LookupData.createLookupData(pricingModel);
-		
+
 		final SeriesParser p = PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
 		final IExpression<ISeries> series = p.parse(expression);
 		double unitPrice = 0.0;
@@ -255,15 +250,12 @@ public class IndexConversionsTest {
 		return unitPrice;
 	}
 
-
 	private void makeFXCurve(final String from, final String to, final double d, final PricingModel pricingModel) {
-		final CurrencyIndex factor = PricingFactory.eINSTANCE.createCurrencyIndex();
+		final CurrencyCurve factor = PricingFactory.eINSTANCE.createCurrencyCurve();
 		factor.setName(String.format("FX_%s_to_%s", from, to));
-		final DerivedIndex<Double> data = PricingFactory.eINSTANCE.createDerivedIndex();
-		data.setExpression(Double.toString(d));
+		factor.setExpression(Double.toString(d));
 
-		factor.setData(data);
-		pricingModel.getCurrencyIndices().add(factor);
+		pricingModel.getCurrencyCurves().add(factor);
 	}
 
 	private void makeConversionFactor(final String from, final String to, final double f, final PricingModel pricingModel) {
@@ -283,22 +275,18 @@ public class IndexConversionsTest {
 		}
 	}
 
-	private static CommodityIndex makeIndex(final String name, final String currencyUnit, final String volumeUnit, final YearMonth date, final double value) {
+	private static CommodityCurve makeIndex(final String name, final String currencyUnit, final String volumeUnit, final YearMonth date, final double value) {
 
-		final DataIndex<Double> data = PricingFactory.eINSTANCE.createDataIndex();
-
-		final IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
-		pt.setDate(date);
-		pt.setValue(value);
-
-		data.getPoints().add(pt);
-
-		final CommodityIndex index = PricingFactory.eINSTANCE.createCommodityIndex();
+		final CommodityCurve index = PricingFactory.eINSTANCE.createCommodityCurve();
 		index.setName(name);
-		index.setData(data);
 
 		index.setCurrencyUnit(currencyUnit);
 		index.setVolumeUnit(volumeUnit);
+		final YearMonthPoint pt = PricingFactory.eINSTANCE.createYearMonthPoint();
+		pt.setDate(date);
+		pt.setValue(value);
+
+		index.getPoints().add(pt);
 
 		return index;
 	}

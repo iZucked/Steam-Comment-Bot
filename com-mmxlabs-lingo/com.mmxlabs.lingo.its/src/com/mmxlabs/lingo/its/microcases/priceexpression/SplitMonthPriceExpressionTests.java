@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.microcases.priceexpression;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,11 +23,9 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.google.common.collect.Lists;
-import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
-import com.mmxlabs.lingo.its.tests.microcases.MicroCaseDateUtils;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
 import com.mmxlabs.lingo.its.tests.microcases.TimeWindowsTestsUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -36,8 +33,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
@@ -49,16 +45,8 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.IntervalData;
-import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.LadenRouteData;
-import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
-import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowsTrimming;
 import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
@@ -129,11 +117,11 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 		pricingModelBuilder = null;
 		entity = null;
 	}
-	
+
 	private int daysToHours(int days) {
 		return (days - 1) * 24;
 	}
-	
+
 	private VesselAvailability createTestVesselAvailability(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
@@ -147,10 +135,8 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Simple price expression with constants value. Vessel Availability
-	 * lasting a month. Load and Discharge are unbounded during that period. Price
-	 * in the first half negligible and really high in the second half. Expected
-	 * result: Load during the first half and discharge during the second half
+	 * Test: Simple price expression with constants value. Vessel Availability lasting a month. Load and Discharge are unbounded during that period. Price in the first half negligible and really high
+	 * in the second half. Expected result: Load during the first half and discharge during the second half
 	 * 
 	 * @throws Exception
 	 */
@@ -164,7 +150,7 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 		// Create cargo 1, cargo 2
 		final int splitDay = 15;
-		
+
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2018, 6, 1), portFinder.findPort("Bonny Nigeria"), null, entity, String.format("SPLITMONTH(1, 10, %d)", splitDay)) //
 				.withWindowStartTime(0) //
@@ -176,7 +162,7 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability, 1).build();
 
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		
+
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -219,10 +205,8 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Simple price expression with two index. Vessel Availability lasting a
-	 * month. Load and Discharge are unbounded during that period. Price in the
-	 * first half negligible and really high in the second half. Expected result:
-	 * Load during the first half and discharge during the second half
+	 * Test: Simple price expression with two index. Vessel Availability lasting a month. Load and Discharge are unbounded during that period. Price in the first half negligible and really high in the
+	 * second half. Expected result: Load during the first half and discharge during the second half
 	 * 
 	 * @throws Exception
 	 */
@@ -237,7 +221,7 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 
 		final int splitDay = 15;
-		
+
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2018, 6, 1), portFinder.findPort("Bonny Nigeria"), null, entity, String.format("SPLITMONTH(Henry_Hub, JCC, %d)", splitDay), 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
@@ -251,10 +235,10 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
 		// Create custom index prices
-		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		CommodityIndex hh = null;
-		CommodityIndex jcc = null;
-		for (final CommodityIndex commodityIndex : commodityIndices) {
+		final EList<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		CommodityCurve hh = null;
+		CommodityCurve jcc = null;
+		for (final CommodityCurve commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
@@ -265,8 +249,7 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 
 		// HH prices
 		assert hh != null;
-		final DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
-		hh_data.getPoints().clear();
+		hh.getPoints().clear();
 
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2018, 5), 5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2018, 6), 5);
@@ -274,8 +257,7 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 
 		// JCC prices
 		assert jcc != null;
-		final DataIndex<Double> jcc_data = (DataIndex<Double>) jcc.getData();
-		jcc_data.getPoints().clear();
+		jcc.getPoints().clear();
 
 		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2018, 5), 10);
 		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2018, 6), 10);

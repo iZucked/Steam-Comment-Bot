@@ -15,8 +15,8 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -33,14 +33,14 @@ public class CurrencyCurveNameOverlapConstraint extends AbstractModelMultiConstr
 		if (target instanceof PricingModel) {
 			final PricingModel pricingModel = (PricingModel) target;
 			// Get list of existing names
-			final Set<String> currencyCurveNames = pricingModel.getCurrencyIndices().stream() //
-					.map(CurrencyIndex::getName) //
+			final Set<String> currencyCurveNames = pricingModel.getCurrencyCurves().stream() //
+					.map(CurrencyCurve::getName) //
 					.collect(Collectors.toSet());
 			// Remove nulls
 			currencyCurveNames.remove(null);
 
 			// Consumer to check a given index name against currency curve names
-			final Consumer<NamedIndexContainer<?>> checker = index -> {
+			final Consumer<AbstractYearMonthCurve> checker = index -> {
 				if (currencyCurveNames.contains(index.getName())) {
 					final String message = String.format("Curve %s is already registered as a currency curve", index.getName());
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
@@ -48,9 +48,9 @@ public class CurrencyCurveNameOverlapConstraint extends AbstractModelMultiConstr
 					statuses.add(dcsd);
 				}
 			};
-			pricingModel.getCommodityIndices().forEach(idx -> checker.accept(idx));
-			pricingModel.getBaseFuelPrices().forEach(idx -> checker.accept(idx));
-			pricingModel.getCharterIndices().forEach(idx -> checker.accept(idx));
+			pricingModel.getCommodityCurves().forEach(idx -> checker.accept(idx));
+			pricingModel.getBunkerFuelCurves().forEach(idx -> checker.accept(idx));
+			pricingModel.getCharterCurves().forEach(idx -> checker.accept(idx));
 		}
 
 		return Activator.PLUGIN_ID;

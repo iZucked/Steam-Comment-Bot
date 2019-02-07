@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
@@ -28,9 +29,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.ToolTip;
 import org.eclipse.jface.window.Window;
@@ -39,7 +38,6 @@ import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
-import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
 import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -57,18 +55,15 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.Index;
-import com.mmxlabs.models.lng.pricing.IndexPoint;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
+import com.mmxlabs.models.lng.pricing.CharterCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.pricing.ui.actions.AddDateToIndexAction;
 import com.mmxlabs.models.lng.pricing.ui.editorpart.IndexTreeTransformer.DataType;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
@@ -100,8 +95,6 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  * 
  */
 public class IndexPane extends ScenarioTableViewerPane {
-
-	private static final YearMonth dateZero = YearMonth.of(2000, 1);
 
 	private YearMonth minDisplayDate = null;
 	private YearMonth maxDisplayDate = null;
@@ -157,10 +150,10 @@ public class IndexPane extends ScenarioTableViewerPane {
 		final Action[] actions = new Action[] { new AddDateToIndexAction(this) };
 
 		final List<Pair<EClass, IAddContext>> items = new LinkedList<>();
-		items.add(new Pair<>(PricingPackage.Literals.COMMODITY_INDEX, getAddContext(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES)));
-		items.add(new Pair<>(PricingPackage.Literals.BASE_FUEL_INDEX, getAddContext(PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES)));
-		items.add(new Pair<>(PricingPackage.Literals.CHARTER_INDEX, getAddContext(PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES)));
-		items.add(new Pair<>(PricingPackage.Literals.CURRENCY_INDEX, getAddContext(PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES)));
+		items.add(new Pair<>(PricingPackage.Literals.COMMODITY_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES)));
+		items.add(new Pair<>(PricingPackage.Literals.BUNKER_FUEL_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES)));
+		items.add(new Pair<>(PricingPackage.Literals.CHARTER_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES)));
+		items.add(new Pair<>(PricingPackage.Literals.CURRENCY_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES)));
 
 		return AddModelAction.create(items, actions);
 	}
@@ -180,7 +173,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 		getScenarioViewer().init(transformer.createContentProvider(), modelReference);
 
 		// TODO: API subject to change!
-		getScenarioViewer().setCurrentContainerAndContainment(pricingModel, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA);
+		getScenarioViewer().setCurrentContainerAndContainment(pricingModel, null);
 
 		ColumnViewerToolTipSupport.enableFor((ColumnViewer) scenarioViewer, ToolTip.NO_RECREATE);
 
@@ -188,10 +181,10 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 			@Override
 			public String getToolTipText(final Object element) {
-				if (element instanceof NamedIndexContainer<?>) {
-					final Index<?> index = ((NamedIndexContainer<?>) element).getData();
-					if (index instanceof DerivedIndex<?>) {
-						return ((DerivedIndex<?>) index).getExpression();
+				if (element instanceof AbstractYearMonthCurve) {
+					final AbstractYearMonthCurve curve = (AbstractYearMonthCurve) element;
+					if (curve.isSetExpression()) {
+						return curve.getExpression();
 					}
 				}
 				return null;
@@ -212,47 +205,35 @@ public class IndexPane extends ScenarioTableViewerPane {
 		// Enable the tree controls on this column
 		nameViewerColumn.getColumn().setTree(true);
 
-		// addTypicalColumn("Units", new BasicAttributeManipulator(PricingPackage.Literals.NAMED_INDEX_CONTAINER__UNITS, getEditingDomain()) {
-		// @Override
-		// public boolean canEdit(final Object object) {
-		// // Skip tree model elements
-		// if (transformer.getNodeClass().isInstance(object)) {
-		// return false;
-		// }
-		//
-		// return super.canEdit(object);
-		// }
-		// });
-
 		unitViewerColumn = addTypicalColumn("Units", new NonEditableColumn() {
 			@Override
 			public String render(final Object object) {
 
-				if (object instanceof NamedIndexContainer<?>) {
-					final NamedIndexContainer<?> idx = (NamedIndexContainer<?>) object;
+				if (object instanceof AbstractYearMonthCurve) {
+					final AbstractYearMonthCurve curve = (AbstractYearMonthCurve) object;
 
-					if (!isEmpty(idx.getCurrencyUnit()) && !isEmpty(idx.getVolumeUnit())) {
-						return String.format("%s/%s", idx.getCurrencyUnit(), idx.getVolumeUnit());
-					} else if (!isEmpty(idx.getCurrencyUnit())) {
-						return idx.getCurrencyUnit();
-					} else if (!isEmpty(idx.getVolumeUnit())) {
-						return idx.getVolumeUnit();
+					if (!isEmpty(curve.getCurrencyUnit()) && !isEmpty(curve.getVolumeUnit())) {
+						return String.format("%s/%s", curve.getCurrencyUnit(), curve.getVolumeUnit());
+					} else if (!isEmpty(curve.getCurrencyUnit())) {
+						return curve.getCurrencyUnit();
+					} else if (!isEmpty(curve.getVolumeUnit())) {
+						return curve.getVolumeUnit();
 					}
-					// return ((NamedIndexContainer<?>) o).getData();
 				}
 				return "";
 			}
 		});
 		addTypicalColumn("Type", new NonEditableColumn() {
 			@Override
-			public String render(Object object) {
+			public String render(final Object object) {
 
-				object = getIndex(object);
-
-				if (object instanceof DerivedIndex) {
-					return "Expression";
-				} else if (object instanceof DataIndex) {
-					return "Data";
+				if (object instanceof AbstractYearMonthCurve) {
+					final AbstractYearMonthCurve curve = (AbstractYearMonthCurve) object;
+					if (curve.isSetExpression()) {
+						return "Expression";
+					} else {
+						return "Data";
+					}
 				}
 				return "";
 			}
@@ -273,14 +254,12 @@ public class IndexPane extends ScenarioTableViewerPane {
 							// Record current command so we can undo back to here when cancelling
 							final Command currentCommand = commandStack.getUndoCommand();
 							if (dialog.open() != Window.OK) {
-								// if (commandStack.getMostRecentCommand() != currentCommand) {
 								while (commandStack.getUndoCommand() != currentCommand) {
 									commandStack.undo();
 									// This avoids infinite loop... but should only be valid if currentCommand is also null.
 									if (commandStack.getUndoCommand() == null) {
 										break;
 									}
-									// }
 								}
 							}
 						} finally {
@@ -302,35 +281,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 		seriesParsers.clear();
 
 		for (final DataType dt : DataType.values()) {
-			// PriceIndexUtils.getParserFor(pricingModel, priceIndexType)
-			// final SeriesParser seriesParser = new SeriesParser();
-			// if (pricingModel != null) {
-			// @SuppressWarnings("unchecked")
-			// final List<EObject> indexObjects = (List<EObject>) pricingModel.eGet(dt.getContainerFeature());
-			//
-			// for (final EObject indexObject : indexObjects) {
-			//
-			// if (!indexObject.eIsSet(dt.getIndexFeature())) {
-			// continue;
-			// }
-			//
-			// String name = "Unknown";
-			// if (indexObject instanceof NamedObject) {
-			// final NamedObject namedObject = (NamedObject) indexObject;
-			// if (namedObject.getName() != null) {
-			// name = namedObject.getName();
-			// }
-			// }
-			//
-			// final Index<?> idx = (Index<?>) indexObject.eGet(dt.getIndexFeature());
-			// if (idx instanceof DataIndex) {
-			// PriceIndexUtils.addSeriesDataFromDataIndex(seriesParser, name, dateZero, (DataIndex<? extends Number>) idx);
-			// } else if (idx instanceof DerivedIndex) {
-			// seriesParser.addSeriesExpression(name, ((DerivedIndex) idx).getExpression());
-			// }
-			// }
-			// }
-			// seriesParsers.put(dt, seriesParser);
+
 			if (pricingModel != null) {
 				seriesParsers.put(dt, PriceIndexUtils.getParserFor(pricingModel, dt.getPriceIndexType()));
 			}
@@ -346,16 +297,13 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 			for (final EObject indexObject : indexObjects) {
 
-				if (!indexObject.eIsSet(dt.getIndexFeature())) {
+				final AbstractYearMonthCurve curve = (AbstractYearMonthCurve) indexObject;
+				if (curve.isSetExpression()) {
 					continue;
 				}
 
-				final Index<?> idx = (Index<?>) indexObject.eGet(dt.getIndexFeature());
-				if (!(idx instanceof DataIndex<?>)) {
-					continue;
-				}
-
-				for (final YearMonth d : idx.getDates()) {
+				for (final YearMonthPoint pt : curve.getPoints()) {
+					final YearMonth d = pt.getDate();
 					if (minDisplayDate == null || minDisplayDate.isAfter(d)) {
 						minDisplayDate = d;
 					}
@@ -462,12 +410,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 					final YearMonth colDate = (YearMonth) col.getColumn().getData("date");
 					final Number number = getNumberForElement(element, colDate);
 					if (number != null) {
-						final DataType dt = getDataTypeForElement(element);
-						if (dt.useIntegers()) {
-							return number.intValue();
-						} else {
-							return number.doubleValue();
-						}
+						return number.doubleValue();
 					}
 
 					return null;
@@ -476,43 +419,30 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 			col.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, renderer);
 			col.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, renderer);
+
 			final ICellManipulator manipulator = new ICellManipulator() {
 
 				@SuppressWarnings("unchecked")
 				@Override
-				public void setValue(Object element, final Object value) {
+				public void setValue(final Object element, final Object value) {
 					final DataType dt = getDataTypeForElement(element);
 					if (dt != null) {
-
-						// Unwrap index from owner
-						if (element instanceof EObject) {
-							final EObject eObject = (EObject) element;
-							if (eObject.eIsSet(dt.getIndexFeature())) {
-								element = eObject.eGet(dt.getIndexFeature());
-							}
-						}
-						if (element instanceof DataIndex) {
+						if (element instanceof AbstractYearMonthCurve) {
 							final YearMonth colDate = (YearMonth) col.getColumn().getData("date");
-
-							if (dt.useIntegers()) {
-								setIndexPoint((Integer) value, (DataIndex<Integer>) element, colDate);
-							} else {
-								setIndexPoint((Double) value, (DataIndex<Double>) element, colDate);
-							}
+							setIndexPoint((Double) value, (AbstractYearMonthCurve) element, colDate);
 						}
 					}
 				}
 
-				private <T extends Number> void setIndexPoint(final T value, final DataIndex<T> di, final YearMonth colDate) {
-
-					for (final IndexPoint<T> p : di.getPoints()) {
+				private void setIndexPoint(final Double value, final AbstractYearMonthCurve curve, final YearMonth colDate) {
+					for (final YearMonthPoint p : curve.getPoints()) {
 						if (p.getDate().getYear() == colDate.getYear() && p.getDate().getMonthValue() == colDate.getMonthValue()) {
 
 							final Command cmd;
 							if (value == null) {
 								cmd = RemoveCommand.create(getEditingDomain(), p);
 							} else {
-								cmd = SetCommand.create(getEditingDomain(), p, PricingPackage.eINSTANCE.getIndexPoint_Value(), value);
+								cmd = SetCommand.create(getEditingDomain(), p, PricingPackage.eINSTANCE.getYearMonthPoint_Value(), value);
 							}
 							if (!cmd.canExecute()) {
 								throw new RuntimeException("Unable to execute index set command");
@@ -523,10 +453,10 @@ public class IndexPane extends ScenarioTableViewerPane {
 						}
 					}
 					if (value != null) {
-						final IndexPoint<T> p = PricingFactory.eINSTANCE.createIndexPoint();
+						final YearMonthPoint p = PricingFactory.eINSTANCE.createYearMonthPoint();
 						p.setDate(colDate);
 						p.setValue(value);
-						final Command cmd = AddCommand.create(getEditingDomain(), di, PricingPackage.eINSTANCE.getDataIndex_Points(), p);
+						final Command cmd = AddCommand.create(getEditingDomain(), curve, PricingPackage.eINSTANCE.getYearMonthPointContainer_Points(), p);
 						if (!cmd.canExecute()) {
 							throw new RuntimeException("Unable to execute index add command");
 						}
@@ -540,12 +470,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 					final YearMonth colDate = (YearMonth) col.getColumn().getData("date");
 					final Number number = getNumberForElement(element, colDate);
 					if (number != null) {
-						final DataType dt = getDataTypeForElement(element);
-						if (dt.useIntegers()) {
-							return number.intValue();
-						} else {
-							return number.doubleValue();
-						}
+						return number.doubleValue();
 					}
 
 					return null;
@@ -559,11 +484,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 						final FormattedTextCellEditor result = new FormattedTextCellEditor(parent);
 						final NumberFormatter formatter;
 
-						if (dt.useIntegers()) {
-							formatter = new IntegerFormatter("#,###.###");
-						} else {
-							formatter = new DoubleFormatter("#,###.###");
-						}
+						formatter = new DoubleFormatter("#,###.###");
 
 						formatter.setFixedLengths(false, false);
 
@@ -575,19 +496,14 @@ public class IndexPane extends ScenarioTableViewerPane {
 				}
 
 				@Override
-				public boolean canEdit(Object element) {
-					final DataType dt = getDataTypeForElement(element);
-					if (dt != null) {
+				public boolean canEdit(final Object element) {
+					if (element instanceof AbstractYearMonthCurve) {
+						final AbstractYearMonthCurve curve = (AbstractYearMonthCurve) element;
+						return !curve.isSetExpression();
 
-						// Unwrap index from owner
-						if (element instanceof EObject) {
-							final EObject eObject = (EObject) element;
-							if (eObject.eIsSet(dt.getIndexFeature())) {
-								element = eObject.eGet(dt.getIndexFeature());
-							}
-						}
 					}
-					return (element instanceof DataIndex<?>);
+
+					return false;
 				}
 
 				@Override
@@ -612,7 +528,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 				@Override
 				protected CellEditor getCellEditor(final Object element) {
-					Composite grid = null;// = ((GridTableViewer) IndexPane.this.viewer).getGrid();
+					Composite grid = null;
 					if (viewer instanceof GridTreeViewer) {
 						grid = ((GridTreeViewer) IndexPane.this.viewer).getGrid();
 					} else if (viewer instanceof GridTableViewer) {
@@ -645,20 +561,13 @@ public class IndexPane extends ScenarioTableViewerPane {
 			col.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
 
 				@Override
-				public Color getForeground(Object element) {
+				public Color getForeground(final Object element) {
 
-					final DataType dt = getDataTypeForElement(element);
-					if (dt != null) {
-						// Unwrap index from owner
-						if (element instanceof EObject) {
-							final EObject eObject = (EObject) element;
-							if (eObject.eClass().getEAllStructuralFeatures().contains(dt.getIndexFeature()) && eObject.eIsSet(dt.getIndexFeature())) {
-								element = eObject.eGet(dt.getIndexFeature());
-							}
+					if (element instanceof AbstractYearMonthCurve) {
+						final AbstractYearMonthCurve curve = (AbstractYearMonthCurve) element;
+						if (curve.isSetExpression()) {
+							return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 						}
-					}
-					if (element instanceof DerivedIndex<?>) {
-						return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 					}
 					return super.getForeground(element);
 				}
@@ -669,12 +578,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 					final YearMonth colDate = (YearMonth) col.getColumn().getData("date");
 					final Number number = getNumberForElement(element, colDate);
 					if (number != null) {
-						final DataType dt = getDataTypeForElement(element);
-						if (dt.useIntegers()) {
-							return String.format("%d", number.intValue());
-						} else {
-							return String.format("%01.3f", number.doubleValue());
-						}
+						return String.format("%01.3f", number.doubleValue());
 					}
 
 					return null;
@@ -704,36 +608,29 @@ public class IndexPane extends ScenarioTableViewerPane {
 			}
 
 		});
-
-		scenarioViewer.addOpenListener(new IOpenListener() {
-
-			@Override
-			public void open(final OpenEvent event) {
-			}
-		});
 	}
 
-	private @Nullable Index<?> getIndex(@Nullable final Object o) {
-		if (o instanceof CommodityIndex) {
-			return ((CommodityIndex) o).getData();
-		} else if (o instanceof CharterIndex) {
-			return ((CharterIndex) o).getData();
-		} else if (o instanceof BaseFuelIndex) {
-			return ((BaseFuelIndex) o).getData();
-		} else if (o instanceof NamedIndexContainer<?>) {
-			return ((NamedIndexContainer<?>) o).getData();
-		}
-		return null;
-	}
+	// private @Nullable Index<?> getIndex(@Nullable final Object o) {
+	// if (o instanceof CommodityCurve) {
+	// return ((CommodityCurve) o).getData();
+	// } else if (o instanceof CharterCurve) {
+	// return ((CharterCurve) o).getData();
+	// } else if (o instanceof BunkerFuelCurve) {
+	// return ((BunkerFuelCurve) o).getData();
+	// } else if (o instanceof NamedIndexContainer<?>) {
+	// return ((NamedIndexContainer<?>) o).getData();
+	// }
+	// return null;
+	// }
 
 	private @Nullable DataType getDataTypeForElement(@Nullable final Object element) {
-		if (element instanceof CommodityIndex) {
+		if (element instanceof CommodityCurve) {
 			return DataType.Commodity;
-		} else if (element instanceof BaseFuelIndex) {
+		} else if (element instanceof BunkerFuelCurve) {
 			return DataType.BaseFuel;
-		} else if (element instanceof CharterIndex) {
+		} else if (element instanceof CharterCurve) {
 			return DataType.Charter;
-		} else if (element instanceof CurrencyIndex) {
+		} else if (element instanceof CurrencyCurve) {
 			return DataType.Currency;
 		}
 		return null;
@@ -752,35 +649,42 @@ public class IndexPane extends ScenarioTableViewerPane {
 			name = namedObject.getName();
 		}
 
-		final DataType dt = getDataTypeForElement(element);
-		element = getIndex(element);
+		DataType dt = getDataTypeForElement(element);
 
-		if (element instanceof DataIndex) {
-			final DataIndex<?> idx = (DataIndex<?>) element;
-			return (Number) idx.getValueForMonth(colDate);
-		} else if (element instanceof DerivedIndex) {
-
-			final SeriesParser seriesParser = seriesParsers.get(dt);
-			if (seriesParser != null) {
-				if (name != null && !name.isEmpty()) {
-					try {
-						final ISeries series = seriesParser.getSeries(name);
-						if (series != null) {
-							return series.evaluate(PriceIndexUtils.convertTime(PriceIndexUtils.dateZero, colDate));
+		if (element instanceof AbstractYearMonthCurve) {
+			AbstractYearMonthCurve curve = (AbstractYearMonthCurve) element;
+			if (curve.isSetExpression()) {
+				final SeriesParser seriesParser = seriesParsers.get(dt);
+				if (seriesParser != null) {
+					if (name != null && !name.isEmpty()) {
+						try {
+							final ISeries series = seriesParser.getSeries(name);
+							if (series != null) {
+								return series.evaluate(PriceIndexUtils.convertTime(PriceIndexUtils.dateZero, colDate));
+							}
+						} catch (final Exception e) {
+							// Ignore, anything from series parser should be picked up via validation
 						}
-					} catch (final Exception e) {
-						// Ignore, anything from seried parser should be picked up via validation
 					}
 				}
+			} else {
+				Optional<YearMonthPoint> pt = curve.getPoints().stream() //
+						.filter(p -> colDate.equals(p.getDate())) //
+						.findFirst();
+				if (pt.isPresent()) {
+					return pt.get().getValue();
+				}
+				return null;
 			}
 		}
+
 		return null;
 	}
 
 	public void setInput(final PricingModel pricingModel) {
 		this.pricingModel = pricingModel;
 
-		getScenarioViewer().setCurrentContainerAndContainment(pricingModel, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA);
+		 getScenarioViewer().setCurrentContainerAndContainment(pricingModel, null);
 
 		final EObject root = transformer.getRootObject();
 		transformer.update(pricingModel);

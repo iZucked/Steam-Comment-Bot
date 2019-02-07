@@ -216,7 +216,7 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (markupRate: ");
 		result.append(markupRate);
 		result.append(')');

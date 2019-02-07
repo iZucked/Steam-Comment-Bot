@@ -282,9 +282,9 @@ public class IndexConversion {
 		} else if (node instanceof ShiftNode) {
 			s = String.format("shift(%s, %s)", getExpression(((ShiftNode) node).getChild()), ((ShiftNode) node).getMonths());
 		} else if (node instanceof CommodityNode) {
-			s = ((CommodityNode) node).getIndex().getName();
+			s = ((CommodityNode) node).getCurve().getName();
 		} else if (node instanceof CurrencyNode) {
-			s = ((CurrencyNode) node).getIndex().getName();
+			s = ((CurrencyNode) node).getCurve().getName();
 		} else if (node instanceof ConversionNode) {
 			s = ((ConversionNode) node).getName();
 		} else if (node instanceof BreakevenNode) {

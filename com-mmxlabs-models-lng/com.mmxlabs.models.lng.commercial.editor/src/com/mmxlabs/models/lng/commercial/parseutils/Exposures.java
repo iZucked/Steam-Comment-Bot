@@ -34,7 +34,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.parser.Node;
@@ -245,7 +245,7 @@ public class Exposures {
 	 * @param filterOn
 	 * @return
 	 */
-	public static Map<YearMonth, Double> getExposuresByMonth(final @NonNull Schedule schedule, final @NonNull CommodityIndex index, @NonNull final PricingModel pricingModel, final ValueMode mode,
+	public static Map<YearMonth, Double> getExposuresByMonth(final @NonNull Schedule schedule, final @NonNull CommodityCurve index, @NonNull final PricingModel pricingModel, final ValueMode mode,
 			final Collection<Object> filterOn) {
 		final Map<YearMonth, Double> result = new HashMap<>();
 
@@ -404,7 +404,7 @@ public class Exposures {
 	}
 
 	static class ExposureRecord {
-		CommodityIndex index;
+		CommodityCurve index;
 		double unitPrice;
 		double nativeVolume;
 		double nativeValue;
@@ -412,7 +412,7 @@ public class Exposures {
 		YearMonth date;
 		String volumeUnit;
 
-		ExposureRecord(final CommodityIndex index, final double unitPrice, final double nativeVolume, final double nativeValue, final double mmbtuVolume, final YearMonth date,
+		ExposureRecord(final CommodityCurve index, final double unitPrice, final double nativeVolume, final double nativeValue, final double mmbtuVolume, final YearMonth date,
 				final String volumeUnit) {
 			this.index = index;
 			this.unitPrice = unitPrice;
@@ -623,14 +623,14 @@ public class Exposures {
 
 			// Should really look up actual value from curve...
 			final SeriesParser p = PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
-			final ISeries series = p.getSeries(commodityNode.getIndex().getName());
+			final ISeries series = p.getSeries(commodityNode.getCurve().getName());
 			final Number evaluate = series.evaluate(Hours.between(PriceIndexUtils.dateZero, date));
 
 			final double unitPrice = evaluate.doubleValue();
 			double nativeVolume = inputRecord.volumeInMMBTU;
 
 			// Perform units conversion.
-			final String u = commodityNode.getIndex().getVolumeUnit();
+			final String u = commodityNode.getCurve().getVolumeUnit();
 			for (final UnitConversion factor : lookupData.pricingModel.getConversionFactors()) {
 				if (factor.getTo().equalsIgnoreCase("mmbtu")) {
 					if (factor.getFrom().equalsIgnoreCase(u)) {
@@ -640,8 +640,8 @@ public class Exposures {
 				}
 			}
 
-			final ExposureRecord record = new ExposureRecord(commodityNode.getIndex(), unitPrice, nativeVolume, nativeVolume * unitPrice, inputRecord.volumeInMMBTU, date,
-					commodityNode.getIndex().getVolumeUnit());
+			final ExposureRecord record = new ExposureRecord(commodityNode.getCurve(), unitPrice, nativeVolume, nativeVolume * unitPrice, inputRecord.volumeInMMBTU, date,
+					commodityNode.getCurve().getVolumeUnit());
 			return new Pair<>(unitPrice, new ExposureRecords(record));
 		} else if (node instanceof CurrencyNode) {
 
@@ -649,7 +649,7 @@ public class Exposures {
 
 			// Should really look up actual value from curve...
 			final SeriesParser p = PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.CURRENCY);
-			final ISeries series = p.getSeries(currencyNode.getIndex().getName());
+			final ISeries series = p.getSeries(currencyNode.getCurve().getName());
 			final Number evaluate = series.evaluate(Hours.between(PriceIndexUtils.dateZero, date));
 
 			final double unitPrice = evaluate.doubleValue();

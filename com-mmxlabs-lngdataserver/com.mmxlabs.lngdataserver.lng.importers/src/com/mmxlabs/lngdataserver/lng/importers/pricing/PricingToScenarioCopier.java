@@ -8,6 +8,8 @@ import java.time.YearMonth;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,6 +18,7 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
@@ -27,15 +30,11 @@ import com.mmxlabs.lngdataserver.integration.pricing.model.CurveType;
 import com.mmxlabs.lngdataserver.integration.pricing.model.DataCurve;
 import com.mmxlabs.lngdataserver.integration.pricing.model.ExpressionCurve;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
-import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.Index;
-import com.mmxlabs.models.lng.pricing.IndexPoint;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 
 public class PricingToScenarioCopier {
 
@@ -50,86 +49,66 @@ public class PricingToScenarioCopier {
 		final CompoundCommand cmd = new CompoundCommand("Update pricing");
 
 		// Gather existing curves
-		final EnumMap<CurveType, Map<String, NamedIndexContainer<?>>> map = new EnumMap<>(CurveType.class);
-		final Set<NamedIndexContainer<?>> existing = new HashSet<>();
+		final EnumMap<CurveType, Map<String, AbstractYearMonthCurve>> map = new EnumMap<>(CurveType.class);
+		final Set<AbstractYearMonthCurve> existing = new HashSet<>();
 
 		map.put(CurveType.BASE_FUEL, new HashMap<>());
 		map.put(CurveType.CHARTER, new HashMap<>());
 		map.put(CurveType.COMMODITY, new HashMap<>());
 		map.put(CurveType.CURRENCY, new HashMap<>());
 
-		pricingModel.getBaseFuelPrices().forEach(c -> map.get(CurveType.BASE_FUEL).put(c.getName(), c));
-		pricingModel.getCharterIndices().forEach(c -> map.get(CurveType.CHARTER).put(c.getName(), c));
-		pricingModel.getCommodityIndices().forEach(c -> map.get(CurveType.COMMODITY).put(c.getName(), c));
-		pricingModel.getCurrencyIndices().forEach(c -> map.get(CurveType.CURRENCY).put(c.getName(), c));
-		pricingModel.getBaseFuelPrices().forEach(existing::add);
-		pricingModel.getCharterIndices().forEach(existing::add);
-		pricingModel.getCommodityIndices().forEach(existing::add);
-		pricingModel.getCurrencyIndices().forEach(existing::add);
+		pricingModel.getBunkerFuelCurves().forEach(c -> map.get(CurveType.BASE_FUEL).put(c.getName(), c));
+		pricingModel.getCharterCurves().forEach(c -> map.get(CurveType.CHARTER).put(c.getName(), c));
+		pricingModel.getCommodityCurves().forEach(c -> map.get(CurveType.COMMODITY).put(c.getName(), c));
+		pricingModel.getCurrencyCurves().forEach(c -> map.get(CurveType.CURRENCY).put(c.getName(), c));
+		pricingModel.getBunkerFuelCurves().forEach(existing::add);
+		pricingModel.getCharterCurves().forEach(existing::add);
+		pricingModel.getCommodityCurves().forEach(existing::add);
+		pricingModel.getCurrencyCurves().forEach(existing::add);
 
-		final Set<NamedIndexContainer<?>> updated = new HashSet<>();
+		final Set<AbstractYearMonthCurve> updated = new HashSet<>();
 		for (final Map.Entry<String, Curve> e : version.getCurves().entrySet()) {
 			final String name = e.getKey();
 			final Curve curve = e.getValue();
 
-			final boolean isIntegerType = curve.getType() == CurveType.CHARTER;
-			Index index = null;
+			List<YearMonthPoint> points = new LinkedList<>();
+			String expression = null;
 			if (curve instanceof ExpressionCurve) {
 				final ExpressionCurve expressionCurve = (ExpressionCurve) curve;
-				if (isIntegerType) {
-					final DerivedIndex<Integer> derivedIndex = PricingPackage.eINSTANCE.getPricingFactory().createDerivedIndex();
-					derivedIndex.setExpression(expressionCurve.getExpression());
-					index = derivedIndex;
-				} else {
-					final DerivedIndex<Double> derivedIndex = PricingPackage.eINSTANCE.getPricingFactory().createDerivedIndex();
-					derivedIndex.setExpression(expressionCurve.getExpression());
-					index = derivedIndex;
-				}
+				expression = expressionCurve.getExpression();
 			} else if (curve instanceof DataCurve) {
 				final DataCurve dataCurve = (DataCurve) curve;
-				if (isIntegerType) {
-					final DataIndex<Integer> dataIndex = PricingPackage.eINSTANCE.getPricingFactory().createDataIndex();
-					dataCurve.getCurve().forEach(point -> {
-						final IndexPoint<Integer> indexPoint = PricingPackage.eINSTANCE.getPricingFactory().createIndexPoint();
-						indexPoint.setDate(YearMonth.of(point.getDate().getYear(), point.getDate().getMonthValue()));
-						indexPoint.setValue(point.getValue().intValue());
-						dataIndex.getPoints().add(indexPoint);
-					});
-					index = dataIndex;
-				} else {
-					final DataIndex<Double> dataIndex = PricingPackage.eINSTANCE.getPricingFactory().createDataIndex();
-					dataCurve.getCurve().forEach(point -> {
-						final IndexPoint<Double> indexPoint = PricingPackage.eINSTANCE.getPricingFactory().createIndexPoint();
-						indexPoint.setDate(YearMonth.of(point.getDate().getYear(), point.getDate().getMonthValue()));
-						indexPoint.setValue(point.getValue().doubleValue());
-						dataIndex.getPoints().add(indexPoint);
-					});
-					index = dataIndex;
-				}
+				dataCurve.getCurve().forEach(point -> {
+					final YearMonthPoint indexPoint = PricingPackage.eINSTANCE.getPricingFactory().createYearMonthPoint();
+					indexPoint.setDate(YearMonth.of(point.getDate().getYear(), point.getDate().getMonthValue()));
+					indexPoint.setValue(point.getValue().doubleValue());
+					points.add(indexPoint);
+				});
 			} else {
 				// Unknown
+				throw new IllegalArgumentException();
 			}
 
-			NamedIndexContainer<?> existingCurve = map.get(curve.getType()).get(name);
+			AbstractYearMonthCurve existingCurve = map.get(curve.getType()).get(name);
 
 			if (existingCurve == null) {
 				final EReference ref;
 				switch (curve.getType()) {
 				case BASE_FUEL:
-					existingCurve = PricingFactory.eINSTANCE.createBaseFuelIndex();
-					ref = PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES;
+					existingCurve = PricingFactory.eINSTANCE.createBunkerFuelCurve();
+					ref = PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES;
 					break;
 				case CHARTER:
-					existingCurve = PricingFactory.eINSTANCE.createCharterIndex();
-					ref = PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES;
+					existingCurve = PricingFactory.eINSTANCE.createCharterCurve();
+					ref = PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES;
 					break;
 				case COMMODITY:
-					existingCurve = PricingFactory.eINSTANCE.createCommodityIndex();
-					ref = PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES;
+					existingCurve = PricingFactory.eINSTANCE.createCommodityCurve();
+					ref = PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES;
 					break;
 				case CURRENCY:
-					existingCurve = PricingFactory.eINSTANCE.createCurrencyIndex();
-					ref = PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES;
+					existingCurve = PricingFactory.eINSTANCE.createCurrencyCurve();
+					ref = PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES;
 					break;
 				default:
 					throw new IllegalArgumentException();
@@ -138,25 +117,28 @@ public class PricingToScenarioCopier {
 				existingCurve.setName(curve.getName());
 				existingCurve.setVolumeUnit(curve.getUnit());
 				existingCurve.setCurrencyUnit(curve.getCurrency());
-				existingCurve.setData(index);
+				if (expression != null) {
+					existingCurve.setExpression(expression);
+				} else {
+					existingCurve.getPoints().addAll(points);
+				}
 
 				// ADD COMMAND
 				cmd.append(AddCommand.create(editingDomain, pricingModel, ref, existingCurve));
 
 			} else {
-				// Fails due to generics...
-				// cmd.append(SetCommand.create(editingDomain, existingCurve, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, index));
-				// ... instead assume we have not flipped between data and expression and update the data points
-				if (index instanceof DataIndex) {
-					cmd.append(SetCommand.create(editingDomain, existingCurve.getData(), PricingPackage.Literals.DATA_INDEX__POINTS, ((DataIndex) index).getPoints()));
-				} else if (index instanceof DerivedIndex) {
-					cmd.append(SetCommand.create(editingDomain, existingCurve.getData(), PricingPackage.Literals.DERIVED_INDEX__EXPRESSION, ((DerivedIndex) index).getExpression()));
+				if (!existingCurve.getPoints().isEmpty()) {
+					cmd.append(RemoveCommand.create(editingDomain, existingCurve, PricingPackage.Literals.YEAR_MONTH_POINT_CONTAINER__POINTS, new LinkedList<>(existingCurve.getPoints())));
+				}
+				if (expression == null) {
+					cmd.append(AddCommand.create(editingDomain, existingCurve, PricingPackage.Literals.YEAR_MONTH_POINT_CONTAINER__POINTS, points));
+					cmd.append(SetCommand.create(editingDomain, existingCurve, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION, SetCommand.UNSET_VALUE));
 				} else {
-					throw new IllegalStateException();
+					cmd.append(SetCommand.create(editingDomain, existingCurve, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION, expression));
 				}
 
-				cmd.append(SetCommand.create(editingDomain, existingCurve, PricingPackage.Literals.NAMED_INDEX_CONTAINER__VOLUME_UNIT, curve.getUnit()));
-				cmd.append(SetCommand.create(editingDomain, existingCurve, PricingPackage.Literals.NAMED_INDEX_CONTAINER__CURRENCY_UNIT, curve.getCurrency()));
+				cmd.append(SetCommand.create(editingDomain, existingCurve, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT, curve.getUnit()));
+				cmd.append(SetCommand.create(editingDomain, existingCurve, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT, curve.getCurrency()));
 			}
 			updated.add(existingCurve);
 		}
@@ -165,10 +147,9 @@ public class PricingToScenarioCopier {
 		if (!existing.isEmpty()) {
 			cmd.append(DeleteCommand.create(editingDomain, existing));
 		}
-		
+
 		cmd.append(SetCommand.create(editingDomain, pricingModel, PricingPackage.Literals.PRICING_MODEL__MARKET_CURVE_DATA_VERSION, version.getIdentifier()));
 
-		
 		return cmd;
 	}
 }

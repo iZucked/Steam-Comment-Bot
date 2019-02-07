@@ -322,10 +322,10 @@ public class CSVImporter {
 					classImporters.put(SpotMarketsPackage.eINSTANCE.getSpotMarket(), new SpotMarketImporter());
 					classImporters.put(FleetPackage.eINSTANCE.getVessel(), new VesselImporter());
 					classImporters.put(PricingPackage.eINSTANCE.getDataIndex(), new DataIndexImporter());
-					classImporters.put(PricingPackage.eINSTANCE.getBaseFuelIndex(), new BaseFuelIndexImporter());
-					classImporters.put(PricingPackage.eINSTANCE.getCurrencyIndex(), new CurrencyIndexImporter());
-					classImporters.put(PricingPackage.eINSTANCE.getCharterIndex(), new CharterIndexImporter());
-					classImporters.put(PricingPackage.eINSTANCE.getCommodityIndex(), new CommodityIndexImporter());
+					classImporters.put(PricingPackage.eINSTANCE.getBunkerFuelCurve(), new BaseFuelIndexImporter());
+					classImporters.put(PricingPackage.eINSTANCE.getCurrencyCurve(), new CurrencyIndexImporter());
+					classImporters.put(PricingPackage.eINSTANCE.getCharterCurve(), new CharterIndexImporter());
+					classImporters.put(PricingPackage.eINSTANCE.getCommodityCurve(), new CommodityIndexImporter());
 
 					final List<IPostModelImporter> portModelImporters = new ArrayList<>();
 					final List<IExtraModelImporter> extraModelImporters = new ArrayList<>();

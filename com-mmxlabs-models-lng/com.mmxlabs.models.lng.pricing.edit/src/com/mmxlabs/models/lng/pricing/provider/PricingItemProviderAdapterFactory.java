@@ -180,121 +180,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CurrencyIndex} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CurrencyIndexItemProvider currencyIndexItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.CurrencyIndex}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createCurrencyIndexAdapter() {
-		if (currencyIndexItemProvider == null) {
-			currencyIndexItemProvider = new CurrencyIndexItemProvider(this);
-		}
-
-		return currencyIndexItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CommodityIndex} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CommodityIndexItemProvider commodityIndexItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.CommodityIndex}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createCommodityIndexAdapter() {
-		if (commodityIndexItemProvider == null) {
-			commodityIndexItemProvider = new CommodityIndexItemProvider(this);
-		}
-
-		return commodityIndexItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CharterIndex} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CharterIndexItemProvider charterIndexItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.CharterIndex}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createCharterIndexAdapter() {
-		if (charterIndexItemProvider == null) {
-			charterIndexItemProvider = new CharterIndexItemProvider(this);
-		}
-
-		return charterIndexItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.BaseFuelIndex} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected BaseFuelIndexItemProvider baseFuelIndexItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.BaseFuelIndex}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createBaseFuelIndexAdapter() {
-		if (baseFuelIndexItemProvider == null) {
-			baseFuelIndexItemProvider = new BaseFuelIndexItemProvider(this);
-		}
-
-		return baseFuelIndexItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.NamedIndexContainer} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected NamedIndexContainerItemProvider namedIndexContainerItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.NamedIndexContainer}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createNamedIndexContainerAdapter() {
-		if (namedIndexContainerItemProvider == null) {
-			namedIndexContainerItemProvider = new NamedIndexContainerItemProvider(this);
-		}
-
-		return namedIndexContainerItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CostModel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -663,6 +548,144 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.YearMonthPointContainer} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected YearMonthPointContainerItemProvider yearMonthPointContainerItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.YearMonthPointContainer}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createYearMonthPointContainerAdapter() {
+		if (yearMonthPointContainerItemProvider == null) {
+			yearMonthPointContainerItemProvider = new YearMonthPointContainerItemProvider(this);
+		}
+
+		return yearMonthPointContainerItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.YearMonthPoint} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected YearMonthPointItemProvider yearMonthPointItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.YearMonthPoint}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createYearMonthPointAdapter() {
+		if (yearMonthPointItemProvider == null) {
+			yearMonthPointItemProvider = new YearMonthPointItemProvider(this);
+		}
+
+		return yearMonthPointItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CommodityCurve} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CommodityCurveItemProvider commodityCurveItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.CommodityCurve}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCommodityCurveAdapter() {
+		if (commodityCurveItemProvider == null) {
+			commodityCurveItemProvider = new CommodityCurveItemProvider(this);
+		}
+
+		return commodityCurveItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CharterCurve} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterCurveItemProvider charterCurveItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.CharterCurve}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterCurveAdapter() {
+		if (charterCurveItemProvider == null) {
+			charterCurveItemProvider = new CharterCurveItemProvider(this);
+		}
+
+		return charterCurveItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.BunkerFuelCurve} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BunkerFuelCurveItemProvider bunkerFuelCurveItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.BunkerFuelCurve}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBunkerFuelCurveAdapter() {
+		if (bunkerFuelCurveItemProvider == null) {
+			bunkerFuelCurveItemProvider = new BunkerFuelCurveItemProvider(this);
+		}
+
+		return bunkerFuelCurveItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CurrencyCurve} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CurrencyCurveItemProvider currencyCurveItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.CurrencyCurve}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCurrencyCurveAdapter() {
+		if (currencyCurveItemProvider == null) {
+			currencyCurveItemProvider = new CurrencyCurveItemProvider(this);
+		}
+
+		return currencyCurveItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -792,11 +815,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (dataIndexItemProvider != null) dataIndexItemProvider.dispose();
 		if (derivedIndexItemProvider != null) derivedIndexItemProvider.dispose();
 		if (indexPointItemProvider != null) indexPointItemProvider.dispose();
-		if (currencyIndexItemProvider != null) currencyIndexItemProvider.dispose();
-		if (commodityIndexItemProvider != null) commodityIndexItemProvider.dispose();
-		if (charterIndexItemProvider != null) charterIndexItemProvider.dispose();
-		if (baseFuelIndexItemProvider != null) baseFuelIndexItemProvider.dispose();
-		if (namedIndexContainerItemProvider != null) namedIndexContainerItemProvider.dispose();
 		if (costModelItemProvider != null) costModelItemProvider.dispose();
 		if (routeCostItemProvider != null) routeCostItemProvider.dispose();
 		if (baseFuelCostItemProvider != null) baseFuelCostItemProvider.dispose();
@@ -813,6 +831,12 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (unitConversionItemProvider != null) unitConversionItemProvider.dispose();
 		if (datePointContainerItemProvider != null) datePointContainerItemProvider.dispose();
 		if (datePointItemProvider != null) datePointItemProvider.dispose();
+		if (yearMonthPointContainerItemProvider != null) yearMonthPointContainerItemProvider.dispose();
+		if (yearMonthPointItemProvider != null) yearMonthPointItemProvider.dispose();
+		if (commodityCurveItemProvider != null) commodityCurveItemProvider.dispose();
+		if (charterCurveItemProvider != null) charterCurveItemProvider.dispose();
+		if (bunkerFuelCurveItemProvider != null) bunkerFuelCurveItemProvider.dispose();
+		if (currencyCurveItemProvider != null) currencyCurveItemProvider.dispose();
 	}
 
 }

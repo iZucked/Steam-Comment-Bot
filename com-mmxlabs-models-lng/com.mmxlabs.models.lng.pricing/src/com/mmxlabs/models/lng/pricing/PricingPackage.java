@@ -88,40 +88,40 @@ public interface PricingPackage extends EPackage {
 	int PRICING_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Currency Indices</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Currency Curves</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL__CURRENCY_INDICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+	int PRICING_MODEL__CURRENCY_CURVES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Commodity Indices</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Commodity Curves</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL__COMMODITY_INDICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int PRICING_MODEL__COMMODITY_CURVES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Charter Indices</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Charter Curves</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL__CHARTER_INDICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int PRICING_MODEL__CHARTER_CURVES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Base Fuel Prices</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Bunker Fuel Curves</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL__BASE_FUEL_PRICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int PRICING_MODEL__BUNKER_FUEL_CURVES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Conversion Factors</b></em>' containment reference list.
@@ -279,7 +279,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getRouteCost()
 	 * @generated
 	 */
-	int ROUTE_COST = 11;
+	int ROUTE_COST = 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelCostImpl <em>Base Fuel Cost</em>}' class.
@@ -289,7 +289,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getBaseFuelCost()
 	 * @generated
 	 */
-	int BASE_FUEL_COST = 12;
+	int BASE_FUEL_COST = 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl <em>Port Cost</em>}' class.
@@ -299,7 +299,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortCost()
 	 * @generated
 	 */
-	int PORT_COST = 13;
+	int PORT_COST = 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostEntryImpl <em>Port Cost Entry</em>}' class.
@@ -309,7 +309,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortCostEntry()
 	 * @generated
 	 */
-	int PORT_COST_ENTRY = 14;
+	int PORT_COST_ENTRY = 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl <em>Cooldown Price</em>}' class.
@@ -319,47 +319,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCooldownPrice()
 	 * @generated
 	 */
-	int COOLDOWN_PRICE = 15;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CommodityIndexImpl <em>Commodity Index</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.pricing.impl.CommodityIndexImpl
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCommodityIndex()
-	 * @generated
-	 */
-	int COMMODITY_INDEX = 6;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CharterIndexImpl <em>Charter Index</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.pricing.impl.CharterIndexImpl
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCharterIndex()
-	 * @generated
-	 */
-	int CHARTER_INDEX = 7;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl <em>Named Index Container</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getNamedIndexContainer()
-	 * @generated
-	 */
-	int NAMED_INDEX_CONTAINER = 9;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelIndexImpl <em>Base Fuel Index</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.pricing.impl.BaseFuelIndexImpl
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getBaseFuelIndex()
-	 * @generated
-	 */
-	int BASE_FUEL_INDEX = 8;
+	int COOLDOWN_PRICE = 10;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsExpressionMapImpl <em>Ports Expression Map</em>}' class.
@@ -369,332 +329,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsExpressionMap()
 	 * @generated
 	 */
-	int PORTS_EXPRESSION_MAP = 16;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NAMED_INDEX_CONTAINER__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NAMED_INDEX_CONTAINER__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NAMED_INDEX_CONTAINER__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Data</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NAMED_INDEX_CONTAINER__DATA = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NAMED_INDEX_CONTAINER__CURRENCY_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NAMED_INDEX_CONTAINER__VOLUME_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The number of structural features of the '<em>Named Index Container</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NAMED_INDEX_CONTAINER_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CurrencyIndexImpl <em>Currency Index</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.pricing.impl.CurrencyIndexImpl
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCurrencyIndex()
-	 * @generated
-	 */
-	int CURRENCY_INDEX = 5;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CURRENCY_INDEX__EXTENSIONS = NAMED_INDEX_CONTAINER__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CURRENCY_INDEX__UUID = NAMED_INDEX_CONTAINER__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CURRENCY_INDEX__NAME = NAMED_INDEX_CONTAINER__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Data</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CURRENCY_INDEX__DATA = NAMED_INDEX_CONTAINER__DATA;
-
-	/**
-	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CURRENCY_INDEX__CURRENCY_UNIT = NAMED_INDEX_CONTAINER__CURRENCY_UNIT;
-
-	/**
-	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CURRENCY_INDEX__VOLUME_UNIT = NAMED_INDEX_CONTAINER__VOLUME_UNIT;
-
-	/**
-	 * The number of structural features of the '<em>Currency Index</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CURRENCY_INDEX_FEATURE_COUNT = NAMED_INDEX_CONTAINER_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMODITY_INDEX__EXTENSIONS = NAMED_INDEX_CONTAINER__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMODITY_INDEX__UUID = NAMED_INDEX_CONTAINER__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMODITY_INDEX__NAME = NAMED_INDEX_CONTAINER__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Data</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMODITY_INDEX__DATA = NAMED_INDEX_CONTAINER__DATA;
-
-	/**
-	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMODITY_INDEX__CURRENCY_UNIT = NAMED_INDEX_CONTAINER__CURRENCY_UNIT;
-
-	/**
-	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMODITY_INDEX__VOLUME_UNIT = NAMED_INDEX_CONTAINER__VOLUME_UNIT;
-
-	/**
-	 * The number of structural features of the '<em>Commodity Index</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMODITY_INDEX_FEATURE_COUNT = NAMED_INDEX_CONTAINER_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_INDEX__EXTENSIONS = NAMED_INDEX_CONTAINER__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_INDEX__UUID = NAMED_INDEX_CONTAINER__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_INDEX__NAME = NAMED_INDEX_CONTAINER__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Data</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_INDEX__DATA = NAMED_INDEX_CONTAINER__DATA;
-
-	/**
-	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_INDEX__CURRENCY_UNIT = NAMED_INDEX_CONTAINER__CURRENCY_UNIT;
-
-	/**
-	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_INDEX__VOLUME_UNIT = NAMED_INDEX_CONTAINER__VOLUME_UNIT;
-
-	/**
-	 * The number of structural features of the '<em>Charter Index</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_INDEX_FEATURE_COUNT = NAMED_INDEX_CONTAINER_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_FUEL_INDEX__EXTENSIONS = NAMED_INDEX_CONTAINER__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_FUEL_INDEX__UUID = NAMED_INDEX_CONTAINER__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_FUEL_INDEX__NAME = NAMED_INDEX_CONTAINER__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Data</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_FUEL_INDEX__DATA = NAMED_INDEX_CONTAINER__DATA;
-
-	/**
-	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_FUEL_INDEX__CURRENCY_UNIT = NAMED_INDEX_CONTAINER__CURRENCY_UNIT;
-
-	/**
-	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_FUEL_INDEX__VOLUME_UNIT = NAMED_INDEX_CONTAINER__VOLUME_UNIT;
-
-	/**
-	 * The number of structural features of the '<em>Base Fuel Index</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_FUEL_INDEX_FEATURE_COUNT = NAMED_INDEX_CONTAINER_FEATURE_COUNT + 0;
+	int PORTS_EXPRESSION_MAP = 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CostModelImpl <em>Cost Model</em>}' class.
@@ -704,7 +339,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCostModel()
 	 * @generated
 	 */
-	int COST_MODEL = 10;
+	int COST_MODEL = 5;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1038,7 +673,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsSplitExpressionMap()
 	 * @generated
 	 */
-	int PORTS_SPLIT_EXPRESSION_MAP = 17;
+	int PORTS_SPLIT_EXPRESSION_MAP = 12;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1093,7 +728,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPanamaCanalTariff()
 	 * @generated
 	 */
-	int PANAMA_CANAL_TARIFF = 18;
+	int PANAMA_CANAL_TARIFF = 13;
 
 	/**
 	 * The feature id for the '<em><b>Bands</b></em>' containment reference list.
@@ -1130,7 +765,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPanamaCanalTariffBand()
 	 * @generated
 	 */
-	int PANAMA_CANAL_TARIFF_BAND = 19;
+	int PANAMA_CANAL_TARIFF_BAND = 14;
 
 	/**
 	 * The feature id for the '<em><b>Laden Tariff</b></em>' attribute.
@@ -1194,7 +829,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalTugBand()
 	 * @generated
 	 */
-	int SUEZ_CANAL_TUG_BAND = 20;
+	int SUEZ_CANAL_TUG_BAND = 15;
 
 	/**
 	 * The feature id for the '<em><b>Tugs</b></em>' attribute.
@@ -1240,7 +875,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalTariff()
 	 * @generated
 	 */
-	int SUEZ_CANAL_TARIFF = 21;
+	int SUEZ_CANAL_TARIFF = 16;
 
 	/**
 	 * The feature id for the '<em><b>Bands</b></em>' containment reference list.
@@ -1313,7 +948,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalTariffBand()
 	 * @generated
 	 */
-	int SUEZ_CANAL_TARIFF_BAND = 22;
+	int SUEZ_CANAL_TARIFF_BAND = 17;
 
 	/**
 	 * The feature id for the '<em><b>Laden Tariff</b></em>' attribute.
@@ -1368,7 +1003,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getUnitConversion()
 	 * @generated
 	 */
-	int UNIT_CONVERSION = 23;
+	int UNIT_CONVERSION = 18;
 
 	/**
 	 * The feature id for the '<em><b>From</b></em>' attribute.
@@ -1414,7 +1049,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getDatePointContainer()
 	 * @generated
 	 */
-	int DATE_POINT_CONTAINER = 24;
+	int DATE_POINT_CONTAINER = 19;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1469,7 +1104,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getDatePoint()
 	 * @generated
 	 */
-	int DATE_POINT = 25;
+	int DATE_POINT = 20;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -1499,6 +1134,508 @@ public interface PricingPackage extends EPackage {
 	int DATE_POINT_FEATURE_COUNT = 2;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.YearMonthPointContainerImpl <em>Year Month Point Container</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.YearMonthPointContainerImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getYearMonthPointContainer()
+	 * @generated
+	 */
+	int YEAR_MONTH_POINT_CONTAINER = 21;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int YEAR_MONTH_POINT_CONTAINER__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int YEAR_MONTH_POINT_CONTAINER__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int YEAR_MONTH_POINT_CONTAINER__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Points</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int YEAR_MONTH_POINT_CONTAINER__POINTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Year Month Point Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int YEAR_MONTH_POINT_CONTAINER_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.YearMonthPointImpl <em>Year Month Point</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.YearMonthPointImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getYearMonthPoint()
+	 * @generated
+	 */
+	int YEAR_MONTH_POINT = 22;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int YEAR_MONTH_POINT__DATE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int YEAR_MONTH_POINT__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Year Month Point</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int YEAR_MONTH_POINT_FEATURE_COUNT = 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.AbstractYearMonthCurveImpl <em>Abstract Year Month Curve</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.AbstractYearMonthCurveImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getAbstractYearMonthCurve()
+	 * @generated
+	 */
+	int ABSTRACT_YEAR_MONTH_CURVE = 23;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_YEAR_MONTH_CURVE__EXTENSIONS = YEAR_MONTH_POINT_CONTAINER__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_YEAR_MONTH_CURVE__UUID = YEAR_MONTH_POINT_CONTAINER__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_YEAR_MONTH_CURVE__NAME = YEAR_MONTH_POINT_CONTAINER__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Points</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_YEAR_MONTH_CURVE__POINTS = YEAR_MONTH_POINT_CONTAINER__POINTS;
+
+	/**
+	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT = YEAR_MONTH_POINT_CONTAINER_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT = YEAR_MONTH_POINT_CONTAINER_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION = YEAR_MONTH_POINT_CONTAINER_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Abstract Year Month Curve</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_YEAR_MONTH_CURVE_FEATURE_COUNT = YEAR_MONTH_POINT_CONTAINER_FEATURE_COUNT + 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CommodityCurveImpl <em>Commodity Curve</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.CommodityCurveImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCommodityCurve()
+	 * @generated
+	 */
+	int COMMODITY_CURVE = 24;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE__EXTENSIONS = ABSTRACT_YEAR_MONTH_CURVE__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE__UUID = ABSTRACT_YEAR_MONTH_CURVE__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE__NAME = ABSTRACT_YEAR_MONTH_CURVE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Points</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE__POINTS = ABSTRACT_YEAR_MONTH_CURVE__POINTS;
+
+	/**
+	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE__CURRENCY_UNIT = ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE__VOLUME_UNIT = ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE__EXPRESSION = ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION;
+
+	/**
+	 * The number of structural features of the '<em>Commodity Curve</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE_FEATURE_COUNT = ABSTRACT_YEAR_MONTH_CURVE_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CharterCurveImpl <em>Charter Curve</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.CharterCurveImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCharterCurve()
+	 * @generated
+	 */
+	int CHARTER_CURVE = 25;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_CURVE__EXTENSIONS = ABSTRACT_YEAR_MONTH_CURVE__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_CURVE__UUID = ABSTRACT_YEAR_MONTH_CURVE__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_CURVE__NAME = ABSTRACT_YEAR_MONTH_CURVE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Points</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_CURVE__POINTS = ABSTRACT_YEAR_MONTH_CURVE__POINTS;
+
+	/**
+	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_CURVE__CURRENCY_UNIT = ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_CURVE__VOLUME_UNIT = ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_CURVE__EXPRESSION = ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION;
+
+	/**
+	 * The number of structural features of the '<em>Charter Curve</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_CURVE_FEATURE_COUNT = ABSTRACT_YEAR_MONTH_CURVE_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.BunkerFuelCurveImpl <em>Bunker Fuel Curve</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.BunkerFuelCurveImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getBunkerFuelCurve()
+	 * @generated
+	 */
+	int BUNKER_FUEL_CURVE = 26;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUNKER_FUEL_CURVE__EXTENSIONS = ABSTRACT_YEAR_MONTH_CURVE__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUNKER_FUEL_CURVE__UUID = ABSTRACT_YEAR_MONTH_CURVE__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUNKER_FUEL_CURVE__NAME = ABSTRACT_YEAR_MONTH_CURVE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Points</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUNKER_FUEL_CURVE__POINTS = ABSTRACT_YEAR_MONTH_CURVE__POINTS;
+
+	/**
+	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUNKER_FUEL_CURVE__CURRENCY_UNIT = ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUNKER_FUEL_CURVE__VOLUME_UNIT = ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUNKER_FUEL_CURVE__EXPRESSION = ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION;
+
+	/**
+	 * The number of structural features of the '<em>Bunker Fuel Curve</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUNKER_FUEL_CURVE_FEATURE_COUNT = ABSTRACT_YEAR_MONTH_CURVE_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CurrencyCurveImpl <em>Currency Curve</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.CurrencyCurveImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCurrencyCurve()
+	 * @generated
+	 */
+	int CURRENCY_CURVE = 27;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CURRENCY_CURVE__EXTENSIONS = ABSTRACT_YEAR_MONTH_CURVE__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CURRENCY_CURVE__UUID = ABSTRACT_YEAR_MONTH_CURVE__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CURRENCY_CURVE__NAME = ABSTRACT_YEAR_MONTH_CURVE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Points</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CURRENCY_CURVE__POINTS = ABSTRACT_YEAR_MONTH_CURVE__POINTS;
+
+	/**
+	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CURRENCY_CURVE__CURRENCY_UNIT = ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CURRENCY_CURVE__VOLUME_UNIT = ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CURRENCY_CURVE__EXPRESSION = ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION;
+
+	/**
+	 * The number of structural features of the '<em>Currency Curve</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CURRENCY_CURVE_FEATURE_COUNT = ABSTRACT_YEAR_MONTH_CURVE_FEATURE_COUNT + 0;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1509,48 +1646,48 @@ public interface PricingPackage extends EPackage {
 	EClass getPricingModel();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getCurrencyIndices <em>Currency Indices</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getCurrencyCurves <em>Currency Curves</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Currency Indices</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getCurrencyIndices()
+	 * @return the meta object for the containment reference list '<em>Currency Curves</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getCurrencyCurves()
 	 * @see #getPricingModel()
 	 * @generated
 	 */
-	EReference getPricingModel_CurrencyIndices();
+	EReference getPricingModel_CurrencyCurves();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getCommodityIndices <em>Commodity Indices</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getCommodityCurves <em>Commodity Curves</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Commodity Indices</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getCommodityIndices()
+	 * @return the meta object for the containment reference list '<em>Commodity Curves</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getCommodityCurves()
 	 * @see #getPricingModel()
 	 * @generated
 	 */
-	EReference getPricingModel_CommodityIndices();
+	EReference getPricingModel_CommodityCurves();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getCharterIndices <em>Charter Indices</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getCharterCurves <em>Charter Curves</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Charter Indices</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getCharterIndices()
+	 * @return the meta object for the containment reference list '<em>Charter Curves</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getCharterCurves()
 	 * @see #getPricingModel()
 	 * @generated
 	 */
-	EReference getPricingModel_CharterIndices();
+	EReference getPricingModel_CharterCurves();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getBaseFuelPrices <em>Base Fuel Prices</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getBunkerFuelCurves <em>Bunker Fuel Curves</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Base Fuel Prices</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getBaseFuelPrices()
+	 * @return the meta object for the containment reference list '<em>Bunker Fuel Curves</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getBunkerFuelCurves()
 	 * @see #getPricingModel()
 	 * @generated
 	 */
-	EReference getPricingModel_BaseFuelPrices();
+	EReference getPricingModel_BunkerFuelCurves();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getConversionFactors <em>Conversion Factors</em>}'.
@@ -1668,16 +1805,6 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getIndex();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CurrencyIndex <em>Currency Index</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Currency Index</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.CurrencyIndex
-	 * @generated
-	 */
-	EClass getCurrencyIndex();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.RouteCost <em>Route Cost</em>}'.
@@ -1860,79 +1987,6 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCooldownPrice_Lumpsum();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CommodityIndex <em>Commodity Index</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Commodity Index</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.CommodityIndex
-	 * @generated
-	 */
-	EClass getCommodityIndex();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CharterIndex <em>Charter Index</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Charter Index</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.CharterIndex
-	 * @generated
-	 */
-	EClass getCharterIndex();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.BaseFuelIndex <em>Base Fuel Index</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Base Fuel Index</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.BaseFuelIndex
-	 * @generated
-	 */
-	EClass getBaseFuelIndex();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer <em>Named Index Container</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Named Index Container</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.NamedIndexContainer
-	 * @generated
-	 */
-	EClass getNamedIndexContainer();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getData <em>Data</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Data</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.NamedIndexContainer#getData()
-	 * @see #getNamedIndexContainer()
-	 * @generated
-	 */
-	EReference getNamedIndexContainer_Data();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getCurrencyUnit <em>Currency Unit</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Currency Unit</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.NamedIndexContainer#getCurrencyUnit()
-	 * @see #getNamedIndexContainer()
-	 * @generated
-	 */
-	EAttribute getNamedIndexContainer_CurrencyUnit();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getVolumeUnit <em>Volume Unit</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Volume Unit</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.NamedIndexContainer#getVolumeUnit()
-	 * @see #getNamedIndexContainer()
-	 * @generated
-	 */
-	EAttribute getNamedIndexContainer_VolumeUnit();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CostModel <em>Cost Model</em>}'.
@@ -2452,6 +2506,142 @@ public interface PricingPackage extends EPackage {
 	EAttribute getDatePoint_Value();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.YearMonthPointContainer <em>Year Month Point Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Year Month Point Container</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.YearMonthPointContainer
+	 * @generated
+	 */
+	EClass getYearMonthPointContainer();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.YearMonthPointContainer#getPoints <em>Points</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Points</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.YearMonthPointContainer#getPoints()
+	 * @see #getYearMonthPointContainer()
+	 * @generated
+	 */
+	EReference getYearMonthPointContainer_Points();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.YearMonthPoint <em>Year Month Point</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Year Month Point</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.YearMonthPoint
+	 * @generated
+	 */
+	EClass getYearMonthPoint();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.YearMonthPoint#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.YearMonthPoint#getDate()
+	 * @see #getYearMonthPoint()
+	 * @generated
+	 */
+	EAttribute getYearMonthPoint_Date();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.YearMonthPoint#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.YearMonthPoint#getValue()
+	 * @see #getYearMonthPoint()
+	 * @generated
+	 */
+	EAttribute getYearMonthPoint_Value();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve <em>Abstract Year Month Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Abstract Year Month Curve</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve
+	 * @generated
+	 */
+	EClass getAbstractYearMonthCurve();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve#getCurrencyUnit <em>Currency Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Currency Unit</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve#getCurrencyUnit()
+	 * @see #getAbstractYearMonthCurve()
+	 * @generated
+	 */
+	EAttribute getAbstractYearMonthCurve_CurrencyUnit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve#getVolumeUnit <em>Volume Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Unit</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve#getVolumeUnit()
+	 * @see #getAbstractYearMonthCurve()
+	 * @generated
+	 */
+	EAttribute getAbstractYearMonthCurve_VolumeUnit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve#getExpression <em>Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Expression</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve#getExpression()
+	 * @see #getAbstractYearMonthCurve()
+	 * @generated
+	 */
+	EAttribute getAbstractYearMonthCurve_Expression();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CommodityCurve <em>Commodity Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Commodity Curve</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CommodityCurve
+	 * @generated
+	 */
+	EClass getCommodityCurve();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CharterCurve <em>Charter Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Charter Curve</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CharterCurve
+	 * @generated
+	 */
+	EClass getCharterCurve();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.BunkerFuelCurve <em>Bunker Fuel Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Bunker Fuel Curve</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.BunkerFuelCurve
+	 * @generated
+	 */
+	EClass getBunkerFuelCurve();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CurrencyCurve <em>Currency Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Currency Curve</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CurrencyCurve
+	 * @generated
+	 */
+	EClass getCurrencyCurve();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2484,36 +2674,36 @@ public interface PricingPackage extends EPackage {
 		EClass PRICING_MODEL = eINSTANCE.getPricingModel();
 
 		/**
-		 * The meta object literal for the '<em><b>Currency Indices</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Currency Curves</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PRICING_MODEL__CURRENCY_INDICES = eINSTANCE.getPricingModel_CurrencyIndices();
+		EReference PRICING_MODEL__CURRENCY_CURVES = eINSTANCE.getPricingModel_CurrencyCurves();
 
 		/**
-		 * The meta object literal for the '<em><b>Commodity Indices</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Commodity Curves</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PRICING_MODEL__COMMODITY_INDICES = eINSTANCE.getPricingModel_CommodityIndices();
+		EReference PRICING_MODEL__COMMODITY_CURVES = eINSTANCE.getPricingModel_CommodityCurves();
 
 		/**
-		 * The meta object literal for the '<em><b>Charter Indices</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Charter Curves</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PRICING_MODEL__CHARTER_INDICES = eINSTANCE.getPricingModel_CharterIndices();
+		EReference PRICING_MODEL__CHARTER_CURVES = eINSTANCE.getPricingModel_CharterCurves();
 
 		/**
-		 * The meta object literal for the '<em><b>Base Fuel Prices</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Bunker Fuel Curves</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PRICING_MODEL__BASE_FUEL_PRICES = eINSTANCE.getPricingModel_BaseFuelPrices();
+		EReference PRICING_MODEL__BUNKER_FUEL_CURVES = eINSTANCE.getPricingModel_BunkerFuelCurves();
 
 		/**
 		 * The meta object literal for the '<em><b>Conversion Factors</b></em>' containment reference list feature.
@@ -2610,16 +2800,6 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EClass INDEX = eINSTANCE.getIndex();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CurrencyIndexImpl <em>Currency Index</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.pricing.impl.CurrencyIndexImpl
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCurrencyIndex()
-		 * @generated
-		 */
-		EClass CURRENCY_INDEX = eINSTANCE.getCurrencyIndex();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.RouteCostImpl <em>Route Cost</em>}' class.
@@ -2766,70 +2946,6 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute COOLDOWN_PRICE__LUMPSUM = eINSTANCE.getCooldownPrice_Lumpsum();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CommodityIndexImpl <em>Commodity Index</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.pricing.impl.CommodityIndexImpl
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCommodityIndex()
-		 * @generated
-		 */
-		EClass COMMODITY_INDEX = eINSTANCE.getCommodityIndex();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CharterIndexImpl <em>Charter Index</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.pricing.impl.CharterIndexImpl
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCharterIndex()
-		 * @generated
-		 */
-		EClass CHARTER_INDEX = eINSTANCE.getCharterIndex();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelIndexImpl <em>Base Fuel Index</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.pricing.impl.BaseFuelIndexImpl
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getBaseFuelIndex()
-		 * @generated
-		 */
-		EClass BASE_FUEL_INDEX = eINSTANCE.getBaseFuelIndex();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl <em>Named Index Container</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getNamedIndexContainer()
-		 * @generated
-		 */
-		EClass NAMED_INDEX_CONTAINER = eINSTANCE.getNamedIndexContainer();
-
-		/**
-		 * The meta object literal for the '<em><b>Data</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference NAMED_INDEX_CONTAINER__DATA = eINSTANCE.getNamedIndexContainer_Data();
-
-		/**
-		 * The meta object literal for the '<em><b>Currency Unit</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NAMED_INDEX_CONTAINER__CURRENCY_UNIT = eINSTANCE.getNamedIndexContainer_CurrencyUnit();
-
-		/**
-		 * The meta object literal for the '<em><b>Volume Unit</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NAMED_INDEX_CONTAINER__VOLUME_UNIT = eINSTANCE.getNamedIndexContainer_VolumeUnit();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CostModelImpl <em>Cost Model</em>}' class.
@@ -3236,6 +3352,124 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DATE_POINT__VALUE = eINSTANCE.getDatePoint_Value();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.YearMonthPointContainerImpl <em>Year Month Point Container</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.YearMonthPointContainerImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getYearMonthPointContainer()
+		 * @generated
+		 */
+		EClass YEAR_MONTH_POINT_CONTAINER = eINSTANCE.getYearMonthPointContainer();
+
+		/**
+		 * The meta object literal for the '<em><b>Points</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference YEAR_MONTH_POINT_CONTAINER__POINTS = eINSTANCE.getYearMonthPointContainer_Points();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.YearMonthPointImpl <em>Year Month Point</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.YearMonthPointImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getYearMonthPoint()
+		 * @generated
+		 */
+		EClass YEAR_MONTH_POINT = eINSTANCE.getYearMonthPoint();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute YEAR_MONTH_POINT__DATE = eINSTANCE.getYearMonthPoint_Date();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute YEAR_MONTH_POINT__VALUE = eINSTANCE.getYearMonthPoint_Value();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.AbstractYearMonthCurveImpl <em>Abstract Year Month Curve</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.AbstractYearMonthCurveImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getAbstractYearMonthCurve()
+		 * @generated
+		 */
+		EClass ABSTRACT_YEAR_MONTH_CURVE = eINSTANCE.getAbstractYearMonthCurve();
+
+		/**
+		 * The meta object literal for the '<em><b>Currency Unit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT = eINSTANCE.getAbstractYearMonthCurve_CurrencyUnit();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Unit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT = eINSTANCE.getAbstractYearMonthCurve_VolumeUnit();
+
+		/**
+		 * The meta object literal for the '<em><b>Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION = eINSTANCE.getAbstractYearMonthCurve_Expression();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CommodityCurveImpl <em>Commodity Curve</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.CommodityCurveImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCommodityCurve()
+		 * @generated
+		 */
+		EClass COMMODITY_CURVE = eINSTANCE.getCommodityCurve();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CharterCurveImpl <em>Charter Curve</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.CharterCurveImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCharterCurve()
+		 * @generated
+		 */
+		EClass CHARTER_CURVE = eINSTANCE.getCharterCurve();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.BunkerFuelCurveImpl <em>Bunker Fuel Curve</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.BunkerFuelCurveImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getBunkerFuelCurve()
+		 * @generated
+		 */
+		EClass BUNKER_FUEL_CURVE = eINSTANCE.getBunkerFuelCurve();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CurrencyCurveImpl <em>Currency Curve</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.CurrencyCurveImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCurrencyCurve()
+		 * @generated
+		 */
+		EClass CURRENCY_CURVE = eINSTANCE.getCurrencyCurve();
 
 	}
 

@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
@@ -231,7 +231,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		final CostModel costModel = scenario.getReferenceModel().getCostModel();
 		final PortModel portModel = scenario.getReferenceModel().getPortModel();
 
-		final CommodityIndex cooldownIndex = pricingCreator.createDefaultCommodityIndex("cooldown", value);
+		final CommodityCurve cooldownIndex = pricingCreator.createDefaultCommodityIndex("cooldown", value);
 
 		final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
 		price.setExpression(cooldownIndex.getName());

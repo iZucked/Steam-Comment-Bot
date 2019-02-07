@@ -14,7 +14,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -92,7 +92,7 @@ public class PaperDealConstraint extends AbstractModelMultiConstraint {
 						.withMessage("No price specified") //
 						.make(ctx, statuses);
 			} else {
-				final NamedIndexContainer<?> data = PriceExpressionUtils.getMarketCurveProvider().getCurve(PriceIndexType.COMMODITY, curve.toLowerCase());
+				final AbstractYearMonthCurve data = PriceExpressionUtils.getMarketCurveProvider().getCurve(PriceIndexType.COMMODITY, curve.toLowerCase());
 				if (data == null) {
 					factory.copyName() //
 							.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__INDEX) //

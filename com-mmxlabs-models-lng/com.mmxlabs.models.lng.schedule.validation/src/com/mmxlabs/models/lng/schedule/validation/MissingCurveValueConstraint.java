@@ -18,7 +18,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -56,7 +56,7 @@ public class MissingCurveValueConstraint extends AbstractModelMultiConstraint {
 
 					final String vesselName = vessel == null ? "<Unknown>" : vessel.getName();
 
-					for (final NamedIndexContainer<?> index : PriceExpressionUtils.getLinkedCurves(charterInRate)) {
+					for (final AbstractYearMonthCurve index : PriceExpressionUtils.getLinkedCurves(charterInRate)) {
 						@Nullable
 						final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 						if (date == null || date.isAfter(startDate)) {
@@ -76,7 +76,7 @@ public class MissingCurveValueConstraint extends AbstractModelMultiConstraint {
 			if (charterInMarket != null) {
 				final String charterInRate = charterInMarket.getCharterInRate();
 				if (charterInRate != null && !charterInRate.trim().isEmpty()) {
-					for (final NamedIndexContainer<?> index : PriceExpressionUtils.getLinkedCurves(charterInRate)) {
+					for (final AbstractYearMonthCurve index : PriceExpressionUtils.getLinkedCurves(charterInRate)) {
 						@Nullable
 						final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 						if (date == null || date.isAfter(startDate)) {

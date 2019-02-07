@@ -26,8 +26,8 @@ public class CurrencyIndexReferenceValueProviderFactory implements IReferenceVal
 			final PricingModel model = ScenarioModelUtil.getPricingModel(lngScenarioModel);
 			final EClass referenceClass = reference.getEReferenceType();
 
-			if (referenceClass == PricingPackage.eINSTANCE.getCurrencyIndex()) {
-				return new SimpleReferenceValueProvider(model, PricingPackage.eINSTANCE.getPricingModel_CurrencyIndices());
+			if (referenceClass == PricingPackage.eINSTANCE.getCurrencyCurve()) {
+				return new SimpleReferenceValueProvider(model, PricingPackage.eINSTANCE.getPricingModel_CurrencyCurves());
 			}
 		}
 
