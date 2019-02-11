@@ -89,6 +89,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot()
  * @model abstract="true"
+ *        annotation="http://www.mmxlabs.com/models/featureOverride"
  * @generated
  */
 public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITimezoneProvider {
@@ -1237,7 +1238,7 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Restricted Contracts</em>' reference list.
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedContracts()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/overrideFeature"
 	 * @generated
 	 */
 	EList<Contract> getRestrictedContracts();
@@ -1253,7 +1254,7 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Restricted Ports</em>' reference list.
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedPorts()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/overrideFeature"
 	 * @generated
 	 */
 	EList<Port> getRestrictedPorts();
@@ -1269,7 +1270,7 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @return the value of the '<em>Restricted Lists Are Permissive</em>' attribute.
 	 * @see #setRestrictedListsArePermissive(boolean)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedListsArePermissive()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/overrideFeature"
 	 * @generated
 	 */
 	boolean isRestrictedListsArePermissive();

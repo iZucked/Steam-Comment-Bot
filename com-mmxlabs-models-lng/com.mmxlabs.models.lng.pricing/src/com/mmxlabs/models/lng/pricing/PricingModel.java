@@ -23,6 +23,9 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getConversionFactors <em>Conversion Factors</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getMarketCurveDataVersion <em>Market Curve Data Version</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getSettledPrices <em>Settled Prices</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getMarketIndices <em>Market Indices</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getHolidayCalendars <em>Holiday Calendars</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getSettleStrategies <em>Settle Strategies</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel()
@@ -151,6 +154,54 @@ public interface PricingModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<DatePointContainer> getSettledPrices();
+
+	/**
+	 * Returns the value of the '<em><b>Market Indices</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.MarketIndex}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Market Indices</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Market Indices</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_MarketIndices()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<MarketIndex> getMarketIndices();
+
+	/**
+	 * Returns the value of the '<em><b>Holiday Calendars</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.HolidayCalendar}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Holiday Calendars</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Holiday Calendars</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_HolidayCalendars()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<HolidayCalendar> getHolidayCalendars();
+
+	/**
+	 * Returns the value of the '<em><b>Settle Strategies</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.SettleStrategy}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Settle Strategies</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Settle Strategies</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_SettleStrategies()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<SettleStrategy> getSettleStrategies();
 
 } // end of  PricingModel
 

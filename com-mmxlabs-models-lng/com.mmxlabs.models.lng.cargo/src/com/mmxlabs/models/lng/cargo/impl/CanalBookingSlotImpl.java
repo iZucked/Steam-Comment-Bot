@@ -153,6 +153,7 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public RouteOption getRouteOption() {
 		return routeOption;
 	}
@@ -162,6 +163,7 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRouteOption(RouteOption newRouteOption) {
 		RouteOption oldRouteOption = routeOption;
 		routeOption = newRouteOption == null ? ROUTE_OPTION_EDEFAULT : newRouteOption;
@@ -174,6 +176,7 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getBookingDate() {
 		return bookingDate;
 	}
@@ -183,6 +186,7 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBookingDate(LocalDate newBookingDate) {
 		LocalDate oldBookingDate = bookingDate;
 		bookingDate = newBookingDate;
@@ -195,6 +199,7 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CanalEntry getCanalEntrance() {
 		return canalEntrance;
 	}
@@ -204,6 +209,7 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCanalEntrance(CanalEntry newCanalEntrance) {
 		CanalEntry oldCanalEntrance = canalEntrance;
 		canalEntrance = newCanalEntrance == null ? CANAL_ENTRANCE_EDEFAULT : newCanalEntrance;
@@ -216,6 +222,7 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Slot getSlot() {
 		if (slot != null && slot.eIsProxy()) {
 			InternalEObject oldSlot = (InternalEObject)slot;
@@ -242,6 +249,7 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlot(Slot newSlot) {
 		Slot oldSlot = slot;
 		slot = newSlot;
@@ -254,6 +262,7 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getNotes() {
 		return notes;
 	}
@@ -263,6 +272,7 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNotes(String newNotes) {
 		String oldNotes = notes;
 		notes = newNotes;

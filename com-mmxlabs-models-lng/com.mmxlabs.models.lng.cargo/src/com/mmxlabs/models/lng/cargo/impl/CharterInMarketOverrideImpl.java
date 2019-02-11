@@ -313,6 +313,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterInMarket getCharterInMarket() {
 		if (charterInMarket != null && charterInMarket.eIsProxy()) {
 			InternalEObject oldCharterInMarket = (InternalEObject)charterInMarket;
@@ -339,6 +340,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterInMarket(CharterInMarket newCharterInMarket) {
 		CharterInMarket oldCharterInMarket = charterInMarket;
 		charterInMarket = newCharterInMarket;
@@ -351,6 +353,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSpotIndex() {
 		return spotIndex;
 	}
@@ -360,6 +363,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpotIndex(int newSpotIndex) {
 		int oldSpotIndex = spotIndex;
 		spotIndex = newSpotIndex;
@@ -372,6 +376,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public StartHeelOptions getStartHeel() {
 		if (startHeel != null && startHeel.eIsProxy()) {
 			InternalEObject oldStartHeel = (InternalEObject)startHeel;
@@ -421,6 +426,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartHeel(StartHeelOptions newStartHeel) {
 		if (newStartHeel != startHeel) {
 			NotificationChain msgs = null;
@@ -461,6 +467,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetStartHeel() {
 		if (startHeel != null) {
 			NotificationChain msgs = null;
@@ -481,6 +488,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetStartHeel() {
 		return startHeelESet;
 	}
@@ -490,6 +498,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDateTime getStartDate() {
 		return startDate;
 	}
@@ -499,6 +508,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartDate(LocalDateTime newStartDate) {
 		LocalDateTime oldStartDate = startDate;
 		startDate = newStartDate;
@@ -513,6 +523,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetStartDate() {
 		LocalDateTime oldStartDate = startDate;
 		boolean oldStartDateESet = startDateESet;
@@ -527,6 +538,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetStartDate() {
 		return startDateESet;
 	}
@@ -536,6 +548,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getEndPort() {
 		if (endPort != null && endPort.eIsProxy()) {
 			InternalEObject oldEndPort = (InternalEObject)endPort;
@@ -562,6 +575,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEndPort(Port newEndPort) {
 		Port oldEndPort = endPort;
 		endPort = newEndPort;
@@ -576,6 +590,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetEndPort() {
 		Port oldEndPort = endPort;
 		boolean oldEndPortESet = endPortESet;
@@ -590,6 +605,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetEndPort() {
 		return endPortESet;
 	}
@@ -599,6 +615,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDateTime getEndDate() {
 		return endDate;
 	}
@@ -608,6 +625,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEndDate(LocalDateTime newEndDate) {
 		LocalDateTime oldEndDate = endDate;
 		endDate = newEndDate;
@@ -622,6 +640,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetEndDate() {
 		LocalDateTime oldEndDate = endDate;
 		boolean oldEndDateESet = endDateESet;
@@ -636,6 +655,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetEndDate() {
 		return endDateESet;
 	}
@@ -645,6 +665,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EndHeelOptions getEndHeel() {
 		if (endHeel != null && endHeel.eIsProxy()) {
 			InternalEObject oldEndHeel = (InternalEObject)endHeel;
@@ -694,6 +715,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEndHeel(EndHeelOptions newEndHeel) {
 		if (newEndHeel != endHeel) {
 			NotificationChain msgs = null;
@@ -734,6 +756,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetEndHeel() {
 		if (endHeel != null) {
 			NotificationChain msgs = null;
@@ -754,6 +777,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetEndHeel() {
 		return endHeelESet;
 	}
@@ -763,6 +787,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isIncludeBallastBonus() {
 		return includeBallastBonus;
 	}
@@ -772,6 +797,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIncludeBallastBonus(boolean newIncludeBallastBonus) {
 		boolean oldIncludeBallastBonus = includeBallastBonus;
 		includeBallastBonus = newIncludeBallastBonus;
@@ -784,6 +810,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinDuration() {
 		return minDuration;
 	}
@@ -793,6 +820,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinDuration(int newMinDuration) {
 		int oldMinDuration = minDuration;
 		minDuration = newMinDuration;
@@ -807,6 +835,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMinDuration() {
 		int oldMinDuration = minDuration;
 		boolean oldMinDurationESet = minDurationESet;
@@ -821,6 +850,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMinDuration() {
 		return minDurationESet;
 	}
@@ -830,6 +860,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaxDuration() {
 		return maxDuration;
 	}
@@ -839,6 +870,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxDuration(int newMaxDuration) {
 		int oldMaxDuration = maxDuration;
 		maxDuration = newMaxDuration;
@@ -853,6 +885,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMaxDuration() {
 		int oldMaxDuration = maxDuration;
 		boolean oldMaxDurationESet = maxDurationESet;
@@ -867,6 +900,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMaxDuration() {
 		return maxDurationESet;
 	}

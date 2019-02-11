@@ -77,6 +77,7 @@ public class VesselTypeGroupImpl extends AVesselSetImpl<Vessel> implements Vesse
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselType getVesselType() {
 		return vesselType;
 	}
@@ -85,6 +86,7 @@ public class VesselTypeGroupImpl extends AVesselSetImpl<Vessel> implements Vesse
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselType(VesselType newVesselType) {
 		VesselType oldVesselType = vesselType;
 		vesselType = newVesselType == null ? VESSEL_TYPE_EDEFAULT : newVesselType;

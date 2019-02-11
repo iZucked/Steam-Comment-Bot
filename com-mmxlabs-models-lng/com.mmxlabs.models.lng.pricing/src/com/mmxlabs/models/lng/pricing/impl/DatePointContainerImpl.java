@@ -96,6 +96,7 @@ public class DatePointContainerImpl extends UUIDObjectImpl implements DatePointC
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -105,6 +106,7 @@ public class DatePointContainerImpl extends UUIDObjectImpl implements DatePointC
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -117,6 +119,7 @@ public class DatePointContainerImpl extends UUIDObjectImpl implements DatePointC
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<DatePoint> getPoints() {
 		if (points == null) {
 			points = new EObjectContainmentEList<DatePoint>(DatePoint.class, this, PricingPackage.DATE_POINT_CONTAINER__POINTS);

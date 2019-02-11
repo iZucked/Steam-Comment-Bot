@@ -127,6 +127,7 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSpotIndex() {
 		return spotIndex;
 	}
@@ -136,6 +137,7 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpotIndex(int newSpotIndex) {
 		int oldSpotIndex = spotIndex;
 		spotIndex = newSpotIndex;
@@ -148,6 +150,7 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSequenceHint() {
 		return sequenceHint;
 	}
@@ -157,6 +160,7 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSequenceHint(int newSequenceHint) {
 		int oldSequenceHint = sequenceHint;
 		sequenceHint = newSequenceHint;
@@ -169,6 +173,7 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isLocked() {
 		return locked;
 	}
@@ -178,6 +183,7 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLocked(boolean newLocked) {
 		boolean oldLocked = locked;
 		locked = newLocked;
@@ -190,6 +196,7 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselAssignmentType getVesselAssignmentType() {
 		if (vesselAssignmentType != null && vesselAssignmentType.eIsProxy()) {
 			InternalEObject oldVesselAssignmentType = (InternalEObject)vesselAssignmentType;
@@ -216,6 +223,7 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselAssignmentType(VesselAssignmentType newVesselAssignmentType) {
 		VesselAssignmentType oldVesselAssignmentType = vesselAssignmentType;
 		vesselAssignmentType = newVesselAssignmentType;

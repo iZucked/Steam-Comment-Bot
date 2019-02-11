@@ -97,6 +97,7 @@ public class DatePointImpl extends EObjectImpl implements DatePoint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getDate() {
 		return date;
 	}
@@ -106,6 +107,7 @@ public class DatePointImpl extends EObjectImpl implements DatePoint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDate(LocalDate newDate) {
 		LocalDate oldDate = date;
 		date = newDate;
@@ -118,6 +120,7 @@ public class DatePointImpl extends EObjectImpl implements DatePoint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getValue() {
 		return value;
 	}
@@ -127,6 +130,7 @@ public class DatePointImpl extends EObjectImpl implements DatePoint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValue(double newValue) {
 		double oldValue = value;
 		value = newValue;

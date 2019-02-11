@@ -170,6 +170,7 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<SuezCanalTariffBand> getBands() {
 		if (bands == null) {
 			bands = new EObjectContainmentEList<SuezCanalTariffBand>(SuezCanalTariffBand.class, this, PricingPackage.SUEZ_CANAL_TARIFF__BANDS);
@@ -182,6 +183,7 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<SuezCanalTugBand> getTugBands() {
 		if (tugBands == null) {
 			tugBands = new EObjectContainmentEList<SuezCanalTugBand>(SuezCanalTugBand.class, this, PricingPackage.SUEZ_CANAL_TARIFF__TUG_BANDS);
@@ -194,6 +196,7 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getTugCost() {
 		return tugCost;
 	}
@@ -203,6 +206,7 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTugCost(double newTugCost) {
 		double oldTugCost = tugCost;
 		tugCost = newTugCost;
@@ -215,6 +219,7 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getFixedCosts() {
 		return fixedCosts;
 	}
@@ -224,6 +229,7 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFixedCosts(double newFixedCosts) {
 		double oldFixedCosts = fixedCosts;
 		fixedCosts = newFixedCosts;
@@ -236,6 +242,7 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getDiscountFactor() {
 		return discountFactor;
 	}
@@ -245,6 +252,7 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDiscountFactor(double newDiscountFactor) {
 		double oldDiscountFactor = discountFactor;
 		discountFactor = newDiscountFactor;
@@ -257,6 +265,7 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getSdrToUSD() {
 		return sdrToUSD;
 	}
@@ -266,6 +275,7 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSdrToUSD(String newSdrToUSD) {
 		String oldSdrToUSD = sdrToUSD;
 		sdrToUSD = newSdrToUSD;

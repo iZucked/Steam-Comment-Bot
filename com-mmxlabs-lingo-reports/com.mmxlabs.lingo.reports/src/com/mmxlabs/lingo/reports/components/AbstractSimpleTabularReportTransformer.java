@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.common.Pair;
@@ -43,7 +44,10 @@ public abstract class AbstractSimpleTabularReportTransformer<T> {
 		public void dispose() {
 
 		}
-
+		public Font getFont(final T element) {
+			return null;
+		}
+		
 		public Image getColumnImage(final T obj) {
 			return null;
 		}

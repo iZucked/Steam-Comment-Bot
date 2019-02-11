@@ -62,9 +62,13 @@ public class PaperDealItemProvider
 
 			addPricePropertyDescriptor(object);
 			addIndexPropertyDescriptor(object);
+			addInstrumentPropertyDescriptor(object);
 			addQuantityPropertyDescriptor(object);
 			addStartDatePropertyDescriptor(object);
 			addEndDatePropertyDescriptor(object);
+			addEntityPropertyDescriptor(object);
+			addYearPropertyDescriptor(object);
+			addCommentPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -131,6 +135,94 @@ public class PaperDealItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Entity feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEntityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PaperDeal_entity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PaperDeal_entity_feature", "_UI_PaperDeal_type"),
+				 CargoPackage.Literals.PAPER_DEAL__ENTITY,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Year feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addYearPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PaperDeal_year_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PaperDeal_year_feature", "_UI_PaperDeal_type"),
+				 CargoPackage.Literals.PAPER_DEAL__YEAR,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Comment feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCommentPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PaperDeal_comment_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PaperDeal_comment_feature", "_UI_PaperDeal_type"),
+				 CargoPackage.Literals.PAPER_DEAL__COMMENT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Instrument feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addInstrumentPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PaperDeal_instrument_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PaperDeal_instrument_feature", "_UI_PaperDeal_type"),
+				 CargoPackage.Literals.PAPER_DEAL__INSTRUMENT,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
@@ -211,6 +303,8 @@ public class PaperDealItemProvider
 			case CargoPackage.PAPER_DEAL__QUANTITY:
 			case CargoPackage.PAPER_DEAL__START_DATE:
 			case CargoPackage.PAPER_DEAL__END_DATE:
+			case CargoPackage.PAPER_DEAL__YEAR:
+			case CargoPackage.PAPER_DEAL__COMMENT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

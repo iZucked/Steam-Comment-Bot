@@ -11,7 +11,7 @@ package com.mmxlabs.models.lng.cargo;
  *
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSpotDischargeSlot()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/featureOverride"
  * @generated
  */
 public interface SpotDischargeSlot extends DischargeSlot, SpotSlot {

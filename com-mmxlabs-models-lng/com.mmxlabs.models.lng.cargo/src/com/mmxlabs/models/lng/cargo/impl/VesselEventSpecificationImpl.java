@@ -65,6 +65,7 @@ public class VesselEventSpecificationImpl extends ScheduleSpecificationEventImpl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselEvent getVesselEvent() {
 		if (vesselEvent != null && vesselEvent.eIsProxy()) {
 			InternalEObject oldVesselEvent = (InternalEObject)vesselEvent;
@@ -91,6 +92,7 @@ public class VesselEventSpecificationImpl extends ScheduleSpecificationEventImpl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselEvent(VesselEvent newVesselEvent) {
 		VesselEvent oldVesselEvent = vesselEvent;
 		vesselEvent = newVesselEvent;

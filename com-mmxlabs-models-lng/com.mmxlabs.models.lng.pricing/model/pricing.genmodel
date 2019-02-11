@@ -16,6 +16,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/conversionFactors"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PricingModel/marketCurveDataVersion"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/settledPrices"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/marketIndices"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/holidayCalendars"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/settleStrategies"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//DataIndex">
       <genTypeParameters ecoreTypeParameter="pricing.ecore#//DataIndex/Value"/>
@@ -30,7 +33,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//IndexPoint/date"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//IndexPoint/value"/>
     </genClasses>
-    <genClasses ecoreClass="pricing.ecore#//Index">
+    <genClasses image="false" ecoreClass="pricing.ecore#//Index">
       <genTypeParameters ecoreTypeParameter="pricing.ecore#//Index/Value"/>
       <genOperations ecoreOperation="pricing.ecore#//Index/getValueForMonth">
         <genParameters ecoreParameter="pricing.ecore#//Index/getValueForMonth/date"/>
@@ -98,18 +101,16 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PanamaCanalTariffBand/bandEnd"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//SuezCanalTugBand">
-      <genFeatures createChild="false" propertyDescription="Number of tugs required for vessels in this range (inclusive,exclusive)"
-          ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTugBand/tugs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTugBand/tugs"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTugBand/bandStart"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTugBand/bandEnd"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//SuezCanalTariff">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//SuezCanalTariff/bands"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//SuezCanalTariff/tugBands"/>
-      <genFeatures createChild="false" propertyDescription="Cost per tug" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariff/tugCost"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariff/tugCost"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariff/fixedCosts"/>
-      <genFeatures createChild="false" propertyDescription="LNG vessel discount factor"
-          ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariff/discountFactor"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariff/discountFactor"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariff/sdrToUSD"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//SuezCanalTariffBand">
@@ -143,12 +144,32 @@
     <genClasses image="false" ecoreClass="pricing.ecore#//AbstractYearMonthCurve">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//AbstractYearMonthCurve/currencyUnit"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//AbstractYearMonthCurve/volumeUnit"/>
-      <genFeatures createChild="false" propertyDescription="If set, the price expression used to generate the curve data. This overrides any existing data."
-          ecoreFeature="ecore:EAttribute pricing.ecore#//AbstractYearMonthCurve/expression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//AbstractYearMonthCurve/expression"/>
     </genClasses>
-    <genClasses ecoreClass="pricing.ecore#//CommodityCurve"/>
+    <genClasses ecoreClass="pricing.ecore#//CommodityCurve">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//CommodityCurve/marketIndex"/>
+    </genClasses>
     <genClasses ecoreClass="pricing.ecore#//CharterCurve"/>
     <genClasses ecoreClass="pricing.ecore#//BunkerFuelCurve"/>
     <genClasses ecoreClass="pricing.ecore#//CurrencyCurve"/>
+    <genClasses ecoreClass="pricing.ecore#//MarketIndex">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/settleCalendar"/>
+    </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//HolidayCalendarEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//HolidayCalendarEntry/date"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//HolidayCalendarEntry/comment"/>
+    </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//HolidayCalendar">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//HolidayCalendar/entries"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//HolidayCalendar/description"/>
+    </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//SettleStrategy">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/dayOfTheMonth"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/lastDayOfTheMonth"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/useCalendarMonth"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settlePeriod"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settlePeriodUnit"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settleStartMonthsPrior"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

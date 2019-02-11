@@ -71,6 +71,9 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 		add_conversionFactorsEditor(detailComposite, topClass);
 		add_marketCurveDataVersionEditor(detailComposite, topClass);
 		add_settledPricesEditor(detailComposite, topClass);
+		add_marketIndicesEditor(detailComposite, topClass);
+		add_holidayCalendarsEditor(detailComposite, topClass);
+		add_settleStrategiesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the currencyCurves feature on PricingModel
@@ -133,5 +136,32 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_settledPricesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES));
+	}
+
+	/**
+	 * Create the editor for the marketIndices feature on PricingModel
+	 *
+	 * @generated
+	 */
+	protected void add_marketIndicesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__MARKET_INDICES));
+	}
+
+	/**
+	 * Create the editor for the holidayCalendars feature on PricingModel
+	 *
+	 * @generated
+	 */
+	protected void add_holidayCalendarsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__HOLIDAY_CALENDARS));
+	}
+
+	/**
+	 * Create the editor for the settleStrategies feature on PricingModel
+	 *
+	 * @generated
+	 */
+	protected void add_settleStrategiesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__SETTLE_STRATEGIES));
 	}
 }

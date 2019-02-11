@@ -21,6 +21,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ITableColorProvider;
+import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -60,6 +61,7 @@ import com.mmxlabs.models.ui.tabular.renderers.TopLeftRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -81,6 +83,8 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	private Action copyTableAction;
 
 	private final String helpContextId;
+	
+	protected boolean pinnedMode = false;
 
 	@NonNull
 	protected final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
@@ -142,7 +146,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		}
 	};
 
-	public class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
+	public class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, ITableFontProvider, ITableColorProvider {
 
 		@Override
 		public void dispose() {
@@ -174,8 +178,8 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		}
 
 		@Override
-		public Font getFont(final Object element) {
-			return null;
+		public Font getFont(final Object obj, final int index) {
+			return columnManagers.get(index).getFont((T) obj);
 		}
 
 		@SuppressWarnings("unchecked")
@@ -334,8 +338,13 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	protected void makeActions() {
 		packColumnsAction = new PackGridTreeColumnsAction(viewer);
-		copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
+		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false , () -> setCopyPasteMode(true), () -> setCopyPasteMode(false));
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
+	}
+	
+	protected void setCopyPasteMode(boolean copyPasteMode) {
+		this.pinnedMode = copyPasteMode;
+		ViewerHelper.refresh(viewer, true);
 	}
 
 	/**
@@ -348,7 +357,6 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	@Override
 	public void dispose() {
-
 		selectedScenariosService.removeListener(selectedScenariosServiceListener);
 
 		super.dispose();
@@ -385,6 +393,5 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	protected void refresh() {
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
-
 	}
 }

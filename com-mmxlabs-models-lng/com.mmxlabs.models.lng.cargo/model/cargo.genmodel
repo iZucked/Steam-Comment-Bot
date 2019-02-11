@@ -391,9 +391,13 @@
     <genClasses image="false" ecoreClass="cargo.ecore#//PaperDeal">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/price"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/index"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PaperDeal/instrument"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/quantity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/startDate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/endDate"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PaperDeal/entity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/year"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/comment"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//BuyPaperDeal"/>
     <genClasses ecoreClass="cargo.ecore#//SellPaperDeal"/>

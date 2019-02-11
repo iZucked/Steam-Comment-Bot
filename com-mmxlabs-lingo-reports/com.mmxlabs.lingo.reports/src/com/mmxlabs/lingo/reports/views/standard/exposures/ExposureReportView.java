@@ -14,7 +14,6 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -23,10 +22,14 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.common.Equality;
@@ -34,11 +37,14 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
+import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer.ColumnManager;
+import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures.ValueMode;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
@@ -47,6 +53,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -61,12 +68,23 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ExposureReportView extends SimpleTabularReportView<IndexExposureData> implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
+	protected Image cellImageDarkArrowDown;
+	protected Image cellImageDarkArrowUp;
+	
+	protected List<String> entities;
+	protected List<String> fiscalYears;
+	protected String selectedEntity;
+	protected int selectedFiscalYear = -1;
+	protected AssetType selectedAssetType = AssetType.NET;
+	
 	// -------------------------------------Transformer class starts-------------------------------------
 	private final class ExposureData extends AbstractSimpleTabularReportTransformer<IndexExposureData> {
 		@Override
 		public List<ColumnManager<IndexExposureData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
 			final ArrayList<ColumnManager<IndexExposureData>> result = new ArrayList<ColumnManager<IndexExposureData>>();
-
+			if (selectedDataProvider.getScenarioResults().isEmpty()) {
+				return result;
+			}
 			if (selectedDataProvider.getScenarioResults().size() > 1 && selectedDataProvider.getPinnedScenarioResult() == null) {
 				result.add(new ColumnManager<IndexExposureData>("Scenario") {
 
@@ -101,7 +119,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					}
 				});
 			}
-
+			
+			pinnedMode = selectedDataProvider.getPinnedScenarioResult() != null;
+			
 			result.add(new ColumnManager<IndexExposureData>("Date") {
 				@Override
 				public String getColumnText(final IndexExposureData data) {
@@ -127,56 +147,63 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				}
 			});
 
-			for (final ScenarioResult sr : selectedDataProvider.getScenarioResults()) {
+			final List<String> columnNames = new ArrayList<String>();
+			{
+				final ScenarioResult sr = selectedDataProvider.getScenarioResults().get(0);
 				final IScenarioDataProvider sdp = sr.getScenarioDataProvider();
 				final PricingModel pm = ScenarioModelUtil.getPricingModel(sdp);
+
 				final EList<CommodityCurve> indices = pm.getCommodityCurves();
-
 				for (final CommodityCurve index : indices) {
-					final String indexName = index.getName();
-					if (indexName == null) {
+					if(index.getMarketIndex() == null) {
 						continue;
 					}
-					if (indexName == null) {
-						continue;
-					}
-					result.add(new ColumnManager<IndexExposureData>(indexName) {
-						@Override
-						public String getColumnText(final IndexExposureData data) {
-							if (Objects.equals(data.scenarioResult, sr) && data.exposures.containsKey(indexName)) {
-								final double result = data.exposures.get(indexName);
-								return String.format("%,.01f", result);
-							}
-							return "";
-						}
-
-						@Override
-						public int compare(final IndexExposureData o1, final IndexExposureData o2) {
-							final double result1 = o1.exposures.containsKey(indexName) ? o1.exposures.get(indexName) : 0;
-							final double result2 = o2.exposures.containsKey(indexName) ? o2.exposures.get(indexName) : 0;
-							return Double.compare(result1, result2);
-						}
-					});
+					String indexName = index.getMarketIndex().getName();
+					columnNames.add(indexName);
 				}
-				final String indexName = "Physical";
-				result.add(new ColumnManager<IndexExposureData>(indexName) {
+
+				columnNames.add("Physical");
+			}
+						
+			for (final String columnName : columnNames) {
+				result.add(new ColumnManager<IndexExposureData>(columnName) {
 					@Override
 					public String getColumnText(final IndexExposureData data) {
-						if (Objects.equals(data.scenarioResult, sr) && data.exposures.containsKey(indexName)) {
-							final double result = data.exposures.get(indexName);
+						if (data == null) return "";
+						if (data.exposures.isEmpty()) return "";
+						if (data.exposures.containsKey(columnName)) {
+							final double result;
+							if (pinnedMode) {
+								result = Math.abs(data.exposures.get(columnName));
+							} else {
+								result = data.exposures.get(columnName);
+							}
 							return String.format("%,.01f", result);
 						}
 						return "";
 					}
 
 					@Override
+					public Image getColumnImage(final IndexExposureData ied) {
+						if (!pinnedMode) return null;
+						if (ied.exposures.containsKey(columnName)) {
+							final double result = ied.exposures.get(columnName);
+							if(result > 0.0) {
+								return cellImageDarkArrowUp;
+							} else {
+								return cellImageDarkArrowDown;
+							}
+						}
+						return null;
+					}
+
+					@Override
 					public int compare(final IndexExposureData o1, final IndexExposureData o2) {
-						final double result1 = o1.exposures.containsKey(indexName) ? o1.exposures.get(indexName) : 0;
-						final double result2 = o2.exposures.containsKey(indexName) ? o2.exposures.get(indexName) : 0;
+						final double result1 = o1.exposures.containsKey(columnName) ? o1.exposures.get(columnName) : 0;
+						final double result2 = o2.exposures.containsKey(columnName) ? o2.exposures.get(columnName) : 0;
 						return Double.compare(result1, result2);
 					}
 				});
-
 			}
 
 			return result;
@@ -251,29 +278,83 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					.collect(Collectors.toList());
 
 			for (YearMonth cym = ymStart; cym.isBefore(ymEnd); cym = cym.plusMonths(1)) {
-				final IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, mode, selected);
-				if (exposuresByMonth.exposures.size() != 0.0) {
+				IndexExposureData exposuresByMonth = 
+						ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, mode, selected, selectedEntity, selectedFiscalYear, selectedAssetType);
+				if (inspectChildrenAndExposures(exposuresByMonth)) {
 					output.add(exposuresByMonth);
 				}
 			}
+			entities = getEntities(schedule);
+			fiscalYears = getFiscalYears(schedule);
 			return output;
 		}
 	}
 	// -------------------------------------Transformer class ends----------------------------------------
-
+	
+	protected List<String> getFiscalYears(final Schedule schedule){
+		final List<String> result = new LinkedList<String>();
+		for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
+			final PaperDeal pd = paperDealAllocation.getPaperDeal();
+			final String year = String.format("%d", pd.getYear());
+			if(!result.contains(year)) {
+				result.add(year);
+			}
+		}
+		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+				final Slot s = slotAllocation.getSlot();
+				final String year = String.format("%d", s.getWindowStart().getYear());
+				if(!result.contains(year)) {
+					result.add(year);
+				}
+			}
+		}
+		result.sort((a,b) -> a.compareTo(b));
+		return result;
+	}
+	
+	protected List<String> getEntities(final Schedule schedule){
+		final List<String> result = new LinkedList<String>();
+		for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
+			final PaperDeal pd = paperDealAllocation.getPaperDeal();
+			if(pd.getEntity() == null) continue;
+			final String entity = pd.getEntity().getName();
+			if(!result.contains(entity)) {
+				result.add(entity);
+			}
+		}
+		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+				final Slot s = slotAllocation.getSlot();
+				if (s.getSlotOrDelegateEntity() == null) continue;
+				final String entity = s.getSlotOrDelegateEntity().getName();
+				if(!result.contains(entity)) {
+					result.add(entity);
+				}
+			}
+		}
+		return result;
+	}
+	
 	@Override
 	public void createPartControl(final Composite parent) {
 		super.createPartControl(parent);
 		// Get e4 selection service!
 		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 		service.addPostSelectionListener(this);
+		
+		ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor("icons/dark_arrow_down.png");
+		cellImageDarkArrowDown = imageDescriptor.createImage();
+		imageDescriptor = Activator.Implementation.getImageDescriptor("icons/dark_arrow_up.png");
+		cellImageDarkArrowUp = imageDescriptor.createImage();
 	}
 
 	@Override
 	public void dispose() {
 		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 		service.removePostSelectionListener(this);
-
+		cellImageDarkArrowDown.dispose();
+		cellImageDarkArrowUp.dispose();
 		super.dispose();
 	}
 
@@ -348,56 +429,56 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 		final IndexExposureData modelData = pinData != null ? pinData : otherData;
 		final Map<String, Double> exposuresByMonth = new HashMap<>();
-
-		final Collection<YearMonth> keys = new LinkedHashSet<>();
-		final Map<YearMonth, IndexExposureData> pinChildren = new HashMap<>();
-		final Map<YearMonth, IndexExposureData> otherChildren = new HashMap<>();
+		
+		Collection<String> k = new LinkedHashSet<>();
+		Map<String, IndexExposureData> pc = new HashMap();
+		Map<String, IndexExposureData> oc = new HashMap();
 		if (pinData != null) {
 			for (final Map.Entry<String, Double> e : pinData.exposures.entrySet()) {
 				final double val = exposuresByMonth.getOrDefault(e.getKey(), 0.0);
 				exposuresByMonth.put(e.getKey(), val + e.getValue());
 			}
 			if (pinData.children != null) {
-				for (final IndexExposureData d : pinData.children) {
-					keys.add(d.date);
-					pinChildren.put(d.date, d);
+				for (IndexExposureData d : pinData.children) {
+					k.add(d.childName);
+					pc.put(d.childName, d);
 				}
 			}
 		}
 		if (otherData != null) {
 			for (final Map.Entry<String, Double> e : otherData.exposures.entrySet()) {
-				final double val = exposuresByMonth.getOrDefault(e.getKey(), 0.0);
-				exposuresByMonth.put(e.getKey(), val - e.getValue());
+				exposuresByMonth.merge(e.getKey(), e.getValue(), (a, b) -> a - b);
 			}
 			if (otherData.children != null) {
-				for (final IndexExposureData d : otherData.children) {
-					keys.add(d.date);
-					otherChildren.put(d.date, d);
+				for (IndexExposureData d : otherData.children) {
+					k.add(d.childName);
+					oc.put(d.childName, d);
 				}
 			}
 		}
 
 		List<IndexExposureData> newChildren = null;
-		if (!keys.isEmpty()) {
-			newChildren = new ArrayList<>(keys.size());
-			for (final YearMonth key : keys) {
-				final IndexExposureData childDiffData = createDiffData(pinChildren.get(key), otherChildren.get(key));
-				for (final Double value : childDiffData.exposures.values()) {
-					if (value.doubleValue() != 0.0) {
-						newChildren.add(childDiffData);
-						break;
-					}
-				}
-
+		if (!k.isEmpty()) {
+			newChildren = new ArrayList<>(k.size());
+			for (String key : k) {
+				IndexExposureData childDiffData = createDiffData(pc.get(key), oc.get(key));
+				newChildren.add(childDiffData);
 			}
 		}
-
-		return new IndexExposureData(null, null, modelData.date, exposuresByMonth, newChildren);
+		IndexExposureData ied1;
+		if (modelData.isChild) {
+			ied1 = new IndexExposureData(null, null, modelData.date, modelData.childName , exposuresByMonth, modelData.entity);
+		} else {
+			ied1 = new IndexExposureData(null, null, modelData.date, exposuresByMonth, newChildren);
+		}
+		return ied1;
 	}
 
 	@Override
 	protected void makeActions() {
 		super.makeActions();
+		
+		//TODO : filter
 
 		final Action modeToggle = new Action("Units: currency", Action.AS_PUSH_BUTTON) {
 			@Override
@@ -407,12 +488,14 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				mode = Exposures.ValueMode.values()[modeIdx];
 				setUnitsActionText(this);
 				getViewSite().getActionBars().updateActionBars();
-				// columnManagers.get(modeIdx)
 				ExposureReportView.this.refresh();
 
 			}
 		};
 		setUnitsActionText(modeToggle);
+		final FilterMenuAction filterAction = new FilterMenuAction("Filters");
+		filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
+		getViewSite().getActionBars().getToolBarManager().add(filterAction);
 
 		getViewSite().getActionBars().getToolBarManager().add(modeToggle);
 		final Action selectionToggle = new Action("View: " + (selectionMode ? "Selection" : "All"), Action.AS_CHECK_BOX) {
@@ -431,6 +514,88 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
+	
+	private class FilterMenuAction extends DefaultMenuCreatorAction {
+
+		public FilterMenuAction(final String label) {
+			super(label);
+		}
+
+		@Override
+		protected void populate(Menu menu) {
+			final Action clearAction = new Action("Clear Filter") {
+				@Override
+				public void run() {
+					selectedEntity = null;
+					selectedFiscalYear = -1;
+					selectedAssetType = AssetType.NET;
+					ExposureReportView.this.refresh();
+				}
+			};
+
+			addActionToMenu(clearAction, menu);
+			
+			final DefaultMenuCreatorAction dmcaEntity = new DefaultMenuCreatorAction("Entity") {
+
+				@Override
+				protected void populate(Menu subMenu) {
+					if (entities.isEmpty()) return;
+					for (final String e : entities) {
+						final Action entityAction = new Action(e) {
+							@Override
+							public void run() {
+								selectedEntity = e;
+								ExposureReportView.this.refresh();
+							}
+						};
+						addActionToMenu(entityAction, subMenu);
+					}
+				}
+				
+			};
+			addActionToMenu(dmcaEntity, menu);
+			
+			final DefaultMenuCreatorAction dmcaFiscalYear = new DefaultMenuCreatorAction("Fiscal Year") {
+
+				@Override
+				protected void populate(Menu subMenu) {
+					if (fiscalYears.isEmpty()) return;
+					for (final String e : fiscalYears) {
+						final Action fiscalYearAction = new Action(e) {
+							@Override
+							public void run() {
+								selectedFiscalYear = Integer.parseInt(e);
+								ExposureReportView.this.refresh();
+							}
+						};
+						addActionToMenu(fiscalYearAction, subMenu);
+					}
+				}
+				
+			};
+			addActionToMenu(dmcaFiscalYear, menu);
+			
+			final DefaultMenuCreatorAction dmcaAssetTypes = new DefaultMenuCreatorAction("Phys/Fin") {
+
+				@Override
+				protected void populate(Menu subMenu) {
+					for (final AssetType at : AssetType.values()) {
+						final Action assetTypeAction = new Action(at.toString()) {
+							@Override
+							public void run() {
+								selectedAssetType = at;
+								ExposureReportView.this.refresh();
+							}
+						};
+						addActionToMenu(assetTypeAction, subMenu);
+					}
+				}
+			};
+			addActionToMenu(dmcaAssetTypes, menu);
+		}
+		
+	}
+	
 
 	@Override
 	public void selectionChanged(final MPart part, final Object selectionObject) {
@@ -445,7 +610,6 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			}
 		}
 		selection = SelectionHelper.adaptSelection(selectionObject);
-		// viewer.setSelection(selection, true);
 		ExposureReportView.this.refresh();
 	}
 
@@ -520,5 +684,31 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			}
 		}
 		return result;
+	}
+	
+	public enum AssetType {
+		NET("All"), FINANCIAL("Net Index"), PAPER("Paper"), INDEX("Physical Index"), PHYSICAL("Physical");
+		
+		private String value;
+		
+		private AssetType(String value) {
+			this.value = value;
+		}
+		
+		@Override
+		public String toString() {
+			return value;
+		}
+	}
+	
+	public static boolean inspectChildrenAndExposures(IndexExposureData fd) {
+		if (fd.children != null && !fd.children.isEmpty()) {
+			return true;
+		}
+		if (fd.exposures != null && !fd.exposures.isEmpty()) {
+			return true;
+		}
+		
+		return false;
 	}
 }

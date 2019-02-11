@@ -9,14 +9,18 @@ import java.util.Collections;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.MarketIndex;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
@@ -26,10 +30,12 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class PricingModelEditorContribution extends BaseJointModelEditorContribution<PricingModel> {
 	private IndexPane indexPane;
-//	private SettledPricesPane settledPricesPane;
+	
+	private MarketIndexViewerPane mivPane;
+	private SettleStrategyViewerPane ssvPane;
 
 	private int indexPage = -1;
-//	private int settledPricesPage = -1;
+	private int mivpPage = -1;
 
 	@Override
 	public void addPages(final Composite parent) {
@@ -42,15 +48,24 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 			indexPage = editorPart.addPage(indexPane.getControl());
 			editorPart.setPageText(indexPage, "Curves");
 		}
-//		if (LicenseFeatures.isPermitted("features:paperdeals")) {
-//			settledPricesPane = new SettledPricesPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-//			settledPricesPane.createControl(parent);
-//			settledPricesPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_SettledPrices()), editorPart.getAdapterFactory(), editorPart.getModelReference());
-//			settledPricesPane.setInput(modelObject);
-//
-//			settledPricesPage = editorPart.addPage(settledPricesPane.getControl());
-//			editorPart.setPageText(settledPricesPage, "Settled Prices");
-//		}
+		if (LicenseFeatures.isPermitted("features:paperdeals")) {
+			final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
+			mivPane = new MarketIndexViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			ssvPane = new SettleStrategyViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			
+			mivPane.createControl(sash);
+			ssvPane.createControl(sash);
+			
+			mivPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_MarketIndices()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+			ssvPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_SettleStrategies()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+			
+			mivPane.getViewer().setInput(modelObject);
+			ssvPane.getViewer().setInput(modelObject);
+
+			mivpPage = editorPart.addPage(sash);
+			
+			editorPart.setPageText(mivpPage, "Indices");
+		}
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(indexPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Markets");
 	}
 
@@ -59,9 +74,12 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		if (indexPane != null) {
 			indexPane.setLocked(locked);
 		}
-//		if (settledPricesPane != null) {
-//			settledPricesPane.setLocked(locked);
-//		}
+		if (mivPane != null) {
+			mivPane.setLocked(locked);
+		}
+		if (ssvPane != null) {
+			ssvPane.setLocked(locked);
+		}
 	}
 
 	@Override
@@ -85,7 +103,7 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 			if (target instanceof UnitConversion) {
 				return true;
 			}
-			if (target instanceof PricingModel) {
+			if (target instanceof MarketIndex) {
 				return true;
 			}
 		}
@@ -122,6 +140,13 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 					editorPart.setActivePage(indexPage);
 					indexPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
 					indexPane.openUnitsEditor();
+				}
+				return;
+			}
+			if (target instanceof MarketIndex) {
+				if (mivPane != null) {
+					editorPart.setActivePage(mivpPage);
+					mivPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
 				}
 				return;
 			}

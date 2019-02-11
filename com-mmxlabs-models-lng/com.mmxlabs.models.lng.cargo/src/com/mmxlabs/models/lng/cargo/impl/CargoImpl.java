@@ -170,6 +170,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSpotIndex() {
 		return spotIndex;
 	}
@@ -179,6 +180,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpotIndex(int newSpotIndex) {
 		int oldSpotIndex = spotIndex;
 		spotIndex = newSpotIndex;
@@ -191,6 +193,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSequenceHint() {
 		return sequenceHint;
 	}
@@ -200,6 +203,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSequenceHint(int newSequenceHint) {
 		int oldSequenceHint = sequenceHint;
 		sequenceHint = newSequenceHint;
@@ -212,6 +216,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isLocked() {
 		return locked;
 	}
@@ -221,6 +226,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLocked(boolean newLocked) {
 		boolean oldLocked = locked;
 		locked = newLocked;
@@ -233,6 +239,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselAssignmentType getVesselAssignmentType() {
 		if (vesselAssignmentType != null && vesselAssignmentType.eIsProxy()) {
 			InternalEObject oldVesselAssignmentType = (InternalEObject)vesselAssignmentType;
@@ -259,6 +266,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselAssignmentType(VesselAssignmentType newVesselAssignmentType) {
 		VesselAssignmentType oldVesselAssignmentType = vesselAssignmentType;
 		vesselAssignmentType = newVesselAssignmentType;
@@ -271,6 +279,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isAllowRewiring() {
 		return allowRewiring;
 	}
@@ -280,6 +289,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAllowRewiring(boolean newAllowRewiring) {
 		boolean oldAllowRewiring = allowRewiring;
 		allowRewiring = newAllowRewiring;
@@ -292,6 +302,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Slot<?>> getSlots() {
 		if (slots == null) {
 			slots = new EObjectWithInverseResolvingEList<Slot<?>>(Slot.class, this, CargoPackage.CARGO__SLOTS, CargoPackage.SLOT__CARGO);

@@ -5,12 +5,14 @@ package com.mmxlabs.models.lng.pricing.provider;
 
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 
 /**
@@ -41,8 +43,31 @@ public class CommodityCurveItemProvider extends AbstractYearMonthCurveItemProvid
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addMarketIndexPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Market Index feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMarketIndexPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CommodityCurve_marketIndex_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CommodityCurve_marketIndex_feature", "_UI_CommodityCurve_type"),
+				 PricingPackage.Literals.COMMODITY_CURVE__MARKET_INDEX,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**

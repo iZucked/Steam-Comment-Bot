@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lingo.reports.views.standard.exposures.ExposuresTransformer;
 import com.mmxlabs.lingo.reports.views.standard.exposures.IndexExposureData;
+import com.mmxlabs.lingo.reports.views.standard.exposures.ExposureReportView.AssetType;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -48,7 +49,10 @@ public class ExposuresReportJSONGenerator {
 		final YearMonth ymEnd = YearMonth.from(getLatestScenarioDate(scenarioDataProvider));
 
 		for (YearMonth cym = ymStart; cym.isBefore(ymEnd); cym = cym.plusMonths(1)) {
-			IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(null, schedule, cym, Exposures.ValueMode.VOLUME_MMBTU, Collections.emptyList());
+
+			IndexExposureData exposuresByMonth = 
+					ExposuresTransformer.getExposuresByMonth(null, schedule, cym, Exposures.ValueMode.VOLUME_MMBTU,  Collections.emptyList(), null, -1, AssetType.NET);
+
 			if (exposuresByMonth.exposures.size() != 0.0) {
 				temp.add(exposuresByMonth);
 			}

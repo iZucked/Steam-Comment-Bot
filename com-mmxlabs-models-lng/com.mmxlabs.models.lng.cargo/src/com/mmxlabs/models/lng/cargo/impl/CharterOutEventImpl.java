@@ -184,6 +184,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isOptional() {
 		return optional;
 	}
@@ -193,6 +194,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOptional(boolean newOptional) {
 		boolean oldOptional = optional;
 		optional = newOptional;
@@ -205,6 +207,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getRelocateTo() {
 		if (relocateTo != null && relocateTo.eIsProxy()) {
 			InternalEObject oldRelocateTo = (InternalEObject)relocateTo;
@@ -231,6 +234,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRelocateTo(Port newRelocateTo) {
 		Port oldRelocateTo = relocateTo;
 		relocateTo = newRelocateTo;
@@ -245,6 +249,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetRelocateTo() {
 		Port oldRelocateTo = relocateTo;
 		boolean oldRelocateToESet = relocateToESet;
@@ -259,6 +264,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetRelocateTo() {
 		return relocateToESet;
 	}
@@ -268,6 +274,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getRepositioningFee() {
 		return repositioningFee;
 	}
@@ -277,6 +284,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRepositioningFee(int newRepositioningFee) {
 		int oldRepositioningFee = repositioningFee;
 		repositioningFee = newRepositioningFee;
@@ -289,6 +297,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EndHeelOptions getRequiredHeel() {
 		if (requiredHeel != null && requiredHeel.eIsProxy()) {
 			InternalEObject oldRequiredHeel = (InternalEObject)requiredHeel;
@@ -336,6 +345,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRequiredHeel(EndHeelOptions newRequiredHeel) {
 		if (newRequiredHeel != requiredHeel) {
 			NotificationChain msgs = null;
@@ -355,6 +365,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public StartHeelOptions getAvailableHeel() {
 		if (availableHeel != null && availableHeel.eIsProxy()) {
 			InternalEObject oldAvailableHeel = (InternalEObject)availableHeel;
@@ -402,6 +413,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAvailableHeel(StartHeelOptions newAvailableHeel) {
 		if (newAvailableHeel != availableHeel) {
 			NotificationChain msgs = null;
@@ -421,6 +433,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHireRate() {
 		return hireRate;
 	}
@@ -430,6 +443,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHireRate(int newHireRate) {
 		int oldHireRate = hireRate;
 		hireRate = newHireRate;
@@ -442,6 +456,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getBallastBonus() {
 		return ballastBonus;
 	}
@@ -451,6 +466,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBallastBonus(int newBallastBonus) {
 		int oldBallastBonus = ballastBonus;
 		ballastBonus = newBallastBonus;

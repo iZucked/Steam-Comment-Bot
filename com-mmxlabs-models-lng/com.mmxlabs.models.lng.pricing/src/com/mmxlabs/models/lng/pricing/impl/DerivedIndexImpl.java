@@ -75,6 +75,7 @@ public class DerivedIndexImpl<Value> extends IndexImpl<Value> implements Derived
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getExpression() {
 		return expression;
 	}
@@ -84,6 +85,7 @@ public class DerivedIndexImpl<Value> extends IndexImpl<Value> implements Derived
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setExpression(String newExpression) {
 		String oldExpression = expression;
 		expression = newExpression;

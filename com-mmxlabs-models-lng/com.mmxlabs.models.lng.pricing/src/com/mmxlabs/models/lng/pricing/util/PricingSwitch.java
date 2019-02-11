@@ -296,6 +296,36 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case PricingPackage.MARKET_INDEX: {
+				MarketIndex marketIndex = (MarketIndex)theEObject;
+				T result = caseMarketIndex(marketIndex);
+				if (result == null) result = caseNamedObject(marketIndex);
+				if (result == null) result = caseMMXObject(marketIndex);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.HOLIDAY_CALENDAR_ENTRY: {
+				HolidayCalendarEntry holidayCalendarEntry = (HolidayCalendarEntry)theEObject;
+				T result = caseHolidayCalendarEntry(holidayCalendarEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.HOLIDAY_CALENDAR: {
+				HolidayCalendar holidayCalendar = (HolidayCalendar)theEObject;
+				T result = caseHolidayCalendar(holidayCalendar);
+				if (result == null) result = caseNamedObject(holidayCalendar);
+				if (result == null) result = caseMMXObject(holidayCalendar);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.SETTLE_STRATEGY: {
+				SettleStrategy settleStrategy = (SettleStrategy)theEObject;
+				T result = caseSettleStrategy(settleStrategy);
+				if (result == null) result = caseNamedObject(settleStrategy);
+				if (result == null) result = caseMMXObject(settleStrategy);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -717,6 +747,66 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCurrencyCurve(CurrencyCurve object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Market Index</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Market Index</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMarketIndex(MarketIndex object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Holiday Calendar Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Holiday Calendar Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseHolidayCalendarEntry(HolidayCalendarEntry object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Holiday Calendar</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Holiday Calendar</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseHolidayCalendar(HolidayCalendar object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Settle Strategy</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Settle Strategy</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSettleStrategy(SettleStrategy object) {
 		return null;
 	}
 

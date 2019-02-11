@@ -121,6 +121,7 @@ public class RouteCostImpl extends MMXObjectImpl implements RouteCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public RouteOption getRouteOption() {
 		return routeOption;
 	}
@@ -130,6 +131,7 @@ public class RouteCostImpl extends MMXObjectImpl implements RouteCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRouteOption(RouteOption newRouteOption) {
 		RouteOption oldRouteOption = routeOption;
 		routeOption = newRouteOption == null ? ROUTE_OPTION_EDEFAULT : newRouteOption;
@@ -142,6 +144,7 @@ public class RouteCostImpl extends MMXObjectImpl implements RouteCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<AVesselSet<Vessel>> getVessels() {
 		if (vessels == null) {
 			vessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, PricingPackage.ROUTE_COST__VESSELS);
@@ -154,6 +157,7 @@ public class RouteCostImpl extends MMXObjectImpl implements RouteCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getLadenCost() {
 		return ladenCost;
 	}
@@ -163,6 +167,7 @@ public class RouteCostImpl extends MMXObjectImpl implements RouteCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLadenCost(int newLadenCost) {
 		int oldLadenCost = ladenCost;
 		ladenCost = newLadenCost;
@@ -175,6 +180,7 @@ public class RouteCostImpl extends MMXObjectImpl implements RouteCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getBallastCost() {
 		return ballastCost;
 	}
@@ -184,6 +190,7 @@ public class RouteCostImpl extends MMXObjectImpl implements RouteCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBallastCost(int newBallastCost) {
 		int oldBallastCost = ballastCost;
 		ballastCost = newBallastCost;

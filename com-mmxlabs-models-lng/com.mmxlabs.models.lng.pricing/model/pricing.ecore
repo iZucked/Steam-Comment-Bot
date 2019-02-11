@@ -17,6 +17,12 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="settledPrices" upperBound="-1"
         eType="#//DatePointContainer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="marketIndices" upperBound="-1"
+        eType="#//MarketIndex" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="holidayCalendars" upperBound="-1"
+        eType="#//HolidayCalendar" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="settleStrategies" upperBound="-1"
+        eType="#//SettleStrategy" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataIndex">
     <eTypeParameters name="Value"/>
@@ -325,8 +331,31 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" unsettable="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CommodityCurve" eSuperTypes="#//AbstractYearMonthCurve"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CommodityCurve" eSuperTypes="#//AbstractYearMonthCurve">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="marketIndex" eType="#//MarketIndex"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharterCurve" eSuperTypes="#//AbstractYearMonthCurve"/>
   <eClassifiers xsi:type="ecore:EClass" name="BunkerFuelCurve" eSuperTypes="#//AbstractYearMonthCurve"/>
   <eClassifiers xsi:type="ecore:EClass" name="CurrencyCurve" eSuperTypes="#//AbstractYearMonthCurve"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MarketIndex" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="settleCalendar" eType="#//HolidayCalendar"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HolidayCalendarEntry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HolidayCalendar" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//HolidayCalendarEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SettleStrategy" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dayOfTheMonth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastDayOfTheMonth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="useCalendarMonth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="settlePeriod" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="settlePeriodUnit" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//TimePeriod"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="settleStartMonthsPrior"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
 </ecore:EPackage>

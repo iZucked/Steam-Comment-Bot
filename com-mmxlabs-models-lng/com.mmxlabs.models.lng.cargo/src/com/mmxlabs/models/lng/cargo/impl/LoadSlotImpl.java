@@ -193,6 +193,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getCargoCV() {
 		return cargoCV;
 	}
@@ -202,6 +203,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargoCV(double newCargoCV) {
 		double oldCargoCV = cargoCV;
 		cargoCV = newCargoCV;
@@ -216,6 +218,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCargoCV() {
 		double oldCargoCV = cargoCV;
 		boolean oldCargoCVESet = cargoCVESet;
@@ -230,6 +233,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCargoCV() {
 		return cargoCVESet;
 	}
@@ -239,6 +243,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isArriveCold() {
 		return arriveCold;
 	}
@@ -248,6 +253,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setArriveCold(boolean newArriveCold) {
 		boolean oldArriveCold = arriveCold;
 		arriveCold = newArriveCold;
@@ -262,6 +268,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetArriveCold() {
 		boolean oldArriveCold = arriveCold;
 		boolean oldArriveColdESet = arriveColdESet;
@@ -276,6 +283,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetArriveCold() {
 		return arriveColdESet;
 	}
@@ -285,6 +293,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isDESPurchase() {
 		return desPurchase;
 	}
@@ -294,6 +303,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDESPurchase(boolean newDESPurchase) {
 		boolean oldDESPurchase = desPurchase;
 		desPurchase = newDESPurchase;
@@ -306,6 +316,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DischargeSlot getTransferFrom() {
 		if (transferFrom != null && transferFrom.eIsProxy()) {
 			InternalEObject oldTransferFrom = (InternalEObject)transferFrom;
@@ -347,6 +358,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTransferFrom(DischargeSlot newTransferFrom) {
 		if (newTransferFrom != transferFrom) {
 			NotificationChain msgs = null;
@@ -366,6 +378,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoDeliveryType getSalesDeliveryType() {
 		return salesDeliveryType;
 	}
@@ -375,6 +388,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSalesDeliveryType(CargoDeliveryType newSalesDeliveryType) {
 		CargoDeliveryType oldSalesDeliveryType = salesDeliveryType;
 		salesDeliveryType = newSalesDeliveryType == null ? SALES_DELIVERY_TYPE_EDEFAULT : newSalesDeliveryType;
@@ -389,6 +403,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetSalesDeliveryType() {
 		CargoDeliveryType oldSalesDeliveryType = salesDeliveryType;
 		boolean oldSalesDeliveryTypeESet = salesDeliveryTypeESet;
@@ -403,6 +418,7 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetSalesDeliveryType() {
 		return salesDeliveryTypeESet;
 	}

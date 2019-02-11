@@ -89,6 +89,7 @@ public class PortsExpressionMapImpl extends MMXObjectImpl implements PortsExpres
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<APortSet<Port>> getPorts() {
 		if (ports == null) {
 			ports = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, PricingPackage.PORTS_EXPRESSION_MAP__PORTS);
@@ -101,6 +102,7 @@ public class PortsExpressionMapImpl extends MMXObjectImpl implements PortsExpres
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getExpression() {
 		return expression;
 	}
@@ -110,6 +112,7 @@ public class PortsExpressionMapImpl extends MMXObjectImpl implements PortsExpres
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setExpression(String newExpression) {
 		String oldExpression = expression;
 		expression = newExpression;

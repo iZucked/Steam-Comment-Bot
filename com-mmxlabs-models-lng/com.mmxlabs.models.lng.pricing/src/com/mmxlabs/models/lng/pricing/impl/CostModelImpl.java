@@ -134,6 +134,7 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<RouteCost> getRouteCosts() {
 		if (routeCosts == null) {
 			routeCosts = new EObjectContainmentEList<RouteCost>(RouteCost.class, this, PricingPackage.COST_MODEL__ROUTE_COSTS);
@@ -146,6 +147,7 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PortCost> getPortCosts() {
 		if (portCosts == null) {
 			portCosts = new EObjectContainmentEList<PortCost>(PortCost.class, this, PricingPackage.COST_MODEL__PORT_COSTS);
@@ -158,6 +160,7 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<CooldownPrice> getCooldownCosts() {
 		if (cooldownCosts == null) {
 			cooldownCosts = new EObjectContainmentEList<CooldownPrice>(CooldownPrice.class, this, PricingPackage.COST_MODEL__COOLDOWN_COSTS);
@@ -170,6 +173,7 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<BaseFuelCost> getBaseFuelCosts() {
 		if (baseFuelCosts == null) {
 			baseFuelCosts = new EObjectContainmentEList<BaseFuelCost>(BaseFuelCost.class, this, PricingPackage.COST_MODEL__BASE_FUEL_COSTS);
@@ -182,6 +186,7 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PanamaCanalTariff getPanamaCanalTariff() {
 		return panamaCanalTariff;
 	}
@@ -206,6 +211,7 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPanamaCanalTariff(PanamaCanalTariff newPanamaCanalTariff) {
 		if (newPanamaCanalTariff != panamaCanalTariff) {
 			NotificationChain msgs = null;
@@ -225,6 +231,7 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SuezCanalTariff getSuezCanalTariff() {
 		return suezCanalTariff;
 	}
@@ -249,6 +256,7 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSuezCanalTariff(SuezCanalTariff newSuezCanalTariff) {
 		if (newSuezCanalTariff != suezCanalTariff) {
 			NotificationChain msgs = null;

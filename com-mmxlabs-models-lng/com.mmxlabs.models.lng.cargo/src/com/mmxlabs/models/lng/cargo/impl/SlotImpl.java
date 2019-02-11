@@ -1391,6 +1391,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -1400,6 +1401,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -1411,6 +1413,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getWindowStart() {
 		return windowStart;
 	}
@@ -1420,6 +1423,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowStart(LocalDate newWindowStart) {
 		LocalDate oldWindowStart = windowStart;
 		windowStart = newWindowStart;
@@ -1431,6 +1435,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getWindowStartTime() {
 		return windowStartTime;
 	}
@@ -1439,6 +1444,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowStartTime(int newWindowStartTime) {
 		int oldWindowStartTime = windowStartTime;
 		windowStartTime = newWindowStartTime;
@@ -1452,6 +1458,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetWindowStartTime() {
 		int oldWindowStartTime = windowStartTime;
 		boolean oldWindowStartTimeESet = windowStartTimeESet;
@@ -1465,6 +1472,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetWindowStartTime() {
 		return windowStartTimeESet;
 	}
@@ -1473,6 +1481,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getWindowSize() {
 		return windowSize;
 	}
@@ -1481,6 +1490,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowSize(int newWindowSize) {
 		int oldWindowSize = windowSize;
 		windowSize = newWindowSize;
@@ -1494,6 +1504,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetWindowSize() {
 		int oldWindowSize = windowSize;
 		boolean oldWindowSizeESet = windowSizeESet;
@@ -1507,6 +1518,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetWindowSize() {
 		return windowSizeESet;
 	}
@@ -1516,6 +1528,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TimePeriod getWindowSizeUnits() {
 		return windowSizeUnits;
 	}
@@ -1525,6 +1538,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowSizeUnits(TimePeriod newWindowSizeUnits) {
 		TimePeriod oldWindowSizeUnits = windowSizeUnits;
 		windowSizeUnits = newWindowSizeUnits == null ? WINDOW_SIZE_UNITS_EDEFAULT : newWindowSizeUnits;
@@ -1539,6 +1553,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetWindowSizeUnits() {
 		TimePeriod oldWindowSizeUnits = windowSizeUnits;
 		boolean oldWindowSizeUnitsESet = windowSizeUnitsESet;
@@ -1553,6 +1568,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetWindowSizeUnits() {
 		return windowSizeUnitsESet;
 	}
@@ -1562,6 +1578,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getWindowFlex() {
 		return windowFlex;
 	}
@@ -1571,6 +1588,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowFlex(int newWindowFlex) {
 		int oldWindowFlex = windowFlex;
 		windowFlex = newWindowFlex;
@@ -1583,6 +1601,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TimePeriod getWindowFlexUnits() {
 		return windowFlexUnits;
 	}
@@ -1592,6 +1611,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowFlexUnits(TimePeriod newWindowFlexUnits) {
 		TimePeriod oldWindowFlexUnits = windowFlexUnits;
 		windowFlexUnits = newWindowFlexUnits == null ? WINDOW_FLEX_UNITS_EDEFAULT : newWindowFlexUnits;
@@ -1603,6 +1623,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
 			InternalEObject oldPort = (InternalEObject)port;
@@ -1627,6 +1648,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPort(Port newPort) {
 		Port oldPort = port;
 		port = newPort;
@@ -1639,6 +1661,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public T getContract() {
 		if (contract != null && contract.eIsProxy()) {
 			InternalEObject oldContract = (InternalEObject)contract;
@@ -1664,6 +1687,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setContract(T newContract) {
 		T oldContract = contract;
 		contract = newContract;
@@ -1678,6 +1702,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetContract() {
 		T oldContract = contract;
 		boolean oldContractESet = contractESet;
@@ -1692,6 +1717,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetContract() {
 		return contractESet;
 	}
@@ -1701,6 +1727,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCounterparty() {
 		return counterparty;
 	}
@@ -1710,6 +1737,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCounterparty(String newCounterparty) {
 		String oldCounterparty = counterparty;
 		counterparty = newCounterparty;
@@ -1724,6 +1752,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCounterparty() {
 		String oldCounterparty = counterparty;
 		boolean oldCounterpartyESet = counterpartyESet;
@@ -1738,6 +1767,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCounterparty() {
 		return counterpartyESet;
 	}
@@ -1747,6 +1777,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCn() {
 		return cn;
 	}
@@ -1756,6 +1787,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCn(String newCn) {
 		String oldCn = cn;
 		cn = newCn;
@@ -1770,6 +1802,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCn() {
 		String oldCn = cn;
 		boolean oldCnESet = cnESet;
@@ -1784,6 +1817,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCn() {
 		return cnESet;
 	}
@@ -1792,6 +1826,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDuration() {
 		return duration;
 	}
@@ -1800,6 +1835,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDuration(int newDuration) {
 		int oldDuration = duration;
 		duration = newDuration;
@@ -1813,6 +1849,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetDuration() {
 		int oldDuration = duration;
 		boolean oldDurationESet = durationESet;
@@ -1826,6 +1863,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetDuration() {
 		return durationESet;
 	}
@@ -1835,6 +1873,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VolumeUnits getVolumeLimitsUnit() {
 		return volumeLimitsUnit;
 	}
@@ -1844,6 +1883,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeLimitsUnit(VolumeUnits newVolumeLimitsUnit) {
 		VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
 		volumeLimitsUnit = newVolumeLimitsUnit == null ? VOLUME_LIMITS_UNIT_EDEFAULT : newVolumeLimitsUnit;
@@ -1858,6 +1898,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetVolumeLimitsUnit() {
 		VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
 		boolean oldVolumeLimitsUnitESet = volumeLimitsUnitESet;
@@ -1872,6 +1913,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetVolumeLimitsUnit() {
 		return volumeLimitsUnitESet;
 	}
@@ -1880,6 +1922,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinQuantity() {
 		return minQuantity;
 	}
@@ -1888,6 +1931,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinQuantity(int newMinQuantity) {
 		int oldMinQuantity = minQuantity;
 		minQuantity = newMinQuantity;
@@ -1901,6 +1945,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMinQuantity() {
 		int oldMinQuantity = minQuantity;
 		boolean oldMinQuantityESet = minQuantityESet;
@@ -1914,6 +1959,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMinQuantity() {
 		return minQuantityESet;
 	}
@@ -1922,6 +1968,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaxQuantity() {
 		return maxQuantity;
 	}
@@ -1930,6 +1977,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxQuantity(int newMaxQuantity) {
 		int oldMaxQuantity = maxQuantity;
 		maxQuantity = newMaxQuantity;
@@ -1943,6 +1991,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMaxQuantity() {
 		int oldMaxQuantity = maxQuantity;
 		boolean oldMaxQuantityESet = maxQuantityESet;
@@ -1956,6 +2005,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMaxQuantity() {
 		return maxQuantityESet;
 	}
@@ -1965,6 +2015,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getOperationalTolerance() {
 		return operationalTolerance;
 	}
@@ -1974,6 +2025,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOperationalTolerance(double newOperationalTolerance) {
 		double oldOperationalTolerance = operationalTolerance;
 		operationalTolerance = newOperationalTolerance;
@@ -1988,6 +2040,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetOperationalTolerance() {
 		double oldOperationalTolerance = operationalTolerance;
 		boolean oldOperationalToleranceESet = operationalToleranceESet;
@@ -2002,6 +2055,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetOperationalTolerance() {
 		return operationalToleranceESet;
 	}
@@ -2011,6 +2065,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isOptional() {
 		return optional;
 	}
@@ -2020,6 +2075,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOptional(boolean newOptional) {
 		boolean oldOptional = optional;
 		optional = newOptional;
@@ -2032,6 +2088,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getPriceExpression() {
 		return priceExpression;
 	}
@@ -2041,6 +2098,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPriceExpression(String newPriceExpression) {
 		String oldPriceExpression = priceExpression;
 		priceExpression = newPriceExpression;
@@ -2055,6 +2113,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPriceExpression() {
 		String oldPriceExpression = priceExpression;
 		boolean oldPriceExpressionESet = priceExpressionESet;
@@ -2069,6 +2128,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPriceExpression() {
 		return priceExpressionESet;
 	}
@@ -2078,6 +2138,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Cargo getCargo() {
 		if (cargo != null && cargo.eIsProxy()) {
 			InternalEObject oldCargo = (InternalEObject)cargo;
@@ -2119,6 +2180,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargo(Cargo newCargo) {
 		if (newCargo != cargo) {
 			NotificationChain msgs = null;
@@ -2138,6 +2200,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PricingEvent getPricingEvent() {
 		return pricingEvent;
 	}
@@ -2147,6 +2210,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPricingEvent(PricingEvent newPricingEvent) {
 		PricingEvent oldPricingEvent = pricingEvent;
 		pricingEvent = newPricingEvent == null ? PRICING_EVENT_EDEFAULT : newPricingEvent;
@@ -2161,6 +2225,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPricingEvent() {
 		PricingEvent oldPricingEvent = pricingEvent;
 		boolean oldPricingEventESet = pricingEventESet;
@@ -2175,6 +2240,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPricingEvent() {
 		return pricingEventESet;
 	}
@@ -2184,6 +2250,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getPricingDate() {
 		return pricingDate;
 	}
@@ -2193,6 +2260,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPricingDate(LocalDate newPricingDate) {
 		LocalDate oldPricingDate = pricingDate;
 		pricingDate = newPricingDate;
@@ -2207,6 +2275,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPricingDate() {
 		LocalDate oldPricingDate = pricingDate;
 		boolean oldPricingDateESet = pricingDateESet;
@@ -2221,6 +2290,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPricingDate() {
 		return pricingDateESet;
 	}
@@ -2230,6 +2300,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getNotes() {
 		return notes;
 	}
@@ -2239,6 +2310,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNotes(String newNotes) {
 		String oldNotes = notes;
 		notes = newNotes;
@@ -2251,6 +2323,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isDivertible() {
 		return divertible;
 	}
@@ -2260,6 +2333,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDivertible(boolean newDivertible) {
 		boolean oldDivertible = divertible;
 		divertible = newDivertible;
@@ -2274,6 +2348,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetDivertible() {
 		boolean oldDivertible = divertible;
 		boolean oldDivertibleESet = divertibleESet;
@@ -2288,6 +2363,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetDivertible() {
 		return divertibleESet;
 	}
@@ -2297,6 +2373,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getShippingDaysRestriction() {
 		return shippingDaysRestriction;
 	}
@@ -2306,6 +2383,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShippingDaysRestriction(int newShippingDaysRestriction) {
 		int oldShippingDaysRestriction = shippingDaysRestriction;
 		shippingDaysRestriction = newShippingDaysRestriction;
@@ -2320,6 +2398,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetShippingDaysRestriction() {
 		int oldShippingDaysRestriction = shippingDaysRestriction;
 		boolean oldShippingDaysRestrictionESet = shippingDaysRestrictionESet;
@@ -2334,6 +2413,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetShippingDaysRestriction() {
 		return shippingDaysRestrictionESet;
 	}
@@ -2343,6 +2423,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
@@ -2369,6 +2450,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEntity(BaseLegalEntity newEntity) {
 		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;
@@ -2383,6 +2465,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetEntity() {
 		BaseLegalEntity oldEntity = entity;
 		boolean oldEntityESet = entityESet;
@@ -2397,6 +2480,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetEntity() {
 		return entityESet;
 	}
@@ -2406,6 +2490,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Contract> getRestrictedContracts() {
 		if (restrictedContracts == null) {
 			restrictedContracts = new EObjectResolvingEList<Contract>(Contract.class, this, CargoPackage.SLOT__RESTRICTED_CONTRACTS);
@@ -2418,6 +2503,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Port> getRestrictedPorts() {
 		if (restrictedPorts == null) {
 			restrictedPorts = new EObjectResolvingEList<Port>(Port.class, this, CargoPackage.SLOT__RESTRICTED_PORTS);
@@ -2430,6 +2516,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isRestrictedListsArePermissive() {
 		return restrictedListsArePermissive;
 	}
@@ -2439,6 +2526,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRestrictedListsArePermissive(boolean newRestrictedListsArePermissive) {
 		boolean oldRestrictedListsArePermissive = restrictedListsArePermissive;
 		restrictedListsArePermissive = newRestrictedListsArePermissive;
@@ -2451,6 +2539,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHedges() {
 		return hedges;
 	}
@@ -2460,6 +2549,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHedges(int newHedges) {
 		int oldHedges = hedges;
 		hedges = newHedges;
@@ -2471,6 +2561,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMiscCosts() {
 		return miscCosts;
 	}
@@ -2480,6 +2571,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMiscCosts(int newMiscCosts) {
 		int oldMiscCosts = miscCosts;
 		miscCosts = newMiscCosts;
@@ -2492,6 +2584,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCancellationExpression() {
 		return cancellationExpression;
 	}
@@ -2501,6 +2594,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCancellationExpression(String newCancellationExpression) {
 		String oldCancellationExpression = cancellationExpression;
 		cancellationExpression = newCancellationExpression;
@@ -2515,6 +2609,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCancellationExpression() {
 		String oldCancellationExpression = cancellationExpression;
 		boolean oldCancellationExpressionESet = cancellationExpressionESet;
@@ -2529,6 +2624,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCancellationExpression() {
 		return cancellationExpressionESet;
 	}
@@ -2538,6 +2634,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isOverrideRestrictions() {
 		return overrideRestrictions;
 	}
@@ -2547,6 +2644,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOverrideRestrictions(boolean newOverrideRestrictions) {
 		boolean oldOverrideRestrictions = overrideRestrictions;
 		overrideRestrictions = newOverrideRestrictions;
@@ -2559,6 +2657,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Vessel getNominatedVessel() {
 		if (nominatedVessel != null && nominatedVessel.eIsProxy()) {
 			InternalEObject oldNominatedVessel = (InternalEObject)nominatedVessel;
@@ -2585,6 +2684,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNominatedVessel(Vessel newNominatedVessel) {
 		Vessel oldNominatedVessel = nominatedVessel;
 		nominatedVessel = newNominatedVessel;
@@ -2597,6 +2697,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isLocked() {
 		return locked;
 	}
@@ -2606,6 +2707,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLocked(boolean newLocked) {
 		boolean oldLocked = locked;
 		locked = newLocked;
@@ -2618,6 +2720,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getWindowNominationDate() {
 		return windowNominationDate;
 	}
@@ -2627,6 +2730,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowNominationDate(LocalDate newWindowNominationDate) {
 		LocalDate oldWindowNominationDate = windowNominationDate;
 		windowNominationDate = newWindowNominationDate;
@@ -2641,6 +2745,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetWindowNominationDate() {
 		LocalDate oldWindowNominationDate = windowNominationDate;
 		boolean oldWindowNominationDateESet = windowNominationDateESet;
@@ -2655,6 +2760,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetWindowNominationDate() {
 		return windowNominationDateESet;
 	}
@@ -2664,6 +2770,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isWindowNominationIsDone() {
 		return windowNominationIsDone;
 	}
@@ -2673,6 +2780,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowNominationIsDone(boolean newWindowNominationIsDone) {
 		boolean oldWindowNominationIsDone = windowNominationIsDone;
 		windowNominationIsDone = newWindowNominationIsDone;
@@ -2685,6 +2793,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isWindowNominationCounterparty() {
 		return windowNominationCounterparty;
 	}
@@ -2694,6 +2803,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowNominationCounterparty(boolean newWindowNominationCounterparty) {
 		boolean oldWindowNominationCounterparty = windowNominationCounterparty;
 		windowNominationCounterparty = newWindowNominationCounterparty;
@@ -2708,6 +2818,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetWindowNominationCounterparty() {
 		boolean oldWindowNominationCounterparty = windowNominationCounterparty;
 		boolean oldWindowNominationCounterpartyESet = windowNominationCounterpartyESet;
@@ -2722,6 +2833,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetWindowNominationCounterparty() {
 		return windowNominationCounterpartyESet;
 	}
@@ -2731,6 +2843,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getWindowNominationComment() {
 		return windowNominationComment;
 	}
@@ -2740,6 +2853,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowNominationComment(String newWindowNominationComment) {
 		String oldWindowNominationComment = windowNominationComment;
 		windowNominationComment = newWindowNominationComment;
@@ -2752,6 +2866,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getVolumeNominationDate() {
 		return volumeNominationDate;
 	}
@@ -2761,6 +2876,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeNominationDate(LocalDate newVolumeNominationDate) {
 		LocalDate oldVolumeNominationDate = volumeNominationDate;
 		volumeNominationDate = newVolumeNominationDate;
@@ -2775,6 +2891,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetVolumeNominationDate() {
 		LocalDate oldVolumeNominationDate = volumeNominationDate;
 		boolean oldVolumeNominationDateESet = volumeNominationDateESet;
@@ -2789,6 +2906,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetVolumeNominationDate() {
 		return volumeNominationDateESet;
 	}
@@ -2798,6 +2916,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isVolumeNominationDone() {
 		return volumeNominationDone;
 	}
@@ -2807,6 +2926,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeNominationDone(boolean newVolumeNominationDone) {
 		boolean oldVolumeNominationDone = volumeNominationDone;
 		volumeNominationDone = newVolumeNominationDone;
@@ -2819,6 +2939,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isVolumeNominationCounterparty() {
 		return volumeNominationCounterparty;
 	}
@@ -2828,6 +2949,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeNominationCounterparty(boolean newVolumeNominationCounterparty) {
 		boolean oldVolumeNominationCounterparty = volumeNominationCounterparty;
 		volumeNominationCounterparty = newVolumeNominationCounterparty;
@@ -2842,6 +2964,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetVolumeNominationCounterparty() {
 		boolean oldVolumeNominationCounterparty = volumeNominationCounterparty;
 		boolean oldVolumeNominationCounterpartyESet = volumeNominationCounterpartyESet;
@@ -2856,6 +2979,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetVolumeNominationCounterparty() {
 		return volumeNominationCounterpartyESet;
 	}
@@ -2865,6 +2989,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getVolumeNominationComment() {
 		return volumeNominationComment;
 	}
@@ -2874,6 +2999,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeNominationComment(String newVolumeNominationComment) {
 		String oldVolumeNominationComment = volumeNominationComment;
 		volumeNominationComment = newVolumeNominationComment;
@@ -2886,6 +3012,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getVesselNominationDate() {
 		return vesselNominationDate;
 	}
@@ -2895,6 +3022,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselNominationDate(LocalDate newVesselNominationDate) {
 		LocalDate oldVesselNominationDate = vesselNominationDate;
 		vesselNominationDate = newVesselNominationDate;
@@ -2909,6 +3037,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetVesselNominationDate() {
 		LocalDate oldVesselNominationDate = vesselNominationDate;
 		boolean oldVesselNominationDateESet = vesselNominationDateESet;
@@ -2923,6 +3052,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetVesselNominationDate() {
 		return vesselNominationDateESet;
 	}
@@ -2932,6 +3062,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isVesselNominationDone() {
 		return vesselNominationDone;
 	}
@@ -2941,6 +3072,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselNominationDone(boolean newVesselNominationDone) {
 		boolean oldVesselNominationDone = vesselNominationDone;
 		vesselNominationDone = newVesselNominationDone;
@@ -2953,6 +3085,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isVesselNominationCounterparty() {
 		return vesselNominationCounterparty;
 	}
@@ -2962,6 +3095,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselNominationCounterparty(boolean newVesselNominationCounterparty) {
 		boolean oldVesselNominationCounterparty = vesselNominationCounterparty;
 		vesselNominationCounterparty = newVesselNominationCounterparty;
@@ -2976,6 +3110,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetVesselNominationCounterparty() {
 		boolean oldVesselNominationCounterparty = vesselNominationCounterparty;
 		boolean oldVesselNominationCounterpartyESet = vesselNominationCounterpartyESet;
@@ -2990,6 +3125,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetVesselNominationCounterparty() {
 		return vesselNominationCounterpartyESet;
 	}
@@ -2999,6 +3135,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getVesselNominationComment() {
 		return vesselNominationComment;
 	}
@@ -3008,6 +3145,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselNominationComment(String newVesselNominationComment) {
 		String oldVesselNominationComment = vesselNominationComment;
 		vesselNominationComment = newVesselNominationComment;
@@ -3020,6 +3158,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getPortNominationDate() {
 		return portNominationDate;
 	}
@@ -3029,6 +3168,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortNominationDate(LocalDate newPortNominationDate) {
 		LocalDate oldPortNominationDate = portNominationDate;
 		portNominationDate = newPortNominationDate;
@@ -3043,6 +3183,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPortNominationDate() {
 		LocalDate oldPortNominationDate = portNominationDate;
 		boolean oldPortNominationDateESet = portNominationDateESet;
@@ -3057,6 +3198,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPortNominationDate() {
 		return portNominationDateESet;
 	}
@@ -3066,6 +3208,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isPortNominationDone() {
 		return portNominationDone;
 	}
@@ -3075,6 +3218,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortNominationDone(boolean newPortNominationDone) {
 		boolean oldPortNominationDone = portNominationDone;
 		portNominationDone = newPortNominationDone;
@@ -3087,6 +3231,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isPortNominationCounterparty() {
 		return portNominationCounterparty;
 	}
@@ -3096,6 +3241,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortNominationCounterparty(boolean newPortNominationCounterparty) {
 		boolean oldPortNominationCounterparty = portNominationCounterparty;
 		portNominationCounterparty = newPortNominationCounterparty;
@@ -3110,6 +3256,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPortNominationCounterparty() {
 		boolean oldPortNominationCounterparty = portNominationCounterparty;
 		boolean oldPortNominationCounterpartyESet = portNominationCounterpartyESet;
@@ -3124,6 +3271,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPortNominationCounterparty() {
 		return portNominationCounterpartyESet;
 	}
@@ -3133,6 +3281,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getPortNominationComment() {
 		return portNominationComment;
 	}
@@ -3142,6 +3291,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortNominationComment(String newPortNominationComment) {
 		String oldPortNominationComment = portNominationComment;
 		portNominationComment = newPortNominationComment;
@@ -3149,11 +3299,14 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_NOMINATION_COMMENT, oldPortNominationComment, portNominationComment));
 	}
 
+	
+
 								/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getPortLoadNominationDate() {
 		return portLoadNominationDate;
 	}
@@ -3163,6 +3316,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortLoadNominationDate(LocalDate newPortLoadNominationDate) {
 		LocalDate oldPortLoadNominationDate = portLoadNominationDate;
 		portLoadNominationDate = newPortLoadNominationDate;
@@ -3177,6 +3331,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPortLoadNominationDate() {
 		LocalDate oldPortLoadNominationDate = portLoadNominationDate;
 		boolean oldPortLoadNominationDateESet = portLoadNominationDateESet;
@@ -3191,6 +3346,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPortLoadNominationDate() {
 		return portLoadNominationDateESet;
 	}
@@ -3200,6 +3356,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isPortLoadNominationDone() {
 		return portLoadNominationDone;
 	}
@@ -3209,6 +3366,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortLoadNominationDone(boolean newPortLoadNominationDone) {
 		boolean oldPortLoadNominationDone = portLoadNominationDone;
 		portLoadNominationDone = newPortLoadNominationDone;
@@ -3221,6 +3379,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isPortLoadNominationCounterparty() {
 		return portLoadNominationCounterparty;
 	}
@@ -3230,6 +3389,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortLoadNominationCounterparty(boolean newPortLoadNominationCounterparty) {
 		boolean oldPortLoadNominationCounterparty = portLoadNominationCounterparty;
 		portLoadNominationCounterparty = newPortLoadNominationCounterparty;
@@ -3244,6 +3404,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPortLoadNominationCounterparty() {
 		boolean oldPortLoadNominationCounterparty = portLoadNominationCounterparty;
 		boolean oldPortLoadNominationCounterpartyESet = portLoadNominationCounterpartyESet;
@@ -3258,6 +3419,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPortLoadNominationCounterparty() {
 		return portLoadNominationCounterpartyESet;
 	}
@@ -3267,6 +3429,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getPortLoadNominationComment() {
 		return portLoadNominationComment;
 	}
@@ -3276,6 +3439,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortLoadNominationComment(String newPortLoadNominationComment) {
 		String oldPortLoadNominationComment = portLoadNominationComment;
 		portLoadNominationComment = newPortLoadNominationComment;
@@ -3288,6 +3452,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<AVesselSet<Vessel>> getAllowedVessels() {
 		if (allowedVessels == null) {
 			allowedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, CargoPackage.SLOT__ALLOWED_VESSELS);

@@ -484,6 +484,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isFleet() {
 		return fleet;
 	}
@@ -493,6 +494,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFleet(boolean newFleet) {
 		boolean oldFleet = fleet;
 		fleet = newFleet;
@@ -505,6 +507,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Vessel getVessel() {
 		if (vessel != null && vessel.eIsProxy()) {
 			InternalEObject oldVessel = (InternalEObject)vessel;
@@ -531,6 +534,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVessel(Vessel newVessel) {
 		Vessel oldVessel = vessel;
 		vessel = newVessel;
@@ -543,6 +547,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getTimeCharterRate() {
 		return timeCharterRate;
 	}
@@ -552,6 +557,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTimeCharterRate(String newTimeCharterRate) {
 		String oldTimeCharterRate = timeCharterRate;
 		timeCharterRate = newTimeCharterRate;
@@ -566,6 +572,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetTimeCharterRate() {
 		String oldTimeCharterRate = timeCharterRate;
 		boolean oldTimeCharterRateESet = timeCharterRateESet;
@@ -580,6 +587,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetTimeCharterRate() {
 		return timeCharterRateESet;
 	}
@@ -589,6 +597,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getStartAt() {
 		if (startAt != null && startAt.eIsProxy()) {
 			InternalEObject oldStartAt = (InternalEObject)startAt;
@@ -615,6 +624,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartAt(Port newStartAt) {
 		Port oldStartAt = startAt;
 		startAt = newStartAt;
@@ -627,6 +637,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDateTime getStartAfter() {
 		return startAfter;
 	}
@@ -636,6 +647,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartAfter(LocalDateTime newStartAfter) {
 		LocalDateTime oldStartAfter = startAfter;
 		startAfter = newStartAfter;
@@ -650,6 +662,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetStartAfter() {
 		LocalDateTime oldStartAfter = startAfter;
 		boolean oldStartAfterESet = startAfterESet;
@@ -664,6 +677,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetStartAfter() {
 		return startAfterESet;
 	}
@@ -673,6 +687,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDateTime getStartBy() {
 		return startBy;
 	}
@@ -682,6 +697,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartBy(LocalDateTime newStartBy) {
 		LocalDateTime oldStartBy = startBy;
 		startBy = newStartBy;
@@ -696,6 +712,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetStartBy() {
 		LocalDateTime oldStartBy = startBy;
 		boolean oldStartByESet = startByESet;
@@ -710,6 +727,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetStartBy() {
 		return startByESet;
 	}
@@ -719,6 +737,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<APortSet<Port>> getEndAt() {
 		if (endAt == null) {
 			endAt = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, CargoPackage.VESSEL_AVAILABILITY__END_AT);
@@ -731,6 +750,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDateTime getEndAfter() {
 		return endAfter;
 	}
@@ -740,6 +760,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEndAfter(LocalDateTime newEndAfter) {
 		LocalDateTime oldEndAfter = endAfter;
 		endAfter = newEndAfter;
@@ -754,6 +775,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetEndAfter() {
 		LocalDateTime oldEndAfter = endAfter;
 		boolean oldEndAfterESet = endAfterESet;
@@ -768,6 +790,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetEndAfter() {
 		return endAfterESet;
 	}
@@ -777,6 +800,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDateTime getEndBy() {
 		return endBy;
 	}
@@ -786,6 +810,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEndBy(LocalDateTime newEndBy) {
 		LocalDateTime oldEndBy = endBy;
 		endBy = newEndBy;
@@ -800,6 +825,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetEndBy() {
 		LocalDateTime oldEndBy = endBy;
 		boolean oldEndByESet = endByESet;
@@ -814,6 +840,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetEndBy() {
 		return endByESet;
 	}
@@ -823,6 +850,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public StartHeelOptions getStartHeel() {
 		if (startHeel != null && startHeel.eIsProxy()) {
 			InternalEObject oldStartHeel = (InternalEObject)startHeel;
@@ -870,6 +898,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartHeel(StartHeelOptions newStartHeel) {
 		if (newStartHeel != startHeel) {
 			NotificationChain msgs = null;
@@ -889,6 +918,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EndHeelOptions getEndHeel() {
 		if (endHeel != null && endHeel.eIsProxy()) {
 			InternalEObject oldEndHeel = (InternalEObject)endHeel;
@@ -936,6 +966,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEndHeel(EndHeelOptions newEndHeel) {
 		if (newEndHeel != endHeel) {
 			NotificationChain msgs = null;
@@ -955,6 +986,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isForceHireCostOnlyEndRule() {
 		return forceHireCostOnlyEndRule;
 	}
@@ -964,6 +996,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setForceHireCostOnlyEndRule(boolean newForceHireCostOnlyEndRule) {
 		boolean oldForceHireCostOnlyEndRule = forceHireCostOnlyEndRule;
 		forceHireCostOnlyEndRule = newForceHireCostOnlyEndRule;
@@ -976,6 +1009,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isOptional() {
 		return optional;
 	}
@@ -985,6 +1019,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOptional(boolean newOptional) {
 		boolean oldOptional = optional;
 		optional = newOptional;
@@ -997,6 +1032,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getRepositioningFee() {
 		return repositioningFee;
 	}
@@ -1006,6 +1042,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRepositioningFee(String newRepositioningFee) {
 		String oldRepositioningFee = repositioningFee;
 		repositioningFee = newRepositioningFee;
@@ -1018,6 +1055,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BallastBonusContract getBallastBonusContract() {
 		if (ballastBonusContract != null && ballastBonusContract.eIsProxy()) {
 			InternalEObject oldBallastBonusContract = (InternalEObject)ballastBonusContract;
@@ -1065,6 +1103,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBallastBonusContract(BallastBonusContract newBallastBonusContract) {
 		if (newBallastBonusContract != ballastBonusContract) {
 			NotificationChain msgs = null;
@@ -1084,6 +1123,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCharterNumber() {
 		return charterNumber;
 	}
@@ -1093,6 +1133,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterContract getCharterContract() {
 		if (charterContract != null && charterContract.eIsProxy()) {
 			InternalEObject oldCharterContract = (InternalEObject)charterContract;
@@ -1109,6 +1150,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterNumber(int newCharterNumber) {
 		int oldCharterNumber = charterNumber;
 		charterNumber = newCharterNumber;
@@ -1130,6 +1172,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterContract(CharterContract newCharterContract) {
 		CharterContract oldCharterContract = charterContract;
 		charterContract = newCharterContract;
@@ -1144,6 +1187,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCharterContract() {
 		CharterContract oldCharterContract = charterContract;
 		boolean oldCharterContractESet = charterContractESet;
@@ -1158,6 +1202,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCharterContract() {
 		return charterContractESet;
 	}
@@ -1167,6 +1212,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinDuration() {
 		return minDuration;
 	}
@@ -1176,6 +1222,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinDuration(int newMinDuration) {
 		int oldMinDuration = minDuration;
 		minDuration = newMinDuration;
@@ -1190,6 +1237,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMinDuration() {
 		int oldMinDuration = minDuration;
 		boolean oldMinDurationESet = minDurationESet;
@@ -1204,6 +1252,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMinDuration() {
 		return minDurationESet;
 	}
@@ -1213,6 +1262,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaxDuration() {
 		return maxDuration;
 	}
@@ -1222,6 +1272,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxDuration(int newMaxDuration) {
 		int oldMaxDuration = maxDuration;
 		maxDuration = newMaxDuration;
@@ -1236,6 +1287,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMaxDuration() {
 		int oldMaxDuration = maxDuration;
 		boolean oldMaxDurationESet = maxDurationESet;
@@ -1250,6 +1302,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMaxDuration() {
 		return maxDurationESet;
 	}
@@ -1361,6 +1414,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
@@ -1387,6 +1441,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEntity(BaseLegalEntity newEntity) {
 		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;

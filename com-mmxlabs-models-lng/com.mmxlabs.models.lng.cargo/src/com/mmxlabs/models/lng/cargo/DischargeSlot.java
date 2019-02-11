@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getDischargeSlot()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/featureOverride"
  * @generated
  */
 public interface DischargeSlot extends Slot<SalesContract> {

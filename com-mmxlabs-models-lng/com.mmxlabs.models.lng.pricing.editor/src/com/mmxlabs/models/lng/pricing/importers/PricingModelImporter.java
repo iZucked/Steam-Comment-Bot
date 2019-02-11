@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -21,9 +22,11 @@ import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
+import com.mmxlabs.models.lng.pricing.MarketIndex;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
@@ -43,6 +46,9 @@ public class PricingModelImporter implements ISubmodelImporter {
 	public static final String CURRENCY_CURVE_KEY = "CURRENCY_CURVES";
 	public static final String CONVERSION_FACTORS_KEY = "CONVERSION_FACTORS";
 	public static final String SETTLED_PRICES_KEY = "SETTLED_PRICES";
+	public static final String HOLIDAY_CALENDAR_KEY = "HOLIDAY_CALENDAR_KEY";
+	public static final String SETTLE_STRATEGY_KEY = "SETTLE_STRATEGY_KEY";
+	public static final String MARKET_INDEX_KEY = "MARKET_INDEX_KEY";
 
 	static {
 		inputs.put(PRICE_CURVE_KEY, "Commodity Curves");
@@ -51,6 +57,9 @@ public class PricingModelImporter implements ISubmodelImporter {
 		inputs.put(CURRENCY_CURVE_KEY, "Currency Curves");
 		if (LicenseFeatures.isPermitted("features:paperdeals")) {
 			inputs.put(SETTLED_PRICES_KEY, "Settled Prices");
+			inputs.put(HOLIDAY_CALENDAR_KEY, "Holiday Calendars");
+			inputs.put(SETTLE_STRATEGY_KEY, "Settle Strategies");
+			inputs.put(MARKET_INDEX_KEY, "Market Indices");
 		}
 		inputs.put(CONVERSION_FACTORS_KEY, "Conversion Factors");
 	}
@@ -64,6 +73,9 @@ public class PricingModelImporter implements ISubmodelImporter {
 	private IClassImporter currencyIndexImporter;
 	private IClassImporter conversionFactorsImporter;
 	private IClassImporter settledPricesImporter;
+	private IClassImporter marketIndexImporter;
+	private IClassImporter settleStrategyImporter;
+	private HolidayCalendarImporter holidayCalendarImporter;
 
 	/**
 	 */
@@ -85,6 +97,9 @@ public class PricingModelImporter implements ISubmodelImporter {
 			currencyIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCurrencyCurve());
 			conversionFactorsImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getUnitConversion());
 			settledPricesImporter = new DatePointImporter();
+			holidayCalendarImporter = new HolidayCalendarImporter();
+			settleStrategyImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getSettleStrategy());
+			marketIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getMarketIndex());
 		}
 	}
 
@@ -111,20 +126,36 @@ public class PricingModelImporter implements ISubmodelImporter {
 		if (inputs.containsKey(SETTLED_PRICES_KEY)) {
 			importSettledPrices(pricingModel, inputs.get(SETTLED_PRICES_KEY), context);
 		}
+		if (inputs.containsKey(HOLIDAY_CALENDAR_KEY)) {
+			importIndexHolidays(pricingModel, inputs.get(HOLIDAY_CALENDAR_KEY), context);
+		}
 		if (inputs.containsKey(CONVERSION_FACTORS_KEY)) {
 			importConversionFactors(pricingModel, inputs.get(CONVERSION_FACTORS_KEY), context);
+		}
+		if (inputs.containsKey(MARKET_INDEX_KEY)) {
+			importMarketIndices(pricingModel, inputs.get(MARKET_INDEX_KEY), context);
+		}
+		if (inputs.containsKey(SETTLE_STRATEGY_KEY)) {
+			importSettleStrategies(pricingModel, inputs.get(SETTLE_STRATEGY_KEY), context);
 		}
 		if (pricingModel.getConversionFactors().isEmpty()) {
 			// Create default conversion factors
 			makeConversionFactor("therm", "mmBtu", 10, pricingModel);
 			makeConversionFactor("bbl", "mmBtu", 0.180136, pricingModel);
 			makeConversionFactor("MWh", "mmBtu", 0.293297, pricingModel);
-
 		}
 
 		pricingModel.setMarketCurveDataVersion(EcoreUtil.generateUUID());
 
 		return pricingModel;
+	}
+
+	private void importMarketIndices(PricingModel pricingModel, CSVReader csvReader, @NonNull IMMXImportContext context) {
+		pricingModel.getMarketIndices().addAll((Collection<? extends MarketIndex>) marketIndexImporter.importObjects(PricingPackage.eINSTANCE.getMarketIndex(), csvReader, context));
+	}
+	
+	private void importSettleStrategies(PricingModel pricingModel, CSVReader csvReader, @NonNull IMMXImportContext context) {
+		pricingModel.getSettleStrategies().addAll((Collection<? extends SettleStrategy>) settleStrategyImporter.importObjects(PricingPackage.eINSTANCE.getSettleStrategy(), csvReader, context));
 	}
 
 	private void importCommodityCurves(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
@@ -133,6 +164,10 @@ public class PricingModelImporter implements ISubmodelImporter {
 
 	private void importSettledPrices(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
 		pricing.getSettledPrices().addAll((Collection<? extends DatePointContainer>) settledPricesImporter.importObjects(PricingPackage.eINSTANCE.getDatePointContainer(), csvReader, context));
+	}
+	
+	private void importIndexHolidays(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
+		pricing.getHolidayCalendars().addAll(holidayCalendarImporter.importObjects(csvReader, context));
 	}
 
 	private void importCurrencyCurves(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
@@ -160,6 +195,9 @@ public class PricingModelImporter implements ISubmodelImporter {
 		output.put(CURRENCY_CURVE_KEY, currencyIndexImporter.exportObjects(pricing.getCurrencyCurves(), context));
 		output.put(SETTLED_PRICES_KEY, settledPricesImporter.exportObjects(pricing.getSettledPrices(), context));
 		output.put(CONVERSION_FACTORS_KEY, conversionFactorsImporter.exportObjects(pricing.getConversionFactors(), context));
+		output.put(HOLIDAY_CALENDAR_KEY, holidayCalendarImporter.exportObjects(pricing.getHolidayCalendars(), context));
+		output.put(MARKET_INDEX_KEY, marketIndexImporter.exportObjects(pricing.getMarketIndices(), context));
+		output.put(SETTLE_STRATEGY_KEY, settleStrategyImporter.exportObjects(pricing.getSettleStrategies(), context));
 	}
 
 	@Override

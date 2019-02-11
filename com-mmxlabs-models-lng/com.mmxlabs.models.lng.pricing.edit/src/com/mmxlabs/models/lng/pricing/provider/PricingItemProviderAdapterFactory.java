@@ -686,6 +686,98 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.MarketIndex} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarketIndexItemProvider marketIndexItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.MarketIndex}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarketIndexAdapter() {
+		if (marketIndexItemProvider == null) {
+			marketIndexItemProvider = new MarketIndexItemProvider(this);
+		}
+
+		return marketIndexItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.HolidayCalendarEntry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected HolidayCalendarEntryItemProvider holidayCalendarEntryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.HolidayCalendarEntry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createHolidayCalendarEntryAdapter() {
+		if (holidayCalendarEntryItemProvider == null) {
+			holidayCalendarEntryItemProvider = new HolidayCalendarEntryItemProvider(this);
+		}
+
+		return holidayCalendarEntryItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.HolidayCalendar} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected HolidayCalendarItemProvider holidayCalendarItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.HolidayCalendar}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createHolidayCalendarAdapter() {
+		if (holidayCalendarItemProvider == null) {
+			holidayCalendarItemProvider = new HolidayCalendarItemProvider(this);
+		}
+
+		return holidayCalendarItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.SettleStrategy} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SettleStrategyItemProvider settleStrategyItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.SettleStrategy}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSettleStrategyAdapter() {
+		if (settleStrategyItemProvider == null) {
+			settleStrategyItemProvider = new SettleStrategyItemProvider(this);
+		}
+
+		return settleStrategyItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -837,6 +929,10 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (charterCurveItemProvider != null) charterCurveItemProvider.dispose();
 		if (bunkerFuelCurveItemProvider != null) bunkerFuelCurveItemProvider.dispose();
 		if (currencyCurveItemProvider != null) currencyCurveItemProvider.dispose();
+		if (marketIndexItemProvider != null) marketIndexItemProvider.dispose();
+		if (holidayCalendarEntryItemProvider != null) holidayCalendarEntryItemProvider.dispose();
+		if (holidayCalendarItemProvider != null) holidayCalendarItemProvider.dispose();
+		if (settleStrategyItemProvider != null) settleStrategyItemProvider.dispose();
 	}
 
 }

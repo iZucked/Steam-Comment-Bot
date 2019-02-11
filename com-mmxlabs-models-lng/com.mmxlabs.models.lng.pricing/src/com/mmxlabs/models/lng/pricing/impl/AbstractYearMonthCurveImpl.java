@@ -120,6 +120,7 @@ public abstract class AbstractYearMonthCurveImpl extends YearMonthPointContainer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCurrencyUnit() {
 		return currencyUnit;
 	}
@@ -129,6 +130,7 @@ public abstract class AbstractYearMonthCurveImpl extends YearMonthPointContainer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCurrencyUnit(String newCurrencyUnit) {
 		String oldCurrencyUnit = currencyUnit;
 		currencyUnit = newCurrencyUnit;
@@ -141,6 +143,7 @@ public abstract class AbstractYearMonthCurveImpl extends YearMonthPointContainer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getVolumeUnit() {
 		return volumeUnit;
 	}
@@ -150,6 +153,7 @@ public abstract class AbstractYearMonthCurveImpl extends YearMonthPointContainer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeUnit(String newVolumeUnit) {
 		String oldVolumeUnit = volumeUnit;
 		volumeUnit = newVolumeUnit;
@@ -162,6 +166,7 @@ public abstract class AbstractYearMonthCurveImpl extends YearMonthPointContainer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getExpression() {
 		return expression;
 	}
@@ -171,6 +176,7 @@ public abstract class AbstractYearMonthCurveImpl extends YearMonthPointContainer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setExpression(String newExpression) {
 		String oldExpression = expression;
 		expression = newExpression;
@@ -185,6 +191,7 @@ public abstract class AbstractYearMonthCurveImpl extends YearMonthPointContainer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetExpression() {
 		String oldExpression = expression;
 		boolean oldExpressionESet = expressionESet;
@@ -199,6 +206,7 @@ public abstract class AbstractYearMonthCurveImpl extends YearMonthPointContainer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetExpression() {
 		return expressionESet;
 	}

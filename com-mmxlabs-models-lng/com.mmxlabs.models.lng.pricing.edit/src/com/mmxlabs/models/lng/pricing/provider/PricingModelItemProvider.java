@@ -95,6 +95,9 @@ public class PricingModelItemProvider
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__CONVERSION_FACTORS);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__MARKET_INDICES);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__HOLIDAY_CALENDARS);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__SETTLE_STRATEGIES);
 		}
 		return childrenFeatures;
 	}
@@ -158,6 +161,9 @@ public class PricingModelItemProvider
 			case PricingPackage.PRICING_MODEL__BUNKER_FUEL_CURVES:
 			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
+			case PricingPackage.PRICING_MODEL__MARKET_INDICES:
+			case PricingPackage.PRICING_MODEL__HOLIDAY_CALENDARS:
+			case PricingPackage.PRICING_MODEL__SETTLE_STRATEGIES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -204,6 +210,21 @@ public class PricingModelItemProvider
 			(createChildParameter
 				(PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES,
 				 PricingFactory.eINSTANCE.createDatePointContainer()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.PRICING_MODEL__MARKET_INDICES,
+				 PricingFactory.eINSTANCE.createMarketIndex()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.PRICING_MODEL__HOLIDAY_CALENDARS,
+				 PricingFactory.eINSTANCE.createHolidayCalendar()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.PRICING_MODEL__SETTLE_STRATEGIES,
+				 PricingFactory.eINSTANCE.createSettleStrategy()));
 	}
 
 }
