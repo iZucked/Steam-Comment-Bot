@@ -108,7 +108,7 @@ public class AbstractYearMonthCurveItemProvider extends YearMonthPointContainerI
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_AbstractYearMonthCurve_expression_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AbstractYearMonthCurve_expression_feature", "_UI_AbstractYearMonthCurve_type"),
+				 getString("_UI_AbstractYearMonthCurve_expression_description"),
 				 PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION,
 				 true,
 				 false,

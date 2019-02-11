@@ -84,7 +84,7 @@ public class SuezCanalTugBandItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_SuezCanalTugBand_tugs_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SuezCanalTugBand_tugs_feature", "_UI_SuezCanalTugBand_type"),
+				 getString("_UI_SuezCanalTugBand_tugs_description"),
 				 PricingPackage.Literals.SUEZ_CANAL_TUG_BAND__TUGS,
 				 true,
 				 false,
