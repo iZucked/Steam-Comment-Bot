@@ -256,6 +256,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getStartDate() {
 		return startDate;
 	}
@@ -265,6 +266,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartDate(LocalDate newStartDate) {
 		LocalDate oldStartDate = startDate;
 		startDate = newStartDate;
@@ -277,6 +279,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getEndDate() {
 		return endDate;
 	}
@@ -286,6 +289,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEndDate(LocalDate newEndDate) {
 		LocalDate oldEndDate = endDate;
 		endDate = newEndDate;
@@ -298,6 +302,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public InventoryFrequency getPeriod() {
 		return period;
 	}
@@ -307,6 +312,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPeriod(InventoryFrequency newPeriod) {
 		InventoryFrequency oldPeriod = period;
 		period = newPeriod == null ? PERIOD_EDEFAULT : newPeriod;
@@ -319,6 +325,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCounterParty() {
 		return counterParty;
 	}
@@ -328,6 +335,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCounterParty(String newCounterParty) {
 		String oldCounterParty = counterParty;
 		counterParty = newCounterParty;
@@ -340,6 +348,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getReliability() {
 		return reliability;
 	}
@@ -349,6 +358,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setReliability(double newReliability) {
 		double oldReliability = reliability;
 		reliability = newReliability;
@@ -361,6 +371,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getVolume() {
 		return volume;
 	}
@@ -370,6 +381,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolume(int newVolume) {
 		int oldVolume = volume;
 		volume = newVolume;
@@ -382,6 +394,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getForecastDate() {
 		return forecastDate;
 	}
@@ -391,6 +404,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setForecastDate(LocalDate newForecastDate) {
 		LocalDate oldForecastDate = forecastDate;
 		forecastDate = newForecastDate;
@@ -405,6 +419,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetForecastDate() {
 		LocalDate oldForecastDate = forecastDate;
 		boolean oldForecastDateESet = forecastDateESet;
@@ -419,6 +434,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetForecastDate() {
 		return forecastDateESet;
 	}
@@ -428,6 +444,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getVolumeLow() {
 		return volumeLow;
 	}
@@ -437,6 +454,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeLow(int newVolumeLow) {
 		int oldVolumeLow = volumeLow;
 		volumeLow = newVolumeLow;
@@ -449,6 +467,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getVolumeHigh() {
 		return volumeHigh;
 	}
@@ -458,6 +477,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeHigh(int newVolumeHigh) {
 		int oldVolumeHigh = volumeHigh;
 		volumeHigh = newVolumeHigh;

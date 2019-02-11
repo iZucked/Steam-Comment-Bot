@@ -9,6 +9,8 @@ package com.mmxlabs.models.lng.cargo.impl;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 import java.time.LocalDate;
 
@@ -16,6 +18,7 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -29,9 +32,13 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getPrice <em>Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getIndex <em>Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getInstrument <em>Instrument</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getQuantity <em>Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getEndDate <em>End Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getYear <em>Year</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getComment <em>Comment</em>}</li>
  * </ul>
  *
  * @generated
@@ -76,6 +83,16 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	 * @ordered
 	 */
 	protected String index = INDEX_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getInstrument() <em>Instrument</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInstrument()
+	 * @generated
+	 * @ordered
+	 */
+	protected SettleStrategy instrument;
 
 	/**
 	 * The default value of the '{@link #getQuantity() <em>Quantity</em>}' attribute.
@@ -138,6 +155,56 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	protected LocalDate endDate = END_DATE_EDEFAULT;
 
 	/**
+	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEntity()
+	 * @generated
+	 * @ordered
+	 */
+	protected BaseLegalEntity entity;
+
+	/**
+	 * The default value of the '{@link #getYear() <em>Year</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getYear()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int YEAR_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getYear() <em>Year</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getYear()
+	 * @generated
+	 * @ordered
+	 */
+	protected int year = YEAR_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String COMMENT_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected String comment = COMMENT_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -161,6 +228,7 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getQuantity() {
 		return quantity;
 	}
@@ -170,6 +238,7 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setQuantity(double newQuantity) {
 		double oldQuantity = quantity;
 		quantity = newQuantity;
@@ -182,6 +251,7 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getStartDate() {
 		return startDate;
 	}
@@ -191,6 +261,7 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartDate(LocalDate newStartDate) {
 		LocalDate oldStartDate = startDate;
 		startDate = newStartDate;
@@ -203,6 +274,7 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getEndDate() {
 		return endDate;
 	}
@@ -212,6 +284,7 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEndDate(LocalDate newEndDate) {
 		LocalDate oldEndDate = endDate;
 		endDate = newEndDate;
@@ -224,6 +297,133 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public BaseLegalEntity getEntity() {
+		if (entity != null && entity.eIsProxy()) {
+			InternalEObject oldEntity = (InternalEObject)entity;
+			entity = (BaseLegalEntity)eResolveProxy(oldEntity);
+			if (entity != oldEntity) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.PAPER_DEAL__ENTITY, oldEntity, entity));
+			}
+		}
+		return entity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseLegalEntity basicGetEntity() {
+		return entity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setEntity(BaseLegalEntity newEntity) {
+		BaseLegalEntity oldEntity = entity;
+		entity = newEntity;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.PAPER_DEAL__ENTITY, oldEntity, entity));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getYear() {
+		return year;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setYear(int newYear) {
+		int oldYear = year;
+		year = newYear;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.PAPER_DEAL__YEAR, oldYear, year));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getComment() {
+		return comment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setComment(String newComment) {
+		String oldComment = comment;
+		comment = newComment;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.PAPER_DEAL__COMMENT, oldComment, comment));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SettleStrategy getInstrument() {
+		if (instrument != null && instrument.eIsProxy()) {
+			InternalEObject oldInstrument = (InternalEObject)instrument;
+			instrument = (SettleStrategy)eResolveProxy(oldInstrument);
+			if (instrument != oldInstrument) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.PAPER_DEAL__INSTRUMENT, oldInstrument, instrument));
+			}
+		}
+		return instrument;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SettleStrategy basicGetInstrument() {
+		return instrument;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setInstrument(SettleStrategy newInstrument) {
+		SettleStrategy oldInstrument = instrument;
+		instrument = newInstrument;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.PAPER_DEAL__INSTRUMENT, oldInstrument, instrument));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public double getPrice() {
 		return price;
 	}
@@ -233,6 +433,7 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPrice(double newPrice) {
 		double oldPrice = price;
 		price = newPrice;
@@ -245,6 +446,7 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getIndex() {
 		return index;
 	}
@@ -254,6 +456,7 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIndex(String newIndex) {
 		String oldIndex = index;
 		index = newIndex;
@@ -273,12 +476,22 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 				return getPrice();
 			case CargoPackage.PAPER_DEAL__INDEX:
 				return getIndex();
+			case CargoPackage.PAPER_DEAL__INSTRUMENT:
+				if (resolve) return getInstrument();
+				return basicGetInstrument();
 			case CargoPackage.PAPER_DEAL__QUANTITY:
 				return getQuantity();
 			case CargoPackage.PAPER_DEAL__START_DATE:
 				return getStartDate();
 			case CargoPackage.PAPER_DEAL__END_DATE:
 				return getEndDate();
+			case CargoPackage.PAPER_DEAL__ENTITY:
+				if (resolve) return getEntity();
+				return basicGetEntity();
+			case CargoPackage.PAPER_DEAL__YEAR:
+				return getYear();
+			case CargoPackage.PAPER_DEAL__COMMENT:
+				return getComment();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -297,6 +510,9 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 			case CargoPackage.PAPER_DEAL__INDEX:
 				setIndex((String)newValue);
 				return;
+			case CargoPackage.PAPER_DEAL__INSTRUMENT:
+				setInstrument((SettleStrategy)newValue);
+				return;
 			case CargoPackage.PAPER_DEAL__QUANTITY:
 				setQuantity((Double)newValue);
 				return;
@@ -305,6 +521,15 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 				return;
 			case CargoPackage.PAPER_DEAL__END_DATE:
 				setEndDate((LocalDate)newValue);
+				return;
+			case CargoPackage.PAPER_DEAL__ENTITY:
+				setEntity((BaseLegalEntity)newValue);
+				return;
+			case CargoPackage.PAPER_DEAL__YEAR:
+				setYear((Integer)newValue);
+				return;
+			case CargoPackage.PAPER_DEAL__COMMENT:
+				setComment((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -324,6 +549,9 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 			case CargoPackage.PAPER_DEAL__INDEX:
 				setIndex(INDEX_EDEFAULT);
 				return;
+			case CargoPackage.PAPER_DEAL__INSTRUMENT:
+				setInstrument((SettleStrategy)null);
+				return;
 			case CargoPackage.PAPER_DEAL__QUANTITY:
 				setQuantity(QUANTITY_EDEFAULT);
 				return;
@@ -332,6 +560,15 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 				return;
 			case CargoPackage.PAPER_DEAL__END_DATE:
 				setEndDate(END_DATE_EDEFAULT);
+				return;
+			case CargoPackage.PAPER_DEAL__ENTITY:
+				setEntity((BaseLegalEntity)null);
+				return;
+			case CargoPackage.PAPER_DEAL__YEAR:
+				setYear(YEAR_EDEFAULT);
+				return;
+			case CargoPackage.PAPER_DEAL__COMMENT:
+				setComment(COMMENT_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -349,12 +586,20 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 				return price != PRICE_EDEFAULT;
 			case CargoPackage.PAPER_DEAL__INDEX:
 				return INDEX_EDEFAULT == null ? index != null : !INDEX_EDEFAULT.equals(index);
+			case CargoPackage.PAPER_DEAL__INSTRUMENT:
+				return instrument != null;
 			case CargoPackage.PAPER_DEAL__QUANTITY:
 				return quantity != QUANTITY_EDEFAULT;
 			case CargoPackage.PAPER_DEAL__START_DATE:
 				return START_DATE_EDEFAULT == null ? startDate != null : !START_DATE_EDEFAULT.equals(startDate);
 			case CargoPackage.PAPER_DEAL__END_DATE:
 				return END_DATE_EDEFAULT == null ? endDate != null : !END_DATE_EDEFAULT.equals(endDate);
+			case CargoPackage.PAPER_DEAL__ENTITY:
+				return entity != null;
+			case CargoPackage.PAPER_DEAL__YEAR:
+				return year != YEAR_EDEFAULT;
+			case CargoPackage.PAPER_DEAL__COMMENT:
+				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -379,6 +624,10 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 		result.append(startDate);
 		result.append(", endDate: ");
 		result.append(endDate);
+		result.append(", year: ");
+		result.append(year);
+		result.append(", comment: ");
+		result.append(comment);
 		result.append(')');
 		return result.toString();
 	}

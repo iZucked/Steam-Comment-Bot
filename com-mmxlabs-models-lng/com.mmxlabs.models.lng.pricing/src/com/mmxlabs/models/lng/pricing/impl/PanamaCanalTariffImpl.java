@@ -95,6 +95,7 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PanamaCanalTariffBand> getBands() {
 		if (bands == null) {
 			bands = new EObjectContainmentEList<PanamaCanalTariffBand>(PanamaCanalTariffBand.class, this, PricingPackage.PANAMA_CANAL_TARIFF__BANDS);
@@ -107,6 +108,7 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getMarkupRate() {
 		return markupRate;
 	}
@@ -116,6 +118,7 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMarkupRate(double newMarkupRate) {
 		double oldMarkupRate = markupRate;
 		markupRate = newMarkupRate;

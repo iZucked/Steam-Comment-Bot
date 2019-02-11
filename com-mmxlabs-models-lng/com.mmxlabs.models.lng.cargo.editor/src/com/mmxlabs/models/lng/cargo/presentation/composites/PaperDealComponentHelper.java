@@ -13,7 +13,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-
+import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 import java.util.ArrayList;
@@ -71,9 +71,13 @@ public class PaperDealComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_priceEditor(detailComposite, topClass);
 		add_indexEditor(detailComposite, topClass);
+		add_instrumentEditor(detailComposite, topClass);
 		add_quantityEditor(detailComposite, topClass);
 		add_startDateEditor(detailComposite, topClass);
 		add_endDateEditor(detailComposite, topClass);
+		add_entityEditor(detailComposite, topClass);
+		add_yearEditor(detailComposite, topClass);
+		add_commentEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the quantity feature on PaperDeal
@@ -99,6 +103,42 @@ public class PaperDealComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_endDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.PAPER_DEAL__END_DATE));
+	}
+
+	/**
+	 * Create the editor for the entity feature on PaperDeal
+	 *
+	 * @generated
+	 */
+	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.PAPER_DEAL__ENTITY));
+	}
+
+	/**
+	 * Create the editor for the year feature on PaperDeal
+	 *
+	 * @generated
+	 */
+	protected void add_yearEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.PAPER_DEAL__YEAR));
+	}
+
+	/**
+	 * Create the editor for the comment feature on PaperDeal
+	 *
+	 * @generated
+	 */
+	protected void add_commentEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.PAPER_DEAL__COMMENT));
+	}
+
+	/**
+	 * Create the editor for the instrument feature on PaperDeal
+	 *
+	 * @generated
+	 */
+	protected void add_instrumentEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.PAPER_DEAL__INSTRUMENT));
 	}
 
 	/**

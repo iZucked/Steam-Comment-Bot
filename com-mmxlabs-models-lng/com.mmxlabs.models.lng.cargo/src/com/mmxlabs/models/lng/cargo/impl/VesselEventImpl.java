@@ -251,6 +251,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -260,6 +261,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -272,6 +274,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSpotIndex() {
 		return spotIndex;
 	}
@@ -281,6 +284,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpotIndex(int newSpotIndex) {
 		int oldSpotIndex = spotIndex;
 		spotIndex = newSpotIndex;
@@ -293,6 +297,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSequenceHint() {
 		return sequenceHint;
 	}
@@ -302,6 +307,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSequenceHint(int newSequenceHint) {
 		int oldSequenceHint = sequenceHint;
 		sequenceHint = newSequenceHint;
@@ -314,6 +320,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isLocked() {
 		return locked;
 	}
@@ -323,6 +330,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLocked(boolean newLocked) {
 		boolean oldLocked = locked;
 		locked = newLocked;
@@ -335,6 +343,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselAssignmentType getVesselAssignmentType() {
 		if (vesselAssignmentType != null && vesselAssignmentType.eIsProxy()) {
 			InternalEObject oldVesselAssignmentType = (InternalEObject)vesselAssignmentType;
@@ -361,6 +370,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselAssignmentType(VesselAssignmentType newVesselAssignmentType) {
 		VesselAssignmentType oldVesselAssignmentType = vesselAssignmentType;
 		vesselAssignmentType = newVesselAssignmentType;
@@ -373,6 +383,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDurationInDays() {
 		return durationInDays;
 	}
@@ -382,6 +393,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDurationInDays(int newDurationInDays) {
 		int oldDurationInDays = durationInDays;
 		durationInDays = newDurationInDays;
@@ -394,6 +406,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<AVesselSet<Vessel>> getAllowedVessels() {
 		if (allowedVessels == null) {
 			allowedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, CargoPackage.VESSEL_EVENT__ALLOWED_VESSELS);
@@ -406,6 +419,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
 			InternalEObject oldPort = (InternalEObject)port;
@@ -432,6 +446,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPort(Port newPort) {
 		Port oldPort = port;
 		port = newPort;
@@ -444,6 +459,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDateTime getStartAfter() {
 		return startAfter;
 	}
@@ -453,6 +469,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartAfter(LocalDateTime newStartAfter) {
 		LocalDateTime oldStartAfter = startAfter;
 		startAfter = newStartAfter;
@@ -465,6 +482,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDateTime getStartBy() {
 		return startBy;
 	}
@@ -474,6 +492,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartBy(LocalDateTime newStartBy) {
 		LocalDateTime oldStartBy = startBy;
 		startBy = newStartBy;

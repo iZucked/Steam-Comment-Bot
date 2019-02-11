@@ -11,7 +11,7 @@ package com.mmxlabs.models.lng.cargo;
  *
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSpotLoadSlot()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/featureOverride"
  * @generated
  */
 public interface SpotLoadSlot extends LoadSlot, SpotSlot {

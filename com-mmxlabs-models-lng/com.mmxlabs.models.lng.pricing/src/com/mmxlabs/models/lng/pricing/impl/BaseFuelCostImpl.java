@@ -83,6 +83,7 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseFuel getFuel() {
 		if (fuel != null && fuel.eIsProxy()) {
 			InternalEObject oldFuel = (InternalEObject)fuel;
@@ -109,6 +110,7 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFuel(BaseFuel newFuel) {
 		BaseFuel oldFuel = fuel;
 		fuel = newFuel;
@@ -121,6 +123,7 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getExpression() {
 		return expression;
 	}
@@ -130,6 +133,7 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setExpression(String newExpression) {
 		String oldExpression = expression;
 		expression = newExpression;

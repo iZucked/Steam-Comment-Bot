@@ -113,6 +113,7 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<APortSet<Port>> getPorts() {
 		if (ports == null) {
 			ports = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, PricingPackage.PORT_COST__PORTS);
@@ -125,6 +126,7 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PortCostEntry> getEntries() {
 		if (entries == null) {
 			entries = new EObjectContainmentEList<PortCostEntry>(PortCostEntry.class, this, PricingPackage.PORT_COST__ENTRIES);
@@ -137,6 +139,7 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getReferenceCapacity() {
 		return referenceCapacity;
 	}
@@ -146,6 +149,7 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setReferenceCapacity(int newReferenceCapacity) {
 		int oldReferenceCapacity = referenceCapacity;
 		referenceCapacity = newReferenceCapacity;
@@ -160,6 +164,7 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetReferenceCapacity() {
 		int oldReferenceCapacity = referenceCapacity;
 		boolean oldReferenceCapacityESet = referenceCapacityESet;
@@ -174,6 +179,7 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetReferenceCapacity() {
 		return referenceCapacityESet;
 	}

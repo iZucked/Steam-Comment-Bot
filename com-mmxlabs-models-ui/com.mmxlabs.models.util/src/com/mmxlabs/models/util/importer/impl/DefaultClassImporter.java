@@ -55,6 +55,7 @@ import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 public class DefaultClassImporter extends AbstractClassImporter {
 	protected static final String KIND_KEY = "kind";
 	protected static final String DOT = ".";
+	protected static final String SETTLE_CALENDAR = "settle_calendar";
 
 	/**
 	 * Simple record structure class to hold results of importing a row of CSV data.

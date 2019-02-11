@@ -151,13 +151,40 @@ public interface PricingPackage extends EPackage {
 	int PRICING_MODEL__SETTLED_PRICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Market Indices</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICING_MODEL__MARKET_INDICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Holiday Calendars</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICING_MODEL__HOLIDAY_CALENDARS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Settle Strategies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICING_MODEL__SETTLE_STRATEGIES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.IndexImpl <em>Index</em>}' class.
@@ -1381,13 +1408,22 @@ public interface PricingPackage extends EPackage {
 	int COMMODITY_CURVE__EXPRESSION = ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION;
 
 	/**
+	 * The feature id for the '<em><b>Market Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE__MARKET_INDEX = ABSTRACT_YEAR_MONTH_CURVE_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Commodity Curve</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMODITY_CURVE_FEATURE_COUNT = ABSTRACT_YEAR_MONTH_CURVE_FEATURE_COUNT + 0;
+	int COMMODITY_CURVE_FEATURE_COUNT = ABSTRACT_YEAR_MONTH_CURVE_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CharterCurveImpl <em>Charter Curve</em>}' class.
@@ -1636,6 +1672,235 @@ public interface PricingPackage extends EPackage {
 	int CURRENCY_CURVE_FEATURE_COUNT = ABSTRACT_YEAR_MONTH_CURVE_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl <em>Market Index</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getMarketIndex()
+	 * @generated
+	 */
+	int MARKET_INDEX = 28;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_INDEX__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_INDEX__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Settle Calendar</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_INDEX__SETTLE_CALENDAR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Market Index</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_INDEX_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.HolidayCalendarEntryImpl <em>Holiday Calendar Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.HolidayCalendarEntryImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getHolidayCalendarEntry()
+	 * @generated
+	 */
+	int HOLIDAY_CALENDAR_ENTRY = 29;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HOLIDAY_CALENDAR_ENTRY__DATE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HOLIDAY_CALENDAR_ENTRY__COMMENT = 1;
+
+	/**
+	 * The number of structural features of the '<em>Holiday Calendar Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HOLIDAY_CALENDAR_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.HolidayCalendarImpl <em>Holiday Calendar</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.HolidayCalendarImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getHolidayCalendar()
+	 * @generated
+	 */
+	int HOLIDAY_CALENDAR = 30;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HOLIDAY_CALENDAR__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HOLIDAY_CALENDAR__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Entries</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HOLIDAY_CALENDAR__ENTRIES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HOLIDAY_CALENDAR__DESCRIPTION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Holiday Calendar</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HOLIDAY_CALENDAR_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl <em>Settle Strategy</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSettleStrategy()
+	 * @generated
+	 */
+	int SETTLE_STRATEGY = 31;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SETTLE_STRATEGY__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SETTLE_STRATEGY__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Day Of The Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SETTLE_STRATEGY__DAY_OF_THE_MONTH = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Last Day Of The Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Use Calendar Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SETTLE_STRATEGY__USE_CALENDAR_MONTH = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Settle Period</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SETTLE_STRATEGY__SETTLE_PERIOD = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Settle Period Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SETTLE_STRATEGY__SETTLE_PERIOD_UNIT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Settle Start Months Prior</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The number of structural features of the '<em>Settle Strategy</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SETTLE_STRATEGY_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1721,6 +1986,39 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPricingModel_SettledPrices();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getMarketIndices <em>Market Indices</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Market Indices</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getMarketIndices()
+	 * @see #getPricingModel()
+	 * @generated
+	 */
+	EReference getPricingModel_MarketIndices();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getHolidayCalendars <em>Holiday Calendars</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Holiday Calendars</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getHolidayCalendars()
+	 * @see #getPricingModel()
+	 * @generated
+	 */
+	EReference getPricingModel_HolidayCalendars();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getSettleStrategies <em>Settle Strategies</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Settle Strategies</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getSettleStrategies()
+	 * @see #getPricingModel()
+	 * @generated
+	 */
+	EReference getPricingModel_SettleStrategies();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.DataIndex <em>Data Index</em>}'.
@@ -2612,6 +2910,17 @@ public interface PricingPackage extends EPackage {
 	EClass getCommodityCurve();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.CommodityCurve#getMarketIndex <em>Market Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Market Index</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CommodityCurve#getMarketIndex()
+	 * @see #getCommodityCurve()
+	 * @generated
+	 */
+	EReference getCommodityCurve_MarketIndex();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CharterCurve <em>Charter Curve</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2640,6 +2949,167 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getCurrencyCurve();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.MarketIndex <em>Market Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Market Index</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.MarketIndex
+	 * @generated
+	 */
+	EClass getMarketIndex();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.MarketIndex#getSettleCalendar <em>Settle Calendar</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Settle Calendar</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.MarketIndex#getSettleCalendar()
+	 * @see #getMarketIndex()
+	 * @generated
+	 */
+	EReference getMarketIndex_SettleCalendar();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.HolidayCalendarEntry <em>Holiday Calendar Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Holiday Calendar Entry</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.HolidayCalendarEntry
+	 * @generated
+	 */
+	EClass getHolidayCalendarEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.HolidayCalendarEntry#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.HolidayCalendarEntry#getDate()
+	 * @see #getHolidayCalendarEntry()
+	 * @generated
+	 */
+	EAttribute getHolidayCalendarEntry_Date();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.HolidayCalendarEntry#getComment <em>Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Comment</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.HolidayCalendarEntry#getComment()
+	 * @see #getHolidayCalendarEntry()
+	 * @generated
+	 */
+	EAttribute getHolidayCalendarEntry_Comment();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.HolidayCalendar <em>Holiday Calendar</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Holiday Calendar</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.HolidayCalendar
+	 * @generated
+	 */
+	EClass getHolidayCalendar();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.HolidayCalendar#getEntries <em>Entries</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Entries</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.HolidayCalendar#getEntries()
+	 * @see #getHolidayCalendar()
+	 * @generated
+	 */
+	EReference getHolidayCalendar_Entries();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.HolidayCalendar#getDescription <em>Description</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Description</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.HolidayCalendar#getDescription()
+	 * @see #getHolidayCalendar()
+	 * @generated
+	 */
+	EAttribute getHolidayCalendar_Description();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.SettleStrategy <em>Settle Strategy</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Settle Strategy</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SettleStrategy
+	 * @generated
+	 */
+	EClass getSettleStrategy();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getDayOfTheMonth <em>Day Of The Month</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Day Of The Month</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SettleStrategy#getDayOfTheMonth()
+	 * @see #getSettleStrategy()
+	 * @generated
+	 */
+	EAttribute getSettleStrategy_DayOfTheMonth();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#isLastDayOfTheMonth <em>Last Day Of The Month</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Last Day Of The Month</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SettleStrategy#isLastDayOfTheMonth()
+	 * @see #getSettleStrategy()
+	 * @generated
+	 */
+	EAttribute getSettleStrategy_LastDayOfTheMonth();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#isUseCalendarMonth <em>Use Calendar Month</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Use Calendar Month</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SettleStrategy#isUseCalendarMonth()
+	 * @see #getSettleStrategy()
+	 * @generated
+	 */
+	EAttribute getSettleStrategy_UseCalendarMonth();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettlePeriod <em>Settle Period</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Settle Period</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SettleStrategy#getSettlePeriod()
+	 * @see #getSettleStrategy()
+	 * @generated
+	 */
+	EAttribute getSettleStrategy_SettlePeriod();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettlePeriodUnit <em>Settle Period Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Settle Period Unit</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SettleStrategy#getSettlePeriodUnit()
+	 * @see #getSettleStrategy()
+	 * @generated
+	 */
+	EAttribute getSettleStrategy_SettlePeriodUnit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettleStartMonthsPrior <em>Settle Start Months Prior</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Settle Start Months Prior</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SettleStrategy#getSettleStartMonthsPrior()
+	 * @see #getSettleStrategy()
+	 * @generated
+	 */
+	EAttribute getSettleStrategy_SettleStartMonthsPrior();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -2728,6 +3198,30 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PRICING_MODEL__SETTLED_PRICES = eINSTANCE.getPricingModel_SettledPrices();
+
+		/**
+		 * The meta object literal for the '<em><b>Market Indices</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRICING_MODEL__MARKET_INDICES = eINSTANCE.getPricingModel_MarketIndices();
+
+		/**
+		 * The meta object literal for the '<em><b>Holiday Calendars</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRICING_MODEL__HOLIDAY_CALENDARS = eINSTANCE.getPricingModel_HolidayCalendars();
+
+		/**
+		 * The meta object literal for the '<em><b>Settle Strategies</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRICING_MODEL__SETTLE_STRATEGIES = eINSTANCE.getPricingModel_SettleStrategies();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.DataIndexImpl <em>Data Index</em>}' class.
@@ -3442,6 +3936,14 @@ public interface PricingPackage extends EPackage {
 		EClass COMMODITY_CURVE = eINSTANCE.getCommodityCurve();
 
 		/**
+		 * The meta object literal for the '<em><b>Market Index</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMMODITY_CURVE__MARKET_INDEX = eINSTANCE.getCommodityCurve_MarketIndex();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CharterCurveImpl <em>Charter Curve</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3470,6 +3972,135 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EClass CURRENCY_CURVE = eINSTANCE.getCurrencyCurve();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl <em>Market Index</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getMarketIndex()
+		 * @generated
+		 */
+		EClass MARKET_INDEX = eINSTANCE.getMarketIndex();
+
+		/**
+		 * The meta object literal for the '<em><b>Settle Calendar</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MARKET_INDEX__SETTLE_CALENDAR = eINSTANCE.getMarketIndex_SettleCalendar();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.HolidayCalendarEntryImpl <em>Holiday Calendar Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.HolidayCalendarEntryImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getHolidayCalendarEntry()
+		 * @generated
+		 */
+		EClass HOLIDAY_CALENDAR_ENTRY = eINSTANCE.getHolidayCalendarEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HOLIDAY_CALENDAR_ENTRY__DATE = eINSTANCE.getHolidayCalendarEntry_Date();
+
+		/**
+		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HOLIDAY_CALENDAR_ENTRY__COMMENT = eINSTANCE.getHolidayCalendarEntry_Comment();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.HolidayCalendarImpl <em>Holiday Calendar</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.HolidayCalendarImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getHolidayCalendar()
+		 * @generated
+		 */
+		EClass HOLIDAY_CALENDAR = eINSTANCE.getHolidayCalendar();
+
+		/**
+		 * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference HOLIDAY_CALENDAR__ENTRIES = eINSTANCE.getHolidayCalendar_Entries();
+
+		/**
+		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HOLIDAY_CALENDAR__DESCRIPTION = eINSTANCE.getHolidayCalendar_Description();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl <em>Settle Strategy</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSettleStrategy()
+		 * @generated
+		 */
+		EClass SETTLE_STRATEGY = eINSTANCE.getSettleStrategy();
+
+		/**
+		 * The meta object literal for the '<em><b>Day Of The Month</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SETTLE_STRATEGY__DAY_OF_THE_MONTH = eINSTANCE.getSettleStrategy_DayOfTheMonth();
+
+		/**
+		 * The meta object literal for the '<em><b>Last Day Of The Month</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH = eINSTANCE.getSettleStrategy_LastDayOfTheMonth();
+
+		/**
+		 * The meta object literal for the '<em><b>Use Calendar Month</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SETTLE_STRATEGY__USE_CALENDAR_MONTH = eINSTANCE.getSettleStrategy_UseCalendarMonth();
+
+		/**
+		 * The meta object literal for the '<em><b>Settle Period</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SETTLE_STRATEGY__SETTLE_PERIOD = eINSTANCE.getSettleStrategy_SettlePeriod();
+
+		/**
+		 * The meta object literal for the '<em><b>Settle Period Unit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SETTLE_STRATEGY__SETTLE_PERIOD_UNIT = eINSTANCE.getSettleStrategy_SettlePeriodUnit();
+
+		/**
+		 * The meta object literal for the '<em><b>Settle Start Months Prior</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR = eINSTANCE.getSettleStrategy_SettleStartMonthsPrior();
+
 
 	}
 

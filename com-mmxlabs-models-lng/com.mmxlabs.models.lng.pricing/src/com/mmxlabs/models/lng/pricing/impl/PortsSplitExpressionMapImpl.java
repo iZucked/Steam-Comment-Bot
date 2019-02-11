@@ -110,6 +110,7 @@ public class PortsSplitExpressionMapImpl extends MMXObjectImpl implements PortsS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<APortSet<Port>> getPorts() {
 		if (ports == null) {
 			ports = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, PricingPackage.PORTS_SPLIT_EXPRESSION_MAP__PORTS);
@@ -122,6 +123,7 @@ public class PortsSplitExpressionMapImpl extends MMXObjectImpl implements PortsS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getExpression1() {
 		return expression1;
 	}
@@ -131,6 +133,7 @@ public class PortsSplitExpressionMapImpl extends MMXObjectImpl implements PortsS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setExpression1(String newExpression1) {
 		String oldExpression1 = expression1;
 		expression1 = newExpression1;
@@ -143,6 +146,7 @@ public class PortsSplitExpressionMapImpl extends MMXObjectImpl implements PortsS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getExpression2() {
 		return expression2;
 	}
@@ -152,6 +156,7 @@ public class PortsSplitExpressionMapImpl extends MMXObjectImpl implements PortsS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setExpression2(String newExpression2) {
 		String oldExpression2 = expression2;
 		expression2 = newExpression2;

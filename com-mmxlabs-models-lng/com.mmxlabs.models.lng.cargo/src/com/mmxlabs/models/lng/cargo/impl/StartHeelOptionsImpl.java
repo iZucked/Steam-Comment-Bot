@@ -138,6 +138,7 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getCvValue() {
 		return cvValue;
 	}
@@ -147,6 +148,7 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCvValue(double newCvValue) {
 		double oldCvValue = cvValue;
 		cvValue = newCvValue;
@@ -159,6 +161,7 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getMinVolumeAvailable() {
 		return minVolumeAvailable;
 	}
@@ -168,6 +171,7 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinVolumeAvailable(double newMinVolumeAvailable) {
 		double oldMinVolumeAvailable = minVolumeAvailable;
 		minVolumeAvailable = newMinVolumeAvailable;
@@ -180,6 +184,7 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getMaxVolumeAvailable() {
 		return maxVolumeAvailable;
 	}
@@ -189,6 +194,7 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxVolumeAvailable(double newMaxVolumeAvailable) {
 		double oldMaxVolumeAvailable = maxVolumeAvailable;
 		maxVolumeAvailable = newMaxVolumeAvailable;
@@ -201,6 +207,7 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getPriceExpression() {
 		return priceExpression;
 	}
@@ -210,6 +217,7 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPriceExpression(String newPriceExpression) {
 		String oldPriceExpression = priceExpression;
 		priceExpression = newPriceExpression;

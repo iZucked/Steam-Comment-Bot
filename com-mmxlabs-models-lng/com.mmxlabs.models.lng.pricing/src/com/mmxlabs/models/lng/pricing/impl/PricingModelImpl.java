@@ -19,8 +19,11 @@ import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
+import com.mmxlabs.models.lng.pricing.HolidayCalendar;
+import com.mmxlabs.models.lng.pricing.MarketIndex;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
@@ -39,6 +42,9 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getConversionFactors <em>Conversion Factors</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getMarketCurveDataVersion <em>Market Curve Data Version</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getSettledPrices <em>Settled Prices</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getMarketIndices <em>Market Indices</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getHolidayCalendars <em>Holiday Calendars</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getSettleStrategies <em>Settle Strategies</em>}</li>
  * </ul>
  *
  * @generated
@@ -125,6 +131,36 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	protected EList<DatePointContainer> settledPrices;
 
 	/**
+	 * The cached value of the '{@link #getMarketIndices() <em>Market Indices</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMarketIndices()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<MarketIndex> marketIndices;
+
+	/**
+	 * The cached value of the '{@link #getHolidayCalendars() <em>Holiday Calendars</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHolidayCalendars()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<HolidayCalendar> holidayCalendars;
+
+	/**
+	 * The cached value of the '{@link #getSettleStrategies() <em>Settle Strategies</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSettleStrategies()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<SettleStrategy> settleStrategies;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -148,54 +184,7 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<CurrencyCurve> getCurrencyCurves() {
-		if (currencyCurves == null) {
-			currencyCurves = new EObjectContainmentEList<CurrencyCurve>(CurrencyCurve.class, this, PricingPackage.PRICING_MODEL__CURRENCY_CURVES);
-		}
-		return currencyCurves;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<CommodityCurve> getCommodityCurves() {
-		if (commodityCurves == null) {
-			commodityCurves = new EObjectContainmentEList<CommodityCurve>(CommodityCurve.class, this, PricingPackage.PRICING_MODEL__COMMODITY_CURVES);
-		}
-		return commodityCurves;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<CharterCurve> getCharterCurves() {
-		if (charterCurves == null) {
-			charterCurves = new EObjectContainmentEList<CharterCurve>(CharterCurve.class, this, PricingPackage.PRICING_MODEL__CHARTER_CURVES);
-		}
-		return charterCurves;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<BunkerFuelCurve> getBunkerFuelCurves() {
-		if (bunkerFuelCurves == null) {
-			bunkerFuelCurves = new EObjectContainmentEList<BunkerFuelCurve>(BunkerFuelCurve.class, this, PricingPackage.PRICING_MODEL__BUNKER_FUEL_CURVES);
-		}
-		return bunkerFuelCurves;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@Override
 	public EList<UnitConversion> getConversionFactors() {
 		if (conversionFactors == null) {
 			conversionFactors = new EObjectContainmentEList<UnitConversion>(UnitConversion.class, this, PricingPackage.PRICING_MODEL__CONVERSION_FACTORS);
@@ -208,6 +197,7 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getMarketCurveDataVersion() {
 		return marketCurveDataVersion;
 	}
@@ -217,6 +207,7 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMarketCurveDataVersion(String newMarketCurveDataVersion) {
 		String oldMarketCurveDataVersion = marketCurveDataVersion;
 		marketCurveDataVersion = newMarketCurveDataVersion;
@@ -229,11 +220,51 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<DatePointContainer> getSettledPrices() {
 		if (settledPrices == null) {
 			settledPrices = new EObjectContainmentEList<DatePointContainer>(DatePointContainer.class, this, PricingPackage.PRICING_MODEL__SETTLED_PRICES);
 		}
 		return settledPrices;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<MarketIndex> getMarketIndices() {
+		if (marketIndices == null) {
+			marketIndices = new EObjectContainmentEList<MarketIndex>(MarketIndex.class, this, PricingPackage.PRICING_MODEL__MARKET_INDICES);
+		}
+		return marketIndices;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<HolidayCalendar> getHolidayCalendars() {
+		if (holidayCalendars == null) {
+			holidayCalendars = new EObjectContainmentEList<HolidayCalendar>(HolidayCalendar.class, this, PricingPackage.PRICING_MODEL__HOLIDAY_CALENDARS);
+		}
+		return holidayCalendars;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<SettleStrategy> getSettleStrategies() {
+		if (settleStrategies == null) {
+			settleStrategies = new EObjectContainmentEList<SettleStrategy>(SettleStrategy.class, this, PricingPackage.PRICING_MODEL__SETTLE_STRATEGIES);
+		}
+		return settleStrategies;
 	}
 
 	/**
@@ -256,6 +287,12 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return ((InternalEList<?>)getConversionFactors()).basicRemove(otherEnd, msgs);
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
 				return ((InternalEList<?>)getSettledPrices()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PRICING_MODEL__MARKET_INDICES:
+				return ((InternalEList<?>)getMarketIndices()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PRICING_MODEL__HOLIDAY_CALENDARS:
+				return ((InternalEList<?>)getHolidayCalendars()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PRICING_MODEL__SETTLE_STRATEGIES:
+				return ((InternalEList<?>)getSettleStrategies()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -282,6 +319,12 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return getMarketCurveDataVersion();
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
 				return getSettledPrices();
+			case PricingPackage.PRICING_MODEL__MARKET_INDICES:
+				return getMarketIndices();
+			case PricingPackage.PRICING_MODEL__HOLIDAY_CALENDARS:
+				return getHolidayCalendars();
+			case PricingPackage.PRICING_MODEL__SETTLE_STRATEGIES:
+				return getSettleStrategies();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -322,6 +365,18 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				getSettledPrices().clear();
 				getSettledPrices().addAll((Collection<? extends DatePointContainer>)newValue);
 				return;
+			case PricingPackage.PRICING_MODEL__MARKET_INDICES:
+				getMarketIndices().clear();
+				getMarketIndices().addAll((Collection<? extends MarketIndex>)newValue);
+				return;
+			case PricingPackage.PRICING_MODEL__HOLIDAY_CALENDARS:
+				getHolidayCalendars().clear();
+				getHolidayCalendars().addAll((Collection<? extends HolidayCalendar>)newValue);
+				return;
+			case PricingPackage.PRICING_MODEL__SETTLE_STRATEGIES:
+				getSettleStrategies().clear();
+				getSettleStrategies().addAll((Collection<? extends SettleStrategy>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -355,6 +410,15 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
 				getSettledPrices().clear();
 				return;
+			case PricingPackage.PRICING_MODEL__MARKET_INDICES:
+				getMarketIndices().clear();
+				return;
+			case PricingPackage.PRICING_MODEL__HOLIDAY_CALENDARS:
+				getHolidayCalendars().clear();
+				return;
+			case PricingPackage.PRICING_MODEL__SETTLE_STRATEGIES:
+				getSettleStrategies().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -381,6 +445,12 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return MARKET_CURVE_DATA_VERSION_EDEFAULT == null ? marketCurveDataVersion != null : !MARKET_CURVE_DATA_VERSION_EDEFAULT.equals(marketCurveDataVersion);
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
 				return settledPrices != null && !settledPrices.isEmpty();
+			case PricingPackage.PRICING_MODEL__MARKET_INDICES:
+				return marketIndices != null && !marketIndices.isEmpty();
+			case PricingPackage.PRICING_MODEL__HOLIDAY_CALENDARS:
+				return holidayCalendars != null && !holidayCalendars.isEmpty();
+			case PricingPackage.PRICING_MODEL__SETTLE_STRATEGIES:
+				return settleStrategies != null && !settleStrategies.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -399,6 +469,30 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 		result.append(marketCurveDataVersion);
 		result.append(')');
 		return result.toString();
+	}
+
+	@Override
+	public EList<CurrencyCurve> getCurrencyCurves() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EList<CommodityCurve> getCommodityCurves() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EList<CharterCurve> getCharterCurves() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EList<BunkerFuelCurve> getBunkerFuelCurves() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 } // end of PricingModelImpl

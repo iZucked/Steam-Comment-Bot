@@ -62,6 +62,7 @@ public class CargoGroupImpl extends NamedObjectImpl implements CargoGroup {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Cargo> getCargoes() {
 		if (cargoes == null) {
 			cargoes = new EObjectResolvingEList<Cargo>(Cargo.class, this, CargoPackage.CARGO_GROUP__CARGOES);

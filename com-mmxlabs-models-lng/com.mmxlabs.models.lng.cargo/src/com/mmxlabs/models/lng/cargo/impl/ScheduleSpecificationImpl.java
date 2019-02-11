@@ -96,6 +96,7 @@ public class ScheduleSpecificationImpl extends EObjectImpl implements ScheduleSp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VesselScheduleSpecification> getVesselScheduleSpecifications() {
 		if (vesselScheduleSpecifications == null) {
 			vesselScheduleSpecifications = new EObjectContainmentEList.Resolving<VesselScheduleSpecification>(VesselScheduleSpecification.class, this, CargoPackage.SCHEDULE_SPECIFICATION__VESSEL_SCHEDULE_SPECIFICATIONS);
@@ -108,6 +109,7 @@ public class ScheduleSpecificationImpl extends EObjectImpl implements ScheduleSp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<NonShippedCargoSpecification> getNonShippedCargoSpecifications() {
 		if (nonShippedCargoSpecifications == null) {
 			nonShippedCargoSpecifications = new EObjectContainmentEList.Resolving<NonShippedCargoSpecification>(NonShippedCargoSpecification.class, this, CargoPackage.SCHEDULE_SPECIFICATION__NON_SHIPPED_CARGO_SPECIFICATIONS);
@@ -120,6 +122,7 @@ public class ScheduleSpecificationImpl extends EObjectImpl implements ScheduleSp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ScheduleSpecificationEvent> getOpenEvents() {
 		if (openEvents == null) {
 			openEvents = new EObjectContainmentEList.Resolving<ScheduleSpecificationEvent>(ScheduleSpecificationEvent.class, this, CargoPackage.SCHEDULE_SPECIFICATION__OPEN_EVENTS);

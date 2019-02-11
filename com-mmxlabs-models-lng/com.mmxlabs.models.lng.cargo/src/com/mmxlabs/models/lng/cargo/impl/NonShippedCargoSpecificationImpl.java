@@ -72,6 +72,7 @@ public class NonShippedCargoSpecificationImpl extends EObjectImpl implements Non
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<SlotSpecification> getSlotSpecifications() {
 		if (slotSpecifications == null) {
 			slotSpecifications = new EObjectContainmentEList.Resolving<SlotSpecification>(SlotSpecification.class, this, CargoPackage.NON_SHIPPED_CARGO_SPECIFICATION__SLOT_SPECIFICATIONS);

@@ -118,6 +118,7 @@ public class InventoryCapacityRowImpl extends EObjectImpl implements InventoryCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getDate() {
 		return date;
 	}
@@ -127,6 +128,7 @@ public class InventoryCapacityRowImpl extends EObjectImpl implements InventoryCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDate(LocalDate newDate) {
 		LocalDate oldDate = date;
 		date = newDate;
@@ -139,6 +141,7 @@ public class InventoryCapacityRowImpl extends EObjectImpl implements InventoryCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinVolume() {
 		return minVolume;
 	}
@@ -148,6 +151,7 @@ public class InventoryCapacityRowImpl extends EObjectImpl implements InventoryCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinVolume(int newMinVolume) {
 		int oldMinVolume = minVolume;
 		minVolume = newMinVolume;
@@ -160,6 +164,7 @@ public class InventoryCapacityRowImpl extends EObjectImpl implements InventoryCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaxVolume() {
 		return maxVolume;
 	}
@@ -169,6 +174,7 @@ public class InventoryCapacityRowImpl extends EObjectImpl implements InventoryCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxVolume(int newMaxVolume) {
 		int oldMaxVolume = maxVolume;
 		maxVolume = newMaxVolume;

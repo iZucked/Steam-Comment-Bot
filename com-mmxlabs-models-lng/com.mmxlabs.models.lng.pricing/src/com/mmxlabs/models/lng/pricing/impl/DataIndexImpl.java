@@ -65,6 +65,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<IndexPoint<Value>> getPoints() {
 		if (points == null) {
 			points = new EObjectContainmentEList<IndexPoint<Value>>(IndexPoint.class, this, PricingPackage.DATA_INDEX__POINTS);

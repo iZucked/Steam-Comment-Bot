@@ -187,6 +187,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isFOBSale() {
 		return fobSale;
 	}
@@ -196,6 +197,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFOBSale(boolean newFOBSale) {
 		boolean oldFOBSale = fobSale;
 		fobSale = newFOBSale;
@@ -208,6 +210,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoDeliveryType getPurchaseDeliveryType() {
 		return purchaseDeliveryType;
 	}
@@ -217,6 +220,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPurchaseDeliveryType(CargoDeliveryType newPurchaseDeliveryType) {
 		CargoDeliveryType oldPurchaseDeliveryType = purchaseDeliveryType;
 		purchaseDeliveryType = newPurchaseDeliveryType == null ? PURCHASE_DELIVERY_TYPE_EDEFAULT : newPurchaseDeliveryType;
@@ -231,6 +235,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPurchaseDeliveryType() {
 		CargoDeliveryType oldPurchaseDeliveryType = purchaseDeliveryType;
 		boolean oldPurchaseDeliveryTypeESet = purchaseDeliveryTypeESet;
@@ -245,6 +250,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPurchaseDeliveryType() {
 		return purchaseDeliveryTypeESet;
 	}
@@ -254,6 +260,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LoadSlot getTransferTo() {
 		if (transferTo != null && transferTo.eIsProxy()) {
 			InternalEObject oldTransferTo = (InternalEObject)transferTo;
@@ -295,6 +302,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTransferTo(LoadSlot newTransferTo) {
 		if (newTransferTo != transferTo) {
 			NotificationChain msgs = null;
@@ -314,6 +322,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getMinCvValue() {
 		return minCvValue;
 	}
@@ -323,6 +332,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinCvValue(double newMinCvValue) {
 		double oldMinCvValue = minCvValue;
 		minCvValue = newMinCvValue;
@@ -337,6 +347,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMinCvValue() {
 		double oldMinCvValue = minCvValue;
 		boolean oldMinCvValueESet = minCvValueESet;
@@ -351,6 +362,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMinCvValue() {
 		return minCvValueESet;
 	}
@@ -360,6 +372,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getMaxCvValue() {
 		return maxCvValue;
 	}
@@ -369,6 +382,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxCvValue(double newMaxCvValue) {
 		double oldMaxCvValue = maxCvValue;
 		maxCvValue = newMaxCvValue;
@@ -383,6 +397,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMaxCvValue() {
 		double oldMaxCvValue = maxCvValue;
 		boolean oldMaxCvValueESet = maxCvValueESet;
@@ -397,6 +412,7 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMaxCvValue() {
 		return maxCvValueESet;
 	}

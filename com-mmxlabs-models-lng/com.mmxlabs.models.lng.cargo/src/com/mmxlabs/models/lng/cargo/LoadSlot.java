@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/featureOverride"
  * @generated
  */
 public interface LoadSlot extends Slot<PurchaseContract> {

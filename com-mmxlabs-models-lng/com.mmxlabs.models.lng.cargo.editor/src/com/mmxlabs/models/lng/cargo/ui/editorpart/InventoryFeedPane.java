@@ -32,20 +32,17 @@ import com.mmxlabs.rcp.common.handlers.TodayHandler;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class InventoryFeedPane extends ScenarioTableViewerPane {
-
-	private final IScenarioEditingLocation jointModelEditor;
 	
 	private EventHandler todayHandler;
 	
 	public InventoryFeedPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
-		this.jointModelEditor = location;
 	}
 
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
-		final EditingDomain editingDomain = jointModelEditor.getEditingDomain();
+		final EditingDomain editingDomain = getEditingDomain();
 		
 		addTypicalColumn("Start", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_StartDate(), editingDomain));
 		addTypicalColumn("End", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_EndDate(), editingDomain));

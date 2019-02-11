@@ -134,6 +134,7 @@ public class SuezCanalTugBandImpl extends EObjectImpl implements SuezCanalTugBan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getTugs() {
 		return tugs;
 	}
@@ -143,6 +144,7 @@ public class SuezCanalTugBandImpl extends EObjectImpl implements SuezCanalTugBan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTugs(int newTugs) {
 		int oldTugs = tugs;
 		tugs = newTugs;
@@ -155,6 +157,7 @@ public class SuezCanalTugBandImpl extends EObjectImpl implements SuezCanalTugBan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getBandStart() {
 		return bandStart;
 	}
@@ -164,6 +167,7 @@ public class SuezCanalTugBandImpl extends EObjectImpl implements SuezCanalTugBan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBandStart(int newBandStart) {
 		int oldBandStart = bandStart;
 		bandStart = newBandStart;
@@ -178,6 +182,7 @@ public class SuezCanalTugBandImpl extends EObjectImpl implements SuezCanalTugBan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetBandStart() {
 		int oldBandStart = bandStart;
 		boolean oldBandStartESet = bandStartESet;
@@ -192,6 +197,7 @@ public class SuezCanalTugBandImpl extends EObjectImpl implements SuezCanalTugBan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetBandStart() {
 		return bandStartESet;
 	}
@@ -201,6 +207,7 @@ public class SuezCanalTugBandImpl extends EObjectImpl implements SuezCanalTugBan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getBandEnd() {
 		return bandEnd;
 	}
@@ -210,6 +217,7 @@ public class SuezCanalTugBandImpl extends EObjectImpl implements SuezCanalTugBan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBandEnd(int newBandEnd) {
 		int oldBandEnd = bandEnd;
 		bandEnd = newBandEnd;
@@ -224,6 +232,7 @@ public class SuezCanalTugBandImpl extends EObjectImpl implements SuezCanalTugBan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetBandEnd() {
 		int oldBandEnd = bandEnd;
 		boolean oldBandEndESet = bandEndESet;
@@ -238,6 +247,7 @@ public class SuezCanalTugBandImpl extends EObjectImpl implements SuezCanalTugBan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetBandEnd() {
 		return bandEndESet;
 	}

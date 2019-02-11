@@ -203,6 +203,7 @@ public interface PricingFactory extends EFactory {
 	 */
 	DatePoint createDatePoint();
 
+	
 	/**
 	 * Returns a new object of class '<em>Year Month Point Container</em>'.
 	 * <!-- begin-user-doc -->
@@ -256,6 +257,42 @@ public interface PricingFactory extends EFactory {
 	 * @generated
 	 */
 	CurrencyCurve createCurrencyCurve();
+
+	/**
+	 * Returns a new object of class '<em>Market Index</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Market Index</em>'.
+	 * @generated
+	 */
+	MarketIndex createMarketIndex();
+
+	/**
+	 * Returns a new object of class '<em>Holiday Calendar Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Holiday Calendar Entry</em>'.
+	 * @generated
+	 */
+	HolidayCalendarEntry createHolidayCalendarEntry();
+
+	/**
+	 * Returns a new object of class '<em>Holiday Calendar</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Holiday Calendar</em>'.
+	 * @generated
+	 */
+	HolidayCalendar createHolidayCalendar();
+
+	/**
+	 * Returns a new object of class '<em>Settle Strategy</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Settle Strategy</em>'.
+	 * @generated
+	 */
+	SettleStrategy createSettleStrategy();
 
 	/**
 	 * Returns the package supported by this factory.

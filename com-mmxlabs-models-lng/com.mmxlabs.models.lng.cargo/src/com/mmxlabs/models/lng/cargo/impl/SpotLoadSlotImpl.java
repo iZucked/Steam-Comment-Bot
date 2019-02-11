@@ -70,6 +70,7 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotMarket getMarket() {
 		if (market != null && market.eIsProxy()) {
 			InternalEObject oldMarket = (InternalEObject)market;
@@ -96,6 +97,7 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMarket(SpotMarket newMarket) {
 		SpotMarket oldMarket = market;
 		market = newMarket;

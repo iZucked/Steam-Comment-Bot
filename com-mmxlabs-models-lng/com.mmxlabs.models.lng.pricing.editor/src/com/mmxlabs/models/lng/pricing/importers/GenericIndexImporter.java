@@ -23,13 +23,18 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.csv.IDeferment;
 import com.mmxlabs.common.csv.IExportContext;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.datetime.importers.LocalDateAttributeImporter;
 import com.mmxlabs.models.datetime.importers.YearMonthAttributeImporter;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.MarketIndex;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
@@ -51,6 +56,7 @@ public abstract class GenericIndexImporter<T extends AbstractYearMonthCurve> ext
 	protected static final String UNITS = "units";
 	protected static final String CURRENCY_UNITS = "currency_units";
 	protected static final String VOLUME_UNITS = "volume_units";
+	protected static final String MARKET_INDEX = "market_index";
 
 	protected final YearMonthAttributeImporter dateParser = new YearMonthAttributeImporter();
 	protected final LocalDateAttributeImporter dateParser2 = new LocalDateAttributeImporter();
@@ -91,6 +97,13 @@ public abstract class GenericIndexImporter<T extends AbstractYearMonthCurve> ext
 		result.put(CURRENCY_UNITS, target.getCurrencyUnit());
 		result.put(EXPRESSION, target.getExpression());
 		result.put(TYPE_KEY, TYPE_VALUE);
+
+		if (target instanceof CommodityCurve) {
+			final CommodityCurve cc = (CommodityCurve) target;
+			if (cc.getMarketIndex() == null) return result;
+			result.put(MARKET_INDEX, cc.getMarketIndex().getName());
+		}
+
 		return result;
 	}
 
@@ -180,6 +193,27 @@ public abstract class GenericIndexImporter<T extends AbstractYearMonthCurve> ext
 		} else {
 
 			result.getPoints().addAll(importDatePoints(row, getIgnoreSet(NAME, TYPE_KEY, UNITS, VOLUME_UNITS, CURRENCY_UNITS, EXPRESSION), context));
+		}
+		if (row.containsKey(MARKET_INDEX)) {
+			if (result instanceof CommodityCurve) {
+				context.doLater(new IDeferment() {
+
+					@Override
+					public void run(@NonNull IImportContext importContext) {
+						final CommodityCurve ci = (CommodityCurve) result;
+						final IMMXImportContext context = (IMMXImportContext) importContext;
+						final NamedObject genericMarketIndex = context.getNamedObject(row.get(MARKET_INDEX), PricingPackage.eINSTANCE.getMarketIndex());
+						if (genericMarketIndex == null) return;
+						final MarketIndex mi = (MarketIndex) genericMarketIndex;
+						ci.setMarketIndex(mi);
+					}
+
+					@Override
+					public int getStage() {
+						return IMMXImportContext.STAGE_RESOLVE_CROSSREFERENCES;
+					}
+				});
+			}
 		}
 
 		context.registerNamedObject(result);

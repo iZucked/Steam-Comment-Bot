@@ -97,6 +97,7 @@ public class YearMonthPointContainerImpl extends UUIDObjectImpl implements YearM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -106,6 +107,7 @@ public class YearMonthPointContainerImpl extends UUIDObjectImpl implements YearM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -118,6 +120,7 @@ public class YearMonthPointContainerImpl extends UUIDObjectImpl implements YearM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<YearMonthPoint> getPoints() {
 		if (points == null) {
 			points = new EObjectContainmentEList<YearMonthPoint>(YearMonthPoint.class, this, PricingPackage.YEAR_MONTH_POINT_CONTAINER__POINTS);

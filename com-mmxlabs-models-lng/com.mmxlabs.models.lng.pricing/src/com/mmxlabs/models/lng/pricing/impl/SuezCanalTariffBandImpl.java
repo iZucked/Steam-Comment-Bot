@@ -155,6 +155,7 @@ public class SuezCanalTariffBandImpl extends EObjectImpl implements SuezCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getLadenTariff() {
 		return ladenTariff;
 	}
@@ -164,6 +165,7 @@ public class SuezCanalTariffBandImpl extends EObjectImpl implements SuezCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLadenTariff(double newLadenTariff) {
 		double oldLadenTariff = ladenTariff;
 		ladenTariff = newLadenTariff;
@@ -176,6 +178,7 @@ public class SuezCanalTariffBandImpl extends EObjectImpl implements SuezCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getBallastTariff() {
 		return ballastTariff;
 	}
@@ -185,6 +188,7 @@ public class SuezCanalTariffBandImpl extends EObjectImpl implements SuezCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBallastTariff(double newBallastTariff) {
 		double oldBallastTariff = ballastTariff;
 		ballastTariff = newBallastTariff;
@@ -197,6 +201,7 @@ public class SuezCanalTariffBandImpl extends EObjectImpl implements SuezCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getBandStart() {
 		return bandStart;
 	}
@@ -206,6 +211,7 @@ public class SuezCanalTariffBandImpl extends EObjectImpl implements SuezCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBandStart(int newBandStart) {
 		int oldBandStart = bandStart;
 		bandStart = newBandStart;
@@ -220,6 +226,7 @@ public class SuezCanalTariffBandImpl extends EObjectImpl implements SuezCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetBandStart() {
 		int oldBandStart = bandStart;
 		boolean oldBandStartESet = bandStartESet;
@@ -234,6 +241,7 @@ public class SuezCanalTariffBandImpl extends EObjectImpl implements SuezCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetBandStart() {
 		return bandStartESet;
 	}
@@ -243,6 +251,7 @@ public class SuezCanalTariffBandImpl extends EObjectImpl implements SuezCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getBandEnd() {
 		return bandEnd;
 	}
@@ -252,6 +261,7 @@ public class SuezCanalTariffBandImpl extends EObjectImpl implements SuezCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBandEnd(int newBandEnd) {
 		int oldBandEnd = bandEnd;
 		bandEnd = newBandEnd;
@@ -266,6 +276,7 @@ public class SuezCanalTariffBandImpl extends EObjectImpl implements SuezCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetBandEnd() {
 		int oldBandEnd = bandEnd;
 		boolean oldBandEndESet = bandEndESet;
@@ -280,6 +291,7 @@ public class SuezCanalTariffBandImpl extends EObjectImpl implements SuezCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetBandEnd() {
 		return bandEndESet;
 	}

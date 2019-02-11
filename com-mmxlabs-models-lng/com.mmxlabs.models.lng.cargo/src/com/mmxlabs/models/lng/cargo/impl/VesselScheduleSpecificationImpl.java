@@ -108,6 +108,7 @@ public class VesselScheduleSpecificationImpl extends EObjectImpl implements Vess
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselAssignmentType getVesselAllocation() {
 		if (vesselAllocation != null && vesselAllocation.eIsProxy()) {
 			InternalEObject oldVesselAllocation = (InternalEObject)vesselAllocation;
@@ -134,6 +135,7 @@ public class VesselScheduleSpecificationImpl extends EObjectImpl implements Vess
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselAllocation(VesselAssignmentType newVesselAllocation) {
 		VesselAssignmentType oldVesselAllocation = vesselAllocation;
 		vesselAllocation = newVesselAllocation;
@@ -146,6 +148,7 @@ public class VesselScheduleSpecificationImpl extends EObjectImpl implements Vess
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSpotIndex() {
 		return spotIndex;
 	}
@@ -155,6 +158,7 @@ public class VesselScheduleSpecificationImpl extends EObjectImpl implements Vess
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpotIndex(int newSpotIndex) {
 		int oldSpotIndex = spotIndex;
 		spotIndex = newSpotIndex;
@@ -167,6 +171,7 @@ public class VesselScheduleSpecificationImpl extends EObjectImpl implements Vess
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ScheduleSpecificationEvent> getEvents() {
 		if (events == null) {
 			events = new EObjectContainmentEList.Resolving<ScheduleSpecificationEvent>(ScheduleSpecificationEvent.class, this, CargoPackage.VESSEL_SCHEDULE_SPECIFICATION__EVENTS);

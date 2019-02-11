@@ -66,6 +66,7 @@ public class CooldownPriceImpl extends PortsExpressionMapImpl implements Cooldow
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isLumpsum() {
 		return lumpsum;
 	}
@@ -75,6 +76,7 @@ public class CooldownPriceImpl extends PortsExpressionMapImpl implements Cooldow
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLumpsum(boolean newLumpsum) {
 		boolean oldLumpsum = lumpsum;
 		lumpsum = newLumpsum;

@@ -28,8 +28,11 @@ import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DatePoint;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
+import com.mmxlabs.models.lng.pricing.HolidayCalendar;
+import com.mmxlabs.models.lng.pricing.HolidayCalendarEntry;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.MarketIndex;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.PortCost;
@@ -40,6 +43,7 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
 import com.mmxlabs.models.lng.pricing.SuezCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.SuezCanalTugBand;
@@ -253,6 +257,34 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	private EClass currencyCurveEClass = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass marketIndexEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass holidayCalendarEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass holidayCalendarEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass settleStrategyEClass = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -325,51 +357,19 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPricingModel() {
 		return pricingModelEClass;
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getPricingModel_CurrencyCurves() {
-		return (EReference)pricingModelEClass.getEStructuralFeatures().get(0);
-	}
+	
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getPricingModel_CommodityCurves() {
-		return (EReference)pricingModelEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getPricingModel_CharterCurves() {
-		return (EReference)pricingModelEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getPricingModel_BunkerFuelCurves() {
-		return (EReference)pricingModelEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@Override
 	public EReference getPricingModel_ConversionFactors() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(4);
 	}
@@ -379,6 +379,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPricingModel_MarketCurveDataVersion() {
 		return (EAttribute)pricingModelEClass.getEStructuralFeatures().get(5);
 	}
@@ -388,6 +389,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPricingModel_SettledPrices() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(6);
 	}
@@ -397,6 +399,37 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EReference getPricingModel_MarketIndices() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPricingModel_HolidayCalendars() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPricingModel_SettleStrategies() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getDataIndex() {
 		return dataIndexEClass;
 	}
@@ -406,6 +439,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getDataIndex_Points() {
 		return (EReference)dataIndexEClass.getEStructuralFeatures().get(0);
 	}
@@ -415,6 +449,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDerivedIndex() {
 		return derivedIndexEClass;
 	}
@@ -424,6 +459,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDerivedIndex_Expression() {
 		return (EAttribute)derivedIndexEClass.getEStructuralFeatures().get(0);
 	}
@@ -433,6 +469,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getIndexPoint() {
 		return indexPointEClass;
 	}
@@ -442,6 +479,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getIndexPoint_Date() {
 		return (EAttribute)indexPointEClass.getEStructuralFeatures().get(0);
 	}
@@ -451,6 +489,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getIndexPoint_Value() {
 		return (EAttribute)indexPointEClass.getEStructuralFeatures().get(1);
 	}
@@ -460,24 +499,19 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getIndex() {
 		return indexEClass;
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getRouteCost() {
-		return routeCostEClass;
-	}
+	
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRouteCost_RouteOption() {
 		return (EAttribute)routeCostEClass.getEStructuralFeatures().get(0);
 	}
@@ -487,6 +521,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getRouteCost_Vessels() {
 		return (EReference)routeCostEClass.getEStructuralFeatures().get(1);
 	}
@@ -496,6 +531,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRouteCost_LadenCost() {
 		return (EAttribute)routeCostEClass.getEStructuralFeatures().get(2);
 	}
@@ -505,6 +541,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRouteCost_BallastCost() {
 		return (EAttribute)routeCostEClass.getEStructuralFeatures().get(3);
 	}
@@ -514,6 +551,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBaseFuelCost() {
 		return baseFuelCostEClass;
 	}
@@ -523,6 +561,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBaseFuelCost_Fuel() {
 		return (EReference)baseFuelCostEClass.getEStructuralFeatures().get(0);
 	}
@@ -532,6 +571,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBaseFuelCost_Expression() {
 		return (EAttribute)baseFuelCostEClass.getEStructuralFeatures().get(1);
 	}
@@ -541,6 +581,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPortCost() {
 		return portCostEClass;
 	}
@@ -550,6 +591,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortCost_Ports() {
 		return (EReference)portCostEClass.getEStructuralFeatures().get(0);
 	}
@@ -559,6 +601,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortCost_Entries() {
 		return (EReference)portCostEClass.getEStructuralFeatures().get(1);
 	}
@@ -568,6 +611,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPortCost_ReferenceCapacity() {
 		return (EAttribute)portCostEClass.getEStructuralFeatures().get(2);
 	}
@@ -577,6 +621,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPortCostEntry() {
 		return portCostEntryEClass;
 	}
@@ -586,6 +631,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPortCostEntry_Activity() {
 		return (EAttribute)portCostEntryEClass.getEStructuralFeatures().get(0);
 	}
@@ -595,6 +641,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPortCostEntry_Cost() {
 		return (EAttribute)portCostEntryEClass.getEStructuralFeatures().get(1);
 	}
@@ -604,6 +651,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCooldownPrice() {
 		return cooldownPriceEClass;
 	}
@@ -613,6 +661,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCooldownPrice_Lumpsum() {
 		return (EAttribute)cooldownPriceEClass.getEStructuralFeatures().get(0);
 	}
@@ -622,15 +671,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getCostModel() {
-		return costModelEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@Override
 	public EReference getCostModel_RouteCosts() {
 		return (EReference)costModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -640,6 +681,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCostModel_PortCosts() {
 		return (EReference)costModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -649,6 +691,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCostModel_CooldownCosts() {
 		return (EReference)costModelEClass.getEStructuralFeatures().get(2);
 	}
@@ -658,6 +701,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCostModel_BaseFuelCosts() {
 		return (EReference)costModelEClass.getEStructuralFeatures().get(3);
 	}
@@ -667,6 +711,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCostModel_PanamaCanalTariff() {
 		return (EReference)costModelEClass.getEStructuralFeatures().get(4);
 	}
@@ -676,6 +721,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCostModel_SuezCanalTariff() {
 		return (EReference)costModelEClass.getEStructuralFeatures().get(5);
 	}
@@ -685,6 +731,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPortsExpressionMap() {
 		return portsExpressionMapEClass;
 	}
@@ -694,6 +741,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortsExpressionMap_Ports() {
 		return (EReference)portsExpressionMapEClass.getEStructuralFeatures().get(0);
 	}
@@ -703,6 +751,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPortsExpressionMap_Expression() {
 		return (EAttribute)portsExpressionMapEClass.getEStructuralFeatures().get(1);
 	}
@@ -712,6 +761,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPortsSplitExpressionMap() {
 		return portsSplitExpressionMapEClass;
 	}
@@ -721,6 +771,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortsSplitExpressionMap_Ports() {
 		return (EReference)portsSplitExpressionMapEClass.getEStructuralFeatures().get(0);
 	}
@@ -730,6 +781,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPortsSplitExpressionMap_Expression1() {
 		return (EAttribute)portsSplitExpressionMapEClass.getEStructuralFeatures().get(1);
 	}
@@ -739,6 +791,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPortsSplitExpressionMap_Expression2() {
 		return (EAttribute)portsSplitExpressionMapEClass.getEStructuralFeatures().get(2);
 	}
@@ -748,6 +801,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPanamaCanalTariff() {
 		return panamaCanalTariffEClass;
 	}
@@ -757,6 +811,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPanamaCanalTariff_Bands() {
 		return (EReference)panamaCanalTariffEClass.getEStructuralFeatures().get(0);
 	}
@@ -766,6 +821,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPanamaCanalTariff_MarkupRate() {
 		return (EAttribute)panamaCanalTariffEClass.getEStructuralFeatures().get(1);
 	}
@@ -775,6 +831,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPanamaCanalTariffBand() {
 		return panamaCanalTariffBandEClass;
 	}
@@ -784,6 +841,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPanamaCanalTariffBand_LadenTariff() {
 		return (EAttribute)panamaCanalTariffBandEClass.getEStructuralFeatures().get(0);
 	}
@@ -793,6 +851,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPanamaCanalTariffBand_BallastTariff() {
 		return (EAttribute)panamaCanalTariffBandEClass.getEStructuralFeatures().get(1);
 	}
@@ -802,6 +861,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPanamaCanalTariffBand_BallastRoundtripTariff() {
 		return (EAttribute)panamaCanalTariffBandEClass.getEStructuralFeatures().get(2);
 	}
@@ -811,6 +871,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPanamaCanalTariffBand_BandStart() {
 		return (EAttribute)panamaCanalTariffBandEClass.getEStructuralFeatures().get(3);
 	}
@@ -820,6 +881,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPanamaCanalTariffBand_BandEnd() {
 		return (EAttribute)panamaCanalTariffBandEClass.getEStructuralFeatures().get(4);
 	}
@@ -829,6 +891,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSuezCanalTugBand() {
 		return suezCanalTugBandEClass;
 	}
@@ -838,6 +901,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSuezCanalTugBand_Tugs() {
 		return (EAttribute)suezCanalTugBandEClass.getEStructuralFeatures().get(0);
 	}
@@ -847,6 +911,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSuezCanalTugBand_BandStart() {
 		return (EAttribute)suezCanalTugBandEClass.getEStructuralFeatures().get(1);
 	}
@@ -856,6 +921,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSuezCanalTugBand_BandEnd() {
 		return (EAttribute)suezCanalTugBandEClass.getEStructuralFeatures().get(2);
 	}
@@ -865,6 +931,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSuezCanalTariff() {
 		return suezCanalTariffEClass;
 	}
@@ -874,6 +941,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSuezCanalTariff_Bands() {
 		return (EReference)suezCanalTariffEClass.getEStructuralFeatures().get(0);
 	}
@@ -883,6 +951,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSuezCanalTariff_TugBands() {
 		return (EReference)suezCanalTariffEClass.getEStructuralFeatures().get(1);
 	}
@@ -892,6 +961,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSuezCanalTariff_TugCost() {
 		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(2);
 	}
@@ -901,6 +971,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSuezCanalTariff_FixedCosts() {
 		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(3);
 	}
@@ -910,6 +981,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSuezCanalTariff_DiscountFactor() {
 		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(4);
 	}
@@ -919,6 +991,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSuezCanalTariff_SdrToUSD() {
 		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(5);
 	}
@@ -928,6 +1001,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSuezCanalTariffBand() {
 		return suezCanalTariffBandEClass;
 	}
@@ -937,6 +1011,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSuezCanalTariffBand_LadenTariff() {
 		return (EAttribute)suezCanalTariffBandEClass.getEStructuralFeatures().get(0);
 	}
@@ -946,6 +1021,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSuezCanalTariffBand_BallastTariff() {
 		return (EAttribute)suezCanalTariffBandEClass.getEStructuralFeatures().get(1);
 	}
@@ -955,6 +1031,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSuezCanalTariffBand_BandStart() {
 		return (EAttribute)suezCanalTariffBandEClass.getEStructuralFeatures().get(2);
 	}
@@ -964,6 +1041,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSuezCanalTariffBand_BandEnd() {
 		return (EAttribute)suezCanalTariffBandEClass.getEStructuralFeatures().get(3);
 	}
@@ -973,6 +1051,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getUnitConversion() {
 		return unitConversionEClass;
 	}
@@ -982,6 +1061,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitConversion_From() {
 		return (EAttribute)unitConversionEClass.getEStructuralFeatures().get(0);
 	}
@@ -991,6 +1071,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitConversion_To() {
 		return (EAttribute)unitConversionEClass.getEStructuralFeatures().get(1);
 	}
@@ -1000,6 +1081,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitConversion_Factor() {
 		return (EAttribute)unitConversionEClass.getEStructuralFeatures().get(2);
 	}
@@ -1009,6 +1091,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDatePointContainer() {
 		return datePointContainerEClass;
 	}
@@ -1018,6 +1101,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getDatePointContainer_Points() {
 		return (EReference)datePointContainerEClass.getEStructuralFeatures().get(0);
 	}
@@ -1027,6 +1111,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDatePoint() {
 		return datePointEClass;
 	}
@@ -1036,6 +1121,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDatePoint_Date() {
 		return (EAttribute)datePointEClass.getEStructuralFeatures().get(0);
 	}
@@ -1045,6 +1131,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDatePoint_Value() {
 		return (EAttribute)datePointEClass.getEStructuralFeatures().get(1);
 	}
@@ -1054,6 +1141,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getYearMonthPointContainer() {
 		return yearMonthPointContainerEClass;
 	}
@@ -1063,6 +1151,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getYearMonthPointContainer_Points() {
 		return (EReference)yearMonthPointContainerEClass.getEStructuralFeatures().get(0);
 	}
@@ -1072,6 +1161,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getYearMonthPoint() {
 		return yearMonthPointEClass;
 	}
@@ -1081,6 +1171,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getYearMonthPoint_Date() {
 		return (EAttribute)yearMonthPointEClass.getEStructuralFeatures().get(0);
 	}
@@ -1090,6 +1181,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getYearMonthPoint_Value() {
 		return (EAttribute)yearMonthPointEClass.getEStructuralFeatures().get(1);
 	}
@@ -1099,6 +1191,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getAbstractYearMonthCurve() {
 		return abstractYearMonthCurveEClass;
 	}
@@ -1108,6 +1201,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getAbstractYearMonthCurve_CurrencyUnit() {
 		return (EAttribute)abstractYearMonthCurveEClass.getEStructuralFeatures().get(0);
 	}
@@ -1117,6 +1211,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getAbstractYearMonthCurve_VolumeUnit() {
 		return (EAttribute)abstractYearMonthCurveEClass.getEStructuralFeatures().get(1);
 	}
@@ -1126,6 +1221,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getAbstractYearMonthCurve_Expression() {
 		return (EAttribute)abstractYearMonthCurveEClass.getEStructuralFeatures().get(2);
 	}
@@ -1135,6 +1231,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCommodityCurve() {
 		return commodityCurveEClass;
 	}
@@ -1144,6 +1241,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCharterCurve() {
 		return charterCurveEClass;
 	}
@@ -1153,6 +1251,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBunkerFuelCurve() {
 		return bunkerFuelCurveEClass;
 	}
@@ -1162,6 +1261,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCurrencyCurve() {
 		return currencyCurveEClass;
 	}
@@ -1171,6 +1271,87 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EClass getMarketIndex() {
+		return marketIndexEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getMarketIndex_SettleCalendar() {
+		return (EReference)marketIndexEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getHolidayCalendarEntry() {
+		return holidayCalendarEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getHolidayCalendarEntry_Date() {
+		return (EAttribute)holidayCalendarEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getHolidayCalendarEntry_Comment() {
+		return (EAttribute)holidayCalendarEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getHolidayCalendar() {
+		return holidayCalendarEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getHolidayCalendar_Entries() {
+		return (EReference)holidayCalendarEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getHolidayCalendar_Description() {
+		return (EAttribute)holidayCalendarEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public PricingFactory getPricingFactory() {
 		return (PricingFactory)getEFactoryInstance();
 	}
@@ -1202,6 +1383,9 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(pricingModelEClass, PRICING_MODEL__CONVERSION_FACTORS);
 		createEAttribute(pricingModelEClass, PRICING_MODEL__MARKET_CURVE_DATA_VERSION);
 		createEReference(pricingModelEClass, PRICING_MODEL__SETTLED_PRICES);
+		createEReference(pricingModelEClass, PRICING_MODEL__MARKET_INDICES);
+		createEReference(pricingModelEClass, PRICING_MODEL__HOLIDAY_CALENDARS);
+		createEReference(pricingModelEClass, PRICING_MODEL__SETTLE_STRATEGIES);
 
 		dataIndexEClass = createEClass(DATA_INDEX);
 		createEReference(dataIndexEClass, DATA_INDEX__POINTS);
@@ -1309,12 +1493,32 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEAttribute(abstractYearMonthCurveEClass, ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION);
 
 		commodityCurveEClass = createEClass(COMMODITY_CURVE);
+		createEReference(commodityCurveEClass, COMMODITY_CURVE__MARKET_INDEX);
 
 		charterCurveEClass = createEClass(CHARTER_CURVE);
 
 		bunkerFuelCurveEClass = createEClass(BUNKER_FUEL_CURVE);
 
 		currencyCurveEClass = createEClass(CURRENCY_CURVE);
+
+		marketIndexEClass = createEClass(MARKET_INDEX);
+		createEReference(marketIndexEClass, MARKET_INDEX__SETTLE_CALENDAR);
+
+		holidayCalendarEntryEClass = createEClass(HOLIDAY_CALENDAR_ENTRY);
+		createEAttribute(holidayCalendarEntryEClass, HOLIDAY_CALENDAR_ENTRY__DATE);
+		createEAttribute(holidayCalendarEntryEClass, HOLIDAY_CALENDAR_ENTRY__COMMENT);
+
+		holidayCalendarEClass = createEClass(HOLIDAY_CALENDAR);
+		createEReference(holidayCalendarEClass, HOLIDAY_CALENDAR__ENTRIES);
+		createEAttribute(holidayCalendarEClass, HOLIDAY_CALENDAR__DESCRIPTION);
+
+		settleStrategyEClass = createEClass(SETTLE_STRATEGY);
+		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__DAY_OF_THE_MONTH);
+		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH);
+		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__USE_CALENDAR_MONTH);
+		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__SETTLE_PERIOD);
+		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__SETTLE_PERIOD_UNIT);
+		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR);
 	}
 
 	/**
@@ -1381,6 +1585,9 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		charterCurveEClass.getESuperTypes().add(this.getAbstractYearMonthCurve());
 		bunkerFuelCurveEClass.getESuperTypes().add(this.getAbstractYearMonthCurve());
 		currencyCurveEClass.getESuperTypes().add(this.getAbstractYearMonthCurve());
+		marketIndexEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		holidayCalendarEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		settleStrategyEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(pricingModelEClass, PricingModel.class, "PricingModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1391,6 +1598,9 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getPricingModel_ConversionFactors(), this.getUnitConversion(), null, "conversionFactors", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPricingModel_MarketCurveDataVersion(), ecorePackage.getEString(), "marketCurveDataVersion", null, 0, 1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_SettledPrices(), this.getDatePointContainer(), null, "settledPrices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_MarketIndices(), this.getMarketIndex(), null, "marketIndices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_HolidayCalendars(), this.getHolidayCalendar(), null, "holidayCalendars", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_SettleStrategies(), this.getSettleStrategy(), null, "settleStrategies", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(dataIndexEClass, DataIndex.class, "DataIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(this.getIndexPoint());
@@ -1538,12 +1748,32 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEAttribute(getAbstractYearMonthCurve_Expression(), ecorePackage.getEString(), "expression", null, 1, 1, AbstractYearMonthCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(commodityCurveEClass, CommodityCurve.class, "CommodityCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCommodityCurve_MarketIndex(), this.getMarketIndex(), null, "marketIndex", null, 0, 1, CommodityCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterCurveEClass, CharterCurve.class, "CharterCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(bunkerFuelCurveEClass, BunkerFuelCurve.class, "BunkerFuelCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(currencyCurveEClass, CurrencyCurve.class, "CurrencyCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(marketIndexEClass, MarketIndex.class, "MarketIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getMarketIndex_SettleCalendar(), this.getHolidayCalendar(), null, "settleCalendar", null, 0, 1, MarketIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(holidayCalendarEntryEClass, HolidayCalendarEntry.class, "HolidayCalendarEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getHolidayCalendarEntry_Date(), theDateTimePackage.getLocalDate(), "date", null, 0, 1, HolidayCalendarEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getHolidayCalendarEntry_Comment(), ecorePackage.getEString(), "comment", null, 0, 1, HolidayCalendarEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(holidayCalendarEClass, HolidayCalendar.class, "HolidayCalendar", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getHolidayCalendar_Entries(), this.getHolidayCalendarEntry(), null, "entries", null, 0, -1, HolidayCalendar.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getHolidayCalendar_Description(), ecorePackage.getEString(), "description", null, 0, 1, HolidayCalendar.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(settleStrategyEClass, SettleStrategy.class, "SettleStrategy", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSettleStrategy_DayOfTheMonth(), ecorePackage.getEInt(), "dayOfTheMonth", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSettleStrategy_LastDayOfTheMonth(), ecorePackage.getEBoolean(), "lastDayOfTheMonth", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSettleStrategy_UseCalendarMonth(), ecorePackage.getEBoolean(), "useCalendarMonth", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSettleStrategy_SettlePeriod(), ecorePackage.getEInt(), "settlePeriod", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSettleStrategy_SettlePeriodUnit(), theTypesPackage.getTimePeriod(), "settlePeriodUnit", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSettleStrategy_SettleStartMonthsPrior(), ecorePackage.getEInt(), "settleStartMonthsPrior", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -1742,6 +1972,90 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		   new String[] {
 			   "type", "currency"
 		   });
+	}
+
+	@Override
+	public EClass getCostModel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EReference getCommodityCurve_MarketIndex() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EReference getPricingModel_CurrencyCurves() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EReference getPricingModel_CommodityCurves() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EReference getPricingModel_CharterCurves() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EReference getPricingModel_BunkerFuelCurves() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EClass getRouteCost() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EClass getSettleStrategy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EAttribute getSettleStrategy_DayOfTheMonth() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EAttribute getSettleStrategy_LastDayOfTheMonth() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EAttribute getSettleStrategy_UseCalendarMonth() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EAttribute getSettleStrategy_SettlePeriod() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EAttribute getSettleStrategy_SettlePeriodUnit() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EAttribute getSettleStrategy_SettleStartMonthsPrior() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 } //PricingPackageImpl

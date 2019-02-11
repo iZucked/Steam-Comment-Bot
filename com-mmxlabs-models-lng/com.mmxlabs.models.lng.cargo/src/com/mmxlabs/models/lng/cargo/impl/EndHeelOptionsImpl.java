@@ -136,6 +136,7 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EVesselTankState getTankState() {
 		return tankState;
 	}
@@ -145,6 +146,7 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTankState(EVesselTankState newTankState) {
 		EVesselTankState oldTankState = tankState;
 		tankState = newTankState == null ? TANK_STATE_EDEFAULT : newTankState;
@@ -157,6 +159,7 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinimumEndHeel() {
 		return minimumEndHeel;
 	}
@@ -166,6 +169,7 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinimumEndHeel(int newMinimumEndHeel) {
 		int oldMinimumEndHeel = minimumEndHeel;
 		minimumEndHeel = newMinimumEndHeel;
@@ -178,6 +182,7 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaximumEndHeel() {
 		return maximumEndHeel;
 	}
@@ -187,6 +192,7 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaximumEndHeel(int newMaximumEndHeel) {
 		int oldMaximumEndHeel = maximumEndHeel;
 		maximumEndHeel = newMaximumEndHeel;
@@ -199,6 +205,7 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getPriceExpression() {
 		return priceExpression;
 	}
@@ -208,6 +215,7 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPriceExpression(String newPriceExpression) {
 		String oldPriceExpression = priceExpression;
 		priceExpression = newPriceExpression;

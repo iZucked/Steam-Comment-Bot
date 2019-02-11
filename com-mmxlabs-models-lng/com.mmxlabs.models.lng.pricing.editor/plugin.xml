@@ -78,8 +78,7 @@
 			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.YearMonthPointComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.pricing.YearMonthPoint" />
- 
-		
+			
 		<componentHelper
 			id="com.mmxlabs.models.lng.pricing.helpers.Index"
 			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.IndexComponentHelper"
@@ -188,6 +187,21 @@
           id="com.mmxlabs.models.lng.pricing.ui.valueproviders.CurrencyIndexReferenceValueProviderFactory"
           referenceEClass="com.mmxlabs.models.lng.pricing.CurrencyCurve">
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.MarketIndexReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.MarketIndexReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.pricing.MarketIndex">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.HolidayCalendarReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.HolidayCalendarReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.pricing.HolidayCalendar">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.SettleStrategyReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.SettleStrategyReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.pricing.SettleStrategy">
+    </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">
@@ -294,6 +308,18 @@
           label="Conversion Factor"
           targetEClass="com.mmxlabs.models.lng.pricing.UnitConversion">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.MarketIndex.defaultFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Market Index"
+          targetEClass="com.mmxlabs.models.lng.pricing.MarketIndex">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.SettleStrategy.defaultFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Settle Strategy"
+          targetEClass="com.mmxlabs.models.lng.pricing.SettleStrategy">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.componenthelpers">
@@ -314,6 +340,30 @@
           id="com.mmxlabs.models.lng.pricing.SuezCanalTariff"
           inheritable="true"
           modelClass="com.mmxlabs.models.lng.pricing.SuezCanalTariff">
+    </componentHelper>
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.MarketIndexComponentHelper"
+          id="com.mmxlabs.models.lng.pricing.presentation.composites.MarketIndexComponentHelper"
+          inheritable="true"
+          modelClass="com.mmxlabs.models.lng.pricing.MarketIndex">
+    </componentHelper>
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.SettleStrategyComponentHelper"
+          id="com.mmxlabs.models.lng.pricing.presentation.composites.SettleStrategyComponentHelper"
+          inheritable="true"
+          modelClass="com.mmxlabs.models.lng.pricing.SettleStrategy">
+    </componentHelper>
+    <componentHelper
+		id="com.mmxlabs.models.lng.pricing.presentation.composites.HolidayCalendarComponentHelper"
+		helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.HolidayCalendarComponentHelper"
+		inheritable="true"
+		modelClass="com.mmxlabs.models.lng.pricing.HolidayCalendar">
+    </componentHelper>
+    <componentHelper
+		id="com.mmxlabs.models.lng.pricing.presentation.composites.HolidayCalendarEntryComponentHelper"
+		helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.HolidayCalendarEntryComponentHelper"
+		inheritable="true"
+		modelClass="com.mmxlabs.models.lng.pricing.HolidayCalendarEntry">
     </componentHelper>
  </extension>
  <extension

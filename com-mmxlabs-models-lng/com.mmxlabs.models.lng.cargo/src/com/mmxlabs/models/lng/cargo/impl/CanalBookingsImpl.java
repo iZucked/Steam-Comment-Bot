@@ -199,6 +199,7 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<CanalBookingSlot> getCanalBookingSlots() {
 		if (canalBookingSlots == null) {
 			canalBookingSlots = new EObjectContainmentEList.Resolving<CanalBookingSlot>(CanalBookingSlot.class, this, CargoPackage.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS);
@@ -211,6 +212,7 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getStrictBoundaryOffsetDays() {
 		return strictBoundaryOffsetDays;
 	}
@@ -220,6 +222,7 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStrictBoundaryOffsetDays(int newStrictBoundaryOffsetDays) {
 		int oldStrictBoundaryOffsetDays = strictBoundaryOffsetDays;
 		strictBoundaryOffsetDays = newStrictBoundaryOffsetDays;
@@ -232,6 +235,7 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getRelaxedBoundaryOffsetDays() {
 		return relaxedBoundaryOffsetDays;
 	}
@@ -241,6 +245,7 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRelaxedBoundaryOffsetDays(int newRelaxedBoundaryOffsetDays) {
 		int oldRelaxedBoundaryOffsetDays = relaxedBoundaryOffsetDays;
 		relaxedBoundaryOffsetDays = newRelaxedBoundaryOffsetDays;
@@ -253,6 +258,7 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getArrivalMarginHours() {
 		return arrivalMarginHours;
 	}
@@ -262,6 +268,7 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setArrivalMarginHours(int newArrivalMarginHours) {
 		int oldArrivalMarginHours = arrivalMarginHours;
 		arrivalMarginHours = newArrivalMarginHours;
@@ -274,6 +281,7 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getFlexibleBookingAmountNorthbound() {
 		return flexibleBookingAmountNorthbound;
 	}
@@ -283,6 +291,7 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFlexibleBookingAmountNorthbound(int newFlexibleBookingAmountNorthbound) {
 		int oldFlexibleBookingAmountNorthbound = flexibleBookingAmountNorthbound;
 		flexibleBookingAmountNorthbound = newFlexibleBookingAmountNorthbound;
@@ -295,6 +304,7 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getFlexibleBookingAmountSouthbound() {
 		return flexibleBookingAmountSouthbound;
 	}
@@ -304,6 +314,7 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFlexibleBookingAmountSouthbound(int newFlexibleBookingAmountSouthbound) {
 		int oldFlexibleBookingAmountSouthbound = flexibleBookingAmountSouthbound;
 		flexibleBookingAmountSouthbound = newFlexibleBookingAmountSouthbound;
@@ -316,6 +327,7 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getNorthboundMaxIdleDays() {
 		return northboundMaxIdleDays;
 	}
@@ -325,6 +337,7 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNorthboundMaxIdleDays(int newNorthboundMaxIdleDays) {
 		int oldNorthboundMaxIdleDays = northboundMaxIdleDays;
 		northboundMaxIdleDays = newNorthboundMaxIdleDays;

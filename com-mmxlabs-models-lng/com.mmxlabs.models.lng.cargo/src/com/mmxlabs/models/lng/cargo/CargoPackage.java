@@ -7665,13 +7665,22 @@ public interface CargoPackage extends EPackage {
 	int PAPER_DEAL__INDEX = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Instrument</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__INSTRUMENT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Quantity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__QUANTITY = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int PAPER_DEAL__QUANTITY = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
@@ -7680,7 +7689,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__START_DATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int PAPER_DEAL__START_DATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>End Date</b></em>' attribute.
@@ -7689,7 +7698,34 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__END_DATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int PAPER_DEAL__END_DATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__ENTITY = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Year</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__YEAR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__COMMENT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of structural features of the '<em>Paper Deal</em>' class.
@@ -7698,7 +7734,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int PAPER_DEAL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7783,6 +7819,15 @@ public interface CargoPackage extends EPackage {
 	int BUY_PAPER_DEAL__INDEX = PAPER_DEAL__INDEX;
 
 	/**
+	 * The feature id for the '<em><b>Instrument</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__INSTRUMENT = PAPER_DEAL__INSTRUMENT;
+
+	/**
 	 * The feature id for the '<em><b>Quantity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7808,6 +7853,33 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int BUY_PAPER_DEAL__END_DATE = PAPER_DEAL__END_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__ENTITY = PAPER_DEAL__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Year</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__YEAR = PAPER_DEAL__YEAR;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__COMMENT = PAPER_DEAL__COMMENT;
 
 	/**
 	 * The number of structural features of the '<em>Buy Paper Deal</em>' class.
@@ -7901,6 +7973,15 @@ public interface CargoPackage extends EPackage {
 	int SELL_PAPER_DEAL__INDEX = PAPER_DEAL__INDEX;
 
 	/**
+	 * The feature id for the '<em><b>Instrument</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__INSTRUMENT = PAPER_DEAL__INSTRUMENT;
+
+	/**
 	 * The feature id for the '<em><b>Quantity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7926,6 +8007,33 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SELL_PAPER_DEAL__END_DATE = PAPER_DEAL__END_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__ENTITY = PAPER_DEAL__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Year</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__YEAR = PAPER_DEAL__YEAR;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__COMMENT = PAPER_DEAL__COMMENT;
 
 	/**
 	 * The number of structural features of the '<em>Sell Paper Deal</em>' class.
@@ -10812,6 +10920,50 @@ public interface CargoPackage extends EPackage {
 	EAttribute getPaperDeal_EndDate();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getEntity <em>Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entity</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getEntity()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EReference getPaperDeal_Entity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getYear <em>Year</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Year</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getYear()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EAttribute getPaperDeal_Year();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getComment <em>Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Comment</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getComment()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EAttribute getPaperDeal_Comment();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getInstrument <em>Instrument</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Instrument</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getInstrument()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EReference getPaperDeal_Instrument();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPrice <em>Price</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -13066,6 +13218,38 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PAPER_DEAL__END_DATE = eINSTANCE.getPaperDeal_EndDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PAPER_DEAL__ENTITY = eINSTANCE.getPaperDeal_Entity();
+
+		/**
+		 * The meta object literal for the '<em><b>Year</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL__YEAR = eINSTANCE.getPaperDeal_Year();
+
+		/**
+		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL__COMMENT = eINSTANCE.getPaperDeal_Comment();
+
+		/**
+		 * The meta object literal for the '<em><b>Instrument</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PAPER_DEAL__INSTRUMENT = eINSTANCE.getPaperDeal_Instrument();
 
 		/**
 		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.

@@ -91,6 +91,7 @@ public class PortCostEntryImpl extends EObjectImpl implements PortCostEntry {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortCapability getActivity() {
 		return activity;
 	}
@@ -100,6 +101,7 @@ public class PortCostEntryImpl extends EObjectImpl implements PortCostEntry {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setActivity(PortCapability newActivity) {
 		PortCapability oldActivity = activity;
 		activity = newActivity == null ? ACTIVITY_EDEFAULT : newActivity;
@@ -112,6 +114,7 @@ public class PortCostEntryImpl extends EObjectImpl implements PortCostEntry {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCost() {
 		return cost;
 	}
@@ -121,6 +124,7 @@ public class PortCostEntryImpl extends EObjectImpl implements PortCostEntry {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCost(int newCost) {
 		int oldCost = cost;
 		cost = newCost;

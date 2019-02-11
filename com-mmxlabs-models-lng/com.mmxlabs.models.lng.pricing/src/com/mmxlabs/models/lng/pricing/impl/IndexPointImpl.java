@@ -82,6 +82,7 @@ public class IndexPointImpl<Value> extends EObjectImpl implements IndexPoint<Val
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public YearMonth getDate() {
 		return date;
 	}
@@ -91,6 +92,7 @@ public class IndexPointImpl<Value> extends EObjectImpl implements IndexPoint<Val
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDate(YearMonth newDate) {
 		YearMonth oldDate = date;
 		date = newDate;
@@ -103,6 +105,7 @@ public class IndexPointImpl<Value> extends EObjectImpl implements IndexPoint<Val
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Value getValue() {
 		return value;
 	}
@@ -112,6 +115,7 @@ public class IndexPointImpl<Value> extends EObjectImpl implements IndexPoint<Val
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValue(Value newValue) {
 		Value oldValue = value;
 		value = newValue;

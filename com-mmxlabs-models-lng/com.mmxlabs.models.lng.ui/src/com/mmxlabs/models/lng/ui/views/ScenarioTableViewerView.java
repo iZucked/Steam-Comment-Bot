@@ -34,7 +34,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * 
  */
 public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane> extends ScenarioInstanceView implements CommandStackListener {
-	private Composite childComposite;
+	protected Composite childComposite;
 	private @Nullable T viewerPane;
 	private UndoAction undoAction;
 	private RedoAction redoAction;
@@ -70,6 +70,7 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 		// Clear existing settings
 		updateActions(null);
 		if (instance != getScenarioInstance()) {
+			cleanUpInstance(instance);
 			// Pin the reference
 			@Nullable
 			final T nViewerPane = viewerPane;
@@ -90,7 +91,7 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 				final T pViewerPane = createViewerPane();
 				pViewerPane.setExternalMenuManager((MenuManager) getViewSite().getActionBars().getMenuManager());
 				pViewerPane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
-				pViewerPane.createControl(childComposite);
+				pViewerPane.createControl(wrapChildComposite(childComposite));
 				pViewerPane.setLocked(isLocked());
 				this.viewerPane = pViewerPane;
 				initViewerPane(pViewerPane);
@@ -100,6 +101,14 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 			// re-enable!
 			updateActions(getEditingDomain());
 		}
+	}
+	
+	protected Composite wrapChildComposite(final Composite composite) {
+		return composite;
+	}
+	
+	protected void cleanUpInstance(final ScenarioInstance instance) {
+		
 	}
 
 	private void updateActions(final EditingDomain editingDomain) {

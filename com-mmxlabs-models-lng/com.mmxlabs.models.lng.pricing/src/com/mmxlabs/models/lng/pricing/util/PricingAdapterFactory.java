@@ -197,6 +197,22 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 				return createCurrencyCurveAdapter();
 			}
 			@Override
+			public Adapter caseMarketIndex(MarketIndex object) {
+				return createMarketIndexAdapter();
+			}
+			@Override
+			public Adapter caseHolidayCalendarEntry(HolidayCalendarEntry object) {
+				return createHolidayCalendarEntryAdapter();
+			}
+			@Override
+			public Adapter caseHolidayCalendar(HolidayCalendar object) {
+				return createHolidayCalendarAdapter();
+			}
+			@Override
+			public Adapter caseSettleStrategy(SettleStrategy object) {
+				return createSettleStrategyAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -617,6 +633,62 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCurrencyCurveAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.MarketIndex <em>Market Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.MarketIndex
+	 * @generated
+	 */
+	public Adapter createMarketIndexAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.HolidayCalendarEntry <em>Holiday Calendar Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.HolidayCalendarEntry
+	 * @generated
+	 */
+	public Adapter createHolidayCalendarEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.HolidayCalendar <em>Holiday Calendar</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.HolidayCalendar
+	 * @generated
+	 */
+	public Adapter createHolidayCalendarAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.SettleStrategy <em>Settle Strategy</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.SettleStrategy
+	 * @generated
+	 */
+	public Adapter createSettleStrategyAdapter() {
 		return null;
 	}
 

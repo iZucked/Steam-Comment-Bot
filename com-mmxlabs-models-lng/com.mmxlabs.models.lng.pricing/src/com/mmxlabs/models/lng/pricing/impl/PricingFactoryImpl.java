@@ -95,6 +95,10 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.CHARTER_CURVE: return createCharterCurve();
 			case PricingPackage.BUNKER_FUEL_CURVE: return createBunkerFuelCurve();
 			case PricingPackage.CURRENCY_CURVE: return createCurrencyCurve();
+			case PricingPackage.MARKET_INDEX: return createMarketIndex();
+			case PricingPackage.HOLIDAY_CALENDAR_ENTRY: return createHolidayCalendarEntry();
+			case PricingPackage.HOLIDAY_CALENDAR: return createHolidayCalendar();
+			case PricingPackage.SETTLE_STRATEGY: return createSettleStrategy();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -105,6 +109,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PricingModel createPricingModel() {
 		PricingModelImpl pricingModel = new PricingModelImpl();
 		return pricingModel;
@@ -115,6 +120,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public <Value> DataIndex<Value> createDataIndex() {
 		DataIndexImpl<Value> dataIndex = new DataIndexImpl<Value>();
 		return dataIndex;
@@ -125,6 +131,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public <Value> DerivedIndex<Value> createDerivedIndex() {
 		DerivedIndexImpl<Value> derivedIndex = new DerivedIndexImpl<Value>();
 		return derivedIndex;
@@ -135,6 +142,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public <Value> IndexPoint<Value> createIndexPoint() {
 		IndexPointImpl<Value> indexPoint = new IndexPointImpl<Value>();
 		return indexPoint;
@@ -145,6 +153,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CostModel createCostModel() {
 		CostModelImpl costModel = new CostModelImpl();
 		return costModel;
@@ -155,6 +164,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public RouteCost createRouteCost() {
 		RouteCostImpl routeCost = new RouteCostImpl();
 		return routeCost;
@@ -165,6 +175,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseFuelCost createBaseFuelCost() {
 		BaseFuelCostImpl baseFuelCost = new BaseFuelCostImpl();
 		return baseFuelCost;
@@ -175,6 +186,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortCost createPortCost() {
 		PortCostImpl portCost = new PortCostImpl();
 		return portCost;
@@ -185,6 +197,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortCostEntry createPortCostEntry() {
 		PortCostEntryImpl portCostEntry = new PortCostEntryImpl();
 		return portCostEntry;
@@ -195,6 +208,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CooldownPrice createCooldownPrice() {
 		CooldownPriceImpl cooldownPrice = new CooldownPriceImpl();
 		return cooldownPrice;
@@ -205,6 +219,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortsExpressionMap createPortsExpressionMap() {
 		PortsExpressionMapImpl portsExpressionMap = new PortsExpressionMapImpl();
 		return portsExpressionMap;
@@ -215,6 +230,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortsSplitExpressionMap createPortsSplitExpressionMap() {
 		PortsSplitExpressionMapImpl portsSplitExpressionMap = new PortsSplitExpressionMapImpl();
 		return portsSplitExpressionMap;
@@ -225,6 +241,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PanamaCanalTariff createPanamaCanalTariff() {
 		PanamaCanalTariffImpl panamaCanalTariff = new PanamaCanalTariffImpl();
 		return panamaCanalTariff;
@@ -235,6 +252,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PanamaCanalTariffBand createPanamaCanalTariffBand() {
 		PanamaCanalTariffBandImpl panamaCanalTariffBand = new PanamaCanalTariffBandImpl();
 		return panamaCanalTariffBand;
@@ -245,6 +263,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SuezCanalTugBand createSuezCanalTugBand() {
 		SuezCanalTugBandImpl suezCanalTugBand = new SuezCanalTugBandImpl();
 		return suezCanalTugBand;
@@ -255,6 +274,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SuezCanalTariff createSuezCanalTariff() {
 		SuezCanalTariffImpl suezCanalTariff = new SuezCanalTariffImpl();
 		return suezCanalTariff;
@@ -265,6 +285,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SuezCanalTariffBand createSuezCanalTariffBand() {
 		SuezCanalTariffBandImpl suezCanalTariffBand = new SuezCanalTariffBandImpl();
 		return suezCanalTariffBand;
@@ -275,6 +296,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public UnitConversion createUnitConversion() {
 		UnitConversionImpl unitConversion = new UnitConversionImpl();
 		return unitConversion;
@@ -285,6 +307,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DatePointContainer createDatePointContainer() {
 		DatePointContainerImpl datePointContainer = new DatePointContainerImpl();
 		return datePointContainer;
@@ -295,6 +318,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DatePoint createDatePoint() {
 		DatePointImpl datePoint = new DatePointImpl();
 		return datePoint;
@@ -305,6 +329,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public YearMonthPointContainer createYearMonthPointContainer() {
 		YearMonthPointContainerImpl yearMonthPointContainer = new YearMonthPointContainerImpl();
 		return yearMonthPointContainer;
@@ -315,6 +340,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public YearMonthPoint createYearMonthPoint() {
 		YearMonthPointImpl yearMonthPoint = new YearMonthPointImpl();
 		return yearMonthPoint;
@@ -325,6 +351,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CommodityCurve createCommodityCurve() {
 		CommodityCurveImpl commodityCurve = new CommodityCurveImpl();
 		return commodityCurve;
@@ -335,6 +362,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterCurve createCharterCurve() {
 		CharterCurveImpl charterCurve = new CharterCurveImpl();
 		return charterCurve;
@@ -345,6 +373,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BunkerFuelCurve createBunkerFuelCurve() {
 		BunkerFuelCurveImpl bunkerFuelCurve = new BunkerFuelCurveImpl();
 		return bunkerFuelCurve;
@@ -355,6 +384,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CurrencyCurve createCurrencyCurve() {
 		CurrencyCurveImpl currencyCurve = new CurrencyCurveImpl();
 		return currencyCurve;
@@ -365,6 +395,51 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public MarketIndex createMarketIndex() {
+		MarketIndexImpl marketIndex = new MarketIndexImpl();
+		return marketIndex;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public HolidayCalendarEntry createHolidayCalendarEntry() {
+		HolidayCalendarEntryImpl holidayCalendarEntry = new HolidayCalendarEntryImpl();
+		return holidayCalendarEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public HolidayCalendar createHolidayCalendar() {
+		HolidayCalendarImpl holidayCalendar = new HolidayCalendarImpl();
+		return holidayCalendar;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SettleStrategy createSettleStrategy() {
+		SettleStrategyImpl settleStrategy = new SettleStrategyImpl();
+		return settleStrategy;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public PricingPackage getPricingPackage() {
 		return (PricingPackage)getEPackage();
 	}

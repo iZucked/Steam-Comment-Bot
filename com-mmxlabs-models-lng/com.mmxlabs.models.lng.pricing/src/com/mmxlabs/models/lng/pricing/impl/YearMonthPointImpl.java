@@ -93,6 +93,7 @@ public class YearMonthPointImpl extends EObjectImpl implements YearMonthPoint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public YearMonth getDate() {
 		return date;
 	}
@@ -102,6 +103,7 @@ public class YearMonthPointImpl extends EObjectImpl implements YearMonthPoint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDate(YearMonth newDate) {
 		YearMonth oldDate = date;
 		date = newDate;
@@ -114,6 +116,7 @@ public class YearMonthPointImpl extends EObjectImpl implements YearMonthPoint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getValue() {
 		return value;
 	}
@@ -123,6 +126,7 @@ public class YearMonthPointImpl extends EObjectImpl implements YearMonthPoint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValue(double newValue) {
 		double oldValue = value;
 		value = newValue;

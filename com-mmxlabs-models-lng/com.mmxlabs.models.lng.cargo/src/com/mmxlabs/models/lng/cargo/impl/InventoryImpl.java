@@ -112,6 +112,7 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<InventoryEventRow> getFeeds() {
 		if (feeds == null) {
 			feeds = new EObjectContainmentEList.Resolving<InventoryEventRow>(InventoryEventRow.class, this, CargoPackage.INVENTORY__FEEDS);
@@ -124,6 +125,7 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<InventoryEventRow> getOfftakes() {
 		if (offtakes == null) {
 			offtakes = new EObjectContainmentEList.Resolving<InventoryEventRow>(InventoryEventRow.class, this, CargoPackage.INVENTORY__OFFTAKES);
@@ -136,6 +138,7 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<InventoryCapacityRow> getCapacities() {
 		if (capacities == null) {
 			capacities = new EObjectContainmentEList.Resolving<InventoryCapacityRow>(InventoryCapacityRow.class, this, CargoPackage.INVENTORY__CAPACITIES);
@@ -148,6 +151,7 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
 			InternalEObject oldPort = (InternalEObject)port;
@@ -174,6 +178,7 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPort(Port newPort) {
 		Port oldPort = port;
 		port = newPort;

@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -99,6 +100,20 @@ public class PaperDealConstraint extends AbstractModelMultiConstraint {
 							.withFormattedMessage("No commodity index named %s found", curve) //
 							.make(ctx, statuses);
 				}
+			}
+			final int year = paperDeal.getYear();
+			if (year == 0 || year < 2010 || year > 2100) {
+				factory.copyName() //
+				.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__YEAR) //
+				.withMessage("Fiscal year date is not a valid year") //
+				.make(ctx, statuses);
+			}
+			final BaseLegalEntity ble = paperDeal.getEntity();
+			if (ble == null) {
+				factory.copyName() //
+				.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__ENTITY) //
+				.withMessage("Paper deal requires entity") //
+				.make(ctx, statuses);
 			}
 
 		}

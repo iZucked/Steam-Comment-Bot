@@ -6,6 +6,8 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import java.time.LocalDate;
 
@@ -22,9 +24,13 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPrice <em>Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getIndex <em>Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getInstrument <em>Instrument</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getQuantity <em>Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getEndDate <em>End Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getYear <em>Year</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getComment <em>Comment</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal()
@@ -109,6 +115,110 @@ public interface PaperDeal extends NamedObject {
 	 * @generated
 	 */
 	void setEndDate(LocalDate value);
+
+	/**
+	 * Returns the value of the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Entity</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Entity</em>' reference.
+	 * @see #setEntity(BaseLegalEntity)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_Entity()
+	 * @model
+	 * @generated
+	 */
+	BaseLegalEntity getEntity();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getEntity <em>Entity</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Entity</em>' reference.
+	 * @see #getEntity()
+	 * @generated
+	 */
+	void setEntity(BaseLegalEntity value);
+
+	/**
+	 * Returns the value of the '<em><b>Year</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Year</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Year</em>' attribute.
+	 * @see #setYear(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_Year()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='####'"
+	 * @generated
+	 */
+	int getYear();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getYear <em>Year</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Year</em>' attribute.
+	 * @see #getYear()
+	 * @generated
+	 */
+	void setYear(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Comment</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Comment</em>' attribute.
+	 * @see #setComment(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_Comment()
+	 * @model
+	 * @generated
+	 */
+	String getComment();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getComment <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Comment</em>' attribute.
+	 * @see #getComment()
+	 * @generated
+	 */
+	void setComment(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Instrument</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Instrument</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Instrument</em>' reference.
+	 * @see #setInstrument(SettleStrategy)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_Instrument()
+	 * @model
+	 * @generated
+	 */
+	SettleStrategy getInstrument();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getInstrument <em>Instrument</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Instrument</em>' reference.
+	 * @see #getInstrument()
+	 * @generated
+	 */
+	void setInstrument(SettleStrategy value);
 
 	/**
 	 * Returns the value of the '<em><b>Price</b></em>' attribute.

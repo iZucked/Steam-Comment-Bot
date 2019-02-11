@@ -116,6 +116,7 @@ public class UnitConversionImpl extends EObjectImpl implements UnitConversion {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getFrom() {
 		return from;
 	}
@@ -125,6 +126,7 @@ public class UnitConversionImpl extends EObjectImpl implements UnitConversion {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFrom(String newFrom) {
 		String oldFrom = from;
 		from = newFrom;
@@ -137,6 +139,7 @@ public class UnitConversionImpl extends EObjectImpl implements UnitConversion {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getTo() {
 		return to;
 	}
@@ -146,6 +149,7 @@ public class UnitConversionImpl extends EObjectImpl implements UnitConversion {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTo(String newTo) {
 		String oldTo = to;
 		to = newTo;
@@ -158,6 +162,7 @@ public class UnitConversionImpl extends EObjectImpl implements UnitConversion {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getFactor() {
 		return factor;
 	}
@@ -167,6 +172,7 @@ public class UnitConversionImpl extends EObjectImpl implements UnitConversion {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFactor(double newFactor) {
 		double oldFactor = factor;
 		factor = newFactor;

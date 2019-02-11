@@ -68,5 +68,15 @@ public class CommodityCurveComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_marketIndexEditor(detailComposite, topClass);
+	}
+
+	/**
+	 * Create the editor for the marketIndex feature on CommodityCurve
+	 *
+	 * @generated
+	 */
+	protected void add_marketIndexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.COMMODITY_CURVE__MARKET_INDEX));
 	}
 }

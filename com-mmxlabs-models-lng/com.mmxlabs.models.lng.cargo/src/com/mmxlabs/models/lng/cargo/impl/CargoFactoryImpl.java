@@ -155,6 +155,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Cargo createCargo() {
 		CargoImpl cargo = new CargoImpl();
 		return cargo;
@@ -165,6 +166,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LoadSlot createLoadSlot() {
 		LoadSlotImpl loadSlot = new LoadSlotImpl();
 		return loadSlot;
@@ -175,6 +177,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DischargeSlot createDischargeSlot() {
 		DischargeSlotImpl dischargeSlot = new DischargeSlotImpl();
 		return dischargeSlot;
@@ -185,6 +188,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoModel createCargoModel() {
 		CargoModelImpl cargoModel = new CargoModelImpl();
 		return cargoModel;
@@ -195,6 +199,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotLoadSlot createSpotLoadSlot() {
 		SpotLoadSlotImpl spotLoadSlot = new SpotLoadSlotImpl();
 		return spotLoadSlot;
@@ -205,6 +210,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotDischargeSlot createSpotDischargeSlot() {
 		SpotDischargeSlotImpl spotDischargeSlot = new SpotDischargeSlotImpl();
 		return spotDischargeSlot;
@@ -215,6 +221,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoGroup createCargoGroup() {
 		CargoGroupImpl cargoGroup = new CargoGroupImpl();
 		return cargoGroup;
@@ -225,6 +232,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselAvailability createVesselAvailability() {
 		VesselAvailabilityImpl vesselAvailability = new VesselAvailabilityImpl();
 		return vesselAvailability;
@@ -235,6 +243,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MaintenanceEvent createMaintenanceEvent() {
 		MaintenanceEventImpl maintenanceEvent = new MaintenanceEventImpl();
 		return maintenanceEvent;
@@ -245,6 +254,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DryDockEvent createDryDockEvent() {
 		DryDockEventImpl dryDockEvent = new DryDockEventImpl();
 		return dryDockEvent;
@@ -255,6 +265,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterOutEvent createCharterOutEvent() {
 		CharterOutEventImpl charterOutEvent = new CharterOutEventImpl();
 		return charterOutEvent;
@@ -265,6 +276,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselTypeGroup createVesselTypeGroup() {
 		VesselTypeGroupImpl vesselTypeGroup = new VesselTypeGroupImpl();
 		return vesselTypeGroup;
@@ -275,6 +287,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EndHeelOptions createEndHeelOptions() {
 		EndHeelOptionsImpl endHeelOptions = new EndHeelOptionsImpl();
 		return endHeelOptions;
@@ -285,6 +298,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public StartHeelOptions createStartHeelOptions() {
 		StartHeelOptionsImpl startHeelOptions = new StartHeelOptionsImpl();
 		return startHeelOptions;
@@ -295,6 +309,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public InventoryEventRow createInventoryEventRow() {
 		InventoryEventRowImpl inventoryEventRow = new InventoryEventRowImpl();
 		return inventoryEventRow;
@@ -305,6 +320,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public InventoryCapacityRow createInventoryCapacityRow() {
 		InventoryCapacityRowImpl inventoryCapacityRow = new InventoryCapacityRowImpl();
 		return inventoryCapacityRow;
@@ -315,6 +331,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Inventory createInventory() {
 		InventoryImpl inventory = new InventoryImpl();
 		return inventory;
@@ -325,6 +342,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CanalBookingSlot createCanalBookingSlot() {
 		CanalBookingSlotImpl canalBookingSlot = new CanalBookingSlotImpl();
 		return canalBookingSlot;
@@ -335,6 +353,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CanalBookings createCanalBookings() {
 		CanalBookingsImpl canalBookings = new CanalBookingsImpl();
 		return canalBookings;
@@ -345,6 +364,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScheduleSpecification createScheduleSpecification() {
 		ScheduleSpecificationImpl scheduleSpecification = new ScheduleSpecificationImpl();
 		return scheduleSpecification;
@@ -355,6 +375,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public NonShippedCargoSpecification createNonShippedCargoSpecification() {
 		NonShippedCargoSpecificationImpl nonShippedCargoSpecification = new NonShippedCargoSpecificationImpl();
 		return nonShippedCargoSpecification;
@@ -365,6 +386,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselScheduleSpecification createVesselScheduleSpecification() {
 		VesselScheduleSpecificationImpl vesselScheduleSpecification = new VesselScheduleSpecificationImpl();
 		return vesselScheduleSpecification;
@@ -375,6 +397,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScheduleSpecificationEvent createScheduleSpecificationEvent() {
 		ScheduleSpecificationEventImpl scheduleSpecificationEvent = new ScheduleSpecificationEventImpl();
 		return scheduleSpecificationEvent;
@@ -385,6 +408,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselEventSpecification createVesselEventSpecification() {
 		VesselEventSpecificationImpl vesselEventSpecification = new VesselEventSpecificationImpl();
 		return vesselEventSpecification;
@@ -395,6 +419,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VoyageSpecification createVoyageSpecification() {
 		VoyageSpecificationImpl voyageSpecification = new VoyageSpecificationImpl();
 		return voyageSpecification;
@@ -405,6 +430,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotSpecification createSlotSpecification() {
 		SlotSpecificationImpl slotSpecification = new SlotSpecificationImpl();
 		return slotSpecification;
@@ -415,6 +441,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterInMarketOverride createCharterInMarketOverride() {
 		CharterInMarketOverrideImpl charterInMarketOverride = new CharterInMarketOverrideImpl();
 		return charterInMarketOverride;
@@ -425,6 +452,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BuyPaperDeal createBuyPaperDeal() {
 		BuyPaperDealImpl buyPaperDeal = new BuyPaperDealImpl();
 		return buyPaperDeal;
@@ -435,6 +463,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SellPaperDeal createSellPaperDeal() {
 		SellPaperDealImpl sellPaperDeal = new SellPaperDealImpl();
 		return sellPaperDeal;
@@ -525,6 +554,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoPackage getCargoPackage() {
 		return (CargoPackage)getEPackage();
 	}

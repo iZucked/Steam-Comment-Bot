@@ -188,6 +188,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<LoadSlot> getLoadSlots() {
 		if (loadSlots == null) {
 			loadSlots = new EObjectContainmentEList.Resolving<LoadSlot>(LoadSlot.class, this, CargoPackage.CARGO_MODEL__LOAD_SLOTS);
@@ -200,6 +201,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<DischargeSlot> getDischargeSlots() {
 		if (dischargeSlots == null) {
 			dischargeSlots = new EObjectContainmentEList.Resolving<DischargeSlot>(DischargeSlot.class, this, CargoPackage.CARGO_MODEL__DISCHARGE_SLOTS);
@@ -212,6 +214,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Cargo> getCargoes() {
 		if (cargoes == null) {
 			cargoes = new EObjectContainmentEList.Resolving<Cargo>(Cargo.class, this, CargoPackage.CARGO_MODEL__CARGOES);
@@ -224,6 +227,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<CargoGroup> getCargoGroups() {
 		if (cargoGroups == null) {
 			cargoGroups = new EObjectContainmentEList.Resolving<CargoGroup>(CargoGroup.class, this, CargoPackage.CARGO_MODEL__CARGO_GROUPS);
@@ -236,6 +240,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VesselAvailability> getVesselAvailabilities() {
 		if (vesselAvailabilities == null) {
 			vesselAvailabilities = new EObjectContainmentEList.Resolving<VesselAvailability>(VesselAvailability.class, this, CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES);
@@ -248,6 +253,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VesselEvent> getVesselEvents() {
 		if (vesselEvents == null) {
 			vesselEvents = new EObjectContainmentEList.Resolving<VesselEvent>(VesselEvent.class, this, CargoPackage.CARGO_MODEL__VESSEL_EVENTS);
@@ -260,6 +266,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VesselTypeGroup> getVesselTypeGroups() {
 		if (vesselTypeGroups == null) {
 			vesselTypeGroups = new EObjectContainmentEList.Resolving<VesselTypeGroup>(VesselTypeGroup.class, this, CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS);
@@ -272,6 +279,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Inventory> getInventoryModels() {
 		if (inventoryModels == null) {
 			inventoryModels = new EObjectContainmentEList.Resolving<Inventory>(Inventory.class, this, CargoPackage.CARGO_MODEL__INVENTORY_MODELS);
@@ -284,6 +292,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CanalBookings getCanalBookings() {
 		if (canalBookings != null && canalBookings.eIsProxy()) {
 			InternalEObject oldCanalBookings = (InternalEObject)canalBookings;
@@ -331,6 +340,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCanalBookings(CanalBookings newCanalBookings) {
 		if (newCanalBookings != canalBookings) {
 			NotificationChain msgs = null;
@@ -350,6 +360,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<CharterInMarketOverride> getCharterInMarketOverrides() {
 		if (charterInMarketOverrides == null) {
 			charterInMarketOverrides = new EObjectContainmentEList.Resolving<CharterInMarketOverride>(CharterInMarketOverride.class, this, CargoPackage.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES);
@@ -362,6 +373,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PaperDeal> getPaperDeals() {
 		if (paperDeals == null) {
 			paperDeals = new EObjectContainmentEList.Resolving<PaperDeal>(PaperDeal.class, this, CargoPackage.CARGO_MODEL__PAPER_DEALS);

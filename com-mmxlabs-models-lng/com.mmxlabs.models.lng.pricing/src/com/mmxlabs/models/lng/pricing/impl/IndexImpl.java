@@ -44,6 +44,7 @@ public abstract class IndexImpl<Value> extends EObjectImpl implements Index<Valu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Value getValueForMonth(YearMonth date) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
@@ -55,6 +56,7 @@ public abstract class IndexImpl<Value> extends EObjectImpl implements Index<Valu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<YearMonth> getDates() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
@@ -66,6 +68,7 @@ public abstract class IndexImpl<Value> extends EObjectImpl implements Index<Valu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Value getForwardValueForMonth(YearMonth date) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
@@ -77,6 +80,7 @@ public abstract class IndexImpl<Value> extends EObjectImpl implements Index<Valu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Value getBackwardsValueForMonth(YearMonth date) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
