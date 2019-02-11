@@ -185,6 +185,58 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * @generated
 	 */
 	@Override
+	public EList<CurrencyCurve> getCurrencyCurves() {
+		if (currencyCurves == null) {
+			currencyCurves = new EObjectContainmentEList<CurrencyCurve>(CurrencyCurve.class, this, PricingPackage.PRICING_MODEL__CURRENCY_CURVES);
+		}
+		return currencyCurves;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<CommodityCurve> getCommodityCurves() {
+		if (commodityCurves == null) {
+			commodityCurves = new EObjectContainmentEList<CommodityCurve>(CommodityCurve.class, this, PricingPackage.PRICING_MODEL__COMMODITY_CURVES);
+		}
+		return commodityCurves;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<CharterCurve> getCharterCurves() {
+		if (charterCurves == null) {
+			charterCurves = new EObjectContainmentEList<CharterCurve>(CharterCurve.class, this, PricingPackage.PRICING_MODEL__CHARTER_CURVES);
+		}
+		return charterCurves;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<BunkerFuelCurve> getBunkerFuelCurves() {
+		if (bunkerFuelCurves == null) {
+			bunkerFuelCurves = new EObjectContainmentEList<BunkerFuelCurve>(BunkerFuelCurve.class, this, PricingPackage.PRICING_MODEL__BUNKER_FUEL_CURVES);
+		}
+		return bunkerFuelCurves;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<UnitConversion> getConversionFactors() {
 		if (conversionFactors == null) {
 			conversionFactors = new EObjectContainmentEList<UnitConversion>(UnitConversion.class, this, PricingPackage.PRICING_MODEL__CONVERSION_FACTORS);
@@ -469,30 +521,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 		result.append(marketCurveDataVersion);
 		result.append(')');
 		return result.toString();
-	}
-
-	@Override
-	public EList<CurrencyCurve> getCurrencyCurves() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<CommodityCurve> getCommodityCurves() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<CharterCurve> getCharterCurves() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<BunkerFuelCurve> getBunkerFuelCurves() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 } // end of PricingModelImpl

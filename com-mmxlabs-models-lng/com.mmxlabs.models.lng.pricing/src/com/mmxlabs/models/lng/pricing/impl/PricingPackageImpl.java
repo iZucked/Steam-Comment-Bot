@@ -370,6 +370,46 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getPricingModel_CurrencyCurves() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPricingModel_CommodityCurves() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPricingModel_CharterCurves() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPricingModel_BunkerFuelCurves() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getPricingModel_ConversionFactors() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(4);
 	}
@@ -505,6 +545,16 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	}
 
 	
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getCostModel() {
+		return costModelEClass;
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -724,6 +774,16 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	@Override
 	public EReference getCostModel_SuezCanalTariff() {
 		return (EReference)costModelEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getRouteCost() {
+		return routeCostEClass;
 	}
 
 	/**
@@ -1242,6 +1302,16 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getCommodityCurve_MarketIndex() {
+		return (EReference)commodityCurveEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCharterCurve() {
 		return charterCurveEClass;
 	}
@@ -1344,6 +1414,76 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	@Override
 	public EAttribute getHolidayCalendar_Description() {
 		return (EAttribute)holidayCalendarEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSettleStrategy() {
+		return settleStrategyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSettleStrategy_DayOfTheMonth() {
+		return (EAttribute)settleStrategyEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSettleStrategy_LastDayOfTheMonth() {
+		return (EAttribute)settleStrategyEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSettleStrategy_UseCalendarMonth() {
+		return (EAttribute)settleStrategyEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSettleStrategy_SettlePeriod() {
+		return (EAttribute)settleStrategyEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSettleStrategy_SettlePeriodUnit() {
+		return (EAttribute)settleStrategyEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSettleStrategy_SettleStartMonthsPrior() {
+		return (EAttribute)settleStrategyEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -1972,90 +2112,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		   new String[] {
 			   "type", "currency"
 		   });
-	}
-
-	@Override
-	public EClass getCostModel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EReference getCommodityCurve_MarketIndex() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EReference getPricingModel_CurrencyCurves() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EReference getPricingModel_CommodityCurves() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EReference getPricingModel_CharterCurves() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EReference getPricingModel_BunkerFuelCurves() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EClass getRouteCost() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EClass getSettleStrategy() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EAttribute getSettleStrategy_DayOfTheMonth() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EAttribute getSettleStrategy_LastDayOfTheMonth() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EAttribute getSettleStrategy_UseCalendarMonth() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EAttribute getSettleStrategy_SettlePeriod() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EAttribute getSettleStrategy_SettlePeriodUnit() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EAttribute getSettleStrategy_SettleStartMonthsPrior() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 } //PricingPackageImpl
