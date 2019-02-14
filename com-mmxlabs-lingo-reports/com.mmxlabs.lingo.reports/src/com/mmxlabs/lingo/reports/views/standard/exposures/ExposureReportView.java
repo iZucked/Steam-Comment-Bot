@@ -190,7 +190,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 							final double result = ied.exposures.get(columnName);
 							if(result > 0.0) {
 								return cellImageDarkArrowUp;
-							} else {
+							} else if (result < 0.0){
 								return cellImageDarkArrowDown;
 							}
 						}
@@ -227,7 +227,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					final Iterator<IndexExposureData> otherIterator = other.iterator();
 					while (otherIterator.hasNext()) {
 						final IndexExposureData otherData = otherIterator.next();
-						if (Equality.isEqual(refData.date, otherData.date)) { // indexName
+						if (Equality.isEqual(refData.date, otherData.date) 
+								&& Equality.isEqual(refData.type, otherData.type)) { // indexName
 
 							output.add(createDiffData(refData, otherData));
 							otherIterator.remove();
@@ -471,6 +472,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		} else {
 			ied1 = new IndexExposureData(null, null, modelData.date, exposuresByMonth, newChildren);
 		}
+		ied1.setType(modelData.type);
 		return ied1;
 	}
 
