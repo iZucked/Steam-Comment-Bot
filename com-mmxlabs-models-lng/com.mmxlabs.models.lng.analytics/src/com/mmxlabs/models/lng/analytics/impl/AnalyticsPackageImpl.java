@@ -3652,6 +3652,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 			   "nonUniqueChildren", "true"
 		   });
 		addAnnotation
+		  (getAbstractSolutionSet_ExtraSlots(),
+		   source,
+		   new String[] {
+			   "nonUniqueChildren", "true"
+		   });
+		addAnnotation
 		  (actionableSetPlanEClass,
 		   source,
 		   new String[] {

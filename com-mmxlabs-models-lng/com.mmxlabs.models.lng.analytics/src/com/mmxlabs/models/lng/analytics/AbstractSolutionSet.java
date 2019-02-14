@@ -143,6 +143,7 @@ public interface AbstractSolutionSet extends UUIDObject, NamedObject {
 	 * @return the value of the '<em>Extra Slots</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAbstractSolutionSet_ExtraSlots()
 	 * @model containment="true"
+	 *        annotation="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject nonUniqueChildren='true'"
 	 * @generated
 	 */
 	EList<Slot> getExtraSlots();

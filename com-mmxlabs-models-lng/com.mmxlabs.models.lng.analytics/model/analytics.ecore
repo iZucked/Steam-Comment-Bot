@@ -254,7 +254,11 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="extraSlots" upperBound="-1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"
-        containment="true"/>
+        containment="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
+        <details key="nonUniqueChildren" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseOption" eType="#//SolutionOption"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="options" upperBound="-1"
