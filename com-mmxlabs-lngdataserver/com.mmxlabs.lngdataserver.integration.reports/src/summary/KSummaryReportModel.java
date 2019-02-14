@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * All rights reserved.
+ */
 package summary;
 /**
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
