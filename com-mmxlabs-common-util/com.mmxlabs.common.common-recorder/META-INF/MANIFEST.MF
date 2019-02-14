@@ -8,11 +8,11 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.mmxlabs.common.common-recorder
 Automatic-Module-Name: com.mmxlabs.common.common-recorder
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.6.7.RELEASE
+Bundle-Version: 4.6.8.qualifier
 Export-Package: com.mmxlabs.common.recorder,
  com.mmxlabs.common.recorder.conversion,
  com.mmxlabs.common.recorder.conversion.impl
 Import-Package: javax.xml.namespace,
  javax.xml.stream,javax.xml.stream.events
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.common.common-util;bundle-version="[4.6.7,5.0.0)"
+ com.mmxlabs.common.common-util;bundle-version="[4.6.8,5.0.0)"
