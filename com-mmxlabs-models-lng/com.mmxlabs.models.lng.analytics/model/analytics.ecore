@@ -15,7 +15,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="mtmModel" eType="#//MTMModel"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="breakevenModels" upperBound="-1"
-        eType="#//BreakEvenAnalysisModel" containment="true"/>        
+        eType="#//BreakEvenAnalysisModel" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BuyOption" abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="SellOption" abstract="true" interface="true"/>
@@ -303,7 +303,7 @@
         upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//CharterInMarketOverride"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ChangeDescription" eSuperTypes="#//ChangeSource">
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeDescription">
     <eStructuralFeatures xsi:type="ecore:EReference" name="changes" upperBound="-1"
         eType="#//Change" containment="true"/>
   </eClassifiers>
@@ -428,8 +428,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startVolume" unique="false"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ChangeSource" instanceClassName="com.mmxlabs.scenario.service.ui.dnd.IChangeSource"
-      abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="BreakEvenAnalysisModel" eSuperTypes="#//AbstractAnalysisModel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//BreakEvenAnalysisRow"
         containment="true"/>
@@ -460,5 +458,5 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="eta" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="referencePrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-  </eClassifiers>  
+  </eClassifiers>
 </ecore:EPackage>

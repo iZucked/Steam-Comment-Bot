@@ -288,7 +288,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMRow/referencePrice"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMRow/startVolume"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="analytics.ecore#//ChangeSource"/>
     <genClasses ecoreClass="analytics.ecore#//BreakEvenAnalysisModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//BreakEvenAnalysisModel/rows"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BreakEvenAnalysisModel/markets"/>

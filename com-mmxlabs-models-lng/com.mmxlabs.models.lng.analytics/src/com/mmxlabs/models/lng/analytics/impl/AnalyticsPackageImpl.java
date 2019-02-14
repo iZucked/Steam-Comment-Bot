@@ -464,13 +464,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass changeSourceEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass breakEvenAnalysisModelEClass = null;
 
 	/**
@@ -2363,15 +2356,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getChangeSource() {
-		return changeSourceEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getBreakEvenAnalysisModel() {
 		return breakEvenAnalysisModelEClass;
 	}
@@ -3123,8 +3107,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(mtmRowEClass, MTM_ROW__REFERENCE_PRICE);
 		createEAttribute(mtmRowEClass, MTM_ROW__START_VOLUME);
 
-		changeSourceEClass = createEClass(CHANGE_SOURCE);
-
 		breakEvenAnalysisModelEClass = createEClass(BREAK_EVEN_ANALYSIS_MODEL);
 		createEReference(breakEvenAnalysisModelEClass, BREAK_EVEN_ANALYSIS_MODEL__ROWS);
 		createEReference(breakEvenAnalysisModelEClass, BREAK_EVEN_ANALYSIS_MODEL__MARKETS);
@@ -3220,7 +3202,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		slotInsertionOptionsEClass.getESuperTypes().add(this.getAbstractSolutionSet());
 		optimisationResultEClass.getESuperTypes().add(this.getAbstractSolutionSet());
 		dualModeSolutionOptionEClass.getESuperTypes().add(this.getSolutionOption());
-		changeDescriptionEClass.getESuperTypes().add(this.getChangeSource());
 		openSlotChangeEClass.getESuperTypes().add(this.getChange());
 		cargoChangeEClass.getESuperTypes().add(this.getChange());
 		vesselEventChangeEClass.getESuperTypes().add(this.getChange());
@@ -3509,8 +3490,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getMTMRow_Eta(), theDateTimePackage.getLocalDate(), "eta", null, 0, 1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMTMRow_ReferencePrice(), ecorePackage.getEDouble(), "referencePrice", null, 0, 1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMTMRow_StartVolume(), ecorePackage.getELong(), "startVolume", null, 0, 1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(changeSourceEClass, IChangeSource.class, "ChangeSource", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(breakEvenAnalysisModelEClass, BreakEvenAnalysisModel.class, "BreakEvenAnalysisModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBreakEvenAnalysisModel_Rows(), this.getBreakEvenAnalysisRow(), null, "rows", null, 0, -1, BreakEvenAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

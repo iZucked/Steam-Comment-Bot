@@ -2299,32 +2299,13 @@ s	 * <!-- end-user-doc -->
 	int SOLUTION_OPTION_MICRO_CASE_FEATURE_COUNT = 4;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.scenario.service.ui.dnd.IChangeSource <em>Change Source</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.scenario.service.ui.dnd.IChangeSource
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChangeSource()
-	 * @generated
-	 */
-	int CHANGE_SOURCE = 56;
-
-	/**
-	 * The number of structural features of the '<em>Change Source</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SOURCE_FEATURE_COUNT = 0;
-
-	/**
 	 * The feature id for the '<em><b>Changes</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_DESCRIPTION__CHANGES = CHANGE_SOURCE_FEATURE_COUNT + 0;
+	int CHANGE_DESCRIPTION__CHANGES = 0;
 
 	/**
 	 * The number of structural features of the '<em>Change Description</em>' class.
@@ -2333,7 +2314,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_DESCRIPTION_FEATURE_COUNT = CHANGE_SOURCE_FEATURE_COUNT + 1;
+	int CHANGE_DESCRIPTION_FEATURE_COUNT = 1;
 
 	/**
 	 * The number of structural features of the '<em>Change</em>' class.
@@ -3177,7 +3158,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisModel()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_MODEL = 57;
+	int BREAK_EVEN_ANALYSIS_MODEL = 56;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -3259,7 +3240,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisRow()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_ROW = 58;
+	int BREAK_EVEN_ANALYSIS_ROW = 57;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -3341,7 +3322,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResultSet()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_RESULT_SET = 59;
+	int BREAK_EVEN_ANALYSIS_RESULT_SET = 58;
 
 	/**
 	 * The feature id for the '<em><b>Based On</b></em>' reference.
@@ -3387,7 +3368,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResult()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_RESULT = 60;
+	int BREAK_EVEN_ANALYSIS_RESULT = 59;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -3442,7 +3423,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 61;
+	int VOLUME_MODE = 60;
 
 
 	/**
@@ -3453,7 +3434,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotType()
 	 * @generated
 	 */
-	int SLOT_TYPE = 62;
+	int SLOT_TYPE = 61;
 
 
 	/**
@@ -5528,17 +5509,6 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EAttribute getMTMRow_StartVolume();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.ui.dnd.IChangeSource <em>Change Source</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Change Source</em>'.
-	 * @see com.mmxlabs.scenario.service.ui.dnd.IChangeSource
-	 * @model instanceClass="com.mmxlabs.scenario.service.ui.dnd.IChangeSource"
-	 * @generated
-	 */
-	EClass getChangeSource();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel <em>Break Even Analysis Model</em>}'.
@@ -7744,16 +7714,6 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute MTM_ROW__START_VOLUME = eINSTANCE.getMTMRow_StartVolume();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.ui.dnd.IChangeSource <em>Change Source</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.scenario.service.ui.dnd.IChangeSource
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChangeSource()
-		 * @generated
-		 */
-		EClass CHANGE_SOURCE = eINSTANCE.getChangeSource();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BreakEvenAnalysisModelImpl <em>Break Even Analysis Model</em>}' class.

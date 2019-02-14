@@ -428,8 +428,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startVolume" unique="false"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ChangeSource" instanceClassName="com.mmxlabs.scenario.service.ui.dnd.IChangeSource"
-      abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="BreakEvenAnalysisModel" eSuperTypes="#//AbstractAnalysisModel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//BreakEvenAnalysisRow"
         containment="true"/>
@@ -460,5 +458,5 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="eta" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="referencePrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-  </eClassifiers>  
+  </eClassifiers>
 </ecore:EPackage>

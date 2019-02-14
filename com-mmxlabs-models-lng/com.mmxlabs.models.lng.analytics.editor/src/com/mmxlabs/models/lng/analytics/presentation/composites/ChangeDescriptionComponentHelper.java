@@ -47,7 +47,6 @@ public class ChangeDescriptionComponentHelper extends BaseComponentHelper {
 	 */
 	public ChangeDescriptionComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(AnalyticsPackage.Literals.CHANGE_SOURCE));
 	}
 	
 	/**

@@ -24,10 +24,10 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getChangeDescription()
- * @model superTypes="com.mmxlabs.models.lng.analytics.ChangeSource"
+ * @model
  * @generated
  */
-public interface ChangeDescription extends EObject, IChangeSource {
+public interface ChangeDescription extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Changes</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.Change}.

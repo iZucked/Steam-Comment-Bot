@@ -342,7 +342,6 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 			case AnalyticsPackage.CHANGE_DESCRIPTION: {
 				ChangeDescription changeDescription = (ChangeDescription)theEObject;
 				T result = caseChangeDescription(changeDescription);
-				if (result == null) result = caseChangeSource(changeDescription);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -464,12 +463,6 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 			case AnalyticsPackage.MTM_ROW: {
 				MTMRow mtmRow = (MTMRow)theEObject;
 				T result = caseMTMRow(mtmRow);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.CHANGE_SOURCE: {
-				IChangeSource changeSource = (IChangeSource)theEObject;
-				T result = caseChangeSource(changeSource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1281,21 +1274,6 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseMTMRow(MTMRow object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Change Source</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Change Source</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseChangeSource(IChangeSource object) {
 		return null;
 	}
 

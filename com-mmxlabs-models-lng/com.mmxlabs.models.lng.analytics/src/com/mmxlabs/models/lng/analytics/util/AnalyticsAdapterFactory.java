@@ -301,10 +301,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createMTMRowAdapter();
 			}
 			@Override
-			public Adapter caseChangeSource(IChangeSource object) {
-				return createChangeSourceAdapter();
-			}
-			@Override
 			public Adapter caseBreakEvenAnalysisModel(BreakEvenAnalysisModel object) {
 				return createBreakEvenAnalysisModelAdapter();
 			}
@@ -1077,20 +1073,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMTMRowAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.scenario.service.ui.dnd.IChangeSource <em>Change Source</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.scenario.service.ui.dnd.IChangeSource
-	 * @generated
-	 */
-	public Adapter createChangeSourceAdapter() {
 		return null;
 	}
 
