@@ -285,6 +285,15 @@ public interface CargoFactory extends EFactory {
 	SellPaperDeal createSellPaperDeal();
 
 	/**
+	 * Returns a new object of class '<em>Deal Set</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Deal Set</em>'.
+	 * @generated
+	 */
+	DealSet createDealSet();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

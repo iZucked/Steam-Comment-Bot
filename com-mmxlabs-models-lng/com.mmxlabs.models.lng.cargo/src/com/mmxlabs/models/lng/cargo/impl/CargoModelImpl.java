@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.cargo.CargoGroup;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
+import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -49,6 +50,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCanalBookings <em>Canal Bookings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getPaperDeals <em>Paper Deals</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getDealSets <em>Deal Sets</em>}</li>
  * </ul>
  *
  * @generated
@@ -163,6 +165,16 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * @ordered
 	 */
 	protected EList<PaperDeal> paperDeals;
+
+	/**
+	 * The cached value of the '{@link #getDealSets() <em>Deal Sets</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDealSets()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<DealSet> dealSets;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -387,6 +399,19 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * @generated
 	 */
 	@Override
+	public EList<DealSet> getDealSets() {
+		if (dealSets == null) {
+			dealSets = new EObjectContainmentEList.Resolving<DealSet>(DealSet.class, this, CargoPackage.CARGO_MODEL__DEAL_SETS);
+		}
+		return dealSets;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case CargoPackage.CARGO_MODEL__LOAD_SLOTS:
@@ -411,6 +436,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return ((InternalEList<?>)getCharterInMarketOverrides()).basicRemove(otherEnd, msgs);
 			case CargoPackage.CARGO_MODEL__PAPER_DEALS:
 				return ((InternalEList<?>)getPaperDeals()).basicRemove(otherEnd, msgs);
+			case CargoPackage.CARGO_MODEL__DEAL_SETS:
+				return ((InternalEList<?>)getDealSets()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -446,6 +473,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return getCharterInMarketOverrides();
 			case CargoPackage.CARGO_MODEL__PAPER_DEALS:
 				return getPaperDeals();
+			case CargoPackage.CARGO_MODEL__DEAL_SETS:
+				return getDealSets();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -502,6 +531,10 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				getPaperDeals().clear();
 				getPaperDeals().addAll((Collection<? extends PaperDeal>)newValue);
 				return;
+			case CargoPackage.CARGO_MODEL__DEAL_SETS:
+				getDealSets().clear();
+				getDealSets().addAll((Collection<? extends DealSet>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -547,6 +580,9 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 			case CargoPackage.CARGO_MODEL__PAPER_DEALS:
 				getPaperDeals().clear();
 				return;
+			case CargoPackage.CARGO_MODEL__DEAL_SETS:
+				getDealSets().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -581,6 +617,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return charterInMarketOverrides != null && !charterInMarketOverrides.isEmpty();
 			case CargoPackage.CARGO_MODEL__PAPER_DEALS:
 				return paperDeals != null && !paperDeals.isEmpty();
+			case CargoPackage.CARGO_MODEL__DEAL_SETS:
+				return dealSets != null && !dealSets.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

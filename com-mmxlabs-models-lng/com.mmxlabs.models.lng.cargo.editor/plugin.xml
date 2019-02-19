@@ -483,6 +483,12 @@
           label="Sell"
           outputEClass="com.mmxlabs.models.lng.cargo.SellPaperDeal"
           targetEClass="com.mmxlabs.models.lng.cargo.PaperDeal">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.DealSet.defaultFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Deal Set"
+          targetEClass="com.mmxlabs.models.lng.cargo.DealSet">
     </factory>    
  </extension>
  <extension
@@ -586,6 +592,7 @@
             restorable="true">
       </view>
    </extension>
+
    <extension
          point="com.mmxlabs.models.lng.cargo.editor.TradesTableEditor">
       <TradesTableEditor
@@ -605,6 +612,14 @@
             id="com.mmxlabs.models.lng.cargo.editor.TradesTablePreferencesPage"
             name="Filtering">
       </page>
+   </extension>
+
+   <extension
+         point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="risk"
+            plugin.xml="risk.plugin.xml">
+      </PluginXMLEnablement>
    </extension>
 
 </plugin>

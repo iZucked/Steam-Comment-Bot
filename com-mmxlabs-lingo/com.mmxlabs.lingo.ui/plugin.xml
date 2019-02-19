@@ -24,4 +24,11 @@
             plugin.xml="actuals.plugin.xml">
       </PluginXMLEnablement>
    </extension>
+   <extension
+         point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="risk"
+            plugin.xml="risk.plugin.xml">
+      </PluginXMLEnablement>
+   </extension>
 </plugin>

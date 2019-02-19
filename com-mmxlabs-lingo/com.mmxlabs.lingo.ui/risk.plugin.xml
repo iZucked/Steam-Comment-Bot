@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.mmxlabs.lingo.platform.ui.RiskModelPerspective"
+            id="com.mmxlabs.lingo.platform.ui.RiskModelPerspective"
+            name="Risk">
+      </perspective>
+   </extension>
+</plugin>

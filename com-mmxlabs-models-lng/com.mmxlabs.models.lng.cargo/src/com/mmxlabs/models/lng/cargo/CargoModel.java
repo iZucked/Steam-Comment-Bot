@@ -27,6 +27,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getCanalBookings <em>Canal Bookings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getPaperDeals <em>Paper Deals</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getDealSets <em>Deal Sets</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel()
@@ -221,6 +222,22 @@ public interface CargoModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<PaperDeal> getPaperDeals();
+
+	/**
+	 * Returns the value of the '<em><b>Deal Sets</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.DealSet}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Deal Sets</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Deal Sets</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_DealSets()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<DealSet> getDealSets();
 
 } // end of  CargoModel
 

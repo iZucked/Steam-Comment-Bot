@@ -32,6 +32,8 @@
         upperBound="-1" eType="#//CharterInMarketOverride" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="paperDeals" upperBound="-1"
         eType="#//PaperDeal" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dealSets" upperBound="-1"
+        eType="#//DealSet" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Cargo" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//AssignableElement">
     <eOperations name="getCargoType" lowerBound="1" eType="#//CargoType"/>
@@ -684,4 +686,13 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BuyPaperDeal" eSuperTypes="#//PaperDeal"/>
   <eClassifiers xsi:type="ecore:EClass" name="SellPaperDeal" eSuperTypes="#//PaperDeal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DealSet" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slots" upperBound="-1">
+      <eGenericType eClassifier="#//Slot">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paperDeals" upperBound="-1"
+        eType="#//PaperDeal"/>
+  </eClassifiers>
 </ecore:EPackage>
