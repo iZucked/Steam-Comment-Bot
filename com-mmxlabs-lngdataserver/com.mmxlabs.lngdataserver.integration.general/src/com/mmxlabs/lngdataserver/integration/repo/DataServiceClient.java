@@ -64,9 +64,8 @@ public class DataServiceClient {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
 		final String requestURL = String.format("%s%s", upstreamURL, typeRecord.getUploadURL());
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(requestURL) //
-				.header(CONST_AUTHORIZATION, Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.post(requestBody).build();
 
 		// Check the response
@@ -97,9 +96,8 @@ public class DataServiceClient {
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		final String requestURL = String.format("%s%s", upstreamURL, typeRecord.getDownloadURL(uuid));
 
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(requestURL) //
-				.header(CONST_AUTHORIZATION, Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
 		try (Response response = localHttpClient.newCall(request).execute()) {
@@ -128,9 +126,8 @@ public class DataServiceClient {
 		}
 
 		final String requestURL = String.format("%s%s", upstreamURL, typeRecord.getListURL());
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(requestURL) //
-				.header(CONST_AUTHORIZATION, Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -150,9 +147,8 @@ public class DataServiceClient {
 			return;
 		}
 		final String requestURL = String.format("%s%s", upstreamURL, typeRecord.getDeleteURL(uuid));
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(requestURL) //
-				.header(CONST_AUTHORIZATION, Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.delete() //
 				.build();
 
@@ -190,9 +186,8 @@ public class DataServiceClient {
 		final String requestURL = baseUrl + typeRecord.getVersionNotificationEndpoint();
 		LOG.debug("Calling url {}", requestURL);
 		return CompletableFuture.supplyAsync(() -> {
-			final Request.Builder requestBuilder = new Request.Builder() //
+			final Request.Builder requestBuilder = UpstreamUrlProvider.INSTANCE.makeRequest() //
 					.url(requestURL) //
-					.header(CONST_AUTHORIZATION, Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 			;
 			final Request request = requestBuilder.build();
 			try (Response response = LONG_POLLING_CLIENT.newCall(request).execute()) {

@@ -59,9 +59,8 @@ public class SharedWorkspaceServiceClient {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
 
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(upstreamURL + SCENARIO_UPLOAD_URL) //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.post(requestBody).build();
 
 		// Check the response
@@ -98,9 +97,8 @@ public class SharedWorkspaceServiceClient {
 
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(String.format("%s%s%s", upstreamURL, SCENARIO_DOWNLOAD_URL, uuid)) //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
 		try (Response response = localHttpClient.newCall(request).execute()) {
@@ -123,9 +121,8 @@ public class SharedWorkspaceServiceClient {
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(upstreamURL + SCENARIO_DOWNLOAD_URL + uuid + "/details") //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -145,9 +142,8 @@ public class SharedWorkspaceServiceClient {
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(upstreamURL + SCENARIO_LIST_URL) //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -171,9 +167,8 @@ public class SharedWorkspaceServiceClient {
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return;
 		}
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(upstreamURL + SCENARIO_DELETE_URL + uuid) //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.delete() //
 				.build();
 
@@ -190,9 +185,8 @@ public class SharedWorkspaceServiceClient {
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(upstreamURL + SCENARIO_LAST_MODIFIED_URL) //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -219,9 +213,8 @@ public class SharedWorkspaceServiceClient {
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("path", newPath) //
 				.build();
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(upstreamURL + SCENARIO_MOVE_URL + uuid) //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.post(requestBody) //
 				.build();
 

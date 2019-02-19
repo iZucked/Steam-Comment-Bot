@@ -38,7 +38,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class UpstreamUrlProvider implements IUserNameProvider{
+public class UpstreamUrlProvider implements IUserNameProvider {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UpstreamUrlProvider.class);
 
@@ -120,6 +120,7 @@ public class UpstreamUrlProvider implements IUserNameProvider{
 		return "";
 	}
 
+	@Override
 	public String getUsername() {
 		return username;
 	}
@@ -154,8 +155,7 @@ public class UpstreamUrlProvider implements IUserNameProvider{
 			return false;
 		}
 
-		final Request loginRequest = new Request.Builder().url(url + "/api/login") //
-				.addHeader("Authorization", Credentials.basic(username, password)) //
+		final Request loginRequest = makeRequest().url(url + "/api/login") //
 				.build();
 
 		try (Response loginResponse = CLIENT.newCall(loginRequest).execute()) {
@@ -343,4 +343,16 @@ public class UpstreamUrlProvider implements IUserNameProvider{
 	public boolean isTeamServiceEnabled() {
 		return teamServiceEnabled;
 	}
+
+	/**
+	 * Create a request builder with Authorization header.
+	 */
+	public Request.Builder makeRequest() {
+
+		return new Request.Builder() //
+				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword())) //
+				.header("cache-control", "no-cache") //
+		;
+	}
+
 }

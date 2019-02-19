@@ -65,9 +65,8 @@ public class BaseCaseServiceClient {
 
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(upstreamURL + BASECASE_UPLOAD_URL) //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.post(requestBody).build();
 
 		// Check the response
@@ -98,9 +97,8 @@ public class BaseCaseServiceClient {
 
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest()
 				.url(String.format("%s%s%s", upstreamURL, BASECASE_DOWNLOAD_URL, uuid)) //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
 		try (Response response = localHttpClient.newCall(request).execute()) {
@@ -128,9 +126,8 @@ public class BaseCaseServiceClient {
 			return null;
 		}
 
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(upstreamURL + BASECASE_CURRENT_URL) //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -152,9 +149,8 @@ public class BaseCaseServiceClient {
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(upstreamURL + BASECASE_CURRENT_URL + "/" + uuid) //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -172,9 +168,8 @@ public class BaseCaseServiceClient {
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(upstreamURL + BASECASE_DOWNLOAD_URL + uuid + "/details") //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {

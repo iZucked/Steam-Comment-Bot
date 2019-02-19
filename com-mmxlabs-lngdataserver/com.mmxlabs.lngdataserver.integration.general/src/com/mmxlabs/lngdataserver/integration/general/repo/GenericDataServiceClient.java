@@ -64,9 +64,8 @@ public class GenericDataServiceClient {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
 		final String requestURL = String.format("%s%s/%s/%s", upstreamURL, SCENARIO_UPLOAD_URL, type, uuid);
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(requestURL) //
-				.header(CONST_AUTHORIZATION, Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.post(requestBody).build();
 
 		// Check the response
@@ -104,9 +103,8 @@ public class GenericDataServiceClient {
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		final String requestURL = String.format("%s%s/%s/%s", upstreamURL, SCENARIO_DOWNLOAD_URL, type, uuid);
 
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(requestURL) //
-				.header(CONST_AUTHORIZATION, Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
 		try (Response response = localHttpClient.newCall(request).execute()) {
@@ -136,9 +134,8 @@ public class GenericDataServiceClient {
 
 		final String typesList = Joiner.on(",").join(types);
 		final String requestURL = String.format("%s%s/%s", upstreamURL, SCENARIO_LIST_URL, typesList);
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(requestURL) //
-				.header(CONST_AUTHORIZATION, Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -163,9 +160,8 @@ public class GenericDataServiceClient {
 			return;
 		}
 		final String requestURL = String.format("%s%s/%s/%s", upstreamURL, SCENARIO_DELETE_URL, type, uuid);
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(requestURL) //
-				.header(CONST_AUTHORIZATION, Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.delete() //
 				.build();
 
@@ -182,9 +178,8 @@ public class GenericDataServiceClient {
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
-		final Request request = new Request.Builder() //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(upstreamURL + SCENARIO_LAST_MODIFIED_URL) //
-				.header(CONST_AUTHORIZATION, Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {

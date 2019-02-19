@@ -50,9 +50,8 @@ public class ReportsServiceClient {
 		// String upstreamURL = "http://"
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
-		Request request = new Request.Builder() //
+		Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(upstreamURL + REPORT_UPLOAD_URL + "/" + uuid + "/" + type) //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.post(requestBody).build();
 
 		// Check the response
@@ -71,9 +70,8 @@ public class ReportsServiceClient {
 
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
-		Request request = new Request.Builder() //
+		Request request =UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(String.format("%s%s/%s", upstreamURL, REPORT_GET_URL, uuid)) //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
