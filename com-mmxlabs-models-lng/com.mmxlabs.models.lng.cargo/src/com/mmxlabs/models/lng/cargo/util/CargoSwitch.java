@@ -383,6 +383,14 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CargoPackage.DEAL_SET: {
+				DealSet dealSet = (DealSet)theEObject;
+				T1 result = caseDealSet(dealSet);
+				if (result == null) result = caseNamedObject(dealSet);
+				if (result == null) result = caseMMXObject(dealSet);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -894,6 +902,21 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseSellPaperDeal(SellPaperDeal object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Deal Set</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Deal Set</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseDealSet(DealSet object) {
 		return null;
 	}
 

@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.lingo.reports.views.standard.exposures;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +23,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 /**
  */
 public class IndexExposureData {
+	public String dealSet;
 	public final YearMonth date;
 	public final int year;
 	public final int quarter;
@@ -50,6 +53,22 @@ public class IndexExposureData {
 		this.type = IndexExposureType.MONTHLY;
 	}
 	
+	public IndexExposureData(ScenarioResult scenarioResult, //
+			final Schedule schedule, //
+			final String dealSet) {
+		this.scenarioResult = scenarioResult;
+		this.schedule = schedule;
+		this.dealSet = dealSet;
+		this.exposures = new HashMap<String, Double>();
+		this.childName = "";
+		this.children = new ArrayList<IndexExposureData>();
+		this.type = IndexExposureType.MONTHLY;
+		
+		this.date = YearMonth.from(LocalDate.now());
+		this.year = 0;
+		this.quarter = 0;
+	}
+	
 	public IndexExposureData(IndexExposureData data) {
 		this.scenarioResult = data.scenarioResult;
 		this.schedule = data.schedule;
@@ -59,7 +78,7 @@ public class IndexExposureData {
 		this.exposures = new HashMap<String, Double>();
 		this.exposures.putAll(data.exposures);
 		this.childName = "";
-		this.children = null;
+		this.children = new ArrayList<IndexExposureData>();
 	}
 	
 	public IndexExposureData(final ScenarioResult scenarioResult, //
@@ -97,11 +116,15 @@ public class IndexExposureData {
 		this.entity = entity;
 	}
 	
-	public void setType(IndexExposureType type) {
+	public void setType(final IndexExposureType type) {
 		this.type = type;
 	}
 	
-	public static IndexExposureData flatten(List<IndexExposureData> data) {
+	public void setDealSet(final String dealSet) {
+		this.dealSet = dealSet;
+	}
+	
+	public static IndexExposureData flatten(final List<IndexExposureData> data) {
 		if (data.isEmpty()){
 			return null;
 		}

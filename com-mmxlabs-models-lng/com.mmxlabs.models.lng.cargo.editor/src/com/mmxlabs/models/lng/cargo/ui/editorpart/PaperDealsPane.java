@@ -49,7 +49,6 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 public class PaperDealsPane extends ScenarioTableViewerPane {
 
 	private final IScenarioEditingLocation jointModelEditor;
-	private Iterable<IVesselEventsTableContextMenuExtension> contextMenuExtensions;
 
 	public PaperDealsPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);

@@ -231,6 +231,10 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createSellPaperDealAdapter();
 			}
 			@Override
+			public Adapter caseDealSet(DealSet object) {
+				return createDealSetAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -793,6 +797,20 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSellPaperDealAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.DealSet <em>Deal Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.DealSet
+	 * @generated
+	 */
+	public Adapter createDealSetAdapter() {
 		return null;
 	}
 

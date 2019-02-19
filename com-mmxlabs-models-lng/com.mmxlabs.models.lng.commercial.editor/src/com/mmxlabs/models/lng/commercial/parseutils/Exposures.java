@@ -82,6 +82,10 @@ public class Exposures {
 	public enum ValueMode {
 		VOLUME_MMBTU, VOLUME_NATIVE, NATIVE_VALUE
 	}
+	
+	public enum AggregationMode {
+		BY_MONTH_NO_TOTAL, BY_MONTH, BY_DEALSET
+	}
 
 	public static void calculateExposures(final @NonNull LNGScenarioModel scenarioModel, final @Nullable Schedule schedule) {
 

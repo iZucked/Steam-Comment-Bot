@@ -755,6 +755,29 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.DealSet} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DealSetItemProvider dealSetItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.DealSet}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDealSetAdapter() {
+		if (dealSetItemProvider == null) {
+			dealSetItemProvider = new DealSetItemProvider(this);
+		}
+
+		return dealSetItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -909,6 +932,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (charterInMarketOverrideItemProvider != null) charterInMarketOverrideItemProvider.dispose();
 		if (buyPaperDealItemProvider != null) buyPaperDealItemProvider.dispose();
 		if (sellPaperDealItemProvider != null) sellPaperDealItemProvider.dispose();
+		if (dealSetItemProvider != null) dealSetItemProvider.dispose();
 	}
 
 }

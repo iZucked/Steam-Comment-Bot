@@ -29,7 +29,6 @@ public class BasicDragSource implements DragSourceListener {
 
 	@Override
 	public void dragSetData(final DragSourceEvent event) {
-
 		final LocalSelectionTransfer transfer = LocalSelectionTransfer.getTransfer();
 		if (transfer.isSupportedType(event.dataType)) {
 			transfer.setSelection(selection);

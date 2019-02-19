@@ -25,8 +25,13 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -37,10 +42,10 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
-import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer.ColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
+import com.mmxlabs.lingo.reports.views.standard.exposures.IndexExposureData.IndexExposureType;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -68,6 +73,13 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ExposureReportView extends SimpleTabularReportView<IndexExposureData> implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
+	protected Color colourBlue;
+	protected Color colourLightBlue;
+	protected Color colourGreen;
+	protected Color colourOrange;
+	protected Color colourViolet;
+	protected Font fontBold;
+	
 	protected Image cellImageDarkArrowDown;
 	protected Image cellImageDarkArrowUp;
 	
@@ -128,9 +140,26 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					if (data.isChild) {
 						return data.childName;
 					}
+					if (data.type != null) {
+						if (data.type == IndexExposureType.ANNUAL) {
+							return String.format("%04d Total", data.year);
+						} else if(data.type == IndexExposureType.QUARTERLY) {
+							return String.format("Q%1d Total", data.quarter);
+						}
+					}
 					return String.format("%04d-%02d", data.date.getYear(), data.date.getMonthValue());
 				}
 
+				@Override
+				public Color getForeground(final IndexExposureData element) {
+					return colorByType(element);
+				}
+				
+				@Override
+				public Font getFont(final IndexExposureData element) {
+					return fontByType(element);
+				}
+				
 				@Override
 				public int compare(final IndexExposureData o1, final IndexExposureData o2) {
 					if (o1.isChild && o2.isChild) {
@@ -287,7 +316,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			}
 			entities = getEntities(schedule);
 			fiscalYears = getFiscalYears(schedule);
-			return output;
+			return ExposuresTransformer.aggregateBy(viewMode, output, scenarioResult);
 		}
 	}
 	// -------------------------------------Transformer class ends----------------------------------------
@@ -348,20 +377,52 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		cellImageDarkArrowDown = imageDescriptor.createImage();
 		imageDescriptor = Activator.Implementation.getImageDescriptor("icons/dark_arrow_up.png");
 		cellImageDarkArrowUp = imageDescriptor.createImage();
+		
+		colourBlue = new Color(Display.getDefault(), 0, 80, 170);
+		colourLightBlue = new Color(Display.getDefault(), 	23, 214, 255);
+		colourGreen = new Color(Display.getDefault(), 132, 148, 67);
+		colourOrange = new Color(Display.getDefault(), 255, 161, 79);
+		colourViolet = new Color(Display.getDefault(), 109, 108, 144);
+		final Font systemFont = Display.getDefault().getSystemFont();
+		final FontData fontData = systemFont.getFontData()[0];
+		fontBold = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
 	}
 
 	@Override
 	public void dispose() {
 		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 		service.removePostSelectionListener(this);
-		cellImageDarkArrowDown.dispose();
-		cellImageDarkArrowUp.dispose();
+		if (cellImageDarkArrowDown != null) {
+			cellImageDarkArrowDown.dispose();
+		}
+		if (cellImageDarkArrowUp != null) {
+			cellImageDarkArrowUp.dispose();
+		}
+		if (colourBlue != null) {
+			colourBlue.dispose();
+		}
+		if (colourLightBlue != null) {
+			colourLightBlue.dispose();
+		}
+		if (colourGreen != null) {
+			colourGreen.dispose();
+		}
+		if (colourOrange != null) {
+			colourOrange.dispose();
+		}
+		if (colourViolet != null) {
+			colourViolet.dispose();
+		}
+		if (fontBold != null) {
+			fontBold.dispose();
+		}
 		super.dispose();
 	}
 
 	protected final Pair<YearMonth, YearMonth> dateRange = new Pair<>();
 
 	protected Exposures.ValueMode mode = ValueMode.VOLUME_MMBTU;
+	protected Exposures.AggregationMode viewMode = com.mmxlabs.models.lng.commercial.parseutils.Exposures.AggregationMode.BY_MONTH;
 	protected boolean selectionMode = false;
 
 	protected ISelection selection;
@@ -416,7 +477,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 			@Override
 			public boolean hasChildren(final Object element) {
-				return element instanceof Collection<?> || (element instanceof IndexExposureData && ((IndexExposureData) element).children != null);
+				return element instanceof Collection<?> || (element instanceof IndexExposureData && ((IndexExposureData) element).children != null && ((IndexExposureData) element).type == IndexExposureType.MONTHLY);
 			}
 		};
 	}
@@ -480,7 +541,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	protected void makeActions() {
 		super.makeActions();
 		
-		//TODO : filter
+		final FilterMenuAction filterAction = new FilterMenuAction("Filters");
+		filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
+		getViewSite().getActionBars().getToolBarManager().add(filterAction);
 
 		final Action modeToggle = new Action("Units: currency", Action.AS_PUSH_BUTTON) {
 			@Override
@@ -495,11 +558,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			}
 		};
 		setUnitsActionText(modeToggle);
-		final FilterMenuAction filterAction = new FilterMenuAction("Filters");
-		filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
-		getViewSite().getActionBars().getToolBarManager().add(filterAction);
-
 		getViewSite().getActionBars().getToolBarManager().add(modeToggle);
+		
 		final Action selectionToggle = new Action("View: " + (selectionMode ? "Selection" : "All"), Action.AS_CHECK_BOX) {
 			@Override
 			public void run() {
@@ -511,9 +571,23 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 			}
 		};
-
 		getViewSite().getActionBars().getToolBarManager().add(selectionToggle);
 
+		final Action viewModeToggle = new Action("View mode: Month", Action.AS_PUSH_BUTTON) {
+			@Override
+			public void run() {
+
+				final int modeIdx = (viewMode.ordinal() + 1) % Exposures.AggregationMode.values().length;
+				viewMode = Exposures.AggregationMode.values()[modeIdx];
+				setAggregationModeActionText(this);
+				getViewSite().getActionBars().updateActionBars();
+				ExposureReportView.this.refresh();
+
+			}
+		};
+		setAggregationModeActionText(viewModeToggle);
+		getViewSite().getActionBars().getToolBarManager().add(viewModeToggle);
+		
 		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
 	
@@ -635,6 +709,27 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		assert modeStr != null;
 		a.setText("Units: " + modeStr);
 	}
+	
+	private void setAggregationModeActionText(final Action a) {
+		String modeStr = null;
+		switch (viewMode) {
+		case BY_MONTH:
+			modeStr = "Month";
+			break;
+		case BY_DEALSET:
+			modeStr = "Deal Set";
+			break;
+		case BY_MONTH_NO_TOTAL:
+			modeStr = "Month (No total)";
+			break;
+		default:
+			assert false;
+			break;
+
+		}
+		assert modeStr != null;
+		a.setText("View mode: " + modeStr);
+	}
 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
@@ -712,5 +807,21 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		
 		return false;
+	}
+	
+	protected Color colorByType(final IndexExposureData ied) {
+		if(IndexExposureType.ANNUAL.equals(ied.type)) {
+			return colourBlue;
+		} else if(IndexExposureType.QUARTERLY.equals(ied.type)) {
+			return colourLightBlue;
+		}
+		return null;
+	}
+	
+	protected Font fontByType(final IndexExposureData ied) {
+		if(!IndexExposureType.MONTHLY.equals(ied.type)) {
+			return fontBold;
+		}
+		return null;
 	}
 }

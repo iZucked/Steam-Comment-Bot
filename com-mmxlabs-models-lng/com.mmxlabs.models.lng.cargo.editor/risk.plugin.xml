@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.mmxlabs.models.lng.cargo.editor.risk.DealSetTableEditorView"
+            id="com.mmxlabs.models.lng.cargo.editor.risk.DealSetTableEditorView"
+            name="Deal Sets"
+            restorable="true">
+      </view>
+   </extension>
+</plugin>

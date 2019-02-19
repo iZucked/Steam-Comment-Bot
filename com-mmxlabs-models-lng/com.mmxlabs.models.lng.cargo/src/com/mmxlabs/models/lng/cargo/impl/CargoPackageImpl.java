@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
@@ -308,6 +309,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EClass sellPaperDealEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass dealSetEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1626,6 +1634,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	@Override
 	public EReference getCargoModel_PaperDeals() {
 		return (EReference)cargoModelEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCargoModel_DealSets() {
+		return (EReference)cargoModelEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -3104,6 +3122,36 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getDealSet() {
+		return dealSetEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getDealSet_Slots() {
+		return (EReference)dealSetEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getDealSet_PaperDeals() {
+		return (EReference)dealSetEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getCargoType() {
 		return cargoTypeEEnum;
 	}
@@ -3179,6 +3227,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(cargoModelEClass, CARGO_MODEL__CANAL_BOOKINGS);
 		createEReference(cargoModelEClass, CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES);
 		createEReference(cargoModelEClass, CARGO_MODEL__PAPER_DEALS);
+		createEReference(cargoModelEClass, CARGO_MODEL__DEAL_SETS);
 
 		cargoEClass = createEClass(CARGO);
 		createEAttribute(cargoEClass, CARGO__ALLOW_REWIRING);
@@ -3470,6 +3519,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		sellPaperDealEClass = createEClass(SELL_PAPER_DEAL);
 
+		dealSetEClass = createEClass(DEAL_SET);
+		createEReference(dealSetEClass, DEAL_SET__SLOTS);
+		createEReference(dealSetEClass, DEAL_SET__PAPER_DEALS);
+
 		// Create enums
 		cargoTypeEEnum = createEEnum(CARGO_TYPE);
 		vesselTypeEEnum = createEEnum(VESSEL_TYPE);
@@ -3563,6 +3616,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		paperDealEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		buyPaperDealEClass.getESuperTypes().add(this.getPaperDeal());
 		sellPaperDealEClass.getESuperTypes().add(this.getPaperDeal());
+		dealSetEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(cargoModelEClass, CargoModel.class, "CargoModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3577,6 +3631,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getCargoModel_CanalBookings(), this.getCanalBookings(), null, "canalBookings", null, 0, 1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_CharterInMarketOverrides(), this.getCharterInMarketOverride(), null, "charterInMarketOverrides", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_PaperDeals(), this.getPaperDeal(), null, "paperDeals", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoModel_DealSets(), this.getDealSet(), null, "dealSets", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cargoEClass, Cargo.class, "Cargo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCargo_AllowRewiring(), ecorePackage.getEBoolean(), "allowRewiring", "false", 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3939,6 +3994,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEClass(buyPaperDealEClass, BuyPaperDeal.class, "BuyPaperDeal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(sellPaperDealEClass, SellPaperDeal.class, "SellPaperDeal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(dealSetEClass, DealSet.class, "DealSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		g1 = createEGenericType(this.getSlot());
+		g2 = createEGenericType();
+		g1.getETypeArguments().add(g2);
+		initEReference(getDealSet_Slots(), g1, null, "slots", null, 0, -1, DealSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDealSet_PaperDeals(), this.getPaperDeal(), null, "paperDeals", null, 0, -1, DealSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(cargoTypeEEnum, CargoType.class, "CargoType");
