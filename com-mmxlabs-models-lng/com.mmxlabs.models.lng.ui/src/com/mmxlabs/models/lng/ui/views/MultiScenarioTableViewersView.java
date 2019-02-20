@@ -106,7 +106,7 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 		}
 	}
 
-	abstract protected EReference[][] getPaneRootPaths();
+	protected abstract EReference[][] getPaneRootPaths();
 
 	protected void initViewerPanes(final List<ScenarioTableViewerPane> panes) {
 		final ModelReference modelReference = getModelReference();
@@ -197,10 +197,8 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 						viewerPanes.get(i).getScenarioViewer().setSelection(selection, true);
 					}
 				}
-
 			}
 		}
-
 	}
 
 	@Override
