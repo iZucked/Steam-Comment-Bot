@@ -350,7 +350,7 @@ public class UpstreamUrlProvider implements IUserNameProvider {
 	public Request.Builder makeRequest() {
 
 		return new Request.Builder() //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword())) //
+				.header("Authorization", Credentials.basic(getUsername(), getPassword())) //
 				.header("cache-control", "no-cache") //
 		;
 	}
