@@ -170,8 +170,12 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				public int compare(final IndexExposureData o1, final IndexExposureData o2) {
 					if (o1.isChild && o2.isChild) {
 						return o1.childName.compareTo(o2.childName);
-					} else if (!o1.isChild && !o2.isChild) {
-						return o1.date.compareTo(o2.date);
+					} else if(!o1.isChild && !o2.isChild) {
+						int ret = o1.date.compareTo(o2.date);
+						if (ret == 0) {
+							ret += o1.type.getValue() - o2.type.getValue();
+						}
+						return ret;
 					}
 					return o1.hashCode() - o2.hashCode();
 				}
@@ -313,7 +317,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			selected = selected.stream().filter(s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation || s instanceof PaperDeal)
 					.collect(Collectors.toList());
 
-			for (YearMonth cym = ymStart; cym.isBefore(ymEnd); cym = cym.plusMonths(1)) {
+			for (YearMonth cym = ymStart; cym.isBefore(ymEnd.plusMonths(1)); cym = cym.plusMonths(1)) {
 				IndexExposureData exposuresByMonth = 
 						ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, mode, selected, selectedEntity, selectedFiscalYear, selectedAssetType);
 				if (inspectChildrenAndExposures(exposuresByMonth)) {
