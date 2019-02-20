@@ -51,6 +51,7 @@ import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
+import com.mmxlabs.models.lng.commercial.parseutils.Exposures.AggregationMode;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures.ValueMode;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -139,6 +140,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				public String getColumnText(final IndexExposureData data) {
 					if (data.isChild) {
 						return data.childName;
+					}
+					if (viewMode.equals(AggregationMode.BY_DEALSET)) {
+						if (data.dealSet!= null) {
+							return data.dealSet;
+						}
 					}
 					if (data.type != null) {
 						if (data.type == IndexExposureType.ANNUAL) {
