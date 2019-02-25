@@ -8,7 +8,7 @@ Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.commercial.presentation.CommercialEditorPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-10
 Export-Package: com.mmxlabs.models.lng.commercial.editorfactories,
  com.mmxlabs.models.lng.commercial.importer,
  com.mmxlabs.models.lng.commercial.parseutils,

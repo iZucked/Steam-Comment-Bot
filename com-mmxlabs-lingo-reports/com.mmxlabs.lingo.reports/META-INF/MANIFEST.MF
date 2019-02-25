@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.lingo.reports;singleton:=true
+Automatic-Module-Name: com.mmxlabs.lingo.reports
 Bundle-Version: 4.6.8.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.lingo.reports.internal.Activator$Implementation
@@ -106,11 +107,10 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.transformer.ui,
  org.swtchart;bundle-version="0.7.0",
  com.mmxlabs.scenario.service.util,
- com.mmxlabs.models.lng.cargo.editor,
- javax.annotation;bundle-version="1.2.0"
-Import-Package: javax.inject;version="1.0.0",
+ com.mmxlabs.models.lng.cargo.editor
+Import-Package: javax.annotation;version="1.2.0",
+ javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-10
 Service-Component: OSGI-INF/*.xml
-Automatic-Module-Name: com.mmxlabs.lingo.reports

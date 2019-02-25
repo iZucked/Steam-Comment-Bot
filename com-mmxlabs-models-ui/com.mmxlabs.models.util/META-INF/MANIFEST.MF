@@ -23,7 +23,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.models.datetime.ui;bundle-version="[2.1.0,3.0.0)",
  com.mmxlabs.license.features,
  com.mmxlabs.scenario.service.model
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.util,
  com.mmxlabs.models.util.emfpath,

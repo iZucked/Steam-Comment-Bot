@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Module: com.mmxlabs.scheduler.optimiser.peaberry.OptimiserServiceModule
 Bundle-Name: Scheduler - Optimiser Tests
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-10
 Fragment-Host: com.mmxlabs.scheduler.optimiser
 Bundle-SymbolicName: com.mmxlabs.scheduler.optimiser.tests
 Automatic-Module-Name: com.mmxlabs.scheduler.optimiser.tests
@@ -16,4 +16,5 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.optimiser.optimiser-common,
  net.bytebuddy.byte-buddy;bundle-version="1.7.8",
  org.objenesis;bundle-version="2.6.0",
- org.aopalliance;bundle-version="1.0.0"
+ org.aopalliance;bundle-version="1.0.0",
+ javax.annotation;bundle-version="1.2.0"

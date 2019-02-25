@@ -3,7 +3,7 @@ Bundle-Description: LNG Scheduler
 Bundle-ManifestVersion: 2
 Bundle-Module: com.mmxlabs.scheduler.optimiser.peaberry.OptimiserServiceModule
 Bundle-Name: Scheduler - Optimiser
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-SymbolicName: com.mmxlabs.scheduler.optimiser;singleton:=true
 Automatic-Module-Name: com.mmxlabs.scheduler.optimiser
 Bundle-Vendor: Minimax Labs Ltd.

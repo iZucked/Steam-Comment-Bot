@@ -5,11 +5,12 @@ Fragment-Host: com.mmxlabs.models.lng.transformer
 Bundle-SymbolicName: com.mmxlabs.models.lng.transformer.tests
 Bundle-Version: 4.6.8.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-10
 Require-Bundle: org.junit;bundle-version="4.8.2",
  org.mockito.mockito-core;bundle-version="1.9.5",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.transformer.ui,
  net.bytebuddy.byte-buddy;bundle-version="1.7.8",
- org.objenesis;bundle-version="2.6.0"
+ org.objenesis;bundle-version="2.6.0",
+ javax.annotation;bundle-version="1.2.0"
 Automatic-Module-Name: com.mmxlabs.models.lng.transformer.tests

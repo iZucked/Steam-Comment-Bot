@@ -30,7 +30,7 @@ Require-Bundle: org.eclipse.help;bundle-version="3.5.0",
  com.mmxlabs.scenario.service.util;bundle-version="[4.6.8,5.0.0)",
  com.mmxlabs.license.features;bundle-version="[4.6.8,5.0.0)",
  com.google.guava
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.lingo.reports.scheduleview.views,
  com.mmxlabs.lingo.reports.scheduleview.views.colourschemes

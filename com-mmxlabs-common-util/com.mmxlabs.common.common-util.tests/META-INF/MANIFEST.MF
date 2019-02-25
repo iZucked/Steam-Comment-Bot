@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Common-Util: tests
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-SymbolicName: com.mmxlabs.common.common-util.tests
 Automatic-Module-Name: com.mmxlabs.common.common-util.tests
 Bundle-Vendor: Minimax Labs Ltd.
@@ -12,4 +12,5 @@ Require-Bundle: org.mockito.mockito-core;bundle-version="1.9.5",
  ch.qos.logback.classic;bundle-version="1.0.0",
  ch.qos.logback.core;bundle-version="1.0.0",
  org.objenesis;bundle-version="1.0.0",
- net.bytebuddy.byte-buddy;bundle-version="1.7.8"
+ net.bytebuddy.byte-buddy;bundle-version="1.7.8",
+ javax.annotation;bundle-version="1.2.0"
