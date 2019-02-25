@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.sequenceoptimisers.metaheuristic.tabu;
 
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -12,14 +13,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.joda.time.DateTime;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -273,10 +272,10 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	}
 
 	private void printSolutionToFile(List<List<Integer>> solution) {
-		DateTime date = DateTime.now();
+		LocalDateTime date = LocalDateTime.now();
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter(String.format("c:/temp/sequenceTABU-%s-%s-%s.txt", date.getHourOfDay(), date.getMinuteOfHour(), date.getSecondOfMinute()), "UTF-8");
+			writer = new PrintWriter(String.format("c:/temp/sequenceTABU-%s-%s-%s.txt", date.getHour(), date.getMinute(), date.getSecond()), "UTF-8");
 
 			writer.println("\nOrdering");
 			for (List<Integer> vessel : solution) {

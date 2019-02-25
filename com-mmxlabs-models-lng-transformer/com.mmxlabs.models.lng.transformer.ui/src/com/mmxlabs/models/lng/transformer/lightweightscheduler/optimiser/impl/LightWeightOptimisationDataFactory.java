@@ -7,6 +7,8 @@ package com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,7 +26,6 @@ import javax.inject.Inject;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
-import org.joda.time.DateTime;
 
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
@@ -386,10 +387,10 @@ public class LightWeightOptimisationDataFactory {
 	}
 
 	private void printSlotsToFile(final List<? extends IPortSlot> loads, final List<? extends IPortSlot> discharges) {
-		final DateTime date = DateTime.now();
+		final LocalDateTime date = LocalDateTime.now();
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter(String.format("c:/temp/slots-%s-%s-%s.txt", date.getHourOfDay(), date.getMinuteOfHour(), date.getSecondOfMinute()), "UTF-8");
+			writer = new PrintWriter(String.format("c:/temp/slots-%s-%s-%s.txt", date.getHour(), date.getMinute(), date.getSecond()), "UTF-8");
 			loads.forEach(l -> writer.println(l.getId()));
 			discharges.forEach(d -> writer.println(d.getId()));
 			writer.close();
@@ -403,10 +404,10 @@ public class LightWeightOptimisationDataFactory {
 	}
 
 	private void printPairingsToFile(final List<ILoadOption> sortedLoads, final Map<ILoadOption, IDischargeOption> pairingsMap) {
-		final DateTime date = DateTime.now();
+		final LocalDateTime date = LocalDateTime.now();
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter(String.format("c:/temp/pairings-%s-%s-%s.txt", date.getHourOfDay(), date.getMinuteOfHour(), date.getSecondOfMinute()), "UTF-8");
+			writer = new PrintWriter(String.format("c:/temp/pairings-%s-%s-%s.txt", date.getHour(), date.getMinute(), date.getSecond()), "UTF-8");
 			for (final ILoadOption load : sortedLoads) {
 				if (pairingsMap.get(load) != null) {
 					writer.println(String.format("%s -> %s", load.getId(), pairingsMap.get(load)));
@@ -432,10 +433,10 @@ public class LightWeightOptimisationDataFactory {
 	}
 
 	private void printShippedCargoesToFile(final List<List<IPortSlot>> shippedCargoes) {
-		final DateTime date = DateTime.now();
+		final LocalDateTime date = LocalDateTime.now();
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter(String.format("c:/temp/shipped-cargoes-%s-%s-%s.txt", date.getHourOfDay(), date.getMinuteOfHour(), date.getSecondOfMinute()), "UTF-8");
+			writer = new PrintWriter(String.format("c:/temp/shipped-cargoes-%s-%s-%s.txt", date.getHour(), date.getMinute(), date.getSecond()), "UTF-8");
 			for (final List<IPortSlot> cargoe : shippedCargoes) {
 				writer.println(cargoe.stream().map(s -> s.getId()).collect(Collectors.joining("-")));
 			}

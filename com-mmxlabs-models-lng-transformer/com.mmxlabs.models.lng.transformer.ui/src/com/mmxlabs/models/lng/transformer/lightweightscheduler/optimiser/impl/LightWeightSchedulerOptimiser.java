@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,6 @@ import java.util.stream.StreamSupport;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
-import org.joda.time.DateTime;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -38,9 +38,9 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -229,13 +229,13 @@ public class LightWeightSchedulerOptimiser {
 	}
 
 	private void printSequencesToFile(final ISequences sequences) {
-		final DateTime date = DateTime.now();
+		final LocalDateTime date = LocalDateTime.now();
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter(String.format("c:/temp/sequence-%s-%s-%s.txt", date.getHourOfDay(), date.getMinuteOfHour(), date.getSecondOfMinute()), "UTF-8");
+			writer = new PrintWriter(String.format("c:/temp/sequence-%s-%s-%s.txt", date.getHour(), date.getMinute(), date.getSecond()), "UTF-8");
 			for (final IResource iResource : sequences.getResources()) {
 				final ISequence sequence = sequences.getSequence(iResource);
-				final String seqString = StreamSupport.stream(sequence.spliterator(), false).map(s -> s.getName()).collect(Collectors.joining("-"));
+				final String seqString = StreamSupport.stream(sequence.spliterator(), false).map(ISequenceElement::getName).collect(Collectors.joining("-"));
 				writer.println(seqString);
 			}
 			final String seqString = StreamSupport.stream(sequences.getUnusedElements().spliterator(), false).sorted((a, b) -> a.getName().compareTo(b.getName())).map(s -> s.getName())
