@@ -80,6 +80,7 @@ public abstract class AbstractVersionCommandWrapper implements IWrappedCommandPr
 					record.setCreatedAt(Instant.now());
 					final Command cmd = SetCommand.create(editingDomain, modelRoot, versionRecordFeature, record);
 					appendAndExecute(cmd);
+					changedRef[0] = false;
 				}
 			}
 		};
