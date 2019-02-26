@@ -47,6 +47,7 @@
         <setEntry value="com.mmxlabs.lingo.feature:default"/>
         <setEntry value="com.mmxlabs.lingo.its.feature:default"/>
         <setEntry value="com.mmxlabs.lingo.platform.feature:default"/>
+        <setEntry value="com.mmxlabs.lingo.reports.feature:default"/>
         <setEntry value="com.mmxlabs.lngdataserver.feature:default"/>
         <setEntry value="com.mmxlabs.models.datetime.feature:default"/>
         <setEntry value="com.mmxlabs.models.lng.feature:default"/>
