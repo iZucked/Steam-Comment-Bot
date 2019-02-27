@@ -17,7 +17,9 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+import org.mongodb.morphia.mapping.lazy.LazyFeatureDependencies;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExtension;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.ImportFromBaseSelectionPage.DataOptionGroup;
 import com.mmxlabs.rcp.common.ServiceHelper;
@@ -59,11 +61,11 @@ public class SharedDataCopyDataBrowserMenuExtension implements IDataBrowserConte
 
 			}
 		}
-		if (false && selection.size() == 1) {
+		if (LicenseFeatures.isPermitted("features:hub-experimental") && selection.size() == 1) {
 			final Object firstElement = selection.getFirstElement();
 			if (firstElement instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) firstElement;
-				menuManager.add(new RunnableAction("Copy reference data", () -> {
+				menuManager.add(new RunnableAction("Copy reference data to...", () -> {
 					final SharedScenarioDataImportWizard wizard = new SharedScenarioDataImportWizard(scenarioInstance);
 					wizard.init(PlatformUI.getWorkbench(), StructuredSelection.EMPTY);
 					wizard.setForcePreviousAndNextButtons(true);
