@@ -75,7 +75,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	}
 
 	@Before
-	public void constructor() throws MalformedURLException {
+	public void constructor() throws Exception {
 
 		scenarioDataProvider = importReferenceData();
 		lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);

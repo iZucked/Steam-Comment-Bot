@@ -65,7 +65,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 	@Override
-	public IScenarioDataProvider importReferenceData() throws MalformedURLException {
+	public IScenarioDataProvider importReferenceData() throws Exception {
 
 		@NonNull
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData("/referencedata/reference-data-2/");

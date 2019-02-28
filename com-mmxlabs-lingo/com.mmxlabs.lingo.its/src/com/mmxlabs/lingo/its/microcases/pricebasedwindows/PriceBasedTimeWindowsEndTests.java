@@ -81,7 +81,7 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 
 	@Before
 	@Override
-	public void constructor() throws MalformedURLException {
+	public void constructor() throws Exception {
 
 		scenarioDataProvider = importReferenceData();
 		lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);

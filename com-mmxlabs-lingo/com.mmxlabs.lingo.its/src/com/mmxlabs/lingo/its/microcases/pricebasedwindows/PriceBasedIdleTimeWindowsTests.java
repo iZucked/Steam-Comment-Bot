@@ -74,12 +74,12 @@ public class PriceBasedIdleTimeWindowsTests extends AbstractMicroTestCase {
 	
 	@Override
 	@NonNull
-	public IScenarioDataProvider importReferenceData() throws MalformedURLException {
+	public IScenarioDataProvider importReferenceData() throws Exception {
 		return importReferenceData("/referencedata/idle-time-when-laden/");
 	}
 	
 	@Before
-	public void constructor() throws MalformedURLException {
+	public void constructor() throws Exception {
 		
 		scenarioDataProvider = importReferenceData();
 		lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);

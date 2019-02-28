@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -20,6 +22,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.TestMode;
@@ -29,12 +33,16 @@ import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.lingo.its.verifier.SolutionData;
+import com.mmxlabs.lngdataserver.data.distances.DataLoader;
+import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
+import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -82,8 +90,10 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 	// Which scenario data to import
 	@Override
-	public @NonNull IScenarioDataProvider importReferenceData() throws MalformedURLException {
+	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData("/trainingcases/Shipping_I/");
+
+		updateDistanceData(scenarioDataProvider, "v1.0.11.250_9.json");
 
 		return scenarioDataProvider;
 	}
@@ -106,6 +116,27 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		importer.importPorfolioData(urlRoot);
 
 		return importer.doImport();
+	}
+
+	public static void updateDistanceData(IScenarioDataProvider scenarioDataProvider, String key) throws Exception {
+		final String input = DataLoader.importData(key);
+
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.findAndRegisterModules();
+		mapper.registerModule(new JavaTimeModule());
+
+		final DistancesVersion distanceVersion = mapper.readerFor(DistancesVersion.class).readValue(input);
+
+		final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
+		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
+		final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, distanceVersion, true);
+
+		Assert.assertTrue(updateCommand.canExecute());
+
+		editingDomain.getCommandStack().execute(updateCommand);
+
+		// Ensure updated.
+		Assert.assertEquals(distanceVersion.getIdentifier(), portModel.getDistanceVersionRecord().getVersion());
 	}
 
 	@Override
@@ -177,7 +208,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, 944_899, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assert::fail);
 					Assert.assertNotNull(solution);
 				}
 				// Solution 2
@@ -188,7 +219,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, 610_378, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assert::fail);
 					Assert.assertNotNull(solution);
 				}
 			});
@@ -331,7 +362,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, -147_982, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assert::fail);
 					Assert.assertNotNull(solution);
 				}
 				// Solution 2
@@ -345,7 +376,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, -482_503, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assert::fail);
 					Assert.assertNotNull(solution);
 
 				}
@@ -358,7 +389,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, -1_351_441, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(result, msg -> Assert.fail(msg));
+					final ISequences solution = verifier.verifySolutionExistsInResults(result, Assert::fail);
 					Assert.assertNotNull(solution);
 				}
 
@@ -439,7 +470,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, 19_124_719, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assert::fail);
 					Assert.assertNotNull(solution);
 
 				}
@@ -452,7 +483,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, 18_179_820, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(result, msg -> Assert.fail(msg));
+					final ISequences solution = verifier.verifySolutionExistsInResults(result, Assert::fail);
 					Assert.assertNotNull(solution);
 
 				}

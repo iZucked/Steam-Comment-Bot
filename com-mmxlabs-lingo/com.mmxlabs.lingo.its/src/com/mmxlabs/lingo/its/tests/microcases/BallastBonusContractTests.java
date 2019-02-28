@@ -59,7 +59,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 	}
 
 	@Override
-	public IScenarioDataProvider importReferenceData() throws MalformedURLException {
+	public IScenarioDataProvider importReferenceData() throws Exception {
 		return importReferenceData("/referencedata/reference-data-simple-distances/");
 	}
 

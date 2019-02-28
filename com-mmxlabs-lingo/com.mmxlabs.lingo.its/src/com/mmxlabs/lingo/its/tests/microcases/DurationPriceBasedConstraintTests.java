@@ -60,7 +60,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 
 	@Override
-	public IScenarioDataProvider importReferenceData() throws MalformedURLException {
+	public IScenarioDataProvider importReferenceData() throws Exception {
 
 		@NonNull
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData("/referencedata/reference-data-2/");

@@ -70,12 +70,12 @@ public abstract class AbstractMicroTestCase {
 	protected IScenarioDataProvider scenarioDataProvider;
 
 	@NonNull
-	public IScenarioDataProvider importReferenceData() throws MalformedURLException {
+	public IScenarioDataProvider importReferenceData() throws Exception {
 		return importReferenceData("/referencedata/reference-data-1/");
 	}
 
 	@NonNull
-	public static IScenarioDataProvider importReferenceData(final String url) throws MalformedURLException {
+	public static IScenarioDataProvider importReferenceData(final String url) throws Exception {
 
 		final @NonNull String urlRoot = AbstractMicroTestCase.class.getResource(url).toString();
 		final CSVImporter importer = new CSVImporter();

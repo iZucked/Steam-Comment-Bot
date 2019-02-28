@@ -87,7 +87,7 @@ public abstract class AbstractADPAndLightWeightTests extends AbstractMicroTestCa
 
 	// Which scenario data to import
 	@Override
-	public @NonNull IScenarioDataProvider importReferenceData() throws MalformedURLException {
+	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData("/trainingcases/Shipping_I/");
 
 		return scenarioDataProvider;

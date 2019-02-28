@@ -60,7 +60,7 @@ import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 public class CopyFromBaseTests extends AbstractMicroTestCase {
 
 	@Override
-	public @NonNull IScenarioDataProvider importReferenceData() throws MalformedURLException {
+	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData("/trainingcases/Shipping_I/");
 		return scenarioDataProvider;
 	}
