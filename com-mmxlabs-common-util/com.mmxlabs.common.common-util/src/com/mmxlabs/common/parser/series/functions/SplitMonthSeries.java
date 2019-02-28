@@ -4,17 +4,14 @@
  */
 package com.mmxlabs.common.parser.series.functions;
 
-import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.common.parser.series.ISeries;
-import com.mmxlabs.common.parser.series.SeriesUtil;
 
 
 
