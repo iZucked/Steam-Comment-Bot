@@ -225,7 +225,6 @@
             </command>
          </menuContribution>
          !-->
-
      </extension>
       <extension
             point="org.eclipse.ui.commands">
@@ -286,11 +285,31 @@
                  name="Import inventory">
            </command>
           !-->
+           <command
+                 defaultHandler="com.mmxlabs.models.lng.scenario.actions.RollForwardHandler"
+                 description="Update the start of the scenario by removing old data and freezing near-term data."
+                 id="com.mmxlabs.models.lng.scenario.ui.rollforward"
+                 name="Roll Forward">
+           </command>          
       </extension>
+      <extension
+            point="org.eclipse.ui.commandImages">
+         <image
+               commandId="com.mmxlabs.models.lng.scenario.ui.rollforward"
+               icon="icons/roll_forward.gif">
+         </image>
+      </extension>      
       <extension
             point="com.mmxlabs.models.util.import.extramodelimporters">
          <extramodelimporter
                class="com.mmxlabs.models.lng.scenario.ui.importers.PromptPeriodImporter">
          </extramodelimporter>
+      </extension>
+      <extension
+            point="com.mmxlabs.license.features.PluginXMLEnablement">
+         <PluginXMLEnablement
+               feature="roll-forward"
+               plugin.xml="roll-forward-plugin.xml">
+         </PluginXMLEnablement>
       </extension>
 </plugin>
