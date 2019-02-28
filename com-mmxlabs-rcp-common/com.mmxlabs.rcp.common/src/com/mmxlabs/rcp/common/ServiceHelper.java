@@ -22,7 +22,7 @@ import com.mmxlabs.common.util.CheckedFunction;
 public final class ServiceHelper {
 
 	@SuppressWarnings("null")
-	public static <T> void withOptionalServiceConsumer(final Class<T> cls, final Consumer<T> withFunc) {
+	public static <T> void withOptionalServiceConsumer(final Class<T> cls, final Consumer<@Nullable T> withFunc) {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference != null) {

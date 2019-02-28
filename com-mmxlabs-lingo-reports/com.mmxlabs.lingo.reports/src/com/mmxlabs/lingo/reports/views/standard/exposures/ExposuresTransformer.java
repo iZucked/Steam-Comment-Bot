@@ -238,7 +238,9 @@ public class ExposuresTransformer {
 		if (data1 == null) {
 			return data2;
 		}
-		data1.exposures.putAll(data2.exposures);
+		data2.exposures.entrySet().forEach(e -> {
+			data1.exposures.merge(e.getKey(), e.getValue(), Double::sum);
+		});
 		for(final IndexExposureData ied1 : data1.children) {
 			Iterator<IndexExposureData> iedIterator = data2.children.iterator();
 			while (iedIterator.hasNext()) {

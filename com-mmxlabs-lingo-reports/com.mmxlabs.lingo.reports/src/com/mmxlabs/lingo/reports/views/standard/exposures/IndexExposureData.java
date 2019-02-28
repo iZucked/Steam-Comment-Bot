@@ -131,7 +131,8 @@ public class IndexExposureData {
 		final IndexExposureData temp = data.get(0);
 		for (IndexExposureData ied : data) {
 			if (ied.equals(temp)) continue;
-			temp.exposures.putAll(ied.exposures);
+			//temp.exposures.putAll(ied.exposures);
+			ied.exposures.entrySet().forEach(e -> temp.exposures.merge(e.getKey(), e.getValue(), Double::sum));
 			temp.children.addAll(ied.children);
 		}
 		return temp;

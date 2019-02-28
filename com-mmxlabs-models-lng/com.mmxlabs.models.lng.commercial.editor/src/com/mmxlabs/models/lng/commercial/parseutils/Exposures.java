@@ -86,8 +86,18 @@ public class Exposures {
 	public enum AggregationMode {
 		BY_MONTH_NO_TOTAL, BY_MONTH, BY_DEALSET
 	}
-
+	
 	public static void calculateExposures(final @NonNull LNGScenarioModel scenarioModel, final @Nullable Schedule schedule) {
+		ServiceHelper.withOptionalServiceConsumer(IExposuresCustomiser.class, p -> {
+			if (p == null) {
+				calculateExposures(scenarioModel, schedule, new DefaultExposuresCustomiser());
+			} else {
+				calculateExposures(scenarioModel, schedule, p);
+			}
+		});
+	}
+
+	public static void calculateExposures(final @NonNull LNGScenarioModel scenarioModel, final @Nullable Schedule schedule, final IExposuresCustomiser exposuresCustomiser) {
 
 		if (schedule == null) {
 			return;
@@ -114,12 +124,14 @@ public class Exposures {
 
 					physical.setDealType(DealType.PHYSICAL);
 
-					physical.setVolumeInMMBTU((isPurchase ? 1.0 : -1.0) * slotAllocation.getEnergyTransferred());
-					physical.setVolumeInNativeUnits((isPurchase ? 1.0 : -1.0) * slotAllocation.getEnergyTransferred());
-					physical.setNativeValue((isPurchase ? -1.0 : 1.0) * slotAllocation.getVolumeValue());
+					SlotAllocation sa = exposuresCustomiser.getExposed(slotAllocation);
+					
+					physical.setVolumeInMMBTU((isPurchase ? 1.0 : -1.0) * sa.getEnergyTransferred());
+					physical.setVolumeInNativeUnits((isPurchase ? 1.0 : -1.0) * sa.getEnergyTransferred());
+					physical.setNativeValue((isPurchase ? -1.0 : 1.0) * sa.getVolumeValue());
 					physical.setVolumeUnit("mmBtu");
 					physical.setIndexName("Physical");
-					physical.setDate(YearMonth.from(slotAllocation.getSlotVisit().getStart().toLocalDate()));
+					physical.setDate(YearMonth.from(sa.getSlotVisit().getStart().toLocalDate()));
 
 					slotAllocation.getExposures().add(physical);
 				}
@@ -209,7 +221,7 @@ public class Exposures {
 			} else {
 				// Delegate to services registry to see if we have a provider to help us.
 				final String[] result = new String[1];
-				ServiceHelper.withAllServices(IExposuredExpressionProvider.class, null, provider -> {
+				ServiceHelper.withAllServices(IExposuresCustomiser.class, null, provider -> {
 					final String exp = provider.provideExposedPriceExpression(slot, slotAllocation);
 					if (exp != null) {
 						result[0] = exp;

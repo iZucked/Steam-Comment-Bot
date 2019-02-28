@@ -16,6 +16,7 @@ import java.util.function.Function;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -35,6 +36,24 @@ public class PricingMonthUtils {
 	public static @Nullable YearMonth getPricingDate(@NonNull final SlotAllocation slotAllocation) {
 		LocalDate localDate = getFullPricingDate(slotAllocation);
 		return YearMonth.of(localDate.getYear(), localDate.getMonth());
+	}
+	
+	public static SlotAllocation getDischargeIfExists(@NonNull final SlotAllocation slotAllocation) {
+		SlotAllocation result = slotAllocation;
+		final Slot slot = result.getSlot();
+		if (slot instanceof LoadSlot) {
+			final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+			if (cargoAllocation != null && cargoAllocation.getCargoType() == CargoType.FLEET) {
+				for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
+					if (sa.equals(slotAllocation)) continue;
+					final Slot s = sa.getSlot();
+					if (s instanceof DischargeSlot) {
+						result = sa;
+					}
+				}
+			}
+		}
+		return result;
 	}
 	
 	public static @Nullable LocalDate getFullPricingDate(@NonNull final SlotAllocation slotAllocation) {
