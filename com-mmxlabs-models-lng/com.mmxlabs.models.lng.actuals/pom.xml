@@ -13,4 +13,9 @@
 	<artifactId>com.mmxlabs.models.lng.actuals</artifactId>
 	<version>4.6.8-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
+	
+	<properties>
+		<sonar.exclusions>file:**/com/mmxlabs/models/lng/actuals/*.java,file:**/com/mmxlabs/models/lng/actuals/impl/*.java,file:**/com/mmxlabs/models/lng/actuals/util/*.java</sonar.exclusions>
+	</properties>
+	
 </project>

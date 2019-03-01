@@ -12,7 +12,7 @@
 	<artifactId>com.mmxlabs.lngdataserver.browser</artifactId>
 	<packaging>eclipse-plugin</packaging>
 	
-<!-- 	<properties>
-		<sonar.exclusions>file:**/com/mmxlabs/models/browser/*.java,file:**/com/mmxlabs/models/valuecurves/impl/*.java,file:**/com/mmxlabs/models/valuecurves/util/*.java</sonar.exclusions>
-	</properties> -->
+ 	<properties>
+		<sonar.exclusions>file:**/com/mmxlabs/lngdataserver/browser/*.java,file:**/com/mmxlabs/lngdataserver/browser/impl/*.java,file:**/com/mmxlabs/lngdataserver/browser/util/*.java</sonar.exclusions>
+ 	</properties>
 </project>

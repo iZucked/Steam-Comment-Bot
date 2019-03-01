@@ -273,10 +273,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 
 	private void printSolutionToFile(List<List<Integer>> solution) {
 		LocalDateTime date = LocalDateTime.now();
-		PrintWriter writer;
-		try {
-			writer = new PrintWriter(String.format("c:/temp/sequenceTABU-%s-%s-%s.txt", date.getHour(), date.getMinute(), date.getSecond()), "UTF-8");
-
+		try (PrintWriter writer = new PrintWriter(String.format("c:/temp/sequenceTABU-%s-%s-%s.txt", date.getHour(), date.getMinute(), date.getSecond()), "UTF-8")) {
 			writer.println("\nOrdering");
 			for (List<Integer> vessel : solution) {
 				writer.print("Ship " + solution.indexOf(vessel) + ": ");
@@ -289,7 +286,6 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 				}
 				writer.println();
 			}
-			writer.close();
 		} catch (Exception e) {
 
 		}

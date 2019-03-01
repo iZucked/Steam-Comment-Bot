@@ -7,22 +7,20 @@ package com.minimaxlabs.rnd.representation;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
-public class Interval implements Serializable{
-    private double start, end;
+public class Interval implements Serializable {
+	private double start;
+	private double end;
 
-    public Interval(ZonedDateTime startDateTime, ZonedDateTime endDateTime) {
-    }
+	public Interval(final int start, final int end) {
+		this.start = start;
+		this.end = end;
+	}
 
-    public Interval(int start, int end) {
-        this.start = start;
-        this.end = end;
-    }
+	public double getEnd() {
+		return end;
+	}
 
-    public double getEnd() {
-        return end;
-    }
-
-    public double getStart() {
-        return start;
-    }
+	public double getStart() {
+		return start;
+	}
 }

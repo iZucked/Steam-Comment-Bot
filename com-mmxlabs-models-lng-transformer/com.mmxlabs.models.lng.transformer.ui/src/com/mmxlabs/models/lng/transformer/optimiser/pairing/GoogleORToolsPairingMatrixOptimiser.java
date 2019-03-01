@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.transformer.optimiser.pairing;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collections;
@@ -28,7 +27,7 @@ public class GoogleORToolsPairingMatrixOptimiser implements IPairingMatrixOptimi
 
 	private static final long NON_OPTIONAL_PENALTY = 36_000_000_000L;
 	private static final double SYMMETRY_CONSTANT = 0.1;
-	
+
 	public boolean[][] optimise(SerializablePairingData pairingData) {
 		long[][] pnl = pairingData.getPnl();
 		boolean[][] validCargoes = pairingData.getValidCargoes();
@@ -73,9 +72,9 @@ public class GoogleORToolsPairingMatrixOptimiser implements IPairingMatrixOptimi
 
 		// Add symmettry reward
 		for (int load_id = 0; load_id < no_loads; load_id++) {
-				for (int discharge_id = 0; discharge_id < no_discharges; discharge_id++) {
-					symmetryPenalty[load_id][discharge_id] = (((double) load_id) + .1) * (((double) discharge_id) + .1) * SYMMETRY_CONSTANT;
-				}
+			for (int discharge_id = 0; discharge_id < no_discharges; discharge_id++) {
+				symmetryPenalty[load_id][discharge_id] = (((double) load_id) + .1) * (((double) discharge_id) + .1) * SYMMETRY_CONSTANT;
+			}
 		}
 
 		/** google initialization */
@@ -287,22 +286,12 @@ public class GoogleORToolsPairingMatrixOptimiser implements IPairingMatrixOptimi
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		ObjectOutputStream oos = null;
-		FileOutputStream fout = null;
-		try {
-			fout = new FileOutputStream(path, false);
-			oos = new ObjectOutputStream(fout);
-			oos.writeObject(serializable);
+		try (FileOutputStream fout = new FileOutputStream(path, false)) {
+			try (ObjectOutputStream oos = new ObjectOutputStream(fout)) {
+				oos.writeObject(serializable);
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
-		} finally {
-			if (oos != null) {
-				try {
-					oos.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 

@@ -148,7 +148,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				.create());
 
 		{
-			lhsScrolledComposite = new ScrolledComposite(mainComposite, SWT.V_SCROLL | SWT.V_SCROLL);
+			lhsScrolledComposite = new ScrolledComposite(mainComposite, SWT.H_SCROLL | SWT.V_SCROLL);
 			lhsScrolledComposite.setLayoutData(GridDataFactory.swtDefaults()//
 					.grab(false, true)//
 					.span(3, 1) //

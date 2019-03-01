@@ -212,18 +212,15 @@ public class LightWeightSchedulerOptimiser {
 	}
 
 	private static List<List<Integer>> getStoredSequences(final String path) throws IOException {
-		ObjectInputStream objectinputstream = null;
 		LightWeightOutputData readCase = null;
-		try {
-			final FileInputStream streamIn = new FileInputStream(path);
-			objectinputstream = new ObjectInputStream(streamIn);
-			readCase = (LightWeightOutputData) objectinputstream.readObject();
+		try (final FileInputStream streamIn = new FileInputStream(path)) {
+			try (ObjectInputStream objectinputstream = new ObjectInputStream(streamIn)) {
+				readCase = (LightWeightOutputData) objectinputstream.readObject();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
 		} catch (final Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (objectinputstream != null) {
-				objectinputstream.close();
-			}
 		}
 		return readCase.sequences;
 	}

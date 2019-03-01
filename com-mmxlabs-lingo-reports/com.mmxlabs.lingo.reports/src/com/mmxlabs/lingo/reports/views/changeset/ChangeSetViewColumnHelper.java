@@ -84,6 +84,7 @@ public class ChangeSetViewColumnHelper {
 	/**
 	 * Data key to store selected vessel column
 	 */
+
 	static final String DATA_SELECTED_COLUMN = "selected-vessel-column";
 
 	private Font boldFont;
@@ -1181,7 +1182,7 @@ public class ChangeSetViewColumnHelper {
 					if (showAlt) {
 						changeSet = changeSet.getLinkedGroup();
 					}
-					if (changeSet != null) {					
+					if (changeSet != null) {
 						final DeltaMetrics metrics = changeSet.getDeltaMetrics();
 						if (metrics != null) {
 							double delta = metrics.getPnlDelta();
@@ -1198,7 +1199,7 @@ public class ChangeSetViewColumnHelper {
 								} else {
 									cell.setText(String.format("%,.3G", Math.abs(delta)));
 								}
-	
+
 								if (metrics.getPnlDelta() < 0) {
 									cell.setImage(imageRedArrowDown);
 								} else {
@@ -1296,7 +1297,7 @@ public class ChangeSetViewColumnHelper {
 						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
 						final String flexStr;
 						if (originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0) {
-							assert originalInFlex == false;
+							assert !originalInFlex;
 							flexStr = "within";
 						} else if (delta > 0) {
 							flexStr = "out of";
@@ -1465,7 +1466,7 @@ public class ChangeSetViewColumnHelper {
 
 			private String generateDisplayString(final Set<CapacityViolationType> tmp) {
 				final List<String> sorted = tmp.stream() //
-						.map(cvt -> nameMap.get(cvt)) //
+						.map(nameMap::get) //
 						.sorted() // .
 						.collect(Collectors.toList());
 
@@ -1612,13 +1613,12 @@ public class ChangeSetViewColumnHelper {
 					// ChangeSetNode changeSetNode = (ChangeSetNode) element;
 					final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
 					cell.setFont(null);
-					if(insertionPlanFilter.isUnexpandedInsertionGroup(changeSet)) {
+					if (insertionPlanFilter.isUnexpandedInsertionGroup(changeSet)) {
 						cell.setFont(boldFont);
+					} else {
+						// cell.setFont(boldFont);
 					}
-					else {
-//						cell.setFont(boldFont);						
-					}
-//					cell.setFont(boldFont);						
+					// cell.setFont(boldFont);
 					final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSet.eContainer();
 					int idx = 0;
 					if (root != null) {
@@ -1702,9 +1702,9 @@ public class ChangeSetViewColumnHelper {
 
 							if (left.isEmpty() && right.isEmpty()) {
 								final int ii = 0;
-							} else
-
+							} else {
 								cell.setText(String.format("%s      %s", left, right));
+							}
 						}
 					}
 				}
@@ -1872,9 +1872,9 @@ public class ChangeSetViewColumnHelper {
 							}
 						} else {
 							if (asSigFigs) {
-								cell.setText(String.format("%s %,.2G", Math.abs(delta)));
+								cell.setText(String.format("%,.2G", Math.abs(delta)));
 							} else {
-								cell.setText(String.format("%s %,.2f", Math.abs(delta)));
+								cell.setText(String.format("%,.2f", Math.abs(delta)));
 							}
 
 							if (delta < 0) {
@@ -2283,9 +2283,7 @@ public class ChangeSetViewColumnHelper {
 	}
 
 	public static @NonNull BiFunction<ChangeSetTableGroup, Integer, String> getMultipleSolutionLabelProvider() {
-		return (changeSet, index) -> {
-			return String.format("Solution %s", index + 1);
-		};
+		return (changeSet, index) -> String.format("Solution %s", index + 1);
 	}
 
 	public void showCompareColumns(final boolean showCompareColumns) {
