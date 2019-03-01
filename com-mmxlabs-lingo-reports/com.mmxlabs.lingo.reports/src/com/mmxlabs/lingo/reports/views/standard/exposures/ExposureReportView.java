@@ -685,18 +685,20 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 	@Override
 	public void selectionChanged(final MPart part, final Object selectionObject) {
+		if (selectionMode) {
+			final IWorkbenchPart e3Part = SelectionHelper.getE3Part(part);
+			if (e3Part != null) {
+				if (e3Part == this) {
+					return;
+				}
+				if (e3Part instanceof PropertySheet) {
+					return;
+				}
+			}
 
-		final IWorkbenchPart e3Part = SelectionHelper.getE3Part(part);
-		if (e3Part != null) {
-			if (e3Part == this) {
-				return;
-			}
-			if (e3Part instanceof PropertySheet) {
-				return;
-			}
+			selection = SelectionHelper.adaptSelection(selectionObject);
+			ExposureReportView.this.refresh();
 		}
-		selection = SelectionHelper.adaptSelection(selectionObject);
-		ExposureReportView.this.refresh();
 	}
 
 	private void setUnitsActionText(final Action a) {
