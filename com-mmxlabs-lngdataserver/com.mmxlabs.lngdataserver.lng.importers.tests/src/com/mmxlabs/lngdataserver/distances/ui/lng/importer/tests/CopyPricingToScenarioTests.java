@@ -30,6 +30,7 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.lngdataserver.data.distances.DataLoader;
 import com.mmxlabs.lngdataserver.integration.pricing.model.Curve;
@@ -57,6 +58,7 @@ public class CopyPricingToScenarioTests {
 
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.findAndRegisterModules();
+		mapper.registerModule(new JavaTimeModule());
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 		final PricingVersion originalVersion = mapper.readerFor(PricingVersion.class).readValue(input);
@@ -93,6 +95,7 @@ public class CopyPricingToScenarioTests {
 
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.findAndRegisterModules();
+		mapper.registerModule(new JavaTimeModule());
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 		final PricingVersion originalVersion = mapper.readerFor(PricingVersion.class).readValue(input);

@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.lngdataserver.data.distances.DataLoader;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.integration.distances.model.RoutingPoint;
@@ -49,6 +50,7 @@ public class CopyDistancesToScenarioTests {
 
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.findAndRegisterModules();
+		mapper.registerModule(new JavaTimeModule());
 
 		final DistancesVersion originalVersion = mapper.readerFor(DistancesVersion.class).readValue(input);
 		prepareVersionModel(originalVersion);
@@ -80,6 +82,7 @@ public class CopyDistancesToScenarioTests {
 
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.findAndRegisterModules();
+		mapper.registerModule(new JavaTimeModule());
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 		// Load dataset 1 in
@@ -155,6 +158,7 @@ public class CopyDistancesToScenarioTests {
 
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.findAndRegisterModules();
+		mapper.registerModule(new JavaTimeModule());
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 		// Load dataset 1 in
