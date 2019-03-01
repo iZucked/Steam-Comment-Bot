@@ -19,7 +19,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/desSalesSpotMarket"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/fobPurchasesSpotMarket"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/fobSalesSpotMarket"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/charterOutStartDate"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/charterInMarkets"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/charterOutMarkets"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/charterOutMarketParameters"/>
@@ -63,9 +62,6 @@
     <genClasses ecoreClass="spotmarkets.ecore#//SpotAvailability">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//SpotAvailability/constant"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotAvailability/curve"/>
-    </genClasses>
-    <genClasses ecoreClass="spotmarkets.ecore#//CharterOutStartDate">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterOutStartDate/charterOutStartDate"/>
     </genClasses>
     <genClasses ecoreClass="spotmarkets.ecore#//CharterOutMarket">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterOutMarket/charterOutRate"/>

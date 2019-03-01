@@ -97,6 +97,7 @@ public class FOBPurchasesMarketImpl extends SpotMarketImpl implements FOBPurchas
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getNotionalPort() {
 		if (notionalPort != null && notionalPort.eIsProxy()) {
 			InternalEObject oldNotionalPort = (InternalEObject)notionalPort;
@@ -123,6 +124,7 @@ public class FOBPurchasesMarketImpl extends SpotMarketImpl implements FOBPurchas
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNotionalPort(Port newNotionalPort) {
 		Port oldNotionalPort = notionalPort;
 		notionalPort = newNotionalPort;
@@ -135,6 +137,7 @@ public class FOBPurchasesMarketImpl extends SpotMarketImpl implements FOBPurchas
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getCv() {
 		return cv;
 	}
@@ -144,6 +147,7 @@ public class FOBPurchasesMarketImpl extends SpotMarketImpl implements FOBPurchas
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCv(double newCv) {
 		double oldCv = cv;
 		cv = newCv;
@@ -156,6 +160,7 @@ public class FOBPurchasesMarketImpl extends SpotMarketImpl implements FOBPurchas
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<APortSet<Port>> getMarketPorts() {
 		if (marketPorts == null) {
 			marketPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.FOB_PURCHASES_MARKET__MARKET_PORTS);

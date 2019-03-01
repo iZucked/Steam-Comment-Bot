@@ -286,6 +286,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -295,6 +296,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -307,6 +309,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotAvailability getAvailability() {
 		return availability;
 	}
@@ -331,6 +334,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAvailability(SpotAvailability newAvailability) {
 		if (newAvailability != availability) {
 			NotificationChain msgs = null;
@@ -350,6 +354,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinQuantity() {
 		return minQuantity;
 	}
@@ -359,6 +364,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinQuantity(int newMinQuantity) {
 		int oldMinQuantity = minQuantity;
 		minQuantity = newMinQuantity;
@@ -371,6 +377,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaxQuantity() {
 		return maxQuantity;
 	}
@@ -380,6 +387,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxQuantity(int newMaxQuantity) {
 		int oldMaxQuantity = maxQuantity;
 		maxQuantity = newMaxQuantity;
@@ -392,6 +400,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VolumeUnits getVolumeLimitsUnit() {
 		return volumeLimitsUnit;
 	}
@@ -401,6 +410,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeLimitsUnit(VolumeUnits newVolumeLimitsUnit) {
 		VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
 		volumeLimitsUnit = newVolumeLimitsUnit == null ? VOLUME_LIMITS_UNIT_EDEFAULT : newVolumeLimitsUnit;
@@ -413,6 +423,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LNGPriceCalculatorParameters getPriceInfo() {
 		return priceInfo;
 	}
@@ -437,6 +448,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPriceInfo(LNGPriceCalculatorParameters newPriceInfo) {
 		if (newPriceInfo != priceInfo) {
 			NotificationChain msgs = null;
@@ -456,6 +468,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
@@ -482,6 +495,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEntity(BaseLegalEntity newEntity) {
 		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;
@@ -494,6 +508,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PricingEvent getPricingEvent() {
 		return pricingEvent;
 	}
@@ -503,6 +518,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPricingEvent(PricingEvent newPricingEvent) {
 		PricingEvent oldPricingEvent = pricingEvent;
 		pricingEvent = newPricingEvent == null ? PRICING_EVENT_EDEFAULT : newPricingEvent;
@@ -515,6 +531,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isRestrictedListsArePermissive() {
 		return restrictedListsArePermissive;
 	}
@@ -524,6 +541,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRestrictedListsArePermissive(boolean newRestrictedListsArePermissive) {
 		boolean oldRestrictedListsArePermissive = restrictedListsArePermissive;
 		restrictedListsArePermissive = newRestrictedListsArePermissive;
@@ -536,6 +554,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<APortSet<Port>> getRestrictedPorts() {
 		if (restrictedPorts == null) {
 			restrictedPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS);
@@ -548,6 +567,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Contract> getRestrictedContracts() {
 		if (restrictedContracts == null) {
 			restrictedContracts = new EObjectResolvingEList<Contract>(Contract.class, this, SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS);
@@ -560,6 +580,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isMtm() {
 		return mtm;
 	}
@@ -569,6 +590,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMtm(boolean newMtm) {
 		boolean oldMtm = mtm;
 		mtm = newMtm;
@@ -581,6 +603,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -590,6 +613,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEnabled(boolean newEnabled) {
 		boolean oldEnabled = enabled;
 		enabled = newEnabled;

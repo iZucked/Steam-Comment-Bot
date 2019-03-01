@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.migration.utils;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -143,6 +144,8 @@ public class MetamodelLoader {
 						return LocalDate.parse(stringValue, DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 					} else if (eDataType.getInstanceClassName().equals("java.time.LocalDateTime")) {
 						return LocalDateTime.parse(stringValue, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+					} else if (eDataType.getInstanceClassName().equals("java.time.Instant")) {
+						return Instant.parse(stringValue);
 					} else if (eDataType.getInstanceClassName().equals("java.time.ZonedDateTime")) {
 						try {
 							return ZonedDateTime.parse(stringValue, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm VV"));
@@ -162,6 +165,8 @@ public class MetamodelLoader {
 						return ((YearMonth) objectValue).format(DateTimeFormatter.ofPattern("yyyy/MM"));
 					} else if (eDataType.getInstanceClassName().equals("java.time.LocalDate")) {
 						return ((LocalDate) objectValue).format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+					} else if (eDataType.getInstanceClassName().equals("java.time.Instant")) {
+						return ((Instant)objectValue).toString();
 					} else if (eDataType.getInstanceClassName().equals("java.time.LocalDateTime")) {
 						return ((LocalDateTime) objectValue).format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
 					} else if (eDataType.getInstanceClassName().equals("java.time.ZonedDateTime")) {

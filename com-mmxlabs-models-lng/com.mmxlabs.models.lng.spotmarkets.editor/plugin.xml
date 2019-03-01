@@ -80,12 +80,7 @@
 			helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.SpotAvailabilityComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.spotmarkets.SpotAvailability" />
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.CharterOutStartDateComponentHelper"
-        id="com.mmxlabs.models.lng.spotmarkets.presentation.composites.CharterOutStartDateComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate">
-  </componentHelper>
+
     <componentHelper
         helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.CharterOutMarketParametersComponentHelper"
         id="com.mmxlabs.models.lng.spotmarkets.presentation.composites.CharterOutMarketParametersComponentHelper"

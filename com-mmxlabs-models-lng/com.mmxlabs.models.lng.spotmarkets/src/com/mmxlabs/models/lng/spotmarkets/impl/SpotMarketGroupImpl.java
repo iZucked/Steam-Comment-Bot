@@ -101,6 +101,7 @@ public class SpotMarketGroupImpl extends MMXObjectImpl implements SpotMarketGrou
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotAvailability getAvailability() {
 		return availability;
 	}
@@ -125,6 +126,7 @@ public class SpotMarketGroupImpl extends MMXObjectImpl implements SpotMarketGrou
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAvailability(SpotAvailability newAvailability) {
 		if (newAvailability != availability) {
 			NotificationChain msgs = null;
@@ -144,6 +146,7 @@ public class SpotMarketGroupImpl extends MMXObjectImpl implements SpotMarketGrou
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotType getType() {
 		return type;
 	}
@@ -153,6 +156,7 @@ public class SpotMarketGroupImpl extends MMXObjectImpl implements SpotMarketGrou
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setType(SpotType newType) {
 		SpotType oldType = type;
 		type = newType == null ? TYPE_EDEFAULT : newType;
@@ -165,6 +169,7 @@ public class SpotMarketGroupImpl extends MMXObjectImpl implements SpotMarketGrou
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<SpotMarket> getMarkets() {
 		if (markets == null) {
 			markets = new EObjectContainmentEList<SpotMarket>(SpotMarket.class, this, SpotMarketsPackage.SPOT_MARKET_GROUP__MARKETS);

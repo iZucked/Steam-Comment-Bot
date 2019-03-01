@@ -101,6 +101,7 @@ public class SpotAvailabilityImpl extends EObjectImpl implements SpotAvailabilit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getConstant() {
 		return constant;
 	}
@@ -110,6 +111,7 @@ public class SpotAvailabilityImpl extends EObjectImpl implements SpotAvailabilit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setConstant(int newConstant) {
 		int oldConstant = constant;
 		constant = newConstant;
@@ -124,6 +126,7 @@ public class SpotAvailabilityImpl extends EObjectImpl implements SpotAvailabilit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetConstant() {
 		int oldConstant = constant;
 		boolean oldConstantESet = constantESet;
@@ -138,6 +141,7 @@ public class SpotAvailabilityImpl extends EObjectImpl implements SpotAvailabilit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetConstant() {
 		return constantESet;
 	}
@@ -147,6 +151,7 @@ public class SpotAvailabilityImpl extends EObjectImpl implements SpotAvailabilit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DataIndex<Integer> getCurve() {
 		return curve;
 	}
@@ -173,6 +178,7 @@ public class SpotAvailabilityImpl extends EObjectImpl implements SpotAvailabilit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCurve(DataIndex<Integer> newCurve) {
 		if (newCurve != curve) {
 			NotificationChain msgs = null;
@@ -213,6 +219,7 @@ public class SpotAvailabilityImpl extends EObjectImpl implements SpotAvailabilit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCurve() {
 		if (curve != null) {
 			NotificationChain msgs = null;
@@ -233,6 +240,7 @@ public class SpotAvailabilityImpl extends EObjectImpl implements SpotAvailabilit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCurve() {
 		return curveESet;
 	}

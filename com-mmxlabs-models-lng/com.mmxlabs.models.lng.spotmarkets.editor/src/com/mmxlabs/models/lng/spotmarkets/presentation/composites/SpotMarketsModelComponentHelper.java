@@ -68,7 +68,6 @@ public class SpotMarketsModelComponentHelper extends BaseComponentHelper {
 		add_desSalesSpotMarketEditor(detailComposite, topClass);
 		add_fobPurchasesSpotMarketEditor(detailComposite, topClass);
 		add_fobSalesSpotMarketEditor(detailComposite, topClass);
-		add_charterOutStartDateEditor(detailComposite, topClass);
 		add_charterInMarketsEditor(detailComposite, topClass);
 		add_charterOutMarketsEditor(detailComposite, topClass);
 		add_charterOutMarketParametersEditor(detailComposite, topClass);
@@ -105,15 +104,6 @@ public class SpotMarketsModelComponentHelper extends BaseComponentHelper {
 	protected void add_fobSalesSpotMarketEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__FOB_SALES_SPOT_MARKET));
 	}
-	/**
-	 * Create the editor for the charterOutStartDate feature on SpotMarketsModel
-	 *
-	 * @generated
-	 */
-	protected void add_charterOutStartDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE));
-	}
-
 	/**
 	 * Create the editor for the charterInMarkets feature on SpotMarketsModel
 	 *

@@ -307,6 +307,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<EObject> getExtensions() {
 		if (extensions == null) {
 			extensions = new EObjectContainmentEList<EObject>(EObject.class, this, SpotMarketsPackage.CHARTER_IN_MARKET__EXTENSIONS);
@@ -319,6 +320,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -328,6 +330,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -340,6 +343,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Vessel getVessel() {
 		if (vessel != null && vessel.eIsProxy()) {
 			InternalEObject oldVessel = (InternalEObject)vessel;
@@ -366,6 +370,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVessel(Vessel newVessel) {
 		Vessel oldVessel = vessel;
 		vessel = newVessel;
@@ -378,6 +383,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isNominal() {
 		return nominal;
 	}
@@ -387,6 +393,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNominal(boolean newNominal) {
 		boolean oldNominal = nominal;
 		nominal = newNominal;
@@ -399,6 +406,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinDuration() {
 		return minDuration;
 	}
@@ -408,6 +416,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinDuration(int newMinDuration) {
 		int oldMinDuration = minDuration;
 		minDuration = newMinDuration;
@@ -422,6 +431,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMinDuration() {
 		int oldMinDuration = minDuration;
 		boolean oldMinDurationESet = minDurationESet;
@@ -436,6 +446,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMinDuration() {
 		return minDurationESet;
 	}
@@ -445,6 +456,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaxDuration() {
 		return maxDuration;
 	}
@@ -454,6 +466,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxDuration(int newMaxDuration) {
 		int oldMaxDuration = maxDuration;
 		maxDuration = newMaxDuration;
@@ -468,6 +481,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMaxDuration() {
 		int oldMaxDuration = maxDuration;
 		boolean oldMaxDurationESet = maxDurationESet;
@@ -482,6 +496,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMaxDuration() {
 		return maxDurationESet;
 	}
@@ -491,6 +506,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isMtm() {
 		return mtm;
 	}
@@ -500,6 +516,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMtm(boolean newMtm) {
 		boolean oldMtm = mtm;
 		mtm = newMtm;
@@ -531,6 +548,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSpotCharterCount() {
 		return spotCharterCount;
 	}
@@ -540,6 +558,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpotCharterCount(int newSpotCharterCount) {
 		int oldSpotCharterCount = spotCharterCount;
 		spotCharterCount = newSpotCharterCount;
@@ -552,6 +571,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isOverrideInaccessibleRoutes() {
 		return overrideInaccessibleRoutes;
 	}
@@ -561,6 +581,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOverrideInaccessibleRoutes(boolean newOverrideInaccessibleRoutes) {
 		boolean oldOverrideInaccessibleRoutes = overrideInaccessibleRoutes;
 		overrideInaccessibleRoutes = newOverrideInaccessibleRoutes;
@@ -573,6 +594,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<RouteOption> getInaccessibleRoutes() {
 		if (inaccessibleRoutes == null) {
 			inaccessibleRoutes = new EDataTypeUniqueEList<RouteOption>(RouteOption.class, this, SpotMarketsPackage.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES);
@@ -585,6 +607,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterContract getCharterContract() {
 		if (charterContract != null && charterContract.eIsProxy()) {
 			InternalEObject oldCharterContract = (InternalEObject)charterContract;
@@ -611,6 +634,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterContract(CharterContract newCharterContract) {
 		CharterContract oldCharterContract = charterContract;
 		charterContract = newCharterContract;
@@ -625,6 +649,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCharterContract() {
 		CharterContract oldCharterContract = charterContract;
 		boolean oldCharterContractESet = charterContractESet;
@@ -639,6 +664,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCharterContract() {
 		return charterContractESet;
 	}
@@ -648,6 +674,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCharterInRate() {
 		return charterInRate;
 	}
@@ -657,6 +684,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterInRate(String newCharterInRate) {
 		String oldCharterInRate = charterInRate;
 		charterInRate = newCharterInRate;

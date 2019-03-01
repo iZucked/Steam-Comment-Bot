@@ -192,6 +192,7 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<EObject> getExtensions() {
 		if (extensions == null) {
 			extensions = new EObjectContainmentEList<EObject>(EObject.class, this, SpotMarketsPackage.CHARTER_OUT_MARKET__EXTENSIONS);
@@ -204,6 +205,7 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -213,6 +215,7 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -225,6 +228,7 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinCharterOutDuration() {
 		return minCharterOutDuration;
 	}
@@ -234,6 +238,7 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinCharterOutDuration(int newMinCharterOutDuration) {
 		int oldMinCharterOutDuration = minCharterOutDuration;
 		minCharterOutDuration = newMinCharterOutDuration;
@@ -246,6 +251,7 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<APortSet<Port>> getAvailablePorts() {
 		if (availablePorts == null) {
 			availablePorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.CHARTER_OUT_MARKET__AVAILABLE_PORTS);
@@ -258,6 +264,7 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<AVesselSet<Vessel>> getVessels() {
 		if (vessels == null) {
 			vessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, SpotMarketsPackage.CHARTER_OUT_MARKET__VESSELS);
@@ -270,6 +277,7 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaxCharterOutDuration() {
 		return maxCharterOutDuration;
 	}
@@ -279,6 +287,7 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxCharterOutDuration(int newMaxCharterOutDuration) {
 		int oldMaxCharterOutDuration = maxCharterOutDuration;
 		maxCharterOutDuration = newMaxCharterOutDuration;
@@ -293,6 +302,7 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMaxCharterOutDuration() {
 		int oldMaxCharterOutDuration = maxCharterOutDuration;
 		boolean oldMaxCharterOutDurationESet = maxCharterOutDurationESet;
@@ -307,6 +317,7 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMaxCharterOutDuration() {
 		return maxCharterOutDurationESet;
 	}
@@ -316,6 +327,7 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCharterOutRate() {
 		return charterOutRate;
 	}
@@ -325,6 +337,7 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterOutRate(String newCharterOutRate) {
 		String oldCharterOutRate = charterOutRate;
 		charterOutRate = newCharterOutRate;

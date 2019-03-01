@@ -115,6 +115,7 @@ public class CharterOutMarketParametersImpl extends EObjectImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getCharterOutStartDate() {
 		return charterOutStartDate;
 	}
@@ -124,6 +125,7 @@ public class CharterOutMarketParametersImpl extends EObjectImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterOutStartDate(LocalDate newCharterOutStartDate) {
 		LocalDate oldCharterOutStartDate = charterOutStartDate;
 		charterOutStartDate = newCharterOutStartDate;
@@ -138,6 +140,7 @@ public class CharterOutMarketParametersImpl extends EObjectImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCharterOutStartDate() {
 		LocalDate oldCharterOutStartDate = charterOutStartDate;
 		boolean oldCharterOutStartDateESet = charterOutStartDateESet;
@@ -152,6 +155,7 @@ public class CharterOutMarketParametersImpl extends EObjectImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCharterOutStartDate() {
 		return charterOutStartDateESet;
 	}
@@ -161,6 +165,7 @@ public class CharterOutMarketParametersImpl extends EObjectImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getCharterOutEndDate() {
 		return charterOutEndDate;
 	}
@@ -170,6 +175,7 @@ public class CharterOutMarketParametersImpl extends EObjectImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterOutEndDate(LocalDate newCharterOutEndDate) {
 		LocalDate oldCharterOutEndDate = charterOutEndDate;
 		charterOutEndDate = newCharterOutEndDate;
@@ -184,6 +190,7 @@ public class CharterOutMarketParametersImpl extends EObjectImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCharterOutEndDate() {
 		LocalDate oldCharterOutEndDate = charterOutEndDate;
 		boolean oldCharterOutEndDateESet = charterOutEndDateESet;
@@ -198,6 +205,7 @@ public class CharterOutMarketParametersImpl extends EObjectImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCharterOutEndDate() {
 		return charterOutEndDateESet;
 	}

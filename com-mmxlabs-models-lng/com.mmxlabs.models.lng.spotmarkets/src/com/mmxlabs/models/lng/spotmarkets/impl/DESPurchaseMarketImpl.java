@@ -85,6 +85,7 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getCv() {
 		return cv;
 	}
@@ -94,6 +95,7 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCv(double newCv) {
 		double oldCv = cv;
 		cv = newCv;
@@ -106,6 +108,7 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<APortSet<Port>> getDestinationPorts() {
 		if (destinationPorts == null) {
 			destinationPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.DES_PURCHASE_MARKET__DESTINATION_PORTS);

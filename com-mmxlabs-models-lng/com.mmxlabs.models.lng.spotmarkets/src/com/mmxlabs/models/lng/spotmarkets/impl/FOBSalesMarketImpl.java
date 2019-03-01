@@ -62,6 +62,7 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<APortSet<Port>> getOriginPorts() {
 		if (originPorts == null) {
 			originPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.FOB_SALES_MARKET__ORIGIN_PORTS);

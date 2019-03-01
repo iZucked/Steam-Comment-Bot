@@ -20,7 +20,7 @@ import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
-import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
@@ -37,6 +37,7 @@ import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
+import com.mmxlabs.models.util.importer.impl.OtherImportData;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 /**
@@ -91,6 +92,8 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 	@Override
 	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IMMXImportContext context) {
 		final SpotMarketsModel spotMarketsModel = SpotMarketsFactory.eINSTANCE.createSpotMarketsModel();
+		final CharterOutMarketParameters params = SpotMarketsFactory.eINSTANCE.createCharterOutMarketParameters();
+		spotMarketsModel.setCharterOutMarketParameters(params);
 
 		if (inputs.containsKey(CHARTER_PRICING_KEY)) {
 			// Pass in an example class for importer code to obtain the package from.
@@ -99,9 +102,9 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 					spotMarketsModel.getCharterInMarkets().add((CharterInMarket) obj);
 				} else if (obj instanceof CharterOutMarket) {
 					spotMarketsModel.getCharterOutMarkets().add((CharterOutMarket) obj);
-				} else if (obj instanceof CharterOutStartDate) {
-					final CharterOutStartDate charterOutStartDate = (CharterOutStartDate) obj;
-					spotMarketsModel.setCharterOutStartDate(charterOutStartDate);
+				} else if (obj instanceof OtherImportData) {
+					OtherImportData otherImportData = (OtherImportData) obj;
+					params.eSet(otherImportData.getFeature(), otherImportData.getValue());
 				}
 			}
 		}
@@ -201,9 +204,9 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 		{
 			final List<EObject> charterObjects = new LinkedList<EObject>(spotMarketsModel.getCharterInMarkets());
 			charterObjects.addAll(spotMarketsModel.getCharterOutMarkets());
-			final CharterOutStartDate charterOutStartDate = spotMarketsModel.getCharterOutStartDate();
-			if (charterOutStartDate != null) {
-				charterObjects.add(charterOutStartDate);
+			final CharterOutMarketParameters charterOutParams = spotMarketsModel.getCharterOutMarketParameters();
+			if (charterOutParams != null) {
+				charterObjects.add(charterOutParams);
 			}
 
 			output.put(CHARTER_PRICING_KEY, charterPriceImporter.exportObjects(charterObjects, context));

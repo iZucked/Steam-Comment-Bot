@@ -89,15 +89,6 @@ public interface SpotMarketsFactory extends EFactory {
 	SpotAvailability createSpotAvailability();
 
 	/**
-	 * Returns a new object of class '<em>Charter Out Start Date</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Charter Out Start Date</em>'.
-	 * @generated
-	 */
-	CharterOutStartDate createCharterOutStartDate();
-
-	/**
 	 * Returns a new object of class '<em>Charter Out Market</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

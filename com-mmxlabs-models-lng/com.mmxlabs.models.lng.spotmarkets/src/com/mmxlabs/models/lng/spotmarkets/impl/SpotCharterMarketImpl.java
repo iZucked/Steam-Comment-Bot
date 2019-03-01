@@ -70,6 +70,7 @@ public abstract class SpotCharterMarketImpl extends EObjectImpl implements SpotC
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -79,6 +80,7 @@ public abstract class SpotCharterMarketImpl extends EObjectImpl implements SpotC
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEnabled(boolean newEnabled) {
 		boolean oldEnabled = enabled;
 		enabled = newEnabled;

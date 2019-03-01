@@ -112,7 +112,6 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters;
-import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
@@ -3290,13 +3289,6 @@ public class LNGScenarioTransformer {
 			} else {
 				builder.setGeneratedCharterOutStartTime(0);
 				builder.setGeneratedCharterOutEndTime(Integer.MAX_VALUE);
-			}
-
-			final CharterOutStartDate charterOutStartDate = spotMarketsModel.getCharterOutStartDate();
-			if (charterOutStartDate != null && charterOutStartDate.getCharterOutStartDate() != null) {
-				builder.setGeneratedCharterOutStartTime(dateHelper.convertTime(charterOutStartDate.getCharterOutStartDate().atStartOfDay(ZoneId.of("UTC"))));
-			} else {
-				builder.setGeneratedCharterOutStartTime(0);
 			}
 
 			final List<CharterInMarket> charterInMarkets = new LinkedList<>();

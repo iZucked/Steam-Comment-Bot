@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.editor.importers;
 
-import java.text.ParseException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -19,32 +18,32 @@ import com.mmxlabs.common.csv.IFieldMap;
 import com.mmxlabs.models.datetime.importers.LocalDateAttributeImporter;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
-import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
+import com.mmxlabs.models.util.importer.impl.OtherImportData;
 import com.mmxlabs.models.util.importer.impl.SetReference;
 
 public class CharterMarketImporter extends DefaultClassImporter {
 
 	private static final String START_DATE_KEY = "charteroutstartdate";
+	private static final String END_DATE_KEY = "charteroutenddate";
+
 	private final LocalDateAttributeImporter dateAttributeImporter = new LocalDateAttributeImporter();
 
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 
 		if (row.get(START_DATE_KEY) != null && !row.get(START_DATE_KEY).trim().isEmpty()) {
-			final CharterOutStartDate charterOutStartDate = SpotMarketsFactory.eINSTANCE.createCharterOutStartDate();
-			try {
-				charterOutStartDate.setCharterOutStartDate(dateAttributeImporter.parseLocalDate(row.get(START_DATE_KEY)));
-			} catch (final ParseException e) {
-				context.addProblem(context.createProblem("Unable to parse date " + row.get(START_DATE_KEY), true, true, true));
-				return new ImportResults(null);
-			}
-			return new ImportResults(charterOutStartDate);
+			return OtherImportData.parseField(row, context, START_DATE_KEY, "charter out start date", SpotMarketsPackage.Literals.CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_START_DATE,
+					dateAttributeImporter::parseLocalDate);
+		} else if (row.get(END_DATE_KEY) != null && !row.get(END_DATE_KEY).trim().isEmpty()) {
+			return OtherImportData.parseField(row, context, END_DATE_KEY, "charter out end date", SpotMarketsPackage.Literals.CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_END_DATE,
+					dateAttributeImporter::parseLocalDate);
 		} else {
 
 			final String kind = row.get(KIND_KEY);
@@ -138,12 +137,18 @@ public class CharterMarketImporter extends DefaultClassImporter {
 		final List<EObject> generalExportObject = new LinkedList<>();
 		for (final EObject obj : objects) {
 
-			if (obj instanceof CharterOutStartDate) {
-				final CharterOutStartDate charterOutStartDate = (CharterOutStartDate) obj;
-				final Map<String, String> dateRow = new HashMap<String, String>();
+			if (obj instanceof CharterOutMarketParameters) {
+				final CharterOutMarketParameters charterOutMarketParameters = (CharterOutMarketParameters) obj;
+				final Map<String, String> dateRow = new HashMap<>();
 
-				dateRow.put(START_DATE_KEY, dateAttributeImporter.formatLocalDate(charterOutStartDate.getCharterOutStartDate()));
-				exportedObjects.add(dateRow);
+				if (charterOutMarketParameters.isSetCharterOutStartDate()) {
+					dateRow.put(START_DATE_KEY, dateAttributeImporter.formatLocalDate(charterOutMarketParameters.getCharterOutStartDate()));
+					exportedObjects.add(dateRow);
+				}
+				if (charterOutMarketParameters.isSetCharterOutEndDate()) {
+					dateRow.put(END_DATE_KEY, dateAttributeImporter.formatLocalDate(charterOutMarketParameters.getCharterOutEndDate()));
+					exportedObjects.add(dateRow);
+				}
 			} else {
 				generalExportObject.add(obj);
 			}

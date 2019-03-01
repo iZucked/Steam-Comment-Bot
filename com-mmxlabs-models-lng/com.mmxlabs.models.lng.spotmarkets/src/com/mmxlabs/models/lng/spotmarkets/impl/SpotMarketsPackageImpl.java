@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters;
-import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
@@ -98,13 +97,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * @generated
 	 */
 	private EClass spotAvailabilityEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass charterOutStartDateEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -216,6 +208,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSpotMarketsModel() {
 		return spotMarketsModelEClass;
 	}
@@ -225,6 +218,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSpotMarketsModel_DesPurchaseSpotMarket() {
 		return (EReference)spotMarketsModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -234,6 +228,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSpotMarketsModel_DesSalesSpotMarket() {
 		return (EReference)spotMarketsModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -243,6 +238,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSpotMarketsModel_FobPurchasesSpotMarket() {
 		return (EReference)spotMarketsModelEClass.getEStructuralFeatures().get(2);
 	}
@@ -252,6 +248,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSpotMarketsModel_FobSalesSpotMarket() {
 		return (EReference)spotMarketsModelEClass.getEStructuralFeatures().get(3);
 	}
@@ -261,7 +258,8 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSpotMarketsModel_CharterOutStartDate() {
+	@Override
+	public EReference getSpotMarketsModel_CharterInMarkets() {
 		return (EReference)spotMarketsModelEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -270,7 +268,8 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSpotMarketsModel_CharterInMarkets() {
+	@Override
+	public EReference getSpotMarketsModel_CharterOutMarkets() {
 		return (EReference)spotMarketsModelEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -279,7 +278,8 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSpotMarketsModel_CharterOutMarkets() {
+	@Override
+	public EReference getSpotMarketsModel_CharterOutMarketParameters() {
 		return (EReference)spotMarketsModelEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -288,15 +288,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSpotMarketsModel_CharterOutMarketParameters() {
-		return (EReference)spotMarketsModelEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@Override
 	public EClass getSpotMarketGroup() {
 		return spotMarketGroupEClass;
 	}
@@ -306,6 +298,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSpotMarketGroup_Availability() {
 		return (EReference)spotMarketGroupEClass.getEStructuralFeatures().get(0);
 	}
@@ -315,6 +308,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSpotMarketGroup_Type() {
 		return (EAttribute)spotMarketGroupEClass.getEStructuralFeatures().get(1);
 	}
@@ -324,6 +318,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSpotMarketGroup_Markets() {
 		return (EReference)spotMarketGroupEClass.getEStructuralFeatures().get(2);
 	}
@@ -333,6 +328,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSpotMarket() {
 		return spotMarketEClass;
 	}
@@ -342,6 +338,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSpotMarket_Enabled() {
 		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(0);
 	}
@@ -351,6 +348,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSpotMarket_Availability() {
 		return (EReference)spotMarketEClass.getEStructuralFeatures().get(1);
 	}
@@ -360,6 +358,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSpotMarket_MinQuantity() {
 		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(2);
 	}
@@ -369,6 +368,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSpotMarket_MaxQuantity() {
 		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(3);
 	}
@@ -378,6 +378,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSpotMarket_VolumeLimitsUnit() {
 		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(4);
 	}
@@ -387,6 +388,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSpotMarket_PriceInfo() {
 		return (EReference)spotMarketEClass.getEStructuralFeatures().get(5);
 	}
@@ -396,6 +398,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSpotMarket_Entity() {
 		return (EReference)spotMarketEClass.getEStructuralFeatures().get(6);
 	}
@@ -405,6 +408,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSpotMarket_PricingEvent() {
 		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(7);
 	}
@@ -414,6 +418,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSpotMarket_RestrictedListsArePermissive() {
 		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(8);
 	}
@@ -423,6 +428,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSpotMarket_RestrictedPorts() {
 		return (EReference)spotMarketEClass.getEStructuralFeatures().get(9);
 	}
@@ -432,6 +438,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSpotMarket_RestrictedContracts() {
 		return (EReference)spotMarketEClass.getEStructuralFeatures().get(10);
 	}
@@ -441,6 +448,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSpotMarket_Mtm() {
 		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(11);
 	}
@@ -450,6 +458,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDESPurchaseMarket() {
 		return desPurchaseMarketEClass;
 	}
@@ -459,6 +468,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDESPurchaseMarket_Cv() {
 		return (EAttribute)desPurchaseMarketEClass.getEStructuralFeatures().get(0);
 	}
@@ -468,6 +478,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getDESPurchaseMarket_DestinationPorts() {
 		return (EReference)desPurchaseMarketEClass.getEStructuralFeatures().get(1);
 	}
@@ -477,6 +488,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDESSalesMarket() {
 		return desSalesMarketEClass;
 	}
@@ -486,6 +498,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getDESSalesMarket_NotionalPort() {
 		return (EReference)desSalesMarketEClass.getEStructuralFeatures().get(0);
 	}
@@ -495,6 +508,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getDESSalesMarket_AllowedVessels() {
 		return (EReference)desSalesMarketEClass.getEStructuralFeatures().get(1);
 	}
@@ -504,6 +518,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFOBPurchasesMarket() {
 		return fobPurchasesMarketEClass;
 	}
@@ -513,6 +528,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getFOBPurchasesMarket_NotionalPort() {
 		return (EReference)fobPurchasesMarketEClass.getEStructuralFeatures().get(0);
 	}
@@ -522,6 +538,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFOBPurchasesMarket_Cv() {
 		return (EAttribute)fobPurchasesMarketEClass.getEStructuralFeatures().get(1);
 	}
@@ -531,6 +548,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getFOBPurchasesMarket_MarketPorts() {
 		return (EReference)fobPurchasesMarketEClass.getEStructuralFeatures().get(2);
 	}
@@ -540,6 +558,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFOBSalesMarket() {
 		return fobSalesMarketEClass;
 	}
@@ -549,6 +568,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getFOBSalesMarket_OriginPorts() {
 		return (EReference)fobSalesMarketEClass.getEStructuralFeatures().get(0);
 	}
@@ -558,6 +578,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSpotAvailability() {
 		return spotAvailabilityEClass;
 	}
@@ -567,6 +588,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSpotAvailability_Constant() {
 		return (EAttribute)spotAvailabilityEClass.getEStructuralFeatures().get(0);
 	}
@@ -576,6 +598,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSpotAvailability_Curve() {
 		return (EReference)spotAvailabilityEClass.getEStructuralFeatures().get(1);
 	}
@@ -585,24 +608,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getCharterOutStartDate() {
-		return charterOutStartDateEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getCharterOutStartDate_CharterOutStartDate() {
-		return (EAttribute)charterOutStartDateEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@Override
 	public EClass getCharterOutMarket() {
 		return charterOutMarketEClass;
 	}
@@ -612,6 +618,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterOutMarket_MinCharterOutDuration() {
 		return (EAttribute)charterOutMarketEClass.getEStructuralFeatures().get(1);
 	}
@@ -621,6 +628,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCharterOutMarket_AvailablePorts() {
 		return (EReference)charterOutMarketEClass.getEStructuralFeatures().get(2);
 	}
@@ -630,6 +638,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCharterOutMarket_Vessels() {
 		return (EReference)charterOutMarketEClass.getEStructuralFeatures().get(3);
 	}
@@ -639,6 +648,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterOutMarket_MaxCharterOutDuration() {
 		return (EAttribute)charterOutMarketEClass.getEStructuralFeatures().get(4);
 	}
@@ -648,6 +658,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterOutMarket_CharterOutRate() {
 		return (EAttribute)charterOutMarketEClass.getEStructuralFeatures().get(0);
 	}
@@ -657,6 +668,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCharterInMarket() {
 		return charterInMarketEClass;
 	}
@@ -666,6 +678,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCharterInMarket_Vessel() {
 		return (EReference)charterInMarketEClass.getEStructuralFeatures().get(0);
 	}
@@ -675,6 +688,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterInMarket_Nominal() {
 		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(6);
 	}
@@ -684,6 +698,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterInMarket_MinDuration() {
 		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(7);
 	}
@@ -693,6 +708,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterInMarket_MaxDuration() {
 		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(8);
 	}
@@ -702,6 +718,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterInMarket_Mtm() {
 		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(9);
 	}
@@ -711,6 +728,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSpotCharterMarket() {
 		return spotCharterMarketEClass;
 	}
@@ -720,6 +738,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSpotCharterMarket_Enabled() {
 		return (EAttribute)spotCharterMarketEClass.getEStructuralFeatures().get(0);
 	}
@@ -729,6 +748,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCharterOutMarketParameters() {
 		return charterOutMarketParametersEClass;
 	}
@@ -738,6 +758,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterOutMarketParameters_CharterOutStartDate() {
 		return (EAttribute)charterOutMarketParametersEClass.getEStructuralFeatures().get(0);
 	}
@@ -747,6 +768,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterOutMarketParameters_CharterOutEndDate() {
 		return (EAttribute)charterOutMarketParametersEClass.getEStructuralFeatures().get(1);
 	}
@@ -756,6 +778,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterInMarket_SpotCharterCount() {
 		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(2);
 	}
@@ -765,6 +788,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterInMarket_OverrideInaccessibleRoutes() {
 		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(3);
 	}
@@ -774,6 +798,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterInMarket_InaccessibleRoutes() {
 		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(4);
 	}
@@ -783,6 +808,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCharterInMarket_CharterContract() {
 		return (EReference)charterInMarketEClass.getEStructuralFeatures().get(5);
 	}
@@ -792,6 +818,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterInMarket_CharterInRate() {
 		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(1);
 	}
@@ -801,6 +828,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getSpotType() {
 		return spotTypeEEnum;
 	}
@@ -810,6 +838,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotMarketsFactory getSpotMarketsFactory() {
 		return (SpotMarketsFactory)getEFactoryInstance();
 	}
@@ -838,7 +867,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__DES_SALES_SPOT_MARKET);
 		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__FOB_PURCHASES_SPOT_MARKET);
 		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__FOB_SALES_SPOT_MARKET);
-		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE);
 		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS);
 		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS);
 		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS);
@@ -881,9 +909,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		spotAvailabilityEClass = createEClass(SPOT_AVAILABILITY);
 		createEAttribute(spotAvailabilityEClass, SPOT_AVAILABILITY__CONSTANT);
 		createEReference(spotAvailabilityEClass, SPOT_AVAILABILITY__CURVE);
-
-		charterOutStartDateEClass = createEClass(CHARTER_OUT_START_DATE);
-		createEAttribute(charterOutStartDateEClass, CHARTER_OUT_START_DATE__CHARTER_OUT_START_DATE);
 
 		charterOutMarketEClass = createEClass(CHARTER_OUT_MARKET);
 		createEAttribute(charterOutMarketEClass, CHARTER_OUT_MARKET__CHARTER_OUT_RATE);
@@ -972,7 +997,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEReference(getSpotMarketsModel_DesSalesSpotMarket(), this.getSpotMarketGroup(), null, "desSalesSpotMarket", null, 1, 1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarketsModel_FobPurchasesSpotMarket(), this.getSpotMarketGroup(), null, "fobPurchasesSpotMarket", null, 1, 1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarketsModel_FobSalesSpotMarket(), this.getSpotMarketGroup(), null, "fobSalesSpotMarket", null, 1, 1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSpotMarketsModel_CharterOutStartDate(), this.getCharterOutStartDate(), null, "charterOutStartDate", null, 0, 1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarketsModel_CharterInMarkets(), this.getCharterInMarket(), null, "charterInMarkets", null, 0, -1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarketsModel_CharterOutMarkets(), this.getCharterOutMarket(), null, "charterOutMarkets", null, 0, -1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarketsModel_CharterOutMarketParameters(), this.getCharterOutMarketParameters(), null, "charterOutMarketParameters", null, 0, 1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1033,9 +1057,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		g2 = createEGenericType(ecorePackage.getEIntegerObject());
 		g1.getETypeArguments().add(g2);
 		initEReference(getSpotAvailability_Curve(), g1, null, "curve", null, 1, 1, SpotAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(charterOutStartDateEClass, CharterOutStartDate.class, "CharterOutStartDate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCharterOutStartDate_CharterOutStartDate(), theDateTimePackage.getLocalDate(), "charterOutStartDate", null, 0, 1, CharterOutStartDate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterOutMarketEClass, CharterOutMarket.class, "CharterOutMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCharterOutMarket_CharterOutRate(), ecorePackage.getEString(), "charterOutRate", null, 0, 1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

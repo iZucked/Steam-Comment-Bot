@@ -76,6 +76,7 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getNotionalPort() {
 		if (notionalPort != null && notionalPort.eIsProxy()) {
 			InternalEObject oldNotionalPort = (InternalEObject)notionalPort;
@@ -102,6 +103,7 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNotionalPort(Port newNotionalPort) {
 		Port oldNotionalPort = notionalPort;
 		notionalPort = newNotionalPort;
@@ -114,6 +116,7 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<AVesselSet<Vessel>> getAllowedVessels() {
 		if (allowedVessels == null) {
 			allowedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, SpotMarketsPackage.DES_SALES_MARKET__ALLOWED_VESSELS);

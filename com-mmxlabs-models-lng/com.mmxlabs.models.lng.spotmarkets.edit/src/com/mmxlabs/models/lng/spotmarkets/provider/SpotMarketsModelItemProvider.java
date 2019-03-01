@@ -68,7 +68,6 @@ public class SpotMarketsModelItemProvider
 			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__DES_SALES_SPOT_MARKET);
 			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__FOB_PURCHASES_SPOT_MARKET);
 			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__FOB_SALES_SPOT_MARKET);
-			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE);
 			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS);
 			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS);
 			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS);
@@ -130,7 +129,6 @@ public class SpotMarketsModelItemProvider
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__DES_SALES_SPOT_MARKET:
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__FOB_PURCHASES_SPOT_MARKET:
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__FOB_SALES_SPOT_MARKET:
-			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE:
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS:
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS:
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS:
@@ -170,11 +168,6 @@ public class SpotMarketsModelItemProvider
 			(createChildParameter
 				(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__FOB_SALES_SPOT_MARKET,
 				 SpotMarketsFactory.eINSTANCE.createSpotMarketGroup()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE,
-				 SpotMarketsFactory.eINSTANCE.createCharterOutStartDate()));
 
 		newChildDescriptors.add
 			(createChildParameter

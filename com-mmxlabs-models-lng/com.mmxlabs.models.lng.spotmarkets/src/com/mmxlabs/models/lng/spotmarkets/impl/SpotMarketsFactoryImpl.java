@@ -14,7 +14,6 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
-import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
@@ -77,7 +76,6 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 			case SpotMarketsPackage.FOB_PURCHASES_MARKET: return createFOBPurchasesMarket();
 			case SpotMarketsPackage.FOB_SALES_MARKET: return createFOBSalesMarket();
 			case SpotMarketsPackage.SPOT_AVAILABILITY: return createSpotAvailability();
-			case SpotMarketsPackage.CHARTER_OUT_START_DATE: return createCharterOutStartDate();
 			case SpotMarketsPackage.CHARTER_OUT_MARKET: return createCharterOutMarket();
 			case SpotMarketsPackage.CHARTER_IN_MARKET: return createCharterInMarket();
 			case SpotMarketsPackage.CHARTER_OUT_MARKET_PARAMETERS: return createCharterOutMarketParameters();
@@ -121,6 +119,7 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotMarketsModel createSpotMarketsModel() {
 		SpotMarketsModelImpl spotMarketsModel = new SpotMarketsModelImpl();
 		return spotMarketsModel;
@@ -131,6 +130,7 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotMarketGroup createSpotMarketGroup() {
 		SpotMarketGroupImpl spotMarketGroup = new SpotMarketGroupImpl();
 		return spotMarketGroup;
@@ -141,6 +141,7 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DESPurchaseMarket createDESPurchaseMarket() {
 		DESPurchaseMarketImpl desPurchaseMarket = new DESPurchaseMarketImpl();
 		return desPurchaseMarket;
@@ -151,6 +152,7 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DESSalesMarket createDESSalesMarket() {
 		DESSalesMarketImpl desSalesMarket = new DESSalesMarketImpl();
 		return desSalesMarket;
@@ -161,6 +163,7 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FOBPurchasesMarket createFOBPurchasesMarket() {
 		FOBPurchasesMarketImpl fobPurchasesMarket = new FOBPurchasesMarketImpl();
 		return fobPurchasesMarket;
@@ -171,6 +174,7 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FOBSalesMarket createFOBSalesMarket() {
 		FOBSalesMarketImpl fobSalesMarket = new FOBSalesMarketImpl();
 		return fobSalesMarket;
@@ -181,6 +185,7 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotAvailability createSpotAvailability() {
 		SpotAvailabilityImpl spotAvailability = new SpotAvailabilityImpl();
 		return spotAvailability;
@@ -191,16 +196,7 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CharterOutStartDate createCharterOutStartDate() {
-		CharterOutStartDateImpl charterOutStartDate = new CharterOutStartDateImpl();
-		return charterOutStartDate;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@Override
 	public CharterOutMarket createCharterOutMarket() {
 		CharterOutMarketImpl charterOutMarket = new CharterOutMarketImpl();
 		return charterOutMarket;
@@ -211,6 +207,7 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterInMarket createCharterInMarket() {
 		CharterInMarketImpl charterInMarket = new CharterInMarketImpl();
 		return charterInMarket;
@@ -221,6 +218,7 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterOutMarketParameters createCharterOutMarketParameters() {
 		CharterOutMarketParametersImpl charterOutMarketParameters = new CharterOutMarketParametersImpl();
 		return charterOutMarketParameters;
@@ -251,6 +249,7 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotMarketsPackage getSpotMarketsPackage() {
 		return (SpotMarketsPackage)getEPackage();
 	}

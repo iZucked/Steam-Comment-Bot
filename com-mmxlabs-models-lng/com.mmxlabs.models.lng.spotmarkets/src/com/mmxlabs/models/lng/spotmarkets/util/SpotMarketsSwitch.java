@@ -12,7 +12,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
-import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
@@ -152,12 +151,6 @@ public class SpotMarketsSwitch<@Nullable T> extends Switch<T> {
 			case SpotMarketsPackage.SPOT_AVAILABILITY: {
 				SpotAvailability spotAvailability = (SpotAvailability)theEObject;
 				T result = caseSpotAvailability(spotAvailability);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case SpotMarketsPackage.CHARTER_OUT_START_DATE: {
-				CharterOutStartDate charterOutStartDate = (CharterOutStartDate)theEObject;
-				T result = caseCharterOutStartDate(charterOutStartDate);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -313,21 +306,6 @@ public class SpotMarketsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSpotAvailability(SpotAvailability object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Charter Out Start Date</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Charter Out Start Date</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCharterOutStartDate(CharterOutStartDate object) {
 		return null;
 	}
 

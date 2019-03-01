@@ -11,6 +11,8 @@
         lowerBound="1" eType="#//SpotMarketGroup" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fobSalesSpotMarket" lowerBound="1"
         eType="#//SpotMarketGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterOutStartDate" eType="#//CharterOutStartDate"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarkets" upperBound="-1"
         eType="#//CharterInMarket" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterOutMarkets" upperBound="-1"
@@ -118,6 +120,9 @@
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
       </eGenericType>
     </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CharterOutStartDate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterOutStartDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharterOutMarket" eSuperTypes="#//SpotCharterMarket ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterOutRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
