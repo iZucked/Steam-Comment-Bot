@@ -9,8 +9,6 @@ import org.eclipse.nebula.widgets.grid.GridHeaderRenderer;
 import org.eclipse.nebula.widgets.grid.internal.SortArrowRenderer;
 import org.eclipse.nebula.widgets.grid.internal.TextUtils;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -51,6 +49,7 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Point computeSize(GC gc, int wHint, int hHint, Object value) {
 		GridColumn column = (GridColumn) value;
 
@@ -94,6 +93,7 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void paint(GC gc, Object value) {
 		GridColumn column = (GridColumn) value;
 
@@ -102,7 +102,7 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 
 		boolean flat = true;// (column.getParent().getCellSelectionEnabled() && !column.getMoveable());
 
-		boolean drawSelected = ((isMouseDown() && isHover()));
+		boolean drawSelected = isMouseDown() && isHover();
 
 		gc.setBackground(TableColourPalette.getInstance().getColourFor(TableItems.ColumnHeaders, ColourElements.Background));
 
@@ -249,6 +249,7 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDisplay(Display display) {
 		super.setDisplay(display);
 		arrowRenderer.setDisplay(display);
@@ -257,6 +258,7 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean notify(int event, Point point, Object value) {
 		return false;
 	}
@@ -264,6 +266,7 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Rectangle getTextBounds(Object value, boolean preferred) {
 		GridColumn column = (GridColumn) value;
 
@@ -307,6 +310,7 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * @return the bounds reserved for the control
 	 */
+	@Override
 	protected Rectangle getControlBounds(Object value, boolean preferred) {
 		Rectangle bounds = getBounds();
 		GridColumn column = (GridColumn) value;
@@ -328,11 +332,7 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 		if (textLayout == null) {
 			textLayout = new TextLayout(gc.getDevice());
 			textLayout.setFont(gc.getFont());
-			column.getParent().addDisposeListener(new DisposeListener() {
-				public void widgetDisposed(DisposeEvent e) {
-					textLayout.dispose();
-				}
-			});
+			column.getParent().addDisposeListener(e -> textLayout.dispose());
 		}
 
 		if (forceCenter) {

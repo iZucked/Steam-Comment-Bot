@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
@@ -29,7 +28,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -43,14 +41,12 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressConstants2;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Files;
-import com.google.common.util.concurrent.Monitor;
 import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.rcp.common.ServiceHelper;
@@ -71,7 +67,6 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.model.util.ResourceHelper;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 
@@ -96,7 +91,7 @@ public class FileScenarioService extends AbstractScenarioService {
 
 	public FileScenarioService() {
 		super("My Scenarios");
-		options = new HashMap<Object, Object>();
+		options = new HashMap<>();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 	}
 
@@ -266,7 +261,7 @@ public class FileScenarioService extends AbstractScenarioService {
 			try {
 				final ProgressMonitorDialog p = new ProgressMonitorDialog(null);
 
-				final IRunnableWithProgress runnable = (monitor) -> {
+				final IRunnableWithProgress runnable = monitor -> {
 					monitor.beginTask("Backup scenario data", 20);
 					try {
 
@@ -324,7 +319,7 @@ public class FileScenarioService extends AbstractScenarioService {
 		}
 		{
 			// Recursively delete contents
-			while (container.getElements().isEmpty() == false) {
+			while (!container.getElements().isEmpty()) {
 				// assert false; // Caller should do this
 				delete(container.getElements().get(0));
 			}
@@ -496,9 +491,10 @@ public class FileScenarioService extends AbstractScenarioService {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (notification.isTouch() == false) {
-				if (notification.getFeature() instanceof EStructuralFeature && ((EStructuralFeature) notification.getFeature()).isTransient())
+			if (!notification.isTouch()) {
+				if (notification.getFeature() instanceof EStructuralFeature && ((EStructuralFeature) notification.getFeature()).isTransient()) {
 					return;
+				}
 				save();
 			}
 		}
@@ -568,12 +564,10 @@ public class FileScenarioService extends AbstractScenarioService {
 					resourceExisted = true;
 					log.warn("Scenario service model restored from backup.");
 				} catch (final IOException ex2) {
-					if (mainFileExists && backupFileExists) {
+					if (mainFileExists) {
 						log.error("Error reading both main and backup scenario service models.", ex2);
-					} else if (!mainFileExists && backupFileExists) {
+					} else if (!mainFileExists) {
 						log.error("Error reading backup scenario service models.", ex2);
-					} else if (mainFileExists && !backupFileExists) {
-						log.error("Error reading main scenario service models.", ex2);
 					}
 				} finally {
 					// Restore original URI for saves later on
@@ -617,7 +611,6 @@ public class FileScenarioService extends AbstractScenarioService {
 
 		// modify any old scenarios to fix wrong pointing
 		makeRelativeURIs(result);
-		recoverLostScenarios(result);
 
 		result.eAdapters().add(saveAdapter);
 
@@ -677,78 +670,6 @@ public class FileScenarioService extends AbstractScenarioService {
 		return result;
 	}
 
-	/**
-	 * Simple method to recover any lost scenarios (those which are in the instances/ dir, but not in the scenario service)
-	 * 
-	 * @param result
-	 */
-	private void recoverLostScenarios(final ScenarioService result) {
-
-		if (true) {
-			// This does nothing in the new .lingo model
-			return;
-		}
-
-		// gather up all UUIDs
-		final HashSet<String> allUUIDs = new HashSet<String>();
-		final TreeIterator<EObject> iterator = result.eAllContents();
-		while (iterator.hasNext()) {
-			final EObject o = iterator.next();
-			if (o instanceof ScenarioInstance) {
-				allUUIDs.add(((ScenarioInstance) o).getUuid());
-			}
-		}
-		final Folder lostAndFound = ScenarioServiceFactory.eINSTANCE.createFolder();
-		lostAndFound.setName("Lost & Found");
-		// now look for all instances in the spare dir which don't have UUIDs
-		final File f = new File(resolveURI("instances/").toFileString());
-		if (f.exists() && f.isDirectory()) {
-			final HashMap<String, ScenarioInstance> recoveredInstances = new HashMap<String, ScenarioInstance>();
-			final HashSet<String> recoveredSubInstances = new HashSet<String>();
-			for (final File instanceFile : f.listFiles()) {
-				if (instanceFile == null) {
-					continue;
-				}
-				if (instanceFile.getName().endsWith(".xmi")) {
-					final String instanceUUID = instanceFile.getName().substring(0, instanceFile.getName().length() - 4);
-					if (!allUUIDs.contains(instanceUUID)) {
-						log.warn("Recovering instance " + instanceUUID);
-						// recover the instance in f, if possible
-						try {
-							final Resource resource = ResourceHelper.loadResource(resourceSet, URI.createFileURI(instanceFile.getAbsolutePath()));
-							final EObject o = resource.getContents().get(0);
-							if (o instanceof ScenarioInstance) {
-								final ScenarioInstance theInstance = (ScenarioInstance) o;
-								final TreeIterator<EObject> contentIterator = o.eAllContents();
-								while (contentIterator.hasNext()) {
-									final EObject sub = contentIterator.next();
-									if (sub instanceof ScenarioInstance) {
-										final ScenarioInstance subInstance = (ScenarioInstance) sub;
-										if (recoveredInstances.containsKey(subInstance.getUuid())) {
-											recoveredInstances.remove(subInstance.getUuid());
-										}
-										recoveredSubInstances.add(subInstance.getUuid());
-									}
-								}
-								if (!recoveredSubInstances.contains(theInstance.getUuid())) {
-									recoveredInstances.put(theInstance.getUuid(), theInstance);
-								}
-
-							}
-							resourceSet.getResources().remove(resource);
-						} catch (final Throwable th) {
-
-						}
-					}
-				}
-			}
-			lostAndFound.getElements().addAll(recoveredInstances.values());
-		}
-		if (lostAndFound.getElements().size() > 0) {
-			result.getElements().add(lostAndFound);
-		}
-	}
-
 	private void makeRelativeURIs(final Container container) {
 		if (container instanceof ScenarioInstance) {
 			final ScenarioInstance instance = (ScenarioInstance) container;
@@ -756,7 +677,7 @@ public class FileScenarioService extends AbstractScenarioService {
 			{
 				final String uriString = instance.getRootObjectURI();
 				final URI uri = URI.createURI(uriString);
-				if (uri.isRelative() == false) {
+				if (!uri.isRelative()) {
 					final URI derezzed = uri.deresolve(storeURI);
 					if (derezzed.isRelative()) {
 						instance.setRootObjectURI(derezzed.toString());

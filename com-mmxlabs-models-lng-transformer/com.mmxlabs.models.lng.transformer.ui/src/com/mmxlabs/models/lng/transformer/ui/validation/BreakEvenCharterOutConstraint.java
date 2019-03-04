@@ -9,9 +9,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
-import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
@@ -19,9 +17,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
-import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 
 public class BreakEvenCharterOutConstraint extends AbstractModelMultiConstraint {
 
@@ -32,7 +28,7 @@ public class BreakEvenCharterOutConstraint extends AbstractModelMultiConstraint 
 
 		if (target instanceof Slot) {
 
-			final Slot slot = (Slot) target;
+			final Slot<?> slot = (Slot<?>) target;
 			final MMXRootObject rootObject = extraContext.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
 				final SpotMarketsModel spotMarketsModel = ((LNGScenarioModel) rootObject).getReferenceModel().getSpotMarketsModel();
@@ -52,17 +48,6 @@ public class BreakEvenCharterOutConstraint extends AbstractModelMultiConstraint 
 				if (!charterOutEnabled) {
 					// Charter out mode not enabled
 					return Activator.PLUGIN_ID;
-				}
-				if (true) {
-					// SG - Turned off as this needs to check the UserSettings object now
-					return Activator.PLUGIN_ID;
-				}
-
-				if (slot.isSetPriceExpression() && slot.getPriceExpression().contains(IBreakEvenEvaluator.MARKER)) {
-					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("Missing prices cannot be used with charter out generation"));
-					dcsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PriceExpression());
-					statuses.add(dcsd);
 				}
 			}
 		}

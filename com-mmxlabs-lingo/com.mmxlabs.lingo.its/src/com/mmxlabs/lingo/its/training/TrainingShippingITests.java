@@ -97,8 +97,6 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 		updateDistanceData(scenarioDataProvider, "v1.0.11.250_9.json");
 
-		ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File("C:\\temp\\base-n.lingo"));
-		
 		return scenarioDataProvider;
 	}
 
@@ -475,7 +473,6 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.build();
 
 					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assert::fail);
-					Assert.assertNotNull(solution);
 
 				}
 				// Solution 2

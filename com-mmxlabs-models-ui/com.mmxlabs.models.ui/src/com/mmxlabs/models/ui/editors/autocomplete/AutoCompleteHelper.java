@@ -93,7 +93,7 @@ public class AutoCompleteHelper {
 	}
 
 	public static KeyStroke getActivationKeystroke() {
-		final KeyStroke instance = KeyStroke.getInstance(new Integer(SWT.CTRL).intValue(), new Integer(' ').intValue());
+		final KeyStroke instance = KeyStroke.getInstance(Integer.valueOf(SWT.CTRL).intValue(), Integer.valueOf(' ').intValue());
 		return instance;
 	}
 }

@@ -20,30 +20,29 @@ import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
 public class RelatedSlotAllocations {
-	private final Map<String, Set<Slot>> slotsAndTheirRelatedSets = new HashMap<>();
-	private final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
-	private final Map<Slot, OpenSlotAllocation> openSlotAllocationMap = new HashMap<>();
+	private final Map<String, Set<Slot<?>>> slotsAndTheirRelatedSets = new HashMap<>();
+	private final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
+	private final Map<Slot<?>, OpenSlotAllocation> openSlotAllocationMap = new HashMap<>();
 
-	public Set<Slot> getRelatedSetFor(final CargoAllocation cargoAllocation, final boolean buys) {
+	public Set<Slot<?>> getRelatedSetFor(final CargoAllocation cargoAllocation, final boolean buys) {
 		final List<SlotAllocation> slotAllocations = cargoAllocation.getSlotAllocations();
 		for (final SlotAllocation slotAllocation : slotAllocations) {
-
 			return getRelatedSetFor(slotAllocation, buys);
 		}
 		return ASet.of();
 	}
 
-	public Set<Slot> getRelatedSetFor(final SlotAllocation slotAllocation, final boolean buys) {
-		final Slot slot = slotAllocation.getSlot();
+	public Set<Slot<?>> getRelatedSetFor(final SlotAllocation slotAllocation, final boolean buys) {
+		final Slot<?> slot = slotAllocation.getSlot();
 		return getRelatedSetFor(slot, buys);
 	}
 
-	public Set<Slot> getRelatedSetFor(final Slot slot, final boolean buys) {
+	public Set<Slot<?>> getRelatedSetFor(final Slot<?> slot, final boolean buys) {
 		final String slotName = getSlotNameKey(slot);
 		if (slotsAndTheirRelatedSets.containsKey(slotName)) {
-			final Set<Slot> slots = slotsAndTheirRelatedSets.get(slotName);
-			final Set<Slot> returnSet = new HashSet<>();
-			for (final Slot s : slots) {
+			final Set<Slot<?>> slots = slotsAndTheirRelatedSets.get(slotName);
+			final Set<Slot<?>> returnSet = new HashSet<>();
+			for (final Slot<?> s : slots) {
 
 				if (buys && s instanceof LoadSlot) {
 					returnSet.add(s);
@@ -57,13 +56,13 @@ public class RelatedSlotAllocations {
 		return ASet.of();
 	}
 
-	public Set<Slot> getRelatedSetFor(final OpenSlotAllocation openSlotAllocation, final boolean buys) {
-		final Slot slot = openSlotAllocation.getSlot();
+	public Set<Slot<?>> getRelatedSetFor(final OpenSlotAllocation openSlotAllocation, final boolean buys) {
+		final Slot<?> slot = openSlotAllocation.getSlot();
 		final String slotName = getSlotNameKey(slot);
 		if (slotsAndTheirRelatedSets.containsKey(slotName)) {
-			final Set<Slot> slots = slotsAndTheirRelatedSets.get(slotName);
-			final Set<Slot> returnSet = new HashSet<>();
-			for (final Slot s : slots) {
+			final Set<Slot<?>> slots = slotsAndTheirRelatedSets.get(slotName);
+			final Set<Slot<?>> returnSet = new HashSet<>();
+			for (final Slot<?> s : slots) {
 				if (buys && s instanceof LoadSlot) {
 					returnSet.add(s);
 				}
@@ -85,8 +84,8 @@ public class RelatedSlotAllocations {
 			final SlotAllocation slotAllocationA = slotAllocations.get(i - 1);
 			final SlotAllocation slotAllocationB = slotAllocations.get(i);
 
-			final Slot slotA = slotAllocationA.getSlot();
-			final Slot slotB = slotAllocationB.getSlot();
+			final Slot<?> slotA = slotAllocationA.getSlot();
+			final Slot<?> slotB = slotAllocationB.getSlot();
 
 			slotAllocationMap.put(slotA, slotAllocationA);
 			slotAllocationMap.put(slotB, slotAllocationB);
@@ -100,11 +99,11 @@ public class RelatedSlotAllocations {
 		openSlotAllocationMap.put(openSlotAllocation.getSlot(), openSlotAllocation);
 	}
 
-	public SlotAllocation getSlotAllocation(final Slot slot) {
+	public SlotAllocation getSlotAllocation(final Slot<?> slot) {
 		return slotAllocationMap.get(slot);
 	}
 
-	public OpenSlotAllocation getOpenSlotAllocation(final Slot slot) {
+	public OpenSlotAllocation getOpenSlotAllocation(final Slot<?> slot) {
 		return openSlotAllocationMap.get(slot);
 	}
 
@@ -114,7 +113,7 @@ public class RelatedSlotAllocations {
 		openSlotAllocationMap.clear();
 	}
 
-	public void addRelatedSlot(final Slot slotA, final Slot slotB) {
+	public void addRelatedSlot(final Slot<?> slotA, final Slot<?> slotB) {
 		if (slotA == null || slotB == null) {
 			return;
 		}
@@ -123,8 +122,8 @@ public class RelatedSlotAllocations {
 		final String sB = getSlotNameKey(slotB);
 
 		// get/create the sets of slots these wired slots are related to
-		final Set<Slot> setA = slotsAndTheirRelatedSets.containsKey(sA) ? slotsAndTheirRelatedSets.get(sA) : ASet.of(slotA);
-		final Set<Slot> setB = slotsAndTheirRelatedSets.containsKey(sB) ? slotsAndTheirRelatedSets.get(sB) : ASet.of(slotB);
+		final Set<Slot<?>> setA = slotsAndTheirRelatedSets.containsKey(sA) ? slotsAndTheirRelatedSets.get(sA) : ASet.of(slotA);
+		final Set<Slot<?>> setB = slotsAndTheirRelatedSets.containsKey(sB) ? slotsAndTheirRelatedSets.get(sB) : ASet.of(slotB);
 
 		// Ensure self is in set
 		setA.add(slotA);
@@ -132,15 +131,15 @@ public class RelatedSlotAllocations {
 
 		// merge the two sets
 		setA.addAll(setB);
-		final Set<Slot> mergedSet = setA;
+		final Set<Slot<?>> mergedSet = setA;
 
 		// make sure all slots in the mergedSet are related to the new mergedSet
-		for (final Slot slot : mergedSet) {
+		for (final Slot<?> slot : mergedSet) {
 			slotsAndTheirRelatedSets.put(getSlotNameKey(slot), mergedSet);
 		}
 	}
 
-	private String getSlotNameKey(final Slot slot) {
+	private String getSlotNameKey(final Slot<?> slot) {
 		// Add prefix as load and discharge ID's could be the same
 		final String prefix;
 		if (slot instanceof LoadSlot) {

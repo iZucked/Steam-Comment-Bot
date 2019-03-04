@@ -110,10 +110,10 @@ public class CycleDiffProcessor implements IDiffProcessor {
 
 				final CargoAllocation thisCargoAllocation = referenceRowCargoAllocation;
 
-				final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, true);
-				final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, false);
+				final Set<Slot<?>> buysSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, true);
+				final Set<Slot<?>> sellsSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, false);
 
-				for (final Slot s : buysSet) {
+				for (final Slot<?> s : buysSet) {
 					Object a = relatedSlotAllocations.getSlotAllocation(s);
 					if (a == null) {
 						a = relatedSlotAllocations.getOpenSlotAllocation(s);
@@ -155,12 +155,12 @@ public class CycleDiffProcessor implements IDiffProcessor {
 				}
 			}
 			if (different) {
-				final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, true);
-				final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, false);
+				final Set<Slot<?>> buysSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, true);
+				final Set<Slot<?>> sellsSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, false);
 
 				final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
 
-				for (final Slot s : buysSet) {
+				for (final Slot<?> s : buysSet) {
 					Object a = relatedSlotAllocations.getSlotAllocation(s);
 					if (a == null) {
 						a = relatedSlotAllocations.getOpenSlotAllocation(s);
@@ -200,12 +200,12 @@ public class CycleDiffProcessor implements IDiffProcessor {
 				}
 			}
 			if (different) {
-				final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, true);
-				final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, false);
+				final Set<Slot<?>> buysSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, true);
+				final Set<Slot<?>> sellsSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, false);
 
 				final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
 
-				for (final Slot s : buysSet) {
+				for (final Slot<?> s : buysSet) {
 					Object a = relatedSlotAllocations.getSlotAllocation(s);
 					if (a == null) {
 						a = relatedSlotAllocations.getOpenSlotAllocation(s);

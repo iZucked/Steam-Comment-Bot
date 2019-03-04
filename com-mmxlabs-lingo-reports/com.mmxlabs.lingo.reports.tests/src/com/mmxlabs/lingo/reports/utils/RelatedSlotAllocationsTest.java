@@ -61,8 +61,8 @@ public class RelatedSlotAllocationsTest {
 		loadAllocation2.setSlot(load2);
 		dischargeAllocation2.setSlot(discharge2);
 
-		final Set<Slot> relatedSetFor1_loads = rsa.getRelatedSetFor(cargoAllocation1, true);
-		final Set<Slot> relatedSetFor1_discharges = rsa.getRelatedSetFor(cargoAllocation1, false);
+		final Set<Slot<?>> relatedSetFor1_loads = rsa.getRelatedSetFor(cargoAllocation1, true);
+		final Set<Slot<?>> relatedSetFor1_discharges = rsa.getRelatedSetFor(cargoAllocation1, false);
 		Assert.assertTrue(relatedSetFor1_loads.contains(load1));
 		Assert.assertFalse(relatedSetFor1_loads.contains(discharge1));
 		Assert.assertFalse(relatedSetFor1_loads.contains(load2));
@@ -72,8 +72,8 @@ public class RelatedSlotAllocationsTest {
 		Assert.assertFalse(relatedSetFor1_discharges.contains(load2));
 		Assert.assertFalse(relatedSetFor1_discharges.contains(discharge2));
 
-		final Set<Slot> relatedSetFor2_loads = rsa.getRelatedSetFor(cargoAllocation2, true);
-		final Set<Slot> relatedSetFor2_discharges = rsa.getRelatedSetFor(cargoAllocation2, false);
+		final Set<Slot<?>> relatedSetFor2_loads = rsa.getRelatedSetFor(cargoAllocation2, true);
+		final Set<Slot<?>> relatedSetFor2_discharges = rsa.getRelatedSetFor(cargoAllocation2, false);
 		Assert.assertFalse(relatedSetFor2_loads.contains(load1));
 		Assert.assertFalse(relatedSetFor2_loads.contains(discharge1));
 		Assert.assertTrue(relatedSetFor2_loads.contains(load2));
@@ -123,8 +123,8 @@ public class RelatedSlotAllocationsTest {
 		loadAllocation2.setSlot(load2);
 		dischargeAllocation2.setSlot(discharge2);
 
-		final Set<Slot> relatedSetFor1_loads = rsa.getRelatedSetFor(cargoAllocation1, true);
-		final Set<Slot> relatedSetFor1_discharges = rsa.getRelatedSetFor(cargoAllocation1, false);
+		final Set<Slot<?>> relatedSetFor1_loads = rsa.getRelatedSetFor(cargoAllocation1, true);
+		final Set<Slot<?>> relatedSetFor1_discharges = rsa.getRelatedSetFor(cargoAllocation1, false);
 		Assert.assertTrue(relatedSetFor1_loads.contains(load1));
 		Assert.assertFalse(relatedSetFor1_loads.contains(discharge1));
 		Assert.assertTrue(relatedSetFor1_loads.contains(load2));
@@ -134,8 +134,8 @@ public class RelatedSlotAllocationsTest {
 		Assert.assertFalse(relatedSetFor1_discharges.contains(load2));
 		Assert.assertTrue(relatedSetFor1_discharges.contains(discharge2));
 
-		final Set<Slot> relatedSetFor2_loads = rsa.getRelatedSetFor(cargoAllocation2, true);
-		final Set<Slot> relatedSetFor2_discharges = rsa.getRelatedSetFor(cargoAllocation2, false);
+		final Set<Slot<?>> relatedSetFor2_loads = rsa.getRelatedSetFor(cargoAllocation2, true);
+		final Set<Slot<?>> relatedSetFor2_discharges = rsa.getRelatedSetFor(cargoAllocation2, false);
 		Assert.assertTrue(relatedSetFor2_loads.contains(load1));
 		Assert.assertFalse(relatedSetFor2_loads.contains(discharge1));
 		Assert.assertTrue(relatedSetFor2_loads.contains(load2));
@@ -185,27 +185,27 @@ public class RelatedSlotAllocationsTest {
 		loadAllocation2.setSlot(load2);
 		dischargeAllocation2.setSlot(discharge2);
 
-		final Set<Slot> relatedSetFor1_loads = rsa.getRelatedSetFor(cargoAllocation1, true);
+		final Set<Slot<?>> relatedSetFor1_loads = rsa.getRelatedSetFor(cargoAllocation1, true);
 		Assert.assertTrue(relatedSetFor1_loads.contains(load1));
 		Assert.assertFalse(relatedSetFor1_loads.contains(discharge1));
 		// Expect other spot instance to be filtered out by the getRelatedSetFor(CargoAllocation) call
 		Assert.assertFalse(relatedSetFor1_loads.contains(load2));
 		Assert.assertFalse(relatedSetFor1_loads.contains(discharge2));
 
-		final Set<Slot> relatedSetFor1_discharges = rsa.getRelatedSetFor(cargoAllocation1, false);
+		final Set<Slot<?>> relatedSetFor1_discharges = rsa.getRelatedSetFor(cargoAllocation1, false);
 		Assert.assertFalse(relatedSetFor1_discharges.contains(load1));
 		Assert.assertTrue(relatedSetFor1_discharges.contains(discharge1));
 		Assert.assertFalse(relatedSetFor1_discharges.contains(load2));
 		Assert.assertFalse(relatedSetFor1_discharges.contains(discharge2));
 
-		final Set<Slot> relatedSetFor2_loads = rsa.getRelatedSetFor(cargoAllocation2, true);
+		final Set<Slot<?>> relatedSetFor2_loads = rsa.getRelatedSetFor(cargoAllocation2, true);
 		// Expect other spot instance to be filtered out by the getRelatedSetFor(CargoAllocation) call
 		Assert.assertFalse(relatedSetFor2_loads.contains(load1));
 		Assert.assertFalse(relatedSetFor2_loads.contains(discharge1));
 		Assert.assertTrue(relatedSetFor2_loads.contains(load2));
 		Assert.assertFalse(relatedSetFor2_loads.contains(discharge2));
 
-		final Set<Slot> relatedSetFor2_discharges = rsa.getRelatedSetFor(cargoAllocation2, false);
+		final Set<Slot<?>> relatedSetFor2_discharges = rsa.getRelatedSetFor(cargoAllocation2, false);
 		Assert.assertFalse(relatedSetFor2_discharges.contains(load1));
 		Assert.assertFalse(relatedSetFor2_discharges.contains(discharge1));
 		Assert.assertFalse(relatedSetFor2_discharges.contains(load2));
@@ -251,26 +251,26 @@ public class RelatedSlotAllocationsTest {
 		loadAllocation2.setSlot(load2);
 		dischargeAllocation2.setSlot(discharge2);
 
-		final Set<Slot> relatedSetFor1_loads = rsa.getRelatedSetFor(cargoAllocation1, true);
+		final Set<Slot<?>> relatedSetFor1_loads = rsa.getRelatedSetFor(cargoAllocation1, true);
 		Assert.assertTrue(relatedSetFor1_loads.contains(load1));
 		Assert.assertFalse(relatedSetFor1_loads.contains(discharge1));
 		Assert.assertFalse(relatedSetFor1_loads.contains(load2));
 		Assert.assertFalse(relatedSetFor1_loads.contains(discharge2));
 
-		final Set<Slot> relatedSetFor1_discharges = rsa.getRelatedSetFor(cargoAllocation1, false);
+		final Set<Slot<?>> relatedSetFor1_discharges = rsa.getRelatedSetFor(cargoAllocation1, false);
 		Assert.assertFalse(relatedSetFor1_discharges.contains(load1));
 		Assert.assertTrue(relatedSetFor1_discharges.contains(discharge1));
 		Assert.assertFalse(relatedSetFor1_discharges.contains(load2));
 		// Expect other spot instance to be filtered out by the getRelatedSetFor(CargoAllocation) call
 		Assert.assertFalse(relatedSetFor1_discharges.contains(discharge2));
 
-		final Set<Slot> relatedSetFor2_loads = rsa.getRelatedSetFor(cargoAllocation2, true);
+		final Set<Slot<?>> relatedSetFor2_loads = rsa.getRelatedSetFor(cargoAllocation2, true);
 		Assert.assertFalse(relatedSetFor2_loads.contains(load1));
 		Assert.assertFalse(relatedSetFor2_loads.contains(discharge1));
 		Assert.assertTrue(relatedSetFor2_loads.contains(load2));
 		Assert.assertFalse(relatedSetFor2_loads.contains(discharge2));
 
-		final Set<Slot> relatedSetFor2_discharges = rsa.getRelatedSetFor(cargoAllocation2, false);
+		final Set<Slot<?>> relatedSetFor2_discharges = rsa.getRelatedSetFor(cargoAllocation2, false);
 		Assert.assertFalse(relatedSetFor2_discharges.contains(load1));
 		// Expect other spot instance to be filtered out by the getRelatedSetFor(CargoAllocation) call
 		Assert.assertFalse(relatedSetFor2_discharges.contains(discharge1));
@@ -440,10 +440,10 @@ public class RelatedSlotAllocationsTest {
 	}
 
 	private void checkRelatedSlots(final RelatedSlotAllocations rsa, final CargoAllocation cargoAllocation, final boolean buy, final Slot... slots) {
-		final Set<Slot> relatedSet = rsa.getRelatedSetFor(cargoAllocation, buy);
+		final Set<Slot<?>> relatedSet = rsa.getRelatedSetFor(cargoAllocation, buy);
 		Assert.assertTrue(relatedSet.size() == slots.length);
 
-		for (final Slot slot : slots) {
+		for (final Slot<?> slot : slots) {
 			Assert.assertTrue(relatedSet.contains(slot));
 		}
 

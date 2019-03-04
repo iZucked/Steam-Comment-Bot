@@ -14,7 +14,6 @@ import org.eclipse.jface.viewers.ColumnViewer;
 import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
-import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 
 /**

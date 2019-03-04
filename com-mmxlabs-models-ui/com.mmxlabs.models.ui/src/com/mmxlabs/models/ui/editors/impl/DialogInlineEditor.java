@@ -4,13 +4,10 @@
  */
 package com.mmxlabs.models.ui.editors.impl;
 
-import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -18,7 +15,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public abstract class DialogInlineEditor extends UnsettableInlineEditor {
 	public DialogInlineEditor(final EStructuralFeature feature) {
@@ -36,30 +32,16 @@ public abstract class DialogInlineEditor extends UnsettableInlineEditor {
 	 */
 	@Override
 	public Control createValueControl(final Composite parent) {
-		// final Composite contents = new Composite(parent, SWT.NONE);
 		final Composite contents = toolkit.createComposite(parent);
 		contents.setLayout(new GridLayout(2, false));
 
-		// final Label description = new Label(contents, SWT.WRAP);
-		final Label description = toolkit.createLabel(contents, "", SWT.WRAP);
+		this.description = toolkit.createLabel(contents, "", SWT.WRAP);
 		description.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
 
-		// final Button button = new Button(contents, SWT.NONE);
-		final Button button = toolkit.createButton(contents, "Edit", SWT.NONE);
+		this.button = toolkit.createButton(contents, "Edit", SWT.NONE);
 		button.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
-		// button.setText("Edit");
-		this.description = description;
-		this.button = button;
-		button.addSelectionListener(new SelectionListener() {
-			{
-				final SelectionListener sl = this;
-				button.addDisposeListener(new DisposeListener() {
-					@Override
-					public void widgetDisposed(final DisposeEvent e) {
-						button.removeSelectionListener(sl);
-					}
-				});
-			}
+
+		final SelectionAdapter selectionListener = new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -69,11 +51,9 @@ public abstract class DialogInlineEditor extends UnsettableInlineEditor {
 					updateDisplay(getValue());
 				}
 			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
-		});
+		};
+		button.addSelectionListener(selectionListener);
+		button.addDisposeListener(e -> button.removeSelectionListener(selectionListener));
 
 		return super.wrapControl(contents);
 	}

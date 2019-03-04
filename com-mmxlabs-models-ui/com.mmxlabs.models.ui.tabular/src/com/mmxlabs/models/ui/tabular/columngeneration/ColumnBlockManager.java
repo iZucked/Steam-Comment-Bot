@@ -5,7 +5,6 @@
 package com.mmxlabs.models.ui.tabular.columngeneration;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -426,6 +425,7 @@ public class ColumnBlockManager {
 		} else {
 			List<ColumnHandler> group = handlerGroups.get(groupName);
 			Collections.sort(group, new Comparator<ColumnHandler>() {
+				@Override
 				public int compare(ColumnHandler obj1, ColumnHandler obj2) {
 					if (obj1.block.blockOrderKey != null && obj2.block.blockOrderKey == null) {
 						return 1;

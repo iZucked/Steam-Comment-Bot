@@ -23,6 +23,7 @@ public class TopLeftRenderer extends AbstractRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Point computeSize(GC gc, int wHint, int hHint, Object value) {
 		return new Point(wHint, hHint);
 	}
@@ -30,6 +31,7 @@ public class TopLeftRenderer extends AbstractRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void paint(GC gc, Object value) {
 		gc.setBackground(TableColourPalette.getInstance().getColourFor(TableItems.TopLeftHeader, ColourElements.Background));
 

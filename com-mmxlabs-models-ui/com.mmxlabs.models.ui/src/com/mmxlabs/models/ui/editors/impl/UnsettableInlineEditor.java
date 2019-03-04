@@ -10,7 +10,6 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.util.BasicExtendedMetaData.EStructuralFeatureExtendedMetaData;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;

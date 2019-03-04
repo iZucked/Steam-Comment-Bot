@@ -10,8 +10,6 @@ import org.eclipse.nebula.widgets.grid.IInternalWidget;
 import org.eclipse.nebula.widgets.grid.internal.ExpandToggleRenderer;
 import org.eclipse.nebula.widgets.grid.internal.TextUtils;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -48,6 +46,7 @@ public class ColumnGroupHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void paint(GC gc, Object value) {
 		GridColumnGroup group = (GridColumnGroup) value;
 
@@ -106,6 +105,7 @@ public class ColumnGroupHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Point computeSize(GC gc, int wHint, int hHint, Object value) {
 		GridColumnGroup group = (GridColumnGroup) value;
 
@@ -151,6 +151,7 @@ public class ColumnGroupHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean notify(int event, Point point, Object value) {
 		GridColumnGroup group = (GridColumnGroup) value;
 
@@ -181,6 +182,7 @@ public class ColumnGroupHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Rectangle getToggleBounds() {
 		int x = getBounds().x + getBounds().width - toggleRenderer.getBounds().width - rightMargin;
 		int y = getBounds().y + (getBounds().height - toggleRenderer.getBounds().height) / 2;
@@ -191,6 +193,7 @@ public class ColumnGroupHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDisplay(Display display) {
 		super.setDisplay(display);
 		toggleRenderer.setDisplay(display);
@@ -199,6 +202,7 @@ public class ColumnGroupHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Rectangle getTextBounds(Object value, boolean preferred) {
 		GridColumnGroup group = (GridColumnGroup) value;
 
@@ -235,11 +239,7 @@ public class ColumnGroupHeaderRenderer extends GridHeaderRenderer {
 		if (textLayout == null) {
 			textLayout = new TextLayout(gc.getDevice());
 			textLayout.setFont(gc.getFont());
-			group.getParent().addDisposeListener(new DisposeListener() {
-				public void widgetDisposed(DisposeEvent e) {
-					textLayout.dispose();
-				}
-			});
+			group.getParent().addDisposeListener( e -> textLayout.dispose());
 		}
 	}
 }

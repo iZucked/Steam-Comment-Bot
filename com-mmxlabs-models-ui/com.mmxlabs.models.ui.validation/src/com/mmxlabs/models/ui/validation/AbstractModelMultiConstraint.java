@@ -47,7 +47,7 @@ public abstract class AbstractModelMultiConstraint extends AbstractModelConstrai
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 
-		final List<IStatus> statuses = new LinkedList<IStatus>();
+		final List<IStatus> statuses = new LinkedList<>();
 
 		final Activator activator = Activator.getDefault();
 		final IExtraValidationContext extraValidationContext;

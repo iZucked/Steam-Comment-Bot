@@ -7,6 +7,7 @@ package com.mmxlabs.models.ui.tabular.manipulators;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -24,9 +25,9 @@ import com.mmxlabs.models.ui.tabular.IImageProvider;
  */
 public class ReadOnlyManipulatorWrapper<T extends ICellManipulator & ICellRenderer> implements ICellManipulator, ICellRenderer, IImageProvider {
 
-	private final T wrapped;
+	private final @NonNull T wrapped;
 
-	public ReadOnlyManipulatorWrapper(final T wrapped) {
+	public ReadOnlyManipulatorWrapper(final @NonNull T wrapped) {
 
 		this.wrapped = wrapped;
 	}

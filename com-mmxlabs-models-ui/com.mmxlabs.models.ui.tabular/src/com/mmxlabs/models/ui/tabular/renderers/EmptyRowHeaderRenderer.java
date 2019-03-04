@@ -25,7 +25,8 @@ public class EmptyRowHeaderRenderer extends AbstractRenderer
     /** 
      * {@inheritDoc}
      */
-    public void paint(GC gc, Object value)
+    @Override
+	public void paint(GC gc, Object value)
     {
 
         gc.setBackground(TableColourPalette.getInstance().getColourFor(TableItems.ColumnHeaders, ColourElements.Background));
@@ -68,7 +69,8 @@ public class EmptyRowHeaderRenderer extends AbstractRenderer
     /** 
      * {@inheritDoc}
      */
-    public Point computeSize(GC gc, int wHint, int hHint, Object value)
+    @Override
+	public Point computeSize(GC gc, int wHint, int hHint, Object value)
     {
         return new Point(wHint, hHint);
     }

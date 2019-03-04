@@ -7,8 +7,6 @@ package com.mmxlabs.models.ui.editors.dialogs.commandext;
 import static org.ops4j.peaberry.Peaberry.service;
 import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 
-import org.ops4j.peaberry.Peaberry;
-import org.ops4j.peaberry.eclipse.EclipseRegistry;
 import org.osgi.framework.BundleContext;
 
 import com.google.inject.AbstractModule;

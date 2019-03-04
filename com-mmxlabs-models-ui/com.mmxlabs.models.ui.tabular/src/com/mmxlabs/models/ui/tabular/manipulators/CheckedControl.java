@@ -4,12 +4,11 @@
  */
 package com.mmxlabs.models.ui.tabular.manipulators;
 
-
 import java.util.Arrays;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -26,8 +25,9 @@ import com.mmxlabs.models.ui.editors.util.ControlUtils;
  */
 public class CheckedControl<T extends Control> extends Composite {
 	private final Button check;
-	private T control;
-	public CheckedControl(Composite parent, int style) {
+	private @Nullable T control;
+
+	public CheckedControl(final Composite parent, final int style) {
 		super(parent, style);
 		check = new Button(this, SWT.CHECK);
 		final GridLayout l = new GridLayout(2, false);
@@ -36,61 +36,60 @@ public class CheckedControl<T extends Control> extends Composite {
 		l.verticalSpacing = 0;
 		l.horizontalSpacing = 1;
 		setLayout(l);
-		check.addSelectionListener(new SelectionAdapter() {
-			{
-				final SelectionAdapter self = this;
-				check.addDisposeListener(new DisposeListener() {
-					
-					@Override
-					public void widgetDisposed(DisposeEvent e) {
-						check.removeSelectionListener(self);
-					}
-				});
-			}
+		final SelectionAdapter selectionListener = new SelectionAdapter() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				updateEnablement();
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 				updateEnablement();
 			}
-			
-		});
+
+		};
+		check.addSelectionListener(selectionListener);
+		check.addDisposeListener(e -> check.removeSelectionListener(selectionListener));
 	}
-	
+
 	private void updateEnablement() {
 		ControlUtils.setControlEnabled(control, check.getSelection());
 	}
-	
-	public void setValueControl(final T control) {
-		assert Arrays.asList(getChildren()).contains(control);
+
+	public void setValueControl(final @NonNull T control) {
+		if (!Arrays.asList(getChildren()).contains(control)) {
+			throw new IllegalArgumentException();
+		}
 		this.control = control;
 		control.setLayoutData(new GridData(GridData.FILL_BOTH));
 		for (final Listener fl : this.getListeners(SWT.FocusIn | SWT.FocusOut)) {
-			if (fl instanceof FocusListener) control.addFocusListener((FocusListener) fl);
+			if (fl instanceof FocusListener) {
+				control.addFocusListener((FocusListener) fl);
+			}
 		}
 	}
-	
-	public T getValueControl() {
+
+	public @Nullable T getValueControl() {
 		return control;
 	}
 
 	@Override
 	public boolean isFocusControl() {
-		return control.isDisposed() ? false : (super.isFocusControl() || check.isFocusControl() || control.isFocusControl());
+		if (control == null || control.isDisposed()) {
+			return false;
+		}
+		return super.isFocusControl() || check.isFocusControl() || control.isFocusControl();
 	}
-	
+
 	public boolean isCheckFocusControl() {
 		return check.isFocusControl();
 	}
-	
+
 	public boolean isControlFocusControl() {
 		return control.isFocusControl();
 	}
-	
+
 	@Override
 	public boolean setFocus() {
 		if (check.getSelection()) {
@@ -103,7 +102,7 @@ public class CheckedControl<T extends Control> extends Composite {
 	public boolean isChecked() {
 		return check.getSelection();
 	}
-	
+
 	public void setChecked(final boolean checked) {
 		check.setSelection(checked);
 		updateEnablement();
@@ -113,6 +112,7 @@ public class CheckedControl<T extends Control> extends Composite {
 	public void addFocusListener(final FocusListener listener) {
 		super.addFocusListener(listener);
 		check.addFocusListener(listener);
-		if (control != null) control.addFocusListener(listener);
+		if (control != null)
+			control.addFocusListener(listener);
 	}
 }

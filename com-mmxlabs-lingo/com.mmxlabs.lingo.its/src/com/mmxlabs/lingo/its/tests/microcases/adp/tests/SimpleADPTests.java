@@ -50,7 +50,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	public void testEvaluateDoesNotUpair() {
 
 		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
-		
+
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
 
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
@@ -69,8 +69,8 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withVesselAssignment(defaultVesselAvailability, 1) //
 				.build();
 
-		final Slot load = testCargo.getSlots().get(0);
-		final Slot discharge = testCargo.getSlots().get(1);
+		final Slot<?> load = testCargo.getSlots().get(0);
+		final Slot<?> discharge = testCargo.getSlots().get(1);
 
 		final OptimisationPlan optimisationPlan = createOptimisationPlan();
 
@@ -126,7 +126,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				// Simple verification, have these slots been used?
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
 				verifier.withAnySolutionResultChecker().withCargoCount(12, true).build();
-				verifier.verifyOptimisationResults(result, msg -> Assert.fail(msg));
+				verifier.verifyOptimisationResults(result, Assert::fail);
 			});
 		} finally {
 			runnerBuilder.dispose();
@@ -286,7 +286,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				// Simple verification, have these slots been used?
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
 				verifier.withAnySolutionResultChecker().withCargoCount(10, true).build();
-				verifier.verifyOptimisationResults(result, msg -> Assert.fail(msg));
+				verifier.verifyOptimisationResults(result, Assert::fail);
 			});
 		} finally {
 			runnerBuilder.dispose();
@@ -335,7 +335,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				final IMultiStateResult result = runner.runAndApplyBest();
 				// Simple verification, have these slots been used?
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 8, result, msg -> Assert.fail(msg));
+				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 8, result, Assert::fail);
 			});
 		} finally {
 			runnerBuilder.dispose();
@@ -381,7 +381,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				final IMultiStateResult result = runner.runAndApplyBest();
 				// Simple verification, have these slots been used?
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 10, result, msg -> Assert.fail(msg));
+				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 10, result,  Assert::fail);
 			});
 		} finally {
 			runnerBuilder.dispose();
@@ -425,7 +425,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				final IMultiStateResult result = runner.runAndApplyBest();
 				// Simple verification, have these slots been used?
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 1, result, msg -> Assert.fail(msg));
+				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 1, result, Assert::fail);
 			});
 		} finally {
 			runnerBuilder.dispose();
@@ -478,7 +478,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				final IMultiStateResult result = runner.runAndApplyBest();
 				// Simple verification, have these slots been used?
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 2, result, msg -> Assert.fail(msg));
+				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 2, result, Assert::fail);
 			});
 		} finally {
 			runnerBuilder.dispose();
@@ -501,7 +501,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withEndHeel(0, 5_000, EVesselTankState.EITHER, "7") //
 				.withCharterRate("50000") //
 				.build();
-		
+
 		final PurchaseContract purchaseContract = commercialModelBuilder.makeExpressionPurchaseContract("Purchase A", entity, "5");
 		purchaseContract.setMaxQuantity(3_000_000);
 		purchaseContract.setVolumeLimitsUnit(VolumeUnits.MMBTU);

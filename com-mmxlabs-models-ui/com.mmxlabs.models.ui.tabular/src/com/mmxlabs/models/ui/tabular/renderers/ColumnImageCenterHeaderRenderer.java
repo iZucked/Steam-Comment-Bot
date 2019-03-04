@@ -51,6 +51,7 @@ public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Point computeSize(GC gc, int wHint, int hHint, Object value) {
 		GridColumn column = (GridColumn) value;
 
@@ -94,6 +95,7 @@ public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void paint(GC gc, Object value) {
 		GridColumn column = (GridColumn) value;
 
@@ -251,6 +253,7 @@ public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDisplay(Display display) {
 		super.setDisplay(display);
 		arrowRenderer.setDisplay(display);
@@ -259,6 +262,7 @@ public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean notify(int event, Point point, Object value) {
 		return false;
 	}
@@ -266,6 +270,7 @@ public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Rectangle getTextBounds(Object value, boolean preferred) {
 		GridColumn column = (GridColumn) value;
 
@@ -309,6 +314,7 @@ public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * @return the bounds reserved for the control
 	 */
+	@Override
 	protected Rectangle getControlBounds(Object value, boolean preferred) {
 		Rectangle bounds = getBounds();
 		GridColumn column = (GridColumn) value;
@@ -331,6 +337,7 @@ public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 			textLayout = new TextLayout(gc.getDevice());
 			textLayout.setFont(gc.getFont());
 			column.getParent().addDisposeListener(new DisposeListener() {
+				@Override
 				public void widgetDisposed(DisposeEvent e) {
 					textLayout.dispose();
 				}

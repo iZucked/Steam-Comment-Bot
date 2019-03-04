@@ -24,6 +24,7 @@ public class EmptyCellRenderer extends GridCellRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void paint(GC gc, Object value) {
 
 		Grid table = null;
@@ -65,6 +66,7 @@ public class EmptyCellRenderer extends GridCellRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Point computeSize(GC gc, int wHint, int hHint, Object value) {
 		return new Point(wHint, hHint);
 	}
@@ -72,6 +74,7 @@ public class EmptyCellRenderer extends GridCellRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean notify(int event, Point point, Object value) {
 		return false;
 	}

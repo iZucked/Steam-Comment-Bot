@@ -4,14 +4,12 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases.adp.tests;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
 import com.mmxlabs.lingo.its.tests.microcases.adp.AbstractADPAndLightWeightTests;
 import com.mmxlabs.lingo.its.tests.microcases.adp.OptimisationEMFTestUtils;
 import com.mmxlabs.lingo.its.tests.microcases.adp.TrainingCaseConstants;
@@ -25,7 +23,6 @@ import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -143,14 +140,15 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 		defaultCharterInMarket.setNominal(true);
 		defaultCharterInMarket.setEnabled(true);
 
-		final VesselAvailability vesselAvailabilityA = cargoModelBuilder.makeVesselAvailability(vesselSmall, entity) //
+		cargoModelBuilder.makeVesselAvailability(vesselSmall, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0)) //
 				.withStartHeel(1_000, 3_000, 22.6, "5") //
 				.withEndWindow(LocalDateTime.of(2020, 1, 1, 0, 0)) //
 				.withEndHeel(0, 5_000, EVesselTankState.EITHER, "7") //
 				.withCharterRate("50000") //
 				.build();
-		final VesselAvailability vesselAvailabilityB = cargoModelBuilder.makeVesselAvailability(vesselLarge, entity) //
+
+		cargoModelBuilder.makeVesselAvailability(vesselLarge, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0)) //
 				.withStartHeel(1_000, 3_000, 22.6, "5") //
 				.withEndWindow(LocalDateTime.of(2020, 1, 1, 0, 0)) //

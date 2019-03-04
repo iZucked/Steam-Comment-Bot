@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -79,7 +78,7 @@ public abstract class BaseReferenceValueProvider extends MMXContentAdapter imple
 	 * @return
 	 */
 	protected List<Pair<String, EObject>> getSortedNames(final List<? extends EObject> objects, final EAttribute nameAttribute) {
-		final List<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();
+		final List<Pair<String, EObject>> result = new ArrayList<>();
 
 		for (final EObject object : objects) {
 			result.add(new Pair<String, EObject>(getName(null, null, object) + "", object));
