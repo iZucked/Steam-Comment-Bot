@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1033,7 +1032,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			@Override
 			public String renderSetValue(final Object owner, final Object object) {
 				final String v = super.renderSetValue(owner, object);
-				if (v != "") {
+				if (!v.isEmpty()) {
 					final String suffix = getTimeWindowSuffix(owner);
 					return v + suffix;
 				}
@@ -1083,7 +1082,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			@Override
 			public String renderSetValue(final Object owner, final Object object) {
 				final String v = super.renderSetValue(owner, object);
-				if (v != "") {
+				if (!v.isEmpty()) {
 					final String suffix = getTimeWindowSuffix(owner);
 					return v + suffix;
 				}
