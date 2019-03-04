@@ -12,8 +12,6 @@ import com.mmxlabs.models.lng.adp.ext.impl.CargoNumberFactory;
 import com.mmxlabs.models.lng.adp.ext.impl.CargoNumberGenerator;
 import com.mmxlabs.models.lng.adp.ext.impl.CargoSizeFactory;
 import com.mmxlabs.models.lng.adp.ext.impl.CargoSizeGenerator;
-import com.mmxlabs.models.lng.adp.ext.impl.MaxCargoProfileConstraintFactory;
-import com.mmxlabs.models.lng.adp.ext.impl.MinCargoProfileConstraintFactory;
 import com.mmxlabs.models.lng.adp.ext.impl.PeriodDistributionProfileConstraintFactory;
 import com.mmxlabs.models.lng.adp.ext.impl.PreDefinedSlotFactory;
 import com.mmxlabs.models.lng.adp.ext.impl.PreDefinedSlotGenerator;
