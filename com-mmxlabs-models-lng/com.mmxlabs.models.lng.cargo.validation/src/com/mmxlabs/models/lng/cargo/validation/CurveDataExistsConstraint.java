@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
@@ -40,6 +41,7 @@ import com.mmxlabs.models.lng.pricing.parser.Node;
 import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -57,8 +59,8 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 
 	private final DateTimeFormatter sdf = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateStringDisplay());
 
-	interface CurveStartFinder<CurveType, DateType> {
-		DateType getStart(CurveType curve);
+	interface CurveStartFinder<C, T> {
+		T getStart(C curve);
 	}
 
 	class IndexStartFinder implements CurveStartFinder<Index<?>, YearMonth> {
@@ -89,45 +91,24 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 			}
 			return result;
 		}
-
 	}
 
-	public CurveDataExistsConstraint() {
-	}
-
-	private <T, U> Map<Object, U> getEarliestDates(final CurveStartFinder<T, U> finder, final IValidationContext ctx) {
+	private <T, U> Map<T, U> getEarliestDates(final IValidationContext ctx) {
 		@SuppressWarnings("unchecked")
-		Map<Object, U> result = (Map<Object, U>) ctx.getCurrentConstraintData();
+		Map<T, U> result = (Map<T, U>) ctx.getCurrentConstraintData();
 		if (result == null) {
-			result = new HashMap<Object, U>();
-
+			result = new HashMap<>();
 		}
 		return result;
 	}
 
 	private <T, U> U getEarliestDate(final CurveStartFinder<T, U> finder, final T curve, final IValidationContext ctx) {
-		final Map<Object, U> map = getEarliestDates(finder, ctx);
-		U result = map.get(curve);
-		if (result == null) {
-			result = finder.getStart(curve);
-			map.put(curve, result);
-		}
-		return result;
+		final Map<T, U> map = getEarliestDates(ctx);
+		return map.computeIfAbsent(curve, finder::getStart);
 	}
 
 	private <T> boolean curveCovers(final LocalDate date, final CurveStartFinder<T, LocalDate> finder, final T curve, final IValidationContext ctx) {
 		final LocalDate start = getEarliestDate(finder, curve, ctx);
-		if (start == null) {
-			return false;
-		}
-		if (date == null) {
-			return true;
-		}
-		return !date.isBefore(start);
-	}
-
-	private <T> boolean curveCovers(final YearMonth date, final CurveStartFinder<T, YearMonth> finder, final T curve, final IValidationContext ctx) {
-		final YearMonth start = getEarliestDate(finder, curve, ctx);
 		if (start == null) {
 			return false;
 		}
@@ -145,12 +126,12 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 	 * @param ctx
 	 * @param failures
 	 */
-	protected void validateSlot(final Slot slot, final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void validateSlot(final Slot<?> slot, final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 
 		final MMXRootObject rootObject = extraContext.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 
-			final PricingModel pricingModel = ((LNGScenarioModel) rootObject).getReferenceModel().getPricingModel();
+			final PricingModel pricingModel = ScenarioModelUtil.getPricingModel((LNGScenarioModel) rootObject);
 
 			if (pricingModel == null) {
 				return;
@@ -190,10 +171,10 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 								continue;
 							}
 							@Nullable
+							final
 							YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 							if (date == null || utcDate.isBefore(date)) {
 
-								// if (!curveCovers(utcDate, indexFinder, index.getData(), ctx)) {
 								final String format = "[Index|'%s'] No data for %s, the window start of slot '%s'.";
 								final String failureMessage = String.format(format, index.getName(), format(slot), slot.getName());
 								final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
@@ -212,11 +193,12 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 					// Do nothing
 				}
 			}
-			BaseLegalEntity entity = null;
-			if (slot.isSetContract() && slot.getContract() != null) {
-				entity = slot.getContract().getEntity();
-			} else {
-				entity = slot.getEntity();
+			BaseLegalEntity entity = slot.getEntity();
+			if (entity == null) {
+				final Contract contract = slot.getContract();
+				if (contract != null) {
+					entity = contract.getEntity();
+				}
 			}
 
 			// check entity tax rates
@@ -256,7 +238,7 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 		}
 	}
 
-	private String format(final Slot slot) {
+	private String format(final Slot<?> slot) {
 		final LocalDate windowStart = slot.getWindowStart();
 		if (windowStart == null) {
 			return "<no date>";
@@ -306,7 +288,7 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 
 		// check slots for index data (price expressions or contracts) and tax rate data (entity)
 		if (object instanceof Slot) {
-			validateSlot((Slot) object, ctx, extraContext, statuses);
+			validateSlot((Slot<?>) object, ctx, extraContext, statuses);
 		}
 		// check cargoes against the shipping entity tax curve
 		else if (object instanceof Cargo) {
