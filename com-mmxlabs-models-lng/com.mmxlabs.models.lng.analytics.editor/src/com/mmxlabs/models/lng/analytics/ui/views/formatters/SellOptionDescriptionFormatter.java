@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.analytics.ViabilityRow;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 public class SellOptionDescriptionFormatter extends BaseFormatter {
@@ -83,7 +84,8 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 			final LocalDate date = sellOpportunity.getDate();
 			String dateStr = "<not set>";
 			if (date != null) {
-				dateStr = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+				final DateTimeFormatter sdf = DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter();
+				dateStr = date.format(sdf);
 			}
 			String priceExpression = sellOpportunity.getPriceExpression();
 			if (priceExpression != null && priceExpression.length() > 5) {
@@ -114,7 +116,8 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
 				final LocalDate windowStart = slot.getWindowStart();
-				final String str = windowStart.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+				final DateTimeFormatter sdf = DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter();
+				final String str = windowStart.format(sdf);
 				return String.format("%s (%s)", slot.getName(), str);
 			}
 			return String.format("ID %s", "<not set>");

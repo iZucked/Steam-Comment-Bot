@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.analytics.ViabilityRow;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 public class BuyOptionDescriptionFormatter extends BaseFormatter {
@@ -87,7 +88,8 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 			final LocalDate date = buyOpportunity.getDate();
 			String dateStr = "<not set>";
 			if (date != null) {
-				dateStr = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+				final DateTimeFormatter sdf = DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter();
+				dateStr = date.format(sdf);
 			}
 			String priceExpression = buyOpportunity.getPriceExpression();
 			if (priceExpression != null && priceExpression.length() > 5) {
@@ -117,7 +119,8 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
 				final LocalDate windowStart = slot.getWindowStart();
-				final String str = windowStart.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+				final DateTimeFormatter sdf = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateStringDisplay());
+				final String str = windowStart.format(sdf);
 
 				return String.format("%s (%s)", slot.getName(), str);
 			}

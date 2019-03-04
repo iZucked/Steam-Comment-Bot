@@ -9,8 +9,11 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 
+import com.mmxlabs.lingo.its.tests.TestMode;
+import com.mmxlabs.lingo.its.tests.TestingModes;
 import com.mmxlabs.lingo.its.tests.microcases.adp.AbstractADPAndLightWeightTests;
 import com.mmxlabs.lingo.its.tests.microcases.adp.OptimisationEMFTestUtils;
 import com.mmxlabs.lingo.its.tests.microcases.adp.TrainingCaseConstants;
@@ -46,6 +49,8 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	@Test
 	public void testEvaluateDoesNotUpair() {
 
+		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
+		
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
 
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
@@ -87,6 +92,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 
 	@Test
 	public void testBasic12CargoADPOptimisation() {
+		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
 
@@ -154,6 +160,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 
 	@Test
 	public void tesDESPurchaseADPOptimisation() {
+		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final Vessel vesselSmall = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP);
 		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselSmall, "50000", 0);
@@ -243,6 +250,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	 */
 	@Test
 	public void testVesselStartTrimming() {
+		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
 		final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
@@ -290,6 +298,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	 */
 	@Test
 	public void testVesselEndTrimming() {
+		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
 		final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
@@ -338,6 +347,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	 */
 	@Test
 	public void testVesselStartAndEndTrimming() {
+		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
 		final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
@@ -383,6 +393,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	 */
 	@Test
 	public void testContingencyOneVessel() {
+		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
 		// final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
@@ -426,6 +437,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	 */
 	@Test
 	public void testContingencyTwoVessels() {
+		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
 		// final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);

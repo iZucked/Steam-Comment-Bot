@@ -553,7 +553,7 @@ public class DefaultScenarioCreator {
 
 			// if load time is not specified, set it to the current datetime
 			if (loadTime == null) {
-				loadTime = LocalDateTime.now();
+				loadTime = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0);
 			}
 
 			final LocalDateTime dischargeTime1 = loadTime.plusHours(travelTimeInHours1);

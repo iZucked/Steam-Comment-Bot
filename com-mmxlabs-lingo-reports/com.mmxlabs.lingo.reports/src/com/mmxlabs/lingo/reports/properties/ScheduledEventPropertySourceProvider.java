@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.TimeZone;
 
 import org.eclipse.emf.common.util.EList;
@@ -21,11 +20,12 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 
 public class ScheduledEventPropertySourceProvider implements IPropertySourceProvider {
 
 	static class SimpleLabelProvider extends ColumnLabelProvider {
-		final DateTimeFormatter df = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+		final DateTimeFormatter df = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateTimeStringDisplay());
 
 		public SimpleLabelProvider() {
 
@@ -41,7 +41,8 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 				return ((Port) element).getName();
 			} else if (element instanceof ZonedDateTime) {
 				final ZonedDateTime dateTime = (ZonedDateTime) element;
-				return String.format("%s (%s)", dateTime.format(df), TimeZone.getTimeZone(dateTime.getZone()).getDisplayName(false, TimeZone.SHORT));
+				String tzString = DateTimeFormatsProvider.INSTANCE.getDisplayTimezone(dateTime);
+				return String.format("%s (%s)", dateTime.format(df), tzString);
 			} else if (element instanceof LocalDate) {
 				final LocalDate readablePartial = (LocalDate) element;
 				return readablePartial.format(df);

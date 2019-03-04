@@ -31,8 +31,7 @@ import com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.lng.spotmarkets.editor.formatters.CharterOutMarketParametersLocalDateTextFormatter;
-import com.mmxlabs.models.lng.spotmarkets.editor.formatters.LocalDateTextFormatter;
+import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 
 /**
  * Based on PromptToolbarEditor
@@ -45,8 +44,8 @@ public class CharterOutParametersToolbarEditor extends ControlContribution {
 	private EditingDomain editingDomain;
 	private CharterOutMarketParameters charterOutMarketParameters;
 	
-	private LocalDateTextFormatter startDateFormatter = new CharterOutMarketParametersLocalDateTextFormatter();
-	private LocalDateTextFormatter endDateFormatter = new CharterOutMarketParametersLocalDateTextFormatter();
+	private LocalDateTextFormatter startDateFormatter = new LocalDateTextFormatter(true);
+	private LocalDateTextFormatter endDateFormatter = new LocalDateTextFormatter(true);
 	private FormattedText startDateText;
 	private FormattedText endDateText;
 

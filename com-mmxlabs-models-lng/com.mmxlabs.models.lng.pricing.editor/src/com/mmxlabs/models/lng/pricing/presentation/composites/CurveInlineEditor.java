@@ -45,13 +45,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
-import com.mmxlabs.models.datetime.ui.formatters.YearMonthTextFormatter;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.date.YearMonthTextFormatter;
 import com.mmxlabs.models.ui.editors.AbstractTableInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 

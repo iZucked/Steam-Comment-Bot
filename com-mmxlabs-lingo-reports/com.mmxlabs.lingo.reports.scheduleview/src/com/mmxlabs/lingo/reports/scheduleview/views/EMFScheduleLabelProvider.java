@@ -74,6 +74,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
@@ -298,25 +299,25 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	}
 
 	private String dateToString(final ZonedDateTime date) {
-		return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(date);
+		return DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateTimeStringDisplay()).format(date);
 	}
 
 	private String dateOnlyToString(final ZonedDateTime date) {
-		return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(date);
+		return DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter().format(date);
 	}
 
 	private String dateToString(final LocalDate date, final String defaultString) {
 		if (date == null) {
 			return defaultString;
 		}
-		return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(date);
+		return DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter().format(date);
 	}
 
 	private String dateToString(final LocalDateTime date, final String defaultString) {
 		if (date == null) {
 			return defaultString;
 		}
-		return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(date);
+		return DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter().format(date);
 	}
 
 	@Override

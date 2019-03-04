@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -47,8 +48,7 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 
 		private final Map<Port, Map<@NonNull String, @NonNull Collection<@NonNull Slot>>> countingMap = new HashMap<>();
 
-		private final DateTimeFormatter df = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
-
+		private final DateTimeFormatter df = DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter();
 		/**
 		 * Returns a modifiable {@link Collection} of {@link Slot} objects which overlap the given {@link Slot}.
 		 * 

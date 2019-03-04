@@ -2,17 +2,13 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2019
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.spotmarkets.editor.formatters;
+package com.mmxlabs.models.ui.date;
 
-import java.text.DateFormat;
-import java.text.DateFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.temporal.ChronoField;
+import java.time.temporal.Temporal;
 import java.util.Hashtable;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import org.eclipse.nebula.widgets.formattedtext.AbstractFormatter;
 import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
@@ -20,11 +16,11 @@ import org.eclipse.nebula.widgets.formattedtext.ITextFormatter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
@@ -40,9 +36,9 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 	/** Numbers formatter */
 	private static NumberFormat nf;
 	/** Calendar containing the current value */
-	protected Calendar calendar;
+	protected Temporal temporal = createDefaultValue();
 	/** Date formatter for display */
-	protected SimpleDateFormat sdfDisplay;
+	protected java.time.format.DateTimeFormatter sdfDisplay;
 	/** Input mask */
 	protected StringBuffer inputMask;
 	/** Current edited value */
@@ -51,20 +47,16 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 	protected FieldDesc[] fields;
 	/** Number of fields in edit pattern */
 	protected int fieldCount;
-	/** Year limit for 2 digits year field */
-	protected int yearStart = 0;
 	/** Key listener on the Text widget */
 	protected KeyListener klistener;
 	/** Focus listener on the Text widget */
 	protected FocusListener flistener;
 	/** Filter for modify events */
 	protected Listener modifyFilter;
-	/** The Locale used by this formatter */
-	protected Locale locale;
 
 	protected class FieldDesc {
 		/** Time field in Calendar */
-		int field;
+		ChronoField field;
 		/** Minimum length of the field in chars */
 		int minLen;
 		/** Maximum length of the field in chars */
@@ -78,6 +70,8 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 		int curLen;
 	}
 
+	protected boolean emptyStringIsValid = false;
+
 	static {
 		nf = NumberFormat.getIntegerInstance();
 		nf.setGroupingUsed(false);
@@ -88,21 +82,10 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 	 * <ul>
 	 * <li>edit mask in SHORT format for both date and time parts for the default locale</li>
 	 * <li>display mask identical to the edit mask</li>
-	 * <li>default locale</li>
 	 * </ul>
 	 */
 	public AbstractDateTimeTextFormatter() {
-		this(null, null, Locale.getDefault());
-	}
-
-	/**
-	 * Constructs a new instance with default edit and display masks for the given locale.
-	 * 
-	 * @param loc
-	 *            locale
-	 */
-	public AbstractDateTimeTextFormatter(final Locale loc) {
-		this(null, null, loc);
+		this(null, null);
 	}
 
 	/**
@@ -112,31 +95,7 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 	 *            edit mask
 	 */
 	public AbstractDateTimeTextFormatter(final String editPattern) {
-		this(editPattern, null, Locale.getDefault());
-	}
-
-	/**
-	 * Constructs a new instance with the given edit mask and locale. Display mask is identical to the edit mask.
-	 * 
-	 * @param editPattern
-	 *            edit mask
-	 * @param loc
-	 *            locale
-	 */
-	public AbstractDateTimeTextFormatter(final String editPattern, final Locale loc) {
-		this(editPattern, null, loc);
-	}
-
-	/**
-	 * Constructs a new instance with the given edit and display masks. Uses the default locale.
-	 * 
-	 * @param editPattern
-	 *            edit mask
-	 * @param displayPattern
-	 *            display mask
-	 */
-	public AbstractDateTimeTextFormatter(final String editPattern, final String displayPattern) {
-		this(editPattern, displayPattern, Locale.getDefault());
+		this(editPattern, null);
 	}
 
 	/**
@@ -149,34 +108,26 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 	 * @param loc
 	 *            locale
 	 */
-	public AbstractDateTimeTextFormatter(String editPattern, String displayPattern, final Locale loc) {
-		// Set the default value
-		calendar = Calendar.getInstance(loc);
-		if (yearStart == -1) {
-			calendar.setTime(sdfDisplay.get2DigitYearStart());
-			yearStart = calendar.get(Calendar.YEAR) % 100;
-		}
-		calendar.setTimeInMillis(0);
+	public AbstractDateTimeTextFormatter(String editPattern, String displayPattern) {
+
 		// Creates the formatter for the edit value
 		if (editPattern == null) {
-			editPattern = getDefaultEditPattern(loc);
+			editPattern = getDefaultEditPattern();
 		}
+		editPattern = check4DigitYear(editPattern);
+
 		compile(editPattern);
 		// Creates the formatter for the display value
 		if (displayPattern == null) {
 			displayPattern = editPattern;
 		}
-		sdfDisplay = new SimpleDateFormat(displayPattern, loc);
-		{
-			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-			c.clear();
-			c.set(Calendar.YEAR, 2000);
-			sdfDisplay.set2DigitYearStart(c.getTime());
-			sdfDisplay.setLenient(false);
-		}
-		locale = loc;
+		// Ensure 4 digit year
+		displayPattern = check4DigitYear(displayPattern);
+
+		sdfDisplay = java.time.format.DateTimeFormatter.ofPattern(displayPattern);
+
 		// Instantiate the key listener
-		klistener = new KeyListener() {
+		klistener = new KeyAdapter() {
 			@Override
 			public void keyPressed(final KeyEvent e) {
 				if (e.stateMask != 0)
@@ -192,10 +143,6 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 					return;
 				}
 				e.doit = false;
-			}
-
-			@Override
-			public void keyReleased(final KeyEvent e) {
 			}
 		};
 		// Instantiate the focus listener
@@ -225,14 +172,21 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 				}
 			}
 		};
-		modifyFilter = new Listener() {
-			@Override
-			public void handleEvent(final Event event) {
-				event.type = SWT.None;
-			}
-		};
-		setTimeZone(TimeZone.getTimeZone("UTC"));
+		modifyFilter = event -> event.type = SWT.None;
 
+	}
+
+	private String check4DigitYear(String str) {
+		if (!str.contains("yyyy")) {
+			if (str.contains("yyy")) {
+				str = str.replaceAll("yyy", "yyyy");
+			} else if (str.contains("yy")) {
+				str = str.replaceAll("yy", "yyyy");
+			} else if (str.contains("y")) {
+				str = str.replaceAll("y", "yyyy");
+			}
+		}
+		return str;
 	}
 
 	/**
@@ -271,21 +225,22 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 	private void arrow(final int inc) {
 		final int p = text.getCaretPosition();
 		final int l = inputMask.length();
-		if (p == l)
+		if (p == l) {
 			return;
+		}
 		final char m = inputMask.charAt(p);
-		if (m == '*')
+		if (m == '*') {
 			return;
+		}
 		final FieldDesc f = getField(p, 0);
 		final int b = f.pos;
 		if (countValid() == 0) {
 			setValue(createDefaultValue());
-		} else if (f.field == Calendar.YEAR && f.maxLen <= 2) {
-			int year = calendar.get(Calendar.YEAR) % 100 + inc;
-			year += year >= yearStart ? 1900 : 2000;
-			calendar.set(f.field, year);
+		} else if (f.field == ChronoField.YEAR && f.maxLen <= 2) {
+			final long year = temporal.getLong(ChronoField.YEAR) + inc;
+			temporal = temporal.with(f.field, year);
 		} else {
-			calendar.add(f.field, inc);
+			temporal = temporal.plus(inc, f.field.getBaseUnit());
 		}
 		setInputCache();
 		locateField(f, 0);
@@ -294,7 +249,7 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 		ignore = false;
 	}
 
-	protected abstract Object createDefaultValue();
+	protected abstract Temporal createDefaultValue();
 
 	/**
 	 * Clear a part of the input cache.<br>
@@ -307,7 +262,8 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 	 */
 	protected void clear(final int b, int e) {
 		char m;
-		int i = b, from = 0;
+		int i = b;
+		int from = 0;
 		FieldDesc field;
 		while (i < e) {
 			m = inputMask.charAt(i);
@@ -361,58 +317,34 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 			switch (c) {
 			case 'y': // Year
 				fields[fi] = new FieldDesc();
-				fields[fi].field = Calendar.YEAR;
+				fields[fi].field = ChronoField.YEAR;
 				fields[fi].minLen = fields[fi].maxLen = l <= 2 ? 2 : 4;
-				if (fields[fi].maxLen == 2) {
-					yearStart = -1;
-				}
+
 				break;
 			case 'M': // Month
 				fields[fi] = new FieldDesc();
-				fields[fi].field = Calendar.MONTH;
+				fields[fi].field = ChronoField.MONTH_OF_YEAR;
 				fields[fi].minLen = Math.min(l, 2);
 				fields[fi].maxLen = 2;
 				break;
 			case 'd': // Day in month
 				fields[fi] = new FieldDesc();
-				fields[fi].field = Calendar.DAY_OF_MONTH;
+				fields[fi].field = ChronoField.DAY_OF_MONTH;
 				fields[fi].minLen = Math.min(l, 2);
 				fields[fi].maxLen = 2;
 				break;
 			case 'H': // Hour (0-23)
-				fields[fi] = new FieldDesc();
-				fields[fi].field = Calendar.HOUR_OF_DAY;
-				fields[fi].minLen = Math.min(l, 2);
-				fields[fi].maxLen = 2;
-				break;
 			case 'h': // Hour (1-12 AM-PM)
 				fields[fi] = new FieldDesc();
-				fields[fi].field = Calendar.HOUR;
+				fields[fi].field = ChronoField.HOUR_OF_DAY;
 				fields[fi].minLen = Math.min(l, 2);
 				fields[fi].maxLen = 2;
 				break;
 			case 'm': // Minutes
 				fields[fi] = new FieldDesc();
-				fields[fi].field = Calendar.MINUTE;
+				fields[fi].field = ChronoField.MINUTE_OF_HOUR;
 				fields[fi].minLen = Math.min(l, 2);
 				fields[fi].maxLen = 2;
-				break;
-			case 's': // Seconds
-				fields[fi] = new FieldDesc();
-				fields[fi].field = Calendar.SECOND;
-				fields[fi].minLen = Math.min(l, 2);
-				fields[fi].maxLen = 2;
-				break;
-			case 'S': // Milliseconds
-				fields[fi] = new FieldDesc();
-				fields[fi].field = Calendar.MILLISECOND;
-				fields[fi].minLen = Math.min(l, 3);
-				fields[fi].maxLen = 3;
-				break;
-			case 'a': // AM-PM marker
-				fields[fi] = new FieldDesc();
-				fields[fi].field = Calendar.AM_PM;
-				fields[fi].minLen = fields[fi].maxLen = 2;
 				break;
 			default:
 				for (int j = 0; j < l; j++) {
@@ -423,7 +355,7 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 			}
 			fields[fi].empty = true;
 			fields[fi].valid = false;
-			calendar.clear(fields[fi].field);
+			clear(fields[fi].field);
 			final char k = (char) ('0' + fi);
 			for (int j = 0; j < fields[fi].minLen; j++) {
 				inputMask.append(k);
@@ -477,41 +409,23 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 	 *            locale
 	 * @return edit pattern for the locale
 	 */
-	public String getDefaultEditPattern(Locale loc) {
-		if (loc == null) {
-			loc = Locale.getDefault();
-		}
-		final String key = "DT" + loc.toString();
-		String pattern = (String) cachedPatterns.get(key);
-		if (pattern == null) {
-			final DateFormat df = createDefaultDateFormat(loc);
-			if (!(df instanceof SimpleDateFormat)) {
-				throw new IllegalArgumentException("No default pattern for locale " + loc.getDisplayName());
-			}
-			final StringBuffer buffer = new StringBuffer();
-			buffer.append(((SimpleDateFormat) df).toPattern());
-			int i;
-			if (buffer.indexOf("yyy") < 0 && (i = buffer.indexOf("yy")) >= 0) {
-				buffer.insert(i, "yy");
-			}
-			pattern = buffer.toString();
-			cachedPatterns.put(key, pattern);
-		}
-		return pattern;
-	}
+	public abstract String getDefaultEditPattern();
 
 	/**
 	 * Returns the current value formatted for display. This method is called by <code>FormattedText</code> when the <code>Text</code> widget looses focus. The displayed value is the result of
-	 * formatting on the <code>calendar</code> with a <code>SimpleDateFormat<code> for the display pattern passed in
-	 * constructor. In case the input is invalid (eg. blanks fields), the edit
-	 * string is returned in place of the display string.
+	 * formatting on the <code>calendar</code> with a <code>SimpleDateFormat<code> for the display pattern passed in constructor. In case the input is invalid (eg. blanks fields), the edit string is
+	 * returned in place of the display string.
 	 * 
 	 * @return display string if valid, edit string else
 	 * @see ITextFormatter#getDisplayString()
 	 */
 	@Override
 	public String getDisplayString() {
-		return isValid() ? sdfDisplay.format(calendar.getTime()) : getEditString();
+		if (emptyStringIsValid && isFieldsEmpty()) {
+			return getEditString();
+		}
+
+		return isValid() ? sdfDisplay.format(temporal) : getEditString();
 	}
 
 	/**
@@ -563,42 +477,21 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 	private String getFormattedValue(final FieldDesc f) {
 		final StringBuffer value = new StringBuffer();
 		if (f.valid) {
-			int v = calendar.get(f.field);
-			switch (f.field) {
-			case Calendar.MONTH:
-				v++;
-				break;
-			case Calendar.HOUR:
-				if (v == 0)
-					v = 12;
-				break;
-			case Calendar.AM_PM:
-				return sdfDisplay.getDateFormatSymbols().getAmPmStrings()[v];
-			default:
-				break;
-			}
+			final long v = temporal.getLong(f.field);
 			value.append(v);
 			if (value.length() > f.maxLen) {
 				value.delete(0, value.length() - f.maxLen);
-			} else
+			} else {
 				while (value.length() < f.minLen) {
 					value.insert(0, '0');
 				}
+			}
 		} else {
 			while (value.length() < f.minLen) {
 				value.append(SPACE);
 			}
 		}
 		return value.toString();
-	}
-
-	/**
-	 * Returns the current Locale used by this formatter.
-	 * 
-	 * @return Current Locale used
-	 */
-	public Locale getLocale() {
-		return locale;
 	}
 
 	/**
@@ -609,16 +502,15 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 	 * @see ITextFormatter#getValue()
 	 */
 	@Override
-	public abstract Object getValue();
-
-	/**
-	 * Returns the type of value this {@link ITextFormatter} handles, i.e. returns in {@link #getValue()}.<br>
-	 * A DateTimeFormatter always returns a Date value.
-	 * 
-	 * @return The value type.
-	 */
-	@Override
-	public abstract Class<?> getValueType();
+	public Temporal getValue() {
+		if (isEmptyStringIsValid() && isEmpty()) {
+			return null;
+		}
+		if (isValid()) {
+			return temporal;
+		}
+		return null;
+	}
 
 	/**
 	 * Inserts a sequence of characters in the input buffer. The current content of the buffer is override. The new position of the cursor is computed and returned.
@@ -631,8 +523,12 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 	 */
 	private int insert(final String txt, int p) {
 		FieldDesc fd = null;
-		int i = 0, from = 0, t;
-		char c, m, o;
+		int i = 0;
+		int from = 0;
+		int t;
+		char c;
+		char m;
+		char o;
 		while (i < txt.length()) {
 			c = txt.charAt(i);
 			if (p < inputMask.length()) {
@@ -656,9 +552,10 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 				}
 			}
 			t = Character.getType(c);
-			if (t == Character.DECIMAL_DIGIT_NUMBER && fd.field != Calendar.AM_PM) {
+			if (t == Character.DECIMAL_DIGIT_NUMBER) {
 				o = '#';
 				if (m != '*' && p < inputMask.length()) {
+
 					o = inputCache.charAt(p);
 					inputCache.setCharAt(p, c);
 				} else if (fd.curLen < fd.maxLen) {
@@ -669,7 +566,6 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 					beep();
 					return p;
 				}
-				// if ( ! updateFieldValue(fd, p < fd.pos + fd.curLen - 1) ) {
 				if (!updateFieldValue(fd, true)) {
 					if (o != '#') {
 						inputCache.setCharAt(p, o);
@@ -683,28 +579,6 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 				}
 				i++;
 				p++;
-			} else if (fd.field == Calendar.AM_PM && (t == Character.UPPERCASE_LETTER || t == Character.LOWERCASE_LETTER)) {
-				final String[] ampm = sdfDisplay.getDateFormatSymbols().getAmPmStrings();
-				if (Character.toLowerCase(c) == Character.toLowerCase(ampm[0].charAt(0))) {
-					t = 0;
-				} else if (Character.toLowerCase(c) == Character.toLowerCase(ampm[1].charAt(0))) {
-					t = 1;
-				} else {
-					beep();
-					return p;
-				}
-				inputCache.replace(fd.pos, fd.pos + fd.curLen, ampm[t]);
-				while (fd.curLen < ampm[t].length()) {
-					inputMask.insert(p, m);
-					fd.curLen++;
-				}
-				while (fd.curLen > ampm[t].length()) {
-					inputMask.deleteCharAt(p);
-					fd.curLen--;
-				}
-				updateFieldValue(fd, false);
-				i++;
-				p = fd.pos + fd.curLen;
 			} else {
 				t = fd.pos + fd.curLen;
 				if (t < inputCache.length() && c == inputCache.charAt(t) && i == txt.length() - 1) {
@@ -744,6 +618,9 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 	 */
 	@Override
 	public boolean isValid() {
+		if (emptyStringIsValid && isFieldsEmpty()) {
+			return true;
+		}
 		return countValid() == fieldCount;
 	}
 
@@ -829,27 +706,6 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 	}
 
 	/**
-	 * Sets a new <code>Locale</code> on this formatter.
-	 * 
-	 * @param loc
-	 *            locale
-	 */
-	public void setLocale(final Locale loc) {
-		sdfDisplay.setDateFormatSymbols(new DateFormatSymbols(loc));
-		final Calendar newCal = Calendar.getInstance(calendar.getTimeZone(), loc);
-		newCal.setTimeInMillis(0);
-		for (int i = 0; i < fieldCount; i++) {
-			if (fields[i].valid) {
-				newCal.set(fields[i].field, calendar.get(fields[i].field));
-			} else {
-				newCal.clear(fields[i].field);
-			}
-		}
-		calendar = newCal;
-		locale = loc;
-	}
-
-	/**
 	 * Sets the <code>Text</code> widget that will be managed by this formatter.
 	 * <p>
 	 * 
@@ -867,19 +723,6 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 	}
 
 	/**
-	 * Sets the time zone with the given time zone value. The time zone is applied to both the <code>Calendar</code> used as value cache, and the <code>SimpleDateFormat</code> used for display mask.
-	 * 
-	 * @param zone
-	 *            Time zone
-	 */
-	public void setTimeZone(final TimeZone zone) {
-		if (zone == null)
-			SWT.error(SWT.ERROR_NULL_ARGUMENT);
-		sdfDisplay.setTimeZone(zone);
-		calendar.setTimeZone(zone);
-	}
-
-	/**
 	 * Sets the value to edit. The value provided must be a <code>Date</code>.
 	 * 
 	 * @param value
@@ -889,7 +732,20 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 	 * @see ITextFormatter#setValue(java.lang.Object)
 	 */
 	@Override
-	public abstract void setValue(Object value);
+	public void setValue(final Object value) {
+		if (value instanceof Temporal) {
+			temporal = (Temporal) value;
+			for (int i = 0; i < fieldCount; i++) {
+				fields[i].valid = (value != null);
+				fields[i].empty = !fields[i].valid;
+			}
+			setInputCache();
+		} else if (value == null) {
+			clear(0, inputCache.length());
+		} else {
+			SWT.error(SWT.ERROR_INVALID_ARGUMENT);
+		}
+	}
 
 	/**
 	 * Update a calendar field with the current value string of the given field in the input cache. The string value is converted according to the field type. If the conversion is invalid, or if the
@@ -907,12 +763,9 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 		final String s = inputCache.substring(f.pos, f.pos + f.curLen).trim();
 		f.empty = false;
 		if (s.length() == 0 || s.indexOf(SPACE) >= 0) {
-			calendar.clear(f.field);
+			clear(f.field);
 			f.empty = true;
 			f.valid = false;
-		} else if (f.field == Calendar.AM_PM) {
-			calendar.set(f.field, sdfDisplay.getDateFormatSymbols().getAmPmStrings()[0].equals(s) ? 0 : 1);
-			f.valid = true;
 		} else {
 			int v = 0;
 			try {
@@ -920,47 +773,36 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 			} catch (final ParseException e) {
 				e.printStackTrace(System.err);
 			}
-			if (v == 0 && f.field <= Calendar.DAY_OF_MONTH && s.length() < f.maxLen) {
-				calendar.clear(f.field);
-				f.valid = false;
-			} else {
-				if (f.field == Calendar.YEAR && f.maxLen <= 2) {
-					v += v >= yearStart ? 1900 : 2000;
-				} else if (f.field == Calendar.YEAR) {
-					// SG Addition, 2 digit dates add on 2000
-					if (v < 100) {
-						v += 2000;
-					}
-				} else if (f.field == Calendar.HOUR && v == 12) {
-					v = 0;
+
+			if (f.field == ChronoField.YEAR && v < 100) {
+				// SG Addition, 2 digit dates add on 2000
+				v += 2000;
+			}
+
+			long min = f.field.range().getMinimum();
+			long max = f.field.range().getMaximum();
+
+			if (v < min || v > max) {
+				if (!checkLimits) {
+					return false;
 				}
-				int min = calendar.getActualMinimum(f.field);
-				int max = calendar.getActualMaximum(f.field);
-				if (f.field == Calendar.MONTH) {
-					min++;
-					max++;
-				}
-				if (v < min || v > max) {
-					if (!checkLimits) {
+				if (v > max) {
+
+					v = (v / 10) * 10;
+					if (v > max) {
 						return false;
 					}
-					if (v > max) {
-						v = (v / 10) * 10;
-						if (v > max) {
-							return false;
-						}
-						inputCache.setCharAt(f.pos + f.curLen - 1, '0');
-					} else if (f.curLen == f.maxLen) {
-						v = (v / 10) * 10 + 1;
-						if (v < min) {
-							return false;
-						}
-						inputCache.setCharAt(f.pos + f.curLen - 1, '1');
+					inputCache.setCharAt(f.pos + f.curLen - 1, '0');
+				} else if (f.curLen == f.maxLen) {
+					v = (v / 10) * 10 + 1;
+					if (v < min) {
+						return false;
 					}
+					inputCache.setCharAt(f.pos + f.curLen - 1, '1');
 				}
-				calendar.set(f.field, f.field == Calendar.MONTH ? v - 1 : v);
-				f.valid = true;
 			}
+			temporal = temporal.with(f.field, v);
+			f.valid = true;
 		}
 		return true;
 	}
@@ -985,6 +827,29 @@ public abstract class AbstractDateTimeTextFormatter extends AbstractFormatter {
 		updateText(inputCache.toString(), e.start);
 	}
 
-	protected abstract DateFormat createDefaultDateFormat(Locale loc);
+	protected void clear(final ChronoField field) {
+		temporal = temporal.with(field, field.range().getMinimum());
+	}
 
+	protected boolean isFieldsEmpty() {
+		boolean result = false;
+
+		for (final FieldDesc fd : fields) {
+			if (fd != null) {
+				result = fd.empty;
+				if (!result) {
+					break;
+				}
+			}
+		}
+		return result;
+	}
+
+	public boolean isEmptyStringIsValid() {
+		return emptyStringIsValid;
+	}
+
+	public void setEmptyStringIsValid(boolean emptyStringIsValid) {
+		this.emptyStringIsValid = emptyStringIsValid;
+	}
 }

@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.impl.LocalDateTimeInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -126,18 +128,29 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the startAfter feature on VesselAvailability
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_startAfterEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER));
-	}
+		LocalDateTimeInlineEditor editor = new LocalDateTimeInlineEditor(CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER) {
+			@Override
+			protected Object getInitialUnsetValue() {
+				return LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+			}
+		};
+		detailComposite.addInlineEditor(editor);	}
 	/**
 	 * Create the editor for the startBy feature on VesselAvailability
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_startByEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY));
+		LocalDateTimeInlineEditor editor = new LocalDateTimeInlineEditor(CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY) {
+			@Override
+			protected Object getInitialUnsetValue() {
+				return LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+			}
+		};
+		detailComposite.addInlineEditor(editor);
 	}
 	/**
 	 * Create the editor for the endAt feature on VesselAvailability
@@ -150,18 +163,29 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the endAfter feature on VesselAvailability
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_endAfterEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__END_AFTER));
-	}
+		LocalDateTimeInlineEditor editor = new LocalDateTimeInlineEditor(CargoPackage.Literals.VESSEL_AVAILABILITY__END_AFTER) {
+			@Override
+			protected Object getInitialUnsetValue() {
+				return LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+			}
+		};
+		detailComposite.addInlineEditor(editor);	}
 	/**
 	 * Create the editor for the endBy feature on VesselAvailability
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_endByEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY));
+		LocalDateTimeInlineEditor editor = new LocalDateTimeInlineEditor(CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY) {
+			@Override
+			protected Object getInitialUnsetValue() {
+				return LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+			}
+		};
+		detailComposite.addInlineEditor(editor);
 	}
 	/**
 	 * Create the editor for the startHeel feature on VesselAvailability

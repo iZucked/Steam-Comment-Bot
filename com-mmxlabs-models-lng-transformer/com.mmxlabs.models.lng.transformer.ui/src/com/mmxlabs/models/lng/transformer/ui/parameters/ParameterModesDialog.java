@@ -516,7 +516,6 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final Label lbl = toolkit.createLabel(area, option.label);
 		final DateTimeFormatter format = DateTimeFormatter.ofPattern("d/M/yyyy");
 
-		// final DateTimeFormatter format = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 		// Strict parse mode
 		final IValidator validator = new IValidator() {
 			@Override

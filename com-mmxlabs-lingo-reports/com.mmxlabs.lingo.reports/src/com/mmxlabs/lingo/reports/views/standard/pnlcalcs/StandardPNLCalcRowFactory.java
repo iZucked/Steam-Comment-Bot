@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 
 public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 
@@ -61,7 +62,8 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 		final List<PNLCalcsReportRow> rows = new LinkedList<>();
 
 		rows.add(createRow(10, "Buy port", false, "", "", false, createFirstPurchaseFormatter(sa -> sa.getPort().getName())));
-		rows.add(createRow(20, "Buy date", false, "", "", false, createFirstPurchaseFormatter(sa -> sa.getSlotVisit().getStart().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)))));
+		rows.add(createRow(20, "Buy date", false, "", "", false,
+				createFirstPurchaseFormatter(sa -> sa.getSlotVisit().getStart().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
 		rows.add(createRow(30, "Buy volume (m3)", false, "", "", false,
 				createBasicFormatter(options, false, Integer.class, VolumeM3Format::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getVolumeTransferred))));
 		rows.add(createRow(40, "Buy volume (mmBtu)", false, "", "", false,
@@ -70,7 +72,8 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 				createBasicFormatter(options, false, Double.class, DollarsPerMMBtuFormat::format, createFirstPurchaseTransformer(Double.class, SlotAllocation::getPrice))));
 
 		rows.add(createRow(60, "Sale port", false, "", "", false, createFirstSaleAllocationFormatter(sa -> sa.getPort().getName())));
-		rows.add(createRow(70, "Sale date", false, "", "", false, createFirstSaleAllocationFormatter(sa -> sa.getSlotVisit().getStart().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)))));
+		rows.add(createRow(70, "Sale date", false, "", "", false,
+				createFirstSaleAllocationFormatter(sa -> sa.getSlotVisit().getStart().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
 		rows.add(createRow(80, "Sale price($/mmBtu)", false, "", "", false,
 				createBasicFormatter(options, false, Double.class, DollarsPerMMBtuFormat::format, createFirstSaleTransformer(Double.class, SlotAllocation::getPrice))));
 		rows.add(createRow(90, "Sale volume (m3)", false, "", "", false,
@@ -100,7 +103,8 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 		Function<Object, Integer> func2 = (object) -> getShippingCost(object, portCostFunc, fuelCostFunc);
 
 		rows.add(createRow(200, "Real shipping cost", false, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, func2))));
-		rows.add(createRow(205, "PNL", false, "$", "", false, createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardPNLCalcRowFactory::getPNLValue))));
+		rows.add(createRow(205, "PNL", false, "$", "", false,
+				createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardPNLCalcRowFactory::getPNLValue))));
 
 		// Spacer
 		rows.add(createRow(210, "", false, "", "", false, createEmptyFormatter()));
@@ -345,7 +349,7 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Get total cargo PNL value
 	 * 

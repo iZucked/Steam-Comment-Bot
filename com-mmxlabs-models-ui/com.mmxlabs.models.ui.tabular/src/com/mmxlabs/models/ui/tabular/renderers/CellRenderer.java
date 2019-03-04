@@ -187,6 +187,7 @@ public class CellRenderer extends GridCellRenderer {
 			if (textLayout == null) {
 				textLayout = new TextLayout(gc.getDevice());
 				item.getParent().addDisposeListener(new DisposeListener() {
+					@Override
 					public void widgetDisposed(DisposeEvent e) {
 						textLayout.dispose();
 					}

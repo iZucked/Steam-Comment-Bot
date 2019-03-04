@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.its.training;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -62,6 +63,7 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
 @RunWith(value = ShiroRunner.class)
@@ -95,6 +97,8 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 		updateDistanceData(scenarioDataProvider, "v1.0.11.250_9.json");
 
+		ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File("C:\\temp\\base-n.lingo"));
+		
 		return scenarioDataProvider;
 	}
 

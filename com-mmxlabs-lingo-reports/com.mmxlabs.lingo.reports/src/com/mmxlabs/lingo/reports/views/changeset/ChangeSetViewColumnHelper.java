@@ -1,5 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.changeset;
@@ -71,6 +70,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
@@ -957,7 +957,7 @@ public class ChangeSetViewColumnHelper {
 	private CellLabelProvider createDateLabelProvider(final boolean isLoadSide) {
 		return new CellLabelProvider() {
 
-			private final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+			private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateStringDisplay());
 
 			@Override
 			public String getToolTipText(final Object element) {

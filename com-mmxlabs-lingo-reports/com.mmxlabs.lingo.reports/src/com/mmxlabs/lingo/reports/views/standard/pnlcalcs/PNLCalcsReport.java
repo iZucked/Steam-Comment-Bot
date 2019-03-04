@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.reports.views.standard.pnlcalcs;
 
 import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 
 import javax.annotation.PreDestroy;
 
@@ -24,6 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToExcelMSClipboardAction;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
@@ -88,7 +88,7 @@ public class PNLCalcsReport extends ViewPart {
 			public Object getTypedValue(final GridItem item, final int i) {
 				final String text = item.getText(i);
 				try {
-					return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).parse(text);
+					return DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter().parse(text);
 				} catch (final Exception e) {
 
 				}

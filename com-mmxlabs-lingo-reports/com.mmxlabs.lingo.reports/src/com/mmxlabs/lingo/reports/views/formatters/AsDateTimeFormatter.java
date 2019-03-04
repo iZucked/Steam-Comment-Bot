@@ -10,8 +10,8 @@ import java.time.Year;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.TimeZone;
 
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 public class AsDateTimeFormatter extends BaseFormatter {
@@ -31,7 +31,8 @@ public class AsDateTimeFormatter extends BaseFormatter {
 		final ZonedDateTime dateTime = getDateTime(object);
 		if (dateTime != null) {
 			if (showZone) {
-				return String.format("%s (%s)", dateTime.format(dateFormat), TimeZone.getTimeZone(dateTime.getZone()).getDisplayName(false, TimeZone.SHORT));
+				String tzStr = DateTimeFormatsProvider.INSTANCE.getDisplayTimezone(dateTime);
+				return String.format("%s (%s)", dateTime.format(dateFormat), tzStr);
 			} else {
 				return dateTime.format(dateFormat);
 			}

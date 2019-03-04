@@ -12,7 +12,6 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -82,6 +81,7 @@ import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -101,7 +101,7 @@ public class InventoryReport extends ViewPart {
 	private Inventory selectedInventory;
 	private ScenarioResult currentResult;
 	private Color color_Orange;
-	
+
 	private EventHandler todayHandler;
 
 	@NonNull
@@ -224,10 +224,10 @@ public class InventoryReport extends ViewPart {
 			GridViewerHelper.configureLookAndFeel(tableViewer);
 			tableViewer.getGrid().setTreeLinesVisible(true);
 			tableViewer.getGrid().setHeaderVisible(true);
-			final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+			final DateTimeFormatter formatter = DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter();
 			{
 				createColumn("Date", 150, o -> "" + o.date.format(formatter));
-				//createColumn("Type", 150, o -> o.type);
+				// createColumn("Type", 150, o -> o.type);
 				createColumn("Total Feed In", 150, o -> String.format("%,d", o.feedIn));
 				createColumn("Forecast low", 150, o -> String.format("%,d", o.volumeLow));
 				createColumn("Forecast high", 150, o -> String.format("%,d", o.volumeHigh));
@@ -255,16 +255,16 @@ public class InventoryReport extends ViewPart {
 		packAction = PackActionFactory.createPackColumnsAction(tableViewer);
 		getViewSite().getActionBars().getToolBarManager().add(packAction);
 		packAction.setEnabled(folder.getSelectionIndex() == 1);
-		
+
 		copyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(tableViewer);
 		getViewSite().getActionBars().getToolBarManager().add(copyAction);
 		copyAction.setEnabled(folder.getSelectionIndex() == 1);
-		
-		//Adding an event broker for the snap-to-date event todayHandler
+
+		// Adding an event broker for the snap-to-date event todayHandler
 		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-		this.todayHandler = event -> snapTo((LocalDate)  event.getProperty(IEventBroker.DATA));
-	    eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
-		
+		this.todayHandler = event -> snapTo((LocalDate) event.getProperty(IEventBroker.DATA));
+		eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
+
 		folder.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -313,7 +313,7 @@ public class InventoryReport extends ViewPart {
 		LocalDate maxDate = null;
 
 		final List<InventoryLevel> tableLevels = new LinkedList<>();
-		
+
 		Optional<InventoryChangeEvent> firstInventoryData = Optional.empty();
 
 		if (toDisplay != null) {
@@ -343,9 +343,9 @@ public class InventoryReport extends ViewPart {
 						if (inventory.getName() == null) {
 							continue;
 						}
-						
+
 						final List<InventoryEventRow> invs = inventory.getFeeds();
-						if (invs == null){
+						if (invs == null) {
 							continue;
 						}
 
@@ -378,17 +378,21 @@ public class InventoryReport extends ViewPart {
 									if (e.getSlotAllocation() != null) {
 										type = "Cargo";
 										final String vessel = e.getSlotAllocation().getCargoAllocation().getEvents().get(0).getSequence().getName();
-										SlotAllocation allocation = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get();
-										final String dischargeId = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getName();
-										final String dischargePort = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getPort().getName();
-										Contract contract = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getContract();
+										SlotAllocation allocation = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot)
+												.findFirst().get();
+										final String dischargeId = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot)
+												.findFirst().get().getName();
+										final String dischargePort = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot)
+												.findFirst().get().getPort().getName();
+										Contract contract = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get()
+												.getContract();
 										String salesContract = "";
 										if (contract != null) {
 											salesContract = contract.getName();
 										}
 										ZonedDateTime time = allocation.getSlotVisit().getStart();
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), vessel, dischargeId,
-												dischargePort, salesContract, time == null ? null : time.toLocalDate());
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), vessel, dischargeId, dischargePort, salesContract,
+												time == null ? null : time.toLocalDate());
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
 										if (e.getEvent() != null) {
 											lvl.volumeLow = e.getEvent().getVolumeLow();
@@ -416,7 +420,7 @@ public class InventoryReport extends ViewPart {
 											lvl.volumeHigh = e.getEvent().getVolumeHigh();
 										}
 										InventoryChangeEvent first = firstInventoryDataFinal.get();
-										
+
 										// FM
 										setInventoryLevelFeed(lvl);
 										addToInventoryLevelList(tableLevels, lvl);
@@ -551,9 +555,7 @@ public class InventoryReport extends ViewPart {
 			total += lvl.changeInM3;
 			lvl.runningTotal = total;
 			/*
-			 * In the case, when the low/high forecast value is zero , we assume that's a wrong data!
-			 * Hence we use the feedIn (actual volume) if it's also not zero.
-			 * Maybe we need to fix that!
+			 * In the case, when the low/high forecast value is zero , we assume that's a wrong data! Hence we use the feedIn (actual volume) if it's also not zero. Maybe we need to fix that!
 			 */
 			final int vl = lvl.volumeLow == 0 ? lvl.feedIn == 0 ? 0 : lvl.feedIn : lvl.volumeLow;
 			totalLow += vl - Math.abs(lvl.feedOut) - Math.abs(lvl.cargoOut);
@@ -561,17 +563,17 @@ public class InventoryReport extends ViewPart {
 			final int vh = lvl.volumeHigh == 0 ? lvl.feedIn == 0 ? 0 : lvl.feedIn : lvl.volumeHigh;
 			totalHigh += vh - Math.abs(lvl.feedOut) - Math.abs(lvl.cargoOut);
 			lvl.ttlHigh = totalHigh;
-			
+
 		}
-		
+
 		tableViewer.setInput(tableLevels);
 	}
 
 	private void addToInventoryLevelList(final List<InventoryLevel> tableLevels, final InventoryLevel lvl) {
-		//can swap with proper search through the list
+		// can swap with proper search through the list
 		final int i = tableLevels.size();
 		if (i > 0) {
-			final InventoryLevel tlvl = tableLevels.get(i-1);
+			final InventoryLevel tlvl = tableLevels.get(i - 1);
 			if (tlvl.date.equals(lvl.date)) {
 				tlvl.merge(lvl);
 			} else {
@@ -585,7 +587,7 @@ public class InventoryReport extends ViewPart {
 	private void setInventoryLevelFeed(final InventoryLevel lvl) {
 		if (lvl.changeInM3 > 0) {
 			lvl.feedIn = lvl.changeInM3;
-		}else {
+		} else {
 			lvl.feedOut = lvl.changeInM3;
 		}
 	}
@@ -694,7 +696,7 @@ public class InventoryReport extends ViewPart {
 		if (count <= 0) {
 			return;
 		}
-		
+
 		final GridItem[] items = grid.getItems();
 		int pos = -1;
 		for (GridItem item : items) {

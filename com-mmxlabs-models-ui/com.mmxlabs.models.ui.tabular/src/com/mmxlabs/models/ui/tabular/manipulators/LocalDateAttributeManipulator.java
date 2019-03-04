@@ -12,7 +12,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
-import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
+import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 
 /**
  * A {@link LocalDate} attribute manipulator which uses the {@link FormattedTextCellEditor} from nebula.

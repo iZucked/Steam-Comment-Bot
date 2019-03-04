@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
-import com.mmxlabs.models.datetime.ui.formatters.LocalDateTimeTextFormatter;
+import com.mmxlabs.models.ui.date.LocalDateTimeTextFormatter;
 
 public class LocalDateTimeInlineEditor extends UnsettableInlineEditor {
 	private FormattedText formattedText;
@@ -40,7 +40,7 @@ public class LocalDateTimeInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected Object getInitialUnsetValue() {
-		return LocalDateTime.now();
+		return LocalDateTime.now().withMinute(0).withSecond(0).withNano(0);
 	}
 
 	@Override
@@ -49,12 +49,9 @@ public class LocalDateTimeInlineEditor extends UnsettableInlineEditor {
 
 		formattedText.setFormatter(dateFormatter);
 
-		formattedText.getControl().addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				if (formattedText.isValid()) {
-					doSetValue((LocalDateTime) formattedText.getValue(), false);
-				}
+		formattedText.getControl().addModifyListener(e -> {
+			if (formattedText.isValid()) {
+				doSetValue((LocalDateTime) formattedText.getValue(), false);
 			}
 		});
 		return formattedText.getControl();

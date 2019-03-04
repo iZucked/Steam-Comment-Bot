@@ -6,7 +6,6 @@ package com.mmxlabs.models.ui.properties.ui;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
@@ -14,13 +13,15 @@ import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.graphics.Image;
 
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
+
 public class DateTimeFormatLabelProvider extends BaseLabelProvider implements ILabelProvider {
 
 	private final DateTimeFormatter formatter;
 	private final boolean showZone;
 
 	public DateTimeFormatLabelProvider(final boolean showZone) {
-		this(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT), showZone);
+		this(DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getTimeStringDisplay()), showZone);
 	}
 
 	public DateTimeFormatLabelProvider(final DateTimeFormatter formatter, final boolean showZone) {

@@ -15,6 +15,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.views.formatters.AsDateTimeFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.NumberOfDPFormatter;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
@@ -96,7 +97,7 @@ public class PortRotationActualsColumnFactory implements IPortRotationColumnFact
 		switch (columnID) {
 		case "com.mmxlabs.lingo.reports.portrotations.actuals.startdate":
 			manager.registerColumn(PortRotationBasedReportBuilder.PORT_ROTATION_REPORT_TYPE_ID, columnID, "Start Date (Actual)", null, ColumnType.NORMAL,
-					new SlotActualFormatterWrapper(new AsDateTimeFormatter(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT), true)) {
+					new SlotActualFormatterWrapper(Formatters.asDateTimeFormatterWithTZ) {
 
 						@Override
 						protected Object getObject(final SlotActuals slotActuals) {
@@ -106,7 +107,7 @@ public class PortRotationActualsColumnFactory implements IPortRotationColumnFact
 			break;
 		case "com.mmxlabs.lingo.reports.portrotations.actuals.enddate":
 			manager.registerColumn(PortRotationBasedReportBuilder.PORT_ROTATION_REPORT_TYPE_ID, columnID, "End Date (Actual)", null, ColumnType.NORMAL,
-					new SlotActualFormatterWrapper(new AsDateTimeFormatter(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT), true)) {
+					new SlotActualFormatterWrapper(Formatters.asDateTimeFormatterWithTZ) {
 
 						@Override
 						protected Object getObject(final SlotActuals slotActuals) {

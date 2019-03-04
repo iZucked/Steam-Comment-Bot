@@ -5,15 +5,14 @@
 package com.mmxlabs.lingo.reports.views.formatters;
 
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.PortModelLabeller;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
@@ -36,11 +35,11 @@ public final class Formatters {
 		}
 	};
 
-	public static final ICellRenderer asLocalDateFormatter = new AsLocalDateFormatter(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
-	public static final ICellRenderer asLocalTimeFormatter = new AsLocalDateFormatter(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+	public static final ICellRenderer asLocalDateFormatter = new AsLocalDateFormatter(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter());
+	public static final ICellRenderer asLocalTimeFormatter = new AsLocalDateFormatter(DateTimeFormatsProvider.INSTANCE.createDateTimeStringDisplayFormatter());
 
-	public static final ICellRenderer asDateTimeFormatterWithTZ = new AsDateTimeFormatter(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT), true);
-	public static final ICellRenderer asDateTimeFormatterNoTz = new AsDateTimeFormatter(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT), false);
+	public static final ICellRenderer asDateTimeFormatterWithTZ = new AsDateTimeFormatter(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter(), true);
+	public static final ICellRenderer asDateTimeFormatterNoTz = new AsDateTimeFormatter(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter(), false);
 
 	public static final IntegerFormatter integerFormatter = new IntegerFormatter();
 
@@ -48,18 +47,18 @@ public final class Formatters {
 		DAYS_HOURS, DECIMAL
 	}
 
-	private static DurationMode DURATION_MODE = DurationMode.DAYS_HOURS;
+	private static DurationMode durationMode = DurationMode.DAYS_HOURS;
 
 	public static DurationMode getDurationMode() {
-		return DURATION_MODE;
+		return durationMode;
 	}
 
 	public static void setDurationMode(@NonNull final DurationMode mode) {
-		DURATION_MODE = mode;
+		durationMode = mode;
 	}
 
 	public static @NonNull String formatAsDays(final int hours) {
-		switch (DURATION_MODE) {
+		switch (durationMode) {
 		case DAYS_HOURS:
 			return String.format("%02d:%02d", hours / 24, hours % 24);
 		case DECIMAL:

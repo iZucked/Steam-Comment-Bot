@@ -162,6 +162,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -778,7 +779,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						evt = evt.getPreviousEvent();
 					}
 
-				} else if (a instanceof OpenSlotAllocation){
+				} else if (a instanceof OpenSlotAllocation) {
 					final OpenSlotAllocation osa = (OpenSlotAllocation) a;
 					final Slot s = osa.getSlot();
 					if (s != null) {
@@ -1066,7 +1067,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						@Override
 						public String renderSetValue(final Object owner, final Object object) {
 							if (object instanceof ZonedDateTime) {
-								return ((ZonedDateTime) object).toLocalDateTime().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+								final DateTimeFormatter sdf = DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter();
+								return ((ZonedDateTime) object).toLocalDateTime().format(sdf);
 							}
 							return "";
 						}
@@ -1111,7 +1113,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						@Override
 						public String renderSetValue(final Object owner, final Object object) {
 							if (object instanceof ZonedDateTime) {
-								return ((ZonedDateTime) object).toLocalDateTime().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+								final DateTimeFormatter sdf = DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter();
+								return ((ZonedDateTime) object).toLocalDateTime().format(sdf);
 							}
 							return "";
 						}
@@ -2037,7 +2040,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 * A holder for a menu list of filter actions on different fields for the trades wiring table.
 		 * 
 		 * @param label
-		 *                  The label to show in the UI for this menu.
+		 *            The label to show in the UI for this menu.
 		 */
 		public FilterMenuAction(final String label) {
 			super(label);
@@ -2177,13 +2180,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 * An action which updates the filter on the trades wiring table and refreshes the table.
 		 * 
 		 * @param label
-		 *                          The label to associate with this action (the feature from the cargo row it represents).
+		 *            The label to associate with this action (the feature from the cargo row it represents).
 		 * @param sourceObject
-		 *                          The source object in the EMF model which holds the list of possible values for the filter.
+		 *            The source object in the EMF model which holds the list of possible values for the filter.
 		 * @param sourceFeature
-		 *                          The EMF feature of the source object where the list of possible values resides.
+		 *            The EMF feature of the source object where the list of possible values resides.
 		 * @param filterPath
-		 *                          The path within a cargo row object of the field which the table is being filtered on.
+		 *            The path within a cargo row object of the field which the table is being filtered on.
 		 */
 		public FilterAction(final String label, final EObject sourceObject, final EStructuralFeature sourceFeature, final IEMFPath filterPath) {
 			super(label);
@@ -2232,7 +2235,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 * Subclasses should fill their menu with actions here.
 		 * 
 		 * @param menu
-		 *                 the menu which is about to be displayed
+		 *            the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
 			{
@@ -2543,7 +2546,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 * Subclasses should fill their menu with actions here.
 		 * 
 		 * @param menu
-		 *                 the menu which is about to be displayed
+		 *            the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
 

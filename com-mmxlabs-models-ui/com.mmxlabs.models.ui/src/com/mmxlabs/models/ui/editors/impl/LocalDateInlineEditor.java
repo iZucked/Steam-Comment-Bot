@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
-import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
+import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 
 public class LocalDateInlineEditor extends UnsettableInlineEditor {
 	private FormattedText formattedText;

@@ -13,7 +13,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
-import com.mmxlabs.models.datetime.ui.formatters.LocalDateTimeTextFormatter;
+import com.mmxlabs.models.ui.date.LocalDateTimeTextFormatter;
 
 /**
  * A {@link LocalDate} attribute manipulator which uses the {@link FormattedTextCellEditor} from nebula.
@@ -34,7 +34,7 @@ public class LocalDateTimeAttributeManipulator extends BasicAttributeManipulator
 			protected Object doGetValue() {
 				final Object superValue = super.doGetValue();
 				if (superValue == null) {
-					return LocalDateTime.now().withHour(0);
+					return LocalDateTime.now().withMinute(0).withSecond(0).withNano(0);
 				}
 				return superValue;
 			}

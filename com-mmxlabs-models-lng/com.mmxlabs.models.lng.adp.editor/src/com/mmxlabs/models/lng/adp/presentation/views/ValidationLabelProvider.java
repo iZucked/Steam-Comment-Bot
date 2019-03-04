@@ -15,8 +15,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
-import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 
 public class ValidationLabelProvider extends ColumnLabelProvider {
 

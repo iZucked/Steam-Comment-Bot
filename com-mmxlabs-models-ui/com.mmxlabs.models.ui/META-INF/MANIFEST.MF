@@ -32,11 +32,11 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.jface.databinding;bundle-version="1.5.0",
  com.mmxlabs.scenario.service.util;bundle-version="[4.6.8,5.0.0)",
  com.mmxlabs.common.common-util;bundle-version="[4.6.8,5.0.0)",
- org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.models.datetime.ui;bundle-version="[2.1.0,3.0.0)"
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.ui,
+ com.mmxlabs.models.ui.date,
  com.mmxlabs.models.ui.editorpart,
  com.mmxlabs.models.ui.editors,
  com.mmxlabs.models.ui.editors.autocomplete,

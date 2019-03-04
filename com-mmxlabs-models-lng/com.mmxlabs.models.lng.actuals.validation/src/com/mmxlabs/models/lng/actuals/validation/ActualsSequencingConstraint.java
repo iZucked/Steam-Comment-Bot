@@ -7,10 +7,10 @@ package com.mmxlabs.models.lng.actuals.validation;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -278,7 +279,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private String getDateString(final LocalDateTime date) {
-		return date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+		return date.format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter());
 	}
 
 	private String getID(final EObject target) {
