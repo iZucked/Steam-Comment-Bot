@@ -20,6 +20,7 @@ public class PricingRepository extends AbstractGeneralDataRepository<PricingVers
 
 	public boolean publishVersion(final PricingVersion version) throws Exception {
 		final String json = PricingIO.write(version);
+		System.out.println(json);
 		return uploadData(json);
 	}
 

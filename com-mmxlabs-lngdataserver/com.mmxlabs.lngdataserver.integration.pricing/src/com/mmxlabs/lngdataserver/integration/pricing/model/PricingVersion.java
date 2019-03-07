@@ -34,7 +34,7 @@ public class PricingVersion {
 
 	private Map<String, Curve> curves = new HashMap<>();
 
-	private List<Curve> curveList = new LinkedList<>();
+	private List<Curve> curvesList = new LinkedList<>();
 
 	private String createdBy;
 
@@ -66,12 +66,12 @@ public class PricingVersion {
 		this.curves = curves;
 	}
 
-	public List<Curve> getCurveList() {
-		return curveList;
+	public List<Curve> getCurvesList() {
+		return curvesList;
 	}
 
-	public void setCurveList(List<Curve> curveList) {
-		this.curveList = curveList;
+	public void setCurvesList(List<Curve> curvesList) {
+		this.curvesList = curvesList;
 	}
 
 	public String getCreatedBy() {

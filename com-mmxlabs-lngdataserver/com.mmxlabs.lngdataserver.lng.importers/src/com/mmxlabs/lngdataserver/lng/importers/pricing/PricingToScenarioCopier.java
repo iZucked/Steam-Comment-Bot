@@ -72,8 +72,8 @@ public class PricingToScenarioCopier {
 		final Set<AbstractYearMonthCurve> updated = new HashSet<>();
 
 		Collection<Curve> curves;
-		if (!version.getCurveList().isEmpty()) {
-			curves = version.getCurveList();
+		if (!version.getCurvesList().isEmpty()) {
+			curves = version.getCurvesList();
 		} else {
 			curves = version.getCurves().values();
 		}

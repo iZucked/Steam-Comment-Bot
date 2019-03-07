@@ -77,25 +77,25 @@ public class PricingFromScenarioCopier {
 		pricingModel.getCurrencyCurves().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.CURRENCY);
 			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
-			version.getCurveList().add(curve);
+			version.getCurvesList().add(curve);
 		});
 
 		pricingModel.getBunkerFuelCurves().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.BASE_FUEL);
 			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
-			version.getCurveList().add(curve);
+			version.getCurvesList().add(curve);
 		});
 
 		pricingModel.getCharterCurves().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.CHARTER);
 			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
-			version.getCurveList().add(curve);
+			version.getCurvesList().add(curve);
 		});
 
 		pricingModel.getCommodityCurves().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.COMMODITY);
 			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
-			version.getCurveList().add(curve);
+			version.getCurvesList().add(curve);
 		});
 
 		VersionRecord record = pricingModel.getMarketCurvesVersionRecord();
