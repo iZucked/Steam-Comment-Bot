@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.formatters;
 
-import java.time.format.DateTimeFormatter;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
