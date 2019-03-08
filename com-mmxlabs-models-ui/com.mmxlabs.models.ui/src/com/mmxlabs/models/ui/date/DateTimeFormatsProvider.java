@@ -131,4 +131,7 @@ public class DateTimeFormatsProvider {
 	public DateTimeFormatter createDateTimeStringDisplayFormatter() {
 		return DateTimeFormatter.ofPattern(dateTimeStringDisplay);
 	}
+	public DateTimeFormatter createTimeStringDisplayFormatter() {
+		return DateTimeFormatter.ofPattern(timeStringDisplay);
+	}
 }
