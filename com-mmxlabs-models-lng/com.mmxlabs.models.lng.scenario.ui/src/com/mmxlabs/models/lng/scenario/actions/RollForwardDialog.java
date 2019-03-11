@@ -3,7 +3,6 @@ package com.mmxlabs.models.lng.scenario.actions;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -36,6 +35,8 @@ import org.eclipse.ui.forms.IManagedForm;
 import com.mmxlabs.models.lng.scenario.actions.RollForwardEngine.RollForwardDescriptor;
 import com.mmxlabs.models.lng.scenario.internal.Activator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class RollForwardDialog extends FormDialog {
@@ -81,6 +82,68 @@ public class RollForwardDialog extends FormDialog {
 		mform.getForm().setText("Roll Forward");
 
 		mform.getForm().getBody().setLayout(new GridLayout());
+
+		// Dates section.
+		{
+			final Group datesGroup = new Group(mform.getForm().getBody(), SWT.NONE);
+			datesGroup.setLayout(new GridLayout(2, false));
+			datesGroup.setText("Dates to update");
+			mform.getToolkit().adapt(datesGroup);
+
+			mform.getToolkit().createLabel(datesGroup, "Today");
+			DateTime date_a = new DateTime(datesGroup, SWT.DATE);
+			mform.getToolkit().adapt(date_a, true, true);
+
+			{
+//				date_a.setYear(scenarioModel.getPromptPeriodStart().getYear());
+//				date_a.setMonth(scenarioModel.getPromptPeriodStart().getMonthValue() - 1);
+//				date_a.setDay(scenarioModel.getPromptPeriodStart().getDayOfMonth());
+			}
+
+			mform.getToolkit().createLabel(datesGroup, "Prompt End");
+			DateTime date_b = new DateTime(datesGroup, SWT.DATE);
+			mform.getToolkit().adapt(date_b, true, true);
+
+			{
+				LocalDate dt = LocalDate.now().plusDays(90); //scenarioModel.getPromptPeriodEnd();
+				date_b.setYear(dt.getYear());
+				date_b.setMonth(dt.getMonthValue() - 1);
+				date_b.setDay(dt.getDayOfMonth());
+			}
+
+			LocalDate dt = scenarioModel.getSchedulingEndDate();
+			if (dt != null) {
+				mform.getToolkit().createLabel(datesGroup, "Horizon");
+				DateTime date_c = new DateTime(datesGroup, SWT.DATE);
+				mform.getToolkit().adapt(date_c, true, true);
+
+				date_c.setYear(dt.getYear());
+				date_c.setMonth(dt.getMonthValue() - 1);
+				date_c.setDay(dt.getDayOfMonth());
+			}
+
+			CharterOutMarketParameters charterDates = ScenarioModelUtil.getSpotMarketsModel(scenarioModel).getCharterOutMarketParameters();
+			if (charterDates.getCharterOutStartDate() != null) {
+				mform.getToolkit().createLabel(datesGroup, "Charter start date");
+				DateTime date_d = new DateTime(datesGroup, SWT.DATE);
+				mform.getToolkit().adapt(date_d, true, true);
+				{
+					date_d.setYear(charterDates.getCharterOutStartDate().getYear());
+					date_d.setMonth(charterDates.getCharterOutStartDate().getMonthValue() - 1);
+					date_d.setDay(charterDates.getCharterOutStartDate().getDayOfMonth());
+				}
+			}
+			if (charterDates.getCharterOutEndDate() != null) {
+				mform.getToolkit().createLabel(datesGroup, "Charter end date");
+				DateTime date_e = new DateTime(datesGroup, SWT.DATE);
+				mform.getToolkit().adapt(date_e, true, true);
+
+				date_e.setYear(charterDates.getCharterOutEndDate().getYear());
+				date_e.setMonth(charterDates.getCharterOutEndDate().getMonthValue() - 1);
+				date_e.setDay(charterDates.getCharterOutEndDate().getDayOfMonth());
+			}
+
+		}
 		// Input Section
 		{
 			final Group inputGroup = new Group(mform.getForm().getBody(), SWT.NONE);
@@ -212,7 +275,6 @@ public class RollForwardDialog extends FormDialog {
 
 			}
 		}
-
 		// Preview Section
 		{
 			final Group previewGroup = new Group(mform.getForm().getBody(), SWT.NONE);
