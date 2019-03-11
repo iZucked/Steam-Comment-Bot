@@ -45,11 +45,11 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-//		if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
-//			distancesNodeHandler = new DataBrowserNodeHandler("Distances", LNGScenarioSharedModelTypes.DISTANCES.getID(), DistanceRepository.INSTANCE,
-//					root -> new DistanceRepositoryActionHandler(DistanceRepository.INSTANCE, root));
-//			distancesNodeHandler.start();
-//		}
+		if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
+			distancesNodeHandler = new DataBrowserNodeHandler("Distances", LNGScenarioSharedModelTypes.DISTANCES.getID(), DistanceRepository.INSTANCE,
+					root -> new DistanceRepositoryActionHandler(DistanceRepository.INSTANCE, root));
+			distancesNodeHandler.start();
+		}
 
 	}
 

@@ -39,11 +39,11 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-//		if (LicenseFeatures.isPermitted("features:hub-sync-ports")) {
-//			portsNodeHandler = new DataBrowserNodeHandler("Ports", LNGScenarioSharedModelTypes.LOCATIONS.getID(), PortsRepository.INSTANCE,
-//					root -> new PortsRepositoryActionHandler(PortsRepository.INSTANCE, root));
-//			portsNodeHandler.start();
-//		}
+		if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
+			portsNodeHandler = new DataBrowserNodeHandler("Ports", LNGScenarioSharedModelTypes.LOCATIONS.getID(), PortsRepository.INSTANCE,
+					root -> new PortsRepositoryActionHandler(PortsRepository.INSTANCE, root));
+			portsNodeHandler.start();
+		}
 	}
 
 	/*
