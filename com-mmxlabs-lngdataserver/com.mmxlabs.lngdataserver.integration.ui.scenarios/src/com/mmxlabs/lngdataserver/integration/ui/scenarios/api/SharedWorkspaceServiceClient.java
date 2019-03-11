@@ -75,9 +75,8 @@ public class SharedWorkspaceServiceClient {
 			}
 
 			final String jsonData = response.body().string();
-			final JSONObject Jobject = new JSONObject(jsonData);
-			final String uuidString = Jobject.getString("uuid");
-			return uuidString;
+			final JSONObject jsonObject = new JSONObject(jsonData);
+			return jsonObject.getString("uuid");
 		}
 	}
 
@@ -157,7 +156,6 @@ public class SharedWorkspaceServiceClient {
 			final Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
 			final String jsonData = response.body().string();
 			return new Pair<>(jsonData, lastModified);
-
 		}
 	}
 

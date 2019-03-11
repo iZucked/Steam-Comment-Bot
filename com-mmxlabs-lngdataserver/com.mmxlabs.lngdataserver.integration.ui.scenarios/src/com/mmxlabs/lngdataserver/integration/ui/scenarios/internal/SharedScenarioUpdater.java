@@ -445,15 +445,13 @@ public class SharedScenarioUpdater {
 
 		if (available) {
 			final Instant m = client.getLastModified();
-			if (m != null) {
-				if (m.isAfter(lastModified)) {
-					final Pair<String, Instant> scenariosPair = client.getScenarios();
-					if (scenariosPair != null) {
-						final List<SharedScenarioRecord> scenariosList = client.parseScenariosJSONData(scenariosPair.getFirst());
-						update(scenariosList);
-						Files.write(scenariosPair.getFirst(), new File(basePath.getAbsolutePath() + "/scenarios.json"), Charsets.UTF_8);
-						lastModified = scenariosPair.getSecond();
-					}
+			if (m != null && m.isAfter(lastModified)) {
+				final Pair<String, Instant> scenariosPair = client.getScenarios();
+				if (scenariosPair != null) {
+					final List<SharedScenarioRecord> scenariosList = client.parseScenariosJSONData(scenariosPair.getFirst());
+					update(scenariosList);
+					Files.write(scenariosPair.getFirst(), new File(basePath.getAbsolutePath() + "/scenarios.json"), Charsets.UTF_8);
+					lastModified = scenariosPair.getSecond();
 				}
 			}
 		}

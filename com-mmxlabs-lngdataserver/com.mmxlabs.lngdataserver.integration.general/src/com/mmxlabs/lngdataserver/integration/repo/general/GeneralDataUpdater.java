@@ -183,7 +183,7 @@ public class GeneralDataUpdater {
 
 					refreshType(typeRecord);
 					final Boolean versionAvailable = newVersionFuture.get();
-					if (versionAvailable == Boolean.TRUE) {
+					if (Boolean.TRUE.equals(versionAvailable)) {
 						refreshType(typeRecord);
 					}
 				} catch (final InterruptedException e) {
@@ -238,7 +238,7 @@ public class GeneralDataUpdater {
 			final Pair<String, Instant> recordsPair = client.getRecords(typeRecord);
 			if (recordsPair != null) {
 				final List<GeneralDataRecord> records = client.parseRecordsJSONData(typeRecord, recordsPair.getFirst());
-				File parent = new File(basePath.getAbsolutePath() + "/" + typeRecord.getType());
+				File parent = new File(basePath.getAbsolutePath() + File.pathSeparator + typeRecord.getType());
 				parent.mkdirs();
 				update(typeRecord, records);
 				Files.write(recordsPair.getFirst(), new File(parent.getAbsolutePath() + "/records.json"), Charsets.UTF_8);
