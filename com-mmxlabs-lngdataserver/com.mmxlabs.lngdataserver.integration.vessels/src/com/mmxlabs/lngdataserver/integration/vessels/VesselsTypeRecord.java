@@ -5,7 +5,7 @@ import java.io.OutputStream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.lngdataserver.integration.repo.TypeRecord;
+import com.mmxlabs.lngdataserver.integration.repo.general.TypeRecord;
 
 public class VesselsTypeRecord implements TypeRecord {
 

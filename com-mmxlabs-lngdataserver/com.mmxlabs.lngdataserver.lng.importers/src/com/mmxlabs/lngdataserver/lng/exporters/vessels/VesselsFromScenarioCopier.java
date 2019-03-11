@@ -13,7 +13,7 @@ import java.util.OptionalInt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortTypeConstants;
+import com.mmxlabs.lngdataserver.integration.models.portgroups.PortTypeConstants;
 import com.mmxlabs.lngdataserver.integration.vessels.model.FuelConsumption;
 import com.mmxlabs.lngdataserver.integration.vessels.model.Vessel;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselPortAttributes;

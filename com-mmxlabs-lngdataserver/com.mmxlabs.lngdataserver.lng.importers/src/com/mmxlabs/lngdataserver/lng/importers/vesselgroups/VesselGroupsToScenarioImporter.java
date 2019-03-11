@@ -16,9 +16,9 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.lngdataserver.integration.general.model.vesselgroups.VesselGroupDefinition;
-import com.mmxlabs.lngdataserver.integration.general.model.vesselgroups.VesselGroupsVersion;
-import com.mmxlabs.lngdataserver.integration.general.model.vesselgroups.VesselTypeConstants;
+import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupDefinition;
+import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupsVersion;
+import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselTypeConstants;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;

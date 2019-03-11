@@ -4,25 +4,22 @@
  */
 package com.mmxlabs.lngdataserver.integration.distances;
 
-import java.io.IOException;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
-import com.mmxlabs.lngdataserver.integration.repo.AbstractGeneralDataRepository;
+import com.mmxlabs.lngdataserver.integration.repo.generic.AbstractGenericDataRepository;
 
-public class DistanceRepository extends AbstractGeneralDataRepository<DistancesVersion> {
+public class DistanceRepository extends AbstractGenericDataRepository<DistancesVersion> {
 
 	public static final @NonNull DistanceRepository INSTANCE = new DistanceRepository();
 
 	private DistanceRepository() {
-		super(DistancesTypeRecord.INSTANCE);
+		super(DistancesIO.MODEL_TYPE);
 		startListenForNewLocalVersions();
 	}
 
 	public boolean publishVersion(final DistancesVersion version) throws Exception {
-		final String json = DistancesIO.write(version);
-		return uploadData(json);
+		return doPublishOutputStream(version, version.getIdentifier(), DistancesIO::write);
 	}
 
 	public DistancesVersion getLocalVersion(final String uuid) throws Exception {

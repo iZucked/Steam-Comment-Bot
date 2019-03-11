@@ -4,25 +4,22 @@
  */
 package com.mmxlabs.lngdataserver.integration.ports;
 
-import java.io.IOException;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
-import com.mmxlabs.lngdataserver.integration.repo.AbstractGeneralDataRepository;
+import com.mmxlabs.lngdataserver.integration.repo.generic.AbstractGenericDataRepository;
 
-public class PortsRepository extends AbstractGeneralDataRepository<PortsVersion> {
+public class PortsRepository extends AbstractGenericDataRepository<PortsVersion> {
 
 	public static final @NonNull PortsRepository INSTANCE = new PortsRepository();
 
 	private PortsRepository() {
-		super(PortsTypeRecord.INSTANCE);
+		super(PortsIO.MODEL_TYPE);
 		startListenForNewLocalVersions();
 	}
 
 	public boolean publishVersion(final PortsVersion version) throws Exception {
-		final String json = PortsIO.write(version);
-		return uploadData(json);
+		return doPublishOutputStream(version, version.getIdentifier(), PortsIO::write);
 	}
 
 	public PortsVersion getLocalVersion(final String uuid) throws Exception {

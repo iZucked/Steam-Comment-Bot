@@ -16,7 +16,6 @@ import com.mmxlabs.lngdataserver.commons.http.ProgressResponseBody;
 import com.mmxlabs.lngdataserver.server.HttpClientUtil;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
-import okhttp3.Credentials;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -42,20 +41,13 @@ public class BaseCaseServiceClient {
 
 	public String uploadBaseCase(final File file, //
 			final String scenarioName, ///
-			final String pricingVersionUUID, //
-			final String portsVersionUUID, //
-			final String distancesVersionUUID, //
-			final String vesselsVersionUUID, //
 			final IProgressListener progressListener) throws IOException {
-		if (pricingVersionUUID == null) {
-			throw new IllegalArgumentException("Pricing version cannot be null");
-		}
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
-				.addFormDataPart("pricingVersionUUID", pricingVersionUUID) //
-				.addFormDataPart("portsVersionUUID", portsVersionUUID) //
-				.addFormDataPart("vesselsVersionUUID", vesselsVersionUUID) //
-				.addFormDataPart("distancesVersionUUID", distancesVersionUUID) //
+				.addFormDataPart("pricingVersionUUID", "") //
+				.addFormDataPart("portsVersionUUID", "") //
+				.addFormDataPart("vesselsVersionUUID", "") //
+				.addFormDataPart("distancesVersionUUID", "") //
 				.addFormDataPart("basecase", scenarioName, RequestBody.create(mediaType, file)) //
 				.build();
 
@@ -76,8 +68,7 @@ public class BaseCaseServiceClient {
 				throw new IOException("Unexpected code " + response);
 			}
 
-			final String responseStr = response.body().string();
-			return responseStr;
+			return response.body().string();
 		}
 	}
 
@@ -97,8 +88,7 @@ public class BaseCaseServiceClient {
 
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest()
-				.url(String.format("%s%s%s", upstreamURL, BASECASE_DOWNLOAD_URL, uuid)) //
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest().url(String.format("%s%s%s", upstreamURL, BASECASE_DOWNLOAD_URL, uuid)) //
 				.build();
 
 		try (Response response = localHttpClient.newCall(request).execute()) {

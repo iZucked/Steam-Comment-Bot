@@ -1,8 +1,8 @@
 package com.mmxlabs.lngdataserver.lng.importers.portgroups;
 
-import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortGroupDefinition;
-import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortGroupsVersion;
-import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortTypeConstants;
+import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupDefinition;
+import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupsVersion;
+import com.mmxlabs.lngdataserver.integration.models.portgroups.PortTypeConstants;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mmxlabs.lngdataserver.commons.model.CreatedAtInstantDeserializer;
-import com.mmxlabs.lngdataserver.integration.repo.GeneralDataRecord;
+import com.mmxlabs.lngdataserver.integration.repo.general.GeneralDataRecord;
 
 /**
  * Jackson Mixin class to map upstream version data object to {@link GeneralDataRecord} fields.

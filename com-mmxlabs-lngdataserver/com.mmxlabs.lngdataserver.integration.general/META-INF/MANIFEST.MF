@@ -35,9 +35,9 @@ Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd.
 Automatic-Module-Name: com.mmxlabs.lngdataserver.integration.general
 Export-Package: com.mmxlabs.lngdataserver.integration.general,
- com.mmxlabs.lngdataserver.integration.general.model.bunkerfuels,
- com.mmxlabs.lngdataserver.integration.general.model.financial.settled,
- com.mmxlabs.lngdataserver.integration.general.model.portgroups,
- com.mmxlabs.lngdataserver.integration.general.model.vesselgroups,
- com.mmxlabs.lngdataserver.integration.general.repo,
- com.mmxlabs.lngdataserver.integration.repo
+ com.mmxlabs.lngdataserver.integration.models.bunkerfuels,
+ com.mmxlabs.lngdataserver.integration.models.financial.settled,
+ com.mmxlabs.lngdataserver.integration.models.portgroups,
+ com.mmxlabs.lngdataserver.integration.models.vesselgroups,
+ com.mmxlabs.lngdataserver.integration.repo.general,
+ com.mmxlabs.lngdataserver.integration.repo.generic

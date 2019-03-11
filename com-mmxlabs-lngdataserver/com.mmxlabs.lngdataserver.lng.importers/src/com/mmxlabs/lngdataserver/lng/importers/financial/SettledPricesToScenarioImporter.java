@@ -17,8 +17,8 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.lngdataserver.integration.general.model.financial.settled.SettledPriceCurve;
-import com.mmxlabs.lngdataserver.integration.general.model.financial.settled.SettledPricesVersion;
+import com.mmxlabs.lngdataserver.integration.models.financial.settled.SettledPriceCurve;
+import com.mmxlabs.lngdataserver.integration.models.financial.settled.SettledPricesVersion;
 import com.mmxlabs.models.lng.pricing.DatePoint;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.PricingFactory;

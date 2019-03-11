@@ -42,11 +42,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerFactory;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
-import com.mmxlabs.lngdataserver.integration.general.model.bunkerfuels.BunkerFuelsVersion;
-import com.mmxlabs.lngdataserver.integration.general.model.financial.settled.SettledPricesVersion;
-import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortGroupsVersion;
-import com.mmxlabs.lngdataserver.integration.general.model.vesselgroups.VesselGroupsVersion;
+import com.mmxlabs.lngdataserver.integration.models.bunkerfuels.BunkerFuelsVersion;
+import com.mmxlabs.lngdataserver.integration.models.financial.settled.SettledPricesVersion;
+import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupsVersion;
+import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupsVersion;
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
@@ -898,8 +899,9 @@ public final class SharedScenarioDataUtils {
 	public static List<DataOptionGroup> createGroups(IBaseCaseVersionsProvider p, Map<String, String > scenarioDataVersions){
 		final List<DataOptionGroup> groups = new LinkedList<>();
 		groups.add(new DataOptionGroup("Pricing", !SharedScenarioDataUtils.checkPricingDataMatch(p, scenarioDataVersions), true, true, DataOptions.PricingData));
-//		if (LicenseFeatures.isPermitted("features:hub-experimental")) {
-//			groups.add(new DataOptionGroup("Ports && Distances", !checkPortAndDistanceDataMatch(p, scenarioDataVersions), true, false, DataOptions.PortData));
+		if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
+			groups.add(new DataOptionGroup("Ports && Distances", !checkPortAndDistanceDataMatch(p, scenarioDataVersions), true, false, DataOptions.PortData));
+		}
 //			groups.add(new DataOptionGroup("Vessels", !checkFleetDataMatch(p, scenarioDataVersions), true, false, DataOptions.FleetDatabase));
 //			groups.add(new DataOptionGroup("Commercial", true, true, false, DataOptions.CommercialData));
 //			// groups.add(new DataOptionGroup("Misc", true, false, false));

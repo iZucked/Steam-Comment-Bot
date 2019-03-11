@@ -7,7 +7,7 @@ package com.mmxlabs.lngdataserver.integration.pricing;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
-import com.mmxlabs.lngdataserver.integration.repo.AbstractGeneralDataRepository;
+import com.mmxlabs.lngdataserver.integration.repo.general.AbstractGeneralDataRepository;
 
 public class PricingRepository extends AbstractGeneralDataRepository<PricingVersion> {
 

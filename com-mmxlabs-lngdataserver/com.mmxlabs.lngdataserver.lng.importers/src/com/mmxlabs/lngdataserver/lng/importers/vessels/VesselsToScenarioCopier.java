@@ -29,7 +29,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortTypeConstants;
+import com.mmxlabs.lngdataserver.integration.models.portgroups.PortTypeConstants;
 import com.mmxlabs.lngdataserver.integration.vessels.model.FuelConsumption;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselRouteParameters;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;

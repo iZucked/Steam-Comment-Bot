@@ -2,8 +2,8 @@ package com.mmxlabs.lngdataserver.lng.importers.bunkerfuels;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-import com.mmxlabs.lngdataserver.integration.general.model.bunkerfuels.BunkerFuelDefinition;
-import com.mmxlabs.lngdataserver.integration.general.model.bunkerfuels.BunkerFuelsVersion;
+import com.mmxlabs.lngdataserver.integration.models.bunkerfuels.BunkerFuelDefinition;
+import com.mmxlabs.lngdataserver.integration.models.bunkerfuels.BunkerFuelsVersion;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 

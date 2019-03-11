@@ -13,8 +13,8 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.lngdataserver.integration.general.model.bunkerfuels.BunkerFuelDefinition;
-import com.mmxlabs.lngdataserver.integration.general.model.bunkerfuels.BunkerFuelsVersion;
+import com.mmxlabs.lngdataserver.integration.models.bunkerfuels.BunkerFuelDefinition;
+import com.mmxlabs.lngdataserver.integration.models.bunkerfuels.BunkerFuelsVersion;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;

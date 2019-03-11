@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.lngdataserver.integration.repo.AbstractGeneralDataRepository;
+import com.mmxlabs.lngdataserver.integration.repo.general.AbstractGeneralDataRepository;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
 
 public class VesselsRepository extends AbstractGeneralDataRepository<VesselsVersion> {

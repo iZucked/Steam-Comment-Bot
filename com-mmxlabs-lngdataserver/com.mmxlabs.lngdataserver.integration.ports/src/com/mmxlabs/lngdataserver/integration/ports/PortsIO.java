@@ -18,6 +18,7 @@ import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 public class PortsIO {
 
 	public static final int CURRENT_MODEL_VERSION = 1;
+	public static final String MODEL_TYPE = "ports";
 
 	private PortsIO() {
 

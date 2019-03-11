@@ -16,9 +16,9 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortGroupDefinition;
-import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortGroupsVersion;
-import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortTypeConstants;
+import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupDefinition;
+import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupsVersion;
+import com.mmxlabs.lngdataserver.integration.models.portgroups.PortTypeConstants;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;

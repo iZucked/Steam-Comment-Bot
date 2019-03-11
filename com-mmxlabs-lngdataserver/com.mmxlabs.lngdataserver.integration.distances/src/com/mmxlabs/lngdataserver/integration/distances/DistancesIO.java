@@ -18,6 +18,7 @@ import com.mmxlabs.lngdataserver.integration.general.ModelVersionHeader;
 public class DistancesIO {
 
 	public static final int CURRENT_MODEL_VERSION = 1;
+	public static final String MODEL_TYPE = "distances";
 
 	private DistancesIO() {
 

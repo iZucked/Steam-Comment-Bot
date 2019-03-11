@@ -9,12 +9,13 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Display;
@@ -24,40 +25,16 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import com.mmxlabs.common.util.CheckedSupplier;
-import com.mmxlabs.lngdataserver.commons.IDataRepository;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
-import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
-import com.mmxlabs.lngdataserver.integration.general.model.bunkerfuels.BunkerFuelsRepository;
-import com.mmxlabs.lngdataserver.integration.general.model.bunkerfuels.BunkerFuelsVersion;
-import com.mmxlabs.lngdataserver.integration.general.model.financial.settled.SettledPricesRepository;
-import com.mmxlabs.lngdataserver.integration.general.model.financial.settled.SettledPricesVersion;
-import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortGroupsRepository;
-import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortGroupsVersion;
-import com.mmxlabs.lngdataserver.integration.general.model.vesselgroups.VesselGroupsRepository;
-import com.mmxlabs.lngdataserver.integration.general.model.vesselgroups.VesselGroupsVersion;
-import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
-import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
-import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.ReportsServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.ReportPublisherExtensionUtil;
-import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
-import com.mmxlabs.lngdataserver.lng.exporters.distances.DistancesFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.exporters.vessels.VesselsFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.bunkerfuels.BunkerFuelsFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.financial.SettledPricesFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.DataOptions;
 import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
-import com.mmxlabs.lngdataserver.lng.importers.portgroups.PortGroupsFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.vesselgroups.VesselGroupsFromScenarioCopier;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
-import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
@@ -178,9 +155,9 @@ public class ScenarioServicePublishAction {
 				} finally {
 					runnerBuilder.dispose();
 				}
-			} catch (RuntimeException e) {
+			} catch (final RuntimeException e) {
 				if (e.getCause() instanceof ScenarioMigrationException) {
-					ScenarioMigrationException ee = (ScenarioMigrationException) e.getCause();
+					final ScenarioMigrationException ee = (ScenarioMigrationException) e.getCause();
 					throw new PublishBasecaseException("Error evaluating scenario.", Type.FAILED_TO_MIGRATE, ee);
 				}
 				throw new PublishBasecaseException("Error evaluating scenario.", Type.FAILED_UNKNOWN_ERROR, e);
@@ -208,15 +185,15 @@ public class ScenarioServicePublishAction {
 			final BaseCaseServiceClient baseCaseServiceClient = new BaseCaseServiceClient();
 			progressMonitor.subTask("Upload base case");
 
-			final String pricingVersionUUID;
-			final String distanceVersionUUID;
-			final String portVersionUUID;
-			final String fleetVersionUUID;
+			final List<DataOptions> dataTypesToUpload = new LinkedList<>();
+			dataTypesToUpload.add(DataOptions.PricingData);
+
+			if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
+				dataTypesToUpload.add(DataOptions.PortData);
+			}
+
 			try {
-				pricingVersionUUID = checkPricingDataVersion(modelRecord, scenarioModel);
-				distanceVersionUUID = ""; // checkDistanceDataVersion(modelRecord, scenarioModel);
-				portVersionUUID = ""; // checkPortDataVersion(modelRecord, scenarioModel);
-				fleetVersionUUID = ""; // checkFleetDataVersion(modelRecord, scenarioModel);
+				DataPublishUtil.uploadReferenceData(dataTypesToUpload, modelRecord, scenarioModel);
 			} catch (final IOException e) {
 				System.out.println("Error uploading the basecase scenario");
 				e.printStackTrace();
@@ -224,24 +201,11 @@ public class ScenarioServicePublishAction {
 			} finally {
 			}
 
-			if (false) {
-				try {
-					uploadSettledPrices(scenarioDataProvider);
-				} catch (final Exception e) {
-					System.out.println("Error uploading the basecase scenario");
-					e.printStackTrace();
-					throw new PublishBasecaseException("Error uploading scenario.", Type.FAILED_TO_UPLOAD_BACKING_DATA, e);
-				} finally {
-				}
-			}
 			// UploadFile
 			String response = null;
 			final SubMonitor uploadMonitor = progressMonitor.split(500);
 			try {
 				response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile, scenarioInstance.getName(), //
-						pricingVersionUUID, //
-						distanceVersionUUID, portVersionUUID, //
-						fleetVersionUUID, //
 						WrappedProgressMonitor.wrapMonitor(uploadMonitor));
 			} catch (final IOException e) {
 				System.out.println("Error uploading the basecase scenario");
@@ -311,105 +275,4 @@ public class ScenarioServicePublishAction {
 		}
 	}
 
-	private static @Nullable String checkPricingDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
-		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
-		final String version = pricingModel.getMarketCurvesVersionRecord().getVersion();
-		if (genericVersionUpload(PricingRepository.INSTANCE, version, () -> exportPricing(scenarioModel))) {
-			return version;
-		}
-		return null;
-	}
-
-	// private static @Nullable String checkDistanceDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
-	// final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-	// final String version = portModel.getDistanceDataVersion();
-	// if (genericVersionUpload(DistanceRepository.INSTANCE, version, () -> exportDistances(scenarioModel))) {
-	// return version;
-	// }
-	// return null;
-	// }
-
-	// private static @Nullable String checkFleetDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
-	// final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
-	// final String version = fleetModel.getFleetDataVersion();
-	// if (genericVersionUpload(VesselsRepository.INSTANCE, version, () -> exportVessels(scenarioModel))) {
-	// return version;
-	// }
-	// return null;
-	// }
-
-	// private static @Nullable String checkPortDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
-	// final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-	// final String version = portModel.getPortDataVersion();
-	// if (genericVersionUpload(PortsRepository.INSTANCE, version, () -> exportPort(scenarioModel))) {
-	// return version;
-	// }
-	// return null;
-	// }
-
-	private static PricingVersion exportPricing(final LNGScenarioModel scenarioModel) throws IOException {
-		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
-		final PricingVersion version = PricingFromScenarioCopier.generateVersion(pricingModel);
-		return version;
-	}
-
-	private static DistancesVersion exportDistances(final LNGScenarioModel scenarioModel) throws IOException {
-		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-		final DistancesVersion version = DistancesFromScenarioCopier.generateVersion(portModel);
-		return version;
-	}
-
-	private static PortsVersion exportPort(final LNGScenarioModel scenarioModel) throws IOException {
-		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-		final PortsVersion version = PortFromScenarioCopier.generateVersion(portModel);
-		return version;
-	}
-
-	private static String exportVessels(final LNGScenarioModel scenarioModel) throws IOException {
-
-		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
-		final VesselsVersion version = VesselsFromScenarioCopier.generateVersion(fleetModel);
-		return new ObjectMapper().writeValueAsString(version);
-	}
-
-	private static <T> boolean genericVersionUpload(final IDataRepository<T> repository, final String uuid, final CheckedSupplier<T, IOException> doLocalExport) throws IOException {
-		final boolean hasUpstream = repository.hasUpstreamVersion(uuid);
-		if (hasUpstream) {
-			// Version already exists
-			return true;
-		} else {
-			// Publish
-			try {
-				repository.publishVersion(doLocalExport.get());
-				return true;
-			} catch (final Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return false;
-	}
-
-	private static void uploadSettledPrices(IScenarioDataProvider sdp) throws Exception {
-		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(sdp);
-		SettledPricesVersion version = SettledPricesFromScenarioCopier.generateVersion(pricingModel);
-		SettledPricesRepository.INSTANCE.publishVersion(version);
-	}
-
-	private static void uploadVesselGroups(IScenarioDataProvider sdp) throws Exception {
-		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(sdp);
-		VesselGroupsVersion version = VesselGroupsFromScenarioCopier.generateVersion(fleetModel);
-		VesselGroupsRepository.INSTANCE.publishVersion(version);
-	}
-
-	private static void uploadBunkerFuels(IScenarioDataProvider sdp) throws Exception {
-		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(sdp);
-		BunkerFuelsVersion version = BunkerFuelsFromScenarioCopier.generateVersion(fleetModel);
-		BunkerFuelsRepository.INSTANCE.publishVersion(version);
-	}
-
-	private static void uploadPortGroups(IScenarioDataProvider sdp) throws Exception {
-		final PortModel portModel = ScenarioModelUtil.getPortModel(sdp);
-		PortGroupsVersion version = PortGroupsFromScenarioCopier.generateVersion(portModel);
-		PortGroupsRepository.INSTANCE.publishVersion(version);
-	}
 }
