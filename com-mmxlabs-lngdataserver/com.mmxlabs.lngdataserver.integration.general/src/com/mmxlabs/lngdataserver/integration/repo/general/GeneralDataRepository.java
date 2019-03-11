@@ -28,6 +28,8 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.MapMaker;
 import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
+import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
+import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
 public class GeneralDataRepository {
 
@@ -45,10 +47,14 @@ public class GeneralDataRepository {
 
 	private final List<TypeRecord> initialTypes = new LinkedList<>();
 
+	private final IUpstreamDetailChangedListener upstreamDetailsChangedListener;
+
 	private GeneralDataRepository() {
 		dataMap = new MapMaker() //
 				.concurrencyLevel(4) //
 				.makeMap();
+
+		upstreamDetailsChangedListener = dataMap::clear;
 
 		start();
 	}
@@ -122,6 +128,8 @@ public class GeneralDataRepository {
 
 	public void start() {
 
+		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(upstreamDetailsChangedListener);
+
 		final Bundle bundle = FrameworkUtil.getBundle(GeneralDataRecord.class);
 		final BundleContext bundleContext = bundle.getBundleContext();
 
@@ -155,9 +163,12 @@ public class GeneralDataRepository {
 	}
 
 	public void stop() {
+
+		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(upstreamDetailsChangedListener);
 		if (updater != null) {
 			updater.stop();
 		}
+		dataMap.clear();
 	}
 
 	public void registerType(final @NonNull TypeRecord type) {

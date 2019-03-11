@@ -21,7 +21,6 @@ import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.common.util.CheckedFunction;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.IDataRepository;
-import com.mmxlabs.lngdataserver.integration.repo.general.GeneralDataRepository;
 import com.mmxlabs.scenario.service.model.util.encryption.EncryptionUtils;
 
 import okhttp3.MediaType;
@@ -67,8 +66,6 @@ public abstract class AbstractGenericDataRepository<T> implements IDataRepositor
 		return true;
 	}
 
-	public abstract boolean publishVersion(final T version) throws Exception;
-
 	protected boolean doPublishOutputStream(T version, String uuid, CheckedBiConsumer<T, OutputStream, IOException> writeAction) throws Exception {
 
 		Path p = Files.createTempFile("hub-", ".data");
@@ -79,7 +76,7 @@ public abstract class AbstractGenericDataRepository<T> implements IDataRepositor
 				EncryptionUtils.encrypt(os, eos -> writeAction.accept(version, eos));
 			}
 			// Upload it
-			GenericDataRepository.INSTANCE.importData(type, uuid, "application/octet-stream", p.toFile(), null);
+			GenericDataRepository.INSTANCE.uploadData(type, uuid, "application/octet-stream", p.toFile(), null);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

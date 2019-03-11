@@ -28,6 +28,8 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.MapMaker;
 import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
+import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
+import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
 public class GenericDataRepository {
 
@@ -45,10 +47,14 @@ public class GenericDataRepository {
 
 	private final List<String> initialTypes = new LinkedList<>();
 
+	private final IUpstreamDetailChangedListener upstreamDetailsChangedListener;
+	
 	private GenericDataRepository() {
 		dataMap = new MapMaker() //
 				.concurrencyLevel(4) //
 				.makeMap();
+
+		upstreamDetailsChangedListener = dataMap::clear;
 
 		start();
 	}
@@ -88,7 +94,7 @@ public class GenericDataRepository {
 		return new File(String.format("%s/%s/%s.data", dataFolder.getAbsoluteFile(), type, uuid));
 	}
 
-	public void importData(final String type, final String uuid, final String contentType, final File dataFile, @Nullable final IProgressMonitor progressMonitor) throws Exception {
+	public void uploadData(final String type, final String uuid, final String contentType, final File dataFile, @Nullable final IProgressMonitor progressMonitor) throws Exception {
 		try {
 
 			try {
@@ -99,7 +105,7 @@ public class GenericDataRepository {
 			}
 			try {
 				updater.refresh();
-			} catch (final IOException e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -157,9 +163,12 @@ public class GenericDataRepository {
 	}
 
 	public void stop() {
+
+		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(upstreamDetailsChangedListener);
 		if (updater != null) {
 			updater.stop();
 		}
+		dataMap.clear();
 	}
 
 	public void registerType(final @NonNull String type) {
