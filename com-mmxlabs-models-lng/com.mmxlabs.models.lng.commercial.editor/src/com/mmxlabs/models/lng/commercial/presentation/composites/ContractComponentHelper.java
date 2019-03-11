@@ -215,28 +215,34 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the portLoadNominationSize feature on Contract
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_portLoadNominationSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE));
+		if(LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE));
+		}
 	}
 
 	/**
 	 * Create the editor for the portLoadNominationSizeUnits feature on Contract
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_portLoadNominationSizeUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS));
+		if(LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS));
+		}
 	}
 
 	/**
 	 * Create the editor for the portLoadNominationCounterparty feature on Contract
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_portLoadNominationCounterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY));
+		if(LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY));
+		}
 	}
 
 	/**
@@ -380,23 +386,19 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the startDate feature on Contract
 	 *
-	 * @generated NO
+	 * @generated
 	 */
 	protected void add_startDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		if (LicenseFeatures.isPermitted("features:adp")) {
 			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__START_DATE));
-//		}
 	}
 
 	/**
 	 * Create the editor for the endDate feature on Contract
 	 *
-	 * @generated NO
+	 * @generated
 	 */
 	protected void add_endDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if (LicenseFeatures.isPermitted("features:adp")) {
 			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__END_DATE));
-		}
 	}
 
 	/**
