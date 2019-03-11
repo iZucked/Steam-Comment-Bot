@@ -50,4 +50,9 @@ public class GeneralDataRecord {
 		}
 		return false;
 	}
+	
+	@Override
+	public int hashCode() {
+		return uuid.hashCode();
+	}
 }
