@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * All rights reserved.
+ */
 package com.mmxlabs.lngdataserver.integration.general.model;
 
 import com.mmxlabs.lngdataserver.integration.general.repo.AbstractGenericDataRepository;

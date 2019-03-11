@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.scenario.actions;
 
 import org.eclipse.emf.common.command.Command;

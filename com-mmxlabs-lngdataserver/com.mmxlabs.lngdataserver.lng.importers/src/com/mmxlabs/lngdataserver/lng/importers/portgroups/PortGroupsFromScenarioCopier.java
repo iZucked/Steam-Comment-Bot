@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * All rights reserved.
+ */
 package com.mmxlabs.lngdataserver.lng.importers.portgroups;
 
 import com.mmxlabs.lngdataserver.integration.general.model.portgroups.PortGroupDefinition;

@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * All rights reserved.
+ */
 package com.mmxlabs.lngdataserver.integration.general.model.vesselgroups;
 
 import java.util.LinkedList;

@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * All rights reserved.
+ */
 package com.mmxlabs.lngdataserver.lng.importers.bunkerfuels;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
