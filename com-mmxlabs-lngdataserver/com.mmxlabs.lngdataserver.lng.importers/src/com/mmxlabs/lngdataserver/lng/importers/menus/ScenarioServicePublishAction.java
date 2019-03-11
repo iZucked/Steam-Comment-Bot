@@ -191,6 +191,9 @@ public class ScenarioServicePublishAction {
 			if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
 				dataTypesToUpload.add(DataOptions.PortData);
 			}
+			if (LicenseFeatures.isPermitted("features:hub-sync-vessels")) {
+				dataTypesToUpload.add(DataOptions.FleetDatabase);
+			}
 
 			try {
 				DataPublishUtil.uploadReferenceData(dataTypesToUpload, modelRecord, scenarioModel);

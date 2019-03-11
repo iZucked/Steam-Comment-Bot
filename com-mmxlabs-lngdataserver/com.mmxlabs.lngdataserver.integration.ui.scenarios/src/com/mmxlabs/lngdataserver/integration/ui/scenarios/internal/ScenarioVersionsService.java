@@ -10,7 +10,6 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
@@ -35,6 +34,11 @@ public class ScenarioVersionsService implements IScenarioVersionService {
 			types.add(LNGScenarioSharedModelTypes.DISTANCES.getID());
 			types.add(LNGScenarioSharedModelTypes.LOCATIONS.getID());
 			types.add(LNGScenarioSharedModelTypes.PORT_GROUPS.getID());
+		}
+		if (LicenseFeatures.isPermitted("features:hub-sync-vessels")) {
+			types.add(LNGScenarioSharedModelTypes.BUNKER_FUELS.getID());
+			types.add(LNGScenarioSharedModelTypes.FLEET.getID());
+			types.add(LNGScenarioSharedModelTypes.VESSEL_GROUPS.getID());
 		}
 		return types;
 	}

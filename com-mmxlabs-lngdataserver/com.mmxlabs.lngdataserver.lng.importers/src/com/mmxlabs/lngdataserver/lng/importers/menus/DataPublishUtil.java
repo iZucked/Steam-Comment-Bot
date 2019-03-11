@@ -21,14 +21,13 @@ import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupsVer
 import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
-import com.mmxlabs.lngdataserver.integration.repo.generic.AbstractGenericDataRepository;
+import com.mmxlabs.lngdataserver.integration.vessels.VesselsRepository;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
 import com.mmxlabs.lngdataserver.lng.exporters.distances.DistancesFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.vessels.VesselsFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.bunkerfuels.BunkerFuelsFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.financial.SettledPricesFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.DataOptions;
 import com.mmxlabs.lngdataserver.lng.importers.portgroups.PortGroupsFromScenarioCopier;
@@ -54,10 +53,13 @@ public class DataPublishUtil {
 				checkAndUploadPortData(modelRecord, scenarioModel);
 				checkAndUploadPortGroupsData(modelRecord, scenarioModel);
 				break;
+			case FleetDatabase:
+				checkAndUploadBunkerFuelsData(modelRecord, scenarioModel);
+				checkAndUploadVesselData(modelRecord, scenarioModel);
+				checkAndUploadVesselGroupsData(modelRecord, scenarioModel);
 			case ADPData:
 			case CargoData:
 			case CommercialData:
-			case FleetDatabase:
 			case SpotCargoMarketsData:
 			case SpotCharterMarketsData:
 			default:
@@ -82,7 +84,7 @@ public class DataPublishUtil {
 		}
 		return false;
 	}
- 
+
 	public static @Nullable String checkAndUploadPricingData(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
 		final String version = pricingModel.getMarketCurvesVersionRecord().getVersion();
@@ -119,28 +121,37 @@ public class DataPublishUtil {
 		return null;
 	}
 
-	private static void uploadBunkerFuels(IScenarioDataProvider sdp) throws Exception {
-		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(sdp);
-		BunkerFuelsVersion version = BunkerFuelsFromScenarioCopier.generateVersion(fleetModel);
-		BunkerFuelsRepository.INSTANCE.publishVersion(version);
+	public static @Nullable String checkAndUploadVesselData(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
+		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
+		final String version = fleetModel.getFleetVersionRecord().getVersion();
+		if (dataVersionUpload(VesselsRepository.INSTANCE, version, () -> VesselsFromScenarioCopier.generateVersion(fleetModel))) {
+			return version;
+		}
+		return null;
 	}
 
-	private static void uploadPortGroups(IScenarioDataProvider sdp) throws Exception {
-		final PortModel portModel = ScenarioModelUtil.getPortModel(sdp);
-		PortGroupsVersion version = PortGroupsFromScenarioCopier.generateVersion(portModel);
-		PortGroupsRepository.INSTANCE.publishVersion(version);
+	public static @Nullable String checkAndUploadVesselGroupsData(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
+		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
+		final String version = fleetModel.getVesselGroupVersionRecord().getVersion();
+		if (dataVersionUpload(VesselGroupsRepository.INSTANCE, version, () -> VesselGroupsFromScenarioCopier.generateVersion(fleetModel))) {
+			return version;
+		}
+		return null;
+	}
+
+	public static @Nullable String checkAndUploadBunkerFuelsData(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
+		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
+		final String version = fleetModel.getBunkerFuelsVersionRecord().getVersion();
+		if (dataVersionUpload(BunkerFuelsRepository.INSTANCE, version, () -> BunkerFuelsFromScenarioCopier.generateVersion(fleetModel))) {
+			return version;
+		}
+		return null;
 	}
 
 	private static void uploadSettledPrices(IScenarioDataProvider sdp) throws Exception {
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(sdp);
 		SettledPricesVersion version = SettledPricesFromScenarioCopier.generateVersion(pricingModel);
 		SettledPricesRepository.INSTANCE.publishVersion(version);
-	}
-
-	private static void uploadVesselGroups(IScenarioDataProvider sdp) throws Exception {
-		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(sdp);
-		VesselGroupsVersion version = VesselGroupsFromScenarioCopier.generateVersion(fleetModel);
-		VesselGroupsRepository.INSTANCE.publishVersion(version);
 	}
 
 	private static DistancesVersion exportDistances(final LNGScenarioModel scenarioModel) throws IOException {
