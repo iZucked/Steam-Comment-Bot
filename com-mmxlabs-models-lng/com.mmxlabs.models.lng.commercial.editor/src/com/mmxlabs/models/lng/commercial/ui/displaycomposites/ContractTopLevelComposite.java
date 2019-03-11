@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractDetailComposite.ContractDetailGroup;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -102,18 +103,19 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		restrictionsLevel.setCommandHandler(commandHandler);
 		restrictionsLevel.setEditorWrapper(editorWrapper);
 		
-		final Group g3 = new Group(myComposite, SWT.NONE);
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			final Group g3 = new Group(myComposite, SWT.NONE);
 
-		toolkit.adapt(g3);
+			toolkit.adapt(g3);
+			g3.setText("Nominations");
+			g3.setLayout(new FillLayout());
+			g3.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
+			g3.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
-		g3.setText("Nominations");
-		g3.setLayout(new FillLayout());
-		g3.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
-		g3.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-
-		nominationsLevel = new ContractDetailComposite(g3, SWT.NONE, ContractDetailGroup.NOMINATIONS, toolkit);
-		nominationsLevel.setCommandHandler(commandHandler);
-		nominationsLevel.setEditorWrapper(editorWrapper);
+			nominationsLevel = new ContractDetailComposite(g3, SWT.NONE, ContractDetailGroup.NOMINATIONS, toolkit);
+			nominationsLevel.setCommandHandler(commandHandler);
+			nominationsLevel.setEditorWrapper(editorWrapper);
+		}
 		//
 		// // Overrides default layout factory so we get a single column rather than multiple columns and one row
 		this.setLayout(new GridLayout(3, false));
@@ -121,7 +123,9 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		
 		topLevel.display(dialogContext, root, object, range, dbc);
 		restrictionsLevel.display(dialogContext, root, object, range, dbc);
-		nominationsLevel.display(dialogContext, root, object, range, dbc);
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			nominationsLevel.display(dialogContext, root, object, range, dbc);
+		}
 
 		//
 		// // Overrides default layout factory so we get a single column rather than multiple columns and one row
@@ -137,7 +141,9 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 	public void displayValidationStatus(final IStatus status) {
 		super.displayValidationStatus(status);
 		restrictionsLevel.displayValidationStatus(status);
-		nominationsLevel.displayValidationStatus(status);
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			nominationsLevel.displayValidationStatus(status);
+		}
 	}
 
 	@Override
