@@ -68,6 +68,9 @@ public class GenericDataRepository {
 			if (v == null) {
 				return ImmutableList.of(record);
 			} else {
+				if (v.contains(record)) {
+					return v;
+				}
 				return new ImmutableList.Builder<GenericDataRecord>() //
 						.addAll(v) //
 						.add(record) //

@@ -1,6 +1,7 @@
 package com.mmxlabs.lngdataserver.integration.repo.generic;
 
 import java.time.Instant;
+import java.util.Objects;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -56,5 +57,22 @@ public class GenericDataRecord {
 
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj instanceof GenericDataRecord) {
+			GenericDataRecord other = (GenericDataRecord) obj;
+			return Objects.equals(uuid, other.getUuid());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return uuid.hashCode();
 	}
 }
