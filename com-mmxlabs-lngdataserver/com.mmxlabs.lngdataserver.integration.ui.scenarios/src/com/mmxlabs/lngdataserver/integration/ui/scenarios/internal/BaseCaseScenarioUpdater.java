@@ -6,7 +6,9 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.internal;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
@@ -21,7 +23,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
 
-import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
 import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
@@ -60,7 +61,7 @@ public class BaseCaseScenarioUpdater {
 
 	private Thread updateThread;
 
-	public BaseCaseScenarioUpdater(final ScenarioService modelRoot, final File basePath, final BaseCaseServiceClient client, BaseCaseVersionsProviderService baseCaseVersionsProviderService) {
+	public BaseCaseScenarioUpdater(final ScenarioService modelRoot, final File basePath, final BaseCaseServiceClient client, final BaseCaseVersionsProviderService baseCaseVersionsProviderService) {
 		this.modelRoot = modelRoot;
 		this.basePath = basePath;
 		this.client = client;
@@ -74,7 +75,7 @@ public class BaseCaseScenarioUpdater {
 		taskExecutor.shutdownNow();
 	}
 
-	public void update(final BaseCaseRecord record) {
+	public synchronized void update(final BaseCaseRecord record) {
 
 		final Set<String> existingUUIDS = new HashSet<>();
 		recursiveUUIDCollector(modelRoot, existingUUIDS);
@@ -151,8 +152,16 @@ public class BaseCaseScenarioUpdater {
 			if (instance != null) {
 				RunnerHelper.syncExecDisplayOptional(() -> {
 					instance.setName(name);
-					parent.getElements().add(instance);
-					baseCaseVersionsProviderService.setBaseCase(instance);
+					if (parent.getElements().contains(instance)) {
+						// Ensure only this element
+						parent.getElements().retainAll(Collections.singleton(instance));
+					} else {
+						// Remove other entries
+						parent.getElements().clear();
+						// Register this one.
+						parent.getElements().add(instance);
+						baseCaseVersionsProviderService.setBaseCase(instance);
+					}
 				});
 			}
 		}
@@ -247,7 +256,7 @@ public class BaseCaseScenarioUpdater {
 		if (f.exists()) {
 			String json;
 			try {
-				json = Files.toString(f, Charsets.UTF_8);
+				json = Files.toString(f, StandardCharsets.UTF_8);
 
 				final BaseCaseRecord record = client.parseScenariosJSONData(json);
 				if (record != null) {
@@ -331,7 +340,7 @@ public class BaseCaseScenarioUpdater {
 					final BaseCaseRecord scenariosInfo = client.parseScenariosJSONData(scenariosData);
 					if (scenariosInfo != null) {
 						update(scenariosInfo);
-						Files.write(scenariosData, new File(basePath.getAbsolutePath() + "/basecase.json"), Charsets.UTF_8);
+						Files.write(scenariosData, new File(basePath.getAbsolutePath() + "/basecase.json"), StandardCharsets.UTF_8);
 						lastUUID = currentUUID;
 					} else {
 						update(null);
@@ -340,6 +349,5 @@ public class BaseCaseScenarioUpdater {
 				}
 			}
 		}
-	};
- 
+	}
 }

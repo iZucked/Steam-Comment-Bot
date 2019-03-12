@@ -5,7 +5,6 @@
 package com.mmxlabs.lngdataserver.integration.ui.scenarios;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -13,8 +12,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.annotation.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.BaseCaseScenarioUpdater;
@@ -29,52 +26,41 @@ import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 
 public class BaseCaseScenarioService extends AbstractScenarioService {
 
-	private static final Logger log = LoggerFactory.getLogger(BaseCaseScenarioService.class);
-
-	public BaseCaseScenarioService( BaseCaseVersionsProviderService versionsProviderService) {
+	public BaseCaseScenarioService(final BaseCaseVersionsProviderService versionsProviderService) {
 		super("Base case");
 		this.versionsProviderService = versionsProviderService;
 	}
-
-	/**
-	 * Root of the directory tree
-	 */
-	private File dataPath;
 
 	/**
 	 * Name of this service
 	 */
 	private String serviceName;
 
-	private File baseCaseFolder;
-
-	private BaseCaseServiceClient client;
-
 	private BaseCaseScenarioUpdater updater;
 
-	private BaseCaseVersionsProviderService versionsProviderService;
+	private final BaseCaseVersionsProviderService versionsProviderService;
 
 	@Override
-	public ScenarioInstance copyInto(Container parent, ScenarioModelRecord tmpRecord, String name, @Nullable IProgressMonitor progressMonitor) throws Exception {
-
+	public ScenarioInstance copyInto(final Container parent, final ScenarioModelRecord tmpRecord, final String name, @Nullable final IProgressMonitor progressMonitor) throws Exception {
+		// Silently ignore
 		return null;
 
 	}
 
 	@Override
-	public ScenarioInstance copyInto(Container parent, IScenarioDataProvider scenarioDataProvider, String name, @Nullable IProgressMonitor progressMonitor) throws Exception {
-
+	public ScenarioInstance copyInto(final Container parent, final IScenarioDataProvider scenarioDataProvider, final String name, @Nullable final IProgressMonitor progressMonitor) throws Exception {
+		// Silently ignore
 		return null;
 
 	}
 
 	@Override
 	public void delete(final Container container) {
-
+		// Silently ignore
 	}
 
 	@Override
-	public void fireEvent(ScenarioServiceEvent event, ScenarioInstance scenarioInstance) {
+	public void fireEvent(final ScenarioServiceEvent event, final ScenarioInstance scenarioInstance) {
 		super.fireEvent(event, scenarioInstance);
 	}
 
@@ -85,7 +71,6 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 		serviceModel.setDescription("Shared base cases");
 		serviceModel.setLocal(false);
 		serviceModel.setServiceID(getSerivceID());
-		// serviceModel.eAdapters().add(serviceModelAdapter);
 
 		return serviceModel;
 	}
@@ -95,17 +80,17 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 		return URI.createURI(uri);
 	}
 
-	public void start() throws IOException {
+	public void start() {
 
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
-		File workspaceLocationFile = workspaceLocation.toFile();
+		final File workspaceLocationFile = workspaceLocation.toFile();
 
-		baseCaseFolder = new File(workspaceLocationFile.getAbsolutePath() + File.separator + "scenarios" + File.separator + "basecases");
+		File baseCaseFolder = new File(workspaceLocationFile.getAbsolutePath() + File.separator + "scenarios" + File.separator + "basecases");
 		if (!baseCaseFolder.exists()) {
 			baseCaseFolder.mkdirs();
 		}
 
-		client = new BaseCaseServiceClient();
+		final BaseCaseServiceClient client = new BaseCaseServiceClient();
 
 		// Initial model load
 		new Thread(() -> {
@@ -125,12 +110,13 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 
 	@Override
 	public void moveInto(final List<Container> elements, final Container destination) {
+		// Silently ignore
 		return;
 	}
 
 	@Override
 	public void makeFolder(final Container parent, final String name) {
-		// Not supported...
+		// Silently ignore
 		return;
 	}
 
