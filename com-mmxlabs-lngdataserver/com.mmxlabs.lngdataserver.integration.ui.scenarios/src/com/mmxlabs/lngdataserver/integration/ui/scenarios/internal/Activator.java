@@ -169,7 +169,7 @@ public class Activator extends AbstractUIPlugin {
 
 			try {
 				baseCaseService.start();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				baseCaseService.stop();
 				baseCaseService = null;
