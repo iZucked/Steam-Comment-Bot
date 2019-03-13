@@ -29,13 +29,6 @@ public class Activator extends AbstractUIPlugin {
 
 	private DataBrowserNodeHandler vesselsNodeHandler;
 
-	/**
-	 * The constructor
-	 */
-	public Activator() {
-
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 

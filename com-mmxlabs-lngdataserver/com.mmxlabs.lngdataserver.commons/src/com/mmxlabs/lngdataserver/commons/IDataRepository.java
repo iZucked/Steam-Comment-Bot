@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lngdataserver.commons;
 
+import java.util.List;
+
 public interface IDataRepository<T> {
 
 	boolean hasUpstreamVersion(String uuid);
@@ -41,5 +43,7 @@ public interface IDataRepository<T> {
 	// boolean hasUpstreamVersion(String version);
 	//
 	// boolean publishUpstreamVersion(String versionJSON) throws Exception;
+
+	List<DataVersion> getLocalVersions();
 
 }

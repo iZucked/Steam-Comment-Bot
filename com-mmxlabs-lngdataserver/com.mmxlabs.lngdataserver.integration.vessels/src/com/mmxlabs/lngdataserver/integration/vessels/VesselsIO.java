@@ -18,6 +18,7 @@ import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
 public class VesselsIO {
 
 	public static final int CURRENT_MODEL_VERSION = 1;
+	public static final String MODEL_TYPE = "vessels";
 
 	private VesselsIO() {
 

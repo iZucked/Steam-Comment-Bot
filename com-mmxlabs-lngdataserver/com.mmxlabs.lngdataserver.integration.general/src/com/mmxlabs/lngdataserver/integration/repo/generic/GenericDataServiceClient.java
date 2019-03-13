@@ -129,7 +129,7 @@ public class GenericDataServiceClient {
 			return null;
 		}
 
-		final String typesList = Joiner.on(",").join(types);
+		final String typesList = String.join(",", types);
 		final String requestURL = String.format("%s%s/%s", upstreamURL, SCENARIO_LIST_URL, typesList);
 		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(requestURL) //
