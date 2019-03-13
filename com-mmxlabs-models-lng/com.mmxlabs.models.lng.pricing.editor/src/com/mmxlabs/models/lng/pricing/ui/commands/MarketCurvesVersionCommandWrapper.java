@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.VersionRecord;
 import com.mmxlabs.scenario.service.model.util.extpoint.AbstractVersionCommandWrapper;
 
 /**
@@ -81,6 +82,14 @@ public class MarketCurvesVersionCommandWrapper extends AbstractVersionCommandWra
 
 					if (modelArtifact != null) {
 						modelArtifact.setDataVersion(notification.getNewStringValue());
+					}
+
+					changedRef[0] = false;
+				} else if (notification.getFeature() == VERSION_FEATURE) {
+
+					if (modelArtifact != null) {
+						VersionRecord vr = (VersionRecord) notification.getNewValue();
+						modelArtifact.setDataVersion(vr.getVersion());
 					}
 
 					changedRef[0] = false;

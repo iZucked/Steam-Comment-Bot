@@ -17,7 +17,6 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.mongodb.morphia.mapping.lazy.LazyFeatureDependencies;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExtension;
