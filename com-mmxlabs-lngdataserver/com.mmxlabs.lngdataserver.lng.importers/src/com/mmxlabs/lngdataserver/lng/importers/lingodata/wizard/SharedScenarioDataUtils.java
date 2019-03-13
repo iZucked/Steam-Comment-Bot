@@ -902,7 +902,9 @@ public final class SharedScenarioDataUtils {
 		if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
 			groups.add(new DataOptionGroup("Ports && Distances", !checkPortAndDistanceDataMatch(p, scenarioDataVersions), true, false, DataOptions.PortData));
 		}
-//			groups.add(new DataOptionGroup("Vessels", !checkFleetDataMatch(p, scenarioDataVersions), true, false, DataOptions.FleetDatabase));
+		if (LicenseFeatures.isPermitted("features:hub-sync-vessels")) {
+			groups.add(new DataOptionGroup("Vessels", !checkFleetDataMatch(p, scenarioDataVersions), true, false, DataOptions.FleetDatabase));
+		}
 //			groups.add(new DataOptionGroup("Commercial", true, true, false, DataOptions.CommercialData));
 //			// groups.add(new DataOptionGroup("Misc", true, false, false));
 //		}
