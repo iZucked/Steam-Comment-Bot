@@ -347,7 +347,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 			strictParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
 
 			suez_TugCostEditor = new FormattedText(strictParent);
-			suez_TugCostEditor.setFormatter(new IntegerFormatter());
+			suez_TugCostEditor.setFormatter(new DoubleFormatter("##,###,###.###"));
 			suez_TugCostEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().hint(100, SWT.DEFAULT).create());
 			suez_TugCostEditor.getControl().addModifyListener(new ModifyListener() {
 
@@ -373,7 +373,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 			strictParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
 
 			suez_FixedCostsEditor = new FormattedText(strictParent);
-			suez_FixedCostsEditor.setFormatter(new IntegerFormatter());
+			suez_FixedCostsEditor.setFormatter(new DoubleFormatter("##,###,###.###"));
 			suez_FixedCostsEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().hint(100, SWT.DEFAULT).create());
 			suez_FixedCostsEditor.getControl().addModifyListener(new ModifyListener() {
 
