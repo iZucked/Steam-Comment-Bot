@@ -1,5 +1,6 @@
 package com.mmxlabs.lngdataserver.lng.importers.vesselgroups;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -65,9 +66,6 @@ public class VesselGroupsToScenarioImporter {
 
 			VesselGroup existingGroup = map.get(name);
 			assert (existingGroup != null);
-			if (!existingGroup.getVessels().isEmpty()) {
-				cmd.append(RemoveCommand.create(editingDomain, existingGroup, FleetPackage.Literals.VESSEL_GROUP__VESSELS, new LinkedList<>(existingGroup.getVessels())));
-			}
 			List<Object> newContents = new LinkedList<>();
 			for (String id : def.getEntries()) {
 				Object obj = typeMap.get(id);
@@ -76,6 +74,15 @@ public class VesselGroupsToScenarioImporter {
 				}
 				newContents.add(obj);
 			}
+
+			// Find vessels to remove
+			Set<Object> existingValues = new HashSet<>(existingGroup.getVessels());
+			existingValues.removeAll(newContents);
+			if (!existingValues.isEmpty()) {
+				cmd.append(RemoveCommand.create(editingDomain, existingGroup, FleetPackage.Literals.VESSEL_GROUP__VESSELS, existingValues));
+			}
+			// Find vessel to add
+			newContents.removeAll(existingGroup.getVessels());
 			if (!newContents.isEmpty()) {
 				cmd.append(AddCommand.create(editingDomain, existingGroup, FleetPackage.Literals.VESSEL_GROUP__VESSELS, newContents));
 			}
