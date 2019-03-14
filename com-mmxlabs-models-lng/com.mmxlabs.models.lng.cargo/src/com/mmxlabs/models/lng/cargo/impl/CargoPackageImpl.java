@@ -752,8 +752,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_RestrictedListsArePermissive() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(26);
+	public EReference getSlot_RestrictedSlots() {
+		return (EReference)slotEClass.getEStructuralFeatures().get(26);
 	}
 
 	/**
@@ -762,7 +762,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_Hedges() {
+	public EAttribute getSlot_RestrictedSlotsArePermissive() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(27);
 	}
 
@@ -772,7 +772,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_MiscCosts() {
+	public EAttribute getSlot_RestrictedListsArePermissive() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(28);
 	}
 
@@ -782,7 +782,17 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_CancellationExpression() {
+	public EAttribute getSlot_Hedges() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(29);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlot_MiscCosts() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(30);
 	}
 
@@ -792,27 +802,17 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getSlot_CancellationExpression() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(32);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getSlot_OverrideRestrictions() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(31);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getSlot_NominatedVessel() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(32);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSlot_Locked() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(33);
 	}
 
@@ -822,8 +822,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_WindowNominationDate() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(34);
+	public EReference getSlot_NominatedVessel() {
+		return (EReference)slotEClass.getEStructuralFeatures().get(34);
 	}
 
 	/**
@@ -832,7 +832,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_WindowNominationIsDone() {
+	public EAttribute getSlot_Locked() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(35);
 	}
 
@@ -842,7 +842,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_WindowNominationCounterparty() {
+	public EAttribute getSlot_WindowNominationDate() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(36);
 	}
 
@@ -852,7 +852,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_WindowNominationComment() {
+	public EAttribute getSlot_WindowNominationIsDone() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(37);
 	}
 
@@ -862,7 +862,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_VolumeNominationDate() {
+	public EAttribute getSlot_WindowNominationCounterparty() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(38);
 	}
 
@@ -872,7 +872,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_VolumeNominationDone() {
+	public EAttribute getSlot_WindowNominationComment() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(39);
 	}
 
@@ -882,7 +882,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_VolumeNominationCounterparty() {
+	public EAttribute getSlot_VolumeNominationDate() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(40);
 	}
 
@@ -892,7 +892,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_VolumeNominationComment() {
+	public EAttribute getSlot_VolumeNominationDone() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(41);
 	}
 
@@ -902,7 +902,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_VesselNominationDate() {
+	public EAttribute getSlot_VolumeNominationCounterparty() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(42);
 	}
 
@@ -912,7 +912,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_VesselNominationDone() {
+	public EAttribute getSlot_VolumeNominationComment() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(43);
 	}
 
@@ -922,7 +922,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_VesselNominationCounterparty() {
+	public EAttribute getSlot_VesselNominationDate() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(44);
 	}
 
@@ -932,7 +932,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_VesselNominationComment() {
+	public EAttribute getSlot_VesselNominationDone() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(45);
 	}
 
@@ -942,7 +942,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_PortNominationDate() {
+	public EAttribute getSlot_VesselNominationCounterparty() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(46);
 	}
 
@@ -952,7 +952,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_PortNominationDone() {
+	public EAttribute getSlot_VesselNominationComment() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(47);
 	}
 
@@ -962,7 +962,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_PortNominationCounterparty() {
+	public EAttribute getSlot_PortNominationDate() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(48);
 	}
 
@@ -972,9 +972,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_PortNominationComment() {
+	public EAttribute getSlot_PortNominationDone() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(49);
-	}	
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -982,7 +982,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_PortLoadNominationDate() {
+	public EAttribute getSlot_PortNominationCounterparty() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(50);
 	}
 
@@ -992,9 +992,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_PortLoadNominationDone() {
+	public EAttribute getSlot_PortNominationComment() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(51);
-	}
+	}	
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1002,7 +1002,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_PortLoadNominationCounterparty() {
+	public EAttribute getSlot_PortLoadNominationDate() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(52);
 	}
 
@@ -1012,8 +1012,28 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_PortLoadNominationComment() {
+	public EAttribute getSlot_PortLoadNominationDone() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(53);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlot_PortLoadNominationCounterparty() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(54);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlot_PortLoadNominationComment() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(55);
 	}
 
 	/**
@@ -1073,7 +1093,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EReference getSlot_AllowedVessels() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(29);
+		return (EReference)slotEClass.getEStructuralFeatures().get(31);
 	}	
 	
 	/**
@@ -3263,6 +3283,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(slotEClass, SLOT__ENTITY);
 		createEReference(slotEClass, SLOT__RESTRICTED_CONTRACTS);
 		createEReference(slotEClass, SLOT__RESTRICTED_PORTS);
+		createEReference(slotEClass, SLOT__RESTRICTED_SLOTS);
+		createEAttribute(slotEClass, SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE);
 		createEAttribute(slotEClass, SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE);
 		createEAttribute(slotEClass, SLOT__HEDGES);
 		createEAttribute(slotEClass, SLOT__MISC_COSTS);
@@ -3678,6 +3700,11 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getSlot_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_RestrictedContracts(), theCommercialPackage.getContract(), null, "restrictedContracts", null, 0, -1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_RestrictedPorts(), thePortPackage.getPort(), null, "restrictedPorts", null, 0, -1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(this.getSlot());
+		g2 = createEGenericType();
+		g1.getETypeArguments().add(g2);
+		initEReference(getSlot_RestrictedSlots(), g1, null, "restrictedSlots", null, 0, -1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_RestrictedSlotsArePermissive(), ecorePackage.getEBoolean(), "restrictedSlotsArePermissive", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_RestrictedListsArePermissive(), ecorePackage.getEBoolean(), "restrictedListsArePermissive", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Hedges(), ecorePackage.getEInt(), "hedges", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_MiscCosts(), ecorePackage.getEInt(), "miscCosts", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

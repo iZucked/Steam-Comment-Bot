@@ -689,13 +689,31 @@ public interface CargoPackage extends EPackage {
 	int SLOT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Slots</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__RESTRICTED_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Slots Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
+
+	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
+	int SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
 
 	/**
 	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
@@ -704,7 +722,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__HEDGES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
+	int SLOT__HEDGES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 30;
 
 	/**
 	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
@@ -713,7 +731,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
+	int SLOT__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 31;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
@@ -722,7 +740,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 30;
+	int SLOT__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 32;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -731,7 +749,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 31;
+	int SLOT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 33;
 
 	/**
 	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
@@ -740,7 +758,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__OVERRIDE_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 32;
+	int SLOT__OVERRIDE_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 34;
 
 	/**
 	 * The feature id for the '<em><b>Nominated Vessel</b></em>' reference.
@@ -749,7 +767,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 33;
+	int SLOT__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 35;
 
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
@@ -758,7 +776,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 34;
+	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 36;
 
 	/**
 	 * The feature id for the '<em><b>Window Nomination Date</b></em>' attribute.
@@ -767,7 +785,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 35;
+	int SLOT__WINDOW_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 37;
 
 	/**
 	 * The feature id for the '<em><b>Window Nomination Is Done</b></em>' attribute.
@@ -776,7 +794,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_NOMINATION_IS_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 36;
+	int SLOT__WINDOW_NOMINATION_IS_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 38;
 
 	/**
 	 * The feature id for the '<em><b>Window Nomination Counterparty</b></em>' attribute.
@@ -785,7 +803,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 37;
+	int SLOT__WINDOW_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 39;
 
 	/**
 	 * The feature id for the '<em><b>Window Nomination Comment</b></em>' attribute.
@@ -794,7 +812,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 38;
+	int SLOT__WINDOW_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 40;
 
 	/**
 	 * The feature id for the '<em><b>Volume Nomination Date</b></em>' attribute.
@@ -803,7 +821,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VOLUME_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 39;
+	int SLOT__VOLUME_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 41;
 
 	/**
 	 * The feature id for the '<em><b>Volume Nomination Done</b></em>' attribute.
@@ -812,7 +830,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VOLUME_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 40;
+	int SLOT__VOLUME_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
 
 	/**
 	 * The feature id for the '<em><b>Volume Nomination Counterparty</b></em>' attribute.
@@ -821,7 +839,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VOLUME_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 41;
+	int SLOT__VOLUME_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
 
 	/**
 	 * The feature id for the '<em><b>Volume Nomination Comment</b></em>' attribute.
@@ -830,7 +848,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VOLUME_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
+	int SLOT__VOLUME_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Nomination Date</b></em>' attribute.
@@ -839,7 +857,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VESSEL_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
+	int SLOT__VESSEL_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 45;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Nomination Done</b></em>' attribute.
@@ -848,7 +866,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VESSEL_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
+	int SLOT__VESSEL_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 46;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Nomination Counterparty</b></em>' attribute.
@@ -857,7 +875,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VESSEL_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 45;
+	int SLOT__VESSEL_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 47;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Nomination Comment</b></em>' attribute.
@@ -866,7 +884,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VESSEL_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 46;
+	int SLOT__VESSEL_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 48;
 
 	/**
 	 * The feature id for the '<em><b>Port Nomination Date</b></em>' attribute.
@@ -875,7 +893,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 47;
+	int SLOT__PORT_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 49;
 
 	/**
 	 * The feature id for the '<em><b>Port Nomination Done</b></em>' attribute.
@@ -884,7 +902,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 48;
+	int SLOT__PORT_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 50;
 
 	/**
 	 * The feature id for the '<em><b>Port Nomination Counterparty</b></em>' attribute.
@@ -893,7 +911,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 49;
+	int SLOT__PORT_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 51;
 
 	/**
 	 * The feature id for the '<em><b>Port Nomination Comment</b></em>' attribute.
@@ -902,7 +920,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 50;
+	int SLOT__PORT_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 52;
 
 	/**
 	 * The feature id for the '<em><b>Port Load Nomination Date</b></em>' attribute.
@@ -911,7 +929,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_LOAD_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 51;
+	int SLOT__PORT_LOAD_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 53;
 
 	/**
 	 * The feature id for the '<em><b>Port Load Nomination Done</b></em>' attribute.
@@ -920,7 +938,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_LOAD_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 52;
+	int SLOT__PORT_LOAD_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 54;
 
 	/**
 	 * The feature id for the '<em><b>Port Load Nomination Counterparty</b></em>' attribute.
@@ -929,7 +947,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 53;
+	int SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 55;
 
 	/**
 	 * The feature id for the '<em><b>Port Load Nomination Comment</b></em>' attribute.
@@ -938,7 +956,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_LOAD_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 54;
+	int SLOT__PORT_LOAD_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 56;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -947,7 +965,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 55;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 57;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1542,6 +1560,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__RESTRICTED_PORTS = SLOT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Slots</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__RESTRICTED_SLOTS = SLOT__RESTRICTED_SLOTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Slots Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
@@ -2460,6 +2496,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__RESTRICTED_PORTS = SLOT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Slots</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__RESTRICTED_SLOTS = SLOT__RESTRICTED_SLOTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Slots Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
@@ -3472,6 +3526,24 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__RESTRICTED_PORTS = LOAD_SLOT__RESTRICTED_PORTS;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Slots</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__RESTRICTED_SLOTS = LOAD_SLOT__RESTRICTED_SLOTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Slots Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = LOAD_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE;
+
+	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4407,6 +4479,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__RESTRICTED_PORTS = DISCHARGE_SLOT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Slots</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__RESTRICTED_SLOTS = DISCHARGE_SLOT__RESTRICTED_SLOTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Slots Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = DISCHARGE_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
@@ -8593,6 +8683,28 @@ public interface CargoPackage extends EPackage {
 	EReference getSlot_RestrictedPorts();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedSlots <em>Restricted Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Restricted Slots</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getRestrictedSlots()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EReference getSlot_RestrictedSlots();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedSlotsArePermissive <em>Restricted Slots Are Permissive</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restricted Slots Are Permissive</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isRestrictedSlotsArePermissive()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_RestrictedSlotsArePermissive();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11477,6 +11589,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SLOT__RESTRICTED_PORTS = eINSTANCE.getSlot_RestrictedPorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Slots</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT__RESTRICTED_SLOTS = eINSTANCE.getSlot_RestrictedSlots();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Slots Are Permissive</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = eINSTANCE.getSlot_RestrictedSlotsArePermissive();
 
 		/**
 		 * The meta object literal for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute feature.

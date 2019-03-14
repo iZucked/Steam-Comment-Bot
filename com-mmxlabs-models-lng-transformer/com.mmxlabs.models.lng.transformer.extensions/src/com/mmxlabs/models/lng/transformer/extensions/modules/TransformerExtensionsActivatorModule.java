@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.transformer.extensions.inventory.InventoryLevelsOu
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsModule;
 import com.mmxlabs.models.lng.transformer.extensions.paperdeals.PaperDealsScheduleProcessorFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsModule;
+import com.mmxlabs.models.lng.transformer.extensions.restrictedslots.RestrictedSlotsModule;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementModule;
 import com.mmxlabs.models.lng.transformer.extensions.simplecontracts.SimpleContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.BasicSlotPNLExporterExtensionFactory;
@@ -34,6 +35,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 	@Override
 	protected void configure() {
 		install(new RestrictedElementsModule());
+		install(new RestrictedSlotsModule());
 		install(new ContingencyIdleTimeModule());		
 		install(new PanamaSlotsModule());
 		install(new ADPTransformerModule());
