@@ -27,7 +27,7 @@ public class RoutingPoint {
 	@Reference
 	private Set<Location> entryPoints;
 
-	private float distance;
+	private double distance;
 
 	public RoutingPoint() {
 		// used for morphia/jackson
@@ -61,11 +61,11 @@ public class RoutingPoint {
 		this.entryPoints = entryPoints;
 	}
 
-	public float getDistance() {
+	public double getDistance() {
 		return distance;
 	}
 
-	public void setDistance(float distance) {
+	public void setDistance(double distance) {
 		this.distance = distance;
 	}
 

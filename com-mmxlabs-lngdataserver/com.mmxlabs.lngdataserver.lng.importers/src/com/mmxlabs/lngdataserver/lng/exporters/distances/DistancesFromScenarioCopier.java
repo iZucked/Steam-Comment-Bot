@@ -165,7 +165,7 @@ public class DistancesFromScenarioCopier {
 			rp.getEntryPoints().add(suezNorthernLocation);
 			rp.getEntryPoints().add(suezSouthernLocation);
 			rp.setIdentifier("SUZ");
-			rp.setDistance(Double.valueOf(suezDistance).floatValue());
+			rp.setDistance(suezDistance);
 
 			routingPoints.add(rp);
 		}
@@ -177,7 +177,7 @@ public class DistancesFromScenarioCopier {
 			rp.getEntryPoints().add(panamaNorthernLocation);
 			rp.getEntryPoints().add(panamaSouthernLocation);
 			rp.setIdentifier("PAN");
-			rp.setDistance(Double.valueOf(panamaDistance).floatValue());
+			rp.setDistance(panamaDistance);
 
 			routingPoints.add(rp);
 		}

@@ -12,7 +12,7 @@ public class Route {
 
 	private String provider;
 
-	private float distance;
+	private double distance;
 	private String errorCode;
 
 	public String getProvider() {
@@ -23,11 +23,11 @@ public class Route {
 		this.provider = provider;
 	}
 
-	public float getDistance() {
+	public double getDistance() {
 		return distance;
 	}
 
-	public void setDistance(float distance) {
+	public void setDistance(double distance) {
 		this.distance = distance;
 	}
 
