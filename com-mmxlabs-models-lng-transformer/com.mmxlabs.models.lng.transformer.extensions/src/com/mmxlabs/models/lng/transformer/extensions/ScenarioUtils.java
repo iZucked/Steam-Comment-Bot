@@ -36,6 +36,7 @@ import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.restrictedslots.RestrictedSlotsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
@@ -425,6 +426,7 @@ public class ScenarioUtils {
 			// constraints.add(createConstraint(parametersFactory, SlotGroupCountConstraintCheckerFactory.NAME, true));
 
 			constraints.add(createConstraint(RestrictedElementsConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(RestrictedSlotsConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(ContractCvConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(PortCvCompatibilityConstraintCheckerFactory.NAME, true));
 			if (SPOT_TO_SPOT_CONSTRAINT) {

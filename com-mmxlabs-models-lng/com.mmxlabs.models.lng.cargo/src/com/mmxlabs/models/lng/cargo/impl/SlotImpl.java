@@ -82,6 +82,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedSlots <em>Restricted Slots</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedSlotsArePermissive <em>Restricted Slots Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getHedges <em>Hedges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMiscCosts <em>Misc Costs</em>}</li>
@@ -729,6 +731,36 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected EList<Port> restrictedPorts;
+
+	/**
+	 * The cached value of the '{@link #getRestrictedSlots() <em>Restricted Slots</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRestrictedSlots()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Slot<?>> restrictedSlots;
+
+	/**
+	 * The default value of the '{@link #isRestrictedSlotsArePermissive() <em>Restricted Slots Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedSlotsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RESTRICTED_SLOTS_ARE_PERMISSIVE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedSlotsArePermissive() <em>Restricted Slots Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedSlotsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedSlotsArePermissive = RESTRICTED_SLOTS_ARE_PERMISSIVE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
@@ -2517,6 +2549,42 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated
 	 */
 	@Override
+	public EList<Slot<?>> getRestrictedSlots() {
+		if (restrictedSlots == null) {
+			restrictedSlots = new EObjectResolvingEList<Slot<?>>(Slot.class, this, CargoPackage.SLOT__RESTRICTED_SLOTS);
+		}
+		return restrictedSlots;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isRestrictedSlotsArePermissive() {
+		return restrictedSlotsArePermissive;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRestrictedSlotsArePermissive(boolean newRestrictedSlotsArePermissive) {
+		boolean oldRestrictedSlotsArePermissive = restrictedSlotsArePermissive;
+		restrictedSlotsArePermissive = newRestrictedSlotsArePermissive;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE, oldRestrictedSlotsArePermissive, restrictedSlotsArePermissive));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public boolean isRestrictedListsArePermissive() {
 		return restrictedListsArePermissive;
 	}
@@ -3970,6 +4038,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getRestrictedContracts();
 			case CargoPackage.SLOT__RESTRICTED_PORTS:
 				return getRestrictedPorts();
+			case CargoPackage.SLOT__RESTRICTED_SLOTS:
+				return getRestrictedSlots();
+			case CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE:
+				return isRestrictedSlotsArePermissive();
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return isRestrictedListsArePermissive();
 			case CargoPackage.SLOT__HEDGES:
@@ -4121,6 +4193,13 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__RESTRICTED_PORTS:
 				getRestrictedPorts().clear();
 				getRestrictedPorts().addAll((Collection<? extends Port>)newValue);
+				return;
+			case CargoPackage.SLOT__RESTRICTED_SLOTS:
+				getRestrictedSlots().clear();
+				getRestrictedSlots().addAll((Collection<? extends Slot<?>>)newValue);
+				return;
+			case CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE:
+				setRestrictedSlotsArePermissive((Boolean)newValue);
 				return;
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				setRestrictedListsArePermissive((Boolean)newValue);
@@ -4299,6 +4378,12 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__RESTRICTED_PORTS:
 				getRestrictedPorts().clear();
 				return;
+			case CargoPackage.SLOT__RESTRICTED_SLOTS:
+				getRestrictedSlots().clear();
+				return;
+			case CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE:
+				setRestrictedSlotsArePermissive(RESTRICTED_SLOTS_ARE_PERMISSIVE_EDEFAULT);
+				return;
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				setRestrictedListsArePermissive(RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT);
 				return;
@@ -4448,6 +4533,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return restrictedContracts != null && !restrictedContracts.isEmpty();
 			case CargoPackage.SLOT__RESTRICTED_PORTS:
 				return restrictedPorts != null && !restrictedPorts.isEmpty();
+			case CargoPackage.SLOT__RESTRICTED_SLOTS:
+				return restrictedSlots != null && !restrictedSlots.isEmpty();
+			case CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE:
+				return restrictedSlotsArePermissive != RESTRICTED_SLOTS_ARE_PERMISSIVE_EDEFAULT;
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return restrictedListsArePermissive != RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
 			case CargoPackage.SLOT__HEDGES:
@@ -4700,6 +4789,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		if (divertibleESet) result.append(divertible); else result.append("<unset>");
 		result.append(", shippingDaysRestriction: ");
 		if (shippingDaysRestrictionESet) result.append(shippingDaysRestriction); else result.append("<unset>");
+		result.append(", restrictedSlotsArePermissive: ");
+		result.append(restrictedSlotsArePermissive);
 		result.append(", restrictedListsArePermissive: ");
 		result.append(restrictedListsArePermissive);
 		result.append(", hedges: ");

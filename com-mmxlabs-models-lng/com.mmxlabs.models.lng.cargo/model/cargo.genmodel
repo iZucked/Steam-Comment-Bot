@@ -103,6 +103,8 @@
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/restrictedContracts"/>
       <genFeatures notify="false" createChild="false" propertyCategory="" propertyDescription="If specified, the list of ports that may or may not serve deals linked to this trade"
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/restrictedPorts"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/restrictedSlots"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/restrictedSlotsArePermissive"/>
       <genFeatures createChild="false" propertyDescription="If checked, restrictions are permitted values only. If unchecked restrictions are forbidden values."
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/restrictedListsArePermissive"/>
       <genFeatures createChild="false" propertyDescription="Postive or negative hedge value"

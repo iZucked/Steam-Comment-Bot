@@ -57,6 +57,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedSlots <em>Restricted Slots</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedSlotsArePermissive <em>Restricted Slots Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getHedges <em>Hedges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getMiscCosts <em>Misc Costs</em>}</li>
@@ -1258,6 +1260,48 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	EList<Port> getRestrictedPorts();
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Slots</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.Slot}<code>&lt;?&gt;</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Slots</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Slots</em>' reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedSlots()
+	 * @model
+	 * @generated
+	 */
+	EList<Slot<?>> getRestrictedSlots();
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Slots Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Slots Are Permissive</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Slots Are Permissive</em>' attribute.
+	 * @see #setRestrictedSlotsArePermissive(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedSlotsArePermissive()
+	 * @model
+	 * @generated
+	 */
+	boolean isRestrictedSlotsArePermissive();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedSlotsArePermissive <em>Restricted Slots Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Slots Are Permissive</em>' attribute.
+	 * @see #isRestrictedSlotsArePermissive()
+	 * @generated
+	 */
+	void setRestrictedSlotsArePermissive(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.

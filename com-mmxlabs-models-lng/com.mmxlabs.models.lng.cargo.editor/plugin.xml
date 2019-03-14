@@ -193,6 +193,12 @@
           referenceEClass="com.mmxlabs.models.lng.port.Port">
     </valueProvider>
     <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.RestrictedSlotValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.RestrictedSlotValueProvider"
+          ownerEClass="com.mmxlabs.models.lng.cargo.Slot"
+          referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
+    </valueProvider>
+    <valueProvider
           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.SlotContractValueProviderFactory"
           id="com.mmxlabs.models.lng.cargo.editor.slotContractProvider"
           ownerEClass="com.mmxlabs.models.lng.cargo.Slot"

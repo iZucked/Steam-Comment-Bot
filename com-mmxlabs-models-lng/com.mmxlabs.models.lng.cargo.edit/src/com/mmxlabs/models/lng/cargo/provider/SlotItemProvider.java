@@ -76,6 +76,8 @@ public class SlotItemProvider
 			addEntityPropertyDescriptor(object);
 			addRestrictedContractsPropertyDescriptor(object);
 			addRestrictedPortsPropertyDescriptor(object);
+			addRestrictedSlotsPropertyDescriptor(object);
+			addRestrictedSlotsArePermissivePropertyDescriptor(object);
 			addRestrictedListsArePermissivePropertyDescriptor(object);
 			addHedgesPropertyDescriptor(object);
 			addMiscCostsPropertyDescriptor(object);
@@ -698,6 +700,50 @@ public class SlotItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Slots feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedSlotsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_restrictedSlots_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_restrictedSlots_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__RESTRICTED_SLOTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Slots Are Permissive feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedSlotsArePermissivePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_restrictedSlotsArePermissive_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_restrictedSlotsArePermissive_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -1376,6 +1422,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__NOTES:
 			case CargoPackage.SLOT__DIVERTIBLE:
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
+			case CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE:
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 			case CargoPackage.SLOT__HEDGES:
 			case CargoPackage.SLOT__MISC_COSTS:

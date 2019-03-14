@@ -219,6 +219,24 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.CargoRestrictedSlotConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.CargoRestrictedSlotConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Cargo Restricted Slot Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Load and Discharge slots must not be paired to restricted slots.
+               </description>
+               <target
+                     class="Slot">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.CurveDataExistsConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.CurveDataExistsConstraint"
                   lang="Java"
