@@ -11,6 +11,4 @@ public class BaseCaseRecord {
 	public String creator;
 	public String uuid;
 	public String originalName;
-	
-	public String pricingVersionUUID;
 }

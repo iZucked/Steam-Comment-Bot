@@ -181,9 +181,6 @@ public class BaseCaseServiceClient {
 		} else {
 			record.originalName = record.uuid;
 		}
-		if (!versionObject.isNull("pricingVersionUUID")) {
-			record.pricingVersionUUID = versionObject.getString("pricingVersionUUID");
-		}
 		final String creationDate = versionObject.getString("creationDate");
 		record.creationDate = Instant.parse(creationDate);
 		return record;
