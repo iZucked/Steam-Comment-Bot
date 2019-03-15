@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.integration.distances.DistanceRepository;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
-import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.distances.DistancesToScenarioCopier;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -87,7 +87,7 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 
 										final PortModel portModel = ScenarioModelUtil.getPortModel((LNGScenarioModel) modelReference.getInstance());
 										final EditingDomain editingDomain = modelReference.getEditingDomain();
-										final Command command = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, version, false);
+										final Command command = DistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, version, false);
 
 										if (!command.canExecute()) {
 											throw new RuntimeException("Unable to execute command");

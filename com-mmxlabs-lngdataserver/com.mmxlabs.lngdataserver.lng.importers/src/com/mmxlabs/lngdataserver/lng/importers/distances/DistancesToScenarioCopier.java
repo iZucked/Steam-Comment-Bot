@@ -47,9 +47,9 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.VersionRecord;
 
-public class PortAndDistancesToScenarioCopier {
+public class DistancesToScenarioCopier {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(PortAndDistancesToScenarioCopier.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DistancesToScenarioCopier.class);
 
 	public static Command getUpdateCommand(final @NonNull EditingDomain editingDomain, final @NonNull PortModel portModel, final @NonNull DistancesVersion version, final boolean updatePortNames) {
 

@@ -30,7 +30,7 @@ import com.mmxlabs.lngdataserver.data.distances.DataLoader;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.distances.DistancesToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.port.PortsToScenarioCopier;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -56,7 +56,7 @@ public class CopyPortsToScenarioTests {
 		{
 			final String distInput = DataLoader.importData("v1.0.11.250_7.json");
 			final DistancesVersion versionA = mapper.readerFor(DistancesVersion.class).readValue(distInput);
-			final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, versionA, true);
+			final Command updateCommand = DistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, versionA, true);
 			editingDomain.getCommandStack().execute(updateCommand);
 		}
 		final Command updateCommand = PortsToScenarioCopier.getUpdateCommand(editingDomain, portModel, originalVersion);
@@ -88,7 +88,7 @@ public class CopyPortsToScenarioTests {
 			{
 				final String distInput = DataLoader.importData("v1.0.11.250_7.json");
 				final DistancesVersion versionA = mapper.readerFor(DistancesVersion.class).readValue(distInput);
-				final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, versionA, true);
+				final Command updateCommand = DistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, versionA, true);
 				editingDomain.getCommandStack().execute(updateCommand);
 			}
 			{

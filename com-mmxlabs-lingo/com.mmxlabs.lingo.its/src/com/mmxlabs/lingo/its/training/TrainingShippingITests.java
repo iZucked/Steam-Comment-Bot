@@ -36,7 +36,7 @@ import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.lingo.its.verifier.SolutionData;
 import com.mmxlabs.lngdataserver.data.distances.DataLoader;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
-import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.distances.DistancesToScenarioCopier;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -131,7 +131,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 		final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
 		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
-		final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, distanceVersion, true);
+		final Command updateCommand = DistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, distanceVersion, true);
 
 		Assert.assertTrue(updateCommand.canExecute());
 

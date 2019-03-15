@@ -30,7 +30,7 @@ import com.mmxlabs.lingo.its.tests.TesterUtil;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lngdataserver.data.distances.DataLoader;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
-import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.distances.DistancesToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.DataOptions;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.UpdateJob;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -188,7 +188,7 @@ public class CopyFromBaseTests extends AbstractMicroTestCase {
 		final PortModel portModel = ScenarioModelUtil.getPortModel(sdp);
 		final EditingDomain editingDomain = sdp.getEditingDomain();
 
-		final Command updateCommand = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, originalVersion, true);
+		final Command updateCommand = DistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, originalVersion, true);
 		RunnerHelper.syncExecDisplayOptional(() -> editingDomain.getCommandStack().execute(updateCommand));
 	}
 

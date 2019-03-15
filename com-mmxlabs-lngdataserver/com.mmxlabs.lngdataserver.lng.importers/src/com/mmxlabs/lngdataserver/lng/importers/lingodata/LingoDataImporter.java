@@ -24,7 +24,7 @@ import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupsVer
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
 import com.mmxlabs.lngdataserver.lng.importers.bunkerfuels.BunkerFuelsToScenarioImporter;
-import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.distances.DistancesToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.model.DataManifest;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.model.Entry;
 import com.mmxlabs.lngdataserver.lng.importers.port.PortsToScenarioCopier;
@@ -129,7 +129,7 @@ public class LingoDataImporter {
 
 			final PortModel portModel = ScenarioModelUtil.getPortModel((LNGScenarioModel) modelReference.getInstance());
 			final EditingDomain editingDomain = modelReference.getEditingDomain();
-			final Command command = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, version, updatePortNames);
+			final Command command = DistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, version, updatePortNames);
 
 			if (!command.canExecute()) {
 				throw new RuntimeException("Unable to execute command");

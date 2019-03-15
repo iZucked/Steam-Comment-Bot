@@ -57,7 +57,7 @@ import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier
 import com.mmxlabs.lngdataserver.lng.exporters.vessels.VesselsFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.bunkerfuels.BunkerFuelsFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.bunkerfuels.BunkerFuelsToScenarioImporter;
-import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.distances.DistancesToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.financial.SettledPricesFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.financial.SettledPricesToScenarioImporter;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.ImportFromBaseSelectionPage.DataOptionGroup;
@@ -607,7 +607,7 @@ public final class SharedScenarioDataUtils {
 						super.execute();
 						final PortModel pm = ScenarioModelUtil.getPortModel(target);
 						final EditingDomain editingDomain = target.getEditingDomain();
-						final Command command1 = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, pm, distancesVersion, true);
+						final Command command1 = DistancesToScenarioCopier.getUpdateCommand(editingDomain, pm, distancesVersion, true);
 						appendAndExecute(command1);
 						final Command command2 = PortsToScenarioCopier.getUpdateCommand(editingDomain, pm, portsVersion);
 						appendAndExecute(command2);
