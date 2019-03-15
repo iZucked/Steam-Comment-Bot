@@ -25,6 +25,7 @@ import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -143,7 +144,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 		// This executor is for the futures we create and execute here...
 		controlService = LNGScenarioChainBuilder.createExecutorService(numberOfThreads);
 		// Disable optimisation in P&L testing phase
-		if (LicenseFeatures.isPermitted("features:phase-pnl-testing") || LicenseFeatures.isPermitted("features:phase-limited-testing")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PHASE_PNL_TESTING) || LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PHASE_LIMITED_TESTING)) {
 			throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");
 		}
 	}

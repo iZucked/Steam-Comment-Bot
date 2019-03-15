@@ -22,6 +22,7 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -59,7 +60,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 				CollectionsUtil.<QualifiedName, Object> makeHashMap(IProgressConstants.ICON_PROPERTY, (jobDescriptor.isOptimising() ? imgOpti : imgEval)));
 
 		// Disable optimisation in P&L testing phase
-		if (LicenseFeatures.isPermitted("features:phase-pnl-testing")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PHASE_PNL_TESTING)) {
 			throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");
 		}
 
@@ -70,7 +71,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		final EditingDomain originalEditingDomain = originalScenarioDataProvider.getEditingDomain();
 
 		// Disable optimisation in P&L testing phase
-		if (LicenseFeatures.isPermitted("features:phase-limited-testing")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PHASE_LIMITED_TESTING)) {
 			CargoModel cargoModel = ScenarioModelUtil.getCargoModel(originalScenarioDataProvider);
 
 			long countA = cargoModel.getCargoes().stream().count();

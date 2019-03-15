@@ -56,6 +56,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
@@ -334,7 +335,7 @@ public final class OptimisationHelper {
 			// optionAdded = true;
 
 			// Check period optimisation is permitted
-			// if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
+			// if (SecurityUtils.getSubject().isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
 			{
 
 				if (forADP) {
@@ -481,7 +482,7 @@ public final class OptimisationHelper {
 					}
 				});
 
-				if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
+				if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
 					optStart.enabled = false;
 					optEnd.enabled = false;
 					optToday.enabled = false;
@@ -820,7 +821,7 @@ public final class OptimisationHelper {
 			// optionAdded = true;
 
 			// Check period optimisation is permitted
-			if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
+			if (SecurityUtils.getSubject().isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
 				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
 				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)", "", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
 						ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
@@ -856,7 +857,7 @@ public final class OptimisationHelper {
 					}
 				});
 
-				if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
+				if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
 					optStart.enabled = false;
 					optEnd.enabled = false;
 				} else {
@@ -1253,23 +1254,23 @@ public final class OptimisationHelper {
 	}
 
 	private static void resetDisabledFeatures(@NonNull final UserSettings copy) {
-		if (!LicenseFeatures.isPermitted("features:optimisation-actionset")) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET)) {
 			copy.setBuildActionSets(false);
 		}
-		if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
 			copy.unsetPeriodStartDate();
 			copy.unsetPeriodEnd();
 		}
-		if (!LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION)) {
 			copy.setGenerateCharterOuts(false);
 		}
-		if (!LicenseFeatures.isPermitted("features:optimisation-similarity")) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_SIMILARITY)) {
 			copy.setSimilarityMode(SimilarityMode.OFF);
 		}
-		if (!LicenseFeatures.isPermitted("features:charter-length")) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CHARTER_LENGTH)) {
 			copy.setWithCharterLength(false);
 		}
-		if (!LicenseFeatures.isPermitted("features:trader-based-insertions")) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRADER_BASED_INSERIONS)) {
 			copy.setDualMode(false);
 		}
 	}

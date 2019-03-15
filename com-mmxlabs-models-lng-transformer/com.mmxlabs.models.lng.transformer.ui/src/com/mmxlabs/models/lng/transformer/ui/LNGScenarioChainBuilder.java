@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.concurrent.NamedExecutorService;
 import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
@@ -139,7 +140,7 @@ public class LNGScenarioChainBuilder {
 
 		if (System.getProperty(PROPERTY_MMX_NUMBER_OF_CORES) != null) {
 			cores = Integer.valueOf(System.getProperty(PROPERTY_MMX_NUMBER_OF_CORES));
-		} else if (LicenseFeatures.isPermitted("features:module-parallelisation")) {
+		} else if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MODULE_PARALLELISATION)) {
 			cores = Math.max(1, Runtime.getRuntime().availableProcessors() / 2);
 		} else {
 			cores = 1;

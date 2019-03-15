@@ -23,6 +23,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.IDeferment;
 import com.mmxlabs.common.csv.IImportContext;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.ContingencyMatrix;
@@ -75,10 +76,10 @@ public class PortModelImporter implements ISubmodelImporter {
 		inputs.put(DISTANCES_KEY, "Distance Matrix");
 		inputs.put(SUEZ_KEY, "Suez Distance Matrix");
 		inputs.put(CANAL_PORTS_KEY, "Canal Ports");
-		if (LicenseFeatures.isPermitted("features:panama-canal")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PANAMA_CANAL)) {
 			inputs.put(PANAMA_KEY, "Panama Distance Matrix");
 		}
-		if (LicenseFeatures.isPermitted("features:panama-canal")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PANAMA_CANAL)) {
 			inputs.put(CONTINGENCY_MATRIX_KEY, "Contingency Matrix");
 		}
 	}
@@ -218,7 +219,7 @@ public class PortModelImporter implements ISubmodelImporter {
 				}
 			}
 		}
-		if (LicenseFeatures.isPermitted("features:contingency-idle-time")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CONTINGENCY_IDLE_TIME)) {
 			if (inputs.containsKey(CONTINGENCY_MATRIX_KEY)) {
 				final ContingencyMatrix contingencymatrix = contingencyMatrixImporter.importMatrix(inputs.get(CONTINGENCY_MATRIX_KEY), context);
 				if (contingencymatrix != null) {
@@ -237,7 +238,7 @@ public class PortModelImporter implements ISubmodelImporter {
 						break;
 					}
 				}
-				if (found == false) {
+				if (!found) {
 					final CapabilityGroup g = PortFactory.eINSTANCE.createCapabilityGroup();
 					g.setName("All " + capability.getName() + " Ports");
 					g.setCapability(capability);
@@ -265,13 +266,13 @@ public class PortModelImporter implements ISubmodelImporter {
 							}
 							// tmpRoute will not have these set yet, wait until references stages has run to link up
 							context.doLater(new IDeferment() {
-								
+
 								@Override
-								public void run(@NonNull IImportContext context) {
+								public void run(@NonNull final IImportContext context) {
 									route.setVirtualPort(tmpRoute.getVirtualPort());
 									route.setDistance(tmpRoute.getDistance());
 								}
-								
+
 								@Override
 								public int getStage() {
 									return IMMXImportContext.STAGE_RESOLVE_CROSSREFERENCES;
@@ -319,7 +320,7 @@ public class PortModelImporter implements ISubmodelImporter {
 
 	@Override
 	public void exportModel(final EObject model, final Map<String, Collection<Map<String, String>>> output, final IMMXExportContext context) {
-		PortModel portModel = (PortModel) model;
+		final PortModel portModel = (PortModel) model;
 
 		for (final Route r : portModel.getRoutes()) {
 			final Collection<Map<String, String>> result = routeImporter.exportRoute(r, context);

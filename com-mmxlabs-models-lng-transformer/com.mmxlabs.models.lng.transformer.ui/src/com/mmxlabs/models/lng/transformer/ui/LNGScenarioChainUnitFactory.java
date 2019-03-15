@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.time.Months;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -155,7 +156,7 @@ public class LNGScenarioChainUnitFactory {
 			BreakEvenTransformerUnit.chain(builder, userSettings, stage, 100);
 			return null;
 		} else if (template instanceof HillClimbOptimisationStage) {
-			if (SecurityUtils.getSubject().isPermitted("features:optimisation-hillclimb")) {
+			if (SecurityUtils.getSubject().isPermitted(KnownFeatures.FEATURE_OPTIMISATION_HILLCLIMB)) {
 				final HillClimbOptimisationStage stage = (HillClimbOptimisationStage) template;
 				if (stage.getAnnealingSettings().getIterations() > 0) {
 					if (template instanceof ParallelHillClimbOptimisationStage) {
@@ -172,7 +173,7 @@ public class LNGScenarioChainUnitFactory {
 			return null;
 		} else if (template instanceof ActionPlanOptimisationStage) {
 			final ActionPlanOptimisationStage stage = (ActionPlanOptimisationStage) template;
-			if (SecurityUtils.getSubject().isPermitted("features:optimisation-actionset")) {
+			if (SecurityUtils.getSubject().isPermitted(KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET)) {
 				if (stage.getTotalEvaluations() > 0) {
 					// Run the action set post optimisation
 					final boolean doSecondRun = doSecondActionSetRun(userSettings);
