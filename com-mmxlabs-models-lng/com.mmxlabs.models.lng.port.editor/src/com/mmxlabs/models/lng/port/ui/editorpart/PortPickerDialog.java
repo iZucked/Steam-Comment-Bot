@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.port.ui.editorpart;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
@@ -16,10 +17,11 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
@@ -30,7 +32,10 @@ import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
 
 public class PortPickerDialog extends ListSelectionDialog {
-	List<CellLabelProvider> searchedColumns = new ArrayList<>();
+
+	private static boolean STS_ENABLED = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SHIP_TO_SHIP);
+
+	private List<CellLabelProvider> searchedColumns = new ArrayList<>();
 
 	public PortPickerDialog(final Shell parentShell, final Object input) {
 		this(parentShell, input, new ArrayContentProvider(), new LabelProvider() {
@@ -47,13 +52,14 @@ public class PortPickerDialog extends ListSelectionDialog {
 		super(parentShell, input, contentProvider, labelProvider);
 	}
 
-	public List<EObject> pick(final Control cellEditorWindow, final List<Pair<String, EObject>> options, final Collection<EObject> currentValue, final EReference feature) {
-		if (options.size() > 0 && options.get(0).getSecond() == null)
+	public List<EObject> pick(final List<Pair<String, EObject>> options, final Collection<EObject> currentValue, final EReference feature) {
+		if (!options.isEmpty() && options.get(0).getSecond() == null) {
 			options.remove(0);
+		}
 
 		setTitle("Value Selection");
 
-		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<Pair<String, EObject>>();
+		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<>();
 		final Collection<EObject> sel = currentValue;
 		if (sel != null) {
 			for (final Pair<String, EObject> p : options) {
@@ -97,6 +103,10 @@ public class PortPickerDialog extends ListSelectionDialog {
 			searchedColumns.add(countryColumn);
 
 			for (final PortCapability pc : PortCapability.values()) {
+				if (pc == PortCapability.TRANSFER && !STS_ENABLED) {
+					continue;
+				}
+				
 				addColumn(pc.getName(), new ColumnLabelProvider() {
 					@Override
 					public String getText(final Object element) {
@@ -127,6 +137,26 @@ public class PortPickerDialog extends ListSelectionDialog {
 				return second.eClass().getName();
 			}
 		});
+		if (feature.getEReferenceType().isSuperTypeOf(PortPackage.eINSTANCE.getPort())) {
+
+			final ColumnLabelProvider aliasesLabelProvider = new ColumnLabelProvider() {
+				@Override
+				public String getText(final Object element) {
+
+					final Pair<?, EObject> p = (Pair<?, EObject>) element;
+					if (p.getSecond() instanceof Port) {
+						final Location location = ((Port) p.getSecond()).getLocation();
+						if (location != null) {
+							return String.join(", ", location.getOtherNames());
+						}
+					}
+					return "";
+				}
+			};
+
+			final CellLabelProvider aliasColumn = addColumn("Aliases", aliasesLabelProvider);
+			searchedColumns.add(aliasColumn);
+		}
 
 		if (open() == Window.OK) {
 			final Object[] result = getResult();
@@ -134,7 +164,7 @@ public class PortPickerDialog extends ListSelectionDialog {
 			if (result == null) {
 				return null;
 			}
-			
+
 			final List<EObject> resultList = new ArrayList<>();
 			for (final Object o : result) {
 				resultList.add(((Pair<String, EObject>) o).getSecond());
@@ -147,13 +177,14 @@ public class PortPickerDialog extends ListSelectionDialog {
 
 	@Override
 	protected String getFilterableText(final Object element) {
-		String result = "";
+		List<String> result = new LinkedList<>();
 		for (final CellLabelProvider provider : searchedColumns) {
 			final String text = ((ColumnLabelProvider) provider).getText(element);
 			if (text != null) {
-				result = result + text.toLowerCase() + " ";
+				result.add(text.toLowerCase());
 			}
 		}
-		return result;
+
+		return String.join(" ", result);
 	}
 }

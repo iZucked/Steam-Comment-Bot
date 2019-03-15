@@ -32,8 +32,8 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
@@ -347,15 +347,18 @@ public class ListSelectionDialog extends Dialog {
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 				filteredElements.remove(element);
-				if (filters.isEmpty())
+				if (filters.isEmpty()) {
 					return true;
-				if (contentProvider.hasChildren(element))
+				}
+				if (contentProvider.hasChildren(element)) {
 					return true;
+				}
 				final String t = getFilterableText(element);
 
 				for (final String f : filters) {
-					if (t.contains(f))
+					if (t.contains(f)) {
 						return true;
+					}
 				}
 				filteredElements.add(element);
 				return false;
@@ -377,20 +380,14 @@ public class ListSelectionDialog extends Dialog {
 
 				tvc.getColumn().setText(column.getFirst());
 				tvc.setLabelProvider(column.getSecond());
-				tvc.getColumn().addSelectionListener(new SelectionListener() {
+				tvc.getColumn().addSelectionListener(new SelectionAdapter() {
 
 					@Override
 					public void widgetSelected(final SelectionEvent e) {
 						viewer.setComparator(sorter.select());
 						viewer.refresh();
 					}
-
-					@Override
-					public void widgetDefaultSelected(final SelectionEvent e) {
-					}
-
 				});
-				// tvc.getColumn().pack();
 			}
 			viewer.getTree().setHeaderVisible(true);
 			viewer.getTree().setLinesVisible(true);
@@ -557,7 +554,7 @@ public class ListSelectionDialog extends Dialog {
 			return clp;
 		}
 
-		private Object unwrap(final Object element) {
+		public Object unwrap(final Object element) {
 			if (element instanceof GroupedElementProvider.E) {
 				return ((GroupedElementProvider.E) element).value;
 			} else if (element instanceof GroupedElementProvider.G) {

@@ -175,7 +175,7 @@ public class PortMultiReferenceInlineEditor extends UnsettableInlineEditor {
 			options.remove(0);
 
 		PortPickerDialog picker = new PortPickerDialog(cellEditorWindow.getShell(), options.toArray());
-		return picker.pick(cellEditorWindow, options, (List<EObject>) getValue(), (EReference) feature);
+		return picker.pick(options, (List<EObject>) getValue(), (EReference) feature);
 
 	}
 

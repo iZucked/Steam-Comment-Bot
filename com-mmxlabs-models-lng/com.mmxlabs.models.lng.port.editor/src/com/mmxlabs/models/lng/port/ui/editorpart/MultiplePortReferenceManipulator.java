@@ -33,9 +33,9 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 public class MultiplePortReferenceManipulator extends DialogFeatureManipulator {
 
 	/** @see PortMultiReferenceInlineEditor */
-	private final static int MAX_DISPLAY_LENGTH = 32;
+	private static final int MAX_DISPLAY_LENGTH = 32;
 	private static final int MIN_DISPLAY_NAMES = 2;
-	
+
 	private final com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider valueProvider;
 	private final EAttribute nameAttribute;
 
@@ -44,14 +44,14 @@ public class MultiplePortReferenceManipulator extends DialogFeatureManipulator {
 		this.valueProvider = valueProvider;
 		this.nameAttribute = nameAttribute;
 	}
-	
+
 	public MultiplePortReferenceManipulator(final EStructuralFeature field, final IReferenceValueProviderProvider providerProvider, final EditingDomain editingDomain, final EAttribute nameAttribute) {
 		this(field, editingDomain, providerProvider.getReferenceValueProvider(field.getEContainingClass(), (EReference) field), nameAttribute);
 	}
 
 	@Override
 	protected String renderValue(final Object value) {
-		if (! (value instanceof List)) {
+		if (!(value instanceof List)) {
 			return "";
 		}
 		final List<? extends EObject> selectedValues = (List<? extends EObject>) value;
@@ -62,11 +62,11 @@ public class MultiplePortReferenceManipulator extends DialogFeatureManipulator {
 			if (sb.length() > 0) {
 				sb.append(", ");
 			}
-			if (sb.length() + name.length() <= MAX_DISPLAY_LENGTH || numNamesAdded <= MIN_DISPLAY_NAMES-1){
+			if (sb.length() + name.length() <= MAX_DISPLAY_LENGTH || numNamesAdded <= MIN_DISPLAY_NAMES - 1) {
 				sb.append(name);
 				++numNamesAdded;
 			} else {
-				sb.append("...");				
+				sb.append("...");
 				break;
 			}
 		}
@@ -87,19 +87,19 @@ public class MultiplePortReferenceManipulator extends DialogFeatureManipulator {
 	protected Object openDialogBox(final Control cellEditorWindow, final Object object) {
 		final List<Pair<String, EObject>> options = valueProvider.getAllowedValues((EObject) object, field);
 
-		if ((options.size() > 0) && (options.get(0).getSecond() == null)) {
+		if ((!options.isEmpty()) && (options.get(0).getSecond() == null)) {
 			options.remove(0);
 		}
 
 		PortPickerDialog picker = new PortPickerDialog(cellEditorWindow.getShell(), options.toArray());
-		return picker.pick(cellEditorWindow, options, (List<EObject>) getValue(object), (EReference) field);
+		return picker.pick(options, (List<EObject>) getValue(object), (EReference) field);
 	}
 
 	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		if (object != null) {
 			final EList<EObject> values = (EList) super.getValue(object);
-			final LinkedList<Pair<Notifier, List<Object>>> notifiers = new LinkedList<Pair<Notifier, List<Object>>>();
+			final LinkedList<Pair<Notifier, List<Object>>> notifiers = new LinkedList<>();
 			for (final EObject ref : values) {
 				for (final Pair<Notifier, List<Object>> p : valueProvider.getNotifiers((EObject) object, (EReference) field, ref)) {
 					notifiers.add(p);
@@ -111,6 +111,4 @@ public class MultiplePortReferenceManipulator extends DialogFeatureManipulator {
 		return super.getExternalNotifiers(object);
 	}
 
-
-	
 }
