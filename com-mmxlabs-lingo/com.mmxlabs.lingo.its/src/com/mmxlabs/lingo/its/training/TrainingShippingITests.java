@@ -36,7 +36,7 @@ import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.lingo.its.verifier.SolutionData;
 import com.mmxlabs.lngdataserver.data.distances.DataLoader;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
-import com.mmxlabs.lngdataserver.lng.importers.distances.DistancesToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.distances.DistancesToScenarioCopier;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;

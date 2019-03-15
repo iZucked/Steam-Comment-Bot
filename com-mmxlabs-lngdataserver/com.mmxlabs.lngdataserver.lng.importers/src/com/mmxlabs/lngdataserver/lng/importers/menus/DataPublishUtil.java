@@ -5,39 +5,28 @@ import java.util.Collection;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.common.util.CheckedSupplier;
 import com.mmxlabs.lngdataserver.commons.IDataRepository;
 import com.mmxlabs.lngdataserver.integration.distances.DistanceRepository;
-import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.integration.models.bunkerfuels.BunkerFuelsRepository;
-import com.mmxlabs.lngdataserver.integration.models.bunkerfuels.BunkerFuelsVersion;
-import com.mmxlabs.lngdataserver.integration.models.financial.settled.SettledPricesRepository;
-import com.mmxlabs.lngdataserver.integration.models.financial.settled.SettledPricesVersion;
 import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupsRepository;
-import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupsVersion;
 import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupsRepository;
-import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupsVersion;
 import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
-import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.integration.vessels.VesselsRepository;
-import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
-import com.mmxlabs.lngdataserver.lng.exporters.distances.DistancesFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.exporters.vessels.VesselsFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.bunkerfuels.BunkerFuelsFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.financial.SettledPricesFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.DataOptions;
-import com.mmxlabs.lngdataserver.lng.importers.portgroups.PortGroupsFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.vesselgroups.VesselGroupsFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.bunkerfuels.BunkerFuelsFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.distances.DistancesFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.port.PortFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.portgroups.PortGroupsFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.pricing.PricingFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.vesselgroups.VesselGroupsFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.vessels.VesselsFromScenarioCopier;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class DataPublishUtil {
@@ -148,73 +137,4 @@ public class DataPublishUtil {
 		return null;
 	}
 
-	private static void uploadSettledPrices(IScenarioDataProvider sdp) throws Exception {
-		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(sdp);
-		SettledPricesVersion version = SettledPricesFromScenarioCopier.generateVersion(pricingModel);
-		SettledPricesRepository.INSTANCE.publishVersion(version);
-	}
-
-	private static DistancesVersion exportDistances(final LNGScenarioModel scenarioModel) throws IOException {
-		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-		final DistancesVersion version = DistancesFromScenarioCopier.generateVersion(portModel);
-		return version;
-	}
-
-	private static PortsVersion exportPort(final LNGScenarioModel scenarioModel) throws IOException {
-		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-		final PortsVersion version = PortFromScenarioCopier.generateVersion(portModel);
-		return version;
-	}
-
-	// private static @Nullable String checkDistanceDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
-	// final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-	// final String version = portModel.getDistanceDataVersion();
-	// if (genericVersionUpload(DistanceRepository.INSTANCE, version, () -> exportDistances(scenarioModel))) {
-	// return version;
-	// }
-	// return null;
-	// }
-
-	// private static @Nullable String checkFleetDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
-	// final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
-	// final String version = fleetModel.getFleetDataVersion();
-	// if (genericVersionUpload(VesselsRepository.INSTANCE, version, () -> exportVessels(scenarioModel))) {
-	// return version;
-	// }
-	// return null;
-	// }
-
-	// private static @Nullable String checkPortDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
-	// final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-	// final String version = portModel.getPortDataVersion();
-	// if (genericVersionUpload(PortsRepository.INSTANCE, version, () -> exportPort(scenarioModel))) {
-	// return version;
-	// }
-	// return null;
-	// }
-
-	private static String exportVessels(final LNGScenarioModel scenarioModel) throws IOException {
-
-		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
-		final VesselsVersion version = VesselsFromScenarioCopier.generateVersion(fleetModel);
-		return new ObjectMapper().writeValueAsString(version);
-	}
-
-	// private static @Nullable String checkFleetDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
-	// final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
-	// final String version = fleetModel.getFleetDataVersion();
-	// if (genericVersionUpload(VesselsRepository.INSTANCE, version, () -> exportVessels(scenarioModel))) {
-	// return version;
-	// }
-	// return null;
-	// }
-
-	// private static @Nullable String checkPortDataVersion(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
-	// final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-	// final String version = portModel.getPortDataVersion();
-	// if (genericVersionUpload(PortsRepository.INSTANCE, version, () -> exportPort(scenarioModel))) {
-	// return version;
-	// }
-	// return null;
-	// }
 }

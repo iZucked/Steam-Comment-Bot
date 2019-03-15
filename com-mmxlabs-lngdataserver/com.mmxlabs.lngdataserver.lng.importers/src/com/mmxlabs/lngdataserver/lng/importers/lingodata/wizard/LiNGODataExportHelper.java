@@ -18,12 +18,12 @@ import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupsVersion
 import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupsVersion;
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
-import com.mmxlabs.lngdataserver.lng.exporters.distances.DistancesFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.exporters.vessels.VesselsFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.bunkerfuels.BunkerFuelsFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.portgroups.PortGroupsFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.vesselgroups.VesselGroupsFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.bunkerfuels.BunkerFuelsFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.distances.DistancesFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.port.PortFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.portgroups.PortGroupsFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.vesselgroups.VesselGroupsFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.vessels.VesselsFromScenarioCopier;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -74,6 +74,11 @@ public final class LiNGODataExportHelper {
 			{
 				final VesselGroupsVersion vesselsVersion = VesselGroupsFromScenarioCopier.generateVersion(fleetModel);
 				mapper.writerWithDefaultPrettyPrinter().writeValue(new File(target, "vessel-groups.json"), vesselsVersion);
+			}
+			
+			// Other stuff
+			{
+				
 			}
 		}
 	}

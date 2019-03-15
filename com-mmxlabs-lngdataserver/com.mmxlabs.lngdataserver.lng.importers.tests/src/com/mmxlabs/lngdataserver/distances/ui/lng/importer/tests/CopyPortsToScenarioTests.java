@@ -29,9 +29,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.lngdataserver.data.distances.DataLoader;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
-import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.distances.DistancesToScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.port.PortsToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.distances.DistancesToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.port.PortFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.port.PortsToScenarioCopier;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 
