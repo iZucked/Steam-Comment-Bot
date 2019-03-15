@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,6 +21,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.IDeferment;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.ContingencyMatrix;
@@ -141,7 +144,7 @@ public class PortModelImporter implements ISubmodelImporter {
 			// Create country groups
 			final Set<String> countries = portModel.getPorts().stream() //
 					.map(Port::getLocation) //
-					.filter(l -> l != null) //
+					.filter(Objects::nonNull) //
 					.map(Location::getCountry).collect(Collectors.toSet());
 
 			final Set<String> groupNames = portModel.getPortCountryGroups().stream() //
@@ -260,6 +263,20 @@ public class PortModelImporter implements ISubmodelImporter {
 							if (route.getSouthEntrance() != null) {
 								context.registerNamedObject(route.getSouthEntrance());
 							}
+							// tmpRoute will not have these set yet, wait until references stages has run to link up
+							context.doLater(new IDeferment() {
+								
+								@Override
+								public void run(@NonNull IImportContext context) {
+									route.setVirtualPort(tmpRoute.getVirtualPort());
+									route.setDistance(tmpRoute.getDistance());
+								}
+								
+								@Override
+								public int getStage() {
+									return IMMXImportContext.STAGE_RESOLVE_CROSSREFERENCES;
+								}
+							});
 						}
 					}
 				});
