@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -73,7 +74,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private void validateSlotOrder(final IValidationContext ctx, final Cargo cargo, final Slot slot, final long availableTime, final List<IStatus> failures) {
+	private void validateSlotOrder(final IValidationContext ctx, final Cargo cargo, final Slot<?> slot, final long availableTime, final List<IStatus> failures) {
 		if (availableTime < 0) {
 			final int severity = IStatus.ERROR;
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
@@ -107,7 +108,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private void validateSlotTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final Cargo cargo, final Slot from, final Slot to, final long availableTime,
+	private void validateSlotTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final Cargo cargo, final Slot<?> from, final Slot<?> to, final long availableTime,
 			final List<IStatus> failures) {
 		// Skip for FOB/DES cargoes.
 		// TODO: Roll in common des redirection travel time
@@ -119,7 +120,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			final MMXRootObject scenario = extraContext.getRootObject();
 			if (scenario instanceof LNGScenarioModel) {
 
-				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) scenario;
+				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) scenario;
 				double maxSpeedKnots = 0.0;
 				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
 				final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(lngScenarioModel);
@@ -149,9 +150,9 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 				}
 
 				@NonNull
-				ModelDistanceProvider modelDistanceProvider = extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
+				final ModelDistanceProvider modelDistanceProvider = extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 				final Integer minTime = CargoTravelTimeUtils.getFobMinTimeInHours(from, to, cargo.getSortedSlots().get(0).getWindowStart(), cargo.getVesselAssignmentType(),
-						ScenarioModelUtil.getPortModel(lngScenarioModel), ScenarioModelUtil.getCostModel(lngScenarioModel), maxSpeedKnots, modelDistanceProvider);
+						ScenarioModelUtil.getPortModel(lngScenarioModel), maxSpeedKnots, modelDistanceProvider);
 				int severity = IStatus.ERROR;
 				if (minTime == null) {
 					// distance line is missing
@@ -171,12 +172,11 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 						if (diff < totalFlex) {
 							severity = IStatus.WARNING;
 						}
-						int finalSeverity = (cargo.isAllowRewiring()) ? IStatus.WARNING : severity;
-						String extraInfo = cargo.isAllowRewiring() ? "." : " - and cargo is locked.";
-						final String message = String.format("'%s': Laden leg to %s is too long by %s (%s vs. %s available)" + extraInfo,
-								from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(minTime - availableTime),
-								TravelTimeUtils.formatShortHours(minTime), TravelTimeUtils.formatShortHours(availableTime) );
-						
+						final int finalSeverity = (cargo.isAllowRewiring()) ? IStatus.WARNING : severity;
+						final String extraInfo = cargo.isAllowRewiring() ? "." : " - and cargo is locked.";
+						final String message = String.format("'%s': Laden leg to %s is too long by %s (%s vs. %s available)" + extraInfo, from.getName(), to.getPort().getName(),
+								TravelTimeUtils.formatShortHours(minTime - availableTime), TravelTimeUtils.formatShortHours(minTime), TravelTimeUtils.formatShortHours(availableTime));
+
 						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, finalSeverity);
 						dsd.addEObjectAndFeature(from, CargoPackage.eINSTANCE.getSlot_WindowStart());
@@ -190,7 +190,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			}
 		}
 	}
-	
+
 	/**
 	 * Validate that a ridiculous amount of time has not been allocated
 	 * 
@@ -199,7 +199,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private void validateSlotAvailableTime(final IValidationContext ctx, final Cargo cargo, final Slot slot, final long availableTime, final List<IStatus> failures) {
+	private void validateSlotAvailableTime(final IValidationContext ctx, final Cargo cargo, final Slot<?> slot, final long availableTime, final List<IStatus> failures) {
 		if ((availableTime / 24) > SENSIBLE_TRAVEL_TIME) {
 			final int severity = IStatus.WARNING;
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
@@ -227,8 +227,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 				// && (loadSlot != null) && (dischargeSlot != null) && (loadSlot.getWindowStart() != null) && (dischargeSlot.getWindowStart() != null)) {
 				// }
-				Slot prevSlot = null;
-				for (final Slot slot : cargo.getSortedSlots()) {
+				Slot<?> prevSlot = null;
+				for (final Slot<?> slot : cargo.getSortedSlots()) {
 					if (prevSlot != null) {
 						final Port loadPort = prevSlot.getPort();
 						final Port dischargePort = slot.getPort();
@@ -270,11 +270,11 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 	private void validateNonShippedSlotTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final Cargo cargo, final LoadSlot from, final DischargeSlot to,
 			final List<IStatus> failures) {
-		Vessel vessel = from.getNominatedVessel();
+		final Vessel vessel = from.getNominatedVessel();
 		if (vessel == null) {
 			return;
 		}
-		Integer windowLength = getLadenMaxWindow(from, to);
+		final Integer windowLength = getLadenMaxWindow(from, to);
 		if (windowLength == null) {
 			return;
 		}
@@ -290,30 +290,33 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		} else {
 			ServiceHelper.withCheckedServiceConsumer(IShippingDaysRestrictionSpeedProvider.class, shippingDaysSpeedProvider -> {
 
-				int travelTime = CargoTravelTimeUtils.getDivertibleDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(getScenarioModel(extraContext)),
-						vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true),
-						extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
-				int slotDur = from.getSlotOrDelegateDuration();
-				if (travelTime + from.getSlotOrDelegateDuration() > windowLength) {
-//					final String message = String.format("Purchase %s is being shipped to %s but the laden leg (%s travel, %s loading) is greater than the shortest journey by %s.",
-//							from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(travelTime),TravelTimeUtils.formatShortHours(slotDur),
-//							TravelTimeUtils.formatHours((travelTime + slotDur) - windowLength));
-					final String message = String.format("Purchase '%s': Laden leg to %s is too long: %s loading, %s travel is %s more than the %s available.",
-							from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(slotDur), TravelTimeUtils.formatShortHours(travelTime), 
-							TravelTimeUtils.formatShortHours((travelTime + slotDur) - windowLength), TravelTimeUtils.formatShortHours(windowLength));
-					final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
-					dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
-					dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+				final LNGScenarioModel scenarioModel = getScenarioModel(extraContext);
+				if (scenarioModel != null) {
+					final int travelTime = CargoTravelTimeUtils.getDivertibleDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(scenarioModel), vessel,
+							CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true),
+							extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
+					final int slotDur = from.getSlotOrDelegateDuration();
+					if (travelTime + from.getSlotOrDelegateDuration() > windowLength) {
+						// final String message = String.format("Purchase %s is being shipped to %s but the laden leg (%s travel, %s loading) is greater than the shortest journey by %s.",
+						// from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(travelTime),TravelTimeUtils.formatShortHours(slotDur),
+						// TravelTimeUtils.formatHours((travelTime + slotDur) - windowLength));
+						final String message = String.format("Purchase '%s': Laden leg to %s is too long: %s loading, %s travel is %s more than the %s available.", from.getName(),
+								to.getPort().getName(), TravelTimeUtils.formatShortHours(slotDur), TravelTimeUtils.formatShortHours(travelTime),
+								TravelTimeUtils.formatShortHours((travelTime + slotDur) - windowLength), TravelTimeUtils.formatShortHours(windowLength));
+						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
+						dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
+						dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
 
-					failures.add(dsd);
+						failures.add(dsd);
+					}
 				}
 			});
 		}
 
 	}
 
-	private Integer getLadenMaxWindow(Slot startSlot, Slot endSlot) {
+	private Integer getLadenMaxWindow(final Slot<?> startSlot, final Slot<?> endSlot) {
 		final ZonedDateTime dateStart = startSlot.getWindowStartWithSlotOrPortTimeWithFlex();
 		final ZonedDateTime dateEnd = endSlot.getWindowEndWithSlotOrPortTimeWithFlex();
 
@@ -324,7 +327,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		}
 	}
 
-	public static LNGScenarioModel getScenarioModel(final IExtraValidationContext extraContext) {
+	public static @Nullable LNGScenarioModel getScenarioModel(final @NonNull IExtraValidationContext extraContext) {
 		final MMXRootObject scenario = extraContext.getRootObject();
 		if (scenario instanceof LNGScenarioModel) {
 			return (LNGScenarioModel) scenario;
