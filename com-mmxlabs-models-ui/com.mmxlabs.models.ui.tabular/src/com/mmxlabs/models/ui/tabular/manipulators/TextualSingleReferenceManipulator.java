@@ -94,7 +94,7 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 
 	@Override
 	public void doSetValue(final Object object, final Object value) {
-		if (value.equals(-1) || value == null || value.toString().isEmpty()) {
+		if (value == null || value.equals(-1) || value.toString().isEmpty()) {
 			super.runSetCommand(object, SetCommand.UNSET_VALUE);
 			return;
 		}
@@ -117,23 +117,20 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 	public CellEditor createCellEditor(final Composite c, final Object object) {
 		editor = new TextCellEditor(c);
 
-		editor.setValidator(new ICellEditorValidator() {
+		editor.setValidator(value -> {
 
-			@Override
-			public String isValid(final Object value) {
-				if (value == null || value.toString().isEmpty()) {
-					return null;
-				}
-				if (names.contains(value)) {
-					return null;
-				}
-				if (value instanceof String) {
-					if (lowerNames.contains(value.toString().toLowerCase())) {
-						return null;
-					}
-				}
-				return "Unknown name";
+			if (value == null || value.toString().isEmpty()) {
+				return null;
 			}
+			if (names.contains(value)) {
+				return null;
+			}
+			if (value instanceof String) {
+				if (lowerNames.contains(value.toString().toLowerCase())) {
+					return null;
+				}
+			}
+			return "Unknown name";
 		});
 
 		// Sub-class to strip new-line character coming from the proposal adapter
@@ -170,27 +167,24 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 	}
 
 	protected IContentProposalProvider createProposalProvider() {
-		final IContentProposalProvider proposalProvider = new IContentProposalProvider() {
+		return new IContentProposalProvider() {
 
 			@Override
 			public IContentProposal[] getProposals(final String full_contents, final int position) {
 
 				final int completeFrom = 0;
-
 				final String contents = full_contents.substring(completeFrom, position);
 				final ArrayList<ContentProposal> list = new ArrayList<>();
 				for (final String proposal : names) {
 					if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
 						final String c = proposal.substring(contents.length());
 						list.add(new ContentProposal(c, proposal, null, c.length()));
-
 					}
 				}
 
 				return list.toArray(new IContentProposal[list.size()]);
 			}
 		};
-		return proposalProvider;
 	}
 
 	@Override

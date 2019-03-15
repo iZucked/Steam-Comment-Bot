@@ -4,17 +4,10 @@
  */
 package com.mmxlabs.models.lng.cargo.editor.bulk.views;
 
-import java.util.ArrayList;
-
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.fieldassist.ContentProposal;
-import org.eclipse.jface.fieldassist.IContentProposal;
-import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -29,13 +22,11 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Table;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.AssignmentManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.port.Location;
-import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortSingleReferenceManipulatorExtension;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -71,53 +62,15 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
-	private final class TextualPortSingleReferenceManipulatorExtension extends TextualSingleReferenceManipulator {
-		private TextualPortSingleReferenceManipulatorExtension(final EReference field, final IReferenceValueProviderProvider valueProviderProvider, final EditingDomain editingDomain) {
-			super(field, valueProviderProvider, editingDomain);
-		}
-
-		protected IContentProposalProvider createProposalProvider() {
-			final IContentProposalProvider proposalProvider = new IContentProposalProvider() {
-
-				@Override
-				public IContentProposal[] getProposals(final String full_contents, final int position) {
-
-					final int completeFrom = 0;
-
-					final String contents = full_contents.substring(completeFrom, position);
-					final ArrayList<ContentProposal> list = new ArrayList<>();
-					for (int i = 0; i < names.size(); ++i) {
-						final String proposal = names.get(i);
-						if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-							final String c = proposal.substring(contents.length());
-							String description = "";
-							final EObject eObject = valueList.get(i);
-							if (eObject instanceof Port) {
-								final Port port = (Port) eObject;
-								final Location l = port.getLocation();
-								if (l != null) {
-									description = " - " + l.getCountry();
-								}
-							}
-
-							list.add(new ContentProposal(c, proposal + description, null, c.length()));
-
-						}
-					}
-
-					return list.toArray(new IContentProposal[list.size()]);
-				}
-			};
-			return proposalProvider;
-		}
-	}
+	private static final String REPORT_TYPE = "TRADES_TABLE";
 
 	private final class HasRestrictionsFormatter extends BaseFormatter {
 		private static final String yesSymbol = "\u2713";
 
+		@Override
 		public String render(final Object object) {
 			if (object instanceof Slot) {
-				final Slot slot = (Slot) object;
+				final Slot<?> slot = (Slot<?>) object;
 				if (!slot.getAllowedVessels().isEmpty()) {
 					return yesSymbol;
 				}
@@ -149,9 +102,10 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 	private final class DivertibleFormatter extends BaseFormatter {
 		private static final String yesSymbol = "\u2713";
 
+		@Override
 		public String render(final Object object) {
 			if (object instanceof Slot) {
-				final Slot slot = (Slot) object;
+				final Slot<?> slot = (Slot<?>) object;
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					if (loadSlot.isDESPurchase()) {
@@ -182,24 +136,24 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		switch (columnID) {
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-id": {
 			final BasicAttributeManipulator rendMan = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "L-ID", "The main ID for all except discharge slots", ColumnType.NORMAL, LOAD_START_GROUP,
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "L-ID", "The main ID for all except discharge slots", ColumnType.NORMAL, LOAD_START_GROUP,
 					DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan, rendMan, "Load ID", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-port": {
 			final TextualSingleReferenceManipulator rendMan = new TextualPortSingleReferenceManipulatorExtension(CargoPackage.eINSTANCE.getSlot_Port(), referenceValueProvider, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Port", "Load Port", ColumnType.NORMAL, LOAD_PORT_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Port", "Load Port", ColumnType.NORMAL, LOAD_PORT_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
 					rendMan, "Load Port", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-cv": {
 			final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getLoadSlot_CargoCV(), editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "CV", "Load CV", ColumnType.NORMAL, LOAD_PORT_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "CV", "Load CV", ColumnType.NORMAL, LOAD_PORT_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
 					rendMan, "Load CV", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-vol": {
-			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+			columnManager.registerColumn(REPORT_TYPE, new EmfBlockColumnFactory() {
 
 				@Override
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
@@ -228,7 +182,6 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							@Override
 							public void treeCollapsed(final TreeEvent e) {
 								createColumn.column.getColumn().getColumnGroup().setText("");
-
 							}
 						});
 					}
@@ -246,7 +199,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					}
 					{
 						final TextualEnumAttributeManipulator rendMan = new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit(), editingDomain,
-								(e) -> mapName((VolumeUnits) e));
+								e -> mapName((VolumeUnits) e));
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Units", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setSummary(false);
 						createColumn.column.getColumn().setDetail(true);
@@ -266,7 +219,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-date": {
 			// Customise so we can sort by the discharge date if no load is present
 
-			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+			columnManager.registerColumn(REPORT_TYPE, new EmfBlockColumnFactory() {
 
 				@Override
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
@@ -283,13 +236,13 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							@Override
 							public String renderSetValue(final Object owner, final Object object) {
 								String v = super.renderSetValue(owner, object);
-								if (v != "") {
+								if (!v.isEmpty()) {
 									final String suffix = getTimeWindowSuffix(owner);
 									v = v + suffix;
 								}
-								if (v != "") {
+								if (!v.isEmpty()) {
 									if (owner instanceof Slot) {
-										final Slot slot = (Slot) owner;
+										final Slot<?> slot = (Slot<?>) owner;
 										if (slot.getWindowFlex() != 0) {
 											v = v + " *";
 										}
@@ -346,7 +299,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					}
 					{
 						final TextualEnumAttributeManipulator rendMan = new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSizeUnits(), editingDomain,
-								(e) -> mapName((TimePeriod) e));
+								e -> mapName((TimePeriod) e));
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Units", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setSummary(false);
 						createColumn.column.getColumn().setDetail(true);
@@ -366,7 +319,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					}
 					{
 						final TextualEnumAttributeManipulator rendMan = new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowFlexUnits(), editingDomain,
-								(e) -> mapName((TimePeriod) e));
+								e -> mapName((TimePeriod) e));
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Units", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setSummary(false);
 						createColumn.column.getColumn().setDetail(true);
@@ -379,7 +332,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.purchasecontract": {
 
-			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+			columnManager.registerColumn(REPORT_TYPE, new EmfBlockColumnFactory() {
 
 				@Override
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
@@ -435,25 +388,25 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-entity": {
 			final TextualSingleReferenceManipulator rendMan = new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Entity(), referenceValueProvider, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Entity", "Load entity", ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
-					rendMan, "Purchase Entity", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Entity", "Load entity", ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
+					rendMan, rendMan, "Purchase Entity", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.purchasecounterparty": {
 			final StringAttributeManipulator rendMan = new StringAttributeManipulator(CargoPackage.Literals.SLOT__COUNTERPARTY, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Counterparty", "Purchase counterparty", ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
-					rendMan, rendMan, "Purchase Counterparty", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Counterparty", "Purchase counterparty", ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE,
+					DEFAULT_ORDER_KEY, rendMan, rendMan, "Purchase Counterparty", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.purchase-cn": {
 			final StringAttributeManipulator rendMan = new StringAttributeManipulator(CargoPackage.Literals.SLOT__CN, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "CN", "Purchase CN", ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
-					rendMan, "Purchase CN", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "CN", "Purchase CN", ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
+					rendMan, rendMan, "Purchase CN", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-restrictions": {
 
-			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+			columnManager.registerColumn(REPORT_TYPE, new EmfBlockColumnFactory() {
 
 				@Override
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
@@ -513,9 +466,10 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedListsArePermissive(), editingDomain) {
 
+							@Override
 							public boolean canEdit(final Object object) {
 								if (object instanceof Slot) {
-									final Slot slot = (Slot) object;
+									final Slot<?> slot = (Slot<?>) object;
 									return slot.isOverrideRestrictions() && super.canEdit(object);
 								}
 								return false;
@@ -528,9 +482,11 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedPorts(), referenceValueProvider, editingDomain,
 								MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+
+							@Override
 							public boolean canEdit(final Object object) {
 								if (object instanceof Slot) {
-									final Slot slot = (Slot) object;
+									final Slot<?> slot = (Slot<?>) object;
 									return slot.isOverrideRestrictions() && super.canEdit(object);
 								}
 								return false;
@@ -544,9 +500,11 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedContracts(), referenceValueProvider, editingDomain,
 								MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+
+							@Override
 							public boolean canEdit(final Object object) {
 								if (object instanceof Slot) {
-									final Slot slot = (Slot) object;
+									final Slot<?> slot = (Slot<?>) object;
 									return slot.isOverrideRestrictions() && super.canEdit(object);
 								}
 								return false;
@@ -566,19 +524,19 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-id": {
 			final BasicAttributeManipulator rendMan = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "D-ID", null, ColumnType.NORMAL, DISCHARGE_START_GROUP, DEFAULT_BLOCK_TYPE,
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "D-ID", null, ColumnType.NORMAL, DISCHARGE_START_GROUP, DEFAULT_BLOCK_TYPE,
 					DISCHARGE_START_GROUP + "_1", rendMan, rendMan, "Discharge ID", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-port": {
 			final TextualSingleReferenceManipulator rendMan = new TextualPortSingleReferenceManipulatorExtension(CargoPackage.eINSTANCE.getSlot_Port(), referenceValueProvider, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Port", "", ColumnType.NORMAL, DISCHARGE_PORT_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Port", "", ColumnType.NORMAL, DISCHARGE_PORT_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
 					rendMan, "Discharge Port", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-vol": {
 
-			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+			columnManager.registerColumn(REPORT_TYPE, new EmfBlockColumnFactory() {
 
 				@Override
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
@@ -626,7 +584,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 					{
 						final TextualEnumAttributeManipulator rendMan = new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit(), editingDomain,
-								(e) -> mapName((VolumeUnits) e));
+								e -> mapName((VolumeUnits) e));
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Units", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setSummary(false);
 						createColumn.column.getColumn().setDetail(true);
@@ -646,7 +604,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-date": {
 			// Customise so we can sort by the discharge date if no load is present
 
-			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+			columnManager.registerColumn(REPORT_TYPE, new EmfBlockColumnFactory() {
 
 				@Override
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
@@ -663,13 +621,13 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							@Override
 							public String renderSetValue(final Object owner, final Object object) {
 								String v = super.renderSetValue(owner, object);
-								if (v != "") {
+								if (!v.isEmpty()) {
 									final String suffix = getTimeWindowSuffix(owner);
 									v = v + suffix;
 								}
-								if (v != "") {
+								if (!v.isEmpty()) {
 									if (owner instanceof Slot) {
-										final Slot slot = (Slot) owner;
+										final Slot<?> slot = (Slot<?>) owner;
 										if (slot.getWindowFlex() != 0) {
 											v = v + " *";
 										}
@@ -719,7 +677,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					}
 					{
 						final TextualEnumAttributeManipulator rendMan = new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSizeUnits(), editingDomain,
-								(e) -> mapName((TimePeriod) e));
+								e -> mapName((TimePeriod) e));
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Units", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setSummary(false);
 						createColumn.column.getColumn().setDetail(true);
@@ -739,7 +697,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					}
 					{
 						final TextualEnumAttributeManipulator rendMan = new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowFlexUnits(), editingDomain,
-								(e) -> mapName((TimePeriod) e));
+								e -> mapName((TimePeriod) e));
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Units", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setSummary(false);
 						createColumn.column.getColumn().setDetail(true);
@@ -753,7 +711,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.salescontract": {
 
-			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+			columnManager.registerColumn(REPORT_TYPE, new EmfBlockColumnFactory() {
 
 				@Override
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
@@ -809,25 +767,25 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-entity": {
 			final TextualSingleReferenceManipulator rendMan = new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Entity(), referenceValueProvider, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Entity", "", ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Entity", "", ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
 					rendMan, rendMan, "Sales Entity", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.salescounterparty": {
 			final StringAttributeManipulator rendMan = new StringAttributeManipulator(CargoPackage.Literals.SLOT__COUNTERPARTY, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Counterparty", null, ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE,
-					DEFAULT_ORDER_KEY, rendMan, rendMan, "Sales counterparty",CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Counterparty", null, ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
+					rendMan, rendMan, "Sales counterparty", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.sales-cn": {
 			final StringAttributeManipulator rendMan = new StringAttributeManipulator(CargoPackage.Literals.SLOT__CN, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "CN", null, ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
-					rendMan, rendMan, "Sales CN", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "CN", null, ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
+					rendMan, "Sales CN", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-restrictions": {
 
-			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+			columnManager.registerColumn(REPORT_TYPE, new EmfBlockColumnFactory() {
 
 				@Override
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
@@ -884,9 +842,10 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedListsArePermissive(), editingDomain) {
 
+							@Override
 							public boolean canEdit(final Object object) {
 								if (object instanceof Slot) {
-									final Slot slot = (Slot) object;
+									final Slot<?> slot = (Slot<?>) object;
 									return slot.isOverrideRestrictions() && super.canEdit(object);
 								}
 								return false;
@@ -899,9 +858,11 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedPorts(), referenceValueProvider, editingDomain,
 								MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+
+							@Override
 							public boolean canEdit(final Object object) {
 								if (object instanceof Slot) {
-									final Slot slot = (Slot) object;
+									final Slot<?> slot = (Slot<?>) object;
 									return slot.isOverrideRestrictions() && super.canEdit(object);
 								}
 								return false;
@@ -915,9 +876,10 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedContracts(), referenceValueProvider, editingDomain,
 								MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+							@Override
 							public boolean canEdit(final Object object) {
 								if (object instanceof Slot) {
-									final Slot slot = (Slot) object;
+									final Slot<?> slot = (Slot<?>) object;
 									return slot.isOverrideRestrictions() && super.canEdit(object);
 								}
 								return false;
@@ -938,22 +900,22 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.assignment": {
 
 			final AssignmentManipulator rendMan = new AssignmentManipulator(editingLocation);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Assignment", null, ColumnType.NORMAL, CARGO_END_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
-					rendMan, rendMan, "Assignment", CargoBulkEditorPackage.eINSTANCE.getRow__GetAssignableObject()));
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Assignment", null, ColumnType.NORMAL, CARGO_END_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
+					rendMan, "Assignment", CargoBulkEditorPackage.eINSTANCE.getRow__GetAssignableObject()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.load-terminal": {
-			columnManager.registerColumn("TRADES_TABLE", createWiringColumn(columnID, "L-Type", report, true, LOAD_END_GROUP, DEFAULT_BLOCK_TYPE, LOAD_END_GROUP + "_1"));
+			columnManager.registerColumn(REPORT_TYPE, createWiringColumn(columnID, "L-Type", report, true, LOAD_END_GROUP, DEFAULT_BLOCK_TYPE, LOAD_END_GROUP + "_1"));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.discharge-terminal": {
 
-			columnManager.registerColumn("TRADES_TABLE", createWiringColumn(columnID, "D-Type", report, false, DISCHARGE_START_GROUP, DEFAULT_BLOCK_TYPE, DISCHARGE_START_GROUP + "_0"));
+			columnManager.registerColumn(REPORT_TYPE, createWiringColumn(columnID, "D-Type", report, false, DISCHARGE_START_GROUP, DEFAULT_BLOCK_TYPE, DISCHARGE_START_GROUP + "_0"));
 			break;
 		}
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.load-divertible": {
 
-			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+			columnManager.registerColumn(REPORT_TYPE, new EmfBlockColumnFactory() {
 
 				@Override
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
@@ -989,6 +951,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Divertible(), editingDomain) {
+							@Override
 							public boolean canEdit(final Object object) {
 
 								if (object instanceof LoadSlot) {
@@ -999,6 +962,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return false;
 							}
 
+							@Override
 							public String render(final Object object) {
 								if (object instanceof LoadSlot) {
 									final LoadSlot loadSlot = (LoadSlot) object;
@@ -1009,7 +973,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 								}
 								return "";
-							};
+							}
 						};
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Divertible", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setDetail(true);
@@ -1018,6 +982,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					}
 					{
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction(), editingDomain) {
+							@Override
 							public boolean canEdit(final Object object) {
 
 								if (object instanceof LoadSlot) {
@@ -1028,6 +993,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return false;
 							}
 
+							@Override
 							public String render(final Object object) {
 								if (object instanceof LoadSlot) {
 									final LoadSlot loadSlot = (LoadSlot) object;
@@ -1038,7 +1004,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 								}
 								return "";
-							};
+							}
 						};
 
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Ship days", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
@@ -1054,7 +1020,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.discharge-divertible": {
 
-			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+			columnManager.registerColumn(REPORT_TYPE, new EmfBlockColumnFactory() {
 
 				@Override
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
@@ -1091,6 +1057,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Divertible(), editingDomain) {
 
+							@Override
 							public boolean canEdit(final Object object) {
 
 								if (object instanceof DischargeSlot) {
@@ -1101,6 +1068,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return false;
 							}
 
+							@Override
 							public String render(final Object object) {
 								if (object instanceof DischargeSlot) {
 									final DischargeSlot dischargeSlot = (DischargeSlot) object;
@@ -1110,7 +1078,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 								}
 								return "";
-							};
+							}
 						};
 
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Divertible", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
@@ -1119,6 +1087,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					}
 					{
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction(), editingDomain) {
+							@Override
 							public boolean canEdit(final Object object) {
 
 								if (object instanceof DischargeSlot) {
@@ -1129,6 +1098,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return false;
 							}
 
+							@Override
 							public String render(final Object object) {
 								if (object instanceof DischargeSlot) {
 									final DischargeSlot dischargeSlot = (DischargeSlot) object;
@@ -1138,7 +1108,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 								}
 								return "";
-							};
+							}
 						};
 
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Ship days", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
@@ -1157,7 +1127,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				if (!LicenseFeatures.isPermitted("features:nominations")) {
 					break;
 				}
-				columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+				columnManager.registerColumn(REPORT_TYPE, new EmfBlockColumnFactory() {
 
 					@Override
 					public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
@@ -1214,7 +1184,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				if (!LicenseFeatures.isPermitted("features:nominations")) {
 					break;
 				}
-				columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+				columnManager.registerColumn(REPORT_TYPE, new EmfBlockColumnFactory() {
 
 					@Override
 					public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
@@ -1279,8 +1249,6 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 				return blockManager.configureHandler(block, new ColumnHandler(block, (ICellRenderer) null, (ICellManipulator) null, new ETypedElement[0], blockDisplayName, new IColumnFactory() {
 
-					SlotTypePainter diagram;
-
 					@Override
 					public void destroy(final GridViewerColumn gvc) {
 						gvc.getColumn().dispose();
@@ -1293,8 +1261,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							return null;
 						}
 
-						final ScenarioTableViewer viewer = (ScenarioTableViewer) report.getAdapter(ScenarioTableViewer.class);
-						final Table table = (Table) report.getAdapter(Table.class);
+						final ScenarioTableViewer viewer = report.getAdapter(ScenarioTableViewer.class);
 
 						final GridColumnGroup group = handler.block.getOrCreateColumnGroup(viewer.getGrid());
 
@@ -1333,12 +1300,11 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						column.getColumn().setMinimumWidth(100);
 						column.getColumn().setWidth(100);
 						column.getColumn().setResizeable(false);
-						//column.getColumn().setMoveable(false);
 						column.getColumn().setVisible(false);
 
 						// Create the custom rendering stuff
 						final Grid grid = viewer.getGrid();
-						diagram = new SlotTypePainter(grid, column, isLoad);
+						SlotTypePainter diagram = new SlotTypePainter(grid, column, isLoad);
 
 						GridViewerHelper.configureLookAndFeel(column, GridViewerHelper.FLAGS_ROW_HOVER);
 						return column;
@@ -1357,10 +1323,10 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 	protected String getTimeWindowSuffix(final Object owner) {
 		if (owner instanceof Slot) {
-			final Slot slot = (Slot) owner;
+			final Slot<?> slot = (Slot<?>) owner;
 			final int size = slot.getSlotOrDelegateWindowSize();
 			final TimePeriod units = slot.getSlotOrDelegateWindowSizeUnits();
-			String suffix = "h";
+			final String suffix;
 			switch (units) {
 			case DAYS:
 				suffix = "d";
