@@ -44,6 +44,7 @@ import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Days;
 import com.mmxlabs.common.time.TimeUtils;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -104,7 +105,7 @@ public class CargoEditorMenuHelper {
 	private final CargoEditingHelper helper;
 	private final LNGScenarioModel scenarioModel;
 
-	private static final boolean enableSTSMenus = LicenseFeatures.isPermitted("features:shiptoship");
+	private static final boolean enableSTSMenus = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SHIP_TO_SHIP);
 
 	/**
 	 */
