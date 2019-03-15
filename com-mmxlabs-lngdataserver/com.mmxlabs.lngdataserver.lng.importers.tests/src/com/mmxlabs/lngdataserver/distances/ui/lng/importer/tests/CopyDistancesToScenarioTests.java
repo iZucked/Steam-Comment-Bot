@@ -26,6 +26,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mmxlabs.lngdataserver.data.distances.DataConstants;
 import com.mmxlabs.lngdataserver.data.distances.DataLoader;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.integration.distances.model.RoutingPoint;
@@ -41,12 +42,10 @@ import com.mmxlabs.models.lng.port.util.PortModelBuilder;
 
 public class CopyDistancesToScenarioTests {
 
-	private static final String DATAFILE_V1_0_10_25_1_JSON = "v1.0.10.25_1.json";
-	private static final String DATAFILE_V1_0_11_250_4_JSON = "v1.0.11.250_4.json";
 
 	@Test
 	public void testCleanImport() throws Exception {
-		final String input = DataLoader.importData(DATAFILE_V1_0_11_250_4_JSON);
+		final String input = DataLoader.importData(DataConstants.DISTANCES_V1_0_11_250_4_JSON);
 
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.findAndRegisterModules();
@@ -122,7 +121,7 @@ public class CopyDistancesToScenarioTests {
 
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 
-		final String inputB = DataLoader.importData(DATAFILE_V1_0_11_250_4_JSON);
+		final String inputB = DataLoader.importData(DataConstants.DISTANCES_V1_0_11_250_4_JSON);
 		final DistancesVersion versionB = mapper.readerFor(DistancesVersion.class).readValue(inputB);
 		prepareVersionModel(versionB);
 
@@ -163,7 +162,7 @@ public class CopyDistancesToScenarioTests {
 
 		// Load dataset 1 in
 		{
-			final String inputA = DataLoader.importData(DATAFILE_V1_0_10_25_1_JSON);
+			final String inputA = DataLoader.importData(DataConstants.DISTANCES_V1_0_10_25_1_JSON);
 			final DistancesVersion versionA = mapper.readerFor(DistancesVersion.class).readValue(inputA);
 			final Command updateCommand = DistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, versionA, true);
 			editingDomain.getCommandStack().execute(updateCommand);
@@ -171,7 +170,7 @@ public class CopyDistancesToScenarioTests {
 
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 
-		final String inputB = DataLoader.importData(DATAFILE_V1_0_11_250_4_JSON);
+		final String inputB = DataLoader.importData(DataConstants.DISTANCES_V1_0_11_250_4_JSON);
 		final DistancesVersion versionB = mapper.readerFor(DistancesVersion.class).readValue(inputB);
 		prepareVersionModel(versionB);
 

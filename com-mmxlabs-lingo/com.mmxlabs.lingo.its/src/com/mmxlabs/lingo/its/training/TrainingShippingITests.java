@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.training;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -34,9 +33,12 @@ import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.lingo.its.verifier.SolutionData;
+import com.mmxlabs.lngdataserver.data.distances.DataConstants;
 import com.mmxlabs.lngdataserver.data.distances.DataLoader;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
+import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.lng.io.distances.DistancesToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.port.PortsToScenarioCopier;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -63,7 +65,6 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
 @RunWith(value = ShiroRunner.class)
@@ -95,7 +96,8 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData("/trainingcases/Shipping_I/");
 
-		updateDistanceData(scenarioDataProvider, "v1.0.11.250_9.json");
+		updateDistanceData(scenarioDataProvider, DataConstants.DISTANCES_LATEST_JSON);
+		updatePortsData(scenarioDataProvider, DataConstants.PORTS_LATEST_JSON);
 
 		return scenarioDataProvider;
 	}
@@ -139,6 +141,27 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 		// Ensure updated.
 		Assert.assertEquals(distanceVersion.getIdentifier(), portModel.getDistanceVersionRecord().getVersion());
+	}
+
+	public static void updatePortsData(IScenarioDataProvider scenarioDataProvider, String key) throws Exception {
+		final String input = DataLoader.importData(key);
+
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.findAndRegisterModules();
+		mapper.registerModule(new JavaTimeModule());
+
+		final PortsVersion version = mapper.readerFor(PortsVersion.class).readValue(input);
+
+		final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
+		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
+		final Command updateCommand = PortsToScenarioCopier.getUpdateCommand(editingDomain, portModel, version);
+
+		Assert.assertTrue(updateCommand.canExecute());
+
+		editingDomain.getCommandStack().execute(updateCommand);
+
+		// Ensure updated.
+		Assert.assertEquals(version.getIdentifier(), portModel.getPortVersionRecord().getVersion());
 	}
 
 	@Override
