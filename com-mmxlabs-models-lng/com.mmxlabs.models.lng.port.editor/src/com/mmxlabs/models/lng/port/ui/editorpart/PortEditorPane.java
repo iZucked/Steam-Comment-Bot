@@ -30,6 +30,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.ContingencyMatrix;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -123,7 +124,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 							final Action renameCanal = new Action("Rename...") {
 								@Override
 								public void run() {
-									final HashSet<String> existingNames = new HashSet<String>();
+									final HashSet<String> existingNames = new HashSet<>();
 									for (final Route c : portModel.getRoutes()) {
 										if (c != canal) {
 											existingNames.add(c.getName());
@@ -154,7 +155,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 					};
 					addActionToMenu(canalEditor, menu);
 				}
-				if (LicenseFeatures.isPermitted("features:contingency-idle-time")) {
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CONTINGENCY_IDLE_TIME)) {
 					addActionToMenu(new ContingencyMatrixEditorAction(portModel), menu);
 				}
 			}
@@ -196,7 +197,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 			}
 		}
 	}
-	
+
 	@Override
 	protected Action createDeleteAction(@Nullable Function<Collection<?>, Collection<Object>> callback) {
 		return null;
