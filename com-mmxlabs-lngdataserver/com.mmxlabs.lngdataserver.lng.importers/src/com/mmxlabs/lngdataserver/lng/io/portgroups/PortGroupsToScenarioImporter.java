@@ -56,6 +56,7 @@ public class PortGroupsToScenarioImporter {
 				existingGroup = PortFactory.eINSTANCE.createPortGroup();
 				existingGroup.setName(name);
 				cmd.append(AddCommand.create(editingDomain, portModel, PortPackage.Literals.PORT_MODEL__PORT_GROUPS, existingGroup));
+				map.put(name, existingGroup);
 			}
 			typeMap.put(PortTypeConstants.PORT_GROUP_PREFIX + existingGroup.getName(), existingGroup);
 			updated.add(existingGroup);
@@ -66,9 +67,7 @@ public class PortGroupsToScenarioImporter {
 
 			PortGroup existingGroup = map.get(name);
 			assert (existingGroup != null);
-			if (!existingGroup.getContents().isEmpty()) {
-				cmd.append(RemoveCommand.create(editingDomain, existingGroup, PortPackage.Literals.PORT_GROUP__CONTENTS, new LinkedList<>(existingGroup.getContents())));
-			}
+
 			List<Object> newContents = new LinkedList<>();
 			for (String id : def.getEntries()) {
 				Object obj = typeMap.get(id);
@@ -77,6 +76,15 @@ public class PortGroupsToScenarioImporter {
 				}
 				newContents.add(obj);
 			}
+
+			// Find contents to remove
+			Set<Object> existingValues = new HashSet<>(existingGroup.getContents());
+			existingValues.removeAll(newContents);
+			if (!existingValues.isEmpty()) {
+				cmd.append(RemoveCommand.create(editingDomain, existingGroup, PortPackage.Literals.PORT_GROUP__CONTENTS, existingValues));
+			}
+			// Find contents to add
+			newContents.removeAll(existingGroup.getContents());
 			if (!newContents.isEmpty()) {
 				cmd.append(AddCommand.create(editingDomain, existingGroup, PortPackage.Literals.PORT_GROUP__CONTENTS, newContents));
 			}
@@ -86,7 +94,6 @@ public class PortGroupsToScenarioImporter {
 		if (!existing.isEmpty()) {
 			cmd.append(DeleteCommand.create(editingDomain, existing));
 		}
-
 
 		VersionRecord record = portModel.getPortGroupVersionRecord();
 		cmd.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__CREATED_BY, version.getCreatedBy()));

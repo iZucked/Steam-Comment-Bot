@@ -56,6 +56,7 @@ public class VesselGroupsToScenarioImporter {
 				existingGroup = FleetFactory.eINSTANCE.createVesselGroup();
 				existingGroup.setName(name);
 				cmd.append(AddCommand.create(editingDomain, fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS, existingGroup));
+				map.put(name,  existingGroup);
 			}
 			typeMap.put(VesselTypeConstants.VESSEL_GROUP_PREFIX + existingGroup.getName(), existingGroup);
 			updated.add(existingGroup);
