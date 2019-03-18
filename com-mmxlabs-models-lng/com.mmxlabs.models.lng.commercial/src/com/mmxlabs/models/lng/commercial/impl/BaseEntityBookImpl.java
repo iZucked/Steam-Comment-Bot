@@ -68,6 +68,7 @@ public abstract class BaseEntityBookImpl extends UUIDObjectImpl implements BaseE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<TaxRate> getTaxRates() {
 		if (taxRates == null) {
 			taxRates = new EObjectContainmentEList<TaxRate>(TaxRate.class, this, CommercialPackage.BASE_ENTITY_BOOK__TAX_RATES);

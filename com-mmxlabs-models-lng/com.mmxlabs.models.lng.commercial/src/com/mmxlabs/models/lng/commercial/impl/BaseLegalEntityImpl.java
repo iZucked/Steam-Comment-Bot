@@ -110,6 +110,7 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -119,6 +120,7 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -131,6 +133,7 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseEntityBook getShippingBook() {
 		return shippingBook;
 	}
@@ -155,6 +158,7 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShippingBook(BaseEntityBook newShippingBook) {
 		if (newShippingBook != shippingBook) {
 			NotificationChain msgs = null;
@@ -174,6 +178,7 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseEntityBook getTradingBook() {
 		return tradingBook;
 	}
@@ -198,6 +203,7 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTradingBook(BaseEntityBook newTradingBook) {
 		if (newTradingBook != tradingBook) {
 			NotificationChain msgs = null;
@@ -217,6 +223,7 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseEntityBook getUpstreamBook() {
 		return upstreamBook;
 	}
@@ -241,6 +248,7 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUpstreamBook(BaseEntityBook newUpstreamBook) {
 		if (newUpstreamBook != upstreamBook) {
 			NotificationChain msgs = null;

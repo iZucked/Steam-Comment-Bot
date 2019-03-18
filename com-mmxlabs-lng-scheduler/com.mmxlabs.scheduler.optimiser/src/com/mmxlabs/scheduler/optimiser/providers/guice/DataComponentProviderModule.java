@@ -57,6 +57,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IFullCargoLotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IFullCargoLotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProvider;
@@ -142,6 +144,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProvid
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapElementPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapFullCargoLotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapLoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMarkToMarketProviderEditor;
@@ -428,6 +431,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultLockedCargoProviderEditor.class).in(Singleton.class);
 		bind(ILockedCargoProvider.class).to(DefaultLockedCargoProviderEditor.class);
 		bind(ILockedCargoProviderEditor.class).to(DefaultLockedCargoProviderEditor.class);
+		
+		bind(HashMapFullCargoLotProvider.class).in(Singleton.class);
+		bind(IFullCargoLotProvider.class).to(HashMapFullCargoLotProvider.class);
+		bind(IFullCargoLotProviderEditor.class).to(HashMapFullCargoLotProvider.class);
 
 	}
 }

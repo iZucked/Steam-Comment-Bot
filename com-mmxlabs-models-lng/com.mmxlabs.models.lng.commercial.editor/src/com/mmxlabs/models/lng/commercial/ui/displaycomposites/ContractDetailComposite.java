@@ -99,7 +99,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 
 			@Override
 			public Layout createDetailLayout(final MMXRootObject root, final EObject value) {
-				return new GridLayout(8, false);
+				return new GridLayout(10, false);
 			}
 
 			@Override
@@ -126,6 +126,12 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 					} else {
 						editor.setLabel(null);
 					}
+					
+					return gd;
+				}
+				if (feature == CommercialPackage.Literals.CONTRACT__FULL_CARGO_LOT) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					gd.horizontalSpan = 1;
 					return gd;
 				}
 				if (feature == CommercialPackage.Literals.CONTRACT__START_DATE || feature == CommercialPackage.Literals.CONTRACT__END_DATE) {
@@ -145,13 +151,27 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 					} else {
 						editor.setLabel(null);
 					}
+					gd.horizontalSpan = 2;
+					return gd;
+				}
+				if (feature == CommercialPackage.Literals.CONTRACT__CONTRACT_YEAR_START) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					gd.horizontalSpan = 3;
 					return gd;
 				}
-				if (feature == CommercialPackage.Literals.CONTRACT__COUNTERPARTY || feature == CommercialPackage.Literals.CONTRACT__CN) {
+				
+				
+				if (feature == CommercialPackage.Literals.CONTRACT__COUNTERPARTY) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
-					gd.horizontalSpan = 3;
+					gd.horizontalSpan = 4;
+
+					return gd;
+				}
+				if (feature == CommercialPackage.Literals.CONTRACT__CN) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					gd.horizontalSpan = 4;
 
 					return gd;
 				}
@@ -161,7 +181,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 						|| feature == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_COUNTERPARTY) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
-					gd.horizontalSpan = 1;
+					gd.horizontalSpan = 2;
 					if (feature == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE) {
 						gd.horizontalSpan = 3;
 						final Label label = editor.getLabel();
@@ -186,7 +206,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 						|| feature == CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_COUNTERPARTY) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
-					gd.horizontalSpan = 1;
+					gd.horizontalSpan = 2;
 					if (feature == CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_SIZE) {
 						gd.horizontalSpan = 3;
 						final Label label = editor.getLabel();
@@ -211,7 +231,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 						|| feature == CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_COUNTERPARTY) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
-					gd.horizontalSpan = 1;
+					gd.horizontalSpan = 2;
 					if (feature == CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_SIZE) {
 						gd.horizontalSpan = 3;
 						final Label label = editor.getLabel();
@@ -236,7 +256,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 						|| feature == CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_COUNTERPARTY) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
-					gd.horizontalSpan = 1;
+					gd.horizontalSpan = 2;
 					if (feature == CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_SIZE) {
 						gd.horizontalSpan = 3;
 						final Label label = editor.getLabel();
@@ -261,7 +281,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 						|| feature == CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
-					gd.horizontalSpan = 1;
+					gd.horizontalSpan = 2;
 					if (feature == CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE) {
 						gd.horizontalSpan = 3;
 						final Label label = editor.getLabel();
@@ -282,7 +302,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 				}
 
 				GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
-				gd.horizontalSpan = 7;
+				gd.horizontalSpan = 9;
 				return gd;
 			}
 		};

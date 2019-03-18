@@ -156,6 +156,7 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getSpeed() {
 		return speed;
 	}
@@ -165,6 +166,7 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpeed(double newSpeed) {
 		double oldSpeed = speed;
 		speed = newSpeed;
@@ -177,6 +179,7 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getFuelPriceExpression() {
 		return fuelPriceExpression;
 	}
@@ -186,6 +189,7 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFuelPriceExpression(String newFuelPriceExpression) {
 		String oldFuelPriceExpression = fuelPriceExpression;
 		fuelPriceExpression = newFuelPriceExpression;
@@ -198,6 +202,7 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getHirePriceExpression() {
 		return hirePriceExpression;
 	}
@@ -207,6 +212,7 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHirePriceExpression(String newHirePriceExpression) {
 		String oldHirePriceExpression = hirePriceExpression;
 		hirePriceExpression = newHirePriceExpression;
@@ -219,6 +225,7 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<APortSet<Port>> getReturnPorts() {
 		if (returnPorts == null) {
 			returnPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__RETURN_PORTS);
@@ -231,6 +238,7 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isIncludeCanal() {
 		return includeCanal;
 	}
@@ -240,6 +248,7 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIncludeCanal(boolean newIncludeCanal) {
 		boolean oldIncludeCanal = includeCanal;
 		includeCanal = newIncludeCanal;

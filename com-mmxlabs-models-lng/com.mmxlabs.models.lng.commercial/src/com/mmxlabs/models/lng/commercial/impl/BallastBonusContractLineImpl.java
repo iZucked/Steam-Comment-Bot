@@ -71,6 +71,7 @@ public abstract class BallastBonusContractLineImpl extends EObjectImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<APortSet<Port>> getRedeliveryPorts() {
 		if (redeliveryPorts == null) {
 			redeliveryPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, CommercialPackage.BALLAST_BONUS_CONTRACT_LINE__REDELIVERY_PORTS);

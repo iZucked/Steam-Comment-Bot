@@ -99,6 +99,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_minQuantityEditor(detailComposite, topClass);
 		add_maxQuantityEditor(detailComposite, topClass);
 		add_operationalToleranceEditor(detailComposite, topClass);
+		add_fullCargoLotEditor(detailComposite, topClass);
 		add_optionalEditor(detailComposite, topClass);
 		add_priceExpressionEditor(detailComposite, topClass);
 		add_cargoEditor(detailComposite, topClass);
@@ -667,6 +668,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_operationalToleranceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE));
+	}
+
+	/**
+	 * Create the editor for the fullCargoLot feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_fullCargoLotEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__FULL_CARGO_LOT));
 	}
 
 	/**

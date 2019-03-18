@@ -68,6 +68,7 @@ public class ExpressionPriceParametersImpl extends LNGPriceCalculatorParametersI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getPriceExpression() {
 		return priceExpression;
 	}
@@ -77,6 +78,7 @@ public class ExpressionPriceParametersImpl extends LNGPriceCalculatorParametersI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPriceExpression(String newPriceExpression) {
 		String oldPriceExpression = priceExpression;
 		priceExpression = newPriceExpression;

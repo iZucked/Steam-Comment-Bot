@@ -72,6 +72,7 @@ public class RuleBasedBallastBonusContractImpl extends UUIDObjectImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<BallastBonusContractLine> getRules() {
 		if (rules == null) {
 			rules = new EObjectContainmentEList<BallastBonusContractLine>(BallastBonusContractLine.class, this, CommercialPackage.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);

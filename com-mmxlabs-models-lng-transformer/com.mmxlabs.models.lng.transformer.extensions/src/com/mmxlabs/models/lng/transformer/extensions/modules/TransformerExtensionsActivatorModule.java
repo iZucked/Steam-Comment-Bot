@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.Ball
 import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposuresOutputScheduleProcessorFactory;
+import com.mmxlabs.models.lng.transformer.extensions.fcl.FullCargoLotModule;
 import com.mmxlabs.models.lng.transformer.extensions.inventory.InventoryLevelsOutputScheduleProcessorFactory;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsModule;
 import com.mmxlabs.models.lng.transformer.extensions.paperdeals.PaperDealsScheduleProcessorFactory;
@@ -40,6 +41,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		install(new PanamaSlotsModule());
 		install(new ADPTransformerModule());
 		install(new ShippingTypeRequirementModule());
+		install(new FullCargoLotModule());
 
 		bindService(SimpleContractTransformerFactory.class).export();
 		bindService(BallastBonusContractTransformerFactory.class).export();

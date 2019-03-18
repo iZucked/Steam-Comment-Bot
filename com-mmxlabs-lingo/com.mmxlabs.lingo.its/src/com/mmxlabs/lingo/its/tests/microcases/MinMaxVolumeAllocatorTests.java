@@ -54,7 +54,6 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 
 				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU).build() //
-
 				.build();
 
 		evaluateWithOverrides(new MinMaxVolumeModule(), null, scenarioRunner -> {
@@ -184,6 +183,78 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			verifyNoCapacityViolations(cargoAllocation);
 		});
 	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void testDES_Purchase_MinTransfer_withFCL_load() throws Exception {
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", 20.0, null) //
+				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU)//
+				.with(s -> s.setFullCargoLot(true))//
+				.build() //
+
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU)//
+				.build() //
+
+				.build();
+
+		evaluateWithOverrides(new MinMaxVolumeModule(), null, scenarioRunner -> {
+
+			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+			final Schedule schedule = scheduleModel.getSchedule();
+			Assert.assertNotNull(schedule);
+			Assert.assertEquals(1, schedule.getCargoAllocations().size());
+
+			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+
+			Assert.assertEquals(4_000_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
+			Assert.assertEquals(4_000_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+
+			Assert.assertEquals(4_000_000, cargoAllocation.getDischargeAllocation().getEnergyTransferred());
+			Assert.assertEquals(4_000_000 / 20, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+
+			verifyNoCapacityViolations(cargoAllocation);
+		});
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void testDES_Purchase_MinTransfer_withFCL_discharge() throws Exception {
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", 20.0, null) //
+				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU)//
+				.build() //
+
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU)//
+				.with(s -> s.setFullCargoLot(true))//
+				.build() //
+
+				.build();
+
+		evaluateWithOverrides(new MinMaxVolumeModule(), null, scenarioRunner -> {
+
+			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+			final Schedule schedule = scheduleModel.getSchedule();
+			Assert.assertNotNull(schedule);
+			Assert.assertEquals(1, schedule.getCargoAllocations().size());
+
+			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+
+			Assert.assertEquals(4_000_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
+			Assert.assertEquals(4_000_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+
+			Assert.assertEquals(4_000_000, cargoAllocation.getDischargeAllocation().getEnergyTransferred());
+			Assert.assertEquals(4_000_000 / 20, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+
+			verifyNoCapacityViolations(cargoAllocation);
+		});
+	}
 
 	@Test
 	@Category({ MicroTest.class })
@@ -281,6 +352,78 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 
 			Assert.assertEquals(3_500_000, cargoAllocation.getDischargeAllocation().getEnergyTransferred());
 			Assert.assertEquals(3_500_000 / 20, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+
+			verifyNoCapacityViolations(cargoAllocation);
+		});
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void testFOB_Sale_MinTransfer_withFCL_load() throws Exception {
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
+				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU)//
+				.with(s -> s.setFullCargoLot(true))//
+				.build() //
+
+				.makeFOBSale("D1", false, LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
+				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU)//
+				.build() //
+
+				.build();
+
+		evaluateWithOverrides(new MinMaxVolumeModule(), null, scenarioRunner -> {
+
+			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+			final Schedule schedule = scheduleModel.getSchedule();
+			Assert.assertNotNull(schedule);
+			Assert.assertEquals(1, schedule.getCargoAllocations().size());
+
+			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+
+			Assert.assertEquals(4_000_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
+			Assert.assertEquals(4_000_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+
+			Assert.assertEquals(4_000_000, cargoAllocation.getDischargeAllocation().getEnergyTransferred());
+			Assert.assertEquals(4_000_000 / 20, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+
+			verifyNoCapacityViolations(cargoAllocation);
+		});
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void testFOB_Sale_MinTransfer_withFCL_discharge() throws Exception {
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
+				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU)//
+				.build() //
+
+				.makeFOBSale("D1", false, LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
+				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU)//
+				.with(s -> s.setFullCargoLot(true))//
+				.build() //
+
+				.build();
+
+		evaluateWithOverrides(new MinMaxVolumeModule(), null, scenarioRunner -> {
+
+			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+			final Schedule schedule = scheduleModel.getSchedule();
+			Assert.assertNotNull(schedule);
+			Assert.assertEquals(1, schedule.getCargoAllocations().size());
+
+			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+
+			Assert.assertEquals(4_000_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
+			Assert.assertEquals(4_000_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+
+			Assert.assertEquals(4_000_000, cargoAllocation.getDischargeAllocation().getEnergyTransferred());
+			Assert.assertEquals(4_000_000 / 20, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
 
 			verifyNoCapacityViolations(cargoAllocation);
 		});
@@ -397,6 +540,83 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 
 			verifyNoCapacityViolations(cargoAllocation);
 
+		});
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void testShipped_MinTransfer_withFCL_load() throws Exception {
+
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setCapacity(100_000);
+		vessel.setFillCapacity(1.0);
+		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
+				.withVolumeLimits(1_800_000, 4_500_000, VolumeUnits.MMBTU)//
+				.with(s -> s.setFullCargoLot(true))//
+				.build() //
+
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.withVolumeLimits(1_800_000, 3_500_000, VolumeUnits.MMBTU)//
+
+				.build() //
+				.withVesselAssignment(market, 0, 0) //
+				.build();
+
+		evaluateWithOverrides(new MinMaxVolumeModule(), null, scenarioRunner -> {
+
+			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+			final Schedule schedule = scheduleModel.getSchedule();
+			Assert.assertNotNull(schedule);
+			Assert.assertEquals(1, schedule.getCargoAllocations().size());
+
+			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+
+			Assert.assertEquals(2_000_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
+			Assert.assertEquals(2_000_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+
+			verifyNoCapacityViolations(cargoAllocation);
+		});
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void testShipped_MinTransfer_withFCL_discharge() throws Exception {
+
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setCapacity(100_000);
+		vessel.setFillCapacity(1.0);
+		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
+				.withVolumeLimits(1_800_000, 4_500_000, VolumeUnits.MMBTU)//
+				.build() //
+
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.withVolumeLimits(1_800_000, 3_500_000, VolumeUnits.MMBTU)//
+				.with(s -> s.setFullCargoLot(true))//
+				.build() //
+				.withVesselAssignment(market, 0, 0) //
+				.build();
+
+		evaluateWithOverrides(new MinMaxVolumeModule(), null, scenarioRunner -> {
+
+			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+			final Schedule schedule = scheduleModel.getSchedule();
+			Assert.assertNotNull(schedule);
+			Assert.assertEquals(1, schedule.getCargoAllocations().size());
+
+			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+
+			Assert.assertEquals(2_000_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
+			Assert.assertEquals(2_000_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+
+			verifyNoCapacityViolations(cargoAllocation);
 		});
 	}
 

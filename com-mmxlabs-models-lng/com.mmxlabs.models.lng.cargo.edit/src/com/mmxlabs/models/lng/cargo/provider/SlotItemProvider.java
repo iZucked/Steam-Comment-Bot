@@ -65,6 +65,7 @@ public class SlotItemProvider
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
 			addOperationalTolerancePropertyDescriptor(object);
+			addFullCargoLotPropertyDescriptor(object);
 			addOptionalPropertyDescriptor(object);
 			addPriceExpressionPropertyDescriptor(object);
 			addCargoPropertyDescriptor(object);
@@ -458,6 +459,28 @@ public class SlotItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Full Cargo Lot feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFullCargoLotPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_fullCargoLot_feature"),
+				 getString("_UI_Slot_fullCargoLot_description"),
+				 CargoPackage.Literals.SLOT__FULL_CARGO_LOT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -1415,6 +1438,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__MIN_QUANTITY:
 			case CargoPackage.SLOT__MAX_QUANTITY:
 			case CargoPackage.SLOT__OPERATIONAL_TOLERANCE:
+			case CargoPackage.SLOT__FULL_CARGO_LOT:
 			case CargoPackage.SLOT__OPTIONAL:
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
 			case CargoPackage.SLOT__PRICING_EVENT:

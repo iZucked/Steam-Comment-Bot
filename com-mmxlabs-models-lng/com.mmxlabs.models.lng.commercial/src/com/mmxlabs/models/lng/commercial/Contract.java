@@ -35,6 +35,7 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getOperationalTolerance <em>Operational Tolerance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isFullCargoLot <em>Full Cargo Lot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedPorts <em>Restricted Ports</em>}</li>
@@ -243,6 +244,32 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	boolean isSetOperationalTolerance();
+
+	/**
+	 * Returns the value of the '<em><b>Full Cargo Lot</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Full Cargo Lot</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Full Cargo Lot</em>' attribute.
+	 * @see #setFullCargoLot(boolean)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_FullCargoLot()
+	 * @model
+	 * @generated
+	 */
+	boolean isFullCargoLot();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#isFullCargoLot <em>Full Cargo Lot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Full Cargo Lot</em>' attribute.
+	 * @see #isFullCargoLot()
+	 * @generated
+	 */
+	void setFullCargoLot(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Volume Limits Unit</b></em>' attribute.

@@ -85,6 +85,7 @@ public class ContractExpressionMapEntryImpl extends EObjectImpl implements Contr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Contract getContract() {
 		if (contract != null && contract.eIsProxy()) {
 			InternalEObject oldContract = (InternalEObject)contract;
@@ -111,6 +112,7 @@ public class ContractExpressionMapEntryImpl extends EObjectImpl implements Contr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setContract(Contract newContract) {
 		Contract oldContract = contract;
 		contract = newContract;
@@ -123,6 +125,7 @@ public class ContractExpressionMapEntryImpl extends EObjectImpl implements Contr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getExpression() {
 		return expression;
 	}
@@ -132,6 +135,7 @@ public class ContractExpressionMapEntryImpl extends EObjectImpl implements Contr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setExpression(String newExpression) {
 		String oldExpression = expression;
 		expression = newExpression;

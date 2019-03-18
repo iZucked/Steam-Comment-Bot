@@ -139,6 +139,7 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinDuration() {
 		return minDuration;
 	}
@@ -148,6 +149,7 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinDuration(int newMinDuration) {
 		int oldMinDuration = minDuration;
 		minDuration = newMinDuration;
@@ -162,6 +164,7 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMinDuration() {
 		int oldMinDuration = minDuration;
 		boolean oldMinDurationESet = minDurationESet;
@@ -176,6 +179,7 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMinDuration() {
 		return minDurationESet;
 	}
@@ -185,6 +189,7 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaxDuration() {
 		return maxDuration;
 	}
@@ -194,6 +199,7 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxDuration(int newMaxDuration) {
 		int oldMaxDuration = maxDuration;
 		maxDuration = newMaxDuration;
@@ -208,6 +214,7 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMaxDuration() {
 		int oldMaxDuration = maxDuration;
 		boolean oldMaxDurationESet = maxDurationESet;
@@ -222,6 +229,7 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMaxDuration() {
 		return maxDurationESet;
 	}
@@ -231,6 +239,7 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BallastBonusContract getBallastBonusContract() {
 		return ballastBonusContract;
 	}
@@ -255,6 +264,7 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBallastBonusContract(BallastBonusContract newBallastBonusContract) {
 		if (newBallastBonusContract != ballastBonusContract) {
 			NotificationChain msgs = null;
@@ -274,6 +284,7 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
@@ -300,6 +311,7 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEntity(BaseLegalEntity newEntity) {
 		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;

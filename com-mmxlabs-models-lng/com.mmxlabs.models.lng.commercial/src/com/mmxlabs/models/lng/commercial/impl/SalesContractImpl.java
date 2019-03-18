@@ -122,6 +122,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getMinCvValue() {
 		return minCvValue;
 	}
@@ -131,6 +132,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinCvValue(double newMinCvValue) {
 		double oldMinCvValue = minCvValue;
 		minCvValue = newMinCvValue;
@@ -145,6 +147,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMinCvValue() {
 		double oldMinCvValue = minCvValue;
 		boolean oldMinCvValueESet = minCvValueESet;
@@ -159,6 +162,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMinCvValue() {
 		return minCvValueESet;
 	}
@@ -168,6 +172,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getMaxCvValue() {
 		return maxCvValue;
 	}
@@ -177,6 +182,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxCvValue(double newMaxCvValue) {
 		double oldMaxCvValue = maxCvValue;
 		maxCvValue = newMaxCvValue;
@@ -191,6 +197,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMaxCvValue() {
 		double oldMaxCvValue = maxCvValue;
 		boolean oldMaxCvValueESet = maxCvValueESet;
@@ -205,6 +212,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMaxCvValue() {
 		return maxCvValueESet;
 	}
@@ -214,6 +222,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoDeliveryType getPurchaseDeliveryType() {
 		return purchaseDeliveryType;
 	}
@@ -223,6 +232,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPurchaseDeliveryType(CargoDeliveryType newPurchaseDeliveryType) {
 		CargoDeliveryType oldPurchaseDeliveryType = purchaseDeliveryType;
 		purchaseDeliveryType = newPurchaseDeliveryType == null ? PURCHASE_DELIVERY_TYPE_EDEFAULT : newPurchaseDeliveryType;

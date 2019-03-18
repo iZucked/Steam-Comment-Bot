@@ -101,6 +101,7 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<BaseLegalEntity> getEntities() {
 		if (entities == null) {
 			entities = new EObjectContainmentEList<BaseLegalEntity>(BaseLegalEntity.class, this, CommercialPackage.COMMERCIAL_MODEL__ENTITIES);
@@ -113,6 +114,7 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<SalesContract> getSalesContracts() {
 		if (salesContracts == null) {
 			salesContracts = new EObjectContainmentEList<SalesContract>(SalesContract.class, this, CommercialPackage.COMMERCIAL_MODEL__SALES_CONTRACTS);
@@ -125,6 +127,7 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PurchaseContract> getPurchaseContracts() {
 		if (purchaseContracts == null) {
 			purchaseContracts = new EObjectContainmentEList<PurchaseContract>(PurchaseContract.class, this, CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS);
@@ -137,6 +140,7 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<CharterContract> getCharteringContracts() {
 		if (charteringContracts == null) {
 			charteringContracts = new EObjectContainmentEList<CharterContract>(CharterContract.class, this, CommercialPackage.COMMERCIAL_MODEL__CHARTERING_CONTRACTS);

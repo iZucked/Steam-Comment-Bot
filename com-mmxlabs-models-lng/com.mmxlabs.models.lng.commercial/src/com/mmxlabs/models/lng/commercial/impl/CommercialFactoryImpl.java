@@ -129,6 +129,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CommercialModel createCommercialModel() {
 		CommercialModelImpl commercialModel = new CommercialModelImpl();
 		return commercialModel;
@@ -139,6 +140,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LegalEntity createLegalEntity() {
 		LegalEntityImpl legalEntity = new LegalEntityImpl();
 		return legalEntity;
@@ -149,6 +151,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Contract createContract() {
 		ContractImpl contract = new ContractImpl();
 		return contract;
@@ -159,6 +162,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SalesContract createSalesContract() {
 		SalesContractImpl salesContract = new SalesContractImpl();
 		return salesContract;
@@ -169,6 +173,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PurchaseContract createPurchaseContract() {
 		PurchaseContractImpl purchaseContract = new PurchaseContractImpl();
 		return purchaseContract;
@@ -179,6 +184,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TaxRate createTaxRate() {
 		TaxRateImpl taxRate = new TaxRateImpl();
 		return taxRate;
@@ -189,6 +195,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ExpressionPriceParameters createExpressionPriceParameters() {
 		ExpressionPriceParametersImpl expressionPriceParameters = new ExpressionPriceParametersImpl();
 		return expressionPriceParameters;
@@ -199,6 +206,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ContractExpressionMapEntry createContractExpressionMapEntry() {
 		ContractExpressionMapEntryImpl contractExpressionMapEntry = new ContractExpressionMapEntryImpl();
 		return contractExpressionMapEntry;
@@ -209,6 +217,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SimpleEntityBook createSimpleEntityBook() {
 		SimpleEntityBookImpl simpleEntityBook = new SimpleEntityBookImpl();
 		return simpleEntityBook;
@@ -219,6 +228,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DateShiftExpressionPriceParameters createDateShiftExpressionPriceParameters() {
 		DateShiftExpressionPriceParametersImpl dateShiftExpressionPriceParameters = new DateShiftExpressionPriceParametersImpl();
 		return dateShiftExpressionPriceParameters;
@@ -229,6 +239,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public RuleBasedBallastBonusContract createRuleBasedBallastBonusContract() {
 		RuleBasedBallastBonusContractImpl ruleBasedBallastBonusContract = new RuleBasedBallastBonusContractImpl();
 		return ruleBasedBallastBonusContract;
@@ -239,6 +250,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LumpSumBallastBonusContractLine createLumpSumBallastBonusContractLine() {
 		LumpSumBallastBonusContractLineImpl lumpSumBallastBonusContractLine = new LumpSumBallastBonusContractLineImpl();
 		return lumpSumBallastBonusContractLine;
@@ -249,6 +261,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public NotionalJourneyBallastBonusContractLine createNotionalJourneyBallastBonusContractLine() {
 		NotionalJourneyBallastBonusContractLineImpl notionalJourneyBallastBonusContractLine = new NotionalJourneyBallastBonusContractLineImpl();
 		return notionalJourneyBallastBonusContractLine;
@@ -259,6 +272,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SimpleCharterContract createSimpleCharterContract() {
 		SimpleCharterContractImpl simpleCharterContract = new SimpleCharterContractImpl();
 		return simpleCharterContract;
@@ -269,6 +283,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SimpleBallastBonusCharterContract createSimpleBallastBonusCharterContract() {
 		SimpleBallastBonusCharterContractImpl simpleBallastBonusCharterContract = new SimpleBallastBonusCharterContractImpl();
 		return simpleBallastBonusCharterContract;
@@ -319,6 +334,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CommercialPackage getCommercialPackage() {
 		return (CommercialPackage)getEPackage();
 	}

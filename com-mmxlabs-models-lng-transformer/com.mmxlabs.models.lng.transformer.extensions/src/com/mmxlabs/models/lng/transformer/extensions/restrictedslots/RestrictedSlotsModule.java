@@ -29,14 +29,14 @@ public class RestrictedSlotsModule extends PeaberryActivationModule {
 	protected void configure() {
 
 		bindService(RestrictedSlotsConstraintCheckerFactory.class).export();
-		bindService(RestrictedElementsInjectorService.class).export();
+		bindService(RestrictedSlotsInjectorService.class).export();
 		bindService(RestrictedSlotsTransformerFactory.class).export();
 	}
 
 	/**
 	 * An implementation of @link{IOptimiserInjectorService} to bind a @link{IRestrictedSlotsProvider} to the DCP module
 	 */
-	public static class RestrictedElementsInjectorService implements IOptimiserInjectorService {
+	public static class RestrictedSlotsInjectorService implements IOptimiserInjectorService {
 
 		@Override
 		@Nullable

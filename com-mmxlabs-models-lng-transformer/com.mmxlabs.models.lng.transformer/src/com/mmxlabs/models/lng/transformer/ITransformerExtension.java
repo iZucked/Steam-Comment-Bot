@@ -25,10 +25,10 @@ public interface ITransformerExtension {
 	 * @param modelEntityMap
 	 * @param builder
 	 */
-	public void startTransforming(LNGScenarioModel rootObject, ModelEntityMap modelEntityMap, ISchedulerBuilder builder);
+	default void startTransforming(LNGScenarioModel rootObject, ModelEntityMap modelEntityMap, ISchedulerBuilder builder) {}
 
 	/**
 	 * This method will be called just before the transformation is completed and the builder's {@link ISchedulerBuilder#getOptimisationData()} method is called.
 	 */
-	public void finishTransforming();
+	default void finishTransforming() {}
 }

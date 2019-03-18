@@ -95,6 +95,11 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			}
 		}
 		setTransferVolume(allocationRecord, slots, annotation, maxTransferVolumeMMBTu, maxTransferVolumeM3);
+		
+		if (allocationRecord.fullCargoLot) {
+			return annotation;
+		}
+		
 		final long maxTransferPNL = entityValueCalculatorProvider.get()
 				.evaluate(EvaluationMode.Estimate, allocationRecord.resourceVoyagePlan, annotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
 
@@ -129,15 +134,14 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 	@Override
 	protected @NonNull AllocationAnnotation calculateShippedMode(final @NonNull AllocationRecord allocationRecord, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IVessel vessel) {
 
-		if (slots.size() > 2) {
+		if (slots.size() > 2 || allocationRecord.fullCargoLot) {
 			// Fixed discharge volumes, so no decision to make here.
 			return calculateShippedMode_MaxVolumes(allocationRecord, slots, vessel);
 		}
 
 		final IEntityValueCalculator entityValueCalculator = entityValueCalculatorProvider.get();
-
+		
 		final AllocationAnnotation minAnnotation = calculateShippedMode_MinVolumes(allocationRecord, slots, vessel);
-
 		final long minTransferPNL = entityValueCalculator
 				.evaluate(EvaluationMode.Estimate, allocationRecord.resourceVoyagePlan, minAnnotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
 

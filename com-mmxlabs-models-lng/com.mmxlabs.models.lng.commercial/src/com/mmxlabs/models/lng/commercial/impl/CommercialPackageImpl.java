@@ -307,6 +307,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCommercialModel() {
 		return commercialModelEClass;
 	}
@@ -316,6 +317,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCommercialModel_Entities() {
 		return (EReference)commercialModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -325,6 +327,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCommercialModel_SalesContracts() {
 		return (EReference)commercialModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -334,6 +337,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCommercialModel_PurchaseContracts() {
 		return (EReference)commercialModelEClass.getEStructuralFeatures().get(2);
 	}
@@ -343,6 +347,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCommercialModel_CharteringContracts() {
 		return (EReference)commercialModelEClass.getEStructuralFeatures().get(3);
 	}
@@ -352,6 +357,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBaseLegalEntity() {
 		return baseLegalEntityEClass;
 	}
@@ -361,6 +367,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBaseLegalEntity_ShippingBook() {
 		return (EReference)baseLegalEntityEClass.getEStructuralFeatures().get(0);
 	}
@@ -370,6 +377,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBaseLegalEntity_TradingBook() {
 		return (EReference)baseLegalEntityEClass.getEStructuralFeatures().get(1);
 	}
@@ -379,6 +387,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBaseLegalEntity_UpstreamBook() {
 		return (EReference)baseLegalEntityEClass.getEStructuralFeatures().get(2);
 	}
@@ -388,6 +397,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getLegalEntity() {
 		return legalEntityEClass;
 	}
@@ -397,6 +407,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getContract() {
 		return contractEClass;
 	}
@@ -406,6 +417,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContract_Entity() {
 		return (EReference)contractEClass.getEStructuralFeatures().get(3);
 	}
@@ -415,6 +427,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContract_AllowedPorts() {
 		return (EReference)contractEClass.getEStructuralFeatures().get(7);
 	}
@@ -424,6 +437,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContract_PreferredPort() {
 		return (EReference)contractEClass.getEStructuralFeatures().get(8);
 	}
@@ -433,6 +447,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getContract_MinQuantity() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(9);
 	}
@@ -442,6 +457,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getContract_MaxQuantity() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(10);
 	}
@@ -451,6 +467,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getContract_OperationalTolerance() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(12);
 	}
@@ -460,6 +477,17 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EAttribute getContract_FullCargoLot() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getContract_VolumeLimitsUnit() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(11);
 	}
@@ -469,8 +497,9 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getContract_RestrictedListsArePermissive() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(13);
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(14);
 	}
 
 	/**
@@ -478,16 +507,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContract_RestrictedContracts() {
-		return (EReference)contractEClass.getEStructuralFeatures().get(14);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getContract_RestrictedPorts() {
 		return (EReference)contractEClass.getEStructuralFeatures().get(15);
 	}
 
@@ -496,7 +517,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getContract_PriceInfo() {
+	@Override
+	public EReference getContract_RestrictedPorts() {
 		return (EReference)contractEClass.getEStructuralFeatures().get(16);
 	}
 
@@ -505,8 +527,9 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_Notes() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(17);
+	@Override
+	public EReference getContract_PriceInfo() {
+		return (EReference)contractEClass.getEStructuralFeatures().get(17);
 	}
 
 	/**
@@ -514,7 +537,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_ContractType() {
+	@Override
+	public EAttribute getContract_Notes() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(18);
 	}
 
@@ -523,7 +547,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_PricingEvent() {
+	@Override
+	public EAttribute getContract_ContractType() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(19);
 	}
 
@@ -532,7 +557,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_CancellationExpression() {
+	@Override
+	public EAttribute getContract_PricingEvent() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(20);
 	}
 
@@ -541,7 +567,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_WindowNominationSize() {
+	@Override
+	public EAttribute getContract_CancellationExpression() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(21);
 	}
 
@@ -550,7 +577,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_WindowNominationSizeUnits() {
+	@Override
+	public EAttribute getContract_WindowNominationSize() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(22);
 	}
 
@@ -559,7 +587,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_WindowNominationCounterparty() {
+	@Override
+	public EAttribute getContract_WindowNominationSizeUnits() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(23);
 	}
 
@@ -568,52 +597,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_Divertible() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(33);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getContract_ShippingDaysRestriction() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(34);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getContract_PortLoadNominationSize() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(35);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getContract_PortLoadNominationSizeUnits() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(36);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getContract_PortLoadNominationCounterparty() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(37);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getContract_VesselNominationSize() {
+	@Override
+	public EAttribute getContract_WindowNominationCounterparty() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(24);
 	}
 
@@ -622,7 +607,58 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_VesselNominationSizeUnits() {
+	@Override
+	public EAttribute getContract_Divertible() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(34);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getContract_ShippingDaysRestriction() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(35);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getContract_PortLoadNominationSize() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(36);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getContract_PortLoadNominationSizeUnits() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(37);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getContract_PortLoadNominationCounterparty() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(38);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getContract_VesselNominationSize() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(25);
 	}
 
@@ -631,7 +667,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_VesselNominationCounterparty() {
+	@Override
+	public EAttribute getContract_VesselNominationSizeUnits() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(26);
 	}
 
@@ -640,7 +677,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_VolumeNominationSize() {
+	@Override
+	public EAttribute getContract_VesselNominationCounterparty() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(27);
 	}
 
@@ -649,7 +687,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_VolumeNominationSizeUnits() {
+	@Override
+	public EAttribute getContract_VolumeNominationSize() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(28);
 	}
 
@@ -658,7 +697,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_VolumeNominationCounterparty() {
+	@Override
+	public EAttribute getContract_VolumeNominationSizeUnits() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(29);
 	}
 
@@ -667,7 +707,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_PortNominationSize() {
+	@Override
+	public EAttribute getContract_VolumeNominationCounterparty() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(30);
 	}
 
@@ -676,7 +717,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_PortNominationSizeUnits() {
+	@Override
+	public EAttribute getContract_PortNominationSize() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(31);
 	}
 
@@ -685,7 +727,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_PortNominationCounterparty() {
+	@Override
+	public EAttribute getContract_PortNominationSizeUnits() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(32);
 	}
 
@@ -694,6 +737,17 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EAttribute getContract_PortNominationCounterparty() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(33);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getContract_ContractYearStart() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(6);
 	}
@@ -703,6 +757,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getContract_Code() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(0);
 	}
@@ -712,6 +767,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getContract_Counterparty() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(1);
 	}
@@ -721,6 +777,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getContract_Cn() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(2);
 	}
@@ -730,6 +787,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getContract_StartDate() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(4);
 	}
@@ -739,6 +797,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getContract_EndDate() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(5);
 	}
@@ -748,6 +807,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSalesContract() {
 		return salesContractEClass;
 	}
@@ -757,6 +817,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSalesContract_MinCvValue() {
 		return (EAttribute)salesContractEClass.getEStructuralFeatures().get(0);
 	}
@@ -766,6 +827,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSalesContract_MaxCvValue() {
 		return (EAttribute)salesContractEClass.getEStructuralFeatures().get(1);
 	}
@@ -775,6 +837,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSalesContract_PurchaseDeliveryType() {
 		return (EAttribute)salesContractEClass.getEStructuralFeatures().get(2);
 	}
@@ -784,6 +847,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPurchaseContract() {
 		return purchaseContractEClass;
 	}
@@ -793,6 +857,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPurchaseContract_CargoCV() {
 		return (EAttribute)purchaseContractEClass.getEStructuralFeatures().get(0);
 	}
@@ -802,6 +867,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPurchaseContract_SalesDeliveryType() {
 		return (EAttribute)purchaseContractEClass.getEStructuralFeatures().get(1);
 	}
@@ -811,6 +877,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getTaxRate() {
 		return taxRateEClass;
 	}
@@ -820,6 +887,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTaxRate_Date() {
 		return (EAttribute)taxRateEClass.getEStructuralFeatures().get(0);
 	}
@@ -829,6 +897,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTaxRate_Value() {
 		return (EAttribute)taxRateEClass.getEStructuralFeatures().get(1);
 	}
@@ -838,6 +907,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getLNGPriceCalculatorParameters() {
 		return lngPriceCalculatorParametersEClass;
 	}
@@ -847,6 +917,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getExpressionPriceParameters() {
 		return expressionPriceParametersEClass;
 	}
@@ -856,6 +927,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getExpressionPriceParameters_PriceExpression() {
 		return (EAttribute)expressionPriceParametersEClass.getEStructuralFeatures().get(0);
 	}
@@ -865,6 +937,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSlotContractParams() {
 		return slotContractParamsEClass;
 	}
@@ -874,6 +947,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getContractExpressionMapEntry() {
 		return contractExpressionMapEntryEClass;
 	}
@@ -883,6 +957,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContractExpressionMapEntry_Contract() {
 		return (EReference)contractExpressionMapEntryEClass.getEStructuralFeatures().get(0);
 	}
@@ -892,6 +967,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getContractExpressionMapEntry_Expression() {
 		return (EAttribute)contractExpressionMapEntryEClass.getEStructuralFeatures().get(1);
 	}
@@ -901,6 +977,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getVolumeParams() {
 		return volumeParamsEClass;
 	}
@@ -910,6 +987,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBaseEntityBook() {
 		return baseEntityBookEClass;
 	}
@@ -919,6 +997,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBaseEntityBook_TaxRates() {
 		return (EReference)baseEntityBookEClass.getEStructuralFeatures().get(0);
 	}
@@ -928,6 +1007,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSimpleEntityBook() {
 		return simpleEntityBookEClass;
 	}
@@ -937,6 +1017,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDateShiftExpressionPriceParameters() {
 		return dateShiftExpressionPriceParametersEClass;
 	}
@@ -946,6 +1027,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDateShiftExpressionPriceParameters_PriceExpression() {
 		return (EAttribute)dateShiftExpressionPriceParametersEClass.getEStructuralFeatures().get(0);
 	}
@@ -955,6 +1037,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDateShiftExpressionPriceParameters_SpecificDay() {
 		return (EAttribute)dateShiftExpressionPriceParametersEClass.getEStructuralFeatures().get(1);
 	}
@@ -964,6 +1047,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDateShiftExpressionPriceParameters_Value() {
 		return (EAttribute)dateShiftExpressionPriceParametersEClass.getEStructuralFeatures().get(2);
 	}
@@ -973,6 +1057,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBallastBonusContract() {
 		return ballastBonusContractEClass;
 	}
@@ -982,6 +1067,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getRuleBasedBallastBonusContract() {
 		return ruleBasedBallastBonusContractEClass;
 	}
@@ -991,6 +1077,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getRuleBasedBallastBonusContract_Rules() {
 		return (EReference)ruleBasedBallastBonusContractEClass.getEStructuralFeatures().get(0);
 	}
@@ -1000,6 +1087,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBallastBonusContractLine() {
 		return ballastBonusContractLineEClass;
 	}
@@ -1009,6 +1097,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBallastBonusContractLine_RedeliveryPorts() {
 		return (EReference)ballastBonusContractLineEClass.getEStructuralFeatures().get(0);
 	}
@@ -1018,6 +1107,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getLumpSumBallastBonusContractLine() {
 		return lumpSumBallastBonusContractLineEClass;
 	}
@@ -1027,6 +1117,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getLumpSumBallastBonusContractLine_PriceExpression() {
 		return (EAttribute)lumpSumBallastBonusContractLineEClass.getEStructuralFeatures().get(0);
 	}
@@ -1036,6 +1127,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getNotionalJourneyBallastBonusContractLine() {
 		return notionalJourneyBallastBonusContractLineEClass;
 	}
@@ -1045,6 +1137,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNotionalJourneyBallastBonusContractLine_Speed() {
 		return (EAttribute)notionalJourneyBallastBonusContractLineEClass.getEStructuralFeatures().get(0);
 	}
@@ -1054,6 +1147,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNotionalJourneyBallastBonusContractLine_FuelPriceExpression() {
 		return (EAttribute)notionalJourneyBallastBonusContractLineEClass.getEStructuralFeatures().get(1);
 	}
@@ -1063,6 +1157,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNotionalJourneyBallastBonusContractLine_HirePriceExpression() {
 		return (EAttribute)notionalJourneyBallastBonusContractLineEClass.getEStructuralFeatures().get(2);
 	}
@@ -1072,6 +1167,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getNotionalJourneyBallastBonusContractLine_ReturnPorts() {
 		return (EReference)notionalJourneyBallastBonusContractLineEClass.getEStructuralFeatures().get(3);
 	}
@@ -1081,6 +1177,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNotionalJourneyBallastBonusContractLine_IncludeCanal() {
 		return (EAttribute)notionalJourneyBallastBonusContractLineEClass.getEStructuralFeatures().get(4);
 	}
@@ -1090,6 +1187,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCharterContract() {
 		return charterContractEClass;
 	}
@@ -1099,6 +1197,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterContract_MinDuration() {
 		return (EAttribute)charterContractEClass.getEStructuralFeatures().get(0);
 	}
@@ -1108,6 +1207,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterContract_MaxDuration() {
 		return (EAttribute)charterContractEClass.getEStructuralFeatures().get(1);
 	}
@@ -1117,6 +1217,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSimpleCharterContract() {
 		return simpleCharterContractEClass;
 	}
@@ -1126,6 +1227,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBallastBonusCharterContract() {
 		return ballastBonusCharterContractEClass;
 	}
@@ -1135,6 +1237,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBallastBonusCharterContract_BallastBonusContract() {
 		return (EReference)ballastBonusCharterContractEClass.getEStructuralFeatures().get(0);
 	}
@@ -1144,6 +1247,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBallastBonusCharterContract_Entity() {
 		return (EReference)ballastBonusCharterContractEClass.getEStructuralFeatures().get(1);
 	}
@@ -1153,6 +1257,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSimpleBallastBonusCharterContract() {
 		return simpleBallastBonusCharterContractEClass;
 	}
@@ -1162,6 +1267,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getContractType() {
 		return contractTypeEEnum;
 	}
@@ -1171,6 +1277,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getPricingEvent() {
 		return pricingEventEEnum;
 	}
@@ -1180,6 +1287,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CommercialFactory getCommercialFactory() {
 		return (CommercialFactory)getEFactoryInstance();
 	}
@@ -1230,6 +1338,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(contractEClass, CONTRACT__MAX_QUANTITY);
 		createEAttribute(contractEClass, CONTRACT__VOLUME_LIMITS_UNIT);
 		createEAttribute(contractEClass, CONTRACT__OPERATIONAL_TOLERANCE);
+		createEAttribute(contractEClass, CONTRACT__FULL_CARGO_LOT);
 		createEAttribute(contractEClass, CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE);
 		createEReference(contractEClass, CONTRACT__RESTRICTED_CONTRACTS);
 		createEReference(contractEClass, CONTRACT__RESTRICTED_PORTS);
@@ -1415,6 +1524,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getContract_MaxQuantity(), ecorePackage.getEInt(), "maxQuantity", "140000", 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_VolumeLimitsUnit(), theTypesPackage.getVolumeUnits(), "volumeLimitsUnit", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_OperationalTolerance(), ecorePackage.getEDouble(), "operationalTolerance", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContract_FullCargoLot(), ecorePackage.getEBoolean(), "fullCargoLot", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_RestrictedListsArePermissive(), ecorePackage.getEBoolean(), "restrictedListsArePermissive", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContract_RestrictedContracts(), this.getContract(), null, "restrictedContracts", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());

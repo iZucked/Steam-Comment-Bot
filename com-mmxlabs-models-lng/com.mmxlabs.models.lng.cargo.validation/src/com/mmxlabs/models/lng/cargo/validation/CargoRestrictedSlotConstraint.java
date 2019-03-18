@@ -45,13 +45,19 @@ public class CargoRestrictedSlotConstraint extends AbstractModelMultiConstraint 
 							}
 						}
 						if (fail) {
-							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo|" + cargo.getLoadName()
-							+ String.format(" Slot %s is not allowed to be paired to slot %s.",slot.getName(),s.getName())));
+							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) 
+									ctx.createFailureStatus(String.format("'%s' is not allowed to be paired to slot '%s'.",slot.getName(),s.getName())));
 							failure.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__RESTRICTED_SLOTS);
 							failures.add(failure);
 						}
 					}
+				} else if (permissive){
+					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) 
+							ctx.createFailureStatus(String.format("'%s': Permitted slots list is empty.",slot.getName())));
+					failure.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__RESTRICTED_SLOTS);
+					failures.add(failure);
 				}
+				
 			}
 		}
 
