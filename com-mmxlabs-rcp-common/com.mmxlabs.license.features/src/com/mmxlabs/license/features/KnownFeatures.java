@@ -24,7 +24,7 @@ public final class KnownFeatures {
 	public static final String FEATURE_OPTIMISATION_PERIOD = "features:optimisation-period";
 	public static final String FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION = "features:optimisation-charter-out-generation";
 	public static final String FEATURE_OPTIMISATION_SIMILARITY = "features:optimisation-similarity";
-	
+
 	public static final String FEATURE_SHIP_TO_SHIP = "features:shiptoship";
 
 	/**
@@ -69,5 +69,7 @@ public final class KnownFeatures {
 	 * Enable break-even evaluations
 	 */
 	public static final String FEATURE_BREAK_EVENS = "features:break-evens";
+
+	public static final String FEATURE_NOMINATIONS = "features:nominations";
 
 }
