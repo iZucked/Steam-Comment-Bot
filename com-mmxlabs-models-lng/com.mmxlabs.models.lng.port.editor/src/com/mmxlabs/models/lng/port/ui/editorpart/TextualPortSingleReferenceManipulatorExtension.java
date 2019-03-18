@@ -21,60 +21,56 @@ public class TextualPortSingleReferenceManipulatorExtension extends TextualSingl
 		super(field, valueProviderProvider, editingDomain);
 	}
 
+	@Override
 	protected IContentProposalProvider createProposalProvider() {
-		return new IContentProposalProvider() {
+		return (fullContents, position) -> {
 
-			@Override
-			public IContentProposal[] getProposals(final String full_contents, final int position) {
+			final int completeFrom = 0;
 
-				final int completeFrom = 0;
-
-				final String contents = full_contents.substring(completeFrom, position);
-				final ArrayList<ContentProposal> list = new ArrayList<>();
-				Set<Object> seenItems = new HashSet<>();
-				for (int i = 0; i < names.size(); ++i) {
-					final String proposal = names.get(i);
-					if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-						final String c = proposal.substring(contents.length());
-						String description = "";
-						final EObject eObject = valueList.get(i);
-						seenItems.add(eObject);
-						if (eObject instanceof Port) {
-							final Port port = (Port) eObject;
-							final Location l = port.getLocation();
-							if (l != null) {
-								description = " - " + l.getCountry();
-								if (!l.getOtherNames().isEmpty()) {
-									description += " Aliases: " + String.join(", ", l.getOtherNames());
-								}
-							}
-						}
-
-						list.add(new ContentProposal(c, proposal + description, null, c.length()));
-					}
-				}
-				LOOP_VALUES: for (EObject eObject : valueList) {
-					if (seenItems.contains(eObject)) {
-						continue;
-					}
+			final String contents = fullContents.substring(completeFrom, position);
+			final ArrayList<ContentProposal> list = new ArrayList<>();
+			final Set<Object> seenItems = new HashSet<>();
+			for (int i = 0; i < names.size(); ++i) {
+				final String proposal = names.get(i);
+				if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+					final String c = proposal.substring(contents.length());
+					final StringBuilder description = new StringBuilder();
+					final EObject eObject = valueList.get(i);
+					seenItems.add(eObject);
 					if (eObject instanceof Port) {
 						final Port port = (Port) eObject;
 						final Location l = port.getLocation();
 						if (l != null) {
-							for (String otherName : l.getOtherNames()) {
-								if (otherName.toLowerCase().contains(full_contents.toLowerCase())) {
-									String description = " - " + l.getCountry() + " Aliases: " + String.join(", ", l.getOtherNames());
-									list.add(new ContentProposal(port.getName(), port.getName() + description, null, 0));
-									continue LOOP_VALUES;
-								}
+							description.append(" - " + l.getCountry());
+							if (!l.getOtherNames().isEmpty()) {
+								description.append(" Aliases: " + String.join(", ", l.getOtherNames()));
 							}
 						}
 					}
 
+					list.add(new ContentProposal(c, proposal + description.toString(), null, c.length()));
 				}
-
-				return list.toArray(new IContentProposal[list.size()]);
 			}
+			LOOP_VALUES: for (final EObject eObject : valueList) {
+				if (seenItems.contains(eObject)) {
+					continue;
+				}
+				if (eObject instanceof Port) {
+					final Port port = (Port) eObject;
+					final Location l = port.getLocation();
+					if (l != null) {
+						for (final String otherName : l.getOtherNames()) {
+							if (otherName.toLowerCase().startsWith(fullContents.toLowerCase())) {
+								final String description = " - " + l.getCountry() + " Aliases: " + String.join(", ", l.getOtherNames());
+								list.add(new ContentProposal(port.getName(), port.getName() + description, null, 0));
+								continue LOOP_VALUES;
+							}
+						}
+					}
+				}
+			}
+
+			return list.toArray(new IContentProposal[list.size()]);
 		};
 	}
 }

@@ -19,7 +19,6 @@ import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -46,8 +45,7 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 	protected final List<String> names = new ArrayList<>();
 	protected final List<String> lowerNames = new ArrayList<>();
 
-	final IReferenceValueProvider valueProvider;
-	final EditingDomain editingDomain;
+	private final IReferenceValueProvider valueProvider;
 
 	private TextCellEditor editor;
 
@@ -65,7 +63,6 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 		super(field, editingDomain);
 
 		this.valueProvider = valueProvider;
-		this.editingDomain = editingDomain;
 	}
 
 	public TextualSingleReferenceManipulator(final EReference field, final IReferenceValueProviderProvider valueProviderProvider, final EditingDomain editingDomain) {
@@ -167,23 +164,18 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 	}
 
 	protected IContentProposalProvider createProposalProvider() {
-		return new IContentProposalProvider() {
-
-			@Override
-			public IContentProposal[] getProposals(final String full_contents, final int position) {
-
-				final int completeFrom = 0;
-				final String contents = full_contents.substring(completeFrom, position);
-				final ArrayList<ContentProposal> list = new ArrayList<>();
-				for (final String proposal : names) {
-					if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-						final String c = proposal.substring(contents.length());
-						list.add(new ContentProposal(c, proposal, null, c.length()));
-					}
+		return (fullContents, position) -> {
+			final int completeFrom = 0;
+			final String contents = fullContents.substring(completeFrom, position);
+			final ArrayList<ContentProposal> list = new ArrayList<>();
+			for (final String proposal : names) {
+				if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+					final String c = proposal.substring(contents.length());
+					list.add(new ContentProposal(c, proposal, null, c.length()));
 				}
-
-				return list.toArray(new IContentProposal[list.size()]);
 			}
+
+			return list.toArray(new IContentProposal[list.size()]);
 		};
 	}
 
@@ -213,7 +205,7 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 			valueList.add(value.getSecond());
 		}
 
-		return valueList.size() > 0;
+		return !valueList.isEmpty();
 	}
 
 	@Override
