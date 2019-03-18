@@ -5214,23 +5214,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				}	
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__FULL_CARGO_LOT) {
-			return new DelegateInformation(null, null, null) {
-				public boolean delegatesTo(final Object changedFeature) {
-					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
-				}
-				
-				public Object getValue(final EObject object) {
-					Object result = false;
-					final Contract contract = (Contract) getContract();
-					if (contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__FULL_CARGO_LOT)) {
-							result = ((Contract) contract).isFullCargoLot();
-						}
-					}
-					return result;
-					
-				}	
-			};
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_FullCargoLot(), Boolean.FALSE);
 		}
 		
 		return super.getUnsetValueOrDelegate(feature);
