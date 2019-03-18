@@ -16,9 +16,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -27,6 +29,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.port.ui.editorpart.PortPickerDialog;
@@ -105,8 +108,16 @@ public class PortMultiReferenceInlineEditor extends UnsettableInlineEditor {
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		buttonAndLabel.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		label.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		button = new Button(buttonAndLabel, SWT.NONE);
-		button.setText("Edit");
+
+		
+		final ImageDescriptor d = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.port.editor", "icons/edit.png");
+		button = toolkit.createButton(buttonAndLabel, "", SWT.NONE);
+		final Image img = d.createImage();
+		button.setImage(img);
+		button.addDisposeListener(e -> img.dispose());
+
+//		button = new Button(buttonAndLabel, SWT.NONE);
+//		button.setText("Edit");
 
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
