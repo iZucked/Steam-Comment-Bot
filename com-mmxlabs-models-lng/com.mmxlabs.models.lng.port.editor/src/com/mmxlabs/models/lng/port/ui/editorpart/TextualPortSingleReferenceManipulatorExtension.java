@@ -43,7 +43,7 @@ public class TextualPortSingleReferenceManipulatorExtension extends TextualSingl
 						if (l != null) {
 							description.append(" - " + l.getCountry());
 							if (!l.getOtherNames().isEmpty()) {
-								description.append(" Aliases: " + String.join(", ", l.getOtherNames()));
+								description.append(" Also: " + String.join(", ", l.getOtherNames()));
 							}
 						}
 					}
