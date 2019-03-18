@@ -512,31 +512,23 @@ public final class OptimisationHelper {
 						}
 					};
 
-					dialog.addValidation(optStart, new IValidator() {
-
-						@Override
-						public IStatus validate(final Object value) {
-							if (value instanceof LocalDate) {
-								final LocalDate startDate = (LocalDate) value;
-								if (startDate.getYear() < 2010) {
-									return ValidationStatus.error("Invalid period start date");
-								}
+					dialog.addValidation(optStart, value -> {
+						if (value instanceof LocalDate) {
+							final LocalDate startDate = (LocalDate) value;
+							if (startDate.getYear() < 2010) {
+								return ValidationStatus.error("Invalid period start date");
 							}
-							return Status.OK_STATUS;
 						}
+						return Status.OK_STATUS;
 					});
-					dialog.addValidation(optEnd, new IValidator() {
-
-						@Override
-						public IStatus validate(final Object value) {
-							if (value instanceof YearMonth) {
-								final YearMonth endDate = (YearMonth) value;
-								if (endDate.getYear() < 2010) {
-									return ValidationStatus.error("Invalid period end date");
-								}
+					dialog.addValidation(optEnd, value -> {
+						if (value instanceof YearMonth) {
+							final YearMonth endDate = (YearMonth) value;
+							if (endDate.getYear() < 2010) {
+								return ValidationStatus.error("Invalid period end date");
 							}
-							return Status.OK_STATUS;
 						}
+						return Status.OK_STATUS;
 					});
 
 					dialog.addValidationCallback(optStart, (v) -> values[0] = v);

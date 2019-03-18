@@ -49,8 +49,8 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -90,7 +90,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	public static class ChoiceData {
 
 		private final List<Pair<String, Object>> choices = new LinkedList<>();
-		public final List<BiConsumer<Label,Object>> changeHandlers = new LinkedList<>();
+		public final List<BiConsumer<Label, Object>> changeHandlers = new LinkedList<>();
 		public boolean enabled = true;
 		public Function<UserSettings, Boolean> enabledHook;
 		public String disabledMessage;
@@ -120,11 +120,11 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		Control control;
 		MouseListener listener;
 		public boolean enabled = true;
-		
+
 		public void setListener(MouseListener listener) {
 			this.listener = listener;
 		}
-		
+
 		public Control getControl() {
 			return this.control;
 		}
@@ -133,8 +133,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		public final List<IValidator> validators = new LinkedList<>();
 		public final List<Consumer<IObservableValue<?>>> validatorCallbacks = new LinkedList<>();
 
-		public Option(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomain, final String label, final String tooltip, final EObject data, final EObject defaultData,
-				final DataType dataType, final ChoiceData choiceData, String swtBotId, final EStructuralFeature... features) {
+		public Option(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomain, final String label, final String tooltip, final EObject data,
+				final EObject defaultData, final DataType dataType, final ChoiceData choiceData, String swtBotId, final EStructuralFeature... features) {
 			this.dataSection = dataSection;
 			this.group = group;
 			this.data = data;
@@ -384,23 +384,23 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			option.control = createLabel(parent, option);
 			break;
 		case Button:
-			//FIXME using 2014 as an arbitrary number
+			// FIXME using 2014 as an arbitrary number
 			Button button = createButton(parent, 2014, option.label, false);
 			if (option.listener != null) {
 				button.addMouseListener(option.listener);
 			}
-			
+
 			button.setToolTipText(option.tooltip);
 			button.setLayoutData(GridDataFactory.fillDefaults().hint(39, 39).create());
-			
+
 			option.control = button;
 			parent.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).create());
-			
+
 			break;
 		default:
 			break;
 		}
-		
+
 		if (option.choiceData != null && !option.choiceData.enabled && option.choiceData.disabledMessage != null) {
 			toolkit.createText(parent, option.choiceData.disabledMessage);
 		}
@@ -473,16 +473,13 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final EMFUpdateValueStrategy strategy = new EMFUpdateValueStrategy();
 		if (option.enabled) {
 			// Define a validator to check that only numbers are entered
-			final IValidator validator = new IValidator() {
-				@Override
-				public IStatus validate(final Object value) {
-					if (value instanceof Integer) {
-						if (value.toString().matches(".*\\d.*")) {
-							return ValidationStatus.ok();
-						}
+			final IValidator validator = value -> {
+				if (value instanceof Integer) {
+					if (value.toString().matches(".*\\d.*")) {
+						return ValidationStatus.ok();
 					}
-					return ValidationStatus.error("Not a number");
 				}
+				return ValidationStatus.error("Not a number");
 			};
 			strategy.setBeforeSetValidator(validator);
 		}
@@ -517,21 +514,19 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final DateTimeFormatter format = DateTimeFormatter.ofPattern("d/M/yyyy");
 
 		// Strict parse mode
-		final IValidator validator = new IValidator() {
-			@Override
-			public IStatus validate(final Object value) {
-				if (value instanceof String) {
-					if (value.equals("") == false) {
-						try {
-							LocalDate.parse((String) value, format);
-							return ValidationStatus.ok();
-						} catch (final IllegalArgumentException e) {
-						}
-						return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
+		final IValidator validator = value -> {
+			if (value instanceof String) {
+				String valueStr = (String) value;
+				if (!valueStr.isEmpty()) {
+					try {
+						LocalDate.parse((String) value, format);
+						return ValidationStatus.ok();
+					} catch (final IllegalArgumentException e) {
 					}
+					return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
 				}
-				return ValidationStatus.ok();
 			}
+			return ValidationStatus.ok();
 		};
 
 		final Text text = toolkit.createText(area, null, SWT.NONE);
@@ -706,34 +701,29 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 		// Create the multi-validator
 		final MyValidator validator = new MyValidator(option, v);
-		
+
 		Label mlbl = choiceData.changeHandlers.isEmpty() ? null : toolkit.createLabel(parent, "");
 
 		for (final Pair<String, Object> p : choiceData.choices) {
 			final Button btn = toolkit.createButton(area, p.getFirst(), SWT.RADIO);
 			if (p.getSecond().equals(target.eGet(lastFeature))) {
-				for (BiConsumer<Label,Object> c : choiceData.changeHandlers) {
-					c.accept(mlbl,p.getSecond());
+				for (BiConsumer<Label, Object> c : choiceData.changeHandlers) {
+					c.accept(mlbl, p.getSecond());
 				}
 				btn.setSelection(true);
 			}
 			btn.setData(SWTBOT_KEY, option.swtBotId + "." + p.getFirst());
 
-			btn.addSelectionListener(new SelectionListener() {
+			btn.addSelectionListener(new SelectionAdapter() {
 
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
 					if (btn.getSelection()) {
-						for (BiConsumer<Label,Object> c : choiceData.changeHandlers) {
-							c.accept(mlbl,p.getSecond());
+						for (BiConsumer<Label, Object> c : choiceData.changeHandlers) {
+							c.accept(mlbl, p.getSecond());
 						}
 						option.editingDomain.getCommandStack().execute(SetCommand.create(option.editingDomain, target, lastFeature, p.getSecond()));
 					}
-				}
-
-				@Override
-				public void widgetDefaultSelected(final SelectionEvent e) {
-
 				}
 			});
 
@@ -776,8 +766,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	 * @param dataType
 	 * @param features
 	 */
-	public Option addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final String tooltip, final EObject data, final EObject defaultData,
-			final DataType dataType, String swtBotIdPrefix, final EStructuralFeature... features) {
+	public Option addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final String tooltip, final EObject data,
+			final EObject defaultData, final DataType dataType, String swtBotIdPrefix, final EStructuralFeature... features) {
 		return addOption(dataSection, group, editingDomian, label, tooltip, data, defaultData, dataType, null, swtBotIdPrefix, features);
 	}
 
@@ -793,8 +783,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	 * @param dataType
 	 * @param features
 	 */
-	public Option addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final String tooltip, final EObject data, final EObject defaultData,
-			final DataType dataType, final ChoiceData choiceData, String swtBotIdPrefix, final EStructuralFeature... features) {
+	public Option addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final String tooltip, final EObject data,
+			final EObject defaultData, final DataType dataType, final ChoiceData choiceData, String swtBotIdPrefix, final EStructuralFeature... features) {
 
 		if (group != null) {
 			if (dataSection != group.dataSection) {
@@ -807,7 +797,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		if (optionsMap.containsKey(dataSection)) {
 			options = optionsMap.get(dataSection);
 		} else {
-			options = new LinkedList<ParameterModesDialog.Option>();
+			options = new LinkedList<>();
 			optionsMap.put(dataSection, options);
 		}
 		options.add(option);
