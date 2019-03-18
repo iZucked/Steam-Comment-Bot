@@ -316,7 +316,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 	@Override
 	public void processValidation(final IStatus status) {
-		if (validationDecoration.getControl().isDisposed()) {
+		if (validationDecoration == null || validationDecoration.getControl().isDisposed()) {
 			return;
 		}
 		
