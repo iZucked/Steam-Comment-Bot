@@ -306,12 +306,6 @@ public class ScheduleTestModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)
-	private boolean isVPOSpeedStepping() {
-		return true;
-	}
-	
-	@Provides
 	private IPhaseOptimisationData providePhaseOptimisationData() {
 		return this.pData;
 	}

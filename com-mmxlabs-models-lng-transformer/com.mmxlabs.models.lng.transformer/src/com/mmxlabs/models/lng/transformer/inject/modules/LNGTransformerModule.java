@@ -253,12 +253,6 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)
-	private boolean isVPOSpeedStepping() {
-		return true;
-	}
-
-	@Provides
 	@PerChainUnitScope
 	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final @NonNull VoyagePlanOptimiser delegate, @Named(SchedulerConstants.Key_VoyagePlanOptimiserCache) CacheMode cacheMode) {
 

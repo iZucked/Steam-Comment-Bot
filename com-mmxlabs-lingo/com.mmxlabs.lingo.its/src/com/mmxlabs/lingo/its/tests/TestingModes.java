@@ -6,6 +6,10 @@ package com.mmxlabs.lingo.its.tests;
 
 public final class TestingModes {
 
+	private TestingModes() {
+
+	}
+
 	// Never commit as true
 	public static final TestMode ReportTestMode = TestMode.Run;
 

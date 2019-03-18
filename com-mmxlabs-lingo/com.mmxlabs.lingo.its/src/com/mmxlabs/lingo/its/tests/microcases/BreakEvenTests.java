@@ -225,7 +225,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
 			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(7.454, cargoAllocation.getDischargeAllocation().getPrice(), 0.001);
+			Assert.assertEquals(7.450, cargoAllocation.getDischargeAllocation().getPrice(), 0.001);
 
 			assertZeroPNL(cargoAllocation);
 		});

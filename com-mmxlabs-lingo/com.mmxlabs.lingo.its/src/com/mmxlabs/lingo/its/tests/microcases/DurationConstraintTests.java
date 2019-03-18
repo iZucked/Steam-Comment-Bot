@@ -1071,9 +1071,7 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
 				.with(binder -> binder.bind(ISlotTimeScheduler.class).to(EarliestSlotTimeScheduler.class)) //
-				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)).toInstance(Boolean.FALSE)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE))//
-				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)).toInstance(Boolean.FALSE)) //
 				.buildOverride(ModuleType.Module_LNGTransformerModule)//
 				.make();
 
@@ -1216,9 +1214,7 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(canalTrimming)) //
 				.with(binder -> binder.bind(ISlotTimeScheduler.class).to(EarliestSlotTimeScheduler.class)) //
-				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)).toInstance(Boolean.FALSE)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE))//
-				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)).toInstance(Boolean.FALSE)) //
 				.buildOverride(ModuleType.Module_LNGTransformerModule)//
 				.make();
 		return localOverrides;

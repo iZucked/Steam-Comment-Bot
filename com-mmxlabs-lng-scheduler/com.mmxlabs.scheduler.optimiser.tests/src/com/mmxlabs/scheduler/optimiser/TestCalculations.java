@@ -1066,12 +1066,6 @@ public class TestCalculations {
 		final Injector injector = Guice.createInjector(new PerChainUnitScopeModule(), new DataComponentProviderModule(), new AbstractModule() {
 
 			@Provides
-			@Named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)
-			private boolean isVPOSpeedStepping() {
-				return true;
-			}
-
-			@Provides
 			@Singleton
 			private ILatenessComponentParameters provideLatenessComponentParameters() {
 				final LatenessComponentParameters lcp = new LatenessComponentParameters();
