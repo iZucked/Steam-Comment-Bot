@@ -97,6 +97,7 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getCargoCV() {
 		return cargoCV;
 	}
@@ -106,6 +107,7 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargoCV(double newCargoCV) {
 		double oldCargoCV = cargoCV;
 		cargoCV = newCargoCV;
@@ -120,6 +122,7 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCargoCV() {
 		double oldCargoCV = cargoCV;
 		boolean oldCargoCVESet = cargoCVESet;
@@ -134,6 +137,7 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCargoCV() {
 		return cargoCVESet;
 	}
@@ -143,6 +147,7 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoDeliveryType getSalesDeliveryType() {
 		return salesDeliveryType;
 	}
@@ -152,6 +157,7 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSalesDeliveryType(CargoDeliveryType newSalesDeliveryType) {
 		CargoDeliveryType oldSalesDeliveryType = salesDeliveryType;
 		salesDeliveryType = newSalesDeliveryType == null ? SALES_DELIVERY_TYPE_EDEFAULT : newSalesDeliveryType;

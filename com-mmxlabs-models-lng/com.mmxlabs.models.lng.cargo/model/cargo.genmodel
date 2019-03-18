@@ -82,6 +82,8 @@
       <genFeatures createChild="false" propertyDescription="Minimum quantity" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/maxQuantity"/>
       <genFeatures createChild="false" propertyDescription="The operation tolerance around transfered volume. Only used for reporting."
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/operationalTolerance"/>
+      <genFeatures createChild="false" propertyDescription="Load the maximum vessel capacity"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/fullCargoLot"/>
       <genFeatures createChild="false" propertyDescription="If optional, this position may be left open"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/optional"/>
       <genFeatures createChild="false" propertyDescription="The price expression, if any, for this deal"
@@ -188,6 +190,7 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVolumeNominationCounterparty"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortNominationCounterparty"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortLoadNominationCounterparty"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateFullCargoLot"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//LoadSlot">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/cargoCV"/>

@@ -71,6 +71,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getOperationalTolerance <em>Operational Tolerance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isFullCargoLot <em>Full Cargo Lot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCargo <em>Cargo</em>}</li>
@@ -497,6 +498,35 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected boolean operationalToleranceESet;
+
+	/**
+	 * The default value of the '{@link #isFullCargoLot() <em>Full Cargo Lot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isFullCargoLot()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean FULL_CARGO_LOT_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isFullCargoLot() <em>Full Cargo Lot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isFullCargoLot()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean fullCargoLot = FULL_CARGO_LOT_EDEFAULT;
+
+	/**
+	 * This is true if the Full Cargo Lot attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean fullCargoLotESet;
 
 	/**
 	 * The default value of the '{@link #isOptional() <em>Optional</em>}' attribute.
@@ -2090,6 +2120,56 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public boolean isSetOperationalTolerance() {
 		return operationalToleranceESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isFullCargoLot() {
+		return fullCargoLot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setFullCargoLot(boolean newFullCargoLot) {
+		boolean oldFullCargoLot = fullCargoLot;
+		fullCargoLot = newFullCargoLot;
+		boolean oldFullCargoLotESet = fullCargoLotESet;
+		fullCargoLotESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__FULL_CARGO_LOT, oldFullCargoLot, fullCargoLot, !oldFullCargoLotESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetFullCargoLot() {
+		boolean oldFullCargoLot = fullCargoLot;
+		boolean oldFullCargoLotESet = fullCargoLotESet;
+		fullCargoLot = FULL_CARGO_LOT_EDEFAULT;
+		fullCargoLotESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__FULL_CARGO_LOT, oldFullCargoLot, FULL_CARGO_LOT_EDEFAULT, oldFullCargoLotESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetFullCargoLot() {
+		return fullCargoLotESet;
 	}
 
 	/**
@@ -3927,6 +4007,16 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public boolean getSlotOrDelegateFullCargoLot() {
+		return (boolean) eGetWithDefault(CargoPackage.Literals.SLOT__FULL_CARGO_LOT);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -4014,6 +4104,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getMaxQuantity();
 			case CargoPackage.SLOT__OPERATIONAL_TOLERANCE:
 				return getOperationalTolerance();
+			case CargoPackage.SLOT__FULL_CARGO_LOT:
+				return isFullCargoLot();
 			case CargoPackage.SLOT__OPTIONAL:
 				return isOptional();
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
@@ -4158,6 +4250,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return;
 			case CargoPackage.SLOT__OPERATIONAL_TOLERANCE:
 				setOperationalTolerance((Double)newValue);
+				return;
+			case CargoPackage.SLOT__FULL_CARGO_LOT:
+				setFullCargoLot((Boolean)newValue);
 				return;
 			case CargoPackage.SLOT__OPTIONAL:
 				setOptional((Boolean)newValue);
@@ -4345,6 +4440,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__OPERATIONAL_TOLERANCE:
 				unsetOperationalTolerance();
 				return;
+			case CargoPackage.SLOT__FULL_CARGO_LOT:
+				unsetFullCargoLot();
+				return;
 			case CargoPackage.SLOT__OPTIONAL:
 				setOptional(OPTIONAL_EDEFAULT);
 				return;
@@ -4511,6 +4609,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isSetMaxQuantity();
 			case CargoPackage.SLOT__OPERATIONAL_TOLERANCE:
 				return isSetOperationalTolerance();
+			case CargoPackage.SLOT__FULL_CARGO_LOT:
+				return isSetFullCargoLot();
 			case CargoPackage.SLOT__OPTIONAL:
 				return optional != OPTIONAL_EDEFAULT;
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
@@ -4732,6 +4832,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSlotOrDelegatePortNominationCounterparty();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_COUNTERPARTY:
 				return getSlotOrDelegatePortLoadNominationCounterparty();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT:
+				return getSlotOrDelegateFullCargoLot();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -4775,6 +4877,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		if (maxQuantityESet) result.append(maxQuantity); else result.append("<unset>");
 		result.append(", operationalTolerance: ");
 		if (operationalToleranceESet) result.append(operationalTolerance); else result.append("<unset>");
+		result.append(", fullCargoLot: ");
+		if (fullCargoLotESet) result.append(fullCargoLot); else result.append("<unset>");
 		result.append(", optional: ");
 		result.append(optional);
 		result.append(", priceExpression: ");
@@ -5103,6 +5207,24 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 					if (contract != null) {
 						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY)) {
 							result = ((Contract) contract).isPortNominationCounterparty();
+						}
+					}
+					return result;
+					
+				}	
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__FULL_CARGO_LOT) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = false;
+					final Contract contract = (Contract) getContract();
+					if (contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__FULL_CARGO_LOT)) {
+							result = ((Contract) contract).isFullCargoLot();
 						}
 					}
 					return result;

@@ -54,6 +54,8 @@
           ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/volumeLimitsUnit"/>
       <genFeatures createChild="false" propertyDescription="The operation tolerance around transfered volume. Only used for reporting."
           ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/operationalTolerance"/>
+      <genFeatures createChild="false" propertyDescription="Load the maximum vessel capacity"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/fullCargoLot"/>
       <genFeatures createChild="false" propertyDescription="When checked, restricted port and contract pairings are instead the only permitted options"
           ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/restrictedListsArePermissive"/>
       <genFeatures notify="false" createChild="false" propertyDescription="If set, these contracts cannot be paired to this contract"

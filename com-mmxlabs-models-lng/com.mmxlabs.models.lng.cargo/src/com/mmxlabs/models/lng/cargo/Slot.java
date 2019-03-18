@@ -46,6 +46,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getOperationalTolerance <em>Operational Tolerance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isFullCargoLot <em>Full Cargo Lot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}</li>
@@ -825,6 +826,59 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	boolean isSetOperationalTolerance();
+
+	/**
+	 * Returns the value of the '<em><b>Full Cargo Lot</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Full Cargo Lot</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Full Cargo Lot</em>' attribute.
+	 * @see #isSetFullCargoLot()
+	 * @see #unsetFullCargoLot()
+	 * @see #setFullCargoLot(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_FullCargoLot()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	boolean isFullCargoLot();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isFullCargoLot <em>Full Cargo Lot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Full Cargo Lot</em>' attribute.
+	 * @see #isSetFullCargoLot()
+	 * @see #unsetFullCargoLot()
+	 * @see #isFullCargoLot()
+	 * @generated
+	 */
+	void setFullCargoLot(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isFullCargoLot <em>Full Cargo Lot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetFullCargoLot()
+	 * @see #isFullCargoLot()
+	 * @see #setFullCargoLot(boolean)
+	 * @generated
+	 */
+	void unsetFullCargoLot();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isFullCargoLot <em>Full Cargo Lot</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Full Cargo Lot</em>' attribute is set.
+	 * @see #unsetFullCargoLot()
+	 * @see #isFullCargoLot()
+	 * @see #setFullCargoLot(boolean)
+	 * @generated
+	 */
+	boolean isSetFullCargoLot();
 
 	/**
 	 * Returns the value of the '<em><b>Optional</b></em>' attribute.
@@ -2640,6 +2694,14 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	boolean getSlotOrDelegatePortLoadNominationCounterparty();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean getSlotOrDelegateFullCargoLot();
 
 } // end of  Slot
 

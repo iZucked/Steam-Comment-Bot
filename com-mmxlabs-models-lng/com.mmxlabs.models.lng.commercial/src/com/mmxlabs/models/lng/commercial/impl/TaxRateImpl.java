@@ -92,6 +92,7 @@ public class TaxRateImpl extends EObjectImpl implements TaxRate {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getDate() {
 		return date;
 	}
@@ -101,6 +102,7 @@ public class TaxRateImpl extends EObjectImpl implements TaxRate {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDate(LocalDate newDate) {
 		LocalDate oldDate = date;
 		date = newDate;
@@ -113,6 +115,7 @@ public class TaxRateImpl extends EObjectImpl implements TaxRate {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getValue() {
 		return value;
 	}
@@ -122,6 +125,7 @@ public class TaxRateImpl extends EObjectImpl implements TaxRate {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValue(float newValue) {
 		float oldValue = value;
 		value = newValue;

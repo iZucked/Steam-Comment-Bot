@@ -115,6 +115,7 @@ public class DateShiftExpressionPriceParametersImpl extends LNGPriceCalculatorPa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getPriceExpression() {
 		return priceExpression;
 	}
@@ -124,6 +125,7 @@ public class DateShiftExpressionPriceParametersImpl extends LNGPriceCalculatorPa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPriceExpression(String newPriceExpression) {
 		String oldPriceExpression = priceExpression;
 		priceExpression = newPriceExpression;
@@ -136,6 +138,7 @@ public class DateShiftExpressionPriceParametersImpl extends LNGPriceCalculatorPa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSpecificDay() {
 		return specificDay;
 	}
@@ -145,6 +148,7 @@ public class DateShiftExpressionPriceParametersImpl extends LNGPriceCalculatorPa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpecificDay(boolean newSpecificDay) {
 		boolean oldSpecificDay = specificDay;
 		specificDay = newSpecificDay;
@@ -157,6 +161,7 @@ public class DateShiftExpressionPriceParametersImpl extends LNGPriceCalculatorPa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getValue() {
 		return value;
 	}
@@ -166,6 +171,7 @@ public class DateShiftExpressionPriceParametersImpl extends LNGPriceCalculatorPa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValue(int newValue) {
 		int oldValue = value;
 		value = newValue;

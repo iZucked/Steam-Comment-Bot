@@ -13,6 +13,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getLNGPriceCalculatorParameters()
  * @model abstract="true"
+ *        annotation="slotContractParams"
  * @generated
  */
 public interface LNGPriceCalculatorParameters extends UUIDObject {

@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.transformer.extensions.restrictedslots;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -16,31 +15,23 @@ import java.util.function.BiConsumer;
 
 import javax.inject.Inject;
 
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
-import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
+import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 /**
  */
-public class RestrictedSlotsTransformer implements IContractTransformer {
+public class RestrictedSlotsTransformer implements ISlotTransformer {
 
 	@Inject
 	private IRestrictedSlotsProviderEditor restrictedElementsProviderEditor;
@@ -135,7 +126,7 @@ public class RestrictedSlotsTransformer implements IContractTransformer {
 			final List<Slot> restrictedSlots = slot.getRestrictedSlots();
 			boolean isPermissive = slot.isRestrictedSlotsArePermissive();
 
-			if (!restrictedSlots.isEmpty()) {
+			if (!restrictedSlots.isEmpty() || isPermissive) {
 				registerRestrictedElements(slot, restrictedSlots, isPermissive, type);
 			}
 
@@ -178,20 +169,5 @@ public class RestrictedSlotsTransformer implements IContractTransformer {
 			}
 			slotElements.add(sequenceElement);
 		}
-	}
-
-	@Override
-	public Collection<EClass> getContractEClasses() {
-		return Collections.emptySet();
-	}
-
-	@Override
-	public ISalesPriceCalculator transformSalesPriceParameters(final SalesContract salesContract, final LNGPriceCalculatorParameters priceParameters) {
-		return null;
-	}
-
-	@Override
-	public ILoadPriceCalculator transformPurchasePriceParameters(final PurchaseContract purchaseContract, final LNGPriceCalculatorParameters priceParameters) {
-		return null;
 	}
 }

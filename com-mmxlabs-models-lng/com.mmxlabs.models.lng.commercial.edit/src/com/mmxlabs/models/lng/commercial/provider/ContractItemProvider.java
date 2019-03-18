@@ -65,6 +65,7 @@ public class ContractItemProvider
 			addMaxQuantityPropertyDescriptor(object);
 			addVolumeLimitsUnitPropertyDescriptor(object);
 			addOperationalTolerancePropertyDescriptor(object);
+			addFullCargoLotPropertyDescriptor(object);
 			addRestrictedListsArePermissivePropertyDescriptor(object);
 			addRestrictedContractsPropertyDescriptor(object);
 			addRestrictedPortsPropertyDescriptor(object);
@@ -244,6 +245,28 @@ public class ContractItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Full Cargo Lot feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFullCargoLotPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_fullCargoLot_feature"),
+				 getString("_UI_Contract_fullCargoLot_description"),
+				 CommercialPackage.Literals.CONTRACT__FULL_CARGO_LOT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -1030,6 +1053,7 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__MAX_QUANTITY:
 			case CommercialPackage.CONTRACT__VOLUME_LIMITS_UNIT:
 			case CommercialPackage.CONTRACT__OPERATIONAL_TOLERANCE:
+			case CommercialPackage.CONTRACT__FULL_CARGO_LOT:
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 			case CommercialPackage.CONTRACT__NOTES:
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:

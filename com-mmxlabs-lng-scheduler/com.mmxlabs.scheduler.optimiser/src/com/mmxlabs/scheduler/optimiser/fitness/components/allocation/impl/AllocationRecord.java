@@ -85,6 +85,8 @@ public class AllocationRecord {
 
 	// Set to false to maximise load volume and push gas into next loading
 	public boolean preferShortLoadOverLeftoverHeel = true;
+	
+	public boolean fullCargoLot = false;
 
 	public @NonNull AllocationMode allocationMode;
 

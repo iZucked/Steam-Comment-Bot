@@ -40,6 +40,7 @@ Export-Package: com.mmxlabs.models.lng.transformer.extensions,
  com.mmxlabs.models.lng.transformer.extensions.redirection,
  com.mmxlabs.models.lng.transformer.extensions.redirection.impl,
  com.mmxlabs.models.lng.transformer.extensions.restrictedelements,
+ com.mmxlabs.models.lng.transformer.extensions.restrictedslots,
  com.mmxlabs.models.lng.transformer.extensions.shippingtype,
  com.mmxlabs.models.lng.transformer.extensions.simplecontracts,
  com.mmxlabs.models.lng.transformer.extensions.tradingexporter

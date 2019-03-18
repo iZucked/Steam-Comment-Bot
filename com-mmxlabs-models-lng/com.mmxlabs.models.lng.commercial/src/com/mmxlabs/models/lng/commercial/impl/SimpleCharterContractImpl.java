@@ -106,6 +106,7 @@ public class SimpleCharterContractImpl extends NamedObjectImpl implements Simple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinDuration() {
 		return minDuration;
 	}
@@ -115,6 +116,7 @@ public class SimpleCharterContractImpl extends NamedObjectImpl implements Simple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinDuration(int newMinDuration) {
 		int oldMinDuration = minDuration;
 		minDuration = newMinDuration;
@@ -129,6 +131,7 @@ public class SimpleCharterContractImpl extends NamedObjectImpl implements Simple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMinDuration() {
 		int oldMinDuration = minDuration;
 		boolean oldMinDurationESet = minDurationESet;
@@ -143,6 +146,7 @@ public class SimpleCharterContractImpl extends NamedObjectImpl implements Simple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMinDuration() {
 		return minDurationESet;
 	}
@@ -152,6 +156,7 @@ public class SimpleCharterContractImpl extends NamedObjectImpl implements Simple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaxDuration() {
 		return maxDuration;
 	}
@@ -161,6 +166,7 @@ public class SimpleCharterContractImpl extends NamedObjectImpl implements Simple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxDuration(int newMaxDuration) {
 		int oldMaxDuration = maxDuration;
 		maxDuration = newMaxDuration;
@@ -175,6 +181,7 @@ public class SimpleCharterContractImpl extends NamedObjectImpl implements Simple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMaxDuration() {
 		int oldMaxDuration = maxDuration;
 		boolean oldMaxDurationESet = maxDurationESet;
@@ -189,6 +196,7 @@ public class SimpleCharterContractImpl extends NamedObjectImpl implements Simple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMaxDuration() {
 		return maxDurationESet;
 	}

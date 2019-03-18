@@ -50,6 +50,7 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getOperationalTolerance <em>Operational Tolerance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isFullCargoLot <em>Full Cargo Lot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
@@ -356,6 +357,26 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected boolean operationalToleranceESet;
+
+	/**
+	 * The default value of the '{@link #isFullCargoLot() <em>Full Cargo Lot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isFullCargoLot()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean FULL_CARGO_LOT_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isFullCargoLot() <em>Full Cargo Lot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isFullCargoLot()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean fullCargoLot = FULL_CARGO_LOT_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
@@ -851,6 +872,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -860,6 +882,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -872,6 +895,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
@@ -898,6 +922,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEntity(BaseLegalEntity newEntity) {
 		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;
@@ -910,6 +935,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<APortSet<Port>> getAllowedPorts() {
 		if (allowedPorts == null) {
 			allowedPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, CommercialPackage.CONTRACT__ALLOWED_PORTS);
@@ -922,6 +948,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getPreferredPort() {
 		if (preferredPort != null && preferredPort.eIsProxy()) {
 			InternalEObject oldPreferredPort = (InternalEObject)preferredPort;
@@ -948,6 +975,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPreferredPort(Port newPreferredPort) {
 		Port oldPreferredPort = preferredPort;
 		preferredPort = newPreferredPort;
@@ -960,6 +988,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinQuantity() {
 		return minQuantity;
 	}
@@ -969,6 +998,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinQuantity(int newMinQuantity) {
 		int oldMinQuantity = minQuantity;
 		minQuantity = newMinQuantity;
@@ -981,6 +1011,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaxQuantity() {
 		return maxQuantity;
 	}
@@ -990,6 +1021,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxQuantity(int newMaxQuantity) {
 		int oldMaxQuantity = maxQuantity;
 		maxQuantity = newMaxQuantity;
@@ -1002,6 +1034,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getOperationalTolerance() {
 		return operationalTolerance;
 	}
@@ -1011,6 +1044,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOperationalTolerance(double newOperationalTolerance) {
 		double oldOperationalTolerance = operationalTolerance;
 		operationalTolerance = newOperationalTolerance;
@@ -1025,6 +1059,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetOperationalTolerance() {
 		double oldOperationalTolerance = operationalTolerance;
 		boolean oldOperationalToleranceESet = operationalToleranceESet;
@@ -1039,6 +1074,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetOperationalTolerance() {
 		return operationalToleranceESet;
 	}
@@ -1048,6 +1084,30 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public boolean isFullCargoLot() {
+		return fullCargoLot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setFullCargoLot(boolean newFullCargoLot) {
+		boolean oldFullCargoLot = fullCargoLot;
+		fullCargoLot = newFullCargoLot;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__FULL_CARGO_LOT, oldFullCargoLot, fullCargoLot));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public VolumeUnits getVolumeLimitsUnit() {
 		return volumeLimitsUnit;
 	}
@@ -1057,6 +1117,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeLimitsUnit(VolumeUnits newVolumeLimitsUnit) {
 		VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
 		volumeLimitsUnit = newVolumeLimitsUnit == null ? VOLUME_LIMITS_UNIT_EDEFAULT : newVolumeLimitsUnit;
@@ -1069,6 +1130,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isRestrictedListsArePermissive() {
 		return restrictedListsArePermissive;
 	}
@@ -1078,6 +1140,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRestrictedListsArePermissive(boolean newRestrictedListsArePermissive) {
 		boolean oldRestrictedListsArePermissive = restrictedListsArePermissive;
 		restrictedListsArePermissive = newRestrictedListsArePermissive;
@@ -1090,6 +1153,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Contract> getRestrictedContracts() {
 		if (restrictedContracts == null) {
 			restrictedContracts = new EObjectResolvingEList<Contract>(Contract.class, this, CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS);
@@ -1102,6 +1166,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<APortSet<Port>> getRestrictedPorts() {
 		if (restrictedPorts == null) {
 			restrictedPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, CommercialPackage.CONTRACT__RESTRICTED_PORTS);
@@ -1114,6 +1179,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LNGPriceCalculatorParameters getPriceInfo() {
 		return priceInfo;
 	}
@@ -1138,6 +1204,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPriceInfo(LNGPriceCalculatorParameters newPriceInfo) {
 		if (newPriceInfo != priceInfo) {
 			NotificationChain msgs = null;
@@ -1157,6 +1224,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getNotes() {
 		return notes;
 	}
@@ -1166,6 +1234,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNotes(String newNotes) {
 		String oldNotes = notes;
 		notes = newNotes;
@@ -1178,6 +1247,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ContractType getContractType() {
 		return contractType;
 	}
@@ -1187,6 +1257,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setContractType(ContractType newContractType) {
 		ContractType oldContractType = contractType;
 		contractType = newContractType == null ? CONTRACT_TYPE_EDEFAULT : newContractType;
@@ -1199,6 +1270,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PricingEvent getPricingEvent() {
 		return pricingEvent;
 	}
@@ -1208,6 +1280,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPricingEvent(PricingEvent newPricingEvent) {
 		PricingEvent oldPricingEvent = pricingEvent;
 		pricingEvent = newPricingEvent == null ? PRICING_EVENT_EDEFAULT : newPricingEvent;
@@ -1220,6 +1293,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCancellationExpression() {
 		return cancellationExpression;
 	}
@@ -1229,6 +1303,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCancellationExpression(String newCancellationExpression) {
 		String oldCancellationExpression = cancellationExpression;
 		cancellationExpression = newCancellationExpression;
@@ -1241,6 +1316,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getWindowNominationSize() {
 		return windowNominationSize;
 	}
@@ -1250,6 +1326,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowNominationSize(int newWindowNominationSize) {
 		int oldWindowNominationSize = windowNominationSize;
 		windowNominationSize = newWindowNominationSize;
@@ -1262,6 +1339,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TimePeriod getWindowNominationSizeUnits() {
 		return windowNominationSizeUnits;
 	}
@@ -1271,6 +1349,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowNominationSizeUnits(TimePeriod newWindowNominationSizeUnits) {
 		TimePeriod oldWindowNominationSizeUnits = windowNominationSizeUnits;
 		windowNominationSizeUnits = newWindowNominationSizeUnits == null ? WINDOW_NOMINATION_SIZE_UNITS_EDEFAULT : newWindowNominationSizeUnits;
@@ -1283,6 +1362,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isWindowNominationCounterparty() {
 		return windowNominationCounterparty;
 	}
@@ -1292,6 +1372,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowNominationCounterparty(boolean newWindowNominationCounterparty) {
 		boolean oldWindowNominationCounterparty = windowNominationCounterparty;
 		windowNominationCounterparty = newWindowNominationCounterparty;
@@ -1304,6 +1385,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isDivertible() {
 		return divertible;
 	}
@@ -1313,6 +1395,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDivertible(boolean newDivertible) {
 		boolean oldDivertible = divertible;
 		divertible = newDivertible;
@@ -1325,6 +1408,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getShippingDaysRestriction() {
 		return shippingDaysRestriction;
 	}
@@ -1334,6 +1418,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShippingDaysRestriction(int newShippingDaysRestriction) {
 		int oldShippingDaysRestriction = shippingDaysRestriction;
 		shippingDaysRestriction = newShippingDaysRestriction;
@@ -1346,6 +1431,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getPortLoadNominationSize() {
 		return portLoadNominationSize;
 	}
@@ -1355,6 +1441,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortLoadNominationSize(int newPortLoadNominationSize) {
 		int oldPortLoadNominationSize = portLoadNominationSize;
 		portLoadNominationSize = newPortLoadNominationSize;
@@ -1367,6 +1454,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TimePeriod getPortLoadNominationSizeUnits() {
 		return portLoadNominationSizeUnits;
 	}
@@ -1376,6 +1464,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortLoadNominationSizeUnits(TimePeriod newPortLoadNominationSizeUnits) {
 		TimePeriod oldPortLoadNominationSizeUnits = portLoadNominationSizeUnits;
 		portLoadNominationSizeUnits = newPortLoadNominationSizeUnits == null ? PORT_LOAD_NOMINATION_SIZE_UNITS_EDEFAULT : newPortLoadNominationSizeUnits;
@@ -1388,6 +1477,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isPortLoadNominationCounterparty() {
 		return portLoadNominationCounterparty;
 	}
@@ -1397,6 +1487,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortLoadNominationCounterparty(boolean newPortLoadNominationCounterparty) {
 		boolean oldPortLoadNominationCounterparty = portLoadNominationCounterparty;
 		portLoadNominationCounterparty = newPortLoadNominationCounterparty;
@@ -1409,6 +1500,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getVesselNominationSize() {
 		return vesselNominationSize;
 	}
@@ -1418,6 +1510,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselNominationSize(int newVesselNominationSize) {
 		int oldVesselNominationSize = vesselNominationSize;
 		vesselNominationSize = newVesselNominationSize;
@@ -1430,6 +1523,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TimePeriod getVesselNominationSizeUnits() {
 		return vesselNominationSizeUnits;
 	}
@@ -1439,6 +1533,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselNominationSizeUnits(TimePeriod newVesselNominationSizeUnits) {
 		TimePeriod oldVesselNominationSizeUnits = vesselNominationSizeUnits;
 		vesselNominationSizeUnits = newVesselNominationSizeUnits == null ? VESSEL_NOMINATION_SIZE_UNITS_EDEFAULT : newVesselNominationSizeUnits;
@@ -1451,6 +1546,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isVesselNominationCounterparty() {
 		return vesselNominationCounterparty;
 	}
@@ -1460,6 +1556,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselNominationCounterparty(boolean newVesselNominationCounterparty) {
 		boolean oldVesselNominationCounterparty = vesselNominationCounterparty;
 		vesselNominationCounterparty = newVesselNominationCounterparty;
@@ -1472,6 +1569,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getVolumeNominationSize() {
 		return volumeNominationSize;
 	}
@@ -1481,6 +1579,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeNominationSize(int newVolumeNominationSize) {
 		int oldVolumeNominationSize = volumeNominationSize;
 		volumeNominationSize = newVolumeNominationSize;
@@ -1493,6 +1592,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TimePeriod getVolumeNominationSizeUnits() {
 		return volumeNominationSizeUnits;
 	}
@@ -1502,6 +1602,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeNominationSizeUnits(TimePeriod newVolumeNominationSizeUnits) {
 		TimePeriod oldVolumeNominationSizeUnits = volumeNominationSizeUnits;
 		volumeNominationSizeUnits = newVolumeNominationSizeUnits == null ? VOLUME_NOMINATION_SIZE_UNITS_EDEFAULT : newVolumeNominationSizeUnits;
@@ -1514,6 +1615,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isVolumeNominationCounterparty() {
 		return volumeNominationCounterparty;
 	}
@@ -1523,6 +1625,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeNominationCounterparty(boolean newVolumeNominationCounterparty) {
 		boolean oldVolumeNominationCounterparty = volumeNominationCounterparty;
 		volumeNominationCounterparty = newVolumeNominationCounterparty;
@@ -1535,6 +1638,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getPortNominationSize() {
 		return portNominationSize;
 	}
@@ -1544,6 +1648,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortNominationSize(int newPortNominationSize) {
 		int oldPortNominationSize = portNominationSize;
 		portNominationSize = newPortNominationSize;
@@ -1556,6 +1661,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TimePeriod getPortNominationSizeUnits() {
 		return portNominationSizeUnits;
 	}
@@ -1565,6 +1671,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortNominationSizeUnits(TimePeriod newPortNominationSizeUnits) {
 		TimePeriod oldPortNominationSizeUnits = portNominationSizeUnits;
 		portNominationSizeUnits = newPortNominationSizeUnits == null ? PORT_NOMINATION_SIZE_UNITS_EDEFAULT : newPortNominationSizeUnits;
@@ -1577,6 +1684,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isPortNominationCounterparty() {
 		return portNominationCounterparty;
 	}
@@ -1586,6 +1694,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortNominationCounterparty(boolean newPortNominationCounterparty) {
 		boolean oldPortNominationCounterparty = portNominationCounterparty;
 		portNominationCounterparty = newPortNominationCounterparty;
@@ -1598,6 +1707,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getContractYearStart() {
 		return contractYearStart;
 	}
@@ -1607,6 +1717,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setContractYearStart(int newContractYearStart) {
 		int oldContractYearStart = contractYearStart;
 		contractYearStart = newContractYearStart;
@@ -1619,6 +1730,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCode() {
 		return code;
 	}
@@ -1628,6 +1740,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCode(String newCode) {
 		String oldCode = code;
 		code = newCode;
@@ -1640,6 +1753,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCounterparty() {
 		return counterparty;
 	}
@@ -1649,6 +1763,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCounterparty(String newCounterparty) {
 		String oldCounterparty = counterparty;
 		counterparty = newCounterparty;
@@ -1661,6 +1776,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCn() {
 		return cn;
 	}
@@ -1670,6 +1786,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCn(String newCn) {
 		String oldCn = cn;
 		cn = newCn;
@@ -1682,6 +1799,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public YearMonth getStartDate() {
 		return startDate;
 	}
@@ -1691,6 +1809,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartDate(YearMonth newStartDate) {
 		YearMonth oldStartDate = startDate;
 		startDate = newStartDate;
@@ -1705,6 +1824,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetStartDate() {
 		YearMonth oldStartDate = startDate;
 		boolean oldStartDateESet = startDateESet;
@@ -1719,6 +1839,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetStartDate() {
 		return startDateESet;
 	}
@@ -1728,6 +1849,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public YearMonth getEndDate() {
 		return endDate;
 	}
@@ -1737,6 +1859,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEndDate(YearMonth newEndDate) {
 		YearMonth oldEndDate = endDate;
 		endDate = newEndDate;
@@ -1751,6 +1874,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetEndDate() {
 		YearMonth oldEndDate = endDate;
 		boolean oldEndDateESet = endDateESet;
@@ -1765,6 +1889,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetEndDate() {
 		return endDateESet;
 	}
@@ -1821,6 +1946,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getVolumeLimitsUnit();
 			case CommercialPackage.CONTRACT__OPERATIONAL_TOLERANCE:
 				return getOperationalTolerance();
+			case CommercialPackage.CONTRACT__FULL_CARGO_LOT:
+				return isFullCargoLot();
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return isRestrictedListsArePermissive();
 			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS:
@@ -1926,6 +2053,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return;
 			case CommercialPackage.CONTRACT__OPERATIONAL_TOLERANCE:
 				setOperationalTolerance((Double)newValue);
+				return;
+			case CommercialPackage.CONTRACT__FULL_CARGO_LOT:
+				setFullCargoLot((Boolean)newValue);
 				return;
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				setRestrictedListsArePermissive((Boolean)newValue);
@@ -2058,6 +2188,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__OPERATIONAL_TOLERANCE:
 				unsetOperationalTolerance();
 				return;
+			case CommercialPackage.CONTRACT__FULL_CARGO_LOT:
+				setFullCargoLot(FULL_CARGO_LOT_EDEFAULT);
+				return;
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				setRestrictedListsArePermissive(RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT);
 				return;
@@ -2173,6 +2306,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return volumeLimitsUnit != VOLUME_LIMITS_UNIT_EDEFAULT;
 			case CommercialPackage.CONTRACT__OPERATIONAL_TOLERANCE:
 				return isSetOperationalTolerance();
+			case CommercialPackage.CONTRACT__FULL_CARGO_LOT:
+				return fullCargoLot != FULL_CARGO_LOT_EDEFAULT;
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return restrictedListsArePermissive != RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
 			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS:
@@ -2291,6 +2426,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(volumeLimitsUnit);
 		result.append(", operationalTolerance: ");
 		if (operationalToleranceESet) result.append(operationalTolerance); else result.append("<unset>");
+		result.append(", fullCargoLot: ");
+		result.append(fullCargoLot);
 		result.append(", restrictedListsArePermissive: ");
 		result.append(restrictedListsArePermissive);
 		result.append(", notes: ");

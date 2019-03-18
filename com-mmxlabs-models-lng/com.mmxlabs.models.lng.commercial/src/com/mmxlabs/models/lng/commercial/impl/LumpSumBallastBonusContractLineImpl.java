@@ -73,6 +73,7 @@ public class LumpSumBallastBonusContractLineImpl extends BallastBonusContractLin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getPriceExpression() {
 		return priceExpression;
 	}
@@ -82,6 +83,7 @@ public class LumpSumBallastBonusContractLineImpl extends BallastBonusContractLin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPriceExpression(String newPriceExpression) {
 		String oldPriceExpression = priceExpression;
 		priceExpression = newPriceExpression;

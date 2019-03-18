@@ -8,5 +8,7 @@ Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-10
 Require-Bundle: org.junit;bundle-version="4.8.2",
  org.mockito.mockito-core;bundle-version="1.9.5",
- javax.annotation;bundle-version="1.2.0"
+ javax.annotation;bundle-version="1.2.0",
+ net.bytebuddy.byte-buddy;bundle-version="1.9.9",
+ org.objenesis;bundle-version="2.6.0"
 Automatic-Module-Name: com.mmxlabs.models.lng.transformer.extensions.tests

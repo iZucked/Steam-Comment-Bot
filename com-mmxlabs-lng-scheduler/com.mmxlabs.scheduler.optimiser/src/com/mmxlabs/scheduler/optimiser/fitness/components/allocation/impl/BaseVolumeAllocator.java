@@ -28,6 +28,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IFullCargoLotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -53,6 +54,9 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
+	
+	@Inject
+	private IFullCargoLotProviderEditor fullCargoLotProvider;
 
 	public BaseVolumeAllocator() {
 		super();
@@ -201,6 +205,13 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		// TODO: Assert start/end heel match actuals records.
 		final AllocationRecord allocationRecord = new AllocationRecord(vesselAvailability, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3,
 				maxEndVolumeInM3, slots, portTimesRecord, returnSlot, minVolumesInM3, maxVolumesInM3, minVolumesInMMBtu, maxVolumesInMMBtu, slotCV);
+		
+		for (final IPortSlot ps : allocationRecord.slots) {
+			if (fullCargoLotProvider.hasFCLRequirment(ps)) {
+				allocationRecord.fullCargoLot = true;
+				break;
+			}
+		}
 
 		if (hasActuals) {
 			allocationRecord.allocationMode = AllocationMode.Actuals;

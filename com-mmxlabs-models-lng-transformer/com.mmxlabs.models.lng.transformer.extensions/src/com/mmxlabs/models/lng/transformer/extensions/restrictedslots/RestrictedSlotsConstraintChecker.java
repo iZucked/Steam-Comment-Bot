@@ -27,7 +27,7 @@ public class RestrictedSlotsConstraintChecker implements IPairwiseConstraintChec
 	private final String name;
 	
 	@Inject
-	private IRestrictedSlotsProvider restrictedElementsProvider;
+	private IRestrictedSlotsProvider restrictedSlotsProvider;
 
 	public RestrictedSlotsConstraintChecker(final String name) {
 		this.name = name;
@@ -77,8 +77,8 @@ public class RestrictedSlotsConstraintChecker implements IPairwiseConstraintChec
 	@Override
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 
-		final boolean result = !restrictedElementsProvider.getRestrictedFollowerElements(first).contains(second)
-				&& !restrictedElementsProvider.getRestrictedPrecedingElements(second).contains(first);
+		final boolean result = !restrictedSlotsProvider.getRestrictedFollowerElements(first).contains(second)
+				&& !restrictedSlotsProvider.getRestrictedPrecedingElements(second).contains(first);
 		return result;
 	}
 
