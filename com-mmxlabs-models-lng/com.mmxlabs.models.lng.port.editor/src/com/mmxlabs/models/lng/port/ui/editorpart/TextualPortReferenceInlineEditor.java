@@ -5,20 +5,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.fieldassist.ContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
 
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.ui.tabular.manipulators.TextualSingleReferenceManipulator;
-import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.models.ui.editors.impl.TextualReferenceInlineEditor;
 
-public class TextualPortSingleReferenceManipulatorExtension extends TextualSingleReferenceManipulator {
-	public TextualPortSingleReferenceManipulatorExtension(final EReference field, final IReferenceValueProviderProvider valueProviderProvider, final EditingDomain editingDomain) {
-		super(field, valueProviderProvider, editingDomain);
+public class TextualPortReferenceInlineEditor extends TextualReferenceInlineEditor {
+
+	public TextualPortReferenceInlineEditor(final EStructuralFeature feature) {
+		super(feature);
 	}
 
 	@Override

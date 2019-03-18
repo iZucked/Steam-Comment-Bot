@@ -157,7 +157,7 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 		final ContentProposalAdapter proposalAdapter = new ContentProposalAdapter(editor.getControl(), controlContentAdapter, proposalProvider, AutoCompleteHelper.getActivationKeystroke(),
 				AutoCompleteHelper.getAutoactivationChars());
 		proposalAdapter.setFilterStyle(ContentProposalAdapter.FILTER_NONE);
-		proposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_INSERT);
+		proposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 		proposalAdapter.setPropagateKeys(true);
 
 		return editor;
@@ -171,7 +171,7 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 			for (final String proposal : names) {
 				if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
 					final String c = proposal.substring(contents.length());
-					list.add(new ContentProposal(c, proposal, null, c.length()));
+					list.add(new ContentProposal(proposal, proposal, null, 0));
 				}
 			}
 
