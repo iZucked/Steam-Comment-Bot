@@ -219,6 +219,12 @@
           id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractCompositeFactory_PurchaseContract"
           inheritable="true">
     </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.DateShiftExpressionCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.DateShiftExpressionCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.editorfactories">

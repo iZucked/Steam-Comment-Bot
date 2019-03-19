@@ -192,5 +192,32 @@
             subModelImporterClass="com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMarketsModelImporter">
       </submodelImporter>
    </extension>
+   <extension
+         point="com.mmxlabs.models.ui.displaycompositefactories">
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket"
+            factory="com.mmxlabs.models.lng.spotmarkets.editor.displaycomposites.SpotMarketsCompositeFactory"
+            id="com.mmxlabs.models.lng.spotmarkets.editor.displaycomposites.SpotMarketsCompositeFactory_DP"
+            inheritable="true">
+      </displayCompositeFactory>
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.spotmarkets.DESSalesMarket"
+            factory="com.mmxlabs.models.lng.spotmarkets.editor.displaycomposites.SpotMarketsCompositeFactory"
+            id="com.mmxlabs.models.lng.spotmarkets.editor.displaycomposites.SpotMarketsCompositeFactory_DS"
+            inheritable="true">
+      </displayCompositeFactory>
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket"
+            factory="com.mmxlabs.models.lng.spotmarkets.editor.displaycomposites.SpotMarketsCompositeFactory"
+            id="com.mmxlabs.models.lng.spotmarkets.editor.displaycomposites.SpotMarketsCompositeFactory_FP"
+            inheritable="true">
+      </displayCompositeFactory>
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket"
+            factory="com.mmxlabs.models.lng.spotmarkets.editor.displaycomposites.SpotMarketsCompositeFactory"
+            id="com.mmxlabs.models.lng.spotmarkets.editor.displaycomposites.SpotMarketsCompositeFactory_FS"
+            inheritable="true">
+      </displayCompositeFactory>
+   </extension>
 
 </plugin>
