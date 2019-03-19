@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
@@ -32,8 +33,10 @@ public class BaseFuelPriceConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof BaseFuelCost) {
 			final BaseFuelCost baseFuelCost = (BaseFuelCost) target;
 
+			BaseFuel fuel = baseFuelCost.getFuel();
+			String baseFuelName = fuel == null ? "<Unspecified fuel>" : fuel.getName();
 			final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
-					.withTypedName("Base Fuel", baseFuelCost.getFuel().getName());
+					.withTypedName("Base Fuel", baseFuelName);
 
 			final String expression = baseFuelCost.getExpression();
 
