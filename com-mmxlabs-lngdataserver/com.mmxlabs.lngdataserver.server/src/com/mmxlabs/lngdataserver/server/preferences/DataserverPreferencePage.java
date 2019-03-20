@@ -24,9 +24,9 @@ public class DataserverPreferencePage extends FieldEditorPreferencePage implemen
 	protected void createFieldEditors() {
 
 		addField(new StringFieldEditor(StandardDateRepositoryPreferenceConstants.P_URL_KEY, "&URL", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY, "Enable &Base case sharing", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY, "&Base case sharing", getFieldEditorParent()));
 		if (LicenseFeatures.isPermitted("features:hub-team-folder")) {
-			addField(new BooleanFieldEditor(StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY, "Enable &Team workspace", getFieldEditorParent()));
+			addField(new BooleanFieldEditor(StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY, "&Team folder", getFieldEditorParent()));
 		}
 	}
 
