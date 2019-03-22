@@ -73,12 +73,13 @@ public class SolutionSetExporterUnit {
 			public @NonNull IMultiStateResult run(@NonNull final SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState, @NonNull final IProgressMonitor monitor) {
 				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = inputState.getSolutions();
 
-				SequencesToChangeDescriptionTransformer changeTransformer = new SequencesToChangeDescriptionTransformer(scenarioToOptimiserBridge.getFullDataTransformer());
-				ChangeModelToScheduleSpecification specificationTransformer = new ChangeModelToScheduleSpecification(scenarioToOptimiserBridge.getScenarioDataProvider(), null);
+				SequencesToChangeDescriptionTransformer changeTransformer = null;
+				ChangeModelToScheduleSpecification specificationTransformer = null;
 				// build this on the raw transformed seq
-				{
+				if (dualPNLMode) {
+					changeTransformer = new SequencesToChangeDescriptionTransformer(scenarioToOptimiserBridge.getFullDataTransformer());
+					specificationTransformer = new ChangeModelToScheduleSpecification(scenarioToOptimiserBridge.getScenarioDataProvider(), null);
 					ISequences s = scenarioToOptimiserBridge.getTransformedOriginalRawSequences(initialSequences.getSequencesPair().getFirst());
-
 					changeTransformer.prepareFromBase(s);
 				}
 				solutions.add(0, initialSequences.getSequencesPair());
@@ -93,8 +94,6 @@ public class SolutionSetExporterUnit {
 					TraderBasedInsertionHelper helper = null;
 					if (dualPNLMode) {
 						helper = new TraderBasedInsertionHelper(scenarioToOptimiserBridge.getScenarioDataProvider(), scenarioToOptimiserBridge);
-					}
-					if (helper != null) {
 						helper.prepareFromBase(solutions.get(0).getFirst());
 					}
 
@@ -141,19 +140,19 @@ public class SolutionSetExporterUnit {
 							}
 
 							final SolutionOption option = helper == null ? AnalyticsFactory.eINSTANCE.createSolutionOption() : AnalyticsFactory.eINSTANCE.createDualModeSolutionOption();
+							if (helper != null) {
+								ISequences s = scenarioToOptimiserBridge.getTransformedOriginalRawSequences(changeSet.getFirst());
+								option.setChangeDescription(changeTransformer.generateChangeDescription(s));
+								try {
+									Pair<ScheduleSpecification, ExtraDataProvider> p = specificationTransformer.buildScheduleSpecification(option.getChangeDescription());
+									option.setScheduleSpecification(p.getFirst());
+									plan.getExtraSlots().addAll(p.getSecond().extraLoads);
+									plan.getExtraSlots().addAll(p.getSecond().extraDischarges);
+								} catch (Throwable t) {
+									changeTransformer.generateChangeDescription(changeSet.getFirst());
 
-							ISequences s = scenarioToOptimiserBridge.getTransformedOriginalRawSequences(changeSet.getFirst());
-							option.setChangeDescription(changeTransformer.generateChangeDescription(s));
-							try {
-								Pair<ScheduleSpecification, ExtraDataProvider> p = specificationTransformer.buildScheduleSpecification(option.getChangeDescription());
-								option.setScheduleSpecification(p.getFirst());
-								plan.getExtraSlots().addAll(p.getSecond().extraLoads);
-								plan.getExtraSlots().addAll(p.getSecond().extraDischarges);
-							} catch (Throwable t) {
-								changeTransformer.generateChangeDescription(changeSet.getFirst());
-
+								}
 							}
-
 							option.setScheduleModel(scheduleModel);
 
 							if (!firstSolution && helper != null) {
