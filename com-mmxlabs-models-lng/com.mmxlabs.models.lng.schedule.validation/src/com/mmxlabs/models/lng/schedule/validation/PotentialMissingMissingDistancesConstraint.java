@@ -22,11 +22,13 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -90,7 +92,8 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 
 			final Set<Port> startPorts = new HashSet<>();
 			final Set<Port> endPorts = new HashSet<>();
-			final Set<Port> eventPorts = new HashSet<>();
+			final Set<Port> eventStartPorts = new HashSet<>();
+			final Set<Port> eventEndPorts = new HashSet<>();
 			final Set<Port> loadPorts = new HashSet<>();
 			final Set<Port> dischargePorts = new HashSet<>();
 			final Set<Port> ballastBonusReDeliverToPorts = new HashSet<>();
@@ -109,13 +112,21 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 
 			// TODO: Complex cargoes will also have load -> load and discharge -> discharge distance requirements
 
-			cargoModel.getVesselEvents().forEach(e -> eventPorts.add(e.getPort()));
+			for (VesselEvent e : cargoModel.getVesselEvents()) {
+				if (e instanceof CharterOutEvent) {
+					CharterOutEvent co = (CharterOutEvent) e;
+					if (co.getRelocateTo() != null) {
+						eventEndPorts.add(co.getRelocateTo());
+					} else {
+						eventEndPorts.add(e.getPort());
+					}
+				} else {
+					eventStartPorts.add(e.getPort());
+					eventEndPorts.add(e.getPort());
+				}
+			}
 
-			cargoModel.getVesselEvents().stream() //
-					.filter(e -> e instanceof CharterOutEvent) //
-					.forEach(e -> eventPorts.add(((CharterOutEvent) e).getRelocateTo()));
-
-			spotMarketsModel.getCharterOutMarkets().forEach(m -> eventPorts.addAll(SetUtils.getObjects(m.getAvailablePorts())));
+			spotMarketsModel.getCharterOutMarkets().forEach(m -> eventEndPorts.addAll(SetUtils.getObjects(m.getAvailablePorts())));
 
 			spotMarketsModel.getFobPurchasesSpotMarket().getMarkets().forEach(m -> loadPorts.add(((FOBPurchasesMarket) m).getNotionalPort()));
 			spotMarketsModel.getDesSalesSpotMarket().getMarkets().forEach(m -> dischargePorts.add(((DESSalesMarket) m).getNotionalPort()));
@@ -123,7 +134,7 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 			// Filter end ports by likely end ports as with ballast bonus work we may specify world-wide redelivery, but in practise we would not use all possible ports.
 			final Set<Port> likelyEndPorts = new HashSet<>();
 			likelyEndPorts.addAll(dischargePorts);
-			likelyEndPorts.addAll(eventPorts);
+			likelyEndPorts.addAll(eventEndPorts);
 			likelyEndPorts.addAll(startPorts);
 			endPorts.retainAll(likelyEndPorts);
 
@@ -134,7 +145,7 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 				final Set<Port> vaLikelyEndPorts = new HashSet<>();
 				vaLikelyEndPorts.addAll(loadPorts);
 				vaLikelyEndPorts.addAll(dischargePorts);
-				vaLikelyEndPorts.addAll(eventPorts);
+				vaLikelyEndPorts.addAll(eventEndPorts);
 
 				final Set<Port> vaEndPorts = SetUtils.getObjects(va.getEndAt());
 				// vaEndPorts.retainAll(vaLikelyEndPorts);
@@ -187,12 +198,12 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 			missingDistances.addAll(distanceChecker.apply(dischargePorts, loadPorts));
 			// missingDistances.addAll(distanceChecker.apply(dischargePorts, endPorts));
 
-			missingDistances.addAll(distanceChecker.apply(startPorts, eventPorts));
-			missingDistances.addAll(distanceChecker.apply(eventPorts, loadPorts));
-			missingDistances.addAll(distanceChecker.apply(dischargePorts, eventPorts));
+			missingDistances.addAll(distanceChecker.apply(startPorts, eventStartPorts));
+			missingDistances.addAll(distanceChecker.apply(eventEndPorts, loadPorts));
+			missingDistances.addAll(distanceChecker.apply(dischargePorts, eventStartPorts));
 			// missingDistances.addAll(distanceChecker.apply(eventPorts, endPorts));
 
-			missingDistances.addAll(distanceChecker.apply(eventPorts, eventPorts));
+			missingDistances.addAll(distanceChecker.apply(eventEndPorts, eventStartPorts));
 
 			// missingDistances.addAll(distanceChecker.apply(startPorts, endPorts));
 
