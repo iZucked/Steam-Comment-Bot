@@ -42,7 +42,6 @@ class ExpandableSet implements DisposeListener {
 	ExpandableComposite ec;
 	Composite client;
 	List<EStructuralFeature[]> featureLines;
-	// Hyperlink textClient;
 	Label textClient;
 	String baseTitle;
 	Set<EStructuralFeature> headerFeatures;
@@ -53,7 +52,7 @@ class ExpandableSet implements DisposeListener {
 
 	public ExpandableSet(final String title, final ExpansionListener el) {
 		baseTitle = title;
-		titleEObjects = new HashSet<EObject>();
+		titleEObjects = new HashSet<>();
 		expansionListener = el;
 	}
 
@@ -64,15 +63,15 @@ class ExpandableSet implements DisposeListener {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				if ((notification.getNotifier() instanceof EObject) && headerFeatures.contains(notification.getFeature()))
+				if ((notification.getNotifier() instanceof EObject) && headerFeatures.contains(notification.getFeature())) {
 					ExpandableSet.this.updateTextClient((EObject) notification.getNotifier());
+				}
 			}
 		};
 	}
 
 	void create(final IDialogEditingContext dialogContext, final Composite contentComposite, final MMXRootObject root, final EObject object,
 			final Map<EStructuralFeature, IInlineEditor> feature2Editor, final EMFDataBindingContext dbc, final IDisplayCompositeLayoutProvider lp, final FormToolkit toolkit) {
-		// ec = toolkit.createSection(contentComposite, Section.TITLE_BAR | ExpandableComposite.TWISTIE);
 		ec = toolkit.createSection(contentComposite, ExpandableComposite.TWISTIE);
 		final Composite c = createExpandable(ec, toolkit);
 		ec.addDisposeListener(this);
@@ -86,7 +85,6 @@ class ExpandableSet implements DisposeListener {
 		ec.setText(baseTitle);
 		// title label
 		{
-			// textClient = toolkit.createHyperlink(ec, "", SWT.NONE);
 			textClient = toolkit.createLabel(ec, "", SWT.NONE);
 		}
 		textClient.setText("");
@@ -132,10 +130,11 @@ class ExpandableSet implements DisposeListener {
 
 	@Override
 	public void widgetDisposed(final DisposeEvent e) {
-		if (titleListener != null)
+		if (titleListener != null) {
 			for (final EObject eo : titleEObjects) {
 				eo.eAdapters().remove(titleListener);
 			}
+		}
 	}
 
 	public void setToolTipText(@Nullable final String tooltipText) {
