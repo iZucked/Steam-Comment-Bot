@@ -77,7 +77,8 @@ public class UpstreamUrlProvider implements IUserNameProvider {
 		// Schedule a "is alive" check every minute....
 		scheduler.scheduleAtFixedRate(this::testUpstreamAvailability, 1, 1, TimeUnit.MINUTES);
 		// ... and do one now as first invocation can be a bit delayed.
-		testUpstreamAvailability();
+		// Defer to avoid potential deadlock
+		ForkJoinPool.commonPool().execute(this::testUpstreamAvailability);
 	}
 
 	@Override
@@ -170,7 +171,7 @@ public class UpstreamUrlProvider implements IUserNameProvider {
 		return true;
 	}
 
-	public void testUpstreamAvailability() {
+	public synchronized void testUpstreamAvailability() {
 
 		boolean valid = false;
 		try {
