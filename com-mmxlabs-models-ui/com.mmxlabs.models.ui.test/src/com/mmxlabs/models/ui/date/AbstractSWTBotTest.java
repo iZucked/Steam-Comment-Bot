@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.ui.date;
 
+import java.util.Locale;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
@@ -28,6 +29,12 @@ public class AbstractSWTBotTest {
 	public static void setKeyboard() {
 		// For typeText, set US keyboard layout as GB does not seem to be supported
 		System.setProperty(SWTBotPreferenceConstants.KEY_KEYBOARD_LAYOUT, "EN_US");
+	}
+	@BeforeClass
+	public static void setLocale() {
+		// Enforce UK Locale Needed for running tests on build server. Keeps date format consistent.
+		Locale.setDefault(Locale.UK);
+		DateTimeFormatsProvider.INSTANCE.setDefaultDayMonthFormats();
 	}
 
 	@Before
