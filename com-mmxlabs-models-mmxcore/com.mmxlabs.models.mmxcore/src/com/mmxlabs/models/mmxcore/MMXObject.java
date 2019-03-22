@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.mmxcore;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.EList;
@@ -80,6 +81,35 @@ public interface MMXObject extends EObject {
 				}
 			}
 			return absentDelegateValue;
+		}
+		
+		public static DelegateInformation makeFeatureOverride(EObject object, // Object we are editing
+				EStructuralFeature overrideOwnerFeature, // The reference to the object with values we are overriding
+				EStructuralFeature overrideFeature, // The feature to use on the override object 
+				BooleanSupplier isOverriddenSupplier, // Method to use to check if we are overridden
+				Object defaultValue // default value if no other value found
+				) {
+			return new DelegateInformation(null, null, null) {
+				
+				@Override
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == overrideOwnerFeature);
+				}
+				
+				@Override
+				public Object getValue(final EObject object) {
+					Object result = defaultValue;
+					final EObject overrideOwner = (EObject)object.eGet(overrideOwnerFeature);
+					
+					if (!isOverriddenSupplier.getAsBoolean() && overrideOwner != null) {
+						if (overrideOwner.eIsSet(overrideFeature)) {
+							result = overrideOwner.eGet(overrideFeature);
+						}
+					}
+					return result;
+					
+				}				
+			};
 		}
 		
 	}
