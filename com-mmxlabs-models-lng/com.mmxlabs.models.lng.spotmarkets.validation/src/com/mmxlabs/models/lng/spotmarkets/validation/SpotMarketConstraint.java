@@ -16,10 +16,14 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
@@ -35,11 +39,27 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
 
-		final List<IStatus> failures = new LinkedList<IStatus>();
+		final List<IStatus> failures = new LinkedList<>();
 
 		if (target instanceof SpotMarket) {
 			final SpotMarket spotMarket = (SpotMarket) target;
 
+			SpotAvailability availability = spotMarket.getAvailability();
+			if (availability != null) {
+				DataIndex<Integer> idx = availability.getCurve();
+				if (idx != null) {
+					for (IndexPoint<Integer> pt : idx.getPoints()) {
+						if (pt.getDate() == null) {
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Missing date in availability curve"));
+							dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_Availability());
+							dsd.addEObjectAndFeature(idx, SpotMarketsPackage.eINSTANCE.getSpotAvailability_Curve());
+							dsd.addEObjectAndFeature(pt, PricingPackage.eINSTANCE.getIndexPoint_Date());
+							failures.add(dsd);
+							break;
+						}
+					}
+				}
+			}
 			if (spotMarket.getMaxQuantity() != 0 && spotMarket.getMinQuantity() != 0) {
 				if (spotMarket.getMaxQuantity() < spotMarket.getMinQuantity()) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
@@ -73,8 +93,8 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 					if (!port.getCapabilities().contains(PortCapability.DISCHARGE)) {
 						// Only complain if the discharge port is directly included
 						if (desPurchaseMarket.getDestinationPorts().contains(port)) {
-							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Port " + port.getName()
-									+ " is not a discharge port"), IStatus.WARNING);
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus("Port " + port.getName() + " is not a discharge port"), IStatus.WARNING);
 							dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_DestinationPorts());
 							failures.add(dsd);
 						}
@@ -152,8 +172,8 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 		if (spotMarket.eContainer() instanceof SpotMarketGroup) {
 			final SpotMarketGroup spotMarketGroup = (SpotMarketGroup) spotMarket.eContainer();
 			if (spotMarketGroup.getType() != spotType) {
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(spotMarket.eClass().getName()
-						+ " is in the SpotMarketGroup for " + spotType));
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(spotMarket.eClass().getName() + " is in the SpotMarketGroup for " + spotType));
 				dsd.addEObjectAndFeature(spotMarketGroup, SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets());
 				failures.add(dsd);
 			}
