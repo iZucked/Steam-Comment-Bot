@@ -4,7 +4,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-SymbolicName: com.mmxlabs.common.common-recorder.tests
 Automatic-Module-Name: com.mmxlabs.common.common-recorder.tests
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.6.8.qualifier
+Bundle-Version: 4.6.9.qualifier
 Fragment-Host: com.mmxlabs.common.common-recorder
 Bundle-Name: Common-Recorder: Tests
 Require-Bundle: org.junit;bundle-version="4.8.2",

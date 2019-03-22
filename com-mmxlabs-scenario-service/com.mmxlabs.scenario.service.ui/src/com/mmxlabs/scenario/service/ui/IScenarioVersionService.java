@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * All rights reserved.
+ */
 package com.mmxlabs.scenario.service.ui;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;

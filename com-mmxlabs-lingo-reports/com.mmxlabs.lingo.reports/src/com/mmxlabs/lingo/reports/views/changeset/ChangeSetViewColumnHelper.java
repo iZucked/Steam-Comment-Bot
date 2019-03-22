@@ -1,4 +1,8 @@
 /**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * All rights reserved.
+ */
+/**
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.changeset;
