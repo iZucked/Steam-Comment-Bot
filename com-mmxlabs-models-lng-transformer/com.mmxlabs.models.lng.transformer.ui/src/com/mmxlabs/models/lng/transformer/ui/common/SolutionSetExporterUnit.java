@@ -150,7 +150,6 @@ public class SolutionSetExporterUnit {
 									plan.getExtraSlots().addAll(p.getSecond().extraDischarges);
 								} catch (Throwable t) {
 									changeTransformer.generateChangeDescription(changeSet.getFirst());
-
 								}
 							}
 							option.setScheduleModel(scheduleModel);
