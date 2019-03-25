@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.scenario.service.model.edit;singleton:=true
 Automatic-Module-Name: com.mmxlabs.scenario.service.model.edit
-Bundle-Version: 4.6.9.qualifier
+Bundle-Version: 4.6.9.RELEASE
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.scenario.service.model.provider.ScenarioEditPlugin$Implementation
 Bundle-Vendor: %providerName
