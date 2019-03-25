@@ -67,7 +67,7 @@ public interface ISalesPriceCalculator extends ICalculator {
 	public PricingEventType getCalculatorPricingEventType(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord);
 
 	/**
-	 * Get the estimated sales price in dollars per mmbtu at a given point in time in hours
+	 * Get the estimated sales price in dollars per mmbtu at a given point in time in hours. Time should already shifted into UTC equiv.
 	 * 
 	 * @param loadOption
 	 * @param dischargeOption
