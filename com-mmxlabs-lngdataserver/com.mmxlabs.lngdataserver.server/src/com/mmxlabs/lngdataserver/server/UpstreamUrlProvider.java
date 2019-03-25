@@ -156,7 +156,10 @@ public class UpstreamUrlProvider implements IUserNameProvider {
 			return false;
 		}
 
-		final Request loginRequest = makeRequest().url(url + "/api/login") //
+		final Request loginRequest = new Request.Builder() //
+				.header("Authorization", Credentials.basic(username, password)) //
+				.header("cache-control", "no-cache") //
+				.url(url + "/api/login") //
 				.build();
 
 		try (Response loginResponse = CLIENT.newCall(loginRequest).execute()) {
