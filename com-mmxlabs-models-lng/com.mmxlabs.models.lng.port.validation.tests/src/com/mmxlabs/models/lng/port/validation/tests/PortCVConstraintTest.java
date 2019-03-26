@@ -13,6 +13,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
@@ -38,7 +39,7 @@ public class PortCVConstraintTest {
 
 		final Port port = PortFactory.eINSTANCE.createPort();
 		port.getCapabilities().add(PortCapability.LOAD);
-		port.setCvValue(0.001);
+		port.setCvValue(0.1);
 
 		checkConstraint(port, false);
 	}
@@ -72,13 +73,13 @@ public class PortCVConstraintTest {
 		final IValidationContext ctx = Mockito.mock(IValidationContext.class);
 		Mockito.when(ctx.getTarget()).thenReturn(target);
 		Mockito.when(ctx.createSuccessStatus()).thenReturn(successStatus);
-		Mockito.when(ctx.createFailureStatus(Matchers.anyString())).thenReturn(failureStatus);
+		Mockito.when(ctx.createFailureStatus(ArgumentMatchers.anyString())).thenReturn(failureStatus);
 
 		final PortCVConstraint constraint = new PortCVConstraint();
 		final IStatus status = constraint.validate(ctx);
 
 		if (expectSuccess) {
-			Assert.assertTrue("Sucess expected", status.isOK());
+			Assert.assertTrue("Success expected", status.isOK());
 		} else {
 			Assert.assertFalse("Failure expected", status.isOK());
 
