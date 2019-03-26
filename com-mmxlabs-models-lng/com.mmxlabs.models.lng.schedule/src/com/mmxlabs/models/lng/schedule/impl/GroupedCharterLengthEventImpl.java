@@ -113,6 +113,7 @@ public class GroupedCharterLengthEventImpl extends EventImpl implements GroupedC
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Event> getEvents() {
 		if (events == null) {
 			events = new EObjectResolvingEList<Event>(Event.class, this, SchedulePackage.GROUPED_CHARTER_LENGTH_EVENT__EVENTS);
@@ -125,6 +126,7 @@ public class GroupedCharterLengthEventImpl extends EventImpl implements GroupedC
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public GroupProfitAndLoss getGroupProfitAndLoss() {
 		return groupProfitAndLoss;
 	}
@@ -149,6 +151,7 @@ public class GroupedCharterLengthEventImpl extends EventImpl implements GroupedC
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setGroupProfitAndLoss(GroupProfitAndLoss newGroupProfitAndLoss) {
 		if (newGroupProfitAndLoss != groupProfitAndLoss) {
 			NotificationChain msgs = null;
@@ -168,6 +171,7 @@ public class GroupedCharterLengthEventImpl extends EventImpl implements GroupedC
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<GeneralPNLDetails> getGeneralPNLDetails() {
 		if (generalPNLDetails == null) {
 			generalPNLDetails = new EObjectContainmentEList<GeneralPNLDetails>(GeneralPNLDetails.class, this, SchedulePackage.GROUPED_CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS);
@@ -188,6 +192,7 @@ public class GroupedCharterLengthEventImpl extends EventImpl implements GroupedC
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Sequence getLinkedSequence() {
 		if (linkedSequence != null && linkedSequence.eIsProxy()) {
 			InternalEObject oldLinkedSequence = (InternalEObject)linkedSequence;
@@ -214,6 +219,7 @@ public class GroupedCharterLengthEventImpl extends EventImpl implements GroupedC
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLinkedSequence(Sequence newLinkedSequence) {
 		Sequence oldLinkedSequence = linkedSequence;
 		linkedSequence = newLinkedSequence;

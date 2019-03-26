@@ -63,6 +63,7 @@ public class CapacityViolationsHolderImpl extends MMXObjectImpl implements Capac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EMap<CapacityViolationType, Long> getViolations() {
 		if (violations == null) {
 			violations = new EcoreEMap<CapacityViolationType,Long>(SchedulePackage.Literals.CAPACITY_MAP_ENTRY, CapacityMapEntryImpl.class, this, SchedulePackage.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS);

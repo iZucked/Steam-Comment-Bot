@@ -77,6 +77,7 @@ public class CanalBookingEventImpl extends EventImpl implements CanalBookingEven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Sequence getLinkedSequence() {
 		if (linkedSequence != null && linkedSequence.eIsProxy()) {
 			InternalEObject oldLinkedSequence = (InternalEObject)linkedSequence;
@@ -103,6 +104,7 @@ public class CanalBookingEventImpl extends EventImpl implements CanalBookingEven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLinkedSequence(Sequence newLinkedSequence) {
 		Sequence oldLinkedSequence = linkedSequence;
 		linkedSequence = newLinkedSequence;
@@ -115,6 +117,7 @@ public class CanalBookingEventImpl extends EventImpl implements CanalBookingEven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Journey getLinkedJourney() {
 		if (linkedJourney != null && linkedJourney.eIsProxy()) {
 			InternalEObject oldLinkedJourney = (InternalEObject)linkedJourney;
@@ -141,6 +144,7 @@ public class CanalBookingEventImpl extends EventImpl implements CanalBookingEven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLinkedJourney(Journey newLinkedJourney) {
 		Journey oldLinkedJourney = linkedJourney;
 		linkedJourney = newLinkedJourney;

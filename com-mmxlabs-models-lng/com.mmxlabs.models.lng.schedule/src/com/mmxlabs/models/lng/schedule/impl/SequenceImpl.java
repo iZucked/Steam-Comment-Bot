@@ -196,6 +196,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Event> getEvents() {
 		if (events == null) {
 			events = new EObjectContainmentWithInverseEList<Event>(Event.class, this, SchedulePackage.SEQUENCE__EVENTS, SchedulePackage.EVENT__SEQUENCE);
@@ -208,6 +209,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselAvailability getVesselAvailability() {
 		if (vesselAvailability != null && vesselAvailability.eIsProxy()) {
 			InternalEObject oldVesselAvailability = (InternalEObject)vesselAvailability;
@@ -234,6 +236,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselAvailability(VesselAvailability newVesselAvailability) {
 		VesselAvailability oldVesselAvailability = vesselAvailability;
 		vesselAvailability = newVesselAvailability;
@@ -248,6 +251,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetVesselAvailability() {
 		VesselAvailability oldVesselAvailability = vesselAvailability;
 		boolean oldVesselAvailabilityESet = vesselAvailabilityESet;
@@ -262,6 +266,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetVesselAvailability() {
 		return vesselAvailabilityESet;
 	}
@@ -271,6 +276,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterInMarket getCharterInMarket() {
 		if (charterInMarket != null && charterInMarket.eIsProxy()) {
 			InternalEObject oldCharterInMarket = (InternalEObject)charterInMarket;
@@ -297,6 +303,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterInMarket(CharterInMarket newCharterInMarket) {
 		CharterInMarket oldCharterInMarket = charterInMarket;
 		charterInMarket = newCharterInMarket;
@@ -311,6 +318,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCharterInMarket() {
 		CharterInMarket oldCharterInMarket = charterInMarket;
 		boolean oldCharterInMarketESet = charterInMarketESet;
@@ -325,6 +333,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCharterInMarket() {
 		return charterInMarketESet;
 	}
@@ -334,6 +343,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Fitness> getFitnesses() {
 		if (fitnesses == null) {
 			fitnesses = new EObjectContainmentEList<Fitness>(Fitness.class, this, SchedulePackage.SEQUENCE__FITNESSES);
@@ -346,6 +356,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSpotIndex() {
 		return spotIndex;
 	}
@@ -355,6 +366,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpotIndex(int newSpotIndex) {
 		int oldSpotIndex = spotIndex;
 		spotIndex = newSpotIndex;
@@ -369,6 +381,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetSpotIndex() {
 		int oldSpotIndex = spotIndex;
 		boolean oldSpotIndexESet = spotIndexESet;
@@ -383,6 +396,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetSpotIndex() {
 		return spotIndexESet;
 	}
@@ -392,6 +406,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SequenceType getSequenceType() {
 		return sequenceType;
 	}
@@ -401,6 +416,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSequenceType(SequenceType newSequenceType) {
 		SequenceType oldSequenceType = sequenceType;
 		sequenceType = newSequenceType == null ? SEQUENCE_TYPE_EDEFAULT : newSequenceType;
@@ -413,6 +429,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterInMarketOverride getCharterInMarketOverride() {
 		if (charterInMarketOverride != null && charterInMarketOverride.eIsProxy()) {
 			InternalEObject oldCharterInMarketOverride = (InternalEObject)charterInMarketOverride;
@@ -439,6 +456,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterInMarketOverride(CharterInMarketOverride newCharterInMarketOverride) {
 		CharterInMarketOverride oldCharterInMarketOverride = charterInMarketOverride;
 		charterInMarketOverride = newCharterInMarketOverride;
@@ -453,6 +471,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCharterInMarketOverride() {
 		CharterInMarketOverride oldCharterInMarketOverride = charterInMarketOverride;
 		boolean oldCharterInMarketOverrideESet = charterInMarketOverrideESet;
@@ -467,6 +486,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCharterInMarketOverride() {
 		return charterInMarketOverrideESet;
 	}

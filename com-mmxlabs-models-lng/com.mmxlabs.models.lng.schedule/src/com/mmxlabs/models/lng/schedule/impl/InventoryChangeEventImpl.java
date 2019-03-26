@@ -241,6 +241,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDateTime getDate() {
 		return date;
 	}
@@ -250,6 +251,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDate(LocalDateTime newDate) {
 		LocalDateTime oldDate = date;
 		date = newDate;
@@ -262,6 +264,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getChangeQuantity() {
 		return changeQuantity;
 	}
@@ -271,6 +274,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setChangeQuantity(int newChangeQuantity) {
 		int oldChangeQuantity = changeQuantity;
 		changeQuantity = newChangeQuantity;
@@ -283,6 +287,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCurrentLevel() {
 		return currentLevel;
 	}
@@ -292,6 +297,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCurrentLevel(int newCurrentLevel) {
 		int oldCurrentLevel = currentLevel;
 		currentLevel = newCurrentLevel;
@@ -304,6 +310,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCurrentMin() {
 		return currentMin;
 	}
@@ -313,6 +320,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCurrentMin(int newCurrentMin) {
 		int oldCurrentMin = currentMin;
 		currentMin = newCurrentMin;
@@ -325,6 +333,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCurrentMax() {
 		return currentMax;
 	}
@@ -334,6 +343,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCurrentMax(int newCurrentMax) {
 		int oldCurrentMax = currentMax;
 		currentMax = newCurrentMax;
@@ -346,6 +356,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public InventoryEventRow getEvent() {
 		if (event != null && event.eIsProxy()) {
 			InternalEObject oldEvent = (InternalEObject)event;
@@ -372,6 +383,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEvent(InventoryEventRow newEvent) {
 		InventoryEventRow oldEvent = event;
 		event = newEvent;
@@ -384,6 +396,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotAllocation getSlotAllocation() {
 		if (slotAllocation != null && slotAllocation.eIsProxy()) {
 			InternalEObject oldSlotAllocation = (InternalEObject)slotAllocation;
@@ -410,6 +423,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlotAllocation(SlotAllocation newSlotAllocation) {
 		SlotAllocation oldSlotAllocation = slotAllocation;
 		slotAllocation = newSlotAllocation;
@@ -422,6 +436,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public OpenSlotAllocation getOpenSlotAllocation() {
 		if (openSlotAllocation != null && openSlotAllocation.eIsProxy()) {
 			InternalEObject oldOpenSlotAllocation = (InternalEObject)openSlotAllocation;
@@ -448,6 +463,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOpenSlotAllocation(OpenSlotAllocation newOpenSlotAllocation) {
 		OpenSlotAllocation oldOpenSlotAllocation = openSlotAllocation;
 		openSlotAllocation = newOpenSlotAllocation;
@@ -460,6 +476,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isBreachedMin() {
 		return breachedMin;
 	}
@@ -469,6 +486,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBreachedMin(boolean newBreachedMin) {
 		boolean oldBreachedMin = breachedMin;
 		breachedMin = newBreachedMin;
@@ -481,6 +499,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isBreachedMax() {
 		return breachedMax;
 	}
@@ -490,6 +509,7 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBreachedMax(boolean newBreachedMax) {
 		boolean oldBreachedMax = breachedMax;
 		breachedMax = newBreachedMax;

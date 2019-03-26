@@ -81,6 +81,7 @@ public class EntityPNLDetailsImpl extends GeneralPNLDetailsImpl implements Entit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
@@ -107,6 +108,7 @@ public class EntityPNLDetailsImpl extends GeneralPNLDetailsImpl implements Entit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEntity(BaseLegalEntity newEntity) {
 		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;
@@ -119,6 +121,7 @@ public class EntityPNLDetailsImpl extends GeneralPNLDetailsImpl implements Entit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<GeneralPNLDetails> getGeneralPNLDetails() {
 		if (generalPNLDetails == null) {
 			generalPNLDetails = new EObjectContainmentEList<GeneralPNLDetails>(GeneralPNLDetails.class, this, SchedulePackage.ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS);

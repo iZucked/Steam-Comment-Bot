@@ -80,6 +80,7 @@ public class SlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements SlotPNL
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Slot getSlot() {
 		if (slot != null && slot.eIsProxy()) {
 			InternalEObject oldSlot = (InternalEObject)slot;
@@ -106,6 +107,7 @@ public class SlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements SlotPNL
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlot(Slot newSlot) {
 		Slot oldSlot = slot;
 		slot = newSlot;
@@ -118,6 +120,7 @@ public class SlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements SlotPNL
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<GeneralPNLDetails> getGeneralPNLDetails() {
 		if (generalPNLDetails == null) {
 			generalPNLDetails = new EObjectContainmentEList<GeneralPNLDetails>(GeneralPNLDetails.class, this, SchedulePackage.SLOT_PNL_DETAILS__GENERAL_PNL_DETAILS);

@@ -262,6 +262,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getReturnPort() {
 		return returnPort;
 	}
@@ -271,6 +272,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setReturnPort(String newReturnPort) {
 		String oldReturnPort = returnPort;
 		returnPort = newReturnPort;
@@ -283,6 +285,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDistance() {
 		return distance;
 	}
@@ -292,6 +295,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDistance(int newDistance) {
 		int oldDistance = distance;
 		distance = newDistance;
@@ -304,6 +308,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getTotalTimeInDays() {
 		return totalTimeInDays;
 	}
@@ -313,6 +318,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTotalTimeInDays(double newTotalTimeInDays) {
 		double oldTotalTimeInDays = totalTimeInDays;
 		totalTimeInDays = newTotalTimeInDays;
@@ -325,6 +331,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getTotalFuelUsed() {
 		return totalFuelUsed;
 	}
@@ -334,6 +341,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTotalFuelUsed(int newTotalFuelUsed) {
 		int oldTotalFuelUsed = totalFuelUsed;
 		totalFuelUsed = newTotalFuelUsed;
@@ -346,6 +354,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getFuelPrice() {
 		return fuelPrice;
 	}
@@ -355,6 +364,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFuelPrice(double newFuelPrice) {
 		double oldFuelPrice = fuelPrice;
 		fuelPrice = newFuelPrice;
@@ -367,6 +377,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getTotalFuelCost() {
 		return totalFuelCost;
 	}
@@ -376,6 +387,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTotalFuelCost(int newTotalFuelCost) {
 		int oldTotalFuelCost = totalFuelCost;
 		totalFuelCost = newTotalFuelCost;
@@ -388,6 +400,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHireRate() {
 		return hireRate;
 	}
@@ -397,6 +410,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHireRate(int newHireRate) {
 		int oldHireRate = hireRate;
 		hireRate = newHireRate;
@@ -409,6 +423,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHireCost() {
 		return hireCost;
 	}
@@ -418,6 +433,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHireCost(int newHireCost) {
 		int oldHireCost = hireCost;
 		hireCost = newHireCost;
@@ -430,6 +446,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getRouteTaken() {
 		return routeTaken;
 	}
@@ -439,6 +456,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRouteTaken(String newRouteTaken) {
 		String oldRouteTaken = routeTaken;
 		routeTaken = newRouteTaken;
@@ -451,6 +469,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCanalCost() {
 		return canalCost;
 	}
@@ -460,6 +479,7 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCanalCost(int newCanalCost) {
 		int oldCanalCost = canalCost;
 		canalCost = newCanalCost;

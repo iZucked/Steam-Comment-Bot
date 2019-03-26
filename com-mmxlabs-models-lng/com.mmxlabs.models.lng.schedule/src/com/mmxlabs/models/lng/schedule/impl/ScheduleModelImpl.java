@@ -83,6 +83,7 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Schedule getSchedule() {
 		return schedule;
 	}
@@ -107,6 +108,7 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSchedule(Schedule newSchedule) {
 		if (newSchedule != schedule) {
 			NotificationChain msgs = null;
@@ -126,6 +128,7 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isDirty() {
 		return dirty;
 	}
@@ -135,6 +138,7 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDirty(boolean newDirty) {
 		boolean oldDirty = dirty;
 		dirty = newDirty;

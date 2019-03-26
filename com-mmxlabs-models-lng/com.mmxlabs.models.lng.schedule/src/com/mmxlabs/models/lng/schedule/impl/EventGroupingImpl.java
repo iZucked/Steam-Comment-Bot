@@ -65,6 +65,7 @@ public class EventGroupingImpl extends EObjectImpl implements EventGrouping {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Event> getEvents() {
 		if (events == null) {
 			events = new EObjectResolvingEList<Event>(Event.class, this, SchedulePackage.EVENT_GROUPING__EVENTS);

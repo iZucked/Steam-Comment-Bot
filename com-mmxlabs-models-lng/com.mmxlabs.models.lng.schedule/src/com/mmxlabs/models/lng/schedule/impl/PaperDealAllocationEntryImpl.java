@@ -181,6 +181,7 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getDate() {
 		return date;
 	}
@@ -190,6 +191,7 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDate(LocalDate newDate) {
 		LocalDate oldDate = date;
 		date = newDate;
@@ -202,6 +204,7 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getQuantity() {
 		return quantity;
 	}
@@ -211,6 +214,7 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setQuantity(double newQuantity) {
 		double oldQuantity = quantity;
 		quantity = newQuantity;
@@ -223,6 +227,7 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getPrice() {
 		return price;
 	}
@@ -232,6 +237,7 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPrice(double newPrice) {
 		double oldPrice = price;
 		price = newPrice;
@@ -244,6 +250,7 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getValue() {
 		return value;
 	}
@@ -253,6 +260,7 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValue(double newValue) {
 		double oldValue = value;
 		value = newValue;
@@ -265,6 +273,7 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSettled() {
 		return settled;
 	}
@@ -274,6 +283,7 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSettled(boolean newSettled) {
 		boolean oldSettled = settled;
 		settled = newSettled;
@@ -286,6 +296,7 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ExposureDetail> getExposures() {
 		if (exposures == null) {
 			exposures = new EObjectContainmentEList<ExposureDetail>(ExposureDetail.class, this, SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__EXPOSURES);

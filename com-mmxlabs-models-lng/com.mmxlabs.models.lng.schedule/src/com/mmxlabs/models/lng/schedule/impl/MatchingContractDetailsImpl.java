@@ -75,6 +75,7 @@ public abstract class MatchingContractDetailsImpl extends UUIDObjectImpl impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getMatchedPort() {
 		return matchedPort;
 	}
@@ -84,6 +85,7 @@ public abstract class MatchingContractDetailsImpl extends UUIDObjectImpl impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMatchedPort(String newMatchedPort) {
 		String oldMatchedPort = matchedPort;
 		matchedPort = newMatchedPort;

@@ -122,6 +122,7 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Fuel getFuel() {
 		return fuel;
 	}
@@ -131,6 +132,7 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFuel(Fuel newFuel) {
 		Fuel oldFuel = fuel;
 		fuel = newFuel == null ? FUEL_EDEFAULT : newFuel;
@@ -143,6 +145,7 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCost() {
 		return cost;
 	}
@@ -152,6 +155,7 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCost(int newCost) {
 		int oldCost = cost;
 		cost = newCost;
@@ -164,6 +168,7 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<FuelAmount> getAmounts() {
 		if (amounts == null) {
 			amounts = new EObjectContainmentEList<FuelAmount>(FuelAmount.class, this, SchedulePackage.FUEL_QUANTITY__AMOUNTS);
@@ -176,6 +181,7 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseFuel getBaseFuel() {
 		if (baseFuel != null && baseFuel.eIsProxy()) {
 			InternalEObject oldBaseFuel = (InternalEObject)baseFuel;
@@ -202,6 +208,7 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBaseFuel(BaseFuel newBaseFuel) {
 		BaseFuel oldBaseFuel = baseFuel;
 		baseFuel = newBaseFuel;

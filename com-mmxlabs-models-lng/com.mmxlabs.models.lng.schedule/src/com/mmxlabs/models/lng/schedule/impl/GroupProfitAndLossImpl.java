@@ -133,6 +133,7 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getProfitAndLoss() {
 		return profitAndLoss;
 	}
@@ -142,6 +143,7 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setProfitAndLoss(long newProfitAndLoss) {
 		long oldProfitAndLoss = profitAndLoss;
 		profitAndLoss = newProfitAndLoss;
@@ -154,6 +156,7 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getProfitAndLossPreTax() {
 		return profitAndLossPreTax;
 	}
@@ -163,6 +166,7 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setProfitAndLossPreTax(long newProfitAndLossPreTax) {
 		long oldProfitAndLossPreTax = profitAndLossPreTax;
 		profitAndLossPreTax = newProfitAndLossPreTax;
@@ -175,6 +179,7 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getTaxValue() {
 		return taxValue;
 	}
@@ -184,6 +189,7 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTaxValue(long newTaxValue) {
 		long oldTaxValue = taxValue;
 		taxValue = newTaxValue;
@@ -196,6 +202,7 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<EntityProfitAndLoss> getEntityProfitAndLosses() {
 		if (entityProfitAndLosses == null) {
 			entityProfitAndLosses = new EObjectContainmentEList<EntityProfitAndLoss>(EntityProfitAndLoss.class, this, SchedulePackage.GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES);

@@ -557,6 +557,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getScheduleModel() {
 		return scheduleModelEClass;
 	}
@@ -566,6 +567,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScheduleModel_Schedule() {
 		return (EReference)scheduleModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -575,6 +577,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScheduleModel_Dirty() {
 		return (EAttribute)scheduleModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -584,6 +587,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSchedule() {
 		return scheduleEClass;
 	}
@@ -593,6 +597,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSchedule_Sequences() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(0);
 	}
@@ -602,6 +607,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSchedule_CargoAllocations() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(1);
 	}
@@ -611,6 +617,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSchedule_OpenSlotAllocations() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(2);
 	}
@@ -620,6 +627,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSchedule_MarketAllocations() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(3);
 	}
@@ -629,6 +637,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSchedule_SlotAllocations() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(4);
 	}
@@ -638,6 +647,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSchedule_Fitnesses() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(5);
 	}
@@ -647,6 +657,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSchedule_UnusedElements() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(6);
 	}
@@ -656,6 +667,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSchedule_InventoryLevels() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(7);
 	}
@@ -665,6 +677,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSchedule_PaperDealAllocations() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(8);
 	}
@@ -674,6 +687,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSequence() {
 		return sequenceEClass;
 	}
@@ -683,6 +697,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSequence_Events() {
 		return (EReference)sequenceEClass.getEStructuralFeatures().get(0);
 	}
@@ -692,6 +707,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSequence_VesselAvailability() {
 		return (EReference)sequenceEClass.getEStructuralFeatures().get(1);
 	}
@@ -701,6 +717,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSequence_CharterInMarket() {
 		return (EReference)sequenceEClass.getEStructuralFeatures().get(2);
 	}
@@ -710,6 +727,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSequence_Fitnesses() {
 		return (EReference)sequenceEClass.getEStructuralFeatures().get(3);
 	}
@@ -719,6 +737,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSequence_SpotIndex() {
 		return (EAttribute)sequenceEClass.getEStructuralFeatures().get(4);
 	}
@@ -728,6 +747,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSequence_SequenceType() {
 		return (EAttribute)sequenceEClass.getEStructuralFeatures().get(5);
 	}
@@ -737,6 +757,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSequence_CharterInMarketOverride() {
 		return (EReference)sequenceEClass.getEStructuralFeatures().get(6);
 	}
@@ -746,6 +767,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getSequence__GetName() {
 		return sequenceEClass.getEOperations().get(0);
 	}
@@ -755,6 +777,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getSequence__IsSpotVessel() {
 		return sequenceEClass.getEOperations().get(1);
 	}
@@ -764,6 +787,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getSequence__IsFleetVessel() {
 		return sequenceEClass.getEOperations().get(2);
 	}
@@ -773,6 +797,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getSequence__IsTimeCharterVessel() {
 		return sequenceEClass.getEOperations().get(3);
 	}
@@ -782,6 +807,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getEvent() {
 		return eventEClass;
 	}
@@ -791,6 +817,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getEvent_Start() {
 		return (EAttribute)eventEClass.getEStructuralFeatures().get(0);
 	}
@@ -800,6 +827,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getEvent_End() {
 		return (EAttribute)eventEClass.getEStructuralFeatures().get(1);
 	}
@@ -809,6 +837,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getEvent_Port() {
 		return (EReference)eventEClass.getEStructuralFeatures().get(2);
 	}
@@ -818,6 +847,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getEvent_PreviousEvent() {
 		return (EReference)eventEClass.getEStructuralFeatures().get(3);
 	}
@@ -827,6 +857,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getEvent_NextEvent() {
 		return (EReference)eventEClass.getEStructuralFeatures().get(4);
 	}
@@ -836,6 +867,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getEvent_Sequence() {
 		return (EReference)eventEClass.getEStructuralFeatures().get(5);
 	}
@@ -845,6 +877,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getEvent_CharterCost() {
 		return (EAttribute)eventEClass.getEStructuralFeatures().get(6);
 	}
@@ -854,6 +887,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getEvent_HeelAtStart() {
 		return (EAttribute)eventEClass.getEStructuralFeatures().get(7);
 	}
@@ -863,6 +897,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getEvent_HeelAtEnd() {
 		return (EAttribute)eventEClass.getEStructuralFeatures().get(8);
 	}
@@ -872,6 +907,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getEvent__GetDuration() {
 		return eventEClass.getEOperations().get(0);
 	}
@@ -881,6 +917,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getEvent__Type() {
 		return eventEClass.getEOperations().get(1);
 	}
@@ -890,6 +927,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getEvent__Name() {
 		return eventEClass.getEOperations().get(2);
 	}
@@ -899,6 +937,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSlotVisit() {
 		return slotVisitEClass;
 	}
@@ -908,6 +947,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSlotVisit_SlotAllocation() {
 		return (EReference)slotVisitEClass.getEStructuralFeatures().get(0);
 	}
@@ -917,6 +957,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getVesselEventVisit() {
 		return vesselEventVisitEClass;
 	}
@@ -926,6 +967,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getVesselEventVisit_VesselEvent() {
 		return (EReference)vesselEventVisitEClass.getEStructuralFeatures().get(0);
 	}
@@ -935,6 +977,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getVesselEventVisit_RedeliveryPort() {
 		return (EReference)vesselEventVisitEClass.getEStructuralFeatures().get(1);
 	}
@@ -944,6 +987,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getIdle() {
 		return idleEClass;
 	}
@@ -953,6 +997,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getIdle_Laden() {
 		return (EAttribute)idleEClass.getEStructuralFeatures().get(0);
 	}
@@ -962,6 +1007,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getGeneratedCharterOut() {
 		return generatedCharterOutEClass;
 	}
@@ -971,6 +1017,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getGeneratedCharterOut_Revenue() {
 		return (EAttribute)generatedCharterOutEClass.getEStructuralFeatures().get(0);
 	}
@@ -980,6 +1027,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCharterLengthEvent() {
 		return charterLengthEventEClass;
 	}
@@ -989,6 +1037,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterLengthEvent_Duration() {
 		return (EAttribute)charterLengthEventEClass.getEStructuralFeatures().get(0);
 	}
@@ -998,6 +1047,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCharterLengthEvent_Laden() {
 		return (EAttribute)charterLengthEventEClass.getEStructuralFeatures().get(1);
 	}
@@ -1007,6 +1057,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFuelUsage() {
 		return fuelUsageEClass;
 	}
@@ -1016,6 +1067,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getFuelUsage_Fuels() {
 		return (EReference)fuelUsageEClass.getEStructuralFeatures().get(0);
 	}
@@ -1025,6 +1077,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getFuelUsage__GetFuelCost() {
 		return fuelUsageEClass.getEOperations().get(0);
 	}
@@ -1034,6 +1087,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFuelQuantity() {
 		return fuelQuantityEClass;
 	}
@@ -1043,6 +1097,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFuelQuantity_Fuel() {
 		return (EAttribute)fuelQuantityEClass.getEStructuralFeatures().get(0);
 	}
@@ -1052,6 +1107,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFuelQuantity_Cost() {
 		return (EAttribute)fuelQuantityEClass.getEStructuralFeatures().get(1);
 	}
@@ -1061,6 +1117,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getFuelQuantity_Amounts() {
 		return (EReference)fuelQuantityEClass.getEStructuralFeatures().get(2);
 	}
@@ -1070,6 +1127,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getFuelQuantity_BaseFuel() {
 		return (EReference)fuelQuantityEClass.getEStructuralFeatures().get(3);
 	}
@@ -1079,6 +1137,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCooldown() {
 		return cooldownEClass;
 	}
@@ -1088,6 +1147,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCooldown_Volume() {
 		return (EAttribute)cooldownEClass.getEStructuralFeatures().get(0);
 	}
@@ -1097,6 +1157,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCooldown_Cost() {
 		return (EAttribute)cooldownEClass.getEStructuralFeatures().get(1);
 	}
@@ -1106,6 +1167,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCargoAllocation() {
 		return cargoAllocationEClass;
 	}
@@ -1115,6 +1177,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCargoAllocation_SlotAllocations() {
 		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(0);
 	}
@@ -1124,6 +1187,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCargoAllocation_Sequence() {
 		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(1);
 	}
@@ -1133,6 +1197,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCargoAllocation_CargoType() {
 		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(2);
 	}
@@ -1142,6 +1207,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getCargoAllocation__GetName() {
 		return cargoAllocationEClass.getEOperations().get(0);
 	}
@@ -1151,6 +1217,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMarketAllocation() {
 		return marketAllocationEClass;
 	}
@@ -1160,6 +1227,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMarketAllocation_Slot() {
 		return (EReference)marketAllocationEClass.getEStructuralFeatures().get(0);
 	}
@@ -1169,6 +1237,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMarketAllocation_Market() {
 		return (EReference)marketAllocationEClass.getEStructuralFeatures().get(1);
 	}
@@ -1178,6 +1247,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMarketAllocation_SlotAllocation() {
 		return (EReference)marketAllocationEClass.getEStructuralFeatures().get(2);
 	}
@@ -1187,6 +1257,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMarketAllocation_Price() {
 		return (EAttribute)marketAllocationEClass.getEStructuralFeatures().get(3);
 	}
@@ -1196,6 +1267,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMarketAllocation_SlotVisit() {
 		return (EReference)marketAllocationEClass.getEStructuralFeatures().get(4);
 	}
@@ -1205,6 +1277,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getOpenSlotAllocation() {
 		return openSlotAllocationEClass;
 	}
@@ -1214,6 +1287,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOpenSlotAllocation_Slot() {
 		return (EReference)openSlotAllocationEClass.getEStructuralFeatures().get(0);
 	}
@@ -1223,6 +1297,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSlotAllocation() {
 		return slotAllocationEClass;
 	}
@@ -1232,6 +1307,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSlotAllocation_Slot() {
 		return (EReference)slotAllocationEClass.getEStructuralFeatures().get(0);
 	}
@@ -1241,6 +1317,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSlotAllocation_SpotMarket() {
 		return (EReference)slotAllocationEClass.getEStructuralFeatures().get(1);
 	}
@@ -1250,6 +1327,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSlotAllocation_CargoAllocation() {
 		return (EReference)slotAllocationEClass.getEStructuralFeatures().get(2);
 	}
@@ -1259,6 +1337,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSlotAllocation_MarketAllocation() {
 		return (EReference)slotAllocationEClass.getEStructuralFeatures().get(3);
 	}
@@ -1268,6 +1347,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSlotAllocation_SlotVisit() {
 		return (EReference)slotAllocationEClass.getEStructuralFeatures().get(4);
 	}
@@ -1277,6 +1357,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSlotAllocation_Price() {
 		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(5);
 	}
@@ -1286,6 +1367,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSlotAllocation_VolumeTransferred() {
 		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(6);
 	}
@@ -1295,6 +1377,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSlotAllocation_EnergyTransferred() {
 		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(7);
 	}
@@ -1304,6 +1387,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSlotAllocation_Cv() {
 		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(8);
 	}
@@ -1313,6 +1397,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSlotAllocation_VolumeValue() {
 		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(9);
 	}
@@ -1322,6 +1407,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSlotAllocation_Exposures() {
 		return (EReference)slotAllocationEClass.getEStructuralFeatures().get(10);
 	}
@@ -1331,6 +1417,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSlotAllocation_PhysicalVolumeTransferred() {
 		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(11);
 	}
@@ -1340,6 +1427,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSlotAllocation_PhysicalEnergyTransferred() {
 		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(12);
 	}
@@ -1349,6 +1437,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSlotAllocation_SlotAllocationType() {
 		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(13);
 	}
@@ -1358,6 +1447,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getSlotAllocation__GetPort() {
 		return slotAllocationEClass.getEOperations().get(0);
 	}
@@ -1367,6 +1457,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getSlotAllocation__GetContract() {
 		return slotAllocationEClass.getEOperations().get(1);
 	}
@@ -1376,6 +1467,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getSlotAllocation__GetName() {
 		return slotAllocationEClass.getEOperations().get(2);
 	}
@@ -1385,6 +1477,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFuelAmount() {
 		return fuelAmountEClass;
 	}
@@ -1394,6 +1487,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFuelAmount_Unit() {
 		return (EAttribute)fuelAmountEClass.getEStructuralFeatures().get(0);
 	}
@@ -1403,6 +1497,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFuelAmount_Quantity() {
 		return (EAttribute)fuelAmountEClass.getEStructuralFeatures().get(1);
 	}
@@ -1412,6 +1507,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFuelAmount_UnitPrice() {
 		return (EAttribute)fuelAmountEClass.getEStructuralFeatures().get(2);
 	}
@@ -1421,6 +1517,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFitness() {
 		return fitnessEClass;
 	}
@@ -1430,6 +1527,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFitness_FitnessValue() {
 		return (EAttribute)fitnessEClass.getEStructuralFeatures().get(0);
 	}
@@ -1439,6 +1537,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPortVisit() {
 		return portVisitEClass;
 	}
@@ -1448,6 +1547,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPortVisit_PortCost() {
 		return (EAttribute)portVisitEClass.getEStructuralFeatures().get(0);
 	}
@@ -1457,6 +1557,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortVisit_Lateness() {
 		return (EReference)portVisitEClass.getEStructuralFeatures().get(1);
 	}
@@ -1466,6 +1567,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPortVisit_HeelCost() {
 		return (EAttribute)portVisitEClass.getEStructuralFeatures().get(2);
 	}
@@ -1475,6 +1577,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPortVisit_HeelRevenue() {
 		return (EAttribute)portVisitEClass.getEStructuralFeatures().get(3);
 	}
@@ -1484,6 +1587,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getStartEvent() {
 		return startEventEClass;
 	}
@@ -1493,6 +1597,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getStartEvent_SlotAllocation() {
 		return (EReference)startEventEClass.getEStructuralFeatures().get(0);
 	}
@@ -1502,6 +1607,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getStartEvent_RepositioningFee() {
 		return (EAttribute)startEventEClass.getEStructuralFeatures().get(1);
 	}
@@ -1511,6 +1617,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getEndEvent() {
 		return endEventEClass;
 	}
@@ -1520,6 +1627,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getEndEvent_SlotAllocation() {
 		return (EReference)endEventEClass.getEStructuralFeatures().get(0);
 	}
@@ -1529,6 +1637,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getEndEvent_BallastBonusFee() {
 		return (EAttribute)endEventEClass.getEStructuralFeatures().get(1);
 	}
@@ -1538,6 +1647,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getJourney() {
 		return journeyEClass;
 	}
@@ -1547,6 +1657,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getJourney_Destination() {
 		return (EReference)journeyEClass.getEStructuralFeatures().get(0);
 	}
@@ -1556,6 +1667,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getJourney_Laden() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(1);
 	}
@@ -1565,6 +1677,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getJourney_RouteOption() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(2);
 	}
@@ -1574,6 +1687,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getJourney_Toll() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(3);
 	}
@@ -1583,6 +1697,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getJourney_Distance() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(4);
 	}
@@ -1592,6 +1707,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getJourney_Speed() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(5);
 	}
@@ -1601,6 +1717,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getJourney_CanalEntrance() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(6);
 	}
@@ -1610,6 +1727,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getJourney_CanalDateTime() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(7);
 	}
@@ -1619,6 +1737,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getJourney_CanalBooking() {
 		return (EReference)journeyEClass.getEStructuralFeatures().get(8);
 	}
@@ -1628,6 +1747,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getJourney_LatestPossibleCanalDateTime() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(9);
 	}
@@ -1637,6 +1757,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getJourney_CanalArrivalTime() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(10);
 	}
@@ -1646,6 +1767,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getJourney_CanalBookingPeriod() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(11);
 	}
@@ -1655,6 +1777,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getJourney_CanalEntrancePort() {
 		return (EReference)journeyEClass.getEStructuralFeatures().get(12);
 	}
@@ -1664,6 +1787,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCapacityViolationsHolder() {
 		return capacityViolationsHolderEClass;
 	}
@@ -1673,6 +1797,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCapacityViolationsHolder_Violations() {
 		return (EReference)capacityViolationsHolderEClass.getEStructuralFeatures().get(0);
 	}
@@ -1682,6 +1807,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCapacityMapEntry() {
 		return capacityMapEntryEClass;
 	}
@@ -1691,6 +1817,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCapacityMapEntry_Key() {
 		return (EAttribute)capacityMapEntryEClass.getEStructuralFeatures().get(0);
 	}
@@ -1700,6 +1827,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCapacityMapEntry_Value() {
 		return (EAttribute)capacityMapEntryEClass.getEStructuralFeatures().get(1);
 	}
@@ -1709,6 +1837,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getProfitAndLossContainer() {
 		return profitAndLossContainerEClass;
 	}
@@ -1718,6 +1847,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getProfitAndLossContainer_GroupProfitAndLoss() {
 		return (EReference)profitAndLossContainerEClass.getEStructuralFeatures().get(0);
 	}
@@ -1727,6 +1857,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getProfitAndLossContainer_GeneralPNLDetails() {
 		return (EReference)profitAndLossContainerEClass.getEStructuralFeatures().get(1);
 	}
@@ -1736,6 +1867,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getGroupProfitAndLoss() {
 		return groupProfitAndLossEClass;
 	}
@@ -1745,6 +1877,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getGroupProfitAndLoss_ProfitAndLoss() {
 		return (EAttribute)groupProfitAndLossEClass.getEStructuralFeatures().get(0);
 	}
@@ -1754,6 +1887,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getGroupProfitAndLoss_ProfitAndLossPreTax() {
 		return (EAttribute)groupProfitAndLossEClass.getEStructuralFeatures().get(1);
 	}
@@ -1763,6 +1897,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getGroupProfitAndLoss_TaxValue() {
 		return (EAttribute)groupProfitAndLossEClass.getEStructuralFeatures().get(2);
 	}
@@ -1772,6 +1907,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getGroupProfitAndLoss_EntityProfitAndLosses() {
 		return (EReference)groupProfitAndLossEClass.getEStructuralFeatures().get(3);
 	}
@@ -1781,6 +1917,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getEntityProfitAndLoss() {
 		return entityProfitAndLossEClass;
 	}
@@ -1790,6 +1927,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getEntityProfitAndLoss_Entity() {
 		return (EReference)entityProfitAndLossEClass.getEStructuralFeatures().get(0);
 	}
@@ -1799,6 +1937,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getEntityProfitAndLoss_EntityBook() {
 		return (EReference)entityProfitAndLossEClass.getEStructuralFeatures().get(1);
 	}
@@ -1808,6 +1947,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getEntityProfitAndLoss_ProfitAndLoss() {
 		return (EAttribute)entityProfitAndLossEClass.getEStructuralFeatures().get(2);
 	}
@@ -1817,6 +1957,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getEntityProfitAndLoss_ProfitAndLossPreTax() {
 		return (EAttribute)entityProfitAndLossEClass.getEStructuralFeatures().get(3);
 	}
@@ -1826,6 +1967,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getEntityPNLDetails() {
 		return entityPNLDetailsEClass;
 	}
@@ -1835,6 +1977,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getEntityPNLDetails_Entity() {
 		return (EReference)entityPNLDetailsEClass.getEStructuralFeatures().get(0);
 	}
@@ -1844,6 +1987,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getEntityPNLDetails_GeneralPNLDetails() {
 		return (EReference)entityPNLDetailsEClass.getEStructuralFeatures().get(1);
 	}
@@ -1853,6 +1997,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSlotPNLDetails() {
 		return slotPNLDetailsEClass;
 	}
@@ -1862,6 +2007,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSlotPNLDetails_Slot() {
 		return (EReference)slotPNLDetailsEClass.getEStructuralFeatures().get(0);
 	}
@@ -1871,6 +2017,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSlotPNLDetails_GeneralPNLDetails() {
 		return (EReference)slotPNLDetailsEClass.getEStructuralFeatures().get(1);
 	}
@@ -1880,6 +2027,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getGeneralPNLDetails() {
 		return generalPNLDetailsEClass;
 	}
@@ -1889,6 +2037,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBasicSlotPNLDetails() {
 		return basicSlotPNLDetailsEClass;
 	}
@@ -1898,6 +2047,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBasicSlotPNLDetails_ExtraShippingPNL() {
 		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(0);
 	}
@@ -1907,6 +2057,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBasicSlotPNLDetails_AdditionalPNL() {
 		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(1);
 	}
@@ -1916,6 +2067,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBasicSlotPNLDetails_CancellationFees() {
 		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(2);
 	}
@@ -1926,6 +2078,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBasicSlotPNLDetails_HedgingValue() {
 		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(3);
 	}
@@ -1935,6 +2088,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBasicSlotPNLDetails_MiscCostsValue() {
 		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(4);
 	}
@@ -1944,6 +2098,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBasicSlotPNLDetails_ExtraUpsidePNL() {
 		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(5);
 	}
@@ -1953,6 +2108,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getEventGrouping() {
 		return eventGroupingEClass;
 	}
@@ -1962,6 +2118,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getEventGrouping_Events() {
 		return (EReference)eventGroupingEClass.getEStructuralFeatures().get(0);
 	}
@@ -1971,6 +2128,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPortVisitLateness() {
 		return portVisitLatenessEClass;
 	}
@@ -1980,6 +2138,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPortVisitLateness_Type() {
 		return (EAttribute)portVisitLatenessEClass.getEStructuralFeatures().get(0);
 	}
@@ -1989,6 +2148,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPortVisitLateness_LatenessInHours() {
 		return (EAttribute)portVisitLatenessEClass.getEStructuralFeatures().get(1);
 	}
@@ -1998,6 +2158,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getExposureDetail() {
 		return exposureDetailEClass;
 	}
@@ -2007,6 +2168,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getExposureDetail_IndexName() {
 		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(0);
 	}
@@ -2016,6 +2178,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getExposureDetail_Date() {
 		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(1);
 	}
@@ -2025,6 +2188,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getExposureDetail_VolumeInMMBTU() {
 		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(2);
 	}
@@ -2034,6 +2198,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getExposureDetail_VolumeInNativeUnits() {
 		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(3);
 	}
@@ -2043,6 +2208,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getExposureDetail_UnitPrice() {
 		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(4);
 	}
@@ -2052,6 +2218,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getExposureDetail_NativeValue() {
 		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(5);
 	}
@@ -2061,6 +2228,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getExposureDetail_VolumeUnit() {
 		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(6);
 	}
@@ -2070,6 +2238,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getExposureDetail_CurrencyUnit() {
 		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(7);
 	}
@@ -2079,6 +2248,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getExposureDetail_DealType() {
 		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(8);
 	}
@@ -2088,6 +2258,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBallastBonusFeeDetails() {
 		return ballastBonusFeeDetailsEClass;
 	}
@@ -2097,6 +2268,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBallastBonusFeeDetails_Fee() {
 		return (EAttribute)ballastBonusFeeDetailsEClass.getEStructuralFeatures().get(0);
 	}
@@ -2106,6 +2278,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBallastBonusFeeDetails_MatchingBallastBonusContractDetails() {
 		return (EReference)ballastBonusFeeDetailsEClass.getEStructuralFeatures().get(1);
 	}
@@ -2115,6 +2288,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMatchingContractDetails() {
 		return matchingContractDetailsEClass;
 	}
@@ -2124,6 +2298,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMatchingContractDetails_MatchedPort() {
 		return (EAttribute)matchingContractDetailsEClass.getEStructuralFeatures().get(0);
 	}
@@ -2133,6 +2308,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getLumpSumContractDetails() {
 		return lumpSumContractDetailsEClass;
 	}
@@ -2142,6 +2318,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getLumpSumContractDetails_LumpSum() {
 		return (EAttribute)lumpSumContractDetailsEClass.getEStructuralFeatures().get(0);
 	}
@@ -2151,6 +2328,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getNotionalJourneyContractDetails() {
 		return notionalJourneyContractDetailsEClass;
 	}
@@ -2160,6 +2338,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNotionalJourneyContractDetails_ReturnPort() {
 		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(0);
 	}
@@ -2169,6 +2348,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNotionalJourneyContractDetails_Distance() {
 		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(1);
 	}
@@ -2178,6 +2358,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNotionalJourneyContractDetails_TotalTimeInDays() {
 		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(2);
 	}
@@ -2187,6 +2368,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNotionalJourneyContractDetails_TotalFuelUsed() {
 		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(3);
 	}
@@ -2196,6 +2378,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNotionalJourneyContractDetails_FuelPrice() {
 		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(4);
 	}
@@ -2205,6 +2388,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNotionalJourneyContractDetails_TotalFuelCost() {
 		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(5);
 	}
@@ -2214,6 +2398,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNotionalJourneyContractDetails_HireRate() {
 		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(6);
 	}
@@ -2223,6 +2408,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNotionalJourneyContractDetails_HireCost() {
 		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(7);
 	}
@@ -2232,6 +2418,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNotionalJourneyContractDetails_RouteTaken() {
 		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(8);
 	}
@@ -2241,6 +2428,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNotionalJourneyContractDetails_CanalCost() {
 		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(9);
 	}
@@ -2250,6 +2438,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCharterAvailableToEvent() {
 		return charterAvailableToEventEClass;
 	}
@@ -2259,6 +2448,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCharterAvailableToEvent_LinkedSequence() {
 		return (EReference)charterAvailableToEventEClass.getEStructuralFeatures().get(0);
 	}
@@ -2268,6 +2458,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCharterAvailableFromEvent() {
 		return charterAvailableFromEventEClass;
 	}
@@ -2277,6 +2468,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCharterAvailableFromEvent_LinkedSequence() {
 		return (EReference)charterAvailableFromEventEClass.getEStructuralFeatures().get(0);
 	}
@@ -2286,6 +2478,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getGroupedCharterLengthEvent() {
 		return groupedCharterLengthEventEClass;
 	}
@@ -2295,6 +2488,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getGroupedCharterLengthEvent_LinkedSequence() {
 		return (EReference)groupedCharterLengthEventEClass.getEStructuralFeatures().get(0);
 	}
@@ -2304,6 +2498,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCanalBookingEvent() {
 		return canalBookingEventEClass;
 	}
@@ -2313,6 +2508,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCanalBookingEvent_LinkedSequence() {
 		return (EReference)canalBookingEventEClass.getEStructuralFeatures().get(0);
 	}
@@ -2322,6 +2518,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCanalBookingEvent_LinkedJourney() {
 		return (EReference)canalBookingEventEClass.getEStructuralFeatures().get(1);
 	}
@@ -2331,6 +2528,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getInventoryEvents() {
 		return inventoryEventsEClass;
 	}
@@ -2340,6 +2538,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getInventoryEvents_Facility() {
 		return (EReference)inventoryEventsEClass.getEStructuralFeatures().get(0);
 	}
@@ -2349,6 +2548,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getInventoryEvents_Events() {
 		return (EReference)inventoryEventsEClass.getEStructuralFeatures().get(1);
 	}
@@ -2358,6 +2558,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getInventoryChangeEvent() {
 		return inventoryChangeEventEClass;
 	}
@@ -2367,6 +2568,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getInventoryChangeEvent_Date() {
 		return (EAttribute)inventoryChangeEventEClass.getEStructuralFeatures().get(0);
 	}
@@ -2376,6 +2578,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getInventoryChangeEvent_ChangeQuantity() {
 		return (EAttribute)inventoryChangeEventEClass.getEStructuralFeatures().get(1);
 	}
@@ -2385,6 +2588,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getInventoryChangeEvent_CurrentLevel() {
 		return (EAttribute)inventoryChangeEventEClass.getEStructuralFeatures().get(2);
 	}
@@ -2394,6 +2598,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getInventoryChangeEvent_CurrentMin() {
 		return (EAttribute)inventoryChangeEventEClass.getEStructuralFeatures().get(3);
 	}
@@ -2403,6 +2608,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getInventoryChangeEvent_CurrentMax() {
 		return (EAttribute)inventoryChangeEventEClass.getEStructuralFeatures().get(4);
 	}
@@ -2412,6 +2618,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getInventoryChangeEvent_Event() {
 		return (EReference)inventoryChangeEventEClass.getEStructuralFeatures().get(5);
 	}
@@ -2421,6 +2628,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getInventoryChangeEvent_SlotAllocation() {
 		return (EReference)inventoryChangeEventEClass.getEStructuralFeatures().get(6);
 	}
@@ -2430,6 +2638,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getInventoryChangeEvent_OpenSlotAllocation() {
 		return (EReference)inventoryChangeEventEClass.getEStructuralFeatures().get(7);
 	}
@@ -2439,6 +2648,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getInventoryChangeEvent_BreachedMin() {
 		return (EAttribute)inventoryChangeEventEClass.getEStructuralFeatures().get(8);
 	}
@@ -2448,6 +2658,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getInventoryChangeEvent_BreachedMax() {
 		return (EAttribute)inventoryChangeEventEClass.getEStructuralFeatures().get(9);
 	}
@@ -2457,6 +2668,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPaperDealAllocation() {
 		return paperDealAllocationEClass;
 	}
@@ -2466,6 +2678,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPaperDealAllocation_PaperDeal() {
 		return (EReference)paperDealAllocationEClass.getEStructuralFeatures().get(0);
 	}
@@ -2475,6 +2688,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPaperDealAllocation_Entries() {
 		return (EReference)paperDealAllocationEClass.getEStructuralFeatures().get(1);
 	}
@@ -2484,6 +2698,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPaperDealAllocationEntry() {
 		return paperDealAllocationEntryEClass;
 	}
@@ -2493,6 +2708,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPaperDealAllocationEntry_Date() {
 		return (EAttribute)paperDealAllocationEntryEClass.getEStructuralFeatures().get(0);
 	}
@@ -2502,6 +2718,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPaperDealAllocationEntry_Quantity() {
 		return (EAttribute)paperDealAllocationEntryEClass.getEStructuralFeatures().get(1);
 	}
@@ -2511,6 +2728,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPaperDealAllocationEntry_Price() {
 		return (EAttribute)paperDealAllocationEntryEClass.getEStructuralFeatures().get(2);
 	}
@@ -2520,6 +2738,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPaperDealAllocationEntry_Value() {
 		return (EAttribute)paperDealAllocationEntryEClass.getEStructuralFeatures().get(3);
 	}
@@ -2529,6 +2748,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPaperDealAllocationEntry_Settled() {
 		return (EAttribute)paperDealAllocationEntryEClass.getEStructuralFeatures().get(4);
 	}
@@ -2538,6 +2758,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPaperDealAllocationEntry_Exposures() {
 		return (EReference)paperDealAllocationEntryEClass.getEStructuralFeatures().get(5);
 	}
@@ -2547,6 +2768,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -2556,6 +2778,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getFuel() {
 		return fuelEEnum;
 	}
@@ -2565,6 +2788,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getSequenceType() {
 		return sequenceTypeEEnum;
 	}
@@ -2574,6 +2798,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getCapacityViolationType() {
 		return capacityViolationTypeEEnum;
 	}
@@ -2583,6 +2808,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getPortVisitLatenessType() {
 		return portVisitLatenessTypeEEnum;
 	}
@@ -2592,6 +2818,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getSlotAllocationType() {
 		return slotAllocationTypeEEnum;
 	}
@@ -2601,6 +2828,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getPanamaBookingPeriod() {
 		return panamaBookingPeriodEEnum;
 	}
@@ -2610,6 +2838,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getCalendar() {
 		return calendarEDataType;
 	}
@@ -2619,6 +2848,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getIterable() {
 		return iterableEDataType;
 	}
@@ -2628,6 +2858,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getObject() {
 		return objectEDataType;
 	}
@@ -2637,6 +2868,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScheduleFactory getScheduleFactory() {
 		return (ScheduleFactory)getEFactoryInstance();
 	}

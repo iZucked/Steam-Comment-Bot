@@ -65,6 +65,7 @@ public class CharterAvailableFromEventImpl extends EventImpl implements CharterA
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Sequence getLinkedSequence() {
 		if (linkedSequence != null && linkedSequence.eIsProxy()) {
 			InternalEObject oldLinkedSequence = (InternalEObject)linkedSequence;
@@ -91,6 +92,7 @@ public class CharterAvailableFromEventImpl extends EventImpl implements CharterA
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLinkedSequence(Sequence newLinkedSequence) {
 		Sequence oldLinkedSequence = linkedSequence;
 		linkedSequence = newLinkedSequence;

@@ -121,6 +121,7 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Slot getSlot() {
 		if (slot != null && slot.eIsProxy()) {
 			InternalEObject oldSlot = (InternalEObject)slot;
@@ -147,6 +148,7 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlot(Slot newSlot) {
 		Slot oldSlot = slot;
 		slot = newSlot;
@@ -159,6 +161,7 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotMarket getMarket() {
 		if (market != null && market.eIsProxy()) {
 			InternalEObject oldMarket = (InternalEObject)market;
@@ -185,6 +188,7 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMarket(SpotMarket newMarket) {
 		SpotMarket oldMarket = market;
 		market = newMarket;
@@ -197,6 +201,7 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotAllocation getSlotAllocation() {
 		if (slotAllocation != null && slotAllocation.eIsProxy()) {
 			InternalEObject oldSlotAllocation = (InternalEObject)slotAllocation;
@@ -238,6 +243,7 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlotAllocation(SlotAllocation newSlotAllocation) {
 		if (newSlotAllocation != slotAllocation) {
 			NotificationChain msgs = null;
@@ -257,6 +263,7 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getPrice() {
 		return price;
 	}
@@ -266,6 +273,7 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPrice(double newPrice) {
 		double oldPrice = price;
 		price = newPrice;
@@ -278,6 +286,7 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotVisit getSlotVisit() {
 		return slotVisit;
 	}
@@ -302,6 +311,7 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlotVisit(SlotVisit newSlotVisit) {
 		if (newSlotVisit != slotVisit) {
 			NotificationChain msgs = null;

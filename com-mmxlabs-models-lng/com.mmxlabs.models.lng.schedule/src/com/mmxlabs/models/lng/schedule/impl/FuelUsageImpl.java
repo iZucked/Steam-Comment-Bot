@@ -66,6 +66,7 @@ public class FuelUsageImpl extends EObjectImpl implements FuelUsage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<FuelQuantity> getFuels() {
 		if (fuels == null) {
 			fuels = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, SchedulePackage.FUEL_USAGE__FUELS);
@@ -78,6 +79,7 @@ public class FuelUsageImpl extends EObjectImpl implements FuelUsage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getFuelCost() {
 		int sum = 0;
 		for (final FuelQuantity fq : getFuels()) {

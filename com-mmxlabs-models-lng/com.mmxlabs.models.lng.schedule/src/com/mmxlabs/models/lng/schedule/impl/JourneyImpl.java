@@ -325,6 +325,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<FuelQuantity> getFuels() {
 		if (fuels == null) {
 			fuels = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, SchedulePackage.JOURNEY__FUELS);
@@ -337,6 +338,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getDestination() {
 		if (destination != null && destination.eIsProxy()) {
 			InternalEObject oldDestination = (InternalEObject)destination;
@@ -363,6 +365,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDestination(Port newDestination) {
 		Port oldDestination = destination;
 		destination = newDestination;
@@ -375,6 +378,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isLaden() {
 		return laden;
 	}
@@ -384,6 +388,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLaden(boolean newLaden) {
 		boolean oldLaden = laden;
 		laden = newLaden;
@@ -396,6 +401,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public RouteOption getRouteOption() {
 		return routeOption;
 	}
@@ -405,6 +411,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRouteOption(RouteOption newRouteOption) {
 		RouteOption oldRouteOption = routeOption;
 		routeOption = newRouteOption == null ? ROUTE_OPTION_EDEFAULT : newRouteOption;
@@ -417,6 +424,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getToll() {
 		return toll;
 	}
@@ -426,6 +434,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setToll(int newToll) {
 		int oldToll = toll;
 		toll = newToll;
@@ -438,6 +447,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDistance() {
 		return distance;
 	}
@@ -447,6 +457,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDistance(int newDistance) {
 		int oldDistance = distance;
 		distance = newDistance;
@@ -459,6 +470,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getSpeed() {
 		return speed;
 	}
@@ -468,6 +480,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpeed(double newSpeed) {
 		double oldSpeed = speed;
 		speed = newSpeed;
@@ -480,6 +493,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CanalEntry getCanalEntrance() {
 		return canalEntrance;
 	}
@@ -489,6 +503,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCanalEntrance(CanalEntry newCanalEntrance) {
 		CanalEntry oldCanalEntrance = canalEntrance;
 		canalEntrance = newCanalEntrance == null ? CANAL_ENTRANCE_EDEFAULT : newCanalEntrance;
@@ -501,6 +516,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDateTime getCanalDateTime() {
 		return canalDateTime;
 	}
@@ -510,6 +526,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCanalDateTime(LocalDateTime newCanalDateTime) {
 		LocalDateTime oldCanalDateTime = canalDateTime;
 		canalDateTime = newCanalDateTime;
@@ -522,6 +539,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CanalBookingSlot getCanalBooking() {
 		if (canalBooking != null && canalBooking.eIsProxy()) {
 			InternalEObject oldCanalBooking = (InternalEObject)canalBooking;
@@ -548,6 +566,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCanalBooking(CanalBookingSlot newCanalBooking) {
 		CanalBookingSlot oldCanalBooking = canalBooking;
 		canalBooking = newCanalBooking;
@@ -560,6 +579,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDateTime getLatestPossibleCanalDateTime() {
 		return latestPossibleCanalDateTime;
 	}
@@ -569,6 +589,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLatestPossibleCanalDateTime(LocalDateTime newLatestPossibleCanalDateTime) {
 		LocalDateTime oldLatestPossibleCanalDateTime = latestPossibleCanalDateTime;
 		latestPossibleCanalDateTime = newLatestPossibleCanalDateTime;
@@ -581,6 +602,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDateTime getCanalArrivalTime() {
 		return canalArrivalTime;
 	}
@@ -590,6 +612,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCanalArrivalTime(LocalDateTime newCanalArrivalTime) {
 		LocalDateTime oldCanalArrivalTime = canalArrivalTime;
 		canalArrivalTime = newCanalArrivalTime;
@@ -602,6 +625,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PanamaBookingPeriod getCanalBookingPeriod() {
 		return canalBookingPeriod;
 	}
@@ -611,6 +635,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCanalBookingPeriod(PanamaBookingPeriod newCanalBookingPeriod) {
 		PanamaBookingPeriod oldCanalBookingPeriod = canalBookingPeriod;
 		canalBookingPeriod = newCanalBookingPeriod == null ? CANAL_BOOKING_PERIOD_EDEFAULT : newCanalBookingPeriod;
@@ -623,6 +648,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getCanalEntrancePort() {
 		if (canalEntrancePort != null && canalEntrancePort.eIsProxy()) {
 			InternalEObject oldCanalEntrancePort = (InternalEObject)canalEntrancePort;
@@ -649,6 +675,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCanalEntrancePort(Port newCanalEntrancePort) {
 		Port oldCanalEntrancePort = canalEntrancePort;
 		canalEntrancePort = newCanalEntrancePort;

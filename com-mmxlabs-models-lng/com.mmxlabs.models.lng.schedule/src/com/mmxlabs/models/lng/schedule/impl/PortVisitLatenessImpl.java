@@ -94,6 +94,7 @@ public class PortVisitLatenessImpl extends EObjectImpl implements PortVisitLaten
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortVisitLatenessType getType() {
 		return type;
 	}
@@ -103,6 +104,7 @@ public class PortVisitLatenessImpl extends EObjectImpl implements PortVisitLaten
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setType(PortVisitLatenessType newType) {
 		PortVisitLatenessType oldType = type;
 		type = newType == null ? TYPE_EDEFAULT : newType;
@@ -115,6 +117,7 @@ public class PortVisitLatenessImpl extends EObjectImpl implements PortVisitLaten
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getLatenessInHours() {
 		return latenessInHours;
 	}
@@ -124,6 +127,7 @@ public class PortVisitLatenessImpl extends EObjectImpl implements PortVisitLaten
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLatenessInHours(int newLatenessInHours) {
 		int oldLatenessInHours = latenessInHours;
 		latenessInHours = newLatenessInHours;

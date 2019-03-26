@@ -112,6 +112,7 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<FuelQuantity> getFuels() {
 		if (fuels == null) {
 			fuels = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, SchedulePackage.COOLDOWN__FUELS);
@@ -124,6 +125,7 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getVolume() {
 		return volume;
 	}
@@ -133,6 +135,7 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolume(int newVolume) {
 		int oldVolume = volume;
 		volume = newVolume;
@@ -145,6 +148,7 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCost() {
 		return cost;
 	}
@@ -154,6 +158,7 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCost(int newCost) {
 		int oldCost = cost;
 		cost = newCost;
@@ -166,6 +171,7 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getFuelCost() {
 		int sum = 0;
 		for (final FuelQuantity fq : getFuels()) {

@@ -211,6 +211,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EMap<CapacityViolationType, Long> getViolations() {
 		if (violations == null) {
 			violations = new EcoreEMap<CapacityViolationType,Long>(SchedulePackage.Literals.CAPACITY_MAP_ENTRY, CapacityMapEntryImpl.class, this, SchedulePackage.VESSEL_EVENT_VISIT__VIOLATIONS);
@@ -223,6 +224,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getPortCost() {
 		return portCost;
 	}
@@ -232,6 +234,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortCost(int newPortCost) {
 		int oldPortCost = portCost;
 		portCost = newPortCost;
@@ -244,6 +247,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortVisitLateness getLateness() {
 		return lateness;
 	}
@@ -268,6 +272,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLateness(PortVisitLateness newLateness) {
 		if (newLateness != lateness) {
 			NotificationChain msgs = null;
@@ -287,6 +292,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHeelCost() {
 		return heelCost;
 	}
@@ -296,6 +302,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHeelCost(int newHeelCost) {
 		int oldHeelCost = heelCost;
 		heelCost = newHeelCost;
@@ -308,6 +315,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHeelRevenue() {
 		return heelRevenue;
 	}
@@ -317,6 +325,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHeelRevenue(int newHeelRevenue) {
 		int oldHeelRevenue = heelRevenue;
 		heelRevenue = newHeelRevenue;
@@ -329,6 +338,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public GroupProfitAndLoss getGroupProfitAndLoss() {
 		return groupProfitAndLoss;
 	}
@@ -353,6 +363,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setGroupProfitAndLoss(GroupProfitAndLoss newGroupProfitAndLoss) {
 		if (newGroupProfitAndLoss != groupProfitAndLoss) {
 			NotificationChain msgs = null;
@@ -372,6 +383,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<GeneralPNLDetails> getGeneralPNLDetails() {
 		if (generalPNLDetails == null) {
 			generalPNLDetails = new EObjectContainmentEList<GeneralPNLDetails>(GeneralPNLDetails.class, this, SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS);
@@ -384,6 +396,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Event> getEvents() {
 		if (events == null) {
 			events = new EObjectResolvingEList<Event>(Event.class, this, SchedulePackage.VESSEL_EVENT_VISIT__EVENTS);
@@ -396,6 +409,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselEvent getVesselEvent() {
 		if (vesselEvent != null && vesselEvent.eIsProxy()) {
 			InternalEObject oldVesselEvent = (InternalEObject)vesselEvent;
@@ -422,6 +436,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselEvent(VesselEvent newVesselEvent) {
 		VesselEvent oldVesselEvent = vesselEvent;
 		vesselEvent = newVesselEvent;
@@ -434,6 +449,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getRedeliveryPort() {
 		if (redeliveryPort != null && redeliveryPort.eIsProxy()) {
 			InternalEObject oldRedeliveryPort = (InternalEObject)redeliveryPort;
@@ -460,6 +476,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRedeliveryPort(Port newRedeliveryPort) {
 		Port oldRedeliveryPort = redeliveryPort;
 		redeliveryPort = newRedeliveryPort;
@@ -474,6 +491,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetRedeliveryPort() {
 		Port oldRedeliveryPort = redeliveryPort;
 		boolean oldRedeliveryPortESet = redeliveryPortESet;
@@ -488,6 +506,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetRedeliveryPort() {
 		return redeliveryPortESet;
 	}

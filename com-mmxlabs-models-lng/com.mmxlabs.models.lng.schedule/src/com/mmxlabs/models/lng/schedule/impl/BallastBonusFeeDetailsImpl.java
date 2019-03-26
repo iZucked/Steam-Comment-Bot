@@ -89,6 +89,7 @@ public class BallastBonusFeeDetailsImpl extends UUIDObjectImpl implements Ballas
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getFee() {
 		return fee;
 	}
@@ -98,6 +99,7 @@ public class BallastBonusFeeDetailsImpl extends UUIDObjectImpl implements Ballas
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFee(int newFee) {
 		int oldFee = fee;
 		fee = newFee;
@@ -110,6 +112,7 @@ public class BallastBonusFeeDetailsImpl extends UUIDObjectImpl implements Ballas
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MatchingContractDetails getMatchingBallastBonusContractDetails() {
 		return matchingBallastBonusContractDetails;
 	}
@@ -134,6 +137,7 @@ public class BallastBonusFeeDetailsImpl extends UUIDObjectImpl implements Ballas
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMatchingBallastBonusContractDetails(MatchingContractDetails newMatchingBallastBonusContractDetails) {
 		if (newMatchingBallastBonusContractDetails != matchingBallastBonusContractDetails) {
 			NotificationChain msgs = null;

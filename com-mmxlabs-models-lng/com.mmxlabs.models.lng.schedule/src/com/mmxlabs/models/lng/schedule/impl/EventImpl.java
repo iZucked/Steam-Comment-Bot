@@ -201,6 +201,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ZonedDateTime getStart() {
 		return start;
 	}
@@ -210,6 +211,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStart(ZonedDateTime newStart) {
 		ZonedDateTime oldStart = start;
 		start = newStart;
@@ -222,6 +224,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ZonedDateTime getEnd() {
 		return end;
 	}
@@ -231,6 +234,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEnd(ZonedDateTime newEnd) {
 		ZonedDateTime oldEnd = end;
 		end = newEnd;
@@ -243,6 +247,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
 			InternalEObject oldPort = (InternalEObject)port;
@@ -269,6 +274,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPort(Port newPort) {
 		Port oldPort = port;
 		port = newPort;
@@ -281,6 +287,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Event getPreviousEvent() {
 		if (previousEvent != null && previousEvent.eIsProxy()) {
 			InternalEObject oldPreviousEvent = (InternalEObject)previousEvent;
@@ -322,6 +329,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPreviousEvent(Event newPreviousEvent) {
 		if (newPreviousEvent != previousEvent) {
 			NotificationChain msgs = null;
@@ -341,6 +349,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Event getNextEvent() {
 		if (nextEvent != null && nextEvent.eIsProxy()) {
 			InternalEObject oldNextEvent = (InternalEObject)nextEvent;
@@ -382,6 +391,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNextEvent(Event newNextEvent) {
 		if (newNextEvent != nextEvent) {
 			NotificationChain msgs = null;
@@ -401,6 +411,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Sequence getSequence() {
 		if (eContainerFeatureID() != SchedulePackage.EVENT__SEQUENCE) return null;
 		return (Sequence)eInternalContainer();
@@ -421,6 +432,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSequence(Sequence newSequence) {
 		if (newSequence != eInternalContainer() || (eContainerFeatureID() != SchedulePackage.EVENT__SEQUENCE && newSequence != null)) {
 			if (EcoreUtil.isAncestor(this, newSequence))
@@ -442,6 +454,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCharterCost() {
 		return charterCost;
 	}
@@ -451,6 +464,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterCost(int newCharterCost) {
 		int oldCharterCost = charterCost;
 		charterCost = newCharterCost;
@@ -463,6 +477,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHeelAtStart() {
 		return heelAtStart;
 	}
@@ -472,6 +487,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHeelAtStart(int newHeelAtStart) {
 		int oldHeelAtStart = heelAtStart;
 		heelAtStart = newHeelAtStart;
@@ -484,6 +500,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHeelAtEnd() {
 		return heelAtEnd;
 	}
@@ -493,6 +510,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHeelAtEnd(int newHeelAtEnd) {
 		int oldHeelAtEnd = heelAtEnd;
 		heelAtEnd = newHeelAtEnd;

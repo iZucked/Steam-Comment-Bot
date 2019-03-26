@@ -5,17 +5,9 @@
 package com.mmxlabs.models.lng.schedule.impl;
 
 import com.mmxlabs.models.lng.schedule.*;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.lang.Iterable;
 import java.util.Calendar;
 import java.util.Map;
 
-import javax.xml.bind.DatatypeConverter;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -227,6 +219,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScheduleModel createScheduleModel() {
 		ScheduleModelImpl scheduleModel = new ScheduleModelImpl();
 		return scheduleModel;
@@ -237,6 +230,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Schedule createSchedule() {
 		ScheduleImpl schedule = new ScheduleImpl();
 		return schedule;
@@ -247,6 +241,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Sequence createSequence() {
 		SequenceImpl sequence = new SequenceImpl();
 		return sequence;
@@ -257,6 +252,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Event createEvent() {
 		EventImpl event = new EventImpl();
 		return event;
@@ -267,6 +263,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotVisit createSlotVisit() {
 		SlotVisitImpl slotVisit = new SlotVisitImpl();
 		return slotVisit;
@@ -277,6 +274,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselEventVisit createVesselEventVisit() {
 		VesselEventVisitImpl vesselEventVisit = new VesselEventVisitImpl();
 		return vesselEventVisit;
@@ -287,6 +285,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Idle createIdle() {
 		IdleImpl idle = new IdleImpl();
 		return idle;
@@ -297,6 +296,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public GeneratedCharterOut createGeneratedCharterOut() {
 		GeneratedCharterOutImpl generatedCharterOut = new GeneratedCharterOutImpl();
 		return generatedCharterOut;
@@ -307,6 +307,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterLengthEvent createCharterLengthEvent() {
 		CharterLengthEventImpl charterLengthEvent = new CharterLengthEventImpl();
 		return charterLengthEvent;
@@ -317,6 +318,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FuelUsage createFuelUsage() {
 		FuelUsageImpl fuelUsage = new FuelUsageImpl();
 		return fuelUsage;
@@ -327,6 +329,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FuelQuantity createFuelQuantity() {
 		FuelQuantityImpl fuelQuantity = new FuelQuantityImpl();
 		return fuelQuantity;
@@ -337,6 +340,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Cooldown createCooldown() {
 		CooldownImpl cooldown = new CooldownImpl();
 		return cooldown;
@@ -347,6 +351,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoAllocation createCargoAllocation() {
 		CargoAllocationImpl cargoAllocation = new CargoAllocationImpl();
 		return cargoAllocation;
@@ -357,6 +362,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MarketAllocation createMarketAllocation() {
 		MarketAllocationImpl marketAllocation = new MarketAllocationImpl();
 		return marketAllocation;
@@ -367,6 +373,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public OpenSlotAllocation createOpenSlotAllocation() {
 		OpenSlotAllocationImpl openSlotAllocation = new OpenSlotAllocationImpl();
 		return openSlotAllocation;
@@ -377,6 +384,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotAllocation createSlotAllocation() {
 		SlotAllocationImpl slotAllocation = new SlotAllocationImpl();
 		return slotAllocation;
@@ -387,6 +395,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FuelAmount createFuelAmount() {
 		FuelAmountImpl fuelAmount = new FuelAmountImpl();
 		return fuelAmount;
@@ -397,6 +406,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Fitness createFitness() {
 		FitnessImpl fitness = new FitnessImpl();
 		return fitness;
@@ -407,6 +417,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortVisit createPortVisit() {
 		PortVisitImpl portVisit = new PortVisitImpl();
 		return portVisit;
@@ -417,6 +428,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public StartEvent createStartEvent() {
 		StartEventImpl startEvent = new StartEventImpl();
 		return startEvent;
@@ -427,6 +439,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EndEvent createEndEvent() {
 		EndEventImpl endEvent = new EndEventImpl();
 		return endEvent;
@@ -437,6 +450,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Journey createJourney() {
 		JourneyImpl journey = new JourneyImpl();
 		return journey;
@@ -447,6 +461,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CapacityViolationsHolder createCapacityViolationsHolder() {
 		CapacityViolationsHolderImpl capacityViolationsHolder = new CapacityViolationsHolderImpl();
 		return capacityViolationsHolder;
@@ -467,6 +482,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ProfitAndLossContainer createProfitAndLossContainer() {
 		ProfitAndLossContainerImpl profitAndLossContainer = new ProfitAndLossContainerImpl();
 		return profitAndLossContainer;
@@ -477,6 +493,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public GroupProfitAndLoss createGroupProfitAndLoss() {
 		GroupProfitAndLossImpl groupProfitAndLoss = new GroupProfitAndLossImpl();
 		return groupProfitAndLoss;
@@ -487,6 +504,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EntityProfitAndLoss createEntityProfitAndLoss() {
 		EntityProfitAndLossImpl entityProfitAndLoss = new EntityProfitAndLossImpl();
 		return entityProfitAndLoss;
@@ -497,6 +515,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EntityPNLDetails createEntityPNLDetails() {
 		EntityPNLDetailsImpl entityPNLDetails = new EntityPNLDetailsImpl();
 		return entityPNLDetails;
@@ -507,6 +526,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotPNLDetails createSlotPNLDetails() {
 		SlotPNLDetailsImpl slotPNLDetails = new SlotPNLDetailsImpl();
 		return slotPNLDetails;
@@ -517,6 +537,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BasicSlotPNLDetails createBasicSlotPNLDetails() {
 		BasicSlotPNLDetailsImpl basicSlotPNLDetails = new BasicSlotPNLDetailsImpl();
 		return basicSlotPNLDetails;
@@ -527,6 +548,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EventGrouping createEventGrouping() {
 		EventGroupingImpl eventGrouping = new EventGroupingImpl();
 		return eventGrouping;
@@ -537,6 +559,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortVisitLateness createPortVisitLateness() {
 		PortVisitLatenessImpl portVisitLateness = new PortVisitLatenessImpl();
 		return portVisitLateness;
@@ -547,6 +570,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ExposureDetail createExposureDetail() {
 		ExposureDetailImpl exposureDetail = new ExposureDetailImpl();
 		return exposureDetail;
@@ -557,6 +581,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BallastBonusFeeDetails createBallastBonusFeeDetails() {
 		BallastBonusFeeDetailsImpl ballastBonusFeeDetails = new BallastBonusFeeDetailsImpl();
 		return ballastBonusFeeDetails;
@@ -567,6 +592,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LumpSumContractDetails createLumpSumContractDetails() {
 		LumpSumContractDetailsImpl lumpSumContractDetails = new LumpSumContractDetailsImpl();
 		return lumpSumContractDetails;
@@ -577,6 +603,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public NotionalJourneyContractDetails createNotionalJourneyContractDetails() {
 		NotionalJourneyContractDetailsImpl notionalJourneyContractDetails = new NotionalJourneyContractDetailsImpl();
 		return notionalJourneyContractDetails;
@@ -587,6 +614,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterAvailableToEvent createCharterAvailableToEvent() {
 		CharterAvailableToEventImpl charterAvailableToEvent = new CharterAvailableToEventImpl();
 		return charterAvailableToEvent;
@@ -597,6 +625,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterAvailableFromEvent createCharterAvailableFromEvent() {
 		CharterAvailableFromEventImpl charterAvailableFromEvent = new CharterAvailableFromEventImpl();
 		return charterAvailableFromEvent;
@@ -607,6 +636,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public GroupedCharterLengthEvent createGroupedCharterLengthEvent() {
 		GroupedCharterLengthEventImpl groupedCharterLengthEvent = new GroupedCharterLengthEventImpl();
 		return groupedCharterLengthEvent;
@@ -617,6 +647,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CanalBookingEvent createCanalBookingEvent() {
 		CanalBookingEventImpl canalBookingEvent = new CanalBookingEventImpl();
 		return canalBookingEvent;
@@ -627,6 +658,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public InventoryEvents createInventoryEvents() {
 		InventoryEventsImpl inventoryEvents = new InventoryEventsImpl();
 		return inventoryEvents;
@@ -637,6 +669,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public InventoryChangeEvent createInventoryChangeEvent() {
 		InventoryChangeEventImpl inventoryChangeEvent = new InventoryChangeEventImpl();
 		return inventoryChangeEvent;
@@ -647,6 +680,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PaperDealAllocation createPaperDealAllocation() {
 		PaperDealAllocationImpl paperDealAllocation = new PaperDealAllocationImpl();
 		return paperDealAllocation;
@@ -657,6 +691,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PaperDealAllocationEntry createPaperDealAllocationEntry() {
 		PaperDealAllocationEntryImpl paperDealAllocationEntry = new PaperDealAllocationEntryImpl();
 		return paperDealAllocationEntry;
@@ -840,44 +875,19 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * Bodge to read b64 encoded serialized objects
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
 	public Object createObjectFromString(EDataType eDataType, String initialValue) {
-		try {
-			final ByteArrayInputStream bais = new ByteArrayInputStream(DatatypeConverter.parseBase64Binary(initialValue));
-			final ObjectInputStream ois = new ObjectInputStream(bais);
-			return ois.readObject();
-		} catch (Exception e) {
-			return null;
-		} finally {
-			
-		}
-//		return super.createFromString(eDataType, initialValue);
+		return super.createFromString(eDataType, initialValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * This is a slightly grim approach to putting Serializable objects into the ecore.
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
 	public String convertObjectToString(EDataType eDataType, Object instanceValue) {
-		if (instanceValue instanceof Serializable) {
-			final Serializable s = (Serializable) instanceValue;
-			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			try {
-				final ObjectOutputStream oos = new ObjectOutputStream(baos);
-				oos.writeObject(s);
-				oos.flush();
-				oos.close();
-				final String b64 = DatatypeConverter.printBase64Binary(baos.toByteArray());
-				return b64;
-			} catch (IOException e) {
-			}
-			
-		}
 		return super.convertToString(eDataType, instanceValue);
 	}
 
@@ -886,6 +896,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SchedulePackage getSchedulePackage() {
 		return (SchedulePackage)getEPackage();
 	}

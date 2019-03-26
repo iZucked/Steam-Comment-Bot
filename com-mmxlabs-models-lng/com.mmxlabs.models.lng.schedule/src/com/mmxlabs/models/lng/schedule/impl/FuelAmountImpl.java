@@ -112,6 +112,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FuelUnit getUnit() {
 		return unit;
 	}
@@ -121,6 +122,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUnit(FuelUnit newUnit) {
 		FuelUnit oldUnit = unit;
 		unit = newUnit == null ? UNIT_EDEFAULT : newUnit;
@@ -133,6 +135,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getQuantity() {
 		return quantity;
 	}
@@ -142,6 +145,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setQuantity(int newQuantity) {
 		int oldQuantity = quantity;
 		quantity = newQuantity;
@@ -154,6 +158,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getUnitPrice() {
 		return unitPrice;
 	}
@@ -163,6 +168,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUnitPrice(double newUnitPrice) {
 		double oldUnitPrice = unitPrice;
 		unitPrice = newUnitPrice;

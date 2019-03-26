@@ -175,6 +175,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public GroupProfitAndLoss getGroupProfitAndLoss() {
 		return groupProfitAndLoss;
 	}
@@ -199,6 +200,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setGroupProfitAndLoss(GroupProfitAndLoss newGroupProfitAndLoss) {
 		if (newGroupProfitAndLoss != groupProfitAndLoss) {
 			NotificationChain msgs = null;
@@ -218,6 +220,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<GeneralPNLDetails> getGeneralPNLDetails() {
 		if (generalPNLDetails == null) {
 			generalPNLDetails = new EObjectContainmentEList<GeneralPNLDetails>(GeneralPNLDetails.class, this, SchedulePackage.CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS);
@@ -230,6 +233,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Event> getEvents() {
 		if (events == null) {
 			events = new EObjectResolvingEList<Event>(Event.class, this, SchedulePackage.CHARTER_LENGTH_EVENT__EVENTS);
@@ -242,6 +246,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<FuelQuantity> getFuels() {
 		if (fuels == null) {
 			fuels = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, SchedulePackage.CHARTER_LENGTH_EVENT__FUELS);
@@ -254,6 +259,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDuration() {
 		return duration;
 	}
@@ -263,6 +269,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDuration(int newDuration) {
 		int oldDuration = duration;
 		duration = newDuration;
@@ -275,6 +282,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isLaden() {
 		return laden;
 	}
@@ -284,6 +292,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLaden(boolean newLaden) {
 		boolean oldLaden = laden;
 		laden = newLaden;
@@ -296,6 +305,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getFuelCost() {
 		int sum = 0;
 		for (final FuelQuantity fq : getFuels()) {

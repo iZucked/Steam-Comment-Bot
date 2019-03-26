@@ -150,6 +150,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public GroupProfitAndLoss getGroupProfitAndLoss() {
 		return groupProfitAndLoss;
 	}
@@ -174,6 +175,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setGroupProfitAndLoss(GroupProfitAndLoss newGroupProfitAndLoss) {
 		if (newGroupProfitAndLoss != groupProfitAndLoss) {
 			NotificationChain msgs = null;
@@ -193,6 +195,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<GeneralPNLDetails> getGeneralPNLDetails() {
 		if (generalPNLDetails == null) {
 			generalPNLDetails = new EObjectContainmentEList<GeneralPNLDetails>(GeneralPNLDetails.class, this, SchedulePackage.CARGO_ALLOCATION__GENERAL_PNL_DETAILS);
@@ -205,6 +208,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Event> getEvents() {
 		if (events == null) {
 			events = new EObjectResolvingEList<Event>(Event.class, this, SchedulePackage.CARGO_ALLOCATION__EVENTS);
@@ -217,6 +221,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Sequence getSequence() {
 		if (sequence != null && sequence.eIsProxy()) {
 			InternalEObject oldSequence = (InternalEObject)sequence;
@@ -243,6 +248,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSequence(Sequence newSequence) {
 		Sequence oldSequence = sequence;
 		sequence = newSequence;
@@ -257,6 +263,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetSequence() {
 		Sequence oldSequence = sequence;
 		boolean oldSequenceESet = sequenceESet;
@@ -271,6 +278,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetSequence() {
 		return sequenceESet;
 	}
@@ -280,6 +288,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoType getCargoType() {
 		return cargoType;
 	}
@@ -289,6 +298,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargoType(CargoType newCargoType) {
 		CargoType oldCargoType = cargoType;
 		cargoType = newCargoType == null ? CARGO_TYPE_EDEFAULT : newCargoType;
@@ -301,6 +311,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<SlotAllocation> getSlotAllocations() {
 		if (slotAllocations == null) {
 			slotAllocations = new EObjectWithInverseResolvingEList<SlotAllocation>(SlotAllocation.class, this, SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS, SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION);

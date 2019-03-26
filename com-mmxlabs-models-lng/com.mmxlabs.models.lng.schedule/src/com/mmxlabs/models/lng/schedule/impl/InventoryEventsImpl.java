@@ -87,6 +87,7 @@ public class InventoryEventsImpl extends EObjectImpl implements InventoryEvents 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Inventory getFacility() {
 		if (facility != null && facility.eIsProxy()) {
 			InternalEObject oldFacility = (InternalEObject)facility;
@@ -113,6 +114,7 @@ public class InventoryEventsImpl extends EObjectImpl implements InventoryEvents 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFacility(Inventory newFacility) {
 		Inventory oldFacility = facility;
 		facility = newFacility;
@@ -125,6 +127,7 @@ public class InventoryEventsImpl extends EObjectImpl implements InventoryEvents 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<InventoryChangeEvent> getEvents() {
 		if (events == null) {
 			events = new EObjectContainmentEList<InventoryChangeEvent>(InventoryChangeEvent.class, this, SchedulePackage.INVENTORY_EVENTS__EVENTS);

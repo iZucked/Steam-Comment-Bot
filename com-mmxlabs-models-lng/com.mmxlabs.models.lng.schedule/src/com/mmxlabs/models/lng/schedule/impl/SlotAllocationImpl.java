@@ -327,6 +327,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Slot getSlot() {
 		if (slot != null && slot.eIsProxy()) {
 			InternalEObject oldSlot = (InternalEObject)slot;
@@ -353,6 +354,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlot(Slot newSlot) {
 		Slot oldSlot = slot;
 		slot = newSlot;
@@ -367,6 +369,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetSlot() {
 		Slot oldSlot = slot;
 		boolean oldSlotESet = slotESet;
@@ -381,6 +384,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetSlot() {
 		return slotESet;
 	}
@@ -390,6 +394,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotMarket getSpotMarket() {
 		if (spotMarket != null && spotMarket.eIsProxy()) {
 			InternalEObject oldSpotMarket = (InternalEObject)spotMarket;
@@ -416,6 +421,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpotMarket(SpotMarket newSpotMarket) {
 		SpotMarket oldSpotMarket = spotMarket;
 		spotMarket = newSpotMarket;
@@ -430,6 +436,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetSpotMarket() {
 		SpotMarket oldSpotMarket = spotMarket;
 		boolean oldSpotMarketESet = spotMarketESet;
@@ -444,6 +451,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetSpotMarket() {
 		return spotMarketESet;
 	}
@@ -453,6 +461,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoAllocation getCargoAllocation() {
 		if (cargoAllocation != null && cargoAllocation.eIsProxy()) {
 			InternalEObject oldCargoAllocation = (InternalEObject)cargoAllocation;
@@ -494,6 +503,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargoAllocation(CargoAllocation newCargoAllocation) {
 		if (newCargoAllocation != cargoAllocation) {
 			NotificationChain msgs = null;
@@ -513,6 +523,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MarketAllocation getMarketAllocation() {
 		if (marketAllocation != null && marketAllocation.eIsProxy()) {
 			InternalEObject oldMarketAllocation = (InternalEObject)marketAllocation;
@@ -554,6 +565,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMarketAllocation(MarketAllocation newMarketAllocation) {
 		if (newMarketAllocation != marketAllocation) {
 			NotificationChain msgs = null;
@@ -573,6 +585,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotVisit getSlotVisit() {
 		if (slotVisit != null && slotVisit.eIsProxy()) {
 			InternalEObject oldSlotVisit = (InternalEObject)slotVisit;
@@ -616,6 +629,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlotVisit(SlotVisit newSlotVisit) {
 		if (newSlotVisit != slotVisit) {
 			NotificationChain msgs = null;
@@ -656,6 +670,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetSlotVisit() {
 		if (slotVisit != null) {
 			NotificationChain msgs = null;
@@ -676,6 +691,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetSlotVisit() {
 		return slotVisitESet;
 	}
@@ -685,6 +701,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getPrice() {
 		return price;
 	}
@@ -694,6 +711,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPrice(double newPrice) {
 		double oldPrice = price;
 		price = newPrice;
@@ -706,6 +724,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getVolumeTransferred() {
 		return volumeTransferred;
 	}
@@ -715,6 +734,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeTransferred(int newVolumeTransferred) {
 		int oldVolumeTransferred = volumeTransferred;
 		volumeTransferred = newVolumeTransferred;
@@ -727,6 +747,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getEnergyTransferred() {
 		return energyTransferred;
 	}
@@ -736,6 +757,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEnergyTransferred(int newEnergyTransferred) {
 		int oldEnergyTransferred = energyTransferred;
 		energyTransferred = newEnergyTransferred;
@@ -748,6 +770,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getCv() {
 		return cv;
 	}
@@ -757,6 +780,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCv(double newCv) {
 		double oldCv = cv;
 		cv = newCv;
@@ -769,6 +793,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getVolumeValue() {
 		return volumeValue;
 	}
@@ -778,6 +803,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeValue(int newVolumeValue) {
 		int oldVolumeValue = volumeValue;
 		volumeValue = newVolumeValue;
@@ -790,6 +816,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ExposureDetail> getExposures() {
 		if (exposures == null) {
 			exposures = new EObjectContainmentEList<ExposureDetail>(ExposureDetail.class, this, SchedulePackage.SLOT_ALLOCATION__EXPOSURES);
@@ -802,6 +829,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getPhysicalVolumeTransferred() {
 		return physicalVolumeTransferred;
 	}
@@ -811,6 +839,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPhysicalVolumeTransferred(int newPhysicalVolumeTransferred) {
 		int oldPhysicalVolumeTransferred = physicalVolumeTransferred;
 		physicalVolumeTransferred = newPhysicalVolumeTransferred;
@@ -823,6 +852,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getPhysicalEnergyTransferred() {
 		return physicalEnergyTransferred;
 	}
@@ -832,6 +862,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPhysicalEnergyTransferred(int newPhysicalEnergyTransferred) {
 		int oldPhysicalEnergyTransferred = physicalEnergyTransferred;
 		physicalEnergyTransferred = newPhysicalEnergyTransferred;
@@ -844,6 +875,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotAllocationType getSlotAllocationType() {
 		return slotAllocationType;
 	}
@@ -853,6 +885,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlotAllocationType(SlotAllocationType newSlotAllocationType) {
 		SlotAllocationType oldSlotAllocationType = slotAllocationType;
 		slotAllocationType = newSlotAllocationType == null ? SLOT_ALLOCATION_TYPE_EDEFAULT : newSlotAllocationType;

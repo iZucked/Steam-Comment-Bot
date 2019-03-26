@@ -162,6 +162,7 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Sequence> getSequences() {
 		if (sequences == null) {
 			sequences = new EObjectContainmentEList<Sequence>(Sequence.class, this, SchedulePackage.SCHEDULE__SEQUENCES);
@@ -174,6 +175,7 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<CargoAllocation> getCargoAllocations() {
 		if (cargoAllocations == null) {
 			cargoAllocations = new EObjectContainmentEList<CargoAllocation>(CargoAllocation.class, this, SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS);
@@ -186,6 +188,7 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<OpenSlotAllocation> getOpenSlotAllocations() {
 		if (openSlotAllocations == null) {
 			openSlotAllocations = new EObjectContainmentEList<OpenSlotAllocation>(OpenSlotAllocation.class, this, SchedulePackage.SCHEDULE__OPEN_SLOT_ALLOCATIONS);
@@ -198,6 +201,7 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<MarketAllocation> getMarketAllocations() {
 		if (marketAllocations == null) {
 			marketAllocations = new EObjectContainmentEList<MarketAllocation>(MarketAllocation.class, this, SchedulePackage.SCHEDULE__MARKET_ALLOCATIONS);
@@ -210,6 +214,7 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<SlotAllocation> getSlotAllocations() {
 		if (slotAllocations == null) {
 			slotAllocations = new EObjectContainmentEList<SlotAllocation>(SlotAllocation.class, this, SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS);
@@ -222,6 +227,7 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Fitness> getFitnesses() {
 		if (fitnesses == null) {
 			fitnesses = new EObjectContainmentEList<Fitness>(Fitness.class, this, SchedulePackage.SCHEDULE__FITNESSES);
@@ -234,6 +240,7 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<EObject> getUnusedElements() {
 		if (unusedElements == null) {
 			unusedElements = new EObjectResolvingEList<EObject>(EObject.class, this, SchedulePackage.SCHEDULE__UNUSED_ELEMENTS);
@@ -246,6 +253,7 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<InventoryEvents> getInventoryLevels() {
 		if (inventoryLevels == null) {
 			inventoryLevels = new EObjectContainmentEList<InventoryEvents>(InventoryEvents.class, this, SchedulePackage.SCHEDULE__INVENTORY_LEVELS);
@@ -258,6 +266,7 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PaperDealAllocation> getPaperDealAllocations() {
 		if (paperDealAllocations == null) {
 			paperDealAllocations = new EObjectContainmentEList<PaperDealAllocation>(PaperDealAllocation.class, this, SchedulePackage.SCHEDULE__PAPER_DEAL_ALLOCATIONS);

@@ -73,6 +73,7 @@ public class LumpSumContractDetailsImpl extends MatchingContractDetailsImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getLumpSum() {
 		return lumpSum;
 	}
@@ -82,6 +83,7 @@ public class LumpSumContractDetailsImpl extends MatchingContractDetailsImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLumpSum(int newLumpSum) {
 		int oldLumpSum = lumpSum;
 		lumpSum = newLumpSum;

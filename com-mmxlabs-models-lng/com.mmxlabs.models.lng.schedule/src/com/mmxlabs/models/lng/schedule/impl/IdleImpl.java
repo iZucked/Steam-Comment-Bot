@@ -93,6 +93,7 @@ public class IdleImpl extends EventImpl implements Idle {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<FuelQuantity> getFuels() {
 		if (fuels == null) {
 			fuels = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, SchedulePackage.IDLE__FUELS);
@@ -105,6 +106,7 @@ public class IdleImpl extends EventImpl implements Idle {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isLaden() {
 		return laden;
 	}
@@ -114,6 +116,7 @@ public class IdleImpl extends EventImpl implements Idle {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLaden(boolean newLaden) {
 		boolean oldLaden = laden;
 		laden = newLaden;
@@ -126,6 +129,7 @@ public class IdleImpl extends EventImpl implements Idle {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getFuelCost() {
 		int sum = 0;
 		for (final FuelQuantity fq : getFuels()) {

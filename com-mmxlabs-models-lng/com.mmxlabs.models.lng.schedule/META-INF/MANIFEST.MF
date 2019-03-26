@@ -23,7 +23,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.datetime;bundle-version="[2.1.0,3.0.0)";visibility:=reexport,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.common.common-util,
- com.google.guava,
- javax.xml.bind;bundle-version="2.2.0"
+ com.google.guava
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: com.mmxlabs.models.lng.schedule

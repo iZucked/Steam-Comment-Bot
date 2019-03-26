@@ -87,6 +87,7 @@ public class PaperDealAllocationImpl extends EObjectImpl implements PaperDealAll
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PaperDeal getPaperDeal() {
 		if (paperDeal != null && paperDeal.eIsProxy()) {
 			InternalEObject oldPaperDeal = (InternalEObject)paperDeal;
@@ -113,6 +114,7 @@ public class PaperDealAllocationImpl extends EObjectImpl implements PaperDealAll
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPaperDeal(PaperDeal newPaperDeal) {
 		PaperDeal oldPaperDeal = paperDeal;
 		paperDeal = newPaperDeal;
@@ -125,6 +127,7 @@ public class PaperDealAllocationImpl extends EObjectImpl implements PaperDealAll
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PaperDealAllocationEntry> getEntries() {
 		if (entries == null) {
 			entries = new EObjectContainmentEList<PaperDealAllocationEntry>(PaperDealAllocationEntry.class, this, SchedulePackage.PAPER_DEAL_ALLOCATION__ENTRIES);

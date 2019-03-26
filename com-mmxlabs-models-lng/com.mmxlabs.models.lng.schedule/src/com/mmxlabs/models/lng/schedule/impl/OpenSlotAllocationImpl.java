@@ -70,6 +70,7 @@ public class OpenSlotAllocationImpl extends ProfitAndLossContainerImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Slot getSlot() {
 		if (slot != null && slot.eIsProxy()) {
 			InternalEObject oldSlot = (InternalEObject)slot;
@@ -96,6 +97,7 @@ public class OpenSlotAllocationImpl extends ProfitAndLossContainerImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlot(Slot newSlot) {
 		Slot oldSlot = slot;
 		slot = newSlot;
@@ -110,6 +112,7 @@ public class OpenSlotAllocationImpl extends ProfitAndLossContainerImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetSlot() {
 		Slot oldSlot = slot;
 		boolean oldSlotESet = slotESet;
@@ -124,6 +127,7 @@ public class OpenSlotAllocationImpl extends ProfitAndLossContainerImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetSlot() {
 		return slotESet;
 	}

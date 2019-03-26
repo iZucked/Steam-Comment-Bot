@@ -118,6 +118,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
@@ -144,6 +145,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEntity(BaseLegalEntity newEntity) {
 		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;
@@ -156,6 +158,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseEntityBook getEntityBook() {
 		if (entityBook != null && entityBook.eIsProxy()) {
 			InternalEObject oldEntityBook = (InternalEObject)entityBook;
@@ -182,6 +185,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEntityBook(BaseEntityBook newEntityBook) {
 		BaseEntityBook oldEntityBook = entityBook;
 		entityBook = newEntityBook;
@@ -194,6 +198,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getProfitAndLoss() {
 		return profitAndLoss;
 	}
@@ -203,6 +208,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setProfitAndLoss(long newProfitAndLoss) {
 		long oldProfitAndLoss = profitAndLoss;
 		profitAndLoss = newProfitAndLoss;
@@ -215,6 +221,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getProfitAndLossPreTax() {
 		return profitAndLossPreTax;
 	}
@@ -224,6 +231,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setProfitAndLossPreTax(long newProfitAndLossPreTax) {
 		long oldProfitAndLossPreTax = profitAndLossPreTax;
 		profitAndLossPreTax = newProfitAndLossPreTax;

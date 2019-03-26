@@ -244,6 +244,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getIndexName() {
 		return indexName;
 	}
@@ -253,6 +254,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIndexName(String newIndexName) {
 		String oldIndexName = indexName;
 		indexName = newIndexName;
@@ -265,6 +267,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public YearMonth getDate() {
 		return date;
 	}
@@ -274,6 +277,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDate(YearMonth newDate) {
 		YearMonth oldDate = date;
 		date = newDate;
@@ -286,6 +290,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getVolumeInMMBTU() {
 		return volumeInMMBTU;
 	}
@@ -295,6 +300,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeInMMBTU(double newVolumeInMMBTU) {
 		double oldVolumeInMMBTU = volumeInMMBTU;
 		volumeInMMBTU = newVolumeInMMBTU;
@@ -307,6 +313,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getVolumeInNativeUnits() {
 		return volumeInNativeUnits;
 	}
@@ -316,6 +323,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeInNativeUnits(double newVolumeInNativeUnits) {
 		double oldVolumeInNativeUnits = volumeInNativeUnits;
 		volumeInNativeUnits = newVolumeInNativeUnits;
@@ -328,6 +336,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getUnitPrice() {
 		return unitPrice;
 	}
@@ -337,6 +346,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUnitPrice(double newUnitPrice) {
 		double oldUnitPrice = unitPrice;
 		unitPrice = newUnitPrice;
@@ -349,6 +359,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getNativeValue() {
 		return nativeValue;
 	}
@@ -358,6 +369,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNativeValue(double newNativeValue) {
 		double oldNativeValue = nativeValue;
 		nativeValue = newNativeValue;
@@ -370,6 +382,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getVolumeUnit() {
 		return volumeUnit;
 	}
@@ -379,6 +392,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeUnit(String newVolumeUnit) {
 		String oldVolumeUnit = volumeUnit;
 		volumeUnit = newVolumeUnit;
@@ -391,6 +405,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCurrencyUnit() {
 		return currencyUnit;
 	}
@@ -400,6 +415,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCurrencyUnit(String newCurrencyUnit) {
 		String oldCurrencyUnit = currencyUnit;
 		currencyUnit = newCurrencyUnit;
@@ -412,6 +428,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DealType getDealType() {
 		return dealType;
 	}
@@ -421,6 +438,7 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDealType(DealType newDealType) {
 		DealType oldDealType = dealType;
 		dealType = newDealType == null ? DEAL_TYPE_EDEFAULT : newDealType;

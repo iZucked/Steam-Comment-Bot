@@ -165,6 +165,7 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<FuelQuantity> getFuels() {
 		if (fuels == null) {
 			fuels = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, SchedulePackage.SLOT_VISIT__FUELS);
@@ -177,6 +178,7 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EMap<CapacityViolationType, Long> getViolations() {
 		if (violations == null) {
 			violations = new EcoreEMap<CapacityViolationType,Long>(SchedulePackage.Literals.CAPACITY_MAP_ENTRY, CapacityMapEntryImpl.class, this, SchedulePackage.SLOT_VISIT__VIOLATIONS);
@@ -189,6 +191,7 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getPortCost() {
 		return portCost;
 	}
@@ -198,6 +201,7 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortCost(int newPortCost) {
 		int oldPortCost = portCost;
 		portCost = newPortCost;
@@ -210,6 +214,7 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortVisitLateness getLateness() {
 		return lateness;
 	}
@@ -234,6 +239,7 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLateness(PortVisitLateness newLateness) {
 		if (newLateness != lateness) {
 			NotificationChain msgs = null;
@@ -253,6 +259,7 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHeelCost() {
 		return heelCost;
 	}
@@ -262,6 +269,7 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHeelCost(int newHeelCost) {
 		int oldHeelCost = heelCost;
 		heelCost = newHeelCost;
@@ -274,6 +282,7 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHeelRevenue() {
 		return heelRevenue;
 	}
@@ -283,6 +292,7 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHeelRevenue(int newHeelRevenue) {
 		int oldHeelRevenue = heelRevenue;
 		heelRevenue = newHeelRevenue;
@@ -295,6 +305,7 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotAllocation getSlotAllocation() {
 		if (slotAllocation != null && slotAllocation.eIsProxy()) {
 			InternalEObject oldSlotAllocation = (InternalEObject)slotAllocation;
@@ -336,6 +347,7 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlotAllocation(SlotAllocation newSlotAllocation) {
 		if (newSlotAllocation != slotAllocation) {
 			NotificationChain msgs = null;
@@ -355,6 +367,7 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getFuelCost() {
 		int sum = 0;
 		for (final FuelQuantity fq : getFuels()) {

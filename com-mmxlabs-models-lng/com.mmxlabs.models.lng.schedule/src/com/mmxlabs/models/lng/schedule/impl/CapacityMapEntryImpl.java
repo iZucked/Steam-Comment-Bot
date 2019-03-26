@@ -228,6 +228,7 @@ public class CapacityMapEntryImpl extends EObjectImpl implements BasicEMap.Entry
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHash() {
 		if (hash == -1) {
 			Object theKey = getKey();
@@ -241,6 +242,7 @@ public class CapacityMapEntryImpl extends EObjectImpl implements BasicEMap.Entry
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHash(int hash) {
 		this.hash = hash;
 	}
@@ -250,6 +252,7 @@ public class CapacityMapEntryImpl extends EObjectImpl implements BasicEMap.Entry
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CapacityViolationType getKey() {
 		return getTypedKey();
 	}
@@ -259,6 +262,7 @@ public class CapacityMapEntryImpl extends EObjectImpl implements BasicEMap.Entry
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setKey(CapacityViolationType key) {
 		setTypedKey(key);
 	}
@@ -268,6 +272,7 @@ public class CapacityMapEntryImpl extends EObjectImpl implements BasicEMap.Entry
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Long getValue() {
 		return getTypedValue();
 	}
@@ -277,6 +282,7 @@ public class CapacityMapEntryImpl extends EObjectImpl implements BasicEMap.Entry
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Long setValue(Long value) {
 		Long oldValue = getValue();
 		setTypedValue(value);

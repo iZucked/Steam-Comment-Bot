@@ -203,6 +203,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getExtraShippingPNL() {
 		return extraShippingPNL;
 	}
@@ -212,6 +213,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setExtraShippingPNL(int newExtraShippingPNL) {
 		int oldExtraShippingPNL = extraShippingPNL;
 		extraShippingPNL = newExtraShippingPNL;
@@ -224,6 +226,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getAdditionalPNL() {
 		return additionalPNL;
 	}
@@ -233,6 +236,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAdditionalPNL(int newAdditionalPNL) {
 		int oldAdditionalPNL = additionalPNL;
 		additionalPNL = newAdditionalPNL;
@@ -245,6 +249,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCancellationFees() {
 		return cancellationFees;
 	}
@@ -254,6 +259,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCancellationFees(int newCancellationFees) {
 		int oldCancellationFees = cancellationFees;
 		cancellationFees = newCancellationFees;
@@ -268,6 +274,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCancellationFees() {
 		int oldCancellationFees = cancellationFees;
 		boolean oldCancellationFeesESet = cancellationFeesESet;
@@ -282,6 +289,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCancellationFees() {
 		return cancellationFeesESet;
 	}
@@ -291,6 +299,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHedgingValue() {
 		return hedgingValue;
 	}
@@ -300,6 +309,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHedgingValue(int newHedgingValue) {
 		int oldHedgingValue = hedgingValue;
 		hedgingValue = newHedgingValue;
@@ -314,6 +324,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetHedgingValue() {
 		int oldHedgingValue = hedgingValue;
 		boolean oldHedgingValueESet = hedgingValueESet;
@@ -328,6 +339,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetHedgingValue() {
 		return hedgingValueESet;
 	}
@@ -337,6 +349,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMiscCostsValue() {
 		return miscCostsValue;
 	}
@@ -346,6 +359,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMiscCostsValue(int newMiscCostsValue) {
 		int oldMiscCostsValue = miscCostsValue;
 		miscCostsValue = newMiscCostsValue;
@@ -360,6 +374,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMiscCostsValue() {
 		int oldMiscCostsValue = miscCostsValue;
 		boolean oldMiscCostsValueESet = miscCostsValueESet;
@@ -374,6 +389,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMiscCostsValue() {
 		return miscCostsValueESet;
 	}
@@ -383,6 +399,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getExtraUpsidePNL() {
 		return extraUpsidePNL;
 	}
@@ -392,6 +409,7 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setExtraUpsidePNL(int newExtraUpsidePNL) {
 		int oldExtraUpsidePNL = extraUpsidePNL;
 		extraUpsidePNL = newExtraUpsidePNL;

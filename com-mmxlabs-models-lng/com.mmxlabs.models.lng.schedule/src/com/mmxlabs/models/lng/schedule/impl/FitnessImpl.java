@@ -69,6 +69,7 @@ public class FitnessImpl extends NamedObjectImpl implements Fitness {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getFitnessValue() {
 		return fitnessValue;
 	}
@@ -78,6 +79,7 @@ public class FitnessImpl extends NamedObjectImpl implements Fitness {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFitnessValue(long newFitnessValue) {
 		long oldFitnessValue = fitnessValue;
 		fitnessValue = newFitnessValue;

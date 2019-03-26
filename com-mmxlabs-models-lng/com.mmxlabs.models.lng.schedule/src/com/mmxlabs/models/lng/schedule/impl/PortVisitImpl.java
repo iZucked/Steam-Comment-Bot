@@ -141,6 +141,7 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EMap<CapacityViolationType, Long> getViolations() {
 		if (violations == null) {
 			violations = new EcoreEMap<CapacityViolationType,Long>(SchedulePackage.Literals.CAPACITY_MAP_ENTRY, CapacityMapEntryImpl.class, this, SchedulePackage.PORT_VISIT__VIOLATIONS);
@@ -153,6 +154,7 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getPortCost() {
 		return portCost;
 	}
@@ -162,6 +164,7 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortCost(int newPortCost) {
 		int oldPortCost = portCost;
 		portCost = newPortCost;
@@ -174,6 +177,7 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortVisitLateness getLateness() {
 		return lateness;
 	}
@@ -198,6 +202,7 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLateness(PortVisitLateness newLateness) {
 		if (newLateness != lateness) {
 			NotificationChain msgs = null;
@@ -217,6 +222,7 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHeelCost() {
 		return heelCost;
 	}
@@ -226,6 +232,7 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHeelCost(int newHeelCost) {
 		int oldHeelCost = heelCost;
 		heelCost = newHeelCost;
@@ -238,6 +245,7 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHeelRevenue() {
 		return heelRevenue;
 	}
@@ -247,6 +255,7 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHeelRevenue(int newHeelRevenue) {
 		int oldHeelRevenue = heelRevenue;
 		heelRevenue = newHeelRevenue;
