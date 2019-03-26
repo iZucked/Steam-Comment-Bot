@@ -9,6 +9,7 @@ import java.io.StringWriter;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,8 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.pricing.provider.PricingItemProviderAdapterFactory;
+import com.mmxlabs.models.mmxcore.MMXCoreFactory;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 public class CopyPricingToScenarioTests {
 
@@ -62,25 +65,41 @@ public class CopyPricingToScenarioTests {
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 		final PricingVersion originalVersion = mapper.readerFor(PricingVersion.class).readValue(input);
-		// prepareVersionModel(originalVersion);
+
+		prepareVersionModel(originalVersion);
 
 		final String expectedResult = serialise(mapper, originalVersion);
 
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
+		pricingModel.setMarketCurvesVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
 		final EditingDomain editingDomain = createLocalEditingDomain(pricingModel);
 
 		final Command updateCommand = PricingToScenarioCopier.getUpdateCommand(editingDomain, pricingModel, originalVersion);
+		Assert.assertTrue(updateCommand.canExecute());
 		editingDomain.getCommandStack().execute(updateCommand);
 
 		final PricingVersion derivedVersion = PricingFromScenarioCopier.generateVersion(pricingModel);
 		// prepareVersionModel(derivedVersion);
 		// To help ensure diff matches
 		derivedVersion.setCreatedAt(originalVersion.getCreatedAt());
+		// Deprecated!
+		derivedVersion.getCurves().clear();
+		prepareVersionModel(derivedVersion);
 
 		String derivedJSON = serialise(mapper, derivedVersion);
 
 		Assert.assertEquals(expectedResult, derivedJSON);
 
+	}
+
+	private void prepareVersionModel(PricingVersion originalVersion) {
+		Collections.sort(originalVersion.getCurvesList(), (a, b) -> {
+			int c = a.getName().compareTo(b.getName());
+			if (c == 0) {
+				c = a.getType().compareTo(b.getType());
+			}
+			return c;
+		});
 	}
 
 	/**
@@ -88,40 +107,6 @@ public class CopyPricingToScenarioTests {
 	 * 
 	 * @throws Exception
 	 */
-
-	@Test
-	public void testCleanImportWithClash() throws Exception {
-		final String input = DataLoader.importData("pricing-testdata-withclash.json");
-
-		final ObjectMapper mapper = new ObjectMapper();
-		mapper.findAndRegisterModules();
-		mapper.registerModule(new JavaTimeModule());
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-		final PricingVersion originalVersion = mapper.readerFor(PricingVersion.class).readValue(input);
-		// prepareVersionModel(originalVersion);
-
-		final String expectedResult = serialise(mapper, originalVersion);
-
-		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
-		final EditingDomain editingDomain = createLocalEditingDomain(pricingModel);
-
-		final Command updateCommand = PricingToScenarioCopier.getUpdateCommand(editingDomain, pricingModel, originalVersion);
-		editingDomain.getCommandStack().execute(updateCommand);
-
-		Assert.assertEquals(2, pricingModel.getCommodityCurves().size());
-		Assert.assertEquals(1, pricingModel.getCurrencyCurves().size());
-
-		final PricingVersion derivedVersion = PricingFromScenarioCopier.generateVersion(pricingModel);
-		// prepareVersionModel(derivedVersion);
-		// To help ensure diff matches
-		derivedVersion.setCreatedAt(originalVersion.getCreatedAt());
-
-		String derivedJSON = serialise(mapper, derivedVersion);
-
-		Assert.assertEquals(expectedResult, derivedJSON);
-
-	}
 
 	@Test
 	public void testCopyDistances() {
@@ -146,6 +131,8 @@ public class CopyPricingToScenarioTests {
 		currencyIndices.add(cu2);
 
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
+		pricingModel.setMarketCurvesVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
+
 		pricingModel.getCommodityCurves().addAll(commodityIndices);
 		pricingModel.getCurrencyCurves().addAll(currencyIndices);
 
@@ -205,6 +192,8 @@ public class CopyPricingToScenarioTests {
 		currencyIndices.add(cu2);
 
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
+		pricingModel.setMarketCurvesVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
+
 		pricingModel.getCommodityCurves().addAll(commodityIndices);
 		pricingModel.getCurrencyCurves().addAll(currencyIndices);
 
@@ -245,6 +234,8 @@ public class CopyPricingToScenarioTests {
 	@Test
 	public void testIndexNotPreviouslyExisting() {
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
+		pricingModel.setMarketCurvesVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
+
 		final PricingVersion pricingVersion = createDefaultPricingVersion();
 		final EditingDomain ed = createLocalEditingDomain(pricingModel);
 
@@ -289,6 +280,8 @@ public class CopyPricingToScenarioTests {
 		currencyIndices.add(cu2);
 
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
+		pricingModel.setMarketCurvesVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
+
 		pricingModel.getCommodityCurves().addAll(commodityIndices);
 		pricingModel.getCurrencyCurves().addAll(currencyIndices);
 
@@ -314,6 +307,8 @@ public class CopyPricingToScenarioTests {
 	@Test
 	public void testExpressionCurve() {
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
+		pricingModel.setMarketCurvesVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
+
 		final PricingVersion pricingVersion = createDefaultPricingVersion();
 		final EditingDomain ed = createLocalEditingDomain(pricingModel);
 
@@ -335,6 +330,8 @@ public class CopyPricingToScenarioTests {
 	public void testValues() {
 		// test both double and integer values
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
+		pricingModel.setMarketCurvesVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
+
 		final PricingVersion pricingVersion = createDefaultPricingVersion();
 		final EditingDomain ed = createLocalEditingDomain(pricingModel);
 
