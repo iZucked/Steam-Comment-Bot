@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.its.tests;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
@@ -81,10 +82,24 @@ public class TesterUtil {
 			/**
 			 * Extend to save properties in a sorted order for ease of reading
 			 */
-			final Properties props = new Properties() {
+			return new Properties() {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public Set<Object> keySet() {
 					return Collections.unmodifiableSet(new TreeSet<Object>(super.keySet()));
+				}
+
+				@Override
+				public Set<java.util.Map.Entry<Object, Object>> entrySet() {
+					TreeSet<java.util.Map.Entry<Object, Object>> treeSet = new TreeSet<>((a, b) -> {
+						return ((Comparable) a.getKey()).compareTo((Comparable) b.getKey());
+					});
+					treeSet.addAll(super.entrySet());
+					return Collections.unmodifiableSet(treeSet);
 				}
 
 				@Override
@@ -92,7 +107,6 @@ public class TesterUtil {
 					return Collections.enumeration(new TreeSet<Object>(super.keySet()));
 				}
 			};
-			return props;
 		} else {
 
 			final Properties props = new Properties();
