@@ -36,8 +36,8 @@ public final class Formatters {
 	public static final ICellRenderer asLocalDateFormatter = new AsLocalDateFormatter(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter());
 	public static final ICellRenderer asLocalTimeFormatter = new AsLocalDateFormatter(DateTimeFormatsProvider.INSTANCE.createTimeStringDisplayFormatter());
 
-	public static final ICellRenderer asDateTimeFormatterWithTZ = new AsDateTimeFormatter(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter(), true);
-	public static final ICellRenderer asDateTimeFormatterNoTz = new AsDateTimeFormatter(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter(), false);
+	public static final ICellRenderer asDateTimeFormatterWithTZ = new AsDateTimeFormatter(DateTimeFormatsProvider.INSTANCE.createDateTimeStringDisplayFormatter(), true);
+	public static final ICellRenderer asDateTimeFormatterNoTz = new AsDateTimeFormatter(DateTimeFormatsProvider.INSTANCE.createDateTimeStringDisplayFormatter(), false);
 
 	public static final IntegerFormatter integerFormatter = new IntegerFormatter();
 
