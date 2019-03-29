@@ -81,7 +81,7 @@ public class DistancesFromScenarioCopier {
 				}
 
 				final Route versionRoute = new Route();
-				versionRoute.setDistance(Double.valueOf(l.getDistance()).floatValue());
+				versionRoute.setDistance(Double.valueOf(l.getDistance()));
 				versionRoute.setProvider(l.getProvider());
 				versionRoute.setErrorCode(l.getErrorCode());
 				routes.getRoutes().put(String.format("%s>%s", from, to), versionRoute);

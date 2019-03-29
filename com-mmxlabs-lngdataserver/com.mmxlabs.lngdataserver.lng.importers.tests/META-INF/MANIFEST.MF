@@ -11,7 +11,6 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.port.edit,
  com.mmxlabs.models.lng.pricing.edit,
  org.eclipse.emf.edit,
- org.junit.jupiter.api;bundle-version="5.0.0",
  org.mockito.mockito-core,
  com.mmxlabs.lngdataserver.lng.importers,
  com.mmxlabs.common.common-util,
@@ -31,7 +30,8 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.lngdataserver.integration.ports,
  javax.annotation;bundle-version="1.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-10
-Import-Package: org.slf4j
+Import-Package: org.junit.jupiter.api;version="5.1.0",
+ org.slf4j
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Minimax Labs Ltd.
 Automatic-Module-Name: com.mmxlabs.lngdataserver.lng.importers.tests

@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.DistanceModelBuilder;
 import com.mmxlabs.models.lng.port.util.PortModelBuilder;
+import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 
 public class CopyDistancesToScenarioTests {
 
@@ -57,6 +58,8 @@ public class CopyDistancesToScenarioTests {
 		final String expectedResult = serialise(mapper, originalVersion);
 
 		final PortModel portModel = PortFactory.eINSTANCE.createPortModel();
+		portModel.setDistanceVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
+		portModel.setPortVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
 		final EditingDomain editingDomain = createEditingDomain(portModel);
 
 		final Command updateCommand = DistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, originalVersion, true);
@@ -77,6 +80,8 @@ public class CopyDistancesToScenarioTests {
 	public void testReplaceExistingManualVersion() throws Exception {
 
 		final PortModel portModel = PortFactory.eINSTANCE.createPortModel();
+		portModel.setDistanceVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
+		portModel.setPortVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
 		final EditingDomain editingDomain = createEditingDomain(portModel);
 
 		final ObjectMapper mapper = new ObjectMapper();
@@ -153,6 +158,8 @@ public class CopyDistancesToScenarioTests {
 	public void testReplaceExistingJSONVersion() throws Exception {
 
 		final PortModel portModel = PortFactory.eINSTANCE.createPortModel();
+		portModel.setDistanceVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
+		portModel.setPortVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
 		final EditingDomain editingDomain = createEditingDomain(portModel);
 
 		final ObjectMapper mapper = new ObjectMapper();

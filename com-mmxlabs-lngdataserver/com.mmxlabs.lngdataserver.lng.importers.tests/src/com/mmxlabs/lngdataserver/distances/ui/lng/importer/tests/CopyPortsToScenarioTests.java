@@ -34,6 +34,7 @@ import com.mmxlabs.lngdataserver.lng.io.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.port.PortsToScenarioCopier;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 
 public class CopyPortsToScenarioTests {
 
@@ -52,6 +53,8 @@ public class CopyPortsToScenarioTests {
 		final String expectedResult = serialise(mapper, originalVersion);
 
 		final PortModel portModel = PortFactory.eINSTANCE.createPortModel();
+		portModel.setDistanceVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
+		portModel.setPortVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
 		final EditingDomain editingDomain = createEditingDomain(portModel);
 		{
 			final String distInput = DataLoader.importData("v1.0.11.250_7.json");
@@ -81,6 +84,8 @@ public class CopyPortsToScenarioTests {
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 		final PortModel portModel = PortFactory.eINSTANCE.createPortModel();
+		portModel.setDistanceVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
+		portModel.setPortVersionRecord(MMXCoreFactory.eINSTANCE.createVersionRecord());
 		final EditingDomain editingDomain = createEditingDomain(portModel);
 
 		// Load in version 1 data
