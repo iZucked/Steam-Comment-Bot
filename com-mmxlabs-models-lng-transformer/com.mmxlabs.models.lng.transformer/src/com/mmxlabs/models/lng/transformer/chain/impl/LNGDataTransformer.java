@@ -28,6 +28,8 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGInitialSequencesModu
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGSharedDataTransformerModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.SequencesEvaluatorModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.SequencesEvaluatorModule.ISequenceEvaluator;
 import com.mmxlabs.models.lng.transformer.shared.impl.SharedDataTransformerService;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
@@ -60,14 +62,14 @@ public class LNGDataTransformer {
 	@Nullable
 	private IRunnerHook runnerHook;
 
-	private @NonNull UserSettings userSettings;
+	private @NonNull final UserSettings userSettings;
 
-	private @NonNull SolutionBuilderSettings solutionBuilderSettings;
+	private @NonNull final SolutionBuilderSettings solutionBuilderSettings;
 
 	private IMultiStateResult solutionBuilderResult;
 
 	@SuppressWarnings("null")
-	public LNGDataTransformer(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final UserSettings userSettings, @NonNull SolutionBuilderSettings solutionBuilderSettings,
+	public LNGDataTransformer(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final UserSettings userSettings, @NonNull final SolutionBuilderSettings solutionBuilderSettings,
 			@NonNull final Collection<@NonNull String> hints, @NonNull final Collection<@NonNull IOptimiserInjectorService> services) {
 
 		this.userSettings = userSettings;
@@ -148,7 +150,7 @@ public class LNGDataTransformer {
 		return runnerHook;
 	}
 
-	public void setRunnerHook(@Nullable IRunnerHook runnerHook) {
+	public void setRunnerHook(@Nullable final IRunnerHook runnerHook) {
 		this.runnerHook = runnerHook;
 	}
 
@@ -158,5 +160,26 @@ public class LNGDataTransformer {
 
 	public @NonNull IMultiStateResult getInitialResult() {
 		return solutionBuilderResult;
+	}
+
+	/**
+	 * Used to evaluate the given raw sequences against the fitness components defined in the initial sequence builder.
+	 * 
+	 * Intended for use in ITS cases
+	 * 
+	 * @param rawSequences
+	 * @return
+	 */
+	public IMultiStateResult evalWithFitness(final ISequences rawSequences) {
+		final List<Module> modules2 = new LinkedList<>();
+		modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, solutionBuilderSettings.getConstraintAndFitnessSettings()), services,
+				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
+		modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
+		modules2.add(new InitialPhaseOptimisationDataModule());
+		modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new SequencesEvaluatorModule(), services, IOptimiserInjectorService.ModuleType.Module_InitialSolution, hints));
+		final Injector initialSolutionInjector = injector.createChildInjector(modules2);
+
+		final ISequenceEvaluator evaluator = initialSolutionInjector.getInstance(SequencesEvaluatorModule.ISequenceEvaluator.class);
+		return evaluator.eval(rawSequences);
 	}
 }

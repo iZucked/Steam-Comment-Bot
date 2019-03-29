@@ -51,8 +51,8 @@ import com.mmxlabs.scenario.service.model.util.encryption.impl.PassthroughCipher
  * 
  * Abstract class to test the optimisation reproducibility of a scenario. Super classes pass in a URL to a scenario resource. There are two modes of operation, determined by the boolean
  * {@link #OptimisationTestMode}. When set to false (default) a properties file (located at the input URL with ".properties" appended) contains the expected initial and final fitness values of the
- * scenario. The second mode ({@link #OptimisationTestMode} set to true) will generate the properties file. Note this mode will only work for file:// URLs. It is expected that a JUnit test run will provide
- * file based URLs. It is expected JUnit plugin tests will not.
+ * scenario. The second mode ({@link #OptimisationTestMode} set to true) will generate the properties file. Note this mode will only work for file:// URLs. It is expected that a JUnit test run will
+ * provide file based URLs. It is expected JUnit plugin tests will not.
  * 
  * <a href="https://mmxlabs.fogbugz.com/default.asp?220">Case 220: Optimisation Result Test</a>
  * 
@@ -194,7 +194,10 @@ public class AbstractOptimisationResultTester {
 			if (!result.getSolutions().isEmpty()) {
 				int i = 0;
 				for (final NonNullPair<ISequences, Map<String, Object>> p : result.getSolutions()) {
-					final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(p.getSecond());
+
+					// Re-evaluate against the initial solution fitness objectives
+					IMultiStateResult r = scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().evalWithFitness(p.getFirst());
+					final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(r.getBestSolution().getSecond());
 					final String mapName = String.format("solution-%d", i++);
 					if (TestingModes.OptimisationTestMode == TestMode.Generate) {
 						TesterUtil.storeFitnesses(props, mapName, currentEndFitnesses);
@@ -210,7 +213,9 @@ public class AbstractOptimisationResultTester {
 
 			// Check final optimised result
 			{
-				final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(result.getBestSolution().getSecond());
+				// Re-evaluate against the initial solution fitness objectives
+				IMultiStateResult r = scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().evalWithFitness(result.getBestSolution().getFirst());
+				final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(r.getBestSolution().getSecond());
 				if (TestingModes.OptimisationTestMode == TestMode.Generate) {
 					TesterUtil.storeFitnesses(props, endFitnessesMapName, currentEndFitnesses);
 				} else {
