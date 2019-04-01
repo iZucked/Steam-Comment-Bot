@@ -71,7 +71,7 @@
          id="com.google.guava"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="21.0.0.v20170206-1425"
          unpack="false"/>
 
    <plugin
@@ -122,12 +122,12 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.opentest4j"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         unpack="false"/>         
+         unpack="false"/>
 
 </feature>
