@@ -18,7 +18,6 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getNotionalPort <em>Notional Port</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getAllowedVessels <em>Allowed Vessels</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getDESSalesMarket()
@@ -51,22 +50,6 @@ public interface DESSalesMarket extends SpotMarket {
 	 * @generated
 	 */
 	void setNotionalPort(Port value);
-
-	/**
-	 * Returns the value of the '<em><b>Allowed Vessels</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}<code>&lt;com.mmxlabs.models.lng.fleet.Vessel&gt;</code>.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Allowed Vessels</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Allowed Vessels</em>' reference list.
-	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getDESSalesMarket_AllowedVessels()
-	 * @model
-	 * @generated
-	 */
-	EList<AVesselSet<Vessel>> getAllowedVessels();
 
 } // end of  DESSalesMarket
 

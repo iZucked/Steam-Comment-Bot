@@ -124,8 +124,8 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 				.build() //
 				// Discharge
 				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(true)) //
+				.with(s -> s.setRestrictedPortsOverride(true)) //
+				.with(s -> s.setRestrictedPortsArePermissive(true)) //
 				.with(s -> s.getRestrictedPorts().add(portFinder.findPort("Bonny Nigeria"))) //
 				.build() //
 				// Cargo
@@ -159,8 +159,8 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 				.build() //
 				// Discharge
 				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(true)) //
+				.with(s -> s.setRestrictedPortsOverride(true)) //
+				.with(s -> s.setRestrictedPortsArePermissive(true)) //
 				.with(s -> s.getRestrictedPorts().add(portFinder.findPort("Bonny Nigeria"))) //
 				.build() //
 				// Cargo
@@ -192,8 +192,8 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
 				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(true)) //
+				.with(s -> s.setRestrictedPortsOverride(true)) //
+				.with(s -> s.setRestrictedPortsArePermissive(true)) //
 				.with(s -> s.getRestrictedPorts().add(portFinder.findPort("Dragon LNG"))) //
 				.build() //
 				// Discharge
@@ -227,8 +227,8 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
 				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(true)) //
+				.with(s -> s.setRestrictedPortsOverride(true)) //
+				.with(s -> s.setRestrictedPortsArePermissive(true)) //
 				.with(s -> s.getRestrictedPorts().add(portFinder.findPort("Dragon LNG"))) //
 				.build() //
 				// Discharge
@@ -260,7 +260,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("P", entity, "5");
-		contract.setRestrictedListsArePermissive(true);
+		contract.setRestrictedPortsArePermissive(true);
 		contract.getRestrictedPorts().add(portFinder.findPort("Dragon LNG"));
 
 		// Construct the cargo scenario
@@ -296,7 +296,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("P", entity, "5");
-		contract.setRestrictedListsArePermissive(true);
+		contract.setRestrictedPortsArePermissive(true);
 		contract.getRestrictedPorts().add(portFinder.findPort("Dragon LNG"));
 
 		// Construct the cargo scenario
@@ -334,7 +334,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("P", entity, "7");
-		contract.setRestrictedListsArePermissive(true);
+		contract.setRestrictedPortsArePermissive(true);
 		contract.getRestrictedPorts().add(portFinder.findPort("Bonny Nigeria"));
 
 		// Construct the cargo scenario
@@ -367,7 +367,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 	public void testRestricted_SlotSalesContract_Port_Unshipped() throws Exception {
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("P", entity, "7");
-		contract.setRestrictedListsArePermissive(true);
+		contract.setRestrictedPortsArePermissive(true);
 		contract.getRestrictedPorts().add(portFinder.findPort("Bonny Nigeria"));
 
 		// Construct the cargo scenario
@@ -407,7 +407,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
 				.build();
 
-		spotMarket.setRestrictedListsArePermissive(true);
+		spotMarket.setRestrictedPortsArePermissive(true);
 		spotMarket.getRestrictedPorts().add(portFinder.findPort("Dragon LNG"));
 
 		// Construct the cargo scenario
@@ -448,7 +448,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
 				.build();
 
-		spotMarket.setRestrictedListsArePermissive(true);
+		spotMarket.setRestrictedPortsArePermissive(true);
 		spotMarket.getRestrictedPorts().add(portFinder.findPort("Dragon LNG"));
 
 		// Construct the cargo scenario
@@ -489,7 +489,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
 				.build();
 
-		spotMarket.setRestrictedListsArePermissive(true);
+		spotMarket.setRestrictedPortsArePermissive(true);
 		spotMarket.getRestrictedPorts().add(portFinder.findPort("Bonny Nigeria"));
 
 		// Construct the cargo scenario
@@ -530,7 +530,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
 				.build();
 
-		spotMarket.setRestrictedListsArePermissive(true);
+		spotMarket.setRestrictedPortsArePermissive(true);
 		spotMarket.getRestrictedPorts().add(portFinder.findPort("Bonny Nigeria"));
 
 		// Construct the cargo scenario
@@ -578,8 +578,8 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 				.build() //
 				// Discharge
 				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(true)) //
+				.with(s -> s.setRestrictedContractsOverride(true)) //
+				.with(s -> s.setRestrictedContractsArePermissive(true)) //
 				.with(s -> s.getRestrictedContracts().add(contract2)) //
 				.build() //
 				// Cargo
@@ -619,8 +619,8 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 				.build() //
 				// Discharge
 				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(true)) //
+				.with(s -> s.setRestrictedContractsOverride(true)) //
+				.with(s -> s.setRestrictedContractsArePermissive(true)) //
 				.with(s -> s.getRestrictedContracts().add(contract2)) //
 				.build() //
 				// Cargo
@@ -655,8 +655,8 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
 				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(true)) //
+				.with(s -> s.setRestrictedContractsOverride(true)) //
+				.with(s -> s.setRestrictedContractsArePermissive(true)) //
 				.with(s -> s.getRestrictedContracts().add(contract2)) //
 				.build() //
 				// Discharge
@@ -695,8 +695,8 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
 				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(true)) //
+				.with(s -> s.setRestrictedContractsOverride(true)) //
+				.with(s -> s.setRestrictedContractsArePermissive(true)) //
 				.with(s -> s.getRestrictedContracts().add(contract2)) //
 				.build() //
 				// Discharge
@@ -727,11 +727,11 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 
-		final SalesContract salesContract = commercialModelBuilder.makeExpressionSalesContract("Contract", entity, "7");
-		final SalesContract salesContract2 = commercialModelBuilder.makeExpressionSalesContract("Contract", entity, "7");
+		final SalesContract salesContract = commercialModelBuilder.makeExpressionSalesContract("C1", entity, "7");
+		final SalesContract salesContract2 = commercialModelBuilder.makeExpressionSalesContract("C2", entity, "7");
 
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("P", entity, "5");
-		contract.setRestrictedListsArePermissive(true);
+		contract.setRestrictedContractsArePermissive(true);
 		contract.getRestrictedContracts().add(salesContract2);
 
 		// Construct the cargo scenario
@@ -773,7 +773,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("P", entity, "7");
 
-		contract.setRestrictedListsArePermissive(true);
+		contract.setRestrictedContractsArePermissive(true);
 		contract.getRestrictedContracts().add(purchaseContract2);
 
 		// Construct the cargo scenario
@@ -810,14 +810,14 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 
-		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("C", entity, "7");
-		final SalesContract contract2 = commercialModelBuilder.makeExpressionSalesContract("C", entity, "7");
+		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("C1", entity, "7");
+		final SalesContract contract2 = commercialModelBuilder.makeExpressionSalesContract("C2", entity, "7");
 
 		final FOBPurchasesMarket spotMarket = spotMarketsModelBuilder.makeFOBPurchaseMarket("Spot", portFinder.findPort("Point Fortin"), entity, "5", 22.8) //
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
 				.build();
 
-		spotMarket.setRestrictedListsArePermissive(true);
+		spotMarket.setRestrictedContractsArePermissive(true);
 		spotMarket.getRestrictedContracts().add(contract2);
 
 		// Construct the cargo scenario
@@ -854,14 +854,14 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 
-		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("C", entity, "5");
-		final PurchaseContract contract2 = commercialModelBuilder.makeExpressionPurchaseContract("C", entity, "5");
+		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("C1", entity, "5");
+		final PurchaseContract contract2 = commercialModelBuilder.makeExpressionPurchaseContract("C2", entity, "5");
 
 		final DESSalesMarket spotMarket = spotMarketsModelBuilder.makeDESSaleMarket("Spot", portFinder.findPort("Sakai"), entity, "7") //
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
 				.build();
 
-		spotMarket.setRestrictedListsArePermissive(true);
+		spotMarket.setRestrictedContractsArePermissive(true);
 		spotMarket.getRestrictedContracts().add(contract2);
 
 		// Construct the cargo scenario

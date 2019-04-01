@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.impl;
+import java.time.YearMonth;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -19,14 +20,15 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
-import java.time.YearMonth;
 
 /**
  * <!-- begin-user-doc -->
@@ -51,14 +53,19 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getOperationalTolerance <em>Operational Tolerance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isFullCargoLot <em>Full Cargo Lot</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isRestrictedContractsArePermissive <em>Restricted Contracts Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isRestrictedPortsArePermissive <em>Restricted Ports Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getRestrictedVessels <em>Restricted Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isRestrictedVesselsArePermissive <em>Restricted Vessels Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getContractType <em>Contract Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isDivertible <em>Divertible</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getWindowNominationSize <em>Window Nomination Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getWindowNominationSizeUnits <em>Window Nomination Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isWindowNominationCounterparty <em>Window Nomination Counterparty</em>}</li>
@@ -71,8 +78,6 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPortNominationSize <em>Port Nomination Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPortNominationSizeUnits <em>Port Nomination Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isPortNominationCounterparty <em>Port Nomination Counterparty</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isDivertible <em>Divertible</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPortLoadNominationSize <em>Port Load Nomination Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPortLoadNominationSizeUnits <em>Port Load Nomination Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}</li>
@@ -379,26 +384,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	protected boolean fullCargoLot = FULL_CARGO_LOT_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isRestrictedListsArePermissive()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isRestrictedListsArePermissive()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean restrictedListsArePermissive = RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
-
-	/**
 	 * The cached value of the '{@link #getRestrictedContracts() <em>Restricted Contracts</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -409,6 +394,26 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	protected EList<Contract> restrictedContracts;
 
 	/**
+	 * The default value of the '{@link #isRestrictedContractsArePermissive() <em>Restricted Contracts Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedContractsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RESTRICTED_CONTRACTS_ARE_PERMISSIVE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedContractsArePermissive() <em>Restricted Contracts Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedContractsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedContractsArePermissive = RESTRICTED_CONTRACTS_ARE_PERMISSIVE_EDEFAULT;
+
+	/**
 	 * The cached value of the '{@link #getRestrictedPorts() <em>Restricted Ports</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -417,6 +422,56 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected EList<APortSet<Port>> restrictedPorts;
+
+	/**
+	 * The default value of the '{@link #isRestrictedPortsArePermissive() <em>Restricted Ports Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedPortsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RESTRICTED_PORTS_ARE_PERMISSIVE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedPortsArePermissive() <em>Restricted Ports Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedPortsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedPortsArePermissive = RESTRICTED_PORTS_ARE_PERMISSIVE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getRestrictedVessels() <em>Restricted Vessels</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRestrictedVessels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<AVesselSet<Vessel>> restrictedVessels;
+
+	/**
+	 * The default value of the '{@link #isRestrictedVesselsArePermissive() <em>Restricted Vessels Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedVesselsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RESTRICTED_VESSELS_ARE_PERMISSIVE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedVesselsArePermissive() <em>Restricted Vessels Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedVesselsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedVesselsArePermissive = RESTRICTED_VESSELS_ARE_PERMISSIVE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getPriceInfo() <em>Price Info</em>}' containment reference.
@@ -507,6 +562,46 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected String cancellationExpression = CANCELLATION_EXPRESSION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isDivertible() <em>Divertible</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDivertible()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DIVERTIBLE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDivertible() <em>Divertible</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDivertible()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean divertible = DIVERTIBLE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getShippingDaysRestriction() <em>Shipping Days Restriction</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShippingDaysRestriction()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SHIPPING_DAYS_RESTRICTION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getShippingDaysRestriction() <em>Shipping Days Restriction</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShippingDaysRestriction()
+	 * @generated
+	 * @ordered
+	 */
+	protected int shippingDaysRestriction = SHIPPING_DAYS_RESTRICTION_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getWindowNominationSize() <em>Window Nomination Size</em>}' attribute.
@@ -747,46 +842,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected boolean portNominationCounterparty = PORT_NOMINATION_COUNTERPARTY_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isDivertible() <em>Divertible</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isDivertible()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean DIVERTIBLE_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isDivertible() <em>Divertible</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isDivertible()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean divertible = DIVERTIBLE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getShippingDaysRestriction() <em>Shipping Days Restriction</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getShippingDaysRestriction()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int SHIPPING_DAYS_RESTRICTION_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getShippingDaysRestriction() <em>Shipping Days Restriction</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getShippingDaysRestriction()
-	 * @generated
-	 * @ordered
-	 */
-	protected int shippingDaysRestriction = SHIPPING_DAYS_RESTRICTION_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getPortLoadNominationSize() <em>Port Load Nomination Size</em>}' attribute.
@@ -1131,29 +1186,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @generated
 	 */
 	@Override
-	public boolean isRestrictedListsArePermissive() {
-		return restrictedListsArePermissive;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setRestrictedListsArePermissive(boolean newRestrictedListsArePermissive) {
-		boolean oldRestrictedListsArePermissive = restrictedListsArePermissive;
-		restrictedListsArePermissive = newRestrictedListsArePermissive;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE, oldRestrictedListsArePermissive, restrictedListsArePermissive));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EList<Contract> getRestrictedContracts() {
 		if (restrictedContracts == null) {
 			restrictedContracts = new EObjectResolvingEList<Contract>(Contract.class, this, CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS);
@@ -1167,11 +1199,93 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @generated
 	 */
 	@Override
+	public boolean isRestrictedContractsArePermissive() {
+		return restrictedContractsArePermissive;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRestrictedContractsArePermissive(boolean newRestrictedContractsArePermissive) {
+		boolean oldRestrictedContractsArePermissive = restrictedContractsArePermissive;
+		restrictedContractsArePermissive = newRestrictedContractsArePermissive;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE, oldRestrictedContractsArePermissive, restrictedContractsArePermissive));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<APortSet<Port>> getRestrictedPorts() {
 		if (restrictedPorts == null) {
 			restrictedPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, CommercialPackage.CONTRACT__RESTRICTED_PORTS);
 		}
 		return restrictedPorts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isRestrictedPortsArePermissive() {
+		return restrictedPortsArePermissive;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRestrictedPortsArePermissive(boolean newRestrictedPortsArePermissive) {
+		boolean oldRestrictedPortsArePermissive = restrictedPortsArePermissive;
+		restrictedPortsArePermissive = newRestrictedPortsArePermissive;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE, oldRestrictedPortsArePermissive, restrictedPortsArePermissive));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<AVesselSet<Vessel>> getRestrictedVessels() {
+		if (restrictedVessels == null) {
+			restrictedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, CommercialPackage.CONTRACT__RESTRICTED_VESSELS);
+		}
+		return restrictedVessels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isRestrictedVesselsArePermissive() {
+		return restrictedVesselsArePermissive;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRestrictedVesselsArePermissive(boolean newRestrictedVesselsArePermissive) {
+		boolean oldRestrictedVesselsArePermissive = restrictedVesselsArePermissive;
+		restrictedVesselsArePermissive = newRestrictedVesselsArePermissive;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE, oldRestrictedVesselsArePermissive, restrictedVesselsArePermissive));
 	}
 
 	/**
@@ -1948,12 +2062,18 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getOperationalTolerance();
 			case CommercialPackage.CONTRACT__FULL_CARGO_LOT:
 				return isFullCargoLot();
-			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
-				return isRestrictedListsArePermissive();
 			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS:
 				return getRestrictedContracts();
+			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
+				return isRestrictedContractsArePermissive();
 			case CommercialPackage.CONTRACT__RESTRICTED_PORTS:
 				return getRestrictedPorts();
+			case CommercialPackage.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE:
+				return isRestrictedPortsArePermissive();
+			case CommercialPackage.CONTRACT__RESTRICTED_VESSELS:
+				return getRestrictedVessels();
+			case CommercialPackage.CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE:
+				return isRestrictedVesselsArePermissive();
 			case CommercialPackage.CONTRACT__PRICE_INFO:
 				return getPriceInfo();
 			case CommercialPackage.CONTRACT__NOTES:
@@ -1964,6 +2084,10 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getPricingEvent();
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				return getCancellationExpression();
+			case CommercialPackage.CONTRACT__DIVERTIBLE:
+				return isDivertible();
+			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
+				return getShippingDaysRestriction();
 			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE:
 				return getWindowNominationSize();
 			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
@@ -1988,10 +2112,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getPortNominationSizeUnits();
 			case CommercialPackage.CONTRACT__PORT_NOMINATION_COUNTERPARTY:
 				return isPortNominationCounterparty();
-			case CommercialPackage.CONTRACT__DIVERTIBLE:
-				return isDivertible();
-			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
-				return getShippingDaysRestriction();
 			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE:
 				return getPortLoadNominationSize();
 			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS:
@@ -2057,16 +2177,26 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__FULL_CARGO_LOT:
 				setFullCargoLot((Boolean)newValue);
 				return;
-			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
-				setRestrictedListsArePermissive((Boolean)newValue);
-				return;
 			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS:
 				getRestrictedContracts().clear();
 				getRestrictedContracts().addAll((Collection<? extends Contract>)newValue);
 				return;
+			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
+				setRestrictedContractsArePermissive((Boolean)newValue);
+				return;
 			case CommercialPackage.CONTRACT__RESTRICTED_PORTS:
 				getRestrictedPorts().clear();
 				getRestrictedPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
+				return;
+			case CommercialPackage.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE:
+				setRestrictedPortsArePermissive((Boolean)newValue);
+				return;
+			case CommercialPackage.CONTRACT__RESTRICTED_VESSELS:
+				getRestrictedVessels().clear();
+				getRestrictedVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
+				return;
+			case CommercialPackage.CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE:
+				setRestrictedVesselsArePermissive((Boolean)newValue);
 				return;
 			case CommercialPackage.CONTRACT__PRICE_INFO:
 				setPriceInfo((LNGPriceCalculatorParameters)newValue);
@@ -2082,6 +2212,12 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return;
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				setCancellationExpression((String)newValue);
+				return;
+			case CommercialPackage.CONTRACT__DIVERTIBLE:
+				setDivertible((Boolean)newValue);
+				return;
+			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
+				setShippingDaysRestriction((Integer)newValue);
 				return;
 			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE:
 				setWindowNominationSize((Integer)newValue);
@@ -2118,12 +2254,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return;
 			case CommercialPackage.CONTRACT__PORT_NOMINATION_COUNTERPARTY:
 				setPortNominationCounterparty((Boolean)newValue);
-				return;
-			case CommercialPackage.CONTRACT__DIVERTIBLE:
-				setDivertible((Boolean)newValue);
-				return;
-			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
-				setShippingDaysRestriction((Integer)newValue);
 				return;
 			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE:
 				setPortLoadNominationSize((Integer)newValue);
@@ -2191,14 +2321,23 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__FULL_CARGO_LOT:
 				setFullCargoLot(FULL_CARGO_LOT_EDEFAULT);
 				return;
-			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
-				setRestrictedListsArePermissive(RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT);
-				return;
 			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS:
 				getRestrictedContracts().clear();
 				return;
+			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
+				setRestrictedContractsArePermissive(RESTRICTED_CONTRACTS_ARE_PERMISSIVE_EDEFAULT);
+				return;
 			case CommercialPackage.CONTRACT__RESTRICTED_PORTS:
 				getRestrictedPorts().clear();
+				return;
+			case CommercialPackage.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE:
+				setRestrictedPortsArePermissive(RESTRICTED_PORTS_ARE_PERMISSIVE_EDEFAULT);
+				return;
+			case CommercialPackage.CONTRACT__RESTRICTED_VESSELS:
+				getRestrictedVessels().clear();
+				return;
+			case CommercialPackage.CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE:
+				setRestrictedVesselsArePermissive(RESTRICTED_VESSELS_ARE_PERMISSIVE_EDEFAULT);
 				return;
 			case CommercialPackage.CONTRACT__PRICE_INFO:
 				setPriceInfo((LNGPriceCalculatorParameters)null);
@@ -2214,6 +2353,12 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return;
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				setCancellationExpression(CANCELLATION_EXPRESSION_EDEFAULT);
+				return;
+			case CommercialPackage.CONTRACT__DIVERTIBLE:
+				setDivertible(DIVERTIBLE_EDEFAULT);
+				return;
+			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
+				setShippingDaysRestriction(SHIPPING_DAYS_RESTRICTION_EDEFAULT);
 				return;
 			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE:
 				setWindowNominationSize(WINDOW_NOMINATION_SIZE_EDEFAULT);
@@ -2250,12 +2395,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return;
 			case CommercialPackage.CONTRACT__PORT_NOMINATION_COUNTERPARTY:
 				setPortNominationCounterparty(PORT_NOMINATION_COUNTERPARTY_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__DIVERTIBLE:
-				setDivertible(DIVERTIBLE_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
-				setShippingDaysRestriction(SHIPPING_DAYS_RESTRICTION_EDEFAULT);
 				return;
 			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE:
 				setPortLoadNominationSize(PORT_LOAD_NOMINATION_SIZE_EDEFAULT);
@@ -2308,12 +2447,18 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return isSetOperationalTolerance();
 			case CommercialPackage.CONTRACT__FULL_CARGO_LOT:
 				return fullCargoLot != FULL_CARGO_LOT_EDEFAULT;
-			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
-				return restrictedListsArePermissive != RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
 			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS:
 				return restrictedContracts != null && !restrictedContracts.isEmpty();
+			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
+				return restrictedContractsArePermissive != RESTRICTED_CONTRACTS_ARE_PERMISSIVE_EDEFAULT;
 			case CommercialPackage.CONTRACT__RESTRICTED_PORTS:
 				return restrictedPorts != null && !restrictedPorts.isEmpty();
+			case CommercialPackage.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE:
+				return restrictedPortsArePermissive != RESTRICTED_PORTS_ARE_PERMISSIVE_EDEFAULT;
+			case CommercialPackage.CONTRACT__RESTRICTED_VESSELS:
+				return restrictedVessels != null && !restrictedVessels.isEmpty();
+			case CommercialPackage.CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE:
+				return restrictedVesselsArePermissive != RESTRICTED_VESSELS_ARE_PERMISSIVE_EDEFAULT;
 			case CommercialPackage.CONTRACT__PRICE_INFO:
 				return priceInfo != null;
 			case CommercialPackage.CONTRACT__NOTES:
@@ -2324,6 +2469,10 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return pricingEvent != PRICING_EVENT_EDEFAULT;
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				return CANCELLATION_EXPRESSION_EDEFAULT == null ? cancellationExpression != null : !CANCELLATION_EXPRESSION_EDEFAULT.equals(cancellationExpression);
+			case CommercialPackage.CONTRACT__DIVERTIBLE:
+				return divertible != DIVERTIBLE_EDEFAULT;
+			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
+				return shippingDaysRestriction != SHIPPING_DAYS_RESTRICTION_EDEFAULT;
 			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE:
 				return windowNominationSize != WINDOW_NOMINATION_SIZE_EDEFAULT;
 			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
@@ -2348,10 +2497,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return portNominationSizeUnits != PORT_NOMINATION_SIZE_UNITS_EDEFAULT;
 			case CommercialPackage.CONTRACT__PORT_NOMINATION_COUNTERPARTY:
 				return portNominationCounterparty != PORT_NOMINATION_COUNTERPARTY_EDEFAULT;
-			case CommercialPackage.CONTRACT__DIVERTIBLE:
-				return divertible != DIVERTIBLE_EDEFAULT;
-			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
-				return shippingDaysRestriction != SHIPPING_DAYS_RESTRICTION_EDEFAULT;
 			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE:
 				return portLoadNominationSize != PORT_LOAD_NOMINATION_SIZE_EDEFAULT;
 			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS:
@@ -2428,8 +2573,12 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		if (operationalToleranceESet) result.append(operationalTolerance); else result.append("<unset>");
 		result.append(", fullCargoLot: ");
 		result.append(fullCargoLot);
-		result.append(", restrictedListsArePermissive: ");
-		result.append(restrictedListsArePermissive);
+		result.append(", restrictedContractsArePermissive: ");
+		result.append(restrictedContractsArePermissive);
+		result.append(", restrictedPortsArePermissive: ");
+		result.append(restrictedPortsArePermissive);
+		result.append(", restrictedVesselsArePermissive: ");
+		result.append(restrictedVesselsArePermissive);
 		result.append(", notes: ");
 		result.append(notes);
 		result.append(", contractType: ");
@@ -2438,6 +2587,10 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(pricingEvent);
 		result.append(", cancellationExpression: ");
 		result.append(cancellationExpression);
+		result.append(", divertible: ");
+		result.append(divertible);
+		result.append(", shippingDaysRestriction: ");
+		result.append(shippingDaysRestriction);
 		result.append(", windowNominationSize: ");
 		result.append(windowNominationSize);
 		result.append(", windowNominationSizeUnits: ");
@@ -2462,10 +2615,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(portNominationSizeUnits);
 		result.append(", portNominationCounterparty: ");
 		result.append(portNominationCounterparty);
-		result.append(", divertible: ");
-		result.append(divertible);
-		result.append(", shippingDaysRestriction: ");
-		result.append(shippingDaysRestriction);
 		result.append(", portLoadNominationSize: ");
 		result.append(portLoadNominationSize);
 		result.append(", portLoadNominationSizeUnits: ");

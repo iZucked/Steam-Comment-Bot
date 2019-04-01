@@ -332,8 +332,8 @@ public class SlotOverridesTest {
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// do override the contracts' restricted ports
-		msc.loadSlots[0].setOverrideRestrictions(true);
-		msc.dischargeSlots[1].setOverrideRestrictions(true);
+		msc.loadSlots[0].setRestrictedPortsOverride(true);
+		msc.dischargeSlots[1].setRestrictedPortsOverride(true);
 
 		msc.loadSlots[0].getRestrictedPorts().add(msc.dischargePorts[1]);
 		msc.loadSlots[0].getContract().getRestrictedPorts().add(msc.dischargePorts[2]);
@@ -363,8 +363,8 @@ public class SlotOverridesTest {
 		msc.loadSlots[0].getRestrictedContracts().add(forbidden);
 		msc.loadSlots[0].getContract().getRestrictedContracts().add(msc.salesContract);
 
-		msc.loadSlots[0].setOverrideRestrictions(true);
-		msc.dischargeSlots[1].setOverrideRestrictions(true);
+		msc.loadSlots[0].setRestrictedContractsOverride(true);
+		msc.dischargeSlots[1].setRestrictedContractsOverride(true);
 
 		/*
 		 * build the optimiser data (it currently barfs when trying to construct the initial sequence, but the restrictions are built correctly)
@@ -420,11 +420,11 @@ public class SlotOverridesTest {
 
 		// do override the contracts' restricted permissivity
 		msc.loadSlots[0].getRestrictedPorts().add(msc.dischargePorts[1]);
-		msc.loadSlots[0].setRestrictedListsArePermissive(false);
+		msc.loadSlots[0].setRestrictedPortsArePermissive(false);
 		msc.loadSlots[0].getContract().getRestrictedPorts().add(msc.dischargePorts[2]);
-		msc.loadSlots[0].getContract().setRestrictedListsArePermissive(true);
+		msc.loadSlots[0].getContract().setRestrictedPortsArePermissive(true);
 
-		msc.loadSlots[0].setOverrideRestrictions(true);
+		msc.loadSlots[0].setRestrictedPortsOverride(true);
 
 		/*
 		 * build the optimiser data (it currently barfs when trying to construct the initial sequence, but the restrictions are built correctly)
@@ -443,9 +443,9 @@ public class SlotOverridesTest {
 		msc.loadSlots[0].getRestrictedPorts().add(msc.dischargePorts[1]);
 		// These should be ignored due to slot override
 		msc.loadSlots[0].getContract().getRestrictedPorts().add(msc.dischargePorts[2]);
-		msc.loadSlots[0].getContract().setRestrictedListsArePermissive(true);
+		msc.loadSlots[0].getContract().setRestrictedPortsArePermissive(true);
 
-		msc.loadSlots[0].setOverrideRestrictions(true);
+		msc.loadSlots[0].setRestrictedPortsOverride(true);
 
 		/*
 		 * build the optimiser data (it currently barfs when trying to construct the initial sequence, but the restrictions are built correctly)

@@ -10,11 +10,11 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -24,6 +24,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.google.common.base.Objects;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -1310,13 +1311,15 @@ public class AnalyticsBuilder {
 		}
 		return Collections.emptyList();
 	}
-
-	public static Set<AVesselSet<Vessel>> getBuyVesselRestrictions(final BuyOption buy) {
-		final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<AVesselSet<Vessel>>();
+	
+	public static Pair<Boolean, Set<AVesselSet<Vessel>>> getBuyVesselRestrictions(final BuyOption buy) {
+		final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<>();
+		boolean permitted = false;
 		if (buy instanceof BuyReference) {
 			final LoadSlot slot = ((BuyReference) buy).getSlot();
 			if (slot != null) {
-				final EList<AVesselSet<Vessel>> allowedVessels = slot.getAllowedVessels();
+				final List<AVesselSet<Vessel>> allowedVessels = slot.getSlotOrDelegateVesselRestrictions();
+				permitted = slot.getSlotOrDelegateVesselRestrictionsArePermissive();
 				for (final AVesselSet<Vessel> s : allowedVessels) {
 					if (s instanceof Vessel) {
 						expandedVessels.add(s);
@@ -1328,7 +1331,8 @@ public class AnalyticsBuilder {
 				}
 			}
 		}
-		return expandedVessels;
+		Pair<Boolean, Set<AVesselSet<Vessel>>> result = new Pair<Boolean, Set<AVesselSet<Vessel>>>(permitted, expandedVessels);
+		return result;
 	}
 
 	public static Predicate<BuyOption> isFOBPurchase() {

@@ -15,11 +15,13 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -43,9 +45,12 @@ import java.util.Collection;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getPricingEvent <em>Pricing Event</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#isRestrictedContractsArePermissive <em>Restricted Contracts Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#isRestrictedPortsArePermissive <em>Restricted Ports Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getRestrictedVessels <em>Restricted Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#isRestrictedVesselsArePermissive <em>Restricted Vessels Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#isMtm <em>Mtm</em>}</li>
  * </ul>
  *
@@ -203,24 +208,34 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	protected PricingEvent pricingEvent = PRICING_EVENT_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
+	 * The cached value of the '{@link #getRestrictedContracts() <em>Restricted Contracts</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isRestrictedListsArePermissive()
+	 * @see #getRestrictedContracts()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT = false;
+	protected EList<Contract> restrictedContracts;
 
 	/**
-	 * The cached value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
+	 * The default value of the '{@link #isRestrictedContractsArePermissive() <em>Restricted Contracts Are Permissive</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isRestrictedListsArePermissive()
+	 * @see #isRestrictedContractsArePermissive()
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean restrictedListsArePermissive = RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
+	protected static final boolean RESTRICTED_CONTRACTS_ARE_PERMISSIVE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedContractsArePermissive() <em>Restricted Contracts Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedContractsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedContractsArePermissive = RESTRICTED_CONTRACTS_ARE_PERMISSIVE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getRestrictedPorts() <em>Restricted Ports</em>}' reference list.
@@ -233,14 +248,54 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	protected EList<APortSet<Port>> restrictedPorts;
 
 	/**
-	 * The cached value of the '{@link #getRestrictedContracts() <em>Restricted Contracts</em>}' reference list.
+	 * The default value of the '{@link #isRestrictedPortsArePermissive() <em>Restricted Ports Are Permissive</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getRestrictedContracts()
+	 * @see #isRestrictedPortsArePermissive()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Contract> restrictedContracts;
+	protected static final boolean RESTRICTED_PORTS_ARE_PERMISSIVE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedPortsArePermissive() <em>Restricted Ports Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedPortsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedPortsArePermissive = RESTRICTED_PORTS_ARE_PERMISSIVE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getRestrictedVessels() <em>Restricted Vessels</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRestrictedVessels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<AVesselSet<Vessel>> restrictedVessels;
+
+	/**
+	 * The default value of the '{@link #isRestrictedVesselsArePermissive() <em>Restricted Vessels Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedVesselsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RESTRICTED_VESSELS_ARE_PERMISSIVE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedVesselsArePermissive() <em>Restricted Vessels Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedVesselsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedVesselsArePermissive = RESTRICTED_VESSELS_ARE_PERMISSIVE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isMtm() <em>Mtm</em>}' attribute.
@@ -532,29 +587,6 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * @generated
 	 */
 	@Override
-	public boolean isRestrictedListsArePermissive() {
-		return restrictedListsArePermissive;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setRestrictedListsArePermissive(boolean newRestrictedListsArePermissive) {
-		boolean oldRestrictedListsArePermissive = restrictedListsArePermissive;
-		restrictedListsArePermissive = newRestrictedListsArePermissive;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE, oldRestrictedListsArePermissive, restrictedListsArePermissive));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EList<APortSet<Port>> getRestrictedPorts() {
 		if (restrictedPorts == null) {
 			restrictedPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS);
@@ -568,11 +600,93 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * @generated
 	 */
 	@Override
+	public boolean isRestrictedPortsArePermissive() {
+		return restrictedPortsArePermissive;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRestrictedPortsArePermissive(boolean newRestrictedPortsArePermissive) {
+		boolean oldRestrictedPortsArePermissive = restrictedPortsArePermissive;
+		restrictedPortsArePermissive = newRestrictedPortsArePermissive;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS_ARE_PERMISSIVE, oldRestrictedPortsArePermissive, restrictedPortsArePermissive));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<AVesselSet<Vessel>> getRestrictedVessels() {
+		if (restrictedVessels == null) {
+			restrictedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, SpotMarketsPackage.SPOT_MARKET__RESTRICTED_VESSELS);
+		}
+		return restrictedVessels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isRestrictedVesselsArePermissive() {
+		return restrictedVesselsArePermissive;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRestrictedVesselsArePermissive(boolean newRestrictedVesselsArePermissive) {
+		boolean oldRestrictedVesselsArePermissive = restrictedVesselsArePermissive;
+		restrictedVesselsArePermissive = newRestrictedVesselsArePermissive;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__RESTRICTED_VESSELS_ARE_PERMISSIVE, oldRestrictedVesselsArePermissive, restrictedVesselsArePermissive));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<Contract> getRestrictedContracts() {
 		if (restrictedContracts == null) {
 			restrictedContracts = new EObjectResolvingEList<Contract>(Contract.class, this, SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS);
 		}
 		return restrictedContracts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isRestrictedContractsArePermissive() {
+		return restrictedContractsArePermissive;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRestrictedContractsArePermissive(boolean newRestrictedContractsArePermissive) {
+		boolean oldRestrictedContractsArePermissive = restrictedContractsArePermissive;
+		restrictedContractsArePermissive = newRestrictedContractsArePermissive;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS_ARE_PERMISSIVE, oldRestrictedContractsArePermissive, restrictedContractsArePermissive));
 	}
 
 	/**
@@ -664,12 +778,18 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				return basicGetEntity();
 			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
 				return getPricingEvent();
-			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE:
-				return isRestrictedListsArePermissive();
-			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS:
-				return getRestrictedPorts();
 			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS:
 				return getRestrictedContracts();
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
+				return isRestrictedContractsArePermissive();
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS:
+				return getRestrictedPorts();
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS_ARE_PERMISSIVE:
+				return isRestrictedPortsArePermissive();
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_VESSELS:
+				return getRestrictedVessels();
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_VESSELS_ARE_PERMISSIVE:
+				return isRestrictedVesselsArePermissive();
 			case SpotMarketsPackage.SPOT_MARKET__MTM:
 				return isMtm();
 		}
@@ -712,16 +832,26 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
 				setPricingEvent((PricingEvent)newValue);
 				return;
-			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE:
-				setRestrictedListsArePermissive((Boolean)newValue);
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS:
+				getRestrictedContracts().clear();
+				getRestrictedContracts().addAll((Collection<? extends Contract>)newValue);
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
+				setRestrictedContractsArePermissive((Boolean)newValue);
 				return;
 			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS:
 				getRestrictedPorts().clear();
 				getRestrictedPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
-			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS:
-				getRestrictedContracts().clear();
-				getRestrictedContracts().addAll((Collection<? extends Contract>)newValue);
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS_ARE_PERMISSIVE:
+				setRestrictedPortsArePermissive((Boolean)newValue);
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_VESSELS:
+				getRestrictedVessels().clear();
+				getRestrictedVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_VESSELS_ARE_PERMISSIVE:
+				setRestrictedVesselsArePermissive((Boolean)newValue);
 				return;
 			case SpotMarketsPackage.SPOT_MARKET__MTM:
 				setMtm((Boolean)newValue);
@@ -765,14 +895,23 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
 				setPricingEvent(PRICING_EVENT_EDEFAULT);
 				return;
-			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE:
-				setRestrictedListsArePermissive(RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT);
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS:
+				getRestrictedContracts().clear();
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
+				setRestrictedContractsArePermissive(RESTRICTED_CONTRACTS_ARE_PERMISSIVE_EDEFAULT);
 				return;
 			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS:
 				getRestrictedPorts().clear();
 				return;
-			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS:
-				getRestrictedContracts().clear();
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS_ARE_PERMISSIVE:
+				setRestrictedPortsArePermissive(RESTRICTED_PORTS_ARE_PERMISSIVE_EDEFAULT);
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_VESSELS:
+				getRestrictedVessels().clear();
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_VESSELS_ARE_PERMISSIVE:
+				setRestrictedVesselsArePermissive(RESTRICTED_VESSELS_ARE_PERMISSIVE_EDEFAULT);
 				return;
 			case SpotMarketsPackage.SPOT_MARKET__MTM:
 				setMtm(MTM_EDEFAULT);
@@ -807,12 +946,18 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				return entity != null;
 			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
 				return pricingEvent != PRICING_EVENT_EDEFAULT;
-			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE:
-				return restrictedListsArePermissive != RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
-			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS:
-				return restrictedPorts != null && !restrictedPorts.isEmpty();
 			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS:
 				return restrictedContracts != null && !restrictedContracts.isEmpty();
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
+				return restrictedContractsArePermissive != RESTRICTED_CONTRACTS_ARE_PERMISSIVE_EDEFAULT;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS:
+				return restrictedPorts != null && !restrictedPorts.isEmpty();
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS_ARE_PERMISSIVE:
+				return restrictedPortsArePermissive != RESTRICTED_PORTS_ARE_PERMISSIVE_EDEFAULT;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_VESSELS:
+				return restrictedVessels != null && !restrictedVessels.isEmpty();
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_VESSELS_ARE_PERMISSIVE:
+				return restrictedVesselsArePermissive != RESTRICTED_VESSELS_ARE_PERMISSIVE_EDEFAULT;
 			case SpotMarketsPackage.SPOT_MARKET__MTM:
 				return mtm != MTM_EDEFAULT;
 		}
@@ -873,8 +1018,12 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 		result.append(volumeLimitsUnit);
 		result.append(", pricingEvent: ");
 		result.append(pricingEvent);
-		result.append(", restrictedListsArePermissive: ");
-		result.append(restrictedListsArePermissive);
+		result.append(", restrictedContractsArePermissive: ");
+		result.append(restrictedContractsArePermissive);
+		result.append(", restrictedPortsArePermissive: ");
+		result.append(restrictedPortsArePermissive);
+		result.append(", restrictedVesselsArePermissive: ");
+		result.append(restrictedVesselsArePermissive);
 		result.append(", mtm: ");
 		result.append(mtm);
 		result.append(')');

@@ -13,12 +13,12 @@ import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.editor.SlotContractRestrictionsWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselEditorWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselInlineEditor;
+import com.mmxlabs.models.lng.cargo.ui.inlineeditors.RestrictionsOverrideMultiReferenceInlineEditor;
+import com.mmxlabs.models.lng.cargo.ui.inlineeditors.RestrictionsOverridePortMultiReferenceInlineEditor;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.VolumeInlineEditor;
 import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortReferenceInlineEditor;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -28,8 +28,8 @@ import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.LocalDateInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.PermissiveRestrictiveInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.TextInlineEditor;
-import com.mmxlabs.models.ui.editors.impl.TextualReferenceInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -112,15 +112,19 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_shippingDaysRestrictionEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
 		add_restrictedContractsEditor(detailComposite, topClass);
+		add_restrictedContractsArePermissiveEditor(detailComposite, topClass);
+		add_restrictedContractsOverrideEditor(detailComposite, topClass);
 		add_restrictedPortsEditor(detailComposite, topClass);
+		add_restrictedPortsArePermissiveEditor(detailComposite, topClass);
+		add_restrictedPortsOverrideEditor(detailComposite, topClass);
+		add_restrictedVesselsEditor(detailComposite, topClass);
+		add_restrictedVesselsArePermissiveEditor(detailComposite, topClass);
+		add_restrictedVesselsOverrideEditor(detailComposite, topClass);
 		add_restrictedSlotsEditor(detailComposite, topClass);
 		add_restrictedSlotsArePermissiveEditor(detailComposite, topClass);
-		add_restrictedListsArePermissiveEditor(detailComposite, topClass);
 		add_hedgesEditor(detailComposite, topClass);
 		add_miscCostsEditor(detailComposite, topClass);
-		add_allowedVesselsEditor(detailComposite, topClass);
 		add_cancellationExpressionEditor(detailComposite, topClass);
-		add_overrideRestrictionsEditor(detailComposite, topClass);
 		add_nominatedVesselEditor(detailComposite, topClass);
 		add_lockedEditor(detailComposite, topClass);
 		add_windowNominationDateEditor(detailComposite, topClass);
@@ -206,7 +210,25 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_restrictedContractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new SlotContractRestrictionsWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS)));
+		detailComposite.addInlineEditor(new RestrictionsOverrideMultiReferenceInlineEditor(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS, CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_OVERRIDE));
+
+	}
+
+	/**
+	 * Create the editor for the restrictedContractsArePermissive feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_restrictedContractsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new PermissiveRestrictiveInlineEditor(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE));
+	}
+
+	/**
+	 * Create the editor for the restrictedContractsOverride feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_restrictedContractsOverrideEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 	}
 
 	/**
@@ -215,7 +237,24 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_restrictedPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new SlotContractRestrictionsWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__RESTRICTED_PORTS)));
+		detailComposite.addInlineEditor(new RestrictionsOverridePortMultiReferenceInlineEditor(CargoPackage.Literals.SLOT__RESTRICTED_PORTS, CargoPackage.Literals.SLOT__RESTRICTED_PORTS_OVERRIDE));
+	}
+
+	/**
+	 * Create the editor for the restrictedPortsArePermissive feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_restrictedPortsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new PermissiveRestrictiveInlineEditor(CargoPackage.Literals.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE));
+	}
+
+	/**
+	 * Create the editor for the restrictedPortsOverride feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_restrictedPortsOverrideEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 	}
 
 	/**
@@ -230,19 +269,36 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the restrictedSlotsArePermissive feature on Slot
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_restrictedSlotsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE));
+		detailComposite.addInlineEditor(new PermissiveRestrictiveInlineEditor(CargoPackage.Literals.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE));
 	}
 
 	/**
-	 * Create the editor for the restrictedListsArePermissive feature on Slot
-	 * 
+	 * Create the editor for the restrictedVessels feature on Slot
+	 *
 	 * @generated NOT
 	 */
-	protected void add_restrictedListsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new SlotContractRestrictionsWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE)));
+	protected void add_restrictedVesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new RestrictionsOverrideMultiReferenceInlineEditor(CargoPackage.Literals.SLOT__RESTRICTED_VESSELS, CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_OVERRIDE));
+	}
+
+	/**
+	 * Create the editor for the restrictedVesselsArePermissive feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_restrictedVesselsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new PermissiveRestrictiveInlineEditor(CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE));
+	}
+
+	/**
+	 * Create the editor for the restrictedVesselsOverride feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_restrictedVesselsOverrideEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 	}
 
 	/**
@@ -269,7 +325,6 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_cancellationFeeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CANCELLATION_FEE));
 	}
 
 	/**
@@ -279,15 +334,6 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cancellationExpressionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CANCELLATION_EXPRESSION));
-	}
-
-	/**
-	 * Create the editor for the overrideRestrictions feature on Slot
-	 * 
-	 * @generated
-	 */
-	protected void add_overrideRestrictionsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__OVERRIDE_RESTRICTIONS));
 	}
 
 	/**
@@ -518,15 +564,6 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_portLoadNominationCommentEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COMMENT));
-	}
-
-	/**
-	 * Create the editor for the allowedVessels feature on Slot
-	 * 
-	 * @generated
-	 */
-	protected void add_allowedVesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__ALLOWED_VESSELS));
 	}
 
 	/**

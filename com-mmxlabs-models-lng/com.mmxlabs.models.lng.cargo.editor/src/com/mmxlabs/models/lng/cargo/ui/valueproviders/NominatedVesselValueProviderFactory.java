@@ -124,7 +124,7 @@ public class NominatedVesselValueProviderFactory implements IReferenceValueProvi
 					return true;
 				}
 
-				if (changedFeature == CargoPackage.eINSTANCE.getSlot_AllowedVessels()) {
+				if (changedFeature == CargoPackage.eINSTANCE.getSlot_RestrictedVessels()) {
 					return true;
 				}
 

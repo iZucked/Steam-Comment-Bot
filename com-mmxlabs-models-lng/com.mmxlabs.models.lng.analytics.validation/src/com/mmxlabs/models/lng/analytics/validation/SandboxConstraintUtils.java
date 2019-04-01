@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.SellOption;
@@ -38,10 +39,12 @@ public class SandboxConstraintUtils {
 
 	public static boolean vesselRestrictionsValid(final BuyOption buy, final SellOption sell, final ShippingOption shippingOption) {
 		if (buy instanceof BuyReference) {
-			final Set<AVesselSet<Vessel>> allowedVessels = AnalyticsBuilder.getBuyVesselRestrictions(buy);
+			final Pair<Boolean, Set<AVesselSet<Vessel>>> restrictedVessels = AnalyticsBuilder.getBuyVesselRestrictions(buy);
+			final boolean permitted = restrictedVessels.getFirst();
+			final Set<AVesselSet<Vessel>> allowedVessels = restrictedVessels.getSecond();
 			final Vessel vessel = AnalyticsBuilder.getVessel(shippingOption);
 			if (!allowedVessels.isEmpty() && vessel != null) {
-				return SetUtils.getObjects(allowedVessels).contains(vessel);
+				return SetUtils.getObjects(allowedVessels).contains(vessel) && permitted;
 			}
 		}
 		return true;

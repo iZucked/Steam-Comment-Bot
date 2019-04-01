@@ -30,8 +30,16 @@ public class CommercialProviderFactory implements IReferenceValueProviderFactory
 			} else if (CommercialPackage.eINSTANCE.getSalesContract().isSuperTypeOf(referenceClass)) {
 				return new MergedReferenceValueProvider(commercialModel, CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts());
 			} else if (CommercialPackage.eINSTANCE.getContract().isSuperTypeOf(referenceClass)) {
-				return new MergedReferenceValueProvider(commercialModel, CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts(),
+				if (reference == CommercialPackage.eINSTANCE.getContract_RestrictedContracts()) {
+					if (owner == CommercialPackage.eINSTANCE.getSalesContract()) {
+						return new MergedReferenceValueProvider(commercialModel, CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts());
+					} else {
+						return new MergedReferenceValueProvider(commercialModel, CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts());
+					}
+				} else {
+					return new MergedReferenceValueProvider(commercialModel, CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts(),
 						CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts());
+				}
 			} else if (CommercialPackage.eINSTANCE.getBaseLegalEntity().isSuperTypeOf(referenceClass)) {
 				return new MergedReferenceValueProvider(commercialModel, CommercialPackage.eINSTANCE.getCommercialModel_Entities());
 

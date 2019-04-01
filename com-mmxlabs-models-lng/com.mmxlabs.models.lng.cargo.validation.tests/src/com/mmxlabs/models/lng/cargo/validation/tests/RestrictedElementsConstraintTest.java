@@ -8,27 +8,23 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.ECollections;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.RestrictedElementsConstraint;
-import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortGroup;
-import com.mmxlabs.models.lng.types.APortSet;
 
 public class RestrictedElementsConstraintTest {
 
@@ -38,21 +34,38 @@ public class RestrictedElementsConstraintTest {
 		// This is the constraint we will be testing
 		final RestrictedElementsConstraint constraint = new RestrictedElementsConstraint();
 
-		final LoadSlot loadSlot = mock(LoadSlot.class);
-		final DischargeSlot dischargeSlot = mock(DischargeSlot.class);
-		final Cargo cargo = mock(Cargo.class);
+		final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 
-		final EList<Slot<?>> slots = new BasicEList<>();
-		slots.add(loadSlot);
-		slots.add(dischargeSlot);
-		when(cargo.getSlots()).thenReturn(slots);
-		final Port loadPort = mock(Port.class);
-		final Port dischargePort = mock(Port.class);
-		final Port otherPort = mock(Port.class);
+		cargo.getSlots().add(loadSlot);
+		cargo.getSlots().add(dischargeSlot);
 
-		final PurchaseContract loadContract = mock(PurchaseContract.class);
-		final SalesContract dischargeContract = mock(SalesContract.class);
-		final Contract otherContract = mock(Contract.class);
+		final Port loadPort = PortFactory.eINSTANCE.createPort();
+		final Port dischargePort = PortFactory.eINSTANCE.createPort();
+		final Port otherPort = PortFactory.eINSTANCE.createPort();
+
+		final PurchaseContract loadContract = CommercialFactory.eINSTANCE.createPurchaseContract();
+		final SalesContract dischargeContract = CommercialFactory.eINSTANCE.createSalesContract();
+		final PurchaseContract otherPurchaseContract = CommercialFactory.eINSTANCE.createPurchaseContract();
+		final SalesContract otherSalesContract = CommercialFactory.eINSTANCE.createSalesContract();
+
+		loadSlot.setPort(loadPort);
+		dischargeSlot.setPort(dischargePort);
+
+		loadSlot.setContract(loadContract);
+		dischargeSlot.setContract(dischargeContract);
+
+		loadContract.getRestrictedContracts().add(otherSalesContract);
+		dischargeContract.getRestrictedContracts().add(otherPurchaseContract);
+
+		loadContract.getRestrictedPorts().add(otherPort);
+		dischargeContract.getRestrictedPorts().add(otherPort);
+
+		loadContract.setRestrictedPortsArePermissive(false);
+		loadContract.setRestrictedContractsArePermissive(false);
+		dischargeContract.setRestrictedPortsArePermissive(false);
+		dischargeContract.setRestrictedContractsArePermissive(false);
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
@@ -67,24 +80,6 @@ public class RestrictedElementsConstraintTest {
 		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
 
 		// Set up the expected return values of methods.
-		when(loadSlot.getPort()).thenReturn(loadPort);
-		when(dischargeSlot.getPort()).thenReturn(dischargePort);
-
-		when(loadSlot.getContract()).thenReturn(loadContract);
-		when(dischargeSlot.getContract()).thenReturn(dischargeContract);
-
-		when(loadContract.getRestrictedContracts()).thenReturn(ECollections.singletonEList(otherContract));
-		when(dischargeContract.getRestrictedContracts()).thenReturn(ECollections.singletonEList(otherContract));
-
-		when(loadPort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort));
-		when(dischargePort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
-		when(otherPort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(otherPort));
-
-		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> singletonEList(otherPort));
-		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> singletonEList(otherPort));
-
-		when(loadContract.isRestrictedListsArePermissive()).thenReturn(false);
-		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(false);
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status1 = constraint.validate(validationContext);
@@ -92,8 +87,10 @@ public class RestrictedElementsConstraintTest {
 
 		// Flip black/white mode
 
-		when(loadContract.isRestrictedListsArePermissive()).thenReturn(true);
-		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(true);
+		loadContract.setRestrictedPortsArePermissive(true);
+		loadContract.setRestrictedContractsArePermissive(true);
+		dischargeContract.setRestrictedContractsArePermissive(true);
+		dischargeContract.setRestrictedPortsArePermissive(true);
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status2 = constraint.validate(validationContext);
@@ -106,20 +103,21 @@ public class RestrictedElementsConstraintTest {
 		// This is the constraint we will be testing
 		final RestrictedElementsConstraint constraint = new RestrictedElementsConstraint();
 
-		final LoadSlot loadSlot = mock(LoadSlot.class);
-		final DischargeSlot dischargeSlot = mock(DischargeSlot.class);
-		final Cargo cargo = mock(Cargo.class);
+		final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 
-		final EList<Slot<?>> slots = new BasicEList<>();
-		slots.add(loadSlot);
-		slots.add(dischargeSlot);
-		when(cargo.getSlots()).thenReturn(slots);
+		cargo.getSlots().add(loadSlot);
+		cargo.getSlots().add(dischargeSlot);
 
-		final Port loadPort = mock(Port.class);
-		final Port dischargePort = mock(Port.class);
+		final Port loadPort = PortFactory.eINSTANCE.createPort();
+		final Port dischargePort = PortFactory.eINSTANCE.createPort();
+		final Port otherPort = PortFactory.eINSTANCE.createPort();
 
-		final PurchaseContract loadContract = mock(PurchaseContract.class);
-		final SalesContract dischargeContract = mock(SalesContract.class);
+		final PurchaseContract loadContract = CommercialFactory.eINSTANCE.createPurchaseContract();
+		final SalesContract dischargeContract = CommercialFactory.eINSTANCE.createSalesContract();
+		final PurchaseContract otherPurchaseContract = CommercialFactory.eINSTANCE.createPurchaseContract();
+		final SalesContract otherSalesContract = CommercialFactory.eINSTANCE.createSalesContract();
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
@@ -133,24 +131,18 @@ public class RestrictedElementsConstraintTest {
 		when(successStatus.getSeverity()).thenReturn(IStatus.OK);
 		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
 
-		when(loadPort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort));
-		when(dischargePort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
+		loadSlot.setPort(loadPort);
+		dischargeSlot.setPort(dischargePort);
 
-		// Set up the expected return values of methods.
-		when(loadSlot.getPort()).thenReturn(loadPort);
-		when(dischargeSlot.getPort()).thenReturn(dischargePort);
+		loadSlot.setContract(loadContract);
+		dischargeSlot.setContract(dischargeContract);
 
-		when(loadSlot.getContract()).thenReturn(loadContract);
-		when(dischargeSlot.getContract()).thenReturn(dischargeContract);
+		dischargeContract.getRestrictedContracts().add(loadContract);
 
-		when(loadContract.getRestrictedContracts()).thenReturn(ECollections.<Contract> emptyEList());
-		when(dischargeContract.getRestrictedContracts()).thenReturn(ECollections.singletonEList(loadContract));
-
-		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> emptyEList());
-		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> emptyEList());
-
-		when(loadContract.isRestrictedListsArePermissive()).thenReturn(false);
-		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(false);
+		loadContract.setRestrictedPortsArePermissive(false);
+		loadContract.setRestrictedContractsArePermissive(false);
+		dischargeContract.setRestrictedPortsArePermissive(false);
+		dischargeContract.setRestrictedContractsArePermissive(false);
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status1 = constraint.validate(validationContext);
@@ -158,8 +150,7 @@ public class RestrictedElementsConstraintTest {
 
 		// Flip black/white mode
 
-		when(loadContract.isRestrictedListsArePermissive()).thenReturn(true);
-		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(true);
+		dischargeContract.setRestrictedContractsArePermissive(true);
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status2 = constraint.validate(validationContext);
@@ -172,20 +163,21 @@ public class RestrictedElementsConstraintTest {
 		// This is the constraint we will be testing
 		final RestrictedElementsConstraint constraint = new RestrictedElementsConstraint();
 
-		final LoadSlot loadSlot = mock(LoadSlot.class);
-		final DischargeSlot dischargeSlot = mock(DischargeSlot.class);
-		final Cargo cargo = mock(Cargo.class);
+		final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 
-		final EList<Slot<?>> slots = new BasicEList<>();
-		slots.add(loadSlot);
-		slots.add(dischargeSlot);
-		when(cargo.getSlots()).thenReturn(slots);
+		cargo.getSlots().add(loadSlot);
+		cargo.getSlots().add(dischargeSlot);
 
-		final Port loadPort = mock(Port.class);
-		final Port dischargePort = mock(Port.class);
+		final Port loadPort = PortFactory.eINSTANCE.createPort();
+		final Port dischargePort = PortFactory.eINSTANCE.createPort();
+		final Port otherPort = PortFactory.eINSTANCE.createPort();
 
-		final PurchaseContract loadContract = mock(PurchaseContract.class);
-		final SalesContract dischargeContract = mock(SalesContract.class);
+		final PurchaseContract loadContract = CommercialFactory.eINSTANCE.createPurchaseContract();
+		final SalesContract dischargeContract = CommercialFactory.eINSTANCE.createSalesContract();
+		final PurchaseContract otherPurchaseContract = CommercialFactory.eINSTANCE.createPurchaseContract();
+		final SalesContract otherSalesContract = CommercialFactory.eINSTANCE.createSalesContract();
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
@@ -199,24 +191,18 @@ public class RestrictedElementsConstraintTest {
 		when(successStatus.getSeverity()).thenReturn(IStatus.OK);
 		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
 
-		when(loadPort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort));
-		when(dischargePort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
+		loadSlot.setPort(loadPort);
+		dischargeSlot.setPort(dischargePort);
 
-		// Set up the expected return values of methods.
-		when(loadSlot.getPort()).thenReturn(loadPort);
-		when(dischargeSlot.getPort()).thenReturn(dischargePort);
+		loadSlot.setContract(loadContract);
+		dischargeSlot.setContract(dischargeContract);
 
-		when(loadSlot.getContract()).thenReturn(loadContract);
-		when(dischargeSlot.getContract()).thenReturn(dischargeContract);
+		loadContract.getRestrictedContracts().add(dischargeContract);
 
-		when(loadContract.getRestrictedContracts()).thenReturn(ECollections.singletonEList(dischargeContract));
-		when(dischargeContract.getRestrictedContracts()).thenReturn(ECollections.<Contract> emptyEList());
-
-		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> emptyEList());
-		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> emptyEList());
-
-		when(loadContract.isRestrictedListsArePermissive()).thenReturn(false);
-		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(false);
+		loadContract.setRestrictedPortsArePermissive(false);
+		loadContract.setRestrictedContractsArePermissive(false);
+		dischargeContract.setRestrictedPortsArePermissive(false);
+		dischargeContract.setRestrictedContractsArePermissive(false);
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status1 = constraint.validate(validationContext);
@@ -224,8 +210,7 @@ public class RestrictedElementsConstraintTest {
 
 		// Flip black/white mode
 
-		when(loadContract.isRestrictedListsArePermissive()).thenReturn(true);
-		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(true);
+		loadContract.setRestrictedContractsArePermissive(true);
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status2 = constraint.validate(validationContext);
@@ -238,19 +223,21 @@ public class RestrictedElementsConstraintTest {
 		// This is the constraint we will be testing
 		final RestrictedElementsConstraint constraint = new RestrictedElementsConstraint();
 
-		final LoadSlot loadSlot = mock(LoadSlot.class);
-		final DischargeSlot dischargeSlot = mock(DischargeSlot.class);
-		final Cargo cargo = mock(Cargo.class);
-		final EList<Slot<?>> slots = new BasicEList<>();
-		slots.add(loadSlot);
-		slots.add(dischargeSlot);
-		when(cargo.getSlots()).thenReturn(slots);
+		final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 
-		final Port loadPort = mock(Port.class);
-		final Port dischargePort = mock(Port.class);
+		cargo.getSlots().add(loadSlot);
+		cargo.getSlots().add(dischargeSlot);
 
-		final PurchaseContract loadContract = mock(PurchaseContract.class);
-		final SalesContract dischargeContract = mock(SalesContract.class);
+		final Port loadPort = PortFactory.eINSTANCE.createPort();
+		final Port dischargePort = PortFactory.eINSTANCE.createPort();
+		final Port otherPort = PortFactory.eINSTANCE.createPort();
+
+		final PurchaseContract loadContract = CommercialFactory.eINSTANCE.createPurchaseContract();
+		final SalesContract dischargeContract = CommercialFactory.eINSTANCE.createSalesContract();
+		final PurchaseContract otherPurchaseContract = CommercialFactory.eINSTANCE.createPurchaseContract();
+		final SalesContract otherSalesContract = CommercialFactory.eINSTANCE.createSalesContract();
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
@@ -264,24 +251,18 @@ public class RestrictedElementsConstraintTest {
 		when(successStatus.getSeverity()).thenReturn(IStatus.OK);
 		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
 
-		when(loadPort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort));
-		when(dischargePort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
+		loadSlot.setPort(loadPort);
+		dischargeSlot.setPort(dischargePort);
 
-		// Set up the expected return values of methods.
-		when(loadSlot.getPort()).thenReturn(loadPort);
-		when(dischargeSlot.getPort()).thenReturn(dischargePort);
+		loadSlot.setContract(loadContract);
+		dischargeSlot.setContract(dischargeContract);
 
-		when(loadSlot.getContract()).thenReturn(loadContract);
-		when(dischargeSlot.getContract()).thenReturn(dischargeContract);
+		dischargeContract.getRestrictedPorts().add(loadPort);
 
-		when(loadContract.getRestrictedContracts()).thenReturn(ECollections.<Contract> emptyEList());
-		when(dischargeContract.getRestrictedContracts()).thenReturn(ECollections.<Contract> emptyEList());
-
-		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> emptyEList());
-		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> singletonEList(loadPort));
-
-		when(loadContract.isRestrictedListsArePermissive()).thenReturn(false);
-		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(false);
+		loadContract.setRestrictedPortsArePermissive(false);
+		loadContract.setRestrictedContractsArePermissive(false);
+		dischargeContract.setRestrictedPortsArePermissive(false);
+		dischargeContract.setRestrictedContractsArePermissive(false);
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status1 = constraint.validate(validationContext);
@@ -289,8 +270,7 @@ public class RestrictedElementsConstraintTest {
 
 		// Flip black/white mode
 
-		when(loadContract.isRestrictedListsArePermissive()).thenReturn(true);
-		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(true);
+		dischargeContract.setRestrictedPortsArePermissive(true);
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status2 = constraint.validate(validationContext);
@@ -303,24 +283,26 @@ public class RestrictedElementsConstraintTest {
 		// This is the constraint we will be testing
 		final RestrictedElementsConstraint constraint = new RestrictedElementsConstraint();
 
-		final LoadSlot loadSlot = mock(LoadSlot.class);
-		final DischargeSlot dischargeSlot = mock(DischargeSlot.class);
-		final Cargo cargo = mock(Cargo.class);
-		final EList<Slot<?>> slots = new BasicEList<>();
-		slots.add(loadSlot);
-		slots.add(dischargeSlot);
-		when(cargo.getSlots()).thenReturn(slots);
+		final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 
-		final Port loadPort1 = mock(Port.class);
-		final Port loadPort2 = mock(Port.class);
+		cargo.getSlots().add(loadSlot);
+		cargo.getSlots().add(dischargeSlot);
 
-		PortGroup portGroup = mock(PortGroup.class);
-		when(portGroup.getContents()).thenReturn(ECollections.<APortSet<Port>> asEList(loadPort1, loadPort2));
+		final Port loadPort1 = PortFactory.eINSTANCE.createPort();
+		final Port loadPort2 = PortFactory.eINSTANCE.createPort();
+		final Port dischargePort = PortFactory.eINSTANCE.createPort();
+		final Port otherPort = PortFactory.eINSTANCE.createPort();
 
-		final Port dischargePort = mock(Port.class);
+		final PurchaseContract loadContract = CommercialFactory.eINSTANCE.createPurchaseContract();
+		final SalesContract dischargeContract = CommercialFactory.eINSTANCE.createSalesContract();
+		final PurchaseContract otherPurchaseContract = CommercialFactory.eINSTANCE.createPurchaseContract();
+		final SalesContract otherSalesContract = CommercialFactory.eINSTANCE.createSalesContract();
 
-		final PurchaseContract loadContract = mock(PurchaseContract.class);
-		final SalesContract dischargeContract = mock(SalesContract.class);
+		PortGroup portGroup = PortFactory.eINSTANCE.createPortGroup();
+		portGroup.getContents().add(loadPort1);
+		portGroup.getContents().add(loadPort2);
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
@@ -334,36 +316,25 @@ public class RestrictedElementsConstraintTest {
 		when(successStatus.getSeverity()).thenReturn(IStatus.OK);
 		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
 
-		when(loadPort1.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort1));
-		when(loadPort2.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort2));
-		when(dischargePort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
-		when(portGroup.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> asEList(loadPort1, loadPort2));
+		loadSlot.setPort(loadPort1);
+		dischargeSlot.setPort(dischargePort);
 
-		// Set up the expected return values of methods.
-		when(loadSlot.getPort()).thenReturn(loadPort1);
-		when(dischargeSlot.getPort()).thenReturn(dischargePort);
+		loadSlot.setContract(loadContract);
+		dischargeSlot.setContract(dischargeContract);
 
-		when(loadSlot.getContract()).thenReturn(loadContract);
-		when(dischargeSlot.getContract()).thenReturn(dischargeContract);
+		dischargeContract.getRestrictedPorts().add(portGroup);
 
-		when(loadContract.getRestrictedContracts()).thenReturn(ECollections.<Contract> emptyEList());
-		when(dischargeContract.getRestrictedContracts()).thenReturn(ECollections.<Contract> emptyEList());
-
-		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> emptyEList());
-
-		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> singletonEList(portGroup));
-
-		when(loadContract.isRestrictedListsArePermissive()).thenReturn(false);
-		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(false);
+		loadContract.setRestrictedPortsArePermissive(false);
+		loadContract.setRestrictedContractsArePermissive(false);
+		dischargeContract.setRestrictedPortsArePermissive(false);
+		dischargeContract.setRestrictedContractsArePermissive(false);
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status1 = constraint.validate(validationContext);
 		Assertions.assertFalse(status1.isOK());
 
 		// Flip black/white mode
-
-		when(loadContract.isRestrictedListsArePermissive()).thenReturn(true);
-		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(true);
+		dischargeContract.setRestrictedPortsArePermissive(true);
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status2 = constraint.validate(validationContext);
@@ -376,22 +347,19 @@ public class RestrictedElementsConstraintTest {
 		// This is the constraint we will be testing
 		final RestrictedElementsConstraint constraint = new RestrictedElementsConstraint();
 
-		final LoadSlot loadSlot = mock(LoadSlot.class);
-		final DischargeSlot dischargeSlot = mock(DischargeSlot.class);
-		final Cargo cargo = mock(Cargo.class);
+		final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 
-		final EList<Slot<?>> slots = new BasicEList<>();
-		slots.add(loadSlot);
-		slots.add(dischargeSlot);
-		when(cargo.getSlots()).thenReturn(slots);
+		cargo.getSlots().add(loadSlot);
+		cargo.getSlots().add(dischargeSlot);
 
-		final Port loadPort = mock(Port.class);
-		final Port dischargePort = mock(Port.class);
+		final Port loadPort = PortFactory.eINSTANCE.createPort();
+		final Port dischargePort = PortFactory.eINSTANCE.createPort();
+		final Port otherPort = PortFactory.eINSTANCE.createPort();
 
-		Mockito.when(dischargePort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> newBasicEList(dischargePort));
-
-		final PurchaseContract loadContract = mock(PurchaseContract.class);
-		final SalesContract dischargeContract = mock(SalesContract.class);
+		final PurchaseContract loadContract = CommercialFactory.eINSTANCE.createPurchaseContract();
+		final SalesContract dischargeContract = CommercialFactory.eINSTANCE.createSalesContract();
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
@@ -405,30 +373,25 @@ public class RestrictedElementsConstraintTest {
 		when(successStatus.getSeverity()).thenReturn(IStatus.OK);
 		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
 
-		// Set up the expected return values of methods.
-		when(loadSlot.getPort()).thenReturn(loadPort);
-		when(dischargeSlot.getPort()).thenReturn(dischargePort);
+		loadSlot.setPort(loadPort);
+		dischargeSlot.setPort(dischargePort);
 
-		when(loadSlot.getContract()).thenReturn(loadContract);
-		when(dischargeSlot.getContract()).thenReturn(dischargeContract);
+		loadSlot.setContract(loadContract);
+		dischargeSlot.setContract(dischargeContract);
 
-		when(loadContract.getRestrictedContracts()).thenReturn(ECollections.<Contract> emptyEList());
-		when(dischargeContract.getRestrictedContracts()).thenReturn(ECollections.<Contract> emptyEList());
+		loadContract.getRestrictedPorts().add(dischargePort);
 
-		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> singletonEList(dischargePort));
-		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> emptyEList());
-
-		when(loadContract.isRestrictedListsArePermissive()).thenReturn(false);
-		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(false);
-
+		loadContract.setRestrictedPortsArePermissive(false);
+		loadContract.setRestrictedContractsArePermissive(false);
+		dischargeContract.setRestrictedPortsArePermissive(false);
+		dischargeContract.setRestrictedContractsArePermissive(false);
 		// validate the constraint using the mocked expected values set above
 		final IStatus status1 = constraint.validate(validationContext);
 		Assertions.assertFalse(status1.isOK());
 
 		// Flip black/white mode
 
-		when(loadContract.isRestrictedListsArePermissive()).thenReturn(true);
-		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(true);
+		loadContract.setRestrictedPortsArePermissive(true);
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status2 = constraint.validate(validationContext);

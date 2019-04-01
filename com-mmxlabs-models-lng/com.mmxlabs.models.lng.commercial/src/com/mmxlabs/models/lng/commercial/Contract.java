@@ -3,15 +3,18 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial;
+import java.time.YearMonth;
+
 import org.eclipse.emf.common.util.EList;
 
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import java.time.YearMonth;
 
 /**
  * <!-- begin-user-doc -->
@@ -36,14 +39,19 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getOperationalTolerance <em>Operational Tolerance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isFullCargoLot <em>Full Cargo Lot</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedContracts <em>Restricted Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedContractsArePermissive <em>Restricted Contracts Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedPorts <em>Restricted Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedPortsArePermissive <em>Restricted Ports Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedVessels <em>Restricted Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedVesselsArePermissive <em>Restricted Vessels Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getContractType <em>Contract Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getCancellationExpression <em>Cancellation Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isDivertible <em>Divertible</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getWindowNominationSize <em>Window Nomination Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getWindowNominationSizeUnits <em>Window Nomination Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isWindowNominationCounterparty <em>Window Nomination Counterparty</em>}</li>
@@ -56,8 +64,6 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPortNominationSize <em>Port Nomination Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPortNominationSizeUnits <em>Port Nomination Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isPortNominationCounterparty <em>Port Nomination Counterparty</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isDivertible <em>Divertible</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPortLoadNominationSize <em>Port Load Nomination Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPortLoadNominationSizeUnits <em>Port Load Nomination Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}</li>
@@ -301,32 +307,6 @@ public interface Contract extends UUIDObject, NamedObject {
 	void setVolumeLimitsUnit(VolumeUnits value);
 
 	/**
-	 * Returns the value of the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Restricted Lists Are Permissive</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Restricted Lists Are Permissive</em>' attribute.
-	 * @see #setRestrictedListsArePermissive(boolean)
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_RestrictedListsArePermissive()
-	 * @model
-	 * @generated
-	 */
-	boolean isRestrictedListsArePermissive();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Restricted Lists Are Permissive</em>' attribute.
-	 * @see #isRestrictedListsArePermissive()
-	 * @generated
-	 */
-	void setRestrictedListsArePermissive(boolean value);
-
-	/**
 	 * Returns the value of the '<em><b>Restricted Contracts</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.Contract}.
 	 * <!-- begin-user-doc -->
@@ -343,6 +323,32 @@ public interface Contract extends UUIDObject, NamedObject {
 	EList<Contract> getRestrictedContracts();
 
 	/**
+	 * Returns the value of the '<em><b>Restricted Contracts Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Contracts Are Permissive</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Contracts Are Permissive</em>' attribute.
+	 * @see #setRestrictedContractsArePermissive(boolean)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_RestrictedContractsArePermissive()
+	 * @model
+	 * @generated
+	 */
+	boolean isRestrictedContractsArePermissive();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedContractsArePermissive <em>Restricted Contracts Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Contracts Are Permissive</em>' attribute.
+	 * @see #isRestrictedContractsArePermissive()
+	 * @generated
+	 */
+	void setRestrictedContractsArePermissive(boolean value);
+
+	/**
 	 * Returns the value of the '<em><b>Restricted Ports</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.
 	 * <!-- begin-user-doc -->
@@ -357,6 +363,74 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	EList<APortSet<Port>> getRestrictedPorts();
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Ports Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Ports Are Permissive</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Ports Are Permissive</em>' attribute.
+	 * @see #setRestrictedPortsArePermissive(boolean)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_RestrictedPortsArePermissive()
+	 * @model
+	 * @generated
+	 */
+	boolean isRestrictedPortsArePermissive();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedPortsArePermissive <em>Restricted Ports Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Ports Are Permissive</em>' attribute.
+	 * @see #isRestrictedPortsArePermissive()
+	 * @generated
+	 */
+	void setRestrictedPortsArePermissive(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Vessels</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}<code>&lt;com.mmxlabs.models.lng.fleet.Vessel&gt;</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Vessels</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Vessels</em>' reference list.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_RestrictedVessels()
+	 * @model
+	 * @generated
+	 */
+	EList<AVesselSet<Vessel>> getRestrictedVessels();
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Vessels Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Vessels Are Permissive</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Vessels Are Permissive</em>' attribute.
+	 * @see #setRestrictedVesselsArePermissive(boolean)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_RestrictedVesselsArePermissive()
+	 * @model
+	 * @generated
+	 */
+	boolean isRestrictedVesselsArePermissive();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedVesselsArePermissive <em>Restricted Vessels Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Vessels Are Permissive</em>' attribute.
+	 * @see #isRestrictedVesselsArePermissive()
+	 * @generated
+	 */
+	void setRestrictedVesselsArePermissive(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Price Info</b></em>' containment reference.

@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
@@ -79,13 +78,19 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 			}
 
 			for (final EObject target : targets) {
-				EList<AVesselSet<Vessel>> allowedVessels = null;
+				List<AVesselSet<Vessel>> allowedVessels = null;
+				boolean isVesselRestrictionsPermissive = false;
+				
 				if (target instanceof Slot) {
 					final Slot slot = (Slot) target;
-					allowedVessels = slot.getAllowedVessels();
+					allowedVessels = slot.getSlotOrDelegateVesselRestrictions();
+					isVesselRestrictionsPermissive = slot.getSlotOrDelegateVesselRestrictionsArePermissive();
+					
 				} else if (target instanceof VesselEvent) {
 					final VesselEvent vesselEvent = (VesselEvent) target;
 					allowedVessels = vesselEvent.getAllowedVessels();
+					isVesselRestrictionsPermissive = !allowedVessels .isEmpty();
+					
 				}
 
 				if (allowedVessels == null || allowedVessels.isEmpty()) {
@@ -120,7 +125,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 				}
 
 				boolean permitted = false;
-				if (expandedVessels.contains(vesselAssignment)) {
+				if (expandedVessels.contains(vesselAssignment) == isVesselRestrictionsPermissive) {
 					permitted = true;
 				}
 
@@ -139,7 +144,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 
 					failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
 					if (target instanceof Cargo) {
-						failure.addEObjectAndFeature(target, CargoPackage.eINSTANCE.getSlot_AllowedVessels());
+						failure.addEObjectAndFeature(target, CargoPackage.eINSTANCE.getSlot_RestrictedVessels());
 					} else if (target instanceof VesselEvent) {
 						failure.addEObjectAndFeature(target, CargoPackage.eINSTANCE.getVesselEvent_AllowedVessels());
 					}

@@ -18,6 +18,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.impl.PermissiveRestrictiveInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -74,9 +75,12 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 		add_priceInfoEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
 		add_pricingEventEditor(detailComposite, topClass);
-		add_restrictedListsArePermissiveEditor(detailComposite, topClass);
-		add_restrictedPortsEditor(detailComposite, topClass);
 		add_restrictedContractsEditor(detailComposite, topClass);
+		add_restrictedContractsArePermissiveEditor(detailComposite, topClass);
+		add_restrictedPortsEditor(detailComposite, topClass);
+		add_restrictedPortsArePermissiveEditor(detailComposite, topClass);
+		add_restrictedVesselsEditor(detailComposite, topClass);
+		add_restrictedVesselsArePermissiveEditor(detailComposite, topClass);
 		add_mtmEditor(detailComposite, topClass);
 	}
 	/**
@@ -150,15 +154,6 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the restrictedListsArePermissive feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_restrictedListsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE));
-	}
-
-	/**
 	 * Create the editor for the restrictedPorts feature on SpotMarket
 	 *
 	 * @generated
@@ -168,12 +163,52 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
+	 * Create the editor for the restrictedPortsArePermissive feature on SpotMarket
+	 *
+	 * @generated NOT
+	 */
+	protected void add_restrictedPortsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new PermissiveRestrictiveInlineEditor(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS_ARE_PERMISSIVE));
+	}
+
+	/**
+	 * Create the editor for the restrictedVessels feature on SpotMarket
+	 *
+	 * @generated NOT
+	 */
+	protected void add_restrictedVesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (topClass == SpotMarketsPackage.Literals.FOB_PURCHASES_MARKET || topClass == SpotMarketsPackage.Literals.DES_SALES_MARKET) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS));
+		}
+	}
+
+	/**
+	 * Create the editor for the restrictedVesselsArePermissive feature on SpotMarket
+	 *
+	 * @generated NOT
+	 */
+	protected void add_restrictedVesselsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (topClass == SpotMarketsPackage.Literals.FOB_PURCHASES_MARKET || topClass == SpotMarketsPackage.Literals.DES_SALES_MARKET) {
+			detailComposite.addInlineEditor(new PermissiveRestrictiveInlineEditor(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS_ARE_PERMISSIVE));
+		}
+	}
+
+	/**
 	 * Create the editor for the restrictedContracts feature on SpotMarket
 	 *
 	 * @generated
 	 */
 	protected void add_restrictedContractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS));
+	}
+
+	/**
+	 * Create the editor for the restrictedContractsArePermissive feature on SpotMarket
+	 *
+	 * @generated NOT
+	 */
+	protected void add_restrictedContractsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new PermissiveRestrictiveInlineEditor(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS_ARE_PERMISSIVE));
 	}
 
 	/**

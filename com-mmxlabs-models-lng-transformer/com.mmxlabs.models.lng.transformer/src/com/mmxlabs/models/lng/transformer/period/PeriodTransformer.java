@@ -904,8 +904,10 @@ public class PeriodTransformer {
 			}
 
 			if (lockedVessel != null) {
-				slot.getAllowedVessels().clear();
-				slot.getAllowedVessels().add(lockedVessel);
+				slot.getRestrictedVessels().clear();
+				slot.getRestrictedVessels().add(lockedVessel);
+				slot.setRestrictedContractsOverride(true);
+				slot.setRestrictedContractsArePermissive(true);
 			}
 			slot.setLocked(true);
 		}
@@ -941,15 +943,17 @@ public class PeriodTransformer {
 				slot.setWindowStartTime(localStart.getHour());
 			}
 
-			slot.getAllowedVessels().clear();
+			slot.getRestrictedVessels().clear();
+			slot.setRestrictedVesselsArePermissive(true);
+			slot.setRestrictedVesselsOverride(true);
 
 			final VesselAssignmentType vat = slot.getCargo().getVesselAssignmentType();
 			if (vat instanceof VesselAvailability) {
-				slot.getAllowedVessels().add(((VesselAvailability) vat).getVessel());
+				slot.getRestrictedVessels().add(((VesselAvailability) vat).getVessel());
 			} else if (vat instanceof CharterInMarket) {
-				slot.getAllowedVessels().add(((CharterInMarket) vat).getVessel());
+				slot.getRestrictedVessels().add(((CharterInMarket) vat).getVessel());
 			} else if (vat instanceof CharterInMarketOverride) {
-				slot.getAllowedVessels().add(((CharterInMarketOverride) vat).getCharterInMarket().getVessel());
+				slot.getRestrictedVessels().add(((CharterInMarketOverride) vat).getCharterInMarket().getVessel());
 			}
 		}
 		slot.setLocked(true);

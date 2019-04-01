@@ -46,7 +46,6 @@ public class DESSalesMarketItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNotionalPortPropertyDescriptor(object);
-			addAllowedVesselsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -65,28 +64,6 @@ public class DESSalesMarketItemProvider
 				 getString("_UI_DESSalesMarket_notionalPort_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_DESSalesMarket_notionalPort_feature", "_UI_DESSalesMarket_type"),
 				 SpotMarketsPackage.Literals.DES_SALES_MARKET__NOTIONAL_PORT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Allowed Vessels feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAllowedVesselsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_DESSalesMarket_allowedVessels_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_DESSalesMarket_allowedVessels_feature", "_UI_DESSalesMarket_type"),
-				 SpotMarketsPackage.Literals.DES_SALES_MARKET__ALLOWED_VESSELS,
 				 true,
 				 false,
 				 true,

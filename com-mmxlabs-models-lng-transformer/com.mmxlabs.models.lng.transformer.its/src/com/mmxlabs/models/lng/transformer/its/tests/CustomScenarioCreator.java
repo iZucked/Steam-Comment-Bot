@@ -350,7 +350,8 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 	public void addAllowedVesselsOnCargo(final Cargo cargo, final List<Vessel> allowedVessels) {
 
 		for (final Slot s : cargo.getSlots()) {
-			s.getAllowedVessels().addAll(allowedVessels);
+			s.getRestrictedVessels().addAll(allowedVessels);
+			s.setRestrictedVesselsArePermissive(true);
 		}
 	}
 

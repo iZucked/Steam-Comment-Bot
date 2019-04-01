@@ -783,7 +783,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.withOptional(true) //
-				.withAllowedVessels(vessel1) //
+				.withRestrictedVessels(vessel1, true) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "10.0") //
 				.withOptional(true) //
@@ -795,7 +795,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.withOptional(true) //
-				.withAllowedVessels(vessel1) //
+				.withRestrictedVessels(vessel1, true) //
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "10") //
 				.withOptional(true) //
@@ -977,7 +977,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				// Forbid vessel
-				.withAllowedVessels(vessel1) //
+				.withRestrictedVessels(vessel1, true) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //

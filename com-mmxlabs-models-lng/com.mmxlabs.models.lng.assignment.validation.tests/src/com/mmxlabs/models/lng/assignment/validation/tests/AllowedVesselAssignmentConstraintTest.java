@@ -54,7 +54,9 @@ public class AllowedVesselAssignmentConstraintTest {
 		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
 		cargo.getSlots().add(loadSlot);
 		cargo.getSlots().add(dischargeSlot);
-		loadSlot.getAllowedVessels().add(vessel1);
+		loadSlot.getRestrictedVessels().add(vessel1);
+		loadSlot.setRestrictedVesselsArePermissive(true);
+		loadSlot.setRestrictedVesselsOverride(true);
 
 		// Permitted!
 		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
@@ -75,7 +77,9 @@ public class AllowedVesselAssignmentConstraintTest {
 		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
 		cargo.getSlots().add(loadSlot);
 		cargo.getSlots().add(dischargeSlot);
-		loadSlot.getAllowedVessels().add(vessel1);
+		loadSlot.getRestrictedVessels().add(vessel1);
+		loadSlot.setRestrictedVesselsArePermissive(true);
+		loadSlot.setRestrictedVesselsOverride(true);
 
 		// Not permitted!
 		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
@@ -95,7 +99,9 @@ public class AllowedVesselAssignmentConstraintTest {
 		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
 		cargo.getSlots().add(loadSlot);
 		cargo.getSlots().add(dischargeSlot);
-		loadSlot.getAllowedVessels().add(vessel1);
+		loadSlot.getRestrictedVessels().add(vessel1);
+		loadSlot.setRestrictedVesselsArePermissive(true);
+		loadSlot.setRestrictedVesselsOverride(true);
 
 		// Permitted!
 		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
@@ -116,7 +122,9 @@ public class AllowedVesselAssignmentConstraintTest {
 		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
 		cargo.getSlots().add(loadSlot);
 		cargo.getSlots().add(dischargeSlot);
-		loadSlot.getAllowedVessels().add(vessel2);
+		loadSlot.getRestrictedVessels().add(vessel2);
+		loadSlot.setRestrictedVesselsArePermissive(true);
+		loadSlot.setRestrictedVesselsOverride(true);
 
 		// Not permitted!
 		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
@@ -136,7 +144,9 @@ public class AllowedVesselAssignmentConstraintTest {
 		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
 		cargo.getSlots().add(loadSlot);
 		cargo.getSlots().add(dischargeSlot);
-		loadSlot.getAllowedVessels().add(vessel1);
+		loadSlot.getRestrictedVessels().add(vessel1);
+		loadSlot.setRestrictedVesselsArePermissive(true);
+		loadSlot.setRestrictedVesselsOverride(true);
 
 		// Permitted!
 		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
@@ -157,7 +167,9 @@ public class AllowedVesselAssignmentConstraintTest {
 		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
 		cargo.getSlots().add(loadSlot);
 		cargo.getSlots().add(dischargeSlot);
-		loadSlot.getAllowedVessels().add(vessel2);
+		loadSlot.getRestrictedVessels().add(vessel2);
+		loadSlot.setRestrictedVesselsArePermissive(true);
+		loadSlot.setRestrictedVesselsOverride(true);
 
 		// Not permitted!
 		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
@@ -176,8 +188,9 @@ public class AllowedVesselAssignmentConstraintTest {
 		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
 		cargo.getSlots().add(loadSlot);
 		cargo.getSlots().add(dischargeSlot);
-		loadSlot.getAllowedVessels().add(vessel);
-
+		loadSlot.getRestrictedVessels().add(vessel);
+		loadSlot.setRestrictedVesselsArePermissive(true);
+		loadSlot.setRestrictedVesselsOverride(true);
 		// Permitted!
 		CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		market.setVessel(vessel);
@@ -197,8 +210,9 @@ public class AllowedVesselAssignmentConstraintTest {
 		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
 		cargo.getSlots().add(loadSlot);
 		cargo.getSlots().add(dischargeSlot);
-		loadSlot.getAllowedVessels().add(vessel1);
-
+		loadSlot.getRestrictedVessels().add(vessel1);
+		loadSlot.setRestrictedVesselsArePermissive(true);
+		loadSlot.setRestrictedVesselsOverride(true);
 		// Not Permitted!
 		CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		market.setVessel(vessel2);

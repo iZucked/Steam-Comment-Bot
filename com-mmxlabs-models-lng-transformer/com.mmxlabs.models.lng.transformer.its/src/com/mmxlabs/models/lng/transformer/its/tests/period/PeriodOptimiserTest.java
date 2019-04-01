@@ -171,13 +171,27 @@ public class PeriodOptimiserTest {
 		tester.cargoB3.getSortedSlots().get(0).setPriceExpression("20.0");
 
 		// Fix loads to vessel
-		tester.cargoA1.getSlots().get(0).getAllowedVessels().add(tester.vesselAvailabilities[1].getVessel());
-		tester.cargoA2.getSlots().get(0).getAllowedVessels().add(tester.vesselAvailabilities[1].getVessel());
-		tester.cargoA3.getSlots().get(0).getAllowedVessels().add(tester.vesselAvailabilities[1].getVessel());
+		tester.cargoA1.getSlots().get(0).getRestrictedVessels().add(tester.vesselAvailabilities[1].getVessel());
+		tester.cargoA2.getSlots().get(0).getRestrictedVessels().add(tester.vesselAvailabilities[1].getVessel());
+		tester.cargoA3.getSlots().get(0).getRestrictedVessels().add(tester.vesselAvailabilities[1].getVessel());
 
-		tester.cargoB1.getSlots().get(0).getAllowedVessels().add(tester.vesselAvailabilities[0].getVessel());
-		tester.cargoB2.getSlots().get(0).getAllowedVessels().add(tester.vesselAvailabilities[0].getVessel());
-		tester.cargoB3.getSlots().get(0).getAllowedVessels().add(tester.vesselAvailabilities[0].getVessel());
+		tester.cargoB1.getSlots().get(0).getRestrictedVessels().add(tester.vesselAvailabilities[0].getVessel());
+		tester.cargoB2.getSlots().get(0).getRestrictedVessels().add(tester.vesselAvailabilities[0].getVessel());
+		tester.cargoB3.getSlots().get(0).getRestrictedVessels().add(tester.vesselAvailabilities[0].getVessel());
+		
+		tester.cargoA1.getSlots().get(0).setRestrictedVesselsArePermissive(true);
+		tester.cargoA2.getSlots().get(0).setRestrictedVesselsArePermissive(true);
+		tester.cargoA3.getSlots().get(0).setRestrictedVesselsArePermissive(true);
+		tester.cargoB1.getSlots().get(0).setRestrictedVesselsArePermissive(true);
+		tester.cargoB2.getSlots().get(0).setRestrictedVesselsArePermissive(true);
+		tester.cargoB3.getSlots().get(0).setRestrictedVesselsArePermissive(true);
+		
+		tester.cargoA1.getSlots().get(0).setRestrictedVesselsOverride(true);
+		tester.cargoA2.getSlots().get(0).setRestrictedVesselsOverride(true);
+		tester.cargoA3.getSlots().get(0).setRestrictedVesselsOverride(true);
+		tester.cargoB1.getSlots().get(0).setRestrictedVesselsOverride(true);
+		tester.cargoB2.getSlots().get(0).setRestrictedVesselsOverride(true);
+		tester.cargoB3.getSlots().get(0).setRestrictedVesselsOverride(true);
 
 		// Check the prices are correct rather than specific slot instances.
 		Assertions.assertEquals("5.0", tester.cargoA1.getSlots().get(0).getPriceExpression());
@@ -290,14 +304,29 @@ public class PeriodOptimiserTest {
 			cargoB3.setVesselAssignmentType(vesselAvailabilities[1]);
 
 			// Fix loads to vessel
-			cargoA1.getSlots().get(0).getAllowedVessels().add(vesselAvailabilities[0].getVessel());
-			cargoA2.getSlots().get(0).getAllowedVessels().add(vesselAvailabilities[0].getVessel());
-			cargoA3.getSlots().get(0).getAllowedVessels().add(vesselAvailabilities[0].getVessel());
+			cargoA1.getSlots().get(0).getRestrictedVessels().add(vesselAvailabilities[0].getVessel());
+			cargoA2.getSlots().get(0).getRestrictedVessels().add(vesselAvailabilities[0].getVessel());
+			cargoA3.getSlots().get(0).getRestrictedVessels().add(vesselAvailabilities[0].getVessel());
 
-			cargoB1.getSlots().get(0).getAllowedVessels().add(vesselAvailabilities[1].getVessel());
-			cargoB2.getSlots().get(0).getAllowedVessels().add(vesselAvailabilities[1].getVessel());
-			cargoB3.getSlots().get(0).getAllowedVessels().add(vesselAvailabilities[1].getVessel());
+			cargoB1.getSlots().get(0).getRestrictedVessels().add(vesselAvailabilities[1].getVessel());
+			cargoB2.getSlots().get(0).getRestrictedVessels().add(vesselAvailabilities[1].getVessel());
+			cargoB3.getSlots().get(0).getRestrictedVessels().add(vesselAvailabilities[1].getVessel());
 
+
+			cargoA1.getSlots().get(0).setRestrictedVesselsArePermissive(true);
+			cargoA2.getSlots().get(0).setRestrictedVesselsArePermissive(true);
+			cargoA3.getSlots().get(0).setRestrictedVesselsArePermissive(true);
+			cargoB1.getSlots().get(0).setRestrictedVesselsArePermissive(true);
+			cargoB2.getSlots().get(0).setRestrictedVesselsArePermissive(true);
+			cargoB3.getSlots().get(0).setRestrictedVesselsArePermissive(true);
+			
+			cargoA1.getSlots().get(0).setRestrictedVesselsOverride(true);
+			cargoA2.getSlots().get(0).setRestrictedVesselsOverride(true);
+			cargoA3.getSlots().get(0).setRestrictedVesselsOverride(true);
+			cargoB1.getSlots().get(0).setRestrictedVesselsOverride(true);
+			cargoB2.getSlots().get(0).setRestrictedVesselsOverride(true);
+			cargoB3.getSlots().get(0).setRestrictedVesselsOverride(true);
+			
 			// Set volumes
 			cargoA1.getSlots().get(0).setMaxQuantity(bigQty);
 			cargoA2.getSlots().get(0).setMaxQuantity(bigQty);

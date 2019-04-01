@@ -1,5 +1,5 @@
-sell.name,sell.spotIndex,sell.sequenceHint,sell.locked,sell.date,sell.time,sell.windowSize,sell.duration,sell.min,sell.max,sell.optional,sell.price,sell.pricingDate,sell.notes,sell.divertible,sell.shippingDaysRestriction,sell.restrictedListsArePermissive,sell.hedges,sell.cancellationFee,sell.FOB,sell.minCvValue,sell.maxCvValue,sell.port,sell.entity,sell.restrictedContracts,sell.restrictedPorts,sell.allowedVessels,sell.kind
-DES1,,0,false,2014-01-01,0,0,0,,,false,15,,,false,0,,0,,false,,,Futtsu,CorpEntity,,,,DischargeSlot
-DES2,,0,false,2014-01-31,22,0,0,,,false,15,,,false,0,,0,,false,,,Canaport,CorpEntity,,,,DischargeSlot
-DES3,,0,false,2014-01-31,23,0,1,,,false,15,,,false,0,,0,,false,,,Futtsu,CorpEntity,,,,DischargeSlot
-DES4,,0,false,2014-01-01,2,0,0,,,false,15,,,false,0,,0,,false,,,Futtsu,CorpEntity,,,,DischargeSlot
+sell.name,sell.spotIndex,sell.sequenceHint,sell.locked,sell.date,sell.time,sell.windowSize,sell.duration,sell.min,sell.max,sell.optional,sell.price,sell.pricingDate,sell.notes,sell.divertible,sell.shippingDaysRestriction,sell.hedges,sell.cancellationFee,sell.FOB,sell.minCvValue,sell.maxCvValue,sell.port,sell.entity,sell.restrictedContracts,sell.restrictedPorts,sell.kind
+DES1,,0,FALSE,01/01/2014,0,0,0,,,FALSE,15,,,FALSE,0,0,,FALSE,,,Futtsu,CorpEntity,,,DischargeSlot
+DES2,,0,FALSE,31/01/2014,22,0,0,,,FALSE,15,,,FALSE,0,0,,FALSE,,,Canaport,CorpEntity,,,DischargeSlot
+DES3,,0,FALSE,31/01/2014,23,0,1,,,FALSE,15,,,FALSE,0,0,,FALSE,,,Futtsu,CorpEntity,,,DischargeSlot
+DES4,,0,FALSE,01/01/2014,2,0,0,,,FALSE,15,,,FALSE,0,0,,FALSE,,,Futtsu,CorpEntity,,,DischargeSlot

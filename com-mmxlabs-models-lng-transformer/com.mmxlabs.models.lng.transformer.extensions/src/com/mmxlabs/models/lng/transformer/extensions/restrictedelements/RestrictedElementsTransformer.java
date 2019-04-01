@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.restrictedelements;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,12 +31,14 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
@@ -70,9 +73,6 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 	private final Set<ISequenceElement> allElements = new HashSet<ISequenceElement>();
 
 	private Collection<ISequenceElement> findAssociatedISequenceElements(final Object obj) {
-		if (obj instanceof Contract) {
-			return contractMap.get(obj);
-		}
 		if (obj instanceof Contract) {
 			return contractMap.get(obj);
 		}
@@ -162,40 +162,41 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 		if (commercialModel != null) {
 			final CargoModel cargoModel = rootObject.getCargoModel();
 			final BiConsumer<Slot, RestrictionType> applyRestrictions = (slot, type) -> {
-				final List<Contract> restrictedContracts;
-				final List<? extends EObject> restrictedPorts;
-				boolean isPermissive = false;
-				if (slot.isOverrideRestrictions()) {
-					isPermissive = slot.isRestrictedListsArePermissive();
-					restrictedContracts = slot.getRestrictedContracts();
-					restrictedPorts = slot.getRestrictedPorts();
+				List<Contract> restrictedContracts = new ArrayList<>();
+				List<? extends EObject> restrictedPorts = new ArrayList<>();
+				boolean isContractsListPermissive = false;
+				boolean isPortsListPermissive = false;
+				final Contract contract = slot.getContract();
+				if (contract != null) {
+					isContractsListPermissive = contract.isRestrictedContractsArePermissive();
+					restrictedContracts = contract.getRestrictedContracts();
+					isPortsListPermissive = contract.isRestrictedPortsArePermissive();
+					restrictedPorts = contract.getRestrictedPorts();
 				} else {
-					final Contract contract = slot.getContract();
-					if (contract == null) {
-						if (slot instanceof SpotSlot) {
-							final SpotSlot spotSlot = (SpotSlot) slot;
-							final SpotMarket spotMarket = spotSlot.getMarket();
-
-							isPermissive = spotMarket.isRestrictedListsArePermissive();
-							restrictedContracts = spotMarket.getRestrictedContracts();
-							restrictedPorts = spotMarket.getRestrictedPorts();
-						} else {
-							isPermissive = false;
-							restrictedContracts = Collections.emptyList();
-							restrictedPorts = Collections.emptyList();
-						}
-					} else {
-
-						isPermissive = contract.isRestrictedListsArePermissive();
-						restrictedContracts = contract.getRestrictedContracts();
-						restrictedPorts = contract.getRestrictedPorts();
+					if (slot instanceof SpotSlot) {
+						final SpotSlot spotSlot = (SpotSlot) slot;
+						final SpotMarket spotMarket = spotSlot.getMarket();
+						
+						isContractsListPermissive = spotMarket.isRestrictedContractsArePermissive();
+						restrictedContracts = spotMarket.getRestrictedContracts();
+						isPortsListPermissive = spotMarket.isRestrictedPortsArePermissive();
+						restrictedPorts = spotMarket.getRestrictedPorts();
 					}
 				}
-				if (!restrictedContracts.isEmpty()) {
-					registerRestrictedElements(slot, restrictedContracts, isPermissive, type);
+				if (slot.isRestrictedContractsOverride()) {
+					isContractsListPermissive = slot.isRestrictedContractsArePermissive();
+					restrictedContracts = slot.getRestrictedContracts();
 				}
-				if (!restrictedPorts.isEmpty()) {
-					registerRestrictedElements(slot, restrictedPorts, isPermissive, type);
+				if (slot.isRestrictedPortsOverride()) {
+					isPortsListPermissive = slot.isRestrictedPortsArePermissive();
+					restrictedPorts = slot.getRestrictedPorts();
+				}
+				
+				if (!restrictedContracts.isEmpty() || isContractsListPermissive) {
+					registerRestrictedElements(slot, restrictedContracts, isContractsListPermissive, type);
+				}
+				if (!restrictedPorts.isEmpty() || isPortsListPermissive) {
+					registerRestrictedElements(slot, restrictedPorts, isPortsListPermissive, type);
 				}
 
 			};
@@ -232,35 +233,18 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 		allElements.add(sequenceElement);
 		{
 			final Port port = modelSlot.getPort();
-			Collection<ISequenceElement> portElements;
-			if (portMap.containsKey(port)) {
-				portElements = portMap.get(port);
-			} else {
-				portElements = new HashSet<ISequenceElement>();
-				portMap.put(port, portElements);
+			if (port != null) {
+				portMap.computeIfAbsent(port, p -> new HashSet<>()).add(sequenceElement);
 			}
-			portElements.add(sequenceElement);
 		}
 		{
 			final Contract contract = modelSlot.getContract();
-			Collection<ISequenceElement> contractElements;
-			if (contractMap.containsKey(contract)) {
-				contractElements = contractMap.get(contract);
-			} else {
-				contractElements = new HashSet<ISequenceElement>();
-				contractMap.put(contract, contractElements);
+			if (contract != null) {
+				contractMap.computeIfAbsent(contract, k-> new HashSet()).add(sequenceElement);
 			}
-			contractElements.add(sequenceElement);
 		}
 		{
-			Collection<ISequenceElement> slotElements;
-			if (slotMap.containsKey(modelSlot)) {
-				slotElements = slotMap.get(modelSlot);
-			} else {
-				slotElements = new HashSet<ISequenceElement>();
-				slotMap.put(modelSlot, slotElements);
-			}
-			slotElements.add(sequenceElement);
+			slotMap.computeIfAbsent(modelSlot, s -> new HashSet()).add(sequenceElement);
 		}
 	}
 

@@ -27,8 +27,10 @@ import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -66,7 +68,8 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 		}
 		final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 
-		final CargoModel cargoModel = scenarioModel.getCargoModel();
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
+		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
 		final EClass referenceClass = reference.getEReferenceType();
 		final TypesPackage types = TypesPackage.eINSTANCE;
 
@@ -111,29 +114,31 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 					final boolean showThirdPartyVessels = !isVesselEvent;
 					final boolean includeSpotVessels = !isVesselEvent;
 
-					boolean noVesselsAllowed = false;
-					final List<AVesselSet<Vessel>> allowedVessels = new ArrayList<>();
+					final List<Vessel> allowedVessels;
 					// we only want to filter vessels if we are assigning them (i.e. don't do this if we are selecting vessels to add to the restricted list)
 					if (field == CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE) {
-						noVesselsAllowed = AssignmentEditorHelper.compileAllowedVessels(allowedVessels, target);
-					}
+						allowedVessels = AssignmentEditorHelper.compileAllowedVessels(fleetModel.getVessels(), target);
+					} else {
+						allowedVessels = new ArrayList<>(fleetModel.getVessels());
 
-					final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<AVesselSet<Vessel>>();
-					// filter the global list by the object's allowed values
-					if (allowedVessels != null) {
-						// Expand out VesselGroups
-						for (final AVesselSet<Vessel> s : allowedVessels) {
-							if (s instanceof Vessel) {
-								expandedVessels.add(s);
-							} else {
-								// instanceof Vessel Group
-								expandedVessels.addAll(SetUtils.getObjects(s));
-							}
-						}
 					}
+//
+//					final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<>();
+//					// filter the global list by the object's allowed values
+//					if (allowedVessels != null) {
+//						// Expand out VesselGroups
+//						for (final AVesselSet<Vessel> s : allowedVessels) {
+//							if (s instanceof Vessel) {
+//								expandedVessels.add(s);
+//							} else {
+//								// instanceof Vessel Group
+//								expandedVessels.addAll(SetUtils.getObjects(s));
+//							}
+//						}
+//					}
 
 					// create list to populate
-					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();
+					final ArrayList<Pair<String, EObject>> result = new ArrayList<>();
 
 					// filter the globally permissible values by the settings for this cargo
 					for (final Pair<String, EObject> pair : vesselAvailabilityResult) {
@@ -147,10 +152,10 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 							continue;
 						}
 
-						boolean display = !noVesselsAllowed && (
+						boolean display = (
 						// show the option if the cargo allows this vessel-set
 						// (an empty list of allowed vessels means "all vessels")
-						expandedVessels.isEmpty() || expandedVessels.contains(vessel));
+								  allowedVessels.contains(vessel));
 
 						// Filter out non-scenario vessels
 						if (display) {
@@ -182,18 +187,18 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 							}
 							final Vessel vessel = charterInMarket.getVessel();
 
-							boolean display = !noVesselsAllowed && (
+							boolean display =   (
 							// show the option if the cargo allows this vessel-set
 							// (an empty list of allowed vessels means "all vessels")
-							expandedVessels.isEmpty()
+							 
 									// show the option if the cargo allows vessels of this class
-									|| (vessel != null && expandedVessels.contains(vessel)));
+									 (vessel != null && allowedVessels.contains(vessel)));
 
 							// Hide disable markets
 							if (!charterInMarket.isEnabled() && !charterInMarket.isNominal()) {
 								display = false;
 							}
-							
+
 							// Always show the option if the option is the null option
 							// or the current value for the cargo is set to this vessel-set
 							if (Equality.isEqual(charterInMarket, currentValue) || charterInMarket == null) {
@@ -216,7 +221,9 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 					if (va.getVessel() == null) {
 						return true;
 					}
-					return vesselAvailability.stream().filter(v -> va.getVessel().equals(v.getVessel())).count() > 1;
+					return vesselAvailability.stream() //
+							.filter(v -> va.getVessel().equals(v.getVessel())) //
+							.count() == 1;
 				}
 
 				@Override
@@ -280,7 +287,7 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 
 				@Override
 				public boolean updateOnChangeToFeature(final Object changedFeature) {
-					if (changedFeature == CargoPackage.eINSTANCE.getSlot_AllowedVessels()) {
+					if (changedFeature == CargoPackage.eINSTANCE.getSlot_RestrictedVessels()) {
 						return true;
 					}
 

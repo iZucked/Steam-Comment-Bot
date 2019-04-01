@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.commercial.provider;
 
+import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
 
@@ -43,6 +44,7 @@ public final class CommercialEditPlugin extends EMFPlugin {
 	public CommercialEditPlugin() {
 		super
 		  (new ResourceLocator [] {
+		     FleetEditPlugin.INSTANCE,
 		     LNGTypesEditPlugin.INSTANCE,
 		     MmxcoreEditPlugin.INSTANCE,
 		     PortEditPlugin.INSTANCE,

@@ -1,32 +1,32 @@
-name,allowRewiring,allowedVessels,buy.name,buy.date,buy.time,buy.windowSize,buy.duration,buy.min,buy.max,buy.optional,buy.price,buy.cargoCV,buy.arriveCold,buy.DES,buy.contract,buy.port,buy.kind,sell.name,sell.date,sell.time,sell.windowSize,sell.duration,sell.min,sell.max,sell.optional,sell.price,sell.FOB,sell.contract,sell.port,sell.kind,kind
-cargo-1,true,,cargo-1,2011-01-02,,,,,200000,false,,,,false,HH Spot Purchase,Point Fortin,LoadSlot,discharge-cargo-1,2011-01-11,,,,,200000,false,,false,NBP Sales,Dragon LNG,DischargeSlot,Cargo
-cargo-41,,,cargo-41,2011-04-01,,,,,200000,false,,,,false,JCC Spot Purchase,Idku LNG,LoadSlot,discharge-cargo-41,2011-05-01,,,,,200000,false,,false,HH Sales,Elba Island,DischargeSlot,Cargo
-cargo-78,,,cargo-78,2011-03-23,,,,,200000,false,,,,false,JCC Spot Purchase,Damietta,LoadSlot,discharge-cargo-78,2011-04-18,,,,,200000,false,,false,HH Sales,Elba Island,DischargeSlot,Cargo
-cargo-5,,,cargo-5,2011-04-20,,,,,200000,false,,,,false,JCC Spot Purchase,Idku LNG,LoadSlot,discharge-cargo-5,2011-05-06,,,,,200000,false,,false,HH Sales,Elba Island,DischargeSlot,Cargo
-cargo-28,,,cargo-28,2011-04-24,,,,,200000,false,,,,false,HH Spot Purchase,Point Fortin,LoadSlot,discharge-cargo-28,2011-05-26,,,,,200000,false,,false,JCC Sales,Fujian LNG,DischargeSlot,Cargo
-cargo-16,,,cargo-16,2011-04-08,,,,,200000,false,,,,false,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-16,2011-04-30,,,,,200000,false,,false,JCC Sales,Hazira - LNG Terminal,DischargeSlot,Cargo
-cargo-24,,,cargo-24,2010-12-24,,,,,200000,false,,,,false,HH Spot Purchase,Point Fortin,LoadSlot,discharge-cargo-24,2011-01-04,,,,,200000,false,,false,NBP Sales,Isle of Grain,DischargeSlot,Cargo
-cargo-76,,,cargo-76,2011-05-22,,,,,200000,false,,,,false,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-76,2011-06-25,,,,,200000,false,,false,JCC Sales,Ogishima - Tokyo Gas LNG Berth,DischargeSlot,Cargo
-cargo-20,,,cargo-20,2011-06-03,,,,,200000,false,,,,false,JCC Spot Purchase,Damietta,LoadSlot,discharge-cargo-20,2011-06-26,,,,,200000,false,,false,HH Sales,Pascagoula,DischargeSlot,Cargo
-cargo-21,,,cargo-21,2010-12-21,,,,,200000,false,,,,false,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-21,2011-01-19,,,,,200000,false,,false,JCC Sales,Pyeongtaek,DischargeSlot,Cargo
-cargo-22,false,,cargo-22,2011-02-11,,,,,200000,false,,,,false,JCC Spot Purchase,Idku LNG,LoadSlot,discharge-cargo-22,2011-03-07,,,,,200000,false,,false,JCC Sales,Pyeongtaek,DischargeSlot,Cargo
-cargo-32,true,,cargo-32,2010-12-31,,,,,200000,false,,,,false,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-32,2011-02-13,,,,,200000,false,,false,JCC Sales,Pyeongtaek,DischargeSlot,Cargo
-cargo-48,false,,cargo-48,2011-02-07,,,,,200000,false,,,,false,HH Spot Purchase,Point Fortin,LoadSlot,discharge-cargo-48,2011-03-15,,,,,200000,false,,false,JCC Sales,Pyeongtaek,DischargeSlot,Cargo
-cargo-50,,,cargo-50,2011-02-15,,,,,200000,false,,,,false,JCC Spot Purchase,Idku LNG,LoadSlot,discharge-cargo-50,2011-03-05,,,,,200000,false,,false,JCC Sales,Pyeongtaek,DischargeSlot,Cargo
-cargo-70,,,cargo-70,2010-11-29,,,,,200000,false,,,,false,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-70,2011-01-15,,,,,200000,false,,false,JCC Sales,Pyeongtaek,DischargeSlot,Cargo
-cargo-12,,,cargo-12,2011-04-13,,,,,200000,false,,,,false,HH Spot Purchase,Point Fortin,LoadSlot,discharge-cargo-12,2011-04-30,,,,,200000,false,,false,JCC Sales,Quintero Bay LNG,DischargeSlot,Cargo
-cargo-30,,,cargo-30,2011-05-20,,,,,200000,false,,,,false,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-30,2011-06-11,,,,,200000,false,,false,JCC Sales,Quintero Bay LNG,DischargeSlot,Cargo
-cargo-39,,,cargo-39,2010-12-08,,,,,200000,false,,,,false,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-39,2011-01-01,,,,,200000,false,,false,JCC Sales,Quintero Bay LNG,DischargeSlot,Cargo
-cargo-60,,,cargo-60,2011-06-06,,,,,200000,false,,,,false,HH Spot Purchase,Point Fortin,LoadSlot,discharge-cargo-60,2011-06-28,,,,,200000,false,,false,JCC Sales,Quintero Bay LNG,DischargeSlot,Cargo
-cargo-66,,,cargo-66,2011-05-16,,,,,200000,false,,,,false,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-66,2011-06-17,,,,,200000,false,,false,JCC Sales,Tobata,DischargeSlot,Cargo
-cargo-9,,,cargo-9,2011-04-13,,,,,200000,false,,,,false,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-9,2011-05-10,,,,,200000,false,,false,JCC Sales,Yung An,DischargeSlot,Cargo
-cargo-71,,,cargo-71,2011-02-16,,,,,200000,false,,,,false,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-71,2011-03-17,,,,,200000,false,,false,JCC Sales,Yung An,DischargeSlot,Cargo
-cargo-31,false,,cargo-31,2011-01-23,,,,,,false,,,,false,NBP Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-31,2011-03-07,,,,,,false,,false,JCC Sales,Freeport LNG,DischargeSlot,Cargo
-1 Bonny,,,1 Bonny,2010-11-15,,,,,,false,,,,false,HH Spot Purchase,Bonny Nigeria,LoadSlot,discharge-1 Bonny,2010-11-25,,,,,,false,,false,NBP Sales,Isle of Grain,DischargeSlot,Cargo
-2 Bonny,,,2 Bonny,2010-12-15,,,,,,false,,,,false,HH Spot Purchase,Bonny Nigeria,LoadSlot,discharge-2 Bonny,2010-12-25,,,,,,false,,false,NBP Sales,Isle of Grain,DischargeSlot,Cargo
-3 Bonny,true,,3 Bonny,2011-01-20,,,,,,false,,,,false,HH Spot Purchase,Bonny Nigeria,LoadSlot,discharge-3 Bonny,2011-01-25,,,,,,false,,false,NBP Sales,Isle of Grain,DischargeSlot,Cargo
-5 Bonny,,,5 Bonny,2011-03-15,,,,,,false,,,,false,HH Spot Purchase,Bonny Nigeria,LoadSlot,discharge-5 Bonny,2011-03-25,,,,,,false,,false,NBP Sales,Isle of Grain,DischargeSlot,Cargo
-6 Bonny,,,6 Bonny,2011-04-15,,,,,,false,,,,false,HH Spot Purchase,Bonny Nigeria,LoadSlot,discharge-6 Bonny,2011-04-25,,,,,,false,,false,NBP Sales,Isle of Grain,DischargeSlot,Cargo
-7 Bonny,,,7 Bonny,2011-05-15,,,,,,false,,,,false,HH Spot Purchase,Bonny Nigeria,LoadSlot,discharge-7 Bonny,2011-05-25,,,,,,false,,false,NBP Sales,Isle of Grain,DischargeSlot,Cargo
-8 Bonny,,,8 Bonny,2011-06-15,,,,,,false,,,,false,HH Spot Purchase,Bonny Nigeria,LoadSlot,discharge-8 Bonny,2011-06-25,,,,,,false,,false,NBP Sales,Isle of Grain,DischargeSlot,Cargo
-4 Bonny DES,true,,4 Bonny DES,2011-02-25,0,,0,,,false,,,false,true,NBP Spot Purchase,Isle of Grain,LoadSlot,discharge-4 Bonny DES,2011-02-25,,,,,,false,,false,NBP Sales,Isle of Grain,DischargeSlot,Cargo
+name,allowRewiring,buy.name,buy.date,buy.time,buy.windowSize,buy.duration,buy.min,buy.max,buy.optional,buy.price,buy.cargoCV,buy.arriveCold,buy.DES,buy.contract,buy.port,buy.kind,sell.name,sell.date,sell.time,sell.windowSize,sell.duration,sell.min,sell.max,sell.optional,sell.price,sell.FOB,sell.contract,sell.port,sell.kind,kind
+cargo-1,TRUE,cargo-1,02/01/2011,,,,,200000,FALSE,,,,FALSE,HH Spot Purchase,Point Fortin,LoadSlot,discharge-cargo-1,11/01/2011,,,,,200000,FALSE,,FALSE,NBP Sales,Dragon LNG,DischargeSlot,Cargo
+cargo-41,,cargo-41,01/04/2011,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Idku LNG,LoadSlot,discharge-cargo-41,01/05/2011,,,,,200000,FALSE,,FALSE,HH Sales,Elba Island,DischargeSlot,Cargo
+cargo-78,,cargo-78,23/03/2011,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Damietta,LoadSlot,discharge-cargo-78,18/04/2011,,,,,200000,FALSE,,FALSE,HH Sales,Elba Island,DischargeSlot,Cargo
+cargo-5,,cargo-5,20/04/2011,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Idku LNG,LoadSlot,discharge-cargo-5,06/05/2011,,,,,200000,FALSE,,FALSE,HH Sales,Elba Island,DischargeSlot,Cargo
+cargo-28,,cargo-28,24/04/2011,,,,,200000,FALSE,,,,FALSE,HH Spot Purchase,Point Fortin,LoadSlot,discharge-cargo-28,26/05/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Fujian LNG,DischargeSlot,Cargo
+cargo-16,,cargo-16,08/04/2011,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-16,30/04/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Hazira - LNG Terminal,DischargeSlot,Cargo
+cargo-24,,cargo-24,24/12/2010,,,,,200000,FALSE,,,,FALSE,HH Spot Purchase,Point Fortin,LoadSlot,discharge-cargo-24,04/01/2011,,,,,200000,FALSE,,FALSE,NBP Sales,Isle of Grain,DischargeSlot,Cargo
+cargo-76,,cargo-76,22/05/2011,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-76,25/06/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Ogishima - Tokyo Gas LNG Berth,DischargeSlot,Cargo
+cargo-20,,cargo-20,03/06/2011,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Damietta,LoadSlot,discharge-cargo-20,26/06/2011,,,,,200000,FALSE,,FALSE,HH Sales,Pascagoula,DischargeSlot,Cargo
+cargo-21,,cargo-21,21/12/2010,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-21,19/01/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Pyeongtaek,DischargeSlot,Cargo
+cargo-22,FALSE,cargo-22,11/02/2011,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Idku LNG,LoadSlot,discharge-cargo-22,07/03/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Pyeongtaek,DischargeSlot,Cargo
+cargo-32,TRUE,cargo-32,31/12/2010,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-32,13/02/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Pyeongtaek,DischargeSlot,Cargo
+cargo-48,FALSE,cargo-48,07/02/2011,,,,,200000,FALSE,,,,FALSE,HH Spot Purchase,Point Fortin,LoadSlot,discharge-cargo-48,15/03/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Pyeongtaek,DischargeSlot,Cargo
+cargo-50,,cargo-50,15/02/2011,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Idku LNG,LoadSlot,discharge-cargo-50,05/03/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Pyeongtaek,DischargeSlot,Cargo
+cargo-70,,cargo-70,29/11/2010,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-70,15/01/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Pyeongtaek,DischargeSlot,Cargo
+cargo-12,,cargo-12,13/04/2011,,,,,200000,FALSE,,,,FALSE,HH Spot Purchase,Point Fortin,LoadSlot,discharge-cargo-12,30/04/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Quintero Bay LNG,DischargeSlot,Cargo
+cargo-30,,cargo-30,20/05/2011,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-30,11/06/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Quintero Bay LNG,DischargeSlot,Cargo
+cargo-39,,cargo-39,08/12/2010,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-39,01/01/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Quintero Bay LNG,DischargeSlot,Cargo
+cargo-60,,cargo-60,06/06/2011,,,,,200000,FALSE,,,,FALSE,HH Spot Purchase,Point Fortin,LoadSlot,discharge-cargo-60,28/06/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Quintero Bay LNG,DischargeSlot,Cargo
+cargo-66,,cargo-66,16/05/2011,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-66,17/06/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Tobata,DischargeSlot,Cargo
+cargo-9,,cargo-9,13/04/2011,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-9,10/05/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Yung An,DischargeSlot,Cargo
+cargo-71,,cargo-71,16/02/2011,,,,,200000,FALSE,,,,FALSE,JCC Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-71,17/03/2011,,,,,200000,FALSE,,FALSE,JCC Sales,Yung An,DischargeSlot,Cargo
+cargo-31,FALSE,cargo-31,23/01/2011,,,,,,FALSE,,,,FALSE,NBP Spot Purchase,Punta Europa LNG,LoadSlot,discharge-cargo-31,07/03/2011,,,,,,FALSE,,FALSE,JCC Sales,Freeport LNG,DischargeSlot,Cargo
+1 Bonny,,1 Bonny,15/11/2010,,,,,,FALSE,,,,FALSE,HH Spot Purchase,Bonny Nigeria,LoadSlot,discharge-1 Bonny,25/11/2010,,,,,,FALSE,,FALSE,NBP Sales,Isle of Grain,DischargeSlot,Cargo
+2 Bonny,,2 Bonny,15/12/2010,,,,,,FALSE,,,,FALSE,HH Spot Purchase,Bonny Nigeria,LoadSlot,discharge-2 Bonny,25/12/2010,,,,,,FALSE,,FALSE,NBP Sales,Isle of Grain,DischargeSlot,Cargo
+3 Bonny,TRUE,3 Bonny,20/01/2011,,,,,,FALSE,,,,FALSE,HH Spot Purchase,Bonny Nigeria,LoadSlot,discharge-3 Bonny,25/01/2011,,,,,,FALSE,,FALSE,NBP Sales,Isle of Grain,DischargeSlot,Cargo
+5 Bonny,,5 Bonny,15/03/2011,,,,,,FALSE,,,,FALSE,HH Spot Purchase,Bonny Nigeria,LoadSlot,discharge-5 Bonny,25/03/2011,,,,,,FALSE,,FALSE,NBP Sales,Isle of Grain,DischargeSlot,Cargo
+6 Bonny,,6 Bonny,15/04/2011,,,,,,FALSE,,,,FALSE,HH Spot Purchase,Bonny Nigeria,LoadSlot,discharge-6 Bonny,25/04/2011,,,,,,FALSE,,FALSE,NBP Sales,Isle of Grain,DischargeSlot,Cargo
+7 Bonny,,7 Bonny,15/05/2011,,,,,,FALSE,,,,FALSE,HH Spot Purchase,Bonny Nigeria,LoadSlot,discharge-7 Bonny,25/05/2011,,,,,,FALSE,,FALSE,NBP Sales,Isle of Grain,DischargeSlot,Cargo
+8 Bonny,,8 Bonny,15/06/2011,,,,,,FALSE,,,,FALSE,HH Spot Purchase,Bonny Nigeria,LoadSlot,discharge-8 Bonny,25/06/2011,,,,,,FALSE,,FALSE,NBP Sales,Isle of Grain,DischargeSlot,Cargo
+4 Bonny DES,TRUE,4 Bonny DES,25/02/2011,0,,0,,,FALSE,,,FALSE,TRUE,NBP Spot Purchase,Isle of Grain,LoadSlot,discharge-4 Bonny DES,25/02/2011,,,,,,FALSE,,FALSE,NBP Sales,Isle of Grain,DischargeSlot,Cargo

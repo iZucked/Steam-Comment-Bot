@@ -443,22 +443,22 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__FULL_CARGO_LOT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
-	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
-
-	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+	int CONTRACT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
@@ -470,13 +470,40 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Ports Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__RESTRICTED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
+
+	/**
 	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__PRICE_INFO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+	int CONTRACT__PRICE_INFO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
 
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
@@ -485,7 +512,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
+	int CONTRACT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 22;
 
 	/**
 	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
@@ -494,7 +521,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__CONTRACT_TYPE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
+	int CONTRACT__CONTRACT_TYPE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
 
 	/**
 	 * The feature id for the '<em><b>Pricing Event</b></em>' attribute.
@@ -503,7 +530,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__PRICING_EVENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
+	int CONTRACT__PRICING_EVENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -512,115 +539,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 22;
-
-	/**
-	 * The feature id for the '<em><b>Window Nomination Size</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__WINDOW_NOMINATION_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
-
-	/**
-	 * The feature id for the '<em><b>Window Nomination Size Units</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__WINDOW_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
-
-	/**
-	 * The feature id for the '<em><b>Window Nomination Counterparty</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__WINDOW_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
-
-	/**
-	 * The feature id for the '<em><b>Vessel Nomination Size</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__VESSEL_NOMINATION_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
-
-	/**
-	 * The feature id for the '<em><b>Vessel Nomination Size Units</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__VESSEL_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
-
-	/**
-	 * The feature id for the '<em><b>Vessel Nomination Counterparty</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__VESSEL_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
-
-	/**
-	 * The feature id for the '<em><b>Volume Nomination Size</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__VOLUME_NOMINATION_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
-
-	/**
-	 * The feature id for the '<em><b>Volume Nomination Size Units</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__VOLUME_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 30;
-
-	/**
-	 * The feature id for the '<em><b>Volume Nomination Counterparty</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__VOLUME_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 31;
-
-	/**
-	 * The feature id for the '<em><b>Port Nomination Size</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__PORT_NOMINATION_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 32;
-
-	/**
-	 * The feature id for the '<em><b>Port Nomination Size Units</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__PORT_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 33;
-
-	/**
-	 * The feature id for the '<em><b>Port Nomination Counterparty</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__PORT_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 34;
+	int CONTRACT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
 
 	/**
 	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
@@ -629,7 +548,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__DIVERTIBLE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 35;
+	int CONTRACT__DIVERTIBLE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
@@ -638,7 +557,115 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 36;
+	int CONTRACT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
+
+	/**
+	 * The feature id for the '<em><b>Window Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__WINDOW_NOMINATION_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
+
+	/**
+	 * The feature id for the '<em><b>Window Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__WINDOW_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
+
+	/**
+	 * The feature id for the '<em><b>Window Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__WINDOW_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 30;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__VESSEL_NOMINATION_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 31;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__VESSEL_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 32;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__VESSEL_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 33;
+
+	/**
+	 * The feature id for the '<em><b>Volume Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__VOLUME_NOMINATION_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 34;
+
+	/**
+	 * The feature id for the '<em><b>Volume Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__VOLUME_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 35;
+
+	/**
+	 * The feature id for the '<em><b>Volume Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__VOLUME_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 36;
+
+	/**
+	 * The feature id for the '<em><b>Port Nomination Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__PORT_NOMINATION_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 37;
+
+	/**
+	 * The feature id for the '<em><b>Port Nomination Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__PORT_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 38;
+
+	/**
+	 * The feature id for the '<em><b>Port Nomination Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__PORT_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 39;
 
 	/**
 	 * The feature id for the '<em><b>Port Load Nomination Size</b></em>' attribute.
@@ -647,7 +674,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__PORT_LOAD_NOMINATION_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 37;
+	int CONTRACT__PORT_LOAD_NOMINATION_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 40;
 
 	/**
 	 * The feature id for the '<em><b>Port Load Nomination Size Units</b></em>' attribute.
@@ -656,7 +683,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 38;
+	int CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 41;
 
 	/**
 	 * The feature id for the '<em><b>Port Load Nomination Counterparty</b></em>' attribute.
@@ -665,7 +692,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 39;
+	int CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
 
 	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
@@ -674,7 +701,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 40;
+	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -840,15 +867,6 @@ public interface CommercialPackage extends EPackage {
 	int SALES_CONTRACT__FULL_CARGO_LOT = CONTRACT__FULL_CARGO_LOT;
 
 	/**
-	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SALES_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE;
-
-	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -858,6 +876,15 @@ public interface CommercialPackage extends EPackage {
 	int SALES_CONTRACT__RESTRICTED_CONTRACTS = CONTRACT__RESTRICTED_CONTRACTS;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Contracts Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE = CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE;
+
+	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -865,6 +892,33 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__RESTRICTED_PORTS = CONTRACT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE = CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__RESTRICTED_VESSELS = CONTRACT__RESTRICTED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE = CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE;
 
 	/**
 	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
@@ -910,6 +964,24 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__CANCELLATION_EXPRESSION = CONTRACT__CANCELLATION_EXPRESSION;
+
+	/**
+	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__DIVERTIBLE = CONTRACT__DIVERTIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__SHIPPING_DAYS_RESTRICTION = CONTRACT__SHIPPING_DAYS_RESTRICTION;
 
 	/**
 	 * The feature id for the '<em><b>Window Nomination Size</b></em>' attribute.
@@ -1018,24 +1090,6 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__PORT_NOMINATION_COUNTERPARTY = CONTRACT__PORT_NOMINATION_COUNTERPARTY;
-
-	/**
-	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SALES_CONTRACT__DIVERTIBLE = CONTRACT__DIVERTIBLE;
-
-	/**
-	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SALES_CONTRACT__SHIPPING_DAYS_RESTRICTION = CONTRACT__SHIPPING_DAYS_RESTRICTION;
 
 	/**
 	 * The feature id for the '<em><b>Port Load Nomination Size</b></em>' attribute.
@@ -1264,15 +1318,6 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__FULL_CARGO_LOT = CONTRACT__FULL_CARGO_LOT;
 
 	/**
-	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PURCHASE_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE;
-
-	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1282,6 +1327,15 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__RESTRICTED_CONTRACTS = CONTRACT__RESTRICTED_CONTRACTS;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Contracts Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE = CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE;
+
+	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1289,6 +1343,33 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int PURCHASE_CONTRACT__RESTRICTED_PORTS = CONTRACT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE = CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__RESTRICTED_VESSELS = CONTRACT__RESTRICTED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE = CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE;
 
 	/**
 	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
@@ -1334,6 +1415,24 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int PURCHASE_CONTRACT__CANCELLATION_EXPRESSION = CONTRACT__CANCELLATION_EXPRESSION;
+
+	/**
+	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__DIVERTIBLE = CONTRACT__DIVERTIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__SHIPPING_DAYS_RESTRICTION = CONTRACT__SHIPPING_DAYS_RESTRICTION;
 
 	/**
 	 * The feature id for the '<em><b>Window Nomination Size</b></em>' attribute.
@@ -1442,24 +1541,6 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int PURCHASE_CONTRACT__PORT_NOMINATION_COUNTERPARTY = CONTRACT__PORT_NOMINATION_COUNTERPARTY;
-
-	/**
-	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PURCHASE_CONTRACT__DIVERTIBLE = CONTRACT__DIVERTIBLE;
-
-	/**
-	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PURCHASE_CONTRACT__SHIPPING_DAYS_RESTRICTION = CONTRACT__SHIPPING_DAYS_RESTRICTION;
 
 	/**
 	 * The feature id for the '<em><b>Port Load Nomination Size</b></em>' attribute.
@@ -2587,17 +2668,6 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getContract_VolumeLimitsUnit();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Restricted Lists Are Permissive</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.Contract#isRestrictedListsArePermissive()
-	 * @see #getContract()
-	 * @generated
-	 */
-	EAttribute getContract_RestrictedListsArePermissive();
-
-	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedContracts <em>Restricted Contracts</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2609,6 +2679,17 @@ public interface CommercialPackage extends EPackage {
 	EReference getContract_RestrictedContracts();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedContractsArePermissive <em>Restricted Contracts Are Permissive</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restricted Contracts Are Permissive</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#isRestrictedContractsArePermissive()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_RestrictedContractsArePermissive();
+
+	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedPorts <em>Restricted Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2618,6 +2699,39 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getContract_RestrictedPorts();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedPortsArePermissive <em>Restricted Ports Are Permissive</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restricted Ports Are Permissive</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#isRestrictedPortsArePermissive()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_RestrictedPortsArePermissive();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedVessels <em>Restricted Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Restricted Vessels</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getRestrictedVessels()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EReference getContract_RestrictedVessels();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedVesselsArePermissive <em>Restricted Vessels Are Permissive</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restricted Vessels Are Permissive</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#isRestrictedVesselsArePermissive()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_RestrictedVesselsArePermissive();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.Contract#getPriceInfo <em>Price Info</em>}'.
@@ -3616,14 +3730,6 @@ public interface CommercialPackage extends EPackage {
 		EAttribute CONTRACT__VOLUME_LIMITS_UNIT = eINSTANCE.getContract_VolumeLimitsUnit();
 
 		/**
-		 * The meta object literal for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = eINSTANCE.getContract_RestrictedListsArePermissive();
-
-		/**
 		 * The meta object literal for the '<em><b>Restricted Contracts</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3632,12 +3738,44 @@ public interface CommercialPackage extends EPackage {
 		EReference CONTRACT__RESTRICTED_CONTRACTS = eINSTANCE.getContract_RestrictedContracts();
 
 		/**
+		 * The meta object literal for the '<em><b>Restricted Contracts Are Permissive</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE = eINSTANCE.getContract_RestrictedContractsArePermissive();
+
+		/**
 		 * The meta object literal for the '<em><b>Restricted Ports</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference CONTRACT__RESTRICTED_PORTS = eINSTANCE.getContract_RestrictedPorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Ports Are Permissive</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE = eINSTANCE.getContract_RestrictedPortsArePermissive();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Vessels</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT__RESTRICTED_VESSELS = eINSTANCE.getContract_RestrictedVessels();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Vessels Are Permissive</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE = eINSTANCE.getContract_RestrictedVesselsArePermissive();
 
 		/**
 		 * The meta object literal for the '<em><b>Price Info</b></em>' containment reference feature.

@@ -194,9 +194,22 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 	}
 
 	@NonNull
-	public T withAllowedVessels(@NonNull final AVesselSet<Vessel> restrictedVessel) {
-		slot.getAllowedVessels().clear();
-		slot.getAllowedVessels().add(restrictedVessel);
+	public T withRestrictedVessels(@NonNull final AVesselSet<Vessel> restrictedVessel, boolean isPermissive) {
+		slot.getRestrictedVessels().clear();
+		slot.getRestrictedVessels().add(restrictedVessel);
+		slot.setRestrictedVesselsArePermissive(isPermissive);
+		slot.setRestrictedVesselsOverride(true);
+		return (T) this;
+	}
+
+	@NonNull
+	public T withRestrictedVessels(boolean isPermissive, AVesselSet<Vessel>... vessels) {
+		slot.getRestrictedVessels().clear();
+		slot.setRestrictedVesselsArePermissive(isPermissive);
+		slot.setRestrictedVesselsOverride(true);
+		for (AVesselSet<Vessel> vessel : vessels) {
+			slot.getRestrictedVessels().add(vessel);
+		}
 		return (T) this;
 	}
 

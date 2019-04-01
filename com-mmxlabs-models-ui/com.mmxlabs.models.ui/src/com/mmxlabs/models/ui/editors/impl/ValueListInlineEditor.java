@@ -64,6 +64,7 @@ public class ValueListInlineEditor<T> extends UnsettableInlineEditor {
 		}
 	}
 
+	//FIXME!!! add the hiding code for the cases when the override is on the feature itself!
 	@Override
 	public Control createControl(Composite parent, EMFDataBindingContext dbc, FormToolkit toolkit) {
 		isOverridable = false;
@@ -71,7 +72,8 @@ public class ValueListInlineEditor<T> extends UnsettableInlineEditor {
 		if (eAnnotation == null) {
 			eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
 		}
-		if (eAnnotation != null) {
+		
+		if (eAnnotation != null) {		
 			for (EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
 				if (f.getName().equals(feature.getName() + "Override")) {
 					isOverridable = true;

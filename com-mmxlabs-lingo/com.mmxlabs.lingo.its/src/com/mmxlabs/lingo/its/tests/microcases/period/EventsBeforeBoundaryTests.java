@@ -419,11 +419,12 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 			// Load slot is in the boundary, so make sure it is locked.
 			Cargo opt_cargo2 = optimiserScenario.getCargoModel().getCargoes().get(0);
 			Assertions.assertTrue(opt_cargo2.getSortedSlots().get(0).isLocked());
-			Assertions.assertEquals(1, opt_cargo2.getSortedSlots().get(0).getAllowedVessels().size());
+			Assertions.assertEquals(1, opt_cargo2.getSortedSlots().get(0).getSlotOrDelegateVesselRestrictions().size());
 
 			// Discharge should be free
 			Assertions.assertFalse(opt_cargo2.getSortedSlots().get(1).isLocked());
-			Assertions.assertEquals(0, opt_cargo2.getSortedSlots().get(1).getAllowedVessels().size());
+			Assertions.assertEquals(0, opt_cargo2.getSortedSlots().get(1).getSlotOrDelegateVesselRestrictions().size());
+			Assertions.assertFalse(opt_cargo2.getSortedSlots().get(1).getSlotOrDelegateVesselRestrictionsArePermissive());
 
 			// Ensure heel value matches
 			Assertions.assertEquals(vessel_1.getVesselOrDelegateSafetyHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getMaxVolumeAvailable(), 0.0001);

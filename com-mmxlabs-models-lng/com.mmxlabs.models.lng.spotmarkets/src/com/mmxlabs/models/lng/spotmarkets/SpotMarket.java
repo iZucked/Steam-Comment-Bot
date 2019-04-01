@@ -7,8 +7,10 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -31,9 +33,12 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getPricingEvent <em>Pricing Event</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getRestrictedContracts <em>Restricted Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#isRestrictedContractsArePermissive <em>Restricted Contracts Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getRestrictedPorts <em>Restricted Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#isRestrictedPortsArePermissive <em>Restricted Ports Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getRestrictedVessels <em>Restricted Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#isRestrictedVesselsArePermissive <em>Restricted Vessels Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#isMtm <em>Mtm</em>}</li>
  * </ul>
  *
@@ -260,32 +265,6 @@ public interface SpotMarket extends UUIDObject, NamedObject {
 	void setPricingEvent(PricingEvent value);
 
 	/**
-	 * Returns the value of the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Restricted Lists Are Permissive</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Restricted Lists Are Permissive</em>' attribute.
-	 * @see #setRestrictedListsArePermissive(boolean)
-	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarket_RestrictedListsArePermissive()
-	 * @model
-	 * @generated
-	 */
-	boolean isRestrictedListsArePermissive();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Restricted Lists Are Permissive</em>' attribute.
-	 * @see #isRestrictedListsArePermissive()
-	 * @generated
-	 */
-	void setRestrictedListsArePermissive(boolean value);
-
-	/**
 	 * Returns the value of the '<em><b>Restricted Ports</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.
 	 * <!-- begin-user-doc -->
@@ -302,6 +281,74 @@ public interface SpotMarket extends UUIDObject, NamedObject {
 	EList<APortSet<Port>> getRestrictedPorts();
 
 	/**
+	 * Returns the value of the '<em><b>Restricted Ports Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Ports Are Permissive</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Ports Are Permissive</em>' attribute.
+	 * @see #setRestrictedPortsArePermissive(boolean)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarket_RestrictedPortsArePermissive()
+	 * @model
+	 * @generated
+	 */
+	boolean isRestrictedPortsArePermissive();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#isRestrictedPortsArePermissive <em>Restricted Ports Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Ports Are Permissive</em>' attribute.
+	 * @see #isRestrictedPortsArePermissive()
+	 * @generated
+	 */
+	void setRestrictedPortsArePermissive(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Vessels</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}<code>&lt;com.mmxlabs.models.lng.fleet.Vessel&gt;</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Vessels</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Vessels</em>' reference list.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarket_RestrictedVessels()
+	 * @model
+	 * @generated
+	 */
+	EList<AVesselSet<Vessel>> getRestrictedVessels();
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Vessels Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Vessels Are Permissive</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Vessels Are Permissive</em>' attribute.
+	 * @see #setRestrictedVesselsArePermissive(boolean)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarket_RestrictedVesselsArePermissive()
+	 * @model
+	 * @generated
+	 */
+	boolean isRestrictedVesselsArePermissive();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#isRestrictedVesselsArePermissive <em>Restricted Vessels Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Vessels Are Permissive</em>' attribute.
+	 * @see #isRestrictedVesselsArePermissive()
+	 * @generated
+	 */
+	void setRestrictedVesselsArePermissive(boolean value);
+
+	/**
 	 * Returns the value of the '<em><b>Restricted Contracts</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.Contract}.
 	 * <!-- begin-user-doc -->
@@ -316,6 +363,32 @@ public interface SpotMarket extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	EList<Contract> getRestrictedContracts();
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Contracts Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Contracts Are Permissive</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Contracts Are Permissive</em>' attribute.
+	 * @see #setRestrictedContractsArePermissive(boolean)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarket_RestrictedContractsArePermissive()
+	 * @model
+	 * @generated
+	 */
+	boolean isRestrictedContractsArePermissive();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#isRestrictedContractsArePermissive <em>Restricted Contracts Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Contracts Are Permissive</em>' attribute.
+	 * @see #isRestrictedContractsArePermissive()
+	 * @generated
+	 */
+	void setRestrictedContractsArePermissive(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Mtm</b></em>' attribute.

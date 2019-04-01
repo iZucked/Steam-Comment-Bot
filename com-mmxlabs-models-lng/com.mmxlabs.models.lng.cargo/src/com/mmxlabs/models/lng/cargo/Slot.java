@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.TimePeriod;
@@ -57,15 +58,19 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedContractsArePermissive <em>Restricted Contracts Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedContractsOverride <em>Restricted Contracts Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedPortsArePermissive <em>Restricted Ports Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedPortsOverride <em>Restricted Ports Override</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedVessels <em>Restricted Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedVesselsArePermissive <em>Restricted Vessels Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedVesselsOverride <em>Restricted Vessels Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedSlots <em>Restricted Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedSlotsArePermissive <em>Restricted Slots Are Permissive</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getHedges <em>Hedges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getMiscCosts <em>Misc Costs</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationExpression <em>Cancellation Expression</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isOverrideRestrictions <em>Override Restrictions</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getNominatedVessel <em>Nominated Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowNominationDate <em>Window Nomination Date</em>}</li>
@@ -1294,14 +1299,93 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Restricted Contracts</em>' reference list.
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedContracts()
-	 * @model annotation="http://www.mmxlabs.com/models/overrideFeature"
+	 * @model
 	 * @generated
 	 */
 	EList<Contract> getRestrictedContracts();
 
 	/**
+	 * Returns the value of the '<em><b>Restricted Contracts Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Contracts Are Permissive</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Contracts Are Permissive</em>' attribute.
+	 * @see #isSetRestrictedContractsArePermissive()
+	 * @see #unsetRestrictedContractsArePermissive()
+	 * @see #setRestrictedContractsArePermissive(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedContractsArePermissive()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	boolean isRestrictedContractsArePermissive();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedContractsArePermissive <em>Restricted Contracts Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Contracts Are Permissive</em>' attribute.
+	 * @see #isSetRestrictedContractsArePermissive()
+	 * @see #unsetRestrictedContractsArePermissive()
+	 * @see #isRestrictedContractsArePermissive()
+	 * @generated
+	 */
+	void setRestrictedContractsArePermissive(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedContractsArePermissive <em>Restricted Contracts Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetRestrictedContractsArePermissive()
+	 * @see #isRestrictedContractsArePermissive()
+	 * @see #setRestrictedContractsArePermissive(boolean)
+	 * @generated
+	 */
+	void unsetRestrictedContractsArePermissive();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedContractsArePermissive <em>Restricted Contracts Are Permissive</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Restricted Contracts Are Permissive</em>' attribute is set.
+	 * @see #unsetRestrictedContractsArePermissive()
+	 * @see #isRestrictedContractsArePermissive()
+	 * @see #setRestrictedContractsArePermissive(boolean)
+	 * @generated
+	 */
+	boolean isSetRestrictedContractsArePermissive();
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Contracts Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Contracts Override</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Contracts Override</em>' attribute.
+	 * @see #setRestrictedContractsOverride(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedContractsOverride()
+	 * @model
+	 * @generated
+	 */
+	boolean isRestrictedContractsOverride();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedContractsOverride <em>Restricted Contracts Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Contracts Override</em>' attribute.
+	 * @see #isRestrictedContractsOverride()
+	 * @generated
+	 */
+	void setRestrictedContractsOverride(boolean value);
+
+	/**
 	 * Returns the value of the '<em><b>Restricted Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.port.Port}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Restricted Ports</em>' reference list isn't clear,
@@ -1310,10 +1394,89 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Restricted Ports</em>' reference list.
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedPorts()
-	 * @model annotation="http://www.mmxlabs.com/models/overrideFeature"
+	 * @model
 	 * @generated
 	 */
-	EList<Port> getRestrictedPorts();
+	EList<APortSet<Port>> getRestrictedPorts();
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Ports Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Ports Are Permissive</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Ports Are Permissive</em>' attribute.
+	 * @see #isSetRestrictedPortsArePermissive()
+	 * @see #unsetRestrictedPortsArePermissive()
+	 * @see #setRestrictedPortsArePermissive(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedPortsArePermissive()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	boolean isRestrictedPortsArePermissive();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedPortsArePermissive <em>Restricted Ports Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Ports Are Permissive</em>' attribute.
+	 * @see #isSetRestrictedPortsArePermissive()
+	 * @see #unsetRestrictedPortsArePermissive()
+	 * @see #isRestrictedPortsArePermissive()
+	 * @generated
+	 */
+	void setRestrictedPortsArePermissive(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedPortsArePermissive <em>Restricted Ports Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetRestrictedPortsArePermissive()
+	 * @see #isRestrictedPortsArePermissive()
+	 * @see #setRestrictedPortsArePermissive(boolean)
+	 * @generated
+	 */
+	void unsetRestrictedPortsArePermissive();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedPortsArePermissive <em>Restricted Ports Are Permissive</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Restricted Ports Are Permissive</em>' attribute is set.
+	 * @see #unsetRestrictedPortsArePermissive()
+	 * @see #isRestrictedPortsArePermissive()
+	 * @see #setRestrictedPortsArePermissive(boolean)
+	 * @generated
+	 */
+	boolean isSetRestrictedPortsArePermissive();
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Ports Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Ports Override</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Ports Override</em>' attribute.
+	 * @see #setRestrictedPortsOverride(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedPortsOverride()
+	 * @model
+	 * @generated
+	 */
+	boolean isRestrictedPortsOverride();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedPortsOverride <em>Restricted Ports Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Ports Override</em>' attribute.
+	 * @see #isRestrictedPortsOverride()
+	 * @generated
+	 */
+	void setRestrictedPortsOverride(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Restricted Slots</b></em>' reference list.
@@ -1358,30 +1521,99 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	void setRestrictedSlotsArePermissive(boolean value);
 
 	/**
-	 * Returns the value of the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * Returns the value of the '<em><b>Restricted Vessels</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}<code>&lt;com.mmxlabs.models.lng.fleet.Vessel&gt;</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Restricted Lists Are Permissive</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Restricted Vessels</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Restricted Lists Are Permissive</em>' attribute.
-	 * @see #setRestrictedListsArePermissive(boolean)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedListsArePermissive()
-	 * @model annotation="http://www.mmxlabs.com/models/overrideFeature"
+	 * @return the value of the '<em>Restricted Vessels</em>' reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedVessels()
+	 * @model
 	 * @generated
 	 */
-	boolean isRestrictedListsArePermissive();
+	EList<AVesselSet<Vessel>> getRestrictedVessels();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute.
+	 * Returns the value of the '<em><b>Restricted Vessels Are Permissive</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Vessels Are Permissive</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Restricted Lists Are Permissive</em>' attribute.
-	 * @see #isRestrictedListsArePermissive()
+	 * @return the value of the '<em>Restricted Vessels Are Permissive</em>' attribute.
+	 * @see #isSetRestrictedVesselsArePermissive()
+	 * @see #unsetRestrictedVesselsArePermissive()
+	 * @see #setRestrictedVesselsArePermissive(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedVesselsArePermissive()
+	 * @model unsettable="true"
 	 * @generated
 	 */
-	void setRestrictedListsArePermissive(boolean value);
+	boolean isRestrictedVesselsArePermissive();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedVesselsArePermissive <em>Restricted Vessels Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Vessels Are Permissive</em>' attribute.
+	 * @see #isSetRestrictedVesselsArePermissive()
+	 * @see #unsetRestrictedVesselsArePermissive()
+	 * @see #isRestrictedVesselsArePermissive()
+	 * @generated
+	 */
+	void setRestrictedVesselsArePermissive(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedVesselsArePermissive <em>Restricted Vessels Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetRestrictedVesselsArePermissive()
+	 * @see #isRestrictedVesselsArePermissive()
+	 * @see #setRestrictedVesselsArePermissive(boolean)
+	 * @generated
+	 */
+	void unsetRestrictedVesselsArePermissive();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedVesselsArePermissive <em>Restricted Vessels Are Permissive</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Restricted Vessels Are Permissive</em>' attribute is set.
+	 * @see #unsetRestrictedVesselsArePermissive()
+	 * @see #isRestrictedVesselsArePermissive()
+	 * @see #setRestrictedVesselsArePermissive(boolean)
+	 * @generated
+	 */
+	boolean isSetRestrictedVesselsArePermissive();
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Vessels Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Vessels Override</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Vessels Override</em>' attribute.
+	 * @see #setRestrictedVesselsOverride(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedVesselsOverride()
+	 * @model
+	 * @generated
+	 */
+	boolean isRestrictedVesselsOverride();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedVesselsOverride <em>Restricted Vessels Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Vessels Override</em>' attribute.
+	 * @see #isRestrictedVesselsOverride()
+	 * @generated
+	 */
+	void setRestrictedVesselsOverride(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Hedges</b></em>' attribute.
@@ -1434,23 +1666,6 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	void setMiscCosts(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Allowed Vessels</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}<code>&lt;com.mmxlabs.models.lng.fleet.Vessel&gt;</code>.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Allowed Vessels</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Allowed Vessels</em>' reference list.
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_AllowedVessels()
-	 * @model
-	 * @generated
-	 */
-	EList<AVesselSet<Vessel>> getAllowedVessels();
-
 
 	///**
 //	 * Returns the value of the '<em><b>Cancellation Fee</b></em>' attribute.
@@ -1568,32 +1783,6 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	boolean isSetCancellationExpression();
-
-	/**
-	 * Returns the value of the '<em><b>Override Restrictions</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Override Restrictions</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Override Restrictions</em>' attribute.
-	 * @see #setOverrideRestrictions(boolean)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_OverrideRestrictions()
-	 * @model
-	 * @generated
-	 */
-	boolean isOverrideRestrictions();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isOverrideRestrictions <em>Override Restrictions</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Override Restrictions</em>' attribute.
-	 * @see #isOverrideRestrictions()
-	 * @generated
-	 */
-	void setOverrideRestrictions(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Nominated Vessel</b></em>' reference.
@@ -2547,14 +2736,6 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @model kind="operation"
 	 * @generated
 	 */
-	boolean getSlotOrDelegateRestrictedListsArePermissive();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
 	String getSlotOrDelegateCancellationExpression();
 
 	/**
@@ -2702,6 +2883,54 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	boolean getSlotOrDelegateFullCargoLot();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean getSlotOrDelegateContractRestrictionsArePermissive();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean getSlotOrDelegatePortRestrictionsArePermissive();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean getSlotOrDelegateVesselRestrictionsArePermissive();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<Contract> getSlotOrDelegateContractRestrictions();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<APortSet<Port>> getSlotOrDelegatePortRestrictions();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<AVesselSet<Vessel>> getSlotOrDelegateVesselRestrictions();
 
 } // end of  Slot
 

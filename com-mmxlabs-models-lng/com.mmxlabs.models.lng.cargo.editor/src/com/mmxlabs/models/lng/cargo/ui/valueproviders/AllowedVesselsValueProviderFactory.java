@@ -60,7 +60,9 @@ public class AllowedVesselsValueProviderFactory implements IReferenceValueProvid
 		final IReferenceValueProvider vesselGroupProvider = vesselGroupProviderFactory.createReferenceValueProvider(FleetPackage.Literals.FLEET_MODEL, FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS,
 				rootObject);
 
-		if (reference == CargoPackage.Literals.SLOT__ALLOWED_VESSELS || reference == CargoPackage.Literals.VESSEL_EVENT__ALLOWED_VESSELS) {
+		if (reference == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS 
+			|| reference == CargoPackage.Literals.VESSEL_EVENT__ALLOWED_VESSELS
+			|| reference == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS ) {
 			return new IReferenceValueProvider() {
 				// @Override
 				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
@@ -137,11 +139,11 @@ public class AllowedVesselsValueProviderFactory implements IReferenceValueProvid
 
 				@Override
 				public boolean updateOnChangeToFeature(final Object changedFeature) {
-					if (changedFeature == CargoPackage.eINSTANCE.getSlot_AllowedVessels()) {
+					if (changedFeature == CargoPackage.eINSTANCE.getVesselEvent_AllowedVessels()) {
 						return true;
 					}
-
-					if (changedFeature == CargoPackage.eINSTANCE.getVesselEvent_AllowedVessels()) {
+					
+					if (changedFeature == CargoPackage.eINSTANCE.getSlot_RestrictedVessels()) {
 						return true;
 					}
 

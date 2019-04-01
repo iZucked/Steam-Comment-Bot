@@ -172,6 +172,12 @@
           id="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.SpotMarketsCharterValueProviderFactory_CharterOutMarket"
           referenceEClass="com.mmxlabs.models.lng.spotmarkets.CharterOutMarket">
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.SpotMarketContractValueProviderFactory"
+          id="com.mmxlabs.models.lng..editorspotmarkets.valueproviders.SpotMarketContractValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket"
+          referenceEClass="com.mmxlabs.models.lng.commercial.Contract">
+    </valueProvider>
  </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated spotmarkets -->

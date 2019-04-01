@@ -1,4 +1,4 @@
-name,minQuantity,maxQuantity,restrictedListsArePermissive,entity,allowedPorts,restrictedContracts,restrictedPorts,priceInfo.priceExpression,priceInfo.kind,kind
-NBP Spot P,0,1000000,false,Others,All LOAD Ports,,,NBP,ExpressionPriceParameters,PurchaseContract
-HH Spot P,0,1000000,false,Others,All LOAD Ports,,,HH,ExpressionPriceParameters,PurchaseContract
-Buy 5,0,1000000,false,Others,,,,5,ExpressionPriceParameters,PurchaseContract
+name,minQuantity,maxQuantity,entity,allowedPorts,restrictedContracts,restrictedPorts,priceInfo.priceExpression,priceInfo.kind,kind
+NBP Spot P,0,1000000,Others,All LOAD Ports,,,NBP,ExpressionPriceParameters,PurchaseContract
+HH Spot P,0,1000000,Others,All LOAD Ports,,,HH,ExpressionPriceParameters,PurchaseContract
+Buy 5,0,1000000,Others,,,,5,ExpressionPriceParameters,PurchaseContract

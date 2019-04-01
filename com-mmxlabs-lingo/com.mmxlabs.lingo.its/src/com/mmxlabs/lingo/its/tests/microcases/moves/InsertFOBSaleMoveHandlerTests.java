@@ -134,7 +134,7 @@ public class InsertFOBSaleMoveHandlerTests extends AbstractMoveHandlerTest {
 
 		final LoadSlot load1 = cargoModelBuilder//
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "5", 22.6) //
-				.withAllowedVessels(vessel2) //
+				.withRestrictedVessels(vessel2, true) //
 				.build();
 		//
 		final DischargeSlot discharge1 = cargoModelBuilder//

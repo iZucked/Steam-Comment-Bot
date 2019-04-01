@@ -79,6 +79,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -840,14 +841,14 @@ public class CargoEditorMenuHelper {
 		}
 
 		// check that window timings are compatible
-		if (areSlotWindowsCompatible(load, discharge) == false) {
+		if (!areSlotWindowsCompatible(load, discharge)) {
 			return false;
 		}
 
 		// DES purchase
-		if (load.isDESPurchase() == true) {
+		if (load.isDESPurchase()) {
 			// FOB sale - incompatible
-			if (discharge.isFOBSale() == true) {
+			if (discharge.isFOBSale()) {
 				return false;
 			}
 			// DES sale - only at the same port or divertible
@@ -858,7 +859,7 @@ public class CargoEditorMenuHelper {
 		// FOB purchase
 		else {
 			// FOB sale - only at the same port or divertible
-			if (discharge.isFOBSale() == true) {
+			if (discharge.isFOBSale()) {
 				return discharge.getSlotOrDelegateDivertible() || (load.getPort() == discharge.getPort());
 			}
 			// DES sale - compatible
@@ -895,20 +896,17 @@ public class CargoEditorMenuHelper {
 	 * @return
 	 */
 	private boolean checkSourceContractConstraints(final Slot<?> source, final Slot<?> target) {
-		final EList<Port> restrictedPorts = source.getRestrictedPorts();
-		final EList<Contract> restrictedContracts = source.getRestrictedContracts();
-		final boolean areRestrictedListsPermissive = source.getSlotOrDelegateRestrictedListsArePermissive();
+		final List<APortSet<Port>> restrictedPorts = source.getSlotOrDelegatePortRestrictions();
+		final boolean areRestrictedPortsListsPermissive = source.getSlotOrDelegatePortRestrictionsArePermissive();
 
-		if (restrictedContracts != null) {
-			if (restrictedContracts.contains(target.getContract()) != areRestrictedListsPermissive) {
-				return false;
-			}
+		if (restrictedPorts.contains(target.getPort()) != areRestrictedPortsListsPermissive) {
+			return false;
 		}
 
-		if (restrictedPorts != null) {
-			if (restrictedPorts.contains(target.getPort()) != areRestrictedListsPermissive) {
-				return false;
-			}
+		final List<? extends Contract> restrictedContracts = source.getSlotOrDelegateContractRestrictions();
+		final boolean areRestrictedContractListsPermissive = source.getSlotOrDelegateContractRestrictionsArePermissive();
+		if (restrictedContracts.contains(target.getContract()) != areRestrictedContractListsPermissive) {
+			return false;
 		}
 
 		return true;

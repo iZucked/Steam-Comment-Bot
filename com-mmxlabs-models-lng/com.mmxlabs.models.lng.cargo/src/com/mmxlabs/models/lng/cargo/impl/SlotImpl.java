@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.TimePeriod;
@@ -82,15 +83,19 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedContractsArePermissive <em>Restricted Contracts Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedContractsOverride <em>Restricted Contracts Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedPortsArePermissive <em>Restricted Ports Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedPortsOverride <em>Restricted Ports Override</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedVessels <em>Restricted Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedVesselsArePermissive <em>Restricted Vessels Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedVesselsOverride <em>Restricted Vessels Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedSlots <em>Restricted Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedSlotsArePermissive <em>Restricted Slots Are Permissive</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getHedges <em>Hedges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMiscCosts <em>Misc Costs</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOverrideRestrictions <em>Override Restrictions</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNominatedVessel <em>Nominated Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowNominationDate <em>Window Nomination Date</em>}</li>
@@ -753,6 +758,55 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	protected EList<Contract> restrictedContracts;
 
 	/**
+	 * The default value of the '{@link #isRestrictedContractsArePermissive() <em>Restricted Contracts Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedContractsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RESTRICTED_CONTRACTS_ARE_PERMISSIVE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedContractsArePermissive() <em>Restricted Contracts Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedContractsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedContractsArePermissive = RESTRICTED_CONTRACTS_ARE_PERMISSIVE_EDEFAULT;
+
+	/**
+	 * This is true if the Restricted Contracts Are Permissive attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedContractsArePermissiveESet;
+
+	/**
+	 * The default value of the '{@link #isRestrictedContractsOverride() <em>Restricted Contracts Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedContractsOverride()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RESTRICTED_CONTRACTS_OVERRIDE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedContractsOverride() <em>Restricted Contracts Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedContractsOverride()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedContractsOverride = RESTRICTED_CONTRACTS_OVERRIDE_EDEFAULT;
+
+	/**
 	 * The cached value of the '{@link #getRestrictedPorts() <em>Restricted Ports</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -760,7 +814,115 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Port> restrictedPorts;
+	protected EList<APortSet<Port>> restrictedPorts;
+
+	/**
+	 * The default value of the '{@link #isRestrictedPortsArePermissive() <em>Restricted Ports Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedPortsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RESTRICTED_PORTS_ARE_PERMISSIVE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedPortsArePermissive() <em>Restricted Ports Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedPortsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedPortsArePermissive = RESTRICTED_PORTS_ARE_PERMISSIVE_EDEFAULT;
+
+	/**
+	 * This is true if the Restricted Ports Are Permissive attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedPortsArePermissiveESet;
+
+	/**
+	 * The default value of the '{@link #isRestrictedPortsOverride() <em>Restricted Ports Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedPortsOverride()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RESTRICTED_PORTS_OVERRIDE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedPortsOverride() <em>Restricted Ports Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedPortsOverride()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedPortsOverride = RESTRICTED_PORTS_OVERRIDE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getRestrictedVessels() <em>Restricted Vessels</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRestrictedVessels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<AVesselSet<Vessel>> restrictedVessels;
+
+	/**
+	 * The default value of the '{@link #isRestrictedVesselsArePermissive() <em>Restricted Vessels Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedVesselsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RESTRICTED_VESSELS_ARE_PERMISSIVE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedVesselsArePermissive() <em>Restricted Vessels Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedVesselsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedVesselsArePermissive = RESTRICTED_VESSELS_ARE_PERMISSIVE_EDEFAULT;
+
+	/**
+	 * This is true if the Restricted Vessels Are Permissive attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedVesselsArePermissiveESet;
+
+	/**
+	 * The default value of the '{@link #isRestrictedVesselsOverride() <em>Restricted Vessels Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedVesselsOverride()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RESTRICTED_VESSELS_OVERRIDE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedVesselsOverride() <em>Restricted Vessels Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedVesselsOverride()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedVesselsOverride = RESTRICTED_VESSELS_OVERRIDE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getRestrictedSlots() <em>Restricted Slots</em>}' reference list.
@@ -791,26 +953,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected boolean restrictedSlotsArePermissive = RESTRICTED_SLOTS_ARE_PERMISSIVE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isRestrictedListsArePermissive()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isRestrictedListsArePermissive()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean restrictedListsArePermissive = RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getHedges() <em>Hedges</em>}' attribute.
@@ -853,16 +995,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	protected int miscCosts = MISC_COSTS_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getAllowedVessels() <em>Allowed Vessels</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAllowedVessels()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<AVesselSet<Vessel>> allowedVessels;
-
-	/**
 	 * The default value of the '{@link #getCancellationExpression() <em>Cancellation Expression</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -890,26 +1022,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected boolean cancellationExpressionESet;
-
-	/**
-	 * The default value of the '{@link #isOverrideRestrictions() <em>Override Restrictions</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isOverrideRestrictions()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean OVERRIDE_RESTRICTIONS_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isOverrideRestrictions() <em>Override Restrictions</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isOverrideRestrictions()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean overrideRestrictions = OVERRIDE_RESTRICTIONS_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getNominatedVessel() <em>Nominated Vessel</em>}' reference.
@@ -2616,11 +2728,157 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated
 	 */
 	@Override
-	public EList<Port> getRestrictedPorts() {
+	public boolean isRestrictedContractsArePermissive() {
+		return restrictedContractsArePermissive;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRestrictedContractsArePermissive(boolean newRestrictedContractsArePermissive) {
+		boolean oldRestrictedContractsArePermissive = restrictedContractsArePermissive;
+		restrictedContractsArePermissive = newRestrictedContractsArePermissive;
+		boolean oldRestrictedContractsArePermissiveESet = restrictedContractsArePermissiveESet;
+		restrictedContractsArePermissiveESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE, oldRestrictedContractsArePermissive, restrictedContractsArePermissive, !oldRestrictedContractsArePermissiveESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetRestrictedContractsArePermissive() {
+		boolean oldRestrictedContractsArePermissive = restrictedContractsArePermissive;
+		boolean oldRestrictedContractsArePermissiveESet = restrictedContractsArePermissiveESet;
+		restrictedContractsArePermissive = RESTRICTED_CONTRACTS_ARE_PERMISSIVE_EDEFAULT;
+		restrictedContractsArePermissiveESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE, oldRestrictedContractsArePermissive, RESTRICTED_CONTRACTS_ARE_PERMISSIVE_EDEFAULT, oldRestrictedContractsArePermissiveESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetRestrictedContractsArePermissive() {
+		return restrictedContractsArePermissiveESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isRestrictedContractsOverride() {
+		return restrictedContractsOverride;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRestrictedContractsOverride(boolean newRestrictedContractsOverride) {
+		boolean oldRestrictedContractsOverride = restrictedContractsOverride;
+		restrictedContractsOverride = newRestrictedContractsOverride;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_CONTRACTS_OVERRIDE, oldRestrictedContractsOverride, restrictedContractsOverride));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<APortSet<Port>> getRestrictedPorts() {
 		if (restrictedPorts == null) {
-			restrictedPorts = new EObjectResolvingEList<Port>(Port.class, this, CargoPackage.SLOT__RESTRICTED_PORTS);
+			restrictedPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, CargoPackage.SLOT__RESTRICTED_PORTS);
 		}
 		return restrictedPorts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isRestrictedPortsArePermissive() {
+		return restrictedPortsArePermissive;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRestrictedPortsArePermissive(boolean newRestrictedPortsArePermissive) {
+		boolean oldRestrictedPortsArePermissive = restrictedPortsArePermissive;
+		restrictedPortsArePermissive = newRestrictedPortsArePermissive;
+		boolean oldRestrictedPortsArePermissiveESet = restrictedPortsArePermissiveESet;
+		restrictedPortsArePermissiveESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE, oldRestrictedPortsArePermissive, restrictedPortsArePermissive, !oldRestrictedPortsArePermissiveESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetRestrictedPortsArePermissive() {
+		boolean oldRestrictedPortsArePermissive = restrictedPortsArePermissive;
+		boolean oldRestrictedPortsArePermissiveESet = restrictedPortsArePermissiveESet;
+		restrictedPortsArePermissive = RESTRICTED_PORTS_ARE_PERMISSIVE_EDEFAULT;
+		restrictedPortsArePermissiveESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE, oldRestrictedPortsArePermissive, RESTRICTED_PORTS_ARE_PERMISSIVE_EDEFAULT, oldRestrictedPortsArePermissiveESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetRestrictedPortsArePermissive() {
+		return restrictedPortsArePermissiveESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isRestrictedPortsOverride() {
+		return restrictedPortsOverride;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRestrictedPortsOverride(boolean newRestrictedPortsOverride) {
+		boolean oldRestrictedPortsOverride = restrictedPortsOverride;
+		restrictedPortsOverride = newRestrictedPortsOverride;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_PORTS_OVERRIDE, oldRestrictedPortsOverride, restrictedPortsOverride));
 	}
 
 	/**
@@ -2665,8 +2923,11 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated
 	 */
 	@Override
-	public boolean isRestrictedListsArePermissive() {
-		return restrictedListsArePermissive;
+	public EList<AVesselSet<Vessel>> getRestrictedVessels() {
+		if (restrictedVessels == null) {
+			restrictedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, CargoPackage.SLOT__RESTRICTED_VESSELS);
+		}
+		return restrictedVessels;
 	}
 
 	/**
@@ -2675,11 +2936,71 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated
 	 */
 	@Override
-	public void setRestrictedListsArePermissive(boolean newRestrictedListsArePermissive) {
-		boolean oldRestrictedListsArePermissive = restrictedListsArePermissive;
-		restrictedListsArePermissive = newRestrictedListsArePermissive;
+	public boolean isRestrictedVesselsArePermissive() {
+		return restrictedVesselsArePermissive;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRestrictedVesselsArePermissive(boolean newRestrictedVesselsArePermissive) {
+		boolean oldRestrictedVesselsArePermissive = restrictedVesselsArePermissive;
+		restrictedVesselsArePermissive = newRestrictedVesselsArePermissive;
+		boolean oldRestrictedVesselsArePermissiveESet = restrictedVesselsArePermissiveESet;
+		restrictedVesselsArePermissiveESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE, oldRestrictedListsArePermissive, restrictedListsArePermissive));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE, oldRestrictedVesselsArePermissive, restrictedVesselsArePermissive, !oldRestrictedVesselsArePermissiveESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetRestrictedVesselsArePermissive() {
+		boolean oldRestrictedVesselsArePermissive = restrictedVesselsArePermissive;
+		boolean oldRestrictedVesselsArePermissiveESet = restrictedVesselsArePermissiveESet;
+		restrictedVesselsArePermissive = RESTRICTED_VESSELS_ARE_PERMISSIVE_EDEFAULT;
+		restrictedVesselsArePermissiveESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE, oldRestrictedVesselsArePermissive, RESTRICTED_VESSELS_ARE_PERMISSIVE_EDEFAULT, oldRestrictedVesselsArePermissiveESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetRestrictedVesselsArePermissive() {
+		return restrictedVesselsArePermissiveESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isRestrictedVesselsOverride() {
+		return restrictedVesselsOverride;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRestrictedVesselsOverride(boolean newRestrictedVesselsOverride) {
+		boolean oldRestrictedVesselsOverride = restrictedVesselsOverride;
+		restrictedVesselsOverride = newRestrictedVesselsOverride;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_VESSELS_OVERRIDE, oldRestrictedVesselsOverride, restrictedVesselsOverride));
 	}
 
 	/**
@@ -2775,29 +3096,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public boolean isSetCancellationExpression() {
 		return cancellationExpressionESet;
-	}
-
-								/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isOverrideRestrictions() {
-		return overrideRestrictions;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setOverrideRestrictions(boolean newOverrideRestrictions) {
-		boolean oldOverrideRestrictions = overrideRestrictions;
-		overrideRestrictions = newOverrideRestrictions;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__OVERRIDE_RESTRICTIONS, oldOverrideRestrictions, overrideRestrictions));
 	}
 
 								/**
@@ -3598,21 +3896,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 								/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<AVesselSet<Vessel>> getAllowedVessels() {
-		if (allowedVessels == null) {
-			allowedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, CargoPackage.SLOT__ALLOWED_VESSELS);
-		}
-		return allowedVessels;
-	}
-
-	
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
 	 */
@@ -3809,36 +4092,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	public BaseLegalEntity getSlotOrDelegateEntity() {
 		return (BaseLegalEntity) eGetWithDefault(CargoPackage.Literals.SLOT__ENTITY);
 	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	@SuppressWarnings("unchecked")
-	public EList<Contract> getSlotOrDelegateRestrictedContracts() {
-		return (EList<Contract>) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	@SuppressWarnings("unchecked")
-	public EList<Port> getSlotOrDelegateRestrictedPorts() {
-		return (EList<Port>) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_PORTS);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public boolean getSlotOrDelegateRestrictedListsArePermissive() {
-		return (Boolean) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE);
-	}
-
+ 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4017,6 +4271,75 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public boolean getSlotOrDelegateContractRestrictionsArePermissive() {
+		return (boolean) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public boolean getSlotOrDelegatePortRestrictionsArePermissive() {
+		return (boolean) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public boolean getSlotOrDelegateVesselRestrictionsArePermissive() {
+		return (boolean) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Contract> getSlotOrDelegateContractRestrictions() {
+		if (getContract() == null || isRestrictedContractsOverride()) {
+			return getRestrictedContracts();
+		}
+		return getContract().getRestrictedContracts();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<APortSet<Port>> getSlotOrDelegatePortRestrictions() {
+		if (getContract() == null || isRestrictedPortsOverride()) {
+			return getRestrictedPorts();
+		}
+		return getContract().getRestrictedPorts();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<AVesselSet<Vessel>> getSlotOrDelegateVesselRestrictions() {
+		if (getContract() == null || isRestrictedVesselsOverride()) {
+			return getRestrictedVessels();
+		}
+		return getContract().getRestrictedVessels();
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -4128,24 +4451,32 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return basicGetEntity();
 			case CargoPackage.SLOT__RESTRICTED_CONTRACTS:
 				return getRestrictedContracts();
+			case CargoPackage.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
+				return isRestrictedContractsArePermissive();
+			case CargoPackage.SLOT__RESTRICTED_CONTRACTS_OVERRIDE:
+				return isRestrictedContractsOverride();
 			case CargoPackage.SLOT__RESTRICTED_PORTS:
 				return getRestrictedPorts();
+			case CargoPackage.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE:
+				return isRestrictedPortsArePermissive();
+			case CargoPackage.SLOT__RESTRICTED_PORTS_OVERRIDE:
+				return isRestrictedPortsOverride();
+			case CargoPackage.SLOT__RESTRICTED_VESSELS:
+				return getRestrictedVessels();
+			case CargoPackage.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE:
+				return isRestrictedVesselsArePermissive();
+			case CargoPackage.SLOT__RESTRICTED_VESSELS_OVERRIDE:
+				return isRestrictedVesselsOverride();
 			case CargoPackage.SLOT__RESTRICTED_SLOTS:
 				return getRestrictedSlots();
 			case CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE:
 				return isRestrictedSlotsArePermissive();
-			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
-				return isRestrictedListsArePermissive();
 			case CargoPackage.SLOT__HEDGES:
 				return getHedges();
 			case CargoPackage.SLOT__MISC_COSTS:
 				return getMiscCosts();
-			case CargoPackage.SLOT__ALLOWED_VESSELS:
-				return getAllowedVessels();
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
 				return getCancellationExpression();
-			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
-				return isOverrideRestrictions();
 			case CargoPackage.SLOT__NOMINATED_VESSEL:
 				if (resolve) return getNominatedVessel();
 				return basicGetNominatedVessel();
@@ -4285,9 +4616,31 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				getRestrictedContracts().clear();
 				getRestrictedContracts().addAll((Collection<? extends Contract>)newValue);
 				return;
+			case CargoPackage.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
+				setRestrictedContractsArePermissive((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__RESTRICTED_CONTRACTS_OVERRIDE:
+				setRestrictedContractsOverride((Boolean)newValue);
+				return;
 			case CargoPackage.SLOT__RESTRICTED_PORTS:
 				getRestrictedPorts().clear();
-				getRestrictedPorts().addAll((Collection<? extends Port>)newValue);
+				getRestrictedPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
+				return;
+			case CargoPackage.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE:
+				setRestrictedPortsArePermissive((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__RESTRICTED_PORTS_OVERRIDE:
+				setRestrictedPortsOverride((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__RESTRICTED_VESSELS:
+				getRestrictedVessels().clear();
+				getRestrictedVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
+				return;
+			case CargoPackage.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE:
+				setRestrictedVesselsArePermissive((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__RESTRICTED_VESSELS_OVERRIDE:
+				setRestrictedVesselsOverride((Boolean)newValue);
 				return;
 			case CargoPackage.SLOT__RESTRICTED_SLOTS:
 				getRestrictedSlots().clear();
@@ -4296,24 +4649,14 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE:
 				setRestrictedSlotsArePermissive((Boolean)newValue);
 				return;
-			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
-				setRestrictedListsArePermissive((Boolean)newValue);
-				return;
 			case CargoPackage.SLOT__HEDGES:
 				setHedges((Integer)newValue);
 				return;
 			case CargoPackage.SLOT__MISC_COSTS:
 				setMiscCosts((Integer)newValue);
 				return;
-			case CargoPackage.SLOT__ALLOWED_VESSELS:
-				getAllowedVessels().clear();
-				getAllowedVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
-				return;
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
 				setCancellationExpression((String)newValue);
-				return;
-			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
-				setOverrideRestrictions((Boolean)newValue);
 				return;
 			case CargoPackage.SLOT__NOMINATED_VESSEL:
 				setNominatedVessel((Vessel)newValue);
@@ -4473,8 +4816,29 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__RESTRICTED_CONTRACTS:
 				getRestrictedContracts().clear();
 				return;
+			case CargoPackage.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
+				unsetRestrictedContractsArePermissive();
+				return;
+			case CargoPackage.SLOT__RESTRICTED_CONTRACTS_OVERRIDE:
+				setRestrictedContractsOverride(RESTRICTED_CONTRACTS_OVERRIDE_EDEFAULT);
+				return;
 			case CargoPackage.SLOT__RESTRICTED_PORTS:
 				getRestrictedPorts().clear();
+				return;
+			case CargoPackage.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE:
+				unsetRestrictedPortsArePermissive();
+				return;
+			case CargoPackage.SLOT__RESTRICTED_PORTS_OVERRIDE:
+				setRestrictedPortsOverride(RESTRICTED_PORTS_OVERRIDE_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__RESTRICTED_VESSELS:
+				getRestrictedVessels().clear();
+				return;
+			case CargoPackage.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE:
+				unsetRestrictedVesselsArePermissive();
+				return;
+			case CargoPackage.SLOT__RESTRICTED_VESSELS_OVERRIDE:
+				setRestrictedVesselsOverride(RESTRICTED_VESSELS_OVERRIDE_EDEFAULT);
 				return;
 			case CargoPackage.SLOT__RESTRICTED_SLOTS:
 				getRestrictedSlots().clear();
@@ -4482,23 +4846,14 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE:
 				setRestrictedSlotsArePermissive(RESTRICTED_SLOTS_ARE_PERMISSIVE_EDEFAULT);
 				return;
-			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
-				setRestrictedListsArePermissive(RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT);
-				return;
 			case CargoPackage.SLOT__HEDGES:
 				setHedges(HEDGES_EDEFAULT);
 				return;
 			case CargoPackage.SLOT__MISC_COSTS:
 				setMiscCosts(MISC_COSTS_EDEFAULT);
 				return;
-			case CargoPackage.SLOT__ALLOWED_VESSELS:
-				getAllowedVessels().clear();
-				return;
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
 				unsetCancellationExpression();
-				return;
-			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
-				setOverrideRestrictions(OVERRIDE_RESTRICTIONS_EDEFAULT);
 				return;
 			case CargoPackage.SLOT__NOMINATED_VESSEL:
 				setNominatedVessel((Vessel)null);
@@ -4569,6 +4924,23 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		}
 		super.eUnset(featureID);
 	}
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public boolean eIsSet(EStructuralFeature eFeature) {
+		if (eFeature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS) {
+			return getContract() == null || isRestrictedContractsOverride();
+		}
+		if (eFeature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS) {
+			return getContract() == null || isRestrictedPortsOverride();
+		}
+		if (eFeature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS) {
+			return getContract() == null || isRestrictedVesselsOverride();
+		}
+		// TODO Auto-generated method stub
+		return super.eIsSet(eFeature);
+	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -4631,24 +5003,32 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isSetEntity();
 			case CargoPackage.SLOT__RESTRICTED_CONTRACTS:
 				return restrictedContracts != null && !restrictedContracts.isEmpty();
+			case CargoPackage.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
+				return isSetRestrictedContractsArePermissive();
+			case CargoPackage.SLOT__RESTRICTED_CONTRACTS_OVERRIDE:
+				return restrictedContractsOverride != RESTRICTED_CONTRACTS_OVERRIDE_EDEFAULT;
 			case CargoPackage.SLOT__RESTRICTED_PORTS:
 				return restrictedPorts != null && !restrictedPorts.isEmpty();
+			case CargoPackage.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE:
+				return isSetRestrictedPortsArePermissive();
+			case CargoPackage.SLOT__RESTRICTED_PORTS_OVERRIDE:
+				return restrictedPortsOverride != RESTRICTED_PORTS_OVERRIDE_EDEFAULT;
+			case CargoPackage.SLOT__RESTRICTED_VESSELS:
+				return restrictedVessels != null && !restrictedVessels.isEmpty();
+			case CargoPackage.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE:
+				return isSetRestrictedVesselsArePermissive();
+			case CargoPackage.SLOT__RESTRICTED_VESSELS_OVERRIDE:
+				return restrictedVesselsOverride != RESTRICTED_VESSELS_OVERRIDE_EDEFAULT;
 			case CargoPackage.SLOT__RESTRICTED_SLOTS:
 				return restrictedSlots != null && !restrictedSlots.isEmpty();
 			case CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE:
 				return restrictedSlotsArePermissive != RESTRICTED_SLOTS_ARE_PERMISSIVE_EDEFAULT;
-			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
-				return restrictedListsArePermissive != RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
 			case CargoPackage.SLOT__HEDGES:
 				return hedges != HEDGES_EDEFAULT;
 			case CargoPackage.SLOT__MISC_COSTS:
 				return miscCosts != MISC_COSTS_EDEFAULT;
-			case CargoPackage.SLOT__ALLOWED_VESSELS:
-				return allowedVessels != null && !allowedVessels.isEmpty();
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
 				return isSetCancellationExpression();
-			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
-				return overrideRestrictions != OVERRIDE_RESTRICTIONS_EDEFAULT;
 			case CargoPackage.SLOT__NOMINATED_VESSEL:
 				return nominatedVessel != null;
 			case CargoPackage.SLOT__LOCKED:
@@ -4794,8 +5174,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getWindowSizeInHours();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_ENTITY:
 				return getSlotOrDelegateEntity();
-			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_RESTRICTED_LISTS_ARE_PERMISSIVE:
-				return getSlotOrDelegateRestrictedListsArePermissive();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_CANCELLATION_EXPRESSION:
 				return getSlotOrDelegateCancellationExpression();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_PRICING_EVENT:
@@ -4834,6 +5212,18 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSlotOrDelegatePortLoadNominationCounterparty();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT:
 				return getSlotOrDelegateFullCargoLot();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE:
+				return getSlotOrDelegateContractRestrictionsArePermissive();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS_ARE_PERMISSIVE:
+				return getSlotOrDelegatePortRestrictionsArePermissive();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS_ARE_PERMISSIVE:
+				return getSlotOrDelegateVesselRestrictionsArePermissive();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS:
+				return getSlotOrDelegateContractRestrictions();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS:
+				return getSlotOrDelegatePortRestrictions();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS:
+				return getSlotOrDelegateVesselRestrictions();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -4893,18 +5283,26 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		if (divertibleESet) result.append(divertible); else result.append("<unset>");
 		result.append(", shippingDaysRestriction: ");
 		if (shippingDaysRestrictionESet) result.append(shippingDaysRestriction); else result.append("<unset>");
+		result.append(", restrictedContractsArePermissive: ");
+		if (restrictedContractsArePermissiveESet) result.append(restrictedContractsArePermissive); else result.append("<unset>");
+		result.append(", restrictedContractsOverride: ");
+		result.append(restrictedContractsOverride);
+		result.append(", restrictedPortsArePermissive: ");
+		if (restrictedPortsArePermissiveESet) result.append(restrictedPortsArePermissive); else result.append("<unset>");
+		result.append(", restrictedPortsOverride: ");
+		result.append(restrictedPortsOverride);
+		result.append(", restrictedVesselsArePermissive: ");
+		if (restrictedVesselsArePermissiveESet) result.append(restrictedVesselsArePermissive); else result.append("<unset>");
+		result.append(", restrictedVesselsOverride: ");
+		result.append(restrictedVesselsOverride);
 		result.append(", restrictedSlotsArePermissive: ");
 		result.append(restrictedSlotsArePermissive);
-		result.append(", restrictedListsArePermissive: ");
-		result.append(restrictedListsArePermissive);
 		result.append(", hedges: ");
 		result.append(hedges);
 		result.append(", miscCosts: ");
 		result.append(miscCosts);
 		result.append(", cancellationExpression: ");
 		if (cancellationExpressionESet) result.append(cancellationExpression); else result.append("<unset>");
-		result.append(", overrideRestrictions: ");
-		result.append(overrideRestrictions);
 		result.append(", locked: ");
 		result.append(locked);
 		result.append(", windowNominationDate: ");
@@ -4982,27 +5380,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_VolumeLimitsUnit(), VolumeUnits.M3);
 		} else if (CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS == feature) {
 			return new DelegateInformation(cargo.getSlot_Port(), port.getPort_DefaultWindowSizeUnits(), TimePeriod.HOURS);
-		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE) {
-			return new DelegateInformation(null, null, null) {
-				public boolean delegatesTo(final Object changedFeature) {
-					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
-				}
-				
-				public Object getValue(final EObject object) {
-					Object result = null;
-					final Contract contract = (Contract) getContract();
-					if (!isOverrideRestrictions() && contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE)) {
-							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE);
-						}
-					}
-					if (result == null) {
-						return false;
-					}
-					return result;
-					
-				}				
-			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS) {
 			return new DelegateInformation(null, null, null) {
 				public boolean delegatesTo(final Object changedFeature) {
@@ -5010,9 +5387,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				}
 				
 				public Object getValue(final EObject object) {
-					Object result = null;
+					Object result = Collections.EMPTY_LIST;
 					final Contract contract = (Contract) getContract();
-					if (!isOverrideRestrictions() && contract != null) {
+					if (!isRestrictedContractsOverride() && contract != null) {
 						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS)) {
 							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS);
 						}
@@ -5028,9 +5405,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				}
 				
 				public Object getValue(final EObject object) {
-					Object result = null;
+					Object result = Collections.EMPTY_LIST;
 					final Contract contract = (Contract) getContract();
-					if (!isOverrideRestrictions() && contract != null) {
+					if (!isRestrictedPortsOverride() && contract != null) {
 						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS)) {
 							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS);
 						}
@@ -5039,6 +5416,30 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 					
 				}				
 			};
+		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = Collections.EMPTY_LIST;
+					final Contract contract = (Contract) getContract();
+					if (!isRestrictedVesselsOverride() && contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS)) {
+							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS);
+						}
+					}
+					return result;
+					
+				}				
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedContractsArePermissive(), Boolean.FALSE);
+		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedPortsArePermissive(), Boolean.FALSE);
+		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedVesselsArePermissive(), Boolean.FALSE);
 		} else if (feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_DATE) {
 			return new DelegateInformation(null, null, null) {
 				public boolean delegatesTo(final Object changedFeature) {
