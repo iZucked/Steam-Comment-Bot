@@ -33,10 +33,10 @@ public class GeometricThreholderTest {
 		t.step();
 		Assertions.assertTrue(t.accept((long) (mlnHalf * initialTemperature) - 1));
 		t.step();
-		Assertions.assertEquals(initialTemperature * alpha, t.getTemperature(), 0.0);
+		Assertions.assertEquals(initialTemperature * alpha, t.getTemperature(), 0.0001);
 		t.step();
 		t.step();
-		Assertions.assertEquals(initialTemperature * alpha * alpha, t.getTemperature(), 0.0);
+		Assertions.assertEquals(initialTemperature * alpha * alpha, t.getTemperature(), 0.0001);
 		Assertions.assertTrue(t.accept((long) (mlnHalf * initialTemperature * alpha * alpha) - 1));
 		Assertions.assertFalse(t.accept((long) (mlnHalf * initialTemperature * alpha * alpha) + 1));
 	}
