@@ -119,7 +119,16 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		}
 		return super.getAdapter(adapter);
 	}
+	
+	private Table table = null;
+	private void saveTable(final Table table) {
+		this.table = table;
+	}
 
+	public Table getTable() {
+		return this.table;
+	}
+	
 	private final IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
 		//
 		// private final Map<Object, ScenarioResult> _elementToInstanceMap = new
@@ -136,6 +145,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			TransformedSelectedDataProvider newSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
 			processInputs(table.getRows(), newSelectedDataProvider);
 			processCompositeInputs(table.getCompositeRows());
+			saveTable(table);
 
 			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
 				if (handler != null) {
@@ -161,6 +171,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			builder.refreshPNLColumns(rootObjects);
 			TransformedSelectedDataProvider newSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
 			processInputs(table.getRows(), newSelectedDataProvider);
+			saveTable(table);
 
 			final int numberOfSchedules = others.size();
 			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
@@ -179,6 +190,8 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		}
 
 	};
+	
+	
 
 	@Override
 	public void initPartControl(final Composite parent) {

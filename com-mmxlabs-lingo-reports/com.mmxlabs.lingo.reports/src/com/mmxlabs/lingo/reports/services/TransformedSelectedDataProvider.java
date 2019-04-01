@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.services;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +85,11 @@ public class TransformedSelectedDataProvider implements ISelectedDataProvider {
 
 	@Override
 	public @NonNull List<ScenarioResult> getScenarioResults() {
-		return selectedDataProvider.getScenarioResults();
+		if (selectedDataProvider != null) {
+			return selectedDataProvider.getScenarioResults();
+		} else {
+			return Collections.EMPTY_LIST;
+		}
 	}
 
 	public void addExtraData(@NonNull Object obj, @NonNull final ScenarioResult scenarioResult, @Nullable final Schedule schedule) {
