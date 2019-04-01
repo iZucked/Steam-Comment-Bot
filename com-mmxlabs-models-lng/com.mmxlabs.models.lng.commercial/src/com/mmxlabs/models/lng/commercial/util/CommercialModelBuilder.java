@@ -81,7 +81,7 @@ public class CommercialModelBuilder {
 
 	public void setTaxRates(@NonNull final BaseLegalEntity entity, @NonNull final LocalDate date, final float taxRate) {
 		final List<BaseEntityBook> books = CollectionsUtil.makeArrayList(entity.getTradingBook(), entity.getShippingBook(), entity.getUpstreamBook());
-		for (BaseEntityBook entityBook : books) {
+		for (final BaseEntityBook entityBook : books) {
 			if (entityBook != null) {
 				final @NonNull TaxRate tr = createTaxRate(date, taxRate);
 				entityBook.getTaxRates().add(tr);
@@ -162,5 +162,19 @@ public class CommercialModelBuilder {
 		ballastBonusContract.getRules().add(notionalJourneyBallastBonusContractLine);
 
 		return ballastBonusContract;
+	}
+
+	public @NonNull LegalEntity createEntity(@NonNull final String name) {
+		final LegalEntity entity = CommercialFactory.eINSTANCE.createLegalEntity();
+		entity.setName(name);
+
+		entity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		entity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		entity.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+
+		commercialModel.getEntities().add(entity);
+
+		return entity;
+
 	}
 }
