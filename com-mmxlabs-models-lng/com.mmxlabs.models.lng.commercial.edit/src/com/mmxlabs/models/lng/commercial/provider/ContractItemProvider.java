@@ -66,14 +66,19 @@ public class ContractItemProvider
 			addVolumeLimitsUnitPropertyDescriptor(object);
 			addOperationalTolerancePropertyDescriptor(object);
 			addFullCargoLotPropertyDescriptor(object);
-			addRestrictedListsArePermissivePropertyDescriptor(object);
 			addRestrictedContractsPropertyDescriptor(object);
+			addRestrictedContractsArePermissivePropertyDescriptor(object);
 			addRestrictedPortsPropertyDescriptor(object);
+			addRestrictedPortsArePermissivePropertyDescriptor(object);
+			addRestrictedVesselsPropertyDescriptor(object);
+			addRestrictedVesselsArePermissivePropertyDescriptor(object);
 			addPriceInfoPropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
 			addContractTypePropertyDescriptor(object);
 			addPricingEventPropertyDescriptor(object);
 			addCancellationExpressionPropertyDescriptor(object);
+			addDivertiblePropertyDescriptor(object);
+			addShippingDaysRestrictionPropertyDescriptor(object);
 			addWindowNominationSizePropertyDescriptor(object);
 			addWindowNominationSizeUnitsPropertyDescriptor(object);
 			addWindowNominationCounterpartyPropertyDescriptor(object);
@@ -86,8 +91,6 @@ public class ContractItemProvider
 			addPortNominationSizePropertyDescriptor(object);
 			addPortNominationSizeUnitsPropertyDescriptor(object);
 			addPortNominationCounterpartyPropertyDescriptor(object);
-			addDivertiblePropertyDescriptor(object);
-			addShippingDaysRestrictionPropertyDescriptor(object);
 			addPortLoadNominationSizePropertyDescriptor(object);
 			addPortLoadNominationSizeUnitsPropertyDescriptor(object);
 			addPortLoadNominationCounterpartyPropertyDescriptor(object);
@@ -294,28 +297,6 @@ public class ContractItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Restricted Lists Are Permissive feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRestrictedListsArePermissivePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Contract_restrictedListsArePermissive_feature"),
-				 getString("_UI_Contract_restrictedListsArePermissive_description"),
-				 CommercialPackage.Literals.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Restricted Contracts feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -338,6 +319,28 @@ public class ContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Restricted Contracts Are Permissive feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedContractsArePermissivePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_restrictedContractsArePermissive_feature"),
+				 getString("_UI_Contract_restrictedContractsArePermissive_description"),
+				 CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Restricted Ports feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -355,6 +358,72 @@ public class ContractItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Ports Are Permissive feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedPortsArePermissivePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_restrictedPortsArePermissive_feature"),
+				 getString("_UI_Contract_restrictedPortsArePermissive_description"),
+				 CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Vessels feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedVesselsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_restrictedVessels_feature"),
+				 getString("_UI_Contract_restrictedVessels_description"),
+				 CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Vessels Are Permissive feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedVesselsArePermissivePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_restrictedVesselsArePermissive_feature"),
+				 getString("_UI_Contract_restrictedVesselsArePermissive_description"),
+				 CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -1054,11 +1123,15 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__VOLUME_LIMITS_UNIT:
 			case CommercialPackage.CONTRACT__OPERATIONAL_TOLERANCE:
 			case CommercialPackage.CONTRACT__FULL_CARGO_LOT:
-			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
+			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
+			case CommercialPackage.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE:
+			case CommercialPackage.CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE:
 			case CommercialPackage.CONTRACT__NOTES:
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 			case CommercialPackage.CONTRACT__PRICING_EVENT:
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
+			case CommercialPackage.CONTRACT__DIVERTIBLE:
+			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE:
 			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
 			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_COUNTERPARTY:
@@ -1071,8 +1144,6 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__PORT_NOMINATION_SIZE:
 			case CommercialPackage.CONTRACT__PORT_NOMINATION_SIZE_UNITS:
 			case CommercialPackage.CONTRACT__PORT_NOMINATION_COUNTERPARTY:
-			case CommercialPackage.CONTRACT__DIVERTIBLE:
-			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE:
 			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS:
 			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY:

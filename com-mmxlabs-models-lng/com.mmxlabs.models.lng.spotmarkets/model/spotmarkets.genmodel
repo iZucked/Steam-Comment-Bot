@@ -38,9 +38,18 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarket/priceInfo"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarket/entity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//SpotMarket/pricingEvent"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//SpotMarket/restrictedListsArePermissive"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarket/restrictedPorts"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarket/restrictedContracts"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Contracts"
+          propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarket/restrictedContracts"/>
+      <genFeatures createChild="false" propertyDescription="If restrictive, does not allow pairing with the selected"
+          ecoreFeature="ecore:EAttribute spotmarkets.ecore#//SpotMarket/restrictedContractsArePermissive"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Ports"
+          propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarket/restrictedPorts"/>
+      <genFeatures createChild="false" propertyDescription="If restrictive, does not allow pairing with the selected"
+          ecoreFeature="ecore:EAttribute spotmarkets.ecore#//SpotMarket/restrictedPortsArePermissive"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Vessels"
+          propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarket/restrictedVessels"/>
+      <genFeatures createChild="false" propertyDescription="If restrictive, does not allow pairing with the selected"
+          ecoreFeature="ecore:EAttribute spotmarkets.ecore#//SpotMarket/restrictedVesselsArePermissive"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//SpotMarket/mtm"/>
     </genClasses>
     <genClasses ecoreClass="spotmarkets.ecore#//DESPurchaseMarket">
@@ -49,7 +58,6 @@
     </genClasses>
     <genClasses ecoreClass="spotmarkets.ecore#//DESSalesMarket">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//DESSalesMarket/notionalPort"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//DESSalesMarket/allowedVessels"/>
     </genClasses>
     <genClasses ecoreClass="spotmarkets.ecore#//FOBPurchasesMarket">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//FOBPurchasesMarket/notionalPort"/>

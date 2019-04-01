@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
@@ -17,9 +18,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
@@ -93,8 +96,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vessel2) // <<<<<< Restrict load to alternative vessel
-				.build() //
+				.withRestrictedVessels(vessel2, true).build() //
 				//
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -139,7 +141,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vessel2) // <<<<<< Restrict load to alternative vessel
+				.withRestrictedVessels(vessel2, true) // <<<<<< Restrict load to alternative vessel
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -189,7 +191,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vessel1) // <<<<<< Restrict load to alternative vessel
+				.withRestrictedVessels(vessel1, true) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -228,7 +230,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vessel2) // <<<<<< Restrict load to alternative vessel
+				.withRestrictedVessels(vessel2, true) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -272,7 +274,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vessel2) // <<<<<< Restrict load to alternative vessel
+				.withRestrictedVessels(vessel2, true) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -318,7 +320,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vessel2) // <<<<<< Restrict load to alternative vessel
+				.withRestrictedVessels(vessel2, true) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -349,13 +351,76 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		// Construct the cargo scenario
-
+		
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeDESPurchase("L1", true, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withAllowedVessels(vessel) // <<<<<< Restrict load to alternative vessel
+				.withRestrictedVessels(vessel, true) //
+				.build() //
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+
+			Assertions.assertTrue(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
+		});
+	}
+	
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testFOBPurchaseVesselRestrictions_VesselExists() throws Exception {
+
+		// Create the required basic elements
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+
+		// Construct the cargo scenario
+
+		final FOBPurchasesMarket market = spotMarketsModelBuilder.makeFOBPurchaseMarket("FOBP1", portFinder.findPort("Point Fortin"), entity, "5", 22.3).build();
+		
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeMarketFOBPurchase("L1", market,YearMonth.of(2015, 12), portFinder.findPort("Point Fortin")) //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.withRestrictedVessels(vessel, true) //
+				.build() //
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+
+			Assertions.assertTrue(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
+		});
+	}
+	
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testFOBPurchaseVesselRestrictions_VesselExists2() throws Exception {
+
+		// Create the required basic elements
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+
+		// Construct the cargo scenario
+
+		final FOBPurchasesMarket market = spotMarketsModelBuilder
+				.makeFOBPurchaseMarket("FOBP1", portFinder.findPort("Point Fortin"), entity, "5", 22.3) //
+				.with(m -> m.getRestrictedVessels().add(vessel)) //
+				.with(m -> m.setRestrictedVesselsArePermissive(true)) //
+				.build();
+		
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeMarketFOBPurchase("L1", market,YearMonth.of(2015, 12), portFinder.findPort("Point Fortin")) //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -387,7 +452,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 				.makeDESPurchase("L1", true, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withAllowedVessels(vessel2) // <<<<<< Restrict load to alternative vessel
+				.withRestrictedVessels(vessel2, true) //
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -414,7 +479,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vessel) // <<<<<< Restrict load to alternative vessel
+				.withRestrictedVessels(vessel, true) //
 				.build() //
 				.makeFOBSale("D1", true, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", vessel) //
 				.build() //
@@ -446,7 +511,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vessel2) // <<<<<< Restrict load to alternative vessel
+				.withRestrictedVessels(vessel2, true) //
 				.build() //
 				.makeFOBSale("D1", true, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", vessel) //
 				.build() //
@@ -479,7 +544,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 				.makeDESPurchase("L1", true, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withAllowedVessels(vessel2) // <<<<<< Restrict discharge to alternative vessel
+				.withRestrictedVessels(vessel2, true) //
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -509,7 +574,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 				.makeDESPurchase("L1", true, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel1) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withAllowedVessels(vessel2) // <<<<<< Restrict discharge to alternative vessel
+				.withRestrictedVessels(vessel2, true) //
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -523,7 +588,6 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		});
 	}
 
-	@Disabled("FOB/DESallowed vessel restrictions not applied in optimiser")
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testFOBSaleVesselRestrictions_WrongVessel() throws Exception {
@@ -542,7 +606,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.build() //
 				.makeFOBSale("D1", true, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", vessel) //
-				.withAllowedVessels(vessel2) // <<<<<< Restrict discharge to alternative vessel
+				.withRestrictedVessels(vessel2, true) //
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -553,6 +617,224 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			Assertions.assertFalse(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
+		});
+	}
+
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testLoad_RestrictedVessel() throws Exception {
+
+		// Create the required basic elements
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
+
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+				.withCharterRate("80000") //
+				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
+				.build();
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withRestrictedVessels(vessel1, false) // <<<<<< Restrict load to alternative vessel
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+
+			// Real vessel
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null));
+			// Nominal vessel
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null));
+			// Spot cargo
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, 0, cargo1), null));
+		});
+	}
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testLoad_RestrictedVessel_Contract() throws Exception {
+		
+		// Create the required basic elements
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+		
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
+		
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+				.withCharterRate("80000") //
+				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
+				.build();
+		
+
+		PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("C1", entity, "5");
+		contract.setRestrictedVesselsArePermissive(false);
+		contract.getRestrictedVessels() .add(vessel1);
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), contract, entity, "5") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+		
+		evaluateWithLSOTest(scenarioRunner -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+			
+			// Real vessel
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null));
+			// Nominal vessel
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null));
+			// Spot cargo
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, 0, cargo1), null));
+		});
+	}
+
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testLoad_PermissiveEmptyVessel() throws Exception {
+
+		// Create the required basic elements
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
+
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+				.withCharterRate("80000") //
+				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
+				.build();
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withRestrictedVessels(true) // <<<<<< Restrict load to alternative vessel
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+
+			// Real vessel
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null));
+			// Nominal vessel
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null));
+			// Spot cargo
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, 0, cargo1), null));
+		});
+	}
+
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testLoad_PermissiveEmptyVesselContract() throws Exception {
+
+		// Create the required basic elements
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
+
+		PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("C1", entity, "5");
+		contract.setRestrictedVesselsArePermissive(true);
+		
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+				.withCharterRate("80000") //
+				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
+				.build();
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), contract, entity, "5") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+
+			// Real vessel
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null));
+			// Nominal vessel
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null));
+			// Spot cargo
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, 0, cargo1), null));
+		});
+	}
+
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testLoad_RestrictiveEmptyVessel() throws Exception {
+
+		// Create the required basic elements
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
+
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+				.withCharterRate("80000") //
+				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
+				.build();
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withRestrictedVessels(false) // <<<<<< Restrict load to alternative vessel
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+
+			// Real vessel
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null));
+			// Nominal vessel
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null));
+			// Spot cargo
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, 0, cargo1), null));
 		});
 	}
 

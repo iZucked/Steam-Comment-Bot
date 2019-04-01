@@ -119,8 +119,8 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 				.build() //
 				// Discharge
 				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(false)) //
+				.with(s -> s.setRestrictedPortsOverride(true)) //
+				.with(s -> s.setRestrictedPortsArePermissive(false)) //
 				.with(s -> s.getRestrictedPorts().add(portFinder.findPort("Point Fortin"))) //
 				.build() //
 				// Cargo
@@ -154,8 +154,8 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 				.build() //
 				// Discharge
 				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(false)) //
+				.with(s -> s.setRestrictedPortsOverride(true)) //
+				.with(s -> s.setRestrictedPortsArePermissive(false)) //
 				.with(s -> s.getRestrictedPorts().add(portFinder.findPort("Point Fortin"))) //
 				.build() //
 				// Cargo
@@ -187,8 +187,8 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
 				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(false)) //
+				.with(s -> s.setRestrictedPortsOverride(true)) //
+				.with(s -> s.setRestrictedPortsArePermissive(false)) //
 				.with(s -> s.getRestrictedPorts().add(portFinder.findPort("Sakai"))) //
 				.build() //
 				// Discharge
@@ -222,8 +222,8 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
 				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(false)) //
+				.with(s -> s.setRestrictedPortsOverride(true)) //
+				.with(s -> s.setRestrictedPortsArePermissive(false)) //
 				.with(s -> s.getRestrictedPorts().add(portFinder.findPort("Sakai"))) //
 				.build() //
 				// Discharge
@@ -255,7 +255,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("P", entity, "5");
-		contract.setRestrictedListsArePermissive(false);
+		contract.setRestrictedPortsArePermissive(false);
 		contract.getRestrictedPorts().add(portFinder.findPort("Sakai"));
 
 		// Construct the cargo scenario
@@ -291,7 +291,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("P", entity, "5");
-		contract.setRestrictedListsArePermissive(false);
+		contract.setRestrictedPortsArePermissive(false);
 		contract.getRestrictedPorts().add(portFinder.findPort("Sakai"));
 
 		// Construct the cargo scenario
@@ -329,7 +329,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("P", entity, "7");
-		contract.setRestrictedListsArePermissive(false);
+		contract.setRestrictedPortsArePermissive(false);
 		contract.getRestrictedPorts().add(portFinder.findPort("Point Fortin"));
 
 		// Construct the cargo scenario
@@ -369,7 +369,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		final PortGroup g1 = portModelBuilder.makePortGroup("PG1", portFinder.findPort("Point Fortin"), portFinder.findPort("Bonny Nigeria"));
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("P", entity, "7");
-		contract.setRestrictedListsArePermissive(false);
+		contract.setRestrictedPortsArePermissive(false);
 		contract.getRestrictedPorts().add(g1);
 
 		// Construct the cargo scenario
@@ -402,7 +402,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SlotSalesContract_Port_Unshipped() throws Exception {
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("P", entity, "7");
-		contract.setRestrictedListsArePermissive(false);
+		contract.setRestrictedPortsArePermissive(false);
 		contract.getRestrictedPorts().add(portFinder.findPort("Point Fortin"));
 
 		// Construct the cargo scenario
@@ -651,8 +651,8 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 				.build() //
 				// Discharge
 				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(false)) //
+				.with(s -> s.setRestrictedContractsOverride(true)) //
+				.with(s -> s.setRestrictedContractsArePermissive(false)) //
 				.with(s -> s.getRestrictedContracts().add(contract)) //
 				.build() //
 				// Cargo
@@ -691,8 +691,8 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 				.build() //
 				// Discharge
 				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(false)) //
+				.with(s -> s.setRestrictedContractsOverride(true)) //
+				.with(s -> s.setRestrictedContractsArePermissive(false)) //
 				.with(s -> s.getRestrictedContracts().add(contract)) //
 				.build() //
 				// Cargo
@@ -726,8 +726,8 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
 				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(false)) //
+				.with(s -> s.setRestrictedContractsOverride(true)) //
+				.with(s -> s.setRestrictedContractsArePermissive(false)) //
 				.with(s -> s.getRestrictedContracts().add(contract)) //
 				.build() //
 				// Discharge
@@ -765,8 +765,8 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
 				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.with(s -> s.setOverrideRestrictions(true)) //
-				.with(s -> s.setRestrictedListsArePermissive(false)) //
+				.with(s -> s.setRestrictedContractsOverride(true)) //
+				.with(s -> s.setRestrictedContractsArePermissive(false)) //
 				.with(s -> s.getRestrictedContracts().add(contract)) //
 				.build() //
 				// Discharge
@@ -800,7 +800,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		final SalesContract salesContract = commercialModelBuilder.makeExpressionSalesContract("Contract", entity, "7");
 
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("P", entity, "5");
-		contract.setRestrictedListsArePermissive(false);
+		contract.setRestrictedContractsArePermissive(false);
 		contract.getRestrictedContracts().add(salesContract);
 
 		// Construct the cargo scenario
@@ -841,7 +841,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("P", entity, "7");
 
-		contract.setRestrictedListsArePermissive(false);
+		contract.setRestrictedContractsArePermissive(false);
 		contract.getRestrictedContracts().add(purchaseContract);
 
 		// Construct the cargo scenario

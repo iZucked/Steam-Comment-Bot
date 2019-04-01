@@ -451,7 +451,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 				.build();
 
 		// Forbid Chita LNG as destination to force a re-wire insertion
-		load_FOB2.setOverrideRestrictions(true);
+		load_FOB2.setRestrictedPortsOverride(true);
 		load_FOB2.getRestrictedPorts().add(portFinder.findPort("Chita LNG"));
 
 		final DischargeSlot discharge_DES2 = cargoModelBuilder.makeDESSale("DES_Sale2", LocalDate.of(2016, 1, 5), portFinder.findPort("Chita LNG"), null, entity, "7") //

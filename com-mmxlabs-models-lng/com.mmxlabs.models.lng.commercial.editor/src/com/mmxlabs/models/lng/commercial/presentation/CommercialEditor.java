@@ -112,6 +112,7 @@ import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import com.mmxlabs.models.lng.commercial.provider.CommercialItemProviderAdapterFactory;
+import com.mmxlabs.models.lng.fleet.provider.FleetItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.port.provider.PortItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.types.provider.TypesItemProviderAdapterFactory;
 import com.mmxlabs.models.mmxcore.provider.MMXCoreItemProviderAdapterFactory;
@@ -609,6 +610,7 @@ public class CommercialEditor
 
 		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new CommercialItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new FleetItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new TypesItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new MMXCoreItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new PortItemProviderAdapterFactory());

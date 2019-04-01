@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -355,7 +354,14 @@ public class AssignmentEditorHelper {
 		return maxSpot;
 	}
 
-	public static boolean compileAllowedVessels(@NonNull final List<AVesselSet<Vessel>> allowedVessels, @NonNull EObject target) {
+	public static List<Vessel> compileAllowedVessels(List<Vessel> availableVessels, @NonNull EObject target) {
+
+		// ALL WRONG!
+		//
+		// Needs input list of options,
+		//
+		// Needs to habndle permiossive etr
+		List<Vessel> validVessels = new LinkedList<>(availableVessels);
 		// The slot intersection may mean no vessels are permitted at all!
 		boolean noVesselsAllowed = false;
 		// populate the list of allowed vessels for the target object
@@ -367,12 +373,13 @@ public class AssignmentEditorHelper {
 				// Change target and fall through.
 				target = cargo;
 			} else {
-				final List<AVesselSet<Vessel>> slotVessels = slot.getAllowedVessels();
-				if (slotVessels == null || slotVessels.isEmpty()) {
-					return false;
+				final Set<Vessel> slotVessels = SetUtils.getObjects(slot.getSlotOrDelegateVesselRestrictions());
+				if (slot.getSlotOrDelegateVesselRestrictionsArePermissive()) {
+					validVessels.retainAll(slotVessels);
+				} else {
+					validVessels.removeAll(slotVessels);
 				}
-				allowedVessels.addAll(slotVessels);
-				return false;
+				return validVessels;
 			}
 		}
 
@@ -380,56 +387,25 @@ public class AssignmentEditorHelper {
 			final Cargo cargo = (Cargo) target;
 			final Set<AVesselSet<Vessel>> vessels = new LinkedHashSet<>();
 			boolean first = true;
-			for (final Slot s : cargo.getSlots()) {
-				final List<AVesselSet<Vessel>> slotVessels = s.getAllowedVessels();
-				if (slotVessels == null || slotVessels.isEmpty()) {
-					continue;
-				}
-				if (first) {
-					vessels.addAll(slotVessels);
-					first = false;
-				} else {
-					// TODO: hmm, should we check classes vs vessels here?
-					final Set<AVesselSet<Vessel>> matchedByClass = new LinkedHashSet<>();
-					//
-					for (final AVesselSet<Vessel> v1 : vessels) {
-						if (v1 instanceof Vessel) {
-							for (final AVesselSet<Vessel> v2 : slotVessels) {
-								if (SetUtils.getObjects(v2).contains(v1)) {
-									matchedByClass.add(v1);
-								}
-							}
-						}
-					}
-					// Reverse map
-					for (final AVesselSet<Vessel> v1 : slotVessels) {
-						if (v1 instanceof Vessel) {
-							for (final AVesselSet<Vessel> v2 : vessels) {
-								if (SetUtils.getObjects(v2).contains(v1)) {
-									matchedByClass.add(v1);
-								}
-							}
-						}
-					}
+			for (final Slot<?> slot : cargo.getSlots()) {
 
-					// Exact matches
-					vessels.retainAll(slotVessels);
-					// Add in VesselClass/Group hits
-					vessels.addAll(matchedByClass);
+				final Set<Vessel> slotVessels = SetUtils.getObjects(slot.getSlotOrDelegateVesselRestrictions());
+				if (slot.getSlotOrDelegateVesselRestrictionsArePermissive()) {
+					validVessels.retainAll(slotVessels);
+				} else {
+					validVessels.removeAll(slotVessels);
 				}
 			}
-			allowedVessels.addAll(vessels);
-			if (vessels.isEmpty() && first == false) {
-				// Uh oh - set intersection resulted in nothing!
-				noVesselsAllowed = true;
-			}
+			return validVessels;
 		} else if (target instanceof VesselEvent) {
 			final VesselEvent event = (VesselEvent) target;
-			allowedVessels.addAll(event.getAllowedVessels());
-		} else {
-			// allowedVessels = null;
+			final Set<Vessel> eventVessels = SetUtils.getObjects(event.getAllowedVessels());
+			if (!eventVessels.isEmpty()) {
+				validVessels.retainAll(event.getAllowedVessels());
+			}
+			return validVessels;
 		}
-		return noVesselsAllowed;
+		return validVessels;
 	}
 
 	public enum OrderingHint {

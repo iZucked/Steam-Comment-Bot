@@ -59,9 +59,12 @@ public class SpotMarketItemProvider
 			addVolumeLimitsUnitPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 			addPricingEventPropertyDescriptor(object);
-			addRestrictedListsArePermissivePropertyDescriptor(object);
-			addRestrictedPortsPropertyDescriptor(object);
 			addRestrictedContractsPropertyDescriptor(object);
+			addRestrictedContractsArePermissivePropertyDescriptor(object);
+			addRestrictedPortsPropertyDescriptor(object);
+			addRestrictedPortsArePermissivePropertyDescriptor(object);
+			addRestrictedVesselsPropertyDescriptor(object);
+			addRestrictedVesselsArePermissivePropertyDescriptor(object);
 			addMtmPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -222,28 +225,6 @@ public class SpotMarketItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Restricted Lists Are Permissive feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRestrictedListsArePermissivePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SpotMarket_restrictedListsArePermissive_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpotMarket_restrictedListsArePermissive_feature", "_UI_SpotMarket_type"),
-				 SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Restricted Ports feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -255,12 +236,78 @@ public class SpotMarketItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_SpotMarket_restrictedPorts_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpotMarket_restrictedPorts_feature", "_UI_SpotMarket_type"),
+				 getString("_UI_SpotMarket_restrictedPorts_description"),
 				 SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS,
 				 true,
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Ports Are Permissive feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedPortsArePermissivePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SpotMarket_restrictedPortsArePermissive_feature"),
+				 getString("_UI_SpotMarket_restrictedPortsArePermissive_description"),
+				 SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS_ARE_PERMISSIVE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Vessels feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedVesselsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SpotMarket_restrictedVessels_feature"),
+				 getString("_UI_SpotMarket_restrictedVessels_description"),
+				 SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Vessels Are Permissive feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedVesselsArePermissivePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SpotMarket_restrictedVesselsArePermissive_feature"),
+				 getString("_UI_SpotMarket_restrictedVesselsArePermissive_description"),
+				 SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS_ARE_PERMISSIVE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -277,12 +324,34 @@ public class SpotMarketItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_SpotMarket_restrictedContracts_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpotMarket_restrictedContracts_feature", "_UI_SpotMarket_type"),
+				 getString("_UI_SpotMarket_restrictedContracts_description"),
 				 SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS,
 				 true,
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Contracts Are Permissive feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedContractsArePermissivePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SpotMarket_restrictedContractsArePermissive_feature"),
+				 getString("_UI_SpotMarket_restrictedContractsArePermissive_description"),
+				 SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS_ARE_PERMISSIVE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -372,7 +441,9 @@ public class SpotMarketItemProvider
 			case SpotMarketsPackage.SPOT_MARKET__MAX_QUANTITY:
 			case SpotMarketsPackage.SPOT_MARKET__VOLUME_LIMITS_UNIT:
 			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
-			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE:
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS_ARE_PERMISSIVE:
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_VESSELS_ARE_PERMISSIVE:
 			case SpotMarketsPackage.SPOT_MARKET__MTM:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

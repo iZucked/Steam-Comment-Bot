@@ -155,8 +155,10 @@ public class ADPModelUtil {
 								for (SubProfileConstraint subProfileConstraint : subProfile.getConstraints()) {
 									if (subProfileConstraint instanceof ProfileVesselRestriction) {
 										slots.stream().forEach(s -> {
-											s.getAllowedVessels().clear();
-											s.getAllowedVessels().addAll(((ProfileVesselRestriction) subProfileConstraint).getVessels());
+											s.getRestrictedVessels().clear();
+											s.getRestrictedVessels().addAll(((ProfileVesselRestriction) subProfileConstraint).getVessels());
+											s.setRestrictedVesselsArePermissive(true);
+											s.setRestrictedVesselsOverride(true);
 										});
 									}
 								}
@@ -229,8 +231,10 @@ public class ADPModelUtil {
 								for (SubProfileConstraint subProfileConstraint : subProfile.getConstraints()) {
 									if (subProfileConstraint instanceof ProfileVesselRestriction) {
 										slots.stream().forEach(s -> {
-											s.getAllowedVessels().clear();
-											s.getAllowedVessels().addAll(((ProfileVesselRestriction) subProfileConstraint).getVessels());
+											s.getRestrictedVessels().clear();
+											s.getRestrictedVessels().addAll(((ProfileVesselRestriction) subProfileConstraint).getVessels());
+											s.setRestrictedVesselsArePermissive(true);
+											s.setRestrictedVesselsOverride(true);
 										});
 									}
 								}
@@ -392,8 +396,10 @@ public class ADPModelUtil {
 								for (SubProfileConstraint subProfileConstraint : subProfile.getConstraints()) {
 									if (subProfileConstraint instanceof ProfileVesselRestriction) {
 										slots.stream().forEach(s -> {
-											s.getAllowedVessels().clear();
-											s.getAllowedVessels().addAll(((ProfileVesselRestriction) subProfileConstraint).getVessels());
+											s.getRestrictedVessels().clear();
+											s.getRestrictedVessels().addAll(((ProfileVesselRestriction) subProfileConstraint).getVessels());
+											s.setRestrictedVesselsArePermissive(true);
+											s.setRestrictedVesselsOverride(true);
 										});
 									}
 								}
@@ -434,8 +440,10 @@ public class ADPModelUtil {
 								for (SubProfileConstraint subProfileConstraint : subProfile.getConstraints()) {
 									if (subProfileConstraint instanceof ProfileVesselRestriction) {
 										slots.stream().forEach(s -> {
-											s.getAllowedVessels().clear();
-											s.getAllowedVessels().addAll(((ProfileVesselRestriction) subProfileConstraint).getVessels());
+											s.getRestrictedVessels().clear();
+											s.getRestrictedVessels().addAll(((ProfileVesselRestriction) subProfileConstraint).getVessels());
+											s.setRestrictedVesselsArePermissive(true);
+											s.setRestrictedVesselsOverride(true);
 										});
 									}
 								}

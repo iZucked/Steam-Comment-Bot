@@ -51,7 +51,7 @@ public class DeliverToProfileFlowConstraint extends AbstractModelMultiConstraint
 					Contract salesContract = toProfile.getContract();
 					// Check purchase contract permissions
 					{
-						if (purchaseContract.isRestrictedListsArePermissive()) {
+						if (purchaseContract.isRestrictedContractsArePermissive()) {
 							if (!purchaseContract.getRestrictedContracts().contains(salesContract)) {
 								createSimpleStatus(ctx, statuses, "Purchase contract cannot supply this sales contract", flow, ADPPackage.Literals.DELIVER_TO_PROFILE_FLOW__PROFILE);
 							}
@@ -63,7 +63,7 @@ public class DeliverToProfileFlowConstraint extends AbstractModelMultiConstraint
 					}
 					// Check sales contract permissions
 					{
-						if (salesContract.isRestrictedListsArePermissive()) {
+						if (salesContract.isRestrictedContractsArePermissive()) {
 							if (!salesContract.getRestrictedContracts().contains(purchaseContract)) {
 								createSimpleStatus(ctx, statuses, "Sales contract cannot be supplied from this purchase contract", flow, ADPPackage.Literals.DELIVER_TO_PROFILE_FLOW__PROFILE);
 							}

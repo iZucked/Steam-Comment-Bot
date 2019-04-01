@@ -138,7 +138,7 @@ public class InsertDESPurchaseMoveHandlerTests extends AbstractMoveHandlerTest {
 		//
 		final DischargeSlot discharge1 = cargoModelBuilder//
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withAllowedVessels(vessel2) //
+				.withRestrictedVessels(vessel2, true) //
 				.build();
 
 		runTest((injector, scenarioRunner) -> {

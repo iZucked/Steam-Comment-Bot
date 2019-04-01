@@ -419,27 +419,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSpotMarket_RestrictedListsArePermissive() {
-		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(8);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getSpotMarket_RestrictedPorts() {
-		return (EReference)spotMarketEClass.getEStructuralFeatures().get(9);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getSpotMarket_RestrictedContracts() {
 		return (EReference)spotMarketEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -449,8 +429,58 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSpotMarket_Mtm() {
+	public EAttribute getSpotMarket_RestrictedPortsArePermissive() {
 		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSpotMarket_RestrictedVessels() {
+		return (EReference)spotMarketEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSpotMarket_RestrictedVesselsArePermissive() {
+		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSpotMarket_RestrictedContracts() {
+		return (EReference)spotMarketEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSpotMarket_RestrictedContractsArePermissive() {
+		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSpotMarket_Mtm() {
+		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(14);
 	}
 
 	/**
@@ -501,16 +531,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	@Override
 	public EReference getDESSalesMarket_NotionalPort() {
 		return (EReference)desSalesMarketEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getDESSalesMarket_AllowedVessels() {
-		return (EReference)desSalesMarketEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -885,9 +905,12 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEReference(spotMarketEClass, SPOT_MARKET__PRICE_INFO);
 		createEReference(spotMarketEClass, SPOT_MARKET__ENTITY);
 		createEAttribute(spotMarketEClass, SPOT_MARKET__PRICING_EVENT);
-		createEAttribute(spotMarketEClass, SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE);
-		createEReference(spotMarketEClass, SPOT_MARKET__RESTRICTED_PORTS);
 		createEReference(spotMarketEClass, SPOT_MARKET__RESTRICTED_CONTRACTS);
+		createEAttribute(spotMarketEClass, SPOT_MARKET__RESTRICTED_CONTRACTS_ARE_PERMISSIVE);
+		createEReference(spotMarketEClass, SPOT_MARKET__RESTRICTED_PORTS);
+		createEAttribute(spotMarketEClass, SPOT_MARKET__RESTRICTED_PORTS_ARE_PERMISSIVE);
+		createEReference(spotMarketEClass, SPOT_MARKET__RESTRICTED_VESSELS);
+		createEAttribute(spotMarketEClass, SPOT_MARKET__RESTRICTED_VESSELS_ARE_PERMISSIVE);
 		createEAttribute(spotMarketEClass, SPOT_MARKET__MTM);
 
 		desPurchaseMarketEClass = createEClass(DES_PURCHASE_MARKET);
@@ -896,7 +919,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 		desSalesMarketEClass = createEClass(DES_SALES_MARKET);
 		createEReference(desSalesMarketEClass, DES_SALES_MARKET__NOTIONAL_PORT);
-		createEReference(desSalesMarketEClass, DES_SALES_MARKET__ALLOWED_VESSELS);
 
 		fobPurchasesMarketEClass = createEClass(FOB_PURCHASES_MARKET);
 		createEReference(fobPurchasesMarketEClass, FOB_PURCHASES_MARKET__NOTIONAL_PORT);
@@ -1015,12 +1037,18 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEReference(getSpotMarket_PriceInfo(), theCommercialPackage.getLNGPriceCalculatorParameters(), null, "priceInfo", null, 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarket_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSpotMarket_PricingEvent(), theCommercialPackage.getPricingEvent(), "pricingEvent", null, 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSpotMarket_RestrictedListsArePermissive(), ecorePackage.getEBoolean(), "restrictedListsArePermissive", null, 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSpotMarket_RestrictedContracts(), theCommercialPackage.getContract(), null, "restrictedContracts", null, 0, -1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSpotMarket_RestrictedContractsArePermissive(), ecorePackage.getEBoolean(), "restrictedContractsArePermissive", null, 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		EGenericType g1 = createEGenericType(theTypesPackage.getAPortSet());
 		EGenericType g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
 		initEReference(getSpotMarket_RestrictedPorts(), g1, null, "restrictedPorts", null, 0, -1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSpotMarket_RestrictedContracts(), theCommercialPackage.getContract(), null, "restrictedContracts", null, 0, -1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSpotMarket_RestrictedPortsArePermissive(), ecorePackage.getEBoolean(), "restrictedPortsArePermissive", null, 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAVesselSet());
+		g2 = createEGenericType(theFleetPackage.getVessel());
+		g1.getETypeArguments().add(g2);
+		initEReference(getSpotMarket_RestrictedVessels(), g1, null, "restrictedVessels", null, 0, -1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSpotMarket_RestrictedVesselsArePermissive(), ecorePackage.getEBoolean(), "restrictedVesselsArePermissive", null, 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSpotMarket_Mtm(), ecorePackage.getEBoolean(), "mtm", null, 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(desPurchaseMarketEClass, DESPurchaseMarket.class, "DESPurchaseMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1032,10 +1060,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 		initEClass(desSalesMarketEClass, DESSalesMarket.class, "DESSalesMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDESSalesMarket_NotionalPort(), thePortPackage.getPort(), null, "notionalPort", null, 1, 1, DESSalesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		g1 = createEGenericType(theTypesPackage.getAVesselSet());
-		g2 = createEGenericType(theFleetPackage.getVessel());
-		g1.getETypeArguments().add(g2);
-		initEReference(getDESSalesMarket_AllowedVessels(), g1, null, "allowedVessels", null, 0, -1, DESSalesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fobPurchasesMarketEClass, FOBPurchasesMarket.class, "FOBPurchasesMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFOBPurchasesMarket_NotionalPort(), thePortPackage.getPort(), null, "notionalPort", null, 1, 1, FOBPurchasesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

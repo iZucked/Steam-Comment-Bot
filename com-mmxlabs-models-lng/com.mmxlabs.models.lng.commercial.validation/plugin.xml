@@ -105,6 +105,19 @@
                </message>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.commercial.validation.ContractRestrictionsConstraint"
+                  id="com.mmxlabs.models.lng.commercial.validation.ContractRestrictionsConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Contract Restrictions Constraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.commercial.validation.PurchaseContractCvConstraint"
                   id="com.mmxlabs.models.lng.commercial.validation.PurchaseContractCvConstraint"
                   isEnabledByDefault="true"

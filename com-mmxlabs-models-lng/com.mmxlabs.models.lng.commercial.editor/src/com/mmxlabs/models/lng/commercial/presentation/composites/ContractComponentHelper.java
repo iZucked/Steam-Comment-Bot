@@ -22,6 +22,7 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.dates.MonthInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.PermissiveRestrictiveInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -84,14 +85,19 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_volumeLimitsUnitEditor(detailComposite, topClass);
 		add_operationalToleranceEditor(detailComposite, topClass);
 		add_fullCargoLotEditor(detailComposite, topClass);
-		add_restrictedListsArePermissiveEditor(detailComposite, topClass);
 		add_restrictedContractsEditor(detailComposite, topClass);
+		add_restrictedContractsArePermissiveEditor(detailComposite, topClass);
 		add_restrictedPortsEditor(detailComposite, topClass);
+		add_restrictedPortsArePermissiveEditor(detailComposite, topClass);
+		add_restrictedVesselsEditor(detailComposite, topClass);
+		add_restrictedVesselsArePermissiveEditor(detailComposite, topClass);
 		add_priceInfoEditor(detailComposite, topClass);
 		add_notesEditor(detailComposite, topClass);
 		add_contractTypeEditor(detailComposite, topClass);
 		add_pricingEventEditor(detailComposite, topClass);
 		add_cancellationExpressionEditor(detailComposite, topClass);
+		add_divertibleEditor(detailComposite, topClass);
+		add_shippingDaysRestrictionEditor(detailComposite, topClass);
 		add_windowNominationSizeEditor(detailComposite, topClass);
 		add_windowNominationSizeUnitsEditor(detailComposite, topClass);
 		add_windowNominationCounterpartyEditor(detailComposite, topClass);
@@ -104,8 +110,6 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_portNominationSizeEditor(detailComposite, topClass);
 		add_portNominationSizeUnitsEditor(detailComposite, topClass);
 		add_portNominationCounterpartyEditor(detailComposite, topClass);
-		add_divertibleEditor(detailComposite, topClass);
-		add_shippingDaysRestrictionEditor(detailComposite, topClass);
 		add_portLoadNominationSizeEditor(detailComposite, topClass);
 		add_portLoadNominationSizeUnitsEditor(detailComposite, topClass);
 		add_portLoadNominationCounterpartyEditor(detailComposite, topClass);
@@ -484,15 +488,6 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the restrictedListsArePermissive feature on Contract
-	 *
-	 * @generated
-	 */
-	protected void add_restrictedListsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE));
-	}
-
-	/**
 	 * Create the editor for the restrictedContracts feature on Contract
 	 *
 	 * @generated
@@ -502,12 +497,51 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
+	 * Create the editor for the restrictedContractsArePermissive feature on Contract
+	 *
+	 * @generated NOT
+	 */
+	protected void add_restrictedContractsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new PermissiveRestrictiveInlineEditor(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE));
+		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE));
+	}
+
+	/**
 	 * Create the editor for the restrictedPorts feature on Contract
 	 *
 	 * @generated
 	 */
 	protected void add_restrictedPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS));
+	}
+
+	/**
+	 * Create the editor for the restrictedPortsArePermissive feature on Contract
+	 *
+	 * @generated NOT
+	 */
+	protected void add_restrictedPortsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new PermissiveRestrictiveInlineEditor(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE));
+		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE));
+	}
+
+	/**
+	 * Create the editor for the restrictedVessels feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_restrictedVesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS));
+	}
+
+	/**
+	 * Create the editor for the restrictedVesselsArePermissive feature on Contract
+	 *
+	 * @generated NOT
+	 */
+	protected void add_restrictedVesselsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new PermissiveRestrictiveInlineEditor(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE));
+		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE));
 	}
 
 	/**

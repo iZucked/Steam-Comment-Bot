@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo.validation;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
@@ -22,6 +23,7 @@ import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -76,68 +78,59 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 		}
 
 		final List<Contract> restrictedContracts;
-		final List<?> restrictedPorts;
-		boolean restrictedListsArePermissive = false;
-		final String cause;
-		// if (slot1.isSetRestrictedContracts() || slot1.isSetRestrictedListsArePermissive() || slot1.isSetRestrictedPorts()) {
-		if (slot1.isOverrideRestrictions()) {
-			restrictedListsArePermissive = slot1.isRestrictedListsArePermissive();
-			restrictedContracts = slot1.getRestrictedContracts();
-			restrictedPorts = slot1.getRestrictedPorts();
-			cause = "Slot " + slot1.getName();
-		} else {
-			final Contract contract = slot1.getContract();
-			if (contract == null) {
-				if (slot1 instanceof SpotSlot) {
-					SpotSlot spotSlot = (SpotSlot) slot1;
-					SpotMarket market = spotSlot.getMarket();
-					if (market != null) {
-						restrictedListsArePermissive = market.isRestrictedListsArePermissive();
-						restrictedContracts = market.getRestrictedContracts();
-						restrictedPorts = new LinkedList<>(SetUtils.getObjects(market.getRestrictedPorts()));
-						cause = "Spot market " + market.getName();
-					} else {
-						restrictedListsArePermissive = false;
-						restrictedContracts = Collections.emptyList();
-						restrictedPorts = Collections.emptyList();
-						cause = "Slot " + slot1.getName();
-					}
-				} else {
-					restrictedListsArePermissive = false;
-					restrictedContracts = Collections.emptyList();
-					restrictedPorts = Collections.emptyList();
-					cause = "Slot " + slot1.getName();
-				}
+		final List<APortSet<Port>> restrictedPortSets;
+
+		boolean restrictedContractsArePermissive = slot1.getSlotOrDelegateContractRestrictionsArePermissive();
+		boolean restrictedPortsArePermissive = slot1.getSlotOrDelegatePortRestrictionsArePermissive();
+
+		final String causeContract;
+		final String causePort;
+
+		final Contract contract = slot1.getContract();
+
+		if (slot1 instanceof SpotSlot) {
+			SpotSlot spotSlot = (SpotSlot) slot1;
+			SpotMarket market = spotSlot.getMarket();
+			if (market != null) {
+				restrictedContractsArePermissive = market.isRestrictedContractsArePermissive();
+				restrictedPortsArePermissive = market.isRestrictedPortsArePermissive();
+				restrictedContracts = market.getRestrictedContracts();
+				restrictedPortSets = new LinkedList<>(SetUtils.getObjects(market.getRestrictedPorts()));
+				causePort = "Spot market " + market.getName();
+				causeContract = "Spot market " + market.getName();
 			} else {
-				restrictedListsArePermissive = contract.isRestrictedListsArePermissive();
-				restrictedContracts = contract.getRestrictedContracts();
-				restrictedPorts = new LinkedList<>(SetUtils.getObjects(contract.getRestrictedPorts()));
-				cause = "Contract " + contract.getName();
+				restrictedContractsArePermissive = false;
+				restrictedPortsArePermissive = false;
+				restrictedContracts = Collections.emptyList();
+				restrictedPortSets = Collections.emptyList();
+				causePort = "Slot " + slot1.getName();
+				causeContract = "Slot " + slot1.getName();
 			}
+		} else {
+			restrictedContracts = slot1.getSlotOrDelegateContractRestrictions();
+			restrictedPortSets = slot1.getSlotOrDelegatePortRestrictions();
+			causeContract = (contract == null || slot1.isRestrictedContractsOverride()) ? "Slot " + slot1.getName() : "Contract " + contract.getName();
+			causePort = (contract == null || slot1.isRestrictedPortsOverride()) ? "Slot " + slot1.getName() : "Contract " + contract.getName();
 		}
 
 		final Contract contract2 = slot2.getContract();
 		if (contract2 != null) {
-			if (!restrictedContracts.isEmpty()) {
-				if (restrictedContracts.contains(contract2) != restrictedListsArePermissive) {
-					final String msg = String.format(CONTRACT_RESTRICTION, cargoName, cause, typeA, contract2.getName());
-					final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
-					d.addEObjectAndFeature(slot2, CargoPackage.eINSTANCE.getSlot_Contract());
-					statuses.add(d);
-				}
+			if (restrictedContracts.contains(contract2) != restrictedContractsArePermissive) {
+				final String msg = String.format(CONTRACT_RESTRICTION, cargoName, causeContract, typeA, contract2.getName());
+				final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
+				d.addEObjectAndFeature(slot2, CargoPackage.eINSTANCE.getSlot_Contract());
+				statuses.add(d);
 			}
 		}
 		final Port port2 = slot2.getPort();
-		if (slot2.getPort() != null) {
-			if (!restrictedPorts.isEmpty()) {
-				final boolean contains = restrictedPorts.contains(slot2.getPort());
-				if ((restrictedListsArePermissive && !contains) // Whitelist
-						|| !restrictedListsArePermissive && contains) { // Blacklist
-					final String msg = String.format(PORT_RESTRICTION, cargoName, cause, typeA, slot2.getPort().getName());
-					final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
-					d.addEObjectAndFeature(slot2, CargoPackage.eINSTANCE.getSlot_Port());
-					statuses.add(d);
-				}
+		if (port2 != null) {
+			Set<Port> restrictedPorts = SetUtils.getObjects(restrictedPortSets);
+			final boolean contains = restrictedPorts.contains(port2);
+			if (contains != restrictedPortsArePermissive) {
+				final String msg = String.format(PORT_RESTRICTION, cargoName, causePort, typeA, slot2.getPort().getName());
+				final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
+				d.addEObjectAndFeature(slot2, CargoPackage.eINSTANCE.getSlot_Port());
+				statuses.add(d);
 			}
 		}
 	}

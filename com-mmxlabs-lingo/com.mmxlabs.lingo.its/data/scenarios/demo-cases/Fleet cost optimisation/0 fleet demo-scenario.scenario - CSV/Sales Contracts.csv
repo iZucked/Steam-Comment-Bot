@@ -1,8 +1,8 @@
-name,minQuantity,maxQuantity,restrictedListsArePermissive,minCvValue,maxCvValue,entity,allowedPorts,restrictedContracts,restrictedPorts,priceInfo.priceExpression,priceInfo.kind,kind,preferredPort
-Asian Spot Sales,0,1000000,false,,,Others,,,,Asian_Spot,ExpressionPriceParameters,SalesContract,
-Brent Spot Sales,0,1000000,false,,,Others,,,,Brent,ExpressionPriceParameters,SalesContract,
-HH Spot Sales,0,1000000,false,,,Others,,,,HH,ExpressionPriceParameters,SalesContract,
-Japanese Avg. Spot,0,1000000,false,,,Others,Japanese Ports,,,Japanese_Import,ExpressionPriceParameters,SalesContract,Higashi-Ogishima
-Korean Avg. Spot,0,1000000,false,,,Others,,,,Korean_Import,ExpressionPriceParameters,SalesContract,
-NBP Spot S,0,1000000,false,,,Others,,,,NBP,ExpressionPriceParameters,SalesContract,
-Sell 10,0,1000000,false,,,Others,,,,10,ExpressionPriceParameters,SalesContract,
+name,minQuantity,maxQuantity,minCvValue,maxCvValue,entity,allowedPorts,restrictedContracts,restrictedPorts,priceInfo.priceExpression,priceInfo.kind,kind,preferredPort
+Asian Spot Sales,0,1000000,,,Others,,,,Asian_Spot,ExpressionPriceParameters,SalesContract,
+Brent Spot Sales,0,1000000,,,Others,,,,Brent,ExpressionPriceParameters,SalesContract,
+HH Spot Sales,0,1000000,,,Others,,,,HH,ExpressionPriceParameters,SalesContract,
+Japanese Avg. Spot,0,1000000,,,Others,Japanese Ports,,,Japanese_Import,ExpressionPriceParameters,SalesContract,Higashi-Ogishima
+Korean Avg. Spot,0,1000000,,,Others,,,,Korean_Import,ExpressionPriceParameters,SalesContract,
+NBP Spot S,0,1000000,,,Others,,,,NBP,ExpressionPriceParameters,SalesContract,
+Sell 10,0,1000000,,,Others,,,,10,ExpressionPriceParameters,SalesContract,

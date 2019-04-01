@@ -148,29 +148,25 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		windowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize, WindowSizeUnits);
 		allFeatures.addAll(getAllFeatures(windowFeatures));
 
-		loadTermsFeatures = new ArrayList<>();
+		loadTermsFeatures = new ArrayList<EStructuralFeature[]>();
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold(), CargoFeatures.getLoadSlot_CargoCV() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPortsOverride(), CargoFeatures.getSlot_RestrictedPorts(), CargoFeatures.getSlot_RestrictedPortsArePermissive() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContractsOverride(), CargoFeatures.getSlot_RestrictedContracts(), CargoFeatures.getSlot_RestrictedContractsArePermissive() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedVesselsOverride(), CargoFeatures.getSlot_RestrictedVessels(), CargoFeatures.getSlot_RestrictedVesselsArePermissive() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedSlots(), CargoFeatures.getSlot_RestrictedSlotsArePermissive() });
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_OverrideRestrictions() });
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedListsArePermissive() });
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts() });
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts() });
 
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_AllowedVessels() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_NominatedVessel() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertible(), CargoFeatures.getSlot_ShippingDaysRestriction() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_SalesDeliveryType() });
 		allFeatures.addAll(getAllFeatures(loadTermsFeatures));
 
-		dischargeTermsFeatures = new ArrayList<>();
+		dischargeTermsFeatures = new ArrayList<EStructuralFeature[]>();
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_PurchaseDeliveryType() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_MinCvValue(), CargoFeatures.getDischargeSlot_MaxCvValue() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts(), CargoFeatures.getSlot_RestrictedPortsArePermissive(), CargoFeatures.getSlot_RestrictedPortsOverride()});
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts(), CargoFeatures.getSlot_RestrictedContractsArePermissive(), CargoFeatures.getSlot_RestrictedContractsOverride() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedVessels(), CargoFeatures.getSlot_RestrictedVesselsArePermissive(), CargoFeatures.getSlot_RestrictedVesselsOverride() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedSlots(), CargoFeatures.getSlot_RestrictedSlotsArePermissive() });
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_OverrideRestrictions() });
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedListsArePermissive() });
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts() });
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts() });
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_AllowedVessels() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_NominatedVessel() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertible(), CargoFeatures.getSlot_ShippingDaysRestriction() });
 		allFeatures.addAll(getAllFeatures(dischargeTermsFeatures));
@@ -243,26 +239,27 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			}
 		};
 		esWindow.setToolTipText("Permitted arrival date range (inclusive start and end dates)");
-
+		
 		// FM - put separately to allow feature enablement
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_NOMINATIONS)) {
+		if (LicenseFeatures.isPermitted("features:nominations")) {
 			esNomination = new ExpandableSet("Nominations", this);
 			{
-				nominationFeatures = new ArrayList<>();
-				nominationFeatures.add(new EStructuralFeature[] { WindowNomination, WindowNominationCounterparty, WindowNominationIsDone });
-				nominationFeatures.add(new EStructuralFeature[] { WindowNominationComment });
-				nominationFeatures.add(new EStructuralFeature[] { VolumeNomination, VolumeNominationCounterparty, VolumeNominationDone });
-				nominationFeatures.add(new EStructuralFeature[] { VolumeNominationComment });
-				nominationFeatures.add(new EStructuralFeature[] { VesselNomination, VesselNominationCounterparty, VesselNominationDone });
-				nominationFeatures.add(new EStructuralFeature[] { VesselNominationComment });
-				nominationFeatures.add(new EStructuralFeature[] { PortNomination, PortNominationCounterparty, PortNominationDone });
-				nominationFeatures.add(new EStructuralFeature[] { PortNominationComment });
-				nominationFeatures.add(new EStructuralFeature[] { PortLoadNomination, PortLoadNominationCounterparty, PortLoadNominationDone });
-				nominationFeatures.add(new EStructuralFeature[] { PortLoadNominationComment });
-				nominationTitleFeatures = Sets.newHashSet(WindowNomination, WindowNominationCounterparty, WindowNominationIsDone, WindowNominationComment, VolumeNomination,
-						VolumeNominationCounterparty, VolumeNominationDone, VolumeNominationComment, VesselNomination, VesselNominationCounterparty, VesselNominationDone, VesselNominationComment,
-						PortNomination, PortNominationCounterparty, PortNominationDone, PortNominationComment, PortLoadNomination, PortLoadNominationCounterparty, PortLoadNominationDone,
-						PortLoadNominationComment);
+				nominationFeatures = new ArrayList<EStructuralFeature[]>();
+				nominationFeatures.add(new EStructuralFeature[] {WindowNomination, WindowNominationCounterparty, WindowNominationIsDone});
+				nominationFeatures.add(new EStructuralFeature[] {WindowNominationComment});
+				nominationFeatures.add(new EStructuralFeature[] {VolumeNomination, VolumeNominationCounterparty, VolumeNominationDone});
+				nominationFeatures.add(new EStructuralFeature[] {VolumeNominationComment});
+				nominationFeatures.add(new EStructuralFeature[] {VesselNomination, VesselNominationCounterparty, VesselNominationDone});
+				nominationFeatures.add(new EStructuralFeature[] {VesselNominationComment});
+				nominationFeatures.add(new EStructuralFeature[] {PortNomination, PortNominationCounterparty, PortNominationDone});
+				nominationFeatures.add(new EStructuralFeature[] {PortNominationComment});
+				nominationFeatures.add(new EStructuralFeature[] {PortLoadNomination, PortLoadNominationCounterparty, PortLoadNominationDone});
+				nominationFeatures.add(new EStructuralFeature[] {PortLoadNominationComment});
+				nominationTitleFeatures = Sets.newHashSet(WindowNomination, WindowNominationCounterparty, WindowNominationIsDone, WindowNominationComment,
+						VolumeNomination, VolumeNominationCounterparty, VolumeNominationDone, VolumeNominationComment,
+						VesselNomination, VesselNominationCounterparty, VesselNominationDone, VesselNominationComment,
+						PortNomination, PortNominationCounterparty, PortNominationDone, PortNominationComment,
+						PortLoadNomination, PortLoadNominationCounterparty, PortLoadNominationDone, PortLoadNominationComment);
 				allFeatures.addAll(getAllFeatures(nominationFeatures));
 			}
 		}
@@ -329,29 +326,11 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					}
 					return gd;
 				}
-				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_SLOTS || feature == CargoPackage.Literals.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE) {
-					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
-					// 64 - magic constant from MultiDetailDialog
-					gd.widthHint = 100;
-
-					// FIXME: Hack pending proper APi to manipulate labels
-					final Label label = editor.getLabel();
-					if (feature == CargoPackage.Literals.SLOT__RESTRICTED_SLOTS) {
-						if (label != null) {
-							label.setText("Restricted slots");
-						}
-						editor.setLabel(null);
-					} else {
-						if (label != null) {
-							label.setText("Permissive?");
-						}
-						editor.setLabel(null);
-					}
-					return gd;
-				}
-				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_NOMINATIONS)) {
-					if (feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_DATE || feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_IS_DONE
-							|| feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_COUNTERPARTY || feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_COMMENT) {
+				if (LicenseFeatures.isPermitted("features:nominations")) {
+					if (feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_DATE 
+							|| feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_IS_DONE
+							|| feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_COUNTERPARTY
+							|| feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_COMMENT) {
 						final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 						// 64 - magic constant from MultiDetailDialog
 						gd.widthHint = 100;
@@ -384,8 +363,10 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 						}
 						return gd;
 					}
-					if (feature == CargoPackage.Literals.SLOT__VESSEL_NOMINATION_DATE || feature == CargoPackage.Literals.SLOT__VESSEL_NOMINATION_DONE
-							|| feature == CargoPackage.Literals.SLOT__VESSEL_NOMINATION_COUNTERPARTY || feature == CargoPackage.Literals.SLOT__VESSEL_NOMINATION_COMMENT) {
+					if (feature == CargoPackage.Literals.SLOT__VESSEL_NOMINATION_DATE 
+							|| feature == CargoPackage.Literals.SLOT__VESSEL_NOMINATION_DONE
+							|| feature == CargoPackage.Literals.SLOT__VESSEL_NOMINATION_COUNTERPARTY
+							|| feature == CargoPackage.Literals.SLOT__VESSEL_NOMINATION_COMMENT) {
 						final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 						// 64 - magic constant from MultiDetailDialog
 						gd.widthHint = 100;
@@ -418,8 +399,10 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 						}
 						return gd;
 					}
-					if (feature == CargoPackage.Literals.SLOT__VOLUME_NOMINATION_DATE || feature == CargoPackage.Literals.SLOT__VOLUME_NOMINATION_DONE
-							|| feature == CargoPackage.Literals.SLOT__VOLUME_NOMINATION_COUNTERPARTY || feature == CargoPackage.Literals.SLOT__VOLUME_NOMINATION_COMMENT) {
+					if (feature == CargoPackage.Literals.SLOT__VOLUME_NOMINATION_DATE 
+							|| feature == CargoPackage.Literals.SLOT__VOLUME_NOMINATION_DONE
+							|| feature == CargoPackage.Literals.SLOT__VOLUME_NOMINATION_COUNTERPARTY
+							|| feature == CargoPackage.Literals.SLOT__VOLUME_NOMINATION_COMMENT) {
 						final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 						// 64 - magic constant from MultiDetailDialog
 						gd.widthHint = 100;
@@ -452,8 +435,10 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 						}
 						return gd;
 					}
-					if (feature == CargoPackage.Literals.SLOT__PORT_NOMINATION_DATE || feature == CargoPackage.Literals.SLOT__PORT_NOMINATION_DONE
-							|| feature == CargoPackage.Literals.SLOT__PORT_NOMINATION_COUNTERPARTY || feature == CargoPackage.Literals.SLOT__PORT_NOMINATION_COMMENT) {
+					if (feature == CargoPackage.Literals.SLOT__PORT_NOMINATION_DATE 
+							|| feature == CargoPackage.Literals.SLOT__PORT_NOMINATION_DONE
+							|| feature == CargoPackage.Literals.SLOT__PORT_NOMINATION_COUNTERPARTY
+							|| feature == CargoPackage.Literals.SLOT__PORT_NOMINATION_COMMENT) {
 						final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 						// 64 - magic constant from MultiDetailDialog
 						gd.widthHint = 100;
@@ -486,8 +471,10 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 						}
 						return gd;
 					}
-					if (feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DATE || feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DONE
-							|| feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY || feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COMMENT) {
+					if (feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DATE 
+							|| feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DONE
+							|| feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY
+							|| feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COMMENT) {
 						final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 						// 64 - magic constant from MultiDetailDialog
 						gd.widthHint = 100;
@@ -547,7 +534,100 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					gd.widthHint = 100;
 					return gd;
 				}
+				
+				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS 
+						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE 
+						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_OVERRIDE) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					// gd.widthHint = 80;
 
+					// FIXME: Hack pending proper APi to manipulate labels
+					if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Contracts");
+						}
+						editor.setLabel(null);
+					} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE) {
+						editor.setLabel(null);
+					} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_OVERRIDE) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Override");
+						}
+						editor.setLabel(null);
+					}
+					return gd;
+				}
+				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS 
+						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE 
+						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS_OVERRIDE) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					// gd.widthHint = 80;
+
+					// FIXME: Hack pending proper APi to manipulate labels
+					if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Ports");
+						}
+						editor.setLabel(null);
+					} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE) {
+						editor.setLabel(null);
+					} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS_OVERRIDE) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Override");
+						}
+						editor.setLabel(null);
+					}
+					return gd;
+				}
+				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS 
+						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE 
+						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_OVERRIDE) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					// gd.widthHint = 80;
+
+					// FIXME: Hack pending proper APi to manipulate labels
+					if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Vessels");
+						}
+						editor.setLabel(null);
+					} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE) {
+						editor.setLabel(null);
+					} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_OVERRIDE) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Override");
+						}
+						editor.setLabel(null);
+					}
+					return gd;
+				}
+				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_SLOTS 
+						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE ) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					// gd.widthHint = 80;
+
+					// FIXME: Hack pending proper APi to manipulate labels
+					if (feature == CargoPackage.Literals.SLOT__RESTRICTED_SLOTS) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Slots");
+						}
+						editor.setLabel(null);
+					} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE) {
+						editor.setLabel(null);
+					}
+					return gd;
+				}
 				return super.createEditorLayoutData(root, value, editor, control);
 			}
 		};
@@ -767,7 +847,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 		return Section.OTHER;
 	}
-
+	
 	private boolean isNominationPresent(EObject object) {
 		if (object instanceof Slot) {
 			Slot<?> slot = (Slot<?>) object;

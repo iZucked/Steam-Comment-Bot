@@ -17,10 +17,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
@@ -46,11 +44,6 @@ public class SpotMarketsDetailComposite extends DefaultDetailComposite {
 		this.contractDetailGroup = contractDetailGroup;
 	}
 
-	// @Override
-	// protected void setDefaultHelpContext(EObject object) {
-	//// PlatformUI.getWorkbench().getHelpSystem().setHelp(this, "com.mmxlabs.lingo.doc.DataModel_lng_commercial_Contract");
-	// }
-
 	@Override
 	public IInlineEditor addInlineEditor(final IInlineEditor editor) {
 		if (editor == null) {
@@ -60,13 +53,12 @@ public class SpotMarketsDetailComposite extends DefaultDetailComposite {
 		DetailGroup cdg = DetailGroup.GENERAL;
 
 		// Here the exceptions are listed for the elements which should go into the bottom
-		if (editor.getFeature() == SpotMarketsPackage.eINSTANCE.getSpotMarket_RestrictedListsArePermissive() //
+		if (editor.getFeature() == SpotMarketsPackage.eINSTANCE.getSpotMarket_RestrictedContractsArePermissive() //
+				|| editor.getFeature() == SpotMarketsPackage.eINSTANCE.getSpotMarket_RestrictedPortsArePermissive() //
+				|| editor.getFeature() == SpotMarketsPackage.eINSTANCE.getSpotMarket_RestrictedVesselsArePermissive() //
 				|| editor.getFeature() == SpotMarketsPackage.eINSTANCE.getSpotMarket_RestrictedContracts() //
 				|| editor.getFeature() == SpotMarketsPackage.eINSTANCE.getSpotMarket_RestrictedPorts() //
-				|| editor.getFeature() == SpotMarketsPackage.eINSTANCE.getDESSalesMarket_AllowedVessels() //
-		// || editor.getFeature() == SpotMarketsPackage.eINSTANCE.getDESSSalesContract_MinCvValue() //
-		// || editor.getFeature() == SpotMarketsPackage.eINSTANCE.getPurchaseContract_SalesDeliveryType() //
-		// || editor.getFeature() == SpotMarketsPackage.eINSTANCE.getSalesContract_PurchaseDeliveryType())
+				|| editor.getFeature() == SpotMarketsPackage.eINSTANCE.getSpotMarket_RestrictedVessels() //
 		) {
 			cdg = DetailGroup.RESTRICTIONS;
 		}
@@ -114,6 +106,62 @@ public class SpotMarketsDetailComposite extends DefaultDetailComposite {
 						final Label label = editor.getLabel();
 						if (label != null) {
 							label.setText("Volume");
+						}
+						editor.setLabel(null);
+					} else {
+						editor.setLabel(null);
+					}
+
+					return gd;
+				}
+				
+				if (feature == SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS 
+						|| feature == SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS_ARE_PERMISSIVE) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					gd.horizontalSpan = 2;
+					// FIXME: Hack pending proper APi to manipulate labels
+					if (feature == SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS) {
+						
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Contracts");
+						}
+						editor.setLabel(null);
+					} else {
+						editor.setLabel(null);
+					}
+
+					return gd;
+				}
+				if (feature == SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS 
+						|| feature == SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS_ARE_PERMISSIVE) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					gd.horizontalSpan = 2;
+					// FIXME: Hack pending proper APi to manipulate labels
+					if (feature == SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Ports");
+						}
+						editor.setLabel(null);
+					} else {
+						editor.setLabel(null);
+					}
+
+					return gd;
+				}
+				if (feature == SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS 
+						|| feature == SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS_ARE_PERMISSIVE) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					gd.horizontalSpan = 2;
+					// FIXME: Hack pending proper APi to manipulate labels
+					if (feature == SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Vessels");
 						}
 						editor.setLabel(null);
 					} else {

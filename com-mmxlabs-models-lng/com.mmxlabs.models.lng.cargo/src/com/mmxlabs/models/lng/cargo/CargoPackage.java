@@ -689,13 +689,76 @@ public interface CargoPackage extends EPackage {
 	int SLOT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Contracts Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__RESTRICTED_CONTRACTS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
+
+	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
+	int SLOT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 30;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__RESTRICTED_PORTS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 31;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__RESTRICTED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 32;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 33;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__RESTRICTED_VESSELS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 34;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Slots</b></em>' reference list.
@@ -704,7 +767,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
+	int SLOT__RESTRICTED_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 35;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Slots Are Permissive</b></em>' attribute.
@@ -713,16 +776,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
-
-	/**
-	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 30;
+	int SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 36;
 
 	/**
 	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
@@ -731,7 +785,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__HEDGES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 31;
+	int SLOT__HEDGES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 37;
 
 	/**
 	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
@@ -740,16 +794,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 32;
-
-	/**
-	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 33;
+	int SLOT__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 38;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -758,16 +803,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 34;
-
-	/**
-	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__OVERRIDE_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 35;
+	int SLOT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 39;
 
 	/**
 	 * The feature id for the '<em><b>Nominated Vessel</b></em>' reference.
@@ -776,7 +812,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 36;
+	int SLOT__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 40;
 
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
@@ -785,7 +821,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 37;
+	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 41;
 
 	/**
 	 * The feature id for the '<em><b>Window Nomination Date</b></em>' attribute.
@@ -794,7 +830,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 38;
+	int SLOT__WINDOW_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
 
 	/**
 	 * The feature id for the '<em><b>Window Nomination Is Done</b></em>' attribute.
@@ -803,7 +839,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_NOMINATION_IS_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 39;
+	int SLOT__WINDOW_NOMINATION_IS_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
 
 	/**
 	 * The feature id for the '<em><b>Window Nomination Counterparty</b></em>' attribute.
@@ -812,7 +848,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 40;
+	int SLOT__WINDOW_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
 
 	/**
 	 * The feature id for the '<em><b>Window Nomination Comment</b></em>' attribute.
@@ -821,7 +857,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 41;
+	int SLOT__WINDOW_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 45;
 
 	/**
 	 * The feature id for the '<em><b>Volume Nomination Date</b></em>' attribute.
@@ -830,7 +866,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VOLUME_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
+	int SLOT__VOLUME_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 46;
 
 	/**
 	 * The feature id for the '<em><b>Volume Nomination Done</b></em>' attribute.
@@ -839,7 +875,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VOLUME_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
+	int SLOT__VOLUME_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 47;
 
 	/**
 	 * The feature id for the '<em><b>Volume Nomination Counterparty</b></em>' attribute.
@@ -848,7 +884,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VOLUME_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
+	int SLOT__VOLUME_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 48;
 
 	/**
 	 * The feature id for the '<em><b>Volume Nomination Comment</b></em>' attribute.
@@ -857,7 +893,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VOLUME_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 45;
+	int SLOT__VOLUME_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 49;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Nomination Date</b></em>' attribute.
@@ -866,7 +902,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VESSEL_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 46;
+	int SLOT__VESSEL_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 50;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Nomination Done</b></em>' attribute.
@@ -875,7 +911,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VESSEL_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 47;
+	int SLOT__VESSEL_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 51;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Nomination Counterparty</b></em>' attribute.
@@ -884,7 +920,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VESSEL_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 48;
+	int SLOT__VESSEL_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 52;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Nomination Comment</b></em>' attribute.
@@ -893,7 +929,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VESSEL_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 49;
+	int SLOT__VESSEL_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 53;
 
 	/**
 	 * The feature id for the '<em><b>Port Nomination Date</b></em>' attribute.
@@ -902,7 +938,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 50;
+	int SLOT__PORT_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 54;
 
 	/**
 	 * The feature id for the '<em><b>Port Nomination Done</b></em>' attribute.
@@ -911,7 +947,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 51;
+	int SLOT__PORT_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 55;
 
 	/**
 	 * The feature id for the '<em><b>Port Nomination Counterparty</b></em>' attribute.
@@ -920,7 +956,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 52;
+	int SLOT__PORT_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 56;
 
 	/**
 	 * The feature id for the '<em><b>Port Nomination Comment</b></em>' attribute.
@@ -929,7 +965,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 53;
+	int SLOT__PORT_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 57;
 
 	/**
 	 * The feature id for the '<em><b>Port Load Nomination Date</b></em>' attribute.
@@ -938,7 +974,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_LOAD_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 54;
+	int SLOT__PORT_LOAD_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 58;
 
 	/**
 	 * The feature id for the '<em><b>Port Load Nomination Done</b></em>' attribute.
@@ -947,7 +983,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_LOAD_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 55;
+	int SLOT__PORT_LOAD_NOMINATION_DONE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 59;
 
 	/**
 	 * The feature id for the '<em><b>Port Load Nomination Counterparty</b></em>' attribute.
@@ -956,7 +992,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 56;
+	int SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 60;
 
 	/**
 	 * The feature id for the '<em><b>Port Load Nomination Comment</b></em>' attribute.
@@ -965,7 +1001,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT_LOAD_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 57;
+	int SLOT__PORT_LOAD_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 61;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -974,7 +1010,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 58;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 62;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1130,22 +1166,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_DELEGATE_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 13;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Restricted Lists Are Permissive</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 14;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Cancellation Expression</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 15;
+	int SLOT___GET_SLOT_OR_DELEGATE_CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Pricing Event</em>' operation.
@@ -1154,7 +1181,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_PRICING_EVENT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 16;
+	int SLOT___GET_SLOT_OR_DELEGATE_PRICING_EVENT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 15;
 
 	/**
 	 * The operation id for the '<em>Get Pricing Date As Date Time</em>' operation.
@@ -1163,7 +1190,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_PRICING_DATE_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 17;
+	int SLOT___GET_PRICING_DATE_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 16;
 
 	/**
 	 * The operation id for the '<em>Get Slot Contract Params</em>' operation.
@@ -1172,7 +1199,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_CONTRACT_PARAMS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 18;
+	int SLOT___GET_SLOT_CONTRACT_PARAMS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 17;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Counterparty</em>' operation.
@@ -1181,7 +1208,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 19;
+	int SLOT___GET_SLOT_OR_DELEGATE_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 18;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CN</em>' operation.
@@ -1190,7 +1217,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_CN = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 20;
+	int SLOT___GET_SLOT_OR_DELEGATE_CN = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 19;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Divertible</em>' operation.
@@ -1199,7 +1226,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 21;
+	int SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 20;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Shipping Days Restriction</em>' operation.
@@ -1208,7 +1235,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 22;
+	int SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 21;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Port Load Nomination Date</em>' operation.
@@ -1217,7 +1244,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 23;
+	int SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 22;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Window Nomination Date</em>' operation.
@@ -1226,7 +1253,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 24;
+	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 23;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Vessel Nomination Date</em>' operation.
@@ -1235,7 +1262,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 25;
+	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 24;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Volume Nomination Date</em>' operation.
@@ -1244,7 +1271,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_VOLUME_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 26;
+	int SLOT___GET_SLOT_OR_DELEGATE_VOLUME_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 25;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Port Nomination Date</em>' operation.
@@ -1253,7 +1280,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 27;
+	int SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_DATE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 26;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Window Nomination Counterparty</em>' operation.
@@ -1262,7 +1289,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 28;
+	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 27;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Vessel Nomination Counterparty</em>' operation.
@@ -1271,7 +1298,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 29;
+	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 28;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Volume Nomination Counterparty</em>' operation.
@@ -1280,7 +1307,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_VOLUME_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 30;
+	int SLOT___GET_SLOT_OR_DELEGATE_VOLUME_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 29;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Port Nomination Counterparty</em>' operation.
@@ -1289,7 +1316,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 31;
+	int SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 30;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Port Load Nomination Counterparty</em>' operation.
@@ -1298,7 +1325,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 32;
+	int SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 31;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Full Cargo Lot</em>' operation.
@@ -1307,7 +1334,61 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 33;
+	int SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 32;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Contract Restrictions Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 33;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Restrictions Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 34;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Vessel Restrictions Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 35;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Contract Restrictions</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 36;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Restrictions</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 37;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Vessel Restrictions</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 38;
 
 	/**
 	 * The number of operations of the '<em>Slot</em>' class.
@@ -1316,7 +1397,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 34;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 39;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1580,6 +1661,24 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__RESTRICTED_CONTRACTS = SLOT__RESTRICTED_CONTRACTS;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Contracts Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE = SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__RESTRICTED_CONTRACTS_OVERRIDE = SLOT__RESTRICTED_CONTRACTS_OVERRIDE;
+
+	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1587,6 +1686,51 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__RESTRICTED_PORTS = SLOT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE = SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__RESTRICTED_PORTS_OVERRIDE = SLOT__RESTRICTED_PORTS_OVERRIDE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__RESTRICTED_VESSELS = SLOT__RESTRICTED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE = SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__RESTRICTED_VESSELS_OVERRIDE = SLOT__RESTRICTED_VESSELS_OVERRIDE;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Slots</b></em>' reference list.
@@ -1607,15 +1751,6 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE;
 
 	/**
-	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE;
-
-	/**
 	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1634,15 +1769,6 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__MISC_COSTS = SLOT__MISC_COSTS;
 
 	/**
-	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__ALLOWED_VESSELS = SLOT__ALLOWED_VESSELS;
-
-	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1650,15 +1776,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__CANCELLATION_EXPRESSION = SLOT__CANCELLATION_EXPRESSION;
-
-	/**
-	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__OVERRIDE_RESTRICTIONS = SLOT__OVERRIDE_RESTRICTIONS;
 
 	/**
 	 * The feature id for the '<em><b>Nominated Vessel</b></em>' reference.
@@ -2066,15 +2183,6 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_ENTITY = SLOT___GET_SLOT_OR_DELEGATE_ENTITY;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Restricted Lists Are Permissive</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_DELEGATE_RESTRICTED_LISTS_ARE_PERMISSIVE;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Cancellation Expression</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2244,6 +2352,60 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT = SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Contract Restrictions Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Restrictions Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Vessel Restrictions Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Contract Restrictions</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS = SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Restrictions</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS = SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Vessel Restrictions</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -2534,6 +2696,24 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__RESTRICTED_CONTRACTS = SLOT__RESTRICTED_CONTRACTS;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Contracts Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE = SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__RESTRICTED_CONTRACTS_OVERRIDE = SLOT__RESTRICTED_CONTRACTS_OVERRIDE;
+
+	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2541,6 +2721,51 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__RESTRICTED_PORTS = SLOT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE = SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__RESTRICTED_PORTS_OVERRIDE = SLOT__RESTRICTED_PORTS_OVERRIDE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__RESTRICTED_VESSELS = SLOT__RESTRICTED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE = SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__RESTRICTED_VESSELS_OVERRIDE = SLOT__RESTRICTED_VESSELS_OVERRIDE;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Slots</b></em>' reference list.
@@ -2561,15 +2786,6 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE;
 
 	/**
-	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE;
-
-	/**
 	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2588,15 +2804,6 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__MISC_COSTS = SLOT__MISC_COSTS;
 
 	/**
-	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__ALLOWED_VESSELS = SLOT__ALLOWED_VESSELS;
-
-	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2604,15 +2811,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__CANCELLATION_EXPRESSION = SLOT__CANCELLATION_EXPRESSION;
-
-	/**
-	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__OVERRIDE_RESTRICTIONS = SLOT__OVERRIDE_RESTRICTIONS;
 
 	/**
 	 * The feature id for the '<em><b>Nominated Vessel</b></em>' reference.
@@ -3020,15 +3218,6 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_ENTITY = SLOT___GET_SLOT_OR_DELEGATE_ENTITY;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Restricted Lists Are Permissive</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_DELEGATE_RESTRICTED_LISTS_ARE_PERMISSIVE;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Cancellation Expression</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3198,6 +3387,60 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT = SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Contract Restrictions Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Restrictions Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Vessel Restrictions Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Contract Restrictions</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS = SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Restrictions</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS = SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Vessel Restrictions</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -3580,6 +3823,24 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__RESTRICTED_CONTRACTS = LOAD_SLOT__RESTRICTED_CONTRACTS;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Contracts Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE = LOAD_SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__RESTRICTED_CONTRACTS_OVERRIDE = LOAD_SLOT__RESTRICTED_CONTRACTS_OVERRIDE;
+
+	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3587,6 +3848,51 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__RESTRICTED_PORTS = LOAD_SLOT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE = LOAD_SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__RESTRICTED_PORTS_OVERRIDE = LOAD_SLOT__RESTRICTED_PORTS_OVERRIDE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__RESTRICTED_VESSELS = LOAD_SLOT__RESTRICTED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE = LOAD_SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__RESTRICTED_VESSELS_OVERRIDE = LOAD_SLOT__RESTRICTED_VESSELS_OVERRIDE;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Slots</b></em>' reference list.
@@ -3607,15 +3913,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = LOAD_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE;
 
 	/**
-	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = LOAD_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE;
-
-	/**
 	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3634,15 +3931,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__MISC_COSTS = LOAD_SLOT__MISC_COSTS;
 
 	/**
-	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__ALLOWED_VESSELS = LOAD_SLOT__ALLOWED_VESSELS;
-
-	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3650,15 +3938,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__CANCELLATION_EXPRESSION = LOAD_SLOT__CANCELLATION_EXPRESSION;
-
-	/**
-	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__OVERRIDE_RESTRICTIONS = LOAD_SLOT__OVERRIDE_RESTRICTIONS;
 
 	/**
 	 * The feature id for the '<em><b>Nominated Vessel</b></em>' reference.
@@ -4075,15 +4354,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_ENTITY = LOAD_SLOT___GET_SLOT_OR_DELEGATE_ENTITY;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Restricted Lists Are Permissive</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_RESTRICTED_LISTS_ARE_PERMISSIVE = LOAD_SLOT___GET_SLOT_OR_DELEGATE_RESTRICTED_LISTS_ARE_PERMISSIVE;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Cancellation Expression</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4253,6 +4523,60 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT = LOAD_SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Contract Restrictions Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE = LOAD_SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Restrictions Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS_ARE_PERMISSIVE = LOAD_SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Vessel Restrictions Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS_ARE_PERMISSIVE = LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Contract Restrictions</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS = LOAD_SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Restrictions</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS = LOAD_SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Vessel Restrictions</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -4553,6 +4877,24 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__RESTRICTED_CONTRACTS = DISCHARGE_SLOT__RESTRICTED_CONTRACTS;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Contracts Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE = DISCHARGE_SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__RESTRICTED_CONTRACTS_OVERRIDE = DISCHARGE_SLOT__RESTRICTED_CONTRACTS_OVERRIDE;
+
+	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4560,6 +4902,51 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__RESTRICTED_PORTS = DISCHARGE_SLOT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE = DISCHARGE_SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__RESTRICTED_PORTS_OVERRIDE = DISCHARGE_SLOT__RESTRICTED_PORTS_OVERRIDE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__RESTRICTED_VESSELS = DISCHARGE_SLOT__RESTRICTED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE = DISCHARGE_SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Vessels Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__RESTRICTED_VESSELS_OVERRIDE = DISCHARGE_SLOT__RESTRICTED_VESSELS_OVERRIDE;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Slots</b></em>' reference list.
@@ -4580,15 +4967,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = DISCHARGE_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE;
 
 	/**
-	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = DISCHARGE_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE;
-
-	/**
 	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4607,15 +4985,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__MISC_COSTS = DISCHARGE_SLOT__MISC_COSTS;
 
 	/**
-	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT__ALLOWED_VESSELS = DISCHARGE_SLOT__ALLOWED_VESSELS;
-
-	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4623,15 +4992,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__CANCELLATION_EXPRESSION = DISCHARGE_SLOT__CANCELLATION_EXPRESSION;
-
-	/**
-	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT__OVERRIDE_RESTRICTIONS = DISCHARGE_SLOT__OVERRIDE_RESTRICTIONS;
 
 	/**
 	 * The feature id for the '<em><b>Nominated Vessel</b></em>' reference.
@@ -5049,15 +5409,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_ENTITY = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_ENTITY;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Restricted Lists Are Permissive</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_RESTRICTED_LISTS_ARE_PERMISSIVE = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_RESTRICTED_LISTS_ARE_PERMISSIVE;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Cancellation Expression</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5227,6 +5578,60 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Contract Restrictions Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Restrictions Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS_ARE_PERMISSIVE = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Vessel Restrictions Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS_ARE_PERMISSIVE = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Contract Restrictions</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Port Restrictions</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Vessel Restrictions</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -8773,6 +9178,28 @@ public interface CargoPackage extends EPackage {
 	EReference getSlot_RestrictedContracts();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedContractsArePermissive <em>Restricted Contracts Are Permissive</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restricted Contracts Are Permissive</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isRestrictedContractsArePermissive()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_RestrictedContractsArePermissive();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedContractsOverride <em>Restricted Contracts Override</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restricted Contracts Override</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isRestrictedContractsOverride()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_RestrictedContractsOverride();
+
+	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8782,6 +9209,28 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSlot_RestrictedPorts();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedPortsArePermissive <em>Restricted Ports Are Permissive</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restricted Ports Are Permissive</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isRestrictedPortsArePermissive()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_RestrictedPortsArePermissive();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedPortsOverride <em>Restricted Ports Override</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restricted Ports Override</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isRestrictedPortsOverride()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_RestrictedPortsOverride();
 
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedSlots <em>Restricted Slots</em>}'.
@@ -8806,15 +9255,37 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_RestrictedSlotsArePermissive();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedVessels <em>Restricted Vessels</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Restricted Lists Are Permissive</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive()
+	 * @return the meta object for the reference list '<em>Restricted Vessels</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getRestrictedVessels()
 	 * @see #getSlot()
 	 * @generated
 	 */
-	EAttribute getSlot_RestrictedListsArePermissive();
+	EReference getSlot_RestrictedVessels();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedVesselsArePermissive <em>Restricted Vessels Are Permissive</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restricted Vessels Are Permissive</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isRestrictedVesselsArePermissive()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_RestrictedVesselsArePermissive();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedVesselsOverride <em>Restricted Vessels Override</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restricted Vessels Override</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isRestrictedVesselsOverride()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_RestrictedVesselsOverride();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getHedges <em>Hedges</em>}'.
@@ -8848,17 +9319,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlot_CancellationExpression();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isOverrideRestrictions <em>Override Restrictions</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Override Restrictions</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#isOverrideRestrictions()
-	 * @see #getSlot()
-	 * @generated
-	 */
-	EAttribute getSlot_OverrideRestrictions();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Slot#getNominatedVessel <em>Nominated Vessel</em>}'.
@@ -9153,18 +9613,6 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrDelegateVolumeLimitsUnit();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedVessels <em>Allowed Vessels</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Allowed Vessels</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getAllowedVessels()
-	 * @see #getSlot()
-	 * @generated
-	 */
-	EReference getSlot_AllowedVessels();
-
-
-	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowEndWithSlotOrPortTime() <em>Get Window End With Slot Or Port Time</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9243,16 +9691,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getSlot__GetSlotOrDelegateEntity();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateRestrictedListsArePermissive() <em>Get Slot Or Delegate Restricted Lists Are Permissive</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Slot Or Delegate Restricted Lists Are Permissive</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateRestrictedListsArePermissive()
-	 * @generated
-	 */
-	EOperation getSlot__GetSlotOrDelegateRestrictedListsArePermissive();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateCancellationExpression() <em>Get Slot Or Delegate Cancellation Expression</em>}' operation.
@@ -9443,6 +9881,66 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getSlot__GetSlotOrDelegateFullCargoLot();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateContractRestrictionsArePermissive() <em>Get Slot Or Delegate Contract Restrictions Are Permissive</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Contract Restrictions Are Permissive</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateContractRestrictionsArePermissive()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegateContractRestrictionsArePermissive();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatePortRestrictionsArePermissive() <em>Get Slot Or Delegate Port Restrictions Are Permissive</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Port Restrictions Are Permissive</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatePortRestrictionsArePermissive()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegatePortRestrictionsArePermissive();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateVesselRestrictionsArePermissive() <em>Get Slot Or Delegate Vessel Restrictions Are Permissive</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Vessel Restrictions Are Permissive</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateVesselRestrictionsArePermissive()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegateVesselRestrictionsArePermissive();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateContractRestrictions() <em>Get Slot Or Delegate Contract Restrictions</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Contract Restrictions</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateContractRestrictions()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegateContractRestrictions();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatePortRestrictions() <em>Get Slot Or Delegate Port Restrictions</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Port Restrictions</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatePortRestrictions()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegatePortRestrictions();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateVesselRestrictions() <em>Get Slot Or Delegate Vessel Restrictions</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Vessel Restrictions</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateVesselRestrictions()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegateVesselRestrictions();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -11702,12 +12200,44 @@ public interface CargoPackage extends EPackage {
 		EReference SLOT__RESTRICTED_CONTRACTS = eINSTANCE.getSlot_RestrictedContracts();
 
 		/**
+		 * The meta object literal for the '<em><b>Restricted Contracts Are Permissive</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE = eINSTANCE.getSlot_RestrictedContractsArePermissive();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Contracts Override</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__RESTRICTED_CONTRACTS_OVERRIDE = eINSTANCE.getSlot_RestrictedContractsOverride();
+
+		/**
 		 * The meta object literal for the '<em><b>Restricted Ports</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference SLOT__RESTRICTED_PORTS = eINSTANCE.getSlot_RestrictedPorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Ports Are Permissive</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE = eINSTANCE.getSlot_RestrictedPortsArePermissive();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Ports Override</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__RESTRICTED_PORTS_OVERRIDE = eINSTANCE.getSlot_RestrictedPortsOverride();
 
 		/**
 		 * The meta object literal for the '<em><b>Restricted Slots</b></em>' reference list feature.
@@ -11726,12 +12256,28 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = eINSTANCE.getSlot_RestrictedSlotsArePermissive();
 
 		/**
-		 * The meta object literal for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Restricted Vessels</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = eINSTANCE.getSlot_RestrictedListsArePermissive();
+		EReference SLOT__RESTRICTED_VESSELS = eINSTANCE.getSlot_RestrictedVessels();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Vessels Are Permissive</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE = eINSTANCE.getSlot_RestrictedVesselsArePermissive();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Vessels Override</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__RESTRICTED_VESSELS_OVERRIDE = eINSTANCE.getSlot_RestrictedVesselsOverride();
 
 		/**
 		 * The meta object literal for the '<em><b>Hedges</b></em>' attribute feature.
@@ -11750,28 +12296,12 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__MISC_COSTS = eINSTANCE.getSlot_MiscCosts();
 
 		/**
-		 * The meta object literal for the '<em><b>Allowed Vessels</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SLOT__ALLOWED_VESSELS = eINSTANCE.getSlot_AllowedVessels();
-
-		/**
 		 * The meta object literal for the '<em><b>Cancellation Expression</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute SLOT__CANCELLATION_EXPRESSION = eINSTANCE.getSlot_CancellationExpression();
-
-		/**
-		 * The meta object literal for the '<em><b>Override Restrictions</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SLOT__OVERRIDE_RESTRICTIONS = eINSTANCE.getSlot_OverrideRestrictions();
 
 		/**
 		 * The meta object literal for the '<em><b>Nominated Vessel</b></em>' reference feature.
@@ -12054,14 +12584,6 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_ENTITY = eINSTANCE.getSlot__GetSlotOrDelegateEntity();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Slot Or Delegate Restricted Lists Are Permissive</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT___GET_SLOT_OR_DELEGATE_RESTRICTED_LISTS_ARE_PERMISSIVE = eINSTANCE.getSlot__GetSlotOrDelegateRestrictedListsArePermissive();
-
-		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Cancellation Expression</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12212,6 +12734,54 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT = eINSTANCE.getSlot__GetSlotOrDelegateFullCargoLot();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Contract Restrictions Are Permissive</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE = eINSTANCE.getSlot__GetSlotOrDelegateContractRestrictionsArePermissive();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Port Restrictions Are Permissive</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS_ARE_PERMISSIVE = eINSTANCE.getSlot__GetSlotOrDelegatePortRestrictionsArePermissive();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Vessel Restrictions Are Permissive</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS_ARE_PERMISSIVE = eINSTANCE.getSlot__GetSlotOrDelegateVesselRestrictionsArePermissive();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Contract Restrictions</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS = eINSTANCE.getSlot__GetSlotOrDelegateContractRestrictions();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Port Restrictions</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS = eINSTANCE.getSlot__GetSlotOrDelegatePortRestrictions();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Vessel Restrictions</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = eINSTANCE.getSlot__GetSlotOrDelegateVesselRestrictions();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

@@ -1940,7 +1940,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setVesselPermissions(@NonNull final IPortSlot portSlot, @Nullable final List<@NonNull IVessel> permittedVessels) {
-		allowedVesselProviderEditor.setPermittedVesselAndClasses(portSlot, permittedVessels);
+	public void setVesselPermissions(@NonNull final IPortSlot portSlot, @Nullable final List<@NonNull IVessel> permittedVessels, boolean isPermitted) {
+		Set<IVessel> allowedVessels = new HashSet<>(permittedVessels);
+		if (!isPermitted) {
+			final Set<IVessel> permitted = new HashSet<>(vessels);
+			permitted.removeAll(allowedVessels);
+			allowedVessels = permitted;
+		}
+//		if (!allowedVessels.isEmpty()) {
+			allowedVesselProviderEditor.setPermittedVesselAndClasses(portSlot, allowedVessels);
+//		}
 	}
 }

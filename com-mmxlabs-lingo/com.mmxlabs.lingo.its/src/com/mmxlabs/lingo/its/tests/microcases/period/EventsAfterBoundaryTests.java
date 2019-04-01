@@ -457,10 +457,10 @@ public class EventsAfterBoundaryTests extends AbstractMicroTestCase {
 		// Create cargo 1,
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2016, 5, 29), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vessel_1) //
+				.withRestrictedVessels(vessel_1, true) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2016, 6, 27), portFinder.findPort("Mina Al Ahmadi"), null, entity, "7") //
-				.withAllowedVessels(vessel_1) //
+				.withRestrictedVessels(vessel_1, true) //
 				.build() //
 				.withVesselAssignment(vesselAvailability_1, 0) //
 				.withAssignmentFlags(true, false) //

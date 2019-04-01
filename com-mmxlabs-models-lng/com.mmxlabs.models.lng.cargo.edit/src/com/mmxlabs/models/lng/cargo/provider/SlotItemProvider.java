@@ -76,15 +76,19 @@ public class SlotItemProvider
 			addShippingDaysRestrictionPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 			addRestrictedContractsPropertyDescriptor(object);
+			addRestrictedContractsArePermissivePropertyDescriptor(object);
+			addRestrictedContractsOverridePropertyDescriptor(object);
 			addRestrictedPortsPropertyDescriptor(object);
+			addRestrictedPortsArePermissivePropertyDescriptor(object);
+			addRestrictedPortsOverridePropertyDescriptor(object);
+			addRestrictedVesselsPropertyDescriptor(object);
+			addRestrictedVesselsArePermissivePropertyDescriptor(object);
+			addRestrictedVesselsOverridePropertyDescriptor(object);
 			addRestrictedSlotsPropertyDescriptor(object);
 			addRestrictedSlotsArePermissivePropertyDescriptor(object);
-			addRestrictedListsArePermissivePropertyDescriptor(object);
 			addHedgesPropertyDescriptor(object);
 			addMiscCostsPropertyDescriptor(object);
-			addAllowedVesselsPropertyDescriptor(object);
 			addCancellationExpressionPropertyDescriptor(object);
-			addOverrideRestrictionsPropertyDescriptor(object);
 			addNominatedVesselPropertyDescriptor(object);
 			addLockedPropertyDescriptor(object);
 			addWindowNominationDatePropertyDescriptor(object);
@@ -706,6 +710,50 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Restricted Contracts Are Permissive feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedContractsArePermissivePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_restrictedContractsArePermissive_feature"),
+				 getString("_UI_Slot_restrictedContractsArePermissive_description"),
+				 CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Contracts Override feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedContractsOverridePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_restrictedContractsOverride_feature"),
+				 getString("_UI_Slot_restrictedContractsOverride_description"),
+				 CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_OVERRIDE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Restricted Ports feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -728,6 +776,50 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Restricted Ports Are Permissive feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedPortsArePermissivePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_restrictedPortsArePermissive_feature"),
+				 getString("_UI_Slot_restrictedPortsArePermissive_description"),
+				 CargoPackage.Literals.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Ports Override feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedPortsOverridePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_restrictedPortsOverride_feature"),
+				 getString("_UI_Slot_restrictedPortsOverride_description"),
+				 CargoPackage.Literals.SLOT__RESTRICTED_PORTS_OVERRIDE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Restricted Slots feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -739,7 +831,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_restrictedSlots_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_restrictedSlots_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_restrictedSlots_description"),
 				 CargoPackage.Literals.SLOT__RESTRICTED_SLOTS,
 				 true,
 				 false,
@@ -761,7 +853,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_restrictedSlotsArePermissive_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_restrictedSlotsArePermissive_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_restrictedSlotsArePermissive_description"),
 				 CargoPackage.Literals.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE,
 				 true,
 				 false,
@@ -772,19 +864,63 @@ public class SlotItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Restricted Lists Are Permissive feature.
+	 * This adds a property descriptor for the Restricted Vessels feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addRestrictedListsArePermissivePropertyDescriptor(Object object) {
+	protected void addRestrictedVesselsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Slot_restrictedListsArePermissive_feature"),
-				 getString("_UI_Slot_restrictedListsArePermissive_description"),
-				 CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE,
+				 getString("_UI_Slot_restrictedVessels_feature"),
+				 getString("_UI_Slot_restrictedVessels_description"),
+				 CargoPackage.Literals.SLOT__RESTRICTED_VESSELS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Vessels Are Permissive feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedVesselsArePermissivePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_restrictedVesselsArePermissive_feature"),
+				 getString("_UI_Slot_restrictedVesselsArePermissive_description"),
+				 CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Vessels Override feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedVesselsOverridePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_restrictedVesselsOverride_feature"),
+				 getString("_UI_Slot_restrictedVesselsOverride_description"),
+				 CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_OVERRIDE,
 				 true,
 				 false,
 				 false,
@@ -838,28 +974,6 @@ public class SlotItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Allowed Vessels feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAllowedVesselsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Slot_allowedVessels_feature"),
-				 getString("_UI_Slot_allowedVessels_description"),
-				 CargoPackage.Literals.SLOT__ALLOWED_VESSELS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Cancellation Expression feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -877,28 +991,6 @@ public class SlotItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Override Restrictions feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addOverrideRestrictionsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Slot_overrideRestrictions_feature"),
-				 getString("_UI_Slot_overrideRestrictions_description"),
-				 CargoPackage.Literals.SLOT__OVERRIDE_RESTRICTIONS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -1446,12 +1538,16 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__NOTES:
 			case CargoPackage.SLOT__DIVERTIBLE:
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
+			case CargoPackage.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
+			case CargoPackage.SLOT__RESTRICTED_CONTRACTS_OVERRIDE:
+			case CargoPackage.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE:
+			case CargoPackage.SLOT__RESTRICTED_PORTS_OVERRIDE:
+			case CargoPackage.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE:
+			case CargoPackage.SLOT__RESTRICTED_VESSELS_OVERRIDE:
 			case CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE:
-			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 			case CargoPackage.SLOT__HEDGES:
 			case CargoPackage.SLOT__MISC_COSTS:
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
-			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
 			case CargoPackage.SLOT__LOCKED:
 			case CargoPackage.SLOT__WINDOW_NOMINATION_DATE:
 			case CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE:

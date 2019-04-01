@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.commercial.impl;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -41,10 +42,11 @@ import com.mmxlabs.models.lng.commercial.SimpleEntityBook;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.commercial.VolumeParams;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import org.eclipse.emf.common.util.URI;
 
 /**
  * <!-- begin-user-doc -->
@@ -284,6 +286,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		// Initialize simple dependencies
 		DateTimePackage.eINSTANCE.eClass();
+		FleetPackage.eINSTANCE.eClass();
 		TypesPackage.eINSTANCE.eClass();
 		MMXCorePackage.eINSTANCE.eClass();
 		PortPackage.eINSTANCE.eClass();
@@ -498,8 +501,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getContract_RestrictedListsArePermissive() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(14);
+	public EReference getContract_RestrictedContracts() {
+		return (EReference)contractEClass.getEStructuralFeatures().get(14);
 	}
 
 	/**
@@ -508,8 +511,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EReference getContract_RestrictedContracts() {
-		return (EReference)contractEClass.getEStructuralFeatures().get(15);
+	public EAttribute getContract_RestrictedContractsArePermissive() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(15);
 	}
 
 	/**
@@ -528,8 +531,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EReference getContract_PriceInfo() {
-		return (EReference)contractEClass.getEStructuralFeatures().get(17);
+	public EAttribute getContract_RestrictedPortsArePermissive() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(17);
 	}
 
 	/**
@@ -538,8 +541,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getContract_Notes() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(18);
+	public EReference getContract_RestrictedVessels() {
+		return (EReference)contractEClass.getEStructuralFeatures().get(18);
 	}
 
 	/**
@@ -548,7 +551,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getContract_ContractType() {
+	public EAttribute getContract_RestrictedVesselsArePermissive() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(19);
 	}
 
@@ -558,8 +561,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getContract_PricingEvent() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(20);
+	public EReference getContract_PriceInfo() {
+		return (EReference)contractEClass.getEStructuralFeatures().get(20);
 	}
 
 	/**
@@ -568,7 +571,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getContract_CancellationExpression() {
+	public EAttribute getContract_Notes() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(21);
 	}
 
@@ -578,7 +581,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getContract_WindowNominationSize() {
+	public EAttribute getContract_ContractType() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(22);
 	}
 
@@ -588,7 +591,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getContract_WindowNominationSizeUnits() {
+	public EAttribute getContract_PricingEvent() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(23);
 	}
 
@@ -598,7 +601,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getContract_WindowNominationCounterparty() {
+	public EAttribute getContract_CancellationExpression() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(24);
 	}
 
@@ -608,77 +611,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getContract_Divertible() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(34);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getContract_ShippingDaysRestriction() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(35);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getContract_PortLoadNominationSize() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(36);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getContract_PortLoadNominationSizeUnits() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(37);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getContract_PortLoadNominationCounterparty() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(38);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getContract_VesselNominationSize() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(25);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getContract_VesselNominationSizeUnits() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(26);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getContract_VesselNominationCounterparty() {
+	public EAttribute getContract_WindowNominationSize() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(27);
 	}
 
@@ -688,7 +621,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getContract_VolumeNominationSize() {
+	public EAttribute getContract_WindowNominationSizeUnits() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(28);
 	}
 
@@ -698,7 +631,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getContract_VolumeNominationSizeUnits() {
+	public EAttribute getContract_WindowNominationCounterparty() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(29);
 	}
 
@@ -708,7 +641,57 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getContract_VolumeNominationCounterparty() {
+	public EAttribute getContract_Divertible() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(25);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getContract_ShippingDaysRestriction() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(26);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getContract_PortLoadNominationSize() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(39);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getContract_PortLoadNominationSizeUnits() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(40);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getContract_PortLoadNominationCounterparty() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(41);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getContract_VesselNominationSize() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(30);
 	}
 
@@ -718,7 +701,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getContract_PortNominationSize() {
+	public EAttribute getContract_VesselNominationSizeUnits() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(31);
 	}
 
@@ -728,7 +711,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getContract_PortNominationSizeUnits() {
+	public EAttribute getContract_VesselNominationCounterparty() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(32);
 	}
 
@@ -738,8 +721,58 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getContract_PortNominationCounterparty() {
+	public EAttribute getContract_VolumeNominationSize() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(33);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getContract_VolumeNominationSizeUnits() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(34);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getContract_VolumeNominationCounterparty() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(35);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getContract_PortNominationSize() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(36);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getContract_PortNominationSizeUnits() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(37);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getContract_PortNominationCounterparty() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(38);
 	}
 
 	/**
@@ -1339,14 +1372,19 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(contractEClass, CONTRACT__VOLUME_LIMITS_UNIT);
 		createEAttribute(contractEClass, CONTRACT__OPERATIONAL_TOLERANCE);
 		createEAttribute(contractEClass, CONTRACT__FULL_CARGO_LOT);
-		createEAttribute(contractEClass, CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE);
 		createEReference(contractEClass, CONTRACT__RESTRICTED_CONTRACTS);
+		createEAttribute(contractEClass, CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE);
 		createEReference(contractEClass, CONTRACT__RESTRICTED_PORTS);
+		createEAttribute(contractEClass, CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE);
+		createEReference(contractEClass, CONTRACT__RESTRICTED_VESSELS);
+		createEAttribute(contractEClass, CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE);
 		createEReference(contractEClass, CONTRACT__PRICE_INFO);
 		createEAttribute(contractEClass, CONTRACT__NOTES);
 		createEAttribute(contractEClass, CONTRACT__CONTRACT_TYPE);
 		createEAttribute(contractEClass, CONTRACT__PRICING_EVENT);
 		createEAttribute(contractEClass, CONTRACT__CANCELLATION_EXPRESSION);
+		createEAttribute(contractEClass, CONTRACT__DIVERTIBLE);
+		createEAttribute(contractEClass, CONTRACT__SHIPPING_DAYS_RESTRICTION);
 		createEAttribute(contractEClass, CONTRACT__WINDOW_NOMINATION_SIZE);
 		createEAttribute(contractEClass, CONTRACT__WINDOW_NOMINATION_SIZE_UNITS);
 		createEAttribute(contractEClass, CONTRACT__WINDOW_NOMINATION_COUNTERPARTY);
@@ -1359,8 +1397,6 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(contractEClass, CONTRACT__PORT_NOMINATION_SIZE);
 		createEAttribute(contractEClass, CONTRACT__PORT_NOMINATION_SIZE_UNITS);
 		createEAttribute(contractEClass, CONTRACT__PORT_NOMINATION_COUNTERPARTY);
-		createEAttribute(contractEClass, CONTRACT__DIVERTIBLE);
-		createEAttribute(contractEClass, CONTRACT__SHIPPING_DAYS_RESTRICTION);
 		createEAttribute(contractEClass, CONTRACT__PORT_LOAD_NOMINATION_SIZE);
 		createEAttribute(contractEClass, CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS);
 		createEAttribute(contractEClass, CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY);
@@ -1464,6 +1500,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
+		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -1525,17 +1562,25 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getContract_VolumeLimitsUnit(), theTypesPackage.getVolumeUnits(), "volumeLimitsUnit", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_OperationalTolerance(), ecorePackage.getEDouble(), "operationalTolerance", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_FullCargoLot(), ecorePackage.getEBoolean(), "fullCargoLot", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getContract_RestrictedListsArePermissive(), ecorePackage.getEBoolean(), "restrictedListsArePermissive", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContract_RestrictedContracts(), this.getContract(), null, "restrictedContracts", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContract_RestrictedContractsArePermissive(), ecorePackage.getEBoolean(), "restrictedContractsArePermissive", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
 		initEReference(getContract_RestrictedPorts(), g1, null, "restrictedPorts", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContract_RestrictedPortsArePermissive(), ecorePackage.getEBoolean(), "restrictedPortsArePermissive", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAVesselSet());
+		g2 = createEGenericType(theFleetPackage.getVessel());
+		g1.getETypeArguments().add(g2);
+		initEReference(getContract_RestrictedVessels(), g1, null, "restrictedVessels", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContract_RestrictedVesselsArePermissive(), ecorePackage.getEBoolean(), "restrictedVesselsArePermissive", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContract_PriceInfo(), this.getLNGPriceCalculatorParameters(), null, "priceInfo", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_ContractType(), this.getContractType(), "contractType", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_PricingEvent(), this.getPricingEvent(), "pricingEvent", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_CancellationExpression(), ecorePackage.getEString(), "cancellationExpression", "0", 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContract_Divertible(), ecorePackage.getEBoolean(), "divertible", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContract_ShippingDaysRestriction(), ecorePackage.getEInt(), "shippingDaysRestriction", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_WindowNominationSize(), ecorePackage.getEInt(), "windowNominationSize", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_WindowNominationSizeUnits(), theTypesPackage.getTimePeriod(), "windowNominationSizeUnits", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_WindowNominationCounterparty(), ecorePackage.getEBoolean(), "windowNominationCounterparty", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1548,8 +1593,6 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getContract_PortNominationSize(), ecorePackage.getEInt(), "portNominationSize", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_PortNominationSizeUnits(), theTypesPackage.getTimePeriod(), "portNominationSizeUnits", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_PortNominationCounterparty(), ecorePackage.getEBoolean(), "portNominationCounterparty", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getContract_Divertible(), ecorePackage.getEBoolean(), "divertible", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getContract_ShippingDaysRestriction(), ecorePackage.getEInt(), "shippingDaysRestriction", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_PortLoadNominationSize(), ecorePackage.getEInt(), "portLoadNominationSize", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_PortLoadNominationSizeUnits(), theTypesPackage.getTimePeriod(), "portLoadNominationSizeUnits", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_PortLoadNominationCounterparty(), ecorePackage.getEBoolean(), "portLoadNominationCounterparty", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

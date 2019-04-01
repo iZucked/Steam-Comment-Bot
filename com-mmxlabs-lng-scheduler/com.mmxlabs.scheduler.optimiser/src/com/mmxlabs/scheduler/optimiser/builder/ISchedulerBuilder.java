@@ -688,7 +688,7 @@ public interface ISchedulerBuilder {
 
 	void bindSlotsToRoundTripVessel(@NonNull IVesselAvailability roundTripCargoVessel, @NonNull IPortSlot @NonNull... slots);
 
-	void setVesselPermissions(@NonNull IPortSlot portSlot, @Nullable List<@NonNull IVessel> permittedVessels);
+	void setVesselPermissions(@NonNull IPortSlot portSlot, @Nullable List<@NonNull IVessel> permittedVessels, boolean isPermitted);
 
 	void addOpenEndWindow(@NonNull MutableTimeWindow window);
 

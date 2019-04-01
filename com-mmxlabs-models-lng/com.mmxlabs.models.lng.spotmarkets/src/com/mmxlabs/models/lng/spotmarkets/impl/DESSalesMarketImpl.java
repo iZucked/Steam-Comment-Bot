@@ -26,7 +26,6 @@ import java.util.Collection;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.DESSalesMarketImpl#getNotionalPort <em>Notional Port</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.DESSalesMarketImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
  * </ul>
  *
  * @generated
@@ -41,16 +40,6 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 	 * @ordered
 	 */
 	protected Port notionalPort;
-
-	/**
-	 * The cached value of the '{@link #getAllowedVessels() <em>Allowed Vessels</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAllowedVessels()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<AVesselSet<Vessel>> allowedVessels;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -117,26 +106,11 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 	 * @generated
 	 */
 	@Override
-	public EList<AVesselSet<Vessel>> getAllowedVessels() {
-		if (allowedVessels == null) {
-			allowedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, SpotMarketsPackage.DES_SALES_MARKET__ALLOWED_VESSELS);
-		}
-		return allowedVessels;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case SpotMarketsPackage.DES_SALES_MARKET__NOTIONAL_PORT:
 				if (resolve) return getNotionalPort();
 				return basicGetNotionalPort();
-			case SpotMarketsPackage.DES_SALES_MARKET__ALLOWED_VESSELS:
-				return getAllowedVessels();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -153,10 +127,6 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 			case SpotMarketsPackage.DES_SALES_MARKET__NOTIONAL_PORT:
 				setNotionalPort((Port)newValue);
 				return;
-			case SpotMarketsPackage.DES_SALES_MARKET__ALLOWED_VESSELS:
-				getAllowedVessels().clear();
-				getAllowedVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -172,9 +142,6 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 			case SpotMarketsPackage.DES_SALES_MARKET__NOTIONAL_PORT:
 				setNotionalPort((Port)null);
 				return;
-			case SpotMarketsPackage.DES_SALES_MARKET__ALLOWED_VESSELS:
-				getAllowedVessels().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -189,8 +156,6 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 		switch (featureID) {
 			case SpotMarketsPackage.DES_SALES_MARKET__NOTIONAL_PORT:
 				return notionalPort != null;
-			case SpotMarketsPackage.DES_SALES_MARKET__ALLOWED_VESSELS:
-				return allowedVessels != null && !allowedVessels.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

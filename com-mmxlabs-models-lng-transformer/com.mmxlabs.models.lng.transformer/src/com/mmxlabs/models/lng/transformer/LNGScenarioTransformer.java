@@ -1150,11 +1150,11 @@ public class LNGScenarioTransformer {
 				throw new RuntimeException("Unknown event type: " + event.getClass().getName());
 			}
 
-			applySlotVesselRestrictions(event.getAllowedVessels(), builderSlot, vesselAssociation);
+			applyEventVesselRestrictions(event.getAllowedVessels(), builderSlot, vesselAssociation);
 			// Apply restrictions to related slots
 			for (final IPortSlot e : builderSlot.getEventPortSlots()) {
 				if (e != builderSlot) {
-					applySlotVesselRestrictions(event.getAllowedVessels(), e, vesselAssociation);
+					applyEventVesselRestrictions(event.getAllowedVessels(), e, vesselAssociation);
 				}
 			}
 
@@ -1806,7 +1806,7 @@ public class LNGScenarioTransformer {
 			cancellationFeeProviderEditor.setCancellationExpression(discharge, cancellationCurve);
 		}
 		if (!dischargeSlot.isFOBSale()) {
-			applySlotVesselRestrictions(dischargeSlot.getAllowedVessels(), discharge, vesselAssociation);
+			applySlotVesselRestrictions(dischargeSlot.getSlotOrDelegateVesselRestrictions(), dischargeSlot.getSlotOrDelegateVesselRestrictionsArePermissive(), discharge, vesselAssociation);
 		}
 		return discharge;
 	}
@@ -1971,7 +1971,7 @@ public class LNGScenarioTransformer {
 		}
 
 		if (!loadSlot.isDESPurchase()) {
-			applySlotVesselRestrictions(loadSlot.getAllowedVessels(), load, vesselAssociation);
+			applySlotVesselRestrictions(loadSlot.getSlotOrDelegateVesselRestrictions(), loadSlot.getSlotOrDelegateVesselRestrictionsArePermissive(), load, vesselAssociation);
 		}
 
 		return load;
@@ -1986,7 +1986,7 @@ public class LNGScenarioTransformer {
 		spotMarketSlotsProviderEditor.setSpotMarketSlot(element, portSlot, o_spotMarket, marketDateKey);
 	}
 
-	private void applySlotVesselRestrictions(final @Nullable List<AVesselSet<Vessel>> allowedVessels, final @NonNull IPortSlot optimiserSlot, final Association<Vessel, IVessel> vesselAssociation) {
+	private void applyEventVesselRestrictions(final @Nullable List<AVesselSet<Vessel>> allowedVessels, final @NonNull IPortSlot optimiserSlot, final Association<Vessel, IVessel> vesselAssociation) {
 
 		if (allowedVessels == null) {
 			return;
@@ -2005,8 +2005,26 @@ public class LNGScenarioTransformer {
 					}
 					permittedVessels.add(o_vessel);
 				}
-				builder.setVesselPermissions(optimiserSlot, permittedVessels);
+				builder.setVesselPermissions(optimiserSlot, permittedVessels, allowedVessels.isEmpty());
 			}
+		}
+	}
+
+	private void applySlotVesselRestrictions(final @Nullable List<AVesselSet<Vessel>> restrictedVessels, final boolean isPermissive, final @NonNull IPortSlot optimiserSlot,
+			final Association<Vessel, IVessel> vesselAssociation) {
+
+		if (restrictedVessels == null) {
+			return;
+		}
+
+		if (isPermissive || !restrictedVessels.isEmpty()) {
+			List<@NonNull IVessel> permittedVessels = new LinkedList<>();
+
+			for (final Vessel e_vessel : SetUtils.getObjects(restrictedVessels)) {
+				final IVessel o_vessel = vesselAssociation.lookupNullChecked(e_vessel);
+				permittedVessels.add(o_vessel);
+			}
+			builder.setVesselPermissions(optimiserSlot, permittedVessels, isPermissive);
 		}
 	}
 
@@ -2489,7 +2507,8 @@ public class LNGScenarioTransformer {
 
 								// Key piece of information
 								desSlot.setMarket(desSalesMarket);
-								desSlot.getAllowedVessels().addAll(desSalesMarket.getAllowedVessels());
+								desSlot.getRestrictedVessels().addAll(desSalesMarket.getRestrictedVessels());
+								desSlot.setRestrictedVesselsArePermissive(desSalesMarket.isRestrictedVesselsArePermissive());
 								modelEntityMap.addModelObject(desSlot, desSalesSlot);
 
 								for (final ISlotTransformer slotTransformer : slotTransformers) {
@@ -2501,7 +2520,7 @@ public class LNGScenarioTransformer {
 
 								registerSpotMarketSlot(modelEntityMap, desSlot, desSalesSlot);
 
-								applySlotVesselRestrictions(desSlot.getAllowedVessels(), desSalesSlot, vesselAssociation);
+								applySlotVesselRestrictions(desSlot.getRestrictedVessels(), desSlot.isRestrictedVesselsArePermissive(), desSalesSlot, vesselAssociation);
 
 							}
 						}
