@@ -28,6 +28,7 @@ public final class KnownFeatures {
 	public static final String FEATURE_OPTIMISATION_PERIOD = "features:optimisation-period";
 	public static final String FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION = "features:optimisation-charter-out-generation";
 	public static final String FEATURE_OPTIMISATION_SIMILARITY = "features:optimisation-similarity";
+	public static final String FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT = "features:no-nominal-in-prompt";
 
 	public static final String FEATURE_SHIP_TO_SHIP = "features:shiptoship";
 
