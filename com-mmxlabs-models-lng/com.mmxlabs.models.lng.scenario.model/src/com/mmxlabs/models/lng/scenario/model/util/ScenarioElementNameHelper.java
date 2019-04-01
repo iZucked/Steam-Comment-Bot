@@ -16,6 +16,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.common.base.Joiner;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -41,6 +43,8 @@ public class ScenarioElementNameHelper {
 	private static final @NonNull String TYPE_CONTRACT = "Contract";
 	private static final @NonNull String TYPE_SPOT_MARKET = "Market";
 	private static final @NonNull String TYPE_CARGO = "Cargo";
+	private static final @NonNull String TYPE_BUY = "Purchase";
+	private static final @NonNull String TYPE_SELL = "Sale";
 	private static final @NonNull String TYPE_SLOT = "Slot";
 	private static final @NonNull String TYPE_PORT = "Port";
 	private static final @NonNull String TYPE_VESSEL = "Vessel";
@@ -54,6 +58,12 @@ public class ScenarioElementNameHelper {
 	public static @NonNull String getTypeName(@Nullable final EObject target) {
 		if (target instanceof Cargo) {
 			return TYPE_CARGO;
+		}
+		if (target instanceof LoadSlot) {
+			return TYPE_BUY;
+		}
+		if (target instanceof DischargeSlot) {
+			return TYPE_SELL;
 		}
 		if (target instanceof VesselEvent) {
 			return TYPE_VESSEL_EVENT;
@@ -72,7 +82,7 @@ public class ScenarioElementNameHelper {
 			final Cargo cargo = (Cargo) target;
 			return String.format("%s \"%s\"", TYPE_CARGO.toLowerCase(), getNonNullString(cargo.getLoadName()));
 		} else if (target instanceof Slot) {
-			final Slot slot = (Slot) target;
+			final Slot<?> slot = (Slot<?>) target;
 			return String.format("%s \"%s\"", TYPE_SLOT.toLowerCase(), getNonNullString(slot.getName()));
 		} else if (target instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) target;
