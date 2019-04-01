@@ -328,7 +328,11 @@ public class TesterUtil {
 				if (fName.equals("originalFitnesses.SimilarityFitnessCore")) {
 					continue;
 				}
-				Assertions.assertTrue(seenFitnesses.contains(fName));
+				if (fName.equals("endFitnesses.SimilarityFitnessCore")) {
+					continue;
+				}
+				boolean b = seenFitnesses.contains(fName);
+				Assertions.assertTrue(b);
 			}
 		}
 	}
