@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.entities;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * Simple interface describing a contractual entity.
@@ -12,16 +13,16 @@ import org.eclipse.jdt.annotation.NonNull;
  * @author hinton
  * 
  */
+@NonNullByDefault
 public interface IEntity {
 
 	public String getName();
 
-	@NonNull
 	IEntityBook getShippingBook();
 
-	@NonNull
 	IEntityBook getTradingBook();
 
-	@NonNull
 	IEntityBook getUpstreamBook();
+
+	boolean isThirdparty();
 }

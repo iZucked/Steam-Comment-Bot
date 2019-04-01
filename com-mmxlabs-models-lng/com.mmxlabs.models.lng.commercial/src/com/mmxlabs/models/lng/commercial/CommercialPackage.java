@@ -198,13 +198,22 @@ public interface CommercialPackage extends EPackage {
 	int BASE_LEGAL_ENTITY__UPSTREAM_BOOK = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Third Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_LEGAL_ENTITY__THIRD_PARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Base Legal Entity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_LEGAL_ENTITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int BASE_LEGAL_ENTITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.
@@ -269,6 +278,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int LEGAL_ENTITY__UPSTREAM_BOOK = BASE_LEGAL_ENTITY__UPSTREAM_BOOK;
+
+	/**
+	 * The feature id for the '<em><b>Third Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEGAL_ENTITY__THIRD_PARTY = BASE_LEGAL_ENTITY__THIRD_PARTY;
 
 	/**
 	 * The number of structural features of the '<em>Legal Entity</em>' class.
@@ -2560,6 +2578,17 @@ public interface CommercialPackage extends EPackage {
 	EReference getBaseLegalEntity_UpstreamBook();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#isThirdParty <em>Third Party</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Third Party</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BaseLegalEntity#isThirdParty()
+	 * @see #getBaseLegalEntity()
+	 * @generated
+	 */
+	EAttribute getBaseLegalEntity_ThirdParty();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LegalEntity <em>Legal Entity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3644,6 +3673,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference BASE_LEGAL_ENTITY__UPSTREAM_BOOK = eINSTANCE.getBaseLegalEntity_UpstreamBook();
+
+		/**
+		 * The meta object literal for the '<em><b>Third Party</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASE_LEGAL_ENTITY__THIRD_PARTY = eINSTANCE.getBaseLegalEntity_ThirdParty();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.

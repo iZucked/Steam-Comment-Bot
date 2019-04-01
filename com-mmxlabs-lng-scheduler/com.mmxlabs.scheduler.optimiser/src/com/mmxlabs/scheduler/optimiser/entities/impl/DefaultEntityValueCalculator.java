@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.common.detailtree.DetailTree;
@@ -128,7 +129,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		// Find elements to attach export data to.
 		ISequenceElement exportElement = null;
-		final IPortSlot firstSlot = slots.get(0);
 		if (annotatedSolution != null) {
 			// Try and find a real element to attach P&L data to
 			for (final IPortSlot pSlot : slots) {
@@ -141,8 +141,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		final Set<IEntity> seenEntities = new LinkedHashSet<>();
 		// A map of Entity to specific custom property trees.
-		final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap = (exportElement == null) ? null : new HashMap<IEntityBook, IDetailTree>();
-		final Map<IPortSlot, IDetailTree> portSlotDetailTreeMap = (exportElement == null) ? null : new HashMap<IPortSlot, IDetailTree>();
+		final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap = (exportElement == null) ? null : new HashMap<>();
+		final Map<IPortSlot, IDetailTree> portSlotDetailTreeMap = (exportElement == null) ? null : new HashMap<>();
 
 		// Calculate sales/discharge prices
 		int idx = 0;
@@ -289,7 +289,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		long result = 0L;
 		for (final Map.Entry<IEntityBook, Long> e : entityPostTaxProfit.entrySet()) {
-			result += e.getValue();
+			if (!e.getKey().getEntity().isThirdparty()) {
+				result += e.getValue();
+			}
 		}
 
 		// Solution Export branch - should called infrequently
@@ -299,39 +301,22 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			{
 				final List<IProfitAndLossEntry> entries = new LinkedList<>();
 				for (final IEntity entity : seenEntities) {
-					{
-						final Long postTaxProfit = entityPostTaxProfit.get(entity.getShippingBook());
-						final Long preTaxProfit = entityPreTaxProfit.get(entity.getShippingBook());
-						final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getShippingBook());
+					boolean thirdparty = entity.isThirdparty();
+
+					List<IEntityBook> books = Lists.newArrayList(entity.getShippingBook(), entity.getTradingBook(), entity.getUpstreamBook());
+					for (IEntityBook book : books) {
+						final Long postTaxProfit = entityPostTaxProfit.get(book);
+						final Long preTaxProfit = entityPreTaxProfit.get(book);
+						final IDetailTree entityDetails = entityBookDetailTreeMap.get(book);
 
 						if (preTaxProfit != null || postTaxProfit != null || (entityDetails != null && !entityDetails.getChildren().isEmpty())) {
-							final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
-							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue());
-							final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getShippingBook(), postTaxValue, preTaxValue, entityDetails);
-							entries.add(entry);
-						}
-					}
-					{
-						final Long postTaxProfit = entityPostTaxProfit.get(entity.getTradingBook());
-						final Long preTaxProfit = entityPreTaxProfit.get(entity.getTradingBook());
-						final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getTradingBook());
-						if (preTaxProfit != null || postTaxProfit != null || (entityDetails != null && !entityDetails.getChildren().isEmpty())) {
-							final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
-							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue());
-							final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getTradingBook(), postTaxValue, preTaxValue, entityDetails);
-							entries.add(entry);
-						}
-					}
-					{
-						final Long postTaxProfit = entityPostTaxProfit.get(entity.getUpstreamBook());
-						final Long preTaxProfit = entityPreTaxProfit.get(entity.getUpstreamBook());
-						final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getUpstreamBook());
-						if (preTaxProfit != null || postTaxProfit != null || (entityDetails != null && !entityDetails.getChildren().isEmpty())) {
+							final long preTaxValue = (thirdparty || preTaxProfit == null) ? 0 : preTaxProfit.longValue();
+							final long postTaxValue = (thirdparty || postTaxProfit == null) ? 0 : postTaxProfit.longValue();
 
-							final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
-							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue());
-							final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getUpstreamBook(), postTaxValue, preTaxValue, entityDetails);
-							entries.add(entry);
+							if (!thirdparty || (entityDetails != null && !entityDetails.getChildren().isEmpty())) {
+								final IProfitAndLossEntry entry = new ProfitAndLossEntry(book, postTaxValue, preTaxValue, entityDetails);
+								entries.add(entry);
+							}
 						}
 					}
 				}
@@ -339,31 +324,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_profitAndLoss, annotation);
 			}
 			for (final IPortSlot portSlot : slots) {
-
 				final IDetailTree slotDetails = portSlotDetailTreeMap.get(portSlot);
 				if (slotDetails != null) {
 					final IProfitAndLossSlotDetailsAnnotation annotation = new ProfitAndLossSlotDetailsAnnotation(portSlot, slotDetails);
 					annotatedSolution.getElementAnnotations().setAnnotation(slotProvider.getElement(portSlot), SchedulerConstants.AI_profitAndLossSlotDetails, annotation);
-
 				}
-
 			}
 		}
-
-		// Finally handle any charter out generation stuff.
-		// {
-		// final long generatedCharterOutRevenue = shippingCostHelper.getGeneratedCharterOutRevenue(plan, vesselAvailability);
-		// final long generatedCharterOutCosts = shippingCostHelper.getGeneratedCharterOutCosts(plan);
-		//
-		// result += shippingEntity.getShippingBook().getTaxedProfit(generatedCharterOutRevenue - generatedCharterOutCosts, utcEquivTaxTime);
-		//
-		// if (annotatedSolution != null && exportElement != null) {
-		// if (shippingCostHelper.hasGeneratedCharterOut(plan)) {
-		// // Calculate P&L
-		// generateCharterOutAnnotations(plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingEntity, utcEquivTaxTime, generatedCharterOutRevenue, firstSlot);
-		// }
-		// }
-		// }
 
 		return new Pair<>(cargoPNLData, result);
 	}
@@ -392,7 +359,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		IEntity baseEntity = null;
 
-		int idx = 0;
 		for (final IPortSlot slot : cargoPNLData.getSlots()) {
 			assert slot != null;
 			final IEntity entity = cargoPNLData.getSlotEntity(slot);
@@ -429,8 +395,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				assert baseEntity != null;
 				addEntityBookProfit(entityPreTaxProfit, baseEntity.getTradingBook(), value);
 			}
-
-			idx++;
 		}
 	}
 
@@ -447,10 +411,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final int planStartTime, final int vesselStartTime, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getEntityForVesselAvailability(vesselAvailability);
 		if (shippingEntity == null) {
+			// May be null during unit tests
 			return 0L;
 		}
 
-		final long value;
 		final long revenue;
 		long additionalCost = 0;
 		final boolean isGeneratedCharterOutPlan;
@@ -508,12 +472,15 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				}
 			}
 			// Calculate the value for the fitness function
-			final IEntityBook shippingBook = shippingEntity.getShippingBook();
-			final int utcEquivTaxTime = utcOffsetProvider.UTC(planStartTime, firstPortDetails.getOptions().getPortSlot().getPort());
-			long preTaxValue = revenue + heelRevenue - shippingCost - additionalCost - heelCost;
-			long postTaxValue = shippingBook.getTaxedProfit(preTaxValue, utcEquivTaxTime);
-			entityPreTaxProfit.put(shippingBook, preTaxValue);
-			entityPostTaxProfit.put(shippingBook, postTaxValue);
+			boolean thirdparty = shippingEntity.isThirdparty();
+			if (!thirdparty) {
+				final IEntityBook shippingBook = shippingEntity.getShippingBook();
+				final int utcEquivTaxTime = utcOffsetProvider.UTC(planStartTime, firstPortDetails.getOptions().getPortSlot().getPort());
+				long preTaxValue = revenue + heelRevenue - shippingCost - additionalCost - heelCost;
+				long postTaxValue = shippingBook.getTaxedProfit(preTaxValue, utcEquivTaxTime);
+				entityPreTaxProfit.put(shippingBook, preTaxValue);
+				entityPostTaxProfit.put(shippingBook, postTaxValue);
+			}
 		}
 
 		processProfitAndLossBooks(false, entityPreTaxProfit, entityPostTaxProfit);
@@ -524,7 +491,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 		long postTaxValue = 0L;
 		for (final Map.Entry<IEntityBook, Long> e : entityPostTaxProfit.entrySet()) {
-			postTaxValue += e.getValue();
+			if (!e.getKey().getEntity().isThirdparty()) {
+				postTaxValue += e.getValue();
+			}
 		}
 
 		// Solution Export branch - should called infrequently

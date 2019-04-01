@@ -19,6 +19,6 @@ public interface ISlotTransformer extends ITransformerExtension {
 	 * @param modelSlot
 	 * @param optimiserSlot
 	 */
-	public void slotTransformed(@NonNull Slot modelSlot, @NonNull IPortSlot optimiserSlot);
+	public void slotTransformed(@NonNull Slot<?> modelSlot, @NonNull IPortSlot optimiserSlot);
 
 }

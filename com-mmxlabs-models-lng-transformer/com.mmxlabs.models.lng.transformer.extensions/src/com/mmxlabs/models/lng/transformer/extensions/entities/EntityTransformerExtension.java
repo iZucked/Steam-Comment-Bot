@@ -60,7 +60,7 @@ public class EntityTransformerExtension implements ITransformerExtension, ISlotT
 
 		for (final BaseLegalEntity e : commercialModel.getEntities()) {
 			if (e instanceof LegalEntity) {
-				final IEntity defaultEntity = new DefaultEntity(e.getName());
+				final IEntity defaultEntity = new DefaultEntity(e.getName(), e.isThirdParty());
 				injector.injectMembers(defaultEntity);
 				modelEntityMap.addModelObject(e, defaultEntity);
 			}
@@ -101,7 +101,7 @@ public class EntityTransformerExtension implements ITransformerExtension, ISlotT
 	}
 
 	@Override
-	public void slotTransformed(@NonNull Slot modelSlot, @NonNull IPortSlot optimiserSlot) {
+	public void slotTransformed(@NonNull Slot<?> modelSlot, @NonNull IPortSlot optimiserSlot) {
 		final BaseLegalEntity slotEntity = modelSlot.getSlotOrDelegateEntity();
 		final IEntity entity = modelEntityMap.getOptimiserObjectNullChecked(slotEntity, IEntity.class);
 		entityProvider.setEntityForSlot(entity, optimiserSlot);

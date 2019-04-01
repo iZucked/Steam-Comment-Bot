@@ -21,6 +21,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getShippingBook <em>Shipping Book</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getTradingBook <em>Trading Book</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getUpstreamBook <em>Upstream Book</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#isThirdParty <em>Third Party</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getBaseLegalEntity()
@@ -106,4 +107,26 @@ public interface BaseLegalEntity extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setUpstreamBook(BaseEntityBook value);
+
+	/**
+	 * Returns the value of the '<em><b>Third Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Third Party</em>' attribute.
+	 * @see #setThirdParty(boolean)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getBaseLegalEntity_ThirdParty()
+	 * @model
+	 * @generated
+	 */
+	boolean isThirdParty();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#isThirdParty <em>Third Party</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Third Party</em>' attribute.
+	 * @see #isThirdParty()
+	 * @generated
+	 */
+	void setThirdParty(boolean value);
 } // BaseLegalEntity

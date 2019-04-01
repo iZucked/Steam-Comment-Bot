@@ -29,6 +29,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//BaseLegalEntity/shippingBook"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//BaseLegalEntity/tradingBook"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//BaseLegalEntity/upstreamBook"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//BaseLegalEntity/thirdParty"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//LegalEntity"/>
     <genClasses ecoreClass="commercial.ecore#//Contract">

@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
@@ -70,6 +71,7 @@ public class BaseLegalEntityComponentHelper extends BaseComponentHelper {
 		add_shippingBookEditor(detailComposite, topClass);
 		add_tradingBookEditor(detailComposite, topClass);
 		add_upstreamBookEditor(detailComposite, topClass);
+		add_thirdPartyEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -97,5 +99,16 @@ public class BaseLegalEntityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_upstreamBookEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK));
+	}
+
+	/**
+	 * Create the editor for the thirdParty feature on BaseLegalEntity
+	 *
+	 * @generated NOT
+	 */
+	protected void add_thirdPartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:third-party-entities")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.BASE_LEGAL_ENTITY__THIRD_PARTY));
+		}
 	}
 }

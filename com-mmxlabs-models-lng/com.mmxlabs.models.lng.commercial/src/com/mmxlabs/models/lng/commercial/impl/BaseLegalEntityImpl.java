@@ -31,6 +31,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getShippingBook <em>Shipping Book</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getTradingBook <em>Trading Book</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getUpstreamBook <em>Upstream Book</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#isThirdParty <em>Third Party</em>}</li>
  * </ul>
  *
  * @generated
@@ -85,6 +86,26 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * @ordered
 	 */
 	protected BaseEntityBook upstreamBook;
+
+	/**
+	 * The default value of the '{@link #isThirdParty() <em>Third Party</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isThirdParty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean THIRD_PARTY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isThirdParty() <em>Third Party</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isThirdParty()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean thirdParty = THIRD_PARTY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -269,6 +290,29 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * @generated
 	 */
 	@Override
+	public boolean isThirdParty() {
+		return thirdParty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setThirdParty(boolean newThirdParty) {
+		boolean oldThirdParty = thirdParty;
+		thirdParty = newThirdParty;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.BASE_LEGAL_ENTITY__THIRD_PARTY, oldThirdParty, thirdParty));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case CommercialPackage.BASE_LEGAL_ENTITY__SHIPPING_BOOK:
@@ -297,6 +341,8 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 				return getTradingBook();
 			case CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK:
 				return getUpstreamBook();
+			case CommercialPackage.BASE_LEGAL_ENTITY__THIRD_PARTY:
+				return isThirdParty();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -320,6 +366,9 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 				return;
 			case CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK:
 				setUpstreamBook((BaseEntityBook)newValue);
+				return;
+			case CommercialPackage.BASE_LEGAL_ENTITY__THIRD_PARTY:
+				setThirdParty((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -345,6 +394,9 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 			case CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK:
 				setUpstreamBook((BaseEntityBook)null);
 				return;
+			case CommercialPackage.BASE_LEGAL_ENTITY__THIRD_PARTY:
+				setThirdParty(THIRD_PARTY_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -365,6 +417,8 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 				return tradingBook != null;
 			case CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK:
 				return upstreamBook != null;
+			case CommercialPackage.BASE_LEGAL_ENTITY__THIRD_PARTY:
+				return thirdParty != THIRD_PARTY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -413,6 +467,8 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", thirdParty: ");
+		result.append(thirdParty);
 		result.append(')');
 		return result.toString();
 	}
