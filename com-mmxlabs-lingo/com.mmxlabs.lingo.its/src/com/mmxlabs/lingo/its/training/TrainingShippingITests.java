@@ -7,25 +7,17 @@ package com.mmxlabs.lingo.its.training;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.Lists;
-import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.TestMode;
 import com.mmxlabs.lingo.its.tests.TestingModes;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
@@ -34,24 +26,19 @@ import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.lingo.its.verifier.SolutionData;
 import com.mmxlabs.lngdataserver.data.distances.DataConstants;
-import com.mmxlabs.lngdataserver.data.distances.DataLoader;
-import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
-import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
-import com.mmxlabs.lngdataserver.lng.io.distances.DistancesToScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.io.port.PortsToScenarioCopier;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
@@ -68,28 +55,8 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
 @ExtendWith(value = ShiroRunner.class)
+@RequireFeature(features = { KnownFeatures.FEATURE_OPTIMISATION_SIMILARITY, KnownFeatures.FEATURE_OPTIMISATION_HILLCLIMB })
 public class TrainingShippingITests extends AbstractMicroTestCase {
-
-	private static List<String> requiredFeatures = Lists.newArrayList("optimisation-similarity", "optimisation-hillclimb");
-	private static List<String> addedFeatures = new LinkedList<>();
-
-	@BeforeAll
-	public static void hookIn() {
-		for (final String feature : requiredFeatures) {
-			if (!LicenseFeatures.isPermitted("features:" + feature)) {
-				LicenseFeatures.addFeatureEnablements(feature);
-				addedFeatures.add(feature);
-			}
-		}
-	}
-
-	@AfterAll
-	public static void hookOut() {
-		for (final String feature : addedFeatures) {
-			LicenseFeatures.removeFeatureEnablements(feature);
-		}
-		addedFeatures.clear();
-	}
 
 	// Which scenario data to import
 	@Override
@@ -120,48 +87,6 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		importer.importPorfolioData(urlRoot);
 
 		return importer.doImport();
-	}
-
-	public static void updateDistanceData(IScenarioDataProvider scenarioDataProvider, String key) throws Exception {
-		final String input = DataLoader.importData(key);
-
-		final ObjectMapper mapper = new ObjectMapper();
-		mapper.findAndRegisterModules();
-		mapper.registerModule(new JavaTimeModule());
-
-		final DistancesVersion distanceVersion = mapper.readerFor(DistancesVersion.class).readValue(input);
-
-		final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
-		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
-		final Command updateCommand = DistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, distanceVersion, true);
-
-		Assertions.assertTrue(updateCommand.canExecute());
-
-		editingDomain.getCommandStack().execute(updateCommand);
-
-		// Ensure updated.
-		Assertions.assertEquals(distanceVersion.getIdentifier(), portModel.getDistanceVersionRecord().getVersion());
-	}
-
-	public static void updatePortsData(IScenarioDataProvider scenarioDataProvider, String key) throws Exception {
-		final String input = DataLoader.importData(key);
-
-		final ObjectMapper mapper = new ObjectMapper();
-		mapper.findAndRegisterModules();
-		mapper.registerModule(new JavaTimeModule());
-
-		final PortsVersion version = mapper.readerFor(PortsVersion.class).readValue(input);
-
-		final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
-		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
-		final Command updateCommand = PortsToScenarioCopier.getUpdateCommand(editingDomain, portModel, version);
-
-		Assertions.assertTrue(updateCommand.canExecute());
-
-		editingDomain.getCommandStack().execute(updateCommand);
-
-		// Ensure updated.
-		Assertions.assertEquals(version.getIdentifier(), portModel.getPortVersionRecord().getVersion());
 	}
 
 	@Override

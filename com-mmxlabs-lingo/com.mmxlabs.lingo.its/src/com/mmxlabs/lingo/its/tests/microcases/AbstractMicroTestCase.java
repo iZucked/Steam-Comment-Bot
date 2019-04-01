@@ -9,11 +9,21 @@ import java.time.LocalDate;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mmxlabs.lngdataserver.data.distances.DataLoader;
+import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
+import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
+import com.mmxlabs.lngdataserver.lng.io.distances.DistancesToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.port.PortsToScenarioCopier;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -25,6 +35,7 @@ import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.util.DistanceModelBuilder;
 import com.mmxlabs.models.lng.port.util.PortModelBuilder;
 import com.mmxlabs.models.lng.port.util.PortModelFinder;
@@ -33,6 +44,7 @@ import com.mmxlabs.models.lng.pricing.util.PricingModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelFinder;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -72,6 +84,48 @@ public abstract class AbstractMicroTestCase {
 	@NonNull
 	public IScenarioDataProvider importReferenceData() throws Exception {
 		return importReferenceData("/referencedata/reference-data-1/");
+	}
+
+	public static void updateDistanceData(IScenarioDataProvider scenarioDataProvider, String key) throws Exception {
+		final String input = DataLoader.importData(key);
+
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.findAndRegisterModules();
+		mapper.registerModule(new JavaTimeModule());
+
+		final DistancesVersion distanceVersion = mapper.readerFor(DistancesVersion.class).readValue(input);
+
+		final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
+		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
+		final Command updateCommand = DistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, distanceVersion, true);
+
+		Assertions.assertTrue(updateCommand.canExecute());
+
+		editingDomain.getCommandStack().execute(updateCommand);
+
+		// Ensure updated.
+		Assertions.assertEquals(distanceVersion.getIdentifier(), portModel.getDistanceVersionRecord().getVersion());
+	}
+
+	public static void updatePortsData(IScenarioDataProvider scenarioDataProvider, String key) throws Exception {
+		final String input = DataLoader.importData(key);
+
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.findAndRegisterModules();
+		mapper.registerModule(new JavaTimeModule());
+
+		final PortsVersion version = mapper.readerFor(PortsVersion.class).readValue(input);
+
+		final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
+		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
+		final Command updateCommand = PortsToScenarioCopier.getUpdateCommand(editingDomain, portModel, version);
+
+		Assertions.assertTrue(updateCommand.canExecute());
+
+		editingDomain.getCommandStack().execute(updateCommand);
+
+		// Ensure updated.
+		Assertions.assertEquals(version.getIdentifier(), portModel.getPortVersionRecord().getVersion());
 	}
 
 	@NonNull
