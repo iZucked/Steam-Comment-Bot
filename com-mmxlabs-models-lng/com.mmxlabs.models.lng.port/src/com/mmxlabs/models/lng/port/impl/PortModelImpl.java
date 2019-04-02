@@ -162,6 +162,7 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Port> getPorts() {
 		if (ports == null) {
 			ports = new EObjectContainmentEList<Port>(Port.class, this, PortPackage.PORT_MODEL__PORTS);
@@ -174,6 +175,7 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PortGroup> getPortGroups() {
 		if (portGroups == null) {
 			portGroups = new EObjectContainmentEList<PortGroup>(PortGroup.class, this, PortPackage.PORT_MODEL__PORT_GROUPS);
@@ -186,6 +188,7 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Route> getRoutes() {
 		if (routes == null) {
 			routes = new EObjectContainmentEList<Route>(Route.class, this, PortPackage.PORT_MODEL__ROUTES);
@@ -198,6 +201,7 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<CapabilityGroup> getSpecialPortGroups() {
 		if (specialPortGroups == null) {
 			specialPortGroups = new EObjectContainmentEList<CapabilityGroup>(CapabilityGroup.class, this, PortPackage.PORT_MODEL__SPECIAL_PORT_GROUPS);
@@ -210,6 +214,7 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PortCountryGroup> getPortCountryGroups() {
 		if (portCountryGroups == null) {
 			portCountryGroups = new EObjectContainmentEList<PortCountryGroup>(PortCountryGroup.class, this, PortPackage.PORT_MODEL__PORT_COUNTRY_GROUPS);
@@ -222,6 +227,7 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ContingencyMatrix getContingencyMatrix() {
 		return contingencyMatrix;
 	}
@@ -246,6 +252,7 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setContingencyMatrix(ContingencyMatrix newContingencyMatrix) {
 		if (newContingencyMatrix != contingencyMatrix) {
 			NotificationChain msgs = null;
@@ -265,6 +272,7 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VersionRecord getPortVersionRecord() {
 		return portVersionRecord;
 	}
@@ -289,6 +297,7 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortVersionRecord(VersionRecord newPortVersionRecord) {
 		if (newPortVersionRecord != portVersionRecord) {
 			NotificationChain msgs = null;
@@ -308,6 +317,7 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VersionRecord getPortGroupVersionRecord() {
 		return portGroupVersionRecord;
 	}
@@ -332,6 +342,7 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortGroupVersionRecord(VersionRecord newPortGroupVersionRecord) {
 		if (newPortGroupVersionRecord != portGroupVersionRecord) {
 			NotificationChain msgs = null;
@@ -351,6 +362,7 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VersionRecord getDistanceVersionRecord() {
 		return distanceVersionRecord;
 	}
@@ -375,6 +387,7 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDistanceVersionRecord(VersionRecord newDistanceVersionRecord) {
 		if (newDistanceVersionRecord != distanceVersionRecord) {
 			NotificationChain msgs = null;

@@ -67,6 +67,7 @@ public class EntryPointImpl extends NamedObjectImpl implements EntryPoint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
 			InternalEObject oldPort = (InternalEObject)port;
@@ -93,6 +94,7 @@ public class EntryPointImpl extends NamedObjectImpl implements EntryPoint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPort(Port newPort) {
 		Port oldPort = port;
 		port = newPort;

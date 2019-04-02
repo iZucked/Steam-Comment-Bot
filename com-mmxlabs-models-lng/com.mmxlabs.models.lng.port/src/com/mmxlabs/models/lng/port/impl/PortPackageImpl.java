@@ -209,6 +209,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPort() {
 		return portEClass;
 	}
@@ -218,6 +219,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPort_Capabilities() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(2);
 	}
@@ -227,6 +229,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPort_LoadDuration() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(3);
 	}
@@ -236,6 +239,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPort_DischargeDuration() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(4);
 	}
@@ -245,6 +249,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPort_Berths() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(5);
 	}
@@ -254,6 +259,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPort_CvValue() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(6);
 	}
@@ -263,6 +269,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPort_DefaultStartTime() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(7);
 	}
@@ -272,6 +279,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPort_AllowCooldown() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(8);
 	}
@@ -281,6 +289,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPort_DefaultWindowSize() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(9);
 	}
@@ -290,6 +299,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPort_DefaultWindowSizeUnits() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(10);
 	}
@@ -299,6 +309,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPort_Location() {
 		return (EReference)portEClass.getEStructuralFeatures().get(1);
 	}
@@ -308,6 +319,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPort_MinCvValue() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(11);
 	}
@@ -317,6 +329,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPort_MaxCvValue() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(12);
 	}
@@ -326,6 +339,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getPort__GetZoneId() {
 		return portEClass.getEOperations().get(0);
 	}
@@ -335,7 +349,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getPort__GetTempMMXID() {
+	@Override
+	public EOperation getPort__MmxID() {
 		return portEClass.getEOperations().get(1);
 	}
 
@@ -344,6 +359,17 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EOperation getPort__GetTempMMXID() {
+		return portEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getPort_ShortName() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(0);
 	}
@@ -353,6 +379,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getRoute() {
 		return routeEClass;
 	}
@@ -362,6 +389,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getRoute_Lines() {
 		return (EReference)routeEClass.getEStructuralFeatures().get(0);
 	}
@@ -371,6 +399,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRoute_RouteOption() {
 		return (EAttribute)routeEClass.getEStructuralFeatures().get(1);
 	}
@@ -380,6 +409,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getRoute_VirtualPort() {
 		return (EReference)routeEClass.getEStructuralFeatures().get(2);
 	}
@@ -389,6 +419,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getRoute_NorthEntrance() {
 		return (EReference)routeEClass.getEStructuralFeatures().get(3);
 	}
@@ -398,6 +429,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getRoute_SouthEntrance() {
 		return (EReference)routeEClass.getEStructuralFeatures().get(4);
 	}
@@ -407,6 +439,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRoute_Distance() {
 		return (EAttribute)routeEClass.getEStructuralFeatures().get(5);
 	}
@@ -416,6 +449,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPortGroup() {
 		return portGroupEClass;
 	}
@@ -425,6 +459,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortGroup_Contents() {
 		return (EReference)portGroupEClass.getEStructuralFeatures().get(0);
 	}
@@ -434,6 +469,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getRouteLine() {
 		return routeLineEClass;
 	}
@@ -443,6 +479,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getRouteLine_From() {
 		return (EReference)routeLineEClass.getEStructuralFeatures().get(0);
 	}
@@ -452,6 +489,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getRouteLine_To() {
 		return (EReference)routeLineEClass.getEStructuralFeatures().get(1);
 	}
@@ -461,6 +499,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRouteLine_Distance() {
 		return (EAttribute)routeLineEClass.getEStructuralFeatures().get(2);
 	}
@@ -470,6 +509,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRouteLine_Provider() {
 		return (EAttribute)routeLineEClass.getEStructuralFeatures().get(3);
 	}
@@ -479,6 +519,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRouteLine_ErrorCode() {
 		return (EAttribute)routeLineEClass.getEStructuralFeatures().get(4);
 	}
@@ -488,6 +529,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPortModel() {
 		return portModelEClass;
 	}
@@ -497,6 +539,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortModel_Ports() {
 		return (EReference)portModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -506,6 +549,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortModel_PortGroups() {
 		return (EReference)portModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -515,6 +559,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortModel_Routes() {
 		return (EReference)portModelEClass.getEStructuralFeatures().get(2);
 	}
@@ -524,6 +569,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortModel_SpecialPortGroups() {
 		return (EReference)portModelEClass.getEStructuralFeatures().get(3);
 	}
@@ -533,6 +579,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortModel_PortCountryGroups() {
 		return (EReference)portModelEClass.getEStructuralFeatures().get(4);
 	}
@@ -542,6 +589,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortModel_ContingencyMatrix() {
 		return (EReference)portModelEClass.getEStructuralFeatures().get(5);
 	}
@@ -551,6 +599,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortModel_PortVersionRecord() {
 		return (EReference)portModelEClass.getEStructuralFeatures().get(6);
 	}
@@ -560,6 +609,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortModel_PortGroupVersionRecord() {
 		return (EReference)portModelEClass.getEStructuralFeatures().get(7);
 	}
@@ -569,6 +619,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortModel_DistanceVersionRecord() {
 		return (EReference)portModelEClass.getEStructuralFeatures().get(8);
 	}
@@ -578,6 +629,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCapabilityGroup() {
 		return capabilityGroupEClass;
 	}
@@ -587,6 +639,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCapabilityGroup_Capability() {
 		return (EAttribute)capabilityGroupEClass.getEStructuralFeatures().get(0);
 	}
@@ -596,6 +649,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getLocation() {
 		return locationEClass;
 	}
@@ -605,6 +659,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getLocation_MmxId() {
 		return (EAttribute)locationEClass.getEStructuralFeatures().get(0);
 	}
@@ -614,6 +669,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getLocation_TimeZone() {
 		return (EAttribute)locationEClass.getEStructuralFeatures().get(1);
 	}
@@ -623,6 +679,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getLocation_Country() {
 		return (EAttribute)locationEClass.getEStructuralFeatures().get(2);
 	}
@@ -632,6 +689,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getLocation_Lat() {
 		return (EAttribute)locationEClass.getEStructuralFeatures().get(3);
 	}
@@ -641,6 +699,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getLocation_Lon() {
 		return (EAttribute)locationEClass.getEStructuralFeatures().get(4);
 	}
@@ -650,6 +709,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLocation_OtherIdentifiers() {
 		return (EReference)locationEClass.getEStructuralFeatures().get(5);
 	}
@@ -659,6 +719,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getLocation__GetZoneId() {
 		return locationEClass.getEOperations().get(0);
 	}
@@ -668,6 +729,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getLocation__GetTempMMXID() {
 		return locationEClass.getEOperations().get(1);
 	}
@@ -677,6 +739,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPortCountryGroup() {
 		return portCountryGroupEClass;
 	}
@@ -686,6 +749,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getEntryPoint() {
 		return entryPointEClass;
 	}
@@ -695,6 +759,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getEntryPoint_Port() {
 		return (EReference)entryPointEClass.getEStructuralFeatures().get(0);
 	}
@@ -704,6 +769,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getContingencyMatrix() {
 		return contingencyMatrixEClass;
 	}
@@ -713,6 +779,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContingencyMatrix_Entries() {
 		return (EReference)contingencyMatrixEClass.getEStructuralFeatures().get(0);
 	}
@@ -722,6 +789,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getContingencyMatrix_DefaultDuration() {
 		return (EAttribute)contingencyMatrixEClass.getEStructuralFeatures().get(1);
 	}
@@ -731,6 +799,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getContingencyMatrixEntry() {
 		return contingencyMatrixEntryEClass;
 	}
@@ -740,6 +809,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContingencyMatrixEntry_FromPort() {
 		return (EReference)contingencyMatrixEntryEClass.getEStructuralFeatures().get(0);
 	}
@@ -749,6 +819,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContingencyMatrixEntry_ToPort() {
 		return (EReference)contingencyMatrixEntryEClass.getEStructuralFeatures().get(1);
 	}
@@ -758,6 +829,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getContingencyMatrixEntry_Duration() {
 		return (EAttribute)contingencyMatrixEntryEClass.getEStructuralFeatures().get(2);
 	}
@@ -767,6 +839,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getOtherIdentifiers() {
 		return otherIdentifiersEClass;
 	}
@@ -776,6 +849,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getOtherIdentifiers_Identifier() {
 		return (EAttribute)otherIdentifiersEClass.getEStructuralFeatures().get(0);
 	}
@@ -785,6 +859,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getOtherIdentifiers_Provider() {
 		return (EAttribute)otherIdentifiersEClass.getEStructuralFeatures().get(1);
 	}
@@ -794,6 +869,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getRouteOption() {
 		return routeOptionEEnum;
 	}
@@ -803,6 +879,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getCanalEntry() {
 		return canalEntryEEnum;
 	}
@@ -812,6 +889,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortFactory getPortFactory() {
 		return (PortFactory)getEFactoryInstance();
 	}
@@ -850,6 +928,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(portEClass, PORT__MIN_CV_VALUE);
 		createEAttribute(portEClass, PORT__MAX_CV_VALUE);
 		createEOperation(portEClass, PORT___GET_ZONE_ID);
+		createEOperation(portEClass, PORT___MMX_ID);
 		createEOperation(portEClass, PORT___GET_TEMP_MMXID);
 
 		routeEClass = createEClass(ROUTE);
@@ -993,6 +1072,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getPort_MaxCvValue(), ecorePackage.getEDouble(), "maxCvValue", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getPort__GetZoneId(), theDateTimePackage.getZoneId(), "getZoneId", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getPort__MmxID(), ecorePackage.getEString(), "mmxID", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getPort__GetTempMMXID(), ecorePackage.getEString(), "getTempMMXID", 0, 1, IS_UNIQUE, IS_ORDERED);
 

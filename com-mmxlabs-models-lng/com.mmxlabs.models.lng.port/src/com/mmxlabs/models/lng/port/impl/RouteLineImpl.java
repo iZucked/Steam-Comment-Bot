@@ -135,6 +135,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getFrom() {
 		if (from != null && from.eIsProxy()) {
 			InternalEObject oldFrom = (InternalEObject)from;
@@ -161,6 +162,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFrom(Port newFrom) {
 		Port oldFrom = from;
 		from = newFrom;
@@ -173,6 +175,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getTo() {
 		if (to != null && to.eIsProxy()) {
 			InternalEObject oldTo = (InternalEObject)to;
@@ -199,6 +202,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTo(Port newTo) {
 		Port oldTo = to;
 		to = newTo;
@@ -211,6 +215,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getDistance() {
 		return distance;
 	}
@@ -220,6 +225,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDistance(double newDistance) {
 		double oldDistance = distance;
 		distance = newDistance;
@@ -232,6 +238,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getProvider() {
 		return provider;
 	}
@@ -241,6 +248,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setProvider(String newProvider) {
 		String oldProvider = provider;
 		provider = newProvider;
@@ -253,6 +261,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getErrorCode() {
 		return errorCode;
 	}
@@ -262,6 +271,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setErrorCode(String newErrorCode) {
 		String oldErrorCode = errorCode;
 		errorCode = newErrorCode;

@@ -59,7 +59,7 @@ public class JSONReference {
 		String id = mmxidFeature == null ? null : (String) eObject.eGet(mmxidFeature);
 		if (id == null) {
 			for (final EOperation op : eObject.eClass().getEOperations()) {
-				if (op.getName().equalsIgnoreCase("gettempmmxid")) {
+				if (op.getName().equalsIgnoreCase("mmxid")) {
 					try {
 						id = (String) eObject.eInvoke(op, ECollections.emptyEList());
 						break;

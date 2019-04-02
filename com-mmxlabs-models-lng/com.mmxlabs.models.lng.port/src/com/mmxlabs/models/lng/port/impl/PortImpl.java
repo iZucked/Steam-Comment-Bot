@@ -334,6 +334,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PortCapability> getCapabilities() {
 		if (capabilities == null) {
 			capabilities = new EDataTypeUniqueEList<PortCapability>(PortCapability.class, this, PortPackage.PORT__CAPABILITIES);
@@ -346,6 +347,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getLoadDuration() {
 		return loadDuration;
 	}
@@ -355,6 +357,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLoadDuration(int newLoadDuration) {
 		int oldLoadDuration = loadDuration;
 		loadDuration = newLoadDuration;
@@ -367,6 +370,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDischargeDuration() {
 		return dischargeDuration;
 	}
@@ -376,6 +380,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDischargeDuration(int newDischargeDuration) {
 		int oldDischargeDuration = dischargeDuration;
 		dischargeDuration = newDischargeDuration;
@@ -388,6 +393,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getBerths() {
 		return berths;
 	}
@@ -397,6 +403,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBerths(int newBerths) {
 		int oldBerths = berths;
 		berths = newBerths;
@@ -409,6 +416,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getCvValue() {
 		return cvValue;
 	}
@@ -418,6 +426,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCvValue(double newCvValue) {
 		double oldCvValue = cvValue;
 		cvValue = newCvValue;
@@ -430,6 +439,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDefaultStartTime() {
 		return defaultStartTime;
 	}
@@ -439,6 +449,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDefaultStartTime(int newDefaultStartTime) {
 		int oldDefaultStartTime = defaultStartTime;
 		defaultStartTime = newDefaultStartTime;
@@ -451,6 +462,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isAllowCooldown() {
 		return allowCooldown;
 	}
@@ -460,6 +472,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAllowCooldown(boolean newAllowCooldown) {
 		boolean oldAllowCooldown = allowCooldown;
 		allowCooldown = newAllowCooldown;
@@ -472,6 +485,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDefaultWindowSize() {
 		return defaultWindowSize;
 	}
@@ -481,6 +495,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDefaultWindowSize(int newDefaultWindowSize) {
 		int oldDefaultWindowSize = defaultWindowSize;
 		defaultWindowSize = newDefaultWindowSize;
@@ -493,6 +508,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TimePeriod getDefaultWindowSizeUnits() {
 		return defaultWindowSizeUnits;
 	}
@@ -502,6 +518,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDefaultWindowSizeUnits(TimePeriod newDefaultWindowSizeUnits) {
 		TimePeriod oldDefaultWindowSizeUnits = defaultWindowSizeUnits;
 		defaultWindowSizeUnits = newDefaultWindowSizeUnits == null ? DEFAULT_WINDOW_SIZE_UNITS_EDEFAULT : newDefaultWindowSizeUnits;
@@ -514,6 +531,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Location getLocation() {
 		return location;
 	}
@@ -538,6 +556,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLocation(Location newLocation) {
 		if (newLocation != location) {
 			NotificationChain msgs = null;
@@ -557,6 +576,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getMinCvValue() {
 		return minCvValue;
 	}
@@ -566,6 +586,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinCvValue(double newMinCvValue) {
 		double oldMinCvValue = minCvValue;
 		minCvValue = newMinCvValue;
@@ -580,6 +601,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMinCvValue() {
 		double oldMinCvValue = minCvValue;
 		boolean oldMinCvValueESet = minCvValueESet;
@@ -594,6 +616,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMinCvValue() {
 		return minCvValueESet;
 	}
@@ -603,6 +626,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getMaxCvValue() {
 		return maxCvValue;
 	}
@@ -612,6 +636,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxCvValue(double newMaxCvValue) {
 		double oldMaxCvValue = maxCvValue;
 		maxCvValue = newMaxCvValue;
@@ -626,6 +651,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMaxCvValue() {
 		double oldMaxCvValue = maxCvValue;
 		boolean oldMaxCvValueESet = maxCvValueESet;
@@ -640,6 +666,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMaxCvValue() {
 		return maxCvValueESet;
 	}
@@ -651,6 +678,19 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 */
 	public ZoneId getZoneId() {
 		return getLocation().getZoneId();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public String mmxID() {
+		if (getLocation() != null) {
+			return getLocation().getMmxId();
+		}
+		return null;
 	}
 
 	/**
@@ -670,6 +710,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getShortName() {
 		return shortName;
 	}
@@ -679,6 +720,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShortName(String newShortName) {
 		String oldShortName = shortName;
 		shortName = newShortName;
@@ -890,6 +932,8 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 		switch (operationID) {
 			case PortPackage.PORT___GET_ZONE_ID:
 				return getZoneId();
+			case PortPackage.PORT___MMX_ID:
+				return mmxID();
 			case PortPackage.PORT___GET_TEMP_MMXID:
 				return getTempMMXID();
 		}

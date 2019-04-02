@@ -43,6 +43,7 @@
       <genFeatures createChild="false" propertyDescription="The maximum CV value of a discharge that can be received at this port"
           ecoreFeature="ecore:EAttribute port.ecore#//Port/maxCvValue"/>
       <genOperations ecoreOperation="port.ecore#//Port/getZoneId"/>
+      <genOperations ecoreOperation="port.ecore#//Port/mmxID"/>
       <genOperations ecoreOperation="port.ecore#//Port/getTempMMXID"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//Route">

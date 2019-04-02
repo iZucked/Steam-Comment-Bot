@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.ReplaceCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -82,7 +83,14 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.pricing.CooldownPrice;
+import com.mmxlabs.models.lng.pricing.CostModel;
+import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
+import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -262,6 +270,10 @@ public final class SharedScenarioDataUtils {
 			final ObjectMapper mapper = new ObjectMapper();
 			mapper.registerModule(new EMFJacksonModule());
 			final String commercialJSON = mapper.writeValueAsString(commercialModel);
+			return createCommercialsUpdater(commercialJSON);
+		}
+
+		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createCommercialsUpdater(String commercialJSON) {
 
 			return (cmd, target) -> {
 				cmd.append(new CompoundCommand() {
@@ -314,6 +326,199 @@ public final class SharedScenarioDataUtils {
 							}
 							// Replace the actual object
 							appendAndExecute(ReplaceCommand.create(editingDomain, oldMarket.eContainer(), oldMarket.eContainmentFeature(), oldMarket, Collections.singleton(newMarket)));
+						}
+					}
+				});
+			};
+		}
+
+		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createSuezTariffUpdater(String json) {
+
+			return (cmd, target) -> {
+				cmd.append(new CompoundCommand() {
+
+					@Override
+					protected boolean prepare() {
+						super.prepare();
+						return true;
+					}
+
+					@Override
+					public void execute() {
+						final EMFDeserializationContext ctx = new EMFDeserializationContext(BeanDeserializerFactory.instance);
+
+						final CostModel costModel = ScenarioModelUtil.getCostModel(target);
+
+						final ObjectMapper mapper = new ObjectMapper(null, null, ctx);
+						mapper.registerModule(new EMFJacksonModule());
+
+						try {
+							final SuezCanalTariff newTariff = mapper.readValue(json, SuezCanalTariff.class);
+							appendAndExecute(SetCommand.create(target.getEditingDomain(), costModel, PricingPackage.Literals.COST_MODEL__SUEZ_CANAL_TARIFF, newTariff));
+							ctx.runDeferredActions();
+						} catch (final Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							appendAndExecute(UnexecutableCommand.INSTANCE);
+						}
+					}
+				});
+			};
+		}
+
+		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createPortCostsUpdater(String json) {
+
+			return (cmd, target) -> {
+				cmd.append(new CompoundCommand() {
+
+					@Override
+					protected boolean prepare() {
+						super.prepare();
+						return true;
+					}
+
+					@Override
+					public void execute() {
+						final EMFDeserializationContext ctx = new EMFDeserializationContext(BeanDeserializerFactory.instance);
+
+						final PortModel pm = ScenarioModelUtil.getPortModel(target);
+						pm.getPorts().forEach(ctx::registerType);
+						pm.getPortGroups().forEach(ctx::registerType);
+						pm.getPortCountryGroups().forEach(ctx::registerType);
+
+						final CostModel costModel = ScenarioModelUtil.getCostModel(target);
+
+						final ObjectMapper mapper = new ObjectMapper(null, null, ctx);
+						mapper.registerModule(new EMFJacksonModule());
+
+						try {
+							final List<PortCost> newCosts = mapper.readValue(json, new TypeReference<List<PortCost>>() {
+							});
+
+							 appendAndExecute(RemoveCommand.create(target.getEditingDomain(), costModel, PricingPackage.Literals.COST_MODEL__PORT_COSTS, costModel.getPortCosts()));
+							 appendAndExecute(AddCommand.create(target.getEditingDomain(), costModel, PricingPackage.Literals.COST_MODEL__PORT_COSTS, newCosts));
+							ctx.runDeferredActions();
+						} catch (final Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							appendAndExecute(UnexecutableCommand.INSTANCE);
+						}
+					}
+				});
+			};
+		}
+
+		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createCooldownCostsUpdater(String json) {
+
+			return (cmd, target) -> {
+				cmd.append(new CompoundCommand() {
+
+					@Override
+					protected boolean prepare() {
+						super.prepare();
+						return true;
+					}
+
+					@Override
+					public void execute() {
+						final EMFDeserializationContext ctx = new EMFDeserializationContext(BeanDeserializerFactory.instance);
+
+						final PortModel pm = ScenarioModelUtil.getPortModel(target);
+						pm.getPorts().forEach(ctx::registerType);
+						pm.getPortGroups().forEach(ctx::registerType);
+						pm.getPortCountryGroups().forEach(ctx::registerType);
+
+						final CostModel costModel = ScenarioModelUtil.getCostModel(target);
+
+						final ObjectMapper mapper = new ObjectMapper(null, null, ctx);
+						mapper.registerModule(new EMFJacksonModule());
+
+						try {
+							final List<CooldownPrice> newCosts = mapper.readValue(json, new TypeReference<List<CooldownPrice>>() {
+							});
+
+							appendAndExecute(RemoveCommand.create(target.getEditingDomain(), costModel, PricingPackage.Literals.COST_MODEL__COOLDOWN_COSTS, costModel.getCooldownCosts()));
+							appendAndExecute(AddCommand.create(target.getEditingDomain(), costModel, PricingPackage.Literals.COST_MODEL__COOLDOWN_COSTS, newCosts));
+							ctx.runDeferredActions();
+						} catch (final Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							appendAndExecute(UnexecutableCommand.INSTANCE);
+						}
+					}
+				});
+			};
+		}
+
+		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createrRouteCostsUpdater(String json) {
+
+			return (cmd, target) -> {
+				cmd.append(new CompoundCommand() {
+
+					@Override
+					protected boolean prepare() {
+						super.prepare();
+						return true;
+					}
+
+					@Override
+					public void execute() {
+						final EMFDeserializationContext ctx = new EMFDeserializationContext(BeanDeserializerFactory.instance);
+
+						final FleetModel fm = ScenarioModelUtil.getFleetModel(target);
+						fm.getVessels().forEach(ctx::registerType);
+						fm.getVesselGroups().forEach(ctx::registerType);
+
+						final CostModel costModel = ScenarioModelUtil.getCostModel(target);
+
+						final ObjectMapper mapper = new ObjectMapper(null, null, ctx);
+						mapper.registerModule(new EMFJacksonModule());
+
+						try {
+							final List<RouteCost> newCosts = mapper.readValue(json, new TypeReference<List<RouteCost>>() {
+							});
+
+							appendAndExecute(RemoveCommand.create(target.getEditingDomain(), costModel, PricingPackage.Literals.COST_MODEL__ROUTE_COSTS, costModel.getRouteCosts()));
+							appendAndExecute(AddCommand.create(target.getEditingDomain(), costModel, PricingPackage.Literals.COST_MODEL__ROUTE_COSTS, newCosts));
+							ctx.runDeferredActions();
+						} catch (final Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							appendAndExecute(UnexecutableCommand.INSTANCE);
+						}
+					}
+				});
+			};
+		}
+
+		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createPanamaTariffUpdater(String json) {
+
+			return (cmd, target) -> {
+				cmd.append(new CompoundCommand() {
+
+					@Override
+					protected boolean prepare() {
+						super.prepare();
+						return true;
+					}
+
+					@Override
+					public void execute() {
+						final EMFDeserializationContext ctx = new EMFDeserializationContext(BeanDeserializerFactory.instance);
+
+						final CostModel costModel = ScenarioModelUtil.getCostModel(target);
+
+						final ObjectMapper mapper = new ObjectMapper(null, null, ctx);
+						mapper.registerModule(new EMFJacksonModule());
+
+						try {
+							final PanamaCanalTariff newTariff = mapper.readValue(json, PanamaCanalTariff.class);
+							appendAndExecute(SetCommand.create(target.getEditingDomain(), costModel, PricingPackage.Literals.COST_MODEL__PANAMA_CANAL_TARIFF, newTariff));
+							ctx.runDeferredActions();
+						} catch (final Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							appendAndExecute(UnexecutableCommand.INSTANCE);
 						}
 					}
 				});
@@ -895,8 +1100,8 @@ public final class SharedScenarioDataUtils {
 		String version = dataVersions.get(typeId);
 		return version != null && Objects.equals(baseCaseVersion, version);
 	}
-	
-	public static List<DataOptionGroup> createGroups(IBaseCaseVersionsProvider p, Map<String, String > scenarioDataVersions){
+
+	public static List<DataOptionGroup> createGroups(IBaseCaseVersionsProvider p, Map<String, String> scenarioDataVersions) {
 		final List<DataOptionGroup> groups = new LinkedList<>();
 		groups.add(new DataOptionGroup("Pricing", !SharedScenarioDataUtils.checkPricingDataMatch(p, scenarioDataVersions), true, true, DataOptions.PricingData));
 		if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
@@ -905,9 +1110,9 @@ public final class SharedScenarioDataUtils {
 		if (LicenseFeatures.isPermitted("features:hub-sync-vessels")) {
 			groups.add(new DataOptionGroup("Vessels", !checkFleetDataMatch(p, scenarioDataVersions), true, false, DataOptions.FleetDatabase));
 		}
-//			groups.add(new DataOptionGroup("Commercial", true, true, false, DataOptions.CommercialData));
-//			// groups.add(new DataOptionGroup("Misc", true, false, false));
-//		}
+		// groups.add(new DataOptionGroup("Commercial", true, true, false, DataOptions.CommercialData));
+		// // groups.add(new DataOptionGroup("Misc", true, false, false));
+		// }
 		return groups;
 	}
 }

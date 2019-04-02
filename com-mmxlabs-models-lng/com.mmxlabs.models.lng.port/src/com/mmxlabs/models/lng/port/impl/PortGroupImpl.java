@@ -66,6 +66,7 @@ public class PortGroupImpl extends APortSetImpl<Port> implements PortGroup {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<APortSet<Port>> getContents() {
 		if (contents == null) {
 			contents = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, PortPackage.PORT_GROUP__CONTENTS);

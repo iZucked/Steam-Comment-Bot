@@ -97,6 +97,7 @@ public class ContingencyMatrixImpl extends EObjectImpl implements ContingencyMat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ContingencyMatrixEntry> getEntries() {
 		if (entries == null) {
 			entries = new EObjectContainmentEList<ContingencyMatrixEntry>(ContingencyMatrixEntry.class, this, PortPackage.CONTINGENCY_MATRIX__ENTRIES);
@@ -109,6 +110,7 @@ public class ContingencyMatrixImpl extends EObjectImpl implements ContingencyMat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDefaultDuration() {
 		return defaultDuration;
 	}
@@ -118,6 +120,7 @@ public class ContingencyMatrixImpl extends EObjectImpl implements ContingencyMat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDefaultDuration(int newDefaultDuration) {
 		int oldDefaultDuration = defaultDuration;
 		defaultDuration = newDefaultDuration;

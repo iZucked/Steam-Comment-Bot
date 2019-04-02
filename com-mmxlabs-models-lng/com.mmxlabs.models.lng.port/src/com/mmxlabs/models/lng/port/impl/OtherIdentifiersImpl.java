@@ -95,6 +95,7 @@ public class OtherIdentifiersImpl extends EObjectImpl implements OtherIdentifier
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getIdentifier() {
 		return identifier;
 	}
@@ -104,6 +105,7 @@ public class OtherIdentifiersImpl extends EObjectImpl implements OtherIdentifier
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIdentifier(String newIdentifier) {
 		String oldIdentifier = identifier;
 		identifier = newIdentifier;
@@ -116,6 +118,7 @@ public class OtherIdentifiersImpl extends EObjectImpl implements OtherIdentifier
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getProvider() {
 		return provider;
 	}
@@ -125,6 +128,7 @@ public class OtherIdentifiersImpl extends EObjectImpl implements OtherIdentifier
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setProvider(String newProvider) {
 		String oldProvider = provider;
 		provider = newProvider;

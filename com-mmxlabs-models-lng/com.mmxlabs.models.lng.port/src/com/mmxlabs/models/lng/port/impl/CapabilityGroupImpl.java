@@ -75,6 +75,7 @@ public class CapabilityGroupImpl extends APortSetImpl<Port> implements Capabilit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortCapability getCapability() {
 		return capability;
 	}
@@ -84,6 +85,7 @@ public class CapabilityGroupImpl extends APortSetImpl<Port> implements Capabilit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCapability(PortCapability newCapability) {
 		PortCapability oldCapability = capability;
 		capability = newCapability == null ? CAPABILITY_EDEFAULT : newCapability;

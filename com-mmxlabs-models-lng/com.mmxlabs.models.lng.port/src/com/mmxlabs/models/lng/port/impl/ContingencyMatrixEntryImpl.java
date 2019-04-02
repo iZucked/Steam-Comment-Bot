@@ -100,6 +100,7 @@ public class ContingencyMatrixEntryImpl extends EObjectImpl implements Contingen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getFromPort() {
 		if (fromPort != null && fromPort.eIsProxy()) {
 			InternalEObject oldFromPort = (InternalEObject)fromPort;
@@ -126,6 +127,7 @@ public class ContingencyMatrixEntryImpl extends EObjectImpl implements Contingen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFromPort(Port newFromPort) {
 		Port oldFromPort = fromPort;
 		fromPort = newFromPort;
@@ -138,6 +140,7 @@ public class ContingencyMatrixEntryImpl extends EObjectImpl implements Contingen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getToPort() {
 		if (toPort != null && toPort.eIsProxy()) {
 			InternalEObject oldToPort = (InternalEObject)toPort;
@@ -164,6 +167,7 @@ public class ContingencyMatrixEntryImpl extends EObjectImpl implements Contingen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setToPort(Port newToPort) {
 		Port oldToPort = toPort;
 		toPort = newToPort;
@@ -176,6 +180,7 @@ public class ContingencyMatrixEntryImpl extends EObjectImpl implements Contingen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDuration() {
 		return duration;
 	}
@@ -185,6 +190,7 @@ public class ContingencyMatrixEntryImpl extends EObjectImpl implements Contingen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDuration(int newDuration) {
 		int oldDuration = duration;
 		duration = newDuration;

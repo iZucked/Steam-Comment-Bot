@@ -271,13 +271,22 @@ public interface PortPackage extends EPackage {
 	int PORT___GET_ZONE_ID = TypesPackage.APORT_SET_OPERATION_COUNT + 0;
 
 	/**
+	 * The operation id for the '<em>Mmx ID</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT___MMX_ID = TypesPackage.APORT_SET_OPERATION_COUNT + 1;
+
+	/**
 	 * The operation id for the '<em>Get Temp MMXID</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT___GET_TEMP_MMXID = TypesPackage.APORT_SET_OPERATION_COUNT + 1;
+	int PORT___GET_TEMP_MMXID = TypesPackage.APORT_SET_OPERATION_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Port</em>' class.
@@ -286,7 +295,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_OPERATION_COUNT = TypesPackage.APORT_SET_OPERATION_COUNT + 2;
+	int PORT_OPERATION_COUNT = TypesPackage.APORT_SET_OPERATION_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -1534,6 +1543,16 @@ public interface PortPackage extends EPackage {
 	EOperation getPort__GetZoneId();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.port.Port#mmxID() <em>Mmx ID</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Mmx ID</em>' operation.
+	 * @see com.mmxlabs.models.lng.port.Port#mmxID()
+	 * @generated
+	 */
+	EOperation getPort__MmxID();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.port.Port#getTempMMXID() <em>Get Temp MMXID</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2235,6 +2254,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation PORT___GET_ZONE_ID = eINSTANCE.getPort__GetZoneId();
+
+		/**
+		 * The meta object literal for the '<em><b>Mmx ID</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation PORT___MMX_ID = eINSTANCE.getPort__MmxID();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Temp MMXID</b></em>' operation.

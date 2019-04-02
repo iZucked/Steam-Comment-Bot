@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.mmxlabs.common.Association;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
@@ -60,7 +61,7 @@ public class LNGSharedDataTransformer {
 
 		orderedKeys.add(RouteOption.DIRECT);
 		orderedKeys.add(RouteOption.SUEZ);
-		if (LicenseFeatures.isPermitted("features:panama-canal")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PANAMA_CANAL)) {
 			orderedKeys.add(RouteOption.PANAMA);
 		}
 

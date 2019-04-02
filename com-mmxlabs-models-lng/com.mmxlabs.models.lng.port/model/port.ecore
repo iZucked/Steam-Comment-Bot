@@ -3,6 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="port" nsURI="http://www.mmxlabs.com/models/lng/port/1/" nsPrefix="lng.port">
   <eClassifiers xsi:type="ecore:EClass" name="Port">
     <eOperations name="getZoneId" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//ZoneId"/>
+    <eOperations name="mmxID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eOperations name="getTempMMXID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="shortName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="location" lowerBound="1"

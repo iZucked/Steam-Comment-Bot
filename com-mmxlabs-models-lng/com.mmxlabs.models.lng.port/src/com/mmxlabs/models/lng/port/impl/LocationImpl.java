@@ -186,6 +186,7 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
 			otherNames = new EDataTypeUniqueEList<String>(String.class, this, PortPackage.LOCATION__OTHER_NAMES);
@@ -198,6 +199,7 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getMmxId() {
 		return mmxId;
 	}
@@ -207,6 +209,7 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMmxId(String newMmxId) {
 		String oldMmxId = mmxId;
 		mmxId = newMmxId;
@@ -219,6 +222,7 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getTimeZone() {
 		return timeZone;
 	}
@@ -228,6 +232,7 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTimeZone(String newTimeZone) {
 		String oldTimeZone = timeZone;
 		timeZone = newTimeZone;
@@ -240,6 +245,7 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCountry() {
 		return country;
 	}
@@ -249,6 +255,7 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCountry(String newCountry) {
 		String oldCountry = country;
 		country = newCountry;
@@ -261,6 +268,7 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getLat() {
 		return lat;
 	}
@@ -270,6 +278,7 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLat(double newLat) {
 		double oldLat = lat;
 		lat = newLat;
@@ -282,6 +291,7 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getLon() {
 		return lon;
 	}
@@ -291,6 +301,7 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLon(double newLon) {
 		double oldLon = lon;
 		lon = newLon;
@@ -303,6 +314,7 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<OtherIdentifiers> getOtherIdentifiers() {
 		if (otherIdentifiers == null) {
 			otherIdentifiers = new EObjectContainmentEList<OtherIdentifiers>(OtherIdentifiers.class, this, PortPackage.LOCATION__OTHER_IDENTIFIERS);

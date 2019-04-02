@@ -168,6 +168,7 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getUuid() {
 		return uuid;
 	}
@@ -189,6 +190,7 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<RouteLine> getLines() {
 		if (lines == null) {
 			lines = new EObjectContainmentEList<RouteLine>(RouteLine.class, this, PortPackage.ROUTE__LINES);
@@ -201,6 +203,7 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public RouteOption getRouteOption() {
 		return routeOption;
 	}
@@ -210,6 +213,7 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRouteOption(RouteOption newRouteOption) {
 		RouteOption oldRouteOption = routeOption;
 		routeOption = newRouteOption == null ? ROUTE_OPTION_EDEFAULT : newRouteOption;
@@ -222,6 +226,7 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getVirtualPort() {
 		if (virtualPort != null && virtualPort.eIsProxy()) {
 			InternalEObject oldVirtualPort = (InternalEObject)virtualPort;
@@ -248,6 +253,7 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVirtualPort(Port newVirtualPort) {
 		Port oldVirtualPort = virtualPort;
 		virtualPort = newVirtualPort;
@@ -260,6 +266,7 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EntryPoint getNorthEntrance() {
 		return northEntrance;
 	}
@@ -284,6 +291,7 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNorthEntrance(EntryPoint newNorthEntrance) {
 		if (newNorthEntrance != northEntrance) {
 			NotificationChain msgs = null;
@@ -303,6 +311,7 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EntryPoint getSouthEntrance() {
 		return southEntrance;
 	}
@@ -327,6 +336,7 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSouthEntrance(EntryPoint newSouthEntrance) {
 		if (newSouthEntrance != southEntrance) {
 			NotificationChain msgs = null;
@@ -346,6 +356,7 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getDistance() {
 		return distance;
 	}
@@ -355,6 +366,7 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDistance(double newDistance) {
 		double oldDistance = distance;
 		distance = newDistance;
