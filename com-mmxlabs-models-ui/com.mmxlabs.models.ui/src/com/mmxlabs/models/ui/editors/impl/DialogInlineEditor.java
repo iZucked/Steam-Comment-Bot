@@ -5,9 +5,11 @@
 package com.mmxlabs.models.ui.editors.impl;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -15,6 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public abstract class DialogInlineEditor extends UnsettableInlineEditor {
 	public DialogInlineEditor(final EStructuralFeature feature) {
@@ -38,7 +41,12 @@ public abstract class DialogInlineEditor extends UnsettableInlineEditor {
 		this.description = toolkit.createLabel(contents, "", SWT.WRAP);
 		description.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
 
-		this.button = toolkit.createButton(contents, "Edit", SWT.NONE);
+		final ImageDescriptor d = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui", "icons/edit.png");
+		this.button = toolkit.createButton(contents, "", SWT.NONE);
+		final Image img = d.createImage();
+		button.setImage(img);
+		button.addDisposeListener(e -> img.dispose());
+
 		button.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
 
 		final SelectionAdapter selectionListener = new SelectionAdapter() {

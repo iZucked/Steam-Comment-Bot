@@ -17,11 +17,13 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -30,6 +32,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.dialogs.ListSelectionDialog;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 
@@ -72,8 +75,11 @@ public class MultiEnumInlineEditor extends UnsettableInlineEditor {
 			label.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		}
 
-		// final Button button = new Button(buttonAndLabel, SWT.NONE);
-		final Button button = toolkit.createButton(buttonAndLabel, "Edit", SWT.NONE);
+		final ImageDescriptor d = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui", "icons/edit.png");
+		Button button = toolkit.createButton(buttonAndLabel, "", SWT.NONE);
+		final Image img = d.createImage();
+		button.setImage(img);
+		button.addDisposeListener(e -> img.dispose());
 
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -108,7 +114,7 @@ public class MultiEnumInlineEditor extends UnsettableInlineEditor {
 			return setter;
 		}
 	}
-	
+
 	@Override
 	protected boolean updateOnChangeToFeature(Object changedFeature) {
 		// TODO Auto-generated method stub
