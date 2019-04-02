@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -30,14 +31,19 @@ import com.mmxlabs.common.csv.IFieldMap;
 import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.IClassImporter;
@@ -65,7 +71,7 @@ public class CargoImporter extends DefaultClassImporter {
 	 * @return
 	 */
 	private static Map<String, String> getFieldNamesToCsvNames() {
-		final Map<String, String> result = new HashMap<String, String>();
+		final Map<String, String> result = new HashMap<>();
 
 		result.put("minQuantity", "min");
 		result.put("maxQuantity", "max");
@@ -83,18 +89,15 @@ public class CargoImporter extends DefaultClassImporter {
 
 	@Override
 	protected Map<String, String> exportObject(final EObject object, final IMMXExportContext context) {
-		final Map<String, String> result = new LinkedHashMap<String, String>();
+		final Map<String, String> result = new LinkedHashMap<>();
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
 
 			if (object instanceof AssignableElement) {
-				// final AssignableElement assignableElement = (AssignableElement) object;
 				// yes yes both attribute and reference here, but easier to copy paste....
 				if (attribute == CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX || attribute == CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT
 						|| attribute == CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED) {
-					// if (assignableElement.getAssignment() == null) {
 					continue;
-					// }
 				}
 			}
 
@@ -106,12 +109,9 @@ public class CargoImporter extends DefaultClassImporter {
 		for (final EReference reference : object.eClass().getEAllReferences()) {
 
 			if (object instanceof AssignableElement) {
-				// final AssignableElement assignableElement = (AssignableElement) object;
 				// yes yes both attribute and reference here, but easier to copy paste....
 				if (reference == CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE) {
-					// if (assignableElement.getAssignment() == null) {
 					continue;
-					// }
 				}
 			}
 
@@ -124,7 +124,7 @@ public class CargoImporter extends DefaultClassImporter {
 	}
 
 	private static Map<String, String> reverseLookup(final Map<String, String> map) {
-		final Map<String, String> result = new HashMap<String, String>();
+		final Map<String, String> result = new HashMap<>();
 		for (final Entry<String, String> entry : map.entrySet()) {
 			result.put(entry.getValue(), entry.getKey());
 		}
@@ -146,13 +146,13 @@ public class CargoImporter extends DefaultClassImporter {
 	public Collection<Map<String, String>> exportObjects(final Collection<Cargo> cargoes, final Collection<LoadSlot> loadSlots, final Collection<DischargeSlot> dischargeSlots,
 			final IMMXExportContext context) {
 
-		final List<Map<String, String>> data = new LinkedList<Map<String, String>>();
+		final List<Map<String, String>> data = new LinkedList<>();
 
 		{
 			for (final Cargo cargo : cargoes) {
 
-				final List<LoadSlot> cLoadSlots = new ArrayList<LoadSlot>();
-				final List<DischargeSlot> cDischargeSlots = new ArrayList<DischargeSlot>();
+				final List<LoadSlot> cLoadSlots = new ArrayList<>();
+				final List<DischargeSlot> cDischargeSlots = new ArrayList<>();
 				// Slot Slots
 				for (final Slot s : cargo.getSlots()) {
 					if (s instanceof LoadSlot) {
@@ -186,7 +186,7 @@ public class CargoImporter extends DefaultClassImporter {
 		{
 			for (final LoadSlot slot : loadSlots) {
 				if (slot.getCargo() == null) {
-					final Map<String, String> result = new LinkedHashMap<String, String>();
+					final Map<String, String> result = new LinkedHashMap<>();
 					exportSlot(context, result, slot, KEY_LOADSLOT);
 
 					data.add(result);
@@ -196,7 +196,7 @@ public class CargoImporter extends DefaultClassImporter {
 		{
 			for (final DischargeSlot slot : dischargeSlots) {
 				if (slot.getCargo() == null) {
-					final Map<String, String> result = new LinkedHashMap<String, String>();
+					final Map<String, String> result = new LinkedHashMap<>();
 					exportSlot(context, result, slot, KEY_DISCHARGESLOT);
 
 					data.add(result);
@@ -243,7 +243,7 @@ public class CargoImporter extends DefaultClassImporter {
 	}
 
 	private IFieldMap renameCsvMapWithFieldNames(final FieldMap map) {
-		final Map<String, String> resultMap = new HashMap<String, String>();
+		final Map<String, String> resultMap = new HashMap<>();
 		for (final Entry<String, String> entry : map.entrySet()) {
 			resultMap.put(fieldNameFromCsvName(entry.getKey()), entry.getValue());
 		}
@@ -339,17 +339,52 @@ public class CargoImporter extends DefaultClassImporter {
 			}
 		});
 
+		final Cargo fCargo = cargo;
+		final String vesselName = row.get("vessel");
+		if (keepCargo && vesselName != null && !vesselName.isEmpty()) {
+			context.doLater(new IDeferment() {
+
+				@Override
+				public void run(final IImportContext importContext) {
+					// Do not replace value from assignments import
+					if (fCargo.getVesselAssignmentType() == null) {
+						final IMMXImportContext context = (IMMXImportContext) importContext;
+						final MMXRootObject rootObject = context.getRootObject();
+						if (rootObject instanceof LNGScenarioModel) {
+							final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+							final CargoModel cargoModel = scenarioModel.getCargoModel();
+							for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
+								// Only use charter index of 1.
+								if (va.getCharterNumber() == 1) {
+									final Vessel vessel = va.getVessel();
+									if (vessel != null && vesselName.equalsIgnoreCase(vessel.getName())) {
+										fCargo.setVesselAssignmentType(va);
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				@Override
+				public int getStage() {
+					// Delay slightly as assigment importer works in this stage
+					return IMMXImportContext.STAGE_MODIFY_SUBMODELS + 1;
+				}
+			});
+		}
 		return newResult;
 	}
 
 	@Override
 	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IMMXImportContext context) {
-		final LinkedList<EObject> results = new LinkedList<EObject>();
+		final LinkedList<EObject> results = new LinkedList<>();
 		try {
 			try {
 				context.pushReader(reader);
 				Map<String, String> row;
-				final Map<String, Cargo> cargoMap = new HashMap<String, Cargo>();
+				final Map<String, Cargo> cargoMap = new HashMap<>();
 				while ((row = reader.readRow(true)) != null) {
 
 					// Import Row Data
@@ -368,7 +403,7 @@ public class CargoImporter extends DefaultClassImporter {
 							discharge = (DischargeSlot) o;
 						}
 					}
-					final List<EObject> newResults = new ArrayList<EObject>(3);
+					final List<EObject> newResults = new ArrayList<>(3);
 
 					// the row data has a "name" field even though cargo objects do not have names
 					// this is used to allow multi-line specifications of e.g. LDD cargoes
@@ -421,7 +456,7 @@ public class CargoImporter extends DefaultClassImporter {
 					}
 
 					// fix missing names
-					if (realCargo != null && realCargoName != null && realCargoName.trim().isEmpty() == false) {
+					if (realCargo != null && realCargoName != null && !realCargoName.trim().isEmpty()) {
 						final String cargoName = realCargoName.trim();
 						if (load != null && (load.getName() == null || load.getName().trim().isEmpty())) {
 							final LoadSlot load2 = load;
@@ -471,30 +506,22 @@ public class CargoImporter extends DefaultClassImporter {
 	/**
 	 */
 	public Collection<EObject> importRawObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
-		final List<EObject> objects = new LinkedList<EObject>();
+		final List<EObject> objects = new LinkedList<>();
 		objects.addAll(super.importObject(parent, eClass, row, context).getCreatedObjects());
 
 		// Special case for load and discharge slots. These are not under the correct reference type string - so fake it here
 		final IFieldMap fieldMap = new FieldMap(row);
-		{
-			final String lcrn = KEY_LOADSLOT;
+		BiConsumer<String, EClass> func = (lcrn, referenceType) -> {
 			final IFieldMap subMap = fieldMap.getSubMap(lcrn + DOT);
 			final IFieldMap subKeys = renameCsvMapWithFieldNames((FieldMap) subMap);
 
-			final EClass referenceType = CargoPackage.eINSTANCE.getLoadSlot();
 			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
 			final Collection<EObject> values = classImporter.importObject(parent, referenceType, subKeys, context).getCreatedObjects();
 			objects.addAll(values);
-		}
-		{
-			final String lcrn = KEY_DISCHARGESLOT;
-			final IFieldMap subKeys = renameCsvMapWithFieldNames((FieldMap) fieldMap.getSubMap(lcrn + DOT));
+		};
+		func.accept(KEY_LOADSLOT, CargoPackage.eINSTANCE.getLoadSlot());
+		func.accept(KEY_DISCHARGESLOT, CargoPackage.eINSTANCE.getDischargeSlot());
 
-			final EClass referenceType = CargoPackage.eINSTANCE.getDischargeSlot();
-			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
-			final Collection<EObject> values = classImporter.importObject(parent, referenceType, subKeys, context).getCreatedObjects();
-			objects.addAll(values);
-		}
 		return objects;
 	}
 }
