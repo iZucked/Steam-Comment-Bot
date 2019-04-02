@@ -75,6 +75,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -304,6 +305,53 @@ public final class SharedScenarioDataUtils {
 
 						try {
 							updateCommercialModel(target, this, mapper, commercialJSON, mapOldToNew);
+							ctx.runDeferredActions();
+						} catch (final Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							appendAndExecute(UnexecutableCommand.INSTANCE);
+						}
+
+						replaceReferences(this, target, mapOldToNew);
+					}
+				});
+			};
+		}
+
+		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createVesselAvailabilitiesUpdater(String json) {
+
+			return (cmd, target) -> {
+				cmd.append(new CompoundCommand() {
+
+					@Override
+					protected boolean prepare() {
+						super.prepare();
+						return true;
+					}
+
+					@Override
+					public void execute() {
+						final EMFDeserializationContext ctx = new EMFDeserializationContext(BeanDeserializerFactory.instance);
+
+						final PortModel pm = ScenarioModelUtil.getPortModel(target);
+						pm.getPorts().forEach(ctx::registerType);
+						pm.getPortGroups().forEach(ctx::registerType);
+						pm.getPortCountryGroups().forEach(ctx::registerType);
+
+						final FleetModel fm = ScenarioModelUtil.getFleetModel(target);
+						fm.getVessels().forEach(ctx::registerType);
+						fm.getVesselGroups().forEach(ctx::registerType);
+						
+						final CommercialModel cm = ScenarioModelUtil.getCommercialModel(target);
+						cm.getCharteringContracts().forEach(ctx::registerType);
+
+						final ObjectMapper mapper = new ObjectMapper(null, null, ctx);
+						mapper.registerModule(new EMFJacksonModule());
+
+						final Map<EObject, EObject> mapOldToNew = new HashMap<>();
+
+						try {
+							updateVesselAvailabilities(target, this, mapper, json, mapOldToNew);
 							ctx.runDeferredActions();
 						} catch (final Exception e1) {
 							// TODO Auto-generated catch block
@@ -639,6 +687,11 @@ public final class SharedScenarioDataUtils {
 			mapper.registerModule(new EMFJacksonModule());
 			final String adpJSON = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(adpModel);
 
+			return createADPUpdater(adpJSON);
+		}
+
+		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createADPUpdater(final String json) {
+
 			return (cmd, target) -> {
 				cmd.append(new CompoundCommand() {
 
@@ -677,7 +730,7 @@ public final class SharedScenarioDataUtils {
 						mapper.registerModule(new EMFJacksonModule());
 
 						try {
-							final ADPModel newADPModel = mapper.readValue(adpJSON, ADPModel.class);
+							final ADPModel newADPModel = mapper.readValue(json, ADPModel.class);
 							ctx.runDeferredActions();
 							final EditingDomain editingDomain = target.getEditingDomain();
 							appendAndExecute(SetCommand.create(editingDomain, target.getScenario(), LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModel(), newADPModel));
@@ -887,6 +940,33 @@ public final class SharedScenarioDataUtils {
 		}
 	}
 
+	private static void updateVesselAvailabilities(final IScenarioDataProvider target, final CompoundCommand cmd, final ObjectMapper mapper, final String json, final Map<EObject, EObject> mapOldToNew)
+			throws JsonParseException, JsonMappingException, IOException {
+
+		final CargoModel oldCM = ScenarioModelUtil.getCargoModel(target);
+		final List<VesselAvailability> newAvailabilities = mapper.readValue(json, new TypeReference<VesselAvailability>() {
+		});
+
+		final List<EObject> newData = new LinkedList<>();
+		for (final VesselAvailability newVA : newAvailabilities) {
+			boolean found = false;
+
+			for (final VesselAvailability oldVA : oldCM.getVesselAvailabilities()) {
+				if (Objects.equals(newVA.getVessel(), oldVA.getVessel())) {
+					if (newVA.getCharterNumber() == oldVA.getCharterNumber()) {
+						found = true;
+						mapOldToNew.put(oldVA, newVA);
+						break;
+					}
+				}
+			}
+			if (!found) {
+				newData.add(newVA);
+			}
+		}
+		cmd.appendAndExecute(AddCommand.create(target.getEditingDomain(), oldCM, CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES, newData));
+	}
+
 	private static void updateCharterInMarkets(final IScenarioDataProvider target, final CompoundCommand cmd, final ObjectMapper mapper, final String json, final Map<EObject, EObject> mapOldToNew)
 			throws JsonParseException, JsonMappingException, IOException {
 
@@ -1092,7 +1172,7 @@ public final class SharedScenarioDataUtils {
 			}
 			// Replace the actual object
 			if (oldValue.eContainmentFeature().isMany()) {
-				cmd.appendAndExecute(ReplaceCommand.create(editingDomain,oldValue.eContainer(), oldValue.eContainmentFeature(), oldValue, Collections.singleton(newValue)));
+				cmd.appendAndExecute(ReplaceCommand.create(editingDomain, oldValue.eContainer(), oldValue.eContainmentFeature(), oldValue, Collections.singleton(newValue)));
 			} else {
 				cmd.appendAndExecute(SetCommand.create(editingDomain, oldValue.eContainer(), oldValue.eContainmentFeature(), newValue));
 			}

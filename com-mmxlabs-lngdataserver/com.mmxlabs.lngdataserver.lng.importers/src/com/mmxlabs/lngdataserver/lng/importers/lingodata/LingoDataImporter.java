@@ -98,6 +98,8 @@ public class LingoDataImporter {
 					importEMF(entries.get("route-costs"), baseURI, uc, sdp, SharedScenarioDataUtils.UpdateJob::createrRouteCostsUpdater);
 					importEMF(entries.get("port-costs"), baseURI, uc, sdp, SharedScenarioDataUtils.UpdateJob::createPortCostsUpdater);
 					importEMF(entries.get("cooldown-costs"), baseURI, uc, sdp, SharedScenarioDataUtils.UpdateJob::createCooldownCostsUpdater);
+					importEMF(entries.get("vessel-availabilities"), baseURI, uc, sdp, SharedScenarioDataUtils.UpdateJob::createVesselAvailabilitiesUpdater);
+					importEMF(entries.get("adp"), baseURI, uc, sdp, SharedScenarioDataUtils.UpdateJob::createADPUpdater);
 				} catch (final IOException e) {
 					e.printStackTrace();
 				}
