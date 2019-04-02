@@ -311,22 +311,7 @@ public final class SharedScenarioDataUtils {
 							appendAndExecute(UnexecutableCommand.INSTANCE);
 						}
 
-						final Map<EObject, Collection<Setting>> crossReferencecs = EcoreUtil.UsageCrossReferencer.findAll(mapOldToNew.keySet(), target.getScenario());
-
-						final EditingDomain editingDomain = target.getEditingDomain();
-						for (final Map.Entry<EObject, EObject> e : mapOldToNew.entrySet()) {
-							final EObject oldMarket = e.getKey();
-							final EObject newMarket = e.getValue();
-							final Collection<EStructuralFeature.Setting> usages = crossReferencecs.get(oldMarket);
-
-							if (usages != null) {
-								for (final EStructuralFeature.Setting setting : usages) {
-									appendAndExecute(ReplaceCommand.create(editingDomain, setting.getEObject(), setting.getEStructuralFeature(), oldMarket, Collections.singleton(newMarket)));
-								}
-							}
-							// Replace the actual object
-							appendAndExecute(ReplaceCommand.create(editingDomain, oldMarket.eContainer(), oldMarket.eContainmentFeature(), oldMarket, Collections.singleton(newMarket)));
-						}
+						replaceReferences(this, target, mapOldToNew);
 					}
 				});
 			};
@@ -395,8 +380,8 @@ public final class SharedScenarioDataUtils {
 							final List<PortCost> newCosts = mapper.readValue(json, new TypeReference<List<PortCost>>() {
 							});
 
-							 appendAndExecute(RemoveCommand.create(target.getEditingDomain(), costModel, PricingPackage.Literals.COST_MODEL__PORT_COSTS, costModel.getPortCosts()));
-							 appendAndExecute(AddCommand.create(target.getEditingDomain(), costModel, PricingPackage.Literals.COST_MODEL__PORT_COSTS, newCosts));
+							appendAndExecute(RemoveCommand.create(target.getEditingDomain(), costModel, PricingPackage.Literals.COST_MODEL__PORT_COSTS, costModel.getPortCosts()));
+							appendAndExecute(AddCommand.create(target.getEditingDomain(), costModel, PricingPackage.Literals.COST_MODEL__PORT_COSTS, newCosts));
 							ctx.runDeferredActions();
 						} catch (final Exception e1) {
 							// TODO Auto-generated catch block
@@ -579,23 +564,9 @@ public final class SharedScenarioDataUtils {
 							appendAndExecute(UnexecutableCommand.INSTANCE);
 						}
 
-						final Map<EObject, Collection<Setting>> crossReferencecs = EcoreUtil.UsageCrossReferencer.findAll(mapOldToNew.keySet(), target.getScenario());
-
-						final EditingDomain editingDomain = target.getEditingDomain();
-						for (final Map.Entry<EObject, EObject> e : mapOldToNew.entrySet()) {
-							final EObject oldMarket = e.getKey();
-							final EObject newMarket = e.getValue();
-							final Collection<EStructuralFeature.Setting> usages = crossReferencecs.get(oldMarket);
-
-							if (usages != null) {
-								for (final EStructuralFeature.Setting setting : usages) {
-									appendAndExecute(ReplaceCommand.create(editingDomain, setting.getEObject(), setting.getEStructuralFeature(), oldMarket, Collections.singleton(newMarket)));
-								}
-							}
-							// Replace the actual object
-							appendAndExecute(ReplaceCommand.create(editingDomain, oldMarket.eContainer(), oldMarket.eContainmentFeature(), oldMarket, Collections.singleton(newMarket)));
-						}
+						replaceReferences(this, target, mapOldToNew);
 					}
+
 				});
 			};
 		}
@@ -652,22 +623,7 @@ public final class SharedScenarioDataUtils {
 							appendAndExecute(UnexecutableCommand.INSTANCE);
 						}
 
-						final Map<EObject, Collection<Setting>> crossReferencecs = EcoreUtil.UsageCrossReferencer.findAll(mapOldToNew.keySet(), target.getScenario());
-
-						final EditingDomain editingDomain = target.getEditingDomain();
-						for (final Map.Entry<EObject, EObject> e : mapOldToNew.entrySet()) {
-							final EObject oldMarket = e.getKey();
-							final EObject newMarket = e.getValue();
-							final Collection<EStructuralFeature.Setting> usages = crossReferencecs.get(oldMarket);
-
-							if (usages != null) {
-								for (final EStructuralFeature.Setting setting : usages) {
-									appendAndExecute(ReplaceCommand.create(editingDomain, setting.getEObject(), setting.getEStructuralFeature(), oldMarket, Collections.singleton(newMarket)));
-								}
-							}
-							// Replace the actual object
-							appendAndExecute(ReplaceCommand.create(editingDomain, oldMarket.eContainer(), oldMarket.eContainmentFeature(), oldMarket, Collections.singleton(newMarket)));
-						}
+						replaceReferences(this, target, mapOldToNew);
 					}
 				});
 			};
@@ -1114,5 +1070,32 @@ public final class SharedScenarioDataUtils {
 		// // groups.add(new DataOptionGroup("Misc", true, false, false));
 		// }
 		return groups;
+	}
+
+	private static void replaceReferences(CompoundCommand cmd, IScenarioDataProvider target, final Map<EObject, EObject> mapOldToNew) {
+		final Map<EObject, Collection<Setting>> crossReferences = EcoreUtil.UsageCrossReferencer.findAll(mapOldToNew.keySet(), target.getScenario());
+
+		final EditingDomain editingDomain = target.getEditingDomain();
+		for (final Map.Entry<EObject, EObject> e : mapOldToNew.entrySet()) {
+			final EObject oldValue = e.getKey();
+			final EObject newValue = e.getValue();
+			final Collection<EStructuralFeature.Setting> usages = crossReferences.get(oldValue);
+
+			if (usages != null) {
+				for (final EStructuralFeature.Setting setting : usages) {
+					if (setting.getEStructuralFeature().isMany()) {
+						cmd.appendAndExecute(ReplaceCommand.create(editingDomain, setting.getEObject(), setting.getEStructuralFeature(), oldValue, Collections.singleton(newValue)));
+					} else {
+						cmd.appendAndExecute(SetCommand.create(editingDomain, setting.getEObject(), setting.getEStructuralFeature(), newValue));
+					}
+				}
+			}
+			// Replace the actual object
+			if (oldValue.eContainmentFeature().isMany()) {
+				cmd.appendAndExecute(ReplaceCommand.create(editingDomain,oldValue.eContainer(), oldValue.eContainmentFeature(), oldValue, Collections.singleton(newValue)));
+			} else {
+				cmd.appendAndExecute(SetCommand.create(editingDomain, oldValue.eContainer(), oldValue.eContainmentFeature(), newValue));
+			}
+		}
 	}
 }
