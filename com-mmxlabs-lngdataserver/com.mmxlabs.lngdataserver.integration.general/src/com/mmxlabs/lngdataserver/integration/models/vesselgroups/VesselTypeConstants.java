@@ -8,6 +8,6 @@ public final class VesselTypeConstants {
 	private VesselTypeConstants() {
 	}
 
-	public static final String VESSEL_PREFIX = "Port:";
+	public static final String VESSEL_PREFIX = "Vessel:";
 	public static final String VESSEL_GROUP_PREFIX = "VesselGroup:";
 }
