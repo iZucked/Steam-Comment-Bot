@@ -75,6 +75,12 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 						.withMessage("Vessel must be specified.") //
 						.make(ctx));
 			}
+			if (availability.getEntity() == null) {
+				statuses.add(baseFactory.copyName() //
+						.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__ENTITY) //
+						.withMessage("Entity must be specified.") //
+						.make(ctx));
+			}
 
 			if (availability.isSetStartAfter() && availability.isSetStartBy()) {
 				if (availability.getStartAfter().isAfter(availability.getStartBy())) {
