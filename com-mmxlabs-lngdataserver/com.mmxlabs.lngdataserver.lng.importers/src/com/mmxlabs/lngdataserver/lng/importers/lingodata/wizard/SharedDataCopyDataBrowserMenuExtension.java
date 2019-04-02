@@ -75,9 +75,7 @@ public class SharedDataCopyDataBrowserMenuExtension implements IDataBrowserConte
 				}));
 				itemsAdded = true;
 			}
-		}
-		if (false && selection.size() == 1) {
-			final Object firstElement = selection.getFirstElement();
+
 			if (firstElement instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) firstElement;
 				menuManager.add(new RunnableAction("Export reference data", () -> {
