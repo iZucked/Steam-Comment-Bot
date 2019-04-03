@@ -533,37 +533,45 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the portLoadNominationDate feature on Slot
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_portLoadNominationDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DATE));
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DATE));
+		}
 	}
 
 	/**
 	 * Create the editor for the portLoadNominationDone feature on Slot
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_portLoadNominationDoneEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DONE));
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DONE));
+		}
 	}
 
 	/**
 	 * Create the editor for the portLoadNominationCounterparty feature on Slot
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_portLoadNominationCounterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY));
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY));
+		}
 	}
 
 	/**
 	 * Create the editor for the portLoadNominationComment feature on Slot
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_portLoadNominationCommentEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COMMENT));
+		if (LicenseFeatures.isPermitted("features:nominations")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COMMENT));
+		}
 	}
 
 	/**
