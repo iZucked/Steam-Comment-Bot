@@ -2005,7 +2005,7 @@ public class LNGScenarioTransformer {
 					}
 					permittedVessels.add(o_vessel);
 				}
-				builder.setVesselPermissions(optimiserSlot, permittedVessels, allowedVessels.isEmpty());
+				builder.setVesselPermissions(optimiserSlot, permittedVessels, !allowedVessels.isEmpty());
 			}
 		}
 	}
