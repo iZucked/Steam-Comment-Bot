@@ -41,7 +41,7 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 					if (similarityMode == SimilarityMode.ALL) {
 						continue;
 					}
-					final String label = String.format("%s%s_%sSimilarity%s", limitedLabel, gcoLabel, similarityMode, actionLabel);
+					final String label = String.format("%s%s_Similarity%s%s", limitedLabel, gcoLabel, similarityMode, actionLabel);
 					tests.add(DynamicTest.dynamicTest(label, () -> {
 						Assumptions.assumeTrue(TestingModes.OptimisationTestMode != TestMode.Skip);
 						// // No tests defined yet...
