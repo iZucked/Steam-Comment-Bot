@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
@@ -56,6 +57,8 @@ public class VesselAssignmentTypeValueProviderFactoryTest {
 		lngScenarioModel.setReferenceModel(referenceModel);
 		lngScenarioModel.setCargoModel(cargoModel);
 		referenceModel.setSpotMarketsModel(spotMarketsModel);
+		referenceModel.setFleetModel(FleetFactory.eINSTANCE.createFleetModel());
+
 		return lngScenarioModel;
 	}
 
