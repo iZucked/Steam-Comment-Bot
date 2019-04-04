@@ -111,23 +111,58 @@ public class MigrateToV107 extends AbstractMigrationUnit {
 		func2.accept(cargoModel.getRefAsList("dischargeSlots"));
 		
 		EObjectWrapper spotMarketModel = referenceModel.getRef("spotMarketsModel");
-		EObjectWrapper spotMarketGroup = spotMarketModel.getRef("desSalesSpotMarket");
-		List<EObjectWrapper> markets = spotMarketGroup.getRefAsList("markets");
-		if (markets != null) {
-			for(EObjectWrapper market : markets) {
-				boolean permissive = market.getAttribAsBoolean("restrictedListsArePermissive");
-				market.setAttrib("restrictedContractsArePermissive", permissive);
-				market.setAttrib("restrictedPortsArePermissive", permissive);
-				
-				List<EObjectWrapper> allowedVessels = market.getRefAsList("allowedVessels");
-				if (allowedVessels != null && !allowedVessels.isEmpty()) {
-					market.setAttrib("restrictedVesselsArePermissive", Boolean.TRUE);
-					market.setRef("restrictedVessels", allowedVessels);
+		
+		Consumer<List<EObjectWrapper>> func3 = markets -> {
+			if (markets != null) {
+				for(EObjectWrapper market : markets) {
+					boolean permissive = market.getAttribAsBoolean("restrictedListsArePermissive");
+					market.setAttrib("restrictedContractsArePermissive", permissive);
+					market.setAttrib("restrictedPortsArePermissive", permissive);
+					
+					List<EObjectWrapper> allowedVessels = market.getRefAsList("allowedVessels");
+					if (allowedVessels != null && !allowedVessels.isEmpty()) {
+						market.setAttrib("restrictedVesselsArePermissive", Boolean.TRUE);
+						market.setRef("restrictedVessels", allowedVessels);
+					}
+					market.unsetFeature("allowedVessels");
+					market.unsetFeature("restrictedListsArePermissive");
 				}
-				market.unsetFeature("allowedVessels");
-				market.unsetFeature("restrictedListsArePermissive");
 			}
-		}
+		};
+		
+		EObjectWrapper desSalesSpotMarketGroup = spotMarketModel.getRef("desSalesSpotMarket");
+		func3.accept(desSalesSpotMarketGroup.getRefAsList("markets"));
+		
+		Consumer<List<EObjectWrapper>> func4 = markets -> {
+			if (markets != null) {
+				for(EObjectWrapper market : markets) {
+					boolean permissive = market.getAttribAsBoolean("restrictedListsArePermissive");
+					
+					boolean pContracts = permissive;
+					boolean pPorts = permissive;
+					if (permissive) {
+						List<EObjectWrapper> restrictedPorts = market.getRefAsList("restrictedPorts");
+						if (restrictedPorts == null || restrictedPorts.isEmpty()) {
+							pPorts = false;
+						}
+						List<EObjectWrapper> restrictedContracts = market.getRefAsList("restrictedContracts");
+						if (restrictedContracts == null || restrictedContracts.isEmpty()) {
+							pContracts = false;
+						}
+					}
+					market.setAttrib("restrictedContractsArePermissive", pContracts);
+					market.setAttrib("restrictedPortsArePermissive", pPorts);
+					
+					market.unsetFeature("restrictedListsArePermissive");
+				}
+			}
+		};
+		EObjectWrapper fobSalesSpotMarketGroup = spotMarketModel.getRef("fobSalesSpotMarket");
+		func4.accept(fobSalesSpotMarketGroup.getRefAsList("markets"));
+		EObjectWrapper desPurchaseSpotMarketGroup = spotMarketModel.getRef("desPurchaseSpotMarket");
+		func4.accept(desPurchaseSpotMarketGroup.getRefAsList("markets"));
+		EObjectWrapper fobPurchasesSpotMarketGroup = spotMarketModel.getRef("fobPurchasesSpotMarket");
+		func4.accept(fobPurchasesSpotMarketGroup.getRefAsList("markets"));
 		
 	}
 }
