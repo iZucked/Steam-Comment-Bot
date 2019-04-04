@@ -81,12 +81,6 @@ public class BreakEvenSanboxUnit {
 	@NonNull
 	private final Injector injector;
 
-	@NonNull
-	private final IMultiStateResult inputState;
-
-	@NonNull
-	private final String phase;
-
 	private final Map<Thread, BreakEvenSandboxEvaluator> threadCache = new ConcurrentHashMap<>(100);
 
 	private @NonNull ExecutorService executorService;
@@ -99,7 +93,6 @@ public class BreakEvenSanboxUnit {
 			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.scenarioModel = scenarioModel;
 		this.dataTransformer = dataTransformer;
-		this.phase = phase;
 		this.executorService = executorService;
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
@@ -144,8 +137,6 @@ public class BreakEvenSanboxUnit {
 		});
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
-
-		this.inputState = inputState;
 	}
 
 	public void run(final BreakEvenAnalysisModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, @NonNull final IProgressMonitor monitor) {
@@ -182,8 +173,8 @@ public class BreakEvenSanboxUnit {
 
 						LoadSlot load = null;
 						DischargeSlot discharge = null;
-						Slot be_target = null;
-						Slot reference_slot = null;
+						Slot<?> be_target = null;
+						Slot<?> reference_slot = null;
 
 						if (row.getBuyOption() != null) {
 							load = mapper.getOriginal(row.getBuyOption());
@@ -254,8 +245,8 @@ public class BreakEvenSanboxUnit {
 							final boolean pShipped = shipped;
 							final LoadSlot pLoad = load;
 							final DischargeSlot pDischarge = discharge;
-							final Slot pBE_Target = be_target;
-							final Slot pReference_slot = reference_slot;
+							final Slot<?> pBE_Target = be_target;
+							final Slot<?> pReference_slot = reference_slot;
 							final String pTimeZone = timeZone;
 							final Callable<Runnable> job = () -> {
 								if (monitor.isCanceled()) {
@@ -302,6 +293,7 @@ public class BreakEvenSanboxUnit {
 							}
 						} catch (final InterruptedException e) {
 							e.printStackTrace();
+							Thread.currentThread().interrupt();
 						} catch (final ExecutionException e) {
 							e.printStackTrace();
 						}
@@ -371,8 +363,7 @@ public class BreakEvenSanboxUnit {
 
 											LoadSlot load = null;
 											DischargeSlot discharge = null;
-											Slot be_target = null;
-											final Slot reference_slot = null;
+											Slot<?> be_target = null;
 											final SpotMarket market = (SpotMarket) resultBasedOn.getTarget();
 											boolean shipped = true;
 
@@ -391,7 +382,6 @@ public class BreakEvenSanboxUnit {
 														discharge = mapper.getSalesMarketChangable(market, YearMonth.from(load.getWindowStart().plusMonths(1)));
 													}
 												} else {
-													// continue;
 													assert false;
 												}
 												be_target = load;
@@ -411,7 +401,6 @@ public class BreakEvenSanboxUnit {
 														load = mapper.getPurchaseMarketChangable(market, YearMonth.from(discharge.getWindowStart().minusMonths(1)));
 													}
 												} else {
-													// continue;
 													assert false;
 												}
 												be_target = discharge;
@@ -421,7 +410,7 @@ public class BreakEvenSanboxUnit {
 											if (load == null || discharge == null) {
 												throw new IllegalStateException();
 											}
-											final Slot pbe_target = be_target;
+											final Slot<?> pbe_target = be_target;
 											source_be_price = doIt(shipped, vesselAssignment, load, discharge, be_target, (o_load, o_discharge) -> {
 												if (pbe_target instanceof LoadSlot) {
 													((ChangeablePriceCalculator) o_discharge.getDischargePriceCalculator())
@@ -442,8 +431,8 @@ public class BreakEvenSanboxUnit {
 										{
 											LoadSlot load = null;
 											DischargeSlot discharge = null;
-											Slot be_target = null;
-											Slot reference_slot = null;
+											Slot<?> be_target = null;
+											Slot<?> reference_slot = null;
 
 											if (targetRow.getBuyOption() != null) {
 												load = mapper.getChangable(targetRow.getBuyOption());
@@ -512,11 +501,8 @@ public class BreakEvenSanboxUnit {
 													continue;
 												}
 
-												final Slot pbe_target = be_target;
+												final Slot<?> pbe_target = be_target;
 												int internal_be_price = source_be_price.getFirst();
-												if (internal_be_price < 0) {
-													int ii = 0;
-												}
 												final Pair<Integer, Integer> price = doIt(shipped, vesselAssignment, load, discharge, be_target, (o_load, o_discharge) -> {
 													if (pbe_target instanceof LoadSlot) {
 														((ChangeablePriceCalculator) o_discharge.getDischargePriceCalculator()).setPrice(internal_be_price);
@@ -544,7 +530,7 @@ public class BreakEvenSanboxUnit {
 												}
 											}
 										}
-										return () -> multiRunnable.forEach(r -> r.run());
+										return () -> multiRunnable.forEach(Runnable::run);
 									} finally {
 										monitor.worked(1);
 									}
@@ -566,6 +552,7 @@ public class BreakEvenSanboxUnit {
 							}
 						} catch (final InterruptedException e) {
 							e.printStackTrace();
+							Thread.currentThread().interrupt();
 						} catch (final ExecutionException e) {
 							e.printStackTrace();
 						}
@@ -590,14 +577,14 @@ public class BreakEvenSanboxUnit {
 		}
 	}
 
-	private Pair<Integer, Integer> doIt(final boolean shipped, final VesselAssignmentType vesselAssignment, final LoadSlot load, final DischargeSlot discharge, final Slot target,
+	private Pair<Integer, Integer> doIt(final boolean shipped, final VesselAssignmentType vesselAssignment, final LoadSlot load, final DischargeSlot discharge, final Slot<?> target,
 			final BiConsumer<LoadOption, DischargeOption> action) {
 		final IResource resource;
 
-		final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
 		if (action != null) {
-			final IPortSlot a = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(load, IPortSlot.class);
-			final IPortSlot b = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(discharge, IPortSlot.class);
+			final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
+			final IPortSlot a = modelEntityMap.getOptimiserObjectNullChecked(load, IPortSlot.class);
+			final IPortSlot b = modelEntityMap.getOptimiserObjectNullChecked(discharge, IPortSlot.class);
 
 			action.accept((LoadOption) a, (DischargeOption) b);
 		}

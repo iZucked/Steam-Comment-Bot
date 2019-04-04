@@ -61,7 +61,7 @@ public class PortCvCompatibilityConstraintChecker extends AbstractPairwiseConstr
 		if (firstType == PortType.Load && secondType == PortType.Discharge) {
 			final ILoadOption loadSlot = (ILoadOption) portSlotProvider.getPortSlot(first);
 			final IDischargeOption dischargeSlot = (IDischargeOption) portSlotProvider.getPortSlot(second);
-			final IPort dischargePort = (IPort) portProvider.getPortForElement(second);
+			final IPort dischargePort = portProvider.getPortForElement(second);
 			// If data is actualised (i.e. the event has occurred), we do not
 			// care
 			if (actualsDataProvider.hasActuals(loadSlot) && actualsDataProvider.hasActuals(dischargeSlot)) {
@@ -84,7 +84,7 @@ public class PortCvCompatibilityConstraintChecker extends AbstractPairwiseConstr
 		// in any CV range specified at the discharge
 		if (firstType == PortType.Load && secondType == PortType.Discharge) {
 			final ILoadOption loadSlot = (ILoadOption) portSlotProvider.getPortSlot(first);
-			final IPort dischargePort = (IPort) portProvider.getPortForElement(second);
+			final IPort dischargePort = portProvider.getPortForElement(second);
 
 			final int cv = loadSlot.getCargoCVValue();
 

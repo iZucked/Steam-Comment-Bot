@@ -9,9 +9,6 @@ import java.util.List;
 import com.google.inject.Inject;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunction;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightOptimisationData;
-import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.CargoWindowData;
-import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightCargoDetails;
-import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
 public class VesselCargoCountLightWeightFitnessFunction implements ILightWeightFitnessFunction {
 	@Inject

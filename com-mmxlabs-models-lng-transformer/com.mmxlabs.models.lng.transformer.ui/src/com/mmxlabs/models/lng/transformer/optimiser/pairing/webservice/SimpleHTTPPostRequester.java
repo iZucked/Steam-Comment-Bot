@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer.optimiser.pairing.webservice;
 import java.io.IOException;
 import java.util.Map;
 
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;

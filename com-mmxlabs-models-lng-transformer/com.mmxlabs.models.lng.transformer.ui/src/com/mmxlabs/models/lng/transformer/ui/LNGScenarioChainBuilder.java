@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.transformer.ui;
 
 import java.util.OptionalLong;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;

@@ -115,7 +115,7 @@ public class ExportScheduleHelper {
 
 		// Uncontain these slots so the call to #derive will re-parent them
 		for (final SlotAllocation a : schedule.getSlotAllocations()) {
-			final Slot slot = a.getSlot();
+			final Slot<?> slot = a.getSlot();
 			if (slot != null && slot.eContainer() != cargoModel) {
 				final EReference ref = slot.eContainmentFeature();
 				if (ref.isMany()) {

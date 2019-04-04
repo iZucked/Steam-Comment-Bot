@@ -4,30 +4,13 @@
  */
 package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.google.inject.Inject;
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ISequenceElementFilter;
-import com.mmxlabs.optimiser.core.IModifiableSequence;
-import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
-import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class DefaultLongTermSequenceElementFilter implements ISequenceElementFilter {
 	@Inject

@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.ContingencyMatrix;
@@ -17,12 +18,10 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
-import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 
 /**
@@ -35,26 +34,21 @@ public class ContingencyIdleTimeTransformer implements ISlotTransformer {
 	@Inject
 	private IExtraIdleTimeProviderEditor extraIdleTimeProviderEditor;
 
-	@Inject
-	private IPortSlotProvider portSlotProvider;
-
 	private LNGScenarioModel rootObject;
-
-	private ModelEntityMap modelEntityMap;
 
 	/**
 	 */
 	@Override
 	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap modelEntityMap, final ISchedulerBuilder builder) {
 		this.rootObject = rootObject;
-		this.modelEntityMap = modelEntityMap;
 	}
 
 	@Override
 	public void finishTransforming() {
-		if (!LicenseFeatures.isPermitted("features:contingency-idle-time")) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CONTINGENCY_IDLE_TIME)) {
 			return;
 		}
+
 		final PortModel portModel = ScenarioModelUtil.getPortModel(rootObject);
 		final ContingencyMatrix matrix = portModel.getContingencyMatrix();
 		if (matrix != null) {
@@ -73,12 +67,12 @@ public class ContingencyIdleTimeTransformer implements ISlotTransformer {
 	}
 
 	@Override
-	public void slotTransformed(@NonNull final Slot modelSlot, @NonNull final IPortSlot optimiserSlot) {
-		final ISequenceElement sequenceElement = portSlotProvider.getElement(optimiserSlot);
+	public void slotTransformed(@NonNull final Slot<?> modelSlot, @NonNull final IPortSlot optimiserSlot) {
+		// final ISequenceElement sequenceElement = portSlotProvider.getElement(optimiserSlot);
 
-		if (false) { // modelSlot.hasIdleTimeOverride()) {
-			// extraIdleTimeProviderEditor.setOverrideExtraIdleTimeAfterVisit(optimiserSlot, extraIdleTime);
-		}
+		// if (false) { // modelSlot.hasIdleTimeOverride()) {
+		// // extraIdleTimeProviderEditor.setOverrideExtraIdleTimeAfterVisit(optimiserSlot, extraIdleTime);
+		// }
 	}
 
 }

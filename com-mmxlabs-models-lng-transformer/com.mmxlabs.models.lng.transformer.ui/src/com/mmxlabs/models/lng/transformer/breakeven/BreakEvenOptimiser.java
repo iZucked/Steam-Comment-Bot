@@ -84,7 +84,7 @@ public class BreakEvenOptimiser {
 
 	}
 
-	public void optimise(final ISequences rawSequences, final long targetProfitAndLoss, boolean isPurchase, final List<IBreakEvenPriceCalculator> calculators) {
+	public void optimise(final @NonNull ISequences rawSequences, final long targetProfitAndLoss, boolean isPurchase, final List<IBreakEvenPriceCalculator> calculators) {
 
 		final ISequences fullSequences = manipulator.createManipulatedSequences(rawSequences);
 
@@ -95,7 +95,7 @@ public class BreakEvenOptimiser {
 		calculators.forEach(c -> c.setPrice(breakEvenPricePerMMBtu));
 	}
 
-	private int search(final int min, final int max, final long targetValue, final ISequences fullSequences, boolean isPurchase, final List<IBreakEvenPriceCalculator> calculators) {
+	private int search(final int min, final int max, final long targetValue, final @NonNull ISequences fullSequences, boolean isPurchase, final List<IBreakEvenPriceCalculator> calculators) {
 
 		final int mid = min + ((max - min) / 2);
 

@@ -28,7 +28,6 @@ import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.BallastBonusA
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.LumpSumBallastBonusRuleAnnotation;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.NotionalJourneyBallastBonusRuleAnnotation;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.RepositioningFeeAnnotation;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 public class BallastBonusContractExtensionExporter implements IExporterExtension {
@@ -36,12 +35,6 @@ public class BallastBonusContractExtensionExporter implements IExporterExtension
 	private ModelEntityMap modelEntityMap;
 	private IAnnotatedSolution annotatedSolution;
 	private Schedule outputSchedule;
-
-	@Inject
-	private IPortSlotProvider slotProvider;
-
-	@Inject
-	private ExporterExtensionUtils exporterExtensionUtils;
 
 	@Inject
 	private IOptimisationData optimisationData;

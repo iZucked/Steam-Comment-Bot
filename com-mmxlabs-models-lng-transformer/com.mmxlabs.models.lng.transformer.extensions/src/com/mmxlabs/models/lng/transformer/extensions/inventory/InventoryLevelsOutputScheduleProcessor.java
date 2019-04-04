@@ -186,7 +186,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 
 				if (maxDate != null && schedule != null) {
 					for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
-						final Slot slot = slotAllocation.getSlot();
+						final Slot<?> slot = slotAllocation.getSlot();
 						if (slot instanceof LoadSlot) {
 							final LoadSlot loadSlot = (LoadSlot) slot;
 							if (loadSlot.isDESPurchase()) {
@@ -225,7 +225,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 					}
 					// Include open positions?
 					for (final OpenSlotAllocation slotAllocation : schedule.getOpenSlotAllocations()) {
-						final Slot slot = slotAllocation.getSlot();
+						final Slot<?> slot = slotAllocation.getSlot();
 						if (slot instanceof LoadSlot) {
 							final LoadSlot loadSlot = (LoadSlot) slot;
 							if (loadSlot.isDESPurchase()) {
@@ -285,7 +285,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 						}
 					}
 					if (isLevel) {
-						int delta =  evt.getChangeQuantity() - inventoryLevel;
+						int delta = evt.getChangeQuantity() - inventoryLevel;
 						inventoryLevel = evt.getChangeQuantity();
 						evt.setChangeQuantity(delta);
 					} else {

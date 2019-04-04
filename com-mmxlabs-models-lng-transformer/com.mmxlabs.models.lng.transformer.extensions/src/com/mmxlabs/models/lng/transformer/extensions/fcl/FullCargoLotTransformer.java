@@ -21,7 +21,7 @@ public class FullCargoLotTransformer implements ISlotTransformer {
 	private IFullCargoLotProviderEditor fullCargoLotProviderEditor;
 
 	@Override
-	public void slotTransformed(@NonNull Slot modelSlot, @NonNull IPortSlot optimiserSlot) {
+	public void slotTransformed(@NonNull Slot<?> modelSlot, @NonNull IPortSlot optimiserSlot) {
 
 		if (modelSlot.getSlotOrDelegateFullCargoLot()) {
 			fullCargoLotProviderEditor.addFCLSlot(optimiserSlot);

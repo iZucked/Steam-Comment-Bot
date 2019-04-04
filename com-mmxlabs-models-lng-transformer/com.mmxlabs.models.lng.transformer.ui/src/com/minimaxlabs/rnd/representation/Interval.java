@@ -5,7 +5,6 @@
 package com.minimaxlabs.rnd.representation;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
 
 public class Interval implements Serializable {
 	private double start;

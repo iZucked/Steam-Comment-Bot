@@ -185,7 +185,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			final Set<Cargo> usedCargoes = new LinkedHashSet<>();
 
 			for (final SlotAllocation slotAllocation : input_schedule.getSlotAllocations()) {
-				final Slot slot = slotAllocation.getSlot();
+				final Slot<?> slot = slotAllocation.getSlot();
 				if (slot instanceof LoadSlot) {
 					usedLoadSlots.add((LoadSlot) slot);
 
@@ -201,7 +201,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				}
 			}
 			for (final OpenSlotAllocation openSlotAllocation : input_schedule.getOpenSlotAllocations()) {
-				final Slot slot = openSlotAllocation.getSlot();
+				final Slot<?> slot = openSlotAllocation.getSlot();
 				if (slot instanceof LoadSlot) {
 					usedLoadSlots.add((LoadSlot) slot);
 				} else if (slot instanceof DischargeSlot) {

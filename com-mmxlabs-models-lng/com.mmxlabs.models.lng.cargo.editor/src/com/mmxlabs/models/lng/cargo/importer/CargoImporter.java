@@ -308,27 +308,23 @@ public class CargoImporter extends DefaultClassImporter {
 
 					final SpotLoadSlot sls = (SpotLoadSlot) fLoad;
 					SpotMarket market = null;
-					// if (sls.getMarket() == null) {
 					if (sls.isDESPurchase()) {
 						market = (SpotMarket) context.getNamedObject(buyMarket, SpotMarketsPackage.Literals.DES_PURCHASE_MARKET);
 					} else {
 						market = (SpotMarket) context.getNamedObject(buyMarket, SpotMarketsPackage.Literals.FOB_PURCHASES_MARKET);
 					}
-					// }
 					sls.setMarket(market);
 
 				}
 				if (fDischarge instanceof SpotDischargeSlot) {
 					final SpotDischargeSlot sds = (SpotDischargeSlot) fDischarge;
 					SpotMarket market = null;
-					// if (sls.getMarket() == null) {
 					if (sds.isFOBSale()) {
 						market = (SpotMarket) context.getNamedObject(sellMarket, SpotMarketsPackage.Literals.FOB_SALES_MARKET);
 
 					} else {
 						market = (SpotMarket) context.getNamedObject(sellMarket, SpotMarketsPackage.Literals.DES_SALES_MARKET);
 					}
-					// }
 					sds.setMarket(market);
 				}
 			}

@@ -89,7 +89,6 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 			return;
 		}
 
-		final YearMonth end = adpModel.getYearEnd();
 		final FleetProfile fleetProfile = adpModel.getFleetProfile();
 		final IVessel iDefaultVessel = modelEntityMap.getOptimiserObjectNullChecked(fleetProfile.getDefaultNominalMarket().getVessel(), IVessel.class);
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(rootObject);

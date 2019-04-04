@@ -74,7 +74,7 @@ public class ActualsTransformer implements ITransformerExtension {
 				// FIXME: It is possible that SlotActuals order is not chronological
 				IPortSlot lastSlot = null;
 				for (final SlotActuals slotActuals : cargoActuals.getActuals()) {
-					final Slot slot = slotActuals.getSlot();
+					final Slot<?> slot = slotActuals.getSlot();
 					assert slot != null;
 
 					final int cargoCV = OptimiserUnitConvertor.convertToInternalConversionFactor(slotActuals.getCV());
