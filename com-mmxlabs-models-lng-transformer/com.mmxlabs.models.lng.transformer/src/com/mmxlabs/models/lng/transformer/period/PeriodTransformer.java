@@ -906,8 +906,8 @@ public class PeriodTransformer {
 			if (lockedVessel != null) {
 				slot.getRestrictedVessels().clear();
 				slot.getRestrictedVessels().add(lockedVessel);
-				slot.setRestrictedContractsOverride(true);
-				slot.setRestrictedContractsArePermissive(true);
+				slot.setRestrictedVesselsOverride(true);
+				slot.setRestrictedVesselsArePermissive(true);
 			}
 			slot.setLocked(true);
 		}
