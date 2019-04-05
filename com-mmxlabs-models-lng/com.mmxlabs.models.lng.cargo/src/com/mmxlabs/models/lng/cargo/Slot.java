@@ -93,6 +93,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isPortLoadNominationDone <em>Port Load Nomination Done</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPortLoadNominationComment <em>Port Load Nomination Comment</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isCancelled <em>Cancelled</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot()
@@ -1813,10 +1814,6 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	/**
 	 * Returns the value of the '<em><b>Locked</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Locked</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Locked</em>' attribute.
 	 * @see #setLocked(boolean)
@@ -2625,6 +2622,28 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	void setPortLoadNominationComment(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Cancelled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cancelled</em>' attribute.
+	 * @see #setCancelled(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Cancelled()
+	 * @model
+	 * @generated
+	 */
+	boolean isCancelled();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isCancelled <em>Cancelled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cancelled</em>' attribute.
+	 * @see #isCancelled()
+	 * @generated
+	 */
+	void setCancelled(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -111,6 +111,7 @@ public class SlotItemProvider
 			addPortLoadNominationDonePropertyDescriptor(object);
 			addPortLoadNominationCounterpartyPropertyDescriptor(object);
 			addPortLoadNominationCommentPropertyDescriptor(object);
+			addCancelledPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -1029,7 +1030,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_locked_feature"),
-				 getString("_UI_Slot_locked_description"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_locked_feature", "_UI_Slot_type"),
 				 CargoPackage.Literals.SLOT__LOCKED,
 				 true,
 				 false,
@@ -1480,6 +1481,28 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Cancelled feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCancelledPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_cancelled_feature"),
+				 getString("_UI_Slot_cancelled_description"),
+				 CargoPackage.Literals.SLOT__CANCELLED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1569,6 +1592,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DONE:
 			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY:
 			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT:
+			case CargoPackage.SLOT__CANCELLED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

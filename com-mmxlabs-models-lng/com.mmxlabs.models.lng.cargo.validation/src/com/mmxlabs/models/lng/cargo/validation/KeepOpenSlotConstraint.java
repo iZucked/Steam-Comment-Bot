@@ -39,6 +39,17 @@ public class KeepOpenSlotConstraint extends AbstractModelMultiConstraint {
 						statuses.add(dsd);
 					}
 				}
+				if (slot.isCancelled()) {
+					Cargo cargo = slot.getCargo();
+					if (cargo != null) {
+						final String message;
+						message = String.format("[Slot|'%s'] Cancelled can only be set on an open slot. Remove wiring.", slot.getName() == null ? "(no ID)" : slot.getName());
+
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Cancelled());
+						statuses.add(dsd);
+					}
+				}
 			}
 		}
 

@@ -1004,13 +1004,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT__PORT_LOAD_NOMINATION_COMMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 61;
 
 	/**
+	 * The feature id for the '<em><b>Cancelled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__CANCELLED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 62;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 62;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 63;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1974,6 +1983,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__PORT_LOAD_NOMINATION_COMMENT = SLOT__PORT_LOAD_NOMINATION_COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Cancelled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__CANCELLED = SLOT__CANCELLED;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -3009,6 +3027,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__PORT_LOAD_NOMINATION_COMMENT = SLOT__PORT_LOAD_NOMINATION_COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Cancelled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__CANCELLED = SLOT__CANCELLED;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -4138,6 +4165,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__PORT_LOAD_NOMINATION_COMMENT = LOAD_SLOT__PORT_LOAD_NOMINATION_COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Cancelled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__CANCELLED = LOAD_SLOT__CANCELLED;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5190,6 +5226,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__PORT_LOAD_NOMINATION_COMMENT = DISCHARGE_SLOT__PORT_LOAD_NOMINATION_COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Cancelled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__CANCELLED = DISCHARGE_SLOT__CANCELLED;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -9563,6 +9608,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_PortLoadNominationComment();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isCancelled <em>Cancelled</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cancelled</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isCancelled()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_Cancelled();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateDuration() <em>Get Slot Or Delegate Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -12478,6 +12534,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT__PORT_LOAD_NOMINATION_COMMENT = eINSTANCE.getSlot_PortLoadNominationComment();
+
+		/**
+		 * The meta object literal for the '<em><b>Cancelled</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__CANCELLED = eINSTANCE.getSlot_Cancelled();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Duration</b></em>' operation.

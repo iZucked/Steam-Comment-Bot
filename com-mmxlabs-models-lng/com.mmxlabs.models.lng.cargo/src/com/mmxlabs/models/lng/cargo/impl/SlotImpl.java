@@ -118,6 +118,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isPortLoadNominationDone <em>Port Load Nomination Done</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPortLoadNominationComment <em>Port Load Nomination Comment</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isCancelled <em>Cancelled</em>}</li>
  * </ul>
  *
  * @generated
@@ -1542,6 +1543,26 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected String portLoadNominationComment = PORT_LOAD_NOMINATION_COMMENT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isCancelled() <em>Cancelled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isCancelled()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean CANCELLED_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isCancelled() <em>Cancelled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isCancelled()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean cancelled = CANCELLED_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -3896,6 +3917,29 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 								/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isCancelled() {
+		return cancelled;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCancelled(boolean newCancelled) {
+		boolean oldCancelled = cancelled;
+		cancelled = newCancelled;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CANCELLED, oldCancelled, cancelled));
+	}
+
+								/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
 	 */
@@ -4522,6 +4566,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isPortLoadNominationCounterparty();
 			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT:
 				return getPortLoadNominationComment();
+			case CargoPackage.SLOT__CANCELLED:
+				return isCancelled();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -4724,6 +4770,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT:
 				setPortLoadNominationComment((String)newValue);
 				return;
+			case CargoPackage.SLOT__CANCELLED:
+				setCancelled((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -4921,6 +4970,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT:
 				setPortLoadNominationComment(PORT_LOAD_NOMINATION_COMMENT_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__CANCELLED:
+				setCancelled(CANCELLED_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -5073,6 +5125,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isSetPortLoadNominationCounterparty();
 			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT:
 				return PORT_LOAD_NOMINATION_COMMENT_EDEFAULT == null ? portLoadNominationComment != null : !PORT_LOAD_NOMINATION_COMMENT_EDEFAULT.equals(portLoadNominationComment);
+			case CargoPackage.SLOT__CANCELLED:
+				return cancelled != CANCELLED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -5345,6 +5399,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		if (portLoadNominationCounterpartyESet) result.append(portLoadNominationCounterparty); else result.append("<unset>");
 		result.append(", portLoadNominationComment: ");
 		result.append(portLoadNominationComment);
+		result.append(", cancelled: ");
+		result.append(cancelled);
 		result.append(')');
 		return result.toString();
 	}

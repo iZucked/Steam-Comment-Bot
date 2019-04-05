@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.cargo.ui.inlineeditors.RestrictionsOverrideMultiRe
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.RestrictionsOverridePortMultiReferenceInlineEditor;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.VolumeInlineEditor;
 import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortReferenceInlineEditor;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -147,6 +148,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_portLoadNominationDoneEditor(detailComposite, topClass);
 		add_portLoadNominationCounterpartyEditor(detailComposite, topClass);
 		add_portLoadNominationCommentEditor(detailComposite, topClass);
+		add_cancelledEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -572,6 +574,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		if (LicenseFeatures.isPermitted("features:nominations")) {
 			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COMMENT));
 		}
+	}
+
+	/**
+	 * Create the editor for the cancelled feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_cancelledEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CANCELLED));
 	}
 
 	/**
