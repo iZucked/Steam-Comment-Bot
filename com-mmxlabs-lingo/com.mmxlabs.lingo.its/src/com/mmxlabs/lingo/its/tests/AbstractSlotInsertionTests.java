@@ -78,7 +78,7 @@ public class AbstractSlotInsertionTests {
 		}
 
 		final LNGSchedulerInsertSlotJobRunner runner = new LNGSchedulerInsertSlotJobRunner(null, scenarioDataProvider, LNGSchedulerJobUtils.createLocalEditingDomain(), userSettings, targetSlots,
-				targetEvents);
+				targetEvents, null, null);
 		try {
 			runner.setIteration(iterations);
 			runner.prepare();

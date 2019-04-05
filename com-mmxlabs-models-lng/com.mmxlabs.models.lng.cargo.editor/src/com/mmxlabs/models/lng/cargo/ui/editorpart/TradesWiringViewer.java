@@ -1303,7 +1303,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		getScenarioViewer().getGrid().addMouseMoveListener(listener);
 		getScenarioViewer().getGrid().addMouseListener(listener);
 
-		final DragSource source = new DragSource(getScenarioViewer().getControl(), DND.DROP_MOVE);
+		final DragSource source = new DragSource(getScenarioViewer().getControl(), DND.DROP_MOVE | DND.DROP_LINK);
 		final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 		source.setTransfer(types);
 

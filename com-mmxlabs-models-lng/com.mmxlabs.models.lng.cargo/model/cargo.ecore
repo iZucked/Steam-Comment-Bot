@@ -319,6 +319,7 @@
         eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BallastBonusContract"/>
     <eOperations name="getAvailabilityOrContractMinDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getAvailabilityOrContractMaxDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="jsonid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fleet" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>

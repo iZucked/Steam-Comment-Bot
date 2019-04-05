@@ -40,6 +40,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatter
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.OptionsViewerContentProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class SellOptionsComponent extends AbstractSandboxComponent<Object, AbstractAnalysisModel> {
 
@@ -123,6 +124,13 @@ public class SellOptionsComponent extends AbstractSandboxComponent<Object, Abstr
 			sellOptionsViewer.addDropSupport(DND.DROP_MOVE, types, listener);
 		}
 		inputWants.add(model -> sellOptionsViewer.setInput(model));
+		
+
+		lockedListeners.add(locked -> {
+			RunnerHelper.asyncExec(() -> sellOptionsViewer.getGrid().setEnabled(!locked));
+		});
+
+		
 		return sellOptionsViewer.getControl();
 	}
 

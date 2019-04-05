@@ -141,6 +141,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createSequenceAdapter();
 			}
 			@Override
+			public Adapter caseOtherPNL(OtherPNL object) {
+				return createOtherPNLAdapter();
+			}
+			@Override
 			public Adapter caseEvent(Event object) {
 				return createEventAdapter();
 			}
@@ -371,6 +375,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSequenceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.OtherPNL <em>Other PNL</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.OtherPNL
+	 * @generated
+	 */
+	public Adapter createOtherPNLAdapter() {
 		return null;
 	}
 

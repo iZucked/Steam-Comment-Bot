@@ -74,6 +74,8 @@ public final class KnownFeatures {
 	 * Enable break-even evaluations
 	 */
 	public static final String FEATURE_BREAK_EVENS = "features:break-evens";
+	
+	public static final String FEATURE_SANDBOX = "features:sandbox";
 
 	public static final String FEATURE_NOMINATIONS = "features:nominations";
 		

@@ -26,6 +26,8 @@
         eType="#//InventoryEvents" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="paperDealAllocations" upperBound="-1"
         eType="#//PaperDealAllocation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="otherPNL" eType="#//OtherPNL"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Fitness" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fitnessValue" lowerBound="1"
@@ -106,6 +108,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarketOverride"
         lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//CharterInMarketOverride"
         unsettable="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OtherPNL" eSuperTypes="#//ProfitAndLossContainer #//CapacityViolationsHolder">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lateness" eType="#//PortVisitLateness"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
     <eOperations name="getDuration" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>

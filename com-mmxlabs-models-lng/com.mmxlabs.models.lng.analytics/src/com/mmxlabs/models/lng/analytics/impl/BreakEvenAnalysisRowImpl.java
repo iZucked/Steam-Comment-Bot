@@ -144,6 +144,7 @@ public class BreakEvenAnalysisRowImpl extends EObjectImpl implements BreakEvenAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BuyOption getBuyOption() {
 		if (buyOption != null && buyOption.eIsProxy()) {
 			InternalEObject oldBuyOption = (InternalEObject)buyOption;
@@ -170,6 +171,7 @@ public class BreakEvenAnalysisRowImpl extends EObjectImpl implements BreakEvenAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBuyOption(BuyOption newBuyOption) {
 		BuyOption oldBuyOption = buyOption;
 		buyOption = newBuyOption;
@@ -182,6 +184,7 @@ public class BreakEvenAnalysisRowImpl extends EObjectImpl implements BreakEvenAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SellOption getSellOption() {
 		if (sellOption != null && sellOption.eIsProxy()) {
 			InternalEObject oldSellOption = (InternalEObject)sellOption;
@@ -208,6 +211,7 @@ public class BreakEvenAnalysisRowImpl extends EObjectImpl implements BreakEvenAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSellOption(SellOption newSellOption) {
 		SellOption oldSellOption = sellOption;
 		sellOption = newSellOption;
@@ -220,6 +224,7 @@ public class BreakEvenAnalysisRowImpl extends EObjectImpl implements BreakEvenAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ShippingOption getShipping() {
 		if (shipping != null && shipping.eIsProxy()) {
 			InternalEObject oldShipping = (InternalEObject)shipping;
@@ -246,6 +251,7 @@ public class BreakEvenAnalysisRowImpl extends EObjectImpl implements BreakEvenAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShipping(ShippingOption newShipping) {
 		ShippingOption oldShipping = shipping;
 		shipping = newShipping;
@@ -258,6 +264,7 @@ public class BreakEvenAnalysisRowImpl extends EObjectImpl implements BreakEvenAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<BreakEvenAnalysisResultSet> getLhsResults() {
 		if (lhsResults == null) {
 			lhsResults = new EObjectContainmentEList<BreakEvenAnalysisResultSet>(BreakEvenAnalysisResultSet.class, this, AnalyticsPackage.BREAK_EVEN_ANALYSIS_ROW__LHS_RESULTS);
@@ -270,6 +277,7 @@ public class BreakEvenAnalysisRowImpl extends EObjectImpl implements BreakEvenAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<BreakEvenAnalysisResultSet> getRhsResults() {
 		if (rhsResults == null) {
 			rhsResults = new EObjectContainmentEList<BreakEvenAnalysisResultSet>(BreakEvenAnalysisResultSet.class, this, AnalyticsPackage.BREAK_EVEN_ANALYSIS_ROW__RHS_RESULTS);
@@ -282,6 +290,7 @@ public class BreakEvenAnalysisRowImpl extends EObjectImpl implements BreakEvenAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BreakEvenAnalysisResult getLhsBasedOn() {
 		if (lhsBasedOn != null && lhsBasedOn.eIsProxy()) {
 			InternalEObject oldLhsBasedOn = (InternalEObject)lhsBasedOn;
@@ -308,6 +317,7 @@ public class BreakEvenAnalysisRowImpl extends EObjectImpl implements BreakEvenAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLhsBasedOn(BreakEvenAnalysisResult newLhsBasedOn) {
 		BreakEvenAnalysisResult oldLhsBasedOn = lhsBasedOn;
 		lhsBasedOn = newLhsBasedOn;
@@ -320,6 +330,7 @@ public class BreakEvenAnalysisRowImpl extends EObjectImpl implements BreakEvenAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BreakEvenAnalysisResult getRhsBasedOn() {
 		if (rhsBasedOn != null && rhsBasedOn.eIsProxy()) {
 			InternalEObject oldRhsBasedOn = (InternalEObject)rhsBasedOn;
@@ -346,6 +357,7 @@ public class BreakEvenAnalysisRowImpl extends EObjectImpl implements BreakEvenAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRhsBasedOn(BreakEvenAnalysisResult newRhsBasedOn) {
 		BreakEvenAnalysisResult oldRhsBasedOn = rhsBasedOn;
 		rhsBasedOn = newRhsBasedOn;

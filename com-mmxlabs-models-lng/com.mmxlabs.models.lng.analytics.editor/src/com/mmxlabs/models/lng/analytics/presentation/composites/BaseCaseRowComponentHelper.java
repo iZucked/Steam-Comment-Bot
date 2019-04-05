@@ -69,6 +69,7 @@ public class BaseCaseRowComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_buyOptionEditor(detailComposite, topClass);
 		add_sellOptionEditor(detailComposite, topClass);
+		add_vesselEventOptionEditor(detailComposite, topClass);
 		add_shippingEditor(detailComposite, topClass);
 	}
 	/**
@@ -87,6 +88,15 @@ public class BaseCaseRowComponentHelper extends BaseComponentHelper {
 	protected void add_sellOptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION));
 	}
+	/**
+	 * Create the editor for the vesselEventOption feature on BaseCaseRow
+	 *
+	 * @generated
+	 */
+	protected void add_vesselEventOptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BASE_CASE_ROW__VESSEL_EVENT_OPTION));
+	}
+
 	/**
 	 * Create the editor for the shipping feature on BaseCaseRow
 	 *

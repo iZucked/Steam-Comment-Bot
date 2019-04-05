@@ -1822,6 +1822,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EOperation getVesselAvailability__Jsonid() {
+		return vesselAvailabilityEClass.getEOperations().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getVesselAvailability_Entity() {
 		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(4);
 	}
@@ -3215,6 +3225,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CHARTER_CONTRACT_BALLAST_BONUS_CONTRACT);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MIN_DURATION);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MAX_DURATION);
+		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___JSONID);
 
 		vesselEventEClass = createEClass(VESSEL_EVENT);
 		createEAttribute(vesselEventEClass, VESSEL_EVENT__DURATION_IN_DAYS);
@@ -3675,6 +3686,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEOperation(getVesselAvailability__GetAvailabilityOrContractMinDuration(), ecorePackage.getEInt(), "getAvailabilityOrContractMinDuration", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getVesselAvailability__GetAvailabilityOrContractMaxDuration(), ecorePackage.getEInt(), "getAvailabilityOrContractMaxDuration", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getVesselAvailability__Jsonid(), ecorePackage.getEString(), "jsonid", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(vesselEventEClass, VesselEvent.class, "VesselEvent", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getVesselEvent_DurationInDays(), ecorePackage.getEInt(), "durationInDays", null, 1, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

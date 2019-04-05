@@ -1412,6 +1412,18 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public String jsonid() {
+		final Vessel vessel = getVessel();
+		final String vesselId = vessel == null ? "<unknown vessel>" : vessel.getName();
+		return String.format("%s-%d", vesselId, getCharterNumber());
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -1746,6 +1758,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return getAvailabilityOrContractMinDuration();
 			case CargoPackage.VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MAX_DURATION:
 				return getAvailabilityOrContractMaxDuration();
+			case CargoPackage.VESSEL_AVAILABILITY___JSONID:
+				return jsonid();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

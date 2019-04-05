@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.MTMRow;
+import com.mmxlabs.models.lng.analytics.OpenBuy;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.ViabilityRow;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -87,6 +88,8 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 				first = false;
 			}
 			return sb.toString();
+		} else if (object instanceof OpenBuy) {
+			return "<open>";
 		} else if (object instanceof BuyOpportunity) {
 			final BuyOpportunity buyOpportunity = (BuyOpportunity) object;
 			final LocalDate date = buyOpportunity.getDate();

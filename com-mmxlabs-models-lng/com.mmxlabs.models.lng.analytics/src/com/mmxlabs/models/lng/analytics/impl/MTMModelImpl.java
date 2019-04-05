@@ -97,6 +97,7 @@ public class MTMModelImpl extends AbstractAnalysisModelImpl implements MTMModel 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<MTMRow> getRows() {
 		if (rows == null) {
 			rows = new EObjectContainmentEList<MTMRow>(MTMRow.class, this, AnalyticsPackage.MTM_MODEL__ROWS);
@@ -109,6 +110,7 @@ public class MTMModelImpl extends AbstractAnalysisModelImpl implements MTMModel 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<SpotMarket> getMarkets() {
 		if (markets == null) {
 			markets = new EObjectResolvingEList<SpotMarket>(SpotMarket.class, this, AnalyticsPackage.MTM_MODEL__MARKETS);
@@ -121,6 +123,7 @@ public class MTMModelImpl extends AbstractAnalysisModelImpl implements MTMModel 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<CharterInMarket> getNominalMarkets() {
 		if (nominalMarkets == null) {
 			nominalMarkets = new EObjectResolvingEList<CharterInMarket>(CharterInMarket.class, this, AnalyticsPackage.MTM_MODEL__NOMINAL_MARKETS);

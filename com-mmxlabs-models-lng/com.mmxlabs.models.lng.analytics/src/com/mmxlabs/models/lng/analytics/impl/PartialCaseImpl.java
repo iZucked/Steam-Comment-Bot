@@ -94,6 +94,7 @@ public class PartialCaseImpl extends EObjectImpl implements PartialCase {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PartialCaseRow> getPartialCase() {
 		if (partialCase == null) {
 			partialCase = new EObjectContainmentEList<PartialCaseRow>(PartialCaseRow.class, this, AnalyticsPackage.PARTIAL_CASE__PARTIAL_CASE);
@@ -106,6 +107,7 @@ public class PartialCaseImpl extends EObjectImpl implements PartialCase {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isKeepExistingScenario() {
 		return keepExistingScenario;
 	}
@@ -115,6 +117,7 @@ public class PartialCaseImpl extends EObjectImpl implements PartialCase {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setKeepExistingScenario(boolean newKeepExistingScenario) {
 		boolean oldKeepExistingScenario = keepExistingScenario;
 		keepExistingScenario = newKeepExistingScenario;

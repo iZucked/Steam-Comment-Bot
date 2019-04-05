@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.analytics.BuyReference;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -32,7 +33,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class BuyReferenceImpl extends EObjectImpl implements BuyReference {
+public class BuyReferenceImpl extends UUIDObjectImpl implements BuyReference {
 	/**
 	 * The cached value of the '{@link #getSlot() <em>Slot</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -67,6 +68,7 @@ public class BuyReferenceImpl extends EObjectImpl implements BuyReference {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LoadSlot getSlot() {
 		if (slot != null && slot.eIsProxy()) {
 			InternalEObject oldSlot = (InternalEObject)slot;
@@ -93,6 +95,7 @@ public class BuyReferenceImpl extends EObjectImpl implements BuyReference {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlot(LoadSlot newSlot) {
 		LoadSlot oldSlot = slot;
 		slot = newSlot;

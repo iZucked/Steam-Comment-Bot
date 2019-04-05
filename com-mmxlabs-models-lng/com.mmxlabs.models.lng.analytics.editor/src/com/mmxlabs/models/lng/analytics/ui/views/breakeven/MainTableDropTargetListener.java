@@ -29,7 +29,7 @@ import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow;
 import com.mmxlabs.models.lng.analytics.BuyOption;
-import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
@@ -285,7 +285,7 @@ public class MainTableDropTargetListener implements DropTargetListener {
 				else if (o instanceof ShippingOption) {
 					if (existing != null) {
 						ShippingOption opt = null;
-						if (o instanceof RoundTripShippingOption || o instanceof FleetShippingOption) {
+						if (o instanceof RoundTripShippingOption || o instanceof SimpleVesselCharterOption) {
 							opt = (ShippingOption) o;
 						}
 						// Ignore for non-shipped rows

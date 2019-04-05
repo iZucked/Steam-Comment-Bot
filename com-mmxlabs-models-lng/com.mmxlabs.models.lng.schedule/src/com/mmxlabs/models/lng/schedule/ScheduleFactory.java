@@ -51,6 +51,15 @@ public interface ScheduleFactory extends EFactory {
 	Sequence createSequence();
 
 	/**
+	 * Returns a new object of class '<em>Other PNL</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Other PNL</em>'.
+	 * @generated
+	 */
+	OtherPNL createOtherPNL();
+
+	/**
 	 * Returns a new object of class '<em>Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

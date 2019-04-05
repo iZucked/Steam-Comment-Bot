@@ -18,6 +18,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.BuyOpportunity} object.
@@ -26,7 +27,7 @@ import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
  * @generated
  */
 public class BuyOpportunityItemProvider
-	extends MMXObjectItemProvider {
+	extends UUIDObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -370,8 +371,10 @@ public class BuyOpportunityItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		BuyOpportunity buyOpportunity = (BuyOpportunity)object;
-		return getString("_UI_BuyOpportunity_type") + " " + buyOpportunity.isDesPurchase();
+		String label = ((BuyOpportunity)object).getUuid();
+		return label == null || label.length() == 0 ?
+			getString("_UI_BuyOpportunity_type") :
+			getString("_UI_BuyOpportunity_type") + " " + label;
 	}
 
 	/**

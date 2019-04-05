@@ -234,7 +234,7 @@
                   {0}
                </message>
                <target
-                     class="OptionalAvailabilityShippingOption">
+                     class="OptionalSimpleVesselCharterOption">
                </target>
             </constraint>
          </constraints>

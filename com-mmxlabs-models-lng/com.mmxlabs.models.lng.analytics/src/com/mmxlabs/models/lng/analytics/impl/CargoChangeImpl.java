@@ -97,6 +97,7 @@ public class CargoChangeImpl extends ChangeImpl implements CargoChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<SlotDescriptor> getSlotDescriptors() {
 		if (slotDescriptors == null) {
 			slotDescriptors = new EObjectContainmentEList<SlotDescriptor>(SlotDescriptor.class, this, AnalyticsPackage.CARGO_CHANGE__SLOT_DESCRIPTORS);
@@ -109,6 +110,7 @@ public class CargoChangeImpl extends ChangeImpl implements CargoChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselAllocationDescriptor getVesselAllocation() {
 		return vesselAllocation;
 	}
@@ -133,6 +135,7 @@ public class CargoChangeImpl extends ChangeImpl implements CargoChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselAllocation(VesselAllocationDescriptor newVesselAllocation) {
 		if (newVesselAllocation != vesselAllocation) {
 			NotificationChain msgs = null;
@@ -152,6 +155,7 @@ public class CargoChangeImpl extends ChangeImpl implements CargoChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PositionDescriptor getPosition() {
 		return position;
 	}
@@ -176,6 +180,7 @@ public class CargoChangeImpl extends ChangeImpl implements CargoChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPosition(PositionDescriptor newPosition) {
 		if (newPosition != position) {
 			NotificationChain msgs = null;

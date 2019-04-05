@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.OtherPNL;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
@@ -211,6 +212,28 @@ public class ChangeSetKPIUtil {
 			result[FlexType.WithFlex.ordinal()] = LatenessUtils.getLatenessAfterFlex(eventGrouping);
 			result[FlexType.WithoutFlex.ordinal()] = LatenessUtils.getLatenessExcludingFlex(eventGrouping);
 		}
+		
+		switch (type) {
+		case After:
+			if (tableRow.getLhsAfter() != null) {
+				if (tableRow.getLhsAfter().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
+					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsAfter().getLhsGroupProfitAndLoss();
+					result[FlexType.WithoutFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
+					result[FlexType.WithFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
+				}
+			}
+			break;
+		case Before:
+			if (tableRow.getLhsBefore() != null) {
+				if (tableRow.getLhsBefore().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
+					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsBefore().getLhsGroupProfitAndLoss();
+					result[FlexType.WithoutFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
+					result[FlexType.WithFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
+				}
+			}
+			break;
+		}
+		
 		return result;
 	}
 

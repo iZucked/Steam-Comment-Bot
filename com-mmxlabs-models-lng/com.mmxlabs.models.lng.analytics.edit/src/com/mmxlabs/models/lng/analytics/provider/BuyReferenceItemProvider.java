@@ -9,6 +9,8 @@ package com.mmxlabs.models.lng.analytics.provider;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 
+import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,7 +34,7 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
  * <!-- end-user-doc -->
  * @generated
  */
-public class BuyReferenceItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class BuyReferenceItemProvider extends UUIDObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -100,7 +102,10 @@ public class BuyReferenceItemProvider extends ItemProviderAdapter implements IEd
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_BuyReference_type");
+		String label = ((BuyReference)object).getUuid();
+		return label == null || label.length() == 0 ?
+			getString("_UI_BuyReference_type") :
+			getString("_UI_BuyReference_type") + " " + label;
 	}
 	
 
@@ -127,17 +132,6 @@ public class BuyReferenceItemProvider extends ItemProviderAdapter implements IEd
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

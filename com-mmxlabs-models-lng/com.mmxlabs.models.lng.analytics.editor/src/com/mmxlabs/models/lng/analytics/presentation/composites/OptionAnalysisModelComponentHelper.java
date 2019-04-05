@@ -71,10 +71,9 @@ public class OptionAnalysisModelComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_baseCaseEditor(detailComposite, topClass);
 		add_partialCaseEditor(detailComposite, topClass);
-		add_baseCaseResultEditor(detailComposite, topClass);
 		add_resultsEditor(detailComposite, topClass);
 		add_useTargetPNLEditor(detailComposite, topClass);
-		add_childrenEditor(detailComposite, topClass);
+		add_modeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the baseCase feature on OptionAnalysisModel
@@ -92,15 +91,6 @@ public class OptionAnalysisModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_partialCaseEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE));
-	}
-
-	/**
-	 * Create the editor for the baseCaseResult feature on OptionAnalysisModel
-	 *
-	 * @generated
-	 */
-	protected void add_baseCaseResultEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT));
 	}
 
 	/**
@@ -122,11 +112,11 @@ public class OptionAnalysisModelComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the children feature on OptionAnalysisModel
+	 * Create the editor for the mode feature on OptionAnalysisModel
 	 *
 	 * @generated
 	 */
-	protected void add_childrenEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__CHILDREN));
+	protected void add_modeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__MODE));
 	}
 }

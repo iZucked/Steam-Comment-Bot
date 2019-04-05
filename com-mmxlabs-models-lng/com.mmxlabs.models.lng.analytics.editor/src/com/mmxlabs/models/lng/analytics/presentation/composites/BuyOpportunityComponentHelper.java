@@ -45,7 +45,7 @@ public class BuyOpportunityComponentHelper extends BaseComponentHelper {
 	 */
 	public BuyOpportunityComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.MMX_OBJECT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
 		superClassesHelpers.addAll(registry.getComponentHelpers(AnalyticsPackage.Literals.BUY_OPTION));
 	}
 	

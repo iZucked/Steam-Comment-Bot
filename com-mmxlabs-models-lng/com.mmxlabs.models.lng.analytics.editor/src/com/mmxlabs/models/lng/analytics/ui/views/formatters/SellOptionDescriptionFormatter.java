@@ -10,6 +10,8 @@ import java.time.format.FormatStyle;
 import java.util.Collection;
 
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow;
+import com.mmxlabs.models.lng.analytics.OpenBuy;
+import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
@@ -77,6 +79,8 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 				first = false;
 			}
 			return sb.toString();
+		} else if (object instanceof OpenSell) {
+			return "<open>";
 		} else if (object instanceof SellOpportunity) {
 
 			final SellOpportunity sellOpportunity = (SellOpportunity) object;

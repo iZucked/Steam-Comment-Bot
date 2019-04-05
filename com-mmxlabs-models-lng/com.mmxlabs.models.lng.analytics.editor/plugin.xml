@@ -105,22 +105,22 @@
         modelClass="com.mmxlabs.models.lng.analytics.PartialCaseRow">
   </componentHelper>
   <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.FleetShippingOptionComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.FleetShippingOptionComponentHelper"
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.SimpleVesselCharterOptionComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.SimpleVesselCharterOptionComponentHelper"
         inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.FleetShippingOption">
+        modelClass="com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption">
   </componentHelper>
   <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.OptionalAvailabilityShippingOptionComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.OptionalAvailabilityShippingOptionComponentHelper"
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.OptionalSimpleVesselCharterOptionComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.OptionalSimpleVesselCharterOptionComponentHelper"
         inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption">
+        modelClass="com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption">
   </componentHelper>
   <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ExistingVesselAvailabilityComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.ExistingVesselAvailabilityComponentHelper"
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ExistingVesselCharterOptionComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.ExistingVesselCharterOptionComponentHelper"
         inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.ExistingVesselAvailability">
+        modelClass="com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption">
   </componentHelper>
   <componentHelper
         helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ExistingCharterMarketOptionComponentHelper"
@@ -129,10 +129,22 @@
         modelClass="com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption">
   </componentHelper>
   <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.NewVesselAvailabilityComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.NewVesselAvailabilityComponentHelper"
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.FullVesselCharterOptionComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.FullVesselCharterOptionComponentHelper"
         inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.NewVesselAvailability">
+        modelClass="com.mmxlabs.models.lng.analytics.FullVesselCharterOption">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.VesselEventReferenceComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.VesselEventReferenceComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.VesselEventReference">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.CharterOutOpportunityComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.CharterOutOpportunityComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.CharterOutOpportunity">
   </componentHelper>
 		
 	</extension>
@@ -194,7 +206,7 @@
     <valueProvider
           factory="com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.OptionalAvailabilityShippingOptionValueProviderFactory"
           id="com.mmxlabs.models.lng.analytics.ui.views.providers.OptionalAvailabilityShippingOptionValueProviderFactory"
-          ownerEClass="com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption"
+          ownerEClass="com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption"
           referenceEClass="com.mmxlabs.models.lng.port.Port">
     </valueProvider>
     <valueProvider
@@ -424,6 +436,21 @@
                           </and>
             </activeWhen>
       </handler>
+   </extension>
+   <extension
+         point="com.mmxlabs.models.lng.cargo.editor.TradesTableContextMenuExtension">
+      <TradesTableContextMenuExtension
+            class="com.mmxlabs.models.lng.analytics.ui.views.sandbox.CreateSandboxFromSelectionMenuExtension">
+      </TradesTableContextMenuExtension>
+   </extension>
+   <extension
+         point="com.mmxlabs.models.ui.displaycompositefactories">
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.analytics.FullVesselCharterOption"
+            factory="com.mmxlabs.models.lng.analytics.presentation.composites.FullVesselCharterCompositeFactory"
+            id="com.mmxlabs.models.lng.analytics.presentation.composites.FullVesselCharterCompositeFactory"
+            inheritable="true">
+      </displayCompositeFactory>
    </extension>
 
 </plugin>

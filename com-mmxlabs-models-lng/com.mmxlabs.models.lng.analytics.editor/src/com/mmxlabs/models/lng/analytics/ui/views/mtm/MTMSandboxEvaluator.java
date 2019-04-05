@@ -194,7 +194,7 @@ public class MTMSandboxEvaluator {
 	private static void singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final MTMModel model) {
 
 		final LNGScenarioModel optimiserScenario = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		final IMapperClass mapper = new Mapper(optimiserScenario);
+		final IMapperClass mapper = new Mapper(optimiserScenario, true);
 		buildFullScenario(optimiserScenario, model, mapper);
 
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();

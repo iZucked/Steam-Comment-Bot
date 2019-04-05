@@ -51,7 +51,7 @@ public class MMXAdaptersAwareCommandStack extends CommandWrappingCommandStack {
 	public void execute(final Command command) {
 		// All commands should be executed on display thread. Wrap up in
 		// RunnerHelper.syncExecDisplayOptional(() -> { execute(); });
-		assert RunnerHelper.inDisplayThread();
+		assert RunnerHelper.inDisplayThread() : "All commands should be executed on display thread";
 
 		if (readOnlyProvider != null) {
 			assert !readOnlyProvider.isReadonly();

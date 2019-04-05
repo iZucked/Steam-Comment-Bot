@@ -279,12 +279,12 @@ public class MTMResultItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.MTM_RESULT__SHIPPING,
-				 AnalyticsFactory.eINSTANCE.createFleetShippingOption()));
+				 AnalyticsFactory.eINSTANCE.createSimpleVesselCharterOption()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.MTM_RESULT__SHIPPING,
-				 AnalyticsFactory.eINSTANCE.createOptionalAvailabilityShippingOption()));
+				 AnalyticsFactory.eINSTANCE.createOptionalSimpleVesselCharterOption()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -299,12 +299,12 @@ public class MTMResultItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.MTM_RESULT__SHIPPING,
-				 AnalyticsFactory.eINSTANCE.createNewVesselAvailability()));
+				 AnalyticsFactory.eINSTANCE.createFullVesselCharterOption()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.MTM_RESULT__SHIPPING,
-				 AnalyticsFactory.eINSTANCE.createExistingVesselAvailability()));
+				 AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption()));
 
 		newChildDescriptors.add
 			(createChildParameter

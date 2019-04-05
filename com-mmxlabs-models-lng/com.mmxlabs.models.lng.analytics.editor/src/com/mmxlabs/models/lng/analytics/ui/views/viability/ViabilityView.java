@@ -47,7 +47,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
-import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
+import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
@@ -238,8 +238,8 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 					String vesselName = "//";
 
 					final ShippingOption so = row.getShipping();
-					if (so instanceof ExistingVesselAvailability) {
-						final VesselAvailability va = ((ExistingVesselAvailability) so).getVesselAvailability();
+					if (so instanceof ExistingVesselCharterOption) {
+						final VesselAvailability va = ((ExistingVesselCharterOption) so).getVesselCharter();
 						vesselName += va.getVessel().getName();
 					}
 
@@ -273,8 +273,8 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 					String vesselName = "//";
 
 					final ShippingOption so = row.getShipping();
-					if (so instanceof ExistingVesselAvailability) {
-						final VesselAvailability va = ((ExistingVesselAvailability) so).getVesselAvailability();
+					if (so instanceof ExistingVesselCharterOption) {
+						final VesselAvailability va = ((ExistingVesselCharterOption) so).getVesselCharter();
 						vesselName += va.getVessel().getName();
 					}
 					if (so instanceof RoundTripShippingOption) {

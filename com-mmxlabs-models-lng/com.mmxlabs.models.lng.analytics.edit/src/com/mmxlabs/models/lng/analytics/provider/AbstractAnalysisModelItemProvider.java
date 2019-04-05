@@ -70,6 +70,7 @@ public class AbstractAnalysisModelItemProvider extends NamedObjectItemProvider {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS);
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS);
+			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS);
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 		}
 		return childrenFeatures;
@@ -117,6 +118,7 @@ public class AbstractAnalysisModelItemProvider extends NamedObjectItemProvider {
 		switch (notification.getFeatureID(AbstractAnalysisModel.class)) {
 			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__BUYS:
 			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__SELLS:
+			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS:
 			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -138,6 +140,11 @@ public class AbstractAnalysisModelItemProvider extends NamedObjectItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS,
+				 AnalyticsFactory.eINSTANCE.createOpenBuy()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS,
 				 AnalyticsFactory.eINSTANCE.createBuyOpportunity()));
 
 		newChildDescriptors.add
@@ -149,6 +156,11 @@ public class AbstractAnalysisModelItemProvider extends NamedObjectItemProvider {
 			(createChildParameter
 				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS,
 				 AnalyticsFactory.eINSTANCE.createBuyReference()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS,
+				 AnalyticsFactory.eINSTANCE.createOpenSell()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -167,18 +179,33 @@ public class AbstractAnalysisModelItemProvider extends NamedObjectItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS,
+				 AnalyticsFactory.eINSTANCE.createVesselEventOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS,
+				 AnalyticsFactory.eINSTANCE.createVesselEventReference()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS,
+				 AnalyticsFactory.eINSTANCE.createCharterOutOpportunity()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
 				 AnalyticsFactory.eINSTANCE.createShippingOption()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
-				 AnalyticsFactory.eINSTANCE.createFleetShippingOption()));
+				 AnalyticsFactory.eINSTANCE.createSimpleVesselCharterOption()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
-				 AnalyticsFactory.eINSTANCE.createOptionalAvailabilityShippingOption()));
+				 AnalyticsFactory.eINSTANCE.createOptionalSimpleVesselCharterOption()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -193,12 +220,12 @@ public class AbstractAnalysisModelItemProvider extends NamedObjectItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
-				 AnalyticsFactory.eINSTANCE.createNewVesselAvailability()));
+				 AnalyticsFactory.eINSTANCE.createFullVesselCharterOption()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
-				 AnalyticsFactory.eINSTANCE.createExistingVesselAvailability()));
+				 AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption()));
 
 		newChildDescriptors.add
 			(createChildParameter

@@ -821,6 +821,14 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	int getAvailabilityOrContractMaxDuration();
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	String jsonid();
+
+	/**
 	 * Returns the value of the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>

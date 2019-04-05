@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 
 import com.mmxlabs.models.lng.fleet.Vessel;
 
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -31,7 +32,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class NominatedShippingOptionImpl extends ShippingOptionImpl implements NominatedShippingOption {
+public class NominatedShippingOptionImpl extends UUIDObjectImpl implements NominatedShippingOption {
 	/**
 	 * The cached value of the '{@link #getNominatedVessel() <em>Nominated Vessel</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -66,6 +67,7 @@ public class NominatedShippingOptionImpl extends ShippingOptionImpl implements N
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Vessel getNominatedVessel() {
 		if (nominatedVessel != null && nominatedVessel.eIsProxy()) {
 			InternalEObject oldNominatedVessel = (InternalEObject)nominatedVessel;
@@ -92,6 +94,7 @@ public class NominatedShippingOptionImpl extends ShippingOptionImpl implements N
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNominatedVessel(Vessel newNominatedVessel) {
 		Vessel oldNominatedVessel = nominatedVessel;
 		nominatedVessel = newNominatedVessel;

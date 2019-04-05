@@ -63,11 +63,18 @@ public class SellsDropTargetListener implements DropTargetListener {
 
 	@Override
 	public void dropAccept(final DropTargetEvent event) {
-
+		if (scenarioEditingLocation.isLocked()) {
+			event.detail = DND.DROP_NONE;
+			return;
+		}
 	}
 
 	@Override
 	public void drop(final DropTargetEvent event) {
+		if (scenarioEditingLocation.isLocked()) {
+			event.detail = DND.DROP_NONE;
+			return;
+		}
 		final AbstractAnalysisModel optionAnalysisModel = this.model;
 		if (optionAnalysisModel == null) {
 			return;

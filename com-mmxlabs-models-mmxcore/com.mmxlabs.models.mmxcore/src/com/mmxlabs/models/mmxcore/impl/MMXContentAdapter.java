@@ -16,17 +16,17 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import com.mmxlabs.models.mmxcore.IMMXAdapter;
 
 public abstract class MMXContentAdapter extends EContentAdapter implements IMMXAdapter {
-	private final List<Notification> missedNotifications = new LinkedList<Notification>();
+	private final List<Notification> missedNotifications = new LinkedList<>();
 	/**
 	 * @since 2.2
 	 */
-	protected final HashSet<EStructuralFeature> ignoredFeatures = new HashSet<EStructuralFeature>();
+	protected final HashSet<EStructuralFeature> ignoredFeatures = new HashSet<>();
 
 	public MMXContentAdapter() {
 	}
 
 	@Override
-	public void notifyChanged(final Notification notification) {
+	public synchronized void notifyChanged(final Notification notification) {
 		super.notifyChanged(notification);
 		if (ignoredFeatures.contains(notification.getFeature())) {
 			return;
@@ -46,30 +46,31 @@ public abstract class MMXContentAdapter extends EContentAdapter implements IMMXA
 	/**
 	 * @since 2.2
 	 */
-	protected void missedNotifications(final List<Notification> missed) {
+	protected synchronized void missedNotifications(final List<Notification> missed) {
 
 	}
 
 	boolean enabled = true;
 
 	@Override
-	public void disable() {
+	public synchronized void disable() {
 		enabled = false;
 		missedNotifications.clear();
 	}
 
 	@Override
-	public void enable() {
+	public synchronized void enable() {
 		enable(false);
 	}
 
 	/**
 	 * @since 2.2
 	 */
-	public void enable(final boolean skip) {
+	public synchronized void enable(final boolean skip) {
 		if (missedNotifications.isEmpty() == false) {
-			if (!skip)
+			if (!skip) {
 				missedNotifications(Collections.unmodifiableList(missedNotifications));
+			}
 			missedNotifications.clear();
 		}
 		enabled = true;

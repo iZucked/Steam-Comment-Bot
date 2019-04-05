@@ -177,6 +177,11 @@ public class AnalyticsModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS,
+				 AnalyticsFactory.eINSTANCE.createSandboxResult()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS,
 				 AnalyticsFactory.eINSTANCE.createActionableSetPlan()));
 
 		newChildDescriptors.add

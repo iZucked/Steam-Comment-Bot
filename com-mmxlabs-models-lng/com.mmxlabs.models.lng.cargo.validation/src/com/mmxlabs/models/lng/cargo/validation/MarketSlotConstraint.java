@@ -18,6 +18,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
@@ -47,8 +48,13 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 
 		final EObject object = ctx.getTarget();
 		if (object instanceof SpotSlot) {
-
 			final SpotSlot spotSlot = (SpotSlot) object;
+
+			// Ignore extra spot slots.
+			if (!(extraContext.getContainer(spotSlot) instanceof CargoModel)) {
+				return Activator.PLUGIN_ID;
+			}
+
 			final SpotMarket market = spotSlot.getMarket();
 			if (market == null) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(

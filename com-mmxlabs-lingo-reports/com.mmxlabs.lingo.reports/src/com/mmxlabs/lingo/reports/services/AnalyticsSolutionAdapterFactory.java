@@ -5,9 +5,7 @@
 package com.mmxlabs.lingo.reports.services;
 
 import org.eclipse.core.runtime.IAdapterFactory;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
@@ -45,10 +43,8 @@ public class AnalyticsSolutionAdapterFactory implements IAdapterFactory {
 				final Object object = fragment.getFragment();
 				if (object instanceof SlotInsertionOptions) {
 					final SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) object;
-					final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 					final AnalyticsSolution data = new AnalyticsSolution(scenarioInstance, slotInsertionOptions, slotInsertionOptions.getName());
-					data.setCreateInsertionOptions(true);
-					eventBroker.post(ChangeSetViewCreatorService.ChangeSetViewCreatorService_Topic, data);
+					data.open();
 				}
 			}
 		};
@@ -62,10 +58,8 @@ public class AnalyticsSolutionAdapterFactory implements IAdapterFactory {
 				final Object object = fragment.getFragment();
 				if (object instanceof ActionableSetPlan) {
 					final ActionableSetPlan actionableSetPlan = (ActionableSetPlan) object;
-					final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 					final AnalyticsSolution data = new AnalyticsSolution(scenarioInstance, actionableSetPlan, actionableSetPlan.getName());
-					data.setCreateInsertionOptions(true);
-					eventBroker.post(ChangeSetViewCreatorService.ChangeSetViewCreatorService_Topic, data);
+					data.open();
 				}
 			}
 		};
@@ -79,10 +73,9 @@ public class AnalyticsSolutionAdapterFactory implements IAdapterFactory {
 				final Object object = fragment.getFragment();
 				if (object instanceof OptimisationResult) {
 					final OptimisationResult actionableSetPlan = (OptimisationResult) object;
-					final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 					final AnalyticsSolution data = new AnalyticsSolution(scenarioInstance, actionableSetPlan, actionableSetPlan.getName());
-					data.setCreateInsertionOptions(false);
-					eventBroker.post(ChangeSetViewCreatorService.ChangeSetViewCreatorService_Topic, data);
+					data.open();
+
 				}
 			}
 		};
@@ -97,10 +90,8 @@ public class AnalyticsSolutionAdapterFactory implements IAdapterFactory {
 				final Object object = fragment.getFragment();
 				if (object instanceof AbstractSolutionSet) {
 					final AbstractSolutionSet solutionSet = (AbstractSolutionSet) object;
-					final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 					final AnalyticsSolution data = new AnalyticsSolution(scenarioInstance, solutionSet, solutionSet.getName());
-					data.setCreateInsertionOptions(false);
-					eventBroker.post(ChangeSetViewCreatorService.ChangeSetViewCreatorService_Topic, data);
+					data.open();
 				}
 			}
 		};

@@ -4,11 +4,6 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views;
 
-import java.util.Collections;
-
-import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
@@ -21,11 +16,7 @@ import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.widgets.Menu;
 
 import com.google.common.collect.Sets;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.analytics.ui.utils.OptionsModellerUtils;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
@@ -65,7 +56,9 @@ public class OptionsTreeViewerContextMenuManager implements MenuDetectListener {
 				mItem.dispose();
 			}
 		}
-
+		if (scenarioEditingLocation.isLocked()) {
+			return;
+		}
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {
@@ -84,24 +77,6 @@ public class OptionsTreeViewerContextMenuManager implements MenuDetectListener {
 				}
 
 			}));
-			if (OptionsModellerUtils.getRootOptionsModel(optionAnalysisModel) != optionAnalysisModel) {
-				mgr.add(new RunnableAction("Delete", () -> {
-					OptionAnalysisModel container = (OptionAnalysisModel) optionAnalysisModel.eContainer();
-					container.getChildren().remove(optionAnalysisModel);
-					optionModellerView.setInput(container);
-				}));
-			}
-			if (OptionsModellerUtils.getRootOptionsModel(optionAnalysisModel) != optionAnalysisModel) {
-				mgr.add(new RunnableAction("Copy as top level sandbox", () -> {
-					OptionAnalysisModel copy = EcoreUtil.copy(optionAnalysisModel);
-					copy.getChildren().clear();
-
-					final CompoundCommand cmd = new CompoundCommand("Create sandbox");
-					cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getAnalyticsModel((LNGScenarioModel) scenarioEditingLocation.getRootObject()),
-							AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTION_MODELS, Collections.singletonList(copy)));
-					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
-				}));
-			}
 		}
 		menu.setVisible(true);
 	}

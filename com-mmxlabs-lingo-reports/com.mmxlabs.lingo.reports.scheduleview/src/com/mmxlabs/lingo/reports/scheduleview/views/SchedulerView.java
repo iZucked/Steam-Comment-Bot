@@ -70,6 +70,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -91,6 +92,7 @@ import com.mmxlabs.ganttviewer.actions.PackAction;
 import com.mmxlabs.ganttviewer.actions.SaveFullImageAction;
 import com.mmxlabs.ganttviewer.actions.ZoomInAction;
 import com.mmxlabs.ganttviewer.actions.ZoomOutAction;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
@@ -111,6 +113,7 @@ import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.SelectionToSandboxUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -431,6 +434,28 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 		};
 
+		viewer.getGanttChart().getGanttComposite().setMenuAction((menu, event) -> {
+
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX)) {
+				if (numberOfSchedules == 1) {
+					final IStructuredSelection structuredSelection = viewer.getStructuredSelection();
+					if (SelectionToSandboxUtil.canSelectionBeUsed(structuredSelection)) {
+						final ScenarioResult result = currentSelectedDataProvider.getScenarioResult((EObject) structuredSelection.getFirstElement());
+
+						if (result != null) {
+							final MenuItem item = new MenuItem(menu, SWT.PUSH);
+							item.setText("Create sandbox");
+
+							item.addListener(SWT.Selection, e -> {
+								final IScenarioDataProvider sdp = result.getScenarioDataProvider();
+								SelectionToSandboxUtil.selectionToSandbox(structuredSelection, true, sdp);
+							});
+						}
+					}
+				}
+			}
+		});
+
 		viewer.getGanttChart().getGanttComposite().setLegendProvider(() -> legendItems);
 
 		// make sure this viewer is listening to preference changes
@@ -451,7 +476,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 				return result;
 			}
 
-			public int getEventHeight(Object element) {
+			public int getEventHeight(final Object element) {
 				if (element instanceof CharterAvailableFromEvent) {
 					return 20;
 				} else if (element instanceof CharterAvailableToEvent) {
@@ -580,6 +605,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		viewer.setComparator(viewerComparator);
 
 		viewer.setComparer(new IElementComparer() {
+
 			@Override
 			public int hashCode(final Object element) {
 				return element.hashCode();
@@ -611,6 +637,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		contributeToActionBars();
 
 		getSite().setSelectionProvider(viewer);
+
 		// Get e4 selection service!
 		final ESelectionService service = getSite().getService(ESelectionService.class);
 		service.addPostSelectionListener(this);
@@ -823,7 +850,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 			@Override
 			public boolean showMenuItemsOnRightClick() {
-				return false;
+				return true;
 			}
 
 			@Override
@@ -919,7 +946,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			colourSchemeAction = new ColourSchemeAction(this, (EMFScheduleLabelProvider) (viewer.getLabelProvider()), viewer);
 		}
 		toggleLegend = new RunnableAction("Legend", SWT.CHECK, () -> {
-			boolean b = viewer.getGanttChart().getGanttComposite().isShowLegend();
+			final boolean b = viewer.getGanttChart().getGanttComposite().isShowLegend();
 			viewer.getGanttChart().getGanttComposite().setShowLegend(!b);
 			viewer.getGanttChart().getGanttComposite().redraw();
 		});
@@ -1155,6 +1182,8 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 			@Override
 			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule) {
+
+				numberOfSchedules++;
 				return Collections.singleton(schedule);
 			}
 
@@ -1166,7 +1195,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 			@Override
 			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
-
+				numberOfSchedules++;
 				final List<Event> interestingEvents = new LinkedList<>();
 				for (final Sequence sequence : schedule.getSequences()) {
 					for (final Event event : sequence.getEvents()) {

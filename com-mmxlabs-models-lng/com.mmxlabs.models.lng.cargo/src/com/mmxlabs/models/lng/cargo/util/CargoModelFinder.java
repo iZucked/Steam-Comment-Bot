@@ -4,7 +4,11 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -17,6 +21,8 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 
 public class CargoModelFinder {
 	private final @NonNull CargoModel cargoModel;
+	private List<LoadSlot> extraLoads = new LinkedList<>();
+	private List<DischargeSlot> extraDischarges = new LinkedList<>();
 
 	public CargoModelFinder(final @NonNull CargoModel cargoModel) {
 		this.cargoModel = cargoModel;
@@ -44,12 +50,22 @@ public class CargoModelFinder {
 				return cargo;
 			}
 		}
+		for (final LoadSlot cargo : extraLoads) {
+			if (name.equals(cargo.getName())) {
+				return cargo;
+			}
+		}
 		throw new IllegalArgumentException("Unknown load slot: " + name);
 	}
 
 	@NonNull
 	public DischargeSlot findDischargeSlot(@NonNull final String name) {
 		for (final DischargeSlot cargo : getCargoModel().getDischargeSlots()) {
+			if (name.equals(cargo.getName())) {
+				return cargo;
+			}
+		}
+		for (final DischargeSlot cargo : extraDischarges) {
 			if (name.equals(cargo.getName())) {
 				return cargo;
 			}
@@ -93,5 +109,13 @@ public class CargoModelFinder {
 			}
 		}
 		throw new IllegalArgumentException("Unknown vessel availability");
+	}
+
+	public void includeLoads(@Nullable List<LoadSlot> extra) {
+		extraLoads.addAll(extra);
+	}
+
+	public void includeDischarges(@Nullable List<DischargeSlot> extra) {
+		extraDischarges.addAll(extra);
 	}
 }

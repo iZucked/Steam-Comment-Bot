@@ -18,7 +18,7 @@ import com.mmxlabs.lngdataserver.integration.repo.general.GeneralDataRecord;
  * @author Simon Goodall
  *
  */
-@JsonIgnoreProperties({ "creator", "published", "current", "ports" })
+@JsonIgnoreProperties({ "creator", "type", "published", "current", "ports" })
 public class PortsMixin {
 
 	@JsonAlias("identifier")

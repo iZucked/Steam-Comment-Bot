@@ -199,6 +199,7 @@ public class AnalyticsActionBarContributor
 		//
 		submenuManager.addMenuListener
 			(new IMenuListener() {
+				 @Override
 				 public void menuAboutToShow(IMenuManager menuManager) {
 					 menuManager.updateAll(true);
 				 }

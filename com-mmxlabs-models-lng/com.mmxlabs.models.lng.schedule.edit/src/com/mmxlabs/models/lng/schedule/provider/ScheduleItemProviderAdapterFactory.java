@@ -157,6 +157,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.OtherPNL} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OtherPNLItemProvider otherPNLItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.OtherPNL}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOtherPNLAdapter() {
+		if (otherPNLItemProvider == null) {
+			otherPNLItemProvider = new OtherPNLItemProvider(this);
+		}
+
+		return otherPNLItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.Event} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1233,6 +1256,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (openSlotAllocationItemProvider != null) openSlotAllocationItemProvider.dispose();
 		if (slotAllocationItemProvider != null) slotAllocationItemProvider.dispose();
 		if (sequenceItemProvider != null) sequenceItemProvider.dispose();
+		if (otherPNLItemProvider != null) otherPNLItemProvider.dispose();
 		if (eventItemProvider != null) eventItemProvider.dispose();
 		if (startEventItemProvider != null) startEventItemProvider.dispose();
 		if (endEventItemProvider != null) endEventItemProvider.dispose();

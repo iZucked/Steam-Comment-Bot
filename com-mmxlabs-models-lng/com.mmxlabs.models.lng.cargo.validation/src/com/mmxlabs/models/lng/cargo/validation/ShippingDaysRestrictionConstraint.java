@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -51,6 +52,11 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
+
+		if (!(extraContext.getContainer(object) instanceof CargoModel)) {
+			return Activator.PLUGIN_ID;
+		}
+
 		@NonNull
 		ModelDistanceProvider modelDistanceProvider = extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 		// Valid slot data checks

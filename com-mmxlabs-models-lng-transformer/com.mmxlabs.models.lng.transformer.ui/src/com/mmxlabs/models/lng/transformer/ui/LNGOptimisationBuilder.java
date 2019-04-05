@@ -20,6 +20,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Module;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -30,6 +31,7 @@ import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.adp.ADPScenarioModuleHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
+import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -49,6 +51,7 @@ public class LNGOptimisationBuilder {
 
 	private final IScenarioDataProvider scenarioDataProvider;
 	private final @Nullable ScenarioInstance scenarioInstance;
+	private @Nullable ExtraDataProvider extraDataProvider;
 
 	private @Nullable Consumer<OptimisationPlan> optimisationPlanCustomiser;
 	private @Nullable Consumer<UserSettings> userSettingsCustomiser;
@@ -61,10 +64,16 @@ public class LNGOptimisationBuilder {
 	private @Nullable Integer threadCount;
 	private boolean optimiseHint = false;
 	private final List<String> extraHints = new LinkedList<>();
+	private boolean includeDefaultExportStage = true;
 
 	private LNGOptimisationBuilder(final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance) {
 		this.scenarioDataProvider = scenarioDataProvider;
 		this.scenarioInstance = scenarioInstance;
+	}
+
+	public LNGOptimisationBuilder withExtraDataProvider(@Nullable ExtraDataProvider extraDataProvider) {
+		this.extraDataProvider = extraDataProvider;
+		return this;
 	}
 
 	public LNGOptimisationBuilder withHints(final String... hints) {
@@ -124,6 +133,16 @@ public class LNGOptimisationBuilder {
 		return this;
 	}
 
+	/**
+	 * Flag indicating whether to run the default export stages or just return the {@link IMultiStateResult} without further processing.
+	 * 
+	 * @return
+	 */
+	public LNGOptimisationBuilder withIncludeDefaultExportStage(boolean enabled) {
+		this.includeDefaultExportStage = enabled;
+		return this;
+	}
+
 	public LNGOptimisationBuilder withThreadCount(final int threadCount) {
 		this.threadCount = Integer.valueOf(threadCount);
 		return this;
@@ -177,7 +196,7 @@ public class LNGOptimisationBuilder {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = buildStandardBridge(localOptimisationPlan, evaluationOnly, executorService.getNumThreads(), hints);
 
-			final IChainRunner chainRunner = buildStandardChain(scenarioToOptimiserBridge, localOptimisationPlan, executorService, hints);
+			final IChainRunner chainRunner = buildStandardChain(scenarioToOptimiserBridge, localOptimisationPlan, includeDefaultExportStage, executorService, hints);
 
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, scenarioInstance, scenarioToOptimiserBridge, chainRunner, null);
 
@@ -213,14 +232,14 @@ public class LNGOptimisationBuilder {
 
 	public LNGScenarioToOptimiserBridge buildStandardBridge(final OptimisationPlan optimisationPlan, final boolean evaluationOnly, int concurrencyLevel, final String... initialHints) {
 
-		return new LNGScenarioToOptimiserBridge(scenarioDataProvider, scenarioInstance, optimisationPlan.getUserSettings(), optimisationPlan.getSolutionBuilderSettings(),
+		return new LNGScenarioToOptimiserBridge(scenarioDataProvider, scenarioInstance, extraDataProvider, optimisationPlan.getUserSettings(), optimisationPlan.getSolutionBuilderSettings(),
 				scenarioDataProvider.getEditingDomain(), concurrencyLevel, extraModule, optimiserInjectorService, evaluationOnly, initialHints);
 	}
 
-	public IChainRunner buildStandardChain(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, final OptimisationPlan optimisationPlan, final CleanableExecutorService executorService,
-			final String... initialHints) {
+	public IChainRunner buildStandardChain(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, final OptimisationPlan optimisationPlan, boolean includeDefaultExportStage,
+			final CleanableExecutorService executorService, final String... initialHints) {
 		return LNGScenarioChainBuilder.createStandardOptimisationChain(optimisationPlan.getResultName(), scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimisationPlan,
-				executorService, initialHints);
+				executorService, includeDefaultExportStage, initialHints);
 	}
 
 	public static class LNGOptimisationRunnerBuilder implements AutoCloseable {

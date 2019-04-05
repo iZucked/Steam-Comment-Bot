@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -44,7 +45,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *
  * @generated
  */
-public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity {
+public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity {
 	/**
 	 * The default value of the '{@link #isDesPurchase() <em>Des Purchase</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -299,6 +300,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isDesPurchase() {
 		return desPurchase;
 	}
@@ -308,6 +310,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDesPurchase(boolean newDesPurchase) {
 		boolean oldDesPurchase = desPurchase;
 		desPurchase = newDesPurchase;
@@ -446,6 +449,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
@@ -472,6 +476,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEntity(BaseLegalEntity newEntity) {
 		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;
@@ -484,6 +489,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getCv() {
 		return cv;
 	}
@@ -493,6 +499,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCv(double newCv) {
 		double oldCv = cv;
 		cv = newCv;
@@ -505,6 +512,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCancellationExpression() {
 		return cancellationExpression;
 	}
@@ -514,6 +522,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCancellationExpression(String newCancellationExpression) {
 		String oldCancellationExpression = cancellationExpression;
 		cancellationExpression = newCancellationExpression;
@@ -526,6 +535,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMiscCosts() {
 		return miscCosts;
 	}
@@ -535,6 +545,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMiscCosts(int newMiscCosts) {
 		int oldMiscCosts = miscCosts;
 		miscCosts = newMiscCosts;
@@ -547,6 +558,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VolumeMode getVolumeMode() {
 		return volumeMode;
 	}
@@ -556,6 +568,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeMode(VolumeMode newVolumeMode) {
 		VolumeMode oldVolumeMode = volumeMode;
 		volumeMode = newVolumeMode == null ? VOLUME_MODE_EDEFAULT : newVolumeMode;
@@ -568,6 +581,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VolumeUnits getVolumeUnits() {
 		return volumeUnits;
 	}
@@ -577,6 +591,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeUnits(VolumeUnits newVolumeUnits) {
 		VolumeUnits oldVolumeUnits = volumeUnits;
 		volumeUnits = newVolumeUnits == null ? VOLUME_UNITS_EDEFAULT : newVolumeUnits;
@@ -589,6 +604,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinVolume() {
 		return minVolume;
 	}
@@ -598,6 +614,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinVolume(int newMinVolume) {
 		int oldMinVolume = minVolume;
 		minVolume = newMinVolume;
@@ -610,6 +627,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaxVolume() {
 		return maxVolume;
 	}
@@ -619,6 +637,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxVolume(int newMaxVolume) {
 		int oldMaxVolume = maxVolume;
 		maxVolume = newMaxVolume;

@@ -49,6 +49,7 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 		private final Map<Port, Map<@NonNull String, @NonNull Collection<@NonNull Slot>>> countingMap = new HashMap<>();
 
 		private final DateTimeFormatter df = DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter();
+
 		/**
 		 * Returns a modifiable {@link Collection} of {@link Slot} objects which overlap the given {@link Slot}.
 		 * 
@@ -185,6 +186,10 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 		}
 
 		final EObject object = ctx.getTarget();
+		if (!(extraContext.getContainer(object) instanceof CargoModel)) {
+			return Activator.PLUGIN_ID;
+		}
+
 		final EObject original = extraContext.getOriginal(object);
 		final EObject replacement = extraContext.getReplacement(object);
 

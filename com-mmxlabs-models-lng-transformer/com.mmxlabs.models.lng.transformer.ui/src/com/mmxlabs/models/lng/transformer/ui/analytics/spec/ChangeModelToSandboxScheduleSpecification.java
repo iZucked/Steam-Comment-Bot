@@ -280,7 +280,7 @@ public class ChangeModelToSandboxScheduleSpecification {
 	};
 
 	public Pair<Pair<ScheduleSpecification, ExtraDataProvider>, Pair<ScheduleSpecification, ExtraDataProvider>> generateScheduleSpecifications(final LNGScenarioModel scenarioModel,
-			final ScheduleModel baseSchedule, final ScheduleModel targetSchedule, final ChangeDescription changeDescription) {
+			final Schedule baseSchedule, final Schedule targetSchedule, final ChangeDescription changeDescription) {
 
 		// Maybe do this in two passes, old then new
 
@@ -295,8 +295,8 @@ public class ChangeModelToSandboxScheduleSpecification {
 		final Set<VesselEventVisit> targetVesselEventVisits = new LinkedHashSet<>();
 		final Set<OpenSlotAllocation> targetOpenSlotAllocations = new LinkedHashSet<>();
 
-		final Function<String, EObject> baseFinderFunction = buildFinderFunction(baseSchedule.getSchedule());
-		final Function<String, EObject> targetFinderFunction = buildFinderFunction(targetSchedule.getSchedule());
+		final Function<String, EObject> baseFinderFunction = buildFinderFunction(baseSchedule);
+		final Function<String, EObject> targetFinderFunction = buildFinderFunction(targetSchedule);
 
 		for (final Change change : changeDescription.getChanges()) {
 			if (change instanceof CargoChange) {
@@ -540,7 +540,7 @@ public class ChangeModelToSandboxScheduleSpecification {
 			scheduleSpecification.getOpenEvents().add(spec);
 		}
 
-		return new Pair<>(scheduleSpecification, new ExtraDataProvider(newAvailabilities, null, newCharterInMarketOverrides, null, null));
+		return new Pair<>(scheduleSpecification, new ExtraDataProvider(newAvailabilities, null, newCharterInMarketOverrides, null, null, null, null));
 	}
 
 	private <K, V extends VesselAssignmentType> void buildAvailabilities(final ScheduleSpecification scheduleSpecification, final List<V> newAvailabilities,

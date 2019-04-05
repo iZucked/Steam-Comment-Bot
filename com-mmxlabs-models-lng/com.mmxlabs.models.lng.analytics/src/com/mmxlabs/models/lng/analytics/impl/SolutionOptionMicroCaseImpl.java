@@ -112,6 +112,7 @@ public class SolutionOptionMicroCaseImpl extends EObjectImpl implements Solution
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScheduleSpecification getScheduleSpecification() {
 		return scheduleSpecification;
 	}
@@ -136,6 +137,7 @@ public class SolutionOptionMicroCaseImpl extends EObjectImpl implements Solution
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setScheduleSpecification(ScheduleSpecification newScheduleSpecification) {
 		if (newScheduleSpecification != scheduleSpecification) {
 			NotificationChain msgs = null;
@@ -155,6 +157,7 @@ public class SolutionOptionMicroCaseImpl extends EObjectImpl implements Solution
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScheduleModel getScheduleModel() {
 		return scheduleModel;
 	}
@@ -179,6 +182,7 @@ public class SolutionOptionMicroCaseImpl extends EObjectImpl implements Solution
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setScheduleModel(ScheduleModel newScheduleModel) {
 		if (newScheduleModel != scheduleModel) {
 			NotificationChain msgs = null;
@@ -198,6 +202,7 @@ public class SolutionOptionMicroCaseImpl extends EObjectImpl implements Solution
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VesselAvailability> getExtraVesselAvailabilities() {
 		if (extraVesselAvailabilities == null) {
 			extraVesselAvailabilities = new EObjectContainmentEList<VesselAvailability>(VesselAvailability.class, this, AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES);
@@ -210,6 +215,7 @@ public class SolutionOptionMicroCaseImpl extends EObjectImpl implements Solution
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<CharterInMarketOverride> getCharterInMarketOverrides() {
 		if (charterInMarketOverrides == null) {
 			charterInMarketOverrides = new EObjectContainmentEList<CharterInMarketOverride>(CharterInMarketOverride.class, this, AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__CHARTER_IN_MARKET_OVERRIDES);

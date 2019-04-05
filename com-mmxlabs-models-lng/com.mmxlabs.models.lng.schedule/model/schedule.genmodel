@@ -74,6 +74,7 @@
           propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/unusedElements"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/inventoryLevels"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/paperDealAllocations"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/otherPNL"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//Fitness">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Fitness/fitnessValue"/>
@@ -127,6 +128,9 @@
       <genOperations ecoreOperation="schedule.ecore#//Sequence/isSpotVessel"/>
       <genOperations ecoreOperation="schedule.ecore#//Sequence/isFleetVessel"/>
       <genOperations ecoreOperation="schedule.ecore#//Sequence/isTimeCharterVessel"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//OtherPNL">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//OtherPNL/lateness"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//Event">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Event/start"/>

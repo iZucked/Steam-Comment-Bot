@@ -58,7 +58,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 		final List<VesselEvent> targetEvents = jobDescriptor.getTargetEvents();
 		final UserSettings userSettings = jobDescriptor.getUserSettings();
 		this.taskName = jobDescriptor.getJobName();
-		runner = new LNGSchedulerInsertSlotJobRunner(scenarioInstance, scenarioDataProvider, editingDomain, userSettings, targetSlots, targetEvents);
+		runner = new LNGSchedulerInsertSlotJobRunner(scenarioInstance, scenarioDataProvider, editingDomain, userSettings, targetSlots, targetEvents, null, null);
 
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 	}

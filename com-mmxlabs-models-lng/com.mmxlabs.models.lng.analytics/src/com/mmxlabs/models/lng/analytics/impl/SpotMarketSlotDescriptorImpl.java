@@ -117,6 +117,7 @@ public class SpotMarketSlotDescriptorImpl extends SlotDescriptorImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public YearMonth getDate() {
 		return date;
 	}
@@ -126,6 +127,7 @@ public class SpotMarketSlotDescriptorImpl extends SlotDescriptorImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDate(YearMonth newDate) {
 		YearMonth oldDate = date;
 		date = newDate;
@@ -138,6 +140,7 @@ public class SpotMarketSlotDescriptorImpl extends SlotDescriptorImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getMarketName() {
 		return marketName;
 	}
@@ -147,6 +150,7 @@ public class SpotMarketSlotDescriptorImpl extends SlotDescriptorImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMarketName(String newMarketName) {
 		String oldMarketName = marketName;
 		marketName = newMarketName;
@@ -159,6 +163,7 @@ public class SpotMarketSlotDescriptorImpl extends SlotDescriptorImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getPortName() {
 		return portName;
 	}
@@ -168,6 +173,7 @@ public class SpotMarketSlotDescriptorImpl extends SlotDescriptorImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortName(String newPortName) {
 		String oldPortName = portName;
 		portName = newPortName;

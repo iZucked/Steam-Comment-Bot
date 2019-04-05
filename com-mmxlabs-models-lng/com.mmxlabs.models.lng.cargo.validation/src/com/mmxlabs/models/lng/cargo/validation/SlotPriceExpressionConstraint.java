@@ -34,13 +34,12 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof Slot) {
-			// final SeriesParser parser = getParser();
-			final Slot slot = (Slot) target;
+			final Slot<?> slot = (Slot<?>) target;
 
 			if (slot.isSetPriceExpression()) {
 				final String priceExpression = slot.getPriceExpression();
 				boolean checkExpression = true;
-				if ("??".equals("priceExpression")) {
+				if ("??".equals(priceExpression)) {
 					if (!(slot.eContainer() instanceof CargoModel)) {
 						// Special "changable price" expression for sandbox. Not expected to be in main scenario
 						checkExpression = false;

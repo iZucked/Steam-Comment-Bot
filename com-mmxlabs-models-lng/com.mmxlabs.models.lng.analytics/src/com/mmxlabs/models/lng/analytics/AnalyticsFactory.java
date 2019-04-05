@@ -34,6 +34,24 @@ public interface AnalyticsFactory extends EFactory {
 	AnalyticsModel createAnalyticsModel();
 
 	/**
+	 * Returns a new object of class '<em>Open Sell</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Open Sell</em>'.
+	 * @generated
+	 */
+	OpenSell createOpenSell();
+
+	/**
+	 * Returns a new object of class '<em>Open Buy</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Open Buy</em>'.
+	 * @generated
+	 */
+	OpenBuy createOpenBuy();
+
+	/**
 	 * Returns a new object of class '<em>Buy Opportunity</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -88,6 +106,33 @@ public interface AnalyticsFactory extends EFactory {
 	SellReference createSellReference();
 
 	/**
+	 * Returns a new object of class '<em>Vessel Event Option</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Vessel Event Option</em>'.
+	 * @generated
+	 */
+	VesselEventOption createVesselEventOption();
+
+	/**
+	 * Returns a new object of class '<em>Vessel Event Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Vessel Event Reference</em>'.
+	 * @generated
+	 */
+	VesselEventReference createVesselEventReference();
+
+	/**
+	 * Returns a new object of class '<em>Charter Out Opportunity</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Charter Out Opportunity</em>'.
+	 * @generated
+	 */
+	CharterOutOpportunity createCharterOutOpportunity();
+
+	/**
 	 * Returns a new object of class '<em>Base Case Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -115,22 +160,22 @@ public interface AnalyticsFactory extends EFactory {
 	ShippingOption createShippingOption();
 
 	/**
-	 * Returns a new object of class '<em>Fleet Shipping Option</em>'.
+	 * Returns a new object of class '<em>Simple Vessel Charter Option</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Fleet Shipping Option</em>'.
+	 * @return a new object of class '<em>Simple Vessel Charter Option</em>'.
 	 * @generated
 	 */
-	FleetShippingOption createFleetShippingOption();
+	SimpleVesselCharterOption createSimpleVesselCharterOption();
 
 	/**
-	 * Returns a new object of class '<em>Optional Availability Shipping Option</em>'.
+	 * Returns a new object of class '<em>Optional Simple Vessel Charter Option</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Optional Availability Shipping Option</em>'.
+	 * @return a new object of class '<em>Optional Simple Vessel Charter Option</em>'.
 	 * @generated
 	 */
-	OptionalAvailabilityShippingOption createOptionalAvailabilityShippingOption();
+	OptionalSimpleVesselCharterOption createOptionalSimpleVesselCharterOption();
 
 	/**
 	 * Returns a new object of class '<em>Round Trip Shipping Option</em>'.
@@ -151,22 +196,22 @@ public interface AnalyticsFactory extends EFactory {
 	NominatedShippingOption createNominatedShippingOption();
 
 	/**
-	 * Returns a new object of class '<em>Analysis Result Row</em>'.
+	 * Returns a new object of class '<em>Full Vessel Charter Option</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Analysis Result Row</em>'.
+	 * @return a new object of class '<em>Full Vessel Charter Option</em>'.
 	 * @generated
 	 */
-	AnalysisResultRow createAnalysisResultRow();
+	FullVesselCharterOption createFullVesselCharterOption();
 
 	/**
-	 * Returns a new object of class '<em>Result Container</em>'.
+	 * Returns a new object of class '<em>Existing Vessel Charter Option</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Result Container</em>'.
+	 * @return a new object of class '<em>Existing Vessel Charter Option</em>'.
 	 * @generated
 	 */
-	ResultContainer createResultContainer();
+	ExistingVesselCharterOption createExistingVesselCharterOption();
 
 	/**
 	 * Returns a new object of class '<em>Analysis Result Detail</em>'.
@@ -205,22 +250,13 @@ public interface AnalyticsFactory extends EFactory {
 	OptionAnalysisModel createOptionAnalysisModel();
 
 	/**
-	 * Returns a new object of class '<em>Result Set</em>'.
+	 * Returns a new object of class '<em>Sandbox Result</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Result Set</em>'.
+	 * @return a new object of class '<em>Sandbox Result</em>'.
 	 * @generated
 	 */
-	ResultSet createResultSet();
-
-	/**
-	 * Returns a new object of class '<em>Result</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Result</em>'.
-	 * @generated
-	 */
-	Result createResult();
+	SandboxResult createSandboxResult();
 
 	/**
 	 * Returns a new object of class '<em>Base Case</em>'.
@@ -239,24 +275,6 @@ public interface AnalyticsFactory extends EFactory {
 	 * @generated
 	 */
 	PartialCase createPartialCase();
-
-	/**
-	 * Returns a new object of class '<em>New Vessel Availability</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>New Vessel Availability</em>'.
-	 * @generated
-	 */
-	NewVesselAvailability createNewVesselAvailability();
-
-	/**
-	 * Returns a new object of class '<em>Existing Vessel Availability</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Existing Vessel Availability</em>'.
-	 * @generated
-	 */
-	ExistingVesselAvailability createExistingVesselAvailability();
 
 	/**
 	 * Returns a new object of class '<em>Existing Charter Market Option</em>'.

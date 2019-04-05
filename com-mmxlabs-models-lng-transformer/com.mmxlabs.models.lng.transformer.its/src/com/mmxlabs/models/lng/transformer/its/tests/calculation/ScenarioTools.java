@@ -370,7 +370,7 @@ public class ScenarioTools {
 		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 		userSettings.setGenerateCharterOuts(withCharterOutGeneration);
 		final Set<String> hints = LNGTransformerHelper.getHints(userSettings);
-		final LNGDataTransformer dataTransformer = new LNGDataTransformer(scenarioDataProvider, userSettings, ScenarioUtils.createDefaultSolutionBuilderSettings(), 1, hints,
+		final LNGDataTransformer dataTransformer = new LNGDataTransformer(scenarioDataProvider, null, userSettings, ScenarioUtils.createDefaultSolutionBuilderSettings(), 1, hints,
 				LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null));
 
 		Injector evaluationInjector;

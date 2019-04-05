@@ -66,6 +66,7 @@ public class OpenSlotChangeImpl extends ChangeImpl implements OpenSlotChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotDescriptor getSlotDescriptor() {
 		return slotDescriptor;
 	}
@@ -90,6 +91,7 @@ public class OpenSlotChangeImpl extends ChangeImpl implements OpenSlotChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlotDescriptor(SlotDescriptor newSlotDescriptor) {
 		if (newSlotDescriptor != slotDescriptor) {
 			NotificationChain msgs = null;

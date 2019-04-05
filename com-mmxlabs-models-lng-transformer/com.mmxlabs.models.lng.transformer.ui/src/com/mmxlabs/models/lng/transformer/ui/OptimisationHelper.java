@@ -230,6 +230,12 @@ public final class OptimisationHelper {
 		if (scenario != null) {
 			previousSettings = scenario.getUserSettings();
 		}
+		return promptForInsertionUserSettings(scenario, forEvaluation, promptUser, promptOnlyIfOptionsEnabled, nameProvider, previousSettings);
+
+	}
+
+	public static UserSettings promptForUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
+			NameProvider nameProvider, UserSettings previousSettings) {
 
 		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 		if (previousSettings == null) {
@@ -748,7 +754,12 @@ public final class OptimisationHelper {
 		if (scenario != null) {
 			previousSettings = scenario.getUserSettings();
 		}
+		return promptForInsertionUserSettings(scenario, forEvaluation, promptUser, promptOnlyIfOptionsEnabled, nameProvider, previousSettings);
 
+	}
+
+	public static UserSettings promptForInsertionUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
+			NameProvider nameProvider, UserSettings previousSettings) {
 		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 		if (previousSettings == null) {
 			previousSettings = userSettings;
@@ -947,7 +958,7 @@ public final class OptimisationHelper {
 			// enabledOptionAdded = true;
 			// }
 
-			if (LicenseFeatures.isPermitted("features:trader-based-insertions")) {
+			if (false && LicenseFeatures.isPermitted("features:trader-based-insertions")) {
 				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 				choiceData.addChoice("Off", Boolean.FALSE);
 				choiceData.addChoice("On", Boolean.TRUE);
@@ -1089,6 +1100,149 @@ public final class OptimisationHelper {
 				}
 			});
 
+			if (ret[0] != Window.OK) {
+				return null;
+			}
+		}
+		if (nameProvider != null) {
+			nameProvider.nameSuggestion = dialog.getNameSuggestion();
+		}
+		return copy;
+	}
+	
+	public static UserSettings promptForSandboxUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
+			NameProvider nameProvider) {
+		UserSettings previousSettings = null;
+		if (scenario != null) {
+			previousSettings = scenario.getUserSettings();
+		}
+		return promptForSandboxUserSettings(scenario, forEvaluation, promptUser, promptOnlyIfOptionsEnabled, nameProvider, previousSettings);
+		
+	}
+	
+	public static UserSettings promptForSandboxUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
+			NameProvider nameProvider, UserSettings previousSettings) {
+		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
+		if (previousSettings == null) {
+			previousSettings = userSettings;
+		}
+		
+		// Permit the user to override the settings object. Use the previous settings as the initial value
+		if (promptUser) {
+			previousSettings = openSandboxUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider);
+		}
+		
+		if (previousSettings == null) {
+			return null;
+		}
+		
+		// Only merge across specific fields - not all of them. This permits additions to the default settings to pass through to the scenario.
+		mergeFields(previousSettings, userSettings);
+		
+		if (!checkUserSettings(userSettings, false)) {
+			return null;
+		}
+		return userSettings;
+	}
+	
+	public static UserSettings openSandboxUserDialog(final LNGScenarioModel scenario, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings,
+			final boolean displayOnlyIfOptionsEnabled, NameProvider nameProvider) {
+		return openSandboxUserDialog(scenario, PlatformUI.getWorkbench().getDisplay(), PlatformUI.getWorkbench().getDisplay().getActiveShell(), forEvaluation, previousSettings, defaultSettings,
+				displayOnlyIfOptionsEnabled, nameProvider);
+	}
+	
+	public static UserSettings openSandboxUserDialog(final LNGScenarioModel scenario, final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings,
+			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, NameProvider nameProvider) {
+		boolean optionAdded = false;
+		boolean enabledOptionAdded = false;
+		
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		adapterFactory.addAdapterFactory(new ParametersItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+		final EditingDomain editingDomain = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
+		//
+		// Fire up a dialog
+		final ParameterModesDialog dialog = new ParameterModesDialog(shell) {
+			@Override
+			protected void configureShell(final org.eclipse.swt.widgets.Shell newShell) {
+				
+				super.configureShell(newShell);
+				newShell.setText("Sandbox Settings");
+			}
+		};
+		
+		final UserSettings copy = EcoreUtil.copy(previousSettings);
+		
+		// Reset disabled features
+		resetDisabledFeatures(copy);
+		
+		if (!forEvaluation && nameProvider != null) {
+			dialog.addNameOption(nameProvider.nameSuggestion, nameProvider.existingNames);
+		}
+		
+		if (!forEvaluation) {
+			 
+			if (false && LicenseFeatures.isPermitted("features:trader-based-insertions")) {
+				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+				choiceData.addChoice("Off", Boolean.FALSE);
+				choiceData.addChoice("On", Boolean.TRUE);
+				choiceData.enabled = LicenseFeatures.isPermitted("features:trader-based-insertions");
+				if (!choiceData.enabled) {
+					// if not enabled make sure to set setting to false
+					copy.setDualMode(false);
+				}
+				dialog.addOption(DataSection.Toggles, null, editingDomain, "Dual mode: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_DUAL_MODE_PREFIX,
+						ParametersPackage.eINSTANCE.getUserSettings_DualMode());
+				optionAdded = true;
+				enabledOptionAdded = true;
+			}
+			{
+				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+				choiceData.addChoice("Off", Boolean.FALSE);
+				choiceData.addChoice("On", Boolean.TRUE);
+				choiceData.enabled = LicenseFeatures.isPermitted("features:charter-length");
+				if (choiceData.enabled == false) {
+					// if not enabled make sure to set setting to false
+					copy.setWithCharterLength(false);
+				}
+				dialog.addOption(DataSection.Toggles, null, editingDomain, "Charter Length: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CHARTERLENGTH_PREFIX,
+						ParametersPackage.eINSTANCE.getUserSettings_WithCharterLength());
+				optionAdded = true;
+				enabledOptionAdded = true;
+			}
+		}
+		// if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
+		{
+			// dialog.addOption(DataSection.Main, null, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Choice,
+			// ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
+			
+			final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+			choiceData.addChoice("Off", Boolean.FALSE);
+			choiceData.addChoice("On", Boolean.TRUE);
+			
+			choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-charter-out-generation") && isAllowedGCO(scenario);
+			if (choiceData.enabled == false) {
+				// if not enabled make sure to set setting to false
+				copy.setGenerateCharterOuts(false);
+			}
+			// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
+			// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
+			final Option gcoOption = dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", "", copy, defaultSettings, DataType.Choice, choiceData,
+					SWTBOT_CHARTEROUTGENERATION_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
+			optionAdded = true;
+			enabledOptionAdded = choiceData.enabled;
+		}
+		
+		if (optionAdded && (enabledOptionAdded || !displayOnlyIfOptionsEnabled)) {
+			final int[] ret = new int[1];
+			display.syncExec(new Runnable() {
+				
+				@Override
+				public void run() {
+					ret[0] = dialog.open();
+				}
+			});
+			
 			if (ret[0] != Window.OK) {
 				return null;
 			}
@@ -1482,7 +1636,7 @@ public final class OptimisationHelper {
 			return false;
 		}
 
-		if (status.isOK() == false) {
+		if (!status.isOK()) {
 
 			if (optimising || status.getSeverity() == IStatus.ERROR) {
 
@@ -1521,5 +1675,4 @@ public final class OptimisationHelper {
 		}
 		copy.setPeriodEnd(YearMonth.from(temp.plusMonths(3)));
 	}
-
 }

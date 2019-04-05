@@ -48,11 +48,18 @@ public class OptionsTreeViewerDropTargetListener implements DropTargetListener {
 
 	@Override
 	public void dropAccept(final DropTargetEvent event) {
-
+		if (scenarioEditingLocation.isLocked()) {
+			event.detail = DND.DROP_NONE;
+			return;
+		}
 	}
 
 	@Override
 	public void drop(final DropTargetEvent event) {
+		if (scenarioEditingLocation.isLocked()) {
+			event.detail = DND.DROP_NONE;
+			return;
+		}
 		if (event.item instanceof GridItem) {
 			final GridItem gridItem = (GridItem) event.item;
 			final Object d = gridItem.getData();

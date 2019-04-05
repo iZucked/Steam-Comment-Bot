@@ -106,6 +106,7 @@ public class BreakEvenAnalysisResultSetImpl extends EObjectImpl implements Break
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BreakEvenAnalysisResult getBasedOn() {
 		if (basedOn != null && basedOn.eIsProxy()) {
 			InternalEObject oldBasedOn = (InternalEObject)basedOn;
@@ -132,6 +133,7 @@ public class BreakEvenAnalysisResultSetImpl extends EObjectImpl implements Break
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBasedOn(BreakEvenAnalysisResult newBasedOn) {
 		BreakEvenAnalysisResult oldBasedOn = basedOn;
 		basedOn = newBasedOn;
@@ -144,6 +146,7 @@ public class BreakEvenAnalysisResultSetImpl extends EObjectImpl implements Break
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<BreakEvenAnalysisResult> getResults() {
 		if (results == null) {
 			results = new EObjectContainmentEList<BreakEvenAnalysisResult>(BreakEvenAnalysisResult.class, this, AnalyticsPackage.BREAK_EVEN_ANALYSIS_RESULT_SET__RESULTS);
@@ -156,6 +159,7 @@ public class BreakEvenAnalysisResultSetImpl extends EObjectImpl implements Break
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getPrice() {
 		return price;
 	}
@@ -165,6 +169,7 @@ public class BreakEvenAnalysisResultSetImpl extends EObjectImpl implements Break
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPrice(double newPrice) {
 		double oldPrice = price;
 		price = newPrice;

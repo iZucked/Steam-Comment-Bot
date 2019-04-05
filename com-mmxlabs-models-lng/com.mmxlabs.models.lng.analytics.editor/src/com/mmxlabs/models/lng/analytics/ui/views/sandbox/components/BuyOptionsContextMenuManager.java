@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridItem;
+import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.widgets.Menu;
@@ -70,7 +71,9 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 				mItem.dispose();
 			}
 		}
-
+		if (scenarioEditingLocation.isLocked()) {
+			return;
+		}
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {

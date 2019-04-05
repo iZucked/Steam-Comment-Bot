@@ -166,6 +166,7 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotMarket getTarget() {
 		if (target != null && target.eIsProxy()) {
 			InternalEObject oldTarget = (InternalEObject)target;
@@ -192,6 +193,7 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTarget(SpotMarket newTarget) {
 		SpotMarket oldTarget = target;
 		target = newTarget;
@@ -204,6 +206,7 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getEarliestETA() {
 		return earliestETA;
 	}
@@ -213,6 +216,7 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEarliestETA(LocalDate newEarliestETA) {
 		LocalDate oldEarliestETA = earliestETA;
 		earliestETA = newEarliestETA;
@@ -225,6 +229,7 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getEarliestVolume() {
 		return earliestVolume;
 	}
@@ -234,6 +239,7 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEarliestVolume(int newEarliestVolume) {
 		int oldEarliestVolume = earliestVolume;
 		earliestVolume = newEarliestVolume;
@@ -246,6 +252,7 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getEarliestPrice() {
 		return earliestPrice;
 	}
@@ -255,6 +262,7 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEarliestPrice(double newEarliestPrice) {
 		double oldEarliestPrice = earliestPrice;
 		earliestPrice = newEarliestPrice;
@@ -267,6 +275,7 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ShippingOption getShipping() {
 		return shipping;
 	}
@@ -291,6 +300,7 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShipping(ShippingOption newShipping) {
 		if (newShipping != shipping) {
 			NotificationChain msgs = null;
@@ -310,6 +320,7 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getShippingCost() {
 		return shippingCost;
 	}
@@ -319,6 +330,7 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShippingCost(double newShippingCost) {
 		double oldShippingCost = shippingCost;
 		shippingCost = newShippingCost;

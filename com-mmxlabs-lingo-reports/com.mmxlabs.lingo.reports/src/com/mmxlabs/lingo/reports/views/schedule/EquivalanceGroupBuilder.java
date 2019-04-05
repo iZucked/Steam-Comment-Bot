@@ -370,7 +370,7 @@ public class EquivalanceGroupBuilder {
 			prefix = getSlotTypePrefix(slot);
 			if (slot instanceof SpotSlot) {
 				return prefix + "-" + getSpotSlotSuffix(slot);
-			} else {
+			} else if (openSlotAllocation.getSlot() != null) {
 				final String baseName = openSlotAllocation.getSlot().getName();
 				return prefix + "-" + baseName;
 			}

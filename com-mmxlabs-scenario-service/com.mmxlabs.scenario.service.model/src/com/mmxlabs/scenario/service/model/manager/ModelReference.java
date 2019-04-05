@@ -16,10 +16,10 @@ import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomai
 
 public class ModelReference implements Closeable {
 
-	private @NonNull final ModelRecord record;
-	private @NonNull final InstanceData data;
-	private boolean valid = true;
+	private final @NonNull ModelRecord record;
+	private final @NonNull InstanceData data;
 	private final @NonNull String referenceID;
+	private boolean valid = true;
 
 	private boolean shared;
 
@@ -154,6 +154,7 @@ public class ModelReference implements Closeable {
 			return false;
 		}
 	}
+
 	/**
 	 * Execute some code within the context of a write lock.
 	 */
@@ -170,7 +171,7 @@ public class ModelReference implements Closeable {
 							commandProviderEditingDomain.setCommandProvidersDisabled(true);
 						}
 					}
-					
+
 					hook.run();
 				} finally {
 					if (commandProviderEditingDomain != null) {

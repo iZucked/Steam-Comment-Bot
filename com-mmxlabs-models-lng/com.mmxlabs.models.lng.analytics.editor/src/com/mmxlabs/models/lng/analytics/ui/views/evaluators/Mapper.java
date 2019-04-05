@@ -17,16 +17,18 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
-import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
-import com.mmxlabs.models.lng.analytics.FleetShippingOption;
-import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
+import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -34,6 +36,8 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 public class Mapper implements IMapperClass {
 	private LNGScenarioModel scenarioModel;
+
+	private Map<VesselEventOption, VesselEvent> eventMap_orig = new HashMap<>();
 
 	private Map<BuyOption, LoadSlot> buyMap_orig = new HashMap<>();
 	private Map<BuyOption, LoadSlot> buyMap_be = new HashMap<>();
@@ -50,6 +54,8 @@ public class Mapper implements IMapperClass {
 	private Map<Pair<YearMonth, SpotMarket>, LoadSlot> buyMarketMap_be = new HashMap<>();
 	private Map<Pair<YearMonth, SpotMarket>, LoadSlot> buyMarketMap_change = new HashMap<>();
 
+	private Set<SpotMarket> extraSpotCargoMarkets = new LinkedHashSet<>();
+	private Set<VesselEvent> extraVesselEvents = new LinkedHashSet<>();
 	private Set<LoadSlot> extraLoads = new LinkedHashSet<>();
 	private Set<DischargeSlot> extraDischarges = new LinkedHashSet<>();
 	private Set<CharterInMarket> extraCharterInMarkets = new LinkedHashSet<>();
@@ -59,8 +65,16 @@ public class Mapper implements IMapperClass {
 	Map<RoundTripShippingOption, CharterInMarket> roundTripOptionMap = new HashMap<>();
 	Map<ExistingCharterMarketOption, CharterInMarket> charterMarketOptionMap = new HashMap<>();
 
-	public Mapper(LNGScenarioModel scenarioModel) {
+	private boolean makeBETableOptions;
+
+	public Mapper(LNGScenarioModel scenarioModel, boolean makeBETableOptions) {
 		this.scenarioModel = scenarioModel;
+		this.makeBETableOptions = makeBETableOptions;
+	}
+
+	@Override
+	public VesselEvent getOriginal(final VesselEventOption opt) {
+		return eventMap_orig.get(opt);
 	}
 
 	@Override
@@ -70,11 +84,13 @@ public class Mapper implements IMapperClass {
 
 	@Override
 	public LoadSlot getBreakEven(final BuyOption buy) {
+		assert makeBETableOptions;
 		return buyMap_be.get(buy);
 	}
 
 	@Override
 	public LoadSlot getChangable(final BuyOption buy) {
+		assert makeBETableOptions;
 		return buyMap_change.get(buy);
 	}
 
@@ -85,12 +101,23 @@ public class Mapper implements IMapperClass {
 
 	@Override
 	public DischargeSlot getBreakEven(final SellOption sell) {
+		assert makeBETableOptions;
 		return sellMap_be.get(sell);
 	}
 
 	@Override
 	public DischargeSlot getChangable(final SellOption sell) {
+		assert makeBETableOptions;
 		return sellMap_change.get(sell);
+	}
+
+	@Override
+	public void addMapping(final VesselEventOption opt, final VesselEvent original) {
+		if (original != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getVesselEvents().contains(original)) {
+			extraVesselEvents.add(original);
+		}
+
+		eventMap_orig.put(opt, original);
 	}
 
 	@Override
@@ -98,18 +125,19 @@ public class Mapper implements IMapperClass {
 		if (original != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getLoadSlots().contains(original)) {
 			extraLoads.add(original);
 		}
-
-		if (breakeven != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getLoadSlots().contains(breakeven)) {
-			extraLoads.add(breakeven);
-		}
-
-		if (changable != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getLoadSlots().contains(changable)) {
-			extraLoads.add(changable);
-		}
-
 		buyMap_orig.put(buy, original);
-		buyMap_be.put(buy, breakeven);
-		buyMap_change.put(buy, changable);
+		if (makeBETableOptions) {
+			if (breakeven != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getLoadSlots().contains(breakeven)) {
+				extraLoads.add(breakeven);
+			}
+
+			if (changable != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getLoadSlots().contains(changable)) {
+				extraLoads.add(changable);
+			}
+
+			buyMap_be.put(buy, breakeven);
+			buyMap_change.put(buy, changable);
+		}
 	}
 
 	@Override
@@ -118,19 +146,19 @@ public class Mapper implements IMapperClass {
 		if (original != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getDischargeSlots().contains(original)) {
 			extraDischarges.add(original);
 		}
-
-		if (breakeven != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getDischargeSlots().contains(breakeven)) {
-			extraDischarges.add(breakeven);
-		}
-
-		if (changable != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getDischargeSlots().contains(changable)) {
-			extraDischarges.add(changable);
-		}
-
 		sellMap_orig.put(sell, original);
-		sellMap_be.put(sell, breakeven);
-		sellMap_change.put(sell, changable);
+		if (makeBETableOptions) {
+			if (breakeven != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getDischargeSlots().contains(breakeven)) {
+				extraDischarges.add(breakeven);
+			}
 
+			if (changable != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getDischargeSlots().contains(changable)) {
+				extraDischarges.add(changable);
+			}
+
+			sellMap_be.put(sell, breakeven);
+			sellMap_change.put(sell, changable);
+		}
 	}
 
 	@Override
@@ -139,19 +167,21 @@ public class Mapper implements IMapperClass {
 		Pair<YearMonth, SpotMarket> key = new Pair<>(date, market);
 
 		buyMarketMap_original.put(key, original);
-		buyMarketMap_be.put(key, slot_breakEven);
-		buyMarketMap_change.put(key, slot_changable);
 
 		if (original != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getLoadSlots().contains(original)) {
 			extraLoads.add(original);
 		}
+		if (makeBETableOptions) {
+			buyMarketMap_be.put(key, slot_breakEven);
+			buyMarketMap_change.put(key, slot_changable);
 
-		if (slot_breakEven != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getLoadSlots().contains(slot_breakEven)) {
-			extraLoads.add(slot_breakEven);
-		}
+			if (slot_breakEven != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getLoadSlots().contains(slot_breakEven)) {
+				extraLoads.add(slot_breakEven);
+			}
 
-		if (slot_changable != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getLoadSlots().contains(slot_changable)) {
-			extraLoads.add(slot_changable);
+			if (slot_changable != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getLoadSlots().contains(slot_changable)) {
+				extraLoads.add(slot_changable);
+			}
 		}
 	}
 
@@ -160,19 +190,21 @@ public class Mapper implements IMapperClass {
 		Pair<YearMonth, SpotMarket> key = new Pair<>(date, market);
 
 		sellMarketMap_original.put(key, original);
-		sellMarketMap_be.put(key, slot_breakEven);
-		sellMarketMap_change.put(key, slot_changable);
-
 		if (original != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getDischargeSlots().contains(original)) {
 			extraDischarges.add(original);
 		}
+		if (makeBETableOptions) {
 
-		if (slot_breakEven != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getDischargeSlots().contains(slot_breakEven)) {
-			extraDischarges.add(slot_breakEven);
-		}
+			sellMarketMap_be.put(key, slot_breakEven);
+			sellMarketMap_change.put(key, slot_changable);
 
-		if (slot_changable != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getDischargeSlots().contains(slot_changable)) {
-			extraDischarges.add(slot_changable);
+			if (slot_breakEven != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getDischargeSlots().contains(slot_breakEven)) {
+				extraDischarges.add(slot_breakEven);
+			}
+
+			if (slot_changable != null && !ScenarioModelUtil.getCargoModel(scenarioModel).getDischargeSlots().contains(slot_changable)) {
+				extraDischarges.add(slot_changable);
+			}
 		}
 	}
 
@@ -214,7 +246,7 @@ public class Mapper implements IMapperClass {
 	}
 
 	@Override
-	public VesselAvailability get(FleetShippingOption fleetShippingOption) {
+	public VesselAvailability get(SimpleVesselCharterOption fleetShippingOption) {
 		return fleetOptionMap.get(fleetShippingOption);
 	}
 
@@ -227,7 +259,9 @@ public class Mapper implements IMapperClass {
 	}
 
 	@Override
-	public void addMapping(FleetShippingOption fleetShippingOption, VesselAvailability vesselAvailability) {
+	public void addMapping(SimpleVesselCharterOption fleetShippingOption, VesselAvailability vesselAvailability) {
+		assert vesselAvailability != null;
+
 		if (!ScenarioModelUtil.getCargoModel(scenarioModel).getVesselAvailabilities().contains(vesselAvailability)) {
 			extraVesselAvailabilities.add(vesselAvailability);
 		}
@@ -235,7 +269,9 @@ public class Mapper implements IMapperClass {
 	}
 
 	@Override
-	public void addMapping(ExistingVesselAvailability shippingOption, VesselAvailability vesselAvailability) {
+	public void addMapping(ExistingVesselCharterOption shippingOption, VesselAvailability vesselAvailability) {
+		assert vesselAvailability != null;
+
 		if (!ScenarioModelUtil.getCargoModel(scenarioModel).getVesselAvailabilities().contains(vesselAvailability)) {
 			extraVesselAvailabilities.add(vesselAvailability);
 		}
@@ -243,7 +279,8 @@ public class Mapper implements IMapperClass {
 	}
 
 	@Override
-	public void addMapping(NewVesselAvailability shippingOption, VesselAvailability vesselAvailability) {
+	public void addMapping(FullVesselCharterOption shippingOption, VesselAvailability vesselAvailability) {
+		assert vesselAvailability != null;
 		if (!ScenarioModelUtil.getCargoModel(scenarioModel).getVesselAvailabilities().contains(vesselAvailability)) {
 			extraVesselAvailabilities.add(vesselAvailability);
 		}
@@ -253,7 +290,7 @@ public class Mapper implements IMapperClass {
 	@Override
 	public ExtraDataProvider getExtraDataProvider() {
 		return new ExtraDataProvider(new ArrayList<>(extraVesselAvailabilities), new ArrayList<>(extraCharterInMarkets), Collections.emptyList(), new ArrayList<>(extraLoads),
-				new ArrayList<>(extraDischarges));
+				new ArrayList<>(extraDischarges), new ArrayList<>(extraVesselEvents), new ArrayList<>(extraSpotCargoMarkets));
 	}
 
 	@Override
@@ -267,5 +304,10 @@ public class Mapper implements IMapperClass {
 	@Override
 	public CharterInMarket get(ExistingCharterMarketOption existingCharterMarketOption) {
 		return charterMarketOptionMap.get(existingCharterMarketOption);
+	}
+
+	@Override
+	public boolean isCreateBEOptions() {
+		return makeBETableOptions;
 	}
 }

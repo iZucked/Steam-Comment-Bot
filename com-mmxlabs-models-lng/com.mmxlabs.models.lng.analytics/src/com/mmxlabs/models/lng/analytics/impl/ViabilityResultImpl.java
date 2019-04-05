@@ -195,6 +195,7 @@ public class ViabilityResultImpl extends EObjectImpl implements ViabilityResult 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotMarket getTarget() {
 		if (target != null && target.eIsProxy()) {
 			InternalEObject oldTarget = (InternalEObject)target;
@@ -221,6 +222,7 @@ public class ViabilityResultImpl extends EObjectImpl implements ViabilityResult 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTarget(SpotMarket newTarget) {
 		SpotMarket oldTarget = target;
 		target = newTarget;
@@ -233,6 +235,7 @@ public class ViabilityResultImpl extends EObjectImpl implements ViabilityResult 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getEarliestETA() {
 		return earliestETA;
 	}
@@ -242,6 +245,7 @@ public class ViabilityResultImpl extends EObjectImpl implements ViabilityResult 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEarliestETA(LocalDate newEarliestETA) {
 		LocalDate oldEarliestETA = earliestETA;
 		earliestETA = newEarliestETA;
@@ -254,6 +258,7 @@ public class ViabilityResultImpl extends EObjectImpl implements ViabilityResult 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getLatestETA() {
 		return latestETA;
 	}
@@ -263,6 +268,7 @@ public class ViabilityResultImpl extends EObjectImpl implements ViabilityResult 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLatestETA(LocalDate newLatestETA) {
 		LocalDate oldLatestETA = latestETA;
 		latestETA = newLatestETA;
@@ -275,6 +281,7 @@ public class ViabilityResultImpl extends EObjectImpl implements ViabilityResult 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getEarliestVolume() {
 		return earliestVolume;
 	}
@@ -284,6 +291,7 @@ public class ViabilityResultImpl extends EObjectImpl implements ViabilityResult 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEarliestVolume(int newEarliestVolume) {
 		int oldEarliestVolume = earliestVolume;
 		earliestVolume = newEarliestVolume;
@@ -296,6 +304,7 @@ public class ViabilityResultImpl extends EObjectImpl implements ViabilityResult 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getLatestVolume() {
 		return latestVolume;
 	}
@@ -305,6 +314,7 @@ public class ViabilityResultImpl extends EObjectImpl implements ViabilityResult 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLatestVolume(int newLatestVolume) {
 		int oldLatestVolume = latestVolume;
 		latestVolume = newLatestVolume;
@@ -317,6 +327,7 @@ public class ViabilityResultImpl extends EObjectImpl implements ViabilityResult 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getEarliestPrice() {
 		return earliestPrice;
 	}
@@ -326,6 +337,7 @@ public class ViabilityResultImpl extends EObjectImpl implements ViabilityResult 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEarliestPrice(double newEarliestPrice) {
 		double oldEarliestPrice = earliestPrice;
 		earliestPrice = newEarliestPrice;
@@ -338,6 +350,7 @@ public class ViabilityResultImpl extends EObjectImpl implements ViabilityResult 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getLatestPrice() {
 		return latestPrice;
 	}
@@ -347,6 +360,7 @@ public class ViabilityResultImpl extends EObjectImpl implements ViabilityResult 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLatestPrice(double newLatestPrice) {
 		double oldLatestPrice = latestPrice;
 		latestPrice = newLatestPrice;

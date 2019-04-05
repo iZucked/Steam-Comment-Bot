@@ -5,11 +5,13 @@
 package com.mmxlabs.models.lng.schedule.impl;
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -19,6 +21,7 @@ import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.OtherPNL;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -43,6 +46,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getUnusedElements <em>Unused Elements</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getInventoryLevels <em>Inventory Levels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getPaperDealAllocations <em>Paper Deal Allocations</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getOtherPNL <em>Other PNL</em>}</li>
  * </ul>
  *
  * @generated
@@ -137,6 +141,16 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * @ordered
 	 */
 	protected EList<PaperDealAllocation> paperDealAllocations;
+
+	/**
+	 * The cached value of the '{@link #getOtherPNL() <em>Other PNL</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOtherPNL()
+	 * @generated
+	 * @ordered
+	 */
+	protected OtherPNL otherPNL;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -280,6 +294,51 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * @generated
 	 */
 	@Override
+	public OtherPNL getOtherPNL() {
+		return otherPNL;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetOtherPNL(OtherPNL newOtherPNL, NotificationChain msgs) {
+		OtherPNL oldOtherPNL = otherPNL;
+		otherPNL = newOtherPNL;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.SCHEDULE__OTHER_PNL, oldOtherPNL, newOtherPNL);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setOtherPNL(OtherPNL newOtherPNL) {
+		if (newOtherPNL != otherPNL) {
+			NotificationChain msgs = null;
+			if (otherPNL != null)
+				msgs = ((InternalEObject)otherPNL).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.SCHEDULE__OTHER_PNL, null, msgs);
+			if (newOtherPNL != null)
+				msgs = ((InternalEObject)newOtherPNL).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.SCHEDULE__OTHER_PNL, null, msgs);
+			msgs = basicSetOtherPNL(newOtherPNL, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SCHEDULE__OTHER_PNL, newOtherPNL, newOtherPNL));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case SchedulePackage.SCHEDULE__SEQUENCES:
@@ -298,6 +357,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return ((InternalEList<?>)getInventoryLevels()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SCHEDULE__PAPER_DEAL_ALLOCATIONS:
 				return ((InternalEList<?>)getPaperDealAllocations()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SCHEDULE__OTHER_PNL:
+				return basicSetOtherPNL(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -328,6 +389,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return getInventoryLevels();
 			case SchedulePackage.SCHEDULE__PAPER_DEAL_ALLOCATIONS:
 				return getPaperDealAllocations();
+			case SchedulePackage.SCHEDULE__OTHER_PNL:
+				return getOtherPNL();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -377,6 +440,9 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				getPaperDealAllocations().clear();
 				getPaperDealAllocations().addAll((Collection<? extends PaperDealAllocation>)newValue);
 				return;
+			case SchedulePackage.SCHEDULE__OTHER_PNL:
+				setOtherPNL((OtherPNL)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -416,6 +482,9 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 			case SchedulePackage.SCHEDULE__PAPER_DEAL_ALLOCATIONS:
 				getPaperDealAllocations().clear();
 				return;
+			case SchedulePackage.SCHEDULE__OTHER_PNL:
+				setOtherPNL((OtherPNL)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -446,6 +515,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return inventoryLevels != null && !inventoryLevels.isEmpty();
 			case SchedulePackage.SCHEDULE__PAPER_DEAL_ALLOCATIONS:
 				return paperDealAllocations != null && !paperDealAllocations.isEmpty();
+			case SchedulePackage.SCHEDULE__OTHER_PNL:
+				return otherPNL != null;
 		}
 		return super.eIsSet(featureID);
 	}

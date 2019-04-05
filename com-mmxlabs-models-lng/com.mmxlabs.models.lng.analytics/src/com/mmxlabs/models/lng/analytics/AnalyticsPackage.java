@@ -189,142 +189,17 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBuyOpportunity()
 	 * @generated
 	 */
-	int BUY_OPPORTUNITY = 3;
+	int BUY_OPPORTUNITY = 5;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OpenBuyImpl <em>Open Buy</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.OpenBuyImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOpenBuy()
 	 * @generated
-	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Des Purchase</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY__DES_PURCHASE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY__PORT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Contract</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY__CONTRACT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY__DATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Entity</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY__ENTITY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Cv</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY__CV = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
-
-	/**
-	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY__MISC_COSTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
-
-	/**
-	 * The feature id for the '<em><b>Volume Mode</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
-
-	/**
-	 * The feature id for the '<em><b>Volume Units</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
-
-	/**
-	 * The feature id for the '<em><b>Min Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
-
-	/**
-	 * The feature id for the '<em><b>Max Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
-
-	/**
-	 * The number of structural features of the '<em>Buy Opportunity</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 13;
+	int OPEN_BUY = 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl <em>Sell Opportunity</em>}' class.
@@ -334,7 +209,17 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSellOpportunity()
 	 * @generated
 	 */
-	int SELL_OPPORTUNITY = 4;
+	int SELL_OPPORTUNITY = 6;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OpenSellImpl <em>Open Sell</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.OpenSellImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOpenSell()
+	 * @generated
+	 */
+	int OPEN_SELL = 3;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -343,16 +228,79 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+	int OPEN_SELL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Fob Sale</b></em>' attribute.
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__FOB_SALE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+	int OPEN_SELL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The number of structural features of the '<em>Open Sell</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_SELL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_BUY__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_BUY__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The number of structural features of the '<em>Open Buy</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_BUY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Des Purchase</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__DES_PURCHASE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -361,7 +309,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__PORT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int BUY_OPPORTUNITY__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -370,7 +318,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__CONTRACT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int BUY_OPPORTUNITY__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -379,7 +327,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__DATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int BUY_OPPORTUNITY__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -388,7 +336,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int BUY_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -397,7 +345,16 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__ENTITY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int BUY_OPPORTUNITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Cv</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__CV = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -406,7 +363,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int BUY_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
@@ -415,7 +372,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__MISC_COSTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int BUY_OPPORTUNITY__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Volume Mode</b></em>' attribute.
@@ -424,7 +381,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+	int BUY_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Volume Units</b></em>' attribute.
@@ -433,7 +390,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+	int BUY_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Min Volume</b></em>' attribute.
@@ -442,7 +399,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+	int BUY_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Max Volume</b></em>' attribute.
@@ -451,7 +408,142 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
+	int BUY_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+
+	/**
+	 * The number of structural features of the '<em>Buy Opportunity</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Fob Sale</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__FOB_SALE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Volume Mode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Volume Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Min Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Max Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The number of structural features of the '<em>Sell Opportunity</em>' class.
@@ -460,7 +552,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
+	int SELL_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyMarketImpl <em>Buy Market</em>}' class.
@@ -470,7 +562,25 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBuyMarket()
 	 * @generated
 	 */
-	int BUY_MARKET = 5;
+	int BUY_MARKET = 7;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_MARKET__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_MARKET__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -479,7 +589,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_MARKET__MARKET = BUY_OPTION_FEATURE_COUNT + 0;
+	int BUY_MARKET__MARKET = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Buy Market</em>' class.
@@ -488,7 +598,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_MARKET_FEATURE_COUNT = BUY_OPTION_FEATURE_COUNT + 1;
+	int BUY_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SellMarketImpl <em>Sell Market</em>}' class.
@@ -498,7 +608,25 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSellMarket()
 	 * @generated
 	 */
-	int SELL_MARKET = 6;
+	int SELL_MARKET = 8;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_MARKET__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_MARKET__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -507,7 +635,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_MARKET__MARKET = SELL_OPTION_FEATURE_COUNT + 0;
+	int SELL_MARKET__MARKET = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Sell Market</em>' class.
@@ -516,7 +644,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_MARKET_FEATURE_COUNT = SELL_OPTION_FEATURE_COUNT + 1;
+	int SELL_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyReferenceImpl <em>Buy Reference</em>}' class.
@@ -526,7 +654,25 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBuyReference()
 	 * @generated
 	 */
-	int BUY_REFERENCE = 7;
+	int BUY_REFERENCE = 9;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_REFERENCE__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_REFERENCE__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
@@ -535,7 +681,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_REFERENCE__SLOT = BUY_OPTION_FEATURE_COUNT + 0;
+	int BUY_REFERENCE__SLOT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Buy Reference</em>' class.
@@ -544,7 +690,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_REFERENCE_FEATURE_COUNT = BUY_OPTION_FEATURE_COUNT + 1;
+	int BUY_REFERENCE_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SellReferenceImpl <em>Sell Reference</em>}' class.
@@ -554,7 +700,25 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSellReference()
 	 * @generated
 	 */
-	int SELL_REFERENCE = 8;
+	int SELL_REFERENCE = 10;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_REFERENCE__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_REFERENCE__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
@@ -563,7 +727,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_REFERENCE__SLOT = SELL_OPTION_FEATURE_COUNT + 0;
+	int SELL_REFERENCE__SLOT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Sell Reference</em>' class.
@@ -572,7 +736,145 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_REFERENCE_FEATURE_COUNT = SELL_OPTION_FEATURE_COUNT + 1;
+	int SELL_REFERENCE_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventOptionImpl <em>Vessel Event Option</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.VesselEventOptionImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventOption()
+	 * @generated
+	 */
+	int VESSEL_EVENT_OPTION = 11;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Event Option</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_OPTION_FEATURE_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventReferenceImpl <em>Vessel Event Reference</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.VesselEventReferenceImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventReference()
+	 * @generated
+	 */
+	int VESSEL_EVENT_REFERENCE = 12;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_REFERENCE__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_REFERENCE__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_REFERENCE__EVENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Event Reference</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_REFERENCE_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CharterOutOpportunityImpl <em>Charter Out Opportunity</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.CharterOutOpportunityImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCharterOutOpportunity()
+	 * @generated
+	 */
+	int CHARTER_OUT_OPPORTUNITY = 13;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_OPPORTUNITY__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_OPPORTUNITY__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_OPPORTUNITY__HIRE_COST = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_OPPORTUNITY__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_OPPORTUNITY__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_OPPORTUNITY__DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Charter Out Opportunity</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowImpl <em>Base Case Row</em>}' class.
@@ -582,7 +884,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCaseRow()
 	 * @generated
 	 */
-	int BASE_CASE_ROW = 9;
+	int BASE_CASE_ROW = 14;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -603,13 +905,22 @@ s	 * <!-- end-user-doc -->
 	int BASE_CASE_ROW__SELL_OPTION = 1;
 
 	/**
+	 * The feature id for the '<em><b>Vessel Event Option</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW__VESSEL_EVENT_OPTION = 2;
+
+	/**
 	 * The feature id for the '<em><b>Shipping</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW__SHIPPING = 2;
+	int BASE_CASE_ROW__SHIPPING = 3;
 
 	/**
 	 * The number of structural features of the '<em>Base Case Row</em>' class.
@@ -618,7 +929,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW_FEATURE_COUNT = 3;
+	int BASE_CASE_ROW_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl <em>Partial Case Row</em>}' class.
@@ -628,7 +939,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCaseRow()
 	 * @generated
 	 */
-	int PARTIAL_CASE_ROW = 10;
+	int PARTIAL_CASE_ROW = 15;
 
 	/**
 	 * The feature id for the '<em><b>Buy Options</b></em>' reference list.
@@ -649,13 +960,22 @@ s	 * <!-- end-user-doc -->
 	int PARTIAL_CASE_ROW__SELL_OPTIONS = 1;
 
 	/**
+	 * The feature id for the '<em><b>Vessel Event Options</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW__VESSEL_EVENT_OPTIONS = 2;
+
+	/**
 	 * The feature id for the '<em><b>Shipping</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW__SHIPPING = 2;
+	int PARTIAL_CASE_ROW__SHIPPING = 3;
 
 	/**
 	 * The number of structural features of the '<em>Partial Case Row</em>' class.
@@ -664,7 +984,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW_FEATURE_COUNT = 3;
+	int PARTIAL_CASE_ROW_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingOptionImpl <em>Shipping Option</em>}' class.
@@ -674,7 +994,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingOption()
 	 * @generated
 	 */
-	int SHIPPING_OPTION = 11;
+	int SHIPPING_OPTION = 16;
 
 	/**
 	 * The number of structural features of the '<em>Shipping Option</em>' class.
@@ -686,14 +1006,32 @@ s	 * <!-- end-user-doc -->
 	int SHIPPING_OPTION_FEATURE_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.FleetShippingOptionImpl <em>Fleet Shipping Option</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SimpleVesselCharterOptionImpl <em>Simple Vessel Charter Option</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.FleetShippingOptionImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFleetShippingOption()
+	 * @see com.mmxlabs.models.lng.analytics.impl.SimpleVesselCharterOptionImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSimpleVesselCharterOption()
 	 * @generated
 	 */
-	int FLEET_SHIPPING_OPTION = 12;
+	int SIMPLE_VESSEL_CHARTER_OPTION = 17;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_VESSEL_CHARTER_OPTION__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_VESSEL_CHARTER_OPTION__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
@@ -702,7 +1040,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_SHIPPING_OPTION__VESSEL = SHIPPING_OPTION_FEATURE_COUNT + 0;
+	int SIMPLE_VESSEL_CHARTER_OPTION__VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
@@ -711,7 +1049,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_SHIPPING_OPTION__HIRE_COST = SHIPPING_OPTION_FEATURE_COUNT + 1;
+	int SIMPLE_VESSEL_CHARTER_OPTION__HIRE_COST = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -720,7 +1058,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_SHIPPING_OPTION__ENTITY = SHIPPING_OPTION_FEATURE_COUNT + 2;
+	int SIMPLE_VESSEL_CHARTER_OPTION__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Use Safety Heel</b></em>' attribute.
@@ -729,26 +1067,44 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL = SHIPPING_OPTION_FEATURE_COUNT + 3;
+	int SIMPLE_VESSEL_CHARTER_OPTION__USE_SAFETY_HEEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
-	 * The number of structural features of the '<em>Fleet Shipping Option</em>' class.
+	 * The number of structural features of the '<em>Simple Vessel Charter Option</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_SHIPPING_OPTION_FEATURE_COUNT = SHIPPING_OPTION_FEATURE_COUNT + 4;
+	int SIMPLE_VESSEL_CHARTER_OPTION_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionalAvailabilityShippingOptionImpl <em>Optional Availability Shipping Option</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionalSimpleVesselCharterOptionImpl <em>Optional Simple Vessel Charter Option</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.OptionalAvailabilityShippingOptionImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionalAvailabilityShippingOption()
+	 * @see com.mmxlabs.models.lng.analytics.impl.OptionalSimpleVesselCharterOptionImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionalSimpleVesselCharterOption()
 	 * @generated
 	 */
-	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION = 13;
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION = 18;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__EXTENSIONS = SIMPLE_VESSEL_CHARTER_OPTION__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__UUID = SIMPLE_VESSEL_CHARTER_OPTION__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
@@ -757,7 +1113,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__VESSEL = FLEET_SHIPPING_OPTION__VESSEL;
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__VESSEL = SIMPLE_VESSEL_CHARTER_OPTION__VESSEL;
 
 	/**
 	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
@@ -766,7 +1122,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__HIRE_COST = FLEET_SHIPPING_OPTION__HIRE_COST;
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__HIRE_COST = SIMPLE_VESSEL_CHARTER_OPTION__HIRE_COST;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -775,7 +1131,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__ENTITY = FLEET_SHIPPING_OPTION__ENTITY;
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__ENTITY = SIMPLE_VESSEL_CHARTER_OPTION__ENTITY;
 
 	/**
 	 * The feature id for the '<em><b>Use Safety Heel</b></em>' attribute.
@@ -784,7 +1140,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__USE_SAFETY_HEEL = FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL;
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__USE_SAFETY_HEEL = SIMPLE_VESSEL_CHARTER_OPTION__USE_SAFETY_HEEL;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Bonus</b></em>' attribute.
@@ -793,7 +1149,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__BALLAST_BONUS = FLEET_SHIPPING_OPTION_FEATURE_COUNT + 0;
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__BALLAST_BONUS = SIMPLE_VESSEL_CHARTER_OPTION_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
@@ -802,7 +1158,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__REPOSITIONING_FEE = FLEET_SHIPPING_OPTION_FEATURE_COUNT + 1;
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__REPOSITIONING_FEE = SIMPLE_VESSEL_CHARTER_OPTION_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
@@ -811,7 +1167,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__START = FLEET_SHIPPING_OPTION_FEATURE_COUNT + 2;
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__START = SIMPLE_VESSEL_CHARTER_OPTION_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>End</b></em>' attribute.
@@ -820,7 +1176,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__END = FLEET_SHIPPING_OPTION_FEATURE_COUNT + 3;
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__END = SIMPLE_VESSEL_CHARTER_OPTION_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Start Port</b></em>' reference.
@@ -829,7 +1185,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__START_PORT = FLEET_SHIPPING_OPTION_FEATURE_COUNT + 4;
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__START_PORT = SIMPLE_VESSEL_CHARTER_OPTION_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>End Port</b></em>' reference.
@@ -838,16 +1194,16 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__END_PORT = FLEET_SHIPPING_OPTION_FEATURE_COUNT + 5;
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__END_PORT = SIMPLE_VESSEL_CHARTER_OPTION_FEATURE_COUNT + 5;
 
 	/**
-	 * The number of structural features of the '<em>Optional Availability Shipping Option</em>' class.
+	 * The number of structural features of the '<em>Optional Simple Vessel Charter Option</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION_FEATURE_COUNT = FLEET_SHIPPING_OPTION_FEATURE_COUNT + 6;
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION_FEATURE_COUNT = SIMPLE_VESSEL_CHARTER_OPTION_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.RoundTripShippingOptionImpl <em>Round Trip Shipping Option</em>}' class.
@@ -857,7 +1213,25 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getRoundTripShippingOption()
 	 * @generated
 	 */
-	int ROUND_TRIP_SHIPPING_OPTION = 14;
+	int ROUND_TRIP_SHIPPING_OPTION = 19;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUND_TRIP_SHIPPING_OPTION__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUND_TRIP_SHIPPING_OPTION__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
@@ -866,7 +1240,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUND_TRIP_SHIPPING_OPTION__VESSEL = SHIPPING_OPTION_FEATURE_COUNT + 0;
+	int ROUND_TRIP_SHIPPING_OPTION__VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
@@ -875,7 +1249,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUND_TRIP_SHIPPING_OPTION__HIRE_COST = SHIPPING_OPTION_FEATURE_COUNT + 1;
+	int ROUND_TRIP_SHIPPING_OPTION__HIRE_COST = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Round Trip Shipping Option</em>' class.
@@ -884,7 +1258,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUND_TRIP_SHIPPING_OPTION_FEATURE_COUNT = SHIPPING_OPTION_FEATURE_COUNT + 2;
+	int ROUND_TRIP_SHIPPING_OPTION_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.NominatedShippingOptionImpl <em>Nominated Shipping Option</em>}' class.
@@ -894,7 +1268,25 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getNominatedShippingOption()
 	 * @generated
 	 */
-	int NOMINATED_SHIPPING_OPTION = 15;
+	int NOMINATED_SHIPPING_OPTION = 20;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOMINATED_SHIPPING_OPTION__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOMINATED_SHIPPING_OPTION__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Nominated Vessel</b></em>' reference.
@@ -903,7 +1295,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NOMINATED_SHIPPING_OPTION__NOMINATED_VESSEL = SHIPPING_OPTION_FEATURE_COUNT + 0;
+	int NOMINATED_SHIPPING_OPTION__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Nominated Shipping Option</em>' class.
@@ -912,117 +1304,99 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NOMINATED_SHIPPING_OPTION_FEATURE_COUNT = SHIPPING_OPTION_FEATURE_COUNT + 1;
+	int NOMINATED_SHIPPING_OPTION_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.AnalysisResultRowImpl <em>Analysis Result Row</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.FullVesselCharterOptionImpl <em>Full Vessel Charter Option</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalysisResultRowImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAnalysisResultRow()
+	 * @see com.mmxlabs.models.lng.analytics.impl.FullVesselCharterOptionImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFullVesselCharterOption()
 	 * @generated
 	 */
-	int ANALYSIS_RESULT_ROW = 16;
+	int FULL_VESSEL_CHARTER_OPTION = 21;
 
 	/**
-	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYSIS_RESULT_ROW__BUY_OPTION = 0;
-
-	/**
-	 * The feature id for the '<em><b>Sell Option</b></em>' reference.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYSIS_RESULT_ROW__SELL_OPTION = 1;
+	int FULL_VESSEL_CHARTER_OPTION__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Result Detail</b></em>' containment reference.
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYSIS_RESULT_ROW__RESULT_DETAIL = 2;
+	int FULL_VESSEL_CHARTER_OPTION__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Shipping</b></em>' reference.
+	 * The feature id for the '<em><b>Vessel Charter</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYSIS_RESULT_ROW__SHIPPING = 3;
+	int FULL_VESSEL_CHARTER_OPTION__VESSEL_CHARTER = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Result Details</b></em>' containment reference.
+	 * The number of structural features of the '<em>Full Vessel Charter Option</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYSIS_RESULT_ROW__RESULT_DETAILS = 4;
+	int FULL_VESSEL_CHARTER_OPTION_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The number of structural features of the '<em>Analysis Result Row</em>' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ExistingVesselCharterOptionImpl <em>Existing Vessel Charter Option</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.ExistingVesselCharterOptionImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingVesselCharterOption()
+	 * @generated
+	 */
+	int EXISTING_VESSEL_CHARTER_OPTION = 22;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYSIS_RESULT_ROW_FEATURE_COUNT = 5;
+	int EXISTING_VESSEL_CHARTER_OPTION__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ResultContainerImpl <em>Result Container</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.ResultContainerImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResultContainer()
-	 * @generated
-	 */
-	int RESULT_CONTAINER = 17;
-
-	/**
-	 * The feature id for the '<em><b>Cargo Allocation</b></em>' reference.
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESULT_CONTAINER__CARGO_ALLOCATION = 0;
+	int EXISTING_VESSEL_CHARTER_OPTION__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Open Slot Allocations</b></em>' reference list.
+	 * The feature id for the '<em><b>Vessel Charter</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESULT_CONTAINER__OPEN_SLOT_ALLOCATIONS = 1;
+	int EXISTING_VESSEL_CHARTER_OPTION__VESSEL_CHARTER = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Slot Allocations</b></em>' reference list.
+	 * The number of structural features of the '<em>Existing Vessel Charter Option</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESULT_CONTAINER__SLOT_ALLOCATIONS = 2;
-
-	/**
-	 * The number of structural features of the '<em>Result Container</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESULT_CONTAINER_FEATURE_COUNT = 3;
+	int EXISTING_VESSEL_CHARTER_OPTION_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.AnalysisResultDetailImpl <em>Analysis Result Detail</em>}' class.
@@ -1032,7 +1406,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAnalysisResultDetail()
 	 * @generated
 	 */
-	int ANALYSIS_RESULT_DETAIL = 18;
+	int ANALYSIS_RESULT_DETAIL = 23;
 
 	/**
 	 * The number of structural features of the '<em>Analysis Result Detail</em>' class.
@@ -1051,7 +1425,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getProfitAndLossResult()
 	 * @generated
 	 */
-	int PROFIT_AND_LOSS_RESULT = 19;
+	int PROFIT_AND_LOSS_RESULT = 24;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1079,7 +1453,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenResult()
 	 * @generated
 	 */
-	int BREAK_EVEN_RESULT = 20;
+	int BREAK_EVEN_RESULT = 25;
 
 	/**
 	 * The feature id for the '<em><b>Price</b></em>' attribute.
@@ -1125,7 +1499,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractAnalysisModel()
 	 * @generated
 	 */
-	int ABSTRACT_ANALYSIS_MODEL = 21;
+	int ABSTRACT_ANALYSIS_MODEL = 26;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1164,13 +1538,22 @@ s	 * <!-- end-user-doc -->
 	int ABSTRACT_ANALYSIS_MODEL__SELLS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Shipping Templates</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Abstract Analysis Model</em>' class.
@@ -1179,7 +1562,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.
@@ -1189,7 +1572,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionAnalysisModel()
 	 * @generated
 	 */
-	int OPTION_ANALYSIS_MODEL = 22;
+	int OPTION_ANALYSIS_MODEL = 27;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1228,6 +1611,15 @@ s	 * <!-- end-user-doc -->
 	int OPTION_ANALYSIS_MODEL__SELLS = ABSTRACT_ANALYSIS_MODEL__SELLS;
 
 	/**
+	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTION_ANALYSIS_MODEL__VESSEL_EVENTS = ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS;
+
+	/**
 	 * The feature id for the '<em><b>Shipping Templates</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1255,22 +1647,13 @@ s	 * <!-- end-user-doc -->
 	int OPTION_ANALYSIS_MODEL__PARTIAL_CASE = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Base Case Result</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Results</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__RESULTS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 3;
+	int OPTION_ANALYSIS_MODEL__RESULTS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Use Target PNL</b></em>' attribute.
@@ -1279,16 +1662,16 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__USE_TARGET_PNL = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 4;
+	int OPTION_ANALYSIS_MODEL__USE_TARGET_PNL = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Children</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Mode</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__CHILDREN = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 5;
+	int OPTION_ANALYSIS_MODEL__MODE = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Option Analysis Model</em>' class.
@@ -1297,117 +1680,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL_FEATURE_COUNT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 6;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ResultSetImpl <em>Result Set</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.ResultSetImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResultSet()
-	 * @generated
-	 */
-	int RESULT_SET = 23;
-
-	/**
-	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESULT_SET__ROWS = 0;
-
-	/**
-	 * The feature id for the '<em><b>Profit And Loss</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESULT_SET__PROFIT_AND_LOSS = 1;
-
-	/**
-	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESULT_SET__SCHEDULE_MODEL = 2;
-
-	/**
-	 * The number of structural features of the '<em>Result Set</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESULT_SET_FEATURE_COUNT = 3;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ResultImpl <em>Result</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.ResultImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResult()
-	 * @generated
-	 */
-	int RESULT = 24;
-
-	/**
-	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESULT__EXTRA_SLOTS = 0;
-
-	/**
-	 * The feature id for the '<em><b>Result Sets</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESULT__RESULT_SETS = 1;
-
-	/**
-	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESULT__EXTRA_VESSEL_AVAILABILITIES = 2;
-
-	/**
-	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESULT__CHARTER_IN_MARKET_OVERRIDES = 3;
-
-	/**
-	 * The feature id for the '<em><b>Extra Charter In Markets</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESULT__EXTRA_CHARTER_IN_MARKETS = 4;
-
-	/**
-	 * The number of structural features of the '<em>Result</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESULT_FEATURE_COUNT = 5;
+	int OPTION_ANALYSIS_MODEL_FEATURE_COUNT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseImpl <em>Base Case</em>}' class.
@@ -1417,43 +1690,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCase()
 	 * @generated
 	 */
-	int BASE_CASE = 25;
-
-	/**
-	 * The feature id for the '<em><b>Base Case</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_CASE__BASE_CASE = 0;
-
-	/**
-	 * The feature id for the '<em><b>Profit And Loss</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_CASE__PROFIT_AND_LOSS = 1;
-
-	/**
-	 * The feature id for the '<em><b>Keep Existing Scenario</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_CASE__KEEP_EXISTING_SCENARIO = 2;
-
-	/**
-	 * The number of structural features of the '<em>Base Case</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_CASE_FEATURE_COUNT = 3;
+	int BASE_CASE = 29;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseImpl <em>Partial Case</em>}' class.
@@ -1463,90 +1700,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCase()
 	 * @generated
 	 */
-	int PARTIAL_CASE = 26;
-
-	/**
-	 * The feature id for the '<em><b>Partial Case</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARTIAL_CASE__PARTIAL_CASE = 0;
-
-	/**
-	 * The feature id for the '<em><b>Keep Existing Scenario</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARTIAL_CASE__KEEP_EXISTING_SCENARIO = 1;
-
-	/**
-	 * The number of structural features of the '<em>Partial Case</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARTIAL_CASE_FEATURE_COUNT = 2;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.NewVesselAvailabilityImpl <em>New Vessel Availability</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.NewVesselAvailabilityImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getNewVesselAvailability()
-	 * @generated
-	 */
-	int NEW_VESSEL_AVAILABILITY = 27;
-
-	/**
-	 * The feature id for the '<em><b>Vessel Availability</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NEW_VESSEL_AVAILABILITY__VESSEL_AVAILABILITY = SHIPPING_OPTION_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>New Vessel Availability</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NEW_VESSEL_AVAILABILITY_FEATURE_COUNT = SHIPPING_OPTION_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ExistingVesselAvailabilityImpl <em>Existing Vessel Availability</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.ExistingVesselAvailabilityImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingVesselAvailability()
-	 * @generated
-	 */
-	int EXISTING_VESSEL_AVAILABILITY = 28;
-
-	/**
-	 * The feature id for the '<em><b>Vessel Availability</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXISTING_VESSEL_AVAILABILITY__VESSEL_AVAILABILITY = SHIPPING_OPTION_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Existing Vessel Availability</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXISTING_VESSEL_AVAILABILITY_FEATURE_COUNT = SHIPPING_OPTION_FEATURE_COUNT + 1;
+	int PARTIAL_CASE = 30;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ExistingCharterMarketOptionImpl <em>Existing Charter Market Option</em>}' class.
@@ -1556,34 +1710,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingCharterMarketOption()
 	 * @generated
 	 */
-	int EXISTING_CHARTER_MARKET_OPTION = 29;
-
-	/**
-	 * The feature id for the '<em><b>Charter In Market</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXISTING_CHARTER_MARKET_OPTION__CHARTER_IN_MARKET = SHIPPING_OPTION_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXISTING_CHARTER_MARKET_OPTION__SPOT_INDEX = SHIPPING_OPTION_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Existing Charter Market Option</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXISTING_CHARTER_MARKET_OPTION_FEATURE_COUNT = SHIPPING_OPTION_FEATURE_COUNT + 2;
+	int EXISTING_CHARTER_MARKET_OPTION = 31;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl <em>Abstract Solution Set</em>}' class.
@@ -1593,7 +1720,187 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractSolutionSet()
 	 * @generated
 	 */
-	int ABSTRACT_SOLUTION_SET = 30;
+	int ABSTRACT_SOLUTION_SET = 32;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl <em>Actionable Set Plan</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSetPlan()
+	 * @generated
+	 */
+	int ACTIONABLE_SET_PLAN = 33;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl <em>Slot Insertion Options</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotInsertionOptions()
+	 * @generated
+	 */
+	int SLOT_INSERTION_OPTIONS = 34;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl <em>Solution Option</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSolutionOption()
+	 * @generated
+	 */
+	int SOLUTION_OPTION = 35;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ChangeDescriptionImpl <em>Change Description</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.ChangeDescriptionImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChangeDescription()
+	 * @generated
+	 */
+	int CHANGE_DESCRIPTION = 39;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ChangeImpl <em>Change</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.ChangeImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChange()
+	 * @generated
+	 */
+	int CHANGE = 40;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OpenSlotChangeImpl <em>Open Slot Change</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.OpenSlotChangeImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOpenSlotChange()
+	 * @generated
+	 */
+	int OPEN_SLOT_CHANGE = 41;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CargoChangeImpl <em>Cargo Change</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.CargoChangeImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoChange()
+	 * @generated
+	 */
+	int CARGO_CHANGE = 42;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventChangeImpl <em>Vessel Event Change</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.VesselEventChangeImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventChange()
+	 * @generated
+	 */
+	int VESSEL_EVENT_CHANGE = 43;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventDescriptorImpl <em>Vessel Event Descriptor</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.VesselEventDescriptorImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventDescriptor()
+	 * @generated
+	 */
+	int VESSEL_EVENT_DESCRIPTOR = 44;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotDescriptorImpl <em>Slot Descriptor</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.SlotDescriptorImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotDescriptor()
+	 * @generated
+	 */
+	int SLOT_DESCRIPTOR = 45;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.RealSlotDescriptorImpl <em>Real Slot Descriptor</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.RealSlotDescriptorImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getRealSlotDescriptor()
+	 * @generated
+	 */
+	int REAL_SLOT_DESCRIPTOR = 46;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SpotMarketSlotDescriptorImpl <em>Spot Market Slot Descriptor</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.SpotMarketSlotDescriptorImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSpotMarketSlotDescriptor()
+	 * @generated
+	 */
+	int SPOT_MARKET_SLOT_DESCRIPTOR = 47;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselAllocationDescriptorImpl <em>Vessel Allocation Descriptor</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.VesselAllocationDescriptorImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselAllocationDescriptor()
+	 * @generated
+	 */
+	int VESSEL_ALLOCATION_DESCRIPTOR = 48;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketVesselAllocationDescriptorImpl <em>Market Vessel Allocation Descriptor</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.MarketVesselAllocationDescriptorImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketVesselAllocationDescriptor()
+	 * @generated
+	 */
+	int MARKET_VESSEL_ALLOCATION_DESCRIPTOR = 49;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.FleetVesselAllocationDescriptorImpl <em>Fleet Vessel Allocation Descriptor</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.FleetVesselAllocationDescriptorImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFleetVesselAllocationDescriptor()
+	 * @generated
+	 */
+	int FLEET_VESSEL_ALLOCATION_DESCRIPTOR = 50;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PositionDescriptorImpl <em>Position Descriptor</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.PositionDescriptorImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPositionDescriptor()
+	 * @generated
+	 */
+	int POSITION_DESCRIPTOR = 51;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptimisationResultImpl <em>Optimisation Result</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.OptimisationResultImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptimisationResult()
+	 * @generated
+	 */
+	int OPTIMISATION_RESULT = 36;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.DualModeSolutionOptionImpl <em>Dual Mode Solution Option</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.DualModeSolutionOptionImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDualModeSolutionOption()
+	 * @generated
+	 */
+	int DUAL_MODE_SOLUTION_OPTION = 37;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1677,23 +1984,311 @@ s	 * <!-- end-user-doc -->
 	int ABSTRACT_SOLUTION_SET__OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Extra Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Extra Charter In Markets</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Use Scenario Base</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+
+	/**
 	 * The number of structural features of the '<em>Abstract Solution Set</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_SOLUTION_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int ABSTRACT_SOLUTION_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl <em>Actionable Set Plan</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SandboxResultImpl <em>Sandbox Result</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSetPlan()
+	 * @see com.mmxlabs.models.lng.analytics.impl.SandboxResultImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSandboxResult()
 	 * @generated
 	 */
-	int ACTIONABLE_SET_PLAN = 31;
+	int SANDBOX_RESULT = 28;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_RESULT__EXTENSIONS = ABSTRACT_SOLUTION_SET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_RESULT__UUID = ABSTRACT_SOLUTION_SET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_RESULT__NAME = ABSTRACT_SOLUTION_SET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Has Dual Mode Solutions</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_RESULT__HAS_DUAL_MODE_SOLUTIONS = ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Portfolio Break Even Mode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_RESULT__PORTFOLIO_BREAK_EVEN_MODE = ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE;
+
+	/**
+	 * The feature id for the '<em><b>User Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_RESULT__USER_SETTINGS = ABSTRACT_SOLUTION_SET__USER_SETTINGS;
+
+	/**
+	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_RESULT__EXTRA_SLOTS = ABSTRACT_SOLUTION_SET__EXTRA_SLOTS;
+
+	/**
+	 * The feature id for the '<em><b>Base Option</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_RESULT__BASE_OPTION = ABSTRACT_SOLUTION_SET__BASE_OPTION;
+
+	/**
+	 * The feature id for the '<em><b>Options</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_RESULT__OPTIONS = ABSTRACT_SOLUTION_SET__OPTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extra Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_RESULT__EXTRA_VESSEL_EVENTS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS;
+
+	/**
+	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_RESULT__EXTRA_VESSEL_AVAILABILITIES = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES;
+
+	/**
+	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_RESULT__CHARTER_IN_MARKET_OVERRIDES = ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES;
+
+	/**
+	 * The feature id for the '<em><b>Extra Charter In Markets</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_RESULT__EXTRA_CHARTER_IN_MARKETS = ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS;
+
+	/**
+	 * The feature id for the '<em><b>Use Scenario Base</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_RESULT__USE_SCENARIO_BASE = ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE;
+
+	/**
+	 * The number of structural features of the '<em>Sandbox Result</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_RESULT_FEATURE_COUNT = ABSTRACT_SOLUTION_SET_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Base Case</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE__BASE_CASE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Profit And Loss</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE__PROFIT_AND_LOSS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Keep Existing Scenario</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE__KEEP_EXISTING_SCENARIO = 2;
+
+	/**
+	 * The number of structural features of the '<em>Base Case</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_FEATURE_COUNT = 3;
+
+	/**
+	 * The feature id for the '<em><b>Partial Case</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE__PARTIAL_CASE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Keep Existing Scenario</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE__KEEP_EXISTING_SCENARIO = 1;
+
+	/**
+	 * The number of structural features of the '<em>Partial Case</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_FEATURE_COUNT = 2;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXISTING_CHARTER_MARKET_OPTION__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXISTING_CHARTER_MARKET_OPTION__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Charter In Market</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXISTING_CHARTER_MARKET_OPTION__CHARTER_IN_MARKET = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXISTING_CHARTER_MARKET_OPTION__SPOT_INDEX = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Existing Charter Market Option</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXISTING_CHARTER_MARKET_OPTION_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1777,6 +2372,51 @@ s	 * <!-- end-user-doc -->
 	int ACTIONABLE_SET_PLAN__OPTIONS = ABSTRACT_SOLUTION_SET__OPTIONS;
 
 	/**
+	 * The feature id for the '<em><b>Extra Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__EXTRA_VESSEL_EVENTS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS;
+
+	/**
+	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__EXTRA_VESSEL_AVAILABILITIES = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES;
+
+	/**
+	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__CHARTER_IN_MARKET_OVERRIDES = ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES;
+
+	/**
+	 * The feature id for the '<em><b>Extra Charter In Markets</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__EXTRA_CHARTER_IN_MARKETS = ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS;
+
+	/**
+	 * The feature id for the '<em><b>Use Scenario Base</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__USE_SCENARIO_BASE = ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE;
+
+	/**
 	 * The number of structural features of the '<em>Actionable Set Plan</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1784,16 +2424,6 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int ACTIONABLE_SET_PLAN_FEATURE_COUNT = ABSTRACT_SOLUTION_SET_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl <em>Slot Insertion Options</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotInsertionOptions()
-	 * @generated
-	 */
-	int SLOT_INSERTION_OPTIONS = 32;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1877,6 +2507,51 @@ s	 * <!-- end-user-doc -->
 	int SLOT_INSERTION_OPTIONS__OPTIONS = ABSTRACT_SOLUTION_SET__OPTIONS;
 
 	/**
+	 * The feature id for the '<em><b>Extra Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__EXTRA_VESSEL_EVENTS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS;
+
+	/**
+	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__EXTRA_VESSEL_AVAILABILITIES = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES;
+
+	/**
+	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__CHARTER_IN_MARKET_OVERRIDES = ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES;
+
+	/**
+	 * The feature id for the '<em><b>Extra Charter In Markets</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__EXTRA_CHARTER_IN_MARKETS = ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS;
+
+	/**
+	 * The feature id for the '<em><b>Use Scenario Base</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__USE_SCENARIO_BASE = ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE;
+
+	/**
 	 * The feature id for the '<em><b>Slots Inserted</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1902,16 +2577,6 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int SLOT_INSERTION_OPTIONS_FEATURE_COUNT = ABSTRACT_SOLUTION_SET_FEATURE_COUNT + 2;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl <em>Solution Option</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSolutionOption()
-	 * @generated
-	 */
-	int SOLUTION_OPTION = 33;
 
 	/**
 	 * The feature id for the '<em><b>Change Description</b></em>' containment reference.
@@ -1948,146 +2613,6 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int SOLUTION_OPTION_FEATURE_COUNT = 3;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ChangeDescriptionImpl <em>Change Description</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.ChangeDescriptionImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChangeDescription()
-	 * @generated
-	 */
-	int CHANGE_DESCRIPTION = 37;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ChangeImpl <em>Change</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.ChangeImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChange()
-	 * @generated
-	 */
-	int CHANGE = 38;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OpenSlotChangeImpl <em>Open Slot Change</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.OpenSlotChangeImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOpenSlotChange()
-	 * @generated
-	 */
-	int OPEN_SLOT_CHANGE = 39;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CargoChangeImpl <em>Cargo Change</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.CargoChangeImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoChange()
-	 * @generated
-	 */
-	int CARGO_CHANGE = 40;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventChangeImpl <em>Vessel Event Change</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.VesselEventChangeImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventChange()
-	 * @generated
-	 */
-	int VESSEL_EVENT_CHANGE = 41;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventDescriptorImpl <em>Vessel Event Descriptor</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.VesselEventDescriptorImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventDescriptor()
-	 * @generated
-	 */
-	int VESSEL_EVENT_DESCRIPTOR = 42;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotDescriptorImpl <em>Slot Descriptor</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.SlotDescriptorImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotDescriptor()
-	 * @generated
-	 */
-	int SLOT_DESCRIPTOR = 43;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.RealSlotDescriptorImpl <em>Real Slot Descriptor</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.RealSlotDescriptorImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getRealSlotDescriptor()
-	 * @generated
-	 */
-	int REAL_SLOT_DESCRIPTOR = 44;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SpotMarketSlotDescriptorImpl <em>Spot Market Slot Descriptor</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.SpotMarketSlotDescriptorImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSpotMarketSlotDescriptor()
-	 * @generated
-	 */
-	int SPOT_MARKET_SLOT_DESCRIPTOR = 45;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselAllocationDescriptorImpl <em>Vessel Allocation Descriptor</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.VesselAllocationDescriptorImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselAllocationDescriptor()
-	 * @generated
-	 */
-	int VESSEL_ALLOCATION_DESCRIPTOR = 46;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketVesselAllocationDescriptorImpl <em>Market Vessel Allocation Descriptor</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.MarketVesselAllocationDescriptorImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketVesselAllocationDescriptor()
-	 * @generated
-	 */
-	int MARKET_VESSEL_ALLOCATION_DESCRIPTOR = 47;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.FleetVesselAllocationDescriptorImpl <em>Fleet Vessel Allocation Descriptor</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.FleetVesselAllocationDescriptorImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFleetVesselAllocationDescriptor()
-	 * @generated
-	 */
-	int FLEET_VESSEL_ALLOCATION_DESCRIPTOR = 48;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PositionDescriptorImpl <em>Position Descriptor</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.PositionDescriptorImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPositionDescriptor()
-	 * @generated
-	 */
-	int POSITION_DESCRIPTOR = 49;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptimisationResultImpl <em>Optimisation Result</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.OptimisationResultImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptimisationResult()
-	 * @generated
-	 */
-	int OPTIMISATION_RESULT = 34;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2171,6 +2696,51 @@ s	 * <!-- end-user-doc -->
 	int OPTIMISATION_RESULT__OPTIONS = ABSTRACT_SOLUTION_SET__OPTIONS;
 
 	/**
+	 * The feature id for the '<em><b>Extra Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT__EXTRA_VESSEL_EVENTS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS;
+
+	/**
+	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT__EXTRA_VESSEL_AVAILABILITIES = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES;
+
+	/**
+	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT__CHARTER_IN_MARKET_OVERRIDES = ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES;
+
+	/**
+	 * The feature id for the '<em><b>Extra Charter In Markets</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT__EXTRA_CHARTER_IN_MARKETS = ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS;
+
+	/**
+	 * The feature id for the '<em><b>Use Scenario Base</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT__USE_SCENARIO_BASE = ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE;
+
+	/**
 	 * The number of structural features of the '<em>Optimisation Result</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2178,16 +2748,6 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int OPTIMISATION_RESULT_FEATURE_COUNT = ABSTRACT_SOLUTION_SET_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.DualModeSolutionOptionImpl <em>Dual Mode Solution Option</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.DualModeSolutionOptionImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDualModeSolutionOption()
-	 * @generated
-	 */
-	int DUAL_MODE_SOLUTION_OPTION = 35;
 
 	/**
 	 * The feature id for the '<em><b>Change Description</b></em>' containment reference.
@@ -2251,7 +2811,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSolutionOptionMicroCase()
 	 * @generated
 	 */
-	int SOLUTION_OPTION_MICRO_CASE = 36;
+	int SOLUTION_OPTION_MICRO_CASE = 38;
 
 	/**
 	 * The feature id for the '<em><b>Schedule Specification</b></em>' containment reference.
@@ -2621,7 +3181,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityModel()
 	 * @generated
 	 */
-	int VIABILITY_MODEL = 50;
+	int VIABILITY_MODEL = 52;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2658,6 +3218,15 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int VIABILITY_MODEL__SELLS = ABSTRACT_ANALYSIS_MODEL__SELLS;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_MODEL__VESSEL_EVENTS = ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Templates</b></em>' containment reference list.
@@ -2703,7 +3272,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityRow()
 	 * @generated
 	 */
-	int VIABILITY_ROW = 51;
+	int VIABILITY_ROW = 53;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -2812,7 +3381,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityResult()
 	 * @generated
 	 */
-	int VIABILITY_RESULT = 52;
+	int VIABILITY_RESULT = 54;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -2894,7 +3463,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMModel()
 	 * @generated
 	 */
-	int MTM_MODEL = 53;
+	int MTM_MODEL = 55;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2931,6 +3500,15 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int MTM_MODEL__SELLS = ABSTRACT_ANALYSIS_MODEL__SELLS;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_MODEL__VESSEL_EVENTS = ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Templates</b></em>' containment reference list.
@@ -2985,7 +3563,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMResult()
 	 * @generated
 	 */
-	int MTM_RESULT = 54;
+	int MTM_RESULT = 56;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -3058,7 +3636,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMRow()
 	 * @generated
 	 */
-	int MTM_ROW = 55;
+	int MTM_ROW = 57;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -3158,7 +3736,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisModel()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_MODEL = 56;
+	int BREAK_EVEN_ANALYSIS_MODEL = 58;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -3195,6 +3773,15 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int BREAK_EVEN_ANALYSIS_MODEL__SELLS = ABSTRACT_ANALYSIS_MODEL__SELLS;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_MODEL__VESSEL_EVENTS = ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Templates</b></em>' containment reference list.
@@ -3240,7 +3827,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisRow()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_ROW = 57;
+	int BREAK_EVEN_ANALYSIS_ROW = 59;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -3322,7 +3909,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResultSet()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_RESULT_SET = 58;
+	int BREAK_EVEN_ANALYSIS_RESULT_SET = 60;
 
 	/**
 	 * The feature id for the '<em><b>Based On</b></em>' reference.
@@ -3368,7 +3955,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResult()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_RESULT = 59;
+	int BREAK_EVEN_ANALYSIS_RESULT = 61;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -3423,7 +4010,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 60;
+	int VOLUME_MODE = 62;
 
 
 	/**
@@ -3434,7 +4021,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotType()
 	 * @generated
 	 */
-	int SLOT_TYPE = 61;
+	int SLOT_TYPE = 63;
 
 
 	/**
@@ -3521,6 +4108,26 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EClass getSellOption();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OpenSell <em>Open Sell</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Open Sell</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.OpenSell
+	 * @generated
+	 */
+	EClass getOpenSell();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OpenBuy <em>Open Buy</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Open Buy</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.OpenBuy
+	 * @generated
+	 */
+	EClass getOpenBuy();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity <em>Buy Opportunity</em>}'.
@@ -3902,6 +4509,91 @@ s	 * <!-- end-user-doc -->
 	EReference getSellReference_Slot();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.VesselEventOption <em>Vessel Event Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Event Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.VesselEventOption
+	 * @generated
+	 */
+	EClass getVesselEventOption();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.VesselEventReference <em>Vessel Event Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Event Reference</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.VesselEventReference
+	 * @generated
+	 */
+	EClass getVesselEventReference();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.VesselEventReference#getEvent <em>Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Event</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.VesselEventReference#getEvent()
+	 * @see #getVesselEventReference()
+	 * @generated
+	 */
+	EReference getVesselEventReference_Event();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.CharterOutOpportunity <em>Charter Out Opportunity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Charter Out Opportunity</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CharterOutOpportunity
+	 * @generated
+	 */
+	EClass getCharterOutOpportunity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.CharterOutOpportunity#getHireCost <em>Hire Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hire Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CharterOutOpportunity#getHireCost()
+	 * @see #getCharterOutOpportunity()
+	 * @generated
+	 */
+	EAttribute getCharterOutOpportunity_HireCost();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.CharterOutOpportunity#getPort <em>Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CharterOutOpportunity#getPort()
+	 * @see #getCharterOutOpportunity()
+	 * @generated
+	 */
+	EReference getCharterOutOpportunity_Port();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.CharterOutOpportunity#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CharterOutOpportunity#getDate()
+	 * @see #getCharterOutOpportunity()
+	 * @generated
+	 */
+	EAttribute getCharterOutOpportunity_Date();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.CharterOutOpportunity#getDuration <em>Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Duration</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CharterOutOpportunity#getDuration()
+	 * @see #getCharterOutOpportunity()
+	 * @generated
+	 */
+	EAttribute getCharterOutOpportunity_Duration();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow <em>Base Case Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3932,6 +4624,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getBaseCaseRow_SellOption();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getVesselEventOption <em>Vessel Event Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel Event Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRow#getVesselEventOption()
+	 * @see #getBaseCaseRow()
+	 * @generated
+	 */
+	EReference getBaseCaseRow_VesselEventOption();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getShipping <em>Shipping</em>}'.
@@ -3977,6 +4680,17 @@ s	 * <!-- end-user-doc -->
 	EReference getPartialCaseRow_SellOptions();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getVesselEventOptions <em>Vessel Event Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Vessel Event Options</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRow#getVesselEventOptions()
+	 * @see #getPartialCaseRow()
+	 * @generated
+	 */
+	EReference getPartialCaseRow_VesselEventOptions();
+
+	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getShipping <em>Shipping</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3998,134 +4712,134 @@ s	 * <!-- end-user-doc -->
 	EClass getShippingOption();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.FleetShippingOption <em>Fleet Shipping Option</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption <em>Simple Vessel Charter Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Fleet Shipping Option</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.FleetShippingOption
+	 * @return the meta object for class '<em>Simple Vessel Charter Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption
 	 * @generated
 	 */
-	EClass getFleetShippingOption();
+	EClass getSimpleVesselCharterOption();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.FleetShippingOption#getVessel <em>Vessel</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption#getVessel <em>Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Vessel</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.FleetShippingOption#getVessel()
-	 * @see #getFleetShippingOption()
+	 * @see com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption#getVessel()
+	 * @see #getSimpleVesselCharterOption()
 	 * @generated
 	 */
-	EReference getFleetShippingOption_Vessel();
+	EReference getSimpleVesselCharterOption_Vessel();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.FleetShippingOption#getHireCost <em>Hire Cost</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption#getHireCost <em>Hire Cost</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Hire Cost</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.FleetShippingOption#getHireCost()
-	 * @see #getFleetShippingOption()
+	 * @see com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption#getHireCost()
+	 * @see #getSimpleVesselCharterOption()
 	 * @generated
 	 */
-	EAttribute getFleetShippingOption_HireCost();
+	EAttribute getSimpleVesselCharterOption_HireCost();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.FleetShippingOption#getEntity <em>Entity</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption#getEntity <em>Entity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Entity</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.FleetShippingOption#getEntity()
-	 * @see #getFleetShippingOption()
+	 * @see com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption#getEntity()
+	 * @see #getSimpleVesselCharterOption()
 	 * @generated
 	 */
-	EReference getFleetShippingOption_Entity();
+	EReference getSimpleVesselCharterOption_Entity();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.FleetShippingOption#isUseSafetyHeel <em>Use Safety Heel</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption#isUseSafetyHeel <em>Use Safety Heel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Use Safety Heel</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.FleetShippingOption#isUseSafetyHeel()
-	 * @see #getFleetShippingOption()
+	 * @see com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption#isUseSafetyHeel()
+	 * @see #getSimpleVesselCharterOption()
 	 * @generated
 	 */
-	EAttribute getFleetShippingOption_UseSafetyHeel();
+	EAttribute getSimpleVesselCharterOption_UseSafetyHeel();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption <em>Optional Availability Shipping Option</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption <em>Optional Simple Vessel Charter Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Optional Availability Shipping Option</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption
+	 * @return the meta object for class '<em>Optional Simple Vessel Charter Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption
 	 * @generated
 	 */
-	EClass getOptionalAvailabilityShippingOption();
+	EClass getOptionalSimpleVesselCharterOption();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getBallastBonus <em>Ballast Bonus</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption#getBallastBonus <em>Ballast Bonus</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Ballast Bonus</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getBallastBonus()
-	 * @see #getOptionalAvailabilityShippingOption()
+	 * @see com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption#getBallastBonus()
+	 * @see #getOptionalSimpleVesselCharterOption()
 	 * @generated
 	 */
-	EAttribute getOptionalAvailabilityShippingOption_BallastBonus();
+	EAttribute getOptionalSimpleVesselCharterOption_BallastBonus();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getRepositioningFee <em>Repositioning Fee</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption#getRepositioningFee <em>Repositioning Fee</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Repositioning Fee</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getRepositioningFee()
-	 * @see #getOptionalAvailabilityShippingOption()
+	 * @see com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption#getRepositioningFee()
+	 * @see #getOptionalSimpleVesselCharterOption()
 	 * @generated
 	 */
-	EAttribute getOptionalAvailabilityShippingOption_RepositioningFee();
+	EAttribute getOptionalSimpleVesselCharterOption_RepositioningFee();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getStart <em>Start</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption#getStart <em>Start</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Start</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getStart()
-	 * @see #getOptionalAvailabilityShippingOption()
+	 * @see com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption#getStart()
+	 * @see #getOptionalSimpleVesselCharterOption()
 	 * @generated
 	 */
-	EAttribute getOptionalAvailabilityShippingOption_Start();
+	EAttribute getOptionalSimpleVesselCharterOption_Start();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getEnd <em>End</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption#getEnd <em>End</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>End</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getEnd()
-	 * @see #getOptionalAvailabilityShippingOption()
+	 * @see com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption#getEnd()
+	 * @see #getOptionalSimpleVesselCharterOption()
 	 * @generated
 	 */
-	EAttribute getOptionalAvailabilityShippingOption_End();
+	EAttribute getOptionalSimpleVesselCharterOption_End();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getStartPort <em>Start Port</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption#getStartPort <em>Start Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Start Port</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getStartPort()
-	 * @see #getOptionalAvailabilityShippingOption()
+	 * @see com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption#getStartPort()
+	 * @see #getOptionalSimpleVesselCharterOption()
 	 * @generated
 	 */
-	EReference getOptionalAvailabilityShippingOption_StartPort();
+	EReference getOptionalSimpleVesselCharterOption_StartPort();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getEndPort <em>End Port</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption#getEndPort <em>End Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>End Port</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getEndPort()
-	 * @see #getOptionalAvailabilityShippingOption()
+	 * @see com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption#getEndPort()
+	 * @see #getOptionalSimpleVesselCharterOption()
 	 * @generated
 	 */
-	EReference getOptionalAvailabilityShippingOption_EndPort();
+	EReference getOptionalSimpleVesselCharterOption_EndPort();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption <em>Round Trip Shipping Option</em>}'.
@@ -4181,112 +4895,46 @@ s	 * <!-- end-user-doc -->
 	EReference getNominatedShippingOption_NominatedVessel();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow <em>Analysis Result Row</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.FullVesselCharterOption <em>Full Vessel Charter Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Analysis Result Row</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.AnalysisResultRow
+	 * @return the meta object for class '<em>Full Vessel Charter Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.FullVesselCharterOption
 	 * @generated
 	 */
-	EClass getAnalysisResultRow();
+	EClass getFullVesselCharterOption();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getBuyOption <em>Buy Option</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.FullVesselCharterOption#getVesselCharter <em>Vessel Charter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Buy Option</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.AnalysisResultRow#getBuyOption()
-	 * @see #getAnalysisResultRow()
+	 * @return the meta object for the containment reference '<em>Vessel Charter</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.FullVesselCharterOption#getVesselCharter()
+	 * @see #getFullVesselCharterOption()
 	 * @generated
 	 */
-	EReference getAnalysisResultRow_BuyOption();
+	EReference getFullVesselCharterOption_VesselCharter();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getSellOption <em>Sell Option</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption <em>Existing Vessel Charter Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Sell Option</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.AnalysisResultRow#getSellOption()
-	 * @see #getAnalysisResultRow()
+	 * @return the meta object for class '<em>Existing Vessel Charter Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption
 	 * @generated
 	 */
-	EReference getAnalysisResultRow_SellOption();
+	EClass getExistingVesselCharterOption();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getResultDetail <em>Result Detail</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption#getVesselCharter <em>Vessel Charter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Result Detail</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.AnalysisResultRow#getResultDetail()
-	 * @see #getAnalysisResultRow()
+	 * @return the meta object for the reference '<em>Vessel Charter</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption#getVesselCharter()
+	 * @see #getExistingVesselCharterOption()
 	 * @generated
 	 */
-	EReference getAnalysisResultRow_ResultDetail();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getShipping <em>Shipping</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Shipping</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.AnalysisResultRow#getShipping()
-	 * @see #getAnalysisResultRow()
-	 * @generated
-	 */
-	EReference getAnalysisResultRow_Shipping();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getResultDetails <em>Result Details</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Result Details</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.AnalysisResultRow#getResultDetails()
-	 * @see #getAnalysisResultRow()
-	 * @generated
-	 */
-	EReference getAnalysisResultRow_ResultDetails();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ResultContainer <em>Result Container</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Result Container</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ResultContainer
-	 * @generated
-	 */
-	EClass getResultContainer();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ResultContainer#getCargoAllocation <em>Cargo Allocation</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Cargo Allocation</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ResultContainer#getCargoAllocation()
-	 * @see #getResultContainer()
-	 * @generated
-	 */
-	EReference getResultContainer_CargoAllocation();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.ResultContainer#getOpenSlotAllocations <em>Open Slot Allocations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Open Slot Allocations</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ResultContainer#getOpenSlotAllocations()
-	 * @see #getResultContainer()
-	 * @generated
-	 */
-	EReference getResultContainer_OpenSlotAllocations();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.ResultContainer#getSlotAllocations <em>Slot Allocations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Slot Allocations</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ResultContainer#getSlotAllocations()
-	 * @see #getResultContainer()
-	 * @generated
-	 */
-	EReference getResultContainer_SlotAllocations();
+	EReference getExistingVesselCharterOption_VesselCharter();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.AnalysisResultDetail <em>Analysis Result Detail</em>}'.
@@ -4393,6 +5041,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getAbstractAnalysisModel_Sells();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getVesselEvents <em>Vessel Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Events</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getVesselEvents()
+	 * @see #getAbstractAnalysisModel()
+	 * @generated
+	 */
+	EReference getAbstractAnalysisModel_VesselEvents();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getShippingTemplates <em>Shipping Templates</em>}'.
@@ -4502,48 +5161,6 @@ s	 * <!-- end-user-doc -->
 	EAttribute getPartialCase_KeepExistingScenario();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.NewVesselAvailability <em>New Vessel Availability</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>New Vessel Availability</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.NewVesselAvailability
-	 * @generated
-	 */
-	EClass getNewVesselAvailability();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.NewVesselAvailability#getVesselAvailability <em>Vessel Availability</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Vessel Availability</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.NewVesselAvailability#getVesselAvailability()
-	 * @see #getNewVesselAvailability()
-	 * @generated
-	 */
-	EReference getNewVesselAvailability_VesselAvailability();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ExistingVesselAvailability <em>Existing Vessel Availability</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Existing Vessel Availability</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ExistingVesselAvailability
-	 * @generated
-	 */
-	EClass getExistingVesselAvailability();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ExistingVesselAvailability#getVesselAvailability <em>Vessel Availability</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Vessel Availability</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ExistingVesselAvailability#getVesselAvailability()
-	 * @see #getExistingVesselAvailability()
-	 * @generated
-	 */
-	EReference getExistingVesselAvailability_VesselAvailability();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption <em>Existing Charter Market Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4628,6 +5245,61 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getAbstractSolutionSet_Options();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraVesselEvents <em>Extra Vessel Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Extra Vessel Events</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraVesselEvents()
+	 * @see #getAbstractSolutionSet()
+	 * @generated
+	 */
+	EReference getAbstractSolutionSet_ExtraVesselEvents();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraVesselAvailabilities <em>Extra Vessel Availabilities</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Extra Vessel Availabilities</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraVesselAvailabilities()
+	 * @see #getAbstractSolutionSet()
+	 * @generated
+	 */
+	EReference getAbstractSolutionSet_ExtraVesselAvailabilities();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Charter In Market Overrides</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getCharterInMarketOverrides()
+	 * @see #getAbstractSolutionSet()
+	 * @generated
+	 */
+	EReference getAbstractSolutionSet_CharterInMarketOverrides();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraCharterInMarkets <em>Extra Charter In Markets</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Extra Charter In Markets</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraCharterInMarkets()
+	 * @see #getAbstractSolutionSet()
+	 * @generated
+	 */
+	EReference getAbstractSolutionSet_ExtraCharterInMarkets();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#isUseScenarioBase <em>Use Scenario Base</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Use Scenario Base</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet#isUseScenarioBase()
+	 * @see #getAbstractSolutionSet()
+	 * @generated
+	 */
+	EAttribute getAbstractSolutionSet_UseScenarioBase();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraSlots <em>Extra Slots</em>}'.
@@ -5877,17 +6549,6 @@ s	 * <!-- end-user-doc -->
 	EReference getOptionAnalysisModel_PartialCase();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getBaseCaseResult <em>Base Case Result</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Base Case Result</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getBaseCaseResult()
-	 * @see #getOptionAnalysisModel()
-	 * @generated
-	 */
-	EReference getOptionAnalysisModel_BaseCaseResult();
-
-	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getResults <em>Results</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5910,123 +6571,25 @@ s	 * <!-- end-user-doc -->
 	EAttribute getOptionAnalysisModel_UseTargetPNL();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getChildren <em>Children</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getMode <em>Mode</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Children</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getChildren()
+	 * @return the meta object for the attribute '<em>Mode</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getMode()
 	 * @see #getOptionAnalysisModel()
 	 * @generated
 	 */
-	EReference getOptionAnalysisModel_Children();
+	EAttribute getOptionAnalysisModel_Mode();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ResultSet <em>Result Set</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SandboxResult <em>Sandbox Result</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Result Set</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ResultSet
+	 * @return the meta object for class '<em>Sandbox Result</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SandboxResult
 	 * @generated
 	 */
-	EClass getResultSet();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.ResultSet#getRows <em>Rows</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Rows</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ResultSet#getRows()
-	 * @see #getResultSet()
-	 * @generated
-	 */
-	EReference getResultSet_Rows();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ResultSet#getProfitAndLoss <em>Profit And Loss</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Profit And Loss</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ResultSet#getProfitAndLoss()
-	 * @see #getResultSet()
-	 * @generated
-	 */
-	EAttribute getResultSet_ProfitAndLoss();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.ResultSet#getScheduleModel <em>Schedule Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Schedule Model</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ResultSet#getScheduleModel()
-	 * @see #getResultSet()
-	 * @generated
-	 */
-	EReference getResultSet_ScheduleModel();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.Result <em>Result</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Result</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Result
-	 * @generated
-	 */
-	EClass getResult();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.Result#getExtraSlots <em>Extra Slots</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Extra Slots</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Result#getExtraSlots()
-	 * @see #getResult()
-	 * @generated
-	 */
-	EReference getResult_ExtraSlots();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.Result#getResultSets <em>Result Sets</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Result Sets</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Result#getResultSets()
-	 * @see #getResult()
-	 * @generated
-	 */
-	EReference getResult_ResultSets();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.Result#getExtraVesselAvailabilities <em>Extra Vessel Availabilities</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Extra Vessel Availabilities</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Result#getExtraVesselAvailabilities()
-	 * @see #getResult()
-	 * @generated
-	 */
-	EReference getResult_ExtraVesselAvailabilities();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.Result#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Charter In Market Overrides</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Result#getCharterInMarketOverrides()
-	 * @see #getResult()
-	 * @generated
-	 */
-	EReference getResult_CharterInMarketOverrides();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.Result#getExtraCharterInMarkets <em>Extra Charter In Markets</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Extra Charter In Markets</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Result#getExtraCharterInMarkets()
-	 * @see #getResult()
-	 * @generated
-	 */
-	EReference getResult_ExtraCharterInMarkets();
+	EClass getSandboxResult();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}'.
@@ -6140,6 +6703,26 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EClass SELL_OPTION = eINSTANCE.getSellOption();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.OpenSellImpl <em>Open Sell</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.OpenSellImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOpenSell()
+		 * @generated
+		 */
+		EClass OPEN_SELL = eINSTANCE.getOpenSell();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.OpenBuyImpl <em>Open Buy</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.OpenBuyImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOpenBuy()
+		 * @generated
+		 */
+		EClass OPEN_BUY = eINSTANCE.getOpenBuy();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl <em>Buy Opportunity</em>}' class.
@@ -6434,6 +7017,76 @@ s	 * <!-- end-user-doc -->
 		EReference SELL_REFERENCE__SLOT = eINSTANCE.getSellReference_Slot();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventOptionImpl <em>Vessel Event Option</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.VesselEventOptionImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventOption()
+		 * @generated
+		 */
+		EClass VESSEL_EVENT_OPTION = eINSTANCE.getVesselEventOption();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventReferenceImpl <em>Vessel Event Reference</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.VesselEventReferenceImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventReference()
+		 * @generated
+		 */
+		EClass VESSEL_EVENT_REFERENCE = eINSTANCE.getVesselEventReference();
+
+		/**
+		 * The meta object literal for the '<em><b>Event</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_EVENT_REFERENCE__EVENT = eINSTANCE.getVesselEventReference_Event();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.CharterOutOpportunityImpl <em>Charter Out Opportunity</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.CharterOutOpportunityImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCharterOutOpportunity()
+		 * @generated
+		 */
+		EClass CHARTER_OUT_OPPORTUNITY = eINSTANCE.getCharterOutOpportunity();
+
+		/**
+		 * The meta object literal for the '<em><b>Hire Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT_OPPORTUNITY__HIRE_COST = eINSTANCE.getCharterOutOpportunity_HireCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_OUT_OPPORTUNITY__PORT = eINSTANCE.getCharterOutOpportunity_Port();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT_OPPORTUNITY__DATE = eINSTANCE.getCharterOutOpportunity_Date();
+
+		/**
+		 * The meta object literal for the '<em><b>Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT_OPPORTUNITY__DURATION = eINSTANCE.getCharterOutOpportunity_Duration();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowImpl <em>Base Case Row</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6458,6 +7111,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference BASE_CASE_ROW__SELL_OPTION = eINSTANCE.getBaseCaseRow_SellOption();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Event Option</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BASE_CASE_ROW__VESSEL_EVENT_OPTION = eINSTANCE.getBaseCaseRow_VesselEventOption();
 
 		/**
 		 * The meta object literal for the '<em><b>Shipping</b></em>' reference feature.
@@ -6494,6 +7155,14 @@ s	 * <!-- end-user-doc -->
 		EReference PARTIAL_CASE_ROW__SELL_OPTIONS = eINSTANCE.getPartialCaseRow_SellOptions();
 
 		/**
+		 * The meta object literal for the '<em><b>Vessel Event Options</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTIAL_CASE_ROW__VESSEL_EVENT_OPTIONS = eINSTANCE.getPartialCaseRow_VesselEventOptions();
+
+		/**
 		 * The meta object literal for the '<em><b>Shipping</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6512,14 +7181,14 @@ s	 * <!-- end-user-doc -->
 		EClass SHIPPING_OPTION = eINSTANCE.getShippingOption();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.FleetShippingOptionImpl <em>Fleet Shipping Option</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SimpleVesselCharterOptionImpl <em>Simple Vessel Charter Option</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.FleetShippingOptionImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFleetShippingOption()
+		 * @see com.mmxlabs.models.lng.analytics.impl.SimpleVesselCharterOptionImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSimpleVesselCharterOption()
 		 * @generated
 		 */
-		EClass FLEET_SHIPPING_OPTION = eINSTANCE.getFleetShippingOption();
+		EClass SIMPLE_VESSEL_CHARTER_OPTION = eINSTANCE.getSimpleVesselCharterOption();
 
 		/**
 		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
@@ -6527,7 +7196,7 @@ s	 * <!-- end-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference FLEET_SHIPPING_OPTION__VESSEL = eINSTANCE.getFleetShippingOption_Vessel();
+		EReference SIMPLE_VESSEL_CHARTER_OPTION__VESSEL = eINSTANCE.getSimpleVesselCharterOption_Vessel();
 
 		/**
 		 * The meta object literal for the '<em><b>Hire Cost</b></em>' attribute feature.
@@ -6535,7 +7204,7 @@ s	 * <!-- end-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute FLEET_SHIPPING_OPTION__HIRE_COST = eINSTANCE.getFleetShippingOption_HireCost();
+		EAttribute SIMPLE_VESSEL_CHARTER_OPTION__HIRE_COST = eINSTANCE.getSimpleVesselCharterOption_HireCost();
 
 		/**
 		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
@@ -6543,7 +7212,7 @@ s	 * <!-- end-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference FLEET_SHIPPING_OPTION__ENTITY = eINSTANCE.getFleetShippingOption_Entity();
+		EReference SIMPLE_VESSEL_CHARTER_OPTION__ENTITY = eINSTANCE.getSimpleVesselCharterOption_Entity();
 
 		/**
 		 * The meta object literal for the '<em><b>Use Safety Heel</b></em>' attribute feature.
@@ -6551,17 +7220,17 @@ s	 * <!-- end-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL = eINSTANCE.getFleetShippingOption_UseSafetyHeel();
+		EAttribute SIMPLE_VESSEL_CHARTER_OPTION__USE_SAFETY_HEEL = eINSTANCE.getSimpleVesselCharterOption_UseSafetyHeel();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionalAvailabilityShippingOptionImpl <em>Optional Availability Shipping Option</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionalSimpleVesselCharterOptionImpl <em>Optional Simple Vessel Charter Option</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.OptionalAvailabilityShippingOptionImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionalAvailabilityShippingOption()
+		 * @see com.mmxlabs.models.lng.analytics.impl.OptionalSimpleVesselCharterOptionImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionalSimpleVesselCharterOption()
 		 * @generated
 		 */
-		EClass OPTIONAL_AVAILABILITY_SHIPPING_OPTION = eINSTANCE.getOptionalAvailabilityShippingOption();
+		EClass OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION = eINSTANCE.getOptionalSimpleVesselCharterOption();
 
 		/**
 		 * The meta object literal for the '<em><b>Ballast Bonus</b></em>' attribute feature.
@@ -6569,7 +7238,7 @@ s	 * <!-- end-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute OPTIONAL_AVAILABILITY_SHIPPING_OPTION__BALLAST_BONUS = eINSTANCE.getOptionalAvailabilityShippingOption_BallastBonus();
+		EAttribute OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__BALLAST_BONUS = eINSTANCE.getOptionalSimpleVesselCharterOption_BallastBonus();
 
 		/**
 		 * The meta object literal for the '<em><b>Repositioning Fee</b></em>' attribute feature.
@@ -6577,7 +7246,7 @@ s	 * <!-- end-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute OPTIONAL_AVAILABILITY_SHIPPING_OPTION__REPOSITIONING_FEE = eINSTANCE.getOptionalAvailabilityShippingOption_RepositioningFee();
+		EAttribute OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__REPOSITIONING_FEE = eINSTANCE.getOptionalSimpleVesselCharterOption_RepositioningFee();
 
 		/**
 		 * The meta object literal for the '<em><b>Start</b></em>' attribute feature.
@@ -6585,7 +7254,7 @@ s	 * <!-- end-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute OPTIONAL_AVAILABILITY_SHIPPING_OPTION__START = eINSTANCE.getOptionalAvailabilityShippingOption_Start();
+		EAttribute OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__START = eINSTANCE.getOptionalSimpleVesselCharterOption_Start();
 
 		/**
 		 * The meta object literal for the '<em><b>End</b></em>' attribute feature.
@@ -6593,7 +7262,7 @@ s	 * <!-- end-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute OPTIONAL_AVAILABILITY_SHIPPING_OPTION__END = eINSTANCE.getOptionalAvailabilityShippingOption_End();
+		EAttribute OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__END = eINSTANCE.getOptionalSimpleVesselCharterOption_End();
 
 		/**
 		 * The meta object literal for the '<em><b>Start Port</b></em>' reference feature.
@@ -6601,7 +7270,7 @@ s	 * <!-- end-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference OPTIONAL_AVAILABILITY_SHIPPING_OPTION__START_PORT = eINSTANCE.getOptionalAvailabilityShippingOption_StartPort();
+		EReference OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__START_PORT = eINSTANCE.getOptionalSimpleVesselCharterOption_StartPort();
 
 		/**
 		 * The meta object literal for the '<em><b>End Port</b></em>' reference feature.
@@ -6609,7 +7278,7 @@ s	 * <!-- end-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference OPTIONAL_AVAILABILITY_SHIPPING_OPTION__END_PORT = eINSTANCE.getOptionalAvailabilityShippingOption_EndPort();
+		EReference OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__END_PORT = eINSTANCE.getOptionalSimpleVesselCharterOption_EndPort();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.RoundTripShippingOptionImpl <em>Round Trip Shipping Option</em>}' class.
@@ -6656,88 +7325,40 @@ s	 * <!-- end-user-doc -->
 		EReference NOMINATED_SHIPPING_OPTION__NOMINATED_VESSEL = eINSTANCE.getNominatedShippingOption_NominatedVessel();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.AnalysisResultRowImpl <em>Analysis Result Row</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.FullVesselCharterOptionImpl <em>Full Vessel Charter Option</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalysisResultRowImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAnalysisResultRow()
+		 * @see com.mmxlabs.models.lng.analytics.impl.FullVesselCharterOptionImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFullVesselCharterOption()
 		 * @generated
 		 */
-		EClass ANALYSIS_RESULT_ROW = eINSTANCE.getAnalysisResultRow();
+		EClass FULL_VESSEL_CHARTER_OPTION = eINSTANCE.getFullVesselCharterOption();
 
 		/**
-		 * The meta object literal for the '<em><b>Buy Option</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Vessel Charter</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ANALYSIS_RESULT_ROW__BUY_OPTION = eINSTANCE.getAnalysisResultRow_BuyOption();
+		EReference FULL_VESSEL_CHARTER_OPTION__VESSEL_CHARTER = eINSTANCE.getFullVesselCharterOption_VesselCharter();
 
 		/**
-		 * The meta object literal for the '<em><b>Sell Option</b></em>' reference feature.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ExistingVesselCharterOptionImpl <em>Existing Vessel Charter Option</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.ExistingVesselCharterOptionImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingVesselCharterOption()
 		 * @generated
 		 */
-		EReference ANALYSIS_RESULT_ROW__SELL_OPTION = eINSTANCE.getAnalysisResultRow_SellOption();
+		EClass EXISTING_VESSEL_CHARTER_OPTION = eINSTANCE.getExistingVesselCharterOption();
 
 		/**
-		 * The meta object literal for the '<em><b>Result Detail</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Vessel Charter</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ANALYSIS_RESULT_ROW__RESULT_DETAIL = eINSTANCE.getAnalysisResultRow_ResultDetail();
-
-		/**
-		 * The meta object literal for the '<em><b>Shipping</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ANALYSIS_RESULT_ROW__SHIPPING = eINSTANCE.getAnalysisResultRow_Shipping();
-
-		/**
-		 * The meta object literal for the '<em><b>Result Details</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ANALYSIS_RESULT_ROW__RESULT_DETAILS = eINSTANCE.getAnalysisResultRow_ResultDetails();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ResultContainerImpl <em>Result Container</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.ResultContainerImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResultContainer()
-		 * @generated
-		 */
-		EClass RESULT_CONTAINER = eINSTANCE.getResultContainer();
-
-		/**
-		 * The meta object literal for the '<em><b>Cargo Allocation</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RESULT_CONTAINER__CARGO_ALLOCATION = eINSTANCE.getResultContainer_CargoAllocation();
-
-		/**
-		 * The meta object literal for the '<em><b>Open Slot Allocations</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RESULT_CONTAINER__OPEN_SLOT_ALLOCATIONS = eINSTANCE.getResultContainer_OpenSlotAllocations();
-
-		/**
-		 * The meta object literal for the '<em><b>Slot Allocations</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RESULT_CONTAINER__SLOT_ALLOCATIONS = eINSTANCE.getResultContainer_SlotAllocations();
+		EReference EXISTING_VESSEL_CHARTER_OPTION__VESSEL_CHARTER = eINSTANCE.getExistingVesselCharterOption_VesselCharter();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.AnalysisResultDetailImpl <em>Analysis Result Detail</em>}' class.
@@ -6828,6 +7449,14 @@ s	 * <!-- end-user-doc -->
 		EReference ABSTRACT_ANALYSIS_MODEL__SELLS = eINSTANCE.getAbstractAnalysisModel_Sells();
 
 		/**
+		 * The meta object literal for the '<em><b>Vessel Events</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS = eINSTANCE.getAbstractAnalysisModel_VesselEvents();
+
+		/**
 		 * The meta object literal for the '<em><b>Shipping Templates</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6914,42 +7543,6 @@ s	 * <!-- end-user-doc -->
 		EAttribute PARTIAL_CASE__KEEP_EXISTING_SCENARIO = eINSTANCE.getPartialCase_KeepExistingScenario();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.NewVesselAvailabilityImpl <em>New Vessel Availability</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.NewVesselAvailabilityImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getNewVesselAvailability()
-		 * @generated
-		 */
-		EClass NEW_VESSEL_AVAILABILITY = eINSTANCE.getNewVesselAvailability();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessel Availability</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference NEW_VESSEL_AVAILABILITY__VESSEL_AVAILABILITY = eINSTANCE.getNewVesselAvailability_VesselAvailability();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ExistingVesselAvailabilityImpl <em>Existing Vessel Availability</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.ExistingVesselAvailabilityImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingVesselAvailability()
-		 * @generated
-		 */
-		EClass EXISTING_VESSEL_AVAILABILITY = eINSTANCE.getExistingVesselAvailability();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessel Availability</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference EXISTING_VESSEL_AVAILABILITY__VESSEL_AVAILABILITY = eINSTANCE.getExistingVesselAvailability_VesselAvailability();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ExistingCharterMarketOptionImpl <em>Existing Charter Market Option</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -7016,6 +7609,46 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ABSTRACT_SOLUTION_SET__OPTIONS = eINSTANCE.getAbstractSolutionSet_Options();
+
+		/**
+		 * The meta object literal for the '<em><b>Extra Vessel Events</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS = eINSTANCE.getAbstractSolutionSet_ExtraVesselEvents();
+
+		/**
+		 * The meta object literal for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES = eINSTANCE.getAbstractSolutionSet_ExtraVesselAvailabilities();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter In Market Overrides</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES = eINSTANCE.getAbstractSolutionSet_CharterInMarketOverrides();
+
+		/**
+		 * The meta object literal for the '<em><b>Extra Charter In Markets</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS = eINSTANCE.getAbstractSolutionSet_ExtraCharterInMarkets();
+
+		/**
+		 * The meta object literal for the '<em><b>Use Scenario Base</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE = eINSTANCE.getAbstractSolutionSet_UseScenarioBase();
 
 		/**
 		 * The meta object literal for the '<em><b>Extra Slots</b></em>' containment reference list feature.
@@ -8004,14 +8637,6 @@ s	 * <!-- end-user-doc -->
 		EReference OPTION_ANALYSIS_MODEL__PARTIAL_CASE = eINSTANCE.getOptionAnalysisModel_PartialCase();
 
 		/**
-		 * The meta object literal for the '<em><b>Base Case Result</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT = eINSTANCE.getOptionAnalysisModel_BaseCaseResult();
-
-		/**
 		 * The meta object literal for the '<em><b>Results</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -8028,96 +8653,22 @@ s	 * <!-- end-user-doc -->
 		EAttribute OPTION_ANALYSIS_MODEL__USE_TARGET_PNL = eINSTANCE.getOptionAnalysisModel_UseTargetPNL();
 
 		/**
-		 * The meta object literal for the '<em><b>Children</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Mode</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference OPTION_ANALYSIS_MODEL__CHILDREN = eINSTANCE.getOptionAnalysisModel_Children();
+		EAttribute OPTION_ANALYSIS_MODEL__MODE = eINSTANCE.getOptionAnalysisModel_Mode();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ResultSetImpl <em>Result Set</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SandboxResultImpl <em>Sandbox Result</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.ResultSetImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResultSet()
+		 * @see com.mmxlabs.models.lng.analytics.impl.SandboxResultImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSandboxResult()
 		 * @generated
 		 */
-		EClass RESULT_SET = eINSTANCE.getResultSet();
-
-		/**
-		 * The meta object literal for the '<em><b>Rows</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RESULT_SET__ROWS = eINSTANCE.getResultSet_Rows();
-
-		/**
-		 * The meta object literal for the '<em><b>Profit And Loss</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute RESULT_SET__PROFIT_AND_LOSS = eINSTANCE.getResultSet_ProfitAndLoss();
-
-		/**
-		 * The meta object literal for the '<em><b>Schedule Model</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RESULT_SET__SCHEDULE_MODEL = eINSTANCE.getResultSet_ScheduleModel();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ResultImpl <em>Result</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.ResultImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResult()
-		 * @generated
-		 */
-		EClass RESULT = eINSTANCE.getResult();
-
-		/**
-		 * The meta object literal for the '<em><b>Extra Slots</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RESULT__EXTRA_SLOTS = eINSTANCE.getResult_ExtraSlots();
-
-		/**
-		 * The meta object literal for the '<em><b>Result Sets</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RESULT__RESULT_SETS = eINSTANCE.getResult_ResultSets();
-
-		/**
-		 * The meta object literal for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RESULT__EXTRA_VESSEL_AVAILABILITIES = eINSTANCE.getResult_ExtraVesselAvailabilities();
-
-		/**
-		 * The meta object literal for the '<em><b>Charter In Market Overrides</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RESULT__CHARTER_IN_MARKET_OVERRIDES = eINSTANCE.getResult_CharterInMarketOverrides();
-
-		/**
-		 * The meta object literal for the '<em><b>Extra Charter In Markets</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RESULT__EXTRA_CHARTER_IN_MARKETS = eINSTANCE.getResult_ExtraCharterInMarkets();
+		EClass SANDBOX_RESULT = eINSTANCE.getSandboxResult();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}' enum.

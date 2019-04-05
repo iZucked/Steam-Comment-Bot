@@ -63,6 +63,7 @@ public class PartialCaseRowItemProvider
 
 			addBuyOptionsPropertyDescriptor(object);
 			addSellOptionsPropertyDescriptor(object);
+			addVesselEventOptionsPropertyDescriptor(object);
 			addShippingPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -104,6 +105,28 @@ public class PartialCaseRowItemProvider
 				 getString("_UI_PartialCaseRow_sellOptions_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_PartialCaseRow_sellOptions_feature", "_UI_PartialCaseRow_type"),
 				 AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Vessel Event Options feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselEventOptionsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PartialCaseRow_vesselEventOptions_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PartialCaseRow_vesselEventOptions_feature", "_UI_PartialCaseRow_type"),
+				 AnalyticsPackage.Literals.PARTIAL_CASE_ROW__VESSEL_EVENT_OPTIONS,
 				 true,
 				 false,
 				 true,

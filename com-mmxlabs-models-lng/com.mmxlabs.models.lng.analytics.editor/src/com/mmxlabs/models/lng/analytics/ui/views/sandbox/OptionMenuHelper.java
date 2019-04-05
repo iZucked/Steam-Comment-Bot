@@ -12,9 +12,12 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
@@ -25,16 +28,22 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyReference;
-import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.CharterOutOpportunity;
+import com.mmxlabs.models.lng.analytics.OpenBuy;
+import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellReference;
+import com.mmxlabs.models.lng.analytics.VesselEventReference;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
+import com.mmxlabs.models.lng.analytics.ui.views.formatters.VesselEventOptionDescriptionFormatter;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -72,6 +81,7 @@ public class OptionMenuHelper {
 
 		final Function<T, EObject> referenceFactory;
 		final Supplier<EObject> opportunityFactory;
+		final Supplier<EObject> openFactory;
 		final Function<SpotMarket, EObject> marketFactory;
 		final Function<AbstractAnalysisModel, List<T>> existingSlots;
 		final ICellRenderer f;
@@ -92,6 +102,10 @@ public class OptionMenuHelper {
 			marketFactory = market -> {
 				final BuyMarket row = AnalyticsFactory.eINSTANCE.createBuyMarket();
 				row.setMarket(market);
+				return row;
+			};
+			openFactory = () -> {
+				final OpenBuy row = AnalyticsFactory.eINSTANCE.createOpenBuy();
 				return row;
 			};
 			existingSlots = model -> {
@@ -127,6 +141,10 @@ public class OptionMenuHelper {
 				row.setMarket(market);
 				return row;
 			};
+			openFactory = () -> {
+				final OpenSell row = AnalyticsFactory.eINSTANCE.createOpenSell();
+				return row;
+			};
 			existingSlots = model -> {
 
 				final Set<T> used = model.getSells().stream() //
@@ -144,7 +162,7 @@ public class OptionMenuHelper {
 			};
 		}
 
-		return new MouseListener() {
+		return new MouseAdapter() {
 			LocalMenuHelper helper = new LocalMenuHelper(parent);
 
 			@Override
@@ -263,17 +281,139 @@ public class OptionMenuHelper {
 						marketHelper.addSubMenu(fob);
 					}
 					helper.addSubMenu(marketHelper);
-
+					helper.addAction(new RunnableAction("Open", () -> {
+						final EObject row = openFactory.get();
+						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, containerFeature, row), model,
+								containerFeature);
+					}));
 				}
 
 				helper.open();
 
 			}
 
+		};
+
+	}
+
+	public static MouseListener createNewVesselEventOptionMenuListener(Composite parent, @NonNull IScenarioEditingLocation scenarioEditingLocation,
+			@NonNull Supplier<AbstractAnalysisModel> modelProvider) {
+
+		final EStructuralFeature containerFeature;
+
+		final Function<VesselEvent, EObject> referenceFactory;
+		final Supplier<EObject> opportunityFactory;
+		final Function<AbstractAnalysisModel, List<VesselEvent>> existingSlots;
+		final ICellRenderer f;
+
+		{
+			containerFeature = AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS;
+			f = new VesselEventOptionDescriptionFormatter();
+			referenceFactory = ve -> {
+				final VesselEventReference row = AnalyticsFactory.eINSTANCE.createVesselEventReference();
+				row.setEvent(ve);
+				return row;
+			};
+			opportunityFactory = () -> {
+				final CharterOutOpportunity row = AnalyticsFactory.eINSTANCE.createCharterOutOpportunity();
+				return row;
+			};
+			existingSlots = model -> {
+
+				final Set<VesselEvent> used = model.getVesselEvents().stream() //
+						.filter(VesselEventReference.class::isInstance) //
+						.map(b -> ((VesselEventReference) b).getEvent())//
+						.collect(Collectors.toSet());
+				final List<VesselEvent> list = ((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel().getVesselEvents();
+
+				final List<VesselEvent> existing = list.stream() //
+						.filter(s -> !used.contains(s)) //
+						.collect(Collectors.toList());
+
+				return existing;
+			};
+
+		}
+
+		return new MouseAdapter() {
+			LocalMenuHelper helper = new LocalMenuHelper(parent);
+
 			@Override
-			public void mouseDoubleClick(final MouseEvent e) {
+			public void mouseUp(final MouseEvent e) {
 
 			}
+
+			@Override
+			public void mouseDown(final MouseEvent e) {
+
+				helper.clearActions();
+
+				final AbstractAnalysisModel model = modelProvider.get();
+				if (model != null) {
+
+					if (opportunityFactory != null) {
+						helper.addAction(new RunnableAction("New charter", () -> {
+							final EObject row = opportunityFactory.get();
+
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, containerFeature, row), model,
+									containerFeature);
+							DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row);
+						}));
+					}
+					final SubLocalMenuHelper existinMenuHelper = new SubLocalMenuHelper("Existing");
+					helper.addSubMenu(existinMenuHelper);
+
+					final List<VesselEvent> existing = existingSlots.apply(model);
+					{
+
+						final Map<EClass, List<VesselEvent>> eventsByType = existing.stream()//
+								.collect(Collectors.groupingBy(EObject::eClass));
+
+						for (final Map.Entry<EClass, List<VesselEvent>> ee : eventsByType.entrySet()) {
+							final EClass p = ee.getKey();
+							assert getEventName(p) != null;
+							final SubLocalMenuHelper portMenuHelper = new SubLocalMenuHelper(getEventName(p));
+							for (final VesselEvent s : ee.getValue()) {
+								final EObject row = referenceFactory.apply(s);
+								portMenuHelper.addAction(new RunnableAction(f.render(row), () -> {
+									scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, containerFeature, row), model,
+											containerFeature);
+									// DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row);
+								}));
+							}
+							existinMenuHelper.addSubMenu(portMenuHelper);
+						}
+					}
+					//
+					// {
+					// final SubLocalMenuHelper portMenuHelper = new SubLocalMenuHelper("Spot");
+					//// for (final T s : noContractSlots) {
+					//// final EObject row = referenceFactory.apply(s);
+					//// portMenuHelper.addAction(new RunnableAction(f.render(row), () -> {
+					//// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, containerFeature, row), model,
+					//// containerFeature);
+					//// }));
+					//// }
+					// subHelper.addSubMenu(portMenuHelper);
+					// }
+					// existinMenuHelper.addSubMenu(subHelper);
+				}
+
+				helper.open();
+
+			}
+
+			private String getEventName(final EClass p) {
+				if (CargoPackage.Literals.CHARTER_OUT_EVENT == p) {
+					return "Charter out";
+				} else if (CargoPackage.Literals.DRY_DOCK_EVENT == p) {
+					return "Dry-dock";
+				} else if (CargoPackage.Literals.MAINTENANCE_EVENT == p) {
+					return "Maintenance";
+				}
+				return p.getName();
+			}
+
 		};
 
 	}

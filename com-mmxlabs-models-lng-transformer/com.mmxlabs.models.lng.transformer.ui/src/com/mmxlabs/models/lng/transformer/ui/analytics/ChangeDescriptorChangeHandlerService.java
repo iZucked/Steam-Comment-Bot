@@ -90,7 +90,8 @@ public class ChangeDescriptorChangeHandlerService implements IScenarioInstanceCh
 							result.getOptions().add(option);
 						}
 						monitor.subTask("Generating new solution");
-						helper.generateResults(scenarioInstance, userSettings, sdp.getEditingDomain(), extraLoads, extraDischarges, new SubProgressMonitor(monitor, 5));
+						helper.processExtraData(result);
+						helper.generateResults(scenarioInstance, userSettings, sdp.getEditingDomain(), new SubProgressMonitor(monitor, 5));
 						// monitor.worked(5);
 
 						final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);

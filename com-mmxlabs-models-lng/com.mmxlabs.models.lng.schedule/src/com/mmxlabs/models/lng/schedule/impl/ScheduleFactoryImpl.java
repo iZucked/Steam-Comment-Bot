@@ -107,6 +107,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.OPEN_SLOT_ALLOCATION: return createOpenSlotAllocation();
 			case SchedulePackage.SLOT_ALLOCATION: return createSlotAllocation();
 			case SchedulePackage.SEQUENCE: return createSequence();
+			case SchedulePackage.OTHER_PNL: return createOtherPNL();
 			case SchedulePackage.EVENT: return createEvent();
 			case SchedulePackage.START_EVENT: return createStartEvent();
 			case SchedulePackage.END_EVENT: return createEndEvent();
@@ -245,6 +246,17 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public Sequence createSequence() {
 		SequenceImpl sequence = new SequenceImpl();
 		return sequence;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public OtherPNL createOtherPNL() {
+		OtherPNLImpl otherPNL = new OtherPNLImpl();
+		return otherPNL;
 	}
 
 	/**

@@ -23,7 +23,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
+import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
@@ -66,11 +66,18 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 
 	@Override
 	public void dropAccept(final DropTargetEvent event) {
-
+		if (scenarioEditingLocation.isLocked()) {
+			event.detail = DND.DROP_NONE;
+			return;
+		}
 	}
 
 	@Override
 	public void drop(final DropTargetEvent event) {
+		if (scenarioEditingLocation.isLocked()) {
+			event.detail = DND.DROP_NONE;
+			return;
+		}
 		final AbstractAnalysisModel optionAnalysisModel = this.optionAnalysisModel;
 		if (optionAnalysisModel == null) {
 			return;
@@ -112,7 +119,7 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 					// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					// }));
 					menuHelper.addAction(new RunnableAction("Create availability", () -> {
-						final OptionalAvailabilityShippingOption opt = AnalyticsFactory.eINSTANCE.createOptionalAvailabilityShippingOption();
+						final OptionalSimpleVesselCharterOption opt = AnalyticsFactory.eINSTANCE.createOptionalSimpleVesselCharterOption();
 						AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
 						opt.setVessel(vessel);
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
@@ -136,7 +143,7 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 					final LoadSlot loadSlot = rowData.getLoadSlot();
 					final DischargeSlot dischargeSlot = rowData.getDischargeSlot();
 
-					final ShippingOption shippingOption = AnalyticsBuilder.getOrCreateShippingOption(rowData.getCargo(), loadSlot, dischargeSlot, optionAnalysisModel);
+					final ShippingOption shippingOption = AnalyticsBuilder.getOrCreateShippingOption(rowData.getCargo(), loadSlot, dischargeSlot, false, optionAnalysisModel);
 					if (shippingOption != null && shippingOption.eContainer() == null) {
 						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
 								shippingOption));

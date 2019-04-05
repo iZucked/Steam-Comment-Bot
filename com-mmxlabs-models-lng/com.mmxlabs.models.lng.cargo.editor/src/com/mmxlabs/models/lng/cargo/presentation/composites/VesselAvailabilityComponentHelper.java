@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.editor.VesselAvailabilityDetailWrapper;
+import com.mmxlabs.models.lng.fleet.ui.inlineeditors.TextualVesselReferenceInlineEditor;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
@@ -104,10 +105,11 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the vessel feature on VesselAvailability
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_vesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL));
+		detailComposite.addInlineEditor( new TextualVesselReferenceInlineEditor(CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL));
 	}
 	/**
 	 * Create the editor for the timeCharterRate feature on VesselAvailability

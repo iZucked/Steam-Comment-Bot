@@ -216,23 +216,13 @@ public class ScenarioComparisonServiceTransformer {
 
 				diffProcessors.add(new StructuralDifferencesProcessor(scheduleDiffUtils));
 
-/** 2019-01 disable diff processors
-				// Also if number of scenarios is 0 or 1
-				final boolean enableDiffTools = LicenseFeatures.isPermitted("features:difftools");
-				if (enableDiffTools) {
-					diffProcessors.add(new CycleDiffProcessor(customRelatedSlotHandlers));
-				}
-				diffProcessors.add(new StructuralDifferencesProcessor(scheduleDiffUtils));
-				if (enableDiffTools) {
-					diffProcessors.add(new GCOCycleGroupingProcessor());
-					diffProcessors.add(new LadenVoyageProcessor());
-					// Enable to link charter length to ballast idle
-					// diffProcessors.add(new BallastChaterLengthAndIdleVoyageProcessor());
-					diffProcessors.add(new EventGroupingOverlapProcessor());
-					diffProcessors.add(new StartEventProcessor());
-					diffProcessors.add(new CooldownBindingProcessor());
-				}
-**/
+				/**
+				 * 2019-01 disable diff processors // Also if number of scenarios is 0 or 1 final boolean enableDiffTools = LicenseFeatures.isPermitted("features:difftools"); if (enableDiffTools) {
+				 * diffProcessors.add(new CycleDiffProcessor(customRelatedSlotHandlers)); } diffProcessors.add(new StructuralDifferencesProcessor(scheduleDiffUtils)); if (enableDiffTools) {
+				 * diffProcessors.add(new GCOCycleGroupingProcessor()); diffProcessors.add(new LadenVoyageProcessor()); // Enable to link charter length to ballast idle // diffProcessors.add(new
+				 * BallastChaterLengthAndIdleVoyageProcessor()); diffProcessors.add(new EventGroupingOverlapProcessor()); diffProcessors.add(new StartEventProcessor()); diffProcessors.add(new
+				 * CooldownBindingProcessor()); }
+				 **/
 			}
 
 			@Override
@@ -414,12 +404,12 @@ public class ScenarioComparisonServiceTransformer {
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
 				if (event instanceof CharterLengthEvent) {
-//					final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) event;
-//					extraEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents().add(charterLengthEvent);
-//					continue;
+					// final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) event;
+					// extraEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents().add(charterLengthEvent);
+					// continue;
 					interestingEvents.add(event);
 					allEvents.add(event);
-continue;
+					continue;
 				}
 
 				if (showEvent(event)) {
@@ -546,7 +536,8 @@ continue;
 				} else if (openSlotAllocation.getSlot() instanceof DischargeSlot) {
 					row.setOpenDischargeSlotAllocation(openSlotAllocation);
 				} else {
-					assert false;
+					// This has happened in the sandbox code...
+					// assert false;
 				}
 				elementToRowMap.put(openSlotAllocation, row);
 				allElements.add(openSlotAllocation);

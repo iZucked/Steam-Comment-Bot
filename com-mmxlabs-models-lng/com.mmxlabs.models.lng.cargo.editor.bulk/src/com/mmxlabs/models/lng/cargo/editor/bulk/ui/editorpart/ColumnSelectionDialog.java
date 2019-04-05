@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -86,7 +85,7 @@ public class ColumnSelectionDialog extends Dialog {
 	}
 	
 	private List<ColumnBlock> getVisibleColumns(List<ColumnBlock> items){
-		List<ColumnBlock> result = new ArrayList();
+		List<ColumnBlock> result = new ArrayList<>();
 		for (final ColumnBlock cb : items) {
 			if (cb.getVisible()) {
 				result.add(cb);

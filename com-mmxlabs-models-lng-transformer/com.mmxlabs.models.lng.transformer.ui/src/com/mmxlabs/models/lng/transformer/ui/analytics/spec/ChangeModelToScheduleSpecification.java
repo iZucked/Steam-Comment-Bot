@@ -325,7 +325,7 @@ public class ChangeModelToScheduleSpecification {
 					newSlotSpecification.setSlot(slot);
 					newEvents.add(newSlotSpecification);
 				}
-				
+
 				if (vesselAllocation == null) {
 					// Non-shipped.
 					final NonShippedCargoSpecification nonShippedCargoSpecification = CargoFactory.eINSTANCE.createNonShippedCargoSpecification();
@@ -495,7 +495,7 @@ public class ChangeModelToScheduleSpecification {
 									break;
 								}
 							}
-							
+
 						}
 					}
 					if (pTargetVessel.getEvents().isEmpty()) {
@@ -518,13 +518,12 @@ public class ChangeModelToScheduleSpecification {
 				}
 			}
 		}
-		
-		if (!leftOvers .isEmpty()) {
+
+		if (!leftOvers.isEmpty()) {
 			// We got here because; it looks like the period transformer has extracted all cargoes off the vessel and put two on.
 			// Thus the full sequence has multiple carfoes but the positional descriptor does not know about removed cargoes.
 			// Maybe we need to run on FULL sequences not just the period?
-			
-			
+
 			Iterator<BooleanSupplier> itr = leftOvers.iterator();
 			while (itr.hasNext()) {
 				BooleanSupplier supplier = itr.next();
@@ -534,10 +533,10 @@ public class ChangeModelToScheduleSpecification {
 				}
 			}
 		}
-		
+
 		assert leftOvers.isEmpty();
 
-		return new Pair<>(scheduleSpecification, new ExtraDataProvider(null, null, null, extraLoads, extraDischarges));
+		return new Pair<>(scheduleSpecification, new ExtraDataProvider(null, null, null, extraLoads, extraDischarges, null, null));
 	}
 
 	private @NonNull SpotType map(SlotType slotType) {

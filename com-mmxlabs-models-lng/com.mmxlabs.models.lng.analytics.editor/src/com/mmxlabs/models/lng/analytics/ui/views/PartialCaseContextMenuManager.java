@@ -23,6 +23,7 @@ import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
+import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.graphics.Point;
@@ -83,7 +84,9 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 				mItem.dispose();
 			}
 		}
-
+		if (scenarioEditingLocation.isLocked()) {
+			return;
+		}
 		final Point mousePoint = grid.toControl(new Point(e.x, e.y));
 		final GridColumn column = grid.getColumn(mousePoint);
 
@@ -152,7 +155,8 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 												cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), buyOption, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE,
 														AnalyticsBuilder.getDate(sellOption)));
 											} else if (vessel != null) {
-												final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel, modelDistanceProvider);
+												final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel,
+														modelDistanceProvider);
 
 												final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 												final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
@@ -175,8 +179,8 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 													cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), buyOption, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE,
 															AnalyticsBuilder.getDate(sellOption)));
 												} else if (vessel != null) {
-													final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed(), RouteOption.DIRECT, fromPort, toPort,
-															portModel, modelDistanceProvider);
+													final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed(), RouteOption.DIRECT,
+															fromPort, toPort, portModel, modelDistanceProvider);
 
 													final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 													final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
@@ -227,7 +231,8 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 												cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), sellOption, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE,
 														AnalyticsBuilder.getDate(buyOption)));
 											} else if (vessel != null) {
-												final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel, modelDistanceProvider);
+												final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel,
+														modelDistanceProvider);
 
 												final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 												final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();
@@ -239,7 +244,7 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 										scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, row, null);
 									}
 								}));
-								if (vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed() > 0.0) {
+								if (vessel != null && vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed() > 0.0) {
 
 									dateMenu.add(new RunnableAction("service speed", () -> {
 
@@ -251,8 +256,8 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 													cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), sellOption, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE,
 															AnalyticsBuilder.getDate(buyOption)));
 												} else if (vessel != null) {
-													final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed(), RouteOption.DIRECT, fromPort, toPort,
-															portModel, modelDistanceProvider);
+													final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed(), RouteOption.DIRECT,
+															fromPort, toPort, portModel, modelDistanceProvider);
 
 													final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 													final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();

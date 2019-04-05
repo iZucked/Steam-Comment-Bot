@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.analytics;
 
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,7 +26,7 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
  * @model
  * @generated
  */
-public interface ExistingCharterMarketOption extends ShippingOption {
+public interface ExistingCharterMarketOption extends UUIDObject, ShippingOption {
 	/**
 	 * Returns the value of the '<em><b>Charter In Market</b></em>' reference.
 	 * <!-- begin-user-doc -->

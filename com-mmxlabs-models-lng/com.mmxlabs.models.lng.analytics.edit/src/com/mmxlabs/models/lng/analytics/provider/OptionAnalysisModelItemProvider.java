@@ -55,6 +55,7 @@ public class OptionAnalysisModelItemProvider
 			super.getPropertyDescriptors(object);
 
 			addUseTargetPNLPropertyDescriptor(object);
+			addModePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -82,6 +83,28 @@ public class OptionAnalysisModelItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Mode feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addModePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_OptionAnalysisModel_mode_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_OptionAnalysisModel_mode_feature", "_UI_OptionAnalysisModel_type"),
+				 AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__MODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -95,9 +118,7 @@ public class OptionAnalysisModelItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
-			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS);
-			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__CHILDREN);
 		}
 		return childrenFeatures;
 	}
@@ -154,13 +175,12 @@ public class OptionAnalysisModelItemProvider
 
 		switch (notification.getFeatureID(OptionAnalysisModel.class)) {
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL:
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__MODE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULTS:
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__CHILDREN:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -190,41 +210,23 @@ public class OptionAnalysisModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT,
-				 AnalyticsFactory.eINSTANCE.createResult()));
+				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS,
+				 AnalyticsFactory.eINSTANCE.createSandboxResult()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS,
-				 AnalyticsFactory.eINSTANCE.createResult()));
+				 AnalyticsFactory.eINSTANCE.createActionableSetPlan()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__CHILDREN,
-				 AnalyticsFactory.eINSTANCE.createOptionAnalysisModel()));
-	}
+				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS,
+				 AnalyticsFactory.eINSTANCE.createSlotInsertionOptions()));
 
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT ||
-			childFeature == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS,
+				 AnalyticsFactory.eINSTANCE.createOptimisationResult()));
 	}
 
 }

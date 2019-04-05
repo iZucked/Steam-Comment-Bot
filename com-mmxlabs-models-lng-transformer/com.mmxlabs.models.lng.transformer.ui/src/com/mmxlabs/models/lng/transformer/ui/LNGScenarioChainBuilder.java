@@ -52,7 +52,7 @@ public class LNGScenarioChainBuilder {
 	 */
 	public static @NonNull IChainRunner createStandardOptimisationChain(@NonNull final String resultName, @NonNull final LNGDataTransformer dataTransformer,
 			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimisationPlan optimisationPlan, @NonNull final CleanableExecutorService executorService,
-			@NonNull final String @Nullable... initialHints) {
+			boolean includeDefaultExport, @NonNull final String @Nullable... initialHints) {
 		boolean createOptimiser = false;
 
 		final Set<String> hints = LNGTransformerHelper.getHints(optimisationPlan.getUserSettings(), initialHints);
@@ -97,7 +97,7 @@ public class LNGScenarioChainBuilder {
 				}
 			}
 
-			if (exportCallback != null) {
+			if (includeDefaultExport && exportCallback != null) {
 				exportCallback.accept(scenarioToOptimiserBridge, resultName);
 			}
 		} else {

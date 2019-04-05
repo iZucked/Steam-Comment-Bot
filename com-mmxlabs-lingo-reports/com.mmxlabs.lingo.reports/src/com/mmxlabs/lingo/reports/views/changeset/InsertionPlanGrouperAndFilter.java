@@ -378,7 +378,11 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			adjustedMaxComplexity = Math.max(1, Math.min(minComplexity, maxComplexity));
 			for (final Map.Entry<ChangeSetMetadata, List<ChangeSetTableGroup>> e : grouper.entrySet()) {
 				final List<ChangeSetTableGroup> groups = e.getValue();
+				try {
 				Collections.sort(groups, (a, b) -> Long.compare(b.getDeltaMetrics().getPnlDelta(), a.getDeltaMetrics().getPnlDelta()));
+				} catch (NullPointerException ee) {
+					
+				}
 				boolean first = true;
 				double sortValue = 0.0;
 				for (final ChangeSetTableGroup g : groups) {
@@ -480,7 +484,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				final LoadSlot slot = row.getLhsAfter() != null ? row.getLhsAfter().getLoadSlot() : null;
 				if (slot != null) {
 					if (row.isRhsSlot()) {
-						final Slot discharge = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
+						final Slot<?> discharge = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
 						{
 							final String label = row.getLhsName() + " to " + row.getRhsName();
 							showFromMenu.addAction(new RunnableAction(label, () -> {
@@ -607,7 +611,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				}
 			}
 			if (showRHSActions && row.isRhsSlot()) {
-				final Slot slot = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
+				final Slot<?> slot = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
 				if (slot != null) {
 
 					if (showFromMenu.hasActions()) {
@@ -615,7 +619,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 					}
 
 					if (row.isLhsSlot()) {
-						final Slot load = row.getLhsAfter() != null ? row.getLhsAfter().getLoadSlot() : null;
+						final Slot<?> load = row.getLhsAfter() != null ? row.getLhsAfter().getLoadSlot() : null;
 						if (!showLHSActions) {
 							final String label = row.getLhsName() + " to " + row.getRhsName();
 							showFromMenu.addAction(new RunnableAction(label, () -> {
@@ -758,7 +762,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			for (final ChangeSetTableRow row : group.getRows()) {
 				if (row.getLhsAfter() != null && row.getLhsAfter().getLoadSlot() == targetElement) {
 					if (row.isRhsSlot()) {
-						final Slot discharge = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
+						final Slot<?> discharge = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
 						final Contract contract = discharge.getContract();
 
 						if (discharge instanceof SpotSlot) {
@@ -827,7 +831,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 					}
 				} else if (row.getRhsAfter() != null && row.getRhsAfter().getDischargeSlot() == targetElement) {
 					if (row.isLhsSlot()) {
-						final Slot load = row.getLhsAfter() != null ? row.getLhsAfter().getLoadSlot() : null;
+						final Slot<?> load = row.getLhsAfter() != null ? row.getLhsAfter().getLoadSlot() : null;
 						final Contract contract = load == null ? null : load.getContract();
 
 						if (load instanceof SpotSlot) {
@@ -869,19 +873,32 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							}));
 						} else {
 
-							final String label = load.getName() + " to " + row.getRhsName();
-							showFromMenu.addAction(new RunnableAction(label, () -> {
-								final UserFilter f = new UserFilter(label);
-								f.lhsKey = row.getLhsName();
-								f.lhsType = FilterSlotType.BY_ID;
-								f.rhsKey = row.getRhsName();
-								f.rhsType = FilterSlotType.BY_ID;
-								mergeFilter(f);
-								ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
-							}));
+							if (row.isRhsSlot()) {
+								final String label = load.getName() + " to " + row.getRhsName();
+								showFromMenu.addAction(new RunnableAction(label, () -> {
+									final UserFilter f = new UserFilter(label);
+									f.lhsKey = row.getLhsName();
+									f.lhsType = FilterSlotType.BY_ID;
+									f.rhsKey = row.getRhsName();
+									f.rhsType = FilterSlotType.BY_ID;
+									mergeFilter(f);
+									ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+								}));
+							} else {
+								final String label = load.getName() + " to open";
+								showFromMenu.addAction(new RunnableAction(label, () -> {
+									final UserFilter f = new UserFilter(label);
+									f.lhsKey = row.getLhsName();
+									f.lhsType = FilterSlotType.BY_ID;
+									f.rhsType = FilterSlotType.BY_OPEN;
+									mergeFilter(f);
+									ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+								}));
+							}
 						}
 
 					} else {
+
 						final String label = "Open to " + row.getRhsName();
 						showFromMenu.addAction(new RunnableAction(label, () -> {
 							final UserFilter f = new UserFilter(label);

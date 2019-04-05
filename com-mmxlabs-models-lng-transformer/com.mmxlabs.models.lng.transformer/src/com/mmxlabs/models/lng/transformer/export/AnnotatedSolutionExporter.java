@@ -175,6 +175,7 @@ public class AnnotatedSolutionExporter {
 		}
 
 		final List<Sequence> sequences = output.getSequences();
+		assert sequences.isEmpty();
 		final Iterable<IResource> resources = annotatedSolution.getFullSequences().getResources();
 		// Create sequences and run other exporters
 
@@ -253,6 +254,9 @@ public class AnnotatedSolutionExporter {
 
 			if (!(isDESSequence || isFOBSequence || isRoundTripSequence)) {
 				sequences.add(eSequence);
+			}
+			if (sequences.size() > annotatedSolution.getFullSequences().getResources().size()) {
+				int ii = 0;
 			}
 
 			final boolean pIsRoundTripSequence = isRoundTripSequence;

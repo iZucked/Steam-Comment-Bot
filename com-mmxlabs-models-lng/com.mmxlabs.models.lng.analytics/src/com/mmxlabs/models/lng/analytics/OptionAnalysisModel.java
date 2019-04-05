@@ -20,10 +20,9 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getBaseCase <em>Base Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getPartialCase <em>Partial Case</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getBaseCaseResult <em>Base Case Result</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getResults <em>Results</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#isUseTargetPNL <em>Use Target PNL</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getChildren <em>Children</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getMode <em>Mode</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel()
@@ -84,32 +83,6 @@ public interface OptionAnalysisModel extends AbstractAnalysisModel {
 	void setPartialCase(PartialCase value);
 
 	/**
-	 * Returns the value of the '<em><b>Base Case Result</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Base Case Result</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Base Case Result</em>' containment reference.
-	 * @see #setBaseCaseResult(Result)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel_BaseCaseResult()
-	 * @model containment="true"
-	 * @generated
-	 */
-	Result getBaseCaseResult();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getBaseCaseResult <em>Base Case Result</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Base Case Result</em>' containment reference.
-	 * @see #getBaseCaseResult()
-	 * @generated
-	 */
-	void setBaseCaseResult(Result value);
-
-	/**
 	 * Returns the value of the '<em><b>Results</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -118,12 +91,12 @@ public interface OptionAnalysisModel extends AbstractAnalysisModel {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Results</em>' containment reference.
-	 * @see #setResults(Result)
+	 * @see #setResults(AbstractSolutionSet)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel_Results()
 	 * @model containment="true"
 	 * @generated
 	 */
-	Result getResults();
+	AbstractSolutionSet getResults();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getResults <em>Results</em>}' containment reference.
@@ -133,7 +106,7 @@ public interface OptionAnalysisModel extends AbstractAnalysisModel {
 	 * @see #getResults()
 	 * @generated
 	 */
-	void setResults(Result value);
+	void setResults(AbstractSolutionSet value);
 
 	/**
 	 * Returns the value of the '<em><b>Use Target PNL</b></em>' attribute.
@@ -162,19 +135,29 @@ public interface OptionAnalysisModel extends AbstractAnalysisModel {
 	void setUseTargetPNL(boolean value);
 
 	/**
-	 * Returns the value of the '<em><b>Children</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel}.
+	 * Returns the value of the '<em><b>Mode</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Children</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Mode</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Children</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel_Children()
-	 * @model containment="true"
+	 * @return the value of the '<em>Mode</em>' attribute.
+	 * @see #setMode(int)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel_Mode()
+	 * @model
 	 * @generated
 	 */
-	EList<OptionAnalysisModel> getChildren();
+	int getMode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getMode <em>Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Mode</em>' attribute.
+	 * @see #getMode()
+	 * @generated
+	 */
+	void setMode(int value);
 
 } // OptionAnalysisModel

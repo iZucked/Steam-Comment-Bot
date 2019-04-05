@@ -78,6 +78,10 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 				mItem.dispose();
 			}
 		}
+		
+		if (scenarioEditingLocation.isLocked()) {
+			return;
+		}
 
 		final Point mousePoint = grid.toControl(new Point(e.x, e.y));
 		final GridColumn column = grid.getColumn(mousePoint);
@@ -100,6 +104,9 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 					if (ee instanceof BaseCaseRow) {
 						final BaseCaseRow baseCaseRow = (BaseCaseRow) ee;
 						final PartialCaseRow partialCaseRow = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
+						if (baseCaseRow.getVesselEventOption() != null) {
+							partialCaseRow.getVesselEventOptions().add(baseCaseRow.getVesselEventOption());
+						}
 						if (baseCaseRow.getBuyOption() != null) {
 							partialCaseRow.getBuyOptions().add(baseCaseRow.getBuyOption());
 						}

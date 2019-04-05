@@ -10,7 +10,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
-import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
+import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
@@ -51,8 +51,8 @@ public final class ViabilityUtils {
 		} */
 		for (final VesselAvailability vessel : cargoModel.getVesselAvailabilities()) {
 			if (vessel != null) {
-				final ExistingVesselAvailability v = AnalyticsFactory.eINSTANCE.createExistingVesselAvailability();
-				v.setVesselAvailability(vessel);
+				final ExistingVesselCharterOption v = AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption();
+				v.setVesselCharter(vessel);
 				model.getShippingTemplates().add(v);
 			}
 		}

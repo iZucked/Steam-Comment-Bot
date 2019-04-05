@@ -12,13 +12,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -172,13 +170,8 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 				if (newState == EJobState.COMPLETED) {
 					final SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
 					if (plan != null) {
-
-						final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 						final AnalyticsSolution data = new AnalyticsSolution(original, plan, pTaskName);
-						data.setCreateInsertionOptions(true);
-						data.setCreateDiffToBaseAction(true);
-
-						eventBroker.post(ChangeSetViewCreatorService_Topic, data);
+						data.open();
 					}
 				}
 			};

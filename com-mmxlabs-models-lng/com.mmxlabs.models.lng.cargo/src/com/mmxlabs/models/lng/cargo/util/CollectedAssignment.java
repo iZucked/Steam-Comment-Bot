@@ -32,7 +32,7 @@ public class CollectedAssignment {
 
 	private final VesselAvailability vesselAvailability;
 	private final CharterInMarket charterInMarket;
-	private final @NonNull List<@NonNull AssignableElement> assignments;
+	private @NonNull List<@NonNull AssignableElement> assignments;
 	private final Integer spotIndex;
 
 	public CollectedAssignment(final @NonNull List<@NonNull AssignableElement> assignments, final @NonNull VesselAvailability vesselAvailability, final @Nullable PortModel portModel,
@@ -53,7 +53,9 @@ public class CollectedAssignment {
 	}
 
 	public @NonNull List<@NonNull AssignableElement> getAssignedObjects() {
-		return Collections.unmodifiableList(assignments);
+		return assignments;
+//		return Collections.unmodifiableList(
+//				);
 	}
 
 	public boolean isSpotVessel() {
@@ -133,5 +135,9 @@ public class CollectedAssignment {
 
 		};
 		return comparator;
+	}
+
+	public void resort(final @Nullable PortModel portModel, @Nullable ModelDistanceProvider modelDistanceProvider, final @Nullable IAssignableElementDateProvider dateProvider) {
+		this.assignments = (spotIndex != null && spotIndex == -1) ? assignments : sortAssignments(assignments, portModel, modelDistanceProvider, dateProvider);
 	}
 }

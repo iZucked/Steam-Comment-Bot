@@ -89,6 +89,14 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createSellOptionAdapter();
 			}
 			@Override
+			public Adapter caseOpenSell(OpenSell object) {
+				return createOpenSellAdapter();
+			}
+			@Override
+			public Adapter caseOpenBuy(OpenBuy object) {
+				return createOpenBuyAdapter();
+			}
+			@Override
 			public Adapter caseBuyOpportunity(BuyOpportunity object) {
 				return createBuyOpportunityAdapter();
 			}
@@ -113,6 +121,18 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createSellReferenceAdapter();
 			}
 			@Override
+			public Adapter caseVesselEventOption(VesselEventOption object) {
+				return createVesselEventOptionAdapter();
+			}
+			@Override
+			public Adapter caseVesselEventReference(VesselEventReference object) {
+				return createVesselEventReferenceAdapter();
+			}
+			@Override
+			public Adapter caseCharterOutOpportunity(CharterOutOpportunity object) {
+				return createCharterOutOpportunityAdapter();
+			}
+			@Override
 			public Adapter caseBaseCaseRow(BaseCaseRow object) {
 				return createBaseCaseRowAdapter();
 			}
@@ -125,12 +145,12 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createShippingOptionAdapter();
 			}
 			@Override
-			public Adapter caseFleetShippingOption(FleetShippingOption object) {
-				return createFleetShippingOptionAdapter();
+			public Adapter caseSimpleVesselCharterOption(SimpleVesselCharterOption object) {
+				return createSimpleVesselCharterOptionAdapter();
 			}
 			@Override
-			public Adapter caseOptionalAvailabilityShippingOption(OptionalAvailabilityShippingOption object) {
-				return createOptionalAvailabilityShippingOptionAdapter();
+			public Adapter caseOptionalSimpleVesselCharterOption(OptionalSimpleVesselCharterOption object) {
+				return createOptionalSimpleVesselCharterOptionAdapter();
 			}
 			@Override
 			public Adapter caseRoundTripShippingOption(RoundTripShippingOption object) {
@@ -141,12 +161,12 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createNominatedShippingOptionAdapter();
 			}
 			@Override
-			public Adapter caseAnalysisResultRow(AnalysisResultRow object) {
-				return createAnalysisResultRowAdapter();
+			public Adapter caseFullVesselCharterOption(FullVesselCharterOption object) {
+				return createFullVesselCharterOptionAdapter();
 			}
 			@Override
-			public Adapter caseResultContainer(ResultContainer object) {
-				return createResultContainerAdapter();
+			public Adapter caseExistingVesselCharterOption(ExistingVesselCharterOption object) {
+				return createExistingVesselCharterOptionAdapter();
 			}
 			@Override
 			public Adapter caseAnalysisResultDetail(AnalysisResultDetail object) {
@@ -169,12 +189,8 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createOptionAnalysisModelAdapter();
 			}
 			@Override
-			public Adapter caseResultSet(ResultSet object) {
-				return createResultSetAdapter();
-			}
-			@Override
-			public Adapter caseResult(Result object) {
-				return createResultAdapter();
+			public Adapter caseSandboxResult(SandboxResult object) {
+				return createSandboxResultAdapter();
 			}
 			@Override
 			public Adapter caseBaseCase(BaseCase object) {
@@ -183,14 +199,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter casePartialCase(PartialCase object) {
 				return createPartialCaseAdapter();
-			}
-			@Override
-			public Adapter caseNewVesselAvailability(NewVesselAvailability object) {
-				return createNewVesselAvailabilityAdapter();
-			}
-			@Override
-			public Adapter caseExistingVesselAvailability(ExistingVesselAvailability object) {
-				return createExistingVesselAvailabilityAdapter();
 			}
 			@Override
 			public Adapter caseExistingCharterMarketOption(ExistingCharterMarketOption object) {
@@ -391,6 +399,34 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.OpenSell <em>Open Sell</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.OpenSell
+	 * @generated
+	 */
+	public Adapter createOpenSellAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.OpenBuy <em>Open Buy</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.OpenBuy
+	 * @generated
+	 */
+	public Adapter createOpenBuyAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity <em>Buy Opportunity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -475,6 +511,48 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.VesselEventOption <em>Vessel Event Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.VesselEventOption
+	 * @generated
+	 */
+	public Adapter createVesselEventOptionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.VesselEventReference <em>Vessel Event Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.VesselEventReference
+	 * @generated
+	 */
+	public Adapter createVesselEventReferenceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.CharterOutOpportunity <em>Charter Out Opportunity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.CharterOutOpportunity
+	 * @generated
+	 */
+	public Adapter createCharterOutOpportunityAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow <em>Base Case Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -517,30 +595,30 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.FleetShippingOption <em>Fleet Shipping Option</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption <em>Simple Vessel Charter Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.analytics.FleetShippingOption
+	 * @see com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption
 	 * @generated
 	 */
-	public Adapter createFleetShippingOptionAdapter() {
+	public Adapter createSimpleVesselCharterOptionAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption <em>Optional Availability Shipping Option</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption <em>Optional Simple Vessel Charter Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption
+	 * @see com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption
 	 * @generated
 	 */
-	public Adapter createOptionalAvailabilityShippingOptionAdapter() {
+	public Adapter createOptionalSimpleVesselCharterOptionAdapter() {
 		return null;
 	}
 
@@ -573,30 +651,30 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow <em>Analysis Result Row</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.FullVesselCharterOption <em>Full Vessel Charter Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.analytics.AnalysisResultRow
+	 * @see com.mmxlabs.models.lng.analytics.FullVesselCharterOption
 	 * @generated
 	 */
-	public Adapter createAnalysisResultRowAdapter() {
+	public Adapter createFullVesselCharterOptionAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ResultContainer <em>Result Container</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption <em>Existing Vessel Charter Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.analytics.ResultContainer
+	 * @see com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption
 	 * @generated
 	 */
-	public Adapter createResultContainerAdapter() {
+	public Adapter createExistingVesselCharterOptionAdapter() {
 		return null;
 	}
 
@@ -671,30 +749,16 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ResultSet <em>Result Set</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SandboxResult <em>Sandbox Result</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.analytics.ResultSet
+	 * @see com.mmxlabs.models.lng.analytics.SandboxResult
 	 * @generated
 	 */
-	public Adapter createResultSetAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.Result <em>Result</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.analytics.Result
-	 * @generated
-	 */
-	public Adapter createResultAdapter() {
+	public Adapter createSandboxResultAdapter() {
 		return null;
 	}
 
@@ -723,34 +787,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPartialCaseAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.NewVesselAvailability <em>New Vessel Availability</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.analytics.NewVesselAvailability
-	 * @generated
-	 */
-	public Adapter createNewVesselAvailabilityAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ExistingVesselAvailability <em>Existing Vessel Availability</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.analytics.ExistingVesselAvailability
-	 * @generated
-	 */
-	public Adapter createExistingVesselAvailabilityAdapter() {
 		return null;
 	}
 

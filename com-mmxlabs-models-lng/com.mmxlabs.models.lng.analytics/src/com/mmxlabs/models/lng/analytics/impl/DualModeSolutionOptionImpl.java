@@ -77,6 +77,7 @@ public class DualModeSolutionOptionImpl extends SolutionOptionImpl implements Du
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SolutionOptionMicroCase getMicroBaseCase() {
 		return microBaseCase;
 	}
@@ -101,6 +102,7 @@ public class DualModeSolutionOptionImpl extends SolutionOptionImpl implements Du
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMicroBaseCase(SolutionOptionMicroCase newMicroBaseCase) {
 		if (newMicroBaseCase != microBaseCase) {
 			NotificationChain msgs = null;
@@ -120,6 +122,7 @@ public class DualModeSolutionOptionImpl extends SolutionOptionImpl implements Du
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SolutionOptionMicroCase getMicroTargetCase() {
 		return microTargetCase;
 	}
@@ -144,6 +147,7 @@ public class DualModeSolutionOptionImpl extends SolutionOptionImpl implements Du
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMicroTargetCase(SolutionOptionMicroCase newMicroTargetCase) {
 		if (newMicroTargetCase != microTargetCase) {
 			NotificationChain msgs = null;

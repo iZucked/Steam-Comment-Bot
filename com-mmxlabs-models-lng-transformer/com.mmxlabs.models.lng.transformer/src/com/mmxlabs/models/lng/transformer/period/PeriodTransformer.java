@@ -21,6 +21,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -40,6 +41,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
@@ -94,6 +96,7 @@ import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.manager.ClonedScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -146,11 +149,16 @@ public class PeriodTransformer {
 	@NonNull
 	private InclusionChecker inclusionChecker;
 
-	@NonNull
-	public NonNullPair<IScenarioDataProvider, EditingDomain> transform(@NonNull final IScenarioDataProvider wholeScenario, @NonNull Schedule schedule, @NonNull final UserSettings userSettings,
-			@NonNull final IScenarioEntityMapping mapping) {
+	public static class PeriodTransformResult {
+		public @NonNull IScenarioDataProvider sdp;
+		public @NonNull EditingDomain editingDomain;
+		public @Nullable ExtraDataProvider extraDataProvider;
+	}
+
+	public @NonNull PeriodTransformResult transform(@NonNull final IScenarioDataProvider wholeScenario, @NonNull Schedule schedule, @Nullable ExtraDataProvider extraDataProvider,
+			@NonNull final UserSettings userSettings, @NonNull final IScenarioEntityMapping mapping) {
 		final PeriodRecord periodRecord = createPeriodRecord(userSettings, wholeScenario.getTypedScenario(LNGScenarioModel.class));
-		return transform(wholeScenario, schedule, periodRecord, mapping);
+		return transform(wholeScenario, schedule, extraDataProvider, periodRecord, mapping);
 	}
 
 	@NonNull
@@ -188,17 +196,16 @@ public class PeriodTransformer {
 		return periodRecord;
 	}
 
-	@NonNull
-	public NonNullPair<IScenarioDataProvider, EditingDomain> transform(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, @NonNull Schedule wholeScenarioSchedule,
-			@NonNull final PeriodRecord periodRecord, @NonNull final IScenarioEntityMapping mapping) {
+	public @NonNull PeriodTransformResult transform(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, @NonNull Schedule wholeScenarioSchedule,
+			@Nullable ExtraDataProvider extraDataProvider, @NonNull final PeriodRecord periodRecord, @NonNull final IScenarioEntityMapping mapping) {
 
 		// assert - passed validation
 
 		// Take a copy to manipulate.
-		final Pair<IScenarioDataProvider, Schedule> p = copyScenario(wholeScenarioDataProvider, wholeScenarioSchedule, mapping);
+		final Triple<IScenarioDataProvider, ExtraDataProvider, Schedule> p = copyScenario(wholeScenarioDataProvider, wholeScenarioSchedule, extraDataProvider, mapping);
 		final IScenarioDataProvider outputDataProvider = p.getFirst();
 		LNGScenarioModel output = outputDataProvider.getTypedScenario(LNGScenarioModel.class);
-		Schedule schedule = p.getSecond();
+		Schedule schedule = p.getThird();
 
 		// Do not allow the prompt period to extend past the optimisation period
 		if (periodRecord.upperBoundary != null && periodRecord.promptEnd != null) {
@@ -367,7 +374,12 @@ public class PeriodTransformer {
 		// Clear this date as we have fixed everything and it will conflict with rules in schedule transformer.
 		output.unsetSchedulingEndDate();
 
-		return new NonNullPair<>(outputDataProvider, internalDomain);
+		PeriodTransformResult r = new PeriodTransformResult();
+		r.sdp = outputDataProvider;
+		r.editingDomain = internalDomain;
+		r.extraDataProvider = p.getSecond();
+
+		return r;
 	}
 
 	private void lockAndRemoveCanalBookings(final Set<Slot<?>> slotsToRemove, final Set<Cargo> cargoesToRemove, final Set<Slot<?>> lockedSlots, final Set<Cargo> lockedCargoes,
@@ -1208,7 +1220,8 @@ public class PeriodTransformer {
 	}
 
 	@NonNull
-	public Pair<IScenarioDataProvider, Schedule> copyScenario(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, Schedule baseSchedule, @NonNull final IScenarioEntityMapping mapping) {
+	public Triple<IScenarioDataProvider, ExtraDataProvider, Schedule> copyScenario(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, Schedule baseSchedule,
+			@Nullable ExtraDataProvider extraDataProvider, @NonNull final IScenarioEntityMapping mapping) {
 		final Copier copier = new Copier();
 
 		LNGScenarioModel wholeScenario = wholeScenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
@@ -1216,6 +1229,31 @@ public class PeriodTransformer {
 		final LNGScenarioModel output = (LNGScenarioModel) copier.copy(wholeScenarioDataProvider.getScenario());
 		assert output != null;
 		Schedule copyBaseSchedule = (Schedule) copier.copy(baseSchedule);
+
+		ExtraDataProvider copyExtraDataProvider = null;
+		if (extraDataProvider != null) {
+			copyExtraDataProvider = new ExtraDataProvider();
+			final ExtraDataProvider pCopyExtraDataProvider = copyExtraDataProvider;
+			if (extraDataProvider.extraCharterInMarketOverrides != null) {
+				extraDataProvider.extraCharterInMarketOverrides.forEach(e -> pCopyExtraDataProvider.extraCharterInMarketOverrides.add((CharterInMarketOverride) copier.copy(e)));
+			}
+			if (extraDataProvider.extraCharterInMarkets != null) {
+				extraDataProvider.extraCharterInMarkets.forEach(e -> pCopyExtraDataProvider.extraCharterInMarkets.add((CharterInMarket) copier.copy(e)));
+			}
+			if (extraDataProvider.extraDischarges != null) {
+				extraDataProvider.extraDischarges.forEach(e -> pCopyExtraDataProvider.extraDischarges.add((DischargeSlot) copier.copy(e)));
+			}
+			if (extraDataProvider.extraLoads != null) {
+				extraDataProvider.extraLoads.forEach(e -> pCopyExtraDataProvider.extraLoads.add((LoadSlot) copier.copy(e)));
+			}
+			if (extraDataProvider.extraVesselAvailabilities != null) {
+				extraDataProvider.extraVesselAvailabilities.forEach(e -> pCopyExtraDataProvider.extraVesselAvailabilities.add((VesselAvailability) copier.copy(e)));
+			}
+			if (extraDataProvider.extraVesselEvents != null) {
+				extraDataProvider.extraVesselEvents.forEach(e -> pCopyExtraDataProvider.extraVesselEvents.add((VesselEvent) copier.copy(e)));
+			}
+		}
+
 		copier.copyReferences();
 
 		// Remove schedule model references from copier before passing into the mapping object.
@@ -1242,7 +1280,12 @@ public class PeriodTransformer {
 		}
 		mapping.createMappings(copier);
 
-		return new Pair<>(ClonedScenarioDataProvider.make(output, wholeScenarioDataProvider), copyBaseSchedule);
+		ClonedScenarioDataProvider sdp = ClonedScenarioDataProvider.make(output, wholeScenarioDataProvider);
+		// Apply this base schedule to the scenario. This may be an alternative starting state e.g. from sandbox
+		Command updateCommand = LNGSchedulerJobUtils.derive(sdp.getEditingDomain(), sdp.getTypedScenario(MMXRootObject.class), copyBaseSchedule, ScenarioModelUtil.getCargoModel(sdp), null);
+		sdp.getEditingDomain().getCommandStack().execute(updateCommand);
+
+		return new Triple<>(sdp, copyExtraDataProvider, copyBaseSchedule);
 	}
 
 	public void generateSlotAllocationMap(@NonNull final Schedule schedule, @NonNull final Map<Slot<?>, SlotAllocation> slotAllocationMap) {

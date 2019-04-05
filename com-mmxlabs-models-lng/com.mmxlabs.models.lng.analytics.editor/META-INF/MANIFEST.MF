@@ -61,7 +61,11 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.scenario.service.ui,
  com.mmxlabs.scenario.service.util,
  org.eclipse.ui.navigator,
- javax.annotation;bundle-version="1.2.0"
+ javax.annotation;bundle-version="1.2.0",
+ org.eclipse.e4.core.services,
+ com.mmxlabs.models.lng.fleet.editor,
+ com.google.inject,
+ com.mmxlabs.models.lng.port.editor
 Bundle-ActivationPolicy: lazy
 Import-Package: org.slf4j;version="1.6.4"
 Automatic-Module-Name: com.mmxlabs.models.lng.analytics.editor

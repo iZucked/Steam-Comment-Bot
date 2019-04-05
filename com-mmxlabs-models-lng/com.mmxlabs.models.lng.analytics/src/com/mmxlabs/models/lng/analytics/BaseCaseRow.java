@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getBuyOption <em>Buy Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getSellOption <em>Sell Option</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getVesselEventOption <em>Vessel Event Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getShipping <em>Shipping</em>}</li>
  * </ul>
  *
@@ -78,6 +79,32 @@ public interface BaseCaseRow extends EObject {
 	 * @generated
 	 */
 	void setSellOption(SellOption value);
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Event Option</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Event Option</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Event Option</em>' reference.
+	 * @see #setVesselEventOption(VesselEventOption)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBaseCaseRow_VesselEventOption()
+	 * @model
+	 * @generated
+	 */
+	VesselEventOption getVesselEventOption();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getVesselEventOption <em>Vessel Event Option</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel Event Option</em>' reference.
+	 * @see #getVesselEventOption()
+	 * @generated
+	 */
+	void setVesselEventOption(VesselEventOption value);
 
 	/**
 	 * Returns the value of the '<em><b>Shipping</b></em>' reference.

@@ -111,6 +111,52 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.OpenSell} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OpenSellItemProvider openSellItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.OpenSell}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOpenSellAdapter() {
+		if (openSellItemProvider == null) {
+			openSellItemProvider = new OpenSellItemProvider(this);
+		}
+
+		return openSellItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.OpenBuy} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OpenBuyItemProvider openBuyItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.OpenBuy}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOpenBuyAdapter() {
+		if (openBuyItemProvider == null) {
+			openBuyItemProvider = new OpenBuyItemProvider(this);
+		}
+
+		return openBuyItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BuyOpportunity} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -249,6 +295,75 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.VesselEventOption} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VesselEventOptionItemProvider vesselEventOptionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.VesselEventOption}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVesselEventOptionAdapter() {
+		if (vesselEventOptionItemProvider == null) {
+			vesselEventOptionItemProvider = new VesselEventOptionItemProvider(this);
+		}
+
+		return vesselEventOptionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.VesselEventReference} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VesselEventReferenceItemProvider vesselEventReferenceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.VesselEventReference}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVesselEventReferenceAdapter() {
+		if (vesselEventReferenceItemProvider == null) {
+			vesselEventReferenceItemProvider = new VesselEventReferenceItemProvider(this);
+		}
+
+		return vesselEventReferenceItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.CharterOutOpportunity} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterOutOpportunityItemProvider charterOutOpportunityItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.CharterOutOpportunity}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterOutOpportunityAdapter() {
+		if (charterOutOpportunityItemProvider == null) {
+			charterOutOpportunityItemProvider = new CharterOutOpportunityItemProvider(this);
+		}
+
+		return charterOutOpportunityItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BaseCaseRow} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -318,49 +433,49 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.FleetShippingOption} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected FleetShippingOptionItemProvider fleetShippingOptionItemProvider;
+	protected SimpleVesselCharterOptionItemProvider simpleVesselCharterOptionItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.FleetShippingOption}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createFleetShippingOptionAdapter() {
-		if (fleetShippingOptionItemProvider == null) {
-			fleetShippingOptionItemProvider = new FleetShippingOptionItemProvider(this);
+	public Adapter createSimpleVesselCharterOptionAdapter() {
+		if (simpleVesselCharterOptionItemProvider == null) {
+			simpleVesselCharterOptionItemProvider = new SimpleVesselCharterOptionItemProvider(this);
 		}
 
-		return fleetShippingOptionItemProvider;
+		return simpleVesselCharterOptionItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected OptionalAvailabilityShippingOptionItemProvider optionalAvailabilityShippingOptionItemProvider;
+	protected OptionalSimpleVesselCharterOptionItemProvider optionalSimpleVesselCharterOptionItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createOptionalAvailabilityShippingOptionAdapter() {
-		if (optionalAvailabilityShippingOptionItemProvider == null) {
-			optionalAvailabilityShippingOptionItemProvider = new OptionalAvailabilityShippingOptionItemProvider(this);
+	public Adapter createOptionalSimpleVesselCharterOptionAdapter() {
+		if (optionalSimpleVesselCharterOptionItemProvider == null) {
+			optionalSimpleVesselCharterOptionItemProvider = new OptionalSimpleVesselCharterOptionItemProvider(this);
 		}
 
-		return optionalAvailabilityShippingOptionItemProvider;
+		return optionalSimpleVesselCharterOptionItemProvider;
 	}
 
 	/**
@@ -410,49 +525,49 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.AnalysisResultRow} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.FullVesselCharterOption} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected AnalysisResultRowItemProvider analysisResultRowItemProvider;
+	protected FullVesselCharterOptionItemProvider fullVesselCharterOptionItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.AnalysisResultRow}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.FullVesselCharterOption}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createAnalysisResultRowAdapter() {
-		if (analysisResultRowItemProvider == null) {
-			analysisResultRowItemProvider = new AnalysisResultRowItemProvider(this);
+	public Adapter createFullVesselCharterOptionAdapter() {
+		if (fullVesselCharterOptionItemProvider == null) {
+			fullVesselCharterOptionItemProvider = new FullVesselCharterOptionItemProvider(this);
 		}
 
-		return analysisResultRowItemProvider;
+		return fullVesselCharterOptionItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ResultContainer} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ResultContainerItemProvider resultContainerItemProvider;
+	protected ExistingVesselCharterOptionItemProvider existingVesselCharterOptionItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ResultContainer}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createResultContainerAdapter() {
-		if (resultContainerItemProvider == null) {
-			resultContainerItemProvider = new ResultContainerItemProvider(this);
+	public Adapter createExistingVesselCharterOptionAdapter() {
+		if (existingVesselCharterOptionItemProvider == null) {
+			existingVesselCharterOptionItemProvider = new ExistingVesselCharterOptionItemProvider(this);
 		}
 
-		return resultContainerItemProvider;
+		return existingVesselCharterOptionItemProvider;
 	}
 
 	/**
@@ -548,49 +663,26 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ResultSet} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SandboxResult} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ResultSetItemProvider resultSetItemProvider;
+	protected SandboxResultItemProvider sandboxResultItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ResultSet}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SandboxResult}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createResultSetAdapter() {
-		if (resultSetItemProvider == null) {
-			resultSetItemProvider = new ResultSetItemProvider(this);
+	public Adapter createSandboxResultAdapter() {
+		if (sandboxResultItemProvider == null) {
+			sandboxResultItemProvider = new SandboxResultItemProvider(this);
 		}
 
-		return resultSetItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.Result} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ResultItemProvider resultItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.Result}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createResultAdapter() {
-		if (resultItemProvider == null) {
-			resultItemProvider = new ResultItemProvider(this);
-		}
-
-		return resultItemProvider;
+		return sandboxResultItemProvider;
 	}
 
 	/**
@@ -637,52 +729,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		}
 
 		return partialCaseItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.NewVesselAvailability} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected NewVesselAvailabilityItemProvider newVesselAvailabilityItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.NewVesselAvailability}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createNewVesselAvailabilityAdapter() {
-		if (newVesselAvailabilityItemProvider == null) {
-			newVesselAvailabilityItemProvider = new NewVesselAvailabilityItemProvider(this);
-		}
-
-		return newVesselAvailabilityItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ExistingVesselAvailability} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ExistingVesselAvailabilityItemProvider existingVesselAvailabilityItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ExistingVesselAvailability}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createExistingVesselAvailabilityAdapter() {
-		if (existingVesselAvailabilityItemProvider == null) {
-			existingVesselAvailabilityItemProvider = new ExistingVesselAvailabilityItemProvider(this);
-		}
-
-		return existingVesselAvailabilityItemProvider;
 	}
 
 	/**
@@ -1464,31 +1510,33 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	@Override
 	public void dispose() {
 		if (analyticsModelItemProvider != null) analyticsModelItemProvider.dispose();
+		if (openSellItemProvider != null) openSellItemProvider.dispose();
+		if (openBuyItemProvider != null) openBuyItemProvider.dispose();
 		if (buyOpportunityItemProvider != null) buyOpportunityItemProvider.dispose();
 		if (sellOpportunityItemProvider != null) sellOpportunityItemProvider.dispose();
 		if (buyMarketItemProvider != null) buyMarketItemProvider.dispose();
 		if (sellMarketItemProvider != null) sellMarketItemProvider.dispose();
 		if (buyReferenceItemProvider != null) buyReferenceItemProvider.dispose();
 		if (sellReferenceItemProvider != null) sellReferenceItemProvider.dispose();
+		if (vesselEventOptionItemProvider != null) vesselEventOptionItemProvider.dispose();
+		if (vesselEventReferenceItemProvider != null) vesselEventReferenceItemProvider.dispose();
+		if (charterOutOpportunityItemProvider != null) charterOutOpportunityItemProvider.dispose();
 		if (baseCaseRowItemProvider != null) baseCaseRowItemProvider.dispose();
 		if (partialCaseRowItemProvider != null) partialCaseRowItemProvider.dispose();
 		if (shippingOptionItemProvider != null) shippingOptionItemProvider.dispose();
-		if (fleetShippingOptionItemProvider != null) fleetShippingOptionItemProvider.dispose();
-		if (optionalAvailabilityShippingOptionItemProvider != null) optionalAvailabilityShippingOptionItemProvider.dispose();
+		if (simpleVesselCharterOptionItemProvider != null) simpleVesselCharterOptionItemProvider.dispose();
+		if (optionalSimpleVesselCharterOptionItemProvider != null) optionalSimpleVesselCharterOptionItemProvider.dispose();
 		if (roundTripShippingOptionItemProvider != null) roundTripShippingOptionItemProvider.dispose();
 		if (nominatedShippingOptionItemProvider != null) nominatedShippingOptionItemProvider.dispose();
-		if (analysisResultRowItemProvider != null) analysisResultRowItemProvider.dispose();
-		if (resultContainerItemProvider != null) resultContainerItemProvider.dispose();
+		if (fullVesselCharterOptionItemProvider != null) fullVesselCharterOptionItemProvider.dispose();
+		if (existingVesselCharterOptionItemProvider != null) existingVesselCharterOptionItemProvider.dispose();
 		if (analysisResultDetailItemProvider != null) analysisResultDetailItemProvider.dispose();
 		if (profitAndLossResultItemProvider != null) profitAndLossResultItemProvider.dispose();
 		if (breakEvenResultItemProvider != null) breakEvenResultItemProvider.dispose();
 		if (optionAnalysisModelItemProvider != null) optionAnalysisModelItemProvider.dispose();
-		if (resultSetItemProvider != null) resultSetItemProvider.dispose();
-		if (resultItemProvider != null) resultItemProvider.dispose();
+		if (sandboxResultItemProvider != null) sandboxResultItemProvider.dispose();
 		if (baseCaseItemProvider != null) baseCaseItemProvider.dispose();
 		if (partialCaseItemProvider != null) partialCaseItemProvider.dispose();
-		if (newVesselAvailabilityItemProvider != null) newVesselAvailabilityItemProvider.dispose();
-		if (existingVesselAvailabilityItemProvider != null) existingVesselAvailabilityItemProvider.dispose();
 		if (existingCharterMarketOptionItemProvider != null) existingCharterMarketOptionItemProvider.dispose();
 		if (actionableSetPlanItemProvider != null) actionableSetPlanItemProvider.dispose();
 		if (slotInsertionOptionsItemProvider != null) slotInsertionOptionsItemProvider.dispose();

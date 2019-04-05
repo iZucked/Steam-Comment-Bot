@@ -63,6 +63,7 @@ public class BaseCaseRowItemProvider
 
 			addBuyOptionPropertyDescriptor(object);
 			addSellOptionPropertyDescriptor(object);
+			addVesselEventOptionPropertyDescriptor(object);
 			addShippingPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -104,6 +105,28 @@ public class BaseCaseRowItemProvider
 				 getString("_UI_BaseCaseRow_sellOption_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_BaseCaseRow_sellOption_feature", "_UI_BaseCaseRow_type"),
 				 AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Vessel Event Option feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselEventOptionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BaseCaseRow_vesselEventOption_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BaseCaseRow_vesselEventOption_feature", "_UI_BaseCaseRow_type"),
+				 AnalyticsPackage.Literals.BASE_CASE_ROW__VESSEL_EVENT_OPTION,
 				 true,
 				 false,
 				 true,

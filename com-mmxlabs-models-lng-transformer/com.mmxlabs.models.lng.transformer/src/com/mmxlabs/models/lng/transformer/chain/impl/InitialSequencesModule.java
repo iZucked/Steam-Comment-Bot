@@ -35,7 +35,6 @@ public class InitialSequencesModule extends AbstractModule {
 
 	}
 
-	// TODO: Declare this as a constant somewhere
 	@Provides
 	@Singleton
 	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)

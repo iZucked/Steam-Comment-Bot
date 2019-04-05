@@ -18,7 +18,7 @@ import com.mmxlabs.lngdataserver.integration.repo.general.GeneralDataRecord;
  * @author Simon Goodall
  *
  */
-@JsonIgnoreProperties({ "creator", "published", "current" })
+@JsonIgnoreProperties({ "creator", "published", "current", "type" })
 public class PricingMixin {
 
 	@JsonAlias("identifier")

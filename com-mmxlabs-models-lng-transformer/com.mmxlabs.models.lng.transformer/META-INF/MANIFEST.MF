@@ -26,7 +26,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.license.features,
  com.mmxlabs.models.lng.commercial,
  com.mmxlabs.models.lng.spotmarkets,
- org.eclipse.emf.ecore
+ org.eclipse.emf.ecore,
+ com.mmxlabs.models.lng.analytics.editor
 Export-Package: com.mmxlabs.models.lng.transformer,
  com.mmxlabs.models.lng.transformer.chain,
  com.mmxlabs.models.lng.transformer.chain.impl,

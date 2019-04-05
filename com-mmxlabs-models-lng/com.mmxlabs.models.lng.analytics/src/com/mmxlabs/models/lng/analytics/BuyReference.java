@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.analytics;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +25,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
  * @model
  * @generated
  */
-public interface BuyReference extends BuyOption {
+public interface BuyReference extends UUIDObject, BuyOption {
 	/**
 	 * Returns the value of the '<em><b>Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->

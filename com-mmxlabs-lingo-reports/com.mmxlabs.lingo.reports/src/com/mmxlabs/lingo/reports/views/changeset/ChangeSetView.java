@@ -4,13 +4,11 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -24,8 +22,11 @@ import java.util.function.Function;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -43,8 +44,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -70,8 +69,6 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.graphics.Point;
@@ -103,7 +100,7 @@ import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetToTableTransformer.SortMode;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewColumnHelper.VesselData;
 import com.mmxlabs.lingo.reports.views.changeset.InsertionPlanGrouperAndFilter.GroupMode;
-import com.mmxlabs.lingo.reports.views.changeset.actions.CreateSandboxAction;
+import com.mmxlabs.lingo.reports.views.changeset.actions.CreateSandboxFromInsertionAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.ExportChangeAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.MergeChangesAction;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
@@ -118,13 +115,12 @@ import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.DualModeSolutionOption;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
+import com.mmxlabs.models.lng.analytics.SandboxResult;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase;
 import com.mmxlabs.models.lng.analytics.ui.ChangeDescriptionSource;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -158,8 +154,10 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ChangeSetView extends ViewPart {
 
-	public static enum ViewMode {
-		COMPARE, OLD_ACTION_SET, NEW_ACTION_SET, INSERTIONS, GENERIC
+	private final ChangeSetViewSchedulingRule schedulingRule = new ChangeSetViewSchedulingRule(this);
+
+	public enum ViewMode {
+		COMPARE, OLD_ACTION_SET, NEW_ACTION_SET, INSERTIONS, GENERIC, SANDBOX
 	}
 
 	public static class ViewState {
@@ -224,7 +222,7 @@ public class ChangeSetView extends ViewPart {
 				return;
 			}
 			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
-//				columnHelper.cleanUpVesselColumns();
+				// columnHelper.cleanUpVesselColumns();
 				setEmptyData();
 			}
 		}
@@ -372,7 +370,6 @@ public class ChangeSetView extends ViewPart {
 
 				final StringBuilder styleBuilder = new StringBuilder();
 
-				final GridColumn column = viewer.getGrid().getColumn(i);
 				final Object data = item.getData();
 
 				if (data instanceof ChangeSet) {
@@ -423,7 +420,7 @@ public class ChangeSetView extends ViewPart {
 
 					@Override
 					public void displayActionPlan(final List<ScenarioResult> scenarios) {
-//						columnHelper.cleanUpVesselColumns();
+						// columnHelper.cleanUpVesselColumns();
 
 						final ViewState newViewState = new ViewState(null, SortMode.BY_GROUP);
 						final ChangeSetRoot newRoot = new ScheduleResultListTransformer().createDataModel(scenarios, new NullProgressMonitor());
@@ -766,10 +763,9 @@ public class ChangeSetView extends ViewPart {
 			public void open(final OpenEvent event) {
 				if (viewer.getSelection() instanceof IStructuredSelection) {
 					final IStructuredSelection structuredSelection = (IStructuredSelection) viewer.getSelection();
-					if (structuredSelection.isEmpty() == false) {
+					if (!structuredSelection.isEmpty()) {
 
 						// Attempt to detect the column we clicked on.
-						final GridColumn column = null;
 						final IWorkbench workbench = PlatformUI.getWorkbench();
 						if (workbench != null) {
 							final Display display = workbench.getDisplay();
@@ -781,7 +777,6 @@ public class ChangeSetView extends ViewPart {
 
 									final Point mousePoint = grid.toControl(cursorLocation);
 									final GridColumn targetColumn = grid.getColumn(mousePoint);
-									// Point cell = grid.getCell(mousePoint);
 									final ViewerCell cell = viewer.getCell(mousePoint);
 									if (cell != null && !cell.getText().isEmpty()) {
 										if (columnHelper.getLatenessColumn() == targetColumn) {
@@ -821,7 +816,6 @@ public class ChangeSetView extends ViewPart {
 
 					onClosingScenario(scenarioInstance);
 				}
-				final int ii = 0;
 			}
 		};
 		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
@@ -845,7 +839,7 @@ public class ChangeSetView extends ViewPart {
 		}
 
 		// Experimental change drag and drop
-		if (false) {
+		if (false && viewMode == ViewMode.SANDBOX) {
 			final DragSource source = new DragSource(viewer.getControl(), DND.DROP_MOVE);
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 			source.setTransfer(types);
@@ -873,7 +867,7 @@ public class ChangeSetView extends ViewPart {
 
 						final String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
 
-						this.selection = new StructuredSelection(new ChangeDescriptionSource(name, changeSet.getChangeDescription(), null));
+						this.selection = new StructuredSelection(new ChangeDescriptionSource(name, changeSet.getChangeDescription(), changeSet.getUserSettings()));
 						final LocalSelectionTransfer transfer = LocalSelectionTransfer.getTransfer();
 						// if (transfer.isSupportedType(event.dataType)) {
 						transfer.setSelection(this.selection);
@@ -896,9 +890,7 @@ public class ChangeSetView extends ViewPart {
 			getViewSite().getActionBars().getToolBarManager().add(copyAction);
 		}
 		{
-			toggleAltPNLBaseAction = new RunnableAction("Change Mode", SWT.PUSH, () -> {
-				doToggleDiffToBase();
-			});
+			toggleAltPNLBaseAction = new RunnableAction("Change Mode", SWT.PUSH, ChangeSetView.this::doToggleDiffToBase);
 			toggleAltPNLBaseAction.setToolTipText("Toggle comparing to base or previous case");
 			toggleAltPNLBaseAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/compare_to_base.gif"));
 			final GroupMarker group = new GroupMarker("diffToBaseGroup");
@@ -917,7 +909,6 @@ public class ChangeSetView extends ViewPart {
 
 				@Override
 				protected void populate(final Menu menu) {
-					// TODO Auto-generated method stub
 					if (showGroupByMenu) {
 						final AbstractMenuAction groupModeAction = new AbstractMenuAction("Group by") {
 							@Override
@@ -950,17 +941,15 @@ public class ChangeSetView extends ViewPart {
 						groupModeAction.setToolTipText("Change the grouping choice");
 						addActionToMenu(groupModeAction, menu);
 					}
-					final RunnableAction toggleStructuralChanges = new RunnableAction("Show non-structural changes", () -> doShowStructuralChangesToggle());
+					final RunnableAction toggleStructuralChanges = new RunnableAction("Show non-structural changes", ChangeSetView.this::doShowStructuralChangesToggle);
 					toggleStructuralChanges.setToolTipText("Toggling filtering of non structural changes");
 					toggleStructuralChanges.setChecked(showNonStructuralChanges);
-					// toggleStructuralChanges.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
 					addActionToMenu(toggleStructuralChanges, menu);
 
 					if (showNegativePNLChangesMenu) {
-						final RunnableAction toggleNegativePNL = new RunnableAction("Show negative PNL Changes", () -> doShowNegativePNLToggle());
+						final RunnableAction toggleNegativePNL = new RunnableAction("Show negative PNL Changes", ChangeSetView.this::doShowNegativePNLToggle);
 						toggleNegativePNL.setToolTipText("Toggling filtering of negative PNL");
 						toggleNegativePNL.setChecked(showNegativePNLChanges);
-						// item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
 						addActionToMenu(toggleNegativePNL, menu);
 					}
 					if (showChangeTargetMenu) {
@@ -992,11 +981,15 @@ public class ChangeSetView extends ViewPart {
 			getViewSite().getActionBars().getToolBarManager().add(filterMenu);
 		}
 		{
+
 			final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
+
 			getViewSite().getActionBars().getToolBarManager().add(packAction);
 		}
 		if (false) {
-			reEvaluateAction = new RunnableAction("Re-evaluate", () -> {
+			reEvaluateAction = new RunnableAction("Re-evaluate", () ->
+
+			{
 
 				final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 
@@ -1008,22 +1001,17 @@ public class ChangeSetView extends ViewPart {
 						final ScenarioResult result = changeSetTableGroup.getCurrentScenario();
 
 						final EvaluateSolutionSetHelper helper = new EvaluateSolutionSetHelper(result.getScenarioDataProvider());
-						final List<LoadSlot> extraLoads = new LinkedList<>();
-						final List<DischargeSlot> extraDischarges = new LinkedList<>();
+
 						final AnalyticsSolution solution = currentViewState.lastSolution;
 						UserSettings userSettings = null;
 						if (solution != null) {
 							final UUIDObject object = solution.getSolution();
-							if (object instanceof AbstractSolutionSet) {
-								final AbstractSolutionSet options = (AbstractSolutionSet) object;
-								options.getExtraSlots().stream().filter(s -> s instanceof LoadSlot).forEach(s -> extraLoads.add((LoadSlot) s));
-								options.getExtraSlots().stream().filter(s -> s instanceof DischargeSlot).forEach(s -> extraDischarges.add((DischargeSlot) s));
-							}
-
 							helper.processSolution(ScenarioModelUtil.getScheduleModel(result.getScenarioDataProvider()));
 
 							if (object instanceof AbstractSolutionSet) {
 								final AbstractSolutionSet abstractSolutionSet = (AbstractSolutionSet) object;
+								helper.processExtraData(abstractSolutionSet);
+
 								userSettings = abstractSolutionSet.getUserSettings();
 								for (final SolutionOption opt : abstractSolutionSet.getOptions()) {
 									helper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
@@ -1033,6 +1021,7 @@ public class ChangeSetView extends ViewPart {
 										final SolutionOptionMicroCase base = dualModeSolutionOption.getMicroBaseCase();
 										if (base != null) {
 											// Re-evaluate from schedule
+											helper.processExtraData(base);
 											helper.processSolution(base.getScheduleModel());
 											// (Experimental version) Re-evaluate from change specification)
 											// helper.processSolution(base.getScheduleSpecification(), base.getScheduleModel());
@@ -1041,6 +1030,8 @@ public class ChangeSetView extends ViewPart {
 										final SolutionOptionMicroCase target = dualModeSolutionOption.getMicroTargetCase();
 										if (target != null) {
 											// Re-evaluate from schedule
+											helper.processExtraData(target);
+
 											helper.processSolution(target.getScheduleModel());
 											// (Experimental version) Re-evaluate from change specification)
 											// helper.processSolution(target.getScheduleSpecification(), target.getScheduleModel());
@@ -1053,11 +1044,11 @@ public class ChangeSetView extends ViewPart {
 						if (userSettings == null) {
 							userSettings = result.getTypedRoot(LNGScenarioModel.class).getUserSettings();
 						}
-						final ProgressMonitorDialog dialog = new ProgressMonitorDialog(getSite().getShell());
 						try {
 							final UserSettings copy = EcoreUtil.copy(userSettings);
-							dialog.run(true, false, (monitor) -> {
-								helper.generateResults(result.getScenarioInstance(), copy, result.getScenarioDataProvider().getEditingDomain(), extraLoads, extraDischarges, monitor);
+
+							Job job = Job.create("Evalute solution", (monitor) -> {
+								helper.generateResults(result.getScenarioInstance(), copy, result.getScenarioDataProvider().getEditingDomain(), monitor);
 								final ViewState viewState = currentViewState;
 
 								if (viewState != null) {
@@ -1065,6 +1056,9 @@ public class ChangeSetView extends ViewPart {
 									RunnerHelper.asyncExec(() -> openAnalyticsSolution(viewState.lastSolution, id));
 								}
 							});
+							job.setUser(true);
+							job.setRule(schedulingRule);
+							job.schedule();
 						} catch (final Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -1073,6 +1067,8 @@ public class ChangeSetView extends ViewPart {
 					}
 				}
 			});
+			reEvaluateAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/iu_update_obj.gif"));
+
 			getViewSite().getActionBars().getToolBarManager().add(reEvaluateAction);
 
 		}
@@ -1086,60 +1082,42 @@ public class ChangeSetView extends ViewPart {
 
 	public void setNewDataData(final Object target, final BiFunction<IProgressMonitor, @Nullable String, ViewState> action, final boolean runAsync, final @Nullable String targetSlotId) {
 
-//		columnHelper.cleanUpVesselColumns();
+		// columnHelper.cleanUpVesselColumns();
 
 		if (target == null) {
 			setEmptyData();
 		} else {
+			ICoreRunnable runnable = (monitor) -> {
+				final ViewState newViewState = action.apply(monitor, targetSlotId);
+				final ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
+				newViewState.tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newViewState.root, true, newViewState.lastTargetSlot, newViewState.displaySortMode);
+				newViewState.tableRootDefault = changeSetToTableTransformer.createViewDataModel(newViewState.root, false, newViewState.lastTargetSlot, newViewState.displaySortMode);
+
+				changeSetToTableTransformer.bindModels(newViewState.tableRootDefault, newViewState.tableRootAlternative);
+
+				newViewState.postProcess.accept(newViewState.tableRootDefault);
+				newViewState.postProcess.accept(newViewState.tableRootAlternative);
+
+				if (runAsync) {
+					RunnerHelper.asyncExec(new ViewUpdateRunnable(newViewState));
+				} else {
+					RunnerHelper.syncExec(new ViewUpdateRunnable(newViewState));
+				}
+			};
+
 			final Display display = PlatformUI.getWorkbench().getDisplay();
 			final Shell activeShell = display.getActiveShell();
 			try {
-				final IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
-					@Override
-					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
-						final ViewState newViewState = action.apply(monitor, targetSlotId);
-						final ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
-						newViewState.tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newViewState.root, true, newViewState.lastTargetSlot, newViewState.displaySortMode);
-						newViewState.tableRootDefault = changeSetToTableTransformer.createViewDataModel(newViewState.root, false, newViewState.lastTargetSlot, newViewState.displaySortMode);
-
-						changeSetToTableTransformer.bindModels(newViewState.tableRootDefault, newViewState.tableRootAlternative);
-
-						newViewState.postProcess.accept(newViewState.tableRootDefault);
-						newViewState.postProcess.accept(newViewState.tableRootAlternative);
-
-						if (runAsync) {
-							display.asyncExec(new ViewUpdateRunnable(newViewState));
-						} else {
-							display.syncExec(new ViewUpdateRunnable(newViewState));
-						}
-
-					}
-				};
 				if (runAsync) {
-					if (activeShell != null) {
-						final ProgressMonitorDialog d = new ProgressMonitorDialog(activeShell);
-						d.run(true, false, runnable);
-					} else {
-						display.asyncExec(() -> {
-							try {
-								runnable.run(new NullProgressMonitor());
-							} catch (InvocationTargetException | InterruptedException e) {
-								final Throwable cause = e.getCause();
-								if (cause instanceof ScenarioNotEvaluatedException) {
-									MessageDialog.openError(activeShell, "Error opening result", cause.getMessage());
-								} else {
-									MessageDialog.openError(activeShell, "Error opening result", e.getMessage());
-									e.printStackTrace();
-								}
-							}
-						});
-					}
+					Job job = Job.create("Open solution", runnable);
+					job.setUser(true);
+					job.setRule(schedulingRule);
+					job.schedule();
 				} else {
 					runnable.run(new NullProgressMonitor());
 				}
-			} catch (InvocationTargetException | InterruptedException e) {
+			} catch (CoreException e) {
 				final Throwable cause = e.getCause();
 				if (cause instanceof ScenarioNotEvaluatedException) {
 					MessageDialog.openError(activeShell, "Error opening result", cause.getMessage());
@@ -1169,6 +1147,7 @@ public class ChangeSetView extends ViewPart {
 		}
 	}
 
+	@Override
 	@PreDestroy
 	public void dispose() {
 		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
@@ -1185,11 +1164,10 @@ public class ChangeSetView extends ViewPart {
 		cleanUp(this.currentViewState);
 		if (columnHelper != null) {
 			columnHelper.getDiagram().setChangeSetRoot(ChangesetFactory.eINSTANCE.createChangeSetTableRoot());
+			columnHelper.cleanUpVesselColumns();
+			columnHelper.dispose();
 		}
 		this.currentViewState = null;
-
-		columnHelper.cleanUpVesselColumns();
-		columnHelper.dispose();
 
 		// The post selection from this view can be left in the e4 context somehow.
 		if (eSelectionService != null) {
@@ -1198,6 +1176,7 @@ public class ChangeSetView extends ViewPart {
 		}
 	}
 
+	@Override
 	@Focus
 	public void setFocus() {
 		ViewerHelper.setFocus(viewer);
@@ -1331,15 +1310,7 @@ public class ChangeSetView extends ViewPart {
 		private final LocalMenuHelper helper = new LocalMenuHelper(viewer.getGrid());
 
 		public ContextMenuManager() {
-			viewer.getGrid().addDisposeListener(new DisposeListener() {
-
-				@Override
-				public void widgetDisposed(final DisposeEvent e) {
-					helper.dispose();
-
-				}
-			});
-
+			viewer.getGrid().addDisposeListener(e -> helper.dispose());
 		}
 
 		@Override
@@ -1395,7 +1366,8 @@ public class ChangeSetView extends ViewPart {
 							}
 							final String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
 							boolean showSimple = true;
-							if (showAlternativeChangeModel) {
+							if (showAlternativeChangeModel && ChangeSetView.this.viewMode == ViewMode.INSERTIONS) {
+								// Only offer this for dual model insertions.
 								final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
 								if (scenarioResult.getResultRoot() instanceof ScheduleModel) {
 									final ScheduleModel scheduleModel = (ScheduleModel) scenarioResult.getResultRoot();
@@ -1407,7 +1379,12 @@ public class ChangeSetView extends ViewPart {
 								}
 							}
 							if (showSimple) {
-								helper.addAction(new ExportChangeAction(changeSetTableGroup, name, null));
+								BiConsumer<LNGScenarioModel, Schedule> modelCustomiser = null;
+								if (getLastSolution().getSolution() instanceof SandboxResult) {
+									modelCustomiser = EvaluateSolutionSetHelper.createModelCustomiser();
+								}
+
+								helper.addAction(new ExportChangeAction(changeSetTableGroup, name, modelCustomiser));
 							}
 							showMenu = true;
 						}
@@ -1416,7 +1393,100 @@ public class ChangeSetView extends ViewPart {
 							// This does not work as insertion scenario is read-only. Data model is also
 							// unstable (not sure if containment works right.
 							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
-							helper.addAction(new CreateSandboxAction(changeSetTableGroup, changeSetTableGroup.getDescription()));
+							helper.addAction(new CreateSandboxFromInsertionAction(changeSetTableGroup, changeSetTableGroup.getDescription()));
+							showMenu = true;
+						}
+						if (ChangeSetView.this.viewMode == ViewMode.SANDBOX && ChangeSetView.this.showToggleAltPNLBaseAction) {
+
+							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
+							int idx = 0;
+							final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
+							if (root != null) {
+								idx = root.getGroups().indexOf(changeSetTableGroup);
+							}
+
+							Action action = new RunnableAction("Re-evaluate", () -> {
+
+								final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
+
+								final EvaluateSolutionSetHelper ssHelper = new EvaluateSolutionSetHelper(scenarioResult.getScenarioDataProvider());
+
+								final AnalyticsSolution solution = currentViewState.lastSolution;
+								if (solution != null && solution.getSolution() instanceof SandboxResult) {
+									SandboxResult sandboxResult = (SandboxResult) solution.getSolution();
+
+									UserSettings userSettings = null;
+
+									// OtherPNL basePNL = ScheduleFactory.eINSTANCE.createOtherPNL();
+									// {
+									// ScheduleModelKPIUtils.updateOtherPNL(basePNL, sandboxResult.getBaseOption().getScheduleModel().getSchedule(), ScheduleModelKPIUtils.Mode.INCREMENT);
+									// }
+
+									final UUIDObject object = solution.getSolution();
+									ssHelper.processSolution(sandboxResult.getBaseOption().getScheduleSpecification(), sandboxResult.getBaseOption().getScheduleModel());
+
+									if (object instanceof AbstractSolutionSet) {
+										final AbstractSolutionSet abstractSolutionSet = (AbstractSolutionSet) object;
+										ssHelper.processExtraData(abstractSolutionSet);
+
+										userSettings = abstractSolutionSet.getUserSettings();
+										for (final SolutionOption opt : abstractSolutionSet.getOptions()) {
+											if (opt.getScheduleModel() == scenarioResult.getResultRoot()) {
+												ssHelper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
+												break;
+											} else if (changeSetTableGroup.getLinkedGroup() != null
+													&& opt.getScheduleModel() == changeSetTableGroup.getLinkedGroup().getCurrentScenario().getResultRoot()) {
+												ssHelper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
+												break;
+											}
+
+											// if (opt instanceof DualModeSolutionOption) {
+											// final DualModeSolutionOption dualModeSolutionOption = (DualModeSolutionOption) opt;
+											//
+											// final SolutionOptionMicroCase base = dualModeSolutionOption.getMicroBaseCase();
+											// if (base != null) {
+											// // Re-evaluate from schedule
+											// ssHelper.processExtraData(base);
+											// ssHelper.processSolution(base.getScheduleModel());
+											// // (Experimental version) Re-evaluate from change specification)
+											// // helper.processSolution(base.getScheduleSpecification(), base.getScheduleModel());
+											// }
+											//
+											// final SolutionOptionMicroCase target = dualModeSolutionOption.getMicroTargetCase();
+											// if (target != null) {
+											// // Re-evaluate from schedule
+											// ssHelper.processExtraData(target);
+											// ssHelper.processSolution(target.getScheduleModel());
+											// // (Experimental version) Re-evaluate from change specification)
+											// // helper.processSolution(target.getScheduleSpecification(), target.getScheduleModel());
+											// }
+											//
+											// }
+										}
+									}
+
+									if (userSettings == null) {
+										userSettings = scenarioResult.getTypedRoot(LNGScenarioModel.class).getUserSettings();
+									}
+
+									final UserSettings copy = EcoreUtil.copy(userSettings);
+									Job job = Job.create("Open solution", monitor -> {
+										ssHelper.generateResults(scenarioResult.getScenarioInstance(), copy, scenarioResult.getScenarioDataProvider().getEditingDomain(), monitor);
+										final ViewState viewState = currentViewState;
+
+										if (viewState != null) {
+											final String id = viewState.getTargetSlotID();
+											RunnerHelper.asyncExec(() -> openAnalyticsSolution(viewState.lastSolution, id));
+										}
+									});
+									job.setUser(true);
+									job.setRule(schedulingRule);
+									job.schedule();
+
+								}
+							});
+							action.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/iu_update_obj.gif"));
+							helper.addAction(action);
 							showMenu = true;
 						}
 					}
@@ -1432,7 +1502,9 @@ public class ChangeSetView extends ViewPart {
 				if (showUserFilterMenus) {
 					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, directSelectedRows, selectedSets, currentViewState.lastTargetSlot);
 				}
-			} else {
+			} else
+
+			{
 				if (showUserFilterMenus) {
 					if (currentViewState != null) {
 						showMenu |= insertionPlanFilter.generateMenus(helper, viewer, Collections.emptySet(), Collections.emptySet(), currentViewState.lastTargetSlot);
@@ -1444,6 +1516,7 @@ public class ChangeSetView extends ViewPart {
 				helper.open();
 			}
 		}
+
 	}
 
 	public void openAnalyticsSolution(final AnalyticsSolution solution) {
@@ -1480,10 +1553,9 @@ public class ChangeSetView extends ViewPart {
 	private final String[] altPNLToolTipBaseMode_Insertions = { "Full", "Simple" };
 	private String[] altPNLToolTipBaseMode = altPNLToolTipBaseMode_Default;
 
-	private EventHandler eventHandler;;
+	private EventHandler eventHandler;
 
 	public void openAnalyticsSolution(final AnalyticsSolution solution, @Nullable final String slotId) {
-
 		if (lastParent != null) {
 			lastParent.eAdapters().remove(adapter);
 		}
@@ -1512,6 +1584,20 @@ public class ChangeSetView extends ViewPart {
 				// Sorting by Group as the label provider uses the provided ordering for indexing
 				final ViewState viewState = new ViewState(transformer.createDataModel(target, (OptimisationResult) plan, monitor), SortMode.BY_GROUP);
 				viewState.lastSolution = solution;
+				return viewState;
+			}, slotId);
+		} else if (plan instanceof SandboxResult) {
+			setViewMode(ViewMode.SANDBOX, ((SandboxResult) plan).isHasDualModeSolutions());
+			setNewDataData(target, (monitor, targetSlotId) -> {
+				final SandboxResultPlanTransformer transformer = new SandboxResultPlanTransformer();
+				insertionPlanFilter.setMaxComplexity(100);
+
+				SandboxResult sandboxResult = (SandboxResult) plan;
+				// Sorting by Group as the label provider uses the provided ordering for indexing
+				final ViewState viewState = new ViewState(transformer.createDataModel(target, sandboxResult, monitor), SortMode.BY_PNL);
+				viewState.lastSolution = solution;
+				viewState.allTargetSlots.clear();
+				// viewState.allTargetSlots.addAll(sandboxResult.getExtraSlots());
 				return viewState;
 			}, slotId);
 		} else if (plan instanceof ActionableSetPlan) {
@@ -1679,6 +1765,23 @@ public class ChangeSetView extends ViewPart {
 			showToggleAltPNLBaseAction = true;
 			altPNLToolTipBase = altPNLToolTipBase_Default;
 			altPNLToolTipBaseMode = altPNLToolTipBaseMode_ActionPlan;
+			break;
+		case SANDBOX:
+			// Show mini-view by default
+			showAlternativeChangeModel = dualPNLMode;
+			// columnHelper.setChangeSetColumnLabelProvider(insertionPlanFilter.createLabelProvider());
+			insertionPlanFilter.setInsertionModeActive(true);
+			insertionPlanFilter.setMultipleSolutionView(false);
+			insertionPlanFilter.setMaxComplexity(4);
+			// columnHelper.setChangeSetColumnLabelProvider(insertionPlanFilter.createLabelProvider());
+			showRelatedChangesMenus = true;
+			showUserFilterMenus = true;
+			showGroupByMenu = true;
+			// showChangeTargetMenu = true;
+			showNegativePNLChangesMenu = true;
+			showToggleAltPNLBaseAction = dualPNLMode;
+			altPNLToolTipBase = altPNLToolTipBase_Insertions;
+			altPNLToolTipBaseMode = altPNLToolTipBaseMode_Insertions;
 			break;
 		case GENERIC:
 			showAlternativeChangeModel = false;

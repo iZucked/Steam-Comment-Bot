@@ -178,8 +178,9 @@ public class TradingExporterExtension implements IExporterExtension {
 								for (final Sequence sequence : outputSchedule.getSequences()) {
 									for (final Event event : sequence.getEvents()) {
 										if (event instanceof VesselEventVisit) {
-											if (((VesselEventVisit) event).getVesselEvent() == modelEvent) {
-												visit = (VesselEventVisit) event;
+											VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+											if (vesselEventVisit.getVesselEvent() == modelEvent) {
+												visit = vesselEventVisit;
 											}
 										}
 									}

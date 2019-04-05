@@ -112,8 +112,7 @@ public class Activator extends ValidationPlugin {
 
 		jobManagerServiceTracker = new ServiceTracker<>(context, IEclipseJobManager.class.getName(), null);
 		jobManagerServiceTracker.open();
-		scenarioServiceSelectionProviderTracker = new ServiceTracker<>(context, IScenarioServiceSelectionProvider.class.getName(),
-				null);
+		scenarioServiceSelectionProviderTracker = new ServiceTracker<>(context, IScenarioServiceSelectionProvider.class.getName(), null);
 		scenarioServiceSelectionProviderTracker.open();
 
 		{

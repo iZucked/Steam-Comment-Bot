@@ -96,47 +96,99 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.OPEN_SELL: {
+				OpenSell openSell = (OpenSell)theEObject;
+				T result = caseOpenSell(openSell);
+				if (result == null) result = caseUUIDObject(openSell);
+				if (result == null) result = caseSellOption(openSell);
+				if (result == null) result = caseMMXObject(openSell);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.OPEN_BUY: {
+				OpenBuy openBuy = (OpenBuy)theEObject;
+				T result = caseOpenBuy(openBuy);
+				if (result == null) result = caseUUIDObject(openBuy);
+				if (result == null) result = caseBuyOption(openBuy);
+				if (result == null) result = caseMMXObject(openBuy);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case AnalyticsPackage.BUY_OPPORTUNITY: {
 				BuyOpportunity buyOpportunity = (BuyOpportunity)theEObject;
 				T result = caseBuyOpportunity(buyOpportunity);
-				if (result == null) result = caseMMXObject(buyOpportunity);
+				if (result == null) result = caseUUIDObject(buyOpportunity);
 				if (result == null) result = caseBuyOption(buyOpportunity);
+				if (result == null) result = caseMMXObject(buyOpportunity);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case AnalyticsPackage.SELL_OPPORTUNITY: {
 				SellOpportunity sellOpportunity = (SellOpportunity)theEObject;
 				T result = caseSellOpportunity(sellOpportunity);
-				if (result == null) result = caseMMXObject(sellOpportunity);
+				if (result == null) result = caseUUIDObject(sellOpportunity);
 				if (result == null) result = caseSellOption(sellOpportunity);
+				if (result == null) result = caseMMXObject(sellOpportunity);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case AnalyticsPackage.BUY_MARKET: {
 				BuyMarket buyMarket = (BuyMarket)theEObject;
 				T result = caseBuyMarket(buyMarket);
+				if (result == null) result = caseUUIDObject(buyMarket);
 				if (result == null) result = caseBuyOption(buyMarket);
+				if (result == null) result = caseMMXObject(buyMarket);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case AnalyticsPackage.SELL_MARKET: {
 				SellMarket sellMarket = (SellMarket)theEObject;
 				T result = caseSellMarket(sellMarket);
+				if (result == null) result = caseUUIDObject(sellMarket);
 				if (result == null) result = caseSellOption(sellMarket);
+				if (result == null) result = caseMMXObject(sellMarket);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case AnalyticsPackage.BUY_REFERENCE: {
 				BuyReference buyReference = (BuyReference)theEObject;
 				T result = caseBuyReference(buyReference);
+				if (result == null) result = caseUUIDObject(buyReference);
 				if (result == null) result = caseBuyOption(buyReference);
+				if (result == null) result = caseMMXObject(buyReference);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case AnalyticsPackage.SELL_REFERENCE: {
 				SellReference sellReference = (SellReference)theEObject;
 				T result = caseSellReference(sellReference);
+				if (result == null) result = caseUUIDObject(sellReference);
 				if (result == null) result = caseSellOption(sellReference);
+				if (result == null) result = caseMMXObject(sellReference);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.VESSEL_EVENT_OPTION: {
+				VesselEventOption vesselEventOption = (VesselEventOption)theEObject;
+				T result = caseVesselEventOption(vesselEventOption);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.VESSEL_EVENT_REFERENCE: {
+				VesselEventReference vesselEventReference = (VesselEventReference)theEObject;
+				T result = caseVesselEventReference(vesselEventReference);
+				if (result == null) result = caseUUIDObject(vesselEventReference);
+				if (result == null) result = caseVesselEventOption(vesselEventReference);
+				if (result == null) result = caseMMXObject(vesselEventReference);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.CHARTER_OUT_OPPORTUNITY: {
+				CharterOutOpportunity charterOutOpportunity = (CharterOutOpportunity)theEObject;
+				T result = caseCharterOutOpportunity(charterOutOpportunity);
+				if (result == null) result = caseUUIDObject(charterOutOpportunity);
+				if (result == null) result = caseVesselEventOption(charterOutOpportunity);
+				if (result == null) result = caseMMXObject(charterOutOpportunity);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -158,44 +210,58 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case AnalyticsPackage.FLEET_SHIPPING_OPTION: {
-				FleetShippingOption fleetShippingOption = (FleetShippingOption)theEObject;
-				T result = caseFleetShippingOption(fleetShippingOption);
-				if (result == null) result = caseShippingOption(fleetShippingOption);
+			case AnalyticsPackage.SIMPLE_VESSEL_CHARTER_OPTION: {
+				SimpleVesselCharterOption simpleVesselCharterOption = (SimpleVesselCharterOption)theEObject;
+				T result = caseSimpleVesselCharterOption(simpleVesselCharterOption);
+				if (result == null) result = caseUUIDObject(simpleVesselCharterOption);
+				if (result == null) result = caseShippingOption(simpleVesselCharterOption);
+				if (result == null) result = caseMMXObject(simpleVesselCharterOption);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case AnalyticsPackage.OPTIONAL_AVAILABILITY_SHIPPING_OPTION: {
-				OptionalAvailabilityShippingOption optionalAvailabilityShippingOption = (OptionalAvailabilityShippingOption)theEObject;
-				T result = caseOptionalAvailabilityShippingOption(optionalAvailabilityShippingOption);
-				if (result == null) result = caseFleetShippingOption(optionalAvailabilityShippingOption);
-				if (result == null) result = caseShippingOption(optionalAvailabilityShippingOption);
+			case AnalyticsPackage.OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION: {
+				OptionalSimpleVesselCharterOption optionalSimpleVesselCharterOption = (OptionalSimpleVesselCharterOption)theEObject;
+				T result = caseOptionalSimpleVesselCharterOption(optionalSimpleVesselCharterOption);
+				if (result == null) result = caseSimpleVesselCharterOption(optionalSimpleVesselCharterOption);
+				if (result == null) result = caseUUIDObject(optionalSimpleVesselCharterOption);
+				if (result == null) result = caseShippingOption(optionalSimpleVesselCharterOption);
+				if (result == null) result = caseMMXObject(optionalSimpleVesselCharterOption);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION: {
 				RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption)theEObject;
 				T result = caseRoundTripShippingOption(roundTripShippingOption);
+				if (result == null) result = caseUUIDObject(roundTripShippingOption);
 				if (result == null) result = caseShippingOption(roundTripShippingOption);
+				if (result == null) result = caseMMXObject(roundTripShippingOption);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case AnalyticsPackage.NOMINATED_SHIPPING_OPTION: {
 				NominatedShippingOption nominatedShippingOption = (NominatedShippingOption)theEObject;
 				T result = caseNominatedShippingOption(nominatedShippingOption);
+				if (result == null) result = caseUUIDObject(nominatedShippingOption);
 				if (result == null) result = caseShippingOption(nominatedShippingOption);
+				if (result == null) result = caseMMXObject(nominatedShippingOption);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case AnalyticsPackage.ANALYSIS_RESULT_ROW: {
-				AnalysisResultRow analysisResultRow = (AnalysisResultRow)theEObject;
-				T result = caseAnalysisResultRow(analysisResultRow);
+			case AnalyticsPackage.FULL_VESSEL_CHARTER_OPTION: {
+				FullVesselCharterOption fullVesselCharterOption = (FullVesselCharterOption)theEObject;
+				T result = caseFullVesselCharterOption(fullVesselCharterOption);
+				if (result == null) result = caseUUIDObject(fullVesselCharterOption);
+				if (result == null) result = caseShippingOption(fullVesselCharterOption);
+				if (result == null) result = caseMMXObject(fullVesselCharterOption);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case AnalyticsPackage.RESULT_CONTAINER: {
-				ResultContainer resultContainer = (ResultContainer)theEObject;
-				T result = caseResultContainer(resultContainer);
+			case AnalyticsPackage.EXISTING_VESSEL_CHARTER_OPTION: {
+				ExistingVesselCharterOption existingVesselCharterOption = (ExistingVesselCharterOption)theEObject;
+				T result = caseExistingVesselCharterOption(existingVesselCharterOption);
+				if (result == null) result = caseUUIDObject(existingVesselCharterOption);
+				if (result == null) result = caseShippingOption(existingVesselCharterOption);
+				if (result == null) result = caseMMXObject(existingVesselCharterOption);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -236,17 +302,15 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case AnalyticsPackage.RESULT_SET: {
-				ResultSet resultSet = (ResultSet)theEObject;
-				T result = caseResultSet(resultSet);
+			case AnalyticsPackage.SANDBOX_RESULT: {
+				SandboxResult sandboxResult = (SandboxResult)theEObject;
+				T result = caseSandboxResult(sandboxResult);
+				if (result == null) result = caseAbstractSolutionSet(sandboxResult);
+				if (result == null) result = caseUUIDObject(sandboxResult);
+				if (result == null) result = caseNamedObject(sandboxResult);
+				if (result == null) result = caseMMXObject(sandboxResult);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
-			}
-			case AnalyticsPackage.RESULT: {
-				Result result = (Result)theEObject;
-				T theResult = caseResult(result);
-				if (theResult == null) theResult = defaultCase(theEObject);
-				return theResult;
 			}
 			case AnalyticsPackage.BASE_CASE: {
 				BaseCase baseCase = (BaseCase)theEObject;
@@ -260,24 +324,12 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case AnalyticsPackage.NEW_VESSEL_AVAILABILITY: {
-				NewVesselAvailability newVesselAvailability = (NewVesselAvailability)theEObject;
-				T result = caseNewVesselAvailability(newVesselAvailability);
-				if (result == null) result = caseShippingOption(newVesselAvailability);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.EXISTING_VESSEL_AVAILABILITY: {
-				ExistingVesselAvailability existingVesselAvailability = (ExistingVesselAvailability)theEObject;
-				T result = caseExistingVesselAvailability(existingVesselAvailability);
-				if (result == null) result = caseShippingOption(existingVesselAvailability);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case AnalyticsPackage.EXISTING_CHARTER_MARKET_OPTION: {
 				ExistingCharterMarketOption existingCharterMarketOption = (ExistingCharterMarketOption)theEObject;
 				T result = caseExistingCharterMarketOption(existingCharterMarketOption);
+				if (result == null) result = caseUUIDObject(existingCharterMarketOption);
 				if (result == null) result = caseShippingOption(existingCharterMarketOption);
+				if (result == null) result = caseMMXObject(existingCharterMarketOption);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -543,6 +595,36 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Open Sell</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Open Sell</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseOpenSell(OpenSell object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Open Buy</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Open Buy</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseOpenBuy(OpenBuy object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Buy Opportunity</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -633,6 +715,51 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Event Option</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Event Option</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseVesselEventOption(VesselEventOption object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Event Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Event Reference</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseVesselEventReference(VesselEventReference object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Charter Out Opportunity</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Charter Out Opportunity</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCharterOutOpportunity(CharterOutOpportunity object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Base Case Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -678,32 +805,32 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Fleet Shipping Option</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Simple Vessel Charter Option</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Fleet Shipping Option</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Simple Vessel Charter Option</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseFleetShippingOption(FleetShippingOption object) {
+	public T caseSimpleVesselCharterOption(SimpleVesselCharterOption object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Optional Availability Shipping Option</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Optional Simple Vessel Charter Option</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Optional Availability Shipping Option</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Optional Simple Vessel Charter Option</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseOptionalAvailabilityShippingOption(OptionalAvailabilityShippingOption object) {
+	public T caseOptionalSimpleVesselCharterOption(OptionalSimpleVesselCharterOption object) {
 		return null;
 	}
 
@@ -738,32 +865,32 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Analysis Result Row</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Full Vessel Charter Option</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Analysis Result Row</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Full Vessel Charter Option</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAnalysisResultRow(AnalysisResultRow object) {
+	public T caseFullVesselCharterOption(FullVesselCharterOption object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Result Container</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Existing Vessel Charter Option</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Result Container</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Existing Vessel Charter Option</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseResultContainer(ResultContainer object) {
+	public T caseExistingVesselCharterOption(ExistingVesselCharterOption object) {
 		return null;
 	}
 
@@ -843,32 +970,17 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Result Set</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Sandbox Result</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Result Set</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Sandbox Result</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseResultSet(ResultSet object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Result</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Result</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseResult(Result object) {
+	public T caseSandboxResult(SandboxResult object) {
 		return null;
 	}
 
@@ -899,36 +1011,6 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePartialCase(PartialCase object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>New Vessel Availability</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>New Vessel Availability</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseNewVesselAvailability(NewVesselAvailability object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Existing Vessel Availability</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Existing Vessel Availability</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseExistingVesselAvailability(ExistingVesselAvailability object) {
 		return null;
 	}
 

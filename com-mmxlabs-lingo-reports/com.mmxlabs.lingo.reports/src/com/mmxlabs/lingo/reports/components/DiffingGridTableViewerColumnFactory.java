@@ -7,7 +7,6 @@ package com.mmxlabs.lingo.reports.components;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
 
 import org.eclipse.core.databinding.observable.map.IObservableMap;

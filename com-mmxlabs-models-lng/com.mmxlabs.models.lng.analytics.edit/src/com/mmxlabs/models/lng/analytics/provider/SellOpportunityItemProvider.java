@@ -18,6 +18,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.SellOpportunity} object.
@@ -26,7 +27,7 @@ import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
  * @generated
  */
 public class SellOpportunityItemProvider
-	extends MMXObjectItemProvider {
+	extends UUIDObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -347,8 +348,10 @@ public class SellOpportunityItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		SellOpportunity sellOpportunity = (SellOpportunity)object;
-		return getString("_UI_SellOpportunity_type") + " " + sellOpportunity.isFobSale();
+		String label = ((SellOpportunity)object).getUuid();
+		return label == null || label.length() == 0 ?
+			getString("_UI_SellOpportunity_type") :
+			getString("_UI_SellOpportunity_type") + " " + label;
 	}
 
 	/**

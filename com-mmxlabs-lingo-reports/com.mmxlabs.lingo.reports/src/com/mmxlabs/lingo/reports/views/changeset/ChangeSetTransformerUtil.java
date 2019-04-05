@@ -721,9 +721,15 @@ public final class ChangeSetTransformerUtil {
 						if (rhsLink != null) {
 							// LDD? Merge after records)
 							if (!rhsLink.isPrimaryRecord()) {
-								final ChangeSetRowDataGroup rowDataGroup = rhsLink.getRowDataGroup().getMembers().get(0).getLhsLink().getRowDataGroup();
+								ChangeSetRowDataGroup rowDataGroup2 = rhsLink.getRowDataGroup();
+								ChangeSetRowData changeSetRowData = rowDataGroup2.getMembers().get(0);
+								ChangeSetRowData lhsLink = changeSetRowData.getLhsLink();
+								if (lhsLink != null) {
+									// TODO: Why is it null in sandbox?
+								final ChangeSetRowDataGroup rowDataGroup = lhsLink.getRowDataGroup();
 								data.setRowDataGroup(rowDataGroup);
 								handled = true;
+								}
 							}
 						}
 						if (!handled) {
@@ -1128,6 +1134,12 @@ public final class ChangeSetTransformerUtil {
 					pnl += groupProfitAndLoss.getProfitAndLoss();
 				}
 			}
+			if (toSchedule.getOtherPNL() != null && toSchedule.getOtherPNL().getGroupProfitAndLoss() != null) {
+				pnl += toSchedule.getOtherPNL().getGroupProfitAndLoss().getProfitAndLoss();
+				lateness += LatenessUtils.getLatenessExcludingFlex(toSchedule.getOtherPNL());
+//				violations += ScheduleModelKPIUtils.getCapacityViolationCount(toSchedule.getOtherPNL());
+
+			}
 		}
 
 		currentMetrics.setPnl(pnl);
@@ -1163,6 +1175,11 @@ public final class ChangeSetTransformerUtil {
 
 			for (final OpenSlotAllocation openSlotAllocation : fromSchedule.getOpenSlotAllocations()) {
 				pnl -= openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+			}
+			if (fromSchedule.getOtherPNL() != null && fromSchedule.getOtherPNL().getGroupProfitAndLoss() != null) {
+				pnl -= fromSchedule.getOtherPNL().getGroupProfitAndLoss().getProfitAndLoss();
+				lateness -= LatenessUtils.getLatenessExcludingFlex(fromSchedule.getOtherPNL());
+
 			}
 		}
 		deltaMetrics.setPnlDelta(pnl);

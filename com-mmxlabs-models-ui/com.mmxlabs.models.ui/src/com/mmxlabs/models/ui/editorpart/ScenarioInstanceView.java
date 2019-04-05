@@ -27,6 +27,7 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
+import com.google.common.base.Objects;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.IMMXRootObjectProvider;
@@ -63,12 +64,8 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	private boolean locked;
 
-	private final IScenarioLockListener lockListener = new IScenarioLockListener() {
-
-		@Override
-		public void lockStateChanged(@NonNull ModelRecord modelRecord, boolean writeLocked) {
-			RunnerHelper.runNowOrAsync(() -> setLocked(writeLocked || (scenarioInstance != null && scenarioInstance.isReadonly())));
-		};
+	private final IScenarioLockListener lockListener = (modelRecord, writeLocked) -> {
+		RunnerHelper.runNowOrAsync(() -> setLocked(writeLocked || (scenarioInstance != null && scenarioInstance.isReadonly())));
 	};
 	private IPartListener partListener;
 
@@ -104,7 +101,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 				if (part instanceof IEditorPart) {
 					final IEditorPart editorPart = (IEditorPart) part;
 					final IEditorInput editorInput = editorPart.getEditorInput();
-					final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
+					final ScenarioInstance scenarioInstance = editorInput.getAdapter(ScenarioInstance.class);
 					lastPart = part;
 					if (scenarioInstance != null) {
 						try {
@@ -144,7 +141,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	}
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
+	public synchronized void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection structured = (IStructuredSelection) selection;
@@ -159,7 +156,12 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		displayScenarioInstance(null);
 	}
 
-	protected void displayScenarioInstance(final ScenarioInstance instance) {
+	protected synchronized void displayScenarioInstance(final ScenarioInstance instance) {
+
+		if (Objects.equal(instance, this.scenarioInstance)) {
+			return;
+		}
+
 		resetState();
 
 		if (instance != null) {
@@ -173,13 +175,13 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			MMXRootObject rootObject = getRootObject();
 
 			this.valueProviderCache = new ReferenceValueProviderCache(rootObject);
-		
+
 			boolean relaxedValidation = false;
 			final ScenarioInstance scenarioInstance = modelRecord.getScenarioInstance();
 			if (scenarioInstance != null) {
 				relaxedValidation = "Period Scenario".equals(scenarioInstance.getName());
 			}
-						
+
 			extraValidationContext.push(new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation));
 			doDisplayScenarioInstance(scenarioInstance, getRootObject());
 		} else {
@@ -218,7 +220,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		scenarioInstance = null;
 	}
 
-	protected void doDisplayScenarioInstance(@Nullable ScenarioInstance scenarioInstance, @Nullable MMXRootObject rootObject) {
+	protected synchronized void doDisplayScenarioInstance(@Nullable ScenarioInstance scenarioInstance, @Nullable MMXRootObject rootObject) {
 
 	}
 
@@ -231,7 +233,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		this.locked = locked;
 	}
 
-	private final Stack<IExtraValidationContext> extraValidationContext = new Stack<IExtraValidationContext>();
+	private final Stack<IExtraValidationContext> extraValidationContext = new Stack<>();
 
 	@Override
 	public IExtraValidationContext getExtraValidationContext() {

@@ -19,7 +19,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BuyOption" abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="SellOption" abstract="true" interface="true"/>
-  <eClassifiers xsi:type="ecore:EClass" name="BuyOpportunity" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject #//BuyOption">
+  <eClassifiers xsi:type="ecore:EClass" name="OpenSell" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//SellOption"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OpenBuy" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//BuyOption"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BuyOpportunity" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//BuyOption">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="desPurchase" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contract" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PurchaseContract"/>
@@ -51,7 +53,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SellOpportunity" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject #//SellOption">
+  <eClassifiers xsi:type="ecore:EClass" name="SellOpportunity" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//SellOption">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fobSale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contract" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SalesContract"/>
@@ -78,21 +80,32 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BuyMarket" eSuperTypes="#//BuyOption">
+  <eClassifiers xsi:type="ecore:EClass" name="BuyMarket" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//BuyOption">
     <eStructuralFeatures xsi:type="ecore:EReference" name="market" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SellMarket" eSuperTypes="#//SellOption">
+  <eClassifiers xsi:type="ecore:EClass" name="SellMarket" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//SellOption">
     <eStructuralFeatures xsi:type="ecore:EReference" name="market" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BuyReference" eSuperTypes="#//BuyOption">
+  <eClassifiers xsi:type="ecore:EClass" name="BuyReference" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//BuyOption">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SellReference" eSuperTypes="#//SellOption">
+  <eClassifiers xsi:type="ecore:EClass" name="SellReference" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//SellOption">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselEventOption"/>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselEventReference" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//VesselEventOption">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="event" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselEvent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CharterOutOpportunity" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//VesselEventOption">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hireCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BaseCaseRow">
     <eStructuralFeatures xsi:type="ecore:EReference" name="buyOption" eType="#//BuyOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sellOption" eType="#//SellOption"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEventOption" eType="#//VesselEventOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" eType="#//ShippingOption"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PartialCaseRow">
@@ -100,11 +113,13 @@
         eType="#//BuyOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sellOptions" upperBound="-1"
         eType="#//SellOption"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEventOptions" upperBound="-1"
+        eType="#//VesselEventOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" upperBound="-1"
         eType="#//ShippingOption"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ShippingOption"/>
-  <eClassifiers xsi:type="ecore:EClass" name="FleetShippingOption" eSuperTypes="#//ShippingOption">
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleVesselCharterOption" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//ShippingOption">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hireCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
@@ -114,8 +129,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="useSafetyHeel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OptionalAvailabilityShippingOption"
-      eSuperTypes="#//FleetShippingOption">
+  <eClassifiers xsi:type="ecore:EClass" name="OptionalSimpleVesselCharterOption" eSuperTypes="#//SimpleVesselCharterOption">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastBonus" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
         <details key="type" value="charter"/>
@@ -131,7 +145,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="startPort" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="endPort" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RoundTripShippingOption" eSuperTypes="#//ShippingOption">
+  <eClassifiers xsi:type="ecore:EClass" name="RoundTripShippingOption" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//ShippingOption">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hireCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
@@ -139,24 +153,15 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="NominatedShippingOption" eSuperTypes="#//ShippingOption">
+  <eClassifiers xsi:type="ecore:EClass" name="NominatedShippingOption" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//ShippingOption">
     <eStructuralFeatures xsi:type="ecore:EReference" name="nominatedVessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AnalysisResultRow">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="buyOption" eType="#//BuyOption"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="sellOption" eType="#//SellOption"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="resultDetail" eType="#//AnalysisResultDetail"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" eType="#//ShippingOption"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="resultDetails" eType="#//ResultContainer"
+  <eClassifiers xsi:type="ecore:EClass" name="FullVesselCharterOption" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//ShippingOption">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselCharter" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ResultContainer">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//CargoAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="openSlotAllocations" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocations" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExistingVesselCharterOption" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//ShippingOption">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselCharter" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnalysisResultDetail"/>
   <eClassifiers xsi:type="ecore:EClass" name="ProfitAndLossResult" eSuperTypes="#//AnalysisResultDetail">
@@ -173,6 +178,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sells" upperBound="-1"
         eType="#//SellOption" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvents" upperBound="-1"
+        eType="#//VesselEventOption" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="shippingTemplates" upperBound="-1"
         eType="#//ShippingOption" containment="true"/>
   </eClassifiers>
@@ -181,39 +188,15 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="partialCase" eType="#//PartialCase"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="baseCaseResult" eType="#//Result"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="results" eType="#//Result"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="results" eType="#//AbstractSolutionSet"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="useTargetPNL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
-        eType="#//OptionAnalysisModel" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ResultSet">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//AnalysisResultRow"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="profitAndLoss" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="scheduleModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ScheduleModel"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Result">
+  <eClassifiers xsi:type="ecore:EClass" name="SandboxResult" eSuperTypes="#//AbstractSolutionSet">
     <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
       <details key="nonUniqueChildren" value="true"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="extraSlots" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="resultSets" upperBound="-1"
-        eType="#//ResultSet" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="extraVesselAvailabilities"
-        upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarketOverrides"
-        upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//CharterInMarketOverride"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="extraCharterInMarkets"
-        upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//CharterInMarket"
-        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BaseCase">
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseCase" upperBound="-1"
@@ -231,14 +214,7 @@
     <eLiterals name="FIXED" value="1"/>
     <eLiterals name="RANGE" value="2"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="NewVesselAvailability" eSuperTypes="#//ShippingOption">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAvailability" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ExistingVesselAvailability" eSuperTypes="#//ShippingOption">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAvailability" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ExistingCharterMarketOption" eSuperTypes="#//ShippingOption">
+  <eClassifiers xsi:type="ecore:EClass" name="ExistingCharterMarketOption" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//ShippingOption">
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarket" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//CharterInMarket"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
@@ -263,6 +239,19 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="options" upperBound="-1"
         eType="#//SolutionOption" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extraVesselEvents" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselEvent"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extraVesselAvailabilities"
+        upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarketOverrides"
+        upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//CharterInMarketOverride"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extraCharterInMarkets"
+        upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//CharterInMarket"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="useScenarioBase" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ActionableSetPlan" eSuperTypes="#//AbstractSolutionSet">
     <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">

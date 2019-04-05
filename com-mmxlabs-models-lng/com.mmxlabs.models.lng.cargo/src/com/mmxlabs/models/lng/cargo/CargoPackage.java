@@ -284,6 +284,106 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.SpotSlot
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSpotSlot()
+	 * @generated
+	 */
+	int SPOT_SLOT = 5;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SpotLoadSlotImpl <em>Spot Load Slot</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.SpotLoadSlotImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSpotLoadSlot()
+	 * @generated
+	 */
+	int SPOT_LOAD_SLOT = 6;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SpotDischargeSlotImpl <em>Spot Discharge Slot</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.SpotDischargeSlotImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSpotDischargeSlot()
+	 * @generated
+	 */
+	int SPOT_DISCHARGE_SLOT = 7;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoGroupImpl <em>Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoGroupImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoGroup()
+	 * @generated
+	 */
+	int CARGO_GROUP = 8;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl <em>Vessel Availability</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselAvailability()
+	 * @generated
+	 */
+	int VESSEL_AVAILABILITY = 9;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl <em>Vessel Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.VesselEventImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselEvent()
+	 * @generated
+	 */
+	int VESSEL_EVENT = 10;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl <em>Maintenance Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getMaintenanceEvent()
+	 * @generated
+	 */
+	int MAINTENANCE_EVENT = 11;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.DryDockEventImpl <em>Dry Dock Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.DryDockEventImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getDryDockEvent()
+	 * @generated
+	 */
+	int DRY_DOCK_EVENT = 12;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl <em>Charter Out Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCharterOutEvent()
+	 * @generated
+	 */
+	int CHARTER_OUT_EVENT = 13;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl <em>Assignable Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getAssignableElement()
+	 * @generated
+	 */
+	int ASSIGNABLE_ELEMENT = 14;
+
+	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2696,16 +2796,6 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 3;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.SpotSlot
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSpotSlot()
-	 * @generated
-	 */
-	int SPOT_SLOT = 5;
-
-	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2767,16 +2857,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_SLOT_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SpotLoadSlotImpl <em>Spot Load Slot</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.SpotLoadSlotImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSpotLoadSlot()
-	 * @generated
-	 */
-	int SPOT_LOAD_SLOT = 6;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -3562,16 +3642,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT_OPERATION_COUNT = LOAD_SLOT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SpotDischargeSlotImpl <em>Spot Discharge Slot</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.SpotDischargeSlotImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSpotDischargeSlot()
-	 * @generated
-	 */
-	int SPOT_DISCHARGE_SLOT = 7;
-
-	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4039,7 +4109,6 @@ public interface CargoPackage extends EPackage {
 	 */
 	int SPOT_DISCHARGE_SLOT_FEATURE_COUNT = DISCHARGE_SLOT_FEATURE_COUNT + 1;
 
-
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
@@ -4365,16 +4434,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT_OPERATION_COUNT = DISCHARGE_SLOT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoGroupImpl <em>Group</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoGroupImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoGroup()
-	 * @generated
-	 */
-	int CARGO_GROUP = 8;
-
-	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4445,16 +4504,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CARGO_GROUP_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl <em>Vessel Availability</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselAvailability()
-	 * @generated
-	 */
-	int VESSEL_AVAILABILITY = 9;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4754,23 +4803,22 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MAX_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 6;
 
 	/**
+	 * The operation id for the '<em>Jsonid</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY___JSONID = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
+
+	/**
 	 * The number of operations of the '<em>Vessel Availability</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl <em>Vessel Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.VesselEventImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselEvent()
-	 * @generated
-	 */
-	int VESSEL_EVENT = 10;
+	int VESSEL_AVAILABILITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4953,16 +5001,6 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_EVENT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 3;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl <em>Maintenance Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getMaintenanceEvent()
-	 * @generated
-	 */
-	int MAINTENANCE_EVENT = 11;
-
-	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5143,16 +5181,6 @@ public interface CargoPackage extends EPackage {
 	int MAINTENANCE_EVENT_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.DryDockEventImpl <em>Dry Dock Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.DryDockEventImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getDryDockEvent()
-	 * @generated
-	 */
-	int DRY_DOCK_EVENT = 12;
-
-	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5331,16 +5359,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DRY_DOCK_EVENT_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl <em>Charter Out Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCharterOutEvent()
-	 * @generated
-	 */
-	int CHARTER_OUT_EVENT = 13;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5593,16 +5611,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_OUT_EVENT_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl <em>Assignable Element</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getAssignableElement()
-	 * @generated
-	 */
-	int ASSIGNABLE_ELEMENT = 14;
 
 	/**
 	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
@@ -9011,6 +9019,16 @@ public interface CargoPackage extends EPackage {
 	EOperation getVesselAvailability__GetAvailabilityOrContractMaxDuration();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#jsonid() <em>Jsonid</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Jsonid</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#jsonid()
+	 * @generated
+	 */
+	EOperation getVesselAvailability__Jsonid();
+
+	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11476,6 +11494,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MAX_DURATION = eINSTANCE.getVesselAvailability__GetAvailabilityOrContractMaxDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Jsonid</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_AVAILABILITY___JSONID = eINSTANCE.getVesselAvailability__Jsonid();
 
 		/**
 		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.

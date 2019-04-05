@@ -66,6 +66,8 @@ public class LNGTransformerHelper {
 	public static final @NonNull String HINT_DISABLE_CACHES = "hint-lngtransformer-disable-caches";
 	public static final @NonNull String HINT_PORTFOLIO_BREAKEVEN = "hint-portfolio-breakeven";
 	public static final @NonNull String HINT_NOMINAL_ADP = "hint-nominal-adp";
+	
+	public static final @NonNull String HINT_PERIOD_SCENARIO = "hint-period-scenario";
 
 	@NonNull
 	public static Set<@NonNull String> getHints(@NonNull final UserSettings userSettings, @NonNull final String @Nullable... initialHints) {

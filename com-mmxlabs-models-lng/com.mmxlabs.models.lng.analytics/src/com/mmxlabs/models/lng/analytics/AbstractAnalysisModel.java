@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getBuys <em>Buys</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getSells <em>Sells</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getVesselEvents <em>Vessel Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getShippingTemplates <em>Shipping Templates</em>}</li>
  * </ul>
  *
@@ -60,6 +61,22 @@ public interface AbstractAnalysisModel extends NamedObject {
 	 * @generated
 	 */
 	EList<SellOption> getSells();
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.VesselEventOption}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Events</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Events</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAbstractAnalysisModel_VesselEvents()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<VesselEventOption> getVesselEvents();
 
 	/**
 	 * Returns the value of the '<em><b>Shipping Templates</b></em>' containment reference list.

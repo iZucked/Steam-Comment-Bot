@@ -37,7 +37,7 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 	@Inject
 	private PriceIntervalProviderHelper priceIntervalProviderHelper;
 
-	private ThreadLocal<Integer> price = new ThreadLocal<Integer>();
+	private ThreadLocal<Integer> price = new ThreadLocal<>();
 
 	/**
 	 */
@@ -47,7 +47,15 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 
 	@Override
 	public int estimateSalesUnitPrice(final IDischargeOption option, IPortTimesRecord voyageRecord, final IDetailTree annotations) {
-		return price.get();
+		return getPrice();
+	}
+
+	private Integer getPrice() {
+		Integer v =  price.get();
+		if (v == null) {
+			return 0;
+		}
+		return v;
 	}
 
 	public void setPrice(final int newPrice) {
@@ -56,7 +64,7 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 
 	@Override
 	public int calculateSalesUnitPrice(IDischargeOption option, final IAllocationAnnotation allocationAnnotation, IDetailTree annotations) {
-		return price.get();
+		return getPrice();
 	}
 
 	@Override
@@ -66,7 +74,7 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 
 	@Override
 	public int getEstimatedSalesPrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours) {
-		return price.get();
+		return getPrice();
 	}
 
 	@Override
@@ -77,7 +85,7 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 	@Override
 	public List<int @NonNull []> getPriceIntervals(final IPortSlot slot, final int startOfRange, final int endOfRange, final IPortTimeWindowsRecord portTimeWindowRecord) {
 		final List<int[]> intervals = new LinkedList<>();
-		intervals.add(new int[] { startOfRange, price.get() });
+		intervals.add(new int[] { startOfRange, getPrice() });
 		intervals.add(priceIntervalProviderHelper.getEndInterval(endOfRange));
 		return intervals;
 	}
@@ -98,18 +106,18 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 	public int calculateFOBPricePerMMBTu(@NonNull ILoadSlot loadSlot, @NonNull IDischargeSlot dischargeSlot, int dischargePricePerMMBTu, @NonNull IAllocationAnnotation allocationAnnotation,
 			@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @Nullable VolumeAllocatedSequences volumeAllocatedSequences,
 			@Nullable IDetailTree annotations) {
-		return price.get();
+		return getPrice();
 	}
 
 	@Override
 	public int calculateDESPurchasePricePerMMBTu(@NonNull ILoadOption loadOption, @NonNull IDischargeSlot dischargeSlot, int dischargePricePerMMBTu,
 			@NonNull IAllocationAnnotation allocationAnnotation, @Nullable VolumeAllocatedSequences volumeAllocatedSequences, @Nullable IDetailTree annotations) {
-		return price.get();
+		return getPrice();
 	}
 
 	@Override
 	public int calculatePriceForFOBSalePerMMBTu(@NonNull ILoadSlot loadSlot, @NonNull IDischargeOption dischargeOption, int dischargePricePerMMBTu, @NonNull IAllocationAnnotation allocationAnnotation,
 			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, @Nullable IDetailTree annotations) {
-		return price.get();
+		return getPrice();
 	}
 }

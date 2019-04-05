@@ -23,9 +23,9 @@ import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
-import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
-import com.mmxlabs.models.lng.analytics.FleetShippingOption;
-import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
+import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
@@ -200,12 +200,12 @@ public class ViabilitySandboxEvaluator {
 
 		for (final ShippingOption shipping : model.getShippingTemplates()) {
 
-			if (shipping instanceof OptionalAvailabilityShippingOption) {
+			if (shipping instanceof OptionalSimpleVesselCharterOption) {
 				// Do not re-add
 				if (availabilitiesMap.containsKey(shipping)) {
 					continue;
 				}
-				final OptionalAvailabilityShippingOption optionalAvailabilityShippingOption = (OptionalAvailabilityShippingOption) shipping;
+				final OptionalSimpleVesselCharterOption optionalAvailabilityShippingOption = (OptionalSimpleVesselCharterOption) shipping;
 				final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 				vesselAvailability.setTimeCharterRate(optionalAvailabilityShippingOption.getHireCost());
 				final Vessel vessel = optionalAvailabilityShippingOption.getVessel();
@@ -243,12 +243,12 @@ public class ViabilitySandboxEvaluator {
 				availabilitiesMap.put(optionalAvailabilityShippingOption, vesselAvailability);
 
 				mapper.addMapping(optionalAvailabilityShippingOption, vesselAvailability);
-			} else if (shipping instanceof FleetShippingOption) {
+			} else if (shipping instanceof SimpleVesselCharterOption) {
 				// Do not re-add
 				if (availabilitiesMap.containsKey(shipping)) {
 					continue;
 				}
-				final FleetShippingOption fleetShippingOption = (FleetShippingOption) shipping;
+				final SimpleVesselCharterOption fleetShippingOption = (SimpleVesselCharterOption) shipping;
 				final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 				vesselAvailability.setTimeCharterRate(fleetShippingOption.getHireCost());
 				final Vessel vessel = fleetShippingOption.getVessel();
@@ -286,12 +286,12 @@ public class ViabilitySandboxEvaluator {
 				availabilitiesMap.put(roundTripShippingOption, market);
 
 				mapper.addMapping(roundTripShippingOption, market);
-			} else if (shipping instanceof ExistingVesselAvailability) {
+			} else if (shipping instanceof ExistingVesselCharterOption) {
 				if (availabilitiesMap.containsKey(shipping)) {
 					continue;
 				}
-				final ExistingVesselAvailability eva = (ExistingVesselAvailability) shipping;
-				final VesselAvailability va = eva.getVesselAvailability();
+				final ExistingVesselCharterOption eva = (ExistingVesselCharterOption) shipping;
+				final VesselAvailability va = eva.getVesselCharter();
 				availabilitiesMap.put(eva, va);
 				mapper.addMapping(eva, va);
 			} else if (shipping instanceof ExistingCharterMarketOption) {
@@ -343,7 +343,7 @@ public class ViabilitySandboxEvaluator {
 	private static void singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final ViabilityModel model) {
 
 		final LNGScenarioModel optimiserScenario = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		final IMapperClass mapper = new Mapper(optimiserScenario);
+		final IMapperClass mapper = new Mapper(optimiserScenario, true);
 		final Map<ShippingOption, VesselAssignmentType> shippingMap = buildFullScenario(optimiserScenario, model, mapper);
 
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();

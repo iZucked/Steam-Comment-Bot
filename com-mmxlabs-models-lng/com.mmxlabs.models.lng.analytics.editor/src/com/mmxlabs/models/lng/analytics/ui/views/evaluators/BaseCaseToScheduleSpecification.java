@@ -16,16 +16,17 @@ import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
-import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
-import com.mmxlabs.models.lng.analytics.FleetShippingOption;
-import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
-import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
+import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ShippingType;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.SlotMode;
@@ -38,6 +39,8 @@ import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SlotSpecification;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
@@ -63,7 +66,7 @@ public class BaseCaseToScheduleSpecification {
 
 		for (final BaseCaseRow row : baseCase.getBaseCase()) {
 
-			if (row.getBuyOption() == null || row.getSellOption() == null) {
+			if (row.getVesselEventOption() == null && (row.getBuyOption() == null || row.getSellOption() == null)) {
 				SlotSpecification slotSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
 
 				Slot slot = null;
@@ -80,7 +83,7 @@ public class BaseCaseToScheduleSpecification {
 				continue;
 			}
 
-			final ShippingType shippingType = AnalyticsBuilder.getShippingType(row.getBuyOption(), row.getSellOption());
+			final ShippingType shippingType = row.getVesselEventOption() != null ? ShippingType.Shipped : AnalyticsBuilder.getShippingType(row.getBuyOption(), row.getSellOption());
 			if (shippingType == ShippingType.NonShipped) {
 				final NonShippedCargoSpecification spec = CargoFactory.eINSTANCE.createNonShippedCargoSpecification();
 
@@ -140,8 +143,8 @@ public class BaseCaseToScheduleSpecification {
 					spec.setVesselAllocation(option.getCharterInMarket());
 					spec.setSpotIndex(option.getSpotIndex());
 					// mapper.addMapping(option, newMarket);
-				} else if (shipping instanceof OptionalAvailabilityShippingOption) {
-					final OptionalAvailabilityShippingOption optionalAvailabilityShippingOption = (OptionalAvailabilityShippingOption) shipping;
+				} else if (shipping instanceof OptionalSimpleVesselCharterOption) {
+					final OptionalSimpleVesselCharterOption optionalAvailabilityShippingOption = (OptionalSimpleVesselCharterOption) shipping;
 					VesselAvailability vesselAvailability = mapper.get(optionalAvailabilityShippingOption);
 					if (vesselAvailability == null) {
 						vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
@@ -181,8 +184,8 @@ public class BaseCaseToScheduleSpecification {
 						mapper.addMapping(optionalAvailabilityShippingOption, vesselAvailability);
 					}
 					spec.setVesselAllocation(vesselAvailability);
-				} else if (shipping instanceof FleetShippingOption) {
-					final FleetShippingOption fleetShippingOption = (FleetShippingOption) shipping;
+				} else if (shipping instanceof SimpleVesselCharterOption) {
+					final SimpleVesselCharterOption fleetShippingOption = (SimpleVesselCharterOption) shipping;
 					VesselAvailability vesselAvailability = mapper.get(fleetShippingOption);
 					if (vesselAvailability == null) {
 						vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
@@ -209,43 +212,51 @@ public class BaseCaseToScheduleSpecification {
 						mapper.addMapping(fleetShippingOption, vesselAvailability);
 					}
 					spec.setVesselAllocation(vesselAvailability);
-				} else if (shipping instanceof ExistingVesselAvailability) {
-					final ExistingVesselAvailability fleetShippingOption = (ExistingVesselAvailability) shipping;
-					VesselAvailability vesselAvailability = fleetShippingOption.getVesselAvailability();
+				} else if (shipping instanceof ExistingVesselCharterOption) {
+					final ExistingVesselCharterOption fleetShippingOption = (ExistingVesselCharterOption) shipping;
+					VesselAvailability vesselAvailability = fleetShippingOption.getVesselCharter();
 					mapper.addMapping(fleetShippingOption, vesselAvailability);
 					spec.setVesselAllocation(vesselAvailability);
-				} else if (shipping instanceof NewVesselAvailability) {
-					final NewVesselAvailability fleetShippingOption = (NewVesselAvailability) shipping;
-					VesselAvailability vesselAvailability = fleetShippingOption.getVesselAvailability();
+				} else if (shipping instanceof FullVesselCharterOption) {
+					final FullVesselCharterOption fleetShippingOption = (FullVesselCharterOption) shipping;
+					VesselAvailability vesselAvailability = fleetShippingOption.getVesselCharter();
 					mapper.addMapping(fleetShippingOption, vesselAvailability);
 					spec.setVesselAllocation(vesselAvailability);
 				} else {
 					assert false;
 				}
 
-				DischargeSlot dischargeSlot = null;
-				LoadSlot loadSlot = null;
+				if (row.getVesselEventOption() != null) {
+					VesselEventSpecification eventSpec = CargoFactory.eINSTANCE.createVesselEventSpecification();
+					eventSpec.setVesselEvent(getOrCreate(row.getVesselEventOption()));
+					spec.getEvents().add(eventSpec);
 
-				if (buyNeedsDate(row.getBuyOption())) {
-					dischargeSlot = getOrCreate(row.getSellOption());
-					loadSlot = getOrCreate(row.getBuyOption(), dischargeSlot.getWindowStart(), 1);
-				} else if (sellNeedsDate(row.getSellOption())) {
-					loadSlot = getOrCreate(row.getBuyOption());
-					dischargeSlot = getOrCreate(row.getSellOption(), loadSlot.getWindowStart(), 1);
 				} else {
-					dischargeSlot = getOrCreate(row.getSellOption());
-					loadSlot = getOrCreate(row.getBuyOption());
+					DischargeSlot dischargeSlot = null;
+					LoadSlot loadSlot = null;
+
+					if (buyNeedsDate(row.getBuyOption())) {
+						dischargeSlot = getOrCreate(row.getSellOption());
+						loadSlot = getOrCreate(row.getBuyOption(), dischargeSlot.getWindowStart(), 1);
+					} else if (sellNeedsDate(row.getSellOption())) {
+						loadSlot = getOrCreate(row.getBuyOption());
+						dischargeSlot = getOrCreate(row.getSellOption(), loadSlot.getWindowStart(), 1);
+					} else {
+						dischargeSlot = getOrCreate(row.getSellOption());
+						loadSlot = getOrCreate(row.getBuyOption());
+					}
+
+					final SlotSpecification loadSpec = CargoFactory.eINSTANCE.createSlotSpecification();
+					loadSpec.setSlot(loadSlot);
+					final SlotSpecification dischargeSpec = CargoFactory.eINSTANCE.createSlotSpecification();
+					dischargeSpec.setSlot(dischargeSlot);
+
+					spec.getEvents().add(loadSpec);
+					spec.getEvents().add(dischargeSpec);
+
 				}
-
-				final SlotSpecification loadSpec = CargoFactory.eINSTANCE.createSlotSpecification();
-				loadSpec.setSlot(loadSlot);
-				final SlotSpecification dischargeSpec = CargoFactory.eINSTANCE.createSlotSpecification();
-				dischargeSpec.setSlot(dischargeSlot);
-
-				spec.getEvents().add(loadSpec);
-				spec.getEvents().add(dischargeSpec);
-
 				specification.getVesselScheduleSpecifications().add(spec);
+
 			} else {
 				// ?
 			}
@@ -285,12 +296,15 @@ public class BaseCaseToScheduleSpecification {
 			}
 			slot.setWindowSize(diff);
 		}
-		mapper.getBreakEven(buyOption).setWindowStart(slot.getWindowStart());
-		mapper.getBreakEven(buyOption).setWindowSize(slot.getWindowSize());
-		mapper.getBreakEven(buyOption).setWindowSizeUnits(slot.getWindowSizeUnits());
-		mapper.getChangable(buyOption).setWindowStart(slot.getWindowStart());
-		mapper.getChangable(buyOption).setWindowSize(slot.getWindowSize());
-		mapper.getChangable(buyOption).setWindowSizeUnits(slot.getWindowSizeUnits());
+		if (mapper.isCreateBEOptions()) {
+
+			mapper.getBreakEven(buyOption).setWindowStart(slot.getWindowStart());
+			mapper.getBreakEven(buyOption).setWindowSize(slot.getWindowSize());
+			mapper.getBreakEven(buyOption).setWindowSizeUnits(slot.getWindowSizeUnits());
+			mapper.getChangable(buyOption).setWindowStart(slot.getWindowStart());
+			mapper.getChangable(buyOption).setWindowSize(slot.getWindowSize());
+			mapper.getChangable(buyOption).setWindowSizeUnits(slot.getWindowSizeUnits());
+		}
 		return slot;
 	}
 
@@ -324,15 +338,28 @@ public class BaseCaseToScheduleSpecification {
 			slot.setWindowSize(diff);
 		}
 
-		mapper.getBreakEven(sellOption).setWindowStart(slot.getWindowStart());
-		mapper.getBreakEven(sellOption).setWindowSize(slot.getWindowSize());
-		mapper.getBreakEven(sellOption).setWindowSizeUnits(slot.getWindowSizeUnits());
-		mapper.getChangable(sellOption).setWindowStart(slot.getWindowStart());
-		mapper.getChangable(sellOption).setWindowSize(slot.getWindowSize());
-		mapper.getChangable(sellOption).setWindowSizeUnits(slot.getWindowSizeUnits());
-
+		if (mapper.isCreateBEOptions()) {
+			mapper.getBreakEven(sellOption).setWindowStart(slot.getWindowStart());
+			mapper.getBreakEven(sellOption).setWindowSize(slot.getWindowSize());
+			mapper.getBreakEven(sellOption).setWindowSizeUnits(slot.getWindowSizeUnits());
+			mapper.getChangable(sellOption).setWindowStart(slot.getWindowStart());
+			mapper.getChangable(sellOption).setWindowSize(slot.getWindowSize());
+			mapper.getChangable(sellOption).setWindowSizeUnits(slot.getWindowSizeUnits());
+		}
 		return slot;
 
+	}
+
+	private VesselEvent getOrCreate(final VesselEventOption vesselEventOption) {
+		final VesselEvent original = mapper.getOriginal(vesselEventOption);
+		if (original != null) {
+			return original;
+		}
+		final VesselEvent newVesselEvent = AnalyticsBuilder.makeVesselEvent(vesselEventOption, scenarioModel);
+
+		mapper.addMapping(vesselEventOption, newVesselEvent);
+
+		return newVesselEvent;
 	}
 
 	private DischargeSlot getOrCreate(final SellOption sellOption) {
@@ -341,10 +368,14 @@ public class BaseCaseToScheduleSpecification {
 			return original;
 		}
 		final DischargeSlot dischargeSlot_original = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.ORIGINAL_SLOT);
-		final DischargeSlot dischargeSlot_breakEven = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT);
-		final DischargeSlot dischargeSlot_changeable = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT);
 
-		mapper.addMapping(sellOption, dischargeSlot_original, dischargeSlot_breakEven, dischargeSlot_changeable);
+		if (mapper.isCreateBEOptions()) {
+			final DischargeSlot dischargeSlot_breakEven = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT);
+			final DischargeSlot dischargeSlot_changeable = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT);
+			mapper.addMapping(sellOption, dischargeSlot_original, dischargeSlot_breakEven, dischargeSlot_changeable);
+		} else {
+			mapper.addMapping(sellOption, dischargeSlot_original, null, null);
+		}
 
 		return dischargeSlot_original;
 	}
@@ -356,9 +387,13 @@ public class BaseCaseToScheduleSpecification {
 			return original;
 		}
 		final LoadSlot loadSlot_original = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.ORIGINAL_SLOT);
-		final LoadSlot loadSlot_breakEven = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT);
-		final LoadSlot loadSlot_changeable = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT);
-		mapper.addMapping(buyOption, loadSlot_original, loadSlot_breakEven, loadSlot_changeable);
+		if (mapper.isCreateBEOptions()) {
+			final LoadSlot loadSlot_breakEven = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT);
+			final LoadSlot loadSlot_changeable = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT);
+			mapper.addMapping(buyOption, loadSlot_original, loadSlot_breakEven, loadSlot_changeable);
+		} else {
+			mapper.addMapping(buyOption, loadSlot_original, null, null);
+		}
 		return loadSlot_original;
 	}
 

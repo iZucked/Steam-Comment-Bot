@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -316,8 +317,8 @@ public class EMFUtils {
 
 	// Examine models for references to elements not contained in the root tree. Returns true if all elements are contained. Mainly useful for debugging.
 	public static boolean checkValidContainment(final EObject root) {
-		final Set<EObject> containedElements = new HashSet<>();
 		final Set<EObject> referredToElements = new HashSet<>();
+		final Set<EObject> containedElements = new HashSet<>();
 
 		containedElements.add(root);
 		final TreeIterator<EObject> itr = root.eAllContents();
@@ -355,6 +356,8 @@ public class EMFUtils {
 			for (final EObject obj : referredToElements) {
 				final Collection<Setting> settings = findAll.get(obj);
 				for (final Setting s : settings) {
+					EStructuralFeature eStructuralFeature = s.getEStructuralFeature();
+					EObject eObject = s.getEObject();
 					final int ii = 0;
 				}
 			}
