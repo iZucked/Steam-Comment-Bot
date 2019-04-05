@@ -142,6 +142,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 
 						final boolean slotIsOptional = modelSlot.isOptional();
 						final boolean slotIsLocked = modelSlot.isLocked();
+						final boolean slotIsCancelled = modelSlot.isCancelled();
 						final boolean isSpotSlot = (modelSlot instanceof SpotSlot);
 						final ILoadPriceCalculator priceCalculator = loadOption.getLoadPriceCalculator();
 						final int cargoCVValue = loadOption.getCargoCVValue();
@@ -158,7 +159,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 
 							// Convert to FOB Purchase slot
 							alternativeSlot = builder.createLoadSlot(id, loadOption.getPort(), baseTimeWindow, minVolume, maxVolume, priceCalculator, cargoCVValue, loadSlot.getSlotOrDelegateDuration(),
-									false, true, IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, slotIsLocked, isSpotSlot, loadOption.isVolumeSetInM3());
+									false, true, IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, slotIsLocked, isSpotSlot, loadOption.isVolumeSetInM3(), slotIsCancelled);
 							generatedOptions.add(alternativeSlot);
 
 							// Create a fake model object to add in here;
@@ -197,7 +198,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 
 							final ITimeWindow window = TimeWindowMaker.createInclusiveExclusive(currentWindow.getInclusiveStart(), currentWindow.getExclusiveEnd() + shippingHours, 0, false);
 							alternativeSlot = builder.createDESPurchaseLoadSlot(id, loadOption.getPort(), window, minVolume, maxVolume, priceCalculator, cargoCVValue, loadSlot.getSlotOrDelegateDuration(),
-									IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, slotIsLocked, isSpotSlot, loadOption.isVolumeSetInM3());
+									IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, slotIsLocked, isSpotSlot, loadOption.isVolumeSetInM3(), slotIsCancelled);
 
 							generatedOptions.add(alternativeSlot);
 

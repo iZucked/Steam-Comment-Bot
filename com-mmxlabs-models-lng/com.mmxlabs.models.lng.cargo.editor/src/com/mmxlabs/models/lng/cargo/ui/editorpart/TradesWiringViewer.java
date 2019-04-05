@@ -83,6 +83,8 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -1652,7 +1654,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			{
 				// Address new A -> B wiring
 				if (dischargeSide != null && dischargeSide.dischargeSlot != null) {
-					if (loadSide.loadSlot.isLocked() || dischargeSide.dischargeSlot.isLocked()) {
+					if (loadSide.loadSlot.isLocked() || dischargeSide.dischargeSlot.isLocked() || loadSide.loadSlot.isCancelled() || dischargeSide.dischargeSlot.isCancelled()) {
 						// Slots are not permitted to be wired together
 						return;
 					}

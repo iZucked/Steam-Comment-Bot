@@ -354,13 +354,13 @@ public interface ISchedulerBuilder {
 	@NonNull
 	ILoadSlot createLoadSlot(@NonNull String id, @NonNull IPort port, @NonNull ITimeWindow window, long minVolume, long maxVolume, @NonNull ILoadPriceCalculator priceCalculator, int cargoCVValue,
 			int durationHours, boolean cooldownSet, boolean cooldownForbidden, int pricingDate, @NonNull PricingEventType pricingEvent, boolean slotIsOptional, boolean slotIsLocked,
-			boolean isSpotMarketSlot, boolean isVolumeLimitInM3);
+			boolean isSpotMarketSlot, boolean isVolumeLimitInM3, boolean isCancelled);
 
 	/**
 	 */
 	@NonNull
 	ILoadOption createDESPurchaseLoadSlot(String id, @Nullable IPort port, ITimeWindow window, long minVolume, long maxVolume, @NonNull ILoadPriceCalculator priceCalculator, int cargoCVValue,
-			int durationInHours, int pricingDate, @NonNull PricingEventType pricingEvent, boolean slotIsOptional, boolean slotIslocked, boolean isSpotMarketSlot, boolean isVolumeLimitInM3);
+			int durationInHours, int pricingDate, @NonNull PricingEventType pricingEvent, boolean slotIsOptional, boolean slotIslocked, boolean isSpotMarketSlot, boolean isVolumeLimitInM3, boolean slotIsLocked);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected to be assigned to a cargo.
@@ -379,7 +379,7 @@ public interface ISchedulerBuilder {
 	@NonNull
 	IDischargeSlot createDischargeSlot(String id, @NonNull IPort port, @NonNull ITimeWindow window, long minVolumeInM3, long maxVolumeInM3, long minCvValue, long maxCvValue,
 			@NonNull ISalesPriceCalculator pricePerMMBTu, int durationHours, int pricingDate, @NonNull PricingEventType pricingEvent, boolean optional, boolean isLockedSlot, boolean isSpotMarketSlot,
-			boolean isVolumeLimitInM3);
+			boolean isVolumeLimitInM3, boolean isCancelledSlot);
 
 	/**
 	 * 
@@ -395,7 +395,7 @@ public interface ISchedulerBuilder {
 	@NonNull
 	IDischargeOption createFOBSaleDischargeSlot(@NonNull String id, @Nullable IPort port, @NonNull ITimeWindow window, long minVolume, long maxVolume, long minCvValue, long maxCvValue,
 			@NonNull ISalesPriceCalculator priceCalculator, int durationInHours, int pricingDate, PricingEventType pricingEvent, boolean slotIsOptional, boolean slotIsLocked, boolean isSpotMarketSlot,
-			boolean isVolumeLimitInM3);
+			boolean isVolumeLimitInM3, boolean slotIsCancelled);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the data providers. However, the builder will own them until then. Dispose should selectively clean these

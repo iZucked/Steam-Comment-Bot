@@ -273,15 +273,16 @@ public class EObjectTableViewer extends GridTreeViewer {
 					// Hook our control listener into the cell editor
 					// Note - SG: This looks like we could have used a CellEditorActionHandler, but I could not get it working, so lifted the salient pieces.
 					final Control control = cellEditor.getControl();
-
-					// Remove existing listener references.
-					control.removeListener(SWT.Activate, controlListener);
-					control.removeListener(SWT.Deactivate, controlListener);
-
-					controlToEditor.put(control, cellEditor);
-
-					control.addListener(SWT.Activate, controlListener);
-					control.addListener(SWT.Deactivate, controlListener);
+					if(control != null) {
+						// Remove existing listener references.
+						control.removeListener(SWT.Activate, controlListener);
+						control.removeListener(SWT.Deactivate, controlListener);
+	
+						controlToEditor.put(control, cellEditor);
+	
+						control.addListener(SWT.Activate, controlListener);
+						control.addListener(SWT.Deactivate, controlListener);
+					}
 				}
 				return cellEditor;
 			}

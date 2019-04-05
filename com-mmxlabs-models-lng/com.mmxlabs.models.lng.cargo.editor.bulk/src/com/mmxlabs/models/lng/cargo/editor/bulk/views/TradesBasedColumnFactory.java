@@ -48,6 +48,7 @@ import com.mmxlabs.models.ui.tabular.columngeneration.IColumnFactory;
 import com.mmxlabs.models.ui.tabular.columngeneration.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.DateTimeAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.HoursSingleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
@@ -392,6 +393,12 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			final StringAttributeManipulator rendMan = new StringAttributeManipulator(CargoPackage.Literals.SLOT__CN, editingDomain);
 			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "CN", "Purchase CN", ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
 					rendMan, rendMan, "Purchase CN", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+		}
+			break;
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-cancelled": {
+			final BooleanFlagAttributeManipulator rendMan = new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Cancelled(), editingDomain);
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Cancelled", "Purchase is cancelled", ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
+					rendMan, rendMan, "Cancelled", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-restrictions": {
@@ -824,6 +831,11 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					rendMan, "Sales CN", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 		}
 			break;
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-cancelled": {
+			final BooleanFlagAttributeManipulator rendMan = new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Cancelled(), editingDomain);
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Cancelled", "Sale is cancelled", ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
+					rendMan, rendMan, "Cancelled", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
+		}
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-restrictions": {
 
 			columnManager.registerColumn(REPORT_TYPE, new EmfBlockColumnFactory() {

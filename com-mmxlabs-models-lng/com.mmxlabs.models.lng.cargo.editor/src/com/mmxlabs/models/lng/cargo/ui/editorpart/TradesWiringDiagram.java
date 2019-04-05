@@ -251,14 +251,14 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			final float startMid = terminalPositions.get(sortedSource);
 			graphics.setLineDash(null);
 			graphics.setForeground(Black);
-			if (row.loadSlot != null && row.loadSlot.getCargo() == null && row.loadSlot.isLocked()) {
+			if (row.loadSlot != null && row.loadSlot.getCargo() == null && row.loadSlot.isLocked()) {// && row.loadSlot.isCancelled()) {
 				// Draw wire - offset by ca.x to as x pos is relative to left hand side
 				final Path path = makeConnector(e.display, ca.x + 1.5f * terminalSize, startMid, ca.x + ca.width / 2 - 4, startMid);
 				graphics.drawPath(path);
 				path.dispose();
 				graphics.setLineDash(null);
 			}
-			if (row.dischargeSlot != null && row.dischargeSlot.getCargo() == null && row.dischargeSlot.isLocked()) {
+			if (row.dischargeSlot != null && row.dischargeSlot.getCargo() == null && row.dischargeSlot.isLocked()) {// && row.dischargeSlot.isCancelled()) {
 				// Draw wire - offset by ca.x to as x pos is relative to left hand side
 				final Path path = makeConnector(e.display, ca.x + ca.width / 2 + 4, startMid, ca.x + ca.width - 1.5f * terminalSize, startMid);
 				graphics.drawPath(path);
@@ -302,21 +302,30 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 			final RowData row = root.getRows().get(i);
 			// Draw line for keep-open positions
-			if (row.loadSlot != null && row.loadSlot.getCargo() == null && row.loadSlot.isLocked()) {
+			if (row.loadSlot != null && row.loadSlot.getCargo() == null && row.loadSlot.isLocked()) {// && row.loadSlot.isCancelled()) {
 				drawCross(true, Black, ca, graphics, midpoint);
 			}
 			// Draw left hand terminal
 			if (row.loadSlot != null) {
 				drawTerminal(true, row.loadSlot.isDESPurchase(), row.loadTerminalColour, row.loadSlot.isOptional(), row.loadSlot instanceof SpotSlot, ca, graphics, midpoint);
 			}
+			// Draw line for cancelled positions
+			if (row.loadSlot != null && row.loadSlot.isCancelled()) {
+				drawDiagonalCross(true, Black, ca, graphics, midpoint);
+			}
+			
 			graphics.setLineWidth(linewidth);
 			// Draw right hand terminal
-			if (row.dischargeSlot != null && row.dischargeSlot.getCargo() == null && row.dischargeSlot.isLocked()) {
+			if (row.dischargeSlot != null && row.dischargeSlot.getCargo() == null && row.dischargeSlot.isLocked()) {// && row.dischargeSlot.isCancelled()) {
 				drawCross(false, Black, ca, graphics, midpoint);
 			}
 			// Draw line for keep-open positions
 			if (row.dischargeSlot != null) {
 				drawTerminal(false, !row.dischargeSlot.isFOBSale(), row.dischargeTerminalColour, row.dischargeSlot.isOptional(), row.dischargeSlot instanceof SpotSlot, ca, graphics, midpoint);
+			}
+			// Draw right hand terminal
+			if (row.dischargeSlot != null && row.dischargeSlot.isCancelled()) {
+				drawDiagonalCross(false, Black, ca, graphics, midpoint);
 			}
 			rawI++;
 		}
@@ -376,6 +385,26 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		graphics.setForeground(terminalColour);
 		graphics.setBackground(terminalColour);
 		graphics.drawLine(x, y, x, y + terminalSize2);
+	}
+	
+	// X - cross
+	private void drawDiagonalCross(boolean isLeft, Color terminalColour, final Rectangle ca, final GC graphics, final float midpoint) {
+
+		graphics.setLineWidth(2);
+		int extraRadius = 1;
+		int terminalSize2 = terminalSize - 2;
+		int x = 0;
+		if (isLeft) {
+			x = ca.x + terminalSize + extraRadius;
+		} else {
+			x = ca.x + ca.width - 2 * terminalSize + extraRadius;
+		}
+		int y = (int) (midpoint - (terminalSize) / 2 - extraRadius / 2);
+
+		graphics.setForeground(terminalColour);
+		graphics.setBackground(terminalColour);
+		graphics.drawLine(x, y, x + terminalSize2 + extraRadius, y + terminalSize2 + extraRadius);
+		graphics.drawLine(x, y + terminalSize2+ extraRadius, x + terminalSize2 + extraRadius, y );
 	}
 
 	public Rectangle getCanvasClientArea() {

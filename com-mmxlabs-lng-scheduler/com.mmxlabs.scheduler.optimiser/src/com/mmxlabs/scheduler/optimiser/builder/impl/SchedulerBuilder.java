@@ -443,11 +443,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	public ILoadSlot createLoadSlot(final @NonNull String id, final @NonNull IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
 			final ILoadPriceCalculator loadContract, final int cargoCVValue, final int durationHours, final boolean cooldownSet, final boolean cooldownForbidden, final int pricingDate,
-			final PricingEventType pricingEvent, final boolean optional, final boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3) {
+			final PricingEventType pricingEvent, final boolean optional, final boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3, final boolean cancelled) {
 
+		boolean fooLocked = locked || cancelled;
+		
 		final LoadSlot slot = new LoadSlot(id, port, window, isVolumeLimitInM3, minVolumeInM3, maxVolumeInM3, loadContract, cargoCVValue, cooldownSet, cooldownForbidden);
 
-		final ISequenceElement element = configureLoadOption(slot, minVolumeInM3, maxVolumeInM3, loadContract, cargoCVValue, pricingDate, pricingEvent, optional, locked, isSpotMarketSlot,
+		final ISequenceElement element = configureLoadOption(slot, minVolumeInM3, maxVolumeInM3, loadContract, cargoCVValue, pricingDate, pricingEvent, optional, fooLocked, isSpotMarketSlot,
 				isVolumeLimitInM3);
 
 		elementDurationsProvider.setElementDuration(element, durationHours);
@@ -461,14 +463,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	public ILoadOption createDESPurchaseLoadSlot(final String id, @Nullable IPort port, final ITimeWindow window, final long minVolume, final long maxVolume,
 			final ILoadPriceCalculator priceCalculator, final int cargoCVValue, final int durationHours, final int pricingDate, final PricingEventType pricingEvent, final boolean slotIsOptional,
-			final boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3) {
+			final boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3, final boolean cancelled) {
 
 		if (port == null) {
 			port = ANYWHERE;
 		}
+		
+		boolean fooLocked = locked || cancelled;
 
 		final LoadOption slot = new LoadOption(id, port, window, isVolumeLimitInM3, minVolume, maxVolume, priceCalculator, cargoCVValue);
-		final ISequenceElement element = configureLoadOption(slot, minVolume, maxVolume, priceCalculator, cargoCVValue, pricingDate, pricingEvent, slotIsOptional, locked, isSpotMarketSlot,
+		final ISequenceElement element = configureLoadOption(slot, minVolume, maxVolume, priceCalculator, cargoCVValue, pricingDate, pricingEvent, slotIsOptional, fooLocked, isSpotMarketSlot,
 				isVolumeLimitInM3);
 
 		elementDurationsProvider.setElementDuration(element, durationHours);
@@ -523,17 +527,18 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	public IDischargeOption createFOBSaleDischargeSlot(final String id, @Nullable IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final long minCvValue,
 			final long maxCvValue, final ISalesPriceCalculator priceCalculator, final int durationHours, final int pricingDate, final PricingEventType pricingEvent, final boolean slotIsOptional,
-			final boolean slotIsLocked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3) {
+			final boolean slotIsLocked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3, final boolean slotIsCancelled) {
 
 		if (port == null) {
 			port = ANYWHERE;
 		}
 		assert port != null;
+		boolean locked = slotIsLocked || slotIsCancelled;
 
 		final DischargeOption slot = new DischargeOption(id, port, window, isVolumeLimitInM3, minVolume, maxVolume, minCvValue, maxCvValue, priceCalculator);
 		slot.setPricingDate(pricingDate);
 
-		final ISequenceElement element = configureDischargeOption(slot, minVolume, maxVolume, minCvValue, maxCvValue, priceCalculator, pricingDate, pricingEvent, slotIsOptional, slotIsLocked,
+		final ISequenceElement element = configureDischargeOption(slot, minVolume, maxVolume, minCvValue, maxCvValue, priceCalculator, pricingDate, pricingEvent, slotIsOptional, locked,
 				isSpotMarketSlot, isVolumeLimitInM3);
 
 		elementDurationsProvider.setElementDuration(element, durationHours);
@@ -591,12 +596,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	public IDischargeSlot createDischargeSlot(final String id, @NonNull final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final long minCvValue,
 			final long maxCvValue, final ISalesPriceCalculator pricePerMMBTu, final int durationHours, final int pricingDate, final PricingEventType pricingEvent, final boolean optional,
-			final boolean isLockedSlot, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3) {
+			final boolean isLockedSlot, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3, final boolean isCancelledSlot) {
 
 		final DischargeSlot slot = new DischargeSlot(id, port, window, isVolumeLimitInM3, minVolumeInM3, maxVolumeInM3, pricePerMMBTu, minCvValue, maxCvValue);
 		slot.setPricingDate(pricingDate);
+		boolean locked = isLockedSlot || isCancelledSlot;
 
-		final ISequenceElement element = configureDischargeOption(slot, minVolumeInM3, maxVolumeInM3, minCvValue, maxCvValue, pricePerMMBTu, pricingDate, pricingEvent, optional, isLockedSlot,
+		final ISequenceElement element = configureDischargeOption(slot, minVolumeInM3, maxVolumeInM3, minCvValue, maxCvValue, pricePerMMBTu, pricingDate, pricingEvent, optional, locked,
 				isSpotMarketSlot, isVolumeLimitInM3);
 
 		elementDurationsProvider.setElementDuration(element, durationHours);
