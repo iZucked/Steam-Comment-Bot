@@ -144,11 +144,11 @@ public class SpotMarketTopLevelComposite extends DefaultTopLevelComposite {
 		}
 
 		// ... then default code for the rest
-		for (final var ref : eClass.getEAllReferences()) {
+		for (final EReference ref : eClass.getEAllReferences()) {
 			if (shouldDisplay(ref)) {
 				if (ref.isMany()) {
 					final List<?> values = (List<?>) object.eGet(ref);
-					for (final var value : values) {
+					for (final Object value : values) {
 						if (value instanceof EObject && !seenObjects.contains(value)) {
 							createChildArea(childReferences, root, object, parent, ref, (EObject) value);
 						}
