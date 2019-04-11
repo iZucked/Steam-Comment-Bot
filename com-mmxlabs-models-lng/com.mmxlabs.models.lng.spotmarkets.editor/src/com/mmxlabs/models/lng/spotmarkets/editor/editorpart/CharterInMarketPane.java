@@ -43,5 +43,7 @@ public class CharterInMarketPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Vessel", new SingleReferenceManipulator(SpotMarketsPackage.eINSTANCE.getCharterInMarket_Vessel(), getReferenceValueProviderCache(), getEditingDomain()));
 
 		addTypicalColumn("Count", new NumericAttributeManipulator(SpotMarketsPackage.eINSTANCE.getCharterInMarket_SpotCharterCount(), getEditingDomain()));
+		
+		defaultSetTitle("Charter in");
 	}
 }

@@ -31,7 +31,7 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 
 	public VesselAvailabilityDetailComposite(Composite parent, int style, FormToolkit toolkit) {
 		super(parent, style, toolkit);
-	}
+	}	
 
 	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
 		return new DefaultDisplayCompositeLayoutProvider() {
@@ -66,7 +66,49 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 
 					return gd;
 				}
+				
+				if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER || feature == CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 
+					if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("After");
+						}
+						editor.setLabel(null);
+					} else {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("By");
+						}
+						editor.setLabel(null);
+					}
+
+					return gd;
+				}
+
+				if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__MIN_DURATION|| feature == CargoPackage.Literals.VESSEL_AVAILABILITY__MAX_DURATION) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+
+					if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__MIN_DURATION) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Duration");
+						}
+						editor.setLabel(null);
+					} else {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText(" up to ");
+						}
+						editor.setLabel(null);
+					}
+
+					return gd;
+				}
+
+				
+				
 				// Anything else needs to fill the space.
 				GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 				gd.horizontalSpan = 3;

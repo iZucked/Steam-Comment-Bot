@@ -67,10 +67,10 @@ public class CharterOutMarketPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Vessels", new MultipleReferenceManipulator(SpotMarketsPackage.eINSTANCE.getCharterOutMarket_Vessels(), getReferenceValueProviderCache(), getEditingDomain(),
 				MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
-		addTypicalColumn("Min Duration", new NumericAttributeManipulator(SpotMarketsPackage.eINSTANCE.getCharterOutMarket_MinCharterOutDuration(), getEditingDomain()));
+		addTypicalColumn("Min duration", new NumericAttributeManipulator(SpotMarketsPackage.eINSTANCE.getCharterOutMarket_MinCharterOutDuration(), getEditingDomain()));
 
-		addTypicalColumn("Lending Rate", new BasicAttributeManipulator(SpotMarketsPackage.eINSTANCE.getCharterOutMarket_CharterOutRate(), getEditingDomain()));
+		addTypicalColumn("Lending rate", new BasicAttributeManipulator(SpotMarketsPackage.eINSTANCE.getCharterOutMarket_CharterOutRate(), getEditingDomain()));
 
-		defaultSetTitle("Charter Out  Market");
+		defaultSetTitle("Charter out");
 	}
 }
