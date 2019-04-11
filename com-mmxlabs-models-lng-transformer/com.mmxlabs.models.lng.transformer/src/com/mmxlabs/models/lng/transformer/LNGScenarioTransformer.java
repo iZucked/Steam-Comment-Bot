@@ -984,19 +984,23 @@ public class LNGScenarioTransformer {
 		if (cargoModel != null) {
 			for (final LoadSlot loadSlot : cargoModel.getLoadSlots()) {
 				assert loadSlot != null;
-				final IPortSlot portSlot = modelEntityMap.getOptimiserObject(loadSlot, IPortSlot.class);
-				final IVessel vessel = allVessels.get(loadSlot.getNominatedVessel());
-				if (vessel != null && portSlot != null) {
-					builder.setNominatedVessel(portSlot, vessel);
+				if (loadSlot.isDESPurchase()) {
+					final IPortSlot portSlot = modelEntityMap.getOptimiserObject(loadSlot, IPortSlot.class);
+					final IVessel vessel = allVessels.get(loadSlot.getNominatedVessel());
+					if (vessel != null && portSlot != null) {
+						builder.setNominatedVessel(portSlot, vessel);
+					}
 				}
 			}
 
 			for (final DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
 				assert dischargeSlot != null;
-				final IPortSlot portSlot = modelEntityMap.getOptimiserObject(dischargeSlot, IPortSlot.class);
-				final IVessel vessel = allVessels.get(dischargeSlot.getNominatedVessel());
-				if (vessel != null && portSlot != null) {
-					builder.setNominatedVessel(portSlot, vessel);
+				if (dischargeSlot.isFOBSale()) {
+					final IPortSlot portSlot = modelEntityMap.getOptimiserObject(dischargeSlot, IPortSlot.class);
+					final IVessel vessel = allVessels.get(dischargeSlot.getNominatedVessel());
+					if (vessel != null && portSlot != null) {
+						builder.setNominatedVessel(portSlot, vessel);
+					}
 				}
 			}
 		}
