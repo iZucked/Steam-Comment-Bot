@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Models: LNG Transformer Tests
 Fragment-Host: com.mmxlabs.models.lng.transformer.extensions
 Bundle-SymbolicName: com.mmxlabs.models.lng.transformer.extensions.tests
-Bundle-Version: 4.6.12.RELEASE
+Bundle-Version: 4.6.13.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-10
 Require-Bundle: org.junit.jupiter.api;bundle-version="5.0.0",
