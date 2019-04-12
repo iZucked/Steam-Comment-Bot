@@ -57,7 +57,8 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 
 		final EClass eClass = object.eClass();
 		Composite containerComposite = toolkit.createComposite(this, SWT.NONE);
-		containerComposite.setLayout(new FillLayout());
+		// This next line breaks multi-edit.
+		// containerComposite.setLayout(new FillLayout());
 		final Group g = new Group(containerComposite, SWT.NONE);
 		toolkit.adapt(g);
 
@@ -88,18 +89,18 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		topLevel.display(dialogContext, root, object, range, dbc);
 
 		createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, right);
-//		int numChildren = createChildComposites(root, object, eClass, right);
-//		final Iterator<IDisplayComposite> children = childComposites.iterator();
-//		final Iterator<EObject> childObjectsItr = childObjects.iterator();
-//
-//		while (childObjectsItr.hasNext()) {
-//			EObject next = childObjectsItr.next();
-//			if (!(next instanceof BallastBonusContract)) {
-//				children.next().display(dialogContext, root, next, range, dbc);
-//			}
-//		}
-//
-//		// Overrides default layout factory so we get two columns columns
+		// int numChildren = createChildComposites(root, object, eClass, right);
+		// final Iterator<IDisplayComposite> children = childComposites.iterator();
+		// final Iterator<EObject> childObjectsItr = childObjects.iterator();
+		//
+		// while (childObjectsItr.hasNext()) {
+		// EObject next = childObjectsItr.next();
+		// if (!(next instanceof BallastBonusContract)) {
+		// children.next().display(dialogContext, root, next, range, dbc);
+		// }
+		// }
+		//
+		// // Overrides default layout factory so we get two columns columns
 		containerComposite.setLayout(new GridLayout(2, true));
 
 		Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
@@ -128,7 +129,7 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		super.displayValidationStatus(status);
 		ballastBonusComposite.displayValidationStatus(status);
 	}
-	
+
 	@Override
 	protected boolean shouldDisplay(final EReference ref) {
 		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselAvailability_BallastBonusContract();
