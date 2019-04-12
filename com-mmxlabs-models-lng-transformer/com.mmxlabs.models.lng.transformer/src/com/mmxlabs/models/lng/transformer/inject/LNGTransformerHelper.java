@@ -25,6 +25,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -79,12 +80,12 @@ public class LNGTransformerHelper {
 			}
 		}
 		if (userSettings.isGenerateCharterOuts()) {
-			if (LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION)) {
 				hints.add(HINT_GENERATE_CHARTER_OUTS);
 			}
 		}
 		if (userSettings.isWithCharterLength()) {
-			if (LicenseFeatures.isPermitted("features:charter-length")) {
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CHARTER_LENGTH)) {
 				hints.add(HINT_CHARTER_LENGTH);
 			}
 		}
@@ -93,7 +94,7 @@ public class LNGTransformerHelper {
 		} else if (userSettings.isWithSpotCargoMarkets()) {
 			hints.add(HINT_SPOT_CARGO_MARKETS);
 		}
-		if (LicenseFeatures.isPermitted("features:no-nominal-in-prompt")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT)) {
 			hints.add(HINT_NO_NOMINALS_IN_PROMPT);
 		}
 		// If HINT_KEEP_NOMINALS_IN_PROMPT is set, override the HINT_NO_NOMINALS_IN_PROMPT hint
@@ -103,7 +104,7 @@ public class LNGTransformerHelper {
 
 		// Too late for LNGScenarioRunner, but add to hints for modules in case it is needed in the future.
 		if (userSettings.isBuildActionSets()) {
-			if (LicenseFeatures.isPermitted("features:optimisation-actionset")) {
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET)) {
 				hints.add(HINT_OPTIMISE_BREAKDOWN);
 			}
 		}
@@ -223,16 +224,16 @@ public class LNGTransformerHelper {
 
 		return services;
 	}
-	
+
 	@NonNullByDefault
 	public static void updatHintsFromUserSettings(UserSettings userSettings, Collection<String> hints) {
- 
+
 		if (userSettings.isGenerateCharterOuts()) {
 			hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
 		} else {
 			hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
 		}
-		if (userSettings. isWithCharterLength()) {
+		if (userSettings.isWithCharterLength()) {
 			hints.add(LNGTransformerHelper.HINT_CHARTER_LENGTH);
 		} else {
 			hints.remove(LNGTransformerHelper.HINT_CHARTER_LENGTH);
