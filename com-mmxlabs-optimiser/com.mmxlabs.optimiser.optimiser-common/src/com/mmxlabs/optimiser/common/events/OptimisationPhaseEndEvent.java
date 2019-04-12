@@ -1,0 +1,14 @@
+package com.mmxlabs.optimiser.common.events;
+
+public class OptimisationPhaseEndEvent {
+
+	private final String phase;
+
+	public OptimisationPhaseEndEvent(final String phase) {
+		this.phase = phase;
+	}
+
+	public String getPhase() {
+		return phase;
+	}
+}

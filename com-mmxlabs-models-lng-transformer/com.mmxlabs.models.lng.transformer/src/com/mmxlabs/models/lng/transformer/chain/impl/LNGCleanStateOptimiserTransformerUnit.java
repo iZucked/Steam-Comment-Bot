@@ -75,6 +75,10 @@ public class LNGCleanStateOptimiserTransformerUnit implements ILNGStateTransform
 				final LNGDataTransformer dataTransformer = chainBuilder.getDataTransformer();
 
 				final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
+				
+				dataTransformer.getLifecyleManager().startPhase(stage);
+
+				
 				if (runnerHook != null) {
 					runnerHook.beginStage(stage);
 
@@ -86,6 +90,8 @@ public class LNGCleanStateOptimiserTransformerUnit implements ILNGStateTransform
 							return new MultiStateResult(preloadedResult, new HashMap<>());
 						} finally {
 							runnerHook.endStage(stage);
+							dataTransformer.getLifecyleManager().endPhase(stage);
+
 							monitor.done();
 						}
 					}
@@ -200,6 +206,9 @@ public class LNGCleanStateOptimiserTransformerUnit implements ILNGStateTransform
 						runnerHook.endStage(stage);
 					}
 
+					dataTransformer.getLifecyleManager().endPhase(stage);
+
+					
 					monitor.done();
 				}
 			}

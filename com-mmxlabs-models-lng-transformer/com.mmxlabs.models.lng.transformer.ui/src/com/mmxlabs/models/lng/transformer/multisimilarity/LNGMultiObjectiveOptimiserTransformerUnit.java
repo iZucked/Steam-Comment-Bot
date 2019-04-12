@@ -88,6 +88,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 			@Override
 			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				final LNGDataTransformer dataTransformer = chainBuilder.getDataTransformer();
+				dataTransformer.getLifecyleManager().startPhase(stage);
 
 				final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 				if (runnerHook != null) {
@@ -101,6 +102,8 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 							return new MultiStateResult(preloadedResult, new HashMap<>());
 						} finally {
 							runnerHook.endStage(stage);
+							dataTransformer.getLifecyleManager().endPhase(stage);
+
 							monitor.done();
 						}
 					}
@@ -208,6 +211,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 					if (runnerHook != null) {
 						runnerHook.endStage(stage);
 					}
+					dataTransformer.getLifecyleManager().endPhase(stage);
 
 					monitor.done();
 				}
@@ -230,6 +234,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 			@Override
 			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				final LNGDataTransformer dataTransformer = chainBuilder.getDataTransformer();
+				dataTransformer.getLifecyleManager().startPhase(stage);
 
 				final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 				if (runnerHook != null) {
@@ -243,6 +248,8 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 							return new MultiStateResult(preloadedResult, new HashMap<>());
 						} finally {
 							runnerHook.endStage(stage);
+							dataTransformer.getLifecyleManager().endPhase(stage);
+
 							monitor.done();
 						}
 					}
@@ -349,6 +356,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 					if (runnerHook != null) {
 						runnerHook.endStage(stage);
 					}
+					dataTransformer.getLifecyleManager().endPhase(stage);
 
 					monitor.done();
 				}

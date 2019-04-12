@@ -260,6 +260,7 @@ public class LNGTransformerModule extends AbstractModule {
 			return delegate;
 		} else {
 			final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
+			injector.injectMembers(cachingVoyagePlanOptimiser);
 			if (cacheMode == CacheMode.On) {
 				return cachingVoyagePlanOptimiser;
 			} else {

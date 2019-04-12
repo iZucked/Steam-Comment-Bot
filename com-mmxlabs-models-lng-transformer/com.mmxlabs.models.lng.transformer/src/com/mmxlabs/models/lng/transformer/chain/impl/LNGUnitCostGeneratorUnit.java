@@ -70,6 +70,7 @@ public class LNGUnitCostGeneratorUnit implements ILNGStateTransformerUnit {
 			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				this.initialSequencesContainer = initialSequences;
 				final LNGDataTransformer dataTransformer = chainBuilder.getDataTransformer();
+				dataTransformer.getLifecyleManager().startPhase(stage);
 
 				final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 				if (runnerHook != null) {
@@ -83,6 +84,8 @@ public class LNGUnitCostGeneratorUnit implements ILNGStateTransformerUnit {
 							return new MultiStateResult(preloadedResult, new HashMap<>());
 						} finally {
 							runnerHook.endStage(stage);
+							dataTransformer.getLifecyleManager().endPhase(stage);
+
 							monitor.done();
 						}
 					}
@@ -196,6 +199,7 @@ public class LNGUnitCostGeneratorUnit implements ILNGStateTransformerUnit {
 					if (runnerHook != null) {
 						runnerHook.endStage(stage);
 					}
+					dataTransformer.getLifecyleManager().endPhase(stage);
 
 					monitor.done();
 				}

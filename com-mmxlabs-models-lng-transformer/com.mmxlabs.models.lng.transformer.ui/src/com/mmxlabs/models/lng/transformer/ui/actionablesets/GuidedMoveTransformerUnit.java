@@ -80,6 +80,7 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 			@Override
 			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				final LNGDataTransformer dataTransformer = chainBuilder.getDataTransformer();
+				dataTransformer.getLifecyleManager().startPhase(stage);
 
 				final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 				if (runnerHook != null) {
@@ -93,6 +94,8 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 							return new MultiStateResult(preloadedResult, new HashMap<>());
 						} finally {
 							runnerHook.endStage(stage);
+							dataTransformer.getLifecyleManager().endPhase(stage);
+
 							monitor.done();
 						}
 					}
@@ -105,49 +108,49 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 
 				monitor.beginTask("", 100 * seeds.length);
 				try {
-						final LocalSearchOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
-						copyStageSettings.setSeed(seeds[0]);
+					final LocalSearchOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
+					copyStageSettings.setSeed(seeds[0]);
 
-						final int jobId = 0;
-							final GuidedMoveTransformerUnit t = new GuidedMoveTransformerUnit(dataTransformer, stage, jobId, userSettings, copyStageSettings,
-									initialSequences.getSequences(), inputState.getBestSolution().getFirst(), executorService, hints);
-							IMultiStateResult result = t.run(new SubProgressMonitor(monitor, 100));
+					final int jobId = 0;
+					final GuidedMoveTransformerUnit t = new GuidedMoveTransformerUnit(dataTransformer, stage, jobId, userSettings, copyStageSettings, initialSequences.getSequences(),
+							inputState.getBestSolution().getFirst(), executorService, hints);
+					IMultiStateResult result = t.run(new SubProgressMonitor(monitor, 100));
 
-//					final List<NonNullPair<ISequences, Map<String, Object>>> output = new LinkedList<>();
+					// final List<NonNullPair<ISequences, Map<String, Object>>> output = new LinkedList<>();
 
 					// Check monitor state
 					if (monitor.isCanceled()) {
 						throw new OperationCanceledException();
 					}
 
-//					// Sort results
-//					Collections.sort(output, new Comparator<NonNullPair<ISequences, Map<String, Object>>>() {
-//
-//						@Override
-//						public int compare(final NonNullPair<ISequences, Map<String, Object>> o1, final NonNullPair<ISequences, Map<String, Object>> o2) {
-//							final long a = getTotal(o1.getSecond());
-//							final long b = getTotal(o2.getSecond());
-//							return Long.compare(a, b);
-//						}
-//
-//						long getTotal(final Map<String, Object> m) {
-//							if (m == null) {
-//								return 0L;
-//							}
-//							final Map<String, Long> currentFitnesses = (Map<String, Long>) m.get(OptimiserConstants.G_AI_fitnessComponents);
-//							if (currentFitnesses == null) {
-//								return 0L;
-//							}
-//							long sum = 0L;
-//							for (final Long l : currentFitnesses.values()) {
-//								if (l != null) {
-//									sum += l.longValue();
-//								}
-//							}
-//							return sum;
-//
-//						}
-//					});
+					// // Sort results
+					// Collections.sort(output, new Comparator<NonNullPair<ISequences, Map<String, Object>>>() {
+					//
+					// @Override
+					// public int compare(final NonNullPair<ISequences, Map<String, Object>> o1, final NonNullPair<ISequences, Map<String, Object>> o2) {
+					// final long a = getTotal(o1.getSecond());
+					// final long b = getTotal(o2.getSecond());
+					// return Long.compare(a, b);
+					// }
+					//
+					// long getTotal(final Map<String, Object> m) {
+					// if (m == null) {
+					// return 0L;
+					// }
+					// final Map<String, Long> currentFitnesses = (Map<String, Long>) m.get(OptimiserConstants.G_AI_fitnessComponents);
+					// if (currentFitnesses == null) {
+					// return 0L;
+					// }
+					// long sum = 0L;
+					// for (final Long l : currentFitnesses.values()) {
+					// if (l != null) {
+					// sum += l.longValue();
+					// }
+					// }
+					// return sum;
+					//
+					// }
+					// });
 
 					if (result == null) {
 						throw new IllegalStateException("No results generated");
@@ -162,6 +165,7 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 					if (runnerHook != null) {
 						runnerHook.endStage(stage);
 					}
+					dataTransformer.getLifecyleManager().endPhase(stage);
 
 					monitor.done();
 				}
@@ -198,11 +202,11 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 
 			@Override
 			protected void configure() {
-//				binder().requireExplicitBindings();
+				// binder().requireExplicitBindings();
 
 			}
 		});
-		
+
 		ActionPlanOptimisationStage actionPlanOptimisationStage = ParametersFactory.eINSTANCE.createActionPlanOptimisationStage();
 		{
 			actionPlanOptimisationStage.setConstraintAndFitnessSettings(EcoreUtil.copy(stageSettings.getConstraintAndFitnessSettings()));

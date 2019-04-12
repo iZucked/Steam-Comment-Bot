@@ -130,6 +130,8 @@ public abstract class AbstractLNGOptimiserTransformerUnit<T extends ConstraintsA
 			@Override
 			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				final LNGDataTransformer dataTransformer = chainBuilder.getDataTransformer();
+				dataTransformer.getLifecyleManager().startPhase(stage);
+
 				final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 				if (runnerHook != null) {
 					runnerHook.beginStage(stage);
@@ -142,6 +144,8 @@ public abstract class AbstractLNGOptimiserTransformerUnit<T extends ConstraintsA
 							return new MultiStateResult(preloadedResult, new HashMap<>());
 						} finally {
 							runnerHook.endStage(stage);
+							dataTransformer.getLifecyleManager().endPhase(stage);
+
 							monitor.done();
 						}
 					}
@@ -154,6 +158,7 @@ public abstract class AbstractLNGOptimiserTransformerUnit<T extends ConstraintsA
 					if (runnerHook != null) {
 						runnerHook.endStage(stage);
 					}
+					dataTransformer.getLifecyleManager().endPhase(stage);
 
 					monitor.done();
 				}

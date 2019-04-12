@@ -32,6 +32,8 @@ import com.mmxlabs.models.lng.transformer.inject.modules.SequencesEvaluatorModul
 import com.mmxlabs.models.lng.transformer.inject.modules.SequencesEvaluatorModule.ISequenceEvaluator;
 import com.mmxlabs.models.lng.transformer.shared.impl.SharedDataTransformerService;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
+import com.mmxlabs.optimiser.common.events.OptimisationLifecycleManager;
+import com.mmxlabs.optimiser.common.events.OptimisationLifecycleModule;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
@@ -81,6 +83,7 @@ public class LNGDataTransformer {
 
 		// Prepare the main modules with the re-usable data for any further work.
 		modules.add(new PerChainUnitScopeModule());
+		modules.add(new OptimisationLifecycleModule());
 		modules.add(new LNGSharedDataTransformerModule(scenarioDataProvider, new SharedDataTransformerService()));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenarioDataProvider, userSettings, hints), services,
@@ -181,5 +184,9 @@ public class LNGDataTransformer {
 
 		final ISequenceEvaluator evaluator = initialSolutionInjector.getInstance(SequencesEvaluatorModule.ISequenceEvaluator.class);
 		return evaluator.eval(rawSequences);
+	}
+
+	public OptimisationLifecycleManager getLifecyleManager() {
+		return injector.getInstance(OptimisationLifecycleManager.class);
 	}
 }

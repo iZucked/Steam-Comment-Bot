@@ -97,6 +97,7 @@ public class LightWeightSchedulerOptimiserUnit {
 			@Override
 			public IMultiStateResult run(final SequencesContainer initialSequencesContainer, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				final LNGDataTransformer dataTransformer = chainBuilder.getDataTransformer();
+				dataTransformer.getLifecyleManager().startPhase(stage);
 
 				final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 				if (runnerHook != null) {
@@ -110,6 +111,8 @@ public class LightWeightSchedulerOptimiserUnit {
 							return new MultiStateResult(preloadedResult, new HashMap<>());
 						} finally {
 							runnerHook.endStage(stage);
+							dataTransformer.getLifecyleManager().endPhase(stage);
+
 							monitor.done();
 						}
 					}
@@ -132,7 +135,7 @@ public class LightWeightSchedulerOptimiserUnit {
 						if (seq == null) {
 							throw new InfeasibleSolutionException("No feasible solution found");
 						}
-						
+
 						result = new MultiStateResult(seq, new HashMap<>());
 					} else {
 						result = t.runAll(initialSequencesContainer.getSequences(), monitor);
@@ -156,6 +159,8 @@ public class LightWeightSchedulerOptimiserUnit {
 					if (runnerHook != null) {
 						runnerHook.endStage(stage);
 					}
+					dataTransformer.getLifecyleManager().endPhase(stage);
+					monitor.done();
 				}
 			}
 
