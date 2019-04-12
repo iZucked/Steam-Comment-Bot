@@ -122,7 +122,7 @@ public interface CharterOutEvent extends VesselEvent {
 	 * @see #setRepositioningFee(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCharterOutEvent_RepositioningFee()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='###,##0'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='##,###,##0'"
 	 * @generated
 	 */
 	int getRepositioningFee();
@@ -229,7 +229,7 @@ public interface CharterOutEvent extends VesselEvent {
 	 * @see #setBallastBonus(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCharterOutEvent_BallastBonus()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='##,###,##0'"
 	 * @generated
 	 */
 	int getBallastBonus();

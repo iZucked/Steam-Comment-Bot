@@ -4432,14 +4432,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		  (getCharterOutEvent_BallastBonus(),
 		   source,
 		   new String[] {
-			   "unit", "$"
+			   "unit", "$",
+			   "formatString", "##,###,##0"
 		   });
 		addAnnotation
 		  (getCharterOutEvent_RepositioningFee(),
 		   source,
 		   new String[] {
 			   "unit", "$",
-			   "formatString", "###,##0"
+			   "formatString", "##,###,##0"
 		   });
 		addAnnotation
 		  (getEndHeelOptions_MinimumEndHeel(),
