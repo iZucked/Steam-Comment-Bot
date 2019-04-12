@@ -260,8 +260,8 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/endAfter"/>
       <genFeatures createChild="false" propertyDescription="The vessel must have finished use by this date (UTC)"
           ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/endBy"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/startHeel"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/endHeel"/>
+      <genFeatures property="Readonly" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/startHeel"/>
+      <genFeatures property="Readonly" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/endHeel"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/forceHireCostOnlyEndRule"/>
       <genFeatures createChild="false" propertyDescription="The cost to reposition the vessel before use"
           ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/repositioningFee"/>

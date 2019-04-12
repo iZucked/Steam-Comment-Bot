@@ -68,6 +68,8 @@ public class VesselAvailabilityItemProvider
 			addEndAtPropertyDescriptor(object);
 			addEndAfterPropertyDescriptor(object);
 			addEndByPropertyDescriptor(object);
+			addStartHeelPropertyDescriptor(object);
+			addEndHeelPropertyDescriptor(object);
 			addForceHireCostOnlyEndRulePropertyDescriptor(object);
 			addRepositioningFeePropertyDescriptor(object);
 			addCharterContractPropertyDescriptor(object);
@@ -271,6 +273,50 @@ public class VesselAvailabilityItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Start Heel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addStartHeelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_startHeel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_startHeel_feature", "_UI_VesselAvailability_type"),
+				 CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL,
+				 false,
+				 false,
+				 false,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the End Heel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEndHeelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_endHeel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_endHeel_feature", "_UI_VesselAvailability_type"),
+				 CargoPackage.Literals.VESSEL_AVAILABILITY__END_HEEL,
+				 false,
+				 false,
+				 false,
+				 null,
 				 null,
 				 null));
 	}

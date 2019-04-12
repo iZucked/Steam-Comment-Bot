@@ -156,7 +156,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 
 	protected IDisplayComposite createChildArea(final ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
 			final EObject value) {
-		final String label = EditorUtils.unmangle(ref.getName());
+		final String label = EditorUtils.unmangleFeature(ref, object);
 		return createChildArea(childCompositeContainer, root, object, parent, ref, label, value);
 
 	}

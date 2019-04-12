@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortReferenceInlineEditor;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
@@ -95,10 +96,10 @@ public class VesselEventComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the port feature on VesselEvent
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_portEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_EVENT__PORT));
+		detailComposite.addInlineEditor(new TextualPortReferenceInlineEditor(CargoPackage.Literals.VESSEL_EVENT__PORT));
 	}
 	/**
 	 * Create the editor for the startAfter feature on VesselEvent

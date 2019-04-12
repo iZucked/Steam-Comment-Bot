@@ -10,8 +10,11 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
+import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 
 /**
@@ -32,10 +35,30 @@ public class EditorUtils {
 	 * @return
 	 */
 	public static ComposedAdapterFactory createAdapterFactory() {
-		final List<AdapterFactory> factories = new ArrayList<AdapterFactory>();
+		final List<AdapterFactory> factories = new ArrayList<>();
 		factories.add(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
 		factories.add(new ReflectiveItemProviderAdapterFactory());
 		return new ComposedAdapterFactory(factories);
+	}
+
+	public static String unmangleFeature(final EStructuralFeature feature, EObject input) {
+
+		// Note: Make sure the property type for the feature is not NONE in the gen model.
+
+		// This will fetch the property source of the input object
+		final IItemPropertySource inputPropertySource = (IItemPropertySource) FACTORY.adapt(input, IItemPropertySource.class);
+
+		// Iterate through the property descriptors to find a matching
+		// descriptor for the feature
+		for (final IItemPropertyDescriptor descriptor : inputPropertySource.getPropertyDescriptors(input)) {
+
+			if (feature.equals(descriptor.getFeature(input))) {
+				// Found match
+				return descriptor.getDisplayName(input);
+			}
+		}
+
+		return unmangle(feature.getName());
 	}
 
 	public static String unmangle(final EObject object) {
