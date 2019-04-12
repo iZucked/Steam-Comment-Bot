@@ -259,7 +259,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	@PerChainUnitScope
-	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final @NonNull VoyagePlanOptimiser delegate, @Named(SchedulerConstants.Key_VoyagePlanOptimiserCache) CacheMode cacheMode) {
+	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(Injector injector, final @NonNull VoyagePlanOptimiser delegate, @Named(SchedulerConstants.Key_VoyagePlanOptimiserCache) CacheMode cacheMode) {
 
 		if (cacheMode == CacheMode.Off || !hintEnableCache) {
 			return delegate;
