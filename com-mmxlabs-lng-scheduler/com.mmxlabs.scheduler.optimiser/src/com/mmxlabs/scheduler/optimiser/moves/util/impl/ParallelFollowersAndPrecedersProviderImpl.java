@@ -200,7 +200,7 @@ public class ParallelFollowersAndPrecedersProviderImpl implements IFollowersAndP
 
 	@NonNull
 	public static CleanableExecutorService createExecutorService(final int nThreads) {
-		return new SimpleCleanableExecutorService(Executors.newFixedThreadPool(nThreads));
+		return new SimpleCleanableExecutorService(Executors.newFixedThreadPool(nThreads), nThreads);
 	}
 
 	public static int getNumberOfAvailableCores() {

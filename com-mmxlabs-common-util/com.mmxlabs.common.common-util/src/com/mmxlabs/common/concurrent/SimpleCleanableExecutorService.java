@@ -18,9 +18,11 @@ import java.util.concurrent.TimeoutException;
 public class SimpleCleanableExecutorService implements CleanableExecutorService {
 	private final ExecutorService delegate;
 	private final List<Future<?>> futures = new LinkedList<>();
+	private int threads;
 
-	public SimpleCleanableExecutorService(final ExecutorService delegate) {
+	public SimpleCleanableExecutorService(final ExecutorService delegate, int threads) {
 		this.delegate = delegate;
+		this.threads = threads;
 	}
 
 	@Override
@@ -127,4 +129,7 @@ public class SimpleCleanableExecutorService implements CleanableExecutorService 
 		}
 	}
 
+	public int getNumThreads() {
+		return threads;
+	}
 }

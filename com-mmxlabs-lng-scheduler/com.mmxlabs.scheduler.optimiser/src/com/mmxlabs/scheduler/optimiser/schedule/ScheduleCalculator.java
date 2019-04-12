@@ -8,6 +8,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
+import java.sql.Wrapper;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,6 +18,9 @@ import java.util.Objects;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
@@ -29,6 +33,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.cache.CacheKey;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
@@ -36,9 +41,12 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.EvaluationMode;
+import com.mmxlabs.scheduler.optimiser.entities.impl.CargoPNLCacheRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -131,12 +139,27 @@ public class ScheduleCalculator {
 	@Inject
 	private IdleTimeChecker idleTimeChecker;
 
-	private final @NonNull AbstractCache<@NonNull Key, @Nullable VolumeAllocatedSequence> cache;
+	private final LoadingCache<Key, @Nullable VolumeAllocatedSequence> cache;
 
 	public ScheduleCalculator() {
-		cache = new LHMCache<>("ScheduleCalculatorCache", (key) -> {
-			return new Pair<>(key, schedule(key.resource, key.sequence, key.portTimesRecords, null));
-		}, 50_000);
+		System.out.println("New " + getClass().getName());
+
+		this.cache = CacheBuilder.newBuilder() //
+				.concurrencyLevel(10) // Pull from input
+				.maximumSize(50_000) //
+				.build(new CacheLoader<Key, @Nullable VolumeAllocatedSequence>() {
+
+					@Override
+					public @Nullable VolumeAllocatedSequence load(Key key) throws Exception {
+						return schedule(key.resource, key.sequence, key.portTimesRecords, null);
+						//
+					}
+
+				});
+
+		// cache = new LHMCache<>("ScheduleCalculatorCache", (key) -> {
+		// return new Pair<>(key, schedule(key.resource, key.sequence, key.portTimesRecords, null));
+		// }, 50_000);
 	}
 
 	@Nullable
@@ -171,7 +194,12 @@ public class ScheduleCalculator {
 			if (solution == null && cacheMode != CacheMode.Off && hintEnableCache) {
 
 				final Key key = new Key(resource, sequence, portTimeRecords);
-				volumeAllocatedSequence = cache.get(key);
+
+//				
+//				1) remove per-chain Wrapper
+//				2) fix between stage clean ip
+//				
+				volumeAllocatedSequence = cache.getUnchecked(key);
 
 				// Verification
 				if (cacheMode == CacheMode.Verify) {

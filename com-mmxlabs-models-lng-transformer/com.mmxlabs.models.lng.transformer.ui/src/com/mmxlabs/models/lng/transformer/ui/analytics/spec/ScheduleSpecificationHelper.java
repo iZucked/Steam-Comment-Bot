@@ -113,12 +113,15 @@ public class ScheduleSpecificationHelper {
 
 		final SolutionBuilderSettings solutionBuilderSettings = ParametersFactory.eINSTANCE.createSolutionBuilderSettings();
 		solutionBuilderSettings.setConstraintAndFitnessSettings(ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings());
+		
+		final int cores = LNGScenarioChainBuilder.getNumberOfAvailableCores();
 
 		final LNGScenarioToOptimiserBridge bridge = new LNGScenarioToOptimiserBridge(scenarioDataProvider, //
 				scenarioInstance, //
 				settings, //
 				solutionBuilderSettings, //
 				editingDomain, //
+				cores, //
 				null, //
 				OptimiserInjectorServiceMaker.begin()//
 						.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, new AbstractModule() {
@@ -184,12 +187,13 @@ public class ScheduleSpecificationHelper {
 
 			final SolutionBuilderSettings solutionBuilderSettings = ParametersFactory.eINSTANCE.createSolutionBuilderSettings();
 			solutionBuilderSettings.setConstraintAndFitnessSettings(ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings());
-
+			final int cores = LNGScenarioChainBuilder.getNumberOfAvailableCores();
 			final LNGScenarioToOptimiserBridge bridge = new LNGScenarioToOptimiserBridge(scenarioDataProvider, //
 					scenarioInstance, //
 					settings, //
 					solutionBuilderSettings, //
 					editingDomain, //
+					cores, //
 					null, //
 					OptimiserInjectorServiceMaker.begin()//
 							.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, new AbstractModule() {
@@ -252,7 +256,7 @@ public class ScheduleSpecificationHelper {
 			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 
 			final Injector injector = bridge.getInjector().createChildInjector(modules);
-			ExecutorService executor = LNGScenarioChainBuilder.createExecutorService();
+			ExecutorService executor = LNGScenarioChainBuilder.createExecutorService(cores);
 			try {
 				List<Future<?>> futures = new ArrayList<>(jobs.size());
 				List<Supplier<Command>> commandSuppliers = new LinkedList<>();

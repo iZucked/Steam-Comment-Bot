@@ -145,8 +145,9 @@ public class ScheduleTestModule extends AbstractModule {
 	}
 
 	@Provides
-	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final @NonNull VoyagePlanOptimiser delegate) {
-		final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
+	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(Injector injector, final @NonNull VoyagePlanOptimiser delegate) {
+		final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE, 1);
+		injector.injectMembers(cachingVoyagePlanOptimiser);
 		return cachingVoyagePlanOptimiser;
 	}
 

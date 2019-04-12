@@ -111,7 +111,7 @@ public class LNGScenarioToOptimiserBridge {
 	private PeriodExporter periodExporter;
 
 	public LNGScenarioToOptimiserBridge(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance, @NonNull final UserSettings userSettings,
-			@NonNull final SolutionBuilderSettings solutionBuilderSettings, @NonNull final EditingDomain editingDomain, @Nullable final Module bootstrapModule,
+			@NonNull final SolutionBuilderSettings solutionBuilderSettings, @NonNull final EditingDomain editingDomain, int concurrencyLevel, @Nullable final Module bootstrapModule,
 			@Nullable final IOptimiserInjectorService localOverrides, final boolean evaluationOnly, final @NonNull String @Nullable... initialHints) {
 		this.originalScenarioDataProvider = scenarioDataProvider;
 		this.scenarioInstance = scenarioInstance;
@@ -122,7 +122,7 @@ public class LNGScenarioToOptimiserBridge {
 
 		final Collection<@NonNull IOptimiserInjectorService> services = LNGTransformerHelper.getOptimiserInjectorServices(bootstrapModule, localOverrides);
 
-		originalDataTransformer = new LNGDataTransformer(this.originalScenarioDataProvider, userSettings, solutionBuilderSettings, hints, services);
+		originalDataTransformer = new LNGDataTransformer(this.originalScenarioDataProvider, userSettings, solutionBuilderSettings, concurrencyLevel, hints, services);
 
 		// TODO: These ideally should be final, but #overwrite currently needs these variables set.
 		this.optimiserEditingDomain = originalEditingDomain;
@@ -149,7 +149,7 @@ public class LNGScenarioToOptimiserBridge {
 			wrapper.append(IdentityCommand.INSTANCE);
 			optimiserEditingDomain.getCommandStack().execute(wrapper);
 
-			optimiserDataTransformer = new LNGDataTransformer(this.optimiserScenarioDataProvider, userSettings, solutionBuilderSettings, hints, services);
+			optimiserDataTransformer = new LNGDataTransformer(this.optimiserScenarioDataProvider, userSettings, solutionBuilderSettings, concurrencyLevel, hints, services);
 
 			periodExporter = new PeriodExporter(originalDataTransformer, optimiserDataTransformer, periodMapping);
 		}
@@ -358,7 +358,7 @@ public class LNGScenarioToOptimiserBridge {
 	public @NonNull LNGDataTransformer getDataTransformer() {
 		return optimiserDataTransformer;
 	}
-	
+
 	public @NonNull LNGDataTransformer getFullDataTransformer() {
 		return originalDataTransformer;
 	}

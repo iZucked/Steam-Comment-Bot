@@ -85,7 +85,7 @@ public class LNGScenarioRunnerCreator {
 	}
 
 	public static <T, E extends Exception> T withExecutorService(final CheckedFunction<@NonNull CleanableExecutorService, T, E> func) throws E {
-		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newSingleThreadExecutor());
+		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newSingleThreadExecutor(), 1);
 		try {
 			return func.apply(executorService);
 		} finally {
@@ -102,7 +102,7 @@ public class LNGScenarioRunnerCreator {
 
 	public static void withEvaluationRunner(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final OptimisationPlan optimisationPlan,
 			@NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, Exception> consumer) throws Exception {
-		
+
 		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
 				.withOptimisationPlan(optimisationPlan) //
 				.withOptimiserInjectorService(createITSService()) //

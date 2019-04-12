@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
@@ -14,6 +15,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @NonNullByDefault
 public final class SchedulerConstants {
+	public static final String CONCURRENCY_LEVEL = "concurrency-level";
 
 	// Caching constants - used in injection framework
 	public static final String Key_VoyagePlanOptimiserCache = "cache-voyage-plan-optimiser";

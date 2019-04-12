@@ -138,10 +138,14 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private @NonNull IScenarioDataProvider scenarioDataProvider;
 
+	private int concurrencyLevel;
+
 	/**
+	 * @param concurrencyLevel
 	 */
-	public LNGTransformerModule(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull UserSettings userSettings, @NonNull final Collection<@NonNull String> hints) {
+	public LNGTransformerModule(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull UserSettings userSettings, int concurrencyLevel, @NonNull final Collection<@NonNull String> hints) {
 		this.scenarioDataProvider = scenarioDataProvider;
+		this.concurrencyLevel = concurrencyLevel;
 		this.scenario = (LNGScenarioModel) scenarioDataProvider.getScenario();
 		this.userSettings = userSettings;
 		this.shippingOnly = hints.contains(LNGTransformerHelper.HINT_SHIPPING_ONLY);
@@ -164,6 +168,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_PORTFOLIO_BREAKEVEN)).toInstance(portfolioBreakEven);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS)).toInstance(withSpotCargoMarkets);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT)).toInstance(withNoNominalsInPrompt);
+		bind(int.class).annotatedWith(Names.named(SchedulerConstants.CONCURRENCY_LEVEL)).toInstance(concurrencyLevel);
 
 		// Default binding - no limit
 		bind(int.class).annotatedWith(Names.named(LNGScenarioTransformer.LIMIT_SPOT_SLOT_CREATION)).toInstance(-1);

@@ -46,7 +46,7 @@ public class LNGScenarioChainBuilder {
 	 * @param scenarioToOptimiserBridge
 	 * @param optimiserSettings
 	 * @param executorService
-	 *                                      Optional (for now) {@link CleanableExecutorService} for parallelisation
+	 *            Optional (for now) {@link CleanableExecutorService} for parallelisation
 	 * @param initialHints
 	 * @return
 	 */
@@ -128,10 +128,9 @@ public class LNGScenarioChainBuilder {
 		return createExecutorService(cores);
 	}
 
-
 	@NonNull
 	public static CleanableExecutorService createExecutorService(final int nThreads) {
-		return new SimpleCleanableExecutorService(NamedExecutorService.createFixedPool(nThreads));
+		return new SimpleCleanableExecutorService(NamedExecutorService.createFixedPool(nThreads), nThreads);
 	}
 
 	public static int getNumberOfAvailableCores() {

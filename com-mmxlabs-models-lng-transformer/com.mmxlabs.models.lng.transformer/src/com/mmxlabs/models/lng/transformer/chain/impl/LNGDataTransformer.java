@@ -52,30 +52,29 @@ import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModu
  */
 public class LNGDataTransformer {
 
-	@NonNull
-	private final Collection<@NonNull IOptimiserInjectorService> services;
+	private final @NonNull Collection<@NonNull IOptimiserInjectorService> services;
 
-	@NonNull
-	private final Collection<@NonNull String> hints;
+	private final @NonNull Collection<@NonNull String> hints;
 
-	@NonNull
-	private final Injector injector;
+	private final @NonNull Injector injector;
 
-	@Nullable
-	private IRunnerHook runnerHook;
+	private @Nullable IRunnerHook runnerHook;
 
-	private @NonNull final UserSettings userSettings;
+	private final @NonNull UserSettings userSettings;
 
-	private @NonNull final SolutionBuilderSettings solutionBuilderSettings;
+	private final @NonNull SolutionBuilderSettings solutionBuilderSettings;
 
 	private IMultiStateResult solutionBuilderResult;
 
+	private int concurrencyLevel;
+
 	@SuppressWarnings("null")
 	public LNGDataTransformer(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final UserSettings userSettings, @NonNull final SolutionBuilderSettings solutionBuilderSettings,
-			@NonNull final Collection<@NonNull String> hints, @NonNull final Collection<@NonNull IOptimiserInjectorService> services) {
+			int concurrencyLevel, @NonNull final Collection<@NonNull String> hints, @NonNull final Collection<@NonNull IOptimiserInjectorService> services) {
 
 		this.userSettings = userSettings;
 		this.solutionBuilderSettings = solutionBuilderSettings;
+		this.concurrencyLevel = concurrencyLevel;
 		this.hints = hints;
 		this.services = services;
 
@@ -86,7 +85,7 @@ public class LNGDataTransformer {
 		modules.add(new OptimisationLifecycleModule());
 		modules.add(new LNGSharedDataTransformerModule(scenarioDataProvider, new SharedDataTransformerService()));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenarioDataProvider, userSettings, hints), services,
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenarioDataProvider, userSettings, concurrencyLevel, hints), services,
 				IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
 
 		final Injector parentInjector = Guice.createInjector(modules);

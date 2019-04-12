@@ -181,7 +181,7 @@ public class HeadlessApplication implements IApplication {
 
 			// Create logging module
 			final int num_threads = getNumThreads(headlessParameters);
-			final @NonNull CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(num_threads));
+			final @NonNull CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(num_threads), num_threads);
 
 			final Map<String, LSOLogger> phaseToLoggerMap = new ConcurrentHashMap<>();
 
@@ -295,19 +295,19 @@ public class HeadlessApplication implements IApplication {
 				hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 				try {
-					
-					final LNGScenarioRunner runner =	LNGOptimisationBuilder.begin(scenarioDataProvider) //
-						.withRunnerHook(runnerHook) //
-						.withOptimiserInjectorService(localOverrides) //
-						.withHints(hints.toArray(new String[hints.size()])) //
-								.withOptimisationPlan(optimisationPlan) //
-								.withThreadCount(num_threads) //
-					.buildDefaultRunner() //
-					.getScenarioRunner();
-					
-//					final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, 
-//							scenarioDataProvider.getEditingDomain(), null, localOverrides,
-//							runnerHook, false, hints.toArray(new String[hints.size()]));
+
+					final LNGScenarioRunner runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+							.withRunnerHook(runnerHook) //
+							.withOptimiserInjectorService(localOverrides) //
+							.withHints(hints.toArray(new String[hints.size()])) //
+							.withOptimisationPlan(optimisationPlan) //
+							.withThreadCount(num_threads) //
+							.buildDefaultRunner() //
+							.getScenarioRunner();
+
+					// final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan,
+					// scenarioDataProvider.getEditingDomain(), null, localOverrides,
+					// runnerHook, false, hints.toArray(new String[hints.size()]));
 
 					// FIXME
 					// runner.init(monitor);

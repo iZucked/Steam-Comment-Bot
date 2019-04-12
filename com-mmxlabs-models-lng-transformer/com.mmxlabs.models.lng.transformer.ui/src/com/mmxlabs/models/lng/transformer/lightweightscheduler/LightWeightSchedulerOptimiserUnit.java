@@ -230,7 +230,7 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		final LightWeightOptimisationDataFactory scheduler = stage1Injector.getInstance(LightWeightOptimisationDataFactory.class);
 
-		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1));
+		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1), 1);
 
 		try {
 			return scheduler.createSlotPairingMatrix(pnlVessel, calculator, executorService, monitor);
@@ -292,7 +292,7 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		final LightWeightOptimisationDataFactory scheduler = stage1Injector.getInstance(LightWeightOptimisationDataFactory.class);
 
-		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1));
+		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1), 1);
 
 		try {
 			return scheduler.createLightWeightOptimisationData(pnlVessel, calculator, executorService, monitor);
@@ -314,7 +314,7 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		final LightWeightOptimisationDataFactory scheduler = stage1Injector.getInstance(LightWeightOptimisationDataFactory.class);
 
-		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1));
+		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1), 1);
 
 		try {
 			return scheduler.createNominalADP(pnlVessel, calculator, executorService, monitor);

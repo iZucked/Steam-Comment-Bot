@@ -290,11 +290,11 @@ public class ScenarioTools {
 	 * Creates a scenario with a charter out.
 	 * 
 	 */
-	public static @NonNull IScenarioDataProvider createCharterOutScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
-			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
-			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
-			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate,
-			final int charterOutTimeDays, final int heelLimit) {
+	public static @NonNull IScenarioDataProvider createCharterOutScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue,
+			final int travelTime, final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption,
+			final int ballastMaxSpeed, final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed,
+			final int ladenMinConsumption, final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate,
+			final int pilotLightRate, final int charterOutTimeDays, final int heelLimit) {
 
 		CustomScenarioCreator csc = new CustomScenarioCreator(0.0f);
 
@@ -370,7 +370,7 @@ public class ScenarioTools {
 		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 		userSettings.setGenerateCharterOuts(withCharterOutGeneration);
 		final Set<String> hints = LNGTransformerHelper.getHints(userSettings);
-		final LNGDataTransformer dataTransformer = new LNGDataTransformer(scenarioDataProvider, userSettings, ScenarioUtils.createDefaultSolutionBuilderSettings(), hints,
+		final LNGDataTransformer dataTransformer = new LNGDataTransformer(scenarioDataProvider, userSettings, ScenarioUtils.createDefaultSolutionBuilderSettings(), 1, hints,
 				LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null));
 
 		Injector evaluationInjector;

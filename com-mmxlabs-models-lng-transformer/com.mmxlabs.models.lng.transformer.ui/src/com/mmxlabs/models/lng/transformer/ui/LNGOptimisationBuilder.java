@@ -175,7 +175,7 @@ public class LNGOptimisationBuilder {
 				optimiserInjectorService = serviceMaker.make(optimiserInjectorService);
 			}
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = buildStandardBridge(localOptimisationPlan, evaluationOnly, hints);
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = buildStandardBridge(localOptimisationPlan, evaluationOnly, executorService.getNumThreads(), hints);
 
 			final IChainRunner chainRunner = buildStandardChain(scenarioToOptimiserBridge, localOptimisationPlan, executorService, hints);
 
@@ -211,9 +211,10 @@ public class LNGOptimisationBuilder {
 		return localUserSettings;
 	}
 
-	public LNGScenarioToOptimiserBridge buildStandardBridge(final OptimisationPlan optimisationPlan, final boolean evaluationOnly, final String... initialHints) {
+	public LNGScenarioToOptimiserBridge buildStandardBridge(final OptimisationPlan optimisationPlan, final boolean evaluationOnly, int concurrencyLevel, final String... initialHints) {
+
 		return new LNGScenarioToOptimiserBridge(scenarioDataProvider, scenarioInstance, optimisationPlan.getUserSettings(), optimisationPlan.getSolutionBuilderSettings(),
-				scenarioDataProvider.getEditingDomain(), extraModule, optimiserInjectorService, evaluationOnly, initialHints);
+				scenarioDataProvider.getEditingDomain(), concurrencyLevel, extraModule, optimiserInjectorService, evaluationOnly, initialHints);
 	}
 
 	public IChainRunner buildStandardChain(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, final OptimisationPlan optimisationPlan, final CleanableExecutorService executorService,
