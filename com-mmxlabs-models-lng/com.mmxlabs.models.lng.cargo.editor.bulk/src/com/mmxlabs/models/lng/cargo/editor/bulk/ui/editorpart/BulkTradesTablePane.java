@@ -118,6 +118,7 @@ import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesRowTransformerFacto
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.LoadPortTradesBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.PurchaseContractTradesBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.SalesContractTradesBasedFilterHandler;
+import com.mmxlabs.models.lng.cargo.editor.bulk.views.ShippedCargoBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.TimePeriodTradesBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.TradesBasedColumnFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.VesselsTradesBasedFilterHandler;
@@ -956,6 +957,10 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		}
 		{
 			final CargoTradesBasedFilterHandler handler = new CargoTradesBasedFilterHandler();
+			registerHandler(handler, true);
+		}
+		{
+			final ShippedCargoBasedFilterHandler handler = new ShippedCargoBasedFilterHandler();
 			registerHandler(handler, true);
 		}
 		{
