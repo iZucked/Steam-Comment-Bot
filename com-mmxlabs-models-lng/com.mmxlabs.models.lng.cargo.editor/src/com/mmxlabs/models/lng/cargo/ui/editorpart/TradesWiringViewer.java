@@ -244,6 +244,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private final TradesFilter tradesFilter = new TradesFilter();
 
 	private final TradesCargoFilter tradesCargoFilter = new TradesCargoFilter();
+	
+	private final ShippedCargoFilter shippedCargoFilter = new ShippedCargoFilter();
 
 	private final TimePeriodFilter monthFilter = new TimePeriodFilter();
 	private LocalDate earliest;
@@ -468,6 +470,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 				addFilter(tradesFilter);
 				addFilter(tradesCargoFilter);
+				addFilter(shippedCargoFilter);
 				addFilter(monthFilter);
 			}
 
@@ -1943,6 +1946,42 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	}
 
+	private enum ShippedCargoFilterOption {
+		NONE, SHIPPED, NON_SHIPPED, DES, FOB
+	}
+	
+	private class ShippedCargoFilter extends ViewerFilter {
+		private ShippedCargoFilterOption option = ShippedCargoFilterOption.NONE;
+
+		@Override
+		public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+			RowData row = null;
+			Cargo cargo = null;
+			CargoType cargoType = null;
+			if (element instanceof RowData) {
+				row = (RowData) element;
+				cargo = row.getCargo();
+				if (cargo != null) {
+					cargoType = cargo.getCargoType();
+				}
+			}
+			switch (option) {
+			case NONE:
+				return true;
+			case SHIPPED:
+				return cargo != null && cargoType == CargoType.FLEET;
+			case NON_SHIPPED:
+				return cargo != null && cargoType != CargoType.FLEET;
+			case DES:
+				return cargo != null && cargoType == CargoType.DES;
+			case FOB:
+				return cargo != null && cargoType == CargoType.FOB;
+			}
+			return false;
+		}
+	}
+
+	
 	private enum TimeFilterType {
 		NONE, YEARMONTH, PROMPT
 	}
@@ -2067,6 +2106,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				public void run() {
 					tradesFilter.clear();
 					tradesCargoFilter.option = CargoFilterOption.NONE;
+					shippedCargoFilter.option = ShippedCargoFilterOption.NONE;
 					monthFilter.type = TimeFilterType.NONE;
 					scenarioViewer.refresh(false);
 				}
@@ -2117,6 +2157,46 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			};
 			addActionToMenu(dmca, menu);
 
+			final DefaultMenuCreatorAction dmcaShippedCargos = new DefaultMenuCreatorAction("Shipped") {
+
+				@Override
+				protected void populate(final Menu menu) {
+					final Action cargoesAction = new Action("Shipped") {
+						@Override
+						public void run() {
+							shippedCargoFilter.option = ShippedCargoFilterOption.SHIPPED;
+							scenarioViewer.refresh(false);
+						}
+					};
+					final Action openAction = new Action("Non Shipped") {
+						@Override
+						public void run() {
+							shippedCargoFilter.option = ShippedCargoFilterOption.NON_SHIPPED;
+							scenarioViewer.refresh(false);
+						}
+					};
+					final Action longsAction = new Action("FOB") {
+						@Override
+						public void run() {
+							shippedCargoFilter.option = ShippedCargoFilterOption.FOB;
+							scenarioViewer.refresh(false);
+						}
+					};
+					final Action shortsAction = new Action("DES") {
+						@Override
+						public void run() {
+							shippedCargoFilter.option = ShippedCargoFilterOption.DES;
+							scenarioViewer.refresh(false);
+						}
+					};
+					addActionToMenu(cargoesAction, menu);
+					addActionToMenu(openAction, menu);
+					addActionToMenu(longsAction, menu);
+					addActionToMenu(shortsAction, menu);
+				}
+			};
+			addActionToMenu(dmcaShippedCargos, menu);			
+			
 			final DefaultMenuCreatorAction dmcaTimePeriod = new DefaultMenuCreatorAction("Months") {
 
 				@Override
