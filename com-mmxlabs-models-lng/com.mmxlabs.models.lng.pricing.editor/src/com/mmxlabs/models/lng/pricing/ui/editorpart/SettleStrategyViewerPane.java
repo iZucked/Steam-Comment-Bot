@@ -34,6 +34,6 @@ public class SettleStrategyViewerPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory, modelReference);
 
 		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), jointModelEditor.getEditingDomain()));
-		setTitle("Instrument", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
+		setTitle("Mechanism", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 }
