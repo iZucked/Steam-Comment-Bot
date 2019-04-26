@@ -27,6 +27,7 @@ import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
@@ -34,6 +35,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
@@ -53,9 +55,11 @@ import com.mmxlabs.models.lng.pricing.parseutils.OperatorNode;
 import com.mmxlabs.models.lng.pricing.parseutils.SCurveNode;
 import com.mmxlabs.models.lng.pricing.parseutils.ShiftNode;
 import com.mmxlabs.models.lng.pricing.parseutils.SplitNode;
+import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
@@ -67,6 +71,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.DealType;
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * Utility class to calculate schedule exposure to market indices. Provides static methods
@@ -87,22 +92,29 @@ public class Exposures {
 		BY_MONTH_NO_TOTAL, BY_MONTH, BY_DEALSET
 	}
 	
-	public static void calculateExposures(final @NonNull LNGScenarioModel scenarioModel, final @Nullable Schedule schedule) {
+	public static void calculateExposures(final @NonNull IScenarioDataProvider scenarioDataProvider, final @Nullable Schedule schedule) {
 		ServiceHelper.withOptionalServiceConsumer(IExposuresCustomiser.class, p -> {
 			if (p == null) {
-				calculateExposures(scenarioModel, schedule, new DefaultExposuresCustomiser());
+				calculateExposures(scenarioDataProvider, schedule, new DefaultExposuresCustomiser());
 			} else {
-				calculateExposures(scenarioModel, schedule, p);
+				calculateExposures(scenarioDataProvider, schedule, p);
 			}
 		});
 	}
 
-	public static void calculateExposures(final @NonNull LNGScenarioModel scenarioModel, final @Nullable Schedule schedule, final IExposuresCustomiser exposuresCustomiser) {
+	public static void calculateExposures(final @NonNull IScenarioDataProvider scenarioDataProvider, final @Nullable Schedule schedule,//
+			final IExposuresCustomiser exposuresCustomiser) {
 
 		if (schedule == null) {
 			return;
 		}
+		
+		final ModelMarketCurveProvider mmCurveProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.MARKET_CURVES, ModelMarketCurveProvider.class);
+		// TODO : call of getLinkedCurves
 
+		@NonNull
+		final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		
 		@NonNull
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
 		final LookupData lookupData = LookupData.createLookupData(pricingModel);
@@ -117,6 +129,17 @@ public class Exposures {
 				if (slot == null) {
 					continue;
 				}
+				
+				String priceExpression = "";
+				if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICE_EXPRESSION)) {
+					priceExpression = slot.getPriceExpression();
+				} else if (slot.eIsSet(CargoPackage.Literals.SPOT_SLOT__MARKET)){
+					SpotSlot ss = (SpotSlot) slot;
+					ss.getMarket();
+				}else {
+					priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot, slotAllocation);
+				}
+				Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
 
 				final boolean isPurchase = slot instanceof LoadSlot;
 				{
