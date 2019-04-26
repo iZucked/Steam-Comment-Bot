@@ -78,7 +78,7 @@ public class MultipleVesselAvailabilitiesConstraint extends AbstractModelMultiCo
 		if (target instanceof VesselAvailability) {
 			EObject container;
 			if (extraContext.isValidatingClone()) {
-				container = (CargoModel) target.eContainer();
+				container = target.eContainer();
 			} else {
 				container = extraContext.getContainer(target);
 			}
