@@ -709,6 +709,52 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PricingCalendarEntry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PricingCalendarEntryItemProvider pricingCalendarEntryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PricingCalendarEntry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPricingCalendarEntryAdapter() {
+		if (pricingCalendarEntryItemProvider == null) {
+			pricingCalendarEntryItemProvider = new PricingCalendarEntryItemProvider(this);
+		}
+
+		return pricingCalendarEntryItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PricingCalendar} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PricingCalendarItemProvider pricingCalendarItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PricingCalendar}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPricingCalendarAdapter() {
+		if (pricingCalendarItemProvider == null) {
+			pricingCalendarItemProvider = new PricingCalendarItemProvider(this);
+		}
+
+		return pricingCalendarItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.HolidayCalendarEntry} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -930,6 +976,8 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (bunkerFuelCurveItemProvider != null) bunkerFuelCurveItemProvider.dispose();
 		if (currencyCurveItemProvider != null) currencyCurveItemProvider.dispose();
 		if (marketIndexItemProvider != null) marketIndexItemProvider.dispose();
+		if (pricingCalendarEntryItemProvider != null) pricingCalendarEntryItemProvider.dispose();
+		if (pricingCalendarItemProvider != null) pricingCalendarItemProvider.dispose();
 		if (holidayCalendarEntryItemProvider != null) holidayCalendarEntryItemProvider.dispose();
 		if (holidayCalendarItemProvider != null) holidayCalendarItemProvider.dispose();
 		if (settleStrategyItemProvider != null) settleStrategyItemProvider.dispose();
