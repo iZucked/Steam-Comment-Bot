@@ -337,6 +337,18 @@
           label="Pricing Calendar Entry"
           targetEClass="com.mmxlabs.models.lng.pricing.PricingCalendarEntry">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.HolidayCalendar.defaultFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Holiday Calendar"
+          targetEClass="com.mmxlabs.models.lng.pricing.HolidayCalendar">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.HolidayCalendarEntry.defaultFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Holiday Calendar Entry"
+          targetEClass="com.mmxlabs.models.lng.pricing.HolidayCalendarEntry">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.componenthelpers">

@@ -7,9 +7,11 @@
  */
 package com.mmxlabs.models.lng.commercial.parseutils;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -18,6 +20,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -37,6 +40,10 @@ import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.HolidayCalendar;
+import com.mmxlabs.models.lng.pricing.MarketIndex;
+import com.mmxlabs.models.lng.pricing.PricingCalendar;
+import com.mmxlabs.models.lng.pricing.PricingCalendarEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.parser.Node;
@@ -130,16 +137,25 @@ public class Exposures {
 					continue;
 				}
 				
-				String priceExpression = "";
+				final String priceExpression;
 				if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICE_EXPRESSION)) {
 					priceExpression = slot.getPriceExpression();
-				} else if (slot.eIsSet(CargoPackage.Literals.SPOT_SLOT__MARKET)){
-					SpotSlot ss = (SpotSlot) slot;
-					ss.getMarket();
-				}else {
+				} else {
 					priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot, slotAllocation);
 				}
-				Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
+				final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
+				PricingCalendar pc = null;
+				HolidayCalendar hc = null;
+				
+				for (AbstractYearMonthCurve curve : curves) {
+					if (curve instanceof CommodityCurve) {
+						final CommodityCurve cc = (CommodityCurve) curve;
+						final MarketIndex mi = cc.getMarketIndex();
+						if (mi == null) continue;
+						pc = mi.getPricingCalendar();
+						hc = mi.getSettleCalendar();
+					}
+				}
 
 				final boolean isPurchase = slot instanceof LoadSlot;
 				{
@@ -155,7 +171,20 @@ public class Exposures {
 					physical.setVolumeUnit("mmBtu");
 					physical.setIndexName("Physical");
 					physical.setDate(YearMonth.from(sa.getSlotVisit().getStart().toLocalDate()));
-
+					
+					//
+					//
+					//
+					
+					List<PricingCalendarEntry> lPce = pc.getEntries().stream()//
+							.filter(e -> e.getMonth().equals(physical.getDate()))//
+							.collect(Collectors.toList());
+					if (lPce.size() == 1) {
+						int wd = getWorkingDays(lPce.get(0));
+						
+					}
+					
+					
 					slotAllocation.getExposures().add(physical);
 				}
 
@@ -189,6 +218,16 @@ public class Exposures {
 				}
 			}
 		}
+	}
+
+	private static int getWorkingDays(PricingCalendarEntry pricingCalendarEntry) {
+		int i = 0;
+		for (LocalDate c = pricingCalendarEntry.getStart(); c.isBefore(pricingCalendarEntry.getEnd().plusDays(1)); c = c.plusDays(1)) {
+			if (c.getDayOfWeek() != DayOfWeek.SATURDAY && c.getDayOfWeek() != DayOfWeek.SUNDAY) {
+				i += 1;
+			}
+		}
+		return i;
 	}
 
 	/**
@@ -763,3 +802,4 @@ public class Exposures {
 		return n;
 	}
 }
+
