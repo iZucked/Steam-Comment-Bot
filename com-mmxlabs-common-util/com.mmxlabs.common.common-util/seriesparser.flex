@@ -6,6 +6,7 @@ import java_cup.runtime.Symbol;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
+
 %%
 %public
 %class Lexer
@@ -38,7 +39,7 @@ import java_cup.runtime.ComplexSymbolFactory.Location;
       return symbolFactory.newSymbol(name, sym, left, right,val);
   }
   private void error(String message) {
-    System.out.println("Error at line "+(yyline+1)+", column "+(yycolumn+1)+" : "+message);
+    throw new com.mmxlabs.common.parser.series.GenericSeriesParsesException(message + " at column "+(yycolumn+1)+".");
   }
 %}
 

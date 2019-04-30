@@ -27,6 +27,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
+import com.mmxlabs.common.parser.series.GenericSeriesParsesException;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.UnknownSeriesException;
@@ -209,7 +210,7 @@ public class PriceExpressionUtils {
 				final IExpression<ISeries> expression = parser.parse(priceExpression);
 				parsed = expression.evaluate();
 
-			} catch (final UnknownSeriesException e) {
+			} catch (final UnknownSeriesException | GenericSeriesParsesException e) {
 				hints = e.getMessage();
 			} catch (final Exception e) {
 				final String operatorPattern = "([-/*+][-/*+]+)";
