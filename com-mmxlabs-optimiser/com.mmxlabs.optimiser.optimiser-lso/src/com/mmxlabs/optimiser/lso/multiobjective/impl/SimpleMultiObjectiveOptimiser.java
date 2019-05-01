@@ -299,6 +299,8 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		getFitnessEvaluator().setInitialSequences(currentRawSequences, fullSequences, evaluationState);
 		final long[] fitnesses = getFitnessesFromSequences(currentRawSequences, fullSequences, evaluationState);
 
+		// Reset archive
+		archive.clear();
 		// add to archive
 		if (archive.isEmpty()) {
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);

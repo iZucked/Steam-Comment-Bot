@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
+import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -45,6 +46,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.impl.ParallelOptimisationPlanExtender;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -529,11 +531,11 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "7") //
-				.withOptional(true) //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withOptional(false) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
-				.withOptional(true) //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.withOptional(false) //
 				.withCancellationFee("300000") //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
@@ -559,10 +561,56 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		}, null);
 
 	}
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testForcePromptNominalToOpen_InPrompt_MOO() throws Exception {
+		
+		// Create the required basic elements
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "200000", 0);
+		
+		// Construct the cargo scenario
+		
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withOptional(false) //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.withOptional(false) //
+				.withCancellationFee("300000") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+		
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2016, 12, 5));
+		
+		evaluateWithLSOTest(true, plan -> {
+			plan.getUserSettings().setSimilarityMode(SimilarityMode.ALL);
+			new ParallelOptimisationPlanExtender().modifyOptimisationPlan(plan);
+			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
+			// (Actually needs to be 1 to trigger the optimisation stage. This may cause the test to fail if the first move set finds a good solution)
+			ScenarioUtils.setLSOStageIterations(plan, 1);
+			ScenarioUtils.setHillClimbStageIterations(plan, 0);
+		}, null, scenarioRunner -> {
+			
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+			// Check cargoes removed
+			Assertions.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+		}, null);
+		
+	}
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testromptLockedNominalInPromptNotOpened() throws Exception {
+	public void testPromptLockedNominalInPromptNotOpened() throws Exception {
 
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
