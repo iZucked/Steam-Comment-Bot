@@ -18,6 +18,19 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 public class VesselAssignmentFormatter extends BaseFormatter {
+	
+	private final boolean useShortenedNames;
+	
+	public VesselAssignmentFormatter() {
+		super();
+		this.useShortenedNames = false;
+	}
+	
+	public VesselAssignmentFormatter(boolean useShortenedNames) {
+		super();
+		this.useShortenedNames = useShortenedNames;
+	}
+	
 	@Override
 	public String render(final Object object) {
 
@@ -74,7 +87,7 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 			return getSequenceLabel(sequence);
 		} else if (object instanceof Vessel) {
 			Vessel vessel = (Vessel) object;
-			return AssignmentLabelProvider.getLabelFor(vessel, true);
+			return AssignmentLabelProvider.getLabelFor(vessel, !useShortenedNames);
 		}
 
 
@@ -84,10 +97,14 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 	private String getSequenceLabel(final Sequence sequence) {
 		if (sequence.isSetCharterInMarket()) {
 			final CharterInMarket charterInMarket = sequence.getCharterInMarket();
-			return AssignmentLabelProvider.getLabelFor(charterInMarket, sequence.getSpotIndex(), true);
+			if (!useShortenedNames) {
+				return AssignmentLabelProvider.getLabelFor(charterInMarket, sequence.getSpotIndex(), true);
+			} else {
+				return AssignmentLabelProvider.getLabelFor(charterInMarket, false);
+			}
 		} else if (sequence.isSetVesselAvailability()) {
 			final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-			return AssignmentLabelProvider.getLabelFor(vesselAvailability);
+			return AssignmentLabelProvider.getLabelFor(vesselAvailability, !useShortenedNames);
 		}
 		return sequence.getName();
 	}

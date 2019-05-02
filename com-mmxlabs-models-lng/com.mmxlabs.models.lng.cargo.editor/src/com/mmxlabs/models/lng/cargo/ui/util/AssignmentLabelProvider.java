@@ -12,10 +12,14 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 public class AssignmentLabelProvider {
 
 	public static String getLabelFor(final VesselAvailability vesselAvailability) {
+		return getLabelFor(vesselAvailability, true);
+	}
+	
+	public static String getLabelFor(final VesselAvailability vesselAvailability, final boolean showVolume) {
 
 		final Vessel vessel = vesselAvailability.getVessel();
 		if (vessel != null) {
-			return String.format("%s (%dk)", vessel.getName(), vessel.getVesselOrDelegateCapacity() / 1000);
+			return getLabelFor(vessel, showVolume);
 		}
 		return "";
 	}
@@ -33,10 +37,14 @@ public class AssignmentLabelProvider {
 	}
 
 	public static String getLabelFor(final CharterInMarketOverride charterInMarketOverride) {
+		return getLabelFor(charterInMarketOverride, true);
+	}
+	
+	public static String getLabelFor(final CharterInMarketOverride charterInMarketOverride, boolean showVolume) {
 		
 		final CharterInMarket charterInMarket = charterInMarketOverride.getCharterInMarket();
 		if (charterInMarket != null) {
-			return getLabelFor(charterInMarket, charterInMarketOverride.getSpotIndex(), true) + " Override";
+			return getLabelFor(charterInMarket, charterInMarketOverride.getSpotIndex(), showVolume) + " Override";
 		}
 		return "";
 	}
@@ -58,5 +66,13 @@ public class AssignmentLabelProvider {
 		else {
 			return String.format("%s (%s)", charterInMarket.getName(), type);
 		}
+	}
+	
+	public static String getLabelFor(final CharterInMarket charterInMarket, boolean showVolume) {
+		Vessel vessel = charterInMarket.getVessel();
+		if (vessel != null) {
+			return getLabelFor(vessel, showVolume);
+		}
+		return "";
 	}
 }
