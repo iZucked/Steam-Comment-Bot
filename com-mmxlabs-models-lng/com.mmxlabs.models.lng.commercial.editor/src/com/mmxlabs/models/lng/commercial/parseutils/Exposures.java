@@ -172,10 +172,6 @@ public class Exposures {
 					physical.setIndexName("Physical");
 					physical.setDate(YearMonth.from(sa.getSlotVisit().getStart().toLocalDate()));
 					
-					//
-					//
-					//
-					
 					List<PricingCalendarEntry> lPce = pc.getEntries().stream()//
 							.filter(e -> e.getMonth().equals(physical.getDate()))//
 							.collect(Collectors.toList());
