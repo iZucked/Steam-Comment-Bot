@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.PromptToolbarEditor;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
@@ -123,6 +124,7 @@ public class Exposures {
 
 		@NonNull
 		final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		final LocalDate promptStart = scenarioModel.getPromptPeriodStart();
 		
 		@NonNull
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
@@ -161,24 +163,24 @@ public class Exposures {
 
 				final boolean isPurchase = slot instanceof LoadSlot;
 				{
-					final ExposureDetail physical = ScheduleFactory.eINSTANCE.createExposureDetail();
-
-					physical.setDealType(DealType.PHYSICAL);
-
 					SlotAllocation sa = exposuresCustomiser.getExposed(slotAllocation);
-					
-					physical.setVolumeInMMBTU((isPurchase ? 1.0 : -1.0) * sa.getEnergyTransferred());
-					physical.setVolumeInNativeUnits((isPurchase ? 1.0 : -1.0) * sa.getEnergyTransferred());
-					physical.setNativeValue((isPurchase ? -1.0 : 1.0) * sa.getVolumeValue());
-					physical.setVolumeUnit("mmBtu");
-					physical.setIndexName("Physical");
-					physical.setDate(YearMonth.from(sa.getSlotVisit().getStart().toLocalDate()));
-					
-					applyProRataCorrection(pcs, hcs, physical);
-					
-					slotAllocation.getExposures().add(physical);
+					if (sa.getSlotVisit().getStart().toLocalDate().isAfter(promptStart)) {
+						
+						final ExposureDetail physical = ScheduleFactory.eINSTANCE.createExposureDetail();
+	
+						physical.setDealType(DealType.PHYSICAL);
+						physical.setVolumeInMMBTU((isPurchase ? 1.0 : -1.0) * sa.getEnergyTransferred());
+						physical.setVolumeInNativeUnits((isPurchase ? 1.0 : -1.0) * sa.getEnergyTransferred());
+						physical.setNativeValue((isPurchase ? -1.0 : 1.0) * sa.getVolumeValue());
+						physical.setVolumeUnit("mmBtu");
+						physical.setIndexName("Physical");
+						physical.setDate(YearMonth.from(sa.getSlotVisit().getStart().toLocalDate()));
+						
+						applyProRataCorrection(pcs, hcs, physical);
+						
+						slotAllocation.getExposures().add(physical);
+					}
 				}
-
 				final LocalDate pricingFullDate = PricingMonthUtils.getFullPricingDate(slotAllocation);
 				if (pricingFullDate != null) {
 					final YearMonth pricingDate = YearMonth.of(pricingFullDate.getYear(), pricingFullDate.getMonth());
@@ -188,8 +190,11 @@ public class Exposures {
 						if (exposureDetails != null && !exposureDetails.isEmpty()) {
 							for (final ExposureDetail ed : exposureDetails) {
 								applyProRataCorrection(pcs, hcs, ed);
+								if (ed.getDate().isAfter(YearMonth.of(promptStart.getYear(), promptStart.getMonthValue())) //
+										|| ed.getDate().equals(YearMonth.of(promptStart.getYear(), promptStart.getMonthValue()))) {
+									slotAllocation.getExposures().add(ed);
+								}
 							}
-							slotAllocation.getExposures().addAll(exposureDetails);
 						}
 					}
 				}
