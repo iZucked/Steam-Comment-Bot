@@ -27,6 +27,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="settledPricesVersionRecord"
         eType="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//VersionRecord"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pricingCalendars" upperBound="-1"
+        eType="#//PricingCalendar" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataIndex">
     <eTypeParameters name="Value"/>
@@ -343,6 +345,18 @@
   <eClassifiers xsi:type="ecore:EClass" name="CurrencyCurve" eSuperTypes="#//AbstractYearMonthCurve"/>
   <eClassifiers xsi:type="ecore:EClass" name="MarketIndex" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="settleCalendar" eType="#//HolidayCalendar"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pricingCalendar" eType="#//PricingCalendar"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PricingCalendarEntry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="month" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PricingCalendar" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//PricingCalendarEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="HolidayCalendarEntry">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
