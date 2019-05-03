@@ -103,8 +103,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 							.make(ctx));
 				}
 			}
-			
-			
+
 			{
 				final LocalDateTime startStart = availability.getStartAfter();
 				final LocalDateTime startEnd = availability.getStartBy();
@@ -135,7 +134,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-			
+
 			YearMonth earliestDate = null;
 			if (availability.isSetStartAfter()) {
 				earliestDate = YearMonth.from(availability.getStartAfter());
@@ -234,6 +233,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 		final EObject target = ctx.getTarget();
 		if (target instanceof VesselAvailability) {
 			final VesselAvailability va = (VesselAvailability) target;
+
 			final BallastBonusContract vaBallastBonusContract = va.getBallastBonusContract();
 			final CharterContract charterContract = va.getCharterContract();
 			BallastBonusContract charterBallastBonusContract = null;
@@ -245,6 +245,13 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 				if (ballastBonusContract instanceof RuleBasedBallastBonusContract) {
 					ruleBasedballastBonusValidation(ctx, extraContext, baseFactory, failures, va, (RuleBasedBallastBonusContract) ballastBonusContract);
 					ruleBasedballastBonusCheckPortGroups(ctx, extraContext, baseFactory, failures, va, (RuleBasedBallastBonusContract) ballastBonusContract);
+				}
+				if (va.getEndAt().isEmpty()) {
+					final DetailConstraintStatusFactory f = baseFactory.copyName();
+					f.withMessage(String.format("Redelivery ports should be specified when there is a ballast bonus."));
+					f.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__END_AT);
+					f.withSeverity(IStatus.WARNING);
+					failures.add(f.make(ctx));
 				}
 			}
 		}
