@@ -26,11 +26,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 /**
- * A component helper for MarketIndex instances
+ * A component helper for PricingCalendar instances
  *
  * @generated
  */
-public class MarketIndexComponentHelper extends BaseComponentHelper {
+public class PricingCalendarComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -38,7 +38,7 @@ public class MarketIndexComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public MarketIndexComponentHelper() {
+	public PricingCalendarComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -47,19 +47,19 @@ public class MarketIndexComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public MarketIndexComponentHelper(IAdapterManager adapterManager) {
+	public PricingCalendarComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
 	}
 	
 	/**
-	 * add editors to a composite, using MarketIndex as the supertype
+	 * add editors to a composite, using PricingCalendar as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, PricingPackage.Literals.MARKET_INDEX);	
+		addEditorsToComposite(detailComposite, PricingPackage.Literals.PRICING_CALENDAR);	
 	}
 	
 	/**
@@ -70,24 +70,23 @@ public class MarketIndexComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_settleCalendarEditor(detailComposite, topClass);
-		add_pricingCalendarEditor(detailComposite, topClass);
+		add_entriesEditor(detailComposite, topClass);
+		add_descriptionEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the settleCalendar feature on MarketIndex
+	 * Create the editor for the entries feature on PricingCalendar
 	 *
 	 * @generated
 	 */
-	protected void add_settleCalendarEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.MARKET_INDEX__SETTLE_CALENDAR));
+	protected void add_entriesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_CALENDAR__ENTRIES));
 	}
-
 	/**
-	 * Create the editor for the pricingCalendar feature on MarketIndex
+	 * Create the editor for the description feature on PricingCalendar
 	 *
 	 * @generated
 	 */
-	protected void add_pricingCalendarEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.MARKET_INDEX__PRICING_CALENDAR));
+	protected void add_descriptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_CALENDAR__DESCRIPTION));
 	}
 }

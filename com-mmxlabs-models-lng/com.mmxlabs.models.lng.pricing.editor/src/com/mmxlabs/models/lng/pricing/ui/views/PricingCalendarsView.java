@@ -33,18 +33,18 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import com.mmxlabs.models.lng.pricing.HolidayCalendar;
+import com.mmxlabs.models.lng.pricing.PricingCalendar;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.ui.editorpart.HolidayCalendarsViewerPane;
+import com.mmxlabs.models.lng.pricing.ui.editorpart.PricingCalendarsViewerPane;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalendarsViewerPane> {
-	public static final String ID = "com.mmxlabs.models.lng.pricing.editor.HolidayCalendarsView";
+public class PricingCalendarsView extends ScenarioTableViewerView<PricingCalendarsViewerPane> {
+	public static final String ID = "com.mmxlabs.models.lng.pricing.editor.PricingCalendarsView";
 	
 	private ComboViewer calendarSelectionViewer;
 	private PricingModel pricingModel;
@@ -56,15 +56,15 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 				return;
 			}
 
-			if (msg.getFeature() == PricingPackage.Literals.HOLIDAY_CALENDAR) {
+			if (msg.getFeature() == PricingPackage.Literals.PRICING_CALENDAR) {
 				if (calendarSelectionViewer != null) {
 
-					List<HolidayCalendar> models = pricingModel.getHolidayCalendars().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
+					List<PricingCalendar> models = pricingModel.getPricingCalendars().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
 					calendarSelectionViewer.setInput(models);
-					HolidayCalendar selectedCalendar = null;
+					PricingCalendar selectedCalendar = null;
 					if (!models.isEmpty()) {
 						if (lastSelectedCalendar != null) {
-							for (HolidayCalendar cal : pricingModel.getHolidayCalendars()) {
+							for (PricingCalendar cal : pricingModel.getPricingCalendars()) {
 								if (lastSelectedCalendar.equals(cal.getName())) {
 									selectedCalendar = cal;
 									break;
@@ -72,7 +72,7 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 							}
 						}
 						if (selectedCalendar == null) {
-							selectedCalendar = pricingModel.getHolidayCalendars().get(0);
+							selectedCalendar = pricingModel.getPricingCalendars().get(0);
 						}
 						lastSelectedCalendar = selectedCalendar.getName();
 						calendarSelectionViewer.setSelection(new StructuredSelection(selectedCalendar));
@@ -83,12 +83,12 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 	};
 	
 	@Override
-	protected HolidayCalendarsViewerPane createViewerPane() {
-		return new HolidayCalendarsViewerPane(getSite().getPage(), this, this, getViewSite().getActionBars());
+	protected PricingCalendarsViewerPane createViewerPane() {
+		return new PricingCalendarsViewerPane(getSite().getPage(), this, this, getViewSite().getActionBars());
 	}
 
 	@Override
-	protected void initViewerPane(final HolidayCalendarsViewerPane pane) {
+	protected void initViewerPane(final PricingCalendarsViewerPane pane) {
 		
 		final EditingDomain domain = getEditingDomain();
 		if (domain != null) {
@@ -97,24 +97,24 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 				pricingModel = ScenarioModelUtil.getPricingModel(getScenarioDataProvider());
 				pricingModel.eAdapters().add(calendarListener);
 			}
-			final List<HolidayCalendar> holidays = pricingModel.getHolidayCalendars();
+			final List<PricingCalendar> holidays = pricingModel.getPricingCalendars();
 			calendarSelectionViewer.setContentProvider(new ArrayContentProvider());
 			calendarSelectionViewer.setLabelProvider(new LabelProvider() {
 				@Override
 				public String getText(final Object element) {
-					return ((HolidayCalendar) element).getName();
+					return ((PricingCalendar) element).getName();
 				}
 			});
 			calendarSelectionViewer.setInput(holidays);
 			
-			pane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getHolidayCalendar_Entries() }), getAdapterFactory(), getModelReference());
+			pane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingCalendar_Entries() }), getAdapterFactory(), getModelReference());
 			pane.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 			
 			calendarSelectionViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 				@Override
 				public void selectionChanged(final SelectionChangedEvent event) {
-					final HolidayCalendar hc = (HolidayCalendar) ((IStructuredSelection) calendarSelectionViewer.getSelection()).getFirstElement();
+					final PricingCalendar hc = (PricingCalendar) ((IStructuredSelection) calendarSelectionViewer.getSelection()).getFirstElement();
 					pane.setInput(hc);
 				}
 			});
@@ -139,17 +139,17 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 			@Override
 			public void widgetSelected(SelectionEvent e) {
  
-				final HolidayCalendar pc = PricingFactory.eINSTANCE.createHolidayCalendar();
+				final PricingCalendar pc = PricingFactory.eINSTANCE.createPricingCalendar();
 				getModelReference().executeWithTryLock(true, 200, () -> {
 
 					final CompoundCommand cmd = new CompoundCommand("New calendar");
-					cmd.append(AddCommand.create(getEditingDomain(), pricingModel, PricingPackage.eINSTANCE.getPricingModel_HolidayCalendars(), pc));
+					cmd.append(AddCommand.create(getEditingDomain(), pricingModel, PricingPackage.eINSTANCE.getPricingModel_PricingCalendars(), pc));
 
 					CommandStack commandStack = getModelReference().getCommandStack();
 					commandStack.execute(cmd);
-					DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(HolidayCalendarsView.this, pc, commandStack.getMostRecentCommand());
+					DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(PricingCalendarsView.this, pc, commandStack.getMostRecentCommand());
 				});
-				List<HolidayCalendar> models = pricingModel.getHolidayCalendars().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
+				List<PricingCalendar> models = pricingModel.getPricingCalendars().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
 				calendarSelectionViewer.setInput(models);
 			}
 
@@ -171,7 +171,7 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					IStructuredSelection selection = calendarSelectionViewer.getStructuredSelection();
-					DetailCompositeDialogUtil.editSelection(HolidayCalendarsView.this, selection);
+					DetailCompositeDialogUtil.editSelection(PricingCalendarsView.this, selection);
 					calendarSelectionViewer.refresh();
 				}
 

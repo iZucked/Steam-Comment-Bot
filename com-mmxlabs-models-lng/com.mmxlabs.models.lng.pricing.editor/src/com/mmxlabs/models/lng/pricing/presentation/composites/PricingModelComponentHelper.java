@@ -75,6 +75,7 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 		add_settleStrategiesEditor(detailComposite, topClass);
 		add_marketCurvesVersionRecordEditor(detailComposite, topClass);
 		add_settledPricesVersionRecordEditor(detailComposite, topClass);
+		add_pricingCalendarsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the currencyCurves feature on PricingModel
@@ -173,5 +174,14 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_settledPricesVersionRecordEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD));
+	}
+
+	/**
+	 * Create the editor for the pricingCalendars feature on PricingModel
+	 *
+	 * @generated
+	 */
+	protected void add_pricingCalendarsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__PRICING_CALENDARS));
 	}
 }
