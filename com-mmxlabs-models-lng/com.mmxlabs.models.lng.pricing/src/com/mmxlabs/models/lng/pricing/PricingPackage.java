@@ -187,22 +187,13 @@ public interface PricingPackage extends EPackage {
 	int PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
-	 * The feature id for the '<em><b>Pricing Calendars</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_MODEL__PRICING_CALENDARS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
-
-	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.IndexImpl <em>Index</em>}' class.
@@ -1727,132 +1718,13 @@ public interface PricingPackage extends EPackage {
 	int MARKET_INDEX__SETTLE_CALENDAR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Pricing Calendar</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKET_INDEX__PRICING_CALENDAR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>Market Index</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET_INDEX_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PricingCalendarEntryImpl <em>Calendar Entry</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingCalendarEntryImpl
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPricingCalendarEntry()
-	 * @generated
-	 */
-	int PRICING_CALENDAR_ENTRY = 29;
-
-	/**
-	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_CALENDAR_ENTRY__COMMENT = 0;
-
-	/**
-	 * The feature id for the '<em><b>Start</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_CALENDAR_ENTRY__START = 1;
-
-	/**
-	 * The feature id for the '<em><b>End</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_CALENDAR_ENTRY__END = 2;
-
-	/**
-	 * The feature id for the '<em><b>Month</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_CALENDAR_ENTRY__MONTH = 3;
-
-	/**
-	 * The number of structural features of the '<em>Calendar Entry</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_CALENDAR_ENTRY_FEATURE_COUNT = 4;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PricingCalendarImpl <em>Calendar</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingCalendarImpl
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPricingCalendar()
-	 * @generated
-	 */
-	int PRICING_CALENDAR = 30;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_CALENDAR__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_CALENDAR__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Entries</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_CALENDAR__ENTRIES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_CALENDAR__DESCRIPTION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Calendar</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_CALENDAR_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int MARKET_INDEX_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.HolidayCalendarEntryImpl <em>Holiday Calendar Entry</em>}' class.
@@ -1862,7 +1734,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getHolidayCalendarEntry()
 	 * @generated
 	 */
-	int HOLIDAY_CALENDAR_ENTRY = 31;
+	int HOLIDAY_CALENDAR_ENTRY = 29;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -1899,7 +1771,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getHolidayCalendar()
 	 * @generated
 	 */
-	int HOLIDAY_CALENDAR = 32;
+	int HOLIDAY_CALENDAR = 30;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1954,7 +1826,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSettleStrategy()
 	 * @generated
 	 */
-	int SETTLE_STRATEGY = 33;
+	int SETTLE_STRATEGY = 31;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2167,17 +2039,6 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPricingModel_SettledPricesVersionRecord();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getPricingCalendars <em>Pricing Calendars</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Pricing Calendars</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getPricingCalendars()
-	 * @see #getPricingModel()
-	 * @generated
-	 */
-	EReference getPricingModel_PricingCalendars();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.DataIndex <em>Data Index</em>}'.
@@ -3131,103 +2992,6 @@ public interface PricingPackage extends EPackage {
 	EReference getMarketIndex_SettleCalendar();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.MarketIndex#getPricingCalendar <em>Pricing Calendar</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Pricing Calendar</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.MarketIndex#getPricingCalendar()
-	 * @see #getMarketIndex()
-	 * @generated
-	 */
-	EReference getMarketIndex_PricingCalendar();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingCalendarEntry <em>Calendar Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Calendar Entry</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingCalendarEntry
-	 * @generated
-	 */
-	EClass getPricingCalendarEntry();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PricingCalendarEntry#getComment <em>Comment</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Comment</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingCalendarEntry#getComment()
-	 * @see #getPricingCalendarEntry()
-	 * @generated
-	 */
-	EAttribute getPricingCalendarEntry_Comment();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PricingCalendarEntry#getStart <em>Start</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Start</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingCalendarEntry#getStart()
-	 * @see #getPricingCalendarEntry()
-	 * @generated
-	 */
-	EAttribute getPricingCalendarEntry_Start();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PricingCalendarEntry#getEnd <em>End</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>End</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingCalendarEntry#getEnd()
-	 * @see #getPricingCalendarEntry()
-	 * @generated
-	 */
-	EAttribute getPricingCalendarEntry_End();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PricingCalendarEntry#getMonth <em>Month</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Month</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingCalendarEntry#getMonth()
-	 * @see #getPricingCalendarEntry()
-	 * @generated
-	 */
-	EAttribute getPricingCalendarEntry_Month();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingCalendar <em>Calendar</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Calendar</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingCalendar
-	 * @generated
-	 */
-	EClass getPricingCalendar();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingCalendar#getEntries <em>Entries</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Entries</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingCalendar#getEntries()
-	 * @see #getPricingCalendar()
-	 * @generated
-	 */
-	EReference getPricingCalendar_Entries();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PricingCalendar#getDescription <em>Description</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Description</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingCalendar#getDescription()
-	 * @see #getPricingCalendar()
-	 * @generated
-	 */
-	EAttribute getPricingCalendar_Description();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.HolidayCalendarEntry <em>Holiday Calendar Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3486,14 +3250,6 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD = eINSTANCE.getPricingModel_SettledPricesVersionRecord();
-
-		/**
-		 * The meta object literal for the '<em><b>Pricing Calendars</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PRICING_MODEL__PRICING_CALENDARS = eINSTANCE.getPricingModel_PricingCalendars();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.DataIndexImpl <em>Data Index</em>}' class.
@@ -4262,82 +4018,6 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference MARKET_INDEX__SETTLE_CALENDAR = eINSTANCE.getMarketIndex_SettleCalendar();
-
-		/**
-		 * The meta object literal for the '<em><b>Pricing Calendar</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference MARKET_INDEX__PRICING_CALENDAR = eINSTANCE.getMarketIndex_PricingCalendar();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PricingCalendarEntryImpl <em>Calendar Entry</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingCalendarEntryImpl
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPricingCalendarEntry()
-		 * @generated
-		 */
-		EClass PRICING_CALENDAR_ENTRY = eINSTANCE.getPricingCalendarEntry();
-
-		/**
-		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PRICING_CALENDAR_ENTRY__COMMENT = eINSTANCE.getPricingCalendarEntry_Comment();
-
-		/**
-		 * The meta object literal for the '<em><b>Start</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PRICING_CALENDAR_ENTRY__START = eINSTANCE.getPricingCalendarEntry_Start();
-
-		/**
-		 * The meta object literal for the '<em><b>End</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PRICING_CALENDAR_ENTRY__END = eINSTANCE.getPricingCalendarEntry_End();
-
-		/**
-		 * The meta object literal for the '<em><b>Month</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PRICING_CALENDAR_ENTRY__MONTH = eINSTANCE.getPricingCalendarEntry_Month();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PricingCalendarImpl <em>Calendar</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingCalendarImpl
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPricingCalendar()
-		 * @generated
-		 */
-		EClass PRICING_CALENDAR = eINSTANCE.getPricingCalendar();
-
-		/**
-		 * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PRICING_CALENDAR__ENTRIES = eINSTANCE.getPricingCalendar_Entries();
-
-		/**
-		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PRICING_CALENDAR__DESCRIPTION = eINSTANCE.getPricingCalendar_Description();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.HolidayCalendarEntryImpl <em>Holiday Calendar Entry</em>}' class.

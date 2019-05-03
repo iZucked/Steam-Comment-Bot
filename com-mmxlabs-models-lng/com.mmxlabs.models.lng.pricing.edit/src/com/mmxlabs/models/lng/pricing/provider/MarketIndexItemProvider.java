@@ -54,7 +54,6 @@ public class MarketIndexItemProvider extends NamedObjectItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addSettleCalendarPropertyDescriptor(object);
-			addPricingCalendarPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -73,28 +72,6 @@ public class MarketIndexItemProvider extends NamedObjectItemProvider {
 				 getString("_UI_MarketIndex_settleCalendar_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_MarketIndex_settleCalendar_feature", "_UI_MarketIndex_type"),
 				 PricingPackage.Literals.MARKET_INDEX__SETTLE_CALENDAR,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Pricing Calendar feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addPricingCalendarPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MarketIndex_pricingCalendar_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketIndex_pricingCalendar_feature", "_UI_MarketIndex_type"),
-				 PricingPackage.Literals.MARKET_INDEX__PRICING_CALENDAR,
 				 true,
 				 false,
 				 true,

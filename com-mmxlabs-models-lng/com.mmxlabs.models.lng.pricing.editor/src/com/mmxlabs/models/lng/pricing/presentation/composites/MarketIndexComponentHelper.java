@@ -71,7 +71,6 @@ public class MarketIndexComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_settleCalendarEditor(detailComposite, topClass);
-		add_pricingCalendarEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the settleCalendar feature on MarketIndex
@@ -80,14 +79,5 @@ public class MarketIndexComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_settleCalendarEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.MARKET_INDEX__SETTLE_CALENDAR));
-	}
-
-	/**
-	 * Create the editor for the pricingCalendar feature on MarketIndex
-	 *
-	 * @generated
-	 */
-	protected void add_pricingCalendarEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.MARKET_INDEX__PRICING_CALENDAR));
 	}
 }

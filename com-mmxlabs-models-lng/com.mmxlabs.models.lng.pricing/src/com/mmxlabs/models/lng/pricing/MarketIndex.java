@@ -20,7 +20,6 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.MarketIndex#getSettleCalendar <em>Settle Calendar</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.MarketIndex#getPricingCalendar <em>Pricing Calendar</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getMarketIndex()
@@ -53,27 +52,5 @@ public interface MarketIndex extends NamedObject {
 	 * @generated
 	 */
 	void setSettleCalendar(HolidayCalendar value);
-
-	/**
-	 * Returns the value of the '<em><b>Pricing Calendar</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Pricing Calendar</em>' reference.
-	 * @see #setPricingCalendar(PricingCalendar)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getMarketIndex_PricingCalendar()
-	 * @model
-	 * @generated
-	 */
-	PricingCalendar getPricingCalendar();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.MarketIndex#getPricingCalendar <em>Pricing Calendar</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Pricing Calendar</em>' reference.
-	 * @see #getPricingCalendar()
-	 * @generated
-	 */
-	void setPricingCalendar(PricingCalendar value);
 
 } // MarketIndex

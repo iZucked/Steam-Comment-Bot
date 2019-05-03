@@ -20,7 +20,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/settleStrategies"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/marketCurvesVersionRecord"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/settledPricesVersionRecord"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/pricingCalendars"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//DataIndex">
       <genTypeParameters ecoreTypeParameter="pricing.ecore#//DataIndex/Value"/>
@@ -159,17 +158,6 @@
     <genClasses ecoreClass="pricing.ecore#//CurrencyCurve"/>
     <genClasses ecoreClass="pricing.ecore#//MarketIndex">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/settleCalendar"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/pricingCalendar"/>
-    </genClasses>
-    <genClasses ecoreClass="pricing.ecore#//PricingCalendarEntry">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PricingCalendarEntry/comment"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PricingCalendarEntry/start"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PricingCalendarEntry/end"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PricingCalendarEntry/month"/>
-    </genClasses>
-    <genClasses ecoreClass="pricing.ecore#//PricingCalendar">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingCalendar/entries"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PricingCalendar/description"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//HolidayCalendarEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//HolidayCalendarEntry/date"/>

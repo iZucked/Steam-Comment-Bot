@@ -39,8 +39,7 @@ public class MarketIndexViewerPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), jointModelEditor.getEditingDomain()));
 		
 		final IReferenceValueProviderProvider irvpp = getReferenceValueProviderCache();
-		addTypicalColumn("Calendar", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_PricingCalendar(),irvpp, getEditingDomain()));
-		addTypicalColumn("Holidays", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_SettleCalendar(),irvpp, getEditingDomain()));
+		addTypicalColumn("Calendar", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_SettleCalendar(),irvpp, getEditingDomain()));
 		
 		setTitle("Indices", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}

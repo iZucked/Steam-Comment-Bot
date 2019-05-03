@@ -268,24 +268,6 @@ public interface PricingFactory extends EFactory {
 	MarketIndex createMarketIndex();
 
 	/**
-	 * Returns a new object of class '<em>Calendar Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Calendar Entry</em>'.
-	 * @generated
-	 */
-	PricingCalendarEntry createPricingCalendarEntry();
-
-	/**
-	 * Returns a new object of class '<em>Calendar</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Calendar</em>'.
-	 * @generated
-	 */
-	PricingCalendar createPricingCalendar();
-
-	/**
 	 * Returns a new object of class '<em>Holiday Calendar Entry</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

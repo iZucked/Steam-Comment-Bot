@@ -25,11 +25,4 @@
 			name="Holiday Calendar" restorable="true">
 		</view>
 	</extension>
-	<extension point="org.eclipse.ui.views">
-		<view category="com.mmxlabs.models.lng.views.physical"
-			class="com.mmxlabs.models.lng.pricing.ui.views.PricingCalendarsView"
-			id="com.mmxlabs.models.lng.pricing.editor.PricingCalendarsView"
-			name="Pricing Calendar" restorable="true">
-		</view>
-	</extension>
 </plugin>

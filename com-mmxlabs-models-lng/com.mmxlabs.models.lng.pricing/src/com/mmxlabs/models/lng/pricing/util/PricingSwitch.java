@@ -304,20 +304,6 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case PricingPackage.PRICING_CALENDAR_ENTRY: {
-				PricingCalendarEntry pricingCalendarEntry = (PricingCalendarEntry)theEObject;
-				T result = casePricingCalendarEntry(pricingCalendarEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.PRICING_CALENDAR: {
-				PricingCalendar pricingCalendar = (PricingCalendar)theEObject;
-				T result = casePricingCalendar(pricingCalendar);
-				if (result == null) result = caseNamedObject(pricingCalendar);
-				if (result == null) result = caseMMXObject(pricingCalendar);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case PricingPackage.HOLIDAY_CALENDAR_ENTRY: {
 				HolidayCalendarEntry holidayCalendarEntry = (HolidayCalendarEntry)theEObject;
 				T result = caseHolidayCalendarEntry(holidayCalendarEntry);
@@ -776,36 +762,6 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseMarketIndex(MarketIndex object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Calendar Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Calendar Entry</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T casePricingCalendarEntry(PricingCalendarEntry object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Calendar</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Calendar</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T casePricingCalendar(PricingCalendar object) {
 		return null;
 	}
 

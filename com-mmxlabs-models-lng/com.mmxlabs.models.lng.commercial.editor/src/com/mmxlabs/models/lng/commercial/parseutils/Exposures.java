@@ -7,12 +7,9 @@
  */
 package com.mmxlabs.models.lng.commercial.parseutils;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -21,7 +18,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -31,23 +27,14 @@ import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.PromptToolbarEditor;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
-import com.mmxlabs.models.lng.pricing.HolidayCalendar;
-import com.mmxlabs.models.lng.pricing.HolidayCalendarEntry;
-import com.mmxlabs.models.lng.pricing.MarketIndex;
-import com.mmxlabs.models.lng.pricing.PricingCalendar;
-import com.mmxlabs.models.lng.pricing.PricingCalendarEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.parser.Node;
@@ -66,11 +53,9 @@ import com.mmxlabs.models.lng.pricing.parseutils.OperatorNode;
 import com.mmxlabs.models.lng.pricing.parseutils.SCurveNode;
 import com.mmxlabs.models.lng.pricing.parseutils.ShiftNode;
 import com.mmxlabs.models.lng.pricing.parseutils.SplitNode;
-import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
@@ -82,7 +67,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.DealType;
 import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * Utility class to calculate schedule exposure to market indices. Provides static methods
@@ -103,34 +87,25 @@ public class Exposures {
 		BY_MONTH_NO_TOTAL, BY_MONTH, BY_DEALSET
 	}
 	
-	public static void calculateExposures(final @NonNull IScenarioDataProvider scenarioDataProvider, final @Nullable Schedule schedule) {
+	public static void calculateExposures(final @NonNull LNGScenarioModel scenarioModel, final @Nullable Schedule schedule) {
 		ServiceHelper.withOptionalServiceConsumer(IExposuresCustomiser.class, p -> {
 			if (p == null) {
-				calculateExposures(scenarioDataProvider, schedule, new DefaultExposuresCustomiser());
+				calculateExposures(scenarioModel, schedule, new DefaultExposuresCustomiser());
 			} else {
-				calculateExposures(scenarioDataProvider, schedule, p);
+				calculateExposures(scenarioModel, schedule, p);
 			}
 		});
 	}
 
-	public static void calculateExposures(final @NonNull IScenarioDataProvider scenarioDataProvider, final @Nullable Schedule schedule,//
-			final IExposuresCustomiser exposuresCustomiser) {
+	public static void calculateExposures(final @NonNull LNGScenarioModel scenarioModel, final @Nullable Schedule schedule, final IExposuresCustomiser exposuresCustomiser) {
 
 		if (schedule == null) {
 			return;
 		}
-		
-		final ModelMarketCurveProvider mmCurveProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.MARKET_CURVES, ModelMarketCurveProvider.class);
 
-		@NonNull
-		final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		final LocalDate promptStart = scenarioModel.getPromptPeriodStart();
-		
 		@NonNull
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
 		final LookupData lookupData = LookupData.createLookupData(pricingModel);
-		
-		final CalendarHandler calendarHandler = new CalendarHandler(scenarioDataProvider);
 
 		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
@@ -142,45 +117,25 @@ public class Exposures {
 				if (slot == null) {
 					continue;
 				}
-				
-				final String priceExpression;
-				if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICE_EXPRESSION)) {
-					priceExpression = slot.getPriceExpression();
-				} else {
-					priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot, slotAllocation);
-				}
-				final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
-				List<PricingCalendar> pcs = new ArrayList<PricingCalendar>();
-				List<HolidayCalendar> hcs = new ArrayList<HolidayCalendar>();
-				
-				for (AbstractYearMonthCurve curve : curves) {
-					if (curve instanceof CommodityCurve) {
-						final CommodityCurve cc = (CommodityCurve) curve;
-						pcs.add(calendarHandler.getPricingCalendar(cc));
-						hcs.add(calendarHandler.getHolidayCalendar(cc));
-					}
-				}
 
 				final boolean isPurchase = slot instanceof LoadSlot;
 				{
+					final ExposureDetail physical = ScheduleFactory.eINSTANCE.createExposureDetail();
+
+					physical.setDealType(DealType.PHYSICAL);
+
 					SlotAllocation sa = exposuresCustomiser.getExposed(slotAllocation);
-					if (sa.getSlotVisit().getStart().toLocalDate().isAfter(promptStart)) {
-						
-						final ExposureDetail physical = ScheduleFactory.eINSTANCE.createExposureDetail();
-	
-						physical.setDealType(DealType.PHYSICAL);
-						physical.setVolumeInMMBTU((isPurchase ? 1.0 : -1.0) * sa.getEnergyTransferred());
-						physical.setVolumeInNativeUnits((isPurchase ? 1.0 : -1.0) * sa.getEnergyTransferred());
-						physical.setNativeValue((isPurchase ? -1.0 : 1.0) * sa.getVolumeValue());
-						physical.setVolumeUnit("mmBtu");
-						physical.setIndexName("Physical");
-						physical.setDate(YearMonth.from(sa.getSlotVisit().getStart().toLocalDate()));
-						
-						applyProRataCorrection(pcs, hcs, physical);
-						
-						slotAllocation.getExposures().add(physical);
-					}
+					
+					physical.setVolumeInMMBTU((isPurchase ? 1.0 : -1.0) * sa.getEnergyTransferred());
+					physical.setVolumeInNativeUnits((isPurchase ? 1.0 : -1.0) * sa.getEnergyTransferred());
+					physical.setNativeValue((isPurchase ? -1.0 : 1.0) * sa.getVolumeValue());
+					physical.setVolumeUnit("mmBtu");
+					physical.setIndexName("Physical");
+					physical.setDate(YearMonth.from(sa.getSlotVisit().getStart().toLocalDate()));
+
+					slotAllocation.getExposures().add(physical);
 				}
+
 				final LocalDate pricingFullDate = PricingMonthUtils.getFullPricingDate(slotAllocation);
 				if (pricingFullDate != null) {
 					final YearMonth pricingDate = YearMonth.of(pricingFullDate.getYear(), pricingFullDate.getMonth());
@@ -188,13 +143,7 @@ public class Exposures {
 					if (node != null) {
 						final Collection<ExposureDetail> exposureDetails = createExposureDetail(node, pricingDate, volume, isPurchase, lookupData, pricingFullDate.getDayOfMonth());
 						if (exposureDetails != null && !exposureDetails.isEmpty()) {
-							for (final ExposureDetail ed : exposureDetails) {
-								applyProRataCorrection(pcs, hcs, ed);
-								if (ed.getDate().isAfter(YearMonth.of(promptStart.getYear(), promptStart.getMonthValue())) //
-										|| ed.getDate().equals(YearMonth.of(promptStart.getYear(), promptStart.getMonthValue()))) {
-									slotAllocation.getExposures().add(ed);
-								}
-							}
+							slotAllocation.getExposures().addAll(exposureDetails);
 						}
 					}
 				}
@@ -217,73 +166,6 @@ public class Exposures {
 				}
 			}
 		}
-	}
-
-	private static void applyProRataCorrection(List<PricingCalendar> pcs, List<HolidayCalendar> hcs, final ExposureDetail exposure) {
-		for (final PricingCalendar pc : pcs) {
-			List<PricingCalendarEntry> lPce = pc.getEntries().stream()//
-					.filter(e -> e.getMonth().equals(exposure.getDate()))//
-					.collect(Collectors.toList());
-			if (lPce.size() == 1) {
-				int wd = getWorkingDays(lPce.get(0), hcs);
-				double proRataCorrection = exposure.getDate().lengthOfMonth() / wd;
-				exposure.setVolumeInMMBTU(proRataCorrection * exposure.getVolumeInMMBTU());
-				exposure.setVolumeInNativeUnits(proRataCorrection * exposure.getVolumeInNativeUnits());
-				exposure.setNativeValue(proRataCorrection * exposure.getNativeValue());
-			}
-		}
-	}
-	
-	private static class CalendarHandler {
-		
-		private Map<CommodityCurve, PricingCalendar> pricingCalendars = new HashMap<>();
-		private Map<CommodityCurve, HolidayCalendar> holidayCalendars = new HashMap<>();
-		public PricingCalendar getPricingCalendar(final CommodityCurve cc) {
-			return pricingCalendars.get(cc);
-		}
-
-		public HolidayCalendar getHolidayCalendar(final CommodityCurve cc) {
-			return holidayCalendars.get(cc);
-		}
-		
-		public CalendarHandler(final @NonNull IScenarioDataProvider scenarioDataProvider) {	
-
-			PricingModel pm = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
-
-			for (final AbstractYearMonthCurve curve : pm.getCommodityCurves()) {
-				if (curve instanceof CommodityCurve) {
-					final CommodityCurve cc = (CommodityCurve) curve;
-					final MarketIndex mi = cc.getMarketIndex();
-					if (mi == null) continue;
-					if (mi.getPricingCalendar() != null) {
-						pricingCalendars.putIfAbsent(cc, mi.getPricingCalendar());
-					}
-					if (mi.getSettleCalendar() != null) {
-						holidayCalendars.putIfAbsent(cc, mi.getSettleCalendar());
-					}
-				}
-			}
-		}
-	}
-
-	private static int getWorkingDays(PricingCalendarEntry pricingCalendarEntry, List<HolidayCalendar> hcs) {
-		int i = 0;
-		// workdays
-		for (LocalDate c = pricingCalendarEntry.getStart(); c.isBefore(pricingCalendarEntry.getEnd().plusDays(1)); c = c.plusDays(1)) {
-			if (c.getDayOfWeek() != DayOfWeek.SATURDAY && c.getDayOfWeek() != DayOfWeek.SUNDAY) {
-				i++;
-			}
-		}
-		// extra holidays
-		for (final HolidayCalendar hc : hcs) {
-			for (final HolidayCalendarEntry hce: hc.getEntries()) {
-				if (hce.getDate().isAfter(pricingCalendarEntry.getStart()) //
-						&& hce.getDate().isBefore(pricingCalendarEntry.getEnd())) {
-					i--;
-				}
-			}
-		}
-		return i;
 	}
 
 	/**
@@ -858,4 +740,3 @@ public class Exposures {
 		return n;
 	}
 }
-

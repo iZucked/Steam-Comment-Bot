@@ -11,17 +11,16 @@ import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.IOutputScheduleProcessor;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class ExposuresOutputScheduleProcessor implements IOutputScheduleProcessor {
 
-	@Inject 
-	private IScenarioDataProvider scenarioDataProvider;
+	@Inject
+	private LNGScenarioModel scenarioModel;
 
 	@Override
 	public void process(final Schedule schedule) {
 		if (LicenseFeatures.isPermitted("features:exposures")) {
-			Exposures.calculateExposures(scenarioDataProvider, schedule);
+			Exposures.calculateExposures(scenarioModel, schedule);
 		}
 	}
 

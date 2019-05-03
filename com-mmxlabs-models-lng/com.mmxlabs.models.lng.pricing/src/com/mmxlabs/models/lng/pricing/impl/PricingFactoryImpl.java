@@ -96,8 +96,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.BUNKER_FUEL_CURVE: return createBunkerFuelCurve();
 			case PricingPackage.CURRENCY_CURVE: return createCurrencyCurve();
 			case PricingPackage.MARKET_INDEX: return createMarketIndex();
-			case PricingPackage.PRICING_CALENDAR_ENTRY: return createPricingCalendarEntry();
-			case PricingPackage.PRICING_CALENDAR: return createPricingCalendar();
 			case PricingPackage.HOLIDAY_CALENDAR_ENTRY: return createHolidayCalendarEntry();
 			case PricingPackage.HOLIDAY_CALENDAR: return createHolidayCalendar();
 			case PricingPackage.SETTLE_STRATEGY: return createSettleStrategy();
@@ -401,28 +399,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public MarketIndex createMarketIndex() {
 		MarketIndexImpl marketIndex = new MarketIndexImpl();
 		return marketIndex;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public PricingCalendarEntry createPricingCalendarEntry() {
-		PricingCalendarEntryImpl pricingCalendarEntry = new PricingCalendarEntryImpl();
-		return pricingCalendarEntry;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public PricingCalendar createPricingCalendar() {
-		PricingCalendarImpl pricingCalendar = new PricingCalendarImpl();
-		return pricingCalendar;
 	}
 
 	/**

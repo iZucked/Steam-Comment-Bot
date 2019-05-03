@@ -8,13 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.command.CommandStack;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -26,21 +23,14 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.models.lng.pricing.HolidayCalendar;
-import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.ui.editorpart.HolidayCalendarsViewerPane;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
-import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalendarsViewerPane> {
@@ -126,63 +116,8 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 		
 		final Composite sectionParent = new Composite(composite, SWT.NONE);
 		sectionParent.setLayout(GridLayoutFactory.fillDefaults().equalWidth(true).create());
-		sectionParent.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
-
-		final Composite selector = new Composite(sectionParent, SWT.NONE);
-		selector.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).grab(true, false).create());
-
-		Button btn_new = new Button(selector, SWT.PUSH);
-		btn_new.setText("New");
 		
-		btn_new.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
- 
-				final HolidayCalendar pc = PricingFactory.eINSTANCE.createHolidayCalendar();
-				getModelReference().executeWithTryLock(true, 200, () -> {
-
-					final CompoundCommand cmd = new CompoundCommand("New calendar");
-					cmd.append(AddCommand.create(getEditingDomain(), pricingModel, PricingPackage.eINSTANCE.getPricingModel_HolidayCalendars(), pc));
-
-					CommandStack commandStack = getModelReference().getCommandStack();
-					commandStack.execute(cmd);
-					DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(HolidayCalendarsView.this, pc, commandStack.getMostRecentCommand());
-				});
-				List<HolidayCalendar> models = pricingModel.getHolidayCalendars().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
-				calendarSelectionViewer.setInput(models);
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
-		});
-
-		final Label label = new Label(selector, SWT.NONE);
-		label.setText("Calendar: ");
-		
-		calendarSelectionViewer = new ComboViewer(selector);
-		{
-			Button btn = new Button(selector, SWT.PUSH);
-			btn.setText("Edit");
-			btn.addSelectionListener(new SelectionListener() {
-
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					IStructuredSelection selection = calendarSelectionViewer.getStructuredSelection();
-					DetailCompositeDialogUtil.editSelection(HolidayCalendarsView.this, selection);
-					calendarSelectionViewer.refresh();
-				}
-
-				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
-
-				}
-			});
-		}
-		
-		selector.setLayout(new GridLayout(4, false));
+		calendarSelectionViewer = new ComboViewer(sectionParent);
 		
 		return sectionParent;
 	}
