@@ -61,6 +61,7 @@ public class TextualEnumAttributeManipulator extends BasicAttributeManipulator {
 		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
 		EEnum eenum = (EEnum) ((EAttribute) field).getEAttributeType();
 		for (final EEnumLiteral literal : eenum.getELiterals()) {
+			// TODO: Should not depend on commercial package in models ui
 			if (((EAttribute) field) == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS) {
 				if (literal.getValue() == TimePeriod.HOURS_VALUE) {
 					continue;
