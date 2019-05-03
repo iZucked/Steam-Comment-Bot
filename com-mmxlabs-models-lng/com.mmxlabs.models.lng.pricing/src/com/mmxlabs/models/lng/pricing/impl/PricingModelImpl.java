@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.HolidayCalendar;
 import com.mmxlabs.models.lng.pricing.MarketIndex;
+import com.mmxlabs.models.lng.pricing.PricingCalendar;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
@@ -47,6 +48,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getSettleStrategies <em>Settle Strategies</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getMarketCurvesVersionRecord <em>Market Curves Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getSettledPricesVersionRecord <em>Settled Prices Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getPricingCalendars <em>Pricing Calendars</em>}</li>
  * </ul>
  *
  * @generated
@@ -161,6 +163,16 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * @ordered
 	 */
 	protected VersionRecord settledPricesVersionRecord;
+
+	/**
+	 * The cached value of the '{@link #getPricingCalendars() <em>Pricing Calendars</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingCalendars()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PricingCalendar> pricingCalendars;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -303,6 +315,7 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VersionRecord getMarketCurvesVersionRecord() {
 		return marketCurvesVersionRecord;
 	}
@@ -327,6 +340,7 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMarketCurvesVersionRecord(VersionRecord newMarketCurvesVersionRecord) {
 		if (newMarketCurvesVersionRecord != marketCurvesVersionRecord) {
 			NotificationChain msgs = null;
@@ -346,6 +360,7 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VersionRecord getSettledPricesVersionRecord() {
 		return settledPricesVersionRecord;
 	}
@@ -370,6 +385,7 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSettledPricesVersionRecord(VersionRecord newSettledPricesVersionRecord) {
 		if (newSettledPricesVersionRecord != settledPricesVersionRecord) {
 			NotificationChain msgs = null;
@@ -382,6 +398,19 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD, newSettledPricesVersionRecord, newSettledPricesVersionRecord));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<PricingCalendar> getPricingCalendars() {
+		if (pricingCalendars == null) {
+			pricingCalendars = new EObjectContainmentEList<PricingCalendar>(PricingCalendar.class, this, PricingPackage.PRICING_MODEL__PRICING_CALENDARS);
+		}
+		return pricingCalendars;
 	}
 
 	/**
@@ -414,6 +443,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return basicSetMarketCurvesVersionRecord(null, msgs);
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD:
 				return basicSetSettledPricesVersionRecord(null, msgs);
+			case PricingPackage.PRICING_MODEL__PRICING_CALENDARS:
+				return ((InternalEList<?>)getPricingCalendars()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -448,6 +479,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return getMarketCurvesVersionRecord();
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD:
 				return getSettledPricesVersionRecord();
+			case PricingPackage.PRICING_MODEL__PRICING_CALENDARS:
+				return getPricingCalendars();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -503,6 +536,10 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD:
 				setSettledPricesVersionRecord((VersionRecord)newValue);
 				return;
+			case PricingPackage.PRICING_MODEL__PRICING_CALENDARS:
+				getPricingCalendars().clear();
+				getPricingCalendars().addAll((Collection<? extends PricingCalendar>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -548,6 +585,9 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD:
 				setSettledPricesVersionRecord((VersionRecord)null);
 				return;
+			case PricingPackage.PRICING_MODEL__PRICING_CALENDARS:
+				getPricingCalendars().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -582,6 +622,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return marketCurvesVersionRecord != null;
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD:
 				return settledPricesVersionRecord != null;
+			case PricingPackage.PRICING_MODEL__PRICING_CALENDARS:
+				return pricingCalendars != null && !pricingCalendars.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

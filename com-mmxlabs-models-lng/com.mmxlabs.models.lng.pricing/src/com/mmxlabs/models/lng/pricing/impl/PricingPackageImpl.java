@@ -39,6 +39,8 @@ import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PortsExpressionMap;
 import com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap;
+import com.mmxlabs.models.lng.pricing.PricingCalendar;
+import com.mmxlabs.models.lng.pricing.PricingCalendarEntry;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -268,6 +270,20 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass pricingCalendarEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass pricingCalendarEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass holidayCalendarEntryEClass = null;
 
 	/**
@@ -459,6 +475,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPricingModel_MarketCurvesVersionRecord() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(9);
 	}
@@ -468,8 +485,19 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPricingModel_SettledPricesVersionRecord() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPricingModel_PricingCalendars() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -1370,6 +1398,96 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getMarketIndex_PricingCalendar() {
+		return (EReference)marketIndexEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getPricingCalendarEntry() {
+		return pricingCalendarEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPricingCalendarEntry_Comment() {
+		return (EAttribute)pricingCalendarEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPricingCalendarEntry_Start() {
+		return (EAttribute)pricingCalendarEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPricingCalendarEntry_End() {
+		return (EAttribute)pricingCalendarEntryEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPricingCalendarEntry_Month() {
+		return (EAttribute)pricingCalendarEntryEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getPricingCalendar() {
+		return pricingCalendarEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPricingCalendar_Entries() {
+		return (EReference)pricingCalendarEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPricingCalendar_Description() {
+		return (EAttribute)pricingCalendarEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getHolidayCalendarEntry() {
 		return holidayCalendarEntryEClass;
 	}
@@ -1535,6 +1653,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(pricingModelEClass, PRICING_MODEL__SETTLE_STRATEGIES);
 		createEReference(pricingModelEClass, PRICING_MODEL__MARKET_CURVES_VERSION_RECORD);
 		createEReference(pricingModelEClass, PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD);
+		createEReference(pricingModelEClass, PRICING_MODEL__PRICING_CALENDARS);
 
 		dataIndexEClass = createEClass(DATA_INDEX);
 		createEReference(dataIndexEClass, DATA_INDEX__POINTS);
@@ -1652,6 +1771,17 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		marketIndexEClass = createEClass(MARKET_INDEX);
 		createEReference(marketIndexEClass, MARKET_INDEX__SETTLE_CALENDAR);
+		createEReference(marketIndexEClass, MARKET_INDEX__PRICING_CALENDAR);
+
+		pricingCalendarEntryEClass = createEClass(PRICING_CALENDAR_ENTRY);
+		createEAttribute(pricingCalendarEntryEClass, PRICING_CALENDAR_ENTRY__COMMENT);
+		createEAttribute(pricingCalendarEntryEClass, PRICING_CALENDAR_ENTRY__START);
+		createEAttribute(pricingCalendarEntryEClass, PRICING_CALENDAR_ENTRY__END);
+		createEAttribute(pricingCalendarEntryEClass, PRICING_CALENDAR_ENTRY__MONTH);
+
+		pricingCalendarEClass = createEClass(PRICING_CALENDAR);
+		createEReference(pricingCalendarEClass, PRICING_CALENDAR__ENTRIES);
+		createEAttribute(pricingCalendarEClass, PRICING_CALENDAR__DESCRIPTION);
 
 		holidayCalendarEntryEClass = createEClass(HOLIDAY_CALENDAR_ENTRY);
 		createEAttribute(holidayCalendarEntryEClass, HOLIDAY_CALENDAR_ENTRY__DATE);
@@ -1735,6 +1865,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		bunkerFuelCurveEClass.getESuperTypes().add(this.getAbstractYearMonthCurve());
 		currencyCurveEClass.getESuperTypes().add(this.getAbstractYearMonthCurve());
 		marketIndexEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		pricingCalendarEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		holidayCalendarEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		settleStrategyEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
@@ -1751,6 +1882,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getPricingModel_SettleStrategies(), this.getSettleStrategy(), null, "settleStrategies", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_MarketCurvesVersionRecord(), theMMXCorePackage.getVersionRecord(), null, "marketCurvesVersionRecord", null, 0, 1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_SettledPricesVersionRecord(), theMMXCorePackage.getVersionRecord(), null, "settledPricesVersionRecord", null, 0, 1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_PricingCalendars(), this.getPricingCalendar(), null, "pricingCalendars", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(dataIndexEClass, DataIndex.class, "DataIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(this.getIndexPoint());
@@ -1908,6 +2040,17 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		initEClass(marketIndexEClass, MarketIndex.class, "MarketIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMarketIndex_SettleCalendar(), this.getHolidayCalendar(), null, "settleCalendar", null, 0, 1, MarketIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMarketIndex_PricingCalendar(), this.getPricingCalendar(), null, "pricingCalendar", null, 0, 1, MarketIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(pricingCalendarEntryEClass, PricingCalendarEntry.class, "PricingCalendarEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPricingCalendarEntry_Comment(), ecorePackage.getEString(), "comment", null, 0, 1, PricingCalendarEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPricingCalendarEntry_Start(), theDateTimePackage.getLocalDate(), "start", null, 0, 1, PricingCalendarEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPricingCalendarEntry_End(), theDateTimePackage.getLocalDate(), "end", null, 0, 1, PricingCalendarEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPricingCalendarEntry_Month(), theDateTimePackage.getYearMonth(), "month", null, 0, 1, PricingCalendarEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(pricingCalendarEClass, PricingCalendar.class, "PricingCalendar", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getPricingCalendar_Entries(), this.getPricingCalendarEntry(), null, "entries", null, 0, -1, PricingCalendar.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPricingCalendar_Description(), ecorePackage.getEString(), "description", null, 0, 1, PricingCalendar.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(holidayCalendarEntryEClass, HolidayCalendarEntry.class, "HolidayCalendarEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getHolidayCalendarEntry_Date(), theDateTimePackage.getLocalDate(), "date", null, 0, 1, HolidayCalendarEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

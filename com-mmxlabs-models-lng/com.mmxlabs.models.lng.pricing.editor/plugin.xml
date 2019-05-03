@@ -198,6 +198,11 @@
           referenceEClass="com.mmxlabs.models.lng.pricing.HolidayCalendar">
     </valueProvider>
     <valueProvider
+          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.PricingCalendarReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.PricingCalendarReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.pricing.PricingCalendar">
+    </valueProvider>
+    <valueProvider
           factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.SettleStrategyReferenceValueProviderFactory"
           id="com.mmxlabs.models.lng.pricing.ui.valueproviders.SettleStrategyReferenceValueProviderFactory"
           referenceEClass="com.mmxlabs.models.lng.pricing.SettleStrategy">
@@ -320,6 +325,30 @@
           label="Settle Strategy"
           targetEClass="com.mmxlabs.models.lng.pricing.SettleStrategy">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.PricingCalendar.defaultFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Pricing Calendar"
+          targetEClass="com.mmxlabs.models.lng.pricing.PricingCalendar">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.PricingCalendarEntry.defaultFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Pricing Calendar Entry"
+          targetEClass="com.mmxlabs.models.lng.pricing.PricingCalendarEntry">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.HolidayCalendar.defaultFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Holiday Calendar"
+          targetEClass="com.mmxlabs.models.lng.pricing.HolidayCalendar">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.HolidayCalendarEntry.defaultFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Holiday Calendar Entry"
+          targetEClass="com.mmxlabs.models.lng.pricing.HolidayCalendarEntry">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.componenthelpers">
@@ -364,6 +393,18 @@
 		helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.HolidayCalendarEntryComponentHelper"
 		inheritable="true"
 		modelClass="com.mmxlabs.models.lng.pricing.HolidayCalendarEntry">
+    </componentHelper>
+    <componentHelper
+		id="com.mmxlabs.models.lng.pricing.presentation.composites.PricingCalendarComponentHelper"
+		helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PricingCalendarComponentHelper"
+		inheritable="true"
+		modelClass="com.mmxlabs.models.lng.pricing.PricingCalendar">
+    </componentHelper>
+    <componentHelper
+		id="com.mmxlabs.models.lng.pricing.presentation.composites.PricingCalendarEntryComponentHelper"
+		helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PricingCalendarEntryComponentHelper"
+		inheritable="true"
+		modelClass="com.mmxlabs.models.lng.pricing.PricingCalendarEntry">
     </componentHelper>
  </extension>
  <extension
