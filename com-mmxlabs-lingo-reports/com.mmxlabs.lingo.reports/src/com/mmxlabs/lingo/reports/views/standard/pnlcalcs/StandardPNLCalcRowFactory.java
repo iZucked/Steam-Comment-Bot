@@ -139,12 +139,8 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 			rows.add(createRow(base + 50, "    Charter Cost", true, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class,
 					legIdx, (visit, travel, idle) -> (getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost))))));
 			
-			
-			
-			
 			rows.add(createRow(base + 51, "    Charter Rate", true, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class,
 					legIdx, (visit, travel, idle) -> getOrZero(visit, event -> { return (int) ((double)event.getCharterCost()*24/(double)event.getDuration()); }  )))));
-			
 			
 			rows.add(createRow(base + 60, "    Bunkers (MT)", false, "", "", false, createBasicFormatter(options, true, Integer.class, VolumeM3Format::format,
 					createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(visit, travel, idle, FuelUnit.MT, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT))))));
