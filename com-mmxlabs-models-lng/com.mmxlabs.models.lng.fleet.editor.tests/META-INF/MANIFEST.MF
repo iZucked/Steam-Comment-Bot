@@ -3,13 +3,13 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Fleet Editor Tests
 Fragment-Host: com.mmxlabs.models.lng.fleet.editor
 Bundle-SymbolicName: com.mmxlabs.models.lng.fleet.editor.tests
-Bundle-Version: 4.6.13.RELEASE
+Bundle-Version: 4.6.14.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.junit.jupiter.api;bundle-version="5.0.0",
- com.mmxlabs.models.lng.fleet;bundle-version="[4.6.13,5.0.0)",
- com.mmxlabs.models.lng.port;bundle-version="[4.6.13,5.0.0)",
- com.mmxlabs.models.ui.validation;bundle-version="[4.6.13,5.0.0)",
+ com.mmxlabs.models.lng.fleet;bundle-version="[4.6.14,5.0.0)",
+ com.mmxlabs.models.lng.port;bundle-version="[4.6.14,5.0.0)",
+ com.mmxlabs.models.ui.validation;bundle-version="[4.6.14,5.0.0)",
  org.mockito.mockito-core;bundle-version="1.9.5",
  javax.annotation;bundle-version="1.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-10

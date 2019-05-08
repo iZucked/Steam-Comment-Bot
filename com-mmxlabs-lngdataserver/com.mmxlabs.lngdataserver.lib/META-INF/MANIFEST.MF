@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: LNG Dataserver Libraries
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.lib;singleton:=true
-Bundle-Version: 4.6.13.RELEASE
+Bundle-Version: 4.6.14.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
