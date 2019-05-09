@@ -28,8 +28,7 @@ public class AssignmentLabelProvider {
 		if (vessel != null) {
 			if(showVolume) {
 				return String.format("%s (%dk)", vessel.getName(), vessel.getVesselOrDelegateCapacity() / 1000);
-			}
-			else {
+			} else {
 				return String.format("%s", vessel.getName());
 			}
 		}
