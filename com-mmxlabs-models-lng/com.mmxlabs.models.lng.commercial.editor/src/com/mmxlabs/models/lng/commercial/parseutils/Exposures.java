@@ -176,7 +176,7 @@ public class Exposures {
 						physical.setIndexName("Physical");
 						physical.setDate(YearMonth.from(sa.getSlotVisit().getStart().toLocalDate()));
 						
-						applyProRataCorrection(pcs, hcs, physical);
+						applyProRataCorrection(pcs, hcs, promptStart, physical);
 						
 						slotAllocation.getExposures().add(physical);
 					}
@@ -189,7 +189,7 @@ public class Exposures {
 						final Collection<ExposureDetail> exposureDetails = createExposureDetail(node, pricingDate, volume, isPurchase, lookupData, pricingFullDate.getDayOfMonth());
 						if (exposureDetails != null && !exposureDetails.isEmpty()) {
 							for (final ExposureDetail ed : exposureDetails) {
-								applyProRataCorrection(pcs, hcs, ed);
+								applyProRataCorrection(pcs, hcs, promptStart, ed);
 								if (ed.getDate().isAfter(YearMonth.of(promptStart.getYear(), promptStart.getMonthValue())) //
 										|| ed.getDate().equals(YearMonth.of(promptStart.getYear(), promptStart.getMonthValue()))) {
 									slotAllocation.getExposures().add(ed);
@@ -218,15 +218,15 @@ public class Exposures {
 			}
 		}
 	}
-
-	private static void applyProRataCorrection(List<PricingCalendar> pcs, List<HolidayCalendar> hcs, final ExposureDetail exposure) {
+	
+	private static void applyProRataCorrection(List<PricingCalendar> pcs, List<HolidayCalendar> hcs, final LocalDate cutoff, final ExposureDetail exposure) {
 		for (final PricingCalendar pc : pcs) {
 			final List<PricingCalendarEntry> lPce = pc.getEntries().stream()//
 					.filter(e -> e.getMonth().equals(exposure.getDate()))//
 					.collect(Collectors.toList());
 			if (!lPce.isEmpty()) {
 				// for now - we take the first calendar
-				int wd = getWorkingDays(lPce.get(0), hcs);
+				int wd = getWorkingDays(lPce.get(0), hcs, cutoff);
 				double proRataCorrection = exposure.getDate().lengthOfMonth() / (double) wd;
 				exposure.setVolumeInMMBTU(proRataCorrection * exposure.getVolumeInMMBTU());
 				exposure.setVolumeInNativeUnits(proRataCorrection * exposure.getVolumeInNativeUnits());
@@ -237,8 +237,10 @@ public class Exposures {
 	
 	private static class CalendarHandler {
 		
+		private LocalDate cutOffDate = null;
 		private Map<CommodityCurve, PricingCalendar> pricingCalendars = new HashMap<>();
 		private Map<CommodityCurve, HolidayCalendar> holidayCalendars = new HashMap<>();
+		
 		public PricingCalendar getPricingCalendar(final CommodityCurve cc) {
 			return pricingCalendars.get(cc);
 		}
@@ -267,10 +269,10 @@ public class Exposures {
 		}
 	}
 
-	private static int getWorkingDays(final PricingCalendarEntry pricingCalendarEntry,final List<HolidayCalendar> hcs) {
+	private static int getWorkingDays(final PricingCalendarEntry pricingCalendarEntry, final List<HolidayCalendar> hcs, final LocalDate cutoff) {
 		int i = 0;
 		// workdays
-		for (LocalDate c = pricingCalendarEntry.getStart(); c.isBefore(pricingCalendarEntry.getEnd().plusDays(1)); c = c.plusDays(1)) {
+		for (LocalDate c = cutoff/*pricingCalendarEntry.getStart()*/; c.isBefore(pricingCalendarEntry.getEnd().plusDays(1)); c = c.plusDays(1)) {
 			if (c.getDayOfWeek() != DayOfWeek.SATURDAY && c.getDayOfWeek() != DayOfWeek.SUNDAY) {
 				i++;
 			}
@@ -279,7 +281,7 @@ public class Exposures {
 			// extra holidays
 			for (final HolidayCalendar hc : hcs) {
 				for (final HolidayCalendarEntry hce: hc.getEntries()) {
-					if (hce.getDate().isAfter(pricingCalendarEntry.getStart()) //
+					if (hce.getDate().isAfter(cutoff/*pricingCalendarEntry.getStart()*/) //
 							&& hce.getDate().isBefore(pricingCalendarEntry.getEnd())) {
 						i--;
 					}
