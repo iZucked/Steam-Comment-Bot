@@ -91,8 +91,8 @@ public class PricingCalendarImporter {
 
 	private PricingCalendarEntry createFromDateComment(@NonNull final IMMXImportContext context, String start, String end, String month, String comment) {
 		PricingCalendarEntry ih = PricingFactory.eINSTANCE.createPricingCalendarEntry();
-		LocalDate ls = LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(start));
-		LocalDate le = LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(end));
+		LocalDate ls = LocalDate.from(DateTimeFormatter.ofPattern("dd/MM/yyyy").parse(start));
+		LocalDate le = LocalDate.from(DateTimeFormatter.ofPattern("dd/MM/yyyy").parse(end));
 		
 		YearMonth date = null;
 		try {
