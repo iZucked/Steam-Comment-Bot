@@ -237,7 +237,6 @@ public class Exposures {
 	
 	private static class CalendarHandler {
 		
-		private LocalDate cutOffDate = null;
 		private Map<CommodityCurve, PricingCalendar> pricingCalendars = new HashMap<>();
 		private Map<CommodityCurve, HolidayCalendar> holidayCalendars = new HashMap<>();
 		

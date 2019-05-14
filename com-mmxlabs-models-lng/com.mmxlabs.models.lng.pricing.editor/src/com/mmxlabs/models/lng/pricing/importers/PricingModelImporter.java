@@ -47,6 +47,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 	public static final String CONVERSION_FACTORS_KEY = "CONVERSION_FACTORS";
 	public static final String SETTLED_PRICES_KEY = "SETTLED_PRICES";
 	public static final String HOLIDAY_CALENDAR_KEY = "HOLIDAY_CALENDAR_KEY";
+	public static final String PRICING_CALENDAR_KEY = "PRICING_CALENDAR_KEY";
 	public static final String SETTLE_STRATEGY_KEY = "SETTLE_STRATEGY_KEY";
 	public static final String MARKET_INDEX_KEY = "MARKET_INDEX_KEY";
 
@@ -60,6 +61,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 			inputs.put(HOLIDAY_CALENDAR_KEY, "Holiday Calendars");
 			inputs.put(SETTLE_STRATEGY_KEY, "Settle Strategies");
 			inputs.put(MARKET_INDEX_KEY, "Market Indices");
+			inputs.put(PRICING_CALENDAR_KEY, "Pricing Calendars");
 		}
 		inputs.put(CONVERSION_FACTORS_KEY, "Conversion Factors");
 	}
@@ -76,6 +78,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 	private IClassImporter marketIndexImporter;
 	private IClassImporter settleStrategyImporter;
 	private HolidayCalendarImporter holidayCalendarImporter;
+	private PricingCalendarImporter pricingCalendarImporter;
 
 	/**
 	 */
@@ -98,6 +101,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 			conversionFactorsImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getUnitConversion());
 			settledPricesImporter = new DatePointImporter();
 			holidayCalendarImporter = new HolidayCalendarImporter();
+			pricingCalendarImporter = new PricingCalendarImporter();
 			settleStrategyImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getSettleStrategy());
 			marketIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getMarketIndex());
 		}
@@ -128,6 +132,9 @@ public class PricingModelImporter implements ISubmodelImporter {
 		}
 		if (inputs.containsKey(HOLIDAY_CALENDAR_KEY)) {
 			importIndexHolidays(pricingModel, inputs.get(HOLIDAY_CALENDAR_KEY), context);
+		}
+		if (inputs.containsKey(PRICING_CALENDAR_KEY)) {
+			importPricingCalendars(pricingModel, inputs.get(PRICING_CALENDAR_KEY), context);
 		}
 		if (inputs.containsKey(CONVERSION_FACTORS_KEY)) {
 			importConversionFactors(pricingModel, inputs.get(CONVERSION_FACTORS_KEY), context);
@@ -170,6 +177,10 @@ public class PricingModelImporter implements ISubmodelImporter {
 	private void importIndexHolidays(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
 		pricing.getHolidayCalendars().addAll(holidayCalendarImporter.importObjects(csvReader, context));
 	}
+	
+	private void importPricingCalendars(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
+		pricing.getPricingCalendars().addAll(pricingCalendarImporter.importObjects(csvReader, context));
+	}
 
 	private void importCurrencyCurves(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
 		pricing.getCurrencyCurves().addAll((Collection<? extends CurrencyCurve>) currencyIndexImporter.importObjects(PricingPackage.eINSTANCE.getCurrencyCurve(), csvReader, context));
@@ -197,6 +208,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 		output.put(SETTLED_PRICES_KEY, settledPricesImporter.exportObjects(pricing.getSettledPrices(), context));
 		output.put(CONVERSION_FACTORS_KEY, conversionFactorsImporter.exportObjects(pricing.getConversionFactors(), context));
 		output.put(HOLIDAY_CALENDAR_KEY, holidayCalendarImporter.exportObjects(pricing.getHolidayCalendars(), context));
+		output.put(PRICING_CALENDAR_KEY, pricingCalendarImporter.exportObjects(pricing.getPricingCalendars(), context));
 		output.put(MARKET_INDEX_KEY, marketIndexImporter.exportObjects(pricing.getMarketIndices(), context));
 		output.put(SETTLE_STRATEGY_KEY, settleStrategyImporter.exportObjects(pricing.getSettleStrategies(), context));
 	}
