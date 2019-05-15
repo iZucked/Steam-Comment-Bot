@@ -13,8 +13,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.datetime.importers.LocalDateAttributeImporter;
@@ -23,8 +25,10 @@ import com.mmxlabs.models.lng.pricing.HolidayCalendarEntry;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
+import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
+import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
-public class HolidayCalendarImporter {
+public class HolidayCalendarImporter extends AbstractClassImporter {
 
 	private static final String NAME = "name";
 	private static final String DATE = "date";
@@ -111,6 +115,34 @@ public class HolidayCalendarImporter {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public @NonNull ImportResults importObject(@Nullable EObject parent, @NonNull EClass targetClass, @NonNull Map<String, String> row, @NonNull IMMXImportContext context) {
+		
+		String calendarName = row.get(NAME);
+		if(calendarName == null) {
+			context.addProblem(context.createProblem(String.format("Holiday calendar name is missing"), true, true, true));
+		}
+		final HolidayCalendar hc;
+		if (seen(calendarName)) {
+			hc = calendars.get(calendarName);
+		} else {
+			hc = PricingFactory.eINSTANCE.createHolidayCalendar();
+			hc.setName(calendarName);
+			calendars.put(calendarName, hc);
+			context.registerNamedObject(hc);
+		}
+		if (row.get(DATE).length() == 0) {
+			final String desc = row.get(DESCRIPTION);
+			hc.setDescription(desc == null ? "" : desc);
+		} else {
+			final HolidayCalendarEntry hce = createFromDateComment(row.get(DATE), row.get(DESCRIPTION));
+			if (!hc.getEntries().contains(hce))
+				hc.getEntries().add(hce);
+		}
+		
+		return new ImportResults(hc, true);
 	}
 
 }

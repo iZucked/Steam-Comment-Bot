@@ -189,6 +189,32 @@
                   </test>
                </visibleWhen>                  
             </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.holidaycalendars"
+                  label="Import holiday calendars"
+                  style="push">
+ 				<visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:paperdeals"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>                  
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.pricingcalendars"
+                  label="Import pricing calendars"
+                  style="push">
+ 				<visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:paperdeals"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>                  
+            </command>
          </menuContribution>
          <menuContribution
                allPopups="false"
@@ -262,6 +288,16 @@
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.settledprices.ImportSettledPricesHandler"
                id="com.mmxlabs.models.lng.scenario.import.wizards.settledprices"
                name="Import settled prices from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.holidaycalendars.ImportHolidayCalendarsHandler"
+               id="com.mmxlabs.models.lng.scenario.import.wizards.holidaycalendars"
+               name="Import holiday calendars from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.pricingcalendars.ImportPricingCalendarsHandler"
+               id="com.mmxlabs.models.lng.scenario.import.wizards.pricingcalendars"
+               name="Import pricing calendars from CSV">
          </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportUnifiedCurvesHandler"
