@@ -209,7 +209,7 @@ public class GeneralDataUpdater {
 	}
 
 	private void readPersistedRecords(final TypeRecord typeRecord) {
-		final File f = new File(basePath.getAbsolutePath() + "/%s/records.json");
+		final File f = new File(basePath.getAbsolutePath() + "/records.json");
 		if (f.exists()) {
 			String json;
 			try {
@@ -238,7 +238,7 @@ public class GeneralDataUpdater {
 			final Pair<String, Instant> recordsPair = client.getRecords(typeRecord);
 			if (recordsPair != null) {
 				final List<GeneralDataRecord> records = client.parseRecordsJSONData(typeRecord, recordsPair.getFirst());
-				File parent = new File(basePath.getAbsolutePath() + File.pathSeparator + typeRecord.getType());
+				File parent = new File(basePath.getAbsolutePath() + File.separator + typeRecord.getType());
 				parent.mkdirs();
 				update(typeRecord, records);
 				Files.write(recordsPair.getFirst(), new File(parent.getAbsolutePath() + "/records.json"), Charsets.UTF_8);
