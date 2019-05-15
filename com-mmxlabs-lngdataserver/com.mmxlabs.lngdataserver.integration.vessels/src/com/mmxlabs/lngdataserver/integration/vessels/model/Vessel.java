@@ -9,14 +9,8 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Indexed;
-
-@Entity("vessels")
 public class Vessel {
 
-	@Indexed()
 	private String mmxId;
 
 	private String name;
@@ -41,15 +35,11 @@ public class Vessel {
 	private Optional<String> inPortBaseFuel = Optional.empty();
 	private Optional<String> pilotLightBaseFuel = Optional.empty();
 
-	@Embedded
 	private VesselTravelAttributes ladenAttributes = new VesselTravelAttributes();
 
-	@Embedded
 	private VesselTravelAttributes ballastAttributes = new VesselTravelAttributes();
 
-	@Embedded
 	private VesselPortAttributes loadAttributes = new VesselPortAttributes();
-	@Embedded
 	private VesselPortAttributes dischargeAttributes = new VesselPortAttributes();
 
 	private Optional<List<VesselRouteParameters>> routeParameters = Optional.empty();

@@ -4,16 +4,11 @@
  */
 package com.mmxlabs.lngdataserver.integration.distances.model;
 
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-
 /**
  * @author robert.erdin@gmail.com
  *         created on 22/01/17.
  */
-@Entity
 public class Identifier {
-    @Id
     private String identifier;
     private String provider;
 

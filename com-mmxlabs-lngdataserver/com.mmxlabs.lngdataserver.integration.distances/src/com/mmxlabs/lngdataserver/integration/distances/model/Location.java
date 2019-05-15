@@ -8,10 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Indexed;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -20,19 +16,15 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  * @author robert.erdin@minimaxlabs.com created on 22/01/17.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Entity("locations")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "mmxId")
 public class Location {
 
-	@Indexed
 	private String mmxId;
 
 	private boolean virtual = false;
 
-	@Embedded
 	private Map<String, Identifier> otherIdentifiers;
 
-	@Indexed
 	private String name;
 
 	private List<String> aliases;

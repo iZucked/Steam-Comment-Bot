@@ -6,18 +6,12 @@ package com.mmxlabs.lngdataserver.integration.pricing.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
 
 import java.util.List;
 
 
-@Entity
-@ApiModel(parent = Curve.class)
 public class DataCurve extends Curve{
 
-    @Embedded
     private List<CurvePoint> curve;
 
     @JsonCreator

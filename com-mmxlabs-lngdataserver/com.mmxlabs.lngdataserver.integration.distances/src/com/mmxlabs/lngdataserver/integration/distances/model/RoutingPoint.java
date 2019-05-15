@@ -7,24 +7,18 @@ package com.mmxlabs.lngdataserver.integration.distances.model;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Reference;
-
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author robert.erdin@gmail.com created on 22/01/17.
  */
-@Entity("routing_points")
 public class RoutingPoint {
 
 	private String identifier;
 
-	@Reference
 	private Location virtualLocation;
 
-	@Reference
 	private Set<Location> entryPoints;
 
 	private double distance;

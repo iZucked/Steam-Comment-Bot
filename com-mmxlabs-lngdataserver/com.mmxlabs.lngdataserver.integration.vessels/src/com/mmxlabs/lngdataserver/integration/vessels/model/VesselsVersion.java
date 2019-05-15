@@ -8,8 +8,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mongodb.morphia.annotations.Reference;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -17,7 +15,6 @@ public class VesselsVersion {
 
 	private String identifier;
 
-	@Reference
 	private List<Vessel> vessels = new ArrayList<>();
 
 	private Instant createdAt;

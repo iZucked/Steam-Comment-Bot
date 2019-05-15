@@ -7,11 +7,7 @@ package com.mmxlabs.lngdataserver.integration.pricing.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import org.mongodb.morphia.annotations.Entity;
 
-@Entity
-@ApiModel(parent = Curve.class)
 public class ExpressionCurve extends Curve {
 
     private String expression;

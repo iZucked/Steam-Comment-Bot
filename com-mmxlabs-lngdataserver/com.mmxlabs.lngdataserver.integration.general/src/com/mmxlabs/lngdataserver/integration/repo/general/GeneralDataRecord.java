@@ -8,11 +8,8 @@ import java.time.Instant;
 
 import com.google.common.base.Objects;
 
-import io.swagger.annotations.ApiModelProperty;
-
 public class GeneralDataRecord {
 
-	@ApiModelProperty(required = true)
 	private String uuid;
 
 	private String creator;

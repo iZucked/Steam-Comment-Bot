@@ -7,14 +7,10 @@ package com.mmxlabs.lngdataserver.integration.repo.generic;
 import java.time.Instant;
 import java.util.Objects;
 
-import io.swagger.annotations.ApiModelProperty;
-
 public class GenericDataRecord {
 
-	@ApiModelProperty(required = true)
 	private String uuid;
 
-	@ApiModelProperty(required = true)
 	private String type;
 
 	private String creator;

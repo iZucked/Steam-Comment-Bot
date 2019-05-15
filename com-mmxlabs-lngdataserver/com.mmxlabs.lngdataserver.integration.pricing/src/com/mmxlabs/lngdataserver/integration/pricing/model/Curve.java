@@ -4,29 +4,15 @@
  */
 package com.mmxlabs.lngdataserver.integration.pricing.model;
 
-import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Id;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@name")
 @JsonSubTypes({ @JsonSubTypes.Type(value = DataCurve.class, name = "DataCurve"), @JsonSubTypes.Type(value = ExpressionCurve.class, name = "ExpressionCurve") })
-
-@ApiModel(discriminator = "@class", subTypes = { DataCurve.class, ExpressionCurve.class })
 public abstract class Curve {
-	@Id
-	@JsonIgnore
-	private ObjectId id;
-	@ApiModelProperty(required = true)
 	private String name;
-	@ApiModelProperty(required = true)
 	private CurveType type;
 	private String description;
 	private String unit;
@@ -42,14 +28,6 @@ public abstract class Curve {
 		this.description = description;
 		this.unit = unit;
 		this.currency = currency;
-	}
-
-	public ObjectId getId() {
-		return id;
-	}
-
-	public void setId(ObjectId id) {
-		this.id = id;
 	}
 
 	public String getName() {

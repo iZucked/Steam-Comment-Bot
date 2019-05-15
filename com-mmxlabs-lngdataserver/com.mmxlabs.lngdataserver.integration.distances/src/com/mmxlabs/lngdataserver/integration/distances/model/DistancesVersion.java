@@ -8,13 +8,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Reference;
-
 /**
  * @author robert.erdin@gmail.com created on 03/02/17.
  */
-@Entity("versions")
 public class DistancesVersion {
 
 	private String identifier;
@@ -25,13 +21,10 @@ public class DistancesVersion {
 	
 	private String createdBy;
 
-	@Reference
 	private Routes routes = new Routes();
 
-	@Reference
 	private List<Location> locations = new ArrayList<>();
 
-	@Reference
 	private List<RoutingPoint> routingPoints = new ArrayList<>();
 
 	public DistancesVersion() {
