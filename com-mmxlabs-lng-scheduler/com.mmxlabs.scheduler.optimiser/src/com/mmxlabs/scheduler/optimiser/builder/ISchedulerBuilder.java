@@ -207,7 +207,7 @@ public interface ISchedulerBuilder {
 	IHeelOptionSupplier createHeelSupplier(long minHeelInM3, long maxHeelInM3, int heelCVValue, @NonNull IHeelPriceCalculator heelPriceCalculator);
 
 	@NonNull
-	IHeelOptionConsumer createHeelConsumer(long minHeelInM3, long maxHeelInM3, @NonNull VesselTankState tankState, @NonNull IHeelPriceCalculator heelPriceCalculator);
+	IHeelOptionConsumer createHeelConsumer(long minHeelInM3, long maxHeelInM3, @NonNull VesselTankState tankState, @NonNull IHeelPriceCalculator heelPriceCalculator, boolean useLastHeelPrice);
 
 	/**
 	 * Create a vessel availability for the with the given vessel .

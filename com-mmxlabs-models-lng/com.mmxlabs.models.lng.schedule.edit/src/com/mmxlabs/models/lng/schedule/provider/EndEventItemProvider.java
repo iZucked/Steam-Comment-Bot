@@ -53,6 +53,8 @@ public class EndEventItemProvider
 			addPortCostPropertyDescriptor(object);
 			addHeelCostPropertyDescriptor(object);
 			addHeelRevenuePropertyDescriptor(object);
+			addHeelCostUnitPricePropertyDescriptor(object);
+			addHeelRevenueUnitPricePropertyDescriptor(object);
 			addGroupProfitAndLossPropertyDescriptor(object);
 			addEventsPropertyDescriptor(object);
 			addSlotAllocationPropertyDescriptor(object);
@@ -123,6 +125,50 @@ public class EndEventItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Heel Cost Unit Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHeelCostUnitPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PortVisit_heelCostUnitPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortVisit_heelCostUnitPrice_feature", "_UI_PortVisit_type"),
+				 SchedulePackage.Literals.PORT_VISIT__HEEL_COST_UNIT_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Heel Revenue Unit Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHeelRevenueUnitPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PortVisit_heelRevenueUnitPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortVisit_heelRevenueUnitPrice_feature", "_UI_PortVisit_type"),
+				 SchedulePackage.Literals.PORT_VISIT__HEEL_REVENUE_UNIT_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -290,6 +336,8 @@ public class EndEventItemProvider
 			case SchedulePackage.END_EVENT__PORT_COST:
 			case SchedulePackage.END_EVENT__HEEL_COST:
 			case SchedulePackage.END_EVENT__HEEL_REVENUE:
+			case SchedulePackage.END_EVENT__HEEL_COST_UNIT_PRICE:
+			case SchedulePackage.END_EVENT__HEEL_REVENUE_UNIT_PRICE:
 			case SchedulePackage.END_EVENT__BALLAST_BONUS_FEE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

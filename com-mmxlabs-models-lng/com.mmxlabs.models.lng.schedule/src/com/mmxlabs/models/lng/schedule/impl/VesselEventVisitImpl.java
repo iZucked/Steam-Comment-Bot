@@ -50,6 +50,8 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getLateness <em>Lateness</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getHeelCost <em>Heel Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getHeelRevenue <em>Heel Revenue</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getHeelCostUnitPrice <em>Heel Cost Unit Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getHeelRevenueUnitPrice <em>Heel Revenue Unit Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getEvents <em>Events</em>}</li>
@@ -132,6 +134,42 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * @ordered
 	 */
 	protected int heelRevenue = HEEL_REVENUE_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getHeelCostUnitPrice() <em>Heel Cost Unit Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelCostUnitPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double HEEL_COST_UNIT_PRICE_EDEFAULT = 0.0;
+	/**
+	 * The cached value of the '{@link #getHeelCostUnitPrice() <em>Heel Cost Unit Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelCostUnitPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected double heelCostUnitPrice = HEEL_COST_UNIT_PRICE_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getHeelRevenueUnitPrice() <em>Heel Revenue Unit Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelRevenueUnitPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double HEEL_REVENUE_UNIT_PRICE_EDEFAULT = 0.0;
+	/**
+	 * The cached value of the '{@link #getHeelRevenueUnitPrice() <em>Heel Revenue Unit Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelRevenueUnitPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected double heelRevenueUnitPrice = HEEL_REVENUE_UNIT_PRICE_EDEFAULT;
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLoss() <em>Group Profit And Loss</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -331,6 +369,52 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 		heelRevenue = newHeelRevenue;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE, oldHeelRevenue, heelRevenue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getHeelCostUnitPrice() {
+		return heelCostUnitPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHeelCostUnitPrice(double newHeelCostUnitPrice) {
+		double oldHeelCostUnitPrice = heelCostUnitPrice;
+		heelCostUnitPrice = newHeelCostUnitPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST_UNIT_PRICE, oldHeelCostUnitPrice, heelCostUnitPrice));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getHeelRevenueUnitPrice() {
+		return heelRevenueUnitPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHeelRevenueUnitPrice(double newHeelRevenueUnitPrice) {
+		double oldHeelRevenueUnitPrice = heelRevenueUnitPrice;
+		heelRevenueUnitPrice = newHeelRevenueUnitPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE_UNIT_PRICE, oldHeelRevenueUnitPrice, heelRevenueUnitPrice));
 	}
 
 	/**
@@ -550,6 +634,10 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return getHeelCost();
 			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE:
 				return getHeelRevenue();
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST_UNIT_PRICE:
+				return getHeelCostUnitPrice();
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE_UNIT_PRICE:
+				return getHeelRevenueUnitPrice();
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				return getGroupProfitAndLoss();
 			case SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS:
@@ -589,6 +677,12 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE:
 				setHeelRevenue((Integer)newValue);
+				return;
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST_UNIT_PRICE:
+				setHeelCostUnitPrice((Double)newValue);
+				return;
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE_UNIT_PRICE:
+				setHeelRevenueUnitPrice((Double)newValue);
 				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)newValue);
@@ -634,6 +728,12 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE:
 				setHeelRevenue(HEEL_REVENUE_EDEFAULT);
 				return;
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST_UNIT_PRICE:
+				setHeelCostUnitPrice(HEEL_COST_UNIT_PRICE_EDEFAULT);
+				return;
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE_UNIT_PRICE:
+				setHeelRevenueUnitPrice(HEEL_REVENUE_UNIT_PRICE_EDEFAULT);
+				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)null);
 				return;
@@ -671,6 +771,10 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return heelCost != HEEL_COST_EDEFAULT;
 			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE:
 				return heelRevenue != HEEL_REVENUE_EDEFAULT;
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST_UNIT_PRICE:
+				return heelCostUnitPrice != HEEL_COST_UNIT_PRICE_EDEFAULT;
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE_UNIT_PRICE:
+				return heelRevenueUnitPrice != HEEL_REVENUE_UNIT_PRICE_EDEFAULT;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				return groupProfitAndLoss != null;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS:
@@ -704,6 +808,8 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				case SchedulePackage.VESSEL_EVENT_VISIT__LATENESS: return SchedulePackage.PORT_VISIT__LATENESS;
 				case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST: return SchedulePackage.PORT_VISIT__HEEL_COST;
 				case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE: return SchedulePackage.PORT_VISIT__HEEL_REVENUE;
+				case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST_UNIT_PRICE: return SchedulePackage.PORT_VISIT__HEEL_COST_UNIT_PRICE;
+				case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE_UNIT_PRICE: return SchedulePackage.PORT_VISIT__HEEL_REVENUE_UNIT_PRICE;
 				default: return -1;
 			}
 		}
@@ -742,6 +848,8 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				case SchedulePackage.PORT_VISIT__LATENESS: return SchedulePackage.VESSEL_EVENT_VISIT__LATENESS;
 				case SchedulePackage.PORT_VISIT__HEEL_COST: return SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST;
 				case SchedulePackage.PORT_VISIT__HEEL_REVENUE: return SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE;
+				case SchedulePackage.PORT_VISIT__HEEL_COST_UNIT_PRICE: return SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST_UNIT_PRICE;
+				case SchedulePackage.PORT_VISIT__HEEL_REVENUE_UNIT_PRICE: return SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE_UNIT_PRICE;
 				default: return -1;
 			}
 		}
@@ -777,6 +885,10 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 		result.append(heelCost);
 		result.append(", heelRevenue: ");
 		result.append(heelRevenue);
+		result.append(", heelCostUnitPrice: ");
+		result.append(heelCostUnitPrice);
+		result.append(", heelRevenueUnitPrice: ");
+		result.append(heelRevenueUnitPrice);
 		result.append(')');
 		return result.toString();
 	}

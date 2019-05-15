@@ -276,6 +276,8 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//EndHeelOptions/minimumEndHeel"/>
       <genFeatures createChild="false" propertyDescription="If the vessel arrives cold, the maximum heel required"
           ecoreFeature="ecore:EAttribute cargo.ecore#//EndHeelOptions/maximumEndHeel"/>
+      <genFeatures createChild="false" propertyDescription="Price heel sold on the last cargo sales price or the price use to buy the heel"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//EndHeelOptions/useLastHeelPrice"/>
       <genFeatures createChild="false" propertyDescription="The sale price of the heel (up to maximum quantity). Over delivery is not priced."
           ecoreFeature="ecore:EAttribute cargo.ecore#//EndHeelOptions/priceExpression"/>
     </genClasses>

@@ -149,9 +149,9 @@ public class GeneratedCharterOutOptionCache {
 						@Nullable
 						IHeelPriceCalculator gcoEventHeelPrice = gcoo.getGCOEventHeelPrice();
 						assert gcoEventHeelPrice != null;
-	
+
 						HeelOptionConsumer heelConsumer = new HeelOptionConsumer(gcoo.getGCOEventHeelVolume(), gcoo.getGCOEventHeelVolume(),
-								gcoo.getGCOEventHeelVolume() > 0 ? VesselTankState.MUST_BE_COLD : VesselTankState.MUST_BE_WARM, gcoEventHeelPrice);
+								gcoo.getGCOEventHeelVolume() > 0 ? VesselTankState.MUST_BE_COLD : VesselTankState.MUST_BE_WARM, gcoEventHeelPrice, false);
 						HeelOptionSupplier heelSupplier = new HeelOptionSupplier(gcoo.getGCOEventHeelVolume(), gcoo.getGCOEventHeelVolume(), gcoo.getGCOEventHeelCV(), gcoEventHeelPrice);
 						event.setHeelConsumer(heelConsumer);
 						event.setHeelSupplier(heelSupplier);

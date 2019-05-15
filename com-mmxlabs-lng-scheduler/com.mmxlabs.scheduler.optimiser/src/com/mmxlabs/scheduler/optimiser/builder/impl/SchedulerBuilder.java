@@ -446,7 +446,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			final PricingEventType pricingEvent, final boolean optional, final boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3, final boolean cancelled) {
 
 		boolean fooLocked = locked || cancelled;
-		
+
 		final LoadSlot slot = new LoadSlot(id, port, window, isVolumeLimitInM3, minVolumeInM3, maxVolumeInM3, loadContract, cargoCVValue, cooldownSet, cooldownForbidden);
 
 		final ISequenceElement element = configureLoadOption(slot, minVolumeInM3, maxVolumeInM3, loadContract, cargoCVValue, pricingDate, pricingEvent, optional, fooLocked, isSpotMarketSlot,
@@ -468,7 +468,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		if (port == null) {
 			port = ANYWHERE;
 		}
-		
+
 		boolean fooLocked = locked || cancelled;
 
 		final LoadOption slot = new LoadOption(id, port, window, isVolumeLimitInM3, minVolume, maxVolume, priceCalculator, cargoCVValue);
@@ -754,7 +754,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			end = spotCharterInMarket.getEndRequirement();
 		} else {
 			end = createEndRequirement(Collections.singletonList(ANYWHERE), false, new TimeWindow(0, Integer.MAX_VALUE),
-					createHeelConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
+					createHeelConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false), false);
 		}
 		final ILongCurve dailyCharterInPrice = spotCharterInMarket.getDailyCharterInRateCurve();
 
@@ -772,8 +772,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public @NonNull IHeelOptionConsumer createHeelConsumer(long minHeelInM3, long maxHeelInM3, @NonNull VesselTankState tankState, @NonNull IHeelPriceCalculator heelPriceCalculator) {
-		return new HeelOptionConsumer(minHeelInM3, maxHeelInM3, tankState, heelPriceCalculator);
+	public @NonNull IHeelOptionConsumer createHeelConsumer(long minHeelInM3, long maxHeelInM3, @NonNull VesselTankState tankState, @NonNull IHeelPriceCalculator heelPriceCalculator,
+			boolean useLastHeelPrice) {
+		return new HeelOptionConsumer(minHeelInM3, maxHeelInM3, tankState, heelPriceCalculator, useLastHeelPrice);
 	}
 
 	@Override
@@ -897,7 +898,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	public IEndRequirement createEndRequirement() {
 		return createEndRequirement(Collections.singletonList(ANYWHERE), false, new MutableTimeWindow(0, Integer.MAX_VALUE),
-				createHeelConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0)), false);
+				createHeelConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false), false);
 	}
 
 	@Override
@@ -1290,7 +1291,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 			final SplitCharterOutVesselEventStartPortSlot startSlot = new SplitCharterOutVesselEventStartPortSlot("start-" + id, PortType.Other, event.getStartPort(), event.getTimeWindow(), event);
 
-			HeelOptionConsumer redirectConsumer = new HeelOptionConsumer(0, Long.MAX_VALUE, VesselTankState.EITHER, ConstantHeelPriceCalculator.ZERO);
+			HeelOptionConsumer redirectConsumer = new HeelOptionConsumer(0, Long.MAX_VALUE, VesselTankState.EITHER, ConstantHeelPriceCalculator.ZERO, false);
 
 			final VesselEventPortSlot redirectSlot = new VesselEventPortSlot("redirect-" + id, PortType.Virtual, ANYWHERE, null, event, redirectConsumer);
 
@@ -1916,8 +1917,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final IStartRequirement start = createStartRequirement(ANYWHERE, false, null,
 				createHeelSupplier(roundTripCargoVessel.getSafetyHeel(), roundTripCargoVessel.getSafetyHeel(), 0, new ConstantHeelPriceCalculator(0)));
+
 		final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), false, new TimeWindow(0, Integer.MAX_VALUE),
-				createHeelConsumer(roundTripCargoVessel.getSafetyHeel(), roundTripCargoVessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
+				createHeelConsumer(roundTripCargoVessel.getSafetyHeel(), roundTripCargoVessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false), false);
 
 		final IVesselAvailability vesselAvailability = createVesselAvailability(roundTripCargoVessel, spotCharterInMarket.getDailyCharterInRateCurve(), VesselInstanceType.ROUND_TRIP, start, end,
 				spotCharterInMarket, null, -1, new ZeroLongCurve(), true);
@@ -1953,8 +1955,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			permitted.removeAll(allowedVessels);
 			allowedVessels = permitted;
 		}
-//		if (!allowedVessels.isEmpty()) {
-			allowedVesselProviderEditor.setPermittedVesselAndClasses(portSlot, allowedVessels);
-//		}
+		// if (!allowedVessels.isEmpty()) {
+		allowedVesselProviderEditor.setPermittedVesselAndClasses(portSlot, allowedVessels);
+		// }
 	}
 }

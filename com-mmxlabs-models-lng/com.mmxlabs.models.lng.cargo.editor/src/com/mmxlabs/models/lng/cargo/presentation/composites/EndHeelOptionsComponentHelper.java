@@ -13,6 +13,8 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -67,6 +69,7 @@ public class EndHeelOptionsComponentHelper extends BaseComponentHelper {
 		add_tankStateEditor(detailComposite, topClass);
 		add_minimumEndHeelEditor(detailComposite, topClass);
 		add_maximumEndHeelEditor(detailComposite, topClass);
+		add_useLastHeelPriceEditor(detailComposite, topClass);
 		add_priceExpressionEditor(detailComposite, topClass);
 	}
 	/**
@@ -94,6 +97,17 @@ public class EndHeelOptionsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_maximumEndHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.END_HEEL_OPTIONS__MAXIMUM_END_HEEL));
+	}
+
+	/**
+	 * Create the editor for the useLastHeelPrice feature on EndHeelOptions
+	 *
+	 * @generated NOT
+	 */
+	protected void add_useLastHeelPriceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICE_HEEL_ON_LAST_EVENT)) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE));
+		}
 	}
 
 	/**

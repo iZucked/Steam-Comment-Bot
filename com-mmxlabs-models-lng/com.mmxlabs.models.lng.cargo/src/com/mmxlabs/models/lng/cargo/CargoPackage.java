@@ -5796,13 +5796,22 @@ public interface CargoPackage extends EPackage {
 	int END_HEEL_OPTIONS__MAXIMUM_END_HEEL = 2;
 
 	/**
+	 * The feature id for the '<em><b>Use Last Heel Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE = 3;
+
+	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_HEEL_OPTIONS__PRICE_EXPRESSION = 3;
+	int END_HEEL_OPTIONS__PRICE_EXPRESSION = 4;
 
 	/**
 	 * The number of structural features of the '<em>End Heel Options</em>' class.
@@ -5811,7 +5820,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_HEEL_OPTIONS_FEATURE_COUNT = 4;
+	int END_HEEL_OPTIONS_FEATURE_COUNT = 5;
 
 	/**
 	 * The number of operations of the '<em>End Heel Options</em>' class.
@@ -9333,6 +9342,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getEndHeelOptions_MaximumEndHeel();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#isUseLastHeelPrice <em>Use Last Heel Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Use Last Heel Price</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.EndHeelOptions#isUseLastHeelPrice()
+	 * @see #getEndHeelOptions()
+	 * @generated
+	 */
+	EAttribute getEndHeelOptions_UseLastHeelPrice();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getPriceExpression <em>Price Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11718,6 +11738,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute END_HEEL_OPTIONS__MAXIMUM_END_HEEL = eINSTANCE.getEndHeelOptions_MaximumEndHeel();
+
+		/**
+		 * The meta object literal for the '<em><b>Use Last Heel Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE = eINSTANCE.getEndHeelOptions_UseLastHeelPrice();
 
 		/**
 		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.

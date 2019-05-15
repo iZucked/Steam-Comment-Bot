@@ -22,7 +22,7 @@ public class VesselEventPortSlot extends AbstractVesselEventPortSlot implements 
 
 	public VesselEventPortSlot(final String id, final PortType portType, final IPort port, final @Nullable ITimeWindow timeWindow, final IVesselEvent vesselEvent) {
 		super(id, portType, port, timeWindow, vesselEvent);
-		heelConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0));
+		heelConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false);
 	}
 
 	public VesselEventPortSlot(final String id, final PortType portType, final IPort port, final @Nullable ITimeWindow timeWindow, final IVesselEvent vesselEvent,

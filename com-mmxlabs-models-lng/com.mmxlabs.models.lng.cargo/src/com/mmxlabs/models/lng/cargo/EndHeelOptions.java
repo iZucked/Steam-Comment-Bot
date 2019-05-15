@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getTankState <em>Tank State</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getMinimumEndHeel <em>Minimum End Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getMaximumEndHeel <em>Maximum End Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#isUseLastHeelPrice <em>Use Last Heel Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getPriceExpression <em>Price Expression</em>}</li>
  * </ul>
  *
@@ -108,6 +109,32 @@ public interface EndHeelOptions extends EObject {
 	 * @generated
 	 */
 	void setMaximumEndHeel(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Use Last Heel Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Use Last Heel Price</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Use Last Heel Price</em>' attribute.
+	 * @see #setUseLastHeelPrice(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getEndHeelOptions_UseLastHeelPrice()
+	 * @model
+	 * @generated
+	 */
+	boolean isUseLastHeelPrice();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#isUseLastHeelPrice <em>Use Last Heel Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Use Last Heel Price</em>' attribute.
+	 * @see #isUseLastHeelPrice()
+	 * @generated
+	 */
+	void setUseLastHeelPrice(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Price Expression</b></em>' attribute.

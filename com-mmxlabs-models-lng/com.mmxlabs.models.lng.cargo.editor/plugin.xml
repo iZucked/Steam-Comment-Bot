@@ -321,6 +321,12 @@
           id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.VesselAvailabilityCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.cargo.EndHeelOptions"
+          factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.EndHeelOptionsCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.EndHeelOptionsCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">

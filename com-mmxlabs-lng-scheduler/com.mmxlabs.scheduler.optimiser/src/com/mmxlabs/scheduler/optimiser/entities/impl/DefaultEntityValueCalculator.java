@@ -38,6 +38,10 @@ import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossSlotDetails
 import com.mmxlabs.scheduler.optimiser.components.ICharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumerPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplier;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplierPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarketOption;
@@ -49,8 +53,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.Repositioning
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences.HeelValueRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence.HeelValueRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
@@ -407,19 +411,19 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @return
 	 */
 	@Override
-	public long evaluateNonCargoPlan(@NonNull final EvaluationMode evaluationMode, final VoyagePlan plan, final IPortTimesRecord portTimesRecord, final IVesselAvailability vesselAvailability,
-			final int planStartTime, final int vesselStartTime, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
+	public Pair<Map<IPortSlot, HeelValueRecord>, @NonNull Long> evaluateNonCargoPlan(@NonNull final EvaluationMode evaluationMode, final VoyagePlan plan, final IPortTimesRecord portTimesRecord,
+			final IVesselAvailability vesselAvailability, final int planStartTime, final int vesselStartTime, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences,
+			int lastHeelPricePerMMBTU, @Nullable final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getEntityForVesselAvailability(vesselAvailability);
 		if (shippingEntity == null) {
 			// May be null during unit tests
-			return 0L;
+			return Pair.of(Collections.emptyMap(), 0L);
 		}
 
 		final long revenue;
 		long additionalCost = 0;
 		final boolean isGeneratedCharterOutPlan;
-		long heelRevenue = 0;
-		long heelCost = 0;
+
 		DetailTree shippingDetails = null;
 		if (annotatedSolution != null) {
 			shippingDetails = new DetailTree();
@@ -428,6 +432,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final Map<IEntityBook, Long> entityPreTaxProfit = new HashMap<>();
 		final Map<IEntityBook, Long> entityPostTaxProfit = new HashMap<>();
 
+		Map<IPortSlot, HeelValueRecord> heelMap = new HashMap<>();
 		{
 
 			final PortDetails firstPortDetails = (PortDetails) plan.getSequence()[0];
@@ -461,16 +466,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				}
 			}
 
-			if (volumeAllocatedSequences != null) {
-				for (IPortSlot slot : portTimesRecord.getSlots()) {
-					VolumeAllocatedSequence s = volumeAllocatedSequences.getScheduledSequence(slot);
-					HeelValueRecord heelValueRecord = s.getPortHeelRecord(slot);
-					if (heelValueRecord != null) {
-						heelCost += heelValueRecord.getHeelCost();
-						heelRevenue += heelValueRecord.getHeelRevenue();
-					}
-				}
-			}
+			long[] heel = computeHeelValue(volumeAllocatedSequences, portTimesRecord, heelMap, lastHeelPricePerMMBTU);
+			long heelCost = heel[0];
+			long heelRevenue = heel[1];
+
 			// Calculate the value for the fitness function
 			boolean thirdparty = shippingEntity.isThirdparty();
 			if (!thirdparty) {
@@ -510,7 +509,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		}
 
-		return postTaxValue;
+		return Pair.of(heelMap, postTaxValue);
 	}
 
 	protected void generateShippingAnnotations(@NonNull final EvaluationMode evaluationMode, final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int vesselStartTime,
@@ -656,5 +655,52 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 
 		return result;
+	}
+
+	protected long[] computeHeelValue(VolumeAllocatedSequences volumeAllocatedSequences, IPortTimesRecord portTimesRecord, Map<IPortSlot, HeelValueRecord> heelMap, int lastHeelPricePerMMBTU) {
+
+		long heelRevenue = 0;
+		long heelCost = 0;
+
+		if (volumeAllocatedSequences != null) {
+			for (IPortSlot slot : portTimesRecord.getSlots()) {
+				VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequence(slot);
+				if (slot instanceof IHeelOptionConsumerPortSlot) {
+					IHeelOptionConsumerPortSlot heelOptionConsumerPortSlot = (IHeelOptionConsumerPortSlot) slot;
+					final IHeelOptionConsumer heelOptions = heelOptionConsumerPortSlot.getHeelOptionsConsumer();
+
+					long currentHeelInM3 = seq.getPortHeelRecord(slot).getHeelAtStartInM3();
+					int heelTime = seq.getArrivalTime(slot);
+
+					final int pricePerMMBTU = heelOptions.isUseLastPrice() ? lastHeelPricePerMMBTU :
+
+							heelOptions.getHeelPriceCalculator().getHeelPrice(currentHeelInM3, heelTime, slot.getPort());
+
+					int cv = seq.getPortDetails(slot).getOptions().getCargoCVValue();
+					final long heelInMMBTU = Calculator.convertM3ToMMBTu(currentHeelInM3, cv);
+					HeelValueRecord record = HeelValueRecord.withRevenue(Calculator.costFromConsumption(heelInMMBTU, pricePerMMBTU), pricePerMMBTU);
+					heelMap.merge(slot, record, HeelValueRecord::merge);
+					heelRevenue += record.getHeelRevenue();
+					heelCost += record.getHeelCost();
+				}
+				if (slot instanceof IHeelOptionSupplierPortSlot) {
+					IHeelOptionSupplierPortSlot heelOptionSupplierPortSlot = (IHeelOptionSupplierPortSlot) slot;
+					final IHeelOptionSupplier heelOptions = heelOptionSupplierPortSlot.getHeelOptionsSupplier();
+
+					long currentHeelInM3 = seq.getPortHeelRecord(slot).getHeelAtEndInM3();
+					int heelTime = seq.getArrivalTime(slot) + seq.getVisitDuration(slot);
+
+					final int pricePerMMBTU = heelOptions.getHeelPriceCalculator().getHeelPrice(currentHeelInM3, heelTime, slot.getPort());
+
+					final int cv = heelOptions.getHeelCVValue();
+					final long heelInMMBTU = Calculator.convertM3ToMMBTu(currentHeelInM3, cv);
+					HeelValueRecord record = HeelValueRecord.withCost(Calculator.costFromConsumption(heelInMMBTU, pricePerMMBTU), pricePerMMBTU);
+					heelMap.merge(slot, record, HeelValueRecord::merge);
+					heelRevenue += record.getHeelRevenue();
+					heelCost += record.getHeelCost();
+				}
+			}
+		}
+		return new long[] { heelCost, heelRevenue };
 	}
 }

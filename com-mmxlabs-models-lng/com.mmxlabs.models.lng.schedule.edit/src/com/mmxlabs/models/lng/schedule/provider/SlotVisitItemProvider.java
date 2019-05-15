@@ -53,6 +53,8 @@ public class SlotVisitItemProvider
 			addPortCostPropertyDescriptor(object);
 			addHeelCostPropertyDescriptor(object);
 			addHeelRevenuePropertyDescriptor(object);
+			addHeelCostUnitPricePropertyDescriptor(object);
+			addHeelRevenueUnitPricePropertyDescriptor(object);
 			addSlotAllocationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -120,6 +122,50 @@ public class SlotVisitItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Heel Cost Unit Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHeelCostUnitPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PortVisit_heelCostUnitPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortVisit_heelCostUnitPrice_feature", "_UI_PortVisit_type"),
+				 SchedulePackage.Literals.PORT_VISIT__HEEL_COST_UNIT_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Heel Revenue Unit Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHeelRevenueUnitPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PortVisit_heelRevenueUnitPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortVisit_heelRevenueUnitPrice_feature", "_UI_PortVisit_type"),
+				 SchedulePackage.Literals.PORT_VISIT__HEEL_REVENUE_UNIT_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -209,6 +255,8 @@ public class SlotVisitItemProvider
 			case SchedulePackage.SLOT_VISIT__PORT_COST:
 			case SchedulePackage.SLOT_VISIT__HEEL_COST:
 			case SchedulePackage.SLOT_VISIT__HEEL_REVENUE:
+			case SchedulePackage.SLOT_VISIT__HEEL_COST_UNIT_PRICE:
+			case SchedulePackage.SLOT_VISIT__HEEL_REVENUE_UNIT_PRICE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.SLOT_VISIT__FUELS:

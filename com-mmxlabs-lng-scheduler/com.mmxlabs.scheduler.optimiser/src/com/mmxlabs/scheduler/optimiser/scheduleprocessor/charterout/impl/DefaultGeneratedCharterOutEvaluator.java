@@ -296,8 +296,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 				final int charterStartTime = ballastStartTime + toCharterPort.getThird();
 				final long dailyPrice = (long) option.getCharterPrice(charterStartTime);
-				if (charterStartTime < charterMarketProvider.getCharterOutStartTime() ||
-						charterStartTime > charterMarketProvider.getCharterOutEndTime()) {
+				if (charterStartTime < charterMarketProvider.getCharterOutStartTime() || charterStartTime > charterMarketProvider.getCharterOutEndTime()) {
 					continue;
 				}
 				final long charteringRevenue = Calculator.quantityFromRateTime(dailyPrice, availableCharteringTime) / 24L;
@@ -396,7 +395,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		final IPortSlot existingSlotUsedToGenerateCharterOut = originalBallast.getOptions().getFromPortSlot();
 
 		// These will be updated later on
-		HeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, Long.MAX_VALUE, VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0));
+		HeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, Long.MAX_VALUE, VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false);
 		HeelOptionSupplier heelOptionSupplier = new HeelOptionSupplier(0, 0, originalBallast.getOptions().getCargoCVValue(), new ConstantHeelPriceCalculator(0));
 
 		// now update port slot
@@ -410,8 +409,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				heelOptionConsumer, heelOptionSupplier);
 
 		// copy port times record
-		final Triple<IPortSlot, Integer, Integer> charterOutTimesRecord = new Triple<>(charterOutPortSlot, charterOutOption.getCharterStartTime(),
-				charterOutOption.getCharterDuration());
+		final Triple<IPortSlot, Integer, Integer> charterOutTimesRecord = new Triple<>(charterOutPortSlot, charterOutOption.getCharterStartTime(), charterOutOption.getCharterDuration());
 
 		// (1) ballast to charter out
 
@@ -672,7 +670,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			}
 		}
 		assert heelPriceCalculator != null;
-		HeelOptionConsumer heelConsumer = new HeelOptionConsumer(heelVolume, heelVolume, heelVolume > 0 ? VesselTankState.MUST_BE_COLD : VesselTankState.MUST_BE_WARM, heelPriceCalculator);
+		HeelOptionConsumer heelConsumer = new HeelOptionConsumer(heelVolume, heelVolume, heelVolume > 0 ? VesselTankState.MUST_BE_COLD : VesselTankState.MUST_BE_WARM, heelPriceCalculator, false);
 		HeelOptionSupplier heelSupplier = new HeelOptionSupplier(heelVolume, heelVolume, cv, heelPriceCalculator);
 		generatedCharterOutVesselEvent.setHeelConsumer(heelConsumer);
 		generatedCharterOutVesselEvent.setHeelSupplier(heelSupplier);

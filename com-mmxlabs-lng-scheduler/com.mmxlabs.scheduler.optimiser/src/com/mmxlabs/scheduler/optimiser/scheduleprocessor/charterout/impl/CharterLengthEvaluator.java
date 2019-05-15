@@ -73,8 +73,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 	@Override
 	public List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final int vesselStartTime, final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
 			final IPortTimesRecord portTimesRecord) {
-		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET 
-				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
+		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 			return null;
 		}
 
@@ -135,7 +134,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 		final VoyageDetails originalBallast = (VoyageDetails) currentSequence[ballastIdx];
 
 		// These will be updated later on
-		final HeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, Long.MAX_VALUE, VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0));
+		final HeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, Long.MAX_VALUE, VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false);
 		final HeelOptionSupplier heelOptionSupplier = new HeelOptionSupplier(0, 0, originalBallast.getOptions().getCargoCVValue(), new ConstantHeelPriceCalculator(0));
 
 		// now update port slot
@@ -154,8 +153,8 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 		if (originalBallast.isCooldownPerformed()) {
 			// May need to tweak these
 			dischargeToCharterPortVoyageOptions.setShouldBeCold(VesselTankState.EITHER);
-//			dischargeToCharterPortVoyageOptions.setWarm(originalBallast.getOptions().isWarm());
-//			dischargeToCharterPortVoyageOptions.setAllowCooldown(false);
+			// dischargeToCharterPortVoyageOptions.setWarm(originalBallast.getOptions().isWarm());
+			// dischargeToCharterPortVoyageOptions.setAllowCooldown(false);
 		}
 		// (2) charter out
 
@@ -351,7 +350,8 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 			}
 		}
 		assert heelPriceCalculator != null;
-		final HeelOptionConsumer heelConsumer = new HeelOptionConsumer(heelVolume, heelVolume, heelVolume > 0 ? VesselTankState.MUST_BE_COLD : VesselTankState.MUST_BE_WARM, heelPriceCalculator);
+		final HeelOptionConsumer heelConsumer = new HeelOptionConsumer(heelVolume, heelVolume, heelVolume > 0 ? VesselTankState.MUST_BE_COLD : VesselTankState.MUST_BE_WARM, heelPriceCalculator,
+				false);
 		final HeelOptionSupplier heelSupplier = new HeelOptionSupplier(heelVolume, heelVolume, cv, heelPriceCalculator);
 		generatedEvent.setHeelConsumer(heelConsumer);
 		generatedEvent.setHeelSupplier(heelSupplier);

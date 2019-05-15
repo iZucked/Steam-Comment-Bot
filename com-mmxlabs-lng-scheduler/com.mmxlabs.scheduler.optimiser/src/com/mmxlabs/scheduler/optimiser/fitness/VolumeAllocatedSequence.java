@@ -19,11 +19,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumerPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplier;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplierPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -73,31 +70,6 @@ public class VolumeAllocatedSequence {
 		}
 	}
 
-	public static class HeelValueRecord extends HeelRecord {
-		private long heelRevenue;
-		private long heelCost;
-
-		public HeelValueRecord(final long heelAtStart, final long heelAtEnd) {
-			super(heelAtStart, heelAtEnd);
-		}
-
-		public long getHeelRevenue() {
-			return heelRevenue;
-		}
-
-		public void setHeelRevenue(final long heelRevenue) {
-			this.heelRevenue = heelRevenue;
-		}
-
-		public long getHeelCost() {
-			return heelCost;
-		}
-
-		public void setHeelCost(final long heelCost) {
-			this.heelCost = heelCost;
-		}
-	}
-
 	private static class SlotRecord {
 		public int arrivalTime;
 		public int visitDuration;
@@ -116,7 +88,7 @@ public class VolumeAllocatedSequence {
 		public VoyageDetails fromVoyageDetails;
 		public VoyageDetails toVoyageDetails;
 		public PortDetails portDetails;
-		public HeelValueRecord portHeelRecord;
+		public HeelRecord portHeelRecord;
 		// Records after this port slot
 		public HeelRecord travelHeelRecord;
 		public HeelRecord idleHeelRecord;
@@ -179,7 +151,7 @@ public class VolumeAllocatedSequence {
 		return getOrExceptionSlotRecord(portSlot).toVoyageDetails;
 	}
 
-	public @Nullable HeelValueRecord getPortHeelRecord(final @NonNull IPortSlot portSlot) {
+	public @Nullable HeelRecord getPortHeelRecord(final @NonNull IPortSlot portSlot) {
 		return getOrExceptionSlotRecord(portSlot).portHeelRecord;
 	}
 
@@ -296,12 +268,7 @@ public class VolumeAllocatedSequence {
 	}
 
 	private @NonNull SlotRecord getOrCreateSlotRecord(final @NonNull IPortSlot slot) {
-		SlotRecord allocation = slotRecords.get(slot);
-		if (allocation == null) {
-			allocation = new SlotRecord();
-			slotRecords.put(slot, allocation);
-		}
-		return allocation;
+		return slotRecords.computeIfAbsent(slot, k -> new SlotRecord());
 	}
 
 	private @NonNull SlotRecord getOrExceptionSlotRecord(final @NonNull IPortSlot slot) {
@@ -313,14 +280,13 @@ public class VolumeAllocatedSequence {
 	}
 
 	/**
-	 * Builds the lookup data. TODO: More efficient if this is done as the sequence data is built up!
+	 * Builds the lookup data.
 	 */
 	private void buildLookup() {
 		final VoyagePlanIterator vpi = new VoyagePlanIterator(this);
 		long currentHeelInM3 = -1L;
 		boolean firstObject = true;
 		boolean startOfPlan = true;
-		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 		final boolean recordHeel = !(vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE);
 
 		// Forced cooldown volumes are stored on the VoyageDetails, so record the last one for use in the next iteration so we can record the cooldown at the port
@@ -351,8 +317,8 @@ public class VolumeAllocatedSequence {
 
 				// Set mapping between slot and time / current plan
 				sequencePortSlots.add(portSlot);
-				@NonNull
-				final SlotRecord record = getOrCreateSlotRecord(portSlot);
+
+				final @NonNull SlotRecord record = getOrCreateSlotRecord(portSlot);
 				record.arrivalTime = currentTime;
 				record.visitDuration = details.getOptions().getVisitDuration();
 				record.voyagePlan = vpi.getCurrentPlan();
@@ -360,28 +326,11 @@ public class VolumeAllocatedSequence {
 
 				if (recordHeel) {
 					long startHeelInM3 = currentHeelInM3;
-					long heelCost = 0L;
-					long heelRevenue = 0L;
-					if (portSlot instanceof IHeelOptionConsumerPortSlot) {
-						long consumedHeelInM3 = currentHeelInM3;
-						if (startOfPlan) {
-							startHeelInM3 = previousHeelInM3;
-							consumedHeelInM3 = previousHeelInM3;
-						}
-
-						final IHeelOptionConsumerPortSlot heelOptionConsumerPortSlot = (IHeelOptionConsumerPortSlot) portSlot;
-						final IHeelOptionConsumer heelOptions = heelOptionConsumerPortSlot.getHeelOptionsConsumer();
-
-						final int pricePerMMBTU = heelOptions.getHeelPriceCalculator().getHeelPrice(consumedHeelInM3, currentTime, portSlot.getPort());
-						final int cv = details.getOptions().getCargoCVValue();
-
-						// Only pay up to max heel. Excess is "free"
-						final long heelInMMBTU = Calculator.convertM3ToMMBTu(Math.min(consumedHeelInM3, heelOptions.getMaximumHeelAcceptedInM3()), cv);
-						final long thisHeelRevenue = Calculator.costFromConsumption(heelInMMBTU, pricePerMMBTU);
-						heelRevenue += thisHeelRevenue;
+					if (startOfPlan && portSlot instanceof IHeelOptionConsumerPortSlot) {
+						startHeelInM3 = previousHeelInM3;
 					}
 					if (portSlot.getPortType() == PortType.Load) {
-						final IAllocationAnnotation allocationAnnotation = (IAllocationAnnotation) record.portTimesRecord;// scheduledSequence.getAllocationAnnotation(portSlot);
+						final IAllocationAnnotation allocationAnnotation = (IAllocationAnnotation) record.portTimesRecord;
 
 						assert allocationAnnotation.getStartHeelVolumeInM3() >= 0;
 						assert allocationAnnotation.getFuelVolumeInM3() >= 0;
@@ -410,22 +359,11 @@ public class VolumeAllocatedSequence {
 							startHeelInM3 = previousHeelInM3;
 						}
 
-						final IHeelOptionSupplierPortSlot heelOptionSupplierPortSlot = (IHeelOptionSupplierPortSlot) portSlot;
-						final IHeelOptionSupplier heelOptions = heelOptionSupplierPortSlot.getHeelOptionsSupplier();
-
-						final int pricePerMMBTU = heelOptions.getHeelPriceCalculator().getHeelPrice(currentHeelInM3, currentTime, portSlot.getPort());
-						final int cv = details.getOptions().getCargoCVValue();
-
-						final long heelInMMBTU = Calculator.convertM3ToMMBTu(currentHeelInM3, cv);
-						final long thisHeelCost = Calculator.costFromConsumption(heelInMMBTU, pricePerMMBTU);
-						heelCost += thisHeelCost;
 					}
 					assert currentHeelInM3 + IVoyagePlanner.ROUNDING_EPSILON >= 0;
 
 					final long endHeelInM3 = currentHeelInM3;
-					record.portHeelRecord = new HeelValueRecord(startHeelInM3, endHeelInM3);
-					record.portHeelRecord.heelCost = heelCost;
-					record.portHeelRecord.heelRevenue = heelRevenue;
+					record.portHeelRecord = new HeelRecord(startHeelInM3, endHeelInM3);
 				}
 				record.forcedCooldown = isForcedCooldown;
 				// Reset, do not re-record cooldown problems
