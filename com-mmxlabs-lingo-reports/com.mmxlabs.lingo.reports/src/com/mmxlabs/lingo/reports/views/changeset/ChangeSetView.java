@@ -224,7 +224,7 @@ public class ChangeSetView extends ViewPart {
 				return;
 			}
 			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
-				columnHelper.cleanUpVesselColumns();
+//				columnHelper.cleanUpVesselColumns();
 				setEmptyData();
 			}
 		}
@@ -423,7 +423,7 @@ public class ChangeSetView extends ViewPart {
 
 					@Override
 					public void displayActionPlan(final List<ScenarioResult> scenarios) {
-						columnHelper.cleanUpVesselColumns();
+//						columnHelper.cleanUpVesselColumns();
 
 						final ViewState newViewState = new ViewState(null, SortMode.BY_GROUP);
 						final ChangeSetRoot newRoot = new ScheduleResultListTransformer().createDataModel(scenarios, new NullProgressMonitor());
@@ -1086,7 +1086,7 @@ public class ChangeSetView extends ViewPart {
 
 	public void setNewDataData(final Object target, final BiFunction<IProgressMonitor, @Nullable String, ViewState> action, final boolean runAsync, final @Nullable String targetSlotId) {
 
-		columnHelper.cleanUpVesselColumns();
+//		columnHelper.cleanUpVesselColumns();
 
 		if (target == null) {
 			setEmptyData();
@@ -1477,7 +1477,7 @@ public class ChangeSetView extends ViewPart {
 
 	private final String[] altPNLToolTipBaseMode_Default = { "Default", "Alt" };
 	private final String[] altPNLToolTipBaseMode_ActionPlan = { "Previous", "Base" };
-	private final String[] altPNLToolTipBaseMode_Insertions = { "Full", "Simpl" };
+	private final String[] altPNLToolTipBaseMode_Insertions = { "Full", "Simple" };
 	private String[] altPNLToolTipBaseMode = altPNLToolTipBaseMode_Default;
 
 	private EventHandler eventHandler;;

@@ -647,6 +647,9 @@ public class ChangeSetViewColumnHelper {
 	private GridViewerColumn altPNLBaseColumn;
 
 	public void updateVesselColumns(final Collection<VesselData> data) {
+		
+		cleanUpVesselColumns();
+		
 		final Map<ChangeSetVesselType, List<VesselData>> colData = data.stream() //
 				.filter(a -> a.name != null && !a.name.isEmpty()) // Ignore empty names
 				.sorted((a, b) -> (a.name.compareTo(b.name))) // Sort alphabetically
