@@ -120,22 +120,7 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 						allowedVessels = AssignmentEditorHelper.compileAllowedVessels(fleetModel.getVessels(), target);
 					} else {
 						allowedVessels = new ArrayList<>(fleetModel.getVessels());
-
 					}
-//
-//					final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<>();
-//					// filter the global list by the object's allowed values
-//					if (allowedVessels != null) {
-//						// Expand out VesselGroups
-//						for (final AVesselSet<Vessel> s : allowedVessels) {
-//							if (s instanceof Vessel) {
-//								expandedVessels.add(s);
-//							} else {
-//								// instanceof Vessel Group
-//								expandedVessels.addAll(SetUtils.getObjects(s));
-//							}
-//						}
-//					}
 
 					// create list to populate
 					final ArrayList<Pair<String, EObject>> result = new ArrayList<>();
@@ -155,7 +140,7 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 						boolean display = (
 						// show the option if the cargo allows this vessel-set
 						// (an empty list of allowed vessels means "all vessels")
-								  allowedVessels.contains(vessel));
+						allowedVessels.contains(vessel));
 
 						// Filter out non-scenario vessels
 						if (display) {
@@ -187,12 +172,12 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 							}
 							final Vessel vessel = charterInMarket.getVessel();
 
-							boolean display =   (
+							boolean display = (
 							// show the option if the cargo allows this vessel-set
 							// (an empty list of allowed vessels means "all vessels")
-							 
-									// show the option if the cargo allows vessels of this class
-									 (vessel != null && allowedVessels.contains(vessel)));
+
+							// show the option if the cargo allows vessels of this class
+							(vessel != null && allowedVessels.contains(vessel)));
 
 							// Hide disable markets
 							if (!charterInMarket.isEnabled() && !charterInMarket.isNominal()) {
