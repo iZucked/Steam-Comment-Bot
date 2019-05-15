@@ -56,7 +56,7 @@ public class PricingCalendarsView extends ScenarioTableViewerView<PricingCalenda
 				return;
 			}
 
-			if (msg.getFeature() == PricingPackage.Literals.PRICING_CALENDAR) {
+			if (msg.getFeature() == PricingPackage.Literals.PRICING_MODEL__PRICING_CALENDARS) {
 				if (calendarSelectionViewer != null) {
 
 					List<PricingCalendar> models = pricingModel.getPricingCalendars().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
@@ -95,6 +95,8 @@ public class PricingCalendarsView extends ScenarioTableViewerView<PricingCalenda
 			
 			if (this.pricingModel == null) {
 				pricingModel = ScenarioModelUtil.getPricingModel(getScenarioDataProvider());
+				pricingModel.eAdapters().add(calendarListener);
+			} else {
 				pricingModel.eAdapters().add(calendarListener);
 			}
 			final List<PricingCalendar> holidays = pricingModel.getPricingCalendars();

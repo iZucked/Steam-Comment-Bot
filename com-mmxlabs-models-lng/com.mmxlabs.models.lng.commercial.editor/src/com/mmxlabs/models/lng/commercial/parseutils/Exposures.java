@@ -176,8 +176,6 @@ public class Exposures {
 						physical.setIndexName("Physical");
 						physical.setDate(YearMonth.from(sa.getSlotVisit().getStart().toLocalDate()));
 						
-						applyProRataCorrection(pcs, hcs, promptStart, physical);
-						
 						slotAllocation.getExposures().add(physical);
 					}
 				}
@@ -220,18 +218,19 @@ public class Exposures {
 	}
 	
 	private static void applyProRataCorrection(List<PricingCalendar> pcs, List<HolidayCalendar> hcs, final LocalDate cutoff, final ExposureDetail exposure) {
+		final List<PricingCalendarEntry> lPce = new LinkedList<>();
 		for (final PricingCalendar pc : pcs) {
-			final List<PricingCalendarEntry> lPce = pc.getEntries().stream()//
+			lPce.addAll(pc.getEntries().stream()//
 					.filter(e -> e.getMonth().equals(exposure.getDate()))//
-					.collect(Collectors.toList());
-			if (!lPce.isEmpty()) {
-				// for now - we take the first calendar
-				int wd = getWorkingDays(lPce.get(0), hcs, cutoff);
-				double proRataCorrection = exposure.getDate().lengthOfMonth() / (double) wd;
-				exposure.setVolumeInMMBTU(proRataCorrection * exposure.getVolumeInMMBTU());
-				exposure.setVolumeInNativeUnits(proRataCorrection * exposure.getVolumeInNativeUnits());
-				exposure.setNativeValue(proRataCorrection * exposure.getNativeValue());
-			}
+					.collect(Collectors.toList()));
+		}
+		{
+			// for now - we take the first calendar
+			int wd = getWorkingDays(lPce.isEmpty() ? null : lPce.get(0), hcs, cutoff);
+			double proRataCorrection = ((double)wd) / (double) exposure.getDate().lengthOfMonth();
+			exposure.setVolumeInMMBTU(proRataCorrection * exposure.getVolumeInMMBTU());
+			exposure.setVolumeInNativeUnits(proRataCorrection * exposure.getVolumeInNativeUnits());
+			exposure.setNativeValue(proRataCorrection * exposure.getNativeValue());
 		}
 	}
 	
@@ -269,11 +268,13 @@ public class Exposures {
 	}
 
 	private static int getWorkingDays(final PricingCalendarEntry pricingCalendarEntry, final List<HolidayCalendar> hcs, final LocalDate cutoff) {
-		int i = 0;
+		int i = 1;
 		// workdays
-		for (LocalDate c = cutoff/*pricingCalendarEntry.getStart()*/; c.isBefore(pricingCalendarEntry.getEnd().plusDays(1)); c = c.plusDays(1)) {
-			if (c.getDayOfWeek() != DayOfWeek.SATURDAY && c.getDayOfWeek() != DayOfWeek.SUNDAY) {
-				i++;
+		if (pricingCalendarEntry != null) {
+			for (LocalDate c = cutoff; c.isBefore(pricingCalendarEntry.getEnd().plusDays(1)); c = c.plusDays(1)) {
+				if (c.getDayOfWeek() != DayOfWeek.SATURDAY && c.getDayOfWeek() != DayOfWeek.SUNDAY) {
+					i++;
+				}
 			}
 		}
 		if (!hcs.isEmpty()) {
