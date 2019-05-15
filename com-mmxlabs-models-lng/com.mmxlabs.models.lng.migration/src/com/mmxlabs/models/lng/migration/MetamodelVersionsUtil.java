@@ -21,51 +21,6 @@ import com.mmxlabs.models.migration.utils.MetamodelLoader;
  */
 public class MetamodelVersionsUtil {
 
-	/**
-	 * Enum representing each of the models in Models LNG.
-	 * 
-	 */
-	public enum ModelsLNGSet_v1 {
-		/**
-		 */
-		Scenario, Analytics, Cargo, Commercial, Fleet,
-		/**
-		 */
-		Assignment,
-		/**
-		 */
-		Parameters, Port, Pricing, Schedule, SpotMarkets, Actuals
-	}
-
-	public static ModelsLNGSet_v1 getTypeFromNS(final String nsURI) {
-		if (ModelsLNGMigrationConstants.NSURI_ScenarioModel.equals(nsURI)) {
-			return ModelsLNGSet_v1.Scenario;
-		} else if (ModelsLNGMigrationConstants.NSURI_AnalyticsModel.equals(nsURI)) {
-			return ModelsLNGSet_v1.Analytics;
-		} else if (ModelsLNGMigrationConstants.NSURI_CargoModel.equals(nsURI)) {
-			return ModelsLNGSet_v1.Cargo;
-		} else if (ModelsLNGMigrationConstants.NSURI_CommercialModel.equals(nsURI)) {
-			return ModelsLNGSet_v1.Commercial;
-		} else if (ModelsLNGMigrationConstants.NSURI_FleetModel.equals(nsURI)) {
-			return ModelsLNGSet_v1.Fleet;
-		} else if (ModelsLNGMigrationConstants.NSURI_AssignmentModel.equals(nsURI)) {
-			return ModelsLNGSet_v1.Assignment;
-		} else if (ModelsLNGMigrationConstants.NSURI_ParametersModel.equals(nsURI)) {
-			return ModelsLNGSet_v1.Parameters;
-		} else if (ModelsLNGMigrationConstants.NSURI_PortModel.equals(nsURI)) {
-			return ModelsLNGSet_v1.Port;
-		} else if (ModelsLNGMigrationConstants.NSURI_PricingModel.equals(nsURI)) {
-			return ModelsLNGSet_v1.Pricing;
-		} else if (ModelsLNGMigrationConstants.NSURI_ScheduleModel.equals(nsURI)) {
-			return ModelsLNGSet_v1.Schedule;
-		} else if (ModelsLNGMigrationConstants.NSURI_SpotMarketsModel.equals(nsURI)) {
-			return ModelsLNGSet_v1.SpotMarkets;
-		} else if (ModelsLNGMigrationConstants.NSURI_ActualsModel.equals(nsURI)) {
-			return ModelsLNGSet_v1.Actuals;
-		}
-		return null;
-	}
-
 	public static MetamodelLoader createV0Loader(final Map<URI, PackageData> extraPackages) {
 
 		final MetamodelLoader loader = new MetamodelLoader();

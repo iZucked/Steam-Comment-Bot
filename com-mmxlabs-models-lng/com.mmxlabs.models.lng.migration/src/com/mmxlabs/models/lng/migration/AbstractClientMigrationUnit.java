@@ -14,7 +14,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Triple;
-import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil.ModelsLNGSet_v1;
 import com.mmxlabs.models.migration.DataManifest;
 import com.mmxlabs.models.migration.DataManifest.EObjectData;
 import com.mmxlabs.models.migration.IClientMigrationUnit;
