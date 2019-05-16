@@ -48,7 +48,7 @@
                   lang="Java"
                   mode="Batch"
                   name="Name or ID Valid"
-                  severity="WARNING"
+                  severity="ERROR"
                   statusCode="1">
                <message>
                   {0}
