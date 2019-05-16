@@ -69,6 +69,7 @@ public class SlotNameUniquenessConstraint extends AbstractModelMultiConstraint {
 		final EObject target = ctx.getTarget();
 		if (target instanceof Slot) {
 			final Slot slot = (Slot) target;
+			final boolean isPurchase = slot instanceof LoadSlot;
 			final EObject container = extraContext.getContainer(target);
 			if (container instanceof CargoModel) {
 				final CargoModel cargoModel = (CargoModel) container;
@@ -80,8 +81,8 @@ public class SlotNameUniquenessConstraint extends AbstractModelMultiConstraint {
 				}
 
 				// STILL A PROBLEM
-				// 1). We only generate only slot type!
-				// 2). Not easy to do all the tyes as
+				// 1). We only generate  slot type!
+				// 2). Not easy to do all the tyes as0
 
 				// for (LoadSlot )
 
@@ -92,12 +93,13 @@ public class SlotNameUniquenessConstraint extends AbstractModelMultiConstraint {
 						bad = new HashSet<String>();
 						badNames.put(slotType, bad);
 						final List<EObject> objects = extraContext.getSiblings(target);
+						objects.addAll(isPurchase ? cargoModel.getDischargeSlots() : cargoModel.getLoadSlots());
 
 						final Set<String> temp = new HashSet<>();
 						for (final EObject no : objects) {
 							if (no instanceof Slot) {
 								final Slot slot2 = (Slot) no;
-								if (getSlotTypes(slot2).contains(slotType)) {
+								if (getSlotTypes(slot2).contains(Type.LOAD) || getSlotTypes(slot2).contains(Type.DISCHARGE)) {
 									final String n = slot2.getName();
 									if (temp.contains(n)) {
 										bad.add(n);
