@@ -5,13 +5,30 @@
 package com.mmxlabs.lngdataserver.server;
 
 import java.security.KeyStore;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateParsingException;
+import java.security.cert.X509Certificate;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.ssl.LicenseChecker;
@@ -49,5 +66,130 @@ public class HttpClientUtil {
 			e.printStackTrace();
 		}
 		return builder;
+	}
+
+	public static List<CertInfo> extractSSLInfoFromHost(final String url) throws Exception {
+
+		if (url.startsWith("http:")) {
+			return Collections.emptyList();
+		}
+
+		final List<CertInfo> infos = new LinkedList<>();
+		final String patternWithPort = "http[s]*://([a-zA-Z0-9\\.-_]*)(:[0-9]+)[//]*";
+		final String pattern = "http[s]*://([a-zA-Z0-9\\.-_]*)[//]*";
+		Matcher matcher = Pattern.compile(patternWithPort).matcher(url);
+		if (!matcher.matches()) {
+			matcher = Pattern.compile(pattern).matcher(url);
+		}
+		if (matcher.matches()) {
+			final String hostStr = matcher.group(1);
+			final String portStr = matcher.groupCount() > 1 ? matcher.group(2) : null;
+
+			final Pair<KeyStore, char[]> keyStorePair = LicenseChecker.loadLocalKeystore();
+			final KeyStore keyStore = keyStorePair.getFirst();
+
+			final SSLContext sslContext = SSLContext.getInstance("TLS");
+
+			final TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+			trustManagerFactory.init(keyStore);
+
+			final KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+			keyManagerFactory.init(keyStore, keyStorePair.getSecond());
+			sslContext.init(keyManagerFactory.getKeyManagers(), new TrustManager[] { new TrustingTrustManager() }, new SecureRandom());
+
+			final SSLSocketFactory socketFactory = sslContext.getSocketFactory();
+
+			final int port = portStr == null ? 443 : Integer.parseInt(portStr.substring(1));
+
+			try (SSLSocket createSocket = (SSLSocket) socketFactory.createSocket(hostStr, port)) {
+				createSocket.startHandshake();
+				final SSLSession session = createSocket.getSession();
+				for (final java.security.cert.Certificate c : session.getPeerCertificates()) {
+					final X509Certificate cert = (X509Certificate) c;
+					infos.add(CertInfo.from(cert));
+				}
+			}
+		}
+		return infos;
+	}
+
+	public static class CertInfo {
+		public String subject;
+		public String altNames;
+		public String issuer;
+		public String key;
+		public String serial;
+		public String validity;
+		public String thumbprint;
+
+		public static CertInfo from(X509Certificate cert) {
+			final CertInfo certInfo = new CertInfo();
+			certInfo.subject = cert.getSubjectDN().toString();
+			certInfo.serial = cert.getSerialNumber().toString();
+			certInfo.issuer = cert.getIssuerDN().toString();
+			try {
+				certInfo.altNames = cert.getSubjectAlternativeNames() == null ? ""
+						: cert.getSubjectAlternativeNames().stream() //
+								.map(Object::toString).collect(Collectors.joining(", "));
+			} catch (CertificateParsingException e) {
+				e.printStackTrace();
+			}
+			try {
+				certInfo.thumbprint = bytesToHex(MessageDigest.getInstance("SHA-1").digest(cert.getEncoded()));
+			} catch (CertificateEncodingException | NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}
+			certInfo.key = cert.getSigAlgName();
+			certInfo.validity = String.format("Valid from %s to %s", cert.getNotBefore(), cert.getNotAfter());
+			return certInfo;
+		}
+
+		private static final char[] hexArray = "0123456789abcdef".toCharArray();
+
+		private static String bytesToHex(byte[] bytes) {
+			char[] hexChars = new char[bytes.length * 2];
+			for (int j = 0; j < bytes.length; j++) {
+				int v = bytes[j] & 0xFF;
+				hexChars[j * 2] = hexArray[v >>> 4];
+				hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+			}
+			return new String(hexChars);
+		}
+
+		@Override
+		public @NonNull String toString() {
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("Subject: " + this.subject + "\n");
+			sb.append("Issuer: " + this.issuer + "\n");
+			sb.append("Serial: " + this.serial + "\n");
+			sb.append("Alt names: " + this.altNames + "\n");
+			sb.append("Key: " + this.key + "\n");
+			sb.append("Validity: " + this.validity + "\n");
+			sb.append("Thumbprint: " + this.thumbprint + "\n");
+			sb.append("\n");
+
+			return sb.toString();
+		}
+
+	}
+
+	/**
+	 * Trust manager which trusts everything. Only use for certificate checking
+	 *
+	 */
+	private static class TrustingTrustManager implements X509TrustManager {
+
+		public X509Certificate[] getAcceptedIssuers() {
+			return null;
+		}
+
+		public void checkClientTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {
+
+		}
+
+		public void checkServerTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {
+
+		}
 	}
 }
