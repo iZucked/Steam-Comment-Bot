@@ -30,22 +30,18 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 	@Inject
 	private PriceIntervalProviderHelper priceIntervalProviderHelper;
 
-	private ThreadLocal<Integer> price = new ThreadLocal<Integer>();
+	private ThreadLocal<Integer> price = new ThreadLocal<>();
 
 	/**
 	 */
 	@Override
 	public void prepareSalesForEvaluation(final @NonNull ISequences sequences) {
-		price.set(0);
+		// price.set(0);
 	}
 
 	@Override
 	public int estimateSalesUnitPrice(final IDischargeOption option, IPortTimesRecord voyageRecord, final IDetailTree annotations) {
-		Integer value = price.get();
-		if (value == null) {
-			return 0;
-		}
-		return value;
+		return getPrice();
 	}
 
 	@Override
@@ -55,7 +51,7 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 
 	@Override
 	public int calculateSalesUnitPrice(IDischargeOption option, final IAllocationAnnotation allocationAnnotation, IDetailTree annotations) {
-		return price.get();
+		return getPrice();
 	}
 
 	@Override
@@ -65,7 +61,7 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 
 	@Override
 	public int getEstimatedSalesPrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours) {
-		return price.get();
+		return getPrice();
 	}
 
 	@Override
@@ -100,6 +96,10 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 	}
 
 	public int getPrice() {
-		return price.get();
+		Integer value = price.get();
+		if (value == null) {
+			return 0;
+		}
+		return value;
 	}
 }

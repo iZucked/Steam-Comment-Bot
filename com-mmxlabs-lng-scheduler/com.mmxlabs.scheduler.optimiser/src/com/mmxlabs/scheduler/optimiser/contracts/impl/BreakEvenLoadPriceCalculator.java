@@ -39,7 +39,7 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 
 	@Override
 	public void preparePurchaseForEvaluation(final @NonNull ISequences sequences) {
-		price.set(0);
+		// price.set(0);
 	}
 
 	/**
@@ -48,11 +48,7 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerM3, final IAllocationAnnotation allocationAnnotation,
 			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences,
 			final IDetailTree annotations) {
-		Integer p = price.get();
-		if (p == null) {
-			return 0;
-		}
-		return p;
+		return getPrice();
 	}
 
 	/**
@@ -60,7 +56,7 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	@Override
 	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
 			@Nullable final VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
-		return price.get();
+		return getPrice();
 	}
 
 	/**
@@ -68,7 +64,7 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	@Override
 	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
 			final @Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
-		return price.get();
+		return getPrice();
 	}
 
 	@Override
@@ -118,6 +114,10 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	}
 
 	public int getPrice() {
-		return price.get();
+		Integer p = price.get();
+		if (p == null) {
+			return 0;
+		}
+		return p;
 	}
 }
