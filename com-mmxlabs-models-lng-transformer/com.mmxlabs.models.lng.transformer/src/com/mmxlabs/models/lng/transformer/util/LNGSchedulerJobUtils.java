@@ -54,6 +54,7 @@ import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -260,7 +261,6 @@ public class LNGSchedulerJobUtils {
 
 		// Maintain a two lists of commands. The null commands are the commands which unset (or set to null) references between cargoes and lots.. The set commands are the commands which then re-set
 		// the new slot/cargo references. They are kept separate to avoid issues where opposite references changes can lead to unexpected results.
-		// final List<Command> nullCommands = new LinkedList<Command>();
 		final List<Command> setCommands = new LinkedList<>();
 
 		// Set of slots which may not be linked to a cargo
@@ -289,6 +289,26 @@ public class LNGSchedulerJobUtils {
 				} else {
 					throw new IllegalStateException("Unsupported slot type");
 				}
+			}
+		}
+		// First pass - add in generated slots to the slot containers
+		for (final OpenSlotAllocation slotAllocation : schedule.getOpenSlotAllocations()) {
+			
+			final Slot slot = slotAllocation.getSlot();
+			// Slots created in the builder have no container so add it the container now as it is used.
+			if (slot instanceof LoadSlot) {
+				final LoadSlot loadSlot = (LoadSlot) slot;
+				if (slot.eContainer() == null) {
+					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), loadSlot));
+				}
+			} else if (slot instanceof DischargeSlot) {
+				final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+				if (dischargeSlot.eContainer() == null) {
+					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), dischargeSlot));
+				}
+				
+			} else {
+				throw new IllegalStateException("Unsupported slot type");
 			}
 		}
 
@@ -342,7 +362,6 @@ public class LNGSchedulerJobUtils {
 							possibleUnusedCargoes.add(slot.getCargo());
 							unsetCargoSlots.addAll(slot.getCargo().getSlots());
 							unsetCargoSlots.remove(slot);
-							// nullCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
 						}
 
 					}
@@ -355,7 +374,6 @@ public class LNGSchedulerJobUtils {
 					if (dischargeSlot.getCargo() != loadCargo) {
 						possibleUnusedCargoes.add(dischargeSlot.getCargo());
 						unsetCargoSlots.add(slot);
-						// nullCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
 
 					}
 					if (dischargeSlot.isFOBSale()) {
@@ -385,22 +403,12 @@ public class LNGSchedulerJobUtils {
 				}
 			}
 
-			// // If the cargo is to become a FOB Sale - then we remove the vessel assignment.
-			// if (fobSaleSlot != null) {
-			// // Slot discharge = allocation.getSlotAllocations().get(1).getSlot();
-			// final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, loadCargo);
-			// if (elementAssignment !=null) {
-			// cmd.append(DeleteCommand.create(domain, elementAssignment));
-			// }
-			// }
-
 			// Remove references to slots no longer in the cargo
 			final Set<Slot> oldSlots = new HashSet<>();
 			oldSlots.addAll(loadCargo.getSlots());
 			oldSlots.removeAll(cargoSlots);
 			for (final Slot slot : oldSlots) {
 				unsetCargoSlots.add(slot);
-				// nullCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
 			}
 
 			// Add in the slots which are currently not in the cargo
@@ -409,8 +417,6 @@ public class LNGSchedulerJobUtils {
 				setCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), loadCargo));
 				setCargoSlots.add(slot);
 			}
-			// Finally match the CargoAllocation to the Cargo object
-			// cmd.append(SetCommand.create(domain, allocation, SchedulePackage.eINSTANCE.getCargoAllocation_InputCargo(), loadCargo));
 		}
 
 		// Add the unset commands first so they do not overwrite the set commands
@@ -462,7 +468,6 @@ public class LNGSchedulerJobUtils {
 				if (spotSlot.getMarket() != null && eObj.eContainer() != null) {
 					// Remove rather than full delete as we may wish to re-use the object later
 					// Note ensure this is also removed from the unused elements list as Remove does not delete other references.
-					// cmd.append(RemoveCommand.create(domain, eObj));
 					slotsToRemove.add((Slot) spotSlot);
 
 				}
@@ -491,9 +496,7 @@ public class LNGSchedulerJobUtils {
 							// Note ensure this is also removed from the unused elements list as Remove does not delete other references.
 							if (!setCargoSlots.contains(slot)) {
 								slotsToRemove.add(slot);
-								;
 							}
-
 						}
 					}
 				}
@@ -518,7 +521,6 @@ public class LNGSchedulerJobUtils {
 		for (final Sequence sequence : schedule.getSequences()) {
 			final boolean isRoundTrip = sequence.isSetCharterInMarket() && sequence.getSpotIndex() == -1;
 
-			// final AVesselSet<Vessel> assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : (sequence.isSetVesselAvailability() ? sequence.getVesselAvailability().getVessel() : null);
 			int index = 1;
 			for (final Event event : sequence.getEvents()) {
 				AssignableElement object = null;
