@@ -28,6 +28,8 @@ import com.mmxlabs.scenario.service.model.util.encryption.impl.IKeyFile;
 /**
  * Based on {@link AESCipherImpl}
  * 
+ * See https://docs.google.com/document/d/1EQzpr94x9sxxnZsW_1DclcvMhpHi061X-uET7S5AI4M/edit#heading=h.adz1phvucrbl
+ * 
  * @author Simon Goodall
  * 
  */
