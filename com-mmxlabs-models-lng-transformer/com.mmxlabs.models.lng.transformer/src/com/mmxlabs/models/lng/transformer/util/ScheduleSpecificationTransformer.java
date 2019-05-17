@@ -79,9 +79,6 @@ public class ScheduleSpecificationTransformer {
 		final List<ISequenceElement> unusedElements = new LinkedList<>();
 		final IOptimisationData optimisationData = dataTransformer.getOptimisationData();
 		for (final VesselScheduleSpecification vesselSpecificiation : scheduleSpecification.getVesselScheduleSpecifications()) {
-			if (vesselSpecificiation.getEvents().isEmpty()) {
-				continue;
-			}
 			final VesselAssignmentType vesselAllocation = vesselSpecificiation.getVesselAllocation();
 			IResource resource = null;
 			if (vesselAllocation instanceof VesselAvailability) {
