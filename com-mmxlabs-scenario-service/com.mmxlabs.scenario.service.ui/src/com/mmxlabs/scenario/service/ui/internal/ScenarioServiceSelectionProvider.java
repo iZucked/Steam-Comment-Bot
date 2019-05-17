@@ -132,7 +132,7 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	@Override
 	public boolean isSelected(@NonNull final ScenarioInstance instance) {
 		for (final ScenarioResult result : selection) {
-			if (result.getScenarioInstance() == instance) {
+			if (result != null && result.getScenarioInstance() == instance) {
 				return true;
 			}
 		}
