@@ -4,12 +4,17 @@
  */
 package com.mmxlabs.lngdataserver.server;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
@@ -29,6 +34,8 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.ssl.LicenseChecker;
@@ -37,6 +44,8 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 
 public class HttpClientUtil {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(HttpClientUtil.class);
 
 	public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
 	public static final MediaType MEDIA_TYPE_FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
@@ -66,6 +75,59 @@ public class HttpClientUtil {
 			e.printStackTrace();
 		}
 		return builder;
+	}
+
+	public static List<CertInfo> extractSSLInfoFromLocalStore() throws Exception {
+
+		final List<CertInfo> infos = new LinkedList<>();
+		{
+			final String userHome = System.getProperty("user.home");
+			if (userHome != null) {
+				final File f = new File(userHome + "/mmxlabs/cacerts/");
+				if (f.exists() && f.isDirectory()) {
+					for (final File certFile : f.listFiles()) {
+						if (certFile.isFile()) {
+							try (FileInputStream inStream = new FileInputStream(certFile)) {
+								final CertificateFactory factory = CertificateFactory.getInstance("X.509");
+								final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
+								CertInfo info = CertInfo.from(cert);
+								info.filename = certFile.getAbsolutePath();
+								infos.add(info);
+							} catch (final Exception e) {
+								LOGGER.error("Unable to load certificate " + f.getAbsolutePath(), e);
+							}
+						}
+					}
+				}
+			}
+		}
+		{
+
+			final String userHome = System.getProperty("eclipse.home.location");
+			if (userHome != null) {
+				try {
+					File f = new File(new URI(userHome + "/cacerts/"));
+					if (f.exists() && f.isDirectory()) {
+						for (final File certFile : f.listFiles()) {
+							if (certFile.isFile()) {
+								try (FileInputStream inStream = new FileInputStream(certFile)) {
+									final CertificateFactory factory = CertificateFactory.getInstance("X.509");
+									final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
+									CertInfo info = CertInfo.from(cert);
+									info.filename = certFile.getAbsolutePath();
+									infos.add(info);
+								} catch (final Exception e) {
+									LOGGER.error("Unable to read certificate " + f.getAbsolutePath(), e);
+								}
+							}
+						}
+					}
+				} catch (final URISyntaxException e1) {
+					// Ignore
+				}
+			}
+		}
+		return infos;
 	}
 
 	public static List<CertInfo> extractSSLInfoFromHost(final String url) throws Exception {
@@ -114,6 +176,7 @@ public class HttpClientUtil {
 	}
 
 	public static class CertInfo {
+		public String filename;
 		public String subject;
 		public String altNames;
 		public String issuer;
@@ -160,6 +223,9 @@ public class HttpClientUtil {
 		public @NonNull String toString() {
 			StringBuilder sb = new StringBuilder();
 
+			if (this.filename != null) {
+				sb.append("Filename: " + this.filename + "\n");
+			}
 			sb.append("Subject: " + this.subject + "\n");
 			sb.append("Issuer: " + this.issuer + "\n");
 			sb.append("Serial: " + this.serial + "\n");

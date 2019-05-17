@@ -278,7 +278,7 @@ public final class LicenseChecker {
 							try (FileInputStream inStream = new FileInputStream(certFile)) {
 								final CertificateFactory factory = CertificateFactory.getInstance("X.509");
 								final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
-								keystore.setCertificateEntry(f.getName(), cert);
+								keystore.setCertificateEntry(certFile.getName(), cert);
 							} catch (final Exception e) {
 								log.error("Unable to import certificate " + f.getAbsolutePath(), e);
 							}
@@ -301,7 +301,7 @@ public final class LicenseChecker {
 						try (FileInputStream inStream = new FileInputStream(certFile)) {
 							final CertificateFactory factory = CertificateFactory.getInstance("X.509");
 							final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
-							keystore.setCertificateEntry(f.getName(), cert);
+							keystore.setCertificateEntry(certFile.getName(), cert);
 						} catch (final Exception e) {
 							log.error("Unable to import certificate " + f.getAbsolutePath(), e);
 						}

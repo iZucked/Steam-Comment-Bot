@@ -42,8 +42,12 @@ public class DataserverPreferencePage extends FieldEditorPreferencePage implemen
 		}
 		Button btn = new Button(getFieldEditorParent(), SWT.PUSH);
 		btn.setText("Check Remote SSL");
-		btn.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
+		btn.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
 
+		Button btn2 = new Button(getFieldEditorParent(), SWT.PUSH);
+		btn2.setText("Check Local certificates");
+		btn2.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
+		
 		Text lbl = new Text(getFieldEditorParent(), SWT.MULTI | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
 		lbl.setText("");
 		lbl.setLayoutData(GridDataFactory.fillDefaults().span(2, 5).minSize(100, 300).hint(100, 300).create());
@@ -72,6 +76,32 @@ public class DataserverPreferencePage extends FieldEditorPreferencePage implemen
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 
+			}
+		});
+		btn2.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try {
+					List<CertInfo> infos = HttpClientUtil.extractSSLInfoFromLocalStore();
+					
+					StringBuilder sb = new StringBuilder();
+					int counter = 1;
+					for (CertInfo info : infos) {
+						sb.append("Certificate " + counter++ + "\n");
+						sb.append(info);
+						sb.append("\n");
+					}
+					lbl.setText(sb.toString());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
 			}
 		});
 	}
