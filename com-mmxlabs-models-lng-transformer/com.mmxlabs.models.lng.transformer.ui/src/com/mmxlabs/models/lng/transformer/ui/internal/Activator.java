@@ -64,6 +64,9 @@ public class Activator extends ValidationPlugin {
 			if (jobManager != null) {
 
 				for (final ScenarioResult result : selected) {
+					if (result == null) {
+						continue;
+					}
 					ScenarioModelRecord instance = result.getModelRecord();
 
 					final String uuid = instance.getManifest().getUUID();
