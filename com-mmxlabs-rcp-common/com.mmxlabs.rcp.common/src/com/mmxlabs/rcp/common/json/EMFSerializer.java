@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -43,20 +44,27 @@ public class EMFSerializer<T extends EObject> extends StdSerializer<T> {
 	private final EClass eClass;
 	private final Class<T> cls;
 
-	public EMFSerializer(final EClass eClass, final Class<T> cls) {
+	private @Nullable IJSONSerialisationConfigProvider serialisationConfig;
+
+	public EMFSerializer(final EClass eClass, final Class<T> cls, @Nullable IJSONSerialisationConfigProvider serialisationConfig) {
 		super(cls);
 		this.cls = cls;
 		this.eClass = eClass;
+		this.serialisationConfig = serialisationConfig;
 	}
 
 	@Override
 	public void serialize(final T value, final JsonGenerator jgen, final SerializerProvider provider) throws IOException {
+
 		jgen.writeStartObject();
 		if (value instanceof EObject) {
 			jgen.writeStringField(JSONConstants.ATTRIBUTE_CLASS, eClass.getName());
 		}
 
 		for (final EStructuralFeature f : value.eClass().getEAllStructuralFeatures()) {
+			if (serialisationConfig != null && serialisationConfig.isFeatureIgnored(f)) {
+				continue;
+			}
 			if (value.eIsSet(f)) {
 				if (f.isMany()) {
 					jgen.writeArrayFieldStart(f.getName());

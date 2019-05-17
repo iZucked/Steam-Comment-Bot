@@ -7,6 +7,7 @@ package com.mmxlabs.rcp.common.json;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.emf.common.util.ECollections;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -55,7 +56,9 @@ public class JSONReference {
 	public static JSONReference of(final EObject eObject) {
 		final EStructuralFeature nameFeature = eObject.eClass().getEStructuralFeature("name");
 		final EStructuralFeature mmxidFeature = eObject.eClass().getEStructuralFeature("mmxid");
-		final String name = nameFeature == null ? null : (String) eObject.eGet(nameFeature);
+		String name = nameFeature == null ? null : (String) eObject.eGet(nameFeature);
+
+		// Try to find the unique ID for the object.
 		String id = mmxidFeature == null ? null : (String) eObject.eGet(mmxidFeature);
 		if (id == null) {
 			for (final EOperation op : eObject.eClass().getEOperations()) {
@@ -70,7 +73,34 @@ public class JSONReference {
 				}
 			}
 		}
+		if (id == null) {
+			// Does the object expose a jsonid method to obtain a reproducible identifier?
+			for (final EOperation op : eObject.eClass().getEOperations()) {
+				if (op.getName().equalsIgnoreCase("jsonid")) {
+					try {
+						id = (String) eObject.eInvoke(op, ECollections.emptyEList());
+						break;
+					} catch (final InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		if (id == null) {
+			// Finally fall back to uuid. This is not reliable across model instances.
+			for (final EAttribute attrib : eObject.eClass().getEAllAttributes()) {
+				if (attrib.getName().equalsIgnoreCase("uuid")) {
+					id = (String) eObject.eGet(attrib);
+					break;
+				}
+			}
+		}
 		String type = String.format("%s/%s", eObject.eClass().getEPackage().getNsURI(), eObject.eClass().getName());
+		// Use ID as the name if not found.
+		if (name == null) {
+			name = id;
+		}
 		return new JSONReference(type, name, id);
 
 	}

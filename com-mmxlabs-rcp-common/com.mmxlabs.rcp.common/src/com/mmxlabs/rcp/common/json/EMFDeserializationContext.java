@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.rcp.common.json;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,9 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
@@ -26,6 +23,7 @@ import com.fasterxml.jackson.databind.deser.DeserializerCache;
 import com.fasterxml.jackson.databind.deser.DeserializerFactory;
 import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.util.ToBooleanFunction;
 
 public class EMFDeserializationContext extends DefaultDeserializationContext {
 	private class State {
@@ -33,6 +31,7 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 		final Map<Pair<String, String>, Object> nameMap = new HashMap<>();
 		final Map<Pair<String, String>, Object> idMap = new HashMap<>();
 		final Collection<EStructuralFeature> ignoredFeatures = new HashSet<>();
+		ToBooleanFunction<JSONReference> missingReferenceHandler = ref -> Boolean.TRUE;
 	}
 
 	private final State state;
@@ -41,28 +40,18 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 		state.ignoredFeatures.add(feature);
 	}
 
+	public void setMissingFeatureHandler(ToBooleanFunction<JSONReference> missingReferenceHandler) {
+		state.missingReferenceHandler = missingReferenceHandler;
+	}
+
 	public void registerType(final Object value) {
 
 		if (value instanceof EObject) {
 			final EObject eObject = (EObject) value;
-			final EStructuralFeature nameFeature = eObject.eClass().getEStructuralFeature("name");
-			final EStructuralFeature mmxidFeature = eObject.eClass().getEStructuralFeature("mmxid");
-			final String name = nameFeature == null ? null : (String) eObject.eGet(nameFeature);
-			String id = mmxidFeature == null ? null : (String) eObject.eGet(mmxidFeature);
-			if (id == null) {
-				for (final EOperation op : eObject.eClass().getEOperations()) {
-					if (op.getName().equalsIgnoreCase("mmxid")) {
-						try {
-							id = (String) eObject.eInvoke(op, ECollections.emptyEList());
-						} catch (final InvocationTargetException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-			final String type = String.format("%s/%s", eObject.eClass().getEPackage().getNsURI(), eObject.eClass().getName());
-			registerType(type, id, name, eObject);
+
+			JSONReference ref = JSONReference.of(eObject);
+
+			registerType(ref.getClassType(), ref.getGlobalId(), ref.getName(), eObject);
 		}
 	}
 
@@ -98,11 +87,13 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 
 		Object referenceObject = lookupType(ref);
 		if (referenceObject == null) {
-			if (true) {
+			if (state.missingReferenceHandler.accept(ref)) {
 				throw new IllegalArgumentException();
-			} else {
-				System.out.println("Unknown reference " + ref.getName() + "  " + ref.getGlobalId() + " " + ref.getClassType());
 			}
+			// if (true) {
+			// } else {
+			// System.out.println("Unknown reference " + ref.getName() + " " + ref.getGlobalId() + " " + ref.getClassType());
+			// }
 		} else {
 
 			if (feature.isMany()) {
