@@ -18,7 +18,7 @@ import com.mmxlabs.lngdataserver.integration.repo.general.GeneralDataRecord;
  * @author Simon Goodall
  *
  */
-@JsonIgnoreProperties({ "creator", "published", "current", "abcIdentifier", "routes", "locations", "routingPoints" })
+@JsonIgnoreProperties({ "creator", "type", "published", "current", "abcIdentifier", "routes", "locations", "routingPoints" })
 public class DistancesMixin {
 
 	@JsonAlias("identifier")
