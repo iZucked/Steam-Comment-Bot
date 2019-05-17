@@ -27,7 +27,6 @@ public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 	 */
 	@Override
 	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
-		// final Button button = new Button(parent, SWT.CHECK);
 		final Button button = toolkit.createButton(parent, "", SWT.CHECK);
 
 		button.addSelectionListener(new SelectionListener() {
