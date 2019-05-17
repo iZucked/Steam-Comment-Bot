@@ -161,7 +161,7 @@ public class ScheduleCalculator {
 
 		final List<@NonNull IResource> resources = sequences.getResources();
 
-		for (int i = 0; i < sequences.size(); ++i) {
+		for (int i = 0; i < resources.size(); ++i) {
 			final IResource resource = resources.get(i);
 			final ISequence sequence = sequences.getSequence(resource);
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
