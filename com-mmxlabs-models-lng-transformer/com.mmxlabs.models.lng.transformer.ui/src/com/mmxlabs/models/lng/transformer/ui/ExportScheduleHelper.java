@@ -21,12 +21,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -35,6 +37,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -127,6 +130,20 @@ public class ExportScheduleHelper {
 			}
 
 		}
+		// Uncontain these slots so the call to #derive will re-parent them
+		for (final OpenSlotAllocation a : schedule.getOpenSlotAllocations()) {
+			final Slot<?> slot = a.getSlot();
+			if (slot != null && slot.eContainer() != cargoModel) {
+				final EReference ref = slot.eContainmentFeature();
+				if (ref.isMany()) {
+					final List<EObject> l = (List<EObject>) slot.eContainer().eGet(ref);
+					l.remove(slot);
+				} else {
+					slot.eContainer().eUnset(ref);
+				}
+			}
+			
+		}
 
 		// Clear any insertion plans - assume no longer relevant
 		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
@@ -139,6 +156,17 @@ public class ExportScheduleHelper {
 		// TODO: Need injector for correct post export processors
 		final Command command = LNGSchedulerJobUtils.exportSchedule(null, scenarioModel, editingDomain, schedule);
 		editingDomain.getCommandStack().execute(command);
+
+		// Re-check after the customiser has run.
+		for (final Cargo cargo : cargoModel.getCargoes()) {
+			VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
+			if (vesselAssignmentType instanceof CharterInMarket) {
+				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+				if (charterInMarket.eContainer() == null) {
+					spotMarketsModel.getCharterInMarkets().add(charterInMarket);
+				}
+			}
+		}
 
 		assert EMFUtils.checkValidContainment(scenarioModel);
 
