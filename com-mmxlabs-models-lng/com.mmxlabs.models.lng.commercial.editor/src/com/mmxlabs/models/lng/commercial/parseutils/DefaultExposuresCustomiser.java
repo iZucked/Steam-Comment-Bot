@@ -13,7 +13,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 public class DefaultExposuresCustomiser implements IExposuresCustomiser{
 
 	@Override
-	public @Nullable String provideExposedPriceExpression(@NonNull Slot slot, @NonNull SlotAllocation slotAllocation) {
+	public @Nullable String provideExposedPriceExpression(@NonNull Slot slot, SlotAllocation slotAllocation) {
 		return null;
 	}
 

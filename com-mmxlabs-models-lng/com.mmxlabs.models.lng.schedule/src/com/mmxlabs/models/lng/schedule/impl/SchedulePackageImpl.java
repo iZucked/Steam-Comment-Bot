@@ -1298,6 +1298,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EReference getOpenSlotAllocation_Exposures() {
+		return (EReference)openSlotAllocationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSlotAllocation() {
 		return slotAllocationEClass;
 	}
@@ -2925,6 +2935,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		openSlotAllocationEClass = createEClass(OPEN_SLOT_ALLOCATION);
 		createEReference(openSlotAllocationEClass, OPEN_SLOT_ALLOCATION__SLOT);
+		createEReference(openSlotAllocationEClass, OPEN_SLOT_ALLOCATION__EXPOSURES);
 
 		slotAllocationEClass = createEClass(SLOT_ALLOCATION);
 		createEReference(slotAllocationEClass, SLOT_ALLOCATION__SLOT);
@@ -3310,6 +3321,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(openSlotAllocationEClass, OpenSlotAllocation.class, "OpenSlotAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getOpenSlotAllocation_Slot(), theCargoPackage.getSlot(), null, "slot", null, 1, 1, OpenSlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOpenSlotAllocation_Exposures(), this.getExposureDetail(), null, "exposures", null, 0, -1, OpenSlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(slotAllocationEClass, SlotAllocation.class, "SlotAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSlotAllocation_Slot(), theCargoPackage.getSlot(), null, "slot", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

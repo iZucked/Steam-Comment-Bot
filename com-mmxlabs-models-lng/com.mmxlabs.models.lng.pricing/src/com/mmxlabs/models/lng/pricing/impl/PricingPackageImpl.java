@@ -2030,7 +2030,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEAttribute(getAbstractYearMonthCurve_Expression(), ecorePackage.getEString(), "expression", null, 1, 1, AbstractYearMonthCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(commodityCurveEClass, CommodityCurve.class, "CommodityCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCommodityCurve_MarketIndex(), this.getMarketIndex(), null, "marketIndex", null, 0, 1, CommodityCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCommodityCurve_MarketIndex(), this.getMarketIndex(), null, "marketIndex", null, 0, 1, CommodityCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterCurveEClass, CharterCurve.class, "CharterCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

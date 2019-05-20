@@ -338,7 +338,8 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CommodityCurve" eSuperTypes="#//AbstractYearMonthCurve">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="marketIndex" eType="#//MarketIndex"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="marketIndex" eType="#//MarketIndex"
+        unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharterCurve" eSuperTypes="#//AbstractYearMonthCurve"/>
   <eClassifiers xsi:type="ecore:EClass" name="BunkerFuelCurve" eSuperTypes="#//AbstractYearMonthCurve"/>

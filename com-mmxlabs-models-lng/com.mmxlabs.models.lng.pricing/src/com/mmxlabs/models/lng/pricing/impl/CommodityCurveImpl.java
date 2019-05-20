@@ -40,6 +40,15 @@ public class CommodityCurveImpl extends AbstractYearMonthCurveImpl implements Co
 	protected MarketIndex marketIndex;
 
 	/**
+	 * This is true if the Market Index reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean marketIndexESet;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -94,8 +103,35 @@ public class CommodityCurveImpl extends AbstractYearMonthCurveImpl implements Co
 	public void setMarketIndex(MarketIndex newMarketIndex) {
 		MarketIndex oldMarketIndex = marketIndex;
 		marketIndex = newMarketIndex;
+		boolean oldMarketIndexESet = marketIndexESet;
+		marketIndexESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.COMMODITY_CURVE__MARKET_INDEX, oldMarketIndex, marketIndex));
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.COMMODITY_CURVE__MARKET_INDEX, oldMarketIndex, marketIndex, !oldMarketIndexESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetMarketIndex() {
+		MarketIndex oldMarketIndex = marketIndex;
+		boolean oldMarketIndexESet = marketIndexESet;
+		marketIndex = null;
+		marketIndexESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, PricingPackage.COMMODITY_CURVE__MARKET_INDEX, oldMarketIndex, null, oldMarketIndexESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetMarketIndex() {
+		return marketIndexESet;
 	}
 
 	/**
@@ -137,7 +173,7 @@ public class CommodityCurveImpl extends AbstractYearMonthCurveImpl implements Co
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case PricingPackage.COMMODITY_CURVE__MARKET_INDEX:
-				setMarketIndex((MarketIndex)null);
+				unsetMarketIndex();
 				return;
 		}
 		super.eUnset(featureID);
@@ -152,7 +188,7 @@ public class CommodityCurveImpl extends AbstractYearMonthCurveImpl implements Co
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case PricingPackage.COMMODITY_CURVE__MARKET_INDEX:
-				return marketIndex != null;
+				return isSetMarketIndex();
 		}
 		return super.eIsSet(featureID);
 	}

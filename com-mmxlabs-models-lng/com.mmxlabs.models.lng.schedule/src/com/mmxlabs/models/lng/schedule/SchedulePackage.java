@@ -923,13 +923,22 @@ public interface SchedulePackage extends EPackage {
 	int OPEN_SLOT_ALLOCATION__SLOT = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Exposures</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_SLOT_ALLOCATION__EXPOSURES = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Open Slot Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPEN_SLOT_ALLOCATION_FEATURE_COUNT = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 1;
+	int OPEN_SLOT_ALLOCATION_FEATURE_COUNT = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7213,6 +7222,17 @@ public interface SchedulePackage extends EPackage {
 	EReference getOpenSlotAllocation_Slot();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.OpenSlotAllocation#getExposures <em>Exposures</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Exposures</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.OpenSlotAllocation#getExposures()
+	 * @see #getOpenSlotAllocation()
+	 * @generated
+	 */
+	EReference getOpenSlotAllocation_Exposures();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.SlotAllocation <em>Slot Allocation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9543,6 +9563,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference OPEN_SLOT_ALLOCATION__SLOT = eINSTANCE.getOpenSlotAllocation_Slot();
+
+		/**
+		 * The meta object literal for the '<em><b>Exposures</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPEN_SLOT_ALLOCATION__EXPOSURES = eINSTANCE.getOpenSlotAllocation_Exposures();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl <em>Slot Allocation</em>}' class.

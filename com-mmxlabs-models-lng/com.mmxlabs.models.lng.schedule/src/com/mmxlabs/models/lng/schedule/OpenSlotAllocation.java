@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.schedule;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import org.eclipse.emf.common.util.EList;
 
 
 /**
@@ -19,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.OpenSlotAllocation#getSlot <em>Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.OpenSlotAllocation#getExposures <em>Exposures</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getOpenSlotAllocation()
@@ -78,5 +80,17 @@ public interface OpenSlotAllocation extends ProfitAndLossContainer {
 	 * @generated
 	 */
 	boolean isSetSlot();
+
+	/**
+	 * Returns the value of the '<em><b>Exposures</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.ExposureDetail}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Exposures</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getOpenSlotAllocation_Exposures()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<ExposureDetail> getExposures();
 
 } // OpenSlotAllocation

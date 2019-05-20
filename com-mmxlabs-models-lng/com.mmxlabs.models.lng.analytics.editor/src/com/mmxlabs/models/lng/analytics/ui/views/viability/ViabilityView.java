@@ -450,9 +450,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 				 */
 				if (obj instanceof LoadSlot) {
 					final LoadSlot load = (LoadSlot) obj;
-					if (load.getCargo() == null) {
-						return load;
-					}
+					return load;
 				}
 			}
 		}

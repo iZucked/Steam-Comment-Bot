@@ -37,6 +37,7 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.rcp.common;bundle-version="[4.6.14,5.0.0)",
  com.mmxlabs.models.lng.ui;bundle-version="[4.6.14,5.0.0)",
  com.mmxlabs.scenario.service.model,
- com.mmxlabs.models.lng.pricing
+ com.mmxlabs.models.lng.pricing,
+ com.mmxlabs.scheduler.optimiser
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.inject;version="1.0.0"

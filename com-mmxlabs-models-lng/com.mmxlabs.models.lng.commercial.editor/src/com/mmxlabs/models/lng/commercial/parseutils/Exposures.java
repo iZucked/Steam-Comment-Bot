@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -31,12 +30,13 @@ import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.PromptToolbarEditor;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
@@ -74,6 +74,7 @@ import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -81,8 +82,11 @@ import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.DealType;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 
 /**
  * Utility class to calculate schedule exposure to market indices. Provides static methods
@@ -136,7 +140,7 @@ public class Exposures {
 			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 				slotAllocation.getExposures().clear();
 
-				final int volume = slotAllocation.getEnergyTransferred();
+				int volume = slotAllocation.getEnergyTransferred();
 				final Slot slot = slotAllocation.getSlot();
 
 				if (slot == null) {
@@ -164,6 +168,7 @@ public class Exposures {
 				final boolean isPurchase = slot instanceof LoadSlot;
 				{
 					SlotAllocation sa = exposuresCustomiser.getExposed(slotAllocation);
+					volume = sa.getEnergyTransferred();
 					if (sa.getSlotVisit().getStart().toLocalDate().isAfter(promptStart)) {
 						
 						final ExposureDetail physical = ScheduleFactory.eINSTANCE.createExposureDetail();
@@ -215,6 +220,102 @@ public class Exposures {
 				}
 			}
 		}
+		
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPEN_SLOT_EXPOSURE)) return;
+		for (final OpenSlotAllocation slotAllocation : schedule.getOpenSlotAllocations()) {
+			slotAllocation.getExposures().clear();
+			final Slot slot = slotAllocation.getSlot();
+			if (slot == null) {
+				continue;
+			}
+			final LocalDate date = slot.getWindowEndWithSlotOrPortTime().toLocalDate();
+			if (date.isBefore(promptStart) || slot.getWindowStart().isBefore(promptStart)) {
+				continue;
+			}
+			
+			final String priceExpression;
+			if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICE_EXPRESSION)) {
+				priceExpression = slot.getPriceExpression();
+			} else {
+				priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot, null);
+			}
+			
+			final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
+			final List<PricingCalendar> pcs = new ArrayList<PricingCalendar>();
+			final List<HolidayCalendar> hcs = new ArrayList<HolidayCalendar>();
+			
+			for (AbstractYearMonthCurve curve : curves) {
+				if (curve instanceof CommodityCurve) {
+					final CommodityCurve cc = (CommodityCurve) curve;
+					if (calendarHandler.getPricingCalendar(cc) != null) pcs.add(calendarHandler.getPricingCalendar(cc));
+					if (calendarHandler.getHolidayCalendar(cc) != null) hcs.add(calendarHandler.getHolidayCalendar(cc));
+				}
+			}
+
+			final boolean isPurchase = slot instanceof LoadSlot;
+			int volume = 0;
+			
+			if (slot.getSlotOrDelegateVolumeLimitsUnit() == VolumeUnits.M3) {
+				double cv = 22.3;
+				if (slot instanceof LoadSlot) {
+					cv = ((LoadSlot) slot).getSlotOrDelegateCV();
+				} else if (slot instanceof DischargeSlot) {
+					cv = ((DischargeSlot)slot).getSlotOrDelegateMaxCv();
+				}
+				long tempVolume = OptimiserUnitConvertor.convertToInternalVolume(slot.getSlotOrDelegateMaxQuantity());
+				int tempCV = OptimiserUnitConvertor.convertToInternalConversionFactor(cv);
+				long longVolume = Calculator.convertM3ToMMBTuWithOverflowProtection(tempVolume, tempCV);
+				volume = OptimiserUnitConvertor.convertToExternalVolume(longVolume);
+			} else {
+				volume = slot.getSlotOrDelegateMaxQuantity();
+			}
+			
+			final YearMonth ymDate = YearMonth.from(date);
+
+			final SeriesParser seriesParser = PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.COMMODITY);
+			int volumeValue = 0;
+			
+			if (seriesParser != null) {
+				final IExpression<ISeries> expression = seriesParser.parse(priceExpression);
+				final ISeries parsed = expression.evaluate();
+				if (parsed != null) {
+					int time = PriceIndexUtils.convertTime(PriceIndexUtils.dateZero, date);
+					volumeValue = parsed.evaluate(time).intValue();
+				}
+			}
+			
+			{
+				final ExposureDetail physical = ScheduleFactory.eINSTANCE.createExposureDetail();
+				physical.setDealType(DealType.PHYSICAL);
+				physical.setVolumeInMMBTU((isPurchase ? 1.0 : -1.0) * volume);
+				physical.setVolumeInNativeUnits((isPurchase ? 1.0 : -1.0) * slot.getSlotOrDelegateMaxQuantity());
+				physical.setNativeValue((isPurchase ? -1.0 : 1.0) * slot.getSlotOrDelegateMaxQuantity() * volumeValue);
+				physical.setVolumeUnit("mmBtu");
+				physical.setIndexName("Physical");
+				physical.setDate(ymDate);
+				
+				slotAllocation.getExposures().add(physical);
+			}
+			
+			final LocalDate pricingFullDate = date;
+			if (pricingFullDate != null) {
+				final YearMonth pricingDate = YearMonth.of(pricingFullDate.getYear(), pricingFullDate.getMonth());
+				final MarkedUpNode node = getExposureCoefficient(slot, null, lookupData);
+				if (node != null) {
+					final Collection<ExposureDetail> exposureDetails = createExposureDetail(node, pricingDate, volume, isPurchase, lookupData, pricingFullDate.getDayOfMonth());
+					if (exposureDetails != null && !exposureDetails.isEmpty()) {
+						for (final ExposureDetail ed : exposureDetails) {
+							applyProRataCorrection(pcs, hcs, promptStart, ed);
+							if (ed.getDate().isAfter(YearMonth.of(promptStart.getYear(), promptStart.getMonthValue())) //
+									|| ed.getDate().equals(YearMonth.of(promptStart.getYear(), promptStart.getMonthValue()))) {
+								slotAllocation.getExposures().add(ed);
+							}
+						}
+					}
+				}
+			}
+		}
+			
 	}
 	
 	private static void applyProRataCorrection(List<PricingCalendar> pcs, List<HolidayCalendar> hcs, final LocalDate cutoff, final ExposureDetail exposure) {
@@ -226,8 +327,7 @@ public class Exposures {
 		}
 		{
 			// for now - we take the first calendar
-			int wd = getWorkingDays(lPce.isEmpty() ? null : lPce.get(0), hcs, cutoff);
-			double proRataCorrection = ((double)wd) / (double) exposure.getDate().lengthOfMonth();
+			double proRataCorrection = getProRataCoefficient(lPce.isEmpty() ? null : lPce.get(0), hcs, cutoff);
 			exposure.setVolumeInMMBTU(proRataCorrection * exposure.getVolumeInMMBTU());
 			exposure.setVolumeInNativeUnits(proRataCorrection * exposure.getVolumeInNativeUnits());
 			exposure.setNativeValue(proRataCorrection * exposure.getNativeValue());
@@ -267,13 +367,19 @@ public class Exposures {
 		}
 	}
 
-	private static int getWorkingDays(final PricingCalendarEntry pricingCalendarEntry, final List<HolidayCalendar> hcs, final LocalDate cutoff) {
-		int i = 1;
+	private static double getProRataCoefficient(final PricingCalendarEntry pricingCalendarEntry, final List<HolidayCalendar> hcs, final LocalDate cutoff) {
+		double i = 1.0;
+		double k = 1.0;
 		// workdays
 		if (pricingCalendarEntry != null) {
 			for (LocalDate c = cutoff; c.isBefore(pricingCalendarEntry.getEnd().plusDays(1)); c = c.plusDays(1)) {
 				if (c.getDayOfWeek() != DayOfWeek.SATURDAY && c.getDayOfWeek() != DayOfWeek.SUNDAY) {
-					i++;
+					i+=1.0;
+				}
+			}
+			for (LocalDate c = pricingCalendarEntry.getStart(); c.isBefore(pricingCalendarEntry.getEnd().plusDays(1)); c = c.plusDays(1)) {
+				if (c.getDayOfWeek() != DayOfWeek.SATURDAY && c.getDayOfWeek() != DayOfWeek.SUNDAY) {
+					k+=1.0;
 				}
 			}
 		}
@@ -281,14 +387,18 @@ public class Exposures {
 			// extra holidays
 			for (final HolidayCalendar hc : hcs) {
 				for (final HolidayCalendarEntry hce: hc.getEntries()) {
-					if (hce.getDate().isAfter(cutoff/*pricingCalendarEntry.getStart()*/) //
+					if (hce.getDate().isAfter(cutoff) //
 							&& hce.getDate().isBefore(pricingCalendarEntry.getEnd())) {
-						i--;
+						i-=1.0;
+					}
+					if (hce.getDate().isAfter(pricingCalendarEntry.getStart()) //
+							&& hce.getDate().isBefore(pricingCalendarEntry.getEnd())) {
+						k-=1.0;
 					}
 				}
 			}
 		}
-		return i;
+		return i/k;
 	}
 
 	/**
@@ -314,7 +424,7 @@ public class Exposures {
 	 * @param index
 	 * @return
 	 */
-	public static MarkedUpNode getExposureCoefficient(final @NonNull Slot slot, final @NonNull SlotAllocation slotAllocation, final @NonNull LookupData lookupData) {
+	public static MarkedUpNode getExposureCoefficient(final @NonNull Slot slot, final SlotAllocation slotAllocation, final @NonNull LookupData lookupData) {
 		String priceExpression = null;
 		if (slot instanceof SpotSlot) {
 			final SpotSlot spotSlot = (SpotSlot) slot;

@@ -36,19 +36,19 @@ public final class ViabilityUtils {
 		final SpotMarketsModel spotModel = ScenarioModelUtil.getSpotMarketsModel(sm);
 
 		for (final LoadSlot slot : cargoModel.getLoadSlots()) {
-			if (slot.getCargo() == null) {
-				final BuyReference buy = AnalyticsFactory.eINSTANCE.createBuyReference();
-				buy.setSlot(slot);
-				model.getBuys().add(buy);
-			}
+			final BuyReference buy = AnalyticsFactory.eINSTANCE.createBuyReference();
+			buy.setSlot(slot);
+			model.getBuys().add(buy);
 		}
+		/*
+		 * FIXME : uncomment if you want to see shorts
 		for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
 			if (slot.getCargo() == null) {
 				final SellReference sale = AnalyticsFactory.eINSTANCE.createSellReference();
 				sale.setSlot(slot);
 				model.getSells().add(sale);
 			}
-		}
+		} */
 		for (final VesselAvailability vessel : cargoModel.getVesselAvailabilities()) {
 			if (vessel != null) {
 				final ExistingVesselAvailability v = AnalyticsFactory.eINSTANCE.createExistingVesselAvailability();
