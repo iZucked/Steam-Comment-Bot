@@ -66,6 +66,7 @@ public class OpenSlotAllocationComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_slotEditor(detailComposite, topClass);
+		add_exposuresEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the slot feature on OpenSlotAllocation
@@ -74,5 +75,14 @@ public class OpenSlotAllocationComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_slotEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.OPEN_SLOT_ALLOCATION__SLOT));
+	}
+
+	/**
+	 * Create the editor for the exposures feature on OpenSlotAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_exposuresEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.OPEN_SLOT_ALLOCATION__EXPOSURES));
 	}
 }

@@ -39,6 +39,8 @@ import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
@@ -59,6 +61,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -772,6 +775,14 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					}
 				}
 			}
+			if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPEN_SLOT_EXPOSURE)) return result;
+			for (final OpenSlotAllocation sa: schedule.getOpenSlotAllocations()) {
+				for (final ExposureDetail detail : sa.getExposures()) {
+					if (detail.getDate().isBefore(result)) {
+						result = detail.getDate();
+					}
+				}
+			}
 		}
 		return result;
 	}
@@ -788,6 +799,14 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 						if (detail.getDate().isAfter(result)) {
 							result = detail.getDate();
 						}
+					}
+				}
+			}
+			if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPEN_SLOT_EXPOSURE)) return result;
+			for (final OpenSlotAllocation sa: schedule.getOpenSlotAllocations()) {
+				for (final ExposureDetail detail : sa.getExposures()) {
+					if (detail.getDate().isAfter(result)) {
+						result = detail.getDate();
 					}
 				}
 			}

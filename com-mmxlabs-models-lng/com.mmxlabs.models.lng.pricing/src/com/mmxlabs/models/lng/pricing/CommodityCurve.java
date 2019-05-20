@@ -34,9 +34,11 @@ public interface CommodityCurve extends AbstractYearMonthCurve {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Market Index</em>' reference.
+	 * @see #isSetMarketIndex()
+	 * @see #unsetMarketIndex()
 	 * @see #setMarketIndex(MarketIndex)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCommodityCurve_MarketIndex()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	MarketIndex getMarketIndex();
@@ -46,8 +48,33 @@ public interface CommodityCurve extends AbstractYearMonthCurve {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Market Index</em>' reference.
+	 * @see #isSetMarketIndex()
+	 * @see #unsetMarketIndex()
 	 * @see #getMarketIndex()
 	 * @generated
 	 */
 	void setMarketIndex(MarketIndex value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.pricing.CommodityCurve#getMarketIndex <em>Market Index</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetMarketIndex()
+	 * @see #getMarketIndex()
+	 * @see #setMarketIndex(MarketIndex)
+	 * @generated
+	 */
+	void unsetMarketIndex();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.pricing.CommodityCurve#getMarketIndex <em>Market Index</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Market Index</em>' reference is set.
+	 * @see #unsetMarketIndex()
+	 * @see #getMarketIndex()
+	 * @see #setMarketIndex(MarketIndex)
+	 * @generated
+	 */
+	boolean isSetMarketIndex();
 } // CommodityCurve

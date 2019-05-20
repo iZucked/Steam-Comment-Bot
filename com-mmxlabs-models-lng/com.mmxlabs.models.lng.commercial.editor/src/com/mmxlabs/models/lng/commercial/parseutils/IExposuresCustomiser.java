@@ -21,7 +21,7 @@ public interface IExposuresCustomiser {
 	 * @return
 	 */
 	@Nullable
-	String provideExposedPriceExpression(@NonNull Slot slot, @NonNull SlotAllocation slotAllocation);
+	String provideExposedPriceExpression(@NonNull Slot slot, SlotAllocation slotAllocation);
 	
 	SlotAllocation getExposed(final SlotAllocation slotAllocation);
 }

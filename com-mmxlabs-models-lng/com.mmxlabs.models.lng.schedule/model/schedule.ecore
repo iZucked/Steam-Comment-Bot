@@ -52,6 +52,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="OpenSlotAllocation" eSuperTypes="#//ProfitAndLossContainer">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slot" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"
         unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exposures" upperBound="-1"
+        eType="#//ExposureDetail" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SlotAllocation" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eOperations name="getPort" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>

@@ -7,13 +7,19 @@
 package com.mmxlabs.models.lng.schedule.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.schedule.ExposureDetail;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import java.util.Collection;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.OpenSlotAllocationImpl#getSlot <em>Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.OpenSlotAllocationImpl#getExposures <em>Exposures</em>}</li>
  * </ul>
  *
  * @generated
@@ -46,6 +53,15 @@ public class OpenSlotAllocationImpl extends ProfitAndLossContainerImpl implement
 	 * @ordered
 	 */
 	protected boolean slotESet;
+	/**
+	 * The cached value of the '{@link #getExposures() <em>Exposures</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getExposures()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ExposureDetail> exposures;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -138,11 +154,40 @@ public class OpenSlotAllocationImpl extends ProfitAndLossContainerImpl implement
 	 * @generated
 	 */
 	@Override
+	public EList<ExposureDetail> getExposures() {
+		if (exposures == null) {
+			exposures = new EObjectContainmentEList<ExposureDetail>(ExposureDetail.class, this, SchedulePackage.OPEN_SLOT_ALLOCATION__EXPOSURES);
+		}
+		return exposures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case SchedulePackage.OPEN_SLOT_ALLOCATION__EXPOSURES:
+				return ((InternalEList<?>)getExposures()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case SchedulePackage.OPEN_SLOT_ALLOCATION__SLOT:
 				if (resolve) return getSlot();
 				return basicGetSlot();
+			case SchedulePackage.OPEN_SLOT_ALLOCATION__EXPOSURES:
+				return getExposures();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -152,11 +197,16 @@ public class OpenSlotAllocationImpl extends ProfitAndLossContainerImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case SchedulePackage.OPEN_SLOT_ALLOCATION__SLOT:
 				setSlot((Slot)newValue);
+				return;
+			case SchedulePackage.OPEN_SLOT_ALLOCATION__EXPOSURES:
+				getExposures().clear();
+				getExposures().addAll((Collection<? extends ExposureDetail>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -173,6 +223,9 @@ public class OpenSlotAllocationImpl extends ProfitAndLossContainerImpl implement
 			case SchedulePackage.OPEN_SLOT_ALLOCATION__SLOT:
 				unsetSlot();
 				return;
+			case SchedulePackage.OPEN_SLOT_ALLOCATION__EXPOSURES:
+				getExposures().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -187,6 +240,8 @@ public class OpenSlotAllocationImpl extends ProfitAndLossContainerImpl implement
 		switch (featureID) {
 			case SchedulePackage.OPEN_SLOT_ALLOCATION__SLOT:
 				return isSetSlot();
+			case SchedulePackage.OPEN_SLOT_ALLOCATION__EXPOSURES:
+				return exposures != null && !exposures.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

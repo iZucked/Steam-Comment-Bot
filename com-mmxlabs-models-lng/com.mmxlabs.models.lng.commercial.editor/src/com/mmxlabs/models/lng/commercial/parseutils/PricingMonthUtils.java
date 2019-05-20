@@ -53,7 +53,7 @@ public class PricingMonthUtils {
 		final Slot slot = result.getSlot();
 		if (slot instanceof LoadSlot) {
 			final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
-			if (cargoAllocation != null && cargoAllocation.getCargoType() == CargoType.FLEET) {
+			if (cargoAllocation != null) {
 				for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
 					if (sa.equals(slotAllocation)) continue;
 					final Slot s = sa.getSlot();

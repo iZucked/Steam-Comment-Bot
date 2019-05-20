@@ -93,6 +93,7 @@
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//OpenSlotAllocation">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//OpenSlotAllocation/slot"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//OpenSlotAllocation/exposures"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//SlotAllocation">
       <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
