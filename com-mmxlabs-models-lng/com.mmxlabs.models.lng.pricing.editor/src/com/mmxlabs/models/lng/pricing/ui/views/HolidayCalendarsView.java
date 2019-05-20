@@ -15,6 +15,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -184,7 +185,44 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 			});
 		}
 		
-		selector.setLayout(new GridLayout(4, false));
+		{
+			Button btn_remove = new Button(selector, SWT.PUSH);
+			btn_remove.setText("Remove");
+			
+			btn_remove.addSelectionListener(new SelectionListener() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+	 
+					if (calendarSelectionViewer == null) return;
+					if (calendarSelectionViewer.getStructuredSelection() == null ||
+							calendarSelectionViewer.getStructuredSelection().isEmpty()) return;
+					final IStructuredSelection selection = calendarSelectionViewer.getStructuredSelection();
+					final Object obj = selection.getFirstElement();
+					if (!(obj instanceof HolidayCalendar)) return;
+					
+					
+					final HolidayCalendar hc = (HolidayCalendar) obj;
+					getModelReference().executeWithTryLock(true, 200, () -> {
+
+						final CompoundCommand cmd = new CompoundCommand("Remove calendar");
+						cmd.append(RemoveCommand.create(getEditingDomain(), pricingModel, PricingPackage.eINSTANCE.getPricingModel_HolidayCalendars(), hc));
+
+						CommandStack commandStack = getModelReference().getCommandStack();
+						commandStack.execute(cmd);
+					});
+					List<HolidayCalendar> models = pricingModel.getHolidayCalendars().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
+					calendarSelectionViewer.setInput(models);
+				}
+
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+
+				}
+			});
+		}
+		
+		selector.setLayout(new GridLayout(5, false));
 		
 		return sectionParent;
 	}
