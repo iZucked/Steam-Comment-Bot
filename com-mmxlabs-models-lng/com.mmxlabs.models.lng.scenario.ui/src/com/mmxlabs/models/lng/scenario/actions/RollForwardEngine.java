@@ -8,16 +8,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
@@ -31,9 +30,11 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.util.CargoUtils;
 import com.mmxlabs.models.lng.scenario.actions.impl.FixSlotWindowChange;
 import com.mmxlabs.models.lng.scenario.actions.impl.FixVesselEventWindowChange;
 import com.mmxlabs.models.lng.scenario.actions.impl.FreezeCargoChange;
+import com.mmxlabs.models.lng.scenario.actions.impl.FreezeSlotChange;
 import com.mmxlabs.models.lng.scenario.actions.impl.FreezeVesselEventChange;
 import com.mmxlabs.models.lng.scenario.actions.impl.RemoveCargoChange;
 import com.mmxlabs.models.lng.scenario.actions.impl.RemoveSlotChange;
@@ -63,7 +64,425 @@ public class RollForwardEngine {
 		}
 	}
 
-	public List<IRollForwardChange> generateChanges(@NonNull final EditingDomain domain, @NonNull final LNGScenarioModel scenarioModel, @NonNull final RollForwardDescriptor descriptor) {
+	/**
+	 * Computes a list of changes that are necessary for the data model, if a particular date is "in the past".
+	 * 
+	 * @param descriptor A configuration object describing what changes should be made to the model.
+	 * @param domain The editing domain for the data model.
+	 * @param scenarioModel A data model relating to an LNG scenario.
+	 * @param freezeDate The date before which changes cannot be made.
+	 * @return A list of IRollForwardChange objects describing the changes necessary to the model, if a particular date is now "in the past".
+	 */
+	public List<IRollForwardChange> generateChanges(@NonNull final RollForwardDescriptor descriptor, @NonNull final EditingDomain domain, @NonNull final LNGScenarioModel scenarioModel, @NonNull final LocalDate freezeDate, @Nullable List<IRollForwardChange> listToAppendTo) {
+
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioModel);
+		// Step 1 - Sanity Check model
+		{
+			final Schedule schedule = scheduleModel.getSchedule();
+			if (schedule == null || scheduleModel.isDirty()) {
+				// Need to perform an evaluation first
+				throw new IllegalStateException("Schedule is dirty - evaluate");
+			}
+		}
+
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
+
+		// Check for items to remove or freeze
+
+		final List<Slot<?>> slotsToFreeze = getSlotsToFreeze(freezeDate, cargoModel);
+		final List<Cargo> cargoesToFreeze = getCargoesToFreeze(freezeDate, cargoModel);
+		final List<VesselEvent> eventsToFreeze = getEventsToFreeze(freezeDate, cargoModel);
+
+		List<IRollForwardChange> changes = generateCargoAndEventChanges(domain, scenarioModel, cargoesToFreeze, eventsToFreeze, slotsToFreeze, listToAppendTo);
+
+		
+		// TODO: create changes to fix the date on vessel events or other objects
+		/*
+		
+		final Boolean updateVessels = (Boolean) descriptor.get(RollForwardDescriptor.UpdateVessels);
+
+		if (updateVessels != null && updateVessels) {
+			// Update vessel start states
+			Map<VesselAvailability, EObject> firstCommitment = findFirstCommitments(scheduleModel, slotsToFreeze, eventsToFreeze);
+
+			changes = generateVesselAvailabilityChanges(domain, firstCommitment, changes); 
+		}
+		*/
+
+		return changes;
+
+	}
+
+
+
+	/**
+	 * Returns a list of IRollForwardChange objects that update the start date on VesselAvailability objects, or appends these objects to a specified list.
+	 * 
+	 * @param domain The editing domain.
+	 * @param firstCommitments A map from VesselAvailability objects to their first commitments.
+	 * @param listToAppendTo An optional list to append the results to.
+	 * @return The list to which the UpdateVesselAvailabilityChange objects has been appended.
+	 */
+	protected List<IRollForwardChange> generateVesselAvailabilityChanges(@NonNull final EditingDomain domain, 
+			@NonNull final Map<VesselAvailability, EObject> firstCommitments, final List<IRollForwardChange> listToAppendTo) {
+		// create an empty list if there wasn't one specified to append to
+		List<IRollForwardChange> result = (listToAppendTo == null ? new LinkedList<IRollForwardChange>() : listToAppendTo); 
+		
+		for (final Map.Entry<VesselAvailability, EObject> e : firstCommitments.entrySet()) {
+			final VesselAvailability vesselAvailability = e.getKey();
+			final EObject eObject = e.getValue();
+			// Dummy heel options. Should be derived from left over heel etc..
+			// Enough to generally avoid arriving warm.
+			final StartHeelOptions heelOptions = CargoFactory.eINSTANCE.createStartHeelOptions();
+			heelOptions.setCvValue(22.8);
+			heelOptions.setMaxVolumeAvailable(500);
+			heelOptions.setMinVolumeAvailable(0);
+			heelOptions.setPriceExpression("1");
+
+			if (vesselAvailability != null) {
+				if (eObject instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) eObject;
+					result.add(new UpdateVesselAvailabilityChange(vesselAvailability, slotVisit, heelOptions, domain));
+				} else if (eObject instanceof VesselEventVisit) {
+					final VesselEventVisit vesselEventVisit = (VesselEventVisit) eObject;
+					result.add(new UpdateVesselAvailabilityChange(vesselAvailability, vesselEventVisit, heelOptions, domain));
+				} else if (eObject instanceof Slot) {
+					final Slot<?> slot = (Slot<?>) eObject;
+					result.add(new UpdateVesselAvailabilityChange(vesselAvailability, slot, heelOptions, domain));
+				} else if (eObject instanceof VesselEvent) {
+					final VesselEvent vesselEvent = (VesselEvent) eObject;
+					result.add(new UpdateVesselAvailabilityChange(vesselAvailability, vesselEvent, heelOptions, domain));
+				} else {
+					// Error!
+				}			
+			}
+		}
+		
+		return result;
+	}
+
+	
+	/**
+	 * Data class to store an object (VesselEventVisit, VesselEvent, SlotVisit or Slot) along with an associated date. Used by findFirstCommitment()
+	 * 
+	 * @author simonmcgregor
+	 *
+	 */
+	private static class Commitment {
+		public final EObject object;
+		public final ZonedDateTime date;
+		
+		public Commitment(EObject o, ZonedDateTime d) {
+			object = o;
+			date = d;
+		}
+		
+		public boolean isAfter(Commitment x) {
+			return date.isAfter(x.date);
+		}
+	}
+	
+	/**
+	 * Get the commitment (if any) associated with a particular Event. This will be either a VesselEventVisit, a VesselEvent, a SlotVisit, or a Slot. 
+	 * 
+	 * @param event
+	 * @param slotsToFreeze
+	 * @param eventsToFreeze
+	 * @return
+	 */
+	protected Commitment getCommitment(@Nullable Event event, @NonNull final List<Slot<?>> slotsToFreeze,
+			final List<VesselEvent> eventsToFreeze) {
+		// for a VesselEventVisit, return the associated VesselEvent,
+		// unless it is marked to be frozen, in which case return the VesselEventVisit
+		if (event instanceof VesselEventVisit) {
+			final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+			final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
+			
+			if (eventsToFreeze.contains(vesselEvent)) {
+				return new Commitment(vesselEventVisit, vesselEventVisit.getStart());
+			}
+			else {
+				return new Commitment(vesselEvent, vesselEvent.getStartAfterAsDateTime());
+			}						
+		}
+		// for a SlotVisit, return the associated Slot,
+		// unless it is marked to be frozen, in which case return the SlotVisit
+		else if (event instanceof SlotVisit) {
+			final SlotVisit slotVisit = (SlotVisit) event;
+			final Slot<?> slot = slotVisit.getSlotAllocation().getSlot();
+
+			if (slotsToFreeze.contains(slot)) {
+				return new Commitment(slotVisit, slotVisit.getStart());
+			} 
+			else {
+				return new Commitment(slot, slot.getWindowStartWithSlotOrPortTime());
+			}
+			
+		}
+		
+		// for any other event, return null 
+		return null;		
+		
+	}
+	
+	/**
+	 * Return a map from VesselAvailability objects to Commitment objects, representing the first commitment in each availability. 
+	 * 
+	 * @param scheduleModel
+	 * @param slotsToFreeze
+	 * @param eventsToFreeze
+	 */
+	protected @NonNull Map<VesselAvailability, EObject> findFirstCommitments(@NonNull final ScheduleModel scheduleModel, @NonNull final List<Slot<?>> slotsToFreeze,
+			final List<VesselEvent> eventsToFreeze) {
+		final HashMap<VesselAvailability, EObject> result = new HashMap<>();
+		// Find first remaining event/cargoes on each vessel
+		final Schedule schedule = scheduleModel.getSchedule();
+		if (schedule != null) {
+			// traverse every vessel schedule Sequence in the model
+			for (final Sequence sequence : schedule.getSequences()) {
+
+				final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
+				if (vesselAvailability == null) {
+					continue;
+				}				
+					
+				Commitment firstCommitment = null;
+
+				// traverse every event in the vessel's schedule
+				for (final Event event : sequence.getEvents()) {
+					// if it is the first commitment so far, store it temporarily
+					Commitment commitment = getCommitment(event, slotsToFreeze, eventsToFreeze);
+					if (firstCommitment == null || firstCommitment.isAfter(commitment)) {
+						firstCommitment = commitment;
+					}
+				}
+
+				// if there is a first commitment, store it in the method return result
+				if (firstCommitment != null) {
+					result.put(vesselAvailability, firstCommitment.object);
+				}
+			}
+		}
+		
+		return result;
+	}
+
+	
+	/**
+	 * Returns a map from Slot or VesselEvent objects to the SlotVisit or VesselEventVisit objects they are associated with.
+	 * 
+	 * @param scheduleModel
+	 * @return
+	 */
+	protected Map<Object, Event> getEventsForSlotOrVesselEvents(ScheduleModel scheduleModel) {
+		final Map<Object, Event> result = new HashMap<>();
+		final Schedule schedule = scheduleModel.getSchedule();
+		
+		// populate the objectToEventMap, mapping Slot objects to SlotVisit objects and VesselEvent objects to VesselEventVisit objects 
+		if (schedule != null) {
+			for (final Sequence seq : scheduleModel.getSchedule().getSequences()) {
+				for (final Event evt : seq.getEvents()) {
+					if (evt instanceof SlotVisit) {
+						final SlotVisit slotVisit = (SlotVisit) evt;
+						result.put(slotVisit.getSlotAllocation().getSlot(), slotVisit);
+					} else if (evt instanceof VesselEventVisit) {
+						final VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
+						result.put(vesselEventVisit.getVesselEvent(), vesselEventVisit);
+					}
+				}
+			}
+		}
+		
+		return result;
+		
+	}
+	
+	/**
+	 * Generates a list of IRollForwardChange objects from a list of cargoes, events, and slots to freeze. Optionally, appends the result to @code{listToAppendTo}. 
+	 * 
+	 * @param domain
+	 * @param scenarioModel
+	 * @param cargoesToFreeze
+	 * @param eventsToFreeze
+	 * @param slotsToFreeze
+	 * @param listToAppendTo
+	 * @return
+	 */
+	protected List<IRollForwardChange> generateCargoAndEventChanges(@NonNull final EditingDomain domain, @NonNull final LNGScenarioModel scenarioModel, 
+			@NonNull final List<Cargo> cargoesToFreeze, @NonNull final List<VesselEvent> eventsToFreeze, final List<Slot<?>> slotsToFreeze, List<IRollForwardChange> listToAppendTo) {
+		
+		List<IRollForwardChange> result = (listToAppendTo == null ? new LinkedList<IRollForwardChange>() : listToAppendTo);
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioModel);
+		
+		Map<Object, Event> objectToEventMap = getEventsForSlotOrVesselEvents(scheduleModel);
+
+		for (final Cargo cargo : cargoesToFreeze) {
+			result.add(new FreezeCargoChange(cargo, domain));
+			for (final Slot<?> slot : cargo.getSlots()) {
+				final Event evt = objectToEventMap.get(slot);
+				if (evt != null) {
+					result.add(new FixSlotWindowChange(slot, evt.getStart(), domain));
+				}
+			}
+		}
+
+		for (final Slot s : slotsToFreeze) {
+		  result.add(new FreezeSlotChange(s, domain));
+		}
+
+		for (final VesselEvent e : eventsToFreeze) {
+			result.add(new FreezeVesselEventChange(e, domain));
+			final Event evt = objectToEventMap.get(e);
+			if (evt != null) {
+				result.add(new FixVesselEventWindowChange(e, evt.getStart(), domain));
+			}
+		}
+		
+		return result;
+	}
+
+	
+	/**
+	 * Returns a value indicating whether a particular Cargo should be frozen, based on a "freeze date" indicating when the prompt (i.e. the future) starts.
+	 * 
+	 * @param cargo
+	 * @param freezeDate
+	 * @return
+	 */
+	protected boolean shouldFreeze(@Nullable final Cargo cargo, @Nullable final LocalDate freezeDate)
+	{
+		// Current implementation: the cargo is only frozen if *all* its slots are in the past.
+		
+		// don't freeze if the cargo is null, or if the date is null
+		if (cargo == null || freezeDate == null) {
+			return false;
+		}
+		
+		// a cargo should not be frozen unless its discharge slot occurs entirely before the cutoff date
+		
+		EList<Slot<?>> slots = cargo.getSortedSlots();
+		Slot<?> slot = slots.get(slots.size() - 1);
+		
+		LocalDateTime windowEnd = slot.getWindowEndWithSlotOrPortTime().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
+		return windowEnd.toLocalDate().isBefore(freezeDate);
+		
+
+		// previous logic: freeze a cargo if any of its slots should be frozen
+		/*
+		for (final Slot<?> slot: cargo.getSlots()) {
+			// don't freeze if there are any slots that shouldn't be frozen
+			if (!shouldFreeze(slot, freezeDate)) {
+				return false;
+			}
+		}
+		
+		
+		// freeze if all slots should be frozen (including if there are no slots)
+		return true;
+		*/
+	}
+	
+	/**
+	 * Returns a value indicating whether a particular Slot should be frozen, based on a "freeze date" indicating when the prompt (i.e. the future) starts.
+	 * 
+	 * @param slot
+	 * @param freezeDate
+	 * @return
+	 */
+	protected boolean shouldFreeze(@Nullable final Slot<?> slot, @Nullable final LocalDate freezeDate)
+	{
+		// Current implementation: an open slot is frozen if its start window opens in the past.
+		
+		if (slot == null || freezeDate == null) {
+			return false;
+		}
+		
+		LocalDateTime dt = slot.getWindowStartWithSlotOrPortTime().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
+
+		return dt.toLocalDate().isBefore(freezeDate);
+	}
+	
+
+	/**
+	 * Returns a value indicating whether a particular VesselEvent should be frozen, based on a "freeze date" indicating when the prompt (i.e. the future) starts.
+	 * 
+	 * @param event
+	 * @param freezeDate
+	 * @return
+	 */
+	protected boolean shouldFreeze(@Nullable final VesselEvent event, @Nullable final LocalDate freezeDate) {
+		if (event == null || freezeDate == null) {
+			return false;
+		}
+		
+		LocalDateTime earliestStart = event.getStartAfter();
+		return earliestStart.toLocalDate().isBefore(freezeDate);		
+	}
+
+
+	/**
+	 * Returns a list of vessel events in the specified cargo model that should be frozen if history starts at the specified date.
+	 * @param freezeDate
+	 * @param cargoModel
+	 * @return
+	 */
+	protected @NonNull List<VesselEvent> getEventsToFreeze(@Nullable final LocalDate freezeDate, @NonNull final CargoModel cargoModel) 
+	{
+		List<VesselEvent> result = new LinkedList<>();
+		
+		for (final VesselEvent event: cargoModel.getVesselEvents()) {
+			if (shouldFreeze(event, freezeDate)) {
+				result.add(event);
+			}
+		}
+		
+		
+		return result;
+	}
+	
+	/**
+	 * Returns a list of slots in the specified cargo model that should be frozen if history starts at the specified date.
+	 * @param freezeDate
+	 * @param cargoModel
+	 * @return
+	 */
+	protected @NonNull List<Slot<?>> getSlotsToFreeze(@Nullable final LocalDate freezeDate, @NonNull final CargoModel cargoModel)
+	{
+		List<Slot<?>> result = new ArrayList<>();
+		
+		// N.B. Current implementation: freeze only "open" slots in the past (i.e. not attached to a cargo).
+		// This is because freezing slots that belong to a cargo causes a validation error.
+		
+		for (final Slot<?> slot: CargoUtils.getOpenSlotsIterable(cargoModel)) {
+			if (shouldFreeze(slot, freezeDate)) {
+				result.add(slot);
+			}			
+		}
+				
+		return result;
+	}
+	
+	/**
+	 * Returns a list of cargoes in the specified cargo model that should be frozen if history starts at the specified date.
+	 * @param freezeDate
+	 * @param cargoModel
+	 * @return
+	 */
+	protected @NonNull List<Cargo> getCargoesToFreeze(@NonNull LocalDate freezeDate, CargoModel cargoModel) {
+		List<Cargo> result = new LinkedList<>();
+		
+		for (final Cargo cargo: cargoModel.getCargoes()) 
+		{
+			if (shouldFreeze(cargo, freezeDate)) {
+				result.add(cargo);
+			}
+		}
+		
+		return result;
+	}
+	
+	// obsolete code in pre-refactored form, using removals logic
+	public List<IRollForwardChange> generateChangesObsolete(@NonNull final EditingDomain domain, @NonNull final LNGScenarioModel scenarioModel, @NonNull final RollForwardDescriptor descriptor) {
 
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioModel);
 		// Step 1 - Sanity Check model
@@ -95,13 +514,13 @@ public class RollForwardEngine {
 		final List<VesselEvent> eventsToFreeze = new LinkedList<>();
 
 		{
-			examineSlotsAndCargoes(freezeDate, removeDate, cargoModel, slotsToRemove, slotsToFreeze, cargoesToFreeze, cargoesToRemove);
-			examineVesselEvents(freezeDate, removeDate, cargoModel, eventsToRemove, eventsToFreeze);
+			examineSlotsAndCargoesObsolete(freezeDate, removeDate, cargoModel, slotsToRemove, slotsToFreeze, cargoesToFreeze, cargoesToRemove);
+			examineVesselEventsObsolete(freezeDate, removeDate, cargoModel, eventsToRemove, eventsToFreeze);
 		}
 
 		// Generate the changes
 		{
-			generateCargoAndEventChanges(domain, scenarioModel, changes, cargoesToRemove, cargoesToFreeze, eventsToRemove, eventsToFreeze, slotsToRemove, slotsToFreeze);
+			generateCargoAndEventChangesObsolete(domain, scenarioModel, changes, cargoesToRemove, cargoesToFreeze, eventsToRemove, eventsToFreeze, slotsToRemove, slotsToFreeze);
 		}
 
 		final Boolean updateVessels = (Boolean) descriptor.get(RollForwardDescriptor.UpdateVessels);
@@ -112,12 +531,12 @@ public class RollForwardEngine {
 			final Map<VesselAvailability, EObject> firstCommitment = new HashMap<>();
 			final Set<VesselAvailability> vesselsToRemove = new HashSet<>();
 			{
-				examineVesselAvailabilities(scheduleModel, removeDate, slotsToFreeze, cargoesToRemove, eventsToRemove, eventsToFreeze, removeVessels, firstCommitment, vesselsToRemove);
+				examineVesselAvailabilitiesObsolete(scheduleModel, removeDate, slotsToFreeze, cargoesToRemove, eventsToRemove, eventsToFreeze, removeVessels, firstCommitment, vesselsToRemove);
 			}
 
 			// Generate vessel changes
 			{
-				generateVesselAvailabilityChanges(domain, changes, firstCommitment, vesselsToRemove);
+				generateVesselAvailabilityChangesObsolete(domain, changes, firstCommitment, vesselsToRemove);
 			}
 		}
 
@@ -125,7 +544,8 @@ public class RollForwardEngine {
 
 	}
 
-	protected void generateVesselAvailabilityChanges(@NonNull final EditingDomain domain, @NonNull final List<IRollForwardChange> changes,
+	// obsolete code in pre-refactored form, using removals logic
+	protected void generateVesselAvailabilityChangesObsolete(@NonNull final EditingDomain domain, @NonNull final List<IRollForwardChange> changes,
 			@NonNull final Map<VesselAvailability, EObject> firstCommitment, @NonNull final Set<VesselAvailability> vesselsToRemove) {
 		for (final Map.Entry<VesselAvailability, EObject> e : firstCommitment.entrySet()) {
 			final VesselAvailability vesselAvailability = e.getKey();
@@ -160,7 +580,8 @@ public class RollForwardEngine {
 		}
 	}
 
-	protected void examineVesselAvailabilities(@NonNull final ScheduleModel scheduleModel, @Nullable final LocalDate removeDate, @NonNull final List<Slot<?>> slotsToFreeze,
+	// obsolete code in pre-refactored form, using removals logic
+	protected void examineVesselAvailabilitiesObsolete(@NonNull final ScheduleModel scheduleModel, @Nullable final LocalDate removeDate, @NonNull final List<Slot<?>> slotsToFreeze,
 			@NonNull final List<Cargo> cargoesToRemove, @NonNull final List<VesselEvent> eventsToRemove, final List<VesselEvent> eventsToFreeze, @Nullable final Boolean removeVessels,
 			@NonNull final Map<VesselAvailability, EObject> firstCommitment, @NonNull final Set<VesselAvailability> vesselsToRemove) {
 		// Find first remaining event/cargoes on each vessel
@@ -234,7 +655,8 @@ public class RollForwardEngine {
 		}
 	}
 
-	protected void generateCargoAndEventChanges(@NonNull final EditingDomain domain, @NonNull final LNGScenarioModel scenarioModel, @NonNull final List<IRollForwardChange> changes,
+	// obsolete code in pre-refactored form, using removals logic
+	protected void generateCargoAndEventChangesObsolete(@NonNull final EditingDomain domain, @NonNull final LNGScenarioModel scenarioModel, @NonNull final List<IRollForwardChange> changes,
 			final List<Cargo> cargoesToRemove, @NonNull final List<Cargo> cargoesToFreeze, @NonNull final List<VesselEvent> eventsToRemove, @NonNull final List<VesselEvent> eventsToFreeze,
 			@NonNull final List<Slot<?>> slotsToRemove, final List<Slot<?>> slotsToFreeze) {
 		final Map<Object, Event> objectToEventMap = new HashMap<>();
@@ -290,7 +712,8 @@ public class RollForwardEngine {
 		}
 	}
 
-	protected void examineVesselEvents(@Nullable final LocalDate freezeDate, @Nullable final LocalDate removeDate, @NonNull final CargoModel cargoModel,
+	// obsolete code in pre-refactored form, using removals logic
+	protected void examineVesselEventsObsolete(@Nullable final LocalDate freezeDate, @Nullable final LocalDate removeDate, @NonNull final CargoModel cargoModel,
 			@NonNull final List<VesselEvent> eventsToRemove, @NonNull final List<VesselEvent> eventsToFreeze) {
 
 		if (removeDate == null && freezeDate == null) {
@@ -323,7 +746,8 @@ public class RollForwardEngine {
 		}
 	}
 
-	protected void examineSlotsAndCargoes(@Nullable final LocalDate freezeDate, @Nullable final LocalDate removeDate, @NonNull final CargoModel cargoModel, @NonNull final List<Slot<?>> slotsToRemove,
+	// obsolete code in pre-refactored form, using removals logic
+	protected void examineSlotsAndCargoesObsolete(@Nullable final LocalDate freezeDate, @Nullable final LocalDate removeDate, @NonNull final CargoModel cargoModel, @NonNull final List<Slot<?>> slotsToRemove,
 			@NonNull final List<Slot<?>> slotsToFreeze, @NonNull final List<Cargo> cargoesToFreeze, @NonNull final List<Cargo> cargoesToRemove) {
 
 		if (removeDate == null && freezeDate == null) {

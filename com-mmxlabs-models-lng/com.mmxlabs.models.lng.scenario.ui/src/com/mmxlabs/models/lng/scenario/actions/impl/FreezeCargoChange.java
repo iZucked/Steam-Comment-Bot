@@ -34,7 +34,7 @@ public class FreezeCargoChange implements IRollForwardChange {
 
 	@Override
 	public String getMessage() {
-		return String.format("Lock vessel assignment for Cargo %s", cargo.getLoadName());
+		return String.format("Lock vessel assignment and wiring for Cargo %s", cargo.getLoadName());
 	}
 
 	@Override
