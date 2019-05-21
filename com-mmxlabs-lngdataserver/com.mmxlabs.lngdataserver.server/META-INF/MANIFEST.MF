@@ -22,7 +22,8 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.rcp.common,
  com.mmxlabs.scenario.service.model,
  com.mmxlabs.license.features,
- com.mmxlabs.license.ssl
+ com.mmxlabs.license.ssl,
+ org.eclipse.ui.forms
 Import-Package: org.slf4j,
  org.slf4j.helpers,
  org.slf4j.spi

@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLPeerUnverifiedException;
 
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
@@ -293,6 +294,12 @@ public class UpstreamUrlProvider implements IUserNameProvider {
 			if (!reportedError.containsKey(url)) {
 				reportedError.put(url, new Object());
 				LOGGER.error("Error finding Data Hub host", e);
+			}
+			return false;
+		} catch (final SSLPeerUnverifiedException e) {
+			if (!reportedError.containsKey(url)) {
+				reportedError.put(url, new Object());
+				LOGGER.error("Error SSL server hostname mismatch", e);
 			}
 			return false;
 		} catch (final SSLException e) {
