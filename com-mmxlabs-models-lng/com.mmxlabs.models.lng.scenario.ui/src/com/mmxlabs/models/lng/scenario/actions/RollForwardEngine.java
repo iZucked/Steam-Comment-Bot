@@ -58,6 +58,7 @@ public class RollForwardEngine {
 		public static final String RemoveDate = "date-remove";
 		public static final String RemoveVessels = "vessels-remove";
 		public static final String UpdateVessels = "vessels-update";
+		public static final String UpdateWindows = "windows-update";
 
 		public RollForwardDescriptor() {
 			super();
@@ -73,7 +74,8 @@ public class RollForwardEngine {
 	 * @param freezeDate The date before which changes cannot be made.
 	 * @return A list of IRollForwardChange objects describing the changes necessary to the model, if a particular date is now "in the past".
 	 */
-	public List<IRollForwardChange> generateChanges(@NonNull final RollForwardDescriptor descriptor, @NonNull final EditingDomain domain, @NonNull final LNGScenarioModel scenarioModel, @NonNull final LocalDate freezeDate, @Nullable List<IRollForwardChange> listToAppendTo) {
+	public List<IRollForwardChange> generateChanges(@NonNull final RollForwardDescriptor descriptor, @NonNull final EditingDomain domain, //
+			@NonNull final LNGScenarioModel scenarioModel, @NonNull final LocalDate freezeDate, @Nullable List<IRollForwardChange> listToAppendTo) {
 
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioModel);
 		// Step 1 - Sanity Check model
@@ -93,8 +95,12 @@ public class RollForwardEngine {
 		final List<Cargo> cargoesToFreeze = getCargoesToFreeze(freezeDate, cargoModel);
 		final List<VesselEvent> eventsToFreeze = getEventsToFreeze(freezeDate, cargoModel);
 
-		List<IRollForwardChange> changes = generateCargoAndEventChanges(domain, scenarioModel, cargoesToFreeze, eventsToFreeze, slotsToFreeze, listToAppendTo);
-
+		List<IRollForwardChange> changes = generateFreezeChanges(domain, scenarioModel, cargoesToFreeze, eventsToFreeze, slotsToFreeze, listToAppendTo);
+		
+		final Boolean updateWindows = (Boolean) descriptor.get(RollForwardDescriptor.UpdateWindows);
+		if (updateWindows) {
+			changes = generateWindowUpdateChanges(domain, scenarioModel, cargoesToFreeze, eventsToFreeze, changes);
+		}
 		
 		// TODO: create changes to fix the date on vessel events or other objects
 		/*
@@ -298,32 +304,25 @@ public class RollForwardEngine {
 	}
 	
 	/**
-	 * Generates a list of IRollForwardChange objects from a list of cargoes, events, and slots to freeze. Optionally, appends the result to @code{listToAppendTo}. 
+	 * Generates a list of IRollForwardChange objects from a list of cargoes, events, and slots to freeze. Optionally, appends the result to @code{listToAppendTo}. The appended 
+	 * objects should be instances of {@link FreezeSlotChange}, {@link FreezeCargoChange} or {@link FreezeVesselEventChange}.
 	 * 
 	 * @param domain
 	 * @param scenarioModel
 	 * @param cargoesToFreeze
 	 * @param eventsToFreeze
 	 * @param slotsToFreeze
-	 * @param listToAppendTo
-	 * @return
+	 * @param listToAppendTo A list to append the generated objects to. If <code>null</code>, create a new list.
+	 * @return A new list of objects, or the original list with the new objects appended to it.
 	 */
-	protected List<IRollForwardChange> generateCargoAndEventChanges(@NonNull final EditingDomain domain, @NonNull final LNGScenarioModel scenarioModel, 
+	protected List<IRollForwardChange> generateFreezeChanges(@NonNull final EditingDomain domain, @NonNull final LNGScenarioModel scenarioModel, 
 			@NonNull final List<Cargo> cargoesToFreeze, @NonNull final List<VesselEvent> eventsToFreeze, final List<Slot<?>> slotsToFreeze, List<IRollForwardChange> listToAppendTo) {
 		
 		List<IRollForwardChange> result = (listToAppendTo == null ? new LinkedList<IRollForwardChange>() : listToAppendTo);
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioModel);
 		
-		Map<Object, Event> objectToEventMap = getEventsForSlotOrVesselEvents(scheduleModel);
-
 		for (final Cargo cargo : cargoesToFreeze) {
 			result.add(new FreezeCargoChange(cargo, domain));
-			for (final Slot<?> slot : cargo.getSlots()) {
-				final Event evt = objectToEventMap.get(slot);
-				if (evt != null) {
-					result.add(new FixSlotWindowChange(slot, evt.getStart(), domain));
-				}
-			}
 		}
 
 		for (final Slot s : slotsToFreeze) {
@@ -332,15 +331,49 @@ public class RollForwardEngine {
 
 		for (final VesselEvent e : eventsToFreeze) {
 			result.add(new FreezeVesselEventChange(e, domain));
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Generates a list of {@link IRollForwardChange} objects representing the collapse of historical slot window times. Optionally, appends the result to @code{listToAppendTo}.
+	 * The appended objects should be instances of {@link FixSlotWindowChange} or {@link FixVesselEventWindowChange}.
+	 * 
+	 * @param domain
+	 * @param scenarioModel
+	 * @param cargoesToFreeze
+	 * @param eventsToFreeze
+	 * @param listToAppendTo A list to append the generated objects to. If <code>null</code>, create a new list.
+	 * @return A new list of objects, or the original list with the new objects appended to it.
+	 */
+	protected List<IRollForwardChange> generateWindowUpdateChanges(@NonNull final EditingDomain domain, @NonNull final LNGScenarioModel scenarioModel, 
+			@NonNull final List<Cargo> cargoesToFreeze, @NonNull final List<VesselEvent> eventsToFreeze, List<IRollForwardChange> listToAppendTo)
+	{
+		List<IRollForwardChange> result = (listToAppendTo == null ? new LinkedList<IRollForwardChange>() : listToAppendTo);
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioModel);
+		
+		Map<Object, Event> objectToEventMap = getEventsForSlotOrVesselEvents(scheduleModel);
+
+		for (final Cargo cargo : cargoesToFreeze) {
+			for (final Slot<?> slot : cargo.getSlots()) {
+				final Event evt = objectToEventMap.get(slot);
+				if (evt != null) {
+					result.add(new FixSlotWindowChange(slot, evt.getStart(), domain));
+				}
+			}
+		}
+
+
+		for (final VesselEvent e : eventsToFreeze) {
 			final Event evt = objectToEventMap.get(e);
 			if (evt != null) {
 				result.add(new FixVesselEventWindowChange(e, evt.getStart(), domain));
 			}
 		}
 		
-		return result;
+		return result;		
 	}
-
 	
 	/**
 	 * Returns a value indicating whether a particular Cargo should be frozen, based on a "freeze date" indicating when the prompt (i.e. the future) starts.

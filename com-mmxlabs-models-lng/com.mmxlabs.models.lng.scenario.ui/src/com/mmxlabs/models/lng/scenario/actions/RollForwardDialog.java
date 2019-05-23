@@ -28,6 +28,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -60,26 +61,29 @@ public class RollForwardDialog extends FormDialog {
 	private static final String DIALOG_PROMPT_END_NAME = "prompt_end"; 
 	private static final String DIALOG_CHARTER_START_NAME = "charter_start"; 
 	private static final String DIALOG_FREEZE_DATE_NAME = "freeze_date";
+	private static final String DIALOG_UPDATE_WINDOWS_NAME = "update_slot_windows_checked";
 
 	private static final String TOOLTIP_FREEZE_DATE = "Cargoes and Events before or over this date will be frozen. Vessel assignment will be fixed, pairings will be fixed and arrival window will be set to currently scheduled arrival time.";
-
+	private static final String TOOLTIP_UPDATE_WINDOWS = "Update the arrival window for slots and vessel events that occur before the freeze date?";	
 
 	private final EditingDomain domain;
 	private final LNGScenarioModel scenarioModel;
 
 	private GridTableViewer previewViewer;
 	private DateTime freezeDate;
-	
+
+	// form controls that are used to drive the roll forward logic
 	private DateTime promptStart;
 	private DateTime promptEnd;
 	private DateTime horizon = null;
 	private DateTime charterOutStart = null;
 	private DateTime charterOutEnd = null;
+	private Button updateSlotWindowCheckbox;
 
 	private List<IRollForwardChange> changes;
 	
 	private Map<String, Button> persistenceStringsForCheckboxes = new HashMap<>();
-	private Map<DateTime, Period> relativeTimeFieldPeriods = new HashMap<>();	
+	private Map<DateTime, Period> relativeTimeFieldPeriods = new HashMap<>();
 
 	public RollForwardDialog(final Shell shell, final IScenarioDataProvider scenarioDataProvider) {
 		super(shell);
@@ -330,6 +334,22 @@ public class RollForwardDialog extends FormDialog {
 				
 				lbl.setToolTipText(TOOLTIP_FREEZE_DATE);
 				freezeDate.setToolTipText(TOOLTIP_FREEZE_DATE);
+				
+				// option to update slot windows
+				updateSlotWindowCheckbox = mform.getToolkit().createButton(inputGroup, "Update historical slot and vessel event windows", SWT.CHECK);
+				// mark the checkbox for persistence
+				persistenceStringsForCheckboxes.put(DIALOG_UPDATE_WINDOWS_NAME, updateSlotWindowCheckbox);
+				getBooleanValue(DIALOG_UPDATE_WINDOWS_NAME, updateSlotWindowCheckbox);
+
+				updateSlotWindowCheckbox.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						refreshPreview();						
+					}
+					
+				});
+				updateSlotWindowCheckbox.setToolTipText(TOOLTIP_UPDATE_WINDOWS);				
+				
 			}
 
 		}
@@ -376,15 +396,18 @@ public class RollForwardDialog extends FormDialog {
 		
 		EAttribute promptStartFeature = LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart();
 		EAttribute promptEndFeature = LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodEnd();
-		
+	
+		// update the prompt start
 		result.add(new UpdateDateChange("Prompt Start", scenarioModel, promptStartFeature, getLocalDateFromDateTimeField(promptStart), domain));
+		// update the prompt end
 		result.add(new UpdateDateChange("Prompt End", scenarioModel, promptEndFeature, getLocalDateFromDateTimeField(promptEnd), domain));
 	
+		// update the horizon, if set
 		if (horizon != null) {			
 			result.add(new UpdateDateChange("Horizon", scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate(), getLocalDateFromDateTimeField(horizon), domain));
 		}
-
 		
+		// update the charter in and charter out dates, if set
 		CharterOutMarketParameters charterDates = ScenarioModelUtil.getSpotMarketsModel(scenarioModel).getCharterOutMarketParameters();
 
 		if (charterOutStart != null) {			
@@ -406,6 +429,7 @@ public class RollForwardDialog extends FormDialog {
 		{
 			final LocalDate dt = LocalDate.of(freezeDate.getYear(), 1 + freezeDate.getMonth(), freezeDate.getDay());
 			descriptor.put(RollForwardDescriptor.FreezeDate, dt);
+			descriptor.put(RollForwardDescriptor.UpdateWindows, updateSlotWindowCheckbox.getSelection());
 		}
 
 		final Button button = getButton(IDialogConstants.OK_ID);
