@@ -1346,8 +1346,9 @@ public class RollForwardEngineTest {
 
 		final AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
 
-		engine.generateCargoAndEventChanges(domain, scenarioModel, cargoesToFreeze, eventsToFreeze, slotsToFreeze, changes);
-
+		engine.generateFreezeChanges(domain, scenarioModel, cargoesToFreeze, eventsToFreeze, slotsToFreeze, changes);
+		engine.generateWindowUpdateChanges(domain, scenarioModel, cargoesToFreeze, eventsToFreeze, changes);
+		
 		return changes;
 	}
 
