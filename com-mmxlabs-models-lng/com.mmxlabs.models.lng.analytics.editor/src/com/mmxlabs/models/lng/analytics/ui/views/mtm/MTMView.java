@@ -34,6 +34,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -320,6 +321,34 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 	@Override
 	public void setFocus() {
 		mainTableComponent.setFocus();
+	}
+	
+	public class ExportMTMToExcellAction extends Action{
+
+		public ExportMTMToExcellAction(final String label) {
+			super(label);
+		}
+		@Override
+		public void run() {
+			//MTMExporter.export(getTable(), getFile(), dates.getStartMonth(), dates.getEndMonth());
+		}
+		
+		private String getFile() {
+
+	        FileDialog dialog = new FileDialog(getViewSite().getShell(), SWT.SAVE);
+	        String [] filterNames = new String [] {"Excel files", "All Files (*)"};
+	    	String [] filterExtensions = new String [] {"*.xlsx;*.xls;", "*"};
+	        dialog.setFilterNames(filterNames);
+	        dialog.setFilterExtensions(filterExtensions);
+	        String file = dialog.open();
+	        if (file != null) {
+	            file = file.trim();
+	            if (file.length() > 0) {
+					return file;
+				}
+	        }
+	        return "";
+	    }
 	}
 
 }
