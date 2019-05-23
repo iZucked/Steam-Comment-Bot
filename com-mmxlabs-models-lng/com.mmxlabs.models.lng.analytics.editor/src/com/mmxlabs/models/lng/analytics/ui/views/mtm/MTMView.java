@@ -21,6 +21,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
@@ -99,6 +100,9 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 					final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
 					final ScenarioInstance scenarioInstance = getScenarioInstance();
 					final IScenarioDataProvider sdp = getScenarioDataProvider();
+					//FIXME : code doesn't work properly without the line below. Magic?
+					final AnalyticsModel analyticsModelZero = ScenarioModelUtil.getAnalyticsModel(sdp);
+
 					if (scenarioModel == null) {
 						return;
 					}
@@ -111,10 +115,6 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 							RunnerHelper.asyncExec(() -> {
 								final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
 								final EditingDomain editingDomain = sdp.getEditingDomain();
-								// clearing the viability model before the evaluation of the new one
-								// SG - No need for this?
-								// editingDomain.getCommandStack()
-								// .execute(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), SetCommand.UNSET_VALUE));
 
 								final CompoundCommand cmd = new CompoundCommand("Create mtm matrix");
 								cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_MtmModel(), model));

@@ -272,7 +272,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			});// .setTooltip("In mmBtu");
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.heelstart":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Heel Start", null, ColumnType.NORMAL, new IntegerFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Volume on board Start", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof Event) {
@@ -284,7 +284,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			});// .setTooltip("In m³");
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.heelend":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Heel End", null, ColumnType.NORMAL, new IntegerFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Volume on board End", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof Event) {
