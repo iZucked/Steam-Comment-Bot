@@ -7,13 +7,16 @@ package com.mmxlabs.models.lng.cargo.editor.risk;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -37,10 +40,13 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
@@ -48,6 +54,8 @@ import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
@@ -233,6 +241,50 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 	
 	@Override
 	protected Action createAddAction(final EReference containment) {
-		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), new Action[0]);
+		final Action generateFromCargoesAction = createDealSetsFromCargoesAction();
+		final Action[] extraActions = generateFromCargoesAction == null ? new Action[0] : new Action[] { generateFromCargoesAction };
+		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), extraActions);
+	}
+	
+	private Action createDealSetsFromCargoesAction() {
+		return new RunnableAction("Generate from cargoes", new Runnable() {
+			
+			@Override
+			public void run() {
+				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(jointModelEditor.getScenarioDataProvider());
+				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
+				final Set<Slot> usedSlots = updateSlots(jointModelEditor.getScenarioDataProvider());
+				final CompoundCommand cmd = new CompoundCommand();
+				for(final Cargo cargo : cargoModel.getCargoes()) {
+					if (checkContainment(cargo, usedSlots)) continue;
+					final DealSet ds = CargoFactory.eINSTANCE.createDealSet();
+					ds.setName(String.format("%s_%s", cargo.getLoadName(), "set"));
+					cmd.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS, ds));
+					for (final Slot slot : cargo.getSlots()) {
+						if (slot instanceof SpotSlot) continue;
+						cmd.append(AddCommand.create(ed, ds, CargoPackage.Literals.DEAL_SET__SLOTS, slot));
+					}
+				}
+				if(!cmd.isEmpty()) {
+					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
+				}
+			}
+		});
+	}
+	
+	private Set<Slot> updateSlots(final IScenarioDataProvider sdp) {
+		final Set<Slot> usedSlots = new HashSet<Slot>();
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
+		for (final DealSet dealSet : cargoModel.getDealSets()) {
+			usedSlots.addAll(dealSet.getSlots());
+		}
+		return usedSlots;
+	}
+	
+	private boolean checkContainment(final Cargo cargo, final Set<Slot> usedSlots) {
+		for (final Slot slot : cargo.getSlots()) {
+			if (usedSlots.contains(slot)) return true;
+		}
+		return false;
 	}
 }
