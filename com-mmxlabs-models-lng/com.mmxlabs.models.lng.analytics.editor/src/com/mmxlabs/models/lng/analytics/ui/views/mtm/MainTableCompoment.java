@@ -99,7 +99,6 @@ public class MainTableCompoment {
 		tableViewer.getGrid().setAutoHeight(true);
 		tableViewer.getGrid().setRowHeaderVisible(true);
 		
-		//TODO : to add/change columns see MainTableComponent in viability
 		createColumn(tableViewer, "Buy", new BuyOptionDescriptionFormatter(), false).getColumn().setWordWrap(true);
 		createColumn(tableViewer, "Date", new AsLocalDateFormatter(DateTimeFormatter.ofPattern("dd/MM/yyyy")), false);
 
@@ -152,35 +151,37 @@ public class MainTableCompoment {
 					gvc.setLabelProvider(new ColumnLabelProvider() {
 						@Override
 						public void update(final ViewerCell cell) {
-							double price = Double.MAX_VALUE;
+							double price = Double.MIN_VALUE;
 							cell.setText("");
 	
 							final Object element = cell.getElement();
 							if (element instanceof MTMRow) {
 								final MTMRow row = (MTMRow) element;
+								double rowPrice = row.getPrice();
 								if (row.getBuyOption() != null) {
 									for (final MTMResult result : row.getRhsResults()) {
 										if (result.getEarliestETA() == null) continue;
-										if (price > result.getEarliestPrice())
-										{
+										if (price < result.getEarliestPrice()){
 											price = result.getEarliestPrice();
 										}
-										ShippingOption so = result.getShipping();
+										if (result.getTarget() != sm) continue;
+										final ShippingOption so = result.getShipping();
 										if (so == null) {
 											continue;
 										}
-										ExistingCharterMarketOption ecmo = (ExistingCharterMarketOption) so;
-										CharterInMarket cim = ecmo.getCharterInMarket();
+										final ExistingCharterMarketOption ecmo = (ExistingCharterMarketOption) so;
+										final CharterInMarket cim = ecmo.getCharterInMarket();
 										if (cim == null) {
 											continue;
 										}
-										if (result.getTarget() == sm) {
-											cell.setText(formatDate(result.getEarliestETA()));
-										}
+										cell.setText(formatDate(result.getEarliestETA()));
 									}
+									highlightCellForeground(sm, cell, price, row);
 								}
 							}
 						}
+
+
 					});
 					dynamicColumns.add(gvc.getColumn());
 				}
@@ -197,7 +198,7 @@ public class MainTableCompoment {
 					gvc.setLabelProvider(new ColumnLabelProvider() {
 						@Override
 						public void update(final ViewerCell cell) {
-							double price = Double.MAX_VALUE;
+							double price = Double.MIN_VALUE;
 							cell.setText("");
 	
 							final Object element = cell.getElement();
@@ -206,10 +207,10 @@ public class MainTableCompoment {
 								if (row.getBuyOption() != null) {
 									for (final MTMResult result : row.getRhsResults()) {
 										if (result.getEarliestETA() == null) continue;
-										if (price > result.getEarliestPrice())
-										{
+										if (price < result.getEarliestPrice()){
 											price = result.getEarliestPrice();
 										}
+										if (result.getTarget() != sm) continue;
 										ShippingOption so = result.getShipping();
 										if (so == null) {
 											continue;
@@ -223,6 +224,7 @@ public class MainTableCompoment {
 											cell.setText(formatPrice(result.getEarliestPrice()));
 										}
 									}
+									
 								}
 							}
 							if (cell.getText().contains(String.format("$%.2f", price))) {
@@ -245,7 +247,7 @@ public class MainTableCompoment {
 					gvc.setLabelProvider(new ColumnLabelProvider() {
 						@Override
 						public void update(final ViewerCell cell) {
-							double price = Double.MAX_VALUE;
+							double price = Double.MIN_VALUE;
 							cell.setText("");
 	
 							final Object element = cell.getElement();
@@ -254,10 +256,10 @@ public class MainTableCompoment {
 								if (row.getBuyOption() != null) {
 									for (final MTMResult result : row.getRhsResults()) {
 										if (result.getEarliestETA() == null) continue;
-										if (price > result.getEarliestPrice())
-										{
+										if (price < result.getEarliestPrice()){
 											price = result.getEarliestPrice();
 										}
+										if (result.getTarget() != sm) continue;
 										ShippingOption so = result.getShipping();
 										if (so == null) {
 											continue;
@@ -267,14 +269,13 @@ public class MainTableCompoment {
 										if (cim == null) {
 											continue;
 										}
-										if (result.getTarget() == sm) {
-											if (result.getShippingCost() > 0.0) {
-												cell.setText(cim.getName());
-											} else {
-												cell.setText("Non-shipped");
-											}
+										if (result.getShippingCost() > 0.0) {
+											cell.setText(cim.getName());
+										} else {
+											cell.setText("Non-shipped");
 										}
 									}
+									highlightCellForeground(sm, cell, price, row);
 								}
 							}
 						}
@@ -294,7 +295,7 @@ public class MainTableCompoment {
 					gvc.setLabelProvider(new ColumnLabelProvider() {
 						@Override
 						public void update(final ViewerCell cell) {
-							double price = Double.MAX_VALUE;
+							double price = Double.MIN_VALUE;
 							cell.setText("");
 	
 							final Object element = cell.getElement();
@@ -303,10 +304,10 @@ public class MainTableCompoment {
 								if (row.getBuyOption() != null) {
 									for (final MTMResult result : row.getRhsResults()) {
 										if (result.getEarliestETA() == null) continue;
-										if (price > result.getEarliestPrice())
-										{
+										if (price < result.getEarliestPrice()){
 											price = result.getEarliestPrice();
 										}
+										if (result.getTarget() != sm) continue;
 										ShippingOption so = result.getShipping();
 										if (so == null) {
 											continue;
@@ -316,59 +317,19 @@ public class MainTableCompoment {
 										if (cim == null) {
 											continue;
 										}
-										if (result.getTarget() == sm) {
-											if (result.getShippingCost() > 0.0) {
-												cell.setText(formatPrice(result.getShippingCost()));
-											} else {
-												cell.setText("Non-shipped");
-											}
+										if (result.getShippingCost() > 0.0) {
+											cell.setText(formatPrice(result.getShippingCost()));
+										} else {
+											cell.setText("Non-shipped");
 										}
 									}
+									highlightCellForeground(sm, cell, price, row);
 								}
 							}
 						}
 					});
 					dynamicColumns.add(gvc.getColumn());
 				}
-				
-				/*final GridColumn gc = new GridColumn(group, SWT.CENTER | SWT.WRAP);
-				final GridViewerColumn gvc = new GridViewerColumn(tableViewer, gc);
-				gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-				gvc.getColumn().setText(sm.getName());
-				gvc.getColumn().setWordWrap(true);
-				gvc.getColumn().setData(sm);
-
-				gvc.getColumn().setWidth(120);
-				gvc.setLabelProvider(new ColumnLabelProvider() {
-					@Override
-					public void update(final ViewerCell cell) {
-						double price = Double.MAX_VALUE;
-						cell.setText("");
-
-						final Object element = cell.getElement();
-						if (element instanceof MTMRow) {
-							final MTMRow row = (MTMRow) element;
-							if (row.getBuyOption() != null) {
-								for (final MTMResult result : row.getRhsResults()) {
-									if (result.getEarliestETA() == null) continue;
-									if (price > result.getEarliestPrice())
-									{
-										price = result.getEarliestPrice();
-									}
-									
-									if (result.getTarget() == sm) {
-										cell.setText(generateString(result));
-									}
-								}
-							}
-						}
-						if (cell.getText().contains(String.format("$%.2f", price))) {
-							cell.setForeground(myColor);
-						}
-					}
-				});
-				dynamicColumns.add(gvc.getColumn());
-				*/
 			}
 		};
 		inputWants.add(refreshDynamicColumns);
@@ -381,33 +342,6 @@ public class MainTableCompoment {
 	public void refresh() {
 		tableViewer.refresh();
 		GridViewerHelper.recalculateRowHeights(tableViewer.getGrid());
-	}
-	
-	private String generateString(final MTMResult result) {
-		String r= "";
-		ShippingOption so = result.getShipping();
-		if (so == null) {
-			return r;
-		}
-		ExistingCharterMarketOption ecmo = (ExistingCharterMarketOption) so;
-		CharterInMarket cim = ecmo.getCharterInMarket();
-		if (cim == null) {
-			return r;
-		}
-		String vName = cim.getName();
-		if (result.getEarliestETA() != null) {
-			r = String.format("%s %s \n", //
-					formatDate(result.getEarliestETA()), //
-					formatPrice(result.getEarliestPrice()));
-			if (result.getShippingCost() > 0.0) {
-				r += String.format("%s %s", //
-						vName,
-						formatPrice(result.getShippingCost()));
-			} else {
-				r += "Non-shipped";
-			}
-		}
-		return r;
 	}
 
 	private String formatDate(final LocalDate date) {
@@ -480,5 +414,23 @@ public class MainTableCompoment {
 	
 	public void setFocus() {
 		ViewerHelper.setFocus(getViewer());
+	}
+	
+	private void highlightCellForeground(final SpotMarket sm, final ViewerCell cell, double price, final MTMRow row) {
+		for (final MTMResult result : row.getRhsResults()) {
+			if (result.getEarliestETA() == null) continue;
+			if (result.getTarget() != sm) continue;
+			final ShippingOption so = result.getShipping();
+			if (so == null) {
+				continue;
+			}
+			final ExistingCharterMarketOption ecmo = (ExistingCharterMarketOption) so;
+			final CharterInMarket cim = ecmo.getCharterInMarket();
+			if (cim == null) {
+				continue;
+			}
+			if (result.getEarliestPrice() == price)
+				cell.setForeground(myColor);
+		}
 	}
 }

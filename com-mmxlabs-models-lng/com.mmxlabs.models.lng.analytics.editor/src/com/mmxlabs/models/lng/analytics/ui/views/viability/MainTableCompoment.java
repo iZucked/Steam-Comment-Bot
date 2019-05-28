@@ -8,6 +8,7 @@
 package com.mmxlabs.models.lng.analytics.ui.views.viability;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -279,8 +280,7 @@ public class MainTableCompoment {
 		if (date == null) {
 			return "";
 		}
-		//return String.format("%d %s", date.getDayOfMonth(), date.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
-		return date.toString();
+		return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(date);
 	}
 	
 	private String formatPrice(final double price) {
