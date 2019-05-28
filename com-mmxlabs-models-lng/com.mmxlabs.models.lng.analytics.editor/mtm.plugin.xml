@@ -21,7 +21,7 @@
             class="com.mmxlabs.models.lng.analytics.ui.views.mtm.MTMView"
             icon="icons/sandbox.gif"
             id="com.mmxlabs.models.lng.analytics.ui.views.mtm.MTMView"
-            name="Mark to Market"
+            name="Netbacks"
             restorable="true">
       </view>
    </extension>

@@ -35,6 +35,7 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
@@ -47,6 +48,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
+import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
@@ -146,6 +148,28 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 		});
 		go.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif"));
 		getViewSite().getActionBars().getToolBarManager().add(go);
+		
+		final Action remove = new Action("Remove", Action.AS_PUSH_BUTTON) {
+			@Override
+			public void run() {
+				final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
+				final ScenarioInstance scenarioInstance = getScenarioInstance();
+				final IScenarioDataProvider sdp = getScenarioDataProvider();
+				final EditingDomain editingDomain = sdp.getEditingDomain();
+				final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
+				final ViabilityModel model = analyticsModel.getViabilityModel();
+				
+				if (model != null) {
+					final CompoundCommand cmd = new CompoundCommand("Remove viability matrix");
+					cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), SetCommand.UNSET_VALUE));
+					editingDomain.getCommandStack().execute(cmd);
+
+					doDisplayScenarioInstance(scenarioInstance, scenarioModel, null);
+				}
+			}
+		};
+		remove.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+		getViewSite().getActionBars().getToolBarManager().add(remove);
 
 		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(mainTableComponent.getViewer());
 		getViewSite().getActionBars().getToolBarManager().add(packColumnsAction);
