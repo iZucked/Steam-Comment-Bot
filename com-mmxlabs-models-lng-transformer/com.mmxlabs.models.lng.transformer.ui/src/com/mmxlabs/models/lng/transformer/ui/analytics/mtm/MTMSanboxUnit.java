@@ -266,16 +266,16 @@ public class MTMSanboxUnit {
 	
 											if (market instanceof FOBSalesMarket) {
 												shipped = false;
-												discharge = mapper.getSalesMarketBreakEven(market, YearMonth.from(load.getWindowStart()));
+												discharge = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart()));
 												reference_slot = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart()));
 											} else if (market instanceof DESSalesMarket) {
 												if (load.isDESPurchase()) {
 													shipped = false;
-													discharge = mapper.getSalesMarketBreakEven(market, YearMonth.from(load.getWindowStart()));
+													discharge = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart()));
 													reference_slot = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart()));
 												} else {
 													shipped = true;
-													discharge = mapper.getSalesMarketBreakEven(market, YearMonth.from(load.getWindowStart().plusMonths(i)));
+													discharge = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart().plusMonths(i)));
 													reference_slot = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart().plusMonths(i)));
 												}
 											} else {

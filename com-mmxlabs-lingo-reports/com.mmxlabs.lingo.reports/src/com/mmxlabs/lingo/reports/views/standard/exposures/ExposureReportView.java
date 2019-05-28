@@ -391,11 +391,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		imageDescriptor = Activator.Implementation.getImageDescriptor("icons/dark_arrow_up.png");
 		cellImageDarkArrowUp = imageDescriptor.createImage();
 		
-		colourBlue = new Color(Display.getDefault(), 0, 80, 170);
-		colourLightBlue = new Color(Display.getDefault(), 	23, 214, 255);
+		colourBlue = new Color(Display.getDefault(), 135, 206, 235);
+		colourLightBlue = new Color(Display.getDefault(), 135, 206, 250);
 		colourGreen = new Color(Display.getDefault(), 132, 148, 67);
 		colourOrange = new Color(Display.getDefault(), 255, 161, 79);
-		colourViolet = new Color(Display.getDefault(), 109, 108, 144);
+		colourViolet = new Color(Display.getDefault(), 244, 238, 224);
 		final Font systemFont = Display.getDefault().getSystemFont();
 		final FontData fontData = systemFont.getFontData()[0];
 		fontBold = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
