@@ -35,6 +35,10 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 		if (object instanceof MTMRow) {
 			final MTMRow row = (MTMRow) object;
 			final BuyOption buy = row.getBuyOption();
+			if (buy instanceof BuyReference) {
+				final LoadSlot slot = ((BuyReference) buy).getSlot();
+				return slot.getName();
+			}
 			return render(buy);
 		} else if (object instanceof ViabilityRow) {
 			final ViabilityRow row = (ViabilityRow) object;

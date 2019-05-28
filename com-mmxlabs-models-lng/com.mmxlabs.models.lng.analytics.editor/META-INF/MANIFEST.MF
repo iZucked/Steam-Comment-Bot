@@ -61,7 +61,13 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.scenario.service.util,
  org.eclipse.ui.navigator,
  javax.annotation;bundle-version="1.2.0",
- org.apache.poi.ooxml.source
+ org.apache.poi,
+ org.apache.poi.ooxml;bundle-version="3.9.0",
+ org.apache.poi.ooxml.schemas;bundle-version="3.9.0"
 Bundle-ActivationPolicy: lazy
-Import-Package: org.slf4j;version="1.6.4"
+Import-Package: org.slf4j;version="1.6.4",
+ javax.inject,
+ org.apache.commons.lang.time;version="2.6.0",
+ org.apache.poi.xssf.usermodel,
+ org.eclipse.nebula.widgets.formattedtext
 Automatic-Module-Name: com.mmxlabs.models.lng.analytics.editor

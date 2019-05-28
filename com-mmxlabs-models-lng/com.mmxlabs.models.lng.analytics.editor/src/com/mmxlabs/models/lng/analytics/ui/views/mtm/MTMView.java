@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.analytics.ui.views.mtm;
 
 import java.util.EventObject;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -28,15 +27,13 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -45,7 +42,6 @@ import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomai
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.MTMModel;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -102,7 +98,7 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 					final ScenarioInstance scenarioInstance = getScenarioInstance();
 					final IScenarioDataProvider sdp = getScenarioDataProvider();
 					//FIXME : code doesn't work properly without the line below. Magic?
-					final AnalyticsModel analyticsModelZero = ScenarioModelUtil.getAnalyticsModel(sdp);
+					//final AnalyticsModel analyticsModelZero = ScenarioModelUtil.getAnalyticsModel(sdp);
 
 					if (scenarioModel == null) {
 						return;
@@ -136,6 +132,28 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 		});
 		go.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif"));
 		getViewSite().getActionBars().getToolBarManager().add(go);
+		
+		final Action remove = new Action("Remove", Action.AS_PUSH_BUTTON) {
+			@Override
+			public void run() {
+				final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
+				final ScenarioInstance scenarioInstance = getScenarioInstance();
+				final IScenarioDataProvider sdp = getScenarioDataProvider();
+				final EditingDomain editingDomain = sdp.getEditingDomain();
+				final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
+				final MTMModel model = analyticsModel.getMtmModel();
+				
+				if (model != null) {
+					final CompoundCommand cmd = new CompoundCommand("Remove mtm matrix");
+					cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_MtmModel(), SetCommand.UNSET_VALUE));
+					editingDomain.getCommandStack().execute(cmd);
+
+					doDisplayScenarioInstance(scenarioInstance, scenarioModel, null);
+				}
+			}
+		};
+		remove.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+		getViewSite().getActionBars().getToolBarManager().add(remove);
 
 		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(mainTableComponent.getViewer());
 		getViewSite().getActionBars().getToolBarManager().add(packColumnsAction);

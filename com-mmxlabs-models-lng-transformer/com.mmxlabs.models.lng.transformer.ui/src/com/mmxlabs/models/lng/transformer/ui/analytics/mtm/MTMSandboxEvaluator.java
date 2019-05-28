@@ -18,6 +18,8 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeOption;
@@ -76,23 +78,22 @@ public class MTMSandboxEvaluator {
 		final int arrivalTime = scheduledSequence.getArrivalTime(target);
 		final long volumeInMMBTU = cargoValueAnnotation.getPhysicalSlotVolumeInMMBTu(target);
 		final long shippingCost = shippingCostHelper.getShippingCosts(voyagePlan, va, true);
+
 		
+		final int slotPricePerMMBTu = cargoValueAnnotation.getSlotPricePerMMBTu(target);
 		
+		final int shippingCostPerMMBTu = Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(shippingCost, volumeInMMBTU);
+		
+		//might want different volume for the shipping cost
 		if (target instanceof LoadOption) {
-			final LoadOption loadOption = (LoadOption) target;
-			final ILoadPriceCalculator loadPriceCalculator = loadOption.getLoadPriceCalculator();
-			if (loadPriceCalculator instanceof BreakEvenLoadPriceCalculator) {
-				final BreakEvenLoadPriceCalculator beCalc = (BreakEvenLoadPriceCalculator) loadPriceCalculator;
-				return saveResult(beCalc.getPrice(), arrivalTime, volumeInMMBTU, shippingCost);
-			}
+			final int netbackPrice = slotPricePerMMBTu + shippingCostPerMMBTu;
+			
+			return saveResult(netbackPrice, arrivalTime, volumeInMMBTU, shippingCost);
 		}
 		if (target instanceof DischargeOption) {
-			final DischargeOption dischargeOption = (DischargeOption) target;
-			final ISalesPriceCalculator salesPriceCalculator = dischargeOption.getDischargePriceCalculator();
-			if (salesPriceCalculator instanceof BreakEvenSalesPriceCalculator) {
-				final BreakEvenSalesPriceCalculator beCalc = (BreakEvenSalesPriceCalculator) salesPriceCalculator;
-				return saveResult(beCalc.getPrice(), arrivalTime, volumeInMMBTU, shippingCost);
-			}
+			final int netbackPrice = slotPricePerMMBTu - shippingCostPerMMBTu;
+			
+			return saveResult(netbackPrice, arrivalTime, volumeInMMBTU, shippingCost);
 		}
 		
 		if (cargoValueAnnotation != null) {
