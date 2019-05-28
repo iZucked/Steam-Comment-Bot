@@ -6,11 +6,12 @@ package com.mmxlabs.lngdataserver.server.preferences;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.security.cert.CertificateException;
 import java.util.List;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
+import javax.net.ssl.SSLSession;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -36,7 +37,7 @@ import com.mmxlabs.lngdataserver.server.DataServerActivator;
 import com.mmxlabs.lngdataserver.server.HttpClientUtil;
 import com.mmxlabs.lngdataserver.server.HttpClientUtil.CertInfo;
 
-import okhttp3.OkHttpClient.Builder;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -81,6 +82,8 @@ public class DataserverPreferencePage extends FieldEditorPreferencePage implemen
 			}
 		});
 
+		addField(new BooleanFieldEditor(StandardDateRepositoryPreferenceConstants.P_DISABLE_SSL_HOSTNAME_CHECK, "Disable hostname checks (Apply changes to test)", debugComposite));
+
 		Button btn3 = new Button(debugComposite, SWT.PUSH);
 		btn3.setText("Check connection");
 		btn3.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
@@ -110,8 +113,9 @@ public class DataserverPreferencePage extends FieldEditorPreferencePage implemen
 					return;
 				}
 
-				Builder basicBuilder = HttpClientUtil.basicBuilder();
-				try (final Response pingResponse = basicBuilder.build().newCall(pingRequest).execute()) {
+				OkHttpClient client = HttpClientUtil.basicBuilder().build();
+
+				try (final Response pingResponse = client.newCall(pingRequest).execute()) {
 					if (pingResponse.isSuccessful()) {
 						MessageDialog.openConfirm(getShell(), "Data Hub connection checker", "Connected successfully.");
 						return;
@@ -123,6 +127,7 @@ public class DataserverPreferencePage extends FieldEditorPreferencePage implemen
 					MessageDialog.openError(getShell(), "Data Hub connection checker", "Connection failed - Unknown host");
 					return;
 				} catch (final SSLPeerUnverifiedException e) {
+					e.printStackTrace();
 					MessageDialog.openError(getShell(), "Data Hub connection checker", "Connection failed - hostname mismatch between SSL certificate and URL");
 					return;
 				} catch (final SSLException e) {

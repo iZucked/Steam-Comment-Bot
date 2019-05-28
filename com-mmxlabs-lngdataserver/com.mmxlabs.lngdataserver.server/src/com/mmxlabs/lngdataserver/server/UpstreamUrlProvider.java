@@ -74,6 +74,7 @@ public class UpstreamUrlProvider implements IUserNameProvider {
 
 		baseCaseServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY));
 		teamServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY));
+		HttpClientUtil.setDisableSSLHostnameCheck(Boolean.TRUE.equals(preferenceStore.getBoolean(StandardDateRepositoryPreferenceConstants.P_DISABLE_SSL_HOSTNAME_CHECK)));
 
 		// Schedule a "is alive" check every minute....
 		scheduler.scheduleAtFixedRate(this::testUpstreamAvailability, 1, 1, TimeUnit.MINUTES);
@@ -91,6 +92,11 @@ public class UpstreamUrlProvider implements IUserNameProvider {
 	private final IPropertyChangeListener listener = event -> {
 		switch (event.getProperty()) {
 		case StandardDateRepositoryPreferenceConstants.P_URL_KEY:
+			testUpstreamAvailability();
+			fireChangedListeners();
+			break;
+		case StandardDateRepositoryPreferenceConstants.P_DISABLE_SSL_HOSTNAME_CHECK:
+			HttpClientUtil.setDisableSSLHostnameCheck(Boolean.TRUE.equals(event.getNewValue()));
 			testUpstreamAvailability();
 			fireChangedListeners();
 			break;

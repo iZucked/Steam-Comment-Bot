@@ -24,6 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
@@ -42,6 +43,7 @@ import com.mmxlabs.license.ssl.LicenseChecker;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.internal.tls.OkHostnameVerifier;
 
 public class HttpClientUtil {
 
@@ -50,10 +52,29 @@ public class HttpClientUtil {
 	public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
 	public static final MediaType MEDIA_TYPE_FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
 
+	private static boolean disableSSLHostnameCheck = true;
+
+	public static void setDisableSSLHostnameCheck(boolean b) {
+		disableSSLHostnameCheck = b;
+	}
+
 	private static final OkHttpClient CLIENT = new OkHttpClient.Builder().build();
 
 	public static OkHttpClient.Builder basicBuilder() {
 		final OkHttpClient.Builder builder = CLIENT.newBuilder();
+
+		builder.hostnameVerifier(new HostnameVerifier() {
+
+			@Override
+			public boolean verify(String hostname, SSLSession session) {
+
+				if (!disableSSLHostnameCheck) {
+					return OkHostnameVerifier.INSTANCE.verify(hostname, session);
+				}
+				return true;
+			}
+		});
+
 		try {
 
 			final Pair<KeyStore, char[]> keyStorePair = LicenseChecker.loadLocalKeystore();
