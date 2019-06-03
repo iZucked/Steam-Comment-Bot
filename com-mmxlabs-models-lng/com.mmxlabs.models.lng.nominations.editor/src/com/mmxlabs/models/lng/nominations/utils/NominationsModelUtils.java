@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
@@ -63,6 +64,7 @@ public class NominationsModelUtils {
 		return units.getName();
 	}
 
+	//TODO get rid of this if possible.
 	public static AbstractNomination findWindowNomination(final LNGScenarioModel sm, final Slot slot) {
 		if (slot != null && slot.getName() != null) {
 			final String name = slot.getName();
@@ -70,10 +72,10 @@ public class NominationsModelUtils {
 
 			//Check specific slot nominations.
 			for (final SlotNomination s : nm.getSlotNominations()) {
-				if (slot instanceof LoadSlot && s.getNomineeId().equals(name) && s.getType().equals("Buy window")) {
+				if (slot instanceof LoadSlot && Objects.equals(s.getNomineeId(),name) && Objects.equals(s.getType(),"Buy window")) {
 					return s;
 				}
-				if (slot instanceof DischargeSlot && s.getNomineeId().equals(name) && s.getType().equals("Sell window")) {
+				if (slot instanceof DischargeSlot && Objects.equals(s.getNomineeId(),name) && Objects.equals(s.getType(),"Sell window")) {
 					return s;
 				}
 			}
@@ -81,10 +83,10 @@ public class NominationsModelUtils {
 			//If none there, check nominations generated from specifications.
 			final List<AbstractNomination> generatedNominations = generateNominationsForAllDates(sm);
 			for (final AbstractNomination s : generatedNominations) {
-				if (slot instanceof LoadSlot && s.getNomineeId().equals(name) && s.getType().equals("Buy window")) {
+				if (slot instanceof LoadSlot && Objects.equals(s.getNomineeId(),name) && Objects.equals(s.getType(),"Buy window")) {
 					return s;
 				}
-				if (slot instanceof DischargeSlot && s.getNomineeId().equals(name) && s.getType().equals("Sell window")) {
+				if (slot instanceof DischargeSlot && Objects.equals(s.getNomineeId(),name) && Objects.equals(s.getType(),"Sell window")) {
 					return s;
 				}
 			}
@@ -100,29 +102,26 @@ public class NominationsModelUtils {
 
 			//Check specific slot nominations.
 			for (final SlotNomination nomination : nm.getSlotNominations()) {
-				if (nomination.getNomineeId() != null && nomination.getType() != null && nomination.getSide() != null) {
-					if (slot instanceof LoadSlot && nomination.getSide() == Side.BUY && nomination.getNomineeId().equals(name) && nomination.getType().equals(nominationType)) {
-						return nomination;
-					}
-					if (slot instanceof DischargeSlot && nomination.getSide() == Side.SELL && nomination.getNomineeId().equals(name) && nomination.getType().equals(nominationType)) {
-						return nomination;
-					}
+				if (nomination.getSide() == Side.BUY && slot instanceof LoadSlot && Objects.equals(nomination.getNomineeId(),name) && Objects.equals(nomination.getType(),nominationType)) {
+					return nomination;
+				}
+				if (nomination.getSide() == Side.SELL && slot instanceof DischargeSlot && Objects.equals(nomination.getNomineeId(),name) && Objects.equals(nomination.getType(),nominationType)) {
+					return nomination;
 				}
 			}
 
 			//If none there, check nominations generated from specifications.
 			final List<AbstractNomination> generatedNominations = generateNominationsForAllDates(sm);
 			for (final AbstractNomination nomination : generatedNominations) {
-				if (nomination.getNomineeId() != null && nomination.getType() != null && nomination.getSide() != null) {
-					if (slot instanceof LoadSlot && nomination.getSide() == Side.BUY && nomination.getNomineeId().equals(name) && nomination.getType().equals(nominationType)) {
-						return nomination;
-					}
-					if (slot instanceof DischargeSlot && nomination.getSide() == Side.SELL && nomination.getNomineeId().equals(name) && nomination.getType().equals(nominationType)) {
-						return nomination;
-					}
+				if (nomination.getSide() == Side.BUY && slot instanceof LoadSlot && Objects.equals(nomination.getNomineeId(),name) && Objects.equals(nomination.getType(),nominationType)) {
+					return nomination;
+				}
+				if (nomination.getSide() == Side.SELL && slot instanceof DischargeSlot && Objects.equals(nomination.getNomineeId(),name) && Objects.equals(nomination.getType(),nominationType)) {
+					return nomination;
 				}
 			}
 		}
+
 		//None found.
 		return null;
 	}
@@ -321,7 +320,7 @@ public class NominationsModelUtils {
 								refererId = sp.getRefererId();
 							}
 
-							if (!"".equals(refererId) && sp.getSide() == side && contractName.equals(refererId)) {
+							if (!Objects.equals(refererId, "") && sp.getSide() == side && Objects.equals(contractName,refererId)) {
 								AbstractNomination sn = existingSlotNominations.get(sp.getUuid() + ":" + nomineeId);
 								if (sn == null) {
 									sn = NominationsFactory.eINSTANCE.createSlotNomination();
@@ -402,7 +401,7 @@ public class NominationsModelUtils {
 		final CargoModel model = ScenarioModelUtil.getCargoModel(scenarioModel);
 		if (model != null) {
 			for (final LoadSlot s : model.getLoadSlots()) {
-				if (nomineeId.equals(s.getName())) {
+				if (Objects.equals(nomineeId, s.getName())) {
 					return s;
 				}
 			}
@@ -413,7 +412,7 @@ public class NominationsModelUtils {
 	public static DischargeSlot findDischargeSlot(@NonNull final LNGScenarioModel scenarioModel, @NonNull final String nomineeId) {
 		final CargoModel model = ScenarioModelUtil.getCargoModel(scenarioModel);
 		for (final DischargeSlot s : model.getDischargeSlots()) {
-			if (nomineeId.equals(s.getName())) {
+			if (Objects.equals(nomineeId, s.getName())) {
 				return s;
 			}
 		}
@@ -440,7 +439,7 @@ public class NominationsModelUtils {
 		if (nm != null && uuid != null) {
 			final EList<SlotNominationSpec> specs = nm.getSlotNominationSpecs();
 			for (final AbstractNominationSpec spec : specs) {
-				if (uuid.equals(spec.getUuid())) {
+				if (Objects.equals(uuid, spec.getUuid())) {
 					return spec;
 				}
 			}
