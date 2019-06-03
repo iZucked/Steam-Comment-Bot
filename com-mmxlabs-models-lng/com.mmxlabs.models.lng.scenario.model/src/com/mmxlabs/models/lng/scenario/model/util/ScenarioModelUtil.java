@@ -37,39 +37,6 @@ public final class ScenarioModelUtil {
 	private ScenarioModelUtil() {
 
 	}
-
-	/**
-	 * Find the containing {@link LNGScenarioModel} for this Schedule.
-	 * 
-	 * @param schedule
-	 * @return
-	 */
-	@Nullable
-	public static LNGScenarioModel findScenarioModel(@NonNull final Schedule schedule) {
-		EObject container = schedule.eContainer();
-		while (container != null && !(container instanceof LNGScenarioModel)) {
-			container = container.eContainer();
-		}
-		return (LNGScenarioModel) container;
-	}
-
-	@Nullable
-	public static LNGScenarioModel findScenarioModel(@NonNull final CargoModel cargoModel) {
-		final EObject container = cargoModel.eContainer();
-		if (container instanceof LNGScenarioModel) {
-			return (LNGScenarioModel) container;
-		}
-		return null;
-	}
-
-	@Nullable
-	public static LNGScenarioModel findScenarioModel(@NonNull final NominationsModel nominationsModel) {
-		final EObject container = nominationsModel.eContainer();
-		if (container instanceof LNGScenarioModel) {
-			return (LNGScenarioModel) container;
-		}
-		return null;
-	}
 	
 	/**
 	 * Find the containing {@link LNGPortfolioModel} for this Schedule.
@@ -333,19 +300,6 @@ public final class ScenarioModelUtil {
 		return cargoModel;
 	}
 
-	@Nullable
-	public static CargoModel getCargoModel(@NonNull final NominationsModel nominationsModel) {
-		LNGScenarioModel scenarioModel = findScenarioModel(nominationsModel);
-		CargoModel cargoModel = null;
-		if (scenarioModel != null) {
-			cargoModel = scenarioModel.getCargoModel();
-		}
-		if (cargoModel == null) {
-			throw new IllegalArgumentException("Invalid scenario model");
-		}
-		return cargoModel;
-	}
-	
 	@NonNull
 	public static FleetModel getFleetModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
 		final LNGReferenceModel referenceModel = findReferenceModel(scenarioDataProvider);
@@ -459,6 +413,7 @@ public final class ScenarioModelUtil {
 
 	public static @NonNull ModelDistanceProvider getModelDistanceProvider(@NonNull final IScenarioDataProvider scenarioDataProvider) {
 		@NonNull
+		final
 		ModelDistanceProvider extraDataProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 		if (extraDataProvider == null) {
 			throw new IllegalArgumentException("Invalid scenario model");
