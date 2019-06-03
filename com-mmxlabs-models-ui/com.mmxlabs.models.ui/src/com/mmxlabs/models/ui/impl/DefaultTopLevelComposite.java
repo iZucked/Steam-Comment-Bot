@@ -81,7 +81,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		final EClass eClass = object.eClass();
 		final Group g = new Group(this, SWT.NONE);
 		toolkit.adapt(g);
-		g.setText(EditorUtils.unmangle(eClass.getName()));
+		g.setText(EditorUtils.unmangle(object));
 		g.setLayout(new FillLayout());
 		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
 		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, dialogContext, toolkit);

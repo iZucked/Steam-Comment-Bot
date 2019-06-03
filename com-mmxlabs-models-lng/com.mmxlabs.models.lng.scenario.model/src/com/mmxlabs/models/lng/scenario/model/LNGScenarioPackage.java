@@ -190,13 +190,22 @@ public interface LNGScenarioPackage extends EPackage {
 	int LNG_SCENARIO_MODEL__ADP_MODELS = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 10;
 
 	/**
+	 * The feature id for the '<em><b>Nominations Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LNG_SCENARIO_MODEL__NOMINATIONS_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 11;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 11;
+	int LNG_SCENARIO_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -491,6 +500,17 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getLNGScenarioModel_AdpModels();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getNominationsModel <em>Nominations Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Nominations Model</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getNominationsModel()
+	 * @see #getLNGScenarioModel()
+	 * @generated
+	 */
+	EReference getLNGScenarioModel_NominationsModel();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel <em>LNG Reference Model</em>}'.

@@ -81,6 +81,13 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
+         id="com.mmxlabs.models.lng.nominations.validation"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="com.mmxlabs.models.lng.fleet"
          download-size="0"
          install-size="0"
@@ -390,6 +397,27 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.models.lng.cargo.editor.bulk"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.nominations"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.nominations.edit"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.nominations.editor"
          download-size="0"
          install-size="0"
          version="0.0.0"

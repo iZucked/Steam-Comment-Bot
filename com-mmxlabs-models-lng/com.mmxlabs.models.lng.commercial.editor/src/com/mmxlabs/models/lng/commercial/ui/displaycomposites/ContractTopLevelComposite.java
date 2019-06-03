@@ -5,13 +5,11 @@
 package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -21,7 +19,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractDetailComposite.ContractDetailGroup;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -41,7 +38,7 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 	 * {@link IDisplayComposite} to contain elements for the bottom of the editor
 	 */
 	protected IDisplayComposite restrictionsLevel = null;
-	protected IDisplayComposite nominationsLevel = null;
+
 	/**
 	 * {@link Composite} to contain the sub editors
 	 */
@@ -79,14 +76,14 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 
 		// Initialise middle composite
 		middle = toolkit.createComposite(this);
-		int numChildren = createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, middle);
+		final int numChildren = createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, middle);
 
 		// We know there are n slots, so n columns
 		middle.setLayout(new GridLayout(numChildren, true));
 		middle.setLayoutData(new GridData(GridData.FILL_BOTH));
 		middle.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
-		Composite myComposite = new Composite(this, SWT.NONE);
+		final Composite myComposite = new Composite(this, SWT.NONE);
 		toolkit.adapt(myComposite);
 		myComposite.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
 		
@@ -103,19 +100,6 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		restrictionsLevel.setCommandHandler(commandHandler);
 		restrictionsLevel.setEditorWrapper(editorWrapper);
 		
-		if (LicenseFeatures.isPermitted("features:nominations")) {
-			final Group g3 = new Group(myComposite, SWT.NONE);
-
-			toolkit.adapt(g3);
-			g3.setText("Nominations");
-			g3.setLayout(new FillLayout());
-			g3.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
-			g3.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-
-			nominationsLevel = new ContractDetailComposite(g3, SWT.NONE, ContractDetailGroup.NOMINATIONS, toolkit);
-			nominationsLevel.setCommandHandler(commandHandler);
-			nominationsLevel.setEditorWrapper(editorWrapper);
-		}
 		//
 		// // Overrides default layout factory so we get a single column rather than multiple columns and one row
 		this.setLayout(new GridLayout(3, false));
@@ -123,9 +107,6 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		
 		topLevel.display(dialogContext, root, object, range, dbc);
 		restrictionsLevel.display(dialogContext, root, object, range, dbc);
-		if (LicenseFeatures.isPermitted("features:nominations")) {
-			nominationsLevel.display(dialogContext, root, object, range, dbc);
-		}
 
 		//
 		// // Overrides default layout factory so we get a single column rather than multiple columns and one row
@@ -141,18 +122,12 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 	public void displayValidationStatus(final IStatus status) {
 		super.displayValidationStatus(status);
 		restrictionsLevel.displayValidationStatus(status);
-		if (LicenseFeatures.isPermitted("features:nominations")) {
-			nominationsLevel.displayValidationStatus(status);
-		}
 	}
 
 	@Override
 	public void setEditorWrapper(final IInlineEditorWrapper wrapper) {
 		if (restrictionsLevel != null) {
 			restrictionsLevel.setEditorWrapper(wrapper);
-		}
-		if (nominationsLevel != null) {
-			nominationsLevel.setEditorWrapper(wrapper);
 		}
 		super.setEditorWrapper(wrapper);
 	}

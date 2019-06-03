@@ -27,13 +27,11 @@ import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.util.NominationUtils;
 import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Location;
@@ -47,7 +45,6 @@ import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
@@ -98,26 +95,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNominatedVessel <em>Nominated Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isLocked <em>Locked</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowNominationDate <em>Window Nomination Date</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isWindowNominationIsDone <em>Window Nomination Is Done</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isWindowNominationCounterparty <em>Window Nomination Counterparty</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowNominationComment <em>Window Nomination Comment</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getVolumeNominationDate <em>Volume Nomination Date</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isVolumeNominationDone <em>Volume Nomination Done</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isVolumeNominationCounterparty <em>Volume Nomination Counterparty</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getVolumeNominationComment <em>Volume Nomination Comment</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getVesselNominationDate <em>Vessel Nomination Date</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isVesselNominationDone <em>Vessel Nomination Done</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isVesselNominationCounterparty <em>Vessel Nomination Counterparty</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getVesselNominationComment <em>Vessel Nomination Comment</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPortNominationDate <em>Port Nomination Date</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isPortNominationDone <em>Port Nomination Done</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isPortNominationCounterparty <em>Port Nomination Counterparty</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPortNominationComment <em>Port Nomination Comment</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPortLoadNominationDate <em>Port Load Nomination Date</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isPortLoadNominationDone <em>Port Load Nomination Done</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPortLoadNominationComment <em>Port Load Nomination Comment</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isCancelled <em>Cancelled</em>}</li>
  * </ul>
  *
@@ -1055,496 +1032,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	protected boolean locked = LOCKED_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getWindowNominationDate() <em>Window Nomination Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getWindowNominationDate()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final LocalDate WINDOW_NOMINATION_DATE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getWindowNominationDate() <em>Window Nomination Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getWindowNominationDate()
-	 * @generated
-	 * @ordered
-	 */
-	protected LocalDate windowNominationDate = WINDOW_NOMINATION_DATE_EDEFAULT;
-
-	/**
-	 * This is true if the Window Nomination Date attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean windowNominationDateESet;
-
-	/**
-	 * The default value of the '{@link #isWindowNominationIsDone() <em>Window Nomination Is Done</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isWindowNominationIsDone()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean WINDOW_NOMINATION_IS_DONE_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isWindowNominationIsDone() <em>Window Nomination Is Done</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isWindowNominationIsDone()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean windowNominationIsDone = WINDOW_NOMINATION_IS_DONE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isWindowNominationCounterparty() <em>Window Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isWindowNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean WINDOW_NOMINATION_COUNTERPARTY_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isWindowNominationCounterparty() <em>Window Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isWindowNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean windowNominationCounterparty = WINDOW_NOMINATION_COUNTERPARTY_EDEFAULT;
-
-	/**
-	 * This is true if the Window Nomination Counterparty attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean windowNominationCounterpartyESet;
-
-	/**
-	 * The default value of the '{@link #getWindowNominationComment() <em>Window Nomination Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getWindowNominationComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String WINDOW_NOMINATION_COMMENT_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getWindowNominationComment() <em>Window Nomination Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getWindowNominationComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected String windowNominationComment = WINDOW_NOMINATION_COMMENT_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getVolumeNominationDate() <em>Volume Nomination Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumeNominationDate()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final LocalDate VOLUME_NOMINATION_DATE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getVolumeNominationDate() <em>Volume Nomination Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumeNominationDate()
-	 * @generated
-	 * @ordered
-	 */
-	protected LocalDate volumeNominationDate = VOLUME_NOMINATION_DATE_EDEFAULT;
-
-	/**
-	 * This is true if the Volume Nomination Date attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean volumeNominationDateESet;
-
-	/**
-	 * The default value of the '{@link #isVolumeNominationDone() <em>Volume Nomination Done</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isVolumeNominationDone()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean VOLUME_NOMINATION_DONE_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isVolumeNominationDone() <em>Volume Nomination Done</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isVolumeNominationDone()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean volumeNominationDone = VOLUME_NOMINATION_DONE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isVolumeNominationCounterparty() <em>Volume Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isVolumeNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean VOLUME_NOMINATION_COUNTERPARTY_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isVolumeNominationCounterparty() <em>Volume Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isVolumeNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean volumeNominationCounterparty = VOLUME_NOMINATION_COUNTERPARTY_EDEFAULT;
-
-	/**
-	 * This is true if the Volume Nomination Counterparty attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean volumeNominationCounterpartyESet;
-
-	/**
-	 * The default value of the '{@link #getVolumeNominationComment() <em>Volume Nomination Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumeNominationComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String VOLUME_NOMINATION_COMMENT_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getVolumeNominationComment() <em>Volume Nomination Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumeNominationComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected String volumeNominationComment = VOLUME_NOMINATION_COMMENT_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getVesselNominationDate() <em>Vessel Nomination Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesselNominationDate()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final LocalDate VESSEL_NOMINATION_DATE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getVesselNominationDate() <em>Vessel Nomination Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesselNominationDate()
-	 * @generated
-	 * @ordered
-	 */
-	protected LocalDate vesselNominationDate = VESSEL_NOMINATION_DATE_EDEFAULT;
-
-	/**
-	 * This is true if the Vessel Nomination Date attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean vesselNominationDateESet;
-
-	/**
-	 * The default value of the '{@link #isVesselNominationDone() <em>Vessel Nomination Done</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isVesselNominationDone()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean VESSEL_NOMINATION_DONE_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isVesselNominationDone() <em>Vessel Nomination Done</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isVesselNominationDone()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean vesselNominationDone = VESSEL_NOMINATION_DONE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isVesselNominationCounterparty() <em>Vessel Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isVesselNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean VESSEL_NOMINATION_COUNTERPARTY_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isVesselNominationCounterparty() <em>Vessel Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isVesselNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean vesselNominationCounterparty = VESSEL_NOMINATION_COUNTERPARTY_EDEFAULT;
-
-	/**
-	 * This is true if the Vessel Nomination Counterparty attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean vesselNominationCounterpartyESet;
-
-	/**
-	 * The default value of the '{@link #getVesselNominationComment() <em>Vessel Nomination Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesselNominationComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String VESSEL_NOMINATION_COMMENT_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getVesselNominationComment() <em>Vessel Nomination Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesselNominationComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected String vesselNominationComment = VESSEL_NOMINATION_COMMENT_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getPortNominationDate() <em>Port Nomination Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortNominationDate()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final LocalDate PORT_NOMINATION_DATE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getPortNominationDate() <em>Port Nomination Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortNominationDate()
-	 * @generated
-	 * @ordered
-	 */
-	protected LocalDate portNominationDate = PORT_NOMINATION_DATE_EDEFAULT;
-
-	/**
-	 * This is true if the Port Nomination Date attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean portNominationDateESet;
-
-	/**
-	 * The default value of the '{@link #isPortNominationDone() <em>Port Nomination Done</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isPortNominationDone()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean PORT_NOMINATION_DONE_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isPortNominationDone() <em>Port Nomination Done</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isPortNominationDone()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean portNominationDone = PORT_NOMINATION_DONE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isPortNominationCounterparty() <em>Port Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isPortNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean PORT_NOMINATION_COUNTERPARTY_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isPortNominationCounterparty() <em>Port Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isPortNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean portNominationCounterparty = PORT_NOMINATION_COUNTERPARTY_EDEFAULT;
-
-	/**
-	 * This is true if the Port Nomination Counterparty attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean portNominationCounterpartyESet;
-
-	/**
-	 * The default value of the '{@link #getPortNominationComment() <em>Port Nomination Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortNominationComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String PORT_NOMINATION_COMMENT_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getPortNominationComment() <em>Port Nomination Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortNominationComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected String portNominationComment = PORT_NOMINATION_COMMENT_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getPortLoadNominationDate() <em>Port Load Nomination Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortLoadNominationDate()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final LocalDate PORT_LOAD_NOMINATION_DATE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getPortLoadNominationDate() <em>Port Load Nomination Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortLoadNominationDate()
-	 * @generated
-	 * @ordered
-	 */
-	protected LocalDate portLoadNominationDate = PORT_LOAD_NOMINATION_DATE_EDEFAULT;
-
-	/**
-	 * This is true if the Port Load Nomination Date attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean portLoadNominationDateESet;
-
-	/**
-	 * The default value of the '{@link #isPortLoadNominationDone() <em>Port Load Nomination Done</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isPortLoadNominationDone()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean PORT_LOAD_NOMINATION_DONE_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isPortLoadNominationDone() <em>Port Load Nomination Done</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isPortLoadNominationDone()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean portLoadNominationDone = PORT_LOAD_NOMINATION_DONE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isPortLoadNominationCounterparty() <em>Port Load Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isPortLoadNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isPortLoadNominationCounterparty() <em>Port Load Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isPortLoadNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean portLoadNominationCounterparty = PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT;
-
-	/**
-	 * This is true if the Port Load Nomination Counterparty attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean portLoadNominationCounterpartyESet;
-
-	/**
-	 * The default value of the '{@link #getPortLoadNominationComment() <em>Port Load Nomination Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortLoadNominationComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String PORT_LOAD_NOMINATION_COMMENT_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getPortLoadNominationComment() <em>Port Load Nomination Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortLoadNominationComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected String portLoadNominationComment = PORT_LOAD_NOMINATION_COMMENT_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #isCancelled() <em>Cancelled</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1598,7 +1085,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setName(String newName) {
-		String oldName = name;
+		final String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__NAME, oldName, name));
@@ -1620,7 +1107,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setWindowStart(LocalDate newWindowStart) {
-		LocalDate oldWindowStart = windowStart;
+		final LocalDate oldWindowStart = windowStart;
 		windowStart = newWindowStart;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_START, oldWindowStart, windowStart));
@@ -1641,9 +1128,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setWindowStartTime(int newWindowStartTime) {
-		int oldWindowStartTime = windowStartTime;
+		final int oldWindowStartTime = windowStartTime;
 		windowStartTime = newWindowStartTime;
-		boolean oldWindowStartTimeESet = windowStartTimeESet;
+		final boolean oldWindowStartTimeESet = windowStartTimeESet;
 		windowStartTimeESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_START_TIME, oldWindowStartTime, windowStartTime, !oldWindowStartTimeESet));
@@ -1655,8 +1142,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetWindowStartTime() {
-		int oldWindowStartTime = windowStartTime;
-		boolean oldWindowStartTimeESet = windowStartTimeESet;
+		final int oldWindowStartTime = windowStartTime;
+		final boolean oldWindowStartTimeESet = windowStartTimeESet;
 		windowStartTime = WINDOW_START_TIME_EDEFAULT;
 		windowStartTimeESet = false;
 		if (eNotificationRequired())
@@ -1687,9 +1174,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setWindowSize(int newWindowSize) {
-		int oldWindowSize = windowSize;
+		final int oldWindowSize = windowSize;
 		windowSize = newWindowSize;
-		boolean oldWindowSizeESet = windowSizeESet;
+		final boolean oldWindowSizeESet = windowSizeESet;
 		windowSizeESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_SIZE, oldWindowSize, windowSize, !oldWindowSizeESet));
@@ -1701,8 +1188,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetWindowSize() {
-		int oldWindowSize = windowSize;
-		boolean oldWindowSizeESet = windowSizeESet;
+		final int oldWindowSize = windowSize;
+		final boolean oldWindowSizeESet = windowSizeESet;
 		windowSize = WINDOW_SIZE_EDEFAULT;
 		windowSizeESet = false;
 		if (eNotificationRequired())
@@ -1735,9 +1222,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setWindowSizeUnits(TimePeriod newWindowSizeUnits) {
-		TimePeriod oldWindowSizeUnits = windowSizeUnits;
+		final TimePeriod oldWindowSizeUnits = windowSizeUnits;
 		windowSizeUnits = newWindowSizeUnits == null ? WINDOW_SIZE_UNITS_EDEFAULT : newWindowSizeUnits;
-		boolean oldWindowSizeUnitsESet = windowSizeUnitsESet;
+		final boolean oldWindowSizeUnitsESet = windowSizeUnitsESet;
 		windowSizeUnitsESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_SIZE_UNITS, oldWindowSizeUnits, windowSizeUnits, !oldWindowSizeUnitsESet));
@@ -1750,8 +1237,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetWindowSizeUnits() {
-		TimePeriod oldWindowSizeUnits = windowSizeUnits;
-		boolean oldWindowSizeUnitsESet = windowSizeUnitsESet;
+		final TimePeriod oldWindowSizeUnits = windowSizeUnits;
+		final boolean oldWindowSizeUnitsESet = windowSizeUnitsESet;
 		windowSizeUnits = WINDOW_SIZE_UNITS_EDEFAULT;
 		windowSizeUnitsESet = false;
 		if (eNotificationRequired())
@@ -1785,7 +1272,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setWindowFlex(int newWindowFlex) {
-		int oldWindowFlex = windowFlex;
+		final int oldWindowFlex = windowFlex;
 		windowFlex = newWindowFlex;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_FLEX, oldWindowFlex, windowFlex));
@@ -1808,7 +1295,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setWindowFlexUnits(TimePeriod newWindowFlexUnits) {
-		TimePeriod oldWindowFlexUnits = windowFlexUnits;
+		final TimePeriod oldWindowFlexUnits = windowFlexUnits;
 		windowFlexUnits = newWindowFlexUnits == null ? WINDOW_FLEX_UNITS_EDEFAULT : newWindowFlexUnits;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_FLEX_UNITS, oldWindowFlexUnits, windowFlexUnits));
@@ -1821,7 +1308,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
-			InternalEObject oldPort = (InternalEObject)port;
+			final InternalEObject oldPort = (InternalEObject)port;
 			port = (Port)eResolveProxy(oldPort);
 			if (port != oldPort) {
 				if (eNotificationRequired())
@@ -1845,7 +1332,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setPort(Port newPort) {
-		Port oldPort = port;
+		final Port oldPort = port;
 		port = newPort;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT, oldPort, port));
@@ -1859,7 +1346,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public T getContract() {
 		if (contract != null && contract.eIsProxy()) {
-			InternalEObject oldContract = (InternalEObject)contract;
+			final InternalEObject oldContract = (InternalEObject)contract;
 			contract = (T)eResolveProxy(oldContract);
 			if (contract != oldContract) {
 				if (eNotificationRequired())
@@ -1884,9 +1371,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setContract(T newContract) {
-		T oldContract = contract;
+		final T oldContract = contract;
 		contract = newContract;
-		boolean oldContractESet = contractESet;
+		final boolean oldContractESet = contractESet;
 		contractESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CONTRACT, oldContract, contract, !oldContractESet));
@@ -1899,8 +1386,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetContract() {
-		T oldContract = contract;
-		boolean oldContractESet = contractESet;
+		final T oldContract = contract;
+		final boolean oldContractESet = contractESet;
 		contract = null;
 		contractESet = false;
 		if (eNotificationRequired())
@@ -1934,9 +1421,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setCounterparty(String newCounterparty) {
-		String oldCounterparty = counterparty;
+		final String oldCounterparty = counterparty;
 		counterparty = newCounterparty;
-		boolean oldCounterpartyESet = counterpartyESet;
+		final boolean oldCounterpartyESet = counterpartyESet;
 		counterpartyESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__COUNTERPARTY, oldCounterparty, counterparty, !oldCounterpartyESet));
@@ -1949,8 +1436,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetCounterparty() {
-		String oldCounterparty = counterparty;
-		boolean oldCounterpartyESet = counterpartyESet;
+		final String oldCounterparty = counterparty;
+		final boolean oldCounterpartyESet = counterpartyESet;
 		counterparty = COUNTERPARTY_EDEFAULT;
 		counterpartyESet = false;
 		if (eNotificationRequired())
@@ -1984,9 +1471,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setCn(String newCn) {
-		String oldCn = cn;
+		final String oldCn = cn;
 		cn = newCn;
-		boolean oldCnESet = cnESet;
+		final boolean oldCnESet = cnESet;
 		cnESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CN, oldCn, cn, !oldCnESet));
@@ -1999,8 +1486,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetCn() {
-		String oldCn = cn;
-		boolean oldCnESet = cnESet;
+		final String oldCn = cn;
+		final boolean oldCnESet = cnESet;
 		cn = CN_EDEFAULT;
 		cnESet = false;
 		if (eNotificationRequired())
@@ -2032,9 +1519,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setDuration(int newDuration) {
-		int oldDuration = duration;
+		final int oldDuration = duration;
 		duration = newDuration;
-		boolean oldDurationESet = durationESet;
+		final boolean oldDurationESet = durationESet;
 		durationESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__DURATION, oldDuration, duration, !oldDurationESet));
@@ -2046,8 +1533,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetDuration() {
-		int oldDuration = duration;
-		boolean oldDurationESet = durationESet;
+		final int oldDuration = duration;
+		final boolean oldDurationESet = durationESet;
 		duration = DURATION_EDEFAULT;
 		durationESet = false;
 		if (eNotificationRequired())
@@ -2080,9 +1567,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setVolumeLimitsUnit(VolumeUnits newVolumeLimitsUnit) {
-		VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
+		final VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
 		volumeLimitsUnit = newVolumeLimitsUnit == null ? VOLUME_LIMITS_UNIT_EDEFAULT : newVolumeLimitsUnit;
-		boolean oldVolumeLimitsUnitESet = volumeLimitsUnitESet;
+		final boolean oldVolumeLimitsUnitESet = volumeLimitsUnitESet;
 		volumeLimitsUnitESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VOLUME_LIMITS_UNIT, oldVolumeLimitsUnit, volumeLimitsUnit, !oldVolumeLimitsUnitESet));
@@ -2095,8 +1582,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetVolumeLimitsUnit() {
-		VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
-		boolean oldVolumeLimitsUnitESet = volumeLimitsUnitESet;
+		final VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
+		final boolean oldVolumeLimitsUnitESet = volumeLimitsUnitESet;
 		volumeLimitsUnit = VOLUME_LIMITS_UNIT_EDEFAULT;
 		volumeLimitsUnitESet = false;
 		if (eNotificationRequired())
@@ -2128,9 +1615,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setMinQuantity(int newMinQuantity) {
-		int oldMinQuantity = minQuantity;
+		final int oldMinQuantity = minQuantity;
 		minQuantity = newMinQuantity;
-		boolean oldMinQuantityESet = minQuantityESet;
+		final boolean oldMinQuantityESet = minQuantityESet;
 		minQuantityESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MIN_QUANTITY, oldMinQuantity, minQuantity, !oldMinQuantityESet));
@@ -2142,8 +1629,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetMinQuantity() {
-		int oldMinQuantity = minQuantity;
-		boolean oldMinQuantityESet = minQuantityESet;
+		final int oldMinQuantity = minQuantity;
+		final boolean oldMinQuantityESet = minQuantityESet;
 		minQuantity = MIN_QUANTITY_EDEFAULT;
 		minQuantityESet = false;
 		if (eNotificationRequired())
@@ -2174,9 +1661,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setMaxQuantity(int newMaxQuantity) {
-		int oldMaxQuantity = maxQuantity;
+		final int oldMaxQuantity = maxQuantity;
 		maxQuantity = newMaxQuantity;
-		boolean oldMaxQuantityESet = maxQuantityESet;
+		final boolean oldMaxQuantityESet = maxQuantityESet;
 		maxQuantityESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MAX_QUANTITY, oldMaxQuantity, maxQuantity, !oldMaxQuantityESet));
@@ -2188,8 +1675,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetMaxQuantity() {
-		int oldMaxQuantity = maxQuantity;
-		boolean oldMaxQuantityESet = maxQuantityESet;
+		final int oldMaxQuantity = maxQuantity;
+		final boolean oldMaxQuantityESet = maxQuantityESet;
 		maxQuantity = MAX_QUANTITY_EDEFAULT;
 		maxQuantityESet = false;
 		if (eNotificationRequired())
@@ -2222,9 +1709,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setOperationalTolerance(double newOperationalTolerance) {
-		double oldOperationalTolerance = operationalTolerance;
+		final double oldOperationalTolerance = operationalTolerance;
 		operationalTolerance = newOperationalTolerance;
-		boolean oldOperationalToleranceESet = operationalToleranceESet;
+		final boolean oldOperationalToleranceESet = operationalToleranceESet;
 		operationalToleranceESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__OPERATIONAL_TOLERANCE, oldOperationalTolerance, operationalTolerance, !oldOperationalToleranceESet));
@@ -2237,8 +1724,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetOperationalTolerance() {
-		double oldOperationalTolerance = operationalTolerance;
-		boolean oldOperationalToleranceESet = operationalToleranceESet;
+		final double oldOperationalTolerance = operationalTolerance;
+		final boolean oldOperationalToleranceESet = operationalToleranceESet;
 		operationalTolerance = OPERATIONAL_TOLERANCE_EDEFAULT;
 		operationalToleranceESet = false;
 		if (eNotificationRequired())
@@ -2272,9 +1759,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setFullCargoLot(boolean newFullCargoLot) {
-		boolean oldFullCargoLot = fullCargoLot;
+		final boolean oldFullCargoLot = fullCargoLot;
 		fullCargoLot = newFullCargoLot;
-		boolean oldFullCargoLotESet = fullCargoLotESet;
+		final boolean oldFullCargoLotESet = fullCargoLotESet;
 		fullCargoLotESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__FULL_CARGO_LOT, oldFullCargoLot, fullCargoLot, !oldFullCargoLotESet));
@@ -2287,8 +1774,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetFullCargoLot() {
-		boolean oldFullCargoLot = fullCargoLot;
-		boolean oldFullCargoLotESet = fullCargoLotESet;
+		final boolean oldFullCargoLot = fullCargoLot;
+		final boolean oldFullCargoLotESet = fullCargoLotESet;
 		fullCargoLot = FULL_CARGO_LOT_EDEFAULT;
 		fullCargoLotESet = false;
 		if (eNotificationRequired())
@@ -2322,7 +1809,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setOptional(boolean newOptional) {
-		boolean oldOptional = optional;
+		final boolean oldOptional = optional;
 		optional = newOptional;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__OPTIONAL, oldOptional, optional));
@@ -2345,9 +1832,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setPriceExpression(String newPriceExpression) {
-		String oldPriceExpression = priceExpression;
+		final String oldPriceExpression = priceExpression;
 		priceExpression = newPriceExpression;
-		boolean oldPriceExpressionESet = priceExpressionESet;
+		final boolean oldPriceExpressionESet = priceExpressionESet;
 		priceExpressionESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PRICE_EXPRESSION, oldPriceExpression, priceExpression, !oldPriceExpressionESet));
@@ -2360,8 +1847,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetPriceExpression() {
-		String oldPriceExpression = priceExpression;
-		boolean oldPriceExpressionESet = priceExpressionESet;
+		final String oldPriceExpression = priceExpression;
+		final boolean oldPriceExpressionESet = priceExpressionESet;
 		priceExpression = PRICE_EXPRESSION_EDEFAULT;
 		priceExpressionESet = false;
 		if (eNotificationRequired())
@@ -2386,7 +1873,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public Cargo getCargo() {
 		if (cargo != null && cargo.eIsProxy()) {
-			InternalEObject oldCargo = (InternalEObject)cargo;
+			final InternalEObject oldCargo = (InternalEObject)cargo;
 			cargo = (Cargo)eResolveProxy(oldCargo);
 			if (cargo != oldCargo) {
 				if (eNotificationRequired())
@@ -2411,10 +1898,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated
 	 */
 	public NotificationChain basicSetCargo(Cargo newCargo, NotificationChain msgs) {
-		Cargo oldCargo = cargo;
+		final Cargo oldCargo = cargo;
 		cargo = newCargo;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CARGO, oldCargo, newCargo);
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CARGO, oldCargo, newCargo);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -2457,9 +1944,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setPricingEvent(PricingEvent newPricingEvent) {
-		PricingEvent oldPricingEvent = pricingEvent;
+		final PricingEvent oldPricingEvent = pricingEvent;
 		pricingEvent = newPricingEvent == null ? PRICING_EVENT_EDEFAULT : newPricingEvent;
-		boolean oldPricingEventESet = pricingEventESet;
+		final boolean oldPricingEventESet = pricingEventESet;
 		pricingEventESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PRICING_EVENT, oldPricingEvent, pricingEvent, !oldPricingEventESet));
@@ -2472,8 +1959,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetPricingEvent() {
-		PricingEvent oldPricingEvent = pricingEvent;
-		boolean oldPricingEventESet = pricingEventESet;
+		final PricingEvent oldPricingEvent = pricingEvent;
+		final boolean oldPricingEventESet = pricingEventESet;
 		pricingEvent = PRICING_EVENT_EDEFAULT;
 		pricingEventESet = false;
 		if (eNotificationRequired())
@@ -2507,9 +1994,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setPricingDate(LocalDate newPricingDate) {
-		LocalDate oldPricingDate = pricingDate;
+		final LocalDate oldPricingDate = pricingDate;
 		pricingDate = newPricingDate;
-		boolean oldPricingDateESet = pricingDateESet;
+		final boolean oldPricingDateESet = pricingDateESet;
 		pricingDateESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PRICING_DATE, oldPricingDate, pricingDate, !oldPricingDateESet));
@@ -2522,8 +2009,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetPricingDate() {
-		LocalDate oldPricingDate = pricingDate;
-		boolean oldPricingDateESet = pricingDateESet;
+		final LocalDate oldPricingDate = pricingDate;
+		final boolean oldPricingDateESet = pricingDateESet;
 		pricingDate = PRICING_DATE_EDEFAULT;
 		pricingDateESet = false;
 		if (eNotificationRequired())
@@ -2557,7 +2044,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setNotes(String newNotes) {
-		String oldNotes = notes;
+		final String oldNotes = notes;
 		notes = newNotes;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__NOTES, oldNotes, notes));
@@ -2580,9 +2067,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setDivertible(boolean newDivertible) {
-		boolean oldDivertible = divertible;
+		final boolean oldDivertible = divertible;
 		divertible = newDivertible;
-		boolean oldDivertibleESet = divertibleESet;
+		final boolean oldDivertibleESet = divertibleESet;
 		divertibleESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__DIVERTIBLE, oldDivertible, divertible, !oldDivertibleESet));
@@ -2595,8 +2082,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetDivertible() {
-		boolean oldDivertible = divertible;
-		boolean oldDivertibleESet = divertibleESet;
+		final boolean oldDivertible = divertible;
+		final boolean oldDivertibleESet = divertibleESet;
 		divertible = DIVERTIBLE_EDEFAULT;
 		divertibleESet = false;
 		if (eNotificationRequired())
@@ -2630,9 +2117,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setShippingDaysRestriction(int newShippingDaysRestriction) {
-		int oldShippingDaysRestriction = shippingDaysRestriction;
+		final int oldShippingDaysRestriction = shippingDaysRestriction;
 		shippingDaysRestriction = newShippingDaysRestriction;
-		boolean oldShippingDaysRestrictionESet = shippingDaysRestrictionESet;
+		final boolean oldShippingDaysRestrictionESet = shippingDaysRestrictionESet;
 		shippingDaysRestrictionESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION, oldShippingDaysRestriction, shippingDaysRestriction, !oldShippingDaysRestrictionESet));
@@ -2645,8 +2132,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetShippingDaysRestriction() {
-		int oldShippingDaysRestriction = shippingDaysRestriction;
-		boolean oldShippingDaysRestrictionESet = shippingDaysRestrictionESet;
+		final int oldShippingDaysRestriction = shippingDaysRestriction;
+		final boolean oldShippingDaysRestrictionESet = shippingDaysRestrictionESet;
 		shippingDaysRestriction = SHIPPING_DAYS_RESTRICTION_EDEFAULT;
 		shippingDaysRestrictionESet = false;
 		if (eNotificationRequired())
@@ -2671,7 +2158,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
-			InternalEObject oldEntity = (InternalEObject)entity;
+			final InternalEObject oldEntity = (InternalEObject)entity;
 			entity = (BaseLegalEntity)eResolveProxy(oldEntity);
 			if (entity != oldEntity) {
 				if (eNotificationRequired())
@@ -2697,9 +2184,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setEntity(BaseLegalEntity newEntity) {
-		BaseLegalEntity oldEntity = entity;
+		final BaseLegalEntity oldEntity = entity;
 		entity = newEntity;
-		boolean oldEntityESet = entityESet;
+		final boolean oldEntityESet = entityESet;
 		entityESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__ENTITY, oldEntity, entity, !oldEntityESet));
@@ -2712,8 +2199,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetEntity() {
-		BaseLegalEntity oldEntity = entity;
-		boolean oldEntityESet = entityESet;
+		final BaseLegalEntity oldEntity = entity;
+		final boolean oldEntityESet = entityESet;
 		entity = null;
 		entityESet = false;
 		if (eNotificationRequired())
@@ -2760,9 +2247,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setRestrictedContractsArePermissive(boolean newRestrictedContractsArePermissive) {
-		boolean oldRestrictedContractsArePermissive = restrictedContractsArePermissive;
+		final boolean oldRestrictedContractsArePermissive = restrictedContractsArePermissive;
 		restrictedContractsArePermissive = newRestrictedContractsArePermissive;
-		boolean oldRestrictedContractsArePermissiveESet = restrictedContractsArePermissiveESet;
+		final boolean oldRestrictedContractsArePermissiveESet = restrictedContractsArePermissiveESet;
 		restrictedContractsArePermissiveESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE, oldRestrictedContractsArePermissive, restrictedContractsArePermissive, !oldRestrictedContractsArePermissiveESet));
@@ -2775,8 +2262,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetRestrictedContractsArePermissive() {
-		boolean oldRestrictedContractsArePermissive = restrictedContractsArePermissive;
-		boolean oldRestrictedContractsArePermissiveESet = restrictedContractsArePermissiveESet;
+		final boolean oldRestrictedContractsArePermissive = restrictedContractsArePermissive;
+		final boolean oldRestrictedContractsArePermissiveESet = restrictedContractsArePermissiveESet;
 		restrictedContractsArePermissive = RESTRICTED_CONTRACTS_ARE_PERMISSIVE_EDEFAULT;
 		restrictedContractsArePermissiveESet = false;
 		if (eNotificationRequired())
@@ -2810,7 +2297,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setRestrictedContractsOverride(boolean newRestrictedContractsOverride) {
-		boolean oldRestrictedContractsOverride = restrictedContractsOverride;
+		final boolean oldRestrictedContractsOverride = restrictedContractsOverride;
 		restrictedContractsOverride = newRestrictedContractsOverride;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_CONTRACTS_OVERRIDE, oldRestrictedContractsOverride, restrictedContractsOverride));
@@ -2846,9 +2333,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setRestrictedPortsArePermissive(boolean newRestrictedPortsArePermissive) {
-		boolean oldRestrictedPortsArePermissive = restrictedPortsArePermissive;
+		final boolean oldRestrictedPortsArePermissive = restrictedPortsArePermissive;
 		restrictedPortsArePermissive = newRestrictedPortsArePermissive;
-		boolean oldRestrictedPortsArePermissiveESet = restrictedPortsArePermissiveESet;
+		final boolean oldRestrictedPortsArePermissiveESet = restrictedPortsArePermissiveESet;
 		restrictedPortsArePermissiveESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE, oldRestrictedPortsArePermissive, restrictedPortsArePermissive, !oldRestrictedPortsArePermissiveESet));
@@ -2861,8 +2348,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetRestrictedPortsArePermissive() {
-		boolean oldRestrictedPortsArePermissive = restrictedPortsArePermissive;
-		boolean oldRestrictedPortsArePermissiveESet = restrictedPortsArePermissiveESet;
+		final boolean oldRestrictedPortsArePermissive = restrictedPortsArePermissive;
+		final boolean oldRestrictedPortsArePermissiveESet = restrictedPortsArePermissiveESet;
 		restrictedPortsArePermissive = RESTRICTED_PORTS_ARE_PERMISSIVE_EDEFAULT;
 		restrictedPortsArePermissiveESet = false;
 		if (eNotificationRequired())
@@ -2896,7 +2383,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setRestrictedPortsOverride(boolean newRestrictedPortsOverride) {
-		boolean oldRestrictedPortsOverride = restrictedPortsOverride;
+		final boolean oldRestrictedPortsOverride = restrictedPortsOverride;
 		restrictedPortsOverride = newRestrictedPortsOverride;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_PORTS_OVERRIDE, oldRestrictedPortsOverride, restrictedPortsOverride));
@@ -2932,7 +2419,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setRestrictedSlotsArePermissive(boolean newRestrictedSlotsArePermissive) {
-		boolean oldRestrictedSlotsArePermissive = restrictedSlotsArePermissive;
+		final boolean oldRestrictedSlotsArePermissive = restrictedSlotsArePermissive;
 		restrictedSlotsArePermissive = newRestrictedSlotsArePermissive;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE, oldRestrictedSlotsArePermissive, restrictedSlotsArePermissive));
@@ -2968,9 +2455,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setRestrictedVesselsArePermissive(boolean newRestrictedVesselsArePermissive) {
-		boolean oldRestrictedVesselsArePermissive = restrictedVesselsArePermissive;
+		final boolean oldRestrictedVesselsArePermissive = restrictedVesselsArePermissive;
 		restrictedVesselsArePermissive = newRestrictedVesselsArePermissive;
-		boolean oldRestrictedVesselsArePermissiveESet = restrictedVesselsArePermissiveESet;
+		final boolean oldRestrictedVesselsArePermissiveESet = restrictedVesselsArePermissiveESet;
 		restrictedVesselsArePermissiveESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE, oldRestrictedVesselsArePermissive, restrictedVesselsArePermissive, !oldRestrictedVesselsArePermissiveESet));
@@ -2983,8 +2470,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetRestrictedVesselsArePermissive() {
-		boolean oldRestrictedVesselsArePermissive = restrictedVesselsArePermissive;
-		boolean oldRestrictedVesselsArePermissiveESet = restrictedVesselsArePermissiveESet;
+		final boolean oldRestrictedVesselsArePermissive = restrictedVesselsArePermissive;
+		final boolean oldRestrictedVesselsArePermissiveESet = restrictedVesselsArePermissiveESet;
 		restrictedVesselsArePermissive = RESTRICTED_VESSELS_ARE_PERMISSIVE_EDEFAULT;
 		restrictedVesselsArePermissiveESet = false;
 		if (eNotificationRequired())
@@ -3018,7 +2505,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setRestrictedVesselsOverride(boolean newRestrictedVesselsOverride) {
-		boolean oldRestrictedVesselsOverride = restrictedVesselsOverride;
+		final boolean oldRestrictedVesselsOverride = restrictedVesselsOverride;
 		restrictedVesselsOverride = newRestrictedVesselsOverride;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_VESSELS_OVERRIDE, oldRestrictedVesselsOverride, restrictedVesselsOverride));
@@ -3041,7 +2528,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setHedges(int newHedges) {
-		int oldHedges = hedges;
+		final int oldHedges = hedges;
 		hedges = newHedges;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__HEDGES, oldHedges, hedges));
@@ -3063,7 +2550,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setMiscCosts(int newMiscCosts) {
-		int oldMiscCosts = miscCosts;
+		final int oldMiscCosts = miscCosts;
 		miscCosts = newMiscCosts;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MISC_COSTS, oldMiscCosts, miscCosts));
@@ -3086,9 +2573,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setCancellationExpression(String newCancellationExpression) {
-		String oldCancellationExpression = cancellationExpression;
+		final String oldCancellationExpression = cancellationExpression;
 		cancellationExpression = newCancellationExpression;
-		boolean oldCancellationExpressionESet = cancellationExpressionESet;
+		final boolean oldCancellationExpressionESet = cancellationExpressionESet;
 		cancellationExpressionESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CANCELLATION_EXPRESSION, oldCancellationExpression, cancellationExpression, !oldCancellationExpressionESet));
@@ -3101,8 +2588,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetCancellationExpression() {
-		String oldCancellationExpression = cancellationExpression;
-		boolean oldCancellationExpressionESet = cancellationExpressionESet;
+		final String oldCancellationExpression = cancellationExpression;
+		final boolean oldCancellationExpressionESet = cancellationExpressionESet;
 		cancellationExpression = CANCELLATION_EXPRESSION_EDEFAULT;
 		cancellationExpressionESet = false;
 		if (eNotificationRequired())
@@ -3127,7 +2614,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public Vessel getNominatedVessel() {
 		if (nominatedVessel != null && nominatedVessel.eIsProxy()) {
-			InternalEObject oldNominatedVessel = (InternalEObject)nominatedVessel;
+			final InternalEObject oldNominatedVessel = (InternalEObject)nominatedVessel;
 			nominatedVessel = (Vessel)eResolveProxy(oldNominatedVessel);
 			if (nominatedVessel != oldNominatedVessel) {
 				if (eNotificationRequired())
@@ -3153,7 +2640,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setNominatedVessel(Vessel newNominatedVessel) {
-		Vessel oldNominatedVessel = nominatedVessel;
+		final Vessel oldNominatedVessel = nominatedVessel;
 		nominatedVessel = newNominatedVessel;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__NOMINATED_VESSEL, oldNominatedVessel, nominatedVessel));
@@ -3176,742 +2663,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setLocked(boolean newLocked) {
-		boolean oldLocked = locked;
+		final boolean oldLocked = locked;
 		locked = newLocked;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__LOCKED, oldLocked, locked));
-	}
-
-								/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public LocalDate getWindowNominationDate() {
-		return windowNominationDate;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setWindowNominationDate(LocalDate newWindowNominationDate) {
-		LocalDate oldWindowNominationDate = windowNominationDate;
-		windowNominationDate = newWindowNominationDate;
-		boolean oldWindowNominationDateESet = windowNominationDateESet;
-		windowNominationDateESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_NOMINATION_DATE, oldWindowNominationDate, windowNominationDate, !oldWindowNominationDateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetWindowNominationDate() {
-		LocalDate oldWindowNominationDate = windowNominationDate;
-		boolean oldWindowNominationDateESet = windowNominationDateESet;
-		windowNominationDate = WINDOW_NOMINATION_DATE_EDEFAULT;
-		windowNominationDateESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__WINDOW_NOMINATION_DATE, oldWindowNominationDate, WINDOW_NOMINATION_DATE_EDEFAULT, oldWindowNominationDateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetWindowNominationDate() {
-		return windowNominationDateESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isWindowNominationIsDone() {
-		return windowNominationIsDone;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setWindowNominationIsDone(boolean newWindowNominationIsDone) {
-		boolean oldWindowNominationIsDone = windowNominationIsDone;
-		windowNominationIsDone = newWindowNominationIsDone;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE, oldWindowNominationIsDone, windowNominationIsDone));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isWindowNominationCounterparty() {
-		return windowNominationCounterparty;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setWindowNominationCounterparty(boolean newWindowNominationCounterparty) {
-		boolean oldWindowNominationCounterparty = windowNominationCounterparty;
-		windowNominationCounterparty = newWindowNominationCounterparty;
-		boolean oldWindowNominationCounterpartyESet = windowNominationCounterpartyESet;
-		windowNominationCounterpartyESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_NOMINATION_COUNTERPARTY, oldWindowNominationCounterparty, windowNominationCounterparty, !oldWindowNominationCounterpartyESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetWindowNominationCounterparty() {
-		boolean oldWindowNominationCounterparty = windowNominationCounterparty;
-		boolean oldWindowNominationCounterpartyESet = windowNominationCounterpartyESet;
-		windowNominationCounterparty = WINDOW_NOMINATION_COUNTERPARTY_EDEFAULT;
-		windowNominationCounterpartyESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__WINDOW_NOMINATION_COUNTERPARTY, oldWindowNominationCounterparty, WINDOW_NOMINATION_COUNTERPARTY_EDEFAULT, oldWindowNominationCounterpartyESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetWindowNominationCounterparty() {
-		return windowNominationCounterpartyESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getWindowNominationComment() {
-		return windowNominationComment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setWindowNominationComment(String newWindowNominationComment) {
-		String oldWindowNominationComment = windowNominationComment;
-		windowNominationComment = newWindowNominationComment;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_NOMINATION_COMMENT, oldWindowNominationComment, windowNominationComment));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public LocalDate getVolumeNominationDate() {
-		return volumeNominationDate;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVolumeNominationDate(LocalDate newVolumeNominationDate) {
-		LocalDate oldVolumeNominationDate = volumeNominationDate;
-		volumeNominationDate = newVolumeNominationDate;
-		boolean oldVolumeNominationDateESet = volumeNominationDateESet;
-		volumeNominationDateESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VOLUME_NOMINATION_DATE, oldVolumeNominationDate, volumeNominationDate, !oldVolumeNominationDateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetVolumeNominationDate() {
-		LocalDate oldVolumeNominationDate = volumeNominationDate;
-		boolean oldVolumeNominationDateESet = volumeNominationDateESet;
-		volumeNominationDate = VOLUME_NOMINATION_DATE_EDEFAULT;
-		volumeNominationDateESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__VOLUME_NOMINATION_DATE, oldVolumeNominationDate, VOLUME_NOMINATION_DATE_EDEFAULT, oldVolumeNominationDateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetVolumeNominationDate() {
-		return volumeNominationDateESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isVolumeNominationDone() {
-		return volumeNominationDone;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVolumeNominationDone(boolean newVolumeNominationDone) {
-		boolean oldVolumeNominationDone = volumeNominationDone;
-		volumeNominationDone = newVolumeNominationDone;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VOLUME_NOMINATION_DONE, oldVolumeNominationDone, volumeNominationDone));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isVolumeNominationCounterparty() {
-		return volumeNominationCounterparty;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVolumeNominationCounterparty(boolean newVolumeNominationCounterparty) {
-		boolean oldVolumeNominationCounterparty = volumeNominationCounterparty;
-		volumeNominationCounterparty = newVolumeNominationCounterparty;
-		boolean oldVolumeNominationCounterpartyESet = volumeNominationCounterpartyESet;
-		volumeNominationCounterpartyESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VOLUME_NOMINATION_COUNTERPARTY, oldVolumeNominationCounterparty, volumeNominationCounterparty, !oldVolumeNominationCounterpartyESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetVolumeNominationCounterparty() {
-		boolean oldVolumeNominationCounterparty = volumeNominationCounterparty;
-		boolean oldVolumeNominationCounterpartyESet = volumeNominationCounterpartyESet;
-		volumeNominationCounterparty = VOLUME_NOMINATION_COUNTERPARTY_EDEFAULT;
-		volumeNominationCounterpartyESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__VOLUME_NOMINATION_COUNTERPARTY, oldVolumeNominationCounterparty, VOLUME_NOMINATION_COUNTERPARTY_EDEFAULT, oldVolumeNominationCounterpartyESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetVolumeNominationCounterparty() {
-		return volumeNominationCounterpartyESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getVolumeNominationComment() {
-		return volumeNominationComment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVolumeNominationComment(String newVolumeNominationComment) {
-		String oldVolumeNominationComment = volumeNominationComment;
-		volumeNominationComment = newVolumeNominationComment;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VOLUME_NOMINATION_COMMENT, oldVolumeNominationComment, volumeNominationComment));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public LocalDate getVesselNominationDate() {
-		return vesselNominationDate;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVesselNominationDate(LocalDate newVesselNominationDate) {
-		LocalDate oldVesselNominationDate = vesselNominationDate;
-		vesselNominationDate = newVesselNominationDate;
-		boolean oldVesselNominationDateESet = vesselNominationDateESet;
-		vesselNominationDateESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VESSEL_NOMINATION_DATE, oldVesselNominationDate, vesselNominationDate, !oldVesselNominationDateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetVesselNominationDate() {
-		LocalDate oldVesselNominationDate = vesselNominationDate;
-		boolean oldVesselNominationDateESet = vesselNominationDateESet;
-		vesselNominationDate = VESSEL_NOMINATION_DATE_EDEFAULT;
-		vesselNominationDateESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__VESSEL_NOMINATION_DATE, oldVesselNominationDate, VESSEL_NOMINATION_DATE_EDEFAULT, oldVesselNominationDateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetVesselNominationDate() {
-		return vesselNominationDateESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isVesselNominationDone() {
-		return vesselNominationDone;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVesselNominationDone(boolean newVesselNominationDone) {
-		boolean oldVesselNominationDone = vesselNominationDone;
-		vesselNominationDone = newVesselNominationDone;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VESSEL_NOMINATION_DONE, oldVesselNominationDone, vesselNominationDone));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isVesselNominationCounterparty() {
-		return vesselNominationCounterparty;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVesselNominationCounterparty(boolean newVesselNominationCounterparty) {
-		boolean oldVesselNominationCounterparty = vesselNominationCounterparty;
-		vesselNominationCounterparty = newVesselNominationCounterparty;
-		boolean oldVesselNominationCounterpartyESet = vesselNominationCounterpartyESet;
-		vesselNominationCounterpartyESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VESSEL_NOMINATION_COUNTERPARTY, oldVesselNominationCounterparty, vesselNominationCounterparty, !oldVesselNominationCounterpartyESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetVesselNominationCounterparty() {
-		boolean oldVesselNominationCounterparty = vesselNominationCounterparty;
-		boolean oldVesselNominationCounterpartyESet = vesselNominationCounterpartyESet;
-		vesselNominationCounterparty = VESSEL_NOMINATION_COUNTERPARTY_EDEFAULT;
-		vesselNominationCounterpartyESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__VESSEL_NOMINATION_COUNTERPARTY, oldVesselNominationCounterparty, VESSEL_NOMINATION_COUNTERPARTY_EDEFAULT, oldVesselNominationCounterpartyESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetVesselNominationCounterparty() {
-		return vesselNominationCounterpartyESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getVesselNominationComment() {
-		return vesselNominationComment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVesselNominationComment(String newVesselNominationComment) {
-		String oldVesselNominationComment = vesselNominationComment;
-		vesselNominationComment = newVesselNominationComment;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VESSEL_NOMINATION_COMMENT, oldVesselNominationComment, vesselNominationComment));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public LocalDate getPortNominationDate() {
-		return portNominationDate;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPortNominationDate(LocalDate newPortNominationDate) {
-		LocalDate oldPortNominationDate = portNominationDate;
-		portNominationDate = newPortNominationDate;
-		boolean oldPortNominationDateESet = portNominationDateESet;
-		portNominationDateESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_NOMINATION_DATE, oldPortNominationDate, portNominationDate, !oldPortNominationDateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetPortNominationDate() {
-		LocalDate oldPortNominationDate = portNominationDate;
-		boolean oldPortNominationDateESet = portNominationDateESet;
-		portNominationDate = PORT_NOMINATION_DATE_EDEFAULT;
-		portNominationDateESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__PORT_NOMINATION_DATE, oldPortNominationDate, PORT_NOMINATION_DATE_EDEFAULT, oldPortNominationDateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetPortNominationDate() {
-		return portNominationDateESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isPortNominationDone() {
-		return portNominationDone;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPortNominationDone(boolean newPortNominationDone) {
-		boolean oldPortNominationDone = portNominationDone;
-		portNominationDone = newPortNominationDone;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_NOMINATION_DONE, oldPortNominationDone, portNominationDone));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isPortNominationCounterparty() {
-		return portNominationCounterparty;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPortNominationCounterparty(boolean newPortNominationCounterparty) {
-		boolean oldPortNominationCounterparty = portNominationCounterparty;
-		portNominationCounterparty = newPortNominationCounterparty;
-		boolean oldPortNominationCounterpartyESet = portNominationCounterpartyESet;
-		portNominationCounterpartyESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_NOMINATION_COUNTERPARTY, oldPortNominationCounterparty, portNominationCounterparty, !oldPortNominationCounterpartyESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetPortNominationCounterparty() {
-		boolean oldPortNominationCounterparty = portNominationCounterparty;
-		boolean oldPortNominationCounterpartyESet = portNominationCounterpartyESet;
-		portNominationCounterparty = PORT_NOMINATION_COUNTERPARTY_EDEFAULT;
-		portNominationCounterpartyESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__PORT_NOMINATION_COUNTERPARTY, oldPortNominationCounterparty, PORT_NOMINATION_COUNTERPARTY_EDEFAULT, oldPortNominationCounterpartyESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetPortNominationCounterparty() {
-		return portNominationCounterpartyESet;
-	}
-
-								/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getPortNominationComment() {
-		return portNominationComment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPortNominationComment(String newPortNominationComment) {
-		String oldPortNominationComment = portNominationComment;
-		portNominationComment = newPortNominationComment;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_NOMINATION_COMMENT, oldPortNominationComment, portNominationComment));
-	}
-
-	
-
-								/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public LocalDate getPortLoadNominationDate() {
-		return portLoadNominationDate;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPortLoadNominationDate(LocalDate newPortLoadNominationDate) {
-		LocalDate oldPortLoadNominationDate = portLoadNominationDate;
-		portLoadNominationDate = newPortLoadNominationDate;
-		boolean oldPortLoadNominationDateESet = portLoadNominationDateESet;
-		portLoadNominationDateESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_LOAD_NOMINATION_DATE, oldPortLoadNominationDate, portLoadNominationDate, !oldPortLoadNominationDateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetPortLoadNominationDate() {
-		LocalDate oldPortLoadNominationDate = portLoadNominationDate;
-		boolean oldPortLoadNominationDateESet = portLoadNominationDateESet;
-		portLoadNominationDate = PORT_LOAD_NOMINATION_DATE_EDEFAULT;
-		portLoadNominationDateESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__PORT_LOAD_NOMINATION_DATE, oldPortLoadNominationDate, PORT_LOAD_NOMINATION_DATE_EDEFAULT, oldPortLoadNominationDateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetPortLoadNominationDate() {
-		return portLoadNominationDateESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isPortLoadNominationDone() {
-		return portLoadNominationDone;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPortLoadNominationDone(boolean newPortLoadNominationDone) {
-		boolean oldPortLoadNominationDone = portLoadNominationDone;
-		portLoadNominationDone = newPortLoadNominationDone;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_LOAD_NOMINATION_DONE, oldPortLoadNominationDone, portLoadNominationDone));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isPortLoadNominationCounterparty() {
-		return portLoadNominationCounterparty;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPortLoadNominationCounterparty(boolean newPortLoadNominationCounterparty) {
-		boolean oldPortLoadNominationCounterparty = portLoadNominationCounterparty;
-		portLoadNominationCounterparty = newPortLoadNominationCounterparty;
-		boolean oldPortLoadNominationCounterpartyESet = portLoadNominationCounterpartyESet;
-		portLoadNominationCounterpartyESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY, oldPortLoadNominationCounterparty, portLoadNominationCounterparty, !oldPortLoadNominationCounterpartyESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetPortLoadNominationCounterparty() {
-		boolean oldPortLoadNominationCounterparty = portLoadNominationCounterparty;
-		boolean oldPortLoadNominationCounterpartyESet = portLoadNominationCounterpartyESet;
-		portLoadNominationCounterparty = PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT;
-		portLoadNominationCounterpartyESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY, oldPortLoadNominationCounterparty, PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT, oldPortLoadNominationCounterpartyESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetPortLoadNominationCounterparty() {
-		return portLoadNominationCounterpartyESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getPortLoadNominationComment() {
-		return portLoadNominationComment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPortLoadNominationComment(String newPortLoadNominationComment) {
-		String oldPortLoadNominationComment = portLoadNominationComment;
-		portLoadNominationComment = newPortLoadNominationComment;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT, oldPortLoadNominationComment, portLoadNominationComment));
 	}
 
 								/**
@@ -3931,7 +2686,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setCancelled(boolean newCancelled) {
-		boolean oldCancelled = cancelled;
+		final boolean oldCancelled = cancelled;
 		cancelled = newCancelled;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CANCELLED, oldCancelled, cancelled));
@@ -3943,6 +2698,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * 
 	 * @generated NOT
 	 */
+	@Override
 	public int getSlotOrDelegateDuration() {
 		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__DURATION);
 	}
@@ -3953,6 +2709,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * 
 	 * @generated NOT
 	 */
+	@Override
 	public int getSlotOrDelegateMinQuantity() {
 		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__MIN_QUANTITY);
 	}
@@ -3963,6 +2720,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * 
 	 * @generated NOT
 	 */
+	@Override
 	public int getSlotOrDelegateMaxQuantity() {
 		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__MAX_QUANTITY);
 	}
@@ -3972,6 +2730,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public double getSlotOrDelegateOperationalTolerance() {
 		return (Double) eGetWithDefault(CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE);
 
@@ -3982,6 +2741,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public VolumeUnits getSlotOrDelegateVolumeLimitsUnit() {
 		return (VolumeUnits) eGetWithDefault(CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT);
 	}
@@ -3991,6 +2751,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public ZonedDateTime getWindowEndWithSlotOrPortTime() {
 		final ZonedDateTime startTime = getWindowStartWithSlotOrPortTime();
 		if (startTime == null) {
@@ -4005,6 +2766,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public ZonedDateTime getWindowEndWithSlotOrPortTimeWithFlex() {
 		ZonedDateTime endTime = getWindowEndWithSlotOrPortTime();
 		if (endTime == null) {
@@ -4012,7 +2774,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		}
 		final int slotFlex = getWindowFlex();
 		if (slotFlex > 0) {
-			TimePeriod p  = getWindowFlexUnits();
+			final TimePeriod p  = getWindowFlexUnits();
 			switch (p) {
 			case DAYS:
 				endTime = endTime.plusDays(slotFlex).minusHours(1);
@@ -4037,6 +2799,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * 
 	 * @generated NOT
 	 */
+	@Override
 	public ZonedDateTime getWindowStartWithSlotOrPortTime() {
 		final LocalDate wStart = getWindowStart();
 		if (wStart == null) {
@@ -4053,6 +2816,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * 
 	 * @generated NOT
 	 */
+	@Override
 	public ZonedDateTime getWindowStartWithSlotOrPortTimeWithFlex() {
 		ZonedDateTime startTime = getWindowStartWithSlotOrPortTime();
 		if (startTime == null) {
@@ -4060,7 +2824,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		}
 		final int slotFlex = getWindowFlex();
 		if (slotFlex < 0) {
-			TimePeriod p  = getWindowFlexUnits();
+			final TimePeriod p  = getWindowFlexUnits();
 			switch (p) {
 			case DAYS:
 				startTime = startTime.minusDays(slotFlex).plusHours(1);
@@ -4083,6 +2847,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public int getSlotOrDelegateWindowSize() {
 		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE);
 	}
@@ -4092,6 +2857,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public TimePeriod getSlotOrDelegateWindowSizeUnits() {
 		return (TimePeriod) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS);
 
@@ -4102,11 +2868,12 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public int getWindowSizeInHours() {
-		ZonedDateTime start = getWindowStartWithSlotOrPortTime();
+		final ZonedDateTime start = getWindowStartWithSlotOrPortTime();
 		ZonedDateTime end = start;
-		TimePeriod p  = getSlotOrDelegateWindowSizeUnits();
-		int windowSize = getSlotOrDelegateWindowSize();
+		final TimePeriod p  = getSlotOrDelegateWindowSizeUnits();
+		final int windowSize = getSlotOrDelegateWindowSize();
 		if (windowSize == 0) {
 			return 0;
 		}
@@ -4133,6 +2900,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public BaseLegalEntity getSlotOrDelegateEntity() {
 		return (BaseLegalEntity) eGetWithDefault(CargoPackage.Literals.SLOT__ENTITY);
 	}
@@ -4142,6 +2910,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public String getSlotOrDelegateCancellationExpression() {
 		return (String) eGetWithDefault(CargoPackage.Literals.SLOT__CANCELLATION_EXPRESSION);
 	}
@@ -4151,6 +2920,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public PricingEvent getSlotOrDelegatePricingEvent() {
 		return (PricingEvent) eGetWithDefault(CargoPackage.Literals.SLOT__PRICING_EVENT);
 	}
@@ -4160,6 +2930,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public ZonedDateTime getPricingDateAsDateTime() {
 		if (isSetPricingDate()) {
 			final LocalDate ld = getPricingDate();
@@ -4173,6 +2944,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	@Nullable
 	public SlotContractParams getSlotContractParams() {
 		return SlotContractParamsHelper.findSlotContractParams(this);
@@ -4183,6 +2955,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public String getSlotOrDelegateCounterparty() {
 		return (String) eGetWithDefault(CargoPackage.Literals.SLOT__COUNTERPARTY);
 	}
@@ -4192,6 +2965,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public String getSlotOrDelegateCN() {
 		return (String) eGetWithDefault(CargoPackage.Literals.SLOT__CN);
 	}
@@ -4201,15 +2975,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public LocalDate getSlotOrDelegateWindowNominationDate() {
-		return (LocalDate) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_NOMINATION_DATE);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
+	@Override
 	public boolean getSlotOrDelegateDivertible() {
 		return (Boolean) eGetWithDefault(CargoPackage.Literals.SLOT__DIVERTIBLE);
 	}
@@ -4219,89 +2985,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public int getSlotOrDelegateShippingDaysRestriction() {
 		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__SHIPPING_DAYS_RESTRICTION);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public LocalDate getSlotOrDelegatePortLoadNominationDate() {
-		return (LocalDate) eGetWithDefault(CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_DATE);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public LocalDate getSlotOrDelegateVesselNominationDate() {
-		return (LocalDate) eGetWithDefault(CargoPackage.Literals.SLOT__VESSEL_NOMINATION_DATE);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public LocalDate getSlotOrDelegateVolumeNominationDate() {
-		return (LocalDate) eGetWithDefault(CargoPackage.Literals.SLOT__VOLUME_NOMINATION_DATE);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public LocalDate getSlotOrDelegatePortNominationDate() {
-		return (LocalDate) eGetWithDefault(CargoPackage.Literals.SLOT__PORT_NOMINATION_DATE);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public boolean getSlotOrDelegateWindowNominationCounterparty() {
-		return (boolean) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_NOMINATION_COUNTERPARTY);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public boolean getSlotOrDelegateVesselNominationCounterparty() {
-		return (boolean) eGetWithDefault(CargoPackage.Literals.SLOT__VESSEL_NOMINATION_COUNTERPARTY);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public boolean getSlotOrDelegateVolumeNominationCounterparty() {
-		return (boolean) eGetWithDefault(CargoPackage.Literals.SLOT__VOLUME_NOMINATION_COUNTERPARTY);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public boolean getSlotOrDelegatePortNominationCounterparty() {
-		return (boolean) eGetWithDefault(CargoPackage.Literals.SLOT__PORT_NOMINATION_COUNTERPARTY);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public boolean getSlotOrDelegatePortLoadNominationCounterparty() {
-		return (boolean) eGetWithDefault(CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY);
 	}
 
 	/**
@@ -4388,12 +3074,13 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * 
 	 * @generated NOT
 	 */
+	@Override
 	public String getTimeZone(EAttribute attribute) {
 		final Port p = getPort();
 		if (p == null) {
 			return "UTC";
 		}
-		Location l = p.getLocation();
+		final Location l = p.getLocation();
 		if (l == null || l.getTimeZone() == null || l.getTimeZone().isEmpty()) {
 			return "UTC";
 		}
@@ -4526,46 +3213,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return basicGetNominatedVessel();
 			case CargoPackage.SLOT__LOCKED:
 				return isLocked();
-			case CargoPackage.SLOT__WINDOW_NOMINATION_DATE:
-				return getWindowNominationDate();
-			case CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE:
-				return isWindowNominationIsDone();
-			case CargoPackage.SLOT__WINDOW_NOMINATION_COUNTERPARTY:
-				return isWindowNominationCounterparty();
-			case CargoPackage.SLOT__WINDOW_NOMINATION_COMMENT:
-				return getWindowNominationComment();
-			case CargoPackage.SLOT__VOLUME_NOMINATION_DATE:
-				return getVolumeNominationDate();
-			case CargoPackage.SLOT__VOLUME_NOMINATION_DONE:
-				return isVolumeNominationDone();
-			case CargoPackage.SLOT__VOLUME_NOMINATION_COUNTERPARTY:
-				return isVolumeNominationCounterparty();
-			case CargoPackage.SLOT__VOLUME_NOMINATION_COMMENT:
-				return getVolumeNominationComment();
-			case CargoPackage.SLOT__VESSEL_NOMINATION_DATE:
-				return getVesselNominationDate();
-			case CargoPackage.SLOT__VESSEL_NOMINATION_DONE:
-				return isVesselNominationDone();
-			case CargoPackage.SLOT__VESSEL_NOMINATION_COUNTERPARTY:
-				return isVesselNominationCounterparty();
-			case CargoPackage.SLOT__VESSEL_NOMINATION_COMMENT:
-				return getVesselNominationComment();
-			case CargoPackage.SLOT__PORT_NOMINATION_DATE:
-				return getPortNominationDate();
-			case CargoPackage.SLOT__PORT_NOMINATION_DONE:
-				return isPortNominationDone();
-			case CargoPackage.SLOT__PORT_NOMINATION_COUNTERPARTY:
-				return isPortNominationCounterparty();
-			case CargoPackage.SLOT__PORT_NOMINATION_COMMENT:
-				return getPortNominationComment();
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DATE:
-				return getPortLoadNominationDate();
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DONE:
-				return isPortLoadNominationDone();
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY:
-				return isPortLoadNominationCounterparty();
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT:
-				return getPortLoadNominationComment();
 			case CargoPackage.SLOT__CANCELLED:
 				return isCancelled();
 		}
@@ -4710,66 +3357,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__LOCKED:
 				setLocked((Boolean)newValue);
 				return;
-			case CargoPackage.SLOT__WINDOW_NOMINATION_DATE:
-				setWindowNominationDate((LocalDate)newValue);
-				return;
-			case CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE:
-				setWindowNominationIsDone((Boolean)newValue);
-				return;
-			case CargoPackage.SLOT__WINDOW_NOMINATION_COUNTERPARTY:
-				setWindowNominationCounterparty((Boolean)newValue);
-				return;
-			case CargoPackage.SLOT__WINDOW_NOMINATION_COMMENT:
-				setWindowNominationComment((String)newValue);
-				return;
-			case CargoPackage.SLOT__VOLUME_NOMINATION_DATE:
-				setVolumeNominationDate((LocalDate)newValue);
-				return;
-			case CargoPackage.SLOT__VOLUME_NOMINATION_DONE:
-				setVolumeNominationDone((Boolean)newValue);
-				return;
-			case CargoPackage.SLOT__VOLUME_NOMINATION_COUNTERPARTY:
-				setVolumeNominationCounterparty((Boolean)newValue);
-				return;
-			case CargoPackage.SLOT__VOLUME_NOMINATION_COMMENT:
-				setVolumeNominationComment((String)newValue);
-				return;
-			case CargoPackage.SLOT__VESSEL_NOMINATION_DATE:
-				setVesselNominationDate((LocalDate)newValue);
-				return;
-			case CargoPackage.SLOT__VESSEL_NOMINATION_DONE:
-				setVesselNominationDone((Boolean)newValue);
-				return;
-			case CargoPackage.SLOT__VESSEL_NOMINATION_COUNTERPARTY:
-				setVesselNominationCounterparty((Boolean)newValue);
-				return;
-			case CargoPackage.SLOT__VESSEL_NOMINATION_COMMENT:
-				setVesselNominationComment((String)newValue);
-				return;
-			case CargoPackage.SLOT__PORT_NOMINATION_DATE:
-				setPortNominationDate((LocalDate)newValue);
-				return;
-			case CargoPackage.SLOT__PORT_NOMINATION_DONE:
-				setPortNominationDone((Boolean)newValue);
-				return;
-			case CargoPackage.SLOT__PORT_NOMINATION_COUNTERPARTY:
-				setPortNominationCounterparty((Boolean)newValue);
-				return;
-			case CargoPackage.SLOT__PORT_NOMINATION_COMMENT:
-				setPortNominationComment((String)newValue);
-				return;
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DATE:
-				setPortLoadNominationDate((LocalDate)newValue);
-				return;
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DONE:
-				setPortLoadNominationDone((Boolean)newValue);
-				return;
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY:
-				setPortLoadNominationCounterparty((Boolean)newValue);
-				return;
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT:
-				setPortLoadNominationComment((String)newValue);
-				return;
 			case CargoPackage.SLOT__CANCELLED:
 				setCancelled((Boolean)newValue);
 				return;
@@ -4910,66 +3497,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__LOCKED:
 				setLocked(LOCKED_EDEFAULT);
 				return;
-			case CargoPackage.SLOT__WINDOW_NOMINATION_DATE:
-				unsetWindowNominationDate();
-				return;
-			case CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE:
-				setWindowNominationIsDone(WINDOW_NOMINATION_IS_DONE_EDEFAULT);
-				return;
-			case CargoPackage.SLOT__WINDOW_NOMINATION_COUNTERPARTY:
-				unsetWindowNominationCounterparty();
-				return;
-			case CargoPackage.SLOT__WINDOW_NOMINATION_COMMENT:
-				setWindowNominationComment(WINDOW_NOMINATION_COMMENT_EDEFAULT);
-				return;
-			case CargoPackage.SLOT__VOLUME_NOMINATION_DATE:
-				unsetVolumeNominationDate();
-				return;
-			case CargoPackage.SLOT__VOLUME_NOMINATION_DONE:
-				setVolumeNominationDone(VOLUME_NOMINATION_DONE_EDEFAULT);
-				return;
-			case CargoPackage.SLOT__VOLUME_NOMINATION_COUNTERPARTY:
-				unsetVolumeNominationCounterparty();
-				return;
-			case CargoPackage.SLOT__VOLUME_NOMINATION_COMMENT:
-				setVolumeNominationComment(VOLUME_NOMINATION_COMMENT_EDEFAULT);
-				return;
-			case CargoPackage.SLOT__VESSEL_NOMINATION_DATE:
-				unsetVesselNominationDate();
-				return;
-			case CargoPackage.SLOT__VESSEL_NOMINATION_DONE:
-				setVesselNominationDone(VESSEL_NOMINATION_DONE_EDEFAULT);
-				return;
-			case CargoPackage.SLOT__VESSEL_NOMINATION_COUNTERPARTY:
-				unsetVesselNominationCounterparty();
-				return;
-			case CargoPackage.SLOT__VESSEL_NOMINATION_COMMENT:
-				setVesselNominationComment(VESSEL_NOMINATION_COMMENT_EDEFAULT);
-				return;
-			case CargoPackage.SLOT__PORT_NOMINATION_DATE:
-				unsetPortNominationDate();
-				return;
-			case CargoPackage.SLOT__PORT_NOMINATION_DONE:
-				setPortNominationDone(PORT_NOMINATION_DONE_EDEFAULT);
-				return;
-			case CargoPackage.SLOT__PORT_NOMINATION_COUNTERPARTY:
-				unsetPortNominationCounterparty();
-				return;
-			case CargoPackage.SLOT__PORT_NOMINATION_COMMENT:
-				setPortNominationComment(PORT_NOMINATION_COMMENT_EDEFAULT);
-				return;
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DATE:
-				unsetPortLoadNominationDate();
-				return;
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DONE:
-				setPortLoadNominationDone(PORT_LOAD_NOMINATION_DONE_EDEFAULT);
-				return;
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY:
-				unsetPortLoadNominationCounterparty();
-				return;
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT:
-				setPortLoadNominationComment(PORT_LOAD_NOMINATION_COMMENT_EDEFAULT);
-				return;
 			case CargoPackage.SLOT__CANCELLED:
 				setCancelled(CANCELLED_EDEFAULT);
 				return;
@@ -5085,46 +3612,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return nominatedVessel != null;
 			case CargoPackage.SLOT__LOCKED:
 				return locked != LOCKED_EDEFAULT;
-			case CargoPackage.SLOT__WINDOW_NOMINATION_DATE:
-				return isSetWindowNominationDate();
-			case CargoPackage.SLOT__WINDOW_NOMINATION_IS_DONE:
-				return windowNominationIsDone != WINDOW_NOMINATION_IS_DONE_EDEFAULT;
-			case CargoPackage.SLOT__WINDOW_NOMINATION_COUNTERPARTY:
-				return isSetWindowNominationCounterparty();
-			case CargoPackage.SLOT__WINDOW_NOMINATION_COMMENT:
-				return WINDOW_NOMINATION_COMMENT_EDEFAULT == null ? windowNominationComment != null : !WINDOW_NOMINATION_COMMENT_EDEFAULT.equals(windowNominationComment);
-			case CargoPackage.SLOT__VOLUME_NOMINATION_DATE:
-				return isSetVolumeNominationDate();
-			case CargoPackage.SLOT__VOLUME_NOMINATION_DONE:
-				return volumeNominationDone != VOLUME_NOMINATION_DONE_EDEFAULT;
-			case CargoPackage.SLOT__VOLUME_NOMINATION_COUNTERPARTY:
-				return isSetVolumeNominationCounterparty();
-			case CargoPackage.SLOT__VOLUME_NOMINATION_COMMENT:
-				return VOLUME_NOMINATION_COMMENT_EDEFAULT == null ? volumeNominationComment != null : !VOLUME_NOMINATION_COMMENT_EDEFAULT.equals(volumeNominationComment);
-			case CargoPackage.SLOT__VESSEL_NOMINATION_DATE:
-				return isSetVesselNominationDate();
-			case CargoPackage.SLOT__VESSEL_NOMINATION_DONE:
-				return vesselNominationDone != VESSEL_NOMINATION_DONE_EDEFAULT;
-			case CargoPackage.SLOT__VESSEL_NOMINATION_COUNTERPARTY:
-				return isSetVesselNominationCounterparty();
-			case CargoPackage.SLOT__VESSEL_NOMINATION_COMMENT:
-				return VESSEL_NOMINATION_COMMENT_EDEFAULT == null ? vesselNominationComment != null : !VESSEL_NOMINATION_COMMENT_EDEFAULT.equals(vesselNominationComment);
-			case CargoPackage.SLOT__PORT_NOMINATION_DATE:
-				return isSetPortNominationDate();
-			case CargoPackage.SLOT__PORT_NOMINATION_DONE:
-				return portNominationDone != PORT_NOMINATION_DONE_EDEFAULT;
-			case CargoPackage.SLOT__PORT_NOMINATION_COUNTERPARTY:
-				return isSetPortNominationCounterparty();
-			case CargoPackage.SLOT__PORT_NOMINATION_COMMENT:
-				return PORT_NOMINATION_COMMENT_EDEFAULT == null ? portNominationComment != null : !PORT_NOMINATION_COMMENT_EDEFAULT.equals(portNominationComment);
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DATE:
-				return isSetPortLoadNominationDate();
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_DONE:
-				return portLoadNominationDone != PORT_LOAD_NOMINATION_DONE_EDEFAULT;
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY:
-				return isSetPortLoadNominationCounterparty();
-			case CargoPackage.SLOT__PORT_LOAD_NOMINATION_COMMENT:
-				return PORT_LOAD_NOMINATION_COMMENT_EDEFAULT == null ? portLoadNominationComment != null : !PORT_LOAD_NOMINATION_COMMENT_EDEFAULT.equals(portLoadNominationComment);
 			case CargoPackage.SLOT__CANCELLED:
 				return cancelled != CANCELLED_EDEFAULT;
 		}
@@ -5244,26 +3731,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSlotOrDelegateDivertible();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION:
 				return getSlotOrDelegateShippingDaysRestriction();
-			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_DATE:
-				return getSlotOrDelegatePortLoadNominationDate();
-			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_DATE:
-				return getSlotOrDelegateWindowNominationDate();
-			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VESSEL_NOMINATION_DATE:
-				return getSlotOrDelegateVesselNominationDate();
-			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VOLUME_NOMINATION_DATE:
-				return getSlotOrDelegateVolumeNominationDate();
-			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_DATE:
-				return getSlotOrDelegatePortNominationDate();
-			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_WINDOW_NOMINATION_COUNTERPARTY:
-				return getSlotOrDelegateWindowNominationCounterparty();
-			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VESSEL_NOMINATION_COUNTERPARTY:
-				return getSlotOrDelegateVesselNominationCounterparty();
-			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VOLUME_NOMINATION_COUNTERPARTY:
-				return getSlotOrDelegateVolumeNominationCounterparty();
-			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_PORT_NOMINATION_COUNTERPARTY:
-				return getSlotOrDelegatePortNominationCounterparty();
-			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_PORT_LOAD_NOMINATION_COUNTERPARTY:
-				return getSlotOrDelegatePortLoadNominationCounterparty();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT:
 				return getSlotOrDelegateFullCargoLot();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE:
@@ -5292,7 +3759,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(", counterparty: ");
@@ -5359,46 +3826,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		if (cancellationExpressionESet) result.append(cancellationExpression); else result.append("<unset>");
 		result.append(", locked: ");
 		result.append(locked);
-		result.append(", windowNominationDate: ");
-		if (windowNominationDateESet) result.append(windowNominationDate); else result.append("<unset>");
-		result.append(", windowNominationIsDone: ");
-		result.append(windowNominationIsDone);
-		result.append(", windowNominationCounterparty: ");
-		if (windowNominationCounterpartyESet) result.append(windowNominationCounterparty); else result.append("<unset>");
-		result.append(", windowNominationComment: ");
-		result.append(windowNominationComment);
-		result.append(", volumeNominationDate: ");
-		if (volumeNominationDateESet) result.append(volumeNominationDate); else result.append("<unset>");
-		result.append(", volumeNominationDone: ");
-		result.append(volumeNominationDone);
-		result.append(", volumeNominationCounterparty: ");
-		if (volumeNominationCounterpartyESet) result.append(volumeNominationCounterparty); else result.append("<unset>");
-		result.append(", volumeNominationComment: ");
-		result.append(volumeNominationComment);
-		result.append(", vesselNominationDate: ");
-		if (vesselNominationDateESet) result.append(vesselNominationDate); else result.append("<unset>");
-		result.append(", vesselNominationDone: ");
-		result.append(vesselNominationDone);
-		result.append(", vesselNominationCounterparty: ");
-		if (vesselNominationCounterpartyESet) result.append(vesselNominationCounterparty); else result.append("<unset>");
-		result.append(", vesselNominationComment: ");
-		result.append(vesselNominationComment);
-		result.append(", portNominationDate: ");
-		if (portNominationDateESet) result.append(portNominationDate); else result.append("<unset>");
-		result.append(", portNominationDone: ");
-		result.append(portNominationDone);
-		result.append(", portNominationCounterparty: ");
-		if (portNominationCounterpartyESet) result.append(portNominationCounterparty); else result.append("<unset>");
-		result.append(", portNominationComment: ");
-		result.append(portNominationComment);
-		result.append(", portLoadNominationDate: ");
-		if (portLoadNominationDateESet) result.append(portLoadNominationDate); else result.append("<unset>");
-		result.append(", portLoadNominationDone: ");
-		result.append(portLoadNominationDone);
-		result.append(", portLoadNominationCounterparty: ");
-		if (portLoadNominationCounterpartyESet) result.append(portLoadNominationCounterparty); else result.append("<unset>");
-		result.append(", portLoadNominationComment: ");
-		result.append(portLoadNominationComment);
 		result.append(", cancelled: ");
 		result.append(cancelled);
 		result.append(')');
@@ -5407,19 +3834,19 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	
 	@Override
 	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
-		CargoPackage cargo = CargoPackage.eINSTANCE;
-		PortPackage port = PortPackage.eINSTANCE;
-		CommercialPackage commercial = CommercialPackage.eINSTANCE;
+		final CargoPackage cargo = CargoPackage.eINSTANCE;
+		final PortPackage port = PortPackage.eINSTANCE;
+		final CommercialPackage commercial = CommercialPackage.eINSTANCE;
 		if (cargo.getSlot_WindowStartTime() == feature) {
-			return new DelegateInformation(cargo.getSlot_Port(), port.getPort_DefaultStartTime(), (Integer) 7);
+			return new DelegateInformation(cargo.getSlot_Port(), port.getPort_DefaultStartTime(), 7);
 		} else if (cargo.getSlot_WindowSize() == feature) {
-			return new DelegateInformation(cargo.getSlot_Port(), port.getPort_DefaultWindowSize(), (Integer) 6);
+			return new DelegateInformation(cargo.getSlot_Port(), port.getPort_DefaultWindowSize(), 6);
 		} else if (CargoPackage.eINSTANCE.getSlot_MinQuantity() == feature) {
-			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MinQuantity(), (Integer) 0);
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MinQuantity(), 0);
 		} else if (CargoPackage.eINSTANCE.getSlot_MaxQuantity() == feature) {
-			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MaxQuantity(), (Integer) Integer.MAX_VALUE);
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MaxQuantity(), Integer.MAX_VALUE);
 		} else if (CargoPackage.eINSTANCE.getSlot_OperationalTolerance() == feature) {
-			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_OperationalTolerance(), (Double) 0.0);
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_OperationalTolerance(), 0.0);
 		} else if (CargoPackage.Literals.SLOT__ENTITY == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Entity(), null);
 		} else if (CargoPackage.Literals.SLOT__COUNTERPARTY == feature) {
@@ -5427,24 +3854,26 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		} else if (cargo.getSlot_Divertible() == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Divertible(), Boolean.FALSE);
 		} else if (cargo.getSlot_ShippingDaysRestriction() == feature) {
-			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_ShippingDaysRestriction(), (Integer)0);
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_ShippingDaysRestriction(), 0);
 		} else if (CargoPackage.Literals.SLOT__CN == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Cn(), null);
 		} else if (CargoPackage.Literals.SLOT__CANCELLATION_EXPRESSION == feature) {
-			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_CancellationExpression(), (String)"");
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_CancellationExpression(), "");
 		} else if (CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_VolumeLimitsUnit(), VolumeUnits.M3);
 		} else if (CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS == feature) {
 			return new DelegateInformation(cargo.getSlot_Port(), port.getPort_DefaultWindowSizeUnits(), TimePeriod.HOURS);
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS) {
 			return new DelegateInformation(null, null, null) {
+				@Override
 				public boolean delegatesTo(final Object changedFeature) {
 					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
 				}
 				
+				@Override
 				public Object getValue(final EObject object) {
 					Object result = Collections.EMPTY_LIST;
-					final Contract contract = (Contract) getContract();
+					final Contract contract = getContract();
 					if (!isRestrictedContractsOverride() && contract != null) {
 						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS)) {
 							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS);
@@ -5456,13 +3885,15 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS) {
 			return new DelegateInformation(null, null, null) {
+				@Override
 				public boolean delegatesTo(final Object changedFeature) {
 					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
 				}
 				
+				@Override
 				public Object getValue(final EObject object) {
 					Object result = Collections.EMPTY_LIST;
-					final Contract contract = (Contract) getContract();
+					final Contract contract = getContract();
 					if (!isRestrictedPortsOverride() && contract != null) {
 						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS)) {
 							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS);
@@ -5474,13 +3905,15 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS) {
 			return new DelegateInformation(null, null, null) {
+				@Override
 				public boolean delegatesTo(final Object changedFeature) {
 					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
 				}
 				
+				@Override
 				public Object getValue(final EObject object) {
 					Object result = Collections.EMPTY_LIST;
-					final Contract contract = (Contract) getContract();
+					final Contract contract = getContract();
 					if (!isRestrictedVesselsOverride() && contract != null) {
 						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS)) {
 							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS);
@@ -5496,180 +3929,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedPortsArePermissive(), Boolean.FALSE);
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedVesselsArePermissive(), Boolean.FALSE);
-		} else if (feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_DATE) {
-			return new DelegateInformation(null, null, null) {
-				public boolean delegatesTo(final Object changedFeature) {
-					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
-				}
-				
-				public Object getValue(final EObject object) {
-					Object result = null;
-					final Contract contract = (Contract) getContract();
-					if (contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE)) {
-							final int wnSize = ((Contract) contract).getWindowNominationSize();
-							final TimePeriod wnUnits = ((Contract) contract).getWindowNominationSizeUnits();
-							if (wnUnits == null) return result;
-							result = NominationUtils.computeNewDate(getWindowStart(), wnUnits, -wnSize);
-						}
-					}
-					return result;
-					
-				}	
-			};
-		} else if (feature == CargoPackage.Literals.SLOT__VOLUME_NOMINATION_DATE) {
-			return new DelegateInformation(null, null, null) {
-				public boolean delegatesTo(final Object changedFeature) {
-					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
-				}
-				
-				public Object getValue(final EObject object) {
-					Object result = null;
-					final Contract contract = (Contract) getContract();
-					if (contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_SIZE)) {
-							final int wnSize = ((Contract) contract).getVolumeNominationSize();
-							final TimePeriod wnUnits = ((Contract) contract).getVolumeNominationSizeUnits();
-							if (wnUnits == null) return result;
-							result = NominationUtils.computeNewDate(getWindowStart(), wnUnits, -wnSize);
-						}
-					}
-					return result;
-					
-				}	
-			};
-		} else if (feature == CargoPackage.Literals.SLOT__VESSEL_NOMINATION_DATE) {
-			return new DelegateInformation(null, null, null) {
-				public boolean delegatesTo(final Object changedFeature) {
-					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
-				}
-				
-				public Object getValue(final EObject object) {
-					Object result = null;
-					final Contract contract = (Contract) getContract();
-					if (contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_SIZE)) {
-							final int wnSize = ((Contract) contract).getVesselNominationSize();
-							final TimePeriod wnUnits = ((Contract) contract).getVesselNominationSizeUnits();
-							if (wnUnits == null) return result;
-							result = NominationUtils.computeNewDate(getWindowStart(), wnUnits, -wnSize);
-						}
-					}
-					return result;
-					
-				}	
-			};
-		} else if (feature == CargoPackage.Literals.SLOT__PORT_NOMINATION_DATE) {
-			return new DelegateInformation(null, null, null) {
-				public boolean delegatesTo(final Object changedFeature) {
-					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
-				}
-				
-				public Object getValue(final EObject object) {
-					Object result = null;
-					final Contract contract = (Contract) getContract();
-					if (contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_SIZE)) {
-							final int wnSize = ((Contract) contract).getPortNominationSize();
-							final TimePeriod wnUnits = ((Contract) contract).getPortNominationSizeUnits();
-							if (wnUnits == null) return result;
-							result = NominationUtils.computeNewDate(getWindowStart(), wnUnits, -wnSize);
-						}
-					}
-					return result;
-					
-				}	
-			};
-		} else if (feature == CargoPackage.Literals.SLOT__WINDOW_NOMINATION_COUNTERPARTY) {
-			return new DelegateInformation(null, null, null) {
-				public boolean delegatesTo(final Object changedFeature) {
-					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
-				}
-				
-				public Object getValue(final EObject object) {
-					Object result = false;
-					final Contract contract = (Contract) getContract();
-					if (contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_COUNTERPARTY)) {
-							result = ((Contract) contract).isWindowNominationCounterparty();
-						}
-					}
-					return result;
-					
-				}	
-			};
-		} else if (feature == CargoPackage.Literals.SLOT__VESSEL_NOMINATION_COUNTERPARTY) {
-			return new DelegateInformation(null, null, null) {
-				public boolean delegatesTo(final Object changedFeature) {
-					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
-				}
-				
-				public Object getValue(final EObject object) {
-					Object result = false;
-					final Contract contract = (Contract) getContract();
-					if (contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_COUNTERPARTY)) {
-							result = ((Contract) contract).isVesselNominationCounterparty();
-						}
-					}
-					return result;
-					
-				}	
-			};
-		} else if (feature == CargoPackage.Literals.SLOT__VOLUME_NOMINATION_COUNTERPARTY) {
-			return new DelegateInformation(null, null, null) {
-				public boolean delegatesTo(final Object changedFeature) {
-					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
-				}
-				
-				public Object getValue(final EObject object) {
-					Object result = false;
-					final Contract contract = (Contract) getContract();
-					if (contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_COUNTERPARTY)) {
-							result = ((Contract) contract).isVolumeNominationCounterparty();
-						}
-					}
-					return result;
-					
-				}	
-			};
-		} else if (feature == CargoPackage.Literals.SLOT__PORT_NOMINATION_COUNTERPARTY) {
-			return new DelegateInformation(null, null, null) {
-				public boolean delegatesTo(final Object changedFeature) {
-					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
-				}
-				
-				public Object getValue(final EObject object) {
-					Object result = false;
-					final Contract contract = (Contract) getContract();
-					if (contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_COUNTERPARTY)) {
-							result = ((Contract) contract).isPortNominationCounterparty();
-						}
-					}
-					return result;
-					
-				}	
-			};
-		} else if (feature == CargoPackage.Literals.SLOT__PORT_LOAD_NOMINATION_COUNTERPARTY) {
-			return new DelegateInformation(null, null, null) {
-				public boolean delegatesTo(final Object changedFeature) {
-					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
-				}
-				
-				public Object getValue(final EObject object) {
-					Object result = false;
-					final Contract contract = (Contract) getContract();
-					if (contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY)) {
-							result = ((Contract) contract).isPortNominationCounterparty();
-						}
-					}
-					return result;
-					
-				}	
-			};
 		} else if (feature == CargoPackage.Literals.SLOT__FULL_CARGO_LOT) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_FullCargoLot(), Boolean.FALSE);
 		}

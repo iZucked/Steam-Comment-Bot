@@ -161,14 +161,6 @@
             name="Panama Bookings Report"
             restorable="true">
       </view>
-      <!--<view
-            category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.nomination.NominationAlertReport"
-            icon="icons/cview16/ihigh_obj.gif"
-            id="com.mmxlabs.lingo.reports.views.nomination.NominationAlertReport"
-            name="Nominations"
-            restorable="true">
-      </view>-->
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByContract"
@@ -847,10 +839,6 @@
       <PluginXMLEnablement
             feature="exposures"
             plugin.xml="exposures.plugin.xml">
-      </PluginXMLEnablement>
-      <PluginXMLEnablement
-            feature="nominations"
-            plugin.xml="nomination.plugin.xml">
       </PluginXMLEnablement>
       <PluginXMLEnablement
             feature="optimisation-charter-out-generation"

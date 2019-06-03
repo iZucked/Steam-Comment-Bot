@@ -50,6 +50,7 @@ Export-Package: com.mmxlabs.models.ui,
  com.mmxlabs.models.ui.modelfactories,
  com.mmxlabs.models.ui.registries,
  com.mmxlabs.models.ui.registries.impl,
+ com.mmxlabs.models.ui.util,
  com.mmxlabs.models.ui.valueproviders
 Import-Package: javax.inject;version="1.0.0"
 Automatic-Module-Name: com.mmxlabs.models.ui

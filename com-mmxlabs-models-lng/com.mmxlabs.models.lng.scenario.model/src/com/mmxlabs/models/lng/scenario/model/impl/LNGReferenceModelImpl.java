@@ -125,6 +125,7 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortModel getPortModel() {
 		if (portModel != null && portModel.eIsProxy()) {
 			InternalEObject oldPortModel = (InternalEObject)portModel;
@@ -172,6 +173,7 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortModel(PortModel newPortModel) {
 		if (newPortModel != portModel) {
 			NotificationChain msgs = null;
@@ -191,6 +193,7 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FleetModel getFleetModel() {
 		if (fleetModel != null && fleetModel.eIsProxy()) {
 			InternalEObject oldFleetModel = (InternalEObject)fleetModel;
@@ -238,6 +241,7 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFleetModel(FleetModel newFleetModel) {
 		if (newFleetModel != fleetModel) {
 			NotificationChain msgs = null;
@@ -257,6 +261,7 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PricingModel getPricingModel() {
 		if (pricingModel != null && pricingModel.eIsProxy()) {
 			InternalEObject oldPricingModel = (InternalEObject)pricingModel;
@@ -304,6 +309,7 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPricingModel(PricingModel newPricingModel) {
 		if (newPricingModel != pricingModel) {
 			NotificationChain msgs = null;
@@ -323,6 +329,7 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CommercialModel getCommercialModel() {
 		if (commercialModel != null && commercialModel.eIsProxy()) {
 			InternalEObject oldCommercialModel = (InternalEObject)commercialModel;
@@ -370,6 +377,7 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCommercialModel(CommercialModel newCommercialModel) {
 		if (newCommercialModel != commercialModel) {
 			NotificationChain msgs = null;
@@ -389,6 +397,7 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotMarketsModel getSpotMarketsModel() {
 		if (spotMarketsModel != null && spotMarketsModel.eIsProxy()) {
 			InternalEObject oldSpotMarketsModel = (InternalEObject)spotMarketsModel;
@@ -436,6 +445,7 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpotMarketsModel(SpotMarketsModel newSpotMarketsModel) {
 		if (newSpotMarketsModel != spotMarketsModel) {
 			NotificationChain msgs = null;
@@ -455,6 +465,7 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CostModel getCostModel() {
 		if (costModel != null && costModel.eIsProxy()) {
 			InternalEObject oldCostModel = (InternalEObject)costModel;
@@ -502,6 +513,7 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCostModel(CostModel newCostModel) {
 		if (newCostModel != costModel) {
 			NotificationChain msgs = null;

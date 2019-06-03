@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+   <extension-point id="NominationType" name="NominationType" schema="schema/NominationType.exsd"/>
+
+<extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <!-- used for modifying layout of nomination specs editor. -->
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.nominations.AbstractNominationSpec"
+          factory="com.mmxlabs.models.lng.nominations.ui.displaycomposites.AbstractNominationSpecsCompositeFactory"
+          id="com.mmxlabs.models.lng.nominations.editor.NominationSpecsCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    </extension>
+	 <extension
+       point="com.mmxlabs.models.ui.valueproviders">
+    <valueProvider
+          factory="com.mmxlabs.models.lng.nominations.ui.valueproviders.AbstractNominationsSpecReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.nominations.ui.valueproviders.NominationsSpecReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.nominations.AbstractNominationSpec">
+    </valueProvider>
+	</extension>
+ 	<extension
+       point="com.mmxlabs.models.util.import.submodels">
+    	<submodelImporter
+          ID="com.mmxlabs.models.lng.nominations.editor.nominationsModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.nominations.NominationsModel"
+          subModelImporterClass="com.mmxlabs.models.lng.nominations.importer.NominationsModelImporter">
+    	</submodelImporter>
+ 	</extension>
+   <extension
+         point="com.mmxlabs.models.ui.editorfactories">
+      <editorFactory
+            factoryClass="com.mmxlabs.models.lng.nominations.ui.editor.DatePeriodPriorInlineEditorFactory"
+            id="com.mmxlabs.models.ui.editors.DatePeriodUnitsInlineEditorFactory">
+         <FeatureAnyOf>
+            <EDataTypeIs
+                  EDataTypeName="DatePeriodPrior"
+                  EDataTypeURI="http://www.mmxlabs.com/models/lng/nominations/1/">
+            </EDataTypeIs>
+         </FeatureAnyOf>
+      </editorFactory>
+      <editorFactory
+            factoryClass="com.mmxlabs.models.lng.nominations.ui.editor.SideInlineEditorFactory"
+            id="com.mmxlabs.models.ui.editors.SideInlineEditorFactory">
+         <FeatureAnyOf>
+            <EDataTypeIs
+                  EDataTypeName="Side"
+                  EDataTypeURI="http://www.mmxlabs.com/models/lng/nominations/1/">
+            </EDataTypeIs>
+         </FeatureAnyOf>
+      </editorFactory>
+   </extension>
+   <!-- define what elements are added to editor dialogs. -->
+	<extension point="com.mmxlabs.models.ui.componenthelpers">	
+		<componentHelper
+			id="com.mmxlabs.models.lng.nominations.presentations.composites.NominationsModelComponentHelper"
+			helperClass="com.mmxlabs.models.lng.nominations.presentation.composites.NominationsModelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.nominations.NominationsModel" />
+		<componentHelper
+			id="com.mmxlabs.models.lng.nominations.presentations.composites.AbstractNominationSpecComponentHelper"
+			helperClass="com.mmxlabs.models.lng.nominations.presentation.composites.AbstractNominationSpecComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.nominations.AbstractNominationSpec" />
+		<componentHelper
+			id="com.mmxlabs.models.lng.nominations.presentations.composites.AbstractNominationComponentHelper"
+			helperClass="com.mmxlabs.models.lng.nominations.presentation.composites.AbstractNominationComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.nominations.AbstractNomination" />
+	</extension>		
+ 	<extension
+         id="com.mmxlabs.models.lng.nominations.ui.views.RemoveOldNominationsAlertViewModuleProcessor"
+         point="org.eclipse.e4.workbench.model">
+      <processor
+            apply="always"
+            beforefragment="false"
+            class="com.mmxlabs.models.lng.nominations.ui.views.RemoveOldNominationsAlertViewModuleProcessor">
+      </processor>
+   </extension>
+ 	<extension
+       point="org.eclipse.ui.views">
+    <view
+          category="com.mmxlabs.shiplingo.platform.reports"
+          icon="icons/full/obj16/NominationsModelFile.gif"
+          class="com.mmxlabs.models.lng.nominations.ui.views.NominationSpecsView"
+          id="com.mmxlabs.models.lng.nominations.editor.NominationSpecsView"
+          name="Nomination Specifications"
+          restorable="true">
+    </view>
+    <view
+          category="com.mmxlabs.shiplingo.platform.reports"
+          icon="icons/cview16/ihigh_obj.gif"
+          class="com.mmxlabs.models.lng.nominations.ui.views.NominationsView"
+          id="com.mmxlabs.models.lng.nominations.editor.NominationsView"
+          name="Nominations"
+          viewerPane="com.mmxlabs.models.lng.nominations.ui.editorpart.RelativeDateRangeNominationsViewerPane"
+          restorable="true">
+    </view>
+ </extension>
+ <extension point="com.mmxlabs.models.common.modelcommandprovider">
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.nominations.ui.commands.SlotUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.nominations.ui.commands.SlotUpdatingCommandProvider">
+    </ModelCommandProvider>
+    ContractUpdatingCommandProvider
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.nominations.ui.commands.ContractUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.nominations.ui.commands.ContractUpdatingCommandProvider">
+    </ModelCommandProvider>
+ </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated nominations -->
+      <editor
+            id="com.mmxlabs.models.lng.nominations.presentation.NominationsEditorID"
+            name="%_UI_NominationsEditor_label"
+            icon="icons/full/obj16/NominationsModelFile.gif"
+            extensions="nominations"
+            class="com.mmxlabs.models.lng.nominations.presentation.NominationsEditor"
+            contributorClass="com.mmxlabs.models.lng.nominations.presentation.NominationsActionBarContributor">
+      </editor>
+   </extension>
+
+ <extension
+       point="com.mmxlabs.models.ui.modelfactories">
+    <factory
+          ID="com.mmxlabs.models.lng.nominations.SlotNominationSpec.Factory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Slot nomination specifications"
+          targetEClass="com.mmxlabs.models.lng.nominations.SlotNominationSpec">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.nominations.SlotNomination.Factory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Slot nomination"
+          targetEClass="com.mmxlabs.models.lng.nominations.SlotNomination">
+    </factory>
+ </extension>
+ 
+ <extension
+       point="com.mmxlabs.models.lng.nominations.editor.NominationType">
+    <!-- Removed:  "Source port", "Destination port" as redundant: -->
+    <!-- 		"Buy window", "Sell window", "Vessel", "Load volume", "Discharge volume", 
+					"Load port", "Discharge port", Cancellation, Credit, Surveyor -->
+    <NominationType
+    	type="Buy window">
+    </NominationType>
+    <NominationType
+          type="Sell window">
+    </NominationType>
+    <NominationType
+          type="Vessel">
+    </NominationType>
+        <NominationType
+          type="Load volume">
+    </NominationType>
+     <NominationType
+          type="Discharge volume">
+    </NominationType>
+    <NominationType
+          type="Load port">
+    </NominationType>
+    <NominationType
+          type="Discharge port">
+    </NominationType>
+    <NominationType
+          type="Cancellation">
+    </NominationType>
+    <NominationType
+          type="Credit">
+    </NominationType>    
+    <NominationType
+          type="Surveyor">
+    </NominationType>    	
+ </extension>
+</plugin>

@@ -19,6 +19,8 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.nominations.NominationsPackage;
+import com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -114,6 +116,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		PricingPackage.eINSTANCE.eClass();
 		SchedulePackage.eINSTANCE.eClass();
 		SpotMarketsPackage.eINSTANCE.eClass();
+		NominationsPackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theLNGScenarioPackage.createPackageContents();
@@ -134,6 +137,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getLNGScenarioModel() {
 		return lngScenarioModelEClass;
 	}
@@ -143,6 +147,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLNGScenarioModel_CargoModel() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -152,6 +157,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLNGScenarioModel_ScheduleModel() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -161,6 +167,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLNGScenarioModel_ActualsModel() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(2);
 	}
@@ -170,6 +177,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getLNGScenarioModel_PromptPeriodStart() {
 		return (EAttribute)lngScenarioModelEClass.getEStructuralFeatures().get(3);
 	}
@@ -179,6 +187,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getLNGScenarioModel_PromptPeriodEnd() {
 		return (EAttribute)lngScenarioModelEClass.getEStructuralFeatures().get(4);
 	}
@@ -188,6 +197,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getLNGScenarioModel_SchedulingEndDate() {
 		return (EAttribute)lngScenarioModelEClass.getEStructuralFeatures().get(5);
 	}
@@ -197,6 +207,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLNGScenarioModel_ReferenceModel() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(6);
 	}
@@ -206,6 +217,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLNGScenarioModel_UserSettings() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(7);
 	}
@@ -215,6 +227,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLNGScenarioModel_AnalyticsModel() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(8);
 	}
@@ -224,6 +237,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLNGScenarioModel_AdpModel() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(9);
 	}
@@ -233,6 +247,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLNGScenarioModel_AdpModels() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(10);
 	}
@@ -242,6 +257,17 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EReference getLNGScenarioModel_NominationsModel() {
+		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getLNGReferenceModel() {
 		return lngReferenceModelEClass;
 	}
@@ -251,6 +277,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLNGReferenceModel_PortModel() {
 		return (EReference)lngReferenceModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -260,6 +287,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLNGReferenceModel_FleetModel() {
 		return (EReference)lngReferenceModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -269,6 +297,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLNGReferenceModel_PricingModel() {
 		return (EReference)lngReferenceModelEClass.getEStructuralFeatures().get(2);
 	}
@@ -278,6 +307,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLNGReferenceModel_CommercialModel() {
 		return (EReference)lngReferenceModelEClass.getEStructuralFeatures().get(3);
 	}
@@ -287,6 +317,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLNGReferenceModel_SpotMarketsModel() {
 		return (EReference)lngReferenceModelEClass.getEStructuralFeatures().get(4);
 	}
@@ -296,6 +327,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLNGReferenceModel_CostModel() {
 		return (EReference)lngReferenceModelEClass.getEStructuralFeatures().get(5);
 	}
@@ -305,6 +337,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LNGScenarioFactory getLNGScenarioFactory() {
 		return (LNGScenarioFactory)getEFactoryInstance();
 	}
@@ -340,6 +373,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ANALYTICS_MODEL);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ADP_MODEL);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ADP_MODELS);
+		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__NOMINATIONS_MODEL);
 
 		lngReferenceModelEClass = createEClass(LNG_REFERENCE_MODEL);
 		createEReference(lngReferenceModelEClass, LNG_REFERENCE_MODEL__PORT_MODEL);
@@ -382,6 +416,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		ParametersPackage theParametersPackage = (ParametersPackage)EPackage.Registry.INSTANCE.getEPackage(ParametersPackage.eNS_URI);
 		AnalyticsPackage theAnalyticsPackage = (AnalyticsPackage)EPackage.Registry.INSTANCE.getEPackage(AnalyticsPackage.eNS_URI);
 		ADPPackage theADPPackage = (ADPPackage)EPackage.Registry.INSTANCE.getEPackage(ADPPackage.eNS_URI);
+		NominationsPackage theNominationsPackage = (NominationsPackage)EPackage.Registry.INSTANCE.getEPackage(NominationsPackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		PricingPackage thePricingPackage = (PricingPackage)EPackage.Registry.INSTANCE.getEPackage(PricingPackage.eNS_URI);
@@ -409,6 +444,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		initEReference(getLNGScenarioModel_AnalyticsModel(), theAnalyticsPackage.getAnalyticsModel(), null, "analyticsModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_AdpModel(), theADPPackage.getADPModel(), null, "adpModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_AdpModels(), theADPPackage.getADPModel(), null, "adpModels", null, 0, -1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGScenarioModel_NominationsModel(), theNominationsPackage.getNominationsModel(), null, "nominationsModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(lngReferenceModelEClass, LNGReferenceModel.class, "LNGReferenceModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getLNGReferenceModel_PortModel(), thePortPackage.getPortModel(), null, "portModel", null, 0, 1, LNGReferenceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

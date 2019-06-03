@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.pricing.CostModel;
@@ -61,6 +62,15 @@ public final class ScenarioModelUtil {
 		return null;
 	}
 
+	@Nullable
+	public static LNGScenarioModel findScenarioModel(@NonNull final NominationsModel nominationsModel) {
+		final EObject container = nominationsModel.eContainer();
+		if (container instanceof LNGScenarioModel) {
+			return (LNGScenarioModel) container;
+		}
+		return null;
+	}
+	
 	/**
 	 * Find the containing {@link LNGPortfolioModel} for this Schedule.
 	 * 
@@ -90,6 +100,16 @@ public final class ScenarioModelUtil {
 		return null;
 	}
 
+	@Nullable
+	public static LNGScenarioModel findScenarioModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		@NonNull
+		final EObject scenario = scenarioDataProvider.getScenario();
+		if (scenario instanceof LNGScenarioModel) {
+			return ((LNGScenarioModel) scenario);
+		}
+		return null;
+	}
+	
 	@Nullable
 	public static LNGReferenceModel findReferenceModel(@NonNull final LNGScenarioModel scenarioModel) {
 		return scenarioModel.getReferenceModel();
@@ -145,6 +165,60 @@ public final class ScenarioModelUtil {
 		return pricingModel;
 	}
 
+	/**
+	 * Get the nominations model.
+	 * @param scenarioDataProvider
+	 * @return a copy of the nominations model.
+	 * @throws IllegalArgumentException if arguments are invalid or model is missing.
+	 */
+	@NonNull
+	public static NominationsModel getNominationsModel(final IScenarioDataProvider scenarioDataProvider) {
+		final LNGScenarioModel scenarioModel = findScenarioModel(scenarioDataProvider);
+		if (scenarioModel != null) {
+			return getNominationsModel(scenarioModel);
+		}
+		else {
+			throw new IllegalArgumentException("Invalid scenario data provider.");
+		}
+	}
+
+	/**
+	 * Get the nominations model.
+	 * @param scenarioDataProvider
+	 * @return a copy of the nominations model.
+	 * @throws IllegalArgumentException if arguments are invalid or model is missing.
+	 */
+	@NonNull
+	public static NominationsModel getNominationsModel(final LNGScenarioModel scenarioModel) {
+		NominationsModel nominationsModel = null;
+		if (scenarioModel != null) {
+			nominationsModel = scenarioModel.getNominationsModel();
+		}
+		else {
+			throw new IllegalArgumentException("Invalid scenario model.");
+		}
+		if (nominationsModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model: missing nominations model.");
+		}
+		return nominationsModel;
+	}	
+
+	
+	@Nullable
+	public static NominationsModel findNominationsModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		final LNGScenarioModel scenarioModel = findScenarioModel(scenarioDataProvider);
+		return findNominationsModel(scenarioModel);
+	}
+
+	@Nullable
+	public static NominationsModel findNominationsModel(final LNGScenarioModel scenarioModel) {
+		NominationsModel nominationsModel = null;
+		if (scenarioModel != null) {
+			nominationsModel = scenarioModel.getNominationsModel();
+		}
+		return nominationsModel;
+	}	
+	
 	@NonNull
 	public static CostModel getCostModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
 		final LNGReferenceModel referenceModel = findReferenceModel(scenarioDataProvider);
@@ -259,6 +333,19 @@ public final class ScenarioModelUtil {
 		return cargoModel;
 	}
 
+	@Nullable
+	public static CargoModel getCargoModel(@NonNull final NominationsModel nominationsModel) {
+		LNGScenarioModel scenarioModel = findScenarioModel(nominationsModel);
+		CargoModel cargoModel = null;
+		if (scenarioModel != null) {
+			cargoModel = scenarioModel.getCargoModel();
+		}
+		if (cargoModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return cargoModel;
+	}
+	
 	@NonNull
 	public static FleetModel getFleetModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
 		final LNGReferenceModel referenceModel = findReferenceModel(scenarioDataProvider);

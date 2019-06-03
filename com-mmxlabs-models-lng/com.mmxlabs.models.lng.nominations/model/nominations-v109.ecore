@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="nominations" nsURI="http://www.mmxlabs.com/models/lng/nominations/1/"
+    nsPrefix="lng.nominations">
+  <eClassifiers xsi:type="ecore:EClass" name="NominationsModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slotNominationSpecs" upperBound="-1"
+        eType="#//SlotNominationSpec" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slotNominations" upperBound="-1"
+        eType="#//SlotNomination" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contractNominationSpecs"
+        upperBound="-1" eType="#//ContractNominationSpec"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contractNominations" upperBound="-1"
+        eType="#//ContractNomination"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractNominationSpec" abstract="true"
+      eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="counterparty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="remark" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sizeUnits" eType="#//DatePeriodPrior"
+        defaultValueLiteral="DaysPrior"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dayOfMonth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alertSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alertSizeUnits" eType="#//DatePeriodPrior"
+        defaultValueLiteral="DaysPrior"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="side" eType="#//Side"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="refererId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SlotNominationSpec" eSuperTypes="#//AbstractNominationSpec"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SlotNomination" eSuperTypes="#//AbstractNomination"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ContractNomination" eSuperTypes="#//AbstractNomination"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ContractNominationSpec" eSuperTypes="#//AbstractNominationSpec"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractNomination" abstract="true"
+      eSuperTypes="#//AbstractNominationSpec">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nomineeId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dueDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="done" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alertDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="specUuid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        unsettable="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DatePeriodPrior">
+    <eLiterals name="DaysPrior"/>
+    <eLiterals name="MonthsPrior" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Side">
+    <eLiterals name="Buy"/>
+    <eLiterals name="Sell" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

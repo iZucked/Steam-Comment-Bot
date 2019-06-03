@@ -171,6 +171,8 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 		// subModels.add(scenarioModel.getActualsModel());
 		subModels.add(ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
 
+		subModels.add(ScenarioModelUtil.findNominationsModel(scenarioDataProvider));
+		
 		// Remove any null references
 		while (subModels.remove(null))
 			;
