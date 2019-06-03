@@ -233,7 +233,10 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		addTypicalColumn("Done", new BooleanFlagAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_Done(), jointModelEditor.getEditingDomain()) {
 			@Override
 			public void doSetValue(Object object, Object value) {
-				final AbstractNomination nomination = (AbstractNomination)object;
+				final SlotNomination nomination = (SlotNomination)object;
+				if (nomination.eContainer() == null) {
+					addNomination(nomination);	
+				}
 				RelativeDateRangeNominationsViewerPane.this.previousNominations.add(nomination.getUuid());
 				super.doSetValue(object, value);
 			}
@@ -325,20 +328,25 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 				DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection);
 
-				// Add modified slot nomination to the nomination model, if not present.
-				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
-				final NominationsModel nominationsModel = RelativeDateRangeNominationsViewerPane.this.getNominationsModel();
+				//Add the edited slot nomination to the nominations model. 
 				final SlotNomination sn = (SlotNomination) ((IStructuredSelection) selection).getFirstElement();
-				if (!nominationsModel.getSlotNominations().contains(sn)) {
-					final Command cmd = AddCommand.create(ed, nominationsModel, NominationsPackage.Literals.NOMINATIONS_MODEL__SLOT_NOMINATIONS, sn);
-					if (cmd.canExecute()) {
-						jointModelEditor.getDefaultCommandHandler().handleCommand(cmd, null, null);
-					}
-				}
+				addNomination(sn);
 			}
 		});
 	}
 
+	private void addNomination(SlotNomination sn) {
+		// Add modified slot nomination to the nomination model, if not present.
+		final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
+		final NominationsModel nominationsModel = RelativeDateRangeNominationsViewerPane.this.getNominationsModel();
+		if (!nominationsModel.getSlotNominations().contains(sn)) {
+			final Command cmd = AddCommand.create(ed, nominationsModel, NominationsPackage.Literals.NOMINATIONS_MODEL__SLOT_NOMINATIONS, sn);
+			if (cmd.canExecute()) {
+				jointModelEditor.getDefaultCommandHandler().handleCommand(cmd, null, null);
+			}
+		}
+	}
+	
 	private NominationsModel getNominationsModel() {
 		final LNGScenarioModel scenarioModel = (LNGScenarioModel) jointModelEditor.getRootObject();
 		return scenarioModel.getNominationsModel();
