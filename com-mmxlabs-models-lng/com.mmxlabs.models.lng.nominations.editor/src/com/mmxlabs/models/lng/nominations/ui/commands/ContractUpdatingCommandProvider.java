@@ -43,7 +43,7 @@ public class ContractUpdatingCommandProvider extends AbstractCommandProvider {
 							final LNGScenarioModel sm = (LNGScenarioModel)rootObject;
 							final NominationsModel nm = sm.getNominationsModel();
 							nm.getSlotNominationSpecs().forEach(sns -> {
-								if (sns.getRefererId().equals(oldName)) {
+								if (Objects.equals(sns.getRefererId(), oldName)) {
 									cc.append(SetCommand.create(editingDomain, sns, NominationsPackage.eINSTANCE.getAbstractNominationSpec_RefererId(), newName));
 								}
 							});
@@ -61,7 +61,7 @@ public class ContractUpdatingCommandProvider extends AbstractCommandProvider {
 						final LNGScenarioModel sm = (LNGScenarioModel)rootObject;
 						final NominationsModel nm = sm.getNominationsModel();
 						nm.getSlotNominationSpecs().forEach(sns -> {
-							if (sns.getRefererId().equals(name)) {
+							if (Objects.equals(sns.getRefererId(), name)) {
 								cc.append(DeleteCommand.create(editingDomain, sns));
 							}
 						});
