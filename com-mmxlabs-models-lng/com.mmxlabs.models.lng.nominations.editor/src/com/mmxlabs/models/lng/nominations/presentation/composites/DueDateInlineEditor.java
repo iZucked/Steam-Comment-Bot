@@ -1,7 +1,5 @@
 package com.mmxlabs.models.lng.nominations.presentation.composites;
 
-import java.time.LocalDate;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
