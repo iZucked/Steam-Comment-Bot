@@ -69,7 +69,10 @@ public class RelativeDateRangeToolbarEditor extends ControlContribution {
 		btn1M = createRangeModeButton(pparent, "1m", "1 month "+FROM_START_STR, RangeMode.OneMonth);
 		btn3M = createRangeModeButton(pparent, "3m", "3 month "+FROM_START_STR, RangeMode.ThreeMonth);
 		btnAll = createRangeModeButton(pparent, "All", "Display all "+FROM_START_STR, RangeMode.All);	
-
+		
+		//Set the default range mode button so user knows what the current range is set to, on opening the nominations view.
+		this.selectRangeModeButton(this.rangeMode);
+		
 		return pparent;		
 	}
 	
@@ -94,23 +97,44 @@ public class RelativeDateRangeToolbarEditor extends ControlContribution {
 				// Update the current range mode.
 				rangeMode = rangeModeOnClick;
 				
-				// Set other buttons to not be selected.
-				final Button[] btns = new Button[] { btn1M, btn3M, btnAll };
-				for (final Button otherBtn : btns) {
-					if (otherBtn != btn) {
-						otherBtn.setSelection(false);
-					}
-				}
-				
-				// Set this one to be selected.
-				btn.setSelection(true);
-
+				// Set the currently selected range mode button to be selected.
+				selectRangeModeButton(rangeMode);
+		
 				// Get the nominations viewer pane to update.
 				parent.refresh();
 			}
 		});
 		btn.addListener(SWT.Resize, new LimitWidgetHeightListener(btnParent, btn));
 		return btn;
+	}
+	
+	private void selectRangeModeButton(RangeMode rangeMode) {
+		switch (rangeMode) {
+		case OneMonth:
+			setSelectedButton(btn1M);
+			break;
+			
+		case ThreeMonth:
+			setSelectedButton(btn3M);
+			break;
+			
+		case All:
+			setSelectedButton(btnAll);
+			break;
+		}
+	}
+	
+	private void setSelectedButton(Button btn) {
+		// Set other buttons to not be selected.
+		final Button[] btns = new Button[] { btn1M, btn3M, btnAll };
+		for (final Button otherBtn : btns) {
+			if (otherBtn != btn) {
+				otherBtn.setSelection(false);
+			}
+		}
+		
+		// Set this one to be selected.
+		btn.setSelection(true);
 	}
 	
 	public LocalDate getStartDate() {
