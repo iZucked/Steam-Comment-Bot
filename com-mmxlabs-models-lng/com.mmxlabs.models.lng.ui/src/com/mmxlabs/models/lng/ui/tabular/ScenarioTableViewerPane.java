@@ -72,6 +72,69 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 
 	private static final Logger log = LoggerFactory.getLogger(ScenarioTableViewerPane.class);
 
+	public class ScenarioTableViewerDeleteAction extends ScenarioModifyingAction {
+		
+		@Nullable final Function<Collection<?>, Collection<Object>> callback;
+		
+		public ScenarioTableViewerDeleteAction(@Nullable final Function<Collection<?>, Collection<Object>> callback) {
+			super("Delete");
+			this.callback = callback;
+			setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+			setDisabledImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE_DISABLED));
+			viewer.addSelectionChangedListener(this);
+		}
+
+		@Override
+		public void run() {
+
+			// Delete commands can be slow, so show the busy indicator while deleting.
+			final Runnable runnable = new Runnable() {
+
+				@Override
+				public void run() {
+
+					final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+					editorLock.lock();
+					try {
+						getJointModelEditorPart().setDisableUpdates(true);
+						final ISelection sel = getLastSelection();
+						if (sel instanceof IStructuredSelection) {
+							final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
+							// Copy selection
+							final List<?> objects = new ArrayList<>(((IStructuredSelection) sel).toList());
+
+							// Ensure a unique collection of objects - no duplicates
+							final Set<Object> uniqueObjects = new HashSet<>(objects);
+
+							// Pull in additional objects to delete.
+							if (callback != null) {
+								uniqueObjects.addAll(callback.apply(objects));
+							}
+							filterObjectsToDelete(uniqueObjects);
+
+							// Clear current selection
+							selectionChanged(new SelectionChangedEvent(viewer, StructuredSelection.EMPTY));
+
+							// Execute command
+							final Command deleteCommand = DeleteCommand.create(ed, uniqueObjects);
+							ed.getCommandStack().execute(deleteCommand);
+						}
+					} finally {
+						editorLock.unlock();
+						getJointModelEditorPart().setDisableUpdates(false);
+					}
+				}
+
+			};
+			BusyIndicator.showWhile(null, runnable);
+		}
+
+		@Override
+		protected boolean isApplicableToSelection(final ISelection selection) {
+			return selection.isEmpty() == false && selection instanceof IStructuredSelection;
+		}
+	}; 
+	
 	protected ScenarioTableViewer scenarioViewer;
 
 	protected Action deleteAction;
@@ -260,63 +323,7 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 	}
 
 	protected Action createDeleteAction(@Nullable final Function<Collection<?>, Collection<Object>> callback) {
-		return new ScenarioModifyingAction("Delete") {
-			{
-				setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
-				setDisabledImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE_DISABLED));
-				viewer.addSelectionChangedListener(this);
-			}
-
-			@Override
-			public void run() {
-
-				// Delete commands can be slow, so show the busy indicator while deleting.
-				final Runnable runnable = new Runnable() {
-
-					@Override
-					public void run() {
-
-						final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-						editorLock.lock();
-						try {
-							getJointModelEditorPart().setDisableUpdates(true);
-							final ISelection sel = getLastSelection();
-							if (sel instanceof IStructuredSelection) {
-								final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
-								// Copy selection
-								final List<?> objects = new ArrayList<>(((IStructuredSelection) sel).toList());
-
-								// Ensure a unique collection of objects - no duplicates
-								final Set<Object> uniqueObjects = new HashSet<>(objects);
-
-								// Pull in additional objects to delete.
-								if (callback != null) {
-									uniqueObjects.addAll(callback.apply(objects));
-								}
-								filterObjectsToDelete(uniqueObjects);
-
-								// Clear current selection
-								selectionChanged(new SelectionChangedEvent(viewer, StructuredSelection.EMPTY));
-
-								// Execute command
-								final Command deleteCommand = DeleteCommand.create(ed, uniqueObjects);
-								ed.getCommandStack().execute(deleteCommand);
-							}
-						} finally {
-							editorLock.unlock();
-							getJointModelEditorPart().setDisableUpdates(false);
-						}
-					}
-
-				};
-				BusyIndicator.showWhile(null, runnable);
-			}
-
-			@Override
-			protected boolean isApplicableToSelection(final ISelection selection) {
-				return selection.isEmpty() == false && selection instanceof IStructuredSelection;
-			}
-		};
+		return new ScenarioTableViewerDeleteAction(callback);
 	}
 
 	@Override
