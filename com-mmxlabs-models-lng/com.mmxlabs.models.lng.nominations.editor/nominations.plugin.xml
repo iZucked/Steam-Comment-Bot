@@ -5,6 +5,18 @@
 -->
 <?eclipse version="3.4"?>
 <plugin>
+<!-- 
+  <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="Nominations"
+            icon="icons/cview16/ihigh_obj.gif"
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.nomination.NominationAlertReport"
+            id="com.mmxlabs.lingo.reports.views.nomination.NominationAlertReport">
+      </view>
+	</extension>
+-->
  <extension
        point="org.eclipse.ui.views">
     <view
