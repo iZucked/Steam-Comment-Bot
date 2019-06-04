@@ -5,9 +5,12 @@
 package com.mmxlabs.models.lng.nominations.ui.editorpart;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
@@ -19,6 +22,7 @@ import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -230,7 +234,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				}
 			}
 		});
-		addTypicalColumn("Done", new BooleanFlagAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_Done(), jointModelEditor.getEditingDomain()) {
+		final GridViewerColumn gcvDone = addTypicalColumn("Done", new BooleanFlagAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_Done(), jointModelEditor.getEditingDomain()) {
 			@Override
 			public void doSetValue(Object object, Object value) {
 				final SlotNomination nomination = (SlotNomination)object;
@@ -241,6 +245,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				super.doSetValue(object, value);
 			}
 		});
+		gcvDone.getColumn().setAlignment(SWT.CENTER);	
 		addTypicalColumn("Remark", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Remark(), jointModelEditor.getEditingDomain()) {
 			@Override
 			public boolean canEdit(final Object object) {
@@ -254,6 +259,33 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		});
 	}
 
+	/**
+	 * Modified createDeletaAction, so that we disallow deletion of generated nominations or
+	 * overridden generated nomination (those eContainer() == null or with specIds set, respectively).
+	 */
+	@Override
+	protected Action createDeleteAction(@Nullable final Function<Collection<?>, Collection<Object>> callback) {
+		return new ScenarioTableViewerDeleteAction(callback) {
+			@Override
+			protected boolean isApplicableToSelection(final ISelection selection) {
+				if (selection instanceof IStructuredSelection) {
+					final IStructuredSelection s = (IStructuredSelection)selection;
+					final Iterator<?> it = s.iterator();
+					while (it.hasNext()) {
+						final Object o = it.next();
+						if (o instanceof AbstractNomination) {
+							final AbstractNomination n = (AbstractNomination)o;
+							if (n.isSetSpecUuid()) {
+								return false;
+							}
+						}
+					}
+				}
+				return selection.isEmpty() == false && selection instanceof IStructuredSelection;
+			}
+		};
+	}
+	
 	protected LNGScenarioModel getScenarioModel() {
 		return (LNGScenarioModel)this.jointModelEditor.getRootObject();
 	}
