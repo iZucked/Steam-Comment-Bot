@@ -93,26 +93,6 @@
             class="com.mmxlabs.models.lng.nominations.ui.views.RemoveOldNominationsAlertViewModuleProcessor">
       </processor>
    </extension>
- 	<extension
-       point="org.eclipse.ui.views">
-    <view
-          category="com.mmxlabs.shiplingo.platform.reports"
-          icon="icons/full/obj16/NominationsModelFile.gif"
-          class="com.mmxlabs.models.lng.nominations.ui.views.NominationSpecsView"
-          id="com.mmxlabs.models.lng.nominations.editor.NominationSpecsView"
-          name="Nomination Specifications"
-          restorable="true">
-    </view>
-    <view
-          category="com.mmxlabs.shiplingo.platform.reports"
-          icon="icons/cview16/ihigh_obj.gif"
-          class="com.mmxlabs.models.lng.nominations.ui.views.NominationsView"
-          id="com.mmxlabs.models.lng.nominations.editor.NominationsView"
-          name="Nominations"
-          viewerPane="com.mmxlabs.models.lng.nominations.ui.editorpart.RelativeDateRangeNominationsViewerPane"
-          restorable="true">
-    </view>
- </extension>
  <extension point="com.mmxlabs.models.common.modelcommandprovider">
     <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.nominations.ui.commands.SlotUpdatingCommandProvider"
@@ -153,11 +133,17 @@
     </factory>
  </extension>
  
+    <extension
+         point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="nominations"
+            plugin.xml="nominations.plugin.xml">
+      </PluginXMLEnablement>
+ 	</extension>
+ 	
  <extension
        point="com.mmxlabs.models.lng.nominations.editor.NominationType">
     <!-- Removed:  "Source port", "Destination port" as redundant: -->
-    <!-- 		"Buy window", "Sell window", "Vessel", "Load volume", "Discharge volume", 
-					"Load port", "Discharge port", Cancellation, Credit, Surveyor -->
     <NominationType
     	type="Buy window">
     </NominationType>
