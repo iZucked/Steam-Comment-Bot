@@ -23,27 +23,41 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference nominations.ecore#//NominationsModel/contractNominations"/>
     </genClasses>
     <genClasses image="false" ecoreClass="nominations.ecore#//AbstractNominationSpec">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/counterparty"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/remark"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/size"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/sizeUnits"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/dayOfMonth"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/alertSize"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/alertSizeUnits"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/side"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/refererId"/>
+      <genFeatures createChild="false" propertyDescription="The type of nomination."
+          ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/type"/>
+      <genFeatures createChild="false" propertyDescription="Whether this defines counter party nominations or not."
+          ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/counterparty"/>
+      <genFeatures createChild="false" propertyDescription="A comment." ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/remark"/>
+      <genFeatures createChild="false" propertyDescription="The number of days or months, prior to the window start date to make the due date."
+          ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/size"/>
+      <genFeatures createChild="false" propertyDescription="Day or months units to use for computing the due date."
+          ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/sizeUnits"/>
+      <genFeatures createChild="false" propertyDescription="The day of the month that a nomination must be made on."
+          ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/dayOfMonth"/>
+      <genFeatures createChild="false" propertyDescription="The number of days or months, prior to the window start date before the nomination is highlighted."
+          ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/alertSize"/>
+      <genFeatures createChild="false" propertyDescription="Day or months units to use for computing the alert date."
+          ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/alertSizeUnits"/>
+      <genFeatures createChild="false" propertyDescription="Whether this is a buy or a sell."
+          ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/side"/>
+      <genFeatures createChild="false" propertyDescription="The contract attached to slots, that nominations of this type will be automatically generated for."
+          ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNominationSpec/refererId"/>
     </genClasses>
     <genClasses ecoreClass="nominations.ecore#//SlotNominationSpec"/>
     <genClasses ecoreClass="nominations.ecore#//SlotNomination"/>
     <genClasses ecoreClass="nominations.ecore#//ContractNomination"/>
     <genClasses ecoreClass="nominations.ecore#//ContractNominationSpec"/>
     <genClasses image="false" ecoreClass="nominations.ecore#//AbstractNomination">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNomination/nomineeId"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNomination/dueDate"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNomination/done"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNomination/alertDate"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNomination/specUuid"/>
+      <genFeatures createChild="false" propertyDescription="The name of the cargo that this nomination is associated with."
+          ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNomination/nomineeId"/>
+      <genFeatures createChild="false" propertyDescription="The due date when this nomination must be completed by."
+          ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNomination/dueDate"/>
+      <genFeatures createChild="false" propertyDescription="Inidicates that this nomination is completed (the nomination will dissapear from the nomination view once set)"
+          ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNomination/done"/>
+      <genFeatures createChild="false" propertyDescription="The date when this nomination will become highlighted in the nominations view."
+          ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNomination/alertDate"/>
+      <genFeatures createChild="false" propertyDescription="The nomination specification that this nomination was generated from."
+          ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNomination/specUuid"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
