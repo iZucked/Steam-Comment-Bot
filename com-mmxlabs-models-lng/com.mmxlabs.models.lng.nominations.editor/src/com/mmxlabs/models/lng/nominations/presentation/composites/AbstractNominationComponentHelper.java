@@ -92,10 +92,18 @@ public class AbstractNominationComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the nomineeId feature on AbstractNomination
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_nomineeIdEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, NominationsPackage.Literals.ABSTRACT_NOMINATION__NOMINEE_ID));
+		detailComposite.addInlineEditor(new TextualSuggestionInlineEditor(NominationsPackage.Literals.ABSTRACT_NOMINATION__NOMINEE_ID,  (rootObject, target) -> {
+			if (rootObject instanceof LNGScenarioModel && target instanceof AbstractNomination) {
+				final LNGScenarioModel scenarioModel = (LNGScenarioModel)rootObject;
+				final AbstractNomination nomination = (AbstractNomination)target;
+				return NominationsModelUtils.getPossibleSlotNames(scenarioModel, nomination);
+			}
+			else {
+				return Collections.emptyList();
+			}}));
 	}
 
 	/**
