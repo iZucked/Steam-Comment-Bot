@@ -20,14 +20,15 @@ abstract public class AbstractNominationsViewerPane extends ScenarioTableViewerP
 
 	@Override
 	public <T extends ICellManipulator & ICellRenderer> GridViewerColumn addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final ETypedElement... path) {
-		GridViewerColumn gvColumn = super.addTypicalColumn(columnName, manipulatorAndRenderer, path);
-		GridColumn gColumn = gvColumn.getColumn();
+		final GridViewerColumn gvColumn = super.addTypicalColumn(columnName, manipulatorAndRenderer, path);
+		final GridColumn gColumn = gvColumn.getColumn();
 	    if (gColumn != null) {
 	    	gColumn.setAlignment(SWT.LEFT);
 	    }
 		return gvColumn;
 	}
 	
+	@Override
 	public void refresh() {
 		
 	}
