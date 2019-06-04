@@ -39,6 +39,11 @@ public class NomineeIdConstraint extends AbstractModelMultiConstraint {
 					statuses.add(status);	
 				}
 			}
+			else {
+				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Missing nomineeId."));
+				status.addEObjectAndFeature(nomination, NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId());
+				statuses.add(status);
+			}
 		}
 		return Activator.PLUGIN_ID;
 	}
