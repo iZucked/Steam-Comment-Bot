@@ -69,43 +69,24 @@ public class NominationsModelComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_slotNominationSpecsEditor(detailComposite, topClass);
-		add_slotNominationsEditor(detailComposite, topClass);
-		add_contractNominationSpecsEditor(detailComposite, topClass);
-		add_contractNominationsEditor(detailComposite, topClass);
+		add_nominationSpecsEditor(detailComposite, topClass);
+		add_nominationsEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the slotNominationSpecs feature on NominationsModel
+	 * Create the editor for the nominationSpecs feature on NominationsModel
 	 *
 	 * @generated
 	 */
-	protected void add_slotNominationSpecsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, NominationsPackage.Literals.NOMINATIONS_MODEL__SLOT_NOMINATION_SPECS));
-	}
-	/**
-	 * Create the editor for the slotNominations feature on NominationsModel
-	 *
-	 * @generated
-	 */
-	protected void add_slotNominationsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, NominationsPackage.Literals.NOMINATIONS_MODEL__SLOT_NOMINATIONS));
+	protected void add_nominationSpecsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATION_SPECS));
 	}
 
 	/**
-	 * Create the editor for the contractNominationSpecs feature on NominationsModel
+	 * Create the editor for the nominations feature on NominationsModel
 	 *
 	 * @generated
 	 */
-	protected void add_contractNominationSpecsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, NominationsPackage.Literals.NOMINATIONS_MODEL__CONTRACT_NOMINATION_SPECS));
-	}
-
-	/**
-	 * Create the editor for the contractNominations feature on NominationsModel
-	 *
-	 * @generated
-	 */
-	protected void add_contractNominationsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, NominationsPackage.Literals.NOMINATIONS_MODEL__CONTRACT_NOMINATIONS));
+	protected void add_nominationsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATIONS));
 	}
 }

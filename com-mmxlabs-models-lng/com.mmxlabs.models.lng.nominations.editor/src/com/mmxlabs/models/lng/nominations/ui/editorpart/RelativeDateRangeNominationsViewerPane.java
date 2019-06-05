@@ -18,6 +18,8 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypedElement;
@@ -35,6 +37,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -49,13 +52,17 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
-import com.mmxlabs.models.lng.nominations.SlotNomination;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
+import com.mmxlabs.models.lng.ui.actions.AddModelAction;
+import com.mmxlabs.models.lng.ui.actions.SingleAddAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
+import com.mmxlabs.models.ui.modelfactories.IModelFactory;
+import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -89,6 +96,13 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		service.addPostSelectionListener(this);
 	}
 
+	protected Action createAddAction(final EReference containment) {
+		super.createAddAction(containment);
+		final Action duplicateAction = createDuplicateAction();
+		final Action[] extraActions = duplicateAction == null ? new Action[0] : new Action[] { duplicateAction };
+		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), extraActions, this.getViewer());
+	}
+	
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
@@ -239,7 +253,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		final GridViewerColumn gcvDone = addTypicalColumn("Done", new BooleanFlagAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_Done(), jointModelEditor.getEditingDomain()) {
 			@Override
 			public void doSetValue(Object object, Object value) {
-				final SlotNomination nomination = (SlotNomination)object;
+				final AbstractNomination nomination = (AbstractNomination)object;
 				if (nomination.eContainer() == null) {
 					addNomination(nomination);	
 				}
@@ -328,9 +342,9 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			 */
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-				if (element instanceof SlotNomination) {
+				if (element instanceof AbstractNomination) {
 					final LNGScenarioModel scenarioModel = getScenarioModel();
-					final SlotNomination sn = (SlotNomination) element;
+					final AbstractNomination sn = (AbstractNomination) element;
 					final LocalDate startDate = getStartDate();
 					final LocalDate endDate = getEndDate();
 					final LocalDate dueDate = NominationsModelUtils.getDueDate(scenarioModel, sn);
@@ -363,18 +377,18 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection);
 
 				//Add the edited slot nomination to the nominations model. 
-				final SlotNomination sn = (SlotNomination) ((IStructuredSelection) selection).getFirstElement();
+				final AbstractNomination sn = (AbstractNomination) ((IStructuredSelection) selection).getFirstElement();
 				addNomination(sn);
 			}
 		});
 	}
 
-	private void addNomination(SlotNomination sn) {
+	private void addNomination(AbstractNomination sn) {
 		// Add modified slot nomination to the nomination model, if not present.
 		final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
 		final NominationsModel nominationsModel = RelativeDateRangeNominationsViewerPane.this.getNominationsModel();
-		if (!nominationsModel.getSlotNominations().contains(sn)) {
-			final Command cmd = AddCommand.create(ed, nominationsModel, NominationsPackage.Literals.NOMINATIONS_MODEL__SLOT_NOMINATIONS, sn);
+		if (!nominationsModel.getNominations().contains(sn)) {
+			final Command cmd = AddCommand.create(ed, nominationsModel, NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATIONS, sn);
 			if (cmd.canExecute()) {
 				jointModelEditor.getDefaultCommandHandler().handleCommand(cmd, null, null);
 			}
@@ -409,7 +423,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 							final LNGScenarioModel scenarioModel = (LNGScenarioModel) inputElement;
 							final NominationsModel nominationsModel = scenarioModel.getNominationsModel();
 							if (nominationsModel != null) {
-								elements.addAll(nominationsModel.getSlotNominations());
+								elements.addAll(nominationsModel.getNominations());
 							}
 							setCurrentContainerAndContainment(nominationsModel, null);
 						}

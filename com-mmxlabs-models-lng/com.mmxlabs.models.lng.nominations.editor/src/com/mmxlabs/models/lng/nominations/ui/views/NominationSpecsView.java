@@ -33,7 +33,7 @@ public class NominationSpecsView extends ScenarioTableViewerView<NominationSpecs
 		if (domain != null) {
 			pane.init(Arrays.asList(new EReference[] { 
 					LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_NominationsModel(),
-					NominationsPackage.eINSTANCE.getNominationsModel_SlotNominationSpecs() }),
+					NominationsPackage.eINSTANCE.getNominationsModel_NominationSpecs() }),
 					getAdapterFactory(), getModelReference());
 			pane.getViewer().setInput(getRootObject());
 		}	

@@ -68,12 +68,7 @@ public class SlotNominationItemProvider extends AbstractNominationItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		if (object instanceof SlotNomination) {
-			return ((SlotNomination)object).getType();
-		}
-		else {
-			return "";
-		}
+		return "";
 	}
 
 

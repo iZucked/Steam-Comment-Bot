@@ -69,7 +69,7 @@ public class NominationsModelUtils {
 			final NominationsModel nm = sm.getNominationsModel();
 
 			//Check specific slot nominations.
-			for (final SlotNomination nomination : nm.getSlotNominations()) {
+			for (final AbstractNomination nomination : nm.getNominations()) {
 				if (nomination.getSide() == Side.BUY && slot instanceof LoadSlot && Objects.equals(nomination.getNomineeId(),name) && Objects.equals(nomination.getType(),nominationType)) {
 					return nomination;
 				}
@@ -217,7 +217,7 @@ public class NominationsModelUtils {
 		
 		// Make a map of existing nominations, so we don't generate nominations, where an existing generated nomination has been overridden.
 		final HashMap<String, AbstractNomination> existingSlotNominations = new HashMap<>();
-		for (final AbstractNomination n : nominationsModel.getSlotNominations()) {
+		for (final AbstractNomination n : nominationsModel.getNominations()) {
 			existingSlotNominations.put(n.getSpecUuid() + ":" + n.getNomineeId(), n);
 		}
 
@@ -248,7 +248,7 @@ public class NominationsModelUtils {
 							contractName = contract.getName();
 						}
 
-						for (final SlotNominationSpec sp : nominationsModel.getSlotNominationSpecs()) {
+						for (final AbstractNominationSpec sp : nominationsModel.getNominationSpecs()) {
 							String refererId = "";
 							if (sp.getRefererId() != null) {
 								refererId = sp.getRefererId();
@@ -371,7 +371,7 @@ public class NominationsModelUtils {
 	private static AbstractNominationSpec getNominationSpec(@NonNull final LNGScenarioModel scenarioModel, final String uuid) {
 		final NominationsModel nm = scenarioModel.getNominationsModel();
 		if (nm != null && uuid != null) {
-			final EList<SlotNominationSpec> specs = nm.getSlotNominationSpecs();
+			final EList<AbstractNominationSpec> specs = nm.getNominationSpecs();
 			for (final AbstractNominationSpec spec : specs) {
 				if (Objects.equals(uuid, spec.getUuid())) {
 					return spec;
@@ -510,6 +510,35 @@ public class NominationsModelUtils {
 	public static LocalDate getNominationDate(String nominationType, IScenarioDataProvider scenarioDataProvider, Slot<?> slot) {
 		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(scenarioDataProvider);
 		final AbstractNomination n = NominationsModelUtils.findNominationForSlot(scenarioModel, slot, nominationType);
-		return n.getDueDate();	
+		if (n != null) {
+			return n.getDueDate();
+		}
+		else {
+			return null;
+		}
+	}
+
+	public static Contract findContract(LNGScenarioModel scenarioModel, AbstractNomination nomination) {
+		final CommercialModel cm = ScenarioModelUtil.getCommercialModel(scenarioModel);
+		Side side = nomination.getSide();
+		String nomineeId = nomination.getNomineeId();
+		Contract contract = null;
+		if (nomineeId != null && !nomineeId.equals("")) {
+			if (side == Side.BUY) {
+				for (Contract c : cm.getPurchaseContracts()) { 
+					if (c.getName().equals(nomineeId)) {
+						contract = c;
+					}
+				}
+			}
+			else {
+				for (Contract c : cm.getSalesContracts()) { 
+					if (c.getName().equals(nomineeId)) {
+						contract = c;
+					}
+				}
+			}
+		}
+		return contract;
 	}
 }

@@ -108,7 +108,7 @@ public class MigrateToV109 extends AbstractMigrationUnit {
 
 		processContracts(sellLiteral, salesContracts, nominationsFactory, slotNominationSpecClass, slotNominationSpecs);
 
-		nominationsModel.setRef("slotNominationSpecs", slotNominationSpecs);
+		nominationsModel.setRef("nominationSpecs", slotNominationSpecs);
 
 		// Copy across old nominations into nominations model.
 		final EPackage cargoPackage = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CargoModel);
@@ -122,7 +122,7 @@ public class MigrateToV109 extends AbstractMigrationUnit {
 		final List<EObjectWrapper> dischargeSlots = cargoModel.getRefAsList("dischargeSlots");
 		processSlots(sellLiteral, dischargeSlots, nominationsFactory, slotNominationClass, slotNominations);
 
-		nominationsModel.setRef("slotNominations", slotNominations);
+		nominationsModel.setRef("nominations", slotNominations);
 
 		//remove old nominations features on contracts.
 		purchaseContracts.forEach(pc -> removeObsoleteNominationFeaturesFromContract(pc));

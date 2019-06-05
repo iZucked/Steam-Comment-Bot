@@ -33,12 +33,12 @@ public class NominationsModelEditorContribution extends BaseJointModelEditorCont
 			final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
 			nsvPane = new NominationSpecsViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			nsvPane.createControl(sash);
-			nsvPane.init(Collections.singletonList(NominationsPackage.eINSTANCE.getNominationsModel_SlotNominationSpecs()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+			nsvPane.init(Collections.singletonList(NominationsPackage.eINSTANCE.getNominationsModel_NominationSpecs()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 			nsvPane.getViewer().setInput(modelObject);
 
 			snvPane = new RelativeDateRangeNominationsViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			snvPane.createControl(sash);
-			snvPane.init(Collections.singletonList(NominationsPackage.eINSTANCE.getNominationsModel_SlotNominations()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+			snvPane.init(Collections.singletonList(NominationsPackage.eINSTANCE.getNominationsModel_Nominations()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 			snvPane.getViewer().setInput(modelObject);
 		///PlatformUI.getWorkbench().getHelpSystem().setHelp(indexPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Markets");
 			nsvPage = editorPart.addPage(sash);

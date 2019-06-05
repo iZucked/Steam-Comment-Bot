@@ -23,7 +23,7 @@ public class NominationsJSONGenerator {
 		final NominationsModel nominationsModel = scenarioModel.getNominationsModel();
 
 		assert cargoModel != null;
-		for (final SlotNomination sn : nominationsModel.getSlotNominations()) {
+		for (final AbstractNomination sn : nominationsModel.getNominations()) {
 			if (!sn.isDone()) {
 				final Nominations r = new Nominations(scenarioModel, sn);
 				result.add(r);

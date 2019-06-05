@@ -16,10 +16,8 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.nominations.NominationsModel#getSlotNominationSpecs <em>Slot Nomination Specs</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.nominations.NominationsModel#getSlotNominations <em>Slot Nominations</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.nominations.NominationsModel#getContractNominationSpecs <em>Contract Nomination Specs</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.nominations.NominationsModel#getContractNominations <em>Contract Nominations</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.nominations.NominationsModel#getNominationSpecs <em>Nomination Specs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.nominations.NominationsModel#getNominations <em>Nominations</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.nominations.NominationsPackage#getNominationsModel()
@@ -28,67 +26,35 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface NominationsModel extends UUIDObject {
 	/**
-	 * Returns the value of the '<em><b>Slot Nomination Specs</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.nominations.SlotNominationSpec}.
+	 * Returns the value of the '<em><b>Nomination Specs</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.nominations.AbstractNominationSpec}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Slot Nomination Specs</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Nomination Specs</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Slot Nomination Specs</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.nominations.NominationsPackage#getNominationsModel_SlotNominationSpecs()
+	 * @return the value of the '<em>Nomination Specs</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.nominations.NominationsPackage#getNominationsModel_NominationSpecs()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<SlotNominationSpec> getSlotNominationSpecs();
+	EList<AbstractNominationSpec> getNominationSpecs();
 
 	/**
-	 * Returns the value of the '<em><b>Slot Nominations</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.nominations.SlotNomination}.
+	 * Returns the value of the '<em><b>Nominations</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.nominations.AbstractNomination}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Slot Nominations</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Nominations</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Slot Nominations</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.nominations.NominationsPackage#getNominationsModel_SlotNominations()
+	 * @return the value of the '<em>Nominations</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.nominations.NominationsPackage#getNominationsModel_Nominations()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<SlotNomination> getSlotNominations();
-
-	/**
-	 * Returns the value of the '<em><b>Contract Nomination Specs</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.nominations.ContractNominationSpec}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Contract Nomination Specs</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Contract Nomination Specs</em>' reference list.
-	 * @see com.mmxlabs.models.lng.nominations.NominationsPackage#getNominationsModel_ContractNominationSpecs()
-	 * @model
-	 * @generated
-	 */
-	EList<ContractNominationSpec> getContractNominationSpecs();
-
-	/**
-	 * Returns the value of the '<em><b>Contract Nominations</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.nominations.ContractNomination}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Contract Nominations</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Contract Nominations</em>' reference list.
-	 * @see com.mmxlabs.models.lng.nominations.NominationsPackage#getNominationsModel_ContractNominations()
-	 * @model
-	 * @generated
-	 */
-	EList<ContractNomination> getContractNominations();
+	EList<AbstractNomination> getNominations();
 
 } // NominationsModel

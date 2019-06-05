@@ -17,10 +17,8 @@
       <genEnumLiterals ecoreEnumLiteral="nominations.ecore#//Side/Sell"/>
     </genEnums>
     <genClasses ecoreClass="nominations.ecore#//NominationsModel">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference nominations.ecore#//NominationsModel/slotNominationSpecs"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference nominations.ecore#//NominationsModel/slotNominations"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference nominations.ecore#//NominationsModel/contractNominationSpecs"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference nominations.ecore#//NominationsModel/contractNominations"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference nominations.ecore#//NominationsModel/nominationSpecs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference nominations.ecore#//NominationsModel/nominations"/>
     </genClasses>
     <genClasses image="false" ecoreClass="nominations.ecore#//AbstractNominationSpec">
       <genFeatures createChild="false" propertyDescription="The type of nomination."

@@ -27,7 +27,7 @@ public class NominationsSpecReferenceValueProviderFactory implements IReferenceV
 			final EClass referenceClass = reference.getEReferenceType();
 
 			if (referenceClass == NominationsPackage.eINSTANCE.getSlotNominationSpec()) {
-				return new SimpleReferenceValueProvider(model, NominationsPackage.eINSTANCE.getNominationsModel_SlotNominationSpecs());
+				return new SimpleReferenceValueProvider(model, NominationsPackage.eINSTANCE.getNominationsModel_NominationSpecs());
 			}
 		}
 

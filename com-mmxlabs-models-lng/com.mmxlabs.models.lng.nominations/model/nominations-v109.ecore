@@ -3,14 +3,10 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="nominations" nsURI="http://www.mmxlabs.com/models/lng/nominations/1/"
     nsPrefix="lng.nominations">
   <eClassifiers xsi:type="ecore:EClass" name="NominationsModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="slotNominationSpecs" upperBound="-1"
-        eType="#//SlotNominationSpec" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="slotNominations" upperBound="-1"
-        eType="#//SlotNomination" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="contractNominationSpecs"
-        upperBound="-1" eType="#//ContractNominationSpec"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="contractNominations" upperBound="-1"
-        eType="#//ContractNomination"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nominationSpecs" upperBound="-1"
+        eType="#//AbstractNominationSpec" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nominations" upperBound="-1"
+        eType="#//AbstractNomination" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AbstractNominationSpec" abstract="true"
       eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">

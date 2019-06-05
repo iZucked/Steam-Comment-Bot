@@ -2,6 +2,8 @@
  */
 package com.mmxlabs.models.lng.nominations.impl;
 
+import com.mmxlabs.models.lng.nominations.AbstractNomination;
+import com.mmxlabs.models.lng.nominations.AbstractNominationSpec;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -28,54 +30,32 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl#getSlotNominationSpecs <em>Slot Nomination Specs</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl#getSlotNominations <em>Slot Nominations</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl#getContractNominationSpecs <em>Contract Nomination Specs</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl#getContractNominations <em>Contract Nominations</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl#getNominationSpecs <em>Nomination Specs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl#getNominations <em>Nominations</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class NominationsModelImpl extends UUIDObjectImpl implements NominationsModel {
 	/**
-	 * The cached value of the '{@link #getSlotNominationSpecs() <em>Slot Nomination Specs</em>}' containment reference list.
+	 * The cached value of the '{@link #getNominationSpecs() <em>Nomination Specs</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSlotNominationSpecs()
+	 * @see #getNominationSpecs()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<SlotNominationSpec> slotNominationSpecs;
+	protected EList<AbstractNominationSpec> nominationSpecs;
 
 	/**
-	 * The cached value of the '{@link #getSlotNominations() <em>Slot Nominations</em>}' containment reference list.
+	 * The cached value of the '{@link #getNominations() <em>Nominations</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSlotNominations()
+	 * @see #getNominations()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<SlotNomination> slotNominations;
-
-	/**
-	 * The cached value of the '{@link #getContractNominationSpecs() <em>Contract Nomination Specs</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getContractNominationSpecs()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<ContractNominationSpec> contractNominationSpecs;
-
-	/**
-	 * The cached value of the '{@link #getContractNominations() <em>Contract Nominations</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getContractNominations()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<ContractNomination> contractNominations;
+	protected EList<AbstractNomination> nominations;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -102,11 +82,11 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 	 * @generated
 	 */
 	@Override
-	public EList<SlotNominationSpec> getSlotNominationSpecs() {
-		if (slotNominationSpecs == null) {
-			slotNominationSpecs = new EObjectContainmentEList<SlotNominationSpec>(SlotNominationSpec.class, this, NominationsPackage.NOMINATIONS_MODEL__SLOT_NOMINATION_SPECS);
+	public EList<AbstractNominationSpec> getNominationSpecs() {
+		if (nominationSpecs == null) {
+			nominationSpecs = new EObjectContainmentEList<AbstractNominationSpec>(AbstractNominationSpec.class, this, NominationsPackage.NOMINATIONS_MODEL__NOMINATION_SPECS);
 		}
-		return slotNominationSpecs;
+		return nominationSpecs;
 	}
 
 	/**
@@ -115,37 +95,11 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 	 * @generated
 	 */
 	@Override
-	public EList<SlotNomination> getSlotNominations() {
-		if (slotNominations == null) {
-			slotNominations = new EObjectContainmentEList<SlotNomination>(SlotNomination.class, this, NominationsPackage.NOMINATIONS_MODEL__SLOT_NOMINATIONS);
+	public EList<AbstractNomination> getNominations() {
+		if (nominations == null) {
+			nominations = new EObjectContainmentEList<AbstractNomination>(AbstractNomination.class, this, NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS);
 		}
-		return slotNominations;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<ContractNominationSpec> getContractNominationSpecs() {
-		if (contractNominationSpecs == null) {
-			contractNominationSpecs = new EObjectResolvingEList<ContractNominationSpec>(ContractNominationSpec.class, this, NominationsPackage.NOMINATIONS_MODEL__CONTRACT_NOMINATION_SPECS);
-		}
-		return contractNominationSpecs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<ContractNomination> getContractNominations() {
-		if (contractNominations == null) {
-			contractNominations = new EObjectResolvingEList<ContractNomination>(ContractNomination.class, this, NominationsPackage.NOMINATIONS_MODEL__CONTRACT_NOMINATIONS);
-		}
-		return contractNominations;
+		return nominations;
 	}
 
 	/**
@@ -156,10 +110,10 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case NominationsPackage.NOMINATIONS_MODEL__SLOT_NOMINATION_SPECS:
-				return ((InternalEList<?>)getSlotNominationSpecs()).basicRemove(otherEnd, msgs);
-			case NominationsPackage.NOMINATIONS_MODEL__SLOT_NOMINATIONS:
-				return ((InternalEList<?>)getSlotNominations()).basicRemove(otherEnd, msgs);
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_SPECS:
+				return ((InternalEList<?>)getNominationSpecs()).basicRemove(otherEnd, msgs);
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS:
+				return ((InternalEList<?>)getNominations()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -172,14 +126,10 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NominationsPackage.NOMINATIONS_MODEL__SLOT_NOMINATION_SPECS:
-				return getSlotNominationSpecs();
-			case NominationsPackage.NOMINATIONS_MODEL__SLOT_NOMINATIONS:
-				return getSlotNominations();
-			case NominationsPackage.NOMINATIONS_MODEL__CONTRACT_NOMINATION_SPECS:
-				return getContractNominationSpecs();
-			case NominationsPackage.NOMINATIONS_MODEL__CONTRACT_NOMINATIONS:
-				return getContractNominations();
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_SPECS:
+				return getNominationSpecs();
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS:
+				return getNominations();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -193,21 +143,13 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NominationsPackage.NOMINATIONS_MODEL__SLOT_NOMINATION_SPECS:
-				getSlotNominationSpecs().clear();
-				getSlotNominationSpecs().addAll((Collection<? extends SlotNominationSpec>)newValue);
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_SPECS:
+				getNominationSpecs().clear();
+				getNominationSpecs().addAll((Collection<? extends AbstractNominationSpec>)newValue);
 				return;
-			case NominationsPackage.NOMINATIONS_MODEL__SLOT_NOMINATIONS:
-				getSlotNominations().clear();
-				getSlotNominations().addAll((Collection<? extends SlotNomination>)newValue);
-				return;
-			case NominationsPackage.NOMINATIONS_MODEL__CONTRACT_NOMINATION_SPECS:
-				getContractNominationSpecs().clear();
-				getContractNominationSpecs().addAll((Collection<? extends ContractNominationSpec>)newValue);
-				return;
-			case NominationsPackage.NOMINATIONS_MODEL__CONTRACT_NOMINATIONS:
-				getContractNominations().clear();
-				getContractNominations().addAll((Collection<? extends ContractNomination>)newValue);
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS:
+				getNominations().clear();
+				getNominations().addAll((Collection<? extends AbstractNomination>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -221,17 +163,11 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NominationsPackage.NOMINATIONS_MODEL__SLOT_NOMINATION_SPECS:
-				getSlotNominationSpecs().clear();
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_SPECS:
+				getNominationSpecs().clear();
 				return;
-			case NominationsPackage.NOMINATIONS_MODEL__SLOT_NOMINATIONS:
-				getSlotNominations().clear();
-				return;
-			case NominationsPackage.NOMINATIONS_MODEL__CONTRACT_NOMINATION_SPECS:
-				getContractNominationSpecs().clear();
-				return;
-			case NominationsPackage.NOMINATIONS_MODEL__CONTRACT_NOMINATIONS:
-				getContractNominations().clear();
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS:
+				getNominations().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -245,14 +181,10 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NominationsPackage.NOMINATIONS_MODEL__SLOT_NOMINATION_SPECS:
-				return slotNominationSpecs != null && !slotNominationSpecs.isEmpty();
-			case NominationsPackage.NOMINATIONS_MODEL__SLOT_NOMINATIONS:
-				return slotNominations != null && !slotNominations.isEmpty();
-			case NominationsPackage.NOMINATIONS_MODEL__CONTRACT_NOMINATION_SPECS:
-				return contractNominationSpecs != null && !contractNominationSpecs.isEmpty();
-			case NominationsPackage.NOMINATIONS_MODEL__CONTRACT_NOMINATIONS:
-				return contractNominations != null && !contractNominations.isEmpty();
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_SPECS:
+				return nominationSpecs != null && !nominationSpecs.isEmpty();
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS:
+				return nominations != null && !nominations.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

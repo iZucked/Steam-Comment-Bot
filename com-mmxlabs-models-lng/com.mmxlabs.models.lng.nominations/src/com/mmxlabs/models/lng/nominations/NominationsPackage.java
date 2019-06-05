@@ -87,40 +87,22 @@ public interface NominationsPackage extends EPackage {
 	int NOMINATIONS_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Slot Nomination Specs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Nomination Specs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NOMINATIONS_MODEL__SLOT_NOMINATION_SPECS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+	int NOMINATIONS_MODEL__NOMINATION_SPECS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Slot Nominations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Nominations</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NOMINATIONS_MODEL__SLOT_NOMINATIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Contract Nomination Specs</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOMINATIONS_MODEL__CONTRACT_NOMINATION_SPECS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Contract Nominations</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOMINATIONS_MODEL__CONTRACT_NOMINATIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int NOMINATIONS_MODEL__NOMINATIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -129,7 +111,7 @@ public interface NominationsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOMINATIONS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int NOMINATIONS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationSpecImpl <em>Abstract Nomination Spec</em>}' class.
@@ -1062,48 +1044,26 @@ public interface NominationsPackage extends EPackage {
 	EClass getNominationsModel();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.nominations.NominationsModel#getSlotNominationSpecs <em>Slot Nomination Specs</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.nominations.NominationsModel#getNominationSpecs <em>Nomination Specs</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Slot Nomination Specs</em>'.
-	 * @see com.mmxlabs.models.lng.nominations.NominationsModel#getSlotNominationSpecs()
+	 * @return the meta object for the containment reference list '<em>Nomination Specs</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.NominationsModel#getNominationSpecs()
 	 * @see #getNominationsModel()
 	 * @generated
 	 */
-	EReference getNominationsModel_SlotNominationSpecs();
+	EReference getNominationsModel_NominationSpecs();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.nominations.NominationsModel#getSlotNominations <em>Slot Nominations</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.nominations.NominationsModel#getNominations <em>Nominations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Slot Nominations</em>'.
-	 * @see com.mmxlabs.models.lng.nominations.NominationsModel#getSlotNominations()
+	 * @return the meta object for the containment reference list '<em>Nominations</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.NominationsModel#getNominations()
 	 * @see #getNominationsModel()
 	 * @generated
 	 */
-	EReference getNominationsModel_SlotNominations();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.nominations.NominationsModel#getContractNominationSpecs <em>Contract Nomination Specs</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Contract Nomination Specs</em>'.
-	 * @see com.mmxlabs.models.lng.nominations.NominationsModel#getContractNominationSpecs()
-	 * @see #getNominationsModel()
-	 * @generated
-	 */
-	EReference getNominationsModel_ContractNominationSpecs();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.nominations.NominationsModel#getContractNominations <em>Contract Nominations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Contract Nominations</em>'.
-	 * @see com.mmxlabs.models.lng.nominations.NominationsModel#getContractNominations()
-	 * @see #getNominationsModel()
-	 * @generated
-	 */
-	EReference getNominationsModel_ContractNominations();
+	EReference getNominationsModel_Nominations();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.nominations.AbstractNominationSpec <em>Abstract Nomination Spec</em>}'.
@@ -1383,36 +1343,20 @@ public interface NominationsPackage extends EPackage {
 		EClass NOMINATIONS_MODEL = eINSTANCE.getNominationsModel();
 
 		/**
-		 * The meta object literal for the '<em><b>Slot Nomination Specs</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Nomination Specs</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference NOMINATIONS_MODEL__SLOT_NOMINATION_SPECS = eINSTANCE.getNominationsModel_SlotNominationSpecs();
+		EReference NOMINATIONS_MODEL__NOMINATION_SPECS = eINSTANCE.getNominationsModel_NominationSpecs();
 
 		/**
-		 * The meta object literal for the '<em><b>Slot Nominations</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Nominations</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference NOMINATIONS_MODEL__SLOT_NOMINATIONS = eINSTANCE.getNominationsModel_SlotNominations();
-
-		/**
-		 * The meta object literal for the '<em><b>Contract Nomination Specs</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference NOMINATIONS_MODEL__CONTRACT_NOMINATION_SPECS = eINSTANCE.getNominationsModel_ContractNominationSpecs();
-
-		/**
-		 * The meta object literal for the '<em><b>Contract Nominations</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference NOMINATIONS_MODEL__CONTRACT_NOMINATIONS = eINSTANCE.getNominationsModel_ContractNominations();
+		EReference NOMINATIONS_MODEL__NOMINATIONS = eINSTANCE.getNominationsModel_Nominations();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationSpecImpl <em>Abstract Nomination Spec</em>}' class.

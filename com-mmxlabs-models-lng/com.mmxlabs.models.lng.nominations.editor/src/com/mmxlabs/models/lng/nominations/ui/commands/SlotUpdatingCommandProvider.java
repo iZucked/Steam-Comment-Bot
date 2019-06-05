@@ -42,7 +42,7 @@ public class SlotUpdatingCommandProvider extends AbstractCommandProvider {
 							//update all nominations with nomineeId = slot name.
 							final LNGScenarioModel sm = (LNGScenarioModel)rootObject;
 							final NominationsModel nm = sm.getNominationsModel();
-							nm.getSlotNominations().forEach(sn -> {
+							nm.getNominations().forEach(sn -> {
 								if (Objects.equals(sn.getNomineeId(), oldName)) {
 									cc.append(SetCommand.create(editingDomain, sn, NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), newName));
 								}
@@ -60,7 +60,7 @@ public class SlotUpdatingCommandProvider extends AbstractCommandProvider {
 						//delete all nominations with nomineeId = slot name.
 						final LNGScenarioModel sm = (LNGScenarioModel)rootObject;
 						final NominationsModel nm = sm.getNominationsModel();
-						nm.getSlotNominations().forEach(sn -> {
+						nm.getNominations().forEach(sn -> {
 							if (Objects.equals(sn.getNomineeId(), name)) {
 								cc.append(DeleteCommand.create(editingDomain, sn));
 							}

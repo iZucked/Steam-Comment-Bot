@@ -140,8 +140,8 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 		if (isInited) return (NominationsPackage)EPackage.Registry.INSTANCE.getEPackage(NominationsPackage.eNS_URI);
 
 		// Obtain or create and register package
-		final Object registeredNominationsPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
-		final NominationsPackageImpl theNominationsPackage = registeredNominationsPackage instanceof NominationsPackageImpl ? (NominationsPackageImpl)registeredNominationsPackage : new NominationsPackageImpl();
+		Object registeredNominationsPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		NominationsPackageImpl theNominationsPackage = registeredNominationsPackage instanceof NominationsPackageImpl ? (NominationsPackageImpl)registeredNominationsPackage : new NominationsPackageImpl();
 
 		isInited = true;
 
@@ -184,7 +184,7 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 	 * @generated
 	 */
 	@Override
-	public EReference getNominationsModel_SlotNominationSpecs() {
+	public EReference getNominationsModel_NominationSpecs() {
 		return (EReference)nominationsModelEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -194,28 +194,8 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 	 * @generated
 	 */
 	@Override
-	public EReference getNominationsModel_SlotNominations() {
+	public EReference getNominationsModel_Nominations() {
 		return (EReference)nominationsModelEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getNominationsModel_ContractNominationSpecs() {
-		return (EReference)nominationsModelEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getNominationsModel_ContractNominations() {
-		return (EReference)nominationsModelEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -478,10 +458,8 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 
 		// Create classes and their features
 		nominationsModelEClass = createEClass(NOMINATIONS_MODEL);
-		createEReference(nominationsModelEClass, NOMINATIONS_MODEL__SLOT_NOMINATION_SPECS);
-		createEReference(nominationsModelEClass, NOMINATIONS_MODEL__SLOT_NOMINATIONS);
-		createEReference(nominationsModelEClass, NOMINATIONS_MODEL__CONTRACT_NOMINATION_SPECS);
-		createEReference(nominationsModelEClass, NOMINATIONS_MODEL__CONTRACT_NOMINATIONS);
+		createEReference(nominationsModelEClass, NOMINATIONS_MODEL__NOMINATION_SPECS);
+		createEReference(nominationsModelEClass, NOMINATIONS_MODEL__NOMINATIONS);
 
 		abstractNominationSpecEClass = createEClass(ABSTRACT_NOMINATION_SPEC);
 		createEAttribute(abstractNominationSpecEClass, ABSTRACT_NOMINATION_SPEC__TYPE);
@@ -539,8 +517,8 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		final MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
-		final DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
+		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
+		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 
 		// Create type parameters
 
@@ -557,10 +535,8 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(nominationsModelEClass, NominationsModel.class, "NominationsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getNominationsModel_SlotNominationSpecs(), this.getSlotNominationSpec(), null, "slotNominationSpecs", null, 0, -1, NominationsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getNominationsModel_SlotNominations(), this.getSlotNomination(), null, "slotNominations", null, 0, -1, NominationsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getNominationsModel_ContractNominationSpecs(), this.getContractNominationSpec(), null, "contractNominationSpecs", null, 0, -1, NominationsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getNominationsModel_ContractNominations(), this.getContractNomination(), null, "contractNominations", null, 0, -1, NominationsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getNominationsModel_NominationSpecs(), this.getAbstractNominationSpec(), null, "nominationSpecs", null, 0, -1, NominationsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getNominationsModel_Nominations(), this.getAbstractNomination(), null, "nominations", null, 0, -1, NominationsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(abstractNominationSpecEClass, AbstractNominationSpec.class, "AbstractNominationSpec", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAbstractNominationSpec_Type(), ecorePackage.getEString(), "type", null, 0, 1, AbstractNominationSpec.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

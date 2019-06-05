@@ -3,7 +3,6 @@
 package com.mmxlabs.models.lng.nominations.provider;
 
 
-import com.mmxlabs.models.lng.nominations.SlotNomination;
 import com.mmxlabs.models.lng.nominations.SlotNominationSpec;
 
 import java.util.Collection;
@@ -65,12 +64,7 @@ public class SlotNominationSpecItemProvider extends AbstractNominationSpecItemPr
 	 */
 	@Override
 	public String getText(Object object) {
-		if (object instanceof SlotNominationSpec) {
-			return ((SlotNominationSpec)object).getType();
-		}
-		else {
-			return "";
-		}
+		return "";
 	}
 
 	/**

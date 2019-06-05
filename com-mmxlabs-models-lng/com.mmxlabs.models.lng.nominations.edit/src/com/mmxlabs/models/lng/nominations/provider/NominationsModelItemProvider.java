@@ -58,54 +58,8 @@ public class NominationsModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addContractNominationSpecsPropertyDescriptor(object);
-			addContractNominationsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Contract Nomination Specs feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addContractNominationSpecsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_NominationsModel_contractNominationSpecs_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NominationsModel_contractNominationSpecs_feature", "_UI_NominationsModel_type"),
-				 NominationsPackage.Literals.NOMINATIONS_MODEL__CONTRACT_NOMINATION_SPECS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Contract Nominations feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addContractNominationsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_NominationsModel_contractNominations_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NominationsModel_contractNominations_feature", "_UI_NominationsModel_type"),
-				 NominationsPackage.Literals.NOMINATIONS_MODEL__CONTRACT_NOMINATIONS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
 	}
 
 	/**
@@ -120,8 +74,8 @@ public class NominationsModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(NominationsPackage.Literals.NOMINATIONS_MODEL__SLOT_NOMINATION_SPECS);
-			childrenFeatures.add(NominationsPackage.Literals.NOMINATIONS_MODEL__SLOT_NOMINATIONS);
+			childrenFeatures.add(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATION_SPECS);
+			childrenFeatures.add(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATIONS);
 		}
 		return childrenFeatures;
 	}
@@ -177,8 +131,8 @@ public class NominationsModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(NominationsModel.class)) {
-			case NominationsPackage.NOMINATIONS_MODEL__SLOT_NOMINATION_SPECS:
-			case NominationsPackage.NOMINATIONS_MODEL__SLOT_NOMINATIONS:
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_SPECS:
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -198,13 +152,56 @@ public class NominationsModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(NominationsPackage.Literals.NOMINATIONS_MODEL__SLOT_NOMINATION_SPECS,
+				(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATION_SPECS,
 				 NominationsFactory.eINSTANCE.createSlotNominationSpec()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(NominationsPackage.Literals.NOMINATIONS_MODEL__SLOT_NOMINATIONS,
+				(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATION_SPECS,
 				 NominationsFactory.eINSTANCE.createSlotNomination()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATION_SPECS,
+				 NominationsFactory.eINSTANCE.createContractNomination()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATION_SPECS,
+				 NominationsFactory.eINSTANCE.createContractNominationSpec()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATIONS,
+				 NominationsFactory.eINSTANCE.createSlotNomination()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATIONS,
+				 NominationsFactory.eINSTANCE.createContractNomination()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATION_SPECS ||
+			childFeature == NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATIONS;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }
