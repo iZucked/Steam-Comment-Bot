@@ -5,11 +5,13 @@
 package com.mmxlabs.models.lng.nominations.ui.editorpart;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -77,7 +79,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	
 	private boolean includeDone = false;
 	private boolean viewSelected = true;
-	private final HashSet<String> selectedSlots = new HashSet<>();
+	private final List<Slot> selectedSlots = new ArrayList<>();
 	private final HashSet<String> previousNominations = new HashSet<>();
 	
 	public RelativeDateRangeNominationsViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, @NonNull final IScenarioEditingLocation location, final IActionBars actionBars) {
@@ -416,13 +418,22 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 						final LocalDate endDate = getEndDate();
 						elements.addAll(NominationsModelUtils.generateNominations(jointModelEditor, startDate, endDate));
 						if (RelativeDateRangeNominationsViewerPane.this.viewSelected && !RelativeDateRangeNominationsViewerPane.this.selectedSlots.isEmpty()) {
-							return elements.stream().filter(n -> n.getNomineeId() != null && RelativeDateRangeNominationsViewerPane.this.selectedSlots.contains(n.getNomineeId())).toArray();
+							return elements.stream().filter(n -> n.getNomineeId() != null && isSelectedSlot(n.getNomineeId())).toArray();
 						}
 						else {
 							return elements.toArray();
 						}
 					}
 
+					private boolean isSelectedSlot(String nomineeId) {
+						for (Slot<?> slot : RelativeDateRangeNominationsViewerPane.this.selectedSlots) {
+							if (Objects.equals(slot.getName(), nomineeId)) {
+								return true;
+							}
+						}
+						return false;
+					}
+					
 					@Override
 					public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
@@ -461,8 +472,8 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			for (final Object o : s.toArray()) {
 				if (o instanceof Slot) {
 					final Slot slot = (Slot)o;
-					if (slot.getName() != null) {
-						this.selectedSlots.add(slot.getName());
+					if (slot != null) {
+						this.selectedSlots.add(slot);
 					}
 				}
 			}
