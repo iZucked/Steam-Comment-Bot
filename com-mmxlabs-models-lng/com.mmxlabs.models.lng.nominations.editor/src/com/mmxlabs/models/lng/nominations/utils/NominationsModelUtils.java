@@ -48,7 +48,6 @@ public class NominationsModelUtils {
 
 	public static NominationsModel createNominationsModel() {
 		final NominationsModel nominationsModel = NominationsFactory.eINSTANCE.createNominationsModel();
-		//nominationsModel.setNominationParameters(NominationsFactory.eINSTANCE.createNominationsParameters());
 		return nominationsModel;
 	}
 
@@ -62,37 +61,6 @@ public class NominationsModelUtils {
 			break;
 		}
 		return units.getName();
-	}
-
-	//TODO get rid of this if possible.
-	public static AbstractNomination findWindowNomination(final LNGScenarioModel sm, final Slot slot) {
-		if (slot != null && slot.getName() != null) {
-			final String name = slot.getName();
-			final NominationsModel nm = sm.getNominationsModel();
-
-			//Check specific slot nominations.
-			for (final SlotNomination s : nm.getSlotNominations()) {
-				if (slot instanceof LoadSlot && Objects.equals(s.getNomineeId(),name) && Objects.equals(s.getType(),"Buy window")) {
-					return s;
-				}
-				if (slot instanceof DischargeSlot && Objects.equals(s.getNomineeId(),name) && Objects.equals(s.getType(),"Sell window")) {
-					return s;
-				}
-			}
-
-			//If none there, check nominations generated from specifications.
-			final List<AbstractNomination> generatedNominations = generateNominationsForAllDates(sm);
-			for (final AbstractNomination s : generatedNominations) {
-				if (slot instanceof LoadSlot && Objects.equals(s.getNomineeId(),name) && Objects.equals(s.getType(),"Buy window")) {
-					return s;
-				}
-				if (slot instanceof DischargeSlot && Objects.equals(s.getNomineeId(),name) && Objects.equals(s.getType(),"Sell window")) {
-					return s;
-				}
-			}
-		}
-		//None found.
-		return null;
 	}
 
 	public static AbstractNomination findNominationForSlot(final LNGScenarioModel sm, final Slot slot, final String nominationType) {
@@ -216,45 +184,11 @@ public class NominationsModelUtils {
 		}
 		return "";
 	}
-/*
-	public static List<AbstractNomination> generateNominations(@NonNull final IScenarioEditingLocation jointModelEditor) {
-		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
-		if (scenarioModel != null) {
-			return generateNominations(scenarioModel, false);
-		} else {
-			return Collections.emptyList();
-		}
-	}
-*/
+
 	public static List<AbstractNomination> generateNominationsForAllDates(@NonNull final LNGScenarioModel scenarioModel) {
 		return generateNominations(scenarioModel, LocalDate.MIN, LocalDate.MAX);
 	}
-	/*
-	private static List<AbstractNomination> generateNominations(@NonNull final LNGScenarioModel scenarioModel, final boolean generateForAllDates) {
 
-		// If no saved dates, we use max range.
-		final LocalDate startDate = LocalDate.MIN;
-		final LocalDate endDate = LocalDate.MAX;
-		
-		// Get saved start and end date.
-		final NominationsModel nominationsModel = scenarioModel.getNominationsModel();
-		if (nominationsModel == null) {
-			return Collections.emptyList();
-		}
-		
-		if (!generateForAllDates && nominationsModel.getNominationParameters() != null) {
-			if (nominationsModel.getNominationParameters().getStartDate() != null) {
-				startDate = nominationsModel.getNominationParameters().getStartDate();
-			}
-			if (nominationsModel.getNominationParameters().getEndDate() != null) {
-				endDate = nominationsModel.getNominationParameters().getEndDate();			
-			}
-		}
-		
-		// Generate the nominations from specifications, where no specific overridden nomination exists already.
-		return generateNominations(scenarioModel,startDate, endDate);
-	}
-*/
 	public static List<AbstractNomination> generateNominations(@NonNull final IScenarioEditingLocation jointModelEditor, LocalDate startDate, LocalDate endDate) {
 		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
 		if (scenarioModel != null) {
@@ -573,27 +507,9 @@ public class NominationsModelUtils {
 		return contractNames;
 	}
 
-	public static LocalDate getSlotWindowNominationDate(IScenarioDataProvider scenarioDataProvider, Slot<?> slot) {
+	public static LocalDate getNominationDate(String nominationType, IScenarioDataProvider scenarioDataProvider, Slot<?> slot) {
 		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(scenarioDataProvider);
-		final AbstractNomination n = NominationsModelUtils.findWindowNomination(scenarioModel, slot);
-		return n.getDueDate();
-	}
-
-	public static LocalDate getSlotLoadPortNominationDate(IScenarioDataProvider scenarioDataProvider, Slot<?> slot) {
-		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(scenarioDataProvider);
-		final AbstractNomination n = NominationsModelUtils.findNominationForSlot(scenarioModel, slot, "Laod port");
+		final AbstractNomination n = NominationsModelUtils.findNominationForSlot(scenarioModel, slot, nominationType);
 		return n.getDueDate();	
-	}
-
-	public static LocalDate getSlotDischargePortNominationDate(IScenarioDataProvider scenarioDataProvider, Slot<?> slot) {
-		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(scenarioDataProvider);
-		final AbstractNomination n = NominationsModelUtils.findNominationForSlot(scenarioModel, slot, "Discharge port");
-		return n.getDueDate();
-	}
-	
-	public static LocalDate getSlotVesselNominationDate(IScenarioDataProvider scenarioDataProvider, Slot<?> slot) {
-		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(scenarioDataProvider);
-		final AbstractNomination n = NominationsModelUtils.findNominationForSlot(scenarioModel, slot, "Vessel");
-		return n.getDueDate();
 	}
 }
