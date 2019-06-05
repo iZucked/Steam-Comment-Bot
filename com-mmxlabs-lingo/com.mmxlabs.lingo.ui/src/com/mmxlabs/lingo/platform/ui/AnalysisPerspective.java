@@ -8,33 +8,32 @@ import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IViewLayout;
-import org.eclipse.ui.internal.e4.compatibility.ModeledPageLayout;
 
 import com.mmxlabs.lingo.reports.ReportsConstants;
 import com.mmxlabs.lingo.reports.scheduleview.views.SchedulerView;
 import com.mmxlabs.lingo.reports.views.headline.HeadlineReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
-import com.mmxlabs.lingo.reports.views.standard.VolumeIssuesReportView;
 import com.mmxlabs.lingo.reports.views.standard.CooldownReportView;
 import com.mmxlabs.lingo.reports.views.standard.FitnessReportView;
 import com.mmxlabs.lingo.reports.views.standard.KPIReportView;
 import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
 import com.mmxlabs.lingo.reports.views.standard.TotalsHierarchyView;
 import com.mmxlabs.lingo.reports.views.standard.TotalsReportView;
+import com.mmxlabs.lingo.reports.views.standard.VolumeIssuesReportView;
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView;
 
 public class AnalysisPerspective implements IPerspectiveFactory {
 
-	@SuppressWarnings("restriction")
 	@Override
 	public void createInitialLayout(final IPageLayout layout) {
 
-//		if (layout instanceof ModeledPageLayout) {
-//			ModeledPageLayout modeledPageLayout = (ModeledPageLayout) layout;
-//			modeledPageLayout.stackView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID, IPageLayout.ID_EDITOR_AREA, false);
-//			modeledPageLayout.stackView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID, IPageLayout.ID_EDITOR_AREA, false);
-//		}
+		layout.addActionSet("com.mmxlabs.lingo.reports.diff.actionset");
+		// if (layout instanceof ModeledPageLayout) {
+		// ModeledPageLayout modeledPageLayout = (ModeledPageLayout) layout;
+		// modeledPageLayout.stackView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID, IPageLayout.ID_EDITOR_AREA, false);
+		// modeledPageLayout.stackView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID, IPageLayout.ID_EDITOR_AREA, false);
+		// }
 
 		final IFolderLayout reportsFolder = layout.createFolder("reportsFolder", IPageLayout.BOTTOM, 0.65f, IPageLayout.ID_EDITOR_AREA);
 		final IFolderLayout miscFolder = layout.createFolder("miscFolder", IPageLayout.LEFT, 0.25f, "reportsFolder");
@@ -62,19 +61,19 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		// Cargo Econs
 		final IFolderLayout econsArea = layout.createFolder("econsArea", IPageLayout.RIGHT, 0.85f, IPageLayout.ID_EDITOR_AREA);
 		econsArea.addView("com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport");
-//		{
-//			final IViewLayout viewLayout = layout.getViewLayout("com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport");
-//			viewLayout.setCloseable(false);
-//			viewLayout.setMoveable(false);
-//		}
+		// {
+		// final IViewLayout viewLayout = layout.getViewLayout("com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport");
+		// viewLayout.setCloseable(false);
+		// viewLayout.setMoveable(false);
+		// }
 		// PNL Details
 
 		econsArea.addView("com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport");
-//		{
-//			final IViewLayout viewLayout = layout.getViewLayout("com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport");
-//			viewLayout.setCloseable(false);
-//			viewLayout.setMoveable(false);
-//		}
+		// {
+		// final IViewLayout viewLayout = layout.getViewLayout("com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport");
+		// viewLayout.setCloseable(false);
+		// viewLayout.setMoveable(false);
+		// }
 
 		reportsFolder.addView(SchedulerView.ID);
 		reportsFolder.addView(AbstractVerticalCalendarReportView.ID);
