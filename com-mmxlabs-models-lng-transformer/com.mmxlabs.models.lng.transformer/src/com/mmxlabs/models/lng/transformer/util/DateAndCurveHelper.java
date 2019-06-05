@@ -52,6 +52,8 @@ public class DateAndCurveHelper {
 	@NonNull
 	private final ZonedDateTime latestTime;
 
+	private Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTimes;
+
 	@SuppressWarnings("null")
 	@Inject
 	public DateAndCurveHelper(@Named(LNGTransformerModule.EARLIEST_AND_LATEST_TIMES) @NonNull final Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
@@ -64,6 +66,8 @@ public class DateAndCurveHelper {
 		this.earliestTime = earliest.withZoneSameInstant(ZoneId.of("UTC")).truncatedTo(ChronoUnit.HOURS);
 		assert !earliestTime.isAfter(earliest);
 		this.latestTime = latest;
+
+		earliestAndLatestTimes = Pair.of(earliestTime, latestTime);
 	}
 
 	/**
@@ -339,6 +343,10 @@ public class DateAndCurveHelper {
 			start = start.plusMonths(1);
 		}
 		return curve;
+	}
+
+	public Pair<ZonedDateTime, ZonedDateTime> getEarliestAndLatestTimes() {
+		return earliestAndLatestTimes;
 	}
 
 }

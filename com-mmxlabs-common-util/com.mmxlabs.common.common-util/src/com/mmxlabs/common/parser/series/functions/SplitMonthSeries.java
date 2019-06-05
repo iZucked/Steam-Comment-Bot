@@ -59,19 +59,19 @@ public class SplitMonthSeries implements ISeries {
 			return NONE;
 		}
 
-
+int ii = 0;
 		int startMonth = mapper.mapChangePointToMonth(0);
-		int 	endMonth = startMonth + ((int) ChronoUnit.MONTHS.between(earliestAndLatestTime.getFirst(), earliestAndLatestTime.getSecond()));
+		int 	endMonth = 2 + startMonth + ((int) ChronoUnit.MONTHS.between(earliestAndLatestTime.getFirst(), earliestAndLatestTime.getSecond()));
 		
 		if (series1.getChangePoints().length != 0 && series2.getChangePoints().length != 0) {
 			int startTime = Math.min(series1.getChangePoints()[0],
 				 series2.getChangePoints()[0]);
 		
-			int endTime = Math.max(series1.getChangePoints()[series1.getChangePoints().length - 1],
-				 series2.getChangePoints()[series2.getChangePoints().length - 1]);
+//			int endTime = Math.max(series1.getChangePoints()[series1.getChangePoints().length - 1],
+//				 series2.getChangePoints()[series2.getChangePoints().length - 1] + daysToPoint(splitPoint - 1));
 
 			startMonth = mapper.mapChangePointToMonth(startTime);
-			endMonth = mapper.mapChangePointToMonth(endTime);
+//			endMonth = mapper.mapChangePointToMonth(endTime) + 1;
 		}
 
 
