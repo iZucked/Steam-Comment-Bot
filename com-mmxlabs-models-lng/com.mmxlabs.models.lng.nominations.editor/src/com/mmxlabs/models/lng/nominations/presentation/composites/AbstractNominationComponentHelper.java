@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
+import com.mmxlabs.models.lng.nominations.ContractNomination;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -79,14 +80,16 @@ public class AbstractNominationComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers)
 			helper.addEditorsToComposite(detailComposite, topClass);
 
-		specComponentHelper.add_typeEditor(detailComposite, topClass);
-		specComponentHelper.add_sideEditor(detailComposite, topClass);
-		add_nomineeIdEditor(detailComposite, topClass);
-		add_dueDateEditor(detailComposite, topClass);
-		add_alertDateEditor(detailComposite, topClass);
-		specComponentHelper.add_counterpartyEditor(detailComposite, topClass);
-		specComponentHelper.add_remarkEditor(detailComposite, topClass);
-		add_doneEditor(detailComposite, topClass);
+		if (!ContractNomination.class.isAssignableFrom(topClass.getInstanceClass())) {
+			specComponentHelper.add_typeEditor(detailComposite, topClass);
+			specComponentHelper.add_sideEditor(detailComposite, topClass);
+			add_nomineeIdEditor(detailComposite, topClass);
+			add_dueDateEditor(detailComposite, topClass);
+			add_alertDateEditor(detailComposite, topClass);
+			specComponentHelper.add_counterpartyEditor(detailComposite, topClass);
+			specComponentHelper.add_remarkEditor(detailComposite, topClass);
+			add_doneEditor(detailComposite, topClass);
+		}
 	}
 
 	/**

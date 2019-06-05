@@ -83,6 +83,11 @@
 			helperClass="com.mmxlabs.models.lng.nominations.presentation.composites.AbstractNominationComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.nominations.AbstractNomination" />
+		<componentHelper
+			id="com.mmxlabs.models.lng.nominations.presentations.composites.ContractNominationComponentHelper"
+			helperClass="com.mmxlabs.models.lng.nominations.presentation.composites.ContractNominationComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.nominations.ContractNomination" />
 	</extension>		
  	<extension
          id="com.mmxlabs.models.lng.nominations.ui.views.RemoveOldNominationsAlertViewModuleProcessor"
@@ -126,10 +131,18 @@
           targetEClass="com.mmxlabs.models.lng.nominations.SlotNominationSpec">
     </factory>
     <factory
+          ID="com.mmxlabs.models.lng.nominations.ContractNomination.Factory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Contract nomination"
+          outputEClass="com.mmxlabs.models.lng.nominations.ContractNomination"
+          targetEClass="com.mmxlabs.models.lng.nominations.AbstractNomination">
+    </factory>
+    <factory
           ID="com.mmxlabs.models.lng.nominations.SlotNomination.Factory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Slot nomination"
-          targetEClass="com.mmxlabs.models.lng.nominations.SlotNomination">
+          outputEClass="com.mmxlabs.models.lng.nominations.SlotNomination"
+          targetEClass="com.mmxlabs.models.lng.nominations.AbstractNomination">
     </factory>
  </extension>
  

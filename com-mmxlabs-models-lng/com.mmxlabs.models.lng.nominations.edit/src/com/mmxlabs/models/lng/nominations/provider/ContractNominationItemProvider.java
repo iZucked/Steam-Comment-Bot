@@ -64,16 +64,12 @@ public class ContractNominationItemProvider extends AbstractNominationItemProvid
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ContractNomination)object).getUuid();
-		return label == null || label.length() == 0 ?
-			getString("_UI_ContractNomination_type") :
-			getString("_UI_ContractNomination_type") + " " + label;
+		return "";
 	}
-
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
