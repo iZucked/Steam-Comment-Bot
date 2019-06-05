@@ -13,7 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
-import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
+import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
@@ -100,7 +100,7 @@ public class SpotMarketMaker {
 		market.setNotionalPort(notionalPort);
 		market.setEntity(entity);
 
-		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
+		final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
 		params.setPriceExpression(priceExpression);
 		market.setPriceInfo(params);
 
@@ -125,7 +125,7 @@ public class SpotMarketMaker {
 		market.getDestinationPorts().addAll(ports);
 		market.setEntity(entity);
 
-		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
+		final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
 		params.setPriceExpression(priceExpression);
 		market.setPriceInfo(params);
 
@@ -150,7 +150,7 @@ public class SpotMarketMaker {
 		market.getOriginPorts().addAll(ports);
 		market.setEntity(entity);
 
-		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
+		final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
 		params.setPriceExpression(priceExpression);
 		market.setPriceInfo(params);
 
@@ -169,7 +169,7 @@ public class SpotMarketMaker {
 		market.setNotionalPort(notionalPort);
 		market.setEntity(entity);
 
-		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
+		final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
 		params.setPriceExpression(priceExpression);
 		market.setPriceInfo(params);
 
