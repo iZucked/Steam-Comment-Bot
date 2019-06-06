@@ -128,14 +128,11 @@ public class SimpleContractTransformer implements IContractTransformer {
 	}
 
 	/**
-	 * Create an internal representation of a PriceExpressionContract from the price
-	 * expression string.
+	 * Create an internal representation of a PriceExpressionContract from the price expression string.
 	 * 
 	 * @param priceExpression
-	 *            A string containing a valid price expression interpretable by a
-	 *            {@link SeriesParser}
-	 * @return An internal representation of a price expression contract for use by
-	 *         the optimiser
+	 *            A string containing a valid price expression interpretable by a {@link SeriesParser}
+	 * @return An internal representation of a price expression contract for use by the optimiser
 	 */
 	private PriceExpressionContract createPriceExpressionContract(final String priceExpression) {
 
@@ -148,30 +145,25 @@ public class SimpleContractTransformer implements IContractTransformer {
 		final IExpression<ISeries> expression = indices.parse(priceExpression);
 
 		if (isSplitMonth) {
-			Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime = LNGScenarioUtils.findEarliestAndLatestTimes(lngScenarioModel);
-			final ISeries parsed = expression.evaluate(earliestAndLatestTime);
-			
+			final ISeries parsed = expression.evaluate(dateHelper.getEarliestAndLatestTimes());
 			curve = generateExpressionCurve(priceExpression, parsed);
 			priceIntervals = integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints());
 		} else {
 			final ISeries parsed = expression.evaluate();
 			curve = generateExpressionCurve(priceExpression, parsed);
 		}
-		
+
 		final PriceExpressionContract contract = new PriceExpressionContract(curve, priceIntervals);
 		injector.injectMembers(contract);
 		return contract;
 	}
 
 	/**
-	 * Create an internal representation of a PriceExpressionContract from the price
-	 * expression string.
+	 * Create an internal representation of a PriceExpressionContract from the price expression string.
 	 * 
 	 * @param priceExpression
-	 *            A string containing a valid price expression interpretable by a
-	 *            {@link SeriesParser}
-	 * @return An internal representation of a price expression contract for use by
-	 *         the optimiser
+	 *            A string containing a valid price expression interpretable by a {@link SeriesParser}
+	 * @return An internal representation of a price expression contract for use by the optimiser
 	 */
 	private PriceExpressionContract createDateShiftExpressionContract(final String priceExpression, final boolean specificDate, final int shift) {
 		final IIntegerIntervalCurve priceIntervals;
@@ -182,7 +174,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 
 			{
 				final IExpression<ISeries> expression = indices.parse(priceExpression);
-				final ISeries parsed = expression.evaluate();
+				final ISeries parsed = expression.evaluate(dateHelper.getEarliestAndLatestTimes());
 
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 				if (parsed.getChangePoints().length == 0) {
@@ -203,7 +195,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 					integerIntervalCurveHelper.getNextMonth(dateHelper.convertTime(dateHelper.getLatestTime())), shift * 24 * -1);
 			{
 				final IExpression<ISeries> expression = indices.parse(priceExpression);
-				final ISeries parsed = expression.evaluate();
+				final ISeries parsed = expression.evaluate(dateHelper.getEarliestAndLatestTimes());
 
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 				if (parsed.getChangePoints().length == 0) {
