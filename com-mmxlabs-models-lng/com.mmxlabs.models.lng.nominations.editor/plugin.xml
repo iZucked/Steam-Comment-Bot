@@ -127,8 +127,9 @@
     <factory
           ID="com.mmxlabs.models.lng.nominations.SlotNominationSpec.Factory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Slot nomination specifications"
-          targetEClass="com.mmxlabs.models.lng.nominations.SlotNominationSpec">
+          label="Slot nomination specification"
+          outputEClass="com.mmxlabs.models.lng.nominations.SlotNominationSpec"
+          targetEClass="com.mmxlabs.models.lng.nominations.AbstractNominationSpec">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.nominations.ContractNomination.Factory"
