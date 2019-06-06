@@ -16,9 +16,9 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
+import com.mmxlabs.models.lng.nominations.AbstractNominationSpec;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
-import com.mmxlabs.models.lng.nominations.SlotNominationSpec;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
@@ -33,7 +33,7 @@ public class NominationsModelImporter implements ISubmodelImporter {
 	public static final String NOMINATIONS_KEY = "NOMINATIONS";
 	public static final String NOMINATION_SPECS_KEY = "NOMINATION_SPECS";
 	
-	final static Map<String, String> inputs = new LinkedHashMap<String, String>();
+	final static Map<String, String> inputs = new LinkedHashMap<>();
 
 	@Inject
 	private IImporterRegistry importerRegistry;
@@ -77,8 +77,8 @@ public class NominationsModelImporter implements ISubmodelImporter {
 					nominationsImporter.importObjects(NominationsPackage.eINSTANCE.getAbstractNomination(), inputs.get(NOMINATIONS_KEY), context));
 		}
 		if (inputs.containsKey(NOMINATION_SPECS_KEY)) {
-			nominationsModel.getNominationSpecs().addAll((Collection<? extends SlotNominationSpec>)
-					nominationSpecsImporter.importObjects(NominationsPackage.eINSTANCE.getSlotNominationSpec(), inputs.get(NOMINATION_SPECS_KEY), context));
+			nominationsModel.getNominationSpecs().addAll((Collection<? extends AbstractNominationSpec>)
+					nominationSpecsImporter.importObjects(NominationsPackage.eINSTANCE.getAbstractNominationSpec(), inputs.get(NOMINATION_SPECS_KEY), context));
 		}
 		return nominationsModel;
 	}
