@@ -211,7 +211,7 @@ public class MigrateToV109 extends AbstractMigrationUnit {
 		final String comment = (String) slot.getAttrib(nominationType + "NominationComment");
 
 		// Create a nomination with the fields above set, if any have been.
-		if (dueDate != null || done != null || counterParty != null || comment != null) {
+		if (dueDate != null || done != null || (comment != null && !comment.trim().isEmpty())) {
 			nomination = (EObjectWrapper) nominationsFactory.create(nominationClass);
 			nomination.setAttrib("uuid", EcoreUtil.generateUUID());
 			final String name = slot.getAttrib("name");
