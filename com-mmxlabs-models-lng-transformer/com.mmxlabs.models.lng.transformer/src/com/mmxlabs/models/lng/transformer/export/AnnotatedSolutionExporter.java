@@ -198,7 +198,7 @@ public class AnnotatedSolutionExporter {
 				eSequence.setSequenceType(SequenceType.VESSEL);
 				eSequence.setVesselAvailability(modelEntityMap.getModelObjectNullChecked(vesselAvailability, VesselAvailability.class));
 				eSequence.unsetCharterInMarket();
-				if (vesselAvailability.isOptional() && SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
+				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
 					continue;
 				}
 				break;
@@ -206,7 +206,7 @@ public class AnnotatedSolutionExporter {
 				fobSequence.setSequenceType(SequenceType.FOB_SALE);
 				isFOBSequence = true;
 				// Skip and process differently
-				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
+				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
 					continue;
 				}
 				break;
@@ -214,13 +214,13 @@ public class AnnotatedSolutionExporter {
 				desSequence.setSequenceType(SequenceType.DES_PURCHASE);
 				isDESSequence = true;
 				// Skip and process differently
-				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
+				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
 					continue;
 				}
 				break;
 			case SPOT_CHARTER:
 				eSequence.setSequenceType(SequenceType.SPOT_VESSEL);
-				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
+				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
 					continue;
 				}
 
@@ -231,7 +231,7 @@ public class AnnotatedSolutionExporter {
 				break;
 			case ROUND_TRIP:
 				eSequence.setSequenceType(SequenceType.ROUND_TRIP);
-				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
+				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
 					continue;
 				}
 				isRoundTripSequence = true;

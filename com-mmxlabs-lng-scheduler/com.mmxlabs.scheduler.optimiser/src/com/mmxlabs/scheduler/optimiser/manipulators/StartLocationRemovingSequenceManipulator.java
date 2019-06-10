@@ -41,7 +41,7 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 	}
 
 	private void manipulate(final IResource resource, final IModifiableSequence sequence) {
-		if (getShouldAlwaysRemoveStartLocation(resource) || getShouldConditionedRemoveStartLocation(resource, sequence)) {
+		if (getShouldAlwaysRemoveStartLocation(resource)) {
 			sequence.remove(0);
 		}
 	}
@@ -65,14 +65,16 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 		return resourcesToManipulate.contains(resource);
 	}
 	
-	public boolean getShouldConditionedRemoveStartLocation(final IResource resource, final IModifiableSequence sequence) {
-		final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
-		if ((vesselInstanceType != VesselInstanceType.DES_PURCHASE && vesselInstanceType != VesselInstanceType.FOB_SALE) && vesselProvider.getVesselAvailability(resource).isOptional()  && sequence.size() == 2) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+//	public boolean getShouldConditionedRemoveStartLocation(final IResource resource, final IModifiableSequence sequence) {
+//		final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
+//		if ((vesselInstanceType != VesselInstanceType.DES_PURCHASE && vesselInstanceType != VesselInstanceType.FOB_SALE) && 
+//				//Should keep? ---->v
+//				vesselProvider.getVesselAvailability(resource).isOptional() && sequence.size() == 2) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
 
 
 	/**
@@ -84,9 +86,10 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
 			if (vesselInstanceType == VesselInstanceType.ROUND_TRIP) {
 				setShouldAlwaysRemoveStartLocation(resource, true);
-			} else if (vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER)) {
-				setShouldAlwaysRemoveStartLocation(resource, true);
 			} 
+			//else if (vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER)) {
+			//	setShouldAlwaysRemoveStartLocation(resource, true);
+			//} 
 		}
 	}
 }
