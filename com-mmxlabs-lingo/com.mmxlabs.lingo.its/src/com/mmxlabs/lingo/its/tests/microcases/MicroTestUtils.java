@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.inject.modules.InitialPhaseOptimisationDataModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -41,8 +42,11 @@ import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
+import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 
 public class MicroTestUtils {
 	/**
@@ -189,6 +193,34 @@ public class MicroTestUtils {
 				action.accept(injector, solution);
 			}
 		}
+	}
+
+
+	/**
+	 * Returns null on success, or returns the failing evaluated state constraint checkers.
+	 * 
+	 * @param rawSequences
+	 * @return metrics
+	 */
+	public static long[] evaluateMetrics(@NonNull final LNGDataTransformer dataTransformer, @NonNull final ISequences rawSequences) {
+
+		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, dataTransformer.getInitialSequences(), dataTransformer.getInitialSequences(),
+				dataTransformer.getHints());
+		final Injector injector = evaluationTransformerUnit.getInjector();
+
+		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			scope.enter();
+			final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
+			final EvaluationHelper evaluationHelper = injector.getInstance(EvaluationHelper.class);
+
+			// Apply initial state (store initial lateness etc)
+			// // Apply sequence manipulators
+			final IModifiableSequences fullSequences = sequencesManipulator.createManipulatedSequences(rawSequences);
+
+			long[] metrics = evaluationHelper.evaluateState(rawSequences, fullSequences, null, false, null, null);
+			
+			return metrics;
+		}		
 	}
 
 	public static Pair<LNGEvaluationTransformerUnit, List<IConstraintChecker>> getConstraintCheckers(@NonNull final LNGDataTransformer dataTransformer) {

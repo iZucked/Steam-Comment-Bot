@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
@@ -17,24 +16,29 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Idle;
-import com.mmxlabs.models.lng.schedule.PortVisitLateness;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 
 @ExtendWith(ShiroRunner.class)
 public class CharterInVesselAvailabilityTest extends AbstractMicroTestCase {
-
+	
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testCargo_CargoOnNonOptionalVessel() throws Exception {
@@ -73,34 +77,35 @@ public class CharterInVesselAvailabilityTest extends AbstractMicroTestCase {
 
 		evaluateTest(null, null, scenarioRunner -> {
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			// Check spot index has been updated
-			final IScenarioDataProvider optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
-
-			final Sequence sequence = ScenarioModelUtil.getScheduleModel(optimiserScenario).getSchedule().getSequences().get(0);
-			final StartEvent startEvent = (StartEvent) sequence.getEvents().get(0);
-			final Idle idle = (Idle) sequence.getEvents().get(1);
-			//Is SlotVisit actually LoadEvent?
-			final SlotVisit loadEvent = (SlotVisit)sequence.getEvents().get(2);
-			
-			Assertions.assertEquals(0, startEvent.getDuration());
-			Assertions.assertEquals(0, idle.getDuration());
-			
-			//System.out.println("Slot visit = "+loadEvent);
-			Assertions.assertEquals(0, loadEvent.getDuration());
-						
-			final SlotVisit visit1 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(0), lngScenarioModel);
-			final PortVisitLateness lateness1 = visit1.getLateness();
-			Assertions.assertNull(lateness1);
-
-			final SlotVisit visit2 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(1), lngScenarioModel);
-			final PortVisitLateness lateness2 = visit2.getLateness();
-			Assertions.assertNull(lateness2);
+			validateStartIdleLoadEvents(scenarioRunner);
 		});
+	}
+
+	private void validateStartIdleLoadEvents(LNGScenarioRunner scenarioRunner) {
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+		// Check spot index has been updated
+		final IScenarioDataProvider optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+
+		final Sequence sequence = ScenarioModelUtil.getScheduleModel(optimiserScenario).getSchedule().getSequences().get(0);
+		final StartEvent startEvent = (StartEvent) sequence.getEvents().get(0);
+		final Idle idle = (Idle) sequence.getEvents().get(1);
+
+		//SlotVist equates to LoadEvent in the GUI.
+		final SlotVisit loadEvent = (SlotVisit)sequence.getEvents().get(2);
+		Assertions.assertEquals(0, startEvent.getDuration());
+		Assertions.assertEquals(0, idle.getDuration());
+		
+		//Start zone date time of all three events should match.
+		Assertions.assertEquals(startEvent.getStart(),idle.getStart());
+		Assertions.assertEquals(startEvent.getStart(),loadEvent.getStart());
+
+		int slotDuration = loadEvent.getSlotAllocation().getSlot().getDuration();
+		Assertions.assertEquals(24, slotDuration);
 	}
 
 	private CharterInMarket createChartInMarket() {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setMaxSpeed(15.0);
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 1);
 		return charterInMarket_1;
 	}
@@ -142,23 +147,19 @@ public class CharterInVesselAvailabilityTest extends AbstractMicroTestCase {
 
 		evaluateTest(null, null, scenarioRunner -> {
 
-			final SlotVisit visit1 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(0), lngScenarioModel);
-			final PortVisitLateness lateness1 = visit1.getLateness();
-			Assertions.assertNull(lateness1);
-
-			final SlotVisit visit2 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(1), lngScenarioModel);
-			final PortVisitLateness lateness2 = visit2.getLateness();
-			Assertions.assertNull(lateness2);
+			validateStartIdleLoadEvents(scenarioRunner);
 		});
 	}
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testCargo_NoCargoOnNonOptionalVessel() throws Exception {
+	public void testCargo_NoCargoOnVessel() throws Exception {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final VesselAvailability vesselAvailability = this.createVesselAvailabilty(false);
+		final CharterInMarket charterInMarket = createChartInMarket();
+		charterInMarket.setMinDuration(30);
+		charterInMarket.setCharterInRate("10000");
 		
 		@NonNull
 		final Port port1 = portFinder.findPort("Point Fortin");
@@ -173,57 +174,43 @@ public class CharterInVesselAvailabilityTest extends AbstractMicroTestCase {
 
 		evaluateTest(null, null, scenarioRunner -> {
 
-			List<Sequence> sequences = ScenarioModelUtil.getScheduleModel(scenarioRunner.getScenarioDataProvider()).getSchedule().getSequences();
-			boolean found = false;
-			for (Sequence sequence : sequences) {
-				if (vesselAvailability.equals(sequence.getVesselAvailability())) {
-					found = true;
-					break;
-				}
-			}
-			assert found == true;
+			Schedule schedule = ScenarioModelUtil.getScheduleModel(scenarioRunner.getScenarioDataProvider()).getSchedule();
+			
+			validateNoCargo(charterInMarket, schedule);
+			
+			validatePnLAsExpected(schedule);
+			
+			//Check internal pnl.
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+			@NonNull
+			IModifiableSequences initialSequences = new ModifiableSequences(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences());
+
+			long[] metrics = MicroTestUtils.evaluateMetrics(scenarioToOptimiserBridge.getDataTransformer(), initialSequences);
+
+			long internalPnl = metrics[MetricType.PNL.ordinal()];
+				
+			Assertions.assertEquals(0, internalPnl);
 		});
 	}
 
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testCargo_NoCargoOnOptionalVessel() throws Exception {
-		// map into same timezone to make expectations easier
-		portModelBuilder.setAllExistingPortsToUTC();
-
-		final VesselAvailability vesselAvailability = createVesselAvailabilty(true);
-
-		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
-
-		@NonNull
-		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
-
-		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
-		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
-
-		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100);
-
-		evaluateTest(null, null, scenarioRunner -> {
-
-			EList<Sequence> sequences = ScenarioModelUtil.getScheduleModel(scenarioRunner.getScenarioDataProvider()).getSchedule().getSequences();
-			boolean found = false;
-			for (Sequence sequence : sequences) {
-				if (vesselAvailability.equals(sequence.getVesselAvailability())) {
-					found = true;
-					break;
-				}
+	private void validateNoCargo(final CharterInMarket charterInMarket, Schedule schedule) {
+		EList<Sequence> sequences = schedule.getSequences();
+		boolean found = false;
+		for (Sequence sequence : sequences) {
+			if (charterInMarket.equals(sequence.getCharterInMarket())) {
+				found = true;
+				break;
 			}
-			assert found == false;
-		});
+		}
+		assert found == false;
 	}
 
-	private VesselAvailability createVesselAvailabilty(boolean optionality) {
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 1);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withOptionality(optionality).build();
-		return vesselAvailability;
+	private void validatePnLAsExpected(Schedule schedule) {
+		//Check pnl is zero.
+		Assertions.assertEquals(0L, ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule));
 	}
 
 }
