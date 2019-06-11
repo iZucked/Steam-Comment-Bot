@@ -85,6 +85,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/overrideInaccessibleRoutes"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/inaccessibleRoutes"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/charterContract"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/repositioningFee"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/nominal"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/minDuration"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/maxDuration"/>

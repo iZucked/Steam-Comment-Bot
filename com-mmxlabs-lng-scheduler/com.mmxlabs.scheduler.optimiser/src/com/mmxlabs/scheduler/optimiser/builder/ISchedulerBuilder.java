@@ -669,7 +669,7 @@ public interface ISchedulerBuilder {
 
 	@NonNull
 	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVessel oVessel, @NonNull ILongCurve charterInCurve, int charterCount, IEndRequirement endRequiremenbt,
-			IBallastBonusContract ballastBonusContract);
+			IBallastBonusContract ballastBonusContract, ILongCurve repositioningFee);
 
 	/***
 	 * Create a sequence element

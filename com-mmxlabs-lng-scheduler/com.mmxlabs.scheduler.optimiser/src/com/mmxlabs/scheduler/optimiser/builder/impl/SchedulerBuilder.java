@@ -1898,8 +1898,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public ISpotCharterInMarket createSpotCharterInMarket(@NonNull final String name, @NonNull final IVessel vessel, @NonNull final ILongCurve dailyCharterInRateCurve, final int availabilityCount,
-			@Nullable IEndRequirement endRequirement, @Nullable IBallastBonusContract ballastBonusContract) {
-		return new DefaultSpotCharterInMarket(name, vessel, dailyCharterInRateCurve, availabilityCount, endRequirement, ballastBonusContract);
+			@Nullable IEndRequirement endRequirement, @Nullable IBallastBonusContract ballastBonusContract,  final ILongCurve repositioningFee) {
+		return new DefaultSpotCharterInMarket(name, vessel, dailyCharterInRateCurve, availabilityCount, endRequirement, ballastBonusContract, repositioningFee);
 	}
 
 	@Override

@@ -3365,8 +3365,16 @@ public class LNGScenarioTransformer {
 					}
 				}
 
+				final ILongCurve repositioningFeeCurve;
+				if (charterInMarket.getRepositioningFee() != null && !charterInMarket.getRepositioningFee().isEmpty()) {
+					repositioningFeeCurve = dateHelper.generateLongExpressionCurve(charterInMarket.getRepositioningFee(), charterIndices);
+				} else {
+					repositioningFeeCurve = new ConstantValueLongCurve(0);
+				}
+				assert repositioningFeeCurve != null;
+				
 				final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterInMarket.getName(), oVessel, charterInCurve, charterCount, charterInEndRule,
-						ballastBonusContract);
+						ballastBonusContract, repositioningFeeCurve);
 				modelEntityMap.addModelObject(charterInMarket, spotCharterInMarket);
 
 				// Only create a nominal vessel if enabled

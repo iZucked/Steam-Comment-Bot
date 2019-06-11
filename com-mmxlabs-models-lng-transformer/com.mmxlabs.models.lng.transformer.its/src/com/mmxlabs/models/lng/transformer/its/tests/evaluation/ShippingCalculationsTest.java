@@ -50,6 +50,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.LddScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.StsScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.its.tests.evaluation.AbstractShippingCalculationsTestClass.Expectations;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -896,16 +897,10 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		cargoModel.getCargoes().forEach(c -> c.setVesselAssignmentType(charterModel));
 		cargoModel.getCargoes().forEach(c -> c.setSpotIndex(0));
 
-		// Spot charter-in vessels have fewer voyages
-		SequenceTester checker = getDefaultTester();
-		
-		//TODO: fix this test...
-//		final SequenceTester checker;
-//		{
-//			final Class<?>[] expectedClasses = { StartEvent.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
-//			checker = getTestCharterCost_SpotCharterInTester(expectedClasses);
-//		}
-
+		// Spot charter-in vessels have fewer voyages		
+		final Class<?>[] expectedClasses = { StartEvent.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
+		final SequenceTester checker = getTestCharterCost_SpotCharterInTester(expectedClasses);
+			
 		checker.hireCostPerHour = charterRatePerDay / 24;
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -943,7 +938,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		checker.setExpectedValues(Expectations.DURATIONS, EndEvent.class, new Integer[] { null });
 
 		// don't care what the duration of the start event is
-		checker.setExpectedValues(Expectations.DURATIONS, StartEvent.class, new Integer[] {});
+		checker.setExpectedValues(Expectations.DURATIONS, StartEvent.class, new Integer[] { null });
 
 		// expected FBO consumptions of journeys
 		// none (not economical in default)
@@ -968,21 +963,21 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 520, 300 });
 
 		// expected durations of idles
-		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 2, 0 });
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 0 });
 
 		// expected base idle consumptions
 		// 0 = no idle (start)
 		// 0 = no idle (idle on NBO)
 		// 0 = no idle (end)
-		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0 });
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0 });
 
 		// expected NBO idle consumptions
 		// 10 = 2 { idle duration } * 5 { idle NBO rate }
-		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 10, 0 });
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 0 });
 
 		// idle costs
 		// 210 = 10 { LNG consumption } * 21 { LNG CV } * 1 { LNG cost per MMBTU }
-		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 210, 0 });
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210, 0 });
 
 		// expected load / discharge volumes
 		// 10000 (load) = vessel capacity
