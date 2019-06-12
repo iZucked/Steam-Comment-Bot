@@ -113,56 +113,34 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		{
 			List<Slot<?>> slots = new LinkedList<>();
 			final Iterator<?> itr = selection.iterator();
-			boolean noCargoSelected = true;
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
 				if (obj instanceof RowData) {
 					final RowData rowData = (RowData) obj;
 					final LoadSlot load = rowData.getLoadSlot();
 					if (load != null) {
-						if (load.getCargo() != null) {
-							noCargoSelected = false;
-						} else {
-							slots.add(load);
-						}
+						slots.add(load);
 					}
 					final DischargeSlot discharge = rowData.getDischargeSlot();
 					if (discharge != null) {
-						if (discharge.getCargo() != null) {
-							noCargoSelected = false;
-						} else {
-							slots.add(discharge);
-						}
+						slots.add(discharge);
 					}
-				}
-				else	if (obj instanceof Row) {
+				} else if (obj instanceof Row) {
 					final Row rowData = (Row) obj;
 					final LoadSlot load = rowData.getLoadSlot();
 					if (load != null) {
-						if (load.getCargo() != null) {
-							noCargoSelected = false;
-						} else {
-							slots.add(load);
-						}
+						slots.add(load);
 					}
 					final DischargeSlot discharge = rowData.getDischargeSlot();
 					if (discharge != null) {
-						if (discharge.getCargo() != null) {
-							noCargoSelected = false;
-						} else {
-							slots.add(discharge);
-						}
+						slots.add(discharge);
 					}
 				}
 			}
 
 			slots = filterSpotSlots(slots);
 
-			if (noCargoSelected && !slots.isEmpty()) {
-				if (slots.size() != 2 || (slots.size() == 2
-						&& !(slots.stream().filter(s -> (s instanceof LoadSlot)).findAny().isPresent() && slots.stream().filter(s -> (s instanceof DischargeSlot)).findAny().isPresent()))) {
-					slots = Lists.newArrayList(slots.get(0));
-				}
+			if (!slots.isEmpty() && slots.size() <= 2) {
 				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
 
 				for (final Slot<?> slot : slots) {
@@ -173,54 +151,6 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 					}
 				}
 				menuManager.add(action);
-
-				return;
-			}
-		}
-		{
-			final Set<Cargo> cargoes = new LinkedHashSet<>();
-			final Iterator<?> itr = selection.iterator();
-			while (itr.hasNext()) {
-				final Object obj = itr.next();
-				if (obj instanceof RowData) {
-					final RowData rowData = (RowData) obj;
-					final LoadSlot load = rowData.getLoadSlot();
-					if (load != null && load.getCargo() != null) {
-						cargoes.add(load.getCargo());
-						break;
-					}
-					final DischargeSlot discharge = rowData.getDischargeSlot();
-					if (discharge != null && discharge.getCargo() != null) {
-						cargoes.add(discharge.getCargo());
-						break;
-					}
-				}
-			}
-
-			if (cargoes.size() == 1) {
-				final List<Slot<?>> slots = filterSpotSlots(cargoes.stream().flatMap(c -> c.getSortedSlots().stream()).collect(Collectors.toList()));
-				if (slots.isEmpty()) {
-					return;
-				}
-				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
-
-				for (final Slot<?> slot : slots) {
-					if (slot.isLocked()) {
-						action.setEnabled(false);
-						action.setText(action.getText() + " (Kept open)");
-						break;
-					}
-				}
-				for (final Cargo cargo : cargoes) {
-					if (cargo.isLocked()) {
-						action.setEnabled(false);
-						action.setText(action.getText() + " (Locked)");
-						break;
-					}
-				}
-				menuManager.add(action);
-
-				return;
 			}
 		}
 	}
