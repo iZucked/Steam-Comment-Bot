@@ -215,6 +215,7 @@ public class SlotInsertionOptimiserUnit {
 
 			final SlotInsertionOptimiserInitialState state = new SlotInsertionOptimiserInitialState();
 			final List<Pair<ISequenceElement, ISequenceElement>> nonShippedPairs = new LinkedList<>();
+			final Map<ISequenceElement, Pair<IResource, List<ISequenceElement>>> initialAllocation = new HashMap<>();
 			{
 				final IPhaseOptimisationData phaseOptimisationData = injector.getInstance(IPhaseOptimisationData.class);
 				final IMoveHandlerHelper moveHandlerHelper = injector.getInstance(IMoveHandlerHelper.class);
@@ -235,8 +236,20 @@ public class SlotInsertionOptimiserUnit {
 									"Unable to perform insertion on this scenario. This is most likely caused by late and overlapping cargoes. Please check validation messages.");
 						}
 						state.originalRawSequences = initialRawSequences;
-						state.lookupManager = new LookupManager();// .getInstance(ILookupManager.class);
+						state.lookupManager = new LookupManager();
 						state.lookupManager.createLookup(initialRawSequences);
+
+						// Record the initial vessel & cargo pairing
+						for (final IPortSlot portSlot : optionElements) {
+							final ISequenceElement e = portSlotProvider.getElement(portSlot);
+							final Pair<@Nullable IResource, @NonNull Integer> lookup = state.lookupManager.lookup(e);
+							final IResource resource = lookup.getFirst();
+							if (lookup == null || resource == null) {
+								initialAllocation.put(e, null);
+							} else {
+								initialAllocation.put(e, Pair.of(resource, moveHandlerHelper.extractSegment(initialRawSequences.getSequence(resource), e)));
+							}
+						}
 					}
 
 					{
@@ -375,10 +388,59 @@ public class SlotInsertionOptimiserUnit {
 								return null;
 							}
 							try {
-								// Bit nasty, but we are still in PoC stages
-
 								final SlotInsertionOptimiser calculator = injector.getInstance(SlotInsertionOptimiser.class);
-								return calculator.generate(optionElements, state, pTryNo);
+								@Nullable
+								final
+								Pair<ISequences, Long> result = calculator.generate(optionElements, state, pTryNo);
+
+								// Sometimes due to spot slot equivalence we can obtain solutions which do not change the target elements.
+								if (result != null) {
+									final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+									final IMoveHandlerHelper moveHandlerHelper = injector.getInstance(IMoveHandlerHelper.class);
+
+									final LookupManager lookupManager = injector.getInstance(LookupManager.class);
+									lookupManager.createLookup(result.getFirst());
+
+									boolean isOneTargetDifferent = false;
+
+									// Record the initial vessel & cargo pairing
+									for (final IPortSlot portSlot : optionElements) {
+										final ISequenceElement e = portSlotProvider.getElement(portSlot);
+										final Pair<@Nullable IResource, @NonNull Integer> lookup = state.lookupManager.lookup(e);
+										final IResource resource = lookup.getFirst();
+										if (lookup == null || resource == null) {
+											if (initialAllocation.get(e) != null) {
+												// Slot is unused, when it was originally used
+												isOneTargetDifferent = true;
+												break;
+											}
+											initialAllocation.put(e, null);
+										} else {
+											if (initialAllocation.get(e) == null) {
+												// Slot was unused, and now it is used
+												isOneTargetDifferent = true;
+												break;
+											}
+											if (resource != initialAllocation.get(e).getFirst()) {
+												// Slot is on a different vessel
+												isOneTargetDifferent = true;
+												break;
+											}
+											if (!Objects.equals( //
+													moveHandlerHelper.extractSegment(result.getFirst().getSequence(resource), e), //
+													initialAllocation.get(e).getSecond() //
+											)) {
+												// Slot is paired differently
+												isOneTargetDifferent = true;
+												break;
+											}
+										}
+									}
+									if (!isOneTargetDifferent) {
+										return null;
+									}
+								}
+								return result;
 							} catch (final Exception e) {
 								e.printStackTrace();
 							} finally {
