@@ -1431,22 +1431,13 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_IN_MARKET__CHARTER_CONTRACT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 7;
 
 	/**
-	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_IN_MARKET__REPOSITIONING_FEE = SPOT_CHARTER_MARKET_FEATURE_COUNT + 8;
-
-	/**
 	 * The feature id for the '<em><b>Nominal</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__NOMINAL = SPOT_CHARTER_MARKET_FEATURE_COUNT + 9;
+	int CHARTER_IN_MARKET__NOMINAL = SPOT_CHARTER_MARKET_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
@@ -1455,7 +1446,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__MIN_DURATION = SPOT_CHARTER_MARKET_FEATURE_COUNT + 10;
+	int CHARTER_IN_MARKET__MIN_DURATION = SPOT_CHARTER_MARKET_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
@@ -1464,7 +1455,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__MAX_DURATION = SPOT_CHARTER_MARKET_FEATURE_COUNT + 11;
+	int CHARTER_IN_MARKET__MAX_DURATION = SPOT_CHARTER_MARKET_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Mtm</b></em>' attribute.
@@ -1473,7 +1464,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__MTM = SPOT_CHARTER_MARKET_FEATURE_COUNT + 12;
+	int CHARTER_IN_MARKET__MTM = SPOT_CHARTER_MARKET_FEATURE_COUNT + 11;
 
 	/**
 	 * The number of structural features of the '<em>Charter In Market</em>' class.
@@ -1482,7 +1473,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 13;
+	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketParametersImpl <em>Charter Out Market Parameters</em>}' class.
@@ -2214,17 +2205,6 @@ public interface SpotMarketsPackage extends EPackage {
 	EReference getCharterInMarket_CharterContract();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getRepositioningFee <em>Repositioning Fee</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Repositioning Fee</em>'.
-	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getRepositioningFee()
-	 * @see #getCharterInMarket()
-	 * @generated
-	 */
-	EAttribute getCharterInMarket_RepositioningFee();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterInRate <em>Charter In Rate</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2794,14 +2774,6 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHARTER_IN_MARKET__CHARTER_CONTRACT = eINSTANCE.getCharterInMarket_CharterContract();
-
-		/**
-		 * The meta object literal for the '<em><b>Repositioning Fee</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHARTER_IN_MARKET__REPOSITIONING_FEE = eINSTANCE.getCharterInMarket_RepositioningFee();
 
 		/**
 		 * The meta object literal for the '<em><b>Charter In Rate</b></em>' attribute feature.

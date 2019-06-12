@@ -757,10 +757,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 					createHeelConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
 		}
 		final ILongCurve dailyCharterInPrice = spotCharterInMarket.getDailyCharterInRateCurve();
-
+		
 		// End cold already enforced in VoyagePlanner#getVoyageOptionsAndSetVpoChoices
 		final IVesselAvailability spotAvailability = createVesselAvailability(vessel, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, spotCharterInMarket,
-				spotCharterInMarket.getBallastBonusContract(), spotIndex, new ZeroLongCurve(), true);
+				spotCharterInMarket.getBallastBonusContract(), spotIndex, spotCharterInMarket.getRepositioningFee(), true);
 		spotCharterInMarketProviderEditor.addSpotMarketAvailability(spotAvailability, spotCharterInMarket, spotIndex);
 
 		return spotAvailability;
@@ -786,7 +786,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	private IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, final ILongCurve dailyCharterInRate, @NonNull final VesselInstanceType vesselInstanceType,
 			@NonNull final IStartRequirement start, @NonNull final IEndRequirement end, @Nullable final ISpotCharterInMarket spotCharterInMarket, IBallastBonusContract ballastBonusContract,
-			final int spotIndex, final ILongCurve repositioningFee, final boolean isOptional) {
+			final int spotIndex, final ILongCurve positioningFee, final boolean isOptional) {
 		if (!vessels.contains(vessel)) {
 			throw new IllegalArgumentException("IVessel was not created using this builder");
 		}
@@ -875,7 +875,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 
 		vesselAvailability.setOptional(isOptional);
-		vesselAvailability.setRepositioningFee(repositioningFee);
+		vesselAvailability.setRepositioningFee(positioningFee);
 
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 		return vesselAvailability;
@@ -1898,7 +1898,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public ISpotCharterInMarket createSpotCharterInMarket(@NonNull final String name, @NonNull final IVessel vessel, @NonNull final ILongCurve dailyCharterInRateCurve, final int availabilityCount,
-			@Nullable IEndRequirement endRequirement, @Nullable IBallastBonusContract ballastBonusContract,  final ILongCurve repositioningFee) {
+			@Nullable IEndRequirement endRequirement, @Nullable IBallastBonusContract ballastBonusContract, final ILongCurve repositioningFee) {
 		return new DefaultSpotCharterInMarket(name, vessel, dailyCharterInRateCurve, availabilityCount, endRequirement, ballastBonusContract, repositioningFee);
 	}
 

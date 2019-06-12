@@ -3339,8 +3339,14 @@ public class LNGScenarioTransformer {
 				@Nullable
 				IBallastBonusContract ballastBonusContract = null;
 				IEndRequirement charterInEndRule = null;
+			
+				String repositioningFee = null;
+
 				if (charterInMarket.getCharterContract() instanceof BallastBonusCharterContract) {
+
 					final BallastBonusCharterContract charterContract = (BallastBonusCharterContract) charterInMarket.getCharterContract();
+					repositioningFee = charterContract.getRepositioningFee();
+
 					if (charterContract.getBallastBonusContract() != null) {
 						ballastBonusContract = createAndGetBallastBonusContract(charterContract.getBallastBonusContract());
 						if (ballastBonusContract != null) {
@@ -3348,8 +3354,17 @@ public class LNGScenarioTransformer {
 							charterInEndRule = createDefaultCharterInEndRequirement(builder, portAssociation, modelEntityMap, oVessel);
 						}
 					}
+					
 				}
 
+				final ILongCurve repositioningFeeCurve;
+				if (repositioningFee != null && !repositioningFee.isEmpty()) {
+					repositioningFeeCurve = dateHelper.generateLongExpressionCurve(repositioningFee, charterIndices);
+				} else {
+					repositioningFeeCurve = new ConstantValueLongCurve(0);
+				}
+				assert repositioningFeeCurve != null;
+				
 				final int minDurationInDays = charterInMarket.getMarketOrContractMinDuration();
 				final int maxDurationInDays = charterInMarket.getMarketOrContractMaxDuration();
 				if (maxDurationInDays != 0 || minDurationInDays != 0) {
@@ -3364,17 +3379,9 @@ public class LNGScenarioTransformer {
 						charterInEndRule.setMinDurationInHours(minDurationInDays * 24);
 					}
 				}
-
-				final ILongCurve repositioningFeeCurve;
-				if (charterInMarket.getRepositioningFee() != null && !charterInMarket.getRepositioningFee().isEmpty()) {
-					repositioningFeeCurve = dateHelper.generateLongExpressionCurve(charterInMarket.getRepositioningFee(), charterIndices);
-				} else {
-					repositioningFeeCurve = new ConstantValueLongCurve(0);
-				}
-				assert repositioningFeeCurve != null;
 				
-				final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterInMarket.getName(), oVessel, charterInCurve, charterCount, charterInEndRule,
-						ballastBonusContract, repositioningFeeCurve);
+				final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterInMarket.getName(), oVessel, charterInCurve, 
+						charterCount, charterInEndRule, ballastBonusContract, repositioningFeeCurve);
 				modelEntityMap.addModelObject(charterInMarket, spotCharterInMarket);
 
 				// Only create a nominal vessel if enabled

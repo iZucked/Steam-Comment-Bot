@@ -11,6 +11,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -35,6 +36,7 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.export.ExporterExtensionUtils;
 import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
 import com.mmxlabs.models.lng.transformer.export.IPortSlotEventProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -213,96 +215,11 @@ public class TradingExporterExtension implements IExporterExtension {
 	}
 
 	private EndEvent findEndEvent(final ISequenceElement element) {
-		EndEvent endEvent = null;
-		//
-		// for (int i = 0; i < annotatedSolution.getFullSequences().size(); ++i) {
-		LOOP_OUTER: for (final Map.Entry<IResource, ISequence> e : annotatedSolution.getFullSequences().getSequences().entrySet()) {
-			final IResource res = e.getKey();
-			final ISequence seq = e.getValue();
-			if (seq.size() == 0) {
-				continue;
-			}
-			if (seq.get(seq.size() - 1) == element) {
-				for (final Sequence sequence : outputSchedule.getSequences()) {
-					CharterInMarket charterInMarket = sequence.getCharterInMarket();
-					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-					if (charterInMarket == null && vesselAvailability == null) {
-						continue;
-					}
-
-					boolean correctVessel = false;
-					if (charterInMarket != null) {
-						@Nullable
-						ISpotCharterInMarket iSpotCharterInMarket = modelEntityMap.getOptimiserObject(charterInMarket, ISpotCharterInMarket.class);
-						if (iSpotCharterInMarket == null) {
-							continue;
-						}
-						IVesselAvailability iVesselAvailability = vesselProvider.getVesselAvailability(res);
-						@Nullable
-						ISpotCharterInMarket oSpotCharterInMarket = iVesselAvailability.getSpotCharterInMarket();
-						if (oSpotCharterInMarket == iSpotCharterInMarket && iVesselAvailability.getSpotIndex() == sequence.getSpotIndex()) {
-							correctVessel = true;
-						}
-					} else {
-						// non-spot case
-						// Find the matching
-						final IVesselAvailability o_VesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
-						if (o_VesselAvailability == vesselProvider.getVesselAvailability(res)) {
-							correctVessel = true;
-						}
-					}
-
-					if (correctVessel) {
-						if (sequence.getEvents().size() > 0) {
-							final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
-							if (evt instanceof EndEvent) {
-								endEvent = (EndEvent) evt;
-								break LOOP_OUTER;
-							}
-						}
-					}
-				}
-			}
-		}
-		return endEvent;
+		return ExporterExtensionUtils.findEndEvent(element, modelEntityMap, outputSchedule, annotatedSolution, vesselProvider);
 	}
 
 	private StartEvent findStartEvent(final IVesselProvider vesselProvider, final ISequenceElement element) {
-		StartEvent startEvent = null;
-		//
-		// Find the optimiser sequence for the start element
-		LOOP_OUTER: for (final Map.Entry<IResource, ISequence> e : annotatedSolution.getFullSequences().getSequences().entrySet()) {
-			final IResource res = e.getKey();
-			final ISequence seq = e.getValue();
-			if (seq.size() == 0) {
-				continue;
-			}
-
-			if (seq.get(0) == element) {
-				// Found the sequence, so no find the matching EMF sequence
-				for (final Sequence sequence : outputSchedule.getSequences()) {
-					// Get the EMF Vessel
-					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-					if (vesselAvailability == null) {
-						continue;
-					}
-					// Find the matching
-					final IVesselAvailability iVesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
-
-					// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.
-					if (iVesselAvailability == vesselProvider.getVesselAvailability(res)) {
-						if (sequence.getEvents().size() > 0) {
-							final Event evt = sequence.getEvents().get(0);
-							if (evt instanceof StartEvent) {
-								startEvent = (StartEvent) evt;
-								break LOOP_OUTER;
-							}
-						}
-					}
-				}
-			}
-		}
-		return startEvent;
+		return ExporterExtensionUtils.findStartEvent(element, modelEntityMap, outputSchedule, annotatedSolution, vesselProvider);
 	}
 
 	private void setPandLentries(final IProfitAndLossAnnotation profitAndLoss, final ProfitAndLossContainer container) {

@@ -50,7 +50,8 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 public class ReportTester {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ReportTester.class);
-	private static final UnaryOperator<String> stripWhitespace = s -> s.replaceAll("\\s+", "").replaceAll("\r\n", "").replaceAll("\n", "");
+	private static final UnaryOperator<String> stripWhitespace = s -> s;
+			//s -> s.replaceAll("\\s+", "").replaceAll("\r\n", "").replaceAll("\n", "");
 
 	public static void testReportsWithElement(final ScenarioModelRecord instance, @NonNull final IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
 			final String shortName, final String extension, final String elementID, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {

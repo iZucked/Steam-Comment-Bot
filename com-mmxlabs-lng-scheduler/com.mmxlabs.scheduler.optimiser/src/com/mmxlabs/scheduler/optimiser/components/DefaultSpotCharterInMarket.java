@@ -67,9 +67,4 @@ public final class DefaultSpotCharterInMarket implements ISpotCharterInMarket {
 	public ILongCurve getRepositioningFee() {
 		return this.repositioningFee;
 	}
-
-//	public void setRepositioningFee(ILongCurve repositioningFee) {
-//		this.repositioningFee = repositioningFee;
-//	}
-
 }

@@ -297,6 +297,15 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="ballastBonusContract" eType="#//BallastBonusContract"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="#//BaseLegalEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositioningFee" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="$/day"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="charter"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SimpleBallastBonusCharterContract" eSuperTypes="#//BallastBonusCharterContract"/>
 </ecore:EPackage>

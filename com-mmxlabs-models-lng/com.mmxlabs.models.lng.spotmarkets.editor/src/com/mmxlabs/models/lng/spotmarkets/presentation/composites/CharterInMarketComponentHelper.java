@@ -76,7 +76,6 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 		add_overrideInaccessibleRoutesEditor(detailComposite, topClass);
 		add_inaccessibleRoutesEditor(detailComposite, topClass);
 		add_charterContractEditor(detailComposite, topClass);
-		add_repositioningFeeEditor(detailComposite, topClass);
 		add_nominalEditor(detailComposite, topClass);
 		add_minDurationEditor(detailComposite, topClass);
 		add_maxDurationEditor(detailComposite, topClass);
@@ -163,15 +162,6 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_charterContractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__CHARTER_CONTRACT));
-	}
-
-	/**
-	 * Create the editor for the repositioningFee feature on CharterInMarket
-	 *
-	 * @generated
-	 */
-	protected void add_repositioningFeeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__REPOSITIONING_FEE));
 	}
 
 	/**

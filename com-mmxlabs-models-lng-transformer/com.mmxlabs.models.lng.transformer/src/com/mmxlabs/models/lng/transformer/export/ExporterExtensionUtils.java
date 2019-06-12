@@ -278,7 +278,7 @@ public class ExporterExtensionUtils {
 					boolean correctVessel = false;
 					if (charterInMarket != null) {
 						// Spot market vessels have no start event.
-						if (false) {
+						if (true) {
 							@Nullable
 							ISpotCharterInMarket iSpotCharterInMarket = modelEntityMap.getOptimiserObject(charterInMarket, ISpotCharterInMarket.class);
 							if (iSpotCharterInMarket == null) {
@@ -292,7 +292,7 @@ public class ExporterExtensionUtils {
 							}
 						}
 
-						return null;
+						//return null;
 
 					} else {
 						// non-spot case

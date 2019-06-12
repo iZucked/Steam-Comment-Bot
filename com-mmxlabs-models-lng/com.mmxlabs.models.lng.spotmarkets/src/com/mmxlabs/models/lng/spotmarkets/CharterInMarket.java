@@ -28,7 +28,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getRepositioningFee <em>Repositioning Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isNominal <em>Nominal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getMinDuration <em>Min Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getMaxDuration <em>Max Duration</em>}</li>
@@ -381,34 +380,6 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * @generated
 	 */
 	boolean isSetCharterContract();
-
-	/**
-	 * Returns the value of the '<em><b>Repositioning Fee</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Repositioning Fee</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Repositioning Fee</em>' attribute.
-	 * @see #setRepositioningFee(String)
-	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_RepositioningFee()
-	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day'"
-	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='charter'"
-	 * @generated
-	 */
-	String getRepositioningFee();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getRepositioningFee <em>Repositioning Fee</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Repositioning Fee</em>' attribute.
-	 * @see #getRepositioningFee()
-	 * @generated
-	 */
-	void setRepositioningFee(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Charter In Rate</b></em>' attribute.

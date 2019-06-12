@@ -59,7 +59,6 @@ public class CharterInMarketItemProvider
 			addOverrideInaccessibleRoutesPropertyDescriptor(object);
 			addInaccessibleRoutesPropertyDescriptor(object);
 			addCharterContractPropertyDescriptor(object);
-			addRepositioningFeePropertyDescriptor(object);
 			addNominalPropertyDescriptor(object);
 			addMinDurationPropertyDescriptor(object);
 			addMaxDurationPropertyDescriptor(object);
@@ -311,28 +310,6 @@ public class CharterInMarketItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Repositioning Fee feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRepositioningFeePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CharterInMarket_repositioningFee_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_repositioningFee_feature", "_UI_CharterInMarket_type"),
-				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__REPOSITIONING_FEE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Charter In Rate feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -426,7 +403,6 @@ public class CharterInMarketItemProvider
 			case SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES:
-			case SpotMarketsPackage.CHARTER_IN_MARKET__REPOSITIONING_FEE:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MIN_DURATION:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MAX_DURATION:

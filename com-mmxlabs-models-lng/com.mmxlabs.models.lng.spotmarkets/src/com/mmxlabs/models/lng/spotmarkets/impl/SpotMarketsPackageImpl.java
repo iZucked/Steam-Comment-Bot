@@ -710,7 +710,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 */
 	@Override
 	public EAttribute getCharterInMarket_Nominal() {
-		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -720,7 +720,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 */
 	@Override
 	public EAttribute getCharterInMarket_MinDuration() {
-		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(8);
+		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -730,7 +730,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 */
 	@Override
 	public EAttribute getCharterInMarket_MaxDuration() {
-		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(9);
+		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -740,7 +740,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 */
 	@Override
 	public EAttribute getCharterInMarket_Mtm() {
-		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(10);
+		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -831,16 +831,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	@Override
 	public EReference getCharterInMarket_CharterContract() {
 		return (EReference)charterInMarketEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getCharterInMarket_RepositioningFee() {
-		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -956,7 +946,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES);
 		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__INACCESSIBLE_ROUTES);
 		createEReference(charterInMarketEClass, CHARTER_IN_MARKET__CHARTER_CONTRACT);
-		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__REPOSITIONING_FEE);
 		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__NOMINAL);
 		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__MIN_DURATION);
 		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__MAX_DURATION);
@@ -1113,7 +1102,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEAttribute(getCharterInMarket_OverrideInaccessibleRoutes(), ecorePackage.getEBoolean(), "overrideInaccessibleRoutes", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterInMarket_InaccessibleRoutes(), thePortPackage.getRouteOption(), "inaccessibleRoutes", null, 0, -1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCharterInMarket_CharterContract(), theCommercialPackage.getCharterContract(), null, "charterContract", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCharterInMarket_RepositioningFee(), ecorePackage.getEString(), "repositioningFee", null, 1, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterInMarket_Nominal(), ecorePackage.getEBoolean(), "nominal", "true", 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterInMarket_MinDuration(), ecorePackage.getEInt(), "minDuration", null, 1, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterInMarket_MaxDuration(), ecorePackage.getEInt(), "maxDuration", null, 1, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1194,12 +1182,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 			   "unit", "$/day"
 		   });
 		addAnnotation
-		  (getCharterInMarket_RepositioningFee(),
-		   source,
-		   new String[] {
-			   "unit", "$/day"
-		   });
-		addAnnotation
 		  (getCharterInMarket_MinDuration(),
 		   source,
 		   new String[] {
@@ -1231,12 +1213,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		   });
 		addAnnotation
 		  (getCharterInMarket_CharterInRate(),
-		   source,
-		   new String[] {
-			   "type", "charter"
-		   });
-		addAnnotation
-		  (getCharterInMarket_RepositioningFee(),
 		   source,
 		   new String[] {
 			   "type", "charter"

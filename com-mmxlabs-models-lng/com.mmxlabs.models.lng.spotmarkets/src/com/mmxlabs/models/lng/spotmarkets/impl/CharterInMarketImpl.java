@@ -47,7 +47,6 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getCharterContract <em>Charter Contract</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#isNominal <em>Nominal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getMinDuration <em>Min Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getMaxDuration <em>Max Duration</em>}</li>
@@ -185,26 +184,6 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * @ordered
 	 */
 	protected boolean charterContractESet;
-
-	/**
-	 * The default value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRepositioningFee()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String REPOSITIONING_FEE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRepositioningFee()
-	 * @generated
-	 * @ordered
-	 */
-	protected String repositioningFee = REPOSITIONING_FEE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isNominal() <em>Nominal</em>}' attribute.
@@ -696,29 +675,6 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * @generated
 	 */
 	@Override
-	public String getRepositioningFee() {
-		return repositioningFee;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setRepositioningFee(String newRepositioningFee) {
-		String oldRepositioningFee = repositioningFee;
-		repositioningFee = newRepositioningFee;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__REPOSITIONING_FEE, oldRepositioningFee, repositioningFee));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String getCharterInRate() {
 		return charterInRate;
 	}
@@ -814,8 +770,6 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT:
 				if (resolve) return getCharterContract();
 				return basicGetCharterContract();
-			case SpotMarketsPackage.CHARTER_IN_MARKET__REPOSITIONING_FEE:
-				return getRepositioningFee();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
 				return isNominal();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MIN_DURATION:
@@ -862,9 +816,6 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT:
 				setCharterContract((CharterContract)newValue);
-				return;
-			case SpotMarketsPackage.CHARTER_IN_MARKET__REPOSITIONING_FEE:
-				setRepositioningFee((String)newValue);
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
 				setNominal((Boolean)newValue);
@@ -914,9 +865,6 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT:
 				unsetCharterContract();
 				return;
-			case SpotMarketsPackage.CHARTER_IN_MARKET__REPOSITIONING_FEE:
-				setRepositioningFee(REPOSITIONING_FEE_EDEFAULT);
-				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
 				setNominal(NOMINAL_EDEFAULT);
 				return;
@@ -957,8 +905,6 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return inaccessibleRoutes != null && !inaccessibleRoutes.isEmpty();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT:
 				return isSetCharterContract();
-			case SpotMarketsPackage.CHARTER_IN_MARKET__REPOSITIONING_FEE:
-				return REPOSITIONING_FEE_EDEFAULT == null ? repositioningFee != null : !REPOSITIONING_FEE_EDEFAULT.equals(repositioningFee);
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
 				return nominal != NOMINAL_EDEFAULT;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MIN_DURATION:
@@ -1045,8 +991,6 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 		result.append(overrideInaccessibleRoutes);
 		result.append(", inaccessibleRoutes: ");
 		result.append(inaccessibleRoutes);
-		result.append(", repositioningFee: ");
-		result.append(repositioningFee);
 		result.append(", nominal: ");
 		result.append(nominal);
 		result.append(", minDuration: ");
