@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.modules.InitialPhaseOptimisationDataModule;
@@ -561,17 +562,18 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		}, null);
 
 	}
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testForcePromptNominalToOpen_InPrompt_MOO() throws Exception {
-		
+
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		
+
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "200000", 0);
-		
+
 		// Construct the cargo scenario
-		
+
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
@@ -584,9 +586,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
 				.build();
-		
+
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2016, 12, 5));
-		
+
 		evaluateWithLSOTest(true, plan -> {
 			plan.getUserSettings().setSimilarityMode(SimilarityMode.ALL);
 			new ParallelOptimisationPlanExtender().modifyOptimisationPlan(plan);
@@ -595,9 +597,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			ScenarioUtils.setLSOStageIterations(plan, 1);
 			ScenarioUtils.setHillClimbStageIterations(plan, 0);
 		}, null, scenarioRunner -> {
-			
+
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			
+
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
@@ -605,7 +607,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
 			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
 		}, null);
-		
+
 	}
 
 	@Test
@@ -649,6 +651,94 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
 			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
 
+			Assertions.assertSame(charterInMarket_1, cargo1.getVesselAssignmentType());
+			Assertions.assertEquals(-1, cargo1.getSpotIndex());
+		}, null);
+	}
+
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testPromptLockedNominalInPromptNotOpenedWithSpotSale() throws Exception {
+
+		// Create the required basic elements
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "200000", 0);
+
+		DESSalesMarket market = spotMarketsModelBuilder.makeDESSaleMarket("Sale Market", portFinder.findPort("Dominion Cove Point LNG"), entity, "5").build();
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "7") //
+				.build() //
+				.makeMarketDESSale("D1", market, YearMonth.of(2015, 12), portFinder.findPort("Dominion Cove Point LNG")) //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, true) //
+				.build();
+
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2017, 1, 2));
+
+		evaluateWithLSOTest(true, plan -> {
+			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
+			ScenarioUtils.setLSOStageIterations(plan, 0);
+			ScenarioUtils.setHillClimbStageIterations(plan, 0);
+		}, null, scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+			// Check cargo still exists
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+
+			Assertions.assertSame(charterInMarket_1, cargo1.getVesselAssignmentType());
+			Assertions.assertEquals(-1, cargo1.getSpotIndex());
+		}, null);
+	}
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testPromptLockedNominalInPromptNotOpenedWithSpotSaleOpti() throws Exception {
+		
+		// Same as #testPromptLockedNominalInPromptNotOpenedWithSpotSale but we run an optimisation and make sure loss making cargo is not unpaired. 
+		
+		// Create the required basic elements
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "200000", 0);
+		
+		DESSalesMarket market = spotMarketsModelBuilder.makeDESSaleMarket("Sale Market", portFinder.findPort("Dominion Cove Point LNG"), entity, "1").build();
+		// Construct the cargo scenario
+		
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "7") //
+				.build() //
+				.makeMarketDESSale("D1", market, YearMonth.of(2015, 12), portFinder.findPort("Dominion Cove Point LNG")) //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, true) //
+				.build();
+		
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2017, 1, 2));
+		
+		evaluateWithLSOTest(true, plan -> {
+			ScenarioUtils.setLSOStageIterations(plan, 1_000);
+			ScenarioUtils.setHillClimbStageIterations(plan, 0);
+		}, null, scenarioRunner -> {
+			
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+			// Check cargo still exists
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+			
 			Assertions.assertSame(charterInMarket_1, cargo1.getVesselAssignmentType());
 			Assertions.assertEquals(-1, cargo1.getSpotIndex());
 		}, null);
