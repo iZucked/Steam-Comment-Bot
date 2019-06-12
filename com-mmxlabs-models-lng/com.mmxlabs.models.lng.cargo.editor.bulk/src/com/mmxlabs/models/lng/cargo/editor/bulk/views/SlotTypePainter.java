@@ -42,6 +42,7 @@ public class SlotTypePainter implements PaintListener {
 	static final Color White = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
 	static final Color Light_Grey = new Color(Display.getCurrent(), new RGB(240, 240, 240));
 	static final Color Grey = new Color(Display.getCurrent(), new RGB(200, 200, 200));
+	static final Color Black = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 
 	static final Color InvalidTerminalColour = Display.getDefault().getSystemColor(SWT.COLOR_RED);
 	private final Color InvalidWireColour = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
@@ -161,22 +162,28 @@ public class SlotTypePainter implements PaintListener {
 			}
 			GridItem itm = rootItems[i];
 			Object o = itm.getData();
-			final Row row = (Row) o;// root.getRows().get(i);
+			final Row row = (Row) o;
 			final boolean drawLoad = row.getLoadSlot() != null;
 			final boolean drawDischarge = row.getDischargeSlot() != null;
 
 			if (isLoad) {
 				if (drawLoad) {
-					final LoadSlot loadSlot = (LoadSlot) row.getLoadSlot();
-					final Color terminalColour = (loadSlot.getCargo() != null || loadSlot.isOptional()) ? ValidTerminalColour : InvalidTerminalColour;
+					final LoadSlot loadSlot = row.getLoadSlot();
+					final Color terminalColour = (loadSlot.getCargo() != null || (loadSlot.isOptional() || loadSlot.isCancelled())) ? ValidTerminalColour : InvalidTerminalColour;
 					drawTerminal(true, loadSlot.isDESPurchase(), terminalColour, loadSlot.isOptional(), loadSlot instanceof SpotSlot, ca, graphics, midpoint);
+					if (loadSlot.isCancelled()) {
+						drawDiagonalCross(Black, ca, graphics, midpoint);
+					}
 				}
 			} else {
 				graphics.setLineWidth(linewidth);
 				if (drawDischarge) {
-					final DischargeSlot dischargeSlot = (DischargeSlot) row.getDischargeSlot();
-					final Color terminalColour = (dischargeSlot.getCargo() != null || dischargeSlot.isOptional()) ? ValidTerminalColour : InvalidTerminalColour;
+					final DischargeSlot dischargeSlot = row.getDischargeSlot();
+					final Color terminalColour = (dischargeSlot.getCargo() != null || (dischargeSlot.isOptional() || dischargeSlot.isCancelled())) ? ValidTerminalColour : InvalidTerminalColour;
 					drawTerminal(false, !dischargeSlot.isFOBSale(), terminalColour, dischargeSlot.isOptional(), dischargeSlot instanceof SpotSlot, ca, graphics, midpoint);
+					if (dischargeSlot.isCancelled()) {
+						drawDiagonalCross(Black, ca, graphics, midpoint);
+					}
 				}
 			}
 			rawI++;
@@ -298,5 +305,21 @@ public class SlotTypePainter implements PaintListener {
 		offset -= grid.getHorizontalBar().getSelection();
 		// TODO: Take into account h scroll final int colWidth = grid.getColumn(wiringColumnIndex).getWidth();
 		return new Rectangle(area.x + offset, area.y + grid.getHeaderHeight(), wiringColumn.getColumn().getWidth(), area.height);
+	}
+
+	private void drawDiagonalCross(Color terminalColour, final Rectangle ca, final GC graphics, final float midpoint) {
+
+		graphics.setLineWidth(2);
+		int extraRadius = 1;
+		int terminalSize2 = terminalSize - 2;
+		int x = 0;
+
+		x = 1 + ca.x + (ca.width / 2) - (terminalSize / 2);
+		int y = (int) (midpoint - (terminalSize) / 2 - extraRadius / 2);
+
+		graphics.setForeground(terminalColour);
+		graphics.setBackground(terminalColour);
+		graphics.drawLine(x, y, x + terminalSize2 + extraRadius, y + terminalSize2 + extraRadius);
+		graphics.drawLine(x, y + terminalSize2 + extraRadius, x + terminalSize2 + extraRadius, y);
 	}
 }
