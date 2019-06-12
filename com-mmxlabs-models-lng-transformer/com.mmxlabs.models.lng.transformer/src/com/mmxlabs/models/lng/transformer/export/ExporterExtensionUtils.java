@@ -277,6 +277,7 @@ public class ExporterExtensionUtils {
 					}
 					boolean correctVessel = false;
 					if (charterInMarket != null) {
+						//TODO: remove if(true) + comment below, as now we will have start events for spot market vessels in order to facilitate positioningFees.
 						// Spot market vessels have no start event.
 						if (true) {
 							@Nullable

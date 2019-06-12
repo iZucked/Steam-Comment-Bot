@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -16,10 +18,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
+import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -27,6 +33,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.TradingExporterExtension;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -37,7 +44,10 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 
 @ExtendWith(ShiroRunner.class)
-public class CharterInVesselAvailabilityTest extends AbstractMicroTestCase {
+public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
+	
+	final static String BALLAST_BONUS_LUMP_SUM = "12345";
+	final static String POSITIONING_FEE = "99999";
 	
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
@@ -45,15 +55,19 @@ public class CharterInVesselAvailabilityTest extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		// Create the required basic elements
-		final CharterInMarket charterInMarket_1 = createChartInMarket();
-
 		@NonNull
 		final Port port1 = portFinder.findPort("Point Fortin");
 
 		@NonNull
 		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
 
+		//Create Ballast Bonus Charter Contract with entity, repositioningFee, and lump sum bonus.
+		final BallastBonusCharterContract ballastBonusCharterContract = createBallastBonusCharterContract(port1);
+		
+		// Create the required basic elements
+		final CharterInMarket charterInMarket_1 = createChartInMarket();
+		charterInMarket_1.setCharterContract(ballastBonusCharterContract);
+		
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
 
@@ -78,7 +92,33 @@ public class CharterInVesselAvailabilityTest extends AbstractMicroTestCase {
 		evaluateTest(null, null, scenarioRunner -> {
 
 			validateStartIdleLoadEvents(scenarioRunner);
+			
+			validateRepositioningFeeSet(scenarioRunner);
 		});
+	}
+
+	private void validateRepositioningFeeSet(LNGScenarioRunner scenarioRunner) {
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+		// Check spot index has been updated
+		final IScenarioDataProvider optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+
+		final Schedule schedule = ScenarioModelUtil.getScheduleModel(optimiserScenario).getSchedule();
+		final Sequence sequence = ScenarioModelUtil.getScheduleModel(optimiserScenario).getSchedule().getSequences().get(0);
+		final StartEvent startEvent = (StartEvent) sequence.getEvents().get(0);
+		
+		//TODO: How to get the group pnl and specifically validate Other = repositioningFee???
+		//TradingExporterExtension tradingExporter = new TradingExporterExtension();
+		//tradingExporter.startExporting(schedule, modelEntityMap, annotatedSolution);
+		//GroupProfitAndLoss gpnl = startEvent.getSlotAllocation().getCargoAllocation().getGroupProfitAndLoss();
+		
+		//for (EntityProfitAndLoss epnl : gpnl.getEntityProfitAndLosses()) {
+		//	System.out.println(startEvent);
+		//}
+	}
+	
+	private BallastBonusCharterContract createBallastBonusCharterContract(Port port) {
+		final BallastBonusCharterContract ballastBonusCharterContract = commercialModelBuilder.createLumpSumBallastBonusCharterContract(port, BALLAST_BONUS_LUMP_SUM, POSITIONING_FEE);
+		return ballastBonusCharterContract;
 	}
 
 	private void validateStartIdleLoadEvents(LNGScenarioRunner scenarioRunner) {
@@ -106,10 +146,13 @@ public class CharterInVesselAvailabilityTest extends AbstractMicroTestCase {
 	private CharterInMarket createChartInMarket() {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setMaxSpeed(15.0);
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 1);	
+		charterInMarket_1.setNominal(false);
 		return charterInMarket_1;
 	}
 
+	
+	
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testCargo_CargoOnOptionalVessel() throws Exception {
@@ -211,6 +254,5 @@ public class CharterInVesselAvailabilityTest extends AbstractMicroTestCase {
 	private void validatePnLAsExpected(Schedule schedule) {
 		//Check pnl is zero.
 		Assertions.assertEquals(0L, ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule));
-	}
-
+	}	
 }
