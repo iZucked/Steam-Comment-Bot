@@ -149,13 +149,15 @@ public class CommercialModelBuilder {
 		return ballastBonusContract;
 	}
 
-	public @NonNull BallastBonusCharterContract createLumpSumBallastBonusCharterContract(@NonNull final Port redeliveryPort, @NonNull final String priceExpression, @NonNull final String repositioningFee) {
+	public @NonNull BallastBonusCharterContract createLumpSumBallastBonusCharterContract(@NonNull final Port redeliveryPort, @NonNull final BaseLegalEntity legalEntity,
+			@NonNull final String priceExpression, @NonNull final String repositioningFee) {
 		
 		final BallastBonusContract ballastBonusContract = createSimpleLumpSumBallastBonusContract(redeliveryPort, priceExpression);
 		
 		final BallastBonusCharterContract ballastBonusCharterContract = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
 		ballastBonusCharterContract.setRepositioningFee(repositioningFee);
 		ballastBonusCharterContract.setBallastBonusContract(ballastBonusContract);
+		ballastBonusCharterContract.setEntity(legalEntity);
 		
 		return ballastBonusCharterContract;
 	}
