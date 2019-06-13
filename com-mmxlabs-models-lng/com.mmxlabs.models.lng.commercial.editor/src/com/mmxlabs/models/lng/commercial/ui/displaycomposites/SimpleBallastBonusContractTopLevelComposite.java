@@ -57,7 +57,7 @@ public class SimpleBallastBonusContractTopLevelComposite extends DefaultTopLevel
 		final Group g = new Group(containerComposite, SWT.NONE);
 		toolkit.adapt(g);
 
-		g.setText("Charter contract details");
+		g.setText("Charter terms");
 		g.setLayout(new FillLayout());
 		g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));

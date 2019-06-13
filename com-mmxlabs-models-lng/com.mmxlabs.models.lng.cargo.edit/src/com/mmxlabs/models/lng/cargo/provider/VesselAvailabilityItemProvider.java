@@ -399,7 +399,7 @@ public class VesselAvailabilityItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselAvailability_charterContract_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_charterContract_feature", "_UI_VesselAvailability_type"),
+				 getString("_UI_VesselAvailability_charterContract_description"),
 				 CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT,
 				 true,
 				 false,
