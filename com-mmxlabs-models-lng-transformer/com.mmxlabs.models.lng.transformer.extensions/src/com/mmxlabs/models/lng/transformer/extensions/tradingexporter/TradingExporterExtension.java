@@ -94,10 +94,10 @@ public class TradingExporterExtension implements IExporterExtension {
 		if (allElements != null) {
 			for (final ISequenceElement element : allElements) {
 				{
-					final IProfitAndLossAnnotation profitAndLossWithTimeCharter = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLoss,
+					final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLoss,
 							IProfitAndLossAnnotation.class);
 
-					if (profitAndLossWithTimeCharter != null) {
+					if (profitAndLoss != null) {
 						// emit p&l entry - depends on the type of slot associated with the element.
 						final IPortSlot slot = slotProvider.getPortSlot(element);
 
@@ -113,7 +113,7 @@ public class TradingExporterExtension implements IExporterExtension {
 								}
 							}
 							if (cargoAllocation != null) {
-								setPandLentries(profitAndLossWithTimeCharter, cargoAllocation);
+								setPandLentries(profitAndLoss, cargoAllocation);
 							} else {
 
 								OpenSlotAllocation openSlotAllocation = null;
@@ -124,7 +124,7 @@ public class TradingExporterExtension implements IExporterExtension {
 									}
 								}
 								if (openSlotAllocation != null) {
-									setPandLentries(profitAndLossWithTimeCharter, openSlotAllocation);
+									setPandLentries(profitAndLoss, openSlotAllocation);
 								} else {
 									MarketAllocation marketAllocation = null;
 									for (final MarketAllocation allocation : outputSchedule.getMarketAllocations()) {
@@ -134,7 +134,7 @@ public class TradingExporterExtension implements IExporterExtension {
 										}
 									}
 									if (marketAllocation != null) {
-										setPandLentries(profitAndLossWithTimeCharter, marketAllocation);
+										setPandLentries(profitAndLoss, marketAllocation);
 									}
 								}
 							}
@@ -149,7 +149,7 @@ public class TradingExporterExtension implements IExporterExtension {
 								}
 							}
 							if (openSlotAllocation != null) {
-								setPandLentries(profitAndLossWithTimeCharter, openSlotAllocation);
+								setPandLentries(profitAndLoss, openSlotAllocation);
 							} else {
 								MarketAllocation marketAllocation = null;
 								for (final MarketAllocation allocation : outputSchedule.getMarketAllocations()) {
@@ -159,19 +159,19 @@ public class TradingExporterExtension implements IExporterExtension {
 									}
 								}
 								if (marketAllocation != null) {
-									setPandLentries(profitAndLossWithTimeCharter, marketAllocation);
+									setPandLentries(profitAndLoss, marketAllocation);
 								}
 							}
 						} else if (slot instanceof IVesselEventPortSlot) {
 							if (slot instanceof IGeneratedCharterOutVesselEventPortSlot) {
 								final GeneratedCharterOut gco = portSlotEventProvider.getEventFromPortSlot(slot, GeneratedCharterOut.class);
 								if (gco != null) {
-									setPandLentries(profitAndLossWithTimeCharter, gco);
+									setPandLentries(profitAndLoss, gco);
 								}
 							} else if (slot instanceof IGeneratedCharterLengthEventPortSlot) {
 								final CharterLengthEvent gco = portSlotEventProvider.getEventFromPortSlot(slot, CharterLengthEvent.class);
 								if (gco != null) {
-									setPandLentries(profitAndLossWithTimeCharter, gco);
+									setPandLentries(profitAndLoss, gco);
 								}
 							} else {
 								final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = modelEntityMap.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
@@ -187,20 +187,20 @@ public class TradingExporterExtension implements IExporterExtension {
 									}
 								}
 								if (visit != null) {
-									setPandLentries(profitAndLossWithTimeCharter, visit);
+									setPandLentries(profitAndLoss, visit);
 								}
 							}
 						} else if (slot instanceof StartPortSlot) {
 							final StartEvent startEvent = findStartEvent(vesselProvider, element);
 
 							if (startEvent != null) {
-								setPandLentries(profitAndLossWithTimeCharter, startEvent);
+								setPandLentries(profitAndLoss, startEvent);
 							}
 						} else if (slot.getPortType() == PortType.End) {
 							final EndEvent endEvent = findEndEvent(element);
 
 							if (endEvent != null) {
-								setPandLentries(profitAndLossWithTimeCharter, endEvent);
+								setPandLentries(profitAndLoss, endEvent);
 							}
 						}
 					}
