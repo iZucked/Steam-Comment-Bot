@@ -324,8 +324,11 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 					final LocalDate now = LocalDate.now();
 					final LocalDate dueDate = NominationsModelUtils.getDueDate(scenarioModel, nomination);
 					final LocalDate alertDate = NominationsModelUtils.getAlertDate(scenarioModel, nomination);
-					if ((alertDate != null && !now.isBefore(alertDate) || (dueDate != null && !now.isBefore(dueDate)))) {
+					if ((alertDate != null && !now.isBefore(alertDate))) {
 						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_YELLOW));
+					}
+					if ((dueDate != null && !now.isBefore(dueDate))) {
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 					}
 				}
 			}
