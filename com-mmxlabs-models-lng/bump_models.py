@@ -25,6 +25,7 @@ files = [("port", "port"),
 		 ("parameters","parameters"),
 		 ("types","lngtypes"),
 		 ("adp","adp"),
+		 ("nominations","nominations"),
 		 ("scenario.model","scenario"),
 		 ]
 for (d,e) in files:

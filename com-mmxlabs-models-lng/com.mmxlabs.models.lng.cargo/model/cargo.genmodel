@@ -131,42 +131,6 @@
       <genFeatures notify="false" createChild="false" propertyDescription="Vessel nominated for this trade."
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/nominatedVessel"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/locked"/>
-      <genFeatures createChild="false" propertyDescription="Trade date nomination for this deal"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowNominationDate"/>
-      <genFeatures createChild="false" propertyDescription="Trade date nomination is done"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowNominationIsDone"/>
-      <genFeatures createChild="false" propertyDescription="Counterparty nominates the window"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowNominationCounterparty"/>
-      <genFeatures createChild="false" propertyDescription="Trade date nomination remark"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowNominationComment"/>
-      <genFeatures createChild="false" propertyDescription="Volume nomination date for this deal"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/volumeNominationDate"/>
-      <genFeatures createChild="false" propertyDescription="Volume nomination is done"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/volumeNominationDone"/>
-      <genFeatures createChild="false" propertyDescription="Counterparty nominates the volume"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/volumeNominationCounterparty"/>
-      <genFeatures createChild="false" propertyDescription="Volume nomination remark"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/volumeNominationComment"/>
-      <genFeatures createChild="false" propertyDescription="Vessel nomination date for this deal"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/vesselNominationDate"/>
-      <genFeatures createChild="false" propertyDescription="Vessel nomination is done"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/vesselNominationDone"/>
-      <genFeatures createChild="false" propertyDescription="Counterparty nominates the vessel"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/vesselNominationCounterparty"/>
-      <genFeatures createChild="false" propertyDescription="Vessel nomination remark"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/vesselNominationComment"/>
-      <genFeatures createChild="false" propertyDescription="Port nomination date for this deal"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/portNominationDate"/>
-      <genFeatures createChild="false" propertyDescription="Port nomination is done"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/portNominationDone"/>
-      <genFeatures createChild="false" propertyDescription="Counterparty nominates the port"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/portNominationCounterparty"/>
-      <genFeatures createChild="false" propertyDescription="Port nomination remark"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/portNominationComment"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/portLoadNominationDate"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/portLoadNominationDone"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/portLoadNominationCounterparty"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/portLoadNominationComment"/>
       <genFeatures createChild="false" propertyDescription="Is current slot cancelled?"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancelled"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateDuration"/>
@@ -190,16 +154,6 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateCN"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateDivertible"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateShippingDaysRestriction"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortLoadNominationDate"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWindowNominationDate"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVesselNominationDate"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVolumeNominationDate"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortNominationDate"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWindowNominationCounterparty"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVesselNominationCounterparty"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVolumeNominationCounterparty"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortNominationCounterparty"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortLoadNominationCounterparty"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateFullCargoLot"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateContractRestrictionsArePermissive"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortRestrictionsArePermissive"/>

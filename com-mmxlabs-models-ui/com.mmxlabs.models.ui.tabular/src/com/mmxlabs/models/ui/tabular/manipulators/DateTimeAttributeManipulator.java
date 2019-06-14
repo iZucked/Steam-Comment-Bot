@@ -6,6 +6,7 @@ package com.mmxlabs.models.ui.tabular.manipulators;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.time.chrono.ChronoLocalDate;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -17,7 +18,8 @@ import org.eclipse.swt.widgets.DateTime;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 
 /**
- * A {@link LocalDate} attribute manipulator which uses the {@link FormattedTextCellEditor} from nebula.
+ * A {@link LocalDate} attribute manipulator which uses the
+ * {@link FormattedTextCellEditor} from nebula.
  * 
  * @author Simon Goodall
  * 
@@ -47,13 +49,10 @@ public class DateTimeAttributeManipulator extends BasicAttributeManipulator {
 		final Object o = getValue(object);
 		if (o instanceof DateTime) {
 			return (ZonedDateTime) o;
+		} else if (o instanceof LocalDate) {
+			return (ChronoLocalDate) o;
 		} else {
 			return null;
 		}
 	}
-	
-
- 
-
-
 }

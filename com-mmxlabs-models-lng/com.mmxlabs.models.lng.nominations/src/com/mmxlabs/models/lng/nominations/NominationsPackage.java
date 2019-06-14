@@ -1,0 +1,1563 @@
+/**
+ */
+package com.mmxlabs.models.lng.nominations;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+
+/**
+ * <!-- begin-user-doc -->
+ * The <b>Package</b> for the model.
+ * It contains accessors for the meta objects to represent
+ * <ul>
+ *   <li>each class,</li>
+ *   <li>each feature of each class,</li>
+ *   <li>each enum,</li>
+ *   <li>and each data type</li>
+ * </ul>
+ * <!-- end-user-doc -->
+ * @see com.mmxlabs.models.lng.nominations.NominationsFactory
+ * @model kind="package"
+ * @generated
+ */
+public interface NominationsPackage extends EPackage {
+	/**
+	 * The package name.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	String eNAME = "nominations";
+
+	/**
+	 * The package namespace URI.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	String eNS_URI = "http://www.mmxlabs.com/models/lng/nominations/1/";
+
+	/**
+	 * The package namespace name.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	String eNS_PREFIX = "lng.nominations";
+
+	/**
+	 * The singleton instance of the package.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	NominationsPackage eINSTANCE = com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl.init();
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl <em>Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl
+	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getNominationsModel()
+	 * @generated
+	 */
+	int NOMINATIONS_MODEL = 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOMINATIONS_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOMINATIONS_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Nomination Specs</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOMINATIONS_MODEL__NOMINATION_SPECS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Nominations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOMINATIONS_MODEL__NOMINATIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOMINATIONS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationSpecImpl <em>Abstract Nomination Spec</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.nominations.impl.AbstractNominationSpecImpl
+	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getAbstractNominationSpec()
+	 * @generated
+	 */
+	int ABSTRACT_NOMINATION_SPEC = 1;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION_SPEC__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION_SPEC__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION_SPEC__TYPE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION_SPEC__COUNTERPARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Remark</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION_SPEC__REMARK = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION_SPEC__SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION_SPEC__SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Day Of Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION_SPEC__DAY_OF_MONTH = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Alert Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION_SPEC__ALERT_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Alert Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION_SPEC__ALERT_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Side</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION_SPEC__SIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Referer Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION_SPEC__REFERER_ID = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+
+	/**
+	 * The number of structural features of the '<em>Abstract Nomination Spec</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.SlotNominationSpecImpl <em>Slot Nomination Spec</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.nominations.impl.SlotNominationSpecImpl
+	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getSlotNominationSpec()
+	 * @generated
+	 */
+	int SLOT_NOMINATION_SPEC = 2;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION_SPEC__EXTENSIONS = ABSTRACT_NOMINATION_SPEC__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION_SPEC__UUID = ABSTRACT_NOMINATION_SPEC__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION_SPEC__TYPE = ABSTRACT_NOMINATION_SPEC__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION_SPEC__COUNTERPARTY = ABSTRACT_NOMINATION_SPEC__COUNTERPARTY;
+
+	/**
+	 * The feature id for the '<em><b>Remark</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION_SPEC__REMARK = ABSTRACT_NOMINATION_SPEC__REMARK;
+
+	/**
+	 * The feature id for the '<em><b>Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION_SPEC__SIZE = ABSTRACT_NOMINATION_SPEC__SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION_SPEC__SIZE_UNITS = ABSTRACT_NOMINATION_SPEC__SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Day Of Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION_SPEC__DAY_OF_MONTH = ABSTRACT_NOMINATION_SPEC__DAY_OF_MONTH;
+
+	/**
+	 * The feature id for the '<em><b>Alert Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION_SPEC__ALERT_SIZE = ABSTRACT_NOMINATION_SPEC__ALERT_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Alert Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION_SPEC__ALERT_SIZE_UNITS = ABSTRACT_NOMINATION_SPEC__ALERT_SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Side</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION_SPEC__SIDE = ABSTRACT_NOMINATION_SPEC__SIDE;
+
+	/**
+	 * The feature id for the '<em><b>Referer Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION_SPEC__REFERER_ID = ABSTRACT_NOMINATION_SPEC__REFERER_ID;
+
+	/**
+	 * The number of structural features of the '<em>Slot Nomination Spec</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION_SPEC_FEATURE_COUNT = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationImpl <em>Abstract Nomination</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.nominations.impl.AbstractNominationImpl
+	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getAbstractNomination()
+	 * @generated
+	 */
+	int ABSTRACT_NOMINATION = 6;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__EXTENSIONS = ABSTRACT_NOMINATION_SPEC__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__UUID = ABSTRACT_NOMINATION_SPEC__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__TYPE = ABSTRACT_NOMINATION_SPEC__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__COUNTERPARTY = ABSTRACT_NOMINATION_SPEC__COUNTERPARTY;
+
+	/**
+	 * The feature id for the '<em><b>Remark</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__REMARK = ABSTRACT_NOMINATION_SPEC__REMARK;
+
+	/**
+	 * The feature id for the '<em><b>Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__SIZE = ABSTRACT_NOMINATION_SPEC__SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__SIZE_UNITS = ABSTRACT_NOMINATION_SPEC__SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Day Of Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__DAY_OF_MONTH = ABSTRACT_NOMINATION_SPEC__DAY_OF_MONTH;
+
+	/**
+	 * The feature id for the '<em><b>Alert Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__ALERT_SIZE = ABSTRACT_NOMINATION_SPEC__ALERT_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Alert Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__ALERT_SIZE_UNITS = ABSTRACT_NOMINATION_SPEC__ALERT_SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Side</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__SIDE = ABSTRACT_NOMINATION_SPEC__SIDE;
+
+	/**
+	 * The feature id for the '<em><b>Referer Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__REFERER_ID = ABSTRACT_NOMINATION_SPEC__REFERER_ID;
+
+	/**
+	 * The feature id for the '<em><b>Nominee Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__NOMINEE_ID = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Due Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__DUE_DATE = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__DONE = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Alert Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__ALERT_DATE = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Spec Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__SPEC_UUID = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 4;
+
+	/**
+	 * The number of structural features of the '<em>Abstract Nomination</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION_FEATURE_COUNT = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 5;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.SlotNominationImpl <em>Slot Nomination</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.nominations.impl.SlotNominationImpl
+	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getSlotNomination()
+	 * @generated
+	 */
+	int SLOT_NOMINATION = 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.ContractNominationSpecImpl <em>Contract Nomination Spec</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.nominations.impl.ContractNominationSpecImpl
+	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getContractNominationSpec()
+	 * @generated
+	 */
+	int CONTRACT_NOMINATION_SPEC = 5;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.ContractNominationImpl <em>Contract Nomination</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.nominations.impl.ContractNominationImpl
+	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getContractNomination()
+	 * @generated
+	 */
+	int CONTRACT_NOMINATION = 4;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__EXTENSIONS = ABSTRACT_NOMINATION__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__UUID = ABSTRACT_NOMINATION__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__TYPE = ABSTRACT_NOMINATION__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__COUNTERPARTY = ABSTRACT_NOMINATION__COUNTERPARTY;
+
+	/**
+	 * The feature id for the '<em><b>Remark</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__REMARK = ABSTRACT_NOMINATION__REMARK;
+
+	/**
+	 * The feature id for the '<em><b>Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__SIZE = ABSTRACT_NOMINATION__SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__SIZE_UNITS = ABSTRACT_NOMINATION__SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Day Of Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__DAY_OF_MONTH = ABSTRACT_NOMINATION__DAY_OF_MONTH;
+
+	/**
+	 * The feature id for the '<em><b>Alert Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__ALERT_SIZE = ABSTRACT_NOMINATION__ALERT_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Alert Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__ALERT_SIZE_UNITS = ABSTRACT_NOMINATION__ALERT_SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Side</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__SIDE = ABSTRACT_NOMINATION__SIDE;
+
+	/**
+	 * The feature id for the '<em><b>Referer Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__REFERER_ID = ABSTRACT_NOMINATION__REFERER_ID;
+
+	/**
+	 * The feature id for the '<em><b>Nominee Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__NOMINEE_ID = ABSTRACT_NOMINATION__NOMINEE_ID;
+
+	/**
+	 * The feature id for the '<em><b>Due Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__DUE_DATE = ABSTRACT_NOMINATION__DUE_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__DONE = ABSTRACT_NOMINATION__DONE;
+
+	/**
+	 * The feature id for the '<em><b>Alert Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__ALERT_DATE = ABSTRACT_NOMINATION__ALERT_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Spec Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__SPEC_UUID = ABSTRACT_NOMINATION__SPEC_UUID;
+
+	/**
+	 * The number of structural features of the '<em>Slot Nomination</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION_FEATURE_COUNT = ABSTRACT_NOMINATION_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__EXTENSIONS = ABSTRACT_NOMINATION__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__UUID = ABSTRACT_NOMINATION__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__TYPE = ABSTRACT_NOMINATION__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__COUNTERPARTY = ABSTRACT_NOMINATION__COUNTERPARTY;
+
+	/**
+	 * The feature id for the '<em><b>Remark</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__REMARK = ABSTRACT_NOMINATION__REMARK;
+
+	/**
+	 * The feature id for the '<em><b>Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__SIZE = ABSTRACT_NOMINATION__SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__SIZE_UNITS = ABSTRACT_NOMINATION__SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Day Of Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__DAY_OF_MONTH = ABSTRACT_NOMINATION__DAY_OF_MONTH;
+
+	/**
+	 * The feature id for the '<em><b>Alert Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__ALERT_SIZE = ABSTRACT_NOMINATION__ALERT_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Alert Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__ALERT_SIZE_UNITS = ABSTRACT_NOMINATION__ALERT_SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Side</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__SIDE = ABSTRACT_NOMINATION__SIDE;
+
+	/**
+	 * The feature id for the '<em><b>Referer Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__REFERER_ID = ABSTRACT_NOMINATION__REFERER_ID;
+
+	/**
+	 * The feature id for the '<em><b>Nominee Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__NOMINEE_ID = ABSTRACT_NOMINATION__NOMINEE_ID;
+
+	/**
+	 * The feature id for the '<em><b>Due Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__DUE_DATE = ABSTRACT_NOMINATION__DUE_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Done</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__DONE = ABSTRACT_NOMINATION__DONE;
+
+	/**
+	 * The feature id for the '<em><b>Alert Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__ALERT_DATE = ABSTRACT_NOMINATION__ALERT_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Spec Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__SPEC_UUID = ABSTRACT_NOMINATION__SPEC_UUID;
+
+	/**
+	 * The number of structural features of the '<em>Contract Nomination</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION_FEATURE_COUNT = ABSTRACT_NOMINATION_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION_SPEC__EXTENSIONS = ABSTRACT_NOMINATION_SPEC__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION_SPEC__UUID = ABSTRACT_NOMINATION_SPEC__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION_SPEC__TYPE = ABSTRACT_NOMINATION_SPEC__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION_SPEC__COUNTERPARTY = ABSTRACT_NOMINATION_SPEC__COUNTERPARTY;
+
+	/**
+	 * The feature id for the '<em><b>Remark</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION_SPEC__REMARK = ABSTRACT_NOMINATION_SPEC__REMARK;
+
+	/**
+	 * The feature id for the '<em><b>Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION_SPEC__SIZE = ABSTRACT_NOMINATION_SPEC__SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION_SPEC__SIZE_UNITS = ABSTRACT_NOMINATION_SPEC__SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Day Of Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION_SPEC__DAY_OF_MONTH = ABSTRACT_NOMINATION_SPEC__DAY_OF_MONTH;
+
+	/**
+	 * The feature id for the '<em><b>Alert Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION_SPEC__ALERT_SIZE = ABSTRACT_NOMINATION_SPEC__ALERT_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Alert Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION_SPEC__ALERT_SIZE_UNITS = ABSTRACT_NOMINATION_SPEC__ALERT_SIZE_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Side</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION_SPEC__SIDE = ABSTRACT_NOMINATION_SPEC__SIDE;
+
+	/**
+	 * The feature id for the '<em><b>Referer Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION_SPEC__REFERER_ID = ABSTRACT_NOMINATION_SPEC__REFERER_ID;
+
+	/**
+	 * The number of structural features of the '<em>Contract Nomination Spec</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION_SPEC_FEATURE_COUNT = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 0;
+
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.DatePeriodPrior <em>Date Period Prior</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.nominations.DatePeriodPrior
+	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getDatePeriodPrior()
+	 * @generated
+	 */
+	int DATE_PERIOD_PRIOR = 7;
+
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.Side <em>Side</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.nominations.Side
+	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getSide()
+	 * @generated
+	 */
+	int SIDE = 8;
+
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.nominations.NominationsModel <em>Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Model</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.NominationsModel
+	 * @generated
+	 */
+	EClass getNominationsModel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.nominations.NominationsModel#getNominationSpecs <em>Nomination Specs</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Nomination Specs</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.NominationsModel#getNominationSpecs()
+	 * @see #getNominationsModel()
+	 * @generated
+	 */
+	EReference getNominationsModel_NominationSpecs();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.nominations.NominationsModel#getNominations <em>Nominations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Nominations</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.NominationsModel#getNominations()
+	 * @see #getNominationsModel()
+	 * @generated
+	 */
+	EReference getNominationsModel_Nominations();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.nominations.AbstractNominationSpec <em>Abstract Nomination Spec</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Abstract Nomination Spec</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNominationSpec
+	 * @generated
+	 */
+	EClass getAbstractNominationSpec();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getType()
+	 * @see #getAbstractNominationSpec()
+	 * @generated
+	 */
+	EAttribute getAbstractNominationSpec_Type();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNominationSpec#isCounterparty <em>Counterparty</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Counterparty</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNominationSpec#isCounterparty()
+	 * @see #getAbstractNominationSpec()
+	 * @generated
+	 */
+	EAttribute getAbstractNominationSpec_Counterparty();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getRemark <em>Remark</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Remark</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getRemark()
+	 * @see #getAbstractNominationSpec()
+	 * @generated
+	 */
+	EAttribute getAbstractNominationSpec_Remark();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getSize <em>Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Size</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getSize()
+	 * @see #getAbstractNominationSpec()
+	 * @generated
+	 */
+	EAttribute getAbstractNominationSpec_Size();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getSizeUnits <em>Size Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Size Units</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getSizeUnits()
+	 * @see #getAbstractNominationSpec()
+	 * @generated
+	 */
+	EAttribute getAbstractNominationSpec_SizeUnits();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getDayOfMonth <em>Day Of Month</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Day Of Month</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getDayOfMonth()
+	 * @see #getAbstractNominationSpec()
+	 * @generated
+	 */
+	EAttribute getAbstractNominationSpec_DayOfMonth();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getAlertSize <em>Alert Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Alert Size</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getAlertSize()
+	 * @see #getAbstractNominationSpec()
+	 * @generated
+	 */
+	EAttribute getAbstractNominationSpec_AlertSize();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getAlertSizeUnits <em>Alert Size Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Alert Size Units</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getAlertSizeUnits()
+	 * @see #getAbstractNominationSpec()
+	 * @generated
+	 */
+	EAttribute getAbstractNominationSpec_AlertSizeUnits();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getSide <em>Side</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Side</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getSide()
+	 * @see #getAbstractNominationSpec()
+	 * @generated
+	 */
+	EAttribute getAbstractNominationSpec_Side();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getRefererId <em>Referer Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Referer Id</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNominationSpec#getRefererId()
+	 * @see #getAbstractNominationSpec()
+	 * @generated
+	 */
+	EAttribute getAbstractNominationSpec_RefererId();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.nominations.SlotNominationSpec <em>Slot Nomination Spec</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Slot Nomination Spec</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.SlotNominationSpec
+	 * @generated
+	 */
+	EClass getSlotNominationSpec();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.nominations.SlotNomination <em>Slot Nomination</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Slot Nomination</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.SlotNomination
+	 * @generated
+	 */
+	EClass getSlotNomination();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.nominations.ContractNomination <em>Contract Nomination</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Contract Nomination</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.ContractNomination
+	 * @generated
+	 */
+	EClass getContractNomination();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.nominations.ContractNominationSpec <em>Contract Nomination Spec</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Contract Nomination Spec</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.ContractNominationSpec
+	 * @generated
+	 */
+	EClass getContractNominationSpec();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.nominations.AbstractNomination <em>Abstract Nomination</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Abstract Nomination</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNomination
+	 * @generated
+	 */
+	EClass getAbstractNomination();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNomination#getNomineeId <em>Nominee Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Nominee Id</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNomination#getNomineeId()
+	 * @see #getAbstractNomination()
+	 * @generated
+	 */
+	EAttribute getAbstractNomination_NomineeId();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNomination#getDueDate <em>Due Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Due Date</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNomination#getDueDate()
+	 * @see #getAbstractNomination()
+	 * @generated
+	 */
+	EAttribute getAbstractNomination_DueDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNomination#isDone <em>Done</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Done</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNomination#isDone()
+	 * @see #getAbstractNomination()
+	 * @generated
+	 */
+	EAttribute getAbstractNomination_Done();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNomination#getAlertDate <em>Alert Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Alert Date</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNomination#getAlertDate()
+	 * @see #getAbstractNomination()
+	 * @generated
+	 */
+	EAttribute getAbstractNomination_AlertDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNomination#getSpecUuid <em>Spec Uuid</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Spec Uuid</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNomination#getSpecUuid()
+	 * @see #getAbstractNomination()
+	 * @generated
+	 */
+	EAttribute getAbstractNomination_SpecUuid();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.nominations.DatePeriodPrior <em>Date Period Prior</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Date Period Prior</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.DatePeriodPrior
+	 * @generated
+	 */
+	EEnum getDatePeriodPrior();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.nominations.Side <em>Side</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Side</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.Side
+	 * @generated
+	 */
+	EEnum getSide();
+
+	/**
+	 * Returns the factory that creates the instances of the model.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the factory that creates the instances of the model.
+	 * @generated
+	 */
+	NominationsFactory getNominationsFactory();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * Defines literals for the meta objects that represent
+	 * <ul>
+	 *   <li>each class,</li>
+	 *   <li>each feature of each class,</li>
+	 *   <li>each enum,</li>
+	 *   <li>and each data type</li>
+	 * </ul>
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	interface Literals {
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl <em>Model</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl
+		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getNominationsModel()
+		 * @generated
+		 */
+		EClass NOMINATIONS_MODEL = eINSTANCE.getNominationsModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Nomination Specs</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NOMINATIONS_MODEL__NOMINATION_SPECS = eINSTANCE.getNominationsModel_NominationSpecs();
+
+		/**
+		 * The meta object literal for the '<em><b>Nominations</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NOMINATIONS_MODEL__NOMINATIONS = eINSTANCE.getNominationsModel_Nominations();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationSpecImpl <em>Abstract Nomination Spec</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.nominations.impl.AbstractNominationSpecImpl
+		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getAbstractNominationSpec()
+		 * @generated
+		 */
+		EClass ABSTRACT_NOMINATION_SPEC = eINSTANCE.getAbstractNominationSpec();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION_SPEC__TYPE = eINSTANCE.getAbstractNominationSpec_Type();
+
+		/**
+		 * The meta object literal for the '<em><b>Counterparty</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION_SPEC__COUNTERPARTY = eINSTANCE.getAbstractNominationSpec_Counterparty();
+
+		/**
+		 * The meta object literal for the '<em><b>Remark</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION_SPEC__REMARK = eINSTANCE.getAbstractNominationSpec_Remark();
+
+		/**
+		 * The meta object literal for the '<em><b>Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION_SPEC__SIZE = eINSTANCE.getAbstractNominationSpec_Size();
+
+		/**
+		 * The meta object literal for the '<em><b>Size Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION_SPEC__SIZE_UNITS = eINSTANCE.getAbstractNominationSpec_SizeUnits();
+
+		/**
+		 * The meta object literal for the '<em><b>Day Of Month</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION_SPEC__DAY_OF_MONTH = eINSTANCE.getAbstractNominationSpec_DayOfMonth();
+
+		/**
+		 * The meta object literal for the '<em><b>Alert Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION_SPEC__ALERT_SIZE = eINSTANCE.getAbstractNominationSpec_AlertSize();
+
+		/**
+		 * The meta object literal for the '<em><b>Alert Size Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION_SPEC__ALERT_SIZE_UNITS = eINSTANCE.getAbstractNominationSpec_AlertSizeUnits();
+
+		/**
+		 * The meta object literal for the '<em><b>Side</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION_SPEC__SIDE = eINSTANCE.getAbstractNominationSpec_Side();
+
+		/**
+		 * The meta object literal for the '<em><b>Referer Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION_SPEC__REFERER_ID = eINSTANCE.getAbstractNominationSpec_RefererId();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.impl.SlotNominationSpecImpl <em>Slot Nomination Spec</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.nominations.impl.SlotNominationSpecImpl
+		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getSlotNominationSpec()
+		 * @generated
+		 */
+		EClass SLOT_NOMINATION_SPEC = eINSTANCE.getSlotNominationSpec();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.impl.SlotNominationImpl <em>Slot Nomination</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.nominations.impl.SlotNominationImpl
+		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getSlotNomination()
+		 * @generated
+		 */
+		EClass SLOT_NOMINATION = eINSTANCE.getSlotNomination();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.impl.ContractNominationImpl <em>Contract Nomination</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.nominations.impl.ContractNominationImpl
+		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getContractNomination()
+		 * @generated
+		 */
+		EClass CONTRACT_NOMINATION = eINSTANCE.getContractNomination();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.impl.ContractNominationSpecImpl <em>Contract Nomination Spec</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.nominations.impl.ContractNominationSpecImpl
+		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getContractNominationSpec()
+		 * @generated
+		 */
+		EClass CONTRACT_NOMINATION_SPEC = eINSTANCE.getContractNominationSpec();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationImpl <em>Abstract Nomination</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.nominations.impl.AbstractNominationImpl
+		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getAbstractNomination()
+		 * @generated
+		 */
+		EClass ABSTRACT_NOMINATION = eINSTANCE.getAbstractNomination();
+
+		/**
+		 * The meta object literal for the '<em><b>Nominee Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION__NOMINEE_ID = eINSTANCE.getAbstractNomination_NomineeId();
+
+		/**
+		 * The meta object literal for the '<em><b>Due Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION__DUE_DATE = eINSTANCE.getAbstractNomination_DueDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Done</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION__DONE = eINSTANCE.getAbstractNomination_Done();
+
+		/**
+		 * The meta object literal for the '<em><b>Alert Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION__ALERT_DATE = eINSTANCE.getAbstractNomination_AlertDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Spec Uuid</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION__SPEC_UUID = eINSTANCE.getAbstractNomination_SpecUuid();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.DatePeriodPrior <em>Date Period Prior</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.nominations.DatePeriodPrior
+		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getDatePeriodPrior()
+		 * @generated
+		 */
+		EEnum DATE_PERIOD_PRIOR = eINSTANCE.getDatePeriodPrior();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.Side <em>Side</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.nominations.Side
+		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getSide()
+		 * @generated
+		 */
+		EEnum SIDE = eINSTANCE.getSide();
+
+	}
+
+} //NominationsPackage

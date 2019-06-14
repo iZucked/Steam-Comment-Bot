@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    All rights reserved.
+-->
+<?eclipse version="3.4"?>
+<plugin>
+<!-- 
+  <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="Nominations"
+            icon="icons/cview16/ihigh_obj.gif"
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.nomination.NominationAlertReport"
+            id="com.mmxlabs.lingo.reports.views.nomination.NominationAlertReport">
+      </view>
+	</extension>
+-->
+ <extension
+       point="org.eclipse.ui.views">
+    <view
+          category="com.mmxlabs.shiplingo.platform.reports"
+          icon="icons/full/obj16/NominationsModelFile.gif"
+          class="com.mmxlabs.models.lng.nominations.ui.views.NominationSpecsView"
+          id="com.mmxlabs.models.lng.nominations.editor.NominationSpecsView"
+          name="Nomination Specifications"
+          restorable="true">
+    </view>
+    <view
+          category="com.mmxlabs.shiplingo.platform.reports"
+          icon="icons/cview16/ihigh_obj.gif"
+          class="com.mmxlabs.models.lng.nominations.ui.views.NominationsView"
+          id="com.mmxlabs.models.lng.nominations.editor.NominationsView"
+          name="Nominations"
+          restorable="true">
+    </view>
+ </extension>
+</plugin>

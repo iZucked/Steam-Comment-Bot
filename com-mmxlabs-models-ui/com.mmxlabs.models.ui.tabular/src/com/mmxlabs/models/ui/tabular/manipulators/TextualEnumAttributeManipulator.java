@@ -5,6 +5,7 @@
 package com.mmxlabs.models.ui.tabular.manipulators;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
@@ -24,7 +25,6 @@ import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -32,8 +32,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.ui.editors.autocomplete.AutoCompleteHelper;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -51,21 +49,20 @@ public class TextualEnumAttributeManipulator extends BasicAttributeManipulator {
 	protected final List<Object> valueList = new ArrayList<>();
 	protected final List<String> names = new ArrayList<>();
 	protected final List<String> lowerNames = new ArrayList<>();
+	protected final HashSet<Integer> disallowedValues;
 
 	final EditingDomain editingDomain;
 
 	private TextCellEditor editor;
-	private @Nullable Function<Enumerator, String> nameMapper;
+	private @Nullable
+	final Function<Enumerator, String> nameMapper;
 
 	protected List<Pair<String, Object>> getAllowedValues(EObject object) {
 		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
-		EEnum eenum = (EEnum) ((EAttribute) field).getEAttributeType();
+		final EEnum eenum = (EEnum) ((EAttribute) field).getEAttributeType();
 		for (final EEnumLiteral literal : eenum.getELiterals()) {
-			// TODO: Should not depend on commercial package in models ui
-			if (((EAttribute) field) == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS) {
-				if (literal.getValue() == TimePeriod.HOURS_VALUE) {
-					continue;
-				}
+			if (disallowedValues != null && disallowedValues.contains(literal.getValue())) {
+				continue;
 			}
 			values.add(new Pair<String, Object>(getName(literal), literal.getInstance()));
 		}
@@ -109,8 +106,33 @@ public class TextualEnumAttributeManipulator extends BasicAttributeManipulator {
 
 		this.editingDomain = editingDomain;
 		this.nameMapper = nameMapper;
+		this.disallowedValues = null;
 	}
 
+	/**
+	 * Create a manipulator for the given field in the target object, taking values from the given valueProvider and creating set commands in the provided editingDomain.
+	 * 
+	 * @param field
+	 *            the field to set
+	 * @param valueProvider
+	 *            provides the names & values for the field
+	 * @param editingDomain
+	 *            editing domain for setting
+	 * @param disallowedValues
+	 * 			  enumeration values to filter out of the editor
+	 */
+	public TextualEnumAttributeManipulator(final EAttribute field, final EditingDomain editingDomain, @Nullable Function<Enumerator, String> nameMapper, int[] disallowedValues) {
+		super(field, editingDomain);
+
+		this.editingDomain = editingDomain;
+		this.nameMapper = nameMapper;
+		this.disallowedValues = new HashSet<Integer>();
+		for (final int dav : disallowedValues) {
+			this.disallowedValues.add(dav);
+		}
+	}
+
+	
 	@Override
 	public String render(final Object object) {
 		final Object superValue = super.getValue(object);
@@ -162,24 +184,20 @@ public class TextualEnumAttributeManipulator extends BasicAttributeManipulator {
 	public CellEditor createCellEditor(final Composite c, final Object object) {
 		editor = new TextCellEditor(c);
 
-		editor.setValidator(new ICellEditorValidator() {
-
-			@Override
-			public String isValid(final Object value) {
-				if (names.contains(value)) {
+		editor.setValidator(value -> {
+			if (names.contains(value)) {
+				return null;
+			}
+			if (value instanceof String) {
+				final String string = (String) value;
+				if (string.isEmpty()) {
 					return null;
 				}
-				if (value instanceof String) {
-					String string = (String) value;
-					if (string.isEmpty()) {
-						return null;
-					}
-					if (lowerNames.contains(value.toString().toLowerCase())) {
-						return null;
-					}
+				if (lowerNames.contains(value.toString().toLowerCase())) {
+					return null;
 				}
-				return "Unknown name";
 			}
+			return "Unknown name";
 		});
 
 		// Sub-class to strip new-line character coming from the proposal adapter
@@ -216,25 +234,21 @@ public class TextualEnumAttributeManipulator extends BasicAttributeManipulator {
 	}
 
 	protected IContentProposalProvider createProposalProvider() {
-		final IContentProposalProvider proposalProvider = new IContentProposalProvider() {
+		final IContentProposalProvider proposalProvider = (full_contents, position) -> {
 
-			@Override
-			public IContentProposal[] getProposals(final String full_contents, final int position) {
+			final int completeFrom = 0;
 
-				final int completeFrom = 0;
+			final String contents = full_contents.substring(completeFrom, position);
+			final ArrayList<ContentProposal> list = new ArrayList<>();
+			for (final String proposal : names) {
+				if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+					final String c = proposal.substring(contents.length());
+					list.add(new ContentProposal(c, proposal, null, c.length()));
 
-				final String contents = full_contents.substring(completeFrom, position);
-				final ArrayList<ContentProposal> list = new ArrayList<>();
-				for (final String proposal : names) {
-					if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-						final String c = proposal.substring(contents.length());
-						list.add(new ContentProposal(c, proposal, null, c.length()));
-
-					}
 				}
-
-				return list.toArray(new IContentProposal[list.size()]);
 			}
+
+			return list.toArray(new IContentProposal[list.size()]);
 		};
 		return proposalProvider;
 	}

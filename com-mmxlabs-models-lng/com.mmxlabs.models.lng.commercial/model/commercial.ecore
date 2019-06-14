@@ -102,36 +102,6 @@
         <details key="formatString" value="###"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowNominationSize" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowNominationSizeUnits"
-        unique="false" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//TimePeriod"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowNominationCounterparty"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselNominationSize" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselNominationSizeUnits"
-        unique="false" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//TimePeriod"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselNominationCounterparty"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeNominationSize" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeNominationSizeUnits"
-        unique="false" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//TimePeriod"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeNominationCounterparty"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portNominationSize" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portNominationSizeUnits"
-        unique="false" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//TimePeriod"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portNominationCounterparty"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portLoadNominationSize"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portLoadNominationSizeUnits"
-        unique="false" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//TimePeriod"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portLoadNominationCounterparty"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SalesContract" eSuperTypes="#//Contract">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCvValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"

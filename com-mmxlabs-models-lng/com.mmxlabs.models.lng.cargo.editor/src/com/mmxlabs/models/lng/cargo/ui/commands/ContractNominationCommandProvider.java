@@ -4,38 +4,13 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.commands;
 
-import java.time.LocalDate;
-import java.util.Map;
-import java.util.Set;
-
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.command.CommandParameter;
-import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
-
-import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.common.commandservice.AbstractModelCommandProvider;
-import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.util.NominationUtils;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.types.TimePeriod;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-
 /**
  * 19-10-2018
  * Not used at the moment due to user override.
  * @author SG & FM
  *
  */
+/*
 public class ContractNominationCommandProvider extends AbstractModelCommandProvider<Object> {
 
 	@Override
@@ -322,3 +297,4 @@ public class ContractNominationCommandProvider extends AbstractModelCommandProvi
 		return command;
 	}
 }
+*/

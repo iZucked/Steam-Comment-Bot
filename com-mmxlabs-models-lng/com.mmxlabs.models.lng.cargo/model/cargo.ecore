@@ -78,16 +78,6 @@
     <eOperations name="getSlotOrDelegateCN" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eOperations name="getSlotOrDelegateDivertible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eOperations name="getSlotOrDelegateShippingDaysRestriction" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eOperations name="getSlotOrDelegatePortLoadNominationDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
-    <eOperations name="getSlotOrDelegateWindowNominationDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
-    <eOperations name="getSlotOrDelegateVesselNominationDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
-    <eOperations name="getSlotOrDelegateVolumeNominationDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
-    <eOperations name="getSlotOrDelegatePortNominationDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
-    <eOperations name="getSlotOrDelegateWindowNominationCounterparty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eOperations name="getSlotOrDelegateVesselNominationCounterparty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eOperations name="getSlotOrDelegateVolumeNominationCounterparty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eOperations name="getSlotOrDelegatePortNominationCounterparty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eOperations name="getSlotOrDelegatePortLoadNominationCounterparty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eOperations name="getSlotOrDelegateFullCargoLot" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eOperations name="getSlotOrDelegateContractRestrictionsArePermissive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eOperations name="getSlotOrDelegatePortRestrictionsArePermissive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
@@ -251,56 +241,6 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nominatedVessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="locked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowNominationDate" unique="false"
-        eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowNominationIsDone"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowNominationCounterparty"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowNominationComment"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeNominationDate" unique="false"
-        eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeNominationDone" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeNominationCounterparty"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeNominationComment"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselNominationDate" unique="false"
-        eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselNominationDone" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselNominationCounterparty"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselNominationComment"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portNominationDate" unique="false"
-        eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portNominationDone" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portNominationCounterparty"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portNominationComment"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portLoadNominationDate"
-        unique="false" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portLoadNominationDone"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portLoadNominationCounterparty"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portLoadNominationComment"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancelled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LoadSlot">

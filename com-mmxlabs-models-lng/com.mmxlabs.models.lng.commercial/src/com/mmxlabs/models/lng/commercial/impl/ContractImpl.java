@@ -66,21 +66,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isDivertible <em>Divertible</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getWindowNominationSize <em>Window Nomination Size</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getWindowNominationSizeUnits <em>Window Nomination Size Units</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isWindowNominationCounterparty <em>Window Nomination Counterparty</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getVesselNominationSize <em>Vessel Nomination Size</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getVesselNominationSizeUnits <em>Vessel Nomination Size Units</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isVesselNominationCounterparty <em>Vessel Nomination Counterparty</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getVolumeNominationSize <em>Volume Nomination Size</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getVolumeNominationSizeUnits <em>Volume Nomination Size Units</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isVolumeNominationCounterparty <em>Volume Nomination Counterparty</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPortNominationSize <em>Port Nomination Size</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPortNominationSizeUnits <em>Port Nomination Size Units</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isPortNominationCounterparty <em>Port Nomination Counterparty</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPortLoadNominationSize <em>Port Load Nomination Size</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPortLoadNominationSizeUnits <em>Port Load Nomination Size Units</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isPortLoadNominationCounterparty <em>Port Load Nomination Counterparty</em>}</li>
  * </ul>
  *
  * @generated
@@ -604,26 +589,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	protected int shippingDaysRestriction = SHIPPING_DAYS_RESTRICTION_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getWindowNominationSize() <em>Window Nomination Size</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getWindowNominationSize()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int WINDOW_NOMINATION_SIZE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getWindowNominationSize() <em>Window Nomination Size</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getWindowNominationSize()
-	 * @generated
-	 * @ordered
-	 */
-	protected int windowNominationSize = WINDOW_NOMINATION_SIZE_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #getWindowNominationSizeUnits() <em>Window Nomination Size Units</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -632,56 +597,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected static final TimePeriod WINDOW_NOMINATION_SIZE_UNITS_EDEFAULT = TimePeriod.DAYS;
-
-	/**
-	 * The cached value of the '{@link #getWindowNominationSizeUnits() <em>Window Nomination Size Units</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getWindowNominationSizeUnits()
-	 * @generated
-	 * @ordered
-	 */
-	protected TimePeriod windowNominationSizeUnits = WINDOW_NOMINATION_SIZE_UNITS_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isWindowNominationCounterparty() <em>Window Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isWindowNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean WINDOW_NOMINATION_COUNTERPARTY_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isWindowNominationCounterparty() <em>Window Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isWindowNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean windowNominationCounterparty = WINDOW_NOMINATION_COUNTERPARTY_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getVesselNominationSize() <em>Vessel Nomination Size</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesselNominationSize()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int VESSEL_NOMINATION_SIZE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getVesselNominationSize() <em>Vessel Nomination Size</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesselNominationSize()
-	 * @generated
-	 * @ordered
-	 */
-	protected int vesselNominationSize = VESSEL_NOMINATION_SIZE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getVesselNominationSizeUnits() <em>Vessel Nomination Size Units</em>}' attribute.
@@ -694,56 +609,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	protected static final TimePeriod VESSEL_NOMINATION_SIZE_UNITS_EDEFAULT = TimePeriod.DAYS;
 
 	/**
-	 * The cached value of the '{@link #getVesselNominationSizeUnits() <em>Vessel Nomination Size Units</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesselNominationSizeUnits()
-	 * @generated
-	 * @ordered
-	 */
-	protected TimePeriod vesselNominationSizeUnits = VESSEL_NOMINATION_SIZE_UNITS_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isVesselNominationCounterparty() <em>Vessel Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isVesselNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean VESSEL_NOMINATION_COUNTERPARTY_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isVesselNominationCounterparty() <em>Vessel Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isVesselNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean vesselNominationCounterparty = VESSEL_NOMINATION_COUNTERPARTY_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getVolumeNominationSize() <em>Volume Nomination Size</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumeNominationSize()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int VOLUME_NOMINATION_SIZE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getVolumeNominationSize() <em>Volume Nomination Size</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumeNominationSize()
-	 * @generated
-	 * @ordered
-	 */
-	protected int volumeNominationSize = VOLUME_NOMINATION_SIZE_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #getVolumeNominationSizeUnits() <em>Volume Nomination Size Units</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -754,56 +619,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	protected static final TimePeriod VOLUME_NOMINATION_SIZE_UNITS_EDEFAULT = TimePeriod.DAYS;
 
 	/**
-	 * The cached value of the '{@link #getVolumeNominationSizeUnits() <em>Volume Nomination Size Units</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumeNominationSizeUnits()
-	 * @generated
-	 * @ordered
-	 */
-	protected TimePeriod volumeNominationSizeUnits = VOLUME_NOMINATION_SIZE_UNITS_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isVolumeNominationCounterparty() <em>Volume Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isVolumeNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean VOLUME_NOMINATION_COUNTERPARTY_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isVolumeNominationCounterparty() <em>Volume Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isVolumeNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean volumeNominationCounterparty = VOLUME_NOMINATION_COUNTERPARTY_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getPortNominationSize() <em>Port Nomination Size</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortNominationSize()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int PORT_NOMINATION_SIZE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getPortNominationSize() <em>Port Nomination Size</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortNominationSize()
-	 * @generated
-	 * @ordered
-	 */
-	protected int portNominationSize = PORT_NOMINATION_SIZE_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #getPortNominationSizeUnits() <em>Port Nomination Size Units</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -812,96 +627,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected static final TimePeriod PORT_NOMINATION_SIZE_UNITS_EDEFAULT = TimePeriod.DAYS;
-
-	/**
-	 * The cached value of the '{@link #getPortNominationSizeUnits() <em>Port Nomination Size Units</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortNominationSizeUnits()
-	 * @generated
-	 * @ordered
-	 */
-	protected TimePeriod portNominationSizeUnits = PORT_NOMINATION_SIZE_UNITS_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isPortNominationCounterparty() <em>Port Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isPortNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean PORT_NOMINATION_COUNTERPARTY_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isPortNominationCounterparty() <em>Port Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isPortNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean portNominationCounterparty = PORT_NOMINATION_COUNTERPARTY_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getPortLoadNominationSize() <em>Port Load Nomination Size</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortLoadNominationSize()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int PORT_LOAD_NOMINATION_SIZE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getPortLoadNominationSize() <em>Port Load Nomination Size</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortLoadNominationSize()
-	 * @generated
-	 * @ordered
-	 */
-	protected int portLoadNominationSize = PORT_LOAD_NOMINATION_SIZE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getPortLoadNominationSizeUnits() <em>Port Load Nomination Size Units</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortLoadNominationSizeUnits()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final TimePeriod PORT_LOAD_NOMINATION_SIZE_UNITS_EDEFAULT = TimePeriod.HOURS;
-
-	/**
-	 * The cached value of the '{@link #getPortLoadNominationSizeUnits() <em>Port Load Nomination Size Units</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortLoadNominationSizeUnits()
-	 * @generated
-	 * @ordered
-	 */
-	protected TimePeriod portLoadNominationSizeUnits = PORT_LOAD_NOMINATION_SIZE_UNITS_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isPortLoadNominationCounterparty() <em>Port Load Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isPortLoadNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isPortLoadNominationCounterparty() <em>Port Load Nomination Counterparty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isPortLoadNominationCounterparty()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean portLoadNominationCounterparty = PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1431,75 +1156,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @generated
 	 */
 	@Override
-	public int getWindowNominationSize() {
-		return windowNominationSize;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setWindowNominationSize(int newWindowNominationSize) {
-		int oldWindowNominationSize = windowNominationSize;
-		windowNominationSize = newWindowNominationSize;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE, oldWindowNominationSize, windowNominationSize));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public TimePeriod getWindowNominationSizeUnits() {
-		return windowNominationSizeUnits;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setWindowNominationSizeUnits(TimePeriod newWindowNominationSizeUnits) {
-		TimePeriod oldWindowNominationSizeUnits = windowNominationSizeUnits;
-		windowNominationSizeUnits = newWindowNominationSizeUnits == null ? WINDOW_NOMINATION_SIZE_UNITS_EDEFAULT : newWindowNominationSizeUnits;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS, oldWindowNominationSizeUnits, windowNominationSizeUnits));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isWindowNominationCounterparty() {
-		return windowNominationCounterparty;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setWindowNominationCounterparty(boolean newWindowNominationCounterparty) {
-		boolean oldWindowNominationCounterparty = windowNominationCounterparty;
-		windowNominationCounterparty = newWindowNominationCounterparty;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__WINDOW_NOMINATION_COUNTERPARTY, oldWindowNominationCounterparty, windowNominationCounterparty));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public boolean isDivertible() {
 		return divertible;
 	}
@@ -1538,282 +1194,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		shippingDaysRestriction = newShippingDaysRestriction;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION, oldShippingDaysRestriction, shippingDaysRestriction));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getPortLoadNominationSize() {
-		return portLoadNominationSize;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPortLoadNominationSize(int newPortLoadNominationSize) {
-		int oldPortLoadNominationSize = portLoadNominationSize;
-		portLoadNominationSize = newPortLoadNominationSize;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE, oldPortLoadNominationSize, portLoadNominationSize));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public TimePeriod getPortLoadNominationSizeUnits() {
-		return portLoadNominationSizeUnits;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPortLoadNominationSizeUnits(TimePeriod newPortLoadNominationSizeUnits) {
-		TimePeriod oldPortLoadNominationSizeUnits = portLoadNominationSizeUnits;
-		portLoadNominationSizeUnits = newPortLoadNominationSizeUnits == null ? PORT_LOAD_NOMINATION_SIZE_UNITS_EDEFAULT : newPortLoadNominationSizeUnits;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS, oldPortLoadNominationSizeUnits, portLoadNominationSizeUnits));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isPortLoadNominationCounterparty() {
-		return portLoadNominationCounterparty;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPortLoadNominationCounterparty(boolean newPortLoadNominationCounterparty) {
-		boolean oldPortLoadNominationCounterparty = portLoadNominationCounterparty;
-		portLoadNominationCounterparty = newPortLoadNominationCounterparty;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY, oldPortLoadNominationCounterparty, portLoadNominationCounterparty));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getVesselNominationSize() {
-		return vesselNominationSize;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVesselNominationSize(int newVesselNominationSize) {
-		int oldVesselNominationSize = vesselNominationSize;
-		vesselNominationSize = newVesselNominationSize;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__VESSEL_NOMINATION_SIZE, oldVesselNominationSize, vesselNominationSize));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public TimePeriod getVesselNominationSizeUnits() {
-		return vesselNominationSizeUnits;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVesselNominationSizeUnits(TimePeriod newVesselNominationSizeUnits) {
-		TimePeriod oldVesselNominationSizeUnits = vesselNominationSizeUnits;
-		vesselNominationSizeUnits = newVesselNominationSizeUnits == null ? VESSEL_NOMINATION_SIZE_UNITS_EDEFAULT : newVesselNominationSizeUnits;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__VESSEL_NOMINATION_SIZE_UNITS, oldVesselNominationSizeUnits, vesselNominationSizeUnits));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isVesselNominationCounterparty() {
-		return vesselNominationCounterparty;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVesselNominationCounterparty(boolean newVesselNominationCounterparty) {
-		boolean oldVesselNominationCounterparty = vesselNominationCounterparty;
-		vesselNominationCounterparty = newVesselNominationCounterparty;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__VESSEL_NOMINATION_COUNTERPARTY, oldVesselNominationCounterparty, vesselNominationCounterparty));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getVolumeNominationSize() {
-		return volumeNominationSize;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVolumeNominationSize(int newVolumeNominationSize) {
-		int oldVolumeNominationSize = volumeNominationSize;
-		volumeNominationSize = newVolumeNominationSize;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__VOLUME_NOMINATION_SIZE, oldVolumeNominationSize, volumeNominationSize));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public TimePeriod getVolumeNominationSizeUnits() {
-		return volumeNominationSizeUnits;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVolumeNominationSizeUnits(TimePeriod newVolumeNominationSizeUnits) {
-		TimePeriod oldVolumeNominationSizeUnits = volumeNominationSizeUnits;
-		volumeNominationSizeUnits = newVolumeNominationSizeUnits == null ? VOLUME_NOMINATION_SIZE_UNITS_EDEFAULT : newVolumeNominationSizeUnits;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__VOLUME_NOMINATION_SIZE_UNITS, oldVolumeNominationSizeUnits, volumeNominationSizeUnits));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isVolumeNominationCounterparty() {
-		return volumeNominationCounterparty;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVolumeNominationCounterparty(boolean newVolumeNominationCounterparty) {
-		boolean oldVolumeNominationCounterparty = volumeNominationCounterparty;
-		volumeNominationCounterparty = newVolumeNominationCounterparty;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__VOLUME_NOMINATION_COUNTERPARTY, oldVolumeNominationCounterparty, volumeNominationCounterparty));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getPortNominationSize() {
-		return portNominationSize;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPortNominationSize(int newPortNominationSize) {
-		int oldPortNominationSize = portNominationSize;
-		portNominationSize = newPortNominationSize;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PORT_NOMINATION_SIZE, oldPortNominationSize, portNominationSize));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public TimePeriod getPortNominationSizeUnits() {
-		return portNominationSizeUnits;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPortNominationSizeUnits(TimePeriod newPortNominationSizeUnits) {
-		TimePeriod oldPortNominationSizeUnits = portNominationSizeUnits;
-		portNominationSizeUnits = newPortNominationSizeUnits == null ? PORT_NOMINATION_SIZE_UNITS_EDEFAULT : newPortNominationSizeUnits;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PORT_NOMINATION_SIZE_UNITS, oldPortNominationSizeUnits, portNominationSizeUnits));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isPortNominationCounterparty() {
-		return portNominationCounterparty;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPortNominationCounterparty(boolean newPortNominationCounterparty) {
-		boolean oldPortNominationCounterparty = portNominationCounterparty;
-		portNominationCounterparty = newPortNominationCounterparty;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PORT_NOMINATION_COUNTERPARTY, oldPortNominationCounterparty, portNominationCounterparty));
 	}
 
 	/**
@@ -2088,36 +1468,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return isDivertible();
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				return getShippingDaysRestriction();
-			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE:
-				return getWindowNominationSize();
-			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
-				return getWindowNominationSizeUnits();
-			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_COUNTERPARTY:
-				return isWindowNominationCounterparty();
-			case CommercialPackage.CONTRACT__VESSEL_NOMINATION_SIZE:
-				return getVesselNominationSize();
-			case CommercialPackage.CONTRACT__VESSEL_NOMINATION_SIZE_UNITS:
-				return getVesselNominationSizeUnits();
-			case CommercialPackage.CONTRACT__VESSEL_NOMINATION_COUNTERPARTY:
-				return isVesselNominationCounterparty();
-			case CommercialPackage.CONTRACT__VOLUME_NOMINATION_SIZE:
-				return getVolumeNominationSize();
-			case CommercialPackage.CONTRACT__VOLUME_NOMINATION_SIZE_UNITS:
-				return getVolumeNominationSizeUnits();
-			case CommercialPackage.CONTRACT__VOLUME_NOMINATION_COUNTERPARTY:
-				return isVolumeNominationCounterparty();
-			case CommercialPackage.CONTRACT__PORT_NOMINATION_SIZE:
-				return getPortNominationSize();
-			case CommercialPackage.CONTRACT__PORT_NOMINATION_SIZE_UNITS:
-				return getPortNominationSizeUnits();
-			case CommercialPackage.CONTRACT__PORT_NOMINATION_COUNTERPARTY:
-				return isPortNominationCounterparty();
-			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE:
-				return getPortLoadNominationSize();
-			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS:
-				return getPortLoadNominationSizeUnits();
-			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY:
-				return isPortLoadNominationCounterparty();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -2219,51 +1569,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				setShippingDaysRestriction((Integer)newValue);
 				return;
-			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE:
-				setWindowNominationSize((Integer)newValue);
-				return;
-			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
-				setWindowNominationSizeUnits((TimePeriod)newValue);
-				return;
-			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_COUNTERPARTY:
-				setWindowNominationCounterparty((Boolean)newValue);
-				return;
-			case CommercialPackage.CONTRACT__VESSEL_NOMINATION_SIZE:
-				setVesselNominationSize((Integer)newValue);
-				return;
-			case CommercialPackage.CONTRACT__VESSEL_NOMINATION_SIZE_UNITS:
-				setVesselNominationSizeUnits((TimePeriod)newValue);
-				return;
-			case CommercialPackage.CONTRACT__VESSEL_NOMINATION_COUNTERPARTY:
-				setVesselNominationCounterparty((Boolean)newValue);
-				return;
-			case CommercialPackage.CONTRACT__VOLUME_NOMINATION_SIZE:
-				setVolumeNominationSize((Integer)newValue);
-				return;
-			case CommercialPackage.CONTRACT__VOLUME_NOMINATION_SIZE_UNITS:
-				setVolumeNominationSizeUnits((TimePeriod)newValue);
-				return;
-			case CommercialPackage.CONTRACT__VOLUME_NOMINATION_COUNTERPARTY:
-				setVolumeNominationCounterparty((Boolean)newValue);
-				return;
-			case CommercialPackage.CONTRACT__PORT_NOMINATION_SIZE:
-				setPortNominationSize((Integer)newValue);
-				return;
-			case CommercialPackage.CONTRACT__PORT_NOMINATION_SIZE_UNITS:
-				setPortNominationSizeUnits((TimePeriod)newValue);
-				return;
-			case CommercialPackage.CONTRACT__PORT_NOMINATION_COUNTERPARTY:
-				setPortNominationCounterparty((Boolean)newValue);
-				return;
-			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE:
-				setPortLoadNominationSize((Integer)newValue);
-				return;
-			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS:
-				setPortLoadNominationSizeUnits((TimePeriod)newValue);
-				return;
-			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY:
-				setPortLoadNominationCounterparty((Boolean)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -2360,51 +1665,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				setShippingDaysRestriction(SHIPPING_DAYS_RESTRICTION_EDEFAULT);
 				return;
-			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE:
-				setWindowNominationSize(WINDOW_NOMINATION_SIZE_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
-				setWindowNominationSizeUnits(WINDOW_NOMINATION_SIZE_UNITS_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_COUNTERPARTY:
-				setWindowNominationCounterparty(WINDOW_NOMINATION_COUNTERPARTY_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__VESSEL_NOMINATION_SIZE:
-				setVesselNominationSize(VESSEL_NOMINATION_SIZE_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__VESSEL_NOMINATION_SIZE_UNITS:
-				setVesselNominationSizeUnits(VESSEL_NOMINATION_SIZE_UNITS_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__VESSEL_NOMINATION_COUNTERPARTY:
-				setVesselNominationCounterparty(VESSEL_NOMINATION_COUNTERPARTY_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__VOLUME_NOMINATION_SIZE:
-				setVolumeNominationSize(VOLUME_NOMINATION_SIZE_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__VOLUME_NOMINATION_SIZE_UNITS:
-				setVolumeNominationSizeUnits(VOLUME_NOMINATION_SIZE_UNITS_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__VOLUME_NOMINATION_COUNTERPARTY:
-				setVolumeNominationCounterparty(VOLUME_NOMINATION_COUNTERPARTY_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__PORT_NOMINATION_SIZE:
-				setPortNominationSize(PORT_NOMINATION_SIZE_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__PORT_NOMINATION_SIZE_UNITS:
-				setPortNominationSizeUnits(PORT_NOMINATION_SIZE_UNITS_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__PORT_NOMINATION_COUNTERPARTY:
-				setPortNominationCounterparty(PORT_NOMINATION_COUNTERPARTY_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE:
-				setPortLoadNominationSize(PORT_LOAD_NOMINATION_SIZE_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS:
-				setPortLoadNominationSizeUnits(PORT_LOAD_NOMINATION_SIZE_UNITS_EDEFAULT);
-				return;
-			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY:
-				setPortLoadNominationCounterparty(PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -2473,36 +1733,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return divertible != DIVERTIBLE_EDEFAULT;
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				return shippingDaysRestriction != SHIPPING_DAYS_RESTRICTION_EDEFAULT;
-			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE:
-				return windowNominationSize != WINDOW_NOMINATION_SIZE_EDEFAULT;
-			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS:
-				return windowNominationSizeUnits != WINDOW_NOMINATION_SIZE_UNITS_EDEFAULT;
-			case CommercialPackage.CONTRACT__WINDOW_NOMINATION_COUNTERPARTY:
-				return windowNominationCounterparty != WINDOW_NOMINATION_COUNTERPARTY_EDEFAULT;
-			case CommercialPackage.CONTRACT__VESSEL_NOMINATION_SIZE:
-				return vesselNominationSize != VESSEL_NOMINATION_SIZE_EDEFAULT;
-			case CommercialPackage.CONTRACT__VESSEL_NOMINATION_SIZE_UNITS:
-				return vesselNominationSizeUnits != VESSEL_NOMINATION_SIZE_UNITS_EDEFAULT;
-			case CommercialPackage.CONTRACT__VESSEL_NOMINATION_COUNTERPARTY:
-				return vesselNominationCounterparty != VESSEL_NOMINATION_COUNTERPARTY_EDEFAULT;
-			case CommercialPackage.CONTRACT__VOLUME_NOMINATION_SIZE:
-				return volumeNominationSize != VOLUME_NOMINATION_SIZE_EDEFAULT;
-			case CommercialPackage.CONTRACT__VOLUME_NOMINATION_SIZE_UNITS:
-				return volumeNominationSizeUnits != VOLUME_NOMINATION_SIZE_UNITS_EDEFAULT;
-			case CommercialPackage.CONTRACT__VOLUME_NOMINATION_COUNTERPARTY:
-				return volumeNominationCounterparty != VOLUME_NOMINATION_COUNTERPARTY_EDEFAULT;
-			case CommercialPackage.CONTRACT__PORT_NOMINATION_SIZE:
-				return portNominationSize != PORT_NOMINATION_SIZE_EDEFAULT;
-			case CommercialPackage.CONTRACT__PORT_NOMINATION_SIZE_UNITS:
-				return portNominationSizeUnits != PORT_NOMINATION_SIZE_UNITS_EDEFAULT;
-			case CommercialPackage.CONTRACT__PORT_NOMINATION_COUNTERPARTY:
-				return portNominationCounterparty != PORT_NOMINATION_COUNTERPARTY_EDEFAULT;
-			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE:
-				return portLoadNominationSize != PORT_LOAD_NOMINATION_SIZE_EDEFAULT;
-			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS:
-				return portLoadNominationSizeUnits != PORT_LOAD_NOMINATION_SIZE_UNITS_EDEFAULT;
-			case CommercialPackage.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY:
-				return portLoadNominationCounterparty != PORT_LOAD_NOMINATION_COUNTERPARTY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -2591,36 +1821,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(divertible);
 		result.append(", shippingDaysRestriction: ");
 		result.append(shippingDaysRestriction);
-		result.append(", windowNominationSize: ");
-		result.append(windowNominationSize);
-		result.append(", windowNominationSizeUnits: ");
-		result.append(windowNominationSizeUnits);
-		result.append(", windowNominationCounterparty: ");
-		result.append(windowNominationCounterparty);
-		result.append(", vesselNominationSize: ");
-		result.append(vesselNominationSize);
-		result.append(", vesselNominationSizeUnits: ");
-		result.append(vesselNominationSizeUnits);
-		result.append(", vesselNominationCounterparty: ");
-		result.append(vesselNominationCounterparty);
-		result.append(", volumeNominationSize: ");
-		result.append(volumeNominationSize);
-		result.append(", volumeNominationSizeUnits: ");
-		result.append(volumeNominationSizeUnits);
-		result.append(", volumeNominationCounterparty: ");
-		result.append(volumeNominationCounterparty);
-		result.append(", portNominationSize: ");
-		result.append(portNominationSize);
-		result.append(", portNominationSizeUnits: ");
-		result.append(portNominationSizeUnits);
-		result.append(", portNominationCounterparty: ");
-		result.append(portNominationCounterparty);
-		result.append(", portLoadNominationSize: ");
-		result.append(portLoadNominationSize);
-		result.append(", portLoadNominationSizeUnits: ");
-		result.append(portLoadNominationSizeUnits);
-		result.append(", portLoadNominationCounterparty: ");
-		result.append(portLoadNominationCounterparty);
 		result.append(')');
 		return result.toString();
 	}

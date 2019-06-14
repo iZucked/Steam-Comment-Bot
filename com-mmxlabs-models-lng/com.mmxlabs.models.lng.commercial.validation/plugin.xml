@@ -213,22 +213,6 @@
                      class="Contract">
                </target>
             </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.commercial.validation.NominationTimePeriodUnitsConstraint"
-                  id="com.mmxlabs.models.lng.commercial.validation.NominationTimePeriodUnitsConstraint"
-                  isEnabledByDefault="true"
-                  lang="java"
-                  mode="Batch"
-                  name="NominationTimePeriodUnitsConstraint"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <target
-                     class="Contract">
-               </target>
-            </constraint>
          </constraints>
       </constraintProvider>
    </extension>

@@ -34,46 +34,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
+import com.mmxlabs.models.ui.util.LimitWidgetHeightListener;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 
 public class PromptToolbarEditor extends ControlContribution {
-
-	private final class LimitWidgetHeightListener implements Listener {
-		private final Composite pparent;
-		private final Button btn;
-
-		private LimitWidgetHeightListener(final Composite pparent, final Button btn) {
-			this.pparent = pparent;
-			this.btn = btn;
-		}
-
-		@Override
-		public void handleEvent(final Event arg0) {
-			// This should be the toolbar this control set is contained in.
-			final Composite toolbarComposite = pparent.getParent();
-			// Get the height of the composite.
-			int toolbarHeight = toolbarComposite.getSize().y;
-			// Fix issue in workbench. On opening the application, the toolbar height is 44 allowing large buttons. However the real height is only 22 (and this is correct when opening an editor after
-			// the application has opened). This will probably cause issues on e.g. Alex's machine when running at high resolution (3840x2160 -- icons are already tiny on this mode).
-			if (toolbarHeight > 35) {
-				toolbarHeight = 35;
-			}
-			final Point size = btn.getSize();
-
-			// Clamp to toolbar height.
-			if (size.y > toolbarHeight) {
-				btn.setSize(size.x, toolbarHeight);
-			}
-		}
-	}
 
 	private EditingDomain editingDomain;
 	private LNGScenarioModel scenarioModel;
@@ -86,6 +56,7 @@ public class PromptToolbarEditor extends ControlContribution {
 	private boolean locked = false;
 
 	private final @NonNull EContentAdapter adapter = new EContentAdapter() {
+		@Override
 		public void notifyChanged(final Notification notification) {
 			final Object newValue = notification.getNewValue();
 			if (notification.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart()) {
@@ -135,7 +106,7 @@ public class PromptToolbarEditor extends ControlContribution {
 	@Override
 	protected Control createControl(final Composite ppparent) {
 
-		int minHeight = 36;
+		final int minHeight = 36;
 		final Composite pparent = new Composite(ppparent, SWT.NONE) {
 			@Override
 			protected void checkSubclass() {
@@ -143,7 +114,7 @@ public class PromptToolbarEditor extends ControlContribution {
 
 			@Override
 			public Point getSize() {
-				Point p = super.getSize();
+				final Point p = super.getSize();
 				return new Point(p.x, Math.max(minHeight, p.y));
 			}
 
@@ -154,13 +125,13 @@ public class PromptToolbarEditor extends ControlContribution {
 
 			@Override
 			public Point computeSize(int wHint, int hHint) {
-				Point p = super.computeSize(wHint, hHint);
+				final Point p = super.computeSize(wHint, hHint);
 				return new Point(p.x, Math.max(minHeight, p.y));
 			}
 
 			@Override
 			public Point computeSize(int wHint, int hHint, boolean b) {
-				Point p = super.computeSize(wHint, hHint, b);
+				final Point p = super.computeSize(wHint, hHint, b);
 				return new Point(p.x, Math.max(minHeight, p.y));
 			};
 		};
@@ -359,9 +330,9 @@ public class PromptToolbarEditor extends ControlContribution {
 			public void menuDetected(final MenuDetectEvent e) {
 				mgr2.removeAll();
 				{
-					IContributionItem[] items = mgr2.getItems();
+					final IContributionItem[] items = mgr2.getItems();
 					mgr2.removeAll();
-					for (IContributionItem item : items) {
+					for (final IContributionItem item : items) {
 						item.dispose();
 					}
 				}

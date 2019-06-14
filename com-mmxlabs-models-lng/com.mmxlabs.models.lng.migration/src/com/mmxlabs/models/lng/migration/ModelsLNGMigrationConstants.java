@@ -123,4 +123,8 @@ public final class ModelsLNGMigrationConstants {
 	public static final PackageData PKG_DATA_ActualsModel = new PackageData(NSURI_ActualsModel, "platform:/plugin/com.mmxlabs.models.lng.actuals/model/actuals.ecore",
 			"../../com.mmxlabs.models.lng.actuals/model/actuals.ecore");
 
+	public static final String NSURI_NominationsModel = "http://www.mmxlabs.com/models/lng/nominations/1/";
+
+	public static final PackageData PKG_DATA_NominationsModel = new PackageData(NSURI_NominationsModel, "platform:/plugin/com.mmxlabs.models.lng.nominations/model/nominations.ecore",
+			"../../com.mmxlabs.models.lng.nominations/model/nominations.ecore");
 }

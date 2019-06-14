@@ -36,12 +36,11 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 	private final ContractDetailGroup contractDetailGroup;
 	
 	public enum ContractDetailGroup{
-		GENERAL, RESTRICTIONS, NOMINATIONS
+		GENERAL, RESTRICTIONS
 	}
 
 	public ContractDetailComposite(final Composite parent, final int style, final ContractDetailGroup contractDetailGroup, final FormToolkit toolkit) {
 		super(parent, style, toolkit);
-
 		this.contractDetailGroup = contractDetailGroup;
 	}
 
@@ -69,24 +68,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 				|| editor.getFeature() == CommercialPackage.eINSTANCE.getSalesContract_PurchaseDeliveryType()) {
 			cdg = ContractDetailGroup.RESTRICTIONS;
 		}
-		if (editor.getFeature() == CommercialPackage.eINSTANCE.getContract_PortNominationCounterparty()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_PortNominationSize()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_PortNominationSizeUnits()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_PortLoadNominationCounterparty()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_PortLoadNominationSize()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_PortLoadNominationSizeUnits()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_WindowNominationCounterparty()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_WindowNominationSize()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_WindowNominationSizeUnits()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_VesselNominationCounterparty()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_VesselNominationSize()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_VesselNominationSizeUnits()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_VolumeNominationCounterparty()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_VolumeNominationSize()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_VolumeNominationSizeUnits()) {
-			cdg = ContractDetailGroup.NOMINATIONS;
-		}
-
+	
 		// Do not add elements if they are for the wrong section.
 		if (contractDetailGroup != cdg){
 			// Rejected...
@@ -234,131 +216,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 					}
 					return gd;
 				}
-				if (feature == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE 
-						|| feature == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS
-						|| feature == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_COUNTERPARTY) {
-					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
-					// 64 - magic constant from MultiDetailDialog
-					gd.horizontalSpan = 2;
-					if (feature == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE) {
-						gd.horizontalSpan = 3;
-						final Label label = editor.getLabel();
-						if (label != null) {
-							label.setText("Period nomination");
-						}
-						editor.setLabel(null);
-					} else if (feature == CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_COUNTERPARTY){
-						final Label label = editor.getLabel();
-						if (label != null) {
-							label.setText("Counterparty");
-						}
-						editor.setLabel(null);
-					}else {
-						editor.setLabel(null);
-					}
-					return gd;
-				}
 				
-				if (feature == CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_SIZE 
-						|| feature == CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_SIZE_UNITS
-						|| feature == CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_COUNTERPARTY) {
-					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
-					// 64 - magic constant from MultiDetailDialog
-					gd.horizontalSpan = 2;
-					if (feature == CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_SIZE) {
-						gd.horizontalSpan = 3;
-						final Label label = editor.getLabel();
-						if (label != null) {
-							label.setText("Vessel nomination");
-						}
-						editor.setLabel(null);
-					} else if (feature == CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_COUNTERPARTY){
-						final Label label = editor.getLabel();
-						if (label != null) {
-							label.setText("Counterparty");
-						}
-						editor.setLabel(null);
-					}else {
-						editor.setLabel(null);
-					}
-					return gd;
-				}
-				
-				if (feature == CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_SIZE 
-						|| feature == CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_SIZE_UNITS
-						|| feature == CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_COUNTERPARTY) {
-					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
-					// 64 - magic constant from MultiDetailDialog
-					gd.horizontalSpan = 2;
-					if (feature == CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_SIZE) {
-						gd.horizontalSpan = 3;
-						final Label label = editor.getLabel();
-						if (label != null) {
-							label.setText("Volume nomination");
-						}
-						editor.setLabel(null);
-					} else if (feature == CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_COUNTERPARTY){
-						final Label label = editor.getLabel();
-						if (label != null) {
-							label.setText("Counterparty");
-						}
-						editor.setLabel(null);
-					}else {
-						editor.setLabel(null);
-					}
-					return gd;
-				}
-				
-				if (feature == CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_SIZE 
-						|| feature == CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_SIZE_UNITS
-						|| feature == CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_COUNTERPARTY) {
-					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
-					// 64 - magic constant from MultiDetailDialog
-					gd.horizontalSpan = 2;
-					if (feature == CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_SIZE) {
-						gd.horizontalSpan = 3;
-						final Label label = editor.getLabel();
-						if (label != null) {
-							label.setText("Port nomination");
-						}
-						editor.setLabel(null);
-					} else if (feature == CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_COUNTERPARTY){
-						final Label label = editor.getLabel();
-						if (label != null) {
-							label.setText("Counterparty");
-						}
-						editor.setLabel(null);
-					}else {
-						editor.setLabel(null);
-					}
-					return gd;
-				}
-				
-				if (feature == CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE 
-						|| feature == CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS
-						|| feature == CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY) {
-					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
-					// 64 - magic constant from MultiDetailDialog
-					gd.horizontalSpan = 2;
-					if (feature == CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE) {
-						gd.horizontalSpan = 3;
-						final Label label = editor.getLabel();
-						if (label != null) {
-							label.setText("Load Port nomination");
-						}
-						editor.setLabel(null);
-					} else if (feature == CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY){
-						final Label label = editor.getLabel();
-						if (label != null) {
-							label.setText("Counterparty");
-						}
-						editor.setLabel(null);
-					}else {
-						editor.setLabel(null);
-					}
-					return gd;
-				}
-
 				GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 				gd.horizontalSpan = 9;
 				return gd;
