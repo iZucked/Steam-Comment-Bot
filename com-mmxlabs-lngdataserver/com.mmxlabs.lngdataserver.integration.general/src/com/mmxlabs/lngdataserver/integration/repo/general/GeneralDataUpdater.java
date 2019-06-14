@@ -209,7 +209,7 @@ public class GeneralDataUpdater {
 	}
 
 	private void readPersistedRecords(final TypeRecord typeRecord) {
-		final File f = new File(basePath.getAbsolutePath() + "/records.json");
+		final File f = new File(String.format("%s/%s/records.json", basePath.getAbsolutePath(), typeRecord.getType()));
 		if (f.exists()) {
 			String json;
 			try {

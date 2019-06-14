@@ -41,11 +41,12 @@ public class CharterMarketImporter extends DefaultClassImporter {
 		if (row.get(START_DATE_KEY) != null && !row.get(START_DATE_KEY).trim().isEmpty()) {
 			return OtherImportData.parseField(row, context, START_DATE_KEY, "charter out start date", SpotMarketsPackage.Literals.CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_START_DATE,
 					dateAttributeImporter::parseLocalDate);
-		} else if (row.get(END_DATE_KEY) != null && !row.get(END_DATE_KEY).trim().isEmpty()) {
+		}
+		if (row.get(END_DATE_KEY) != null && !row.get(END_DATE_KEY).trim().isEmpty()) {
 			return OtherImportData.parseField(row, context, END_DATE_KEY, "charter out end date", SpotMarketsPackage.Literals.CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_END_DATE,
 					dateAttributeImporter::parseLocalDate);
-		} else {
-
+		}
+		{
 			final String kind = row.get(KIND_KEY);
 			if ("CharterCostModel".equals(kind)) {
 				final String vesselsStr = row.get("vesselclasses");

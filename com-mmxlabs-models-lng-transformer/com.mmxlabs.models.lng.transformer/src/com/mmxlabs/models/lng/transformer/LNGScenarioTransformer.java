@@ -1245,13 +1245,15 @@ public class LNGScenarioTransformer {
 			// TODO: Is this really a good idea?
 			if (noNominalsInPrompt) {
 				if (eCargo.getSpotIndex() == NOMINAL_CARGO_INDEX) {
-					final LocalDate promptPeriodEnd = rootObject.getPromptPeriodEnd();
-					if (promptPeriodEnd != null) {
-						final List<Slot<?>> sortedSlots = eCargo.getSortedSlots();
-						if (!sortedSlots.isEmpty()) {
-							final Slot<?> slot = sortedSlots.get(0);
-							if (slot.getWindowStartWithSlotOrPortTime().toLocalDate().isBefore(promptPeriodEnd)) {
-								isSoftRequired = true;
+					if (!eCargo.isLocked()) { // Locked cargoes will not be unpaired
+						final LocalDate promptPeriodEnd = rootObject.getPromptPeriodEnd();
+						if (promptPeriodEnd != null) {
+							final List<Slot<?>> sortedSlots = eCargo.getSortedSlots();
+							if (!sortedSlots.isEmpty()) {
+								final Slot<?> slot = sortedSlots.get(0);
+								if (slot.getWindowStartWithSlotOrPortTime().toLocalDate().isBefore(promptPeriodEnd)) {
+									isSoftRequired = true;
+								}
 							}
 						}
 					}

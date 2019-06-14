@@ -26,6 +26,6 @@ public class CharterMarketEditorPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory, modelReference);
 		addNameManipulator("Name");
 
-		defaultSetTitle("Charter Contracts");
+		defaultSetTitle("Charter Terms");
 	}
 }

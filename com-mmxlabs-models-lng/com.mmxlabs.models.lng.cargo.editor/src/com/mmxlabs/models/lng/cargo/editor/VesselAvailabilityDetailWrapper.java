@@ -73,7 +73,7 @@ public class VesselAvailabilityDetailWrapper extends IInlineEditorEnablementWrap
 		enabled = false;
 		if (object instanceof VesselAvailability) {
 			final VesselAvailability vesselAvailability = (VesselAvailability) object;
-			if (vesselAvailability.isOptional()) {
+			if (!vesselAvailability.isFleet()) {
 				enabled = true;
 				dialogContext.getDialogController().setEditorVisibility(object, getFeature(), true);
 				super.display(dialogContext, scenario, object, range);
