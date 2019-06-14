@@ -49,7 +49,7 @@
 	 <extension
        point="com.mmxlabs.models.ui.valueproviders">
     <valueProvider
-          factory="com.mmxlabs.models.lng.nominations.ui.valueproviders.AbstractNominationsSpecReferenceValueProviderFactory"
+          factory="com.mmxlabs.models.lng.nominations.ui.valueproviders.NominationsSpecReferenceValueProviderFactory"
           id="com.mmxlabs.models.lng.nominations.ui.valueproviders.NominationsSpecReferenceValueProviderFactory"
           referenceEClass="com.mmxlabs.models.lng.nominations.AbstractNominationSpec">
     </valueProvider>
