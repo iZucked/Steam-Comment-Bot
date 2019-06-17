@@ -31,6 +31,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 
+	private static final String EMPTY_CONTRACT_RESTRICTION = "[Cargo|'%s'] '%s' Permissive contract list does not cover %s slots without a contract.";
 	private static final String CONTRACT_RESTRICTION = "[Cargo|'%s'] '%s' does not permit %s contract '%s'.";
 	private static final String PORT_RESTRICTION = "[Cargo|'%s] '%s' does not permit %s port '%s'.";
 	private static final String LOAD = "load";
@@ -121,6 +122,12 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 				d.addEObjectAndFeature(slot2, CargoPackage.eINSTANCE.getSlot_Contract());
 				statuses.add(d);
 			}
+		}
+		else if (restrictedContractsArePermissive) {
+			final String msg = String.format(EMPTY_CONTRACT_RESTRICTION, cargoName, causeContract, typeA);
+			final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
+			d.addEObjectAndFeature(slot2, CargoPackage.eINSTANCE.getSlot_Contract());
+			statuses.add(d);
 		}
 		final Port port2 = slot2.getPort();
 		if (port2 != null) {
