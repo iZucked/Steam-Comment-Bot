@@ -87,7 +87,7 @@ public class FleetProfileItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_FleetProfile_defaultNominalMarket_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_FleetProfile_defaultNominalMarket_feature", "_UI_FleetProfile_type"),
+				 getString("_UI_FleetProfile_defaultNominalMarket_description"),
 				 ADPPackage.Literals.FLEET_PROFILE__DEFAULT_NOMINAL_MARKET,
 				 true,
 				 false,

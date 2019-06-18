@@ -81,6 +81,7 @@ public class DeliverToProfileFlowImpl extends DeliverToFlowImpl implements Deliv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SalesContractProfile getProfile() {
 		if (profile != null && profile.eIsProxy()) {
 			InternalEObject oldProfile = (InternalEObject)profile;
@@ -107,6 +108,7 @@ public class DeliverToProfileFlowImpl extends DeliverToFlowImpl implements Deliv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setProfile(SalesContractProfile newProfile) {
 		SalesContractProfile oldProfile = profile;
 		profile = newProfile;
@@ -120,6 +122,7 @@ public class DeliverToProfileFlowImpl extends DeliverToFlowImpl implements Deliv
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public SubContractProfile<DischargeSlot, SalesContract> getSubProfile() {
 		if (subProfile != null && subProfile.eIsProxy()) {
 			InternalEObject oldSubProfile = (InternalEObject)subProfile;
@@ -146,6 +149,7 @@ public class DeliverToProfileFlowImpl extends DeliverToFlowImpl implements Deliv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSubProfile(SubContractProfile<DischargeSlot, SalesContract> newSubProfile) {
 		SubContractProfile<DischargeSlot, SalesContract> oldSubProfile = subProfile;
 		subProfile = newSubProfile;

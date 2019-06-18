@@ -76,6 +76,7 @@ public class PreDefinedDateImpl extends EObjectImpl implements PreDefinedDate {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getDate() {
 		return date;
 	}
@@ -85,6 +86,7 @@ public class PreDefinedDateImpl extends EObjectImpl implements PreDefinedDate {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDate(LocalDate newDate) {
 		LocalDate oldDate = date;
 		date = newDate;

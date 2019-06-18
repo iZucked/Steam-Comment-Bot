@@ -403,6 +403,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getADPModel_YearEnd() {
 		return (EAttribute)adpModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -432,6 +433,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getADPModel_FleetProfile() {
 		return (EReference)adpModelEClass.getEStructuralFeatures().get(4);
 	}
@@ -441,6 +443,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFleetProfile() {
 		return fleetProfileEClass;
 	}
@@ -450,6 +453,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getFleetProfile_Constraints() {
 		return (EReference)fleetProfileEClass.getEStructuralFeatures().get(0);
 	}
@@ -459,6 +463,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getFleetProfile_DefaultNominalMarket() {
 		return (EReference)fleetProfileEClass.getEStructuralFeatures().get(1);
 	}
@@ -548,6 +553,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContractProfile_Constraints() {
 		return (EReference)contractProfileEClass.getEStructuralFeatures().get(7);
 	}
@@ -567,6 +573,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDistributionModel_VolumePerCargo() {
 		return (EAttribute)distributionModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -576,6 +583,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDistributionModel_VolumeUnit() {
 		return (EAttribute)distributionModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -585,6 +593,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getDistributionModel__GetModelOrContractVolumePerCargo() {
 		return distributionModelEClass.getEOperations().get(0);
 	}
@@ -594,6 +603,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getDistributionModel__GetModelOrContractVolumeUnit() {
 		return distributionModelEClass.getEOperations().get(1);
 	}
@@ -603,6 +613,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPeriodDistributionProfileConstraint() {
 		return periodDistributionProfileConstraintEClass;
 	}
@@ -612,6 +623,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPeriodDistributionProfileConstraint_Distributions() {
 		return (EReference)periodDistributionProfileConstraintEClass.getEStructuralFeatures().get(0);
 	}
@@ -621,6 +633,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPeriodDistribution() {
 		return periodDistributionEClass;
 	}
@@ -630,6 +643,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPeriodDistribution_Range() {
 		return (EAttribute)periodDistributionEClass.getEStructuralFeatures().get(0);
 	}
@@ -639,6 +653,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPeriodDistribution_MinCargoes() {
 		return (EAttribute)periodDistributionEClass.getEStructuralFeatures().get(1);
 	}
@@ -648,6 +663,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPeriodDistribution_MaxCargoes() {
 		return (EAttribute)periodDistributionEClass.getEStructuralFeatures().get(2);
 	}
@@ -797,6 +813,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSubContractProfile_Constraints() {
 		return (EReference)subContractProfileEClass.getEStructuralFeatures().get(7);
 	}
@@ -906,6 +923,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPreDefinedDistributionModel() {
 		return preDefinedDistributionModelEClass;
 	}
@@ -915,6 +933,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPreDefinedDistributionModel_Dates() {
 		return (EReference)preDefinedDistributionModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -924,6 +943,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPreDefinedDistributionModel_WindowSize() {
 		return (EAttribute)preDefinedDistributionModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -933,6 +953,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPreDefinedDistributionModel_WindowSizeUnits() {
 		return (EAttribute)preDefinedDistributionModelEClass.getEStructuralFeatures().get(2);
 	}
@@ -942,6 +963,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPreDefinedDate() {
 		return preDefinedDateEClass;
 	}
@@ -951,6 +973,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPreDefinedDate_Date() {
 		return (EAttribute)preDefinedDateEClass.getEStructuralFeatures().get(0);
 	}
@@ -960,6 +983,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFlowType() {
 		return flowTypeEClass;
 	}
@@ -969,6 +993,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSupplyFromFlow() {
 		return supplyFromFlowEClass;
 	}
@@ -978,6 +1003,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDeliverToFlow() {
 		return deliverToFlowEClass;
 	}
@@ -987,6 +1013,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSupplyFromProfileFlow() {
 		return supplyFromProfileFlowEClass;
 	}
@@ -996,6 +1023,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSupplyFromProfileFlow_Profile() {
 		return (EReference)supplyFromProfileFlowEClass.getEStructuralFeatures().get(0);
 	}
@@ -1005,6 +1033,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSupplyFromProfileFlow_SubProfile() {
 		return (EReference)supplyFromProfileFlowEClass.getEStructuralFeatures().get(1);
 	}
@@ -1014,6 +1043,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDeliverToProfileFlow() {
 		return deliverToProfileFlowEClass;
 	}
@@ -1023,6 +1053,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getDeliverToProfileFlow_Profile() {
 		return (EReference)deliverToProfileFlowEClass.getEStructuralFeatures().get(0);
 	}
@@ -1032,6 +1063,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getDeliverToProfileFlow_SubProfile() {
 		return (EReference)deliverToProfileFlowEClass.getEStructuralFeatures().get(1);
 	}
@@ -1041,6 +1073,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSupplyFromSpotFlow() {
 		return supplyFromSpotFlowEClass;
 	}
@@ -1050,6 +1083,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSupplyFromSpotFlow_Market() {
 		return (EReference)supplyFromSpotFlowEClass.getEStructuralFeatures().get(0);
 	}
@@ -1059,6 +1093,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDeliverToSpotFlow() {
 		return deliverToSpotFlowEClass;
 	}
@@ -1068,6 +1103,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getDeliverToSpotFlow_Market() {
 		return (EReference)deliverToSpotFlowEClass.getEStructuralFeatures().get(0);
 	}
@@ -1077,6 +1113,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getProfileVesselRestriction() {
 		return profileVesselRestrictionEClass;
 	}
@@ -1086,6 +1123,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getProfileVesselRestriction_Vessels() {
 		return (EReference)profileVesselRestrictionEClass.getEStructuralFeatures().get(0);
 	}
@@ -1135,6 +1173,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getProfileConstraint() {
 		return profileConstraintEClass;
 	}
@@ -1144,6 +1183,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSubProfileConstraint() {
 		return subProfileConstraintEClass;
 	}
@@ -1153,6 +1193,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMinCargoConstraint() {
 		return minCargoConstraintEClass;
 	}
@@ -1162,6 +1203,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMinCargoConstraint_MinCargoes() {
 		return (EAttribute)minCargoConstraintEClass.getEStructuralFeatures().get(0);
 	}
@@ -1171,6 +1213,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMinCargoConstraint_IntervalType() {
 		return (EAttribute)minCargoConstraintEClass.getEStructuralFeatures().get(1);
 	}
@@ -1180,6 +1223,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMaxCargoConstraint() {
 		return maxCargoConstraintEClass;
 	}
@@ -1189,6 +1233,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMaxCargoConstraint_MaxCargoes() {
 		return (EAttribute)maxCargoConstraintEClass.getEStructuralFeatures().get(0);
 	}
@@ -1198,6 +1243,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMaxCargoConstraint_IntervalType() {
 		return (EAttribute)maxCargoConstraintEClass.getEStructuralFeatures().get(1);
 	}
@@ -1207,6 +1253,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFleetConstraint() {
 		return fleetConstraintEClass;
 	}
@@ -1216,6 +1263,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getTargetCargoesOnVesselConstraint() {
 		return targetCargoesOnVesselConstraintEClass;
 	}
@@ -1225,6 +1273,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getTargetCargoesOnVesselConstraint_Vessel() {
 		return (EReference)targetCargoesOnVesselConstraintEClass.getEStructuralFeatures().get(0);
 	}
@@ -1234,6 +1283,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTargetCargoesOnVesselConstraint_TargetNumberOfCargoes() {
 		return (EAttribute)targetCargoesOnVesselConstraintEClass.getEStructuralFeatures().get(1);
 	}
@@ -1243,6 +1293,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTargetCargoesOnVesselConstraint_IntervalType() {
 		return (EAttribute)targetCargoesOnVesselConstraintEClass.getEStructuralFeatures().get(2);
 	}
@@ -1252,6 +1303,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTargetCargoesOnVesselConstraint_Weight() {
 		return (EAttribute)targetCargoesOnVesselConstraintEClass.getEStructuralFeatures().get(3);
 	}
@@ -1271,6 +1323,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getLNGVolumeUnit() {
 		return lngVolumeUnitEEnum;
 	}

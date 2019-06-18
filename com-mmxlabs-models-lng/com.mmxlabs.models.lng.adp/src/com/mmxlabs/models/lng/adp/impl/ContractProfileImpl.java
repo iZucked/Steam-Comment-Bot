@@ -234,6 +234,7 @@ public class ContractProfileImpl<T extends Slot<U>, U extends Contract> extends 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setContract(U newContract) {
 		U oldContract = contract;
 		contract = newContract;
@@ -325,6 +326,7 @@ public class ContractProfileImpl<T extends Slot<U>, U extends Contract> extends 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTotalVolume(double newTotalVolume) {
 		double oldTotalVolume = totalVolume;
 		totalVolume = newTotalVolume;
@@ -347,6 +349,7 @@ public class ContractProfileImpl<T extends Slot<U>, U extends Contract> extends 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeUnit(LNGVolumeUnit newVolumeUnit) {
 		LNGVolumeUnit oldVolumeUnit = volumeUnit;
 		volumeUnit = newVolumeUnit == null ? VOLUME_UNIT_EDEFAULT : newVolumeUnit;
@@ -372,6 +375,7 @@ public class ContractProfileImpl<T extends Slot<U>, U extends Contract> extends 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ProfileConstraint> getConstraints() {
 		if (constraints == null) {
 			constraints = new EObjectContainmentEList.Resolving<ProfileConstraint>(ProfileConstraint.class, this, ADPPackage.CONTRACT_PROFILE__CONSTRAINTS);

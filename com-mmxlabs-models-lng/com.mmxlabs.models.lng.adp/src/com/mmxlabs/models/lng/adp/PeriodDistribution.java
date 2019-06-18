@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getPeriodDistribution()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/featureOverride"
  * @generated
  */
 public interface PeriodDistribution extends EObject {

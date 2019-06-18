@@ -81,6 +81,7 @@ public class SupplyFromProfileFlowImpl extends SupplyFromFlowImpl implements Sup
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PurchaseContractProfile getProfile() {
 		if (profile != null && profile.eIsProxy()) {
 			InternalEObject oldProfile = (InternalEObject)profile;
@@ -107,6 +108,7 @@ public class SupplyFromProfileFlowImpl extends SupplyFromFlowImpl implements Sup
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setProfile(PurchaseContractProfile newProfile) {
 		PurchaseContractProfile oldProfile = profile;
 		profile = newProfile;
@@ -120,6 +122,7 @@ public class SupplyFromProfileFlowImpl extends SupplyFromFlowImpl implements Sup
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public SubContractProfile<LoadSlot, PurchaseContract> getSubProfile() {
 		if (subProfile != null && subProfile.eIsProxy()) {
 			InternalEObject oldSubProfile = (InternalEObject)subProfile;
@@ -146,6 +149,7 @@ public class SupplyFromProfileFlowImpl extends SupplyFromFlowImpl implements Sup
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSubProfile(SubContractProfile<LoadSlot, PurchaseContract> newSubProfile) {
 		SubContractProfile<LoadSlot, PurchaseContract> oldSubProfile = subProfile;
 		subProfile = newSubProfile;

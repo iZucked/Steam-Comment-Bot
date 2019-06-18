@@ -128,6 +128,7 @@ public class PeriodDistributionImpl extends EObjectImpl implements PeriodDistrib
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<YearMonth> getRange() {
 		if (range == null) {
 			range = new EDataTypeUniqueEList<YearMonth>(YearMonth.class, this, ADPPackage.PERIOD_DISTRIBUTION__RANGE);
@@ -140,6 +141,7 @@ public class PeriodDistributionImpl extends EObjectImpl implements PeriodDistrib
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinCargoes() {
 		return minCargoes;
 	}
@@ -149,6 +151,7 @@ public class PeriodDistributionImpl extends EObjectImpl implements PeriodDistrib
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinCargoes(int newMinCargoes) {
 		int oldMinCargoes = minCargoes;
 		minCargoes = newMinCargoes;
@@ -163,6 +166,7 @@ public class PeriodDistributionImpl extends EObjectImpl implements PeriodDistrib
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMinCargoes() {
 		int oldMinCargoes = minCargoes;
 		boolean oldMinCargoesESet = minCargoesESet;
@@ -177,6 +181,7 @@ public class PeriodDistributionImpl extends EObjectImpl implements PeriodDistrib
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMinCargoes() {
 		return minCargoesESet;
 	}
@@ -186,6 +191,7 @@ public class PeriodDistributionImpl extends EObjectImpl implements PeriodDistrib
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaxCargoes() {
 		return maxCargoes;
 	}
@@ -195,6 +201,7 @@ public class PeriodDistributionImpl extends EObjectImpl implements PeriodDistrib
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxCargoes(int newMaxCargoes) {
 		int oldMaxCargoes = maxCargoes;
 		maxCargoes = newMaxCargoes;
@@ -209,6 +216,7 @@ public class PeriodDistributionImpl extends EObjectImpl implements PeriodDistrib
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMaxCargoes() {
 		int oldMaxCargoes = maxCargoes;
 		boolean oldMaxCargoesESet = maxCargoesESet;
@@ -223,6 +231,7 @@ public class PeriodDistributionImpl extends EObjectImpl implements PeriodDistrib
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMaxCargoes() {
 		return maxCargoesESet;
 	}

@@ -60,8 +60,8 @@ public class DistributionModelGeneratorUtil {
 		return contractShortName;
 	}
 
-	public static <T extends Slot<U>, U extends Contract> T generateSlot(ISlotTemplateFactory factory, ContractProfile<T, U> profile, SubContractProfile<T, U> subProfile, YearMonth start,
-			LocalDate date, Function<LocalDate, LocalDate> nextDateGenerator, int idx) {
+	public static <T extends Slot<U>, U extends Contract> T generateSlot(ISlotTemplateFactory factory, ContractProfile<T, U> profile, 
+			SubContractProfile<T, U> subProfile, YearMonth start, LocalDate date, Function<LocalDate, LocalDate> nextDateGenerator, int idx) {
 		final String name = factory.generateName(subProfile.getSlotTemplateId(), profile, subProfile, start, idx);
 		final T slot = factory.createSlot(subProfile.getSlotTemplateId(), profile, subProfile);
 		if (slot instanceof LoadSlot) {
