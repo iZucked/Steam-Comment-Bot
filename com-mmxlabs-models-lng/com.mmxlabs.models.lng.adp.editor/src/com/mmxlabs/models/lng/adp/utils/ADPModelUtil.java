@@ -30,6 +30,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.FleetProfile;
@@ -50,6 +51,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -240,7 +242,7 @@ public class ADPModelUtil {
 								}
 								if (!slots.isEmpty()) {
 									cmd.append(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS, slots));
-								}
+								} //TODO : add some feedback if nothing was generated
 								break;
 							}
 						}
@@ -338,29 +340,33 @@ public class ADPModelUtil {
 		return volumeInM3;
 	}
 
-	public static void setSlotVolumeFrom(double volume, LNGVolumeUnit volumeUnit, Slot slot) {
+	public static void setSlotVolumeFrom(double volume, LNGVolumeUnit volumeUnit, Slot slot, boolean exact) {
 		switch (volumeUnit) {
 		case M3:
 			slot.setVolumeLimitsUnit(VolumeUnits.M3);
-			slot.setMinQuantity((int) Math.round(0));
+			slot.setMinQuantity(getMinQuantity((int)volume, exact));
 			slot.setMaxQuantity((int) Math.round(volume));
 			break;
 		case MMBTU:
 			slot.setVolumeLimitsUnit(VolumeUnits.MMBTU);
-			slot.setMinQuantity((int) Math.round(0));
+			slot.setMinQuantity(getMinQuantity((int)volume, exact));
 			slot.setMaxQuantity((int) Math.round(volume));
 			break;
 		case MT:
 			slot.setVolumeLimitsUnit(VolumeUnits.M3);
 			// Rough MT to m3 conversion
 			int volumeInM3 = convertMTtoM3(volume);
-			slot.setMinQuantity(0);
+			slot.setMinQuantity(getMinQuantity(volumeInM3, exact));
 			slot.setMaxQuantity(volumeInM3);
 			break;
 		default:
 			throw new IllegalArgumentException();
 
 		}
+	}
+	
+	private static int getMinQuantity(int volume, boolean exact) {
+		return exact ? Math.round(volume) : 0;
 	}
 
 	public static void generateModelSlots(@NonNull LNGScenarioModel scenarioModel, @NonNull ADPModel adpModel) {
@@ -462,6 +468,45 @@ public class ADPModelUtil {
 		} catch (final InvalidSyntaxException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static @Nullable Pair<YearMonth, YearMonth> getContractProfilePeriod(final ADPModel adpModel, final Contract contract) {
+		YearMonth start = adpModel.getYearStart();
+		if (contract.isSetStartDate()) {
+			final YearMonth contractStart = contract.getStartDate();
+			if (contractStart.isAfter(start)) {
+				start = contractStart;
+			} else {
+				start = start.plusYears(1);
+			}
+		} else {
+			if (start.getMonthValue() > contract.getContractYearStart()) {
+				start = YearMonth.of(start.getYear() + 1, contract.getContractYearStart());
+			} else {
+				start = YearMonth.of(start.getYear(), contract.getContractYearStart());
+			}
+		}
+		//sanity check
+		if (start.isAfter(adpModel.getYearEnd())) {
+			return null;
+		}
+		
+		YearMonth end = start.plusYears(1);
+		if (contract.isSetEndDate()) {
+			final YearMonth contractEnd = contract.getEndDate();
+			if (contractEnd.isBefore(end)) {
+				end = contractEnd;
+			}
+		}
+		if (end.isBefore(adpModel.getYearEnd())) {
+			end = adpModel.getYearEnd();
+		}
+		//sanity check
+		if (end.isBefore(start)) {
+			return null;
+		}
+			
+		return new Pair<YearMonth, YearMonth>(start, end);
 	}
 
 }

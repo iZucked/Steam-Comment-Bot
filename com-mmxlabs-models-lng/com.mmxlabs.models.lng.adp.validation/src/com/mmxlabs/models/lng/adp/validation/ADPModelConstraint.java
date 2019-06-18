@@ -14,6 +14,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
+import com.mmxlabs.models.lng.adp.CargoSizeDistributionModel;
+import com.mmxlabs.models.lng.adp.ContractProfile;
+import com.mmxlabs.models.lng.adp.DistributionModel;
+import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
+import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -74,7 +79,7 @@ public class ADPModelConstraint extends AbstractModelMultiConstraint {
 						factory.copyName() //
 								.withObjectAndFeature(adpModel, ADPPackage.Literals.ADP_MODEL__YEAR_START) //
 								.withObjectAndFeature(adpModel, ADPPackage.Literals.ADP_MODEL__YEAR_END) //
-								.withMessage("ADP date range is too large") //
+								.withMessage("ADP date range is too large: truncate to 18 month") //
 								.make(ctx, statuses);
 					}
 				}
@@ -85,7 +90,7 @@ public class ADPModelConstraint extends AbstractModelMultiConstraint {
 				factory.copyName() //
 						.withObjectAndFeature(adpModel, CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS) //
 						.withObjectAndFeature(adpModel, CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS) //
-						.withMessage("No slots for ADP") //
+						.withMessage("No existing slots for ADP: re-generate slots") //
 						.make(ctx, statuses);
 			}
 

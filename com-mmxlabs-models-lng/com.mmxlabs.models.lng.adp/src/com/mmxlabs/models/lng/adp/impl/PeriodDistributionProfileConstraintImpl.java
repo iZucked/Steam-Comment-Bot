@@ -75,6 +75,7 @@ public class PeriodDistributionProfileConstraintImpl extends ProfileConstraintIm
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PeriodDistribution> getDistributions() {
 		if (distributions == null) {
 			distributions = new EObjectContainmentEList.Resolving<PeriodDistribution>(PeriodDistribution.class, this, ADPPackage.PERIOD_DISTRIBUTION_PROFILE_CONSTRAINT__DISTRIBUTIONS);

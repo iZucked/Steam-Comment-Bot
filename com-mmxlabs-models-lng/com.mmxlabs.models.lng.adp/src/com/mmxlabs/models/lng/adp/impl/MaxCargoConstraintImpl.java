@@ -95,6 +95,7 @@ public class MaxCargoConstraintImpl extends ProfileConstraintImpl implements Max
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaxCargoes() {
 		return maxCargoes;
 	}
@@ -104,6 +105,7 @@ public class MaxCargoConstraintImpl extends ProfileConstraintImpl implements Max
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxCargoes(int newMaxCargoes) {
 		int oldMaxCargoes = maxCargoes;
 		maxCargoes = newMaxCargoes;
@@ -116,6 +118,7 @@ public class MaxCargoConstraintImpl extends ProfileConstraintImpl implements Max
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IntervalType getIntervalType() {
 		return intervalType;
 	}
@@ -125,6 +128,7 @@ public class MaxCargoConstraintImpl extends ProfileConstraintImpl implements Max
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIntervalType(IntervalType newIntervalType) {
 		IntervalType oldIntervalType = intervalType;
 		intervalType = newIntervalType == null ? INTERVAL_TYPE_EDEFAULT : newIntervalType;

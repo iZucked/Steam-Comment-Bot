@@ -95,6 +95,7 @@ public class MinCargoConstraintImpl extends ProfileConstraintImpl implements Min
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinCargoes() {
 		return minCargoes;
 	}
@@ -104,6 +105,7 @@ public class MinCargoConstraintImpl extends ProfileConstraintImpl implements Min
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinCargoes(int newMinCargoes) {
 		int oldMinCargoes = minCargoes;
 		minCargoes = newMinCargoes;
@@ -116,6 +118,7 @@ public class MinCargoConstraintImpl extends ProfileConstraintImpl implements Min
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IntervalType getIntervalType() {
 		return intervalType;
 	}
@@ -125,6 +128,7 @@ public class MinCargoConstraintImpl extends ProfileConstraintImpl implements Min
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIntervalType(IntervalType newIntervalType) {
 		IntervalType oldIntervalType = intervalType;
 		intervalType = newIntervalType == null ? INTERVAL_TYPE_EDEFAULT : newIntervalType;

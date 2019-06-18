@@ -13,6 +13,7 @@ import java.util.function.Function;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.google.common.util.concurrent.Monitor;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.CargoIntervalDistributionModel;
 import com.mmxlabs.models.lng.adp.ContractProfile;
@@ -43,8 +44,6 @@ public class CargoIntervalGenerator implements IProfileGenerator {
 			return slots;
 		}
 
-		final YearMonth start = adpModel.getYearStart();
-
 		Function<LocalDate, LocalDate> nextDateGenerator;
 		switch (model.getIntervalType()) {
 		case MONTHLY:
@@ -66,24 +65,16 @@ public class CargoIntervalGenerator implements IProfileGenerator {
 		if (contract == null) {
 			throw new IllegalStateException();
 		}
-		YearMonth startMonth = adpModel.getYearStart();
-		if (contract.isSetStartDate()) {
-			final YearMonth contractStart = contract.getStartDate();
-			if (contractStart.isAfter(startMonth)) {
-				startMonth = contractStart;
-			}
+		
+		final Pair<YearMonth, YearMonth> adpPeriod = ADPModelUtil.getContractProfilePeriod(adpModel, contract);
+		if (adpPeriod == null) {
+			throw new IllegalStateException();
 		}
+		final YearMonth start = adpPeriod.getFirst();
+		final YearMonth end = adpPeriod.getSecond();
 
-		YearMonth endMonth = adpModel.getYearEnd();
-		if (contract.isSetEndDate()) {
-			final YearMonth contractEnd = contract.getEndDate();
-			if (contractEnd.isBefore(endMonth)) {
-				endMonth = contractEnd;
-			}
-		}
-
-		LocalDate date = startMonth.atDay(1);
-		final LocalDate endDate = endMonth.atDay(1);
+		LocalDate date = start.atDay(1);
+		final LocalDate endDate = end.atDay(1);
 
 		int idx = 0;
 		while (date.isBefore(endDate)) {
@@ -93,7 +84,7 @@ public class CargoIntervalGenerator implements IProfileGenerator {
 
 				for (int i = 0; i < numberOfCargoes; ++i) {
 					final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, date, nextDateGenerator, idx++);
-					ADPModelUtil.setSlotVolumeFrom(model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot);
+					ADPModelUtil.setSlotVolumeFrom(model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot, false);
 					if (model.getIntervalType() != IntervalType.MONTHLY) {
 						if (model.getIntervalType() == IntervalType.QUARTERLY) {
 							slot.setWindowSize(3);

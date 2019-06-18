@@ -466,6 +466,7 @@ public class SubContractProfileImpl<T extends Slot<U>, U extends Contract> exten
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<SubProfileConstraint> getConstraints() {
 		if (constraints == null) {
 			constraints = new EObjectContainmentEList.Resolving<SubProfileConstraint>(SubProfileConstraint.class, this, ADPPackage.SUB_CONTRACT_PROFILE__CONSTRAINTS);

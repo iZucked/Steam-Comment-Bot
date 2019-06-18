@@ -117,6 +117,7 @@ public class PreDefinedDistributionModelImpl extends DistributionModelImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PreDefinedDate> getDates() {
 		if (dates == null) {
 			dates = new EObjectContainmentEList.Resolving<PreDefinedDate>(PreDefinedDate.class, this, ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__DATES);
@@ -129,6 +130,7 @@ public class PreDefinedDistributionModelImpl extends DistributionModelImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getWindowSize() {
 		return windowSize;
 	}
@@ -138,6 +140,7 @@ public class PreDefinedDistributionModelImpl extends DistributionModelImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowSize(int newWindowSize) {
 		int oldWindowSize = windowSize;
 		windowSize = newWindowSize;
@@ -150,6 +153,7 @@ public class PreDefinedDistributionModelImpl extends DistributionModelImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TimePeriod getWindowSizeUnits() {
 		return windowSizeUnits;
 	}
@@ -159,6 +163,7 @@ public class PreDefinedDistributionModelImpl extends DistributionModelImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowSizeUnits(TimePeriod newWindowSizeUnits) {
 		TimePeriod oldWindowSizeUnits = windowSizeUnits;
 		windowSizeUnits = newWindowSizeUnits == null ? WINDOW_SIZE_UNITS_EDEFAULT : newWindowSizeUnits;
