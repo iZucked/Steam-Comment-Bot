@@ -19,6 +19,7 @@
    <extension-point id="FleetBasedReportInitialState" name="FleetBasedReportInitialState" schema="schema/FleetBasedReportInitialState.exsd"/>
    <extension-point id="ChangeSetColumnValueExtender" name="ChangeSetColumnValueExtender" schema="schema/ChangeSetColumnValueExtender.exsd"/>
    <extension-point id="HeadlineValueExtender" name="HeadlineValueExtender" schema="schema/HeadlineValueExtender.exsd"/>
+   <extension-point id="ScheduleBasedColumnOverride" name="ScheduleBasedColumnOverride" schema="schema/ScheduleBasedColumnOverride.exsd"/>
 
    <extension
          point="org.eclipse.ui.preferencePages">

@@ -13,10 +13,10 @@ import org.eclipse.emf.ecore.ETypedElement;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
-public class SimpleEmfBlockColumnFactory extends EmfBlockColumnFactory {
-	final String columnName;
+public class SimpleEmfBlockColumnFactory extends EmfBlockColumnFactory implements BlockColumnFactoryDisplayNameChanger{
+	String columnName;
 	protected final String blockID;
-	protected final String blockDisplayName;
+	protected String blockDisplayName;
 	final String tooltip;
 	protected final ColumnType columnType;
 	final ICellRenderer formatter;
@@ -73,5 +73,13 @@ public class SimpleEmfBlockColumnFactory extends EmfBlockColumnFactory {
 		final ColumnBlock block = blockManager.createBlock(blockID, blockDisplayName, blockType, blockGroup, orderKey, columnType, blockConfigurationName);
 		block.tooltip = tooltip;
 		return blockManager.createColumn(block, columnName, formatter, manipulator, path);
+	}
+
+	@Override
+	public void setColumnNameByID(String columnID, String newName) {
+		if (blockID.equals(columnID)) {
+			blockDisplayName = newName;
+			columnName = newName;
+		}
 	}
 }

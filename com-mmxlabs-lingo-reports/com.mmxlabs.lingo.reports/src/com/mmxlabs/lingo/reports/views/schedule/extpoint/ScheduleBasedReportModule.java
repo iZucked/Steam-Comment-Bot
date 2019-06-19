@@ -29,5 +29,6 @@ public class ScheduleBasedReportModule extends AbstractModule {
 		bind(iterable(IScheduleBasedColumnFactoryExtension.class)).toProvider(service(IScheduleBasedColumnFactoryExtension.class).multiple());
 		bind(iterable(IScheduleBasedColumnExtension.class)).toProvider(service(IScheduleBasedColumnExtension.class).multiple());
 		bind(iterable(IScheduleBasedReportInitialStateExtension.class)).toProvider(service(IScheduleBasedReportInitialStateExtension.class).multiple());
+		bind(iterable(IScheduleBasedColumnOverrideExtension.class)).toProvider(service(IScheduleBasedColumnOverrideExtension.class).multiple());
 	}
 }

@@ -44,6 +44,7 @@ import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
 import com.mmxlabs.lingo.reports.views.AbstractReportBuilder;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedColumnExtension;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedColumnFactoryExtension;
+import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedColumnOverrideExtension;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialColumn;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialDiffOption;
@@ -55,6 +56,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
@@ -76,6 +78,9 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 	@Inject(optional = true)
 	private Iterable<IScheduleBasedColumnExtension> columnExtensions;
+	
+	@Inject(optional = true)
+	private Iterable<IScheduleBasedColumnOverrideExtension> columnOverrideExtensions;
 
 	@Inject(optional = true)
 	private Iterable<IScheduleBasedReportInitialStateExtension> initialStates;
@@ -509,7 +514,14 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 				handlerMap.put(handlerID, ext.getFactory());
 			}
 		}
-
+		
+		final Map<String, String> nameMap = new HashMap<>();
+		if (columnOverrideExtensions != null) {
+			for (final IScheduleBasedColumnOverrideExtension ext : columnOverrideExtensions) {
+				nameMap.put(ext.getColumnID(), ext.getNameOverride());
+			}
+		}
+		
 		// Now find the column definitions themselves.
 		if (columnExtensions != null) {
 
@@ -525,7 +537,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 				}
 			}
 		}
-
+		manager.overrideColumnNames(nameMap, ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID);
 		// Create the actual columns instances.
 		manager.addColumns(ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID, getBlockManager());
 	}

@@ -26,5 +26,4 @@ public abstract class EmfBlockColumnFactory {
 		result.add(addColumn(blockManager));
 		return result;
 	}
-
 }
