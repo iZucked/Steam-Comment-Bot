@@ -577,20 +577,25 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	public IMenuListener createMultipleSelectionMenuListener(final Set<Cargo> cargoes, final Set<LoadSlot> loads, final Set<DischargeSlot> discharges) {
+	public IMenuListener createMultipleSelectionMenuListener(final Set<Cargo> cargoes, final Set<LoadSlot> loads, final Set<DischargeSlot> discharges, boolean createLoadSpecificOptions,
+			boolean createDischargeSpecificOptions) {
 
 		return manager -> {
 
 			boolean anyLocked = false;
 			boolean anyUnlocked = false;
 
+			boolean complexCargo = false;
 			for (final Cargo cargo : cargoes) {
 				if (cargo.isLocked()) {
 					anyLocked = true;
 				} else {
 					anyUnlocked = true;
 				}
+				complexCargo |= cargo.getSlots().size() != 2;
 			}
+			// Can only swap slots on a pair of LD cargoes.
+			boolean canSwap = !complexCargo && cargoes.size() == 2;
 
 			if (!loads.isEmpty()) {
 				final MenuManager newMenuManager = new MenuManager("Pair to new...", null);
@@ -620,6 +625,20 @@ public class CargoEditorMenuHelper {
 			}
 			if (!cargoes.isEmpty()) {
 				manager.add(new RunnableAction("Unpair", () -> helper.unpairCargoes("Unpair", cargoes)));
+			}
+			if (canSwap) {
+				if (createLoadSpecificOptions) {
+					boolean hasDESPurchase = cargoes.stream().filter(c -> c.getCargoType() == CargoType.DES).count() > 0;
+					if (!hasDESPurchase) {
+						manager.add(new RunnableAction("Swap loads", () -> helper.swapCargoLoads("Swap loads", new ArrayList<>(cargoes))));
+					}
+				}
+				if (createDischargeSpecificOptions) {
+					boolean hasFOBSale = cargoes.stream().filter(c -> c.getCargoType() == CargoType.FOB).count() > 0;
+					if (!hasFOBSale) {
+						manager.add(new RunnableAction("Swap discharges", () -> helper.swapCargoDischarges("Swap discharges", new ArrayList<>(cargoes))));
+					}
+				}
 			}
 		};
 	}

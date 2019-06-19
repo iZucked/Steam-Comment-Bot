@@ -450,6 +450,42 @@ public class CargoEditingHelper {
 		setComands.add(SetCommand.create(editingDomain, slot, CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS, TimePeriod.MONTHS));
 	}
 
+	public void swapCargoLoads(String description, @NonNull List<Cargo> cargoes) {
+		Slot<?> load1 = cargoes.get(0).getSortedSlots().get(0);
+		Slot<?> load2 = cargoes.get(1).getSortedSlots().get(0);
+
+		final CompoundCommand currentWiringCommand = new CompoundCommand(description);
+		currentWiringCommand.append(SetCommand.create(editingDomain, load1, CargoPackage.Literals.SLOT__CARGO, load2.getCargo()));
+		currentWiringCommand.append(SetCommand.create(editingDomain, load2, CargoPackage.Literals.SLOT__CARGO, load1.getCargo()));
+
+		if (currentWiringCommand.isEmpty()) {
+			return;
+		}
+		assert currentWiringCommand.canExecute();
+
+		editingDomain.getCommandStack().execute(currentWiringCommand);
+
+		verifyModel();
+	}
+
+	public void swapCargoDischarges(String description, @NonNull List<Cargo> cargoes) {
+		Slot<?> discharge1 = cargoes.get(0).getSortedSlots().get(1);
+		Slot<?> discharge2 = cargoes.get(1).getSortedSlots().get(1);
+
+		final CompoundCommand currentWiringCommand = new CompoundCommand(description);
+		currentWiringCommand.append(SetCommand.create(editingDomain, discharge1, CargoPackage.Literals.SLOT__CARGO, discharge2.getCargo()));
+		currentWiringCommand.append(SetCommand.create(editingDomain, discharge2, CargoPackage.Literals.SLOT__CARGO, discharge1.getCargo()));
+
+		if (currentWiringCommand.isEmpty()) {
+			return;
+		}
+		assert currentWiringCommand.canExecute();
+
+		editingDomain.getCommandStack().execute(currentWiringCommand);
+
+		verifyModel();
+	}
+
 	public void unpairCargoes(String description, @NonNull Set<Cargo> cargoes) {
 		final List<Command> setCommands = new LinkedList<>();
 		final List<EObject> deleteObjects = new LinkedList<>();

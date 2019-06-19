@@ -244,7 +244,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private final TradesFilter tradesFilter = new TradesFilter();
 
 	private final TradesCargoFilter tradesCargoFilter = new TradesCargoFilter();
-	
+
 	private final ShippedCargoFilter shippedCargoFilter = new ShippedCargoFilter();
 
 	private final TimePeriodFilter monthFilter = new TimePeriodFilter();
@@ -692,11 +692,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							discharges.add(row.getDischargeSlot());
 						}
 					}
-					populateMultipleSelectionMenu(cargoes, loads, discharges, selection);
+					populateMultipleSelectionMenu(cargoes, loads, discharges, selection, column);
 				}
 			}
 
-			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes, Set<LoadSlot> loads, Set<DischargeSlot> discharges, final IStructuredSelection selection) {
+			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes, Set<LoadSlot> loads, Set<DischargeSlot> discharges, final IStructuredSelection selection, GridColumn column) {
 				if (menu == null) {
 					menu = mgr.createContextMenu(scenarioViewer.getGrid());
 				}
@@ -708,7 +708,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						item.dispose();
 					}
 				}
-				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes, loads, discharges);
+
+				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes, loads, discharges, loadColumns.contains(column), dischargeColumns.contains(column));
 				listener.menuAboutToShow(mgr);
 
 				if (contextMenuExtensions != null) {
@@ -1949,7 +1950,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private enum ShippedCargoFilterOption {
 		NONE, SHIPPED, NON_SHIPPED, DES, FOB
 	}
-	
+
 	private class ShippedCargoFilter extends ViewerFilter {
 		private ShippedCargoFilterOption option = ShippedCargoFilterOption.NONE;
 
@@ -1981,7 +1982,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 	}
 
-	
 	private enum TimeFilterType {
 		NONE, YEARMONTH, PROMPT
 	}
@@ -2195,8 +2195,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					addActionToMenu(shortsAction, menu);
 				}
 			};
-			addActionToMenu(dmcaShippedCargos, menu);			
-			
+			addActionToMenu(dmcaShippedCargos, menu);
+
 			final DefaultMenuCreatorAction dmcaTimePeriod = new DefaultMenuCreatorAction("Months") {
 
 				@Override
