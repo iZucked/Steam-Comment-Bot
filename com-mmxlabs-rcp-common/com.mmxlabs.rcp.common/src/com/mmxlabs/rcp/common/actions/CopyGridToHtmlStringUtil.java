@@ -15,7 +15,10 @@ import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +37,7 @@ public class CopyGridToHtmlStringUtil {
 	// Set border around everything?
 	private final boolean includeBorder = false;
 	private boolean showBackgroundColours = false;
+	private boolean showForegroundColours = false;
 	private boolean includeAllColumns = false;
 	private IAdditionalAttributeProvider additionalAttributeProvider = null;
 	private static final String EOL = System.getProperty("line.separator");
@@ -214,7 +218,7 @@ public class CopyGridToHtmlStringUtil {
 			// If offset is greater than zero, skip this row
 			if (rowOffsets[colIdx] == 0) {
 				final Color c = item.getBackground(colIdx);
-				final String colourString;
+				String colourString;
 				if (showBackgroundColours) {
 					if (c == null) {
 						colourString = "bgcolor='white'";
@@ -224,9 +228,34 @@ public class CopyGridToHtmlStringUtil {
 				} else {
 					colourString = "";
 				}
+				final String fontString;
+				if (showForegroundColours) {
+					final Color fc = item.getForeground(colIdx);
+					if (fc != null) {
+						String tempFontString = String.format("<font color='#%02X%02X%02X'>", fc.getRed(), fc.getGreen(), fc.getBlue());
+						final Font font = item.getFont(colIdx);
+						if (font != null) {
+							final FontData fdata = font.getFontData()[0];
+							if (fdata != null) {
+								if (fdata.getStyle() == SWT.ITALIC) {
+									tempFontString += "<i>";
+								} else if (fdata.getStyle() == SWT.BOLD) {
+									tempFontString += "<b>";
+								} else if (fdata.getStyle() == (SWT.BOLD+SWT.ITALIC)) {
+									tempFontString += "<i><b>";
+								}
+							}
+						}
+						fontString = tempFontString;
+					} else {
+						fontString = "";
+					}
+				} else {
+					fontString = "";
+				}
 				addCell(sw, item.getText(colIdx),
 						combineAttributes(new String[] { colourString, String.format(" rowSpan='%d' ", 1 + item.getRowSpan(colIdx)), String.format(" colSpan='%d' ", 1 + item.getColumnSpan(colIdx)) },
-								getAdditionalAttributes(item, colIdx)));
+								getAdditionalAttributes(item, colIdx)), fontString);
 				// Increment col idx.
 				// FIXME: Does this work correctly for sortable columns? No existing reports to test against.
 				i += item.getColumnSpan(colIdx);
@@ -286,10 +315,18 @@ public class CopyGridToHtmlStringUtil {
 	}
 
 	public final void addCell(final StringWriter sw, final String text, final String[] attributes) {
-		addCell(sw, "td", text, attributes);
+		addCell(sw, text, attributes, "");
+	}
+	
+	public final void addCell(final StringWriter sw, final String text, final String[] attributes, final String fontAttributes) {
+		addCell(sw, "td", text, attributes, fontAttributes);
+	}
+	
+	public final void addCell(final StringWriter sw, final String tag, String text, final String[] attributes) {
+		addCell(sw, tag, text, attributes, "");
 	}
 
-	public final void addCell(final StringWriter sw, final String tag, String text, final String[] attributes) {
+	public final void addCell(final StringWriter sw, final String tag, String text, final String[] attributes, final String fontAttributes) {
 		if (attributes == null) {
 			sw.write("<" + tag + ">");
 		} else {
@@ -305,7 +342,19 @@ public class CopyGridToHtmlStringUtil {
 			text = "&nbsp;";
 		}
 
-		sw.write(text); // TODO: escape this for HTML
+		if (!fontAttributes.isEmpty()) {
+			sw.write(fontAttributes);
+		}
+		sw.write(text);
+		if (!fontAttributes.isEmpty()) {
+			if (fontAttributes.contains("<b>")) {
+				sw.write("</b>");
+			}
+			if (fontAttributes.contains("<i>")) {
+				sw.write("</i>");
+			}
+			sw.write("</font>");
+		}
 		sw.write("</" + tag + ">");
 	}
 
@@ -338,6 +387,14 @@ public class CopyGridToHtmlStringUtil {
 
 	public final void setShowBackgroundColours(final boolean showBackgroundColours) {
 		this.showBackgroundColours = showBackgroundColours;
+	}
+	
+	public final boolean isShowForegroundColours() {
+		return showForegroundColours;
+	}
+
+	public final void setShowForegroundColours(final boolean showForegroundColours) {
+		this.showForegroundColours = showForegroundColours;
 	}
 
 	public void setAdditionalAttributeProvider(final IAdditionalAttributeProvider additionalAttributeProvider) {

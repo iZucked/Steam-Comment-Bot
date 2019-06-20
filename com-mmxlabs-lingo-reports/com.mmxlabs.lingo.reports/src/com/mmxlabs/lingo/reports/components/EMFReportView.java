@@ -69,6 +69,7 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.EObjectTableViewerColumnFactory;
+import com.mmxlabs.models.ui.tabular.columngeneration.IColumnFactory;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
@@ -427,7 +428,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 			}
 		};
 
-		getBlockManager().setColumnFactory(new EObjectTableViewerColumnFactory(viewer));
+		getBlockManager().setColumnFactory(getColumnFactory(viewer));
 		getBlockManager().setGrid(viewer.getGrid());
 
 		filterField.setFilterSupport(viewer.getFilterSupport());
@@ -490,6 +491,10 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+	}
+	
+	protected IColumnFactory getColumnFactory(final EObjectTableViewer viewer) {
+		return new EObjectTableViewerColumnFactory(viewer);
 	}
 
 	protected abstract IScenarioInstanceElementCollector getElementCollector();

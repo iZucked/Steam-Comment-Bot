@@ -37,11 +37,23 @@ public class CopyGridToHtmlClipboardAction extends Action{
 		this.postOperation = postOperation;
 
 		util = new CopyGridToHtmlStringUtil(table, includeRowHeaders, false);
-
+		
 		setText("Copy");
 		setDescription("Copies grid data into the clipboard");
 		setToolTipText("Copies grid data into the clipboard");
 		setImageDescriptor(Activator.getImageDescriptor("/icons/copy.gif"));
+	}
+	
+	public void setShowForegroundColours(final boolean showForegroundColours) {
+		if (util != null) {
+			util.setShowForegroundColours(showForegroundColours);
+		}
+	}
+	
+	public void setShowBackgroundColours(final boolean showBackgroundColours) {
+		if (util != null) {
+			util.setShowBackgroundColours(showBackgroundColours);
+		}
 	}
 
 	public void setAdditionalAttributeProvider(IAdditionalAttributeProvider provider) {
@@ -79,10 +91,12 @@ public class CopyGridToHtmlClipboardAction extends Action{
 	}
 
 	public boolean isShowBackgroundColours() {
+		if (util == null) return false;
 		return util.isShowBackgroundColours();
 	}
-
-	public void setShowBackgroundColours(boolean showBackgroundColours) {
-		util.setShowBackgroundColours(showBackgroundColours);
+	
+	public boolean isShowForegroundColours() {
+		if (util == null) return false;
+		return util.isShowForegroundColours();
 	}
 }

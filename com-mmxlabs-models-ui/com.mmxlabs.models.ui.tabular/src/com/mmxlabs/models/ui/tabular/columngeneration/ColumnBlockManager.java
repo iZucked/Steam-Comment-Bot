@@ -65,7 +65,6 @@ public class ColumnBlockManager {
 				return block;
 			}
 		}
-
 		return null;
 	}
 

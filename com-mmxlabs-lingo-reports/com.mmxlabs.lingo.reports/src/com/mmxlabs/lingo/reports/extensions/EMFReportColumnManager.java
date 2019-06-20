@@ -12,6 +12,8 @@ import java.util.Map;
 import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.columngeneration.BlockColumnFactoryDisplayNameChanger;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.models.ui.tabular.columngeneration.EmfBlockColumnFactory;
@@ -40,6 +42,18 @@ public class EMFReportColumnManager {
 			columnsByType.put(reportType, new ArrayList<EmfBlockColumnFactory>());
 		}
 		columnsByType.get(reportType).add(factory);		
+	}
+	
+	public void overrideColumnNames(final Map<String, String> nameMap, final String reportType) {
+		
+		if (columnsByType.containsKey(reportType)) {
+			final List<EmfBlockColumnFactory> factories = columnsByType.get(reportType);
+			for (final EmfBlockColumnFactory factory : factories) {
+				if (factory instanceof BlockColumnFactoryDisplayNameChanger) {
+					nameMap.forEach(((BlockColumnFactoryDisplayNameChanger) factory)::setColumnNameByID);
+				}
+			}
+		}
 	}
 	
 	/**
