@@ -112,6 +112,8 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
 			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+			util.setShowBackgroundColours(true);
+			util.setShowForegroundColours(true);
 			final String contents = util.convert();
 			return (T) new IReportContents() {
 

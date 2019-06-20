@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.window.ToolTip;
 import org.eclipse.jface.window.Window;
@@ -82,6 +83,7 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
+import com.mmxlabs.models.ui.tabular.columngeneration.IColumnFactory;
 import com.mmxlabs.models.ui.tabular.columngeneration.IColumnInfoProvider;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.rcp.common.SelectionHelper;
@@ -307,7 +309,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			filterField.setFilterSupport(filterSupport);
 
 			getBlockManager().setGrid(viewer.getGrid());
-			getBlockManager().setColumnFactory(new DiffingGridTableViewerColumnFactory(viewer, sortingSupport, filterSupport, () -> copyPasteMode));
+			
+			
+			getBlockManager().setColumnFactory(new DiffingGridTableViewerColumnFactory(viewer, sortingSupport, filterSupport, () -> copyPasteMode, this::applyColour));
 			// filterField.setFilterSupport(viewer.getFilterSupport());
 
 			viewer.getGrid().setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -598,7 +602,18 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	private Action packColumnsAction;
 	private CopyGridToHtmlClipboardAction copyTableAction;
-
+	
+	protected void setCopyForegroundColours(final boolean showForegroundColours) {
+		if (copyTableAction != null) {
+			copyTableAction.setShowForegroundColours(showForegroundColours);
+		}
+	}
+	protected void setCopyBackgroundColours(final boolean showBackgroundColours) {
+		if (copyTableAction != null) {
+			copyTableAction.setShowBackgroundColours(showBackgroundColours);
+		}
+	}
+	
 	private final String helpContextId;
 
 	/**
@@ -743,60 +758,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	private void makeActions() {
 		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false, () -> setCopyPasteMode(true), () -> setCopyPasteMode(false));
-		//copyTableAction.setShowBackgroundColours(true);
-		
-		IAdditionalAttributeProvider aap = new IAdditionalAttributeProvider() {
-			
-			@Override
-			public @NonNull String getTopLeftCellUpperText() {
-				return "";
-			}
-			
-			@Override
-			public @NonNull String getTopLeftCellText() {
-				return "";
-			}
-			
-			@Override
-			public @NonNull String getTopLeftCellLowerText() {
-				return "";
-			}
-			
-			@Override
-			public @NonNull String @Nullable [] getAdditionalRowHeaderAttributes(@NonNull GridItem item) {
-				return null;
-			}
-			
-			@Override
-			public @NonNull String @Nullable [] getAdditionalPreRows() {
-				return null;
-			}
-			
-			@Override
-			public @NonNull String @Nullable [] getAdditionalHeaderAttributes(GridColumn column) {
-				return null;
-			}
-			
-			@Override
-			public @NonNull String @Nullable [] getAdditionalAttributes(@NonNull GridItem item, int columnIdx) {
-				final List<String> res = new ArrayList<String>();
-				
-				if (item.getData() instanceof Row) {
-					final Row row = (Row) item.getData();
-					final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
-					if (openSlotAllocation != null) {
-						res.add("bgcolor = '#AAD1B7'");
-					}
-					final OpenSlotAllocation odsa = row.getOpenDischargeSlotAllocation();
-					if (odsa != null) {
-						res.add("bgcolor = '#FBD4B9'");
-					}
-				}
-				
-				return res.toArray(new String[res.size()]);
-			}
-		};
-		copyTableAction.setAdditionalAttributeProvider(aap);
 		
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
@@ -912,6 +873,10 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			return result.getTypedRoot(LNGScenarioModel.class);
 		}
 		return null;
+	}
+	
+	protected void applyColour(ViewerCell cell, ColumnHandler handler, Object element) {
+		
 	}
 
 }

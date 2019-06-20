@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.components;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
 
 import org.eclipse.core.databinding.observable.map.IObservableMap;
@@ -30,6 +31,7 @@ import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 
+import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.CharterLengthDaysFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterDaysFormatter;
@@ -64,13 +66,16 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 	private static final Image cellImageRedArrowDown = imageDescriptorRedArrowDown.createImage();
 	private static final Image cellImageRedArrowUp = imageDescriptorRedArrowUp.createImage();
 	private BooleanSupplier copyPasteMode;
+	
+	private final TriConsumer<ViewerCell, ColumnHandler, Object> colourProvider;
 
 	public DiffingGridTableViewerColumnFactory(final GridTableViewer viewer, final EObjectTableViewerSortingSupport sortingSupport, final EObjectTableViewerFilterSupport filterSupport,
-			BooleanSupplier copyPasteMode) {
+			BooleanSupplier copyPasteMode, TriConsumer<ViewerCell, ColumnHandler, Object> colourProvider) {
 		this.viewer = viewer;
 		this.sortingSupport = sortingSupport;
 		this.filterSupport = filterSupport;
 		this.copyPasteMode = copyPasteMode;
+		this.colourProvider = colourProvider;
 	}
 
 	private Object computeCompositeRow(final CompositeRow element, final EMFPath[] path, final GridColumn col, final ICellRenderer formatter) {
@@ -435,6 +440,10 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 							cell.setImage(image);
 						}
 					}
+				}
+				
+				if (colourProvider != null) {
+					colourProvider.accept(cell, handler, element);
 				}
 			}
 		});
