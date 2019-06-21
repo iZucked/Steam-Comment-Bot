@@ -94,10 +94,22 @@ public class PricingCalendarImporter extends AbstractClassImporter {
 
 	private PricingCalendarEntry createFromDateComment(@NonNull final IMMXImportContext context, String start, String end, String month, String comment) {
 		PricingCalendarEntry ih = PricingFactory.eINSTANCE.createPricingCalendarEntry();
-		LocalDate ls = LocalDate.from(DateTimeFormatter.ofPattern("dd/MM/yyyy").parse(start));
-		LocalDate le = LocalDate.from(DateTimeFormatter.ofPattern("dd/MM/yyyy").parse(end));
-		
+		LocalDate ls = null;
+		LocalDate le = null;
 		YearMonth date = null;
+		
+		try {
+			ls = dateParser.parseLocalDate(start);
+		} catch (final ParseException ex) {
+			context.addProblem(context.createProblem("The field " + start + " is not a date", true, false, true));
+			return null;
+		}
+		try {
+			le = dateParser.parseLocalDate(end);
+		} catch (final ParseException ex) {
+			context.addProblem(context.createProblem("The field " + end + " is not a date", true, false, true));
+			return null;
+		}
 		try {
 			date = parseDateString(month);
 		} catch (final ParseException ex) {
@@ -150,7 +162,7 @@ public class PricingCalendarImporter extends AbstractClassImporter {
 	public @NonNull ImportResults importObject(@Nullable EObject parent, @NonNull EClass targetClass, @NonNull Map<String, String> row, @NonNull IMMXImportContext context) {
 		String calendarName = row.get(NAME);
 		if(calendarName == null) {
-			context.addProblem(context.createProblem(String.format("Holiday calendar name is missing"), true, true, true));
+			context.addProblem(context.createProblem(String.format("Pricing calendar name is missing"), true, true, true));
 		}
 		final PricingCalendar pc;
 		if (seen(calendarName)) {
