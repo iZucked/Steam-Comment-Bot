@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -60,6 +61,9 @@ public class PortTimesRecordMaker {
 
 	@Inject
 	private IEndEventScheduler endEventScheduler;
+	
+	@Inject
+	private IElementDurationProvider durationProvider;
 
 	/**
 	 * This method replaces the normal shipped cargo calculation path with one specific to DES purchase or FOB sale cargoes. However this currently merges in behaviour from other classes - such as
@@ -92,7 +96,8 @@ public class PortTimesRecordMaker {
 			}
 
 			// Set duration to get correct slot order in port times
-			portTimesRecord.setSlotDuration(thisPortSlot, 0);
+			final int loadDuration = durationProvider.getElementDuration(portSlotProvider.getElement(thisPortSlot));
+			portTimesRecord.setSlotDuration(thisPortSlot, loadDuration);
 			portTimesRecord.setSlotExtraIdleTime(thisPortSlot, 0);
 
 			// Determine transfer time
@@ -291,7 +296,7 @@ public class PortTimesRecordMaker {
 				final int extraIdleTime = record.getSlotExtraIdleTime(slot);
 				
 				if (extraIdleTime > 0) {
-					int ii = 0 ;
+					final int ii = 0 ;
 				}
 				
 				// Pick based on earliest time

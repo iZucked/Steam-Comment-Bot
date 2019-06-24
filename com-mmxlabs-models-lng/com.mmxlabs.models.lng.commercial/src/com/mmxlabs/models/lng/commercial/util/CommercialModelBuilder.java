@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
@@ -79,6 +80,43 @@ public class CommercialModelBuilder {
 		return contract;
 	}
 
+	
+	public @NonNull PurchaseContract makeDateShiftExpressionPurchaseContract(@NonNull final String name, @NonNull final BaseLegalEntity entity, @NonNull final String expression,
+			int value, boolean specificDay) {
+		final PurchaseContract contract = CommercialFactory.eINSTANCE.createPurchaseContract();
+		contract.setName(name);
+		contract.setEntity(entity);
+		
+		final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
+		params.setPriceExpression(expression);
+		params.setSpecificDay(specificDay);
+		params.setValue(value);
+		
+		contract.setPriceInfo(params);
+		
+		commercialModel.getPurchaseContracts().add(contract);
+
+		return contract;
+	}
+
+	public @NonNull SalesContract makeDateShiftExpressionSalesContract(@NonNull final String name, @NonNull final BaseLegalEntity entity, @NonNull final String expression,
+			int value, boolean specificDay) {
+		final SalesContract contract = CommercialFactory.eINSTANCE.createSalesContract();
+		contract.setName(name);
+		contract.setEntity(entity);
+
+		final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
+		params.setPriceExpression(expression);
+		params.setSpecificDay(specificDay);
+		params.setValue(value);
+		
+		contract.setPriceInfo(params);
+		contract.setPricingEvent(PricingEvent.START_DISCHARGE);
+		commercialModel.getSalesContracts().add(contract);
+
+		return contract;
+	}
+	
 	public void setTaxRates(@NonNull final BaseLegalEntity entity, @NonNull final LocalDate date, final float taxRate) {
 		final List<BaseEntityBook> books = CollectionsUtil.makeArrayList(entity.getTradingBook(), entity.getShippingBook(), entity.getUpstreamBook());
 		for (final BaseEntityBook entityBook : books) {
