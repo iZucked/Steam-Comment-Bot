@@ -81,7 +81,7 @@
 		<module>com.mmxlabs.models.lng.nominations</module>
 		<module>com.mmxlabs.models.lng.nominations.edit</module>
 		<module>com.mmxlabs.models.lng.nominations.editor</module>
-
+		<module>com.mmxlabs.models.lng.nominations.validation</module>
 
 		<module>com.mmxlabs.models.lng.assignment.validation.tests</module>
 		<module>com.mmxlabs.models.lng.cargo.validation.tests</module>
