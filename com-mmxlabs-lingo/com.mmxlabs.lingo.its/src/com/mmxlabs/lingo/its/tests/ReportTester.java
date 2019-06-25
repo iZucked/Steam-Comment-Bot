@@ -313,7 +313,7 @@ public class ReportTester {
 		if (!valid) {
 			LOG.warn("Expected " + expectedOutput);
 			LOG.warn("Actual " + actualContents);
-			Assertions.assertEquals(stripWhitespace.apply(expectedOutput), stripWhitespace.apply(actualContents));
+			Assertions.assertEquals(expectedOutput, actualContents);
 		}
 	}
 }
