@@ -480,10 +480,11 @@ public class ADPModelUtil {
 				start = start.plusYears(1);
 			}
 		} else {
-			if (start.getMonthValue() > contract.getContractYearStart()) {
-				start = YearMonth.of(start.getYear() + 1, contract.getContractYearStart());
+			int contractYearStartMonth = contract.getContractYearStart() + 1;
+			if (start.getMonthValue() > contractYearStartMonth) {
+				start = YearMonth.of(start.getYear() + 1, contractYearStartMonth);
 			} else {
-				start = YearMonth.of(start.getYear(), contract.getContractYearStart());
+				start = YearMonth.of(start.getYear(), contractYearStartMonth);
 			}
 		}
 		//sanity check
