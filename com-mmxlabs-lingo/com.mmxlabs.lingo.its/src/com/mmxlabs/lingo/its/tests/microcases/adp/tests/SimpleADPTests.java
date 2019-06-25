@@ -55,7 +55,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
 
-		setSimple12CargoCase(adpModelBuilder);
+		setSimple12CargoCase(adpModelBuilder,YearMonth.of(2018, 10), YearMonth.of(2019, 10));
 
 		// Generate all the ADP slots
 		ADPModelUtil.generateModelSlots(scenarioModelBuilder.getLNGScenarioModel(), adpModelBuilder.getADPModel());
@@ -105,7 +105,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
 
-		setSimple12CargoCase(adpModelBuilder);
+		setSimple12CargoCase(adpModelBuilder,YearMonth.of(2018, 10), YearMonth.of(2019, 10));
 
 		// Generate all the ADP slots
 		ADPModelUtil.generateModelSlots(scenarioModelBuilder.getLNGScenarioModel(), adpModelBuilder.getADPModel());
@@ -140,14 +140,14 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		}
 	}
 
-	private void setSimple12CargoCase(final ADPModelBuilder adpModelBuilder) {
+	private void setSimple12CargoCase(final ADPModelBuilder adpModelBuilder, final YearMonth start, final YearMonth end) {
 		final PurchaseContract purchaseContract = commercialModelFinder.findPurchaseContract("Purchase A");
 		final SalesContract salesContract = commercialModelFinder.findSalesContract("Sales A");
-		purchaseContract.setStartDate(YearMonth.of(2018, 10));
-		purchaseContract.setEndDate(YearMonth.of(2019, 10));
+		purchaseContract.setStartDate(start);
+		purchaseContract.setEndDate(end);
 		purchaseContract.setContractYearStart(9);
-		salesContract.setStartDate(YearMonth.of(2018, 10));
-		salesContract.setEndDate(YearMonth.of(2019, 10));
+		salesContract.setStartDate(start);
+		salesContract.setEndDate(end);
 		salesContract.setContractYearStart(9);
 		
 		adpModelBuilder.withPurchaseContractProfile(purchaseContract) //
@@ -281,7 +281,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		vesselAvailability.setStartBy(vesselAvailability.getStartAfter());
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
 
-		setSimple12CargoCase(adpModelBuilder);
+		setSimple12CargoCase(adpModelBuilder,YearMonth.of(2018, 10), YearMonth.of(2019, 10));
 
 		// Generate all the ADP slots
 		ADPModelUtil.generateModelSlots(scenarioModelBuilder.getLNGScenarioModel(), adpModelBuilder.getADPModel());
@@ -331,7 +331,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		vesselAvailability.setEndBy(vesselAvailability.getEndAfter());
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
 
-		setSimple12CargoCase(adpModelBuilder);
+		setSimple12CargoCase(adpModelBuilder,YearMonth.of(2018, 10), YearMonth.of(2019, 10));
 
 		// Generate all the ADP slots
 		ADPModelUtil.generateModelSlots(scenarioModelBuilder.getLNGScenarioModel(), adpModelBuilder.getADPModel());
@@ -378,7 +378,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		vesselAvailability.setEndBy(vesselAvailability.getEndAfter());
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
 
-		setSimple12CargoCase(adpModelBuilder);
+		setSimple12CargoCase(adpModelBuilder,YearMonth.of(2018, 10), YearMonth.of(2019, 10));
 
 		// Generate all the ADP slots
 		ADPModelUtil.generateModelSlots(scenarioModelBuilder.getLNGScenarioModel(), adpModelBuilder.getADPModel());
@@ -422,7 +422,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		// final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2018, 11), defaultCharterInMarket);
 
-		setSimple12CargoCase(adpModelBuilder);
+		setSimple12CargoCase(adpModelBuilder,YearMonth.of(2018, 10), YearMonth.of(2018, 11));
 
 		// Generate all the ADP slots
 		ADPModelUtil.generateModelSlots(scenarioModelBuilder.getLNGScenarioModel(), adpModelBuilder.getADPModel());
@@ -467,7 +467,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		// final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2018, 12), defaultCharterInMarket);
 
-		setSimple12CargoCase(adpModelBuilder);
+		setSimple12CargoCase(adpModelBuilder,YearMonth.of(2018, 10), YearMonth.of(2018, 12));
 
 		// Generate all the ADP slots
 		ADPModelUtil.generateModelSlots(scenarioModelBuilder.getLNGScenarioModel(), adpModelBuilder.getADPModel());
