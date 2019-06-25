@@ -403,10 +403,10 @@ public class SlotInsertionOptimiserUnit {
 
 									boolean isOneTargetDifferent = false;
 
-									// Record the initial vessel & cargo pairing
+									// Compare current paring and vessel to initial state.
 									for (final IPortSlot portSlot : optionElements) {
 										final ISequenceElement e = portSlotProvider.getElement(portSlot);
-										final Pair<@Nullable IResource, @NonNull Integer> lookup = state.lookupManager.lookup(e);
+										final Pair<@Nullable IResource, @NonNull Integer> lookup = lookupManager.lookup(e);
 										final IResource resource = lookup.getFirst();
 										if (lookup == null || resource == null) {
 											if (initialAllocation.get(e) != null) {
