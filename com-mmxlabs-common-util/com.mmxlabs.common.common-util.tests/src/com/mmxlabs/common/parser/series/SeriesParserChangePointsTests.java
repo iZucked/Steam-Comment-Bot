@@ -24,30 +24,19 @@ public class SeriesParserChangePointsTests {
 	public static Iterable<Object[]> generateTests() {
 		return Arrays.asList(new Object[][] { //
 				// Testing split month function (First day of month is zero not 1, hence -1)
-				{ "splitmonth(HH,HH2, 15)", new ArrayList<>(Arrays.asList(0, (15 - 1) * 24, 1, ((15 - 1) * 24) + 1)) } //
+				// The default test month mapper passes the input value back unchanged.
+				{ "splitmonth(HH,HH2, 15)", new ArrayList<>(Arrays.asList(0, (15 - 1) * 24, //
+						1, ((15 - 1) * 24) + 1, //
+						2, ((15 - 1) * 24) + 2, //
+						3, ((15 - 1) * 24) + 3)) } //
 		});
 	}
 
 	@ParameterizedTest(name = "{0}")
 	@MethodSource("generateTests")
 	public void run(String expression, List<Integer> expected) {
-		Assertions.assertTrue(compare(parse(expression), expected));
+		Assertions.assertEquals(expected, parse(expression));
 	}
-
-	private boolean compare(final List<Integer> a, final List<Integer> b) {
-		if (a.size() != b.size()) {
-			return false;
-		}
-
-		for (int i = 0; i < a.size(); i++) {
-			if (!a.get(i).equals(b.get(i))) {
-				return false;
-			}
-		}
-
-		return true;
-	}
- 
 
 	List<Integer> parse(final String expression) {
 		final SeriesParser parser = new SeriesParser();
