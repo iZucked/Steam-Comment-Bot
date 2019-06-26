@@ -474,10 +474,10 @@ public final class OptimisationHelper {
 					@Override
 					public void mouseDown(MouseEvent e) {
 						if (copy != null) {
-							copy.setPeriodEnd(YearMonth.from(LocalDate.now().plusMonths(3)));
+							setPeriodEnd(copy);
 						}
 						if (defaultSettings != null) {
-							defaultSettings.setPeriodEnd(YearMonth.from(LocalDate.now().plusMonths(3)));
+							setPeriodEnd(defaultSettings);
 						}
 					}
 				});
@@ -840,13 +840,13 @@ public final class OptimisationHelper {
 
 					@Override
 					public void mouseDown(MouseEvent e) {
-						if (copy != null) {
-							copy.setPeriodEnd(YearMonth.from(LocalDate.now().plusMonths(3)));
+							if (copy != null) {
+								setPeriodEnd(copy);
+							}
+							if (defaultSettings != null) {
+								setPeriodEnd(defaultSettings);
+							}
 						}
-						if (defaultSettings != null) {
-							defaultSettings.setPeriodEnd(YearMonth.from(LocalDate.now().plusMonths(3)));
-						}
-					}
 				});
 
 				if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
@@ -1512,6 +1512,14 @@ public final class OptimisationHelper {
 		}
 
 		return true;
+	}
+	
+	private static void setPeriodEnd(final UserSettings copy) {
+		LocalDate temp = LocalDate.now();
+		if (copy.getPeriodStartDate() != null) {
+			temp = copy.getPeriodStartDate();
+		}
+		copy.setPeriodEnd(YearMonth.from(temp.plusMonths(3)));
 	}
 
 }
