@@ -5,20 +5,15 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.net.MalformedURLException;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.google.common.collect.Lists;
-import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
@@ -32,6 +27,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
@@ -44,28 +40,8 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
 @ExtendWith(value = ShiroRunner.class)
+@RequireFeature(features = { KnownFeatures.FEATURE_OPTIMISATION_SIMILARITY, KnownFeatures.FEATURE_OPTIMISATION_HILLCLIMB })
 public class MultiObjectiveSimilarityTests extends AbstractMicroTestCase {
-
-	private static List<String> requiredFeatures = Lists.newArrayList("optimisation-similarity", "optimisation-hillclimb");
-	private static List<String> addedFeatures = new LinkedList<>();
-
-	@BeforeAll
-	public static void hookIn() {
-		for (final String feature : requiredFeatures) {
-			if (!LicenseFeatures.isPermitted("features:" + feature)) {
-				LicenseFeatures.addFeatureEnablements(feature);
-				addedFeatures.add(feature);
-			}
-		}
-	}
-
-	@AfterAll
-	public static void hookOut() {
-		for (final String feature : addedFeatures) {
-			LicenseFeatures.removeFeatureEnablements(feature);
-		}
-		addedFeatures.clear();
-	}
 
 	// Which scenario data to import
 	@Override
@@ -153,25 +129,21 @@ public class MultiObjectiveSimilarityTests extends AbstractMicroTestCase {
 				final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
 				final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
 				final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
-				
+
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
 						.withMultipleSolutionCount(2);
 
 				// Solution 1
-				verifier
-					.withSolutionResultChecker(0)
-					.withUsedLoad("A_3").onFleetVessel("Small Ship") //
-					.withUsedLoad("S_1").onFleetVessel("Large Ship") //
-					.withUsedLoad("S_4").onFleetVessel("Medium Ship") //
-					.build();
+				verifier.withSolutionResultChecker(0).withUsedLoad("A_3").onFleetVessel("Small Ship") //
+						.withUsedLoad("S_1").onFleetVessel("Large Ship") //
+						.withUsedLoad("S_4").onFleetVessel("Medium Ship") //
+						.build();
 
 				// Solution 2
-				verifier
-					.withSolutionResultChecker(1)
-					.withUsedLoad("A_3").onFleetVessel("Small Ship") //
-					.withUsedLoad("S_1").onFleetVessel("Medium Ship") //
-					.withUsedLoad("S_4").onFleetVessel("Large Ship") //
-					.build();
+				verifier.withSolutionResultChecker(1).withUsedLoad("A_3").onFleetVessel("Small Ship") //
+						.withUsedLoad("S_1").onFleetVessel("Medium Ship") //
+						.withUsedLoad("S_4").onFleetVessel("Large Ship") //
+						.build();
 
 				verifier.verifyOptimisationResults(result, msg -> Assertions.fail(msg));
 			});
