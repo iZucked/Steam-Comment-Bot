@@ -39,6 +39,16 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * This class manages connections to the data hub, including authentication.
+ * <p>
+ * The base URL is loaded from the preference store, and authentication info requested via the UI for the associated web domain.
+ * Call UpstreamUrlProvider.INSTANCE.getBaseURL() to get the base URL for data hub requests.
+ * <p>
+ * N.B. {@link #getBaseUrlIfAvailable()} will not work until the UpstreamUrlProvider has finished initialising, which may not happen immediately at program start, or if the 
+ * connection goes down later.
+ * 
+ */
 public class UpstreamUrlProvider implements IUserNameProvider {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UpstreamUrlProvider.class);
@@ -117,7 +127,13 @@ public class UpstreamUrlProvider implements IUserNameProvider {
 
 	protected String password;
 
-	public String getBaseURL() {
+	/**
+	 * Returns the current URL for the upstream service, or an empty string if no service is currently available.
+	 * <p>
+	 * <b>N.B. The caller of this method is responsible for guarding against possible failure by checking the return value.</b>
+	 * @return
+	 */
+	public String getBaseUrlIfAvailable() {
 		String url = null;
 		if (connectionValid) {
 			url = currentBaseURL;
@@ -126,6 +142,31 @@ public class UpstreamUrlProvider implements IUserNameProvider {
 			return url;
 		}
 		return "";
+	}
+	
+	/**
+	 * Returns the current URL for the upstream service, trying repeatedly if necessary (with 50ms pauses between each).
+	 * <p>
+	 * After maxRetries retries, the method gives up and returns an empty string.
+	 * @param maxRetries
+	 * @return 
+	 */
+	public String getBaseUrl(int maxRetries) {
+		String result = getBaseUrlIfAvailable();
+		
+		while ( (result == null || result.isEmpty()) && maxRetries-- > 0 ) {
+			// wait 50ms
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+	             // Restore the interrupted status if something happens while asleep
+	             Thread.currentThread().interrupt();
+	        }
+			// try again
+			result = getBaseUrlIfAvailable();
+		}
+		
+		return result;
 	}
 
 	@Override
@@ -329,7 +370,7 @@ public class UpstreamUrlProvider implements IUserNameProvider {
 	}
 
 	public boolean isAvailable() {
-		final String url = getBaseURL();
+		final String url = getBaseUrlIfAvailable();
 		return (url != null && !url.isEmpty());
 	}
 
