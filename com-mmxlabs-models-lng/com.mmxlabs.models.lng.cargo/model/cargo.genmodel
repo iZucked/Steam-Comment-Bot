@@ -277,6 +277,8 @@
       <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getAvailabilityOrCharterContractBallastBonusContract"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getAvailabilityOrContractMinDuration"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getAvailabilityOrContractMaxDuration"/>
+      <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getAvailabilityOrBallastBonusCharterContractEntity"/>
+      <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getAvailabilityOrBallastBonusCharterContractRepositioningFee"/>
     </genClasses>
     <genClasses image="false" ecoreClass="cargo.ecore#//VesselEvent">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselEvent/durationInDays"/>

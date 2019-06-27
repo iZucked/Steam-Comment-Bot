@@ -11,11 +11,13 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -30,9 +32,11 @@ import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
@@ -1412,6 +1416,26 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public BaseLegalEntity getAvailabilityOrBallastBonusCharterContractEntity() {
+		return (BaseLegalEntity) eGetWithDefault(CargoPackage.Literals.VESSEL_AVAILABILITY__ENTITY);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public String getAvailabilityOrBallastBonusCharterContractRepositioningFee() {
+		return (String) eGetWithDefault(CargoPackage.Literals.VESSEL_AVAILABILITY__REPOSITIONING_FEE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -1746,6 +1770,10 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return getAvailabilityOrContractMinDuration();
 			case CargoPackage.VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MAX_DURATION:
 				return getAvailabilityOrContractMaxDuration();
+			case CargoPackage.VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_BALLAST_BONUS_CHARTER_CONTRACT_ENTITY:
+				return getAvailabilityOrBallastBonusCharterContractEntity();
+			case CargoPackage.VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_BALLAST_BONUS_CHARTER_CONTRACT_REPOSITIONING_FEE:
+				return getAvailabilityOrBallastBonusCharterContractRepositioningFee();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -1787,6 +1815,10 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		result.append(')');
 		return result.toString();
 	}
+	
+	/**
+	 * @generated NOT
+	 */
 	@Override
 	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
 		CargoPackage cargo = CargoPackage.eINSTANCE;
@@ -1795,6 +1827,28 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getCharterContract_MinDuration(), (Integer) 0);
 		} else if (cargo.getVesselAvailability_MaxDuration() == feature) {
 			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getCharterContract_MaxDuration(), (Integer) 0);
+		} else if (cargo.getVesselAvailability_Entity() == feature) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.VESSEL_AVAILABILITY__ENTITY);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = Collections.EMPTY_LIST;
+					final CharterContract contract = getCharterContract();
+					if (contract != null) {
+						if (contract.eIsSet(commercial.getBallastBonusCharterContract_Entity())) {
+							result = contract.eGet(commercial.getBallastBonusCharterContract_Entity());
+						}
+					}
+					return result;
+				}				
+			};
+			
+			
+			//return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getBallastBonusCharterContract_Entity(), (Integer) 0);
+		} else if (cargo.getVesselAvailability_RepositioningFee() == feature) {
+			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getBallastBonusCharterContract_RepositioningFee(), (Integer) 0);
 		}
 		
 		return super.getUnsetValueOrDelegate(feature);

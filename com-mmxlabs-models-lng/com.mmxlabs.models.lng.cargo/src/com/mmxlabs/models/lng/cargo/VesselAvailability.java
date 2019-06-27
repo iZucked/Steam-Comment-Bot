@@ -821,6 +821,22 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	int getAvailabilityOrContractMaxDuration();
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	BaseLegalEntity getAvailabilityOrBallastBonusCharterContractEntity();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getAvailabilityOrBallastBonusCharterContractRepositioningFee();
+
+	/**
 	 * Returns the value of the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>

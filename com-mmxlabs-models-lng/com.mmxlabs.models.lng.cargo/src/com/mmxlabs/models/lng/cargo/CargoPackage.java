@@ -6104,13 +6104,31 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MAX_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 6;
 
 	/**
+	 * The operation id for the '<em>Get Availability Or Ballast Bonus Charter Contract Entity</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_BALLAST_BONUS_CHARTER_CONTRACT_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
+
+	/**
+	 * The operation id for the '<em>Get Availability Or Ballast Bonus Charter Contract Repositioning Fee</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_BALLAST_BONUS_CHARTER_CONTRACT_REPOSITIONING_FEE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 8;
+
+	/**
 	 * The number of operations of the '<em>Vessel Availability</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
+	int VESSEL_AVAILABILITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl <em>Vessel Event</em>}' class.
@@ -10672,6 +10690,26 @@ public interface CargoPackage extends EPackage {
 	EOperation getVesselAvailability__GetAvailabilityOrContractMaxDuration();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrBallastBonusCharterContractEntity() <em>Get Availability Or Ballast Bonus Charter Contract Entity</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Availability Or Ballast Bonus Charter Contract Entity</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrBallastBonusCharterContractEntity()
+	 * @generated
+	 */
+	EOperation getVesselAvailability__GetAvailabilityOrBallastBonusCharterContractEntity();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrBallastBonusCharterContractRepositioningFee() <em>Get Availability Or Ballast Bonus Charter Contract Repositioning Fee</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Availability Or Ballast Bonus Charter Contract Repositioning Fee</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrBallastBonusCharterContractRepositioningFee()
+	 * @generated
+	 */
+	EOperation getVesselAvailability__GetAvailabilityOrBallastBonusCharterContractRepositioningFee();
+
+	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -13366,6 +13404,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MAX_DURATION = eINSTANCE.getVesselAvailability__GetAvailabilityOrContractMaxDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Availability Or Ballast Bonus Charter Contract Entity</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_BALLAST_BONUS_CHARTER_CONTRACT_ENTITY = eINSTANCE.getVesselAvailability__GetAvailabilityOrBallastBonusCharterContractEntity();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Availability Or Ballast Bonus Charter Contract Repositioning Fee</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_BALLAST_BONUS_CHARTER_CONTRACT_REPOSITIONING_FEE = eINSTANCE.getVesselAvailability__GetAvailabilityOrBallastBonusCharterContractRepositioningFee();
 
 		/**
 		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
