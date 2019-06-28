@@ -19,6 +19,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -32,6 +33,7 @@ import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
@@ -97,10 +99,48 @@ public class CargoEditingCommands {
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
 		return newCargo;
 	}
+	
+	public static @NonNull Cargo createNewCargo(final @NonNull EditingDomain editingDomain, final List<Command> setCommands, final CargoModel cargoModel,
+			final @Nullable CharterInMarket cim, int spotIndex) {
+		// Create a cargo
+		final Cargo newCargo = CargoFactory.eINSTANCE.createCargo();
+		newCargo.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+
+		// Factory creates new slots by default - remove them
+		newCargo.getSlots().clear();
+		// Allow re-wiring
+		newCargo.setAllowRewiring(true);
+		if (cim != null) {
+			newCargo.setVesselAssignmentType(cim);
+			newCargo.setSpotIndex(spotIndex);
+		}
+
+		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
+		return newCargo;
+	}
 
 	public @NonNull SpotLoadSlot createNewSpotLoad(final List<Command> setCommands, final CargoModel cargoModel, final boolean isDESPurchase, final SpotMarket market) {
 
 		final SpotLoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getSpotLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
+		newLoad.setDESPurchase(isDESPurchase);
+		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+		newLoad.setMarket(market);
+		if (market instanceof FOBPurchasesMarket) {
+			final FOBPurchasesMarket fobPurchasesMarket = (FOBPurchasesMarket) market;
+			newLoad.setPort((Port) fobPurchasesMarket.getNotionalPort());
+		}
+
+		newLoad.setOptional(true);
+		newLoad.setName("");
+
+		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+
+		return newLoad;
+	}
+	
+	public static @NonNull SpotLoadSlot createNewSpotLoad(final @NonNull EditingDomain editingDomain, final List<Command> setCommands, final CargoModel cargoModel, final boolean isDESPurchase, final SpotMarket market) {
+
+		final SpotLoadSlot newLoad = CargoFactory.eINSTANCE.createSpotLoadSlot();
 		newLoad.setDESPurchase(isDESPurchase);
 		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newLoad.setMarket(market);
@@ -238,6 +278,28 @@ public class CargoEditingCommands {
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 		return newDischarge;
 	}
+	
+	public static @NonNull SpotDischargeSlot createNewSpotDischarge(final @NonNull EditingDomain editingDomain, final List<Command> setCommands, //
+			final CargoModel cargoModel, final SpotMarket market) {
+
+		final SpotDischargeSlot newDischarge = CargoFactory.eINSTANCE.createSpotDischargeSlot();
+		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+		newDischarge.setMarket(market);
+		newDischarge.setName("");
+		if (market instanceof DESSalesMarket) {
+			final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
+			newDischarge.setPort((Port) desSalesMarket.getNotionalPort());
+			newDischarge.setFOBSale(false);
+		} else if (market instanceof FOBSalesMarket) {
+			newDischarge.setFOBSale(true);
+		} else {
+			assert false;
+		}
+		newDischarge.setOptional(true);
+
+		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
+		return newDischarge;
+	}
 
 	public void runWiringUpdate(final List<Command> setCommands, final List<EObject> deleteObjects, final @NonNull LoadSlot loadSlot, final @Nullable DischargeSlot dischargeSlot) {
 
@@ -292,6 +354,70 @@ public class CargoEditingCommands {
 
 		} else if (dischargeSlot != null) {
 			cargo = createNewCargo(setCommands, cargoModel);
+			setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
+			setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
+		}
+	}
+	
+	public static void runWiringUpdate(final @NonNull EditingDomain editingDomain, final CargoModel cargoModel, final List<Command> setCommands, 
+			final List<EObject> deleteObjects, final @NonNull LoadSlot loadSlot, final @Nullable DischargeSlot dischargeSlot,
+			final @Nullable CharterInMarket cim, int spotIndex) {
+		
+		// Discharge has an existing slot, so remove the cargo & wiring
+		if (dischargeSlot != null && dischargeSlot.getCargo() != null) {
+			deleteObjects.add(dischargeSlot.getCargo());
+
+			// Optional market slots can be removed.
+			for (final Slot<?> s : dischargeSlot.getCargo().getSlots()) {
+				if (s instanceof LoadSlot) {
+					final LoadSlot oldSlot = (LoadSlot) s;
+					if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
+						deleteObjects.add(oldSlot);
+					}
+				}
+			}
+		}
+
+		// Do we need to create a new cargo or re-wire and existing one.
+		Cargo cargo = loadSlot.getCargo();
+		if (cargo != null) {
+
+			// Clear existing discharge slots
+			for (final Slot<?> slot : cargo.getSlots()) {
+				if (slot instanceof DischargeSlot) {
+					final DischargeSlot oldSlot = (DischargeSlot) slot;
+					setCommands.add(SetCommand.create(editingDomain, oldSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+					// Optional market slots can be removed.
+					if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
+						deleteObjects.add(oldSlot);
+					}
+				}
+			}
+
+			if (dischargeSlot != null) {
+				setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
+
+				if (cargo != null && dischargeSlot.isFOBSale()) {
+					// Cargo assignments should be removed.
+					setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType(), SetCommand.UNSET_VALUE));
+					setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_Locked(), Boolean.FALSE));
+					setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_SequenceHint(), SetCommand.UNSET_VALUE));
+					setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_SpotIndex(), SetCommand.UNSET_VALUE));
+				} else if (cim != null) {
+					setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType(), cim));
+					setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_Locked(), Boolean.FALSE));
+					setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_SequenceHint(), SetCommand.UNSET_VALUE));
+					setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_SpotIndex(), spotIndex));
+				}
+				// Force allow re-wiring on a change
+				setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getCargo_AllowRewiring(), Boolean.TRUE));
+			} else {
+				setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+				deleteObjects.add(cargo);
+			}
+
+		} else if (dischargeSlot != null) {
+			cargo = createNewCargo(editingDomain, setCommands, cargoModel, cim, spotIndex);
 			setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
 			setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
 		}
