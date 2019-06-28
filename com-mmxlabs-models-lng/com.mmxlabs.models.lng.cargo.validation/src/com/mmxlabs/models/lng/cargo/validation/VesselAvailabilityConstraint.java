@@ -75,7 +75,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 						.withMessage("Vessel must be specified.") //
 						.make(ctx));
 			}
-			if (availability.getEntity() == null) {
+			if (availability.getCharterOrDelegateEntity() == null) {
 				statuses.add(baseFactory.copyName() //
 						.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__ENTITY) //
 						.withMessage("Entity must be specified.") //
@@ -162,7 +162,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 
-				final String repositioningFee = availability.getRepositioningFee();
+				final String repositioningFee = availability.getCharterOrDelegateRepositioningFee();
 				if (repositioningFee != null && !repositioningFee.trim().isEmpty()) {
 					for (final AbstractYearMonthCurve index : PriceExpressionUtils.getLinkedCurves(repositioningFee)) {
 						@Nullable

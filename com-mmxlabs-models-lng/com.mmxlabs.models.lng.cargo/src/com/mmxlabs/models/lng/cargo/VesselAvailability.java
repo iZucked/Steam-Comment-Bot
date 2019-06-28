@@ -530,9 +530,11 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Repositioning Fee</em>' attribute.
+	 * @see #isSetRepositioningFee()
+	 * @see #unsetRepositioningFee()
 	 * @see #setRepositioningFee(String)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_RepositioningFee()
-	 * @model required="true"
+	 * @model unsettable="true" required="true"
 	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day'"
 	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='charter'"
 	 * @generated
@@ -544,10 +546,35 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Repositioning Fee</em>' attribute.
+	 * @see #isSetRepositioningFee()
+	 * @see #unsetRepositioningFee()
 	 * @see #getRepositioningFee()
 	 * @generated
 	 */
 	void setRepositioningFee(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetRepositioningFee()
+	 * @see #getRepositioningFee()
+	 * @see #setRepositioningFee(String)
+	 * @generated
+	 */
+	void unsetRepositioningFee();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Repositioning Fee</em>' attribute is set.
+	 * @see #unsetRepositioningFee()
+	 * @see #getRepositioningFee()
+	 * @see #setRepositioningFee(String)
+	 * @generated
+	 */
+	boolean isSetRepositioningFee();
 
 	/**
 	 * Returns the value of the '<em><b>Ballast Bonus Contract</b></em>' containment reference.
@@ -802,7 +829,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	BallastBonusContract getAvailabilityOrCharterContractBallastBonusContract();
+	BallastBonusContract getCharterOrDelegateBallastBonusContract();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -810,7 +837,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	int getAvailabilityOrContractMinDuration();
+	int getCharterOrDelegateMinDuration();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -818,7 +845,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	int getAvailabilityOrContractMaxDuration();
+	int getCharterOrDelegateMaxDuration();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -826,7 +853,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	BaseLegalEntity getAvailabilityOrBallastBonusCharterContractEntity();
+	BaseLegalEntity getCharterOrDelegateEntity();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -834,7 +861,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	String getAvailabilityOrBallastBonusCharterContractRepositioningFee();
+	String getCharterOrDelegateRepositioningFee();
 
 	/**
 	 * Returns the value of the '<em><b>Entity</b></em>' reference.
@@ -845,9 +872,11 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Entity</em>' reference.
+	 * @see #isSetEntity()
+	 * @see #unsetEntity()
 	 * @see #setEntity(BaseLegalEntity)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_Entity()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	BaseLegalEntity getEntity();
@@ -857,9 +886,34 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Entity</em>' reference.
+	 * @see #isSetEntity()
+	 * @see #unsetEntity()
 	 * @see #getEntity()
 	 * @generated
 	 */
 	void setEntity(BaseLegalEntity value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetEntity()
+	 * @see #getEntity()
+	 * @see #setEntity(BaseLegalEntity)
+	 * @generated
+	 */
+	void unsetEntity();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Entity</em>' reference is set.
+	 * @see #unsetEntity()
+	 * @see #getEntity()
+	 * @see #setEntity(BaseLegalEntity)
+	 * @generated
+	 */
+	boolean isSetEntity();
 
 } // VesselAvailability

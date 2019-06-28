@@ -6077,49 +6077,49 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY___GET_END_AFTER_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 3;
 
 	/**
-	 * The operation id for the '<em>Get Availability Or Charter Contract Ballast Bonus Contract</em>' operation.
+	 * The operation id for the '<em>Get Charter Or Delegate Ballast Bonus Contract</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CHARTER_CONTRACT_BALLAST_BONUS_CONTRACT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
+	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_BALLAST_BONUS_CONTRACT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
 
 	/**
-	 * The operation id for the '<em>Get Availability Or Contract Min Duration</em>' operation.
+	 * The operation id for the '<em>Get Charter Or Delegate Min Duration</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MIN_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 5;
+	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_MIN_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 5;
 
 	/**
-	 * The operation id for the '<em>Get Availability Or Contract Max Duration</em>' operation.
+	 * The operation id for the '<em>Get Charter Or Delegate Max Duration</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MAX_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 6;
+	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_MAX_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 6;
 
 	/**
-	 * The operation id for the '<em>Get Availability Or Ballast Bonus Charter Contract Entity</em>' operation.
+	 * The operation id for the '<em>Get Charter Or Delegate Entity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_BALLAST_BONUS_CHARTER_CONTRACT_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
+	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
 
 	/**
-	 * The operation id for the '<em>Get Availability Or Ballast Bonus Charter Contract Repositioning Fee</em>' operation.
+	 * The operation id for the '<em>Get Charter Or Delegate Repositioning Fee</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_BALLAST_BONUS_CHARTER_CONTRACT_REPOSITIONING_FEE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 8;
+	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_REPOSITIONING_FEE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 8;
 
 	/**
 	 * The number of operations of the '<em>Vessel Availability</em>' class.
@@ -10660,54 +10660,54 @@ public interface CargoPackage extends EPackage {
 	EOperation getVesselAvailability__GetEndAfterAsDateTime();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrCharterContractBallastBonusContract() <em>Get Availability Or Charter Contract Ballast Bonus Contract</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateBallastBonusContract() <em>Get Charter Or Delegate Ballast Bonus Contract</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Availability Or Charter Contract Ballast Bonus Contract</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrCharterContractBallastBonusContract()
+	 * @return the meta object for the '<em>Get Charter Or Delegate Ballast Bonus Contract</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateBallastBonusContract()
 	 * @generated
 	 */
-	EOperation getVesselAvailability__GetAvailabilityOrCharterContractBallastBonusContract();
+	EOperation getVesselAvailability__GetCharterOrDelegateBallastBonusContract();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrContractMinDuration() <em>Get Availability Or Contract Min Duration</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateMinDuration() <em>Get Charter Or Delegate Min Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Availability Or Contract Min Duration</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrContractMinDuration()
+	 * @return the meta object for the '<em>Get Charter Or Delegate Min Duration</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateMinDuration()
 	 * @generated
 	 */
-	EOperation getVesselAvailability__GetAvailabilityOrContractMinDuration();
+	EOperation getVesselAvailability__GetCharterOrDelegateMinDuration();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrContractMaxDuration() <em>Get Availability Or Contract Max Duration</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateMaxDuration() <em>Get Charter Or Delegate Max Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Availability Or Contract Max Duration</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrContractMaxDuration()
+	 * @return the meta object for the '<em>Get Charter Or Delegate Max Duration</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateMaxDuration()
 	 * @generated
 	 */
-	EOperation getVesselAvailability__GetAvailabilityOrContractMaxDuration();
+	EOperation getVesselAvailability__GetCharterOrDelegateMaxDuration();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrBallastBonusCharterContractEntity() <em>Get Availability Or Ballast Bonus Charter Contract Entity</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateEntity() <em>Get Charter Or Delegate Entity</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Availability Or Ballast Bonus Charter Contract Entity</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrBallastBonusCharterContractEntity()
+	 * @return the meta object for the '<em>Get Charter Or Delegate Entity</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateEntity()
 	 * @generated
 	 */
-	EOperation getVesselAvailability__GetAvailabilityOrBallastBonusCharterContractEntity();
+	EOperation getVesselAvailability__GetCharterOrDelegateEntity();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrBallastBonusCharterContractRepositioningFee() <em>Get Availability Or Ballast Bonus Charter Contract Repositioning Fee</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateRepositioningFee() <em>Get Charter Or Delegate Repositioning Fee</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Availability Or Ballast Bonus Charter Contract Repositioning Fee</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrBallastBonusCharterContractRepositioningFee()
+	 * @return the meta object for the '<em>Get Charter Or Delegate Repositioning Fee</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateRepositioningFee()
 	 * @generated
 	 */
-	EOperation getVesselAvailability__GetAvailabilityOrBallastBonusCharterContractRepositioningFee();
+	EOperation getVesselAvailability__GetCharterOrDelegateRepositioningFee();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}'.
@@ -13382,44 +13382,44 @@ public interface CargoPackage extends EPackage {
 		EOperation VESSEL_AVAILABILITY___GET_END_AFTER_AS_DATE_TIME = eINSTANCE.getVesselAvailability__GetEndAfterAsDateTime();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Availability Or Charter Contract Ballast Bonus Contract</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Charter Or Delegate Ballast Bonus Contract</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CHARTER_CONTRACT_BALLAST_BONUS_CONTRACT = eINSTANCE.getVesselAvailability__GetAvailabilityOrCharterContractBallastBonusContract();
+		EOperation VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_BALLAST_BONUS_CONTRACT = eINSTANCE.getVesselAvailability__GetCharterOrDelegateBallastBonusContract();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Availability Or Contract Min Duration</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Charter Or Delegate Min Duration</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MIN_DURATION = eINSTANCE.getVesselAvailability__GetAvailabilityOrContractMinDuration();
+		EOperation VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_MIN_DURATION = eINSTANCE.getVesselAvailability__GetCharterOrDelegateMinDuration();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Availability Or Contract Max Duration</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Charter Or Delegate Max Duration</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MAX_DURATION = eINSTANCE.getVesselAvailability__GetAvailabilityOrContractMaxDuration();
+		EOperation VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_MAX_DURATION = eINSTANCE.getVesselAvailability__GetCharterOrDelegateMaxDuration();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Availability Or Ballast Bonus Charter Contract Entity</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Charter Or Delegate Entity</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_BALLAST_BONUS_CHARTER_CONTRACT_ENTITY = eINSTANCE.getVesselAvailability__GetAvailabilityOrBallastBonusCharterContractEntity();
+		EOperation VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_ENTITY = eINSTANCE.getVesselAvailability__GetCharterOrDelegateEntity();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Availability Or Ballast Bonus Charter Contract Repositioning Fee</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Charter Or Delegate Repositioning Fee</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_BALLAST_BONUS_CHARTER_CONTRACT_REPOSITIONING_FEE = eINSTANCE.getVesselAvailability__GetAvailabilityOrBallastBonusCharterContractRepositioningFee();
+		EOperation VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_REPOSITIONING_FEE = eINSTANCE.getVesselAvailability__GetCharterOrDelegateRepositioningFee();
 
 		/**
 		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
