@@ -16,9 +16,11 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
+import com.mmxlabs.models.lng.nominations.Side;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -33,7 +35,11 @@ public class SlotUpdatingCommandProvider extends AbstractCommandProvider {
 			if (commandClass == SetCommand.class) {
 				//Check if slot has been renamed.
 				if (parameter.getEOwner() instanceof Slot) {
-					final Slot slot = (Slot)parameter.getEOwner();
+					final Slot<?> slot = (Slot<?>)parameter.getEOwner();
+					//If it's a LoadSlot => rename Buy nomination's nomineeId.
+					//Else it must be a DischargeSlot => rename Sell nomination's nomineeId.
+					final Side side = (slot instanceof LoadSlot) ? Side.BUY : Side.SELL;
+		
 					if (parameter.getEStructuralFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 						final String oldName = slot.getName();
 						final String newName = (String)parameter.getValue();
@@ -43,7 +49,7 @@ public class SlotUpdatingCommandProvider extends AbstractCommandProvider {
 							final LNGScenarioModel sm = (LNGScenarioModel)rootObject;
 							final NominationsModel nm = sm.getNominationsModel();
 							nm.getNominations().forEach(sn -> {
-								if (Objects.equals(sn.getNomineeId(), oldName)) {
+								if (sn.getSide() == side && Objects.equals(sn.getNomineeId(), oldName)) {
 									cc.append(SetCommand.create(editingDomain, sn, NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), newName));
 								}
 							});
@@ -55,13 +61,17 @@ public class SlotUpdatingCommandProvider extends AbstractCommandProvider {
 				//Check if slot has been deleted.
 				for (final Object object : getChangedValues(parameter)) {
 					if (object instanceof Slot) {
-						final Slot slot = (Slot)object;
+						final Slot<?> slot = (Slot<?>)object;
 						final String name = slot.getName();
+						//If it's a LoadSlot => rename Buy nomination's nomineeId.
+						//Else it must be a DischargeSlot => rename Sell nomination's nomineeId.
+						final Side side = (slot instanceof LoadSlot) ? Side.BUY : Side.SELL;
+						
 						//delete all nominations with nomineeId = slot name.
 						final LNGScenarioModel sm = (LNGScenarioModel)rootObject;
 						final NominationsModel nm = sm.getNominationsModel();
 						nm.getNominations().forEach(sn -> {
-							if (Objects.equals(sn.getNomineeId(), name)) {
+							if (sn.getSide() == side && Objects.equals(sn.getNomineeId(), name)) {
 								cc.append(DeleteCommand.create(editingDomain, sn));
 							}
 						});
