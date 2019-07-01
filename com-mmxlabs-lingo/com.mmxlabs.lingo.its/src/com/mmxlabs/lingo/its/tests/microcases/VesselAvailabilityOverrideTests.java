@@ -58,6 +58,14 @@ public class VesselAvailabilityOverrideTests {
 	}
 
 	@Test
+	public void testNoEntity() {
+		VesselAvailability va = CargoFactory.eINSTANCE.createVesselAvailability();
+		BallastBonusCharterContract bbc = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
+		va.setCharterContract(bbc);
+		assertEquals(null, va.getCharterOrDelegateEntity());
+	}
+	
+	@Test
 	public void testRepositioningFeeOnVA() {
 		VesselAvailability va = CargoFactory.eINSTANCE.createVesselAvailability();
 		BallastBonusCharterContract bbc = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
@@ -83,5 +91,13 @@ public class VesselAvailabilityOverrideTests {
 		va.setCharterContract(bbc);
 		va.setRepositioningFee(VA_REPOSITIONING_FEE);
 		assertEquals(VA_REPOSITIONING_FEE, va.getCharterOrDelegateRepositioningFee());						
+	}
+	
+	@Test
+	public void testNoRepositioningFee() {
+		VesselAvailability va = CargoFactory.eINSTANCE.createVesselAvailability();
+		BallastBonusCharterContract bbc = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
+		va.setCharterContract(bbc);
+		assertEquals(null, va.getCharterOrDelegateRepositioningFee());						
 	}
 }
