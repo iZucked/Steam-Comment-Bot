@@ -1432,12 +1432,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				break;
 			default:
 				return "";
-
+			}
+			if (slot.isWindowCounterParty()) {
+				suffix += " CP";
 			}
 			if (size > 0) {
 				return String.format(" +%d%s", size, suffix);
-			}
-
+			}		
 		}
 		return "";
 	}

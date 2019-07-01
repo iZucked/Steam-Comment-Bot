@@ -66,6 +66,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private static final EStructuralFeature WindowSizeUnits = CargoFeatures.getSlot_WindowSizeUnits();
 	private static final EStructuralFeature WindowFlex = CargoFeatures.getSlot_WindowFlex();
 	private static final EStructuralFeature WindowFlexUnits = CargoFeatures.getSlot_WindowFlexUnits();
+	private static final EStructuralFeature WindowCounterParty = CargoFeatures.getSlot_WindowCounterParty();
 	private static final EStructuralFeature Contract = CargoFeatures.getSlot_Contract();
 	private static final EStructuralFeature PriceExpression = CargoFeatures.getSlot_PriceExpression();
 	private static final EClass SlotContractParams = CommercialPackage.eINSTANCE.getSlotContractParams();
@@ -118,8 +119,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		windowFeatures.add(new EStructuralFeature[] { WindowSize, WindowSizeUnits });
 		windowFeatures.add(new EStructuralFeature[] { WindowFlex, WindowFlexUnits });
 		windowFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Duration() });
+		windowFeatures.add(new EStructuralFeature[] { WindowCounterParty });
 		windowFeatures.add(new EStructuralFeature[] {});
-		windowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize, WindowSizeUnits);
+		windowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize, WindowSizeUnits, WindowCounterParty);
 		allFeatures.addAll(getAllFeatures(windowFeatures));
 
 		loadTermsFeatures = new ArrayList<EStructuralFeature[]>();

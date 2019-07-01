@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.ui.inlineeditors.RestrictionsOverridePortMul
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.VolumeInlineEditor;
 import com.mmxlabs.models.lng.fleet.ui.inlineeditors.TextualVesselReferenceInlineEditor;
 import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortReferenceInlineEditor;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -127,6 +128,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_nominatedVesselEditor(detailComposite, topClass);
 		add_lockedEditor(detailComposite, topClass);
 		add_cancelledEditor(detailComposite, topClass);
+		add_windowCounterPartyEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -341,6 +343,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cancelledEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CANCELLED));
+	}
+
+	/**
+	 * Create the editor for the windowCounterParty feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_windowCounterPartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_COUNTER_PARTY));
 	}
 
 	/**

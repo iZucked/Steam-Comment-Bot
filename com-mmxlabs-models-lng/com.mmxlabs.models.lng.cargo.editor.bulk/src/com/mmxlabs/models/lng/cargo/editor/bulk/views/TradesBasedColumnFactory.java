@@ -311,6 +311,12 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().setSummary(false);
 						createColumn.column.getColumn().setDetail(true);
 					}
+					{
+						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowCounterParty(), editingDomain);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Counter Party", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+						createColumn.column.getColumn().setSummary(false);
+						createColumn.column.getColumn().setDetail(true);
+					}			
 					return null;
 				}
 			});
@@ -746,6 +752,12 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().setSummary(false);
 						createColumn.column.getColumn().setDetail(true);
 					}
+					{
+						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowCounterParty(), editingDomain);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Counter Party", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						createColumn.column.getColumn().setSummary(false);
+						createColumn.column.getColumn().setDetail(true);
+					}		
 					return null;
 				}
 			});

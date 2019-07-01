@@ -833,13 +833,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT__CANCELLED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
 
 	/**
+	 * The feature id for the '<em><b>Window Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__WINDOW_COUNTER_PARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1130,13 +1139,31 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 28;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Flex</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_FLEX = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 29;
+
+	/**
+	 * The operation id for the '<em>Get Window Flex In Hours</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_WINDOW_FLEX_IN_HOURS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 30;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 29;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 31;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1544,6 +1571,15 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__CANCELLED = SLOT__CANCELLED;
 
 	/**
+	 * The feature id for the '<em><b>Window Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__WINDOW_COUNTER_PARTY = SLOT__WINDOW_COUNTER_PARTY;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1884,6 +1920,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Flex</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_FLEX = SLOT___GET_SLOT_OR_DELEGATE_FLEX;
+
+	/**
+	 * The operation id for the '<em>Get Window Flex In Hours</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_WINDOW_FLEX_IN_HOURS = SLOT___GET_WINDOW_FLEX_IN_HOURS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -2318,6 +2372,15 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__CANCELLED = SLOT__CANCELLED;
 
 	/**
+	 * The feature id for the '<em><b>Window Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__WINDOW_COUNTER_PARTY = SLOT__WINDOW_COUNTER_PARTY;
+
+	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2658,6 +2721,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Flex</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_FLEX = SLOT___GET_SLOT_OR_DELEGATE_FLEX;
+
+	/**
+	 * The operation id for the '<em>Get Window Flex In Hours</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_WINDOW_FLEX_IN_HOURS = SLOT___GET_WINDOW_FLEX_IN_HOURS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -3184,6 +3265,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__CANCELLED = LOAD_SLOT__CANCELLED;
 
 	/**
+	 * The feature id for the '<em><b>Window Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__WINDOW_COUNTER_PARTY = LOAD_SLOT__WINDOW_COUNTER_PARTY;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3533,6 +3623,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Flex</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_FLEX = LOAD_SLOT___GET_SLOT_OR_DELEGATE_FLEX;
+
+	/**
+	 * The operation id for the '<em>Get Window Flex In Hours</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_WINDOW_FLEX_IN_HOURS = LOAD_SLOT___GET_WINDOW_FLEX_IN_HOURS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -3977,6 +4085,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__CANCELLED = DISCHARGE_SLOT__CANCELLED;
 
 	/**
+	 * The feature id for the '<em><b>Window Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__WINDOW_COUNTER_PARTY = DISCHARGE_SLOT__WINDOW_COUNTER_PARTY;
+
+	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4327,6 +4444,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Flex</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_FLEX = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_FLEX;
+
+	/**
+	 * The operation id for the '<em>Get Window Flex In Hours</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_WINDOW_FLEX_IN_HOURS = DISCHARGE_SLOT___GET_WINDOW_FLEX_IN_HOURS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -8058,6 +8193,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_Cancelled();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isWindowCounterParty <em>Window Counter Party</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Window Counter Party</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isWindowCounterParty()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_WindowCounterParty();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateDuration() <em>Get Slot Or Delegate Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8336,6 +8482,26 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getSlot__GetSlotOrDelegateVesselRestrictions();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateFlex() <em>Get Slot Or Delegate Flex</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Flex</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateFlex()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegateFlex();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowFlexInHours() <em>Get Window Flex In Hours</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Window Flex In Hours</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getWindowFlexInHours()
+	 * @generated
+	 */
+	EOperation getSlot__GetWindowFlexInHours();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -10734,6 +10900,14 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__CANCELLED = eINSTANCE.getSlot_Cancelled();
 
 		/**
+		 * The meta object literal for the '<em><b>Window Counter Party</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__WINDOW_COUNTER_PARTY = eINSTANCE.getSlot_WindowCounterParty();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Duration</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -10956,6 +11130,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = eINSTANCE.getSlot__GetSlotOrDelegateVesselRestrictions();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Flex</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_FLEX = eINSTANCE.getSlot__GetSlotOrDelegateFlex();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Window Flex In Hours</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_WINDOW_FLEX_IN_HOURS = eINSTANCE.getSlot__GetWindowFlexInHours();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

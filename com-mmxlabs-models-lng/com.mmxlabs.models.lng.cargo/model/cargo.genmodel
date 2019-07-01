@@ -133,6 +133,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/locked"/>
       <genFeatures createChild="false" propertyDescription="Is current slot cancelled?"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancelled"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowCounterParty"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateDuration"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMinQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMaxQuantity"/>
@@ -161,6 +162,8 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateContractRestrictions"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortRestrictions"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVesselRestrictions"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateFlex"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowFlexInHours"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//LoadSlot">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/cargoCV"/>

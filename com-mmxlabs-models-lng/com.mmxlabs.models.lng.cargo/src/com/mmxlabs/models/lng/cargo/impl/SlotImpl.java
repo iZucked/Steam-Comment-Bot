@@ -96,6 +96,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNominatedVessel <em>Nominated Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isCancelled <em>Cancelled</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isWindowCounterParty <em>Window Counter Party</em>}</li>
  * </ul>
  *
  * @generated
@@ -1052,6 +1053,26 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	protected boolean cancelled = CANCELLED_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #isWindowCounterParty() <em>Window Counter Party</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isWindowCounterParty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean WINDOW_COUNTER_PARTY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isWindowCounterParty() <em>Window Counter Party</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isWindowCounterParty()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean windowCounterParty = WINDOW_COUNTER_PARTY_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1085,7 +1106,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setName(String newName) {
-		final String oldName = name;
+		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__NAME, oldName, name));
@@ -1107,7 +1128,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setWindowStart(LocalDate newWindowStart) {
-		final LocalDate oldWindowStart = windowStart;
+		LocalDate oldWindowStart = windowStart;
 		windowStart = newWindowStart;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_START, oldWindowStart, windowStart));
@@ -1128,9 +1149,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setWindowStartTime(int newWindowStartTime) {
-		final int oldWindowStartTime = windowStartTime;
+		int oldWindowStartTime = windowStartTime;
 		windowStartTime = newWindowStartTime;
-		final boolean oldWindowStartTimeESet = windowStartTimeESet;
+		boolean oldWindowStartTimeESet = windowStartTimeESet;
 		windowStartTimeESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_START_TIME, oldWindowStartTime, windowStartTime, !oldWindowStartTimeESet));
@@ -1142,8 +1163,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetWindowStartTime() {
-		final int oldWindowStartTime = windowStartTime;
-		final boolean oldWindowStartTimeESet = windowStartTimeESet;
+		int oldWindowStartTime = windowStartTime;
+		boolean oldWindowStartTimeESet = windowStartTimeESet;
 		windowStartTime = WINDOW_START_TIME_EDEFAULT;
 		windowStartTimeESet = false;
 		if (eNotificationRequired())
@@ -1174,9 +1195,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setWindowSize(int newWindowSize) {
-		final int oldWindowSize = windowSize;
+		int oldWindowSize = windowSize;
 		windowSize = newWindowSize;
-		final boolean oldWindowSizeESet = windowSizeESet;
+		boolean oldWindowSizeESet = windowSizeESet;
 		windowSizeESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_SIZE, oldWindowSize, windowSize, !oldWindowSizeESet));
@@ -1188,8 +1209,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetWindowSize() {
-		final int oldWindowSize = windowSize;
-		final boolean oldWindowSizeESet = windowSizeESet;
+		int oldWindowSize = windowSize;
+		boolean oldWindowSizeESet = windowSizeESet;
 		windowSize = WINDOW_SIZE_EDEFAULT;
 		windowSizeESet = false;
 		if (eNotificationRequired())
@@ -1222,9 +1243,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setWindowSizeUnits(TimePeriod newWindowSizeUnits) {
-		final TimePeriod oldWindowSizeUnits = windowSizeUnits;
+		TimePeriod oldWindowSizeUnits = windowSizeUnits;
 		windowSizeUnits = newWindowSizeUnits == null ? WINDOW_SIZE_UNITS_EDEFAULT : newWindowSizeUnits;
-		final boolean oldWindowSizeUnitsESet = windowSizeUnitsESet;
+		boolean oldWindowSizeUnitsESet = windowSizeUnitsESet;
 		windowSizeUnitsESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_SIZE_UNITS, oldWindowSizeUnits, windowSizeUnits, !oldWindowSizeUnitsESet));
@@ -1237,8 +1258,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetWindowSizeUnits() {
-		final TimePeriod oldWindowSizeUnits = windowSizeUnits;
-		final boolean oldWindowSizeUnitsESet = windowSizeUnitsESet;
+		TimePeriod oldWindowSizeUnits = windowSizeUnits;
+		boolean oldWindowSizeUnitsESet = windowSizeUnitsESet;
 		windowSizeUnits = WINDOW_SIZE_UNITS_EDEFAULT;
 		windowSizeUnitsESet = false;
 		if (eNotificationRequired())
@@ -1272,7 +1293,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setWindowFlex(int newWindowFlex) {
-		final int oldWindowFlex = windowFlex;
+		int oldWindowFlex = windowFlex;
 		windowFlex = newWindowFlex;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_FLEX, oldWindowFlex, windowFlex));
@@ -1295,7 +1316,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setWindowFlexUnits(TimePeriod newWindowFlexUnits) {
-		final TimePeriod oldWindowFlexUnits = windowFlexUnits;
+		TimePeriod oldWindowFlexUnits = windowFlexUnits;
 		windowFlexUnits = newWindowFlexUnits == null ? WINDOW_FLEX_UNITS_EDEFAULT : newWindowFlexUnits;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_FLEX_UNITS, oldWindowFlexUnits, windowFlexUnits));
@@ -1308,7 +1329,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
-			final InternalEObject oldPort = (InternalEObject)port;
+			InternalEObject oldPort = (InternalEObject)port;
 			port = (Port)eResolveProxy(oldPort);
 			if (port != oldPort) {
 				if (eNotificationRequired())
@@ -1332,7 +1353,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setPort(Port newPort) {
-		final Port oldPort = port;
+		Port oldPort = port;
 		port = newPort;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PORT, oldPort, port));
@@ -1346,7 +1367,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public T getContract() {
 		if (contract != null && contract.eIsProxy()) {
-			final InternalEObject oldContract = (InternalEObject)contract;
+			InternalEObject oldContract = (InternalEObject)contract;
 			contract = (T)eResolveProxy(oldContract);
 			if (contract != oldContract) {
 				if (eNotificationRequired())
@@ -1371,9 +1392,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setContract(T newContract) {
-		final T oldContract = contract;
+		T oldContract = contract;
 		contract = newContract;
-		final boolean oldContractESet = contractESet;
+		boolean oldContractESet = contractESet;
 		contractESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CONTRACT, oldContract, contract, !oldContractESet));
@@ -1386,8 +1407,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetContract() {
-		final T oldContract = contract;
-		final boolean oldContractESet = contractESet;
+		T oldContract = contract;
+		boolean oldContractESet = contractESet;
 		contract = null;
 		contractESet = false;
 		if (eNotificationRequired())
@@ -1421,9 +1442,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setCounterparty(String newCounterparty) {
-		final String oldCounterparty = counterparty;
+		String oldCounterparty = counterparty;
 		counterparty = newCounterparty;
-		final boolean oldCounterpartyESet = counterpartyESet;
+		boolean oldCounterpartyESet = counterpartyESet;
 		counterpartyESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__COUNTERPARTY, oldCounterparty, counterparty, !oldCounterpartyESet));
@@ -1436,8 +1457,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetCounterparty() {
-		final String oldCounterparty = counterparty;
-		final boolean oldCounterpartyESet = counterpartyESet;
+		String oldCounterparty = counterparty;
+		boolean oldCounterpartyESet = counterpartyESet;
 		counterparty = COUNTERPARTY_EDEFAULT;
 		counterpartyESet = false;
 		if (eNotificationRequired())
@@ -1471,9 +1492,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setCn(String newCn) {
-		final String oldCn = cn;
+		String oldCn = cn;
 		cn = newCn;
-		final boolean oldCnESet = cnESet;
+		boolean oldCnESet = cnESet;
 		cnESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CN, oldCn, cn, !oldCnESet));
@@ -1486,8 +1507,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetCn() {
-		final String oldCn = cn;
-		final boolean oldCnESet = cnESet;
+		String oldCn = cn;
+		boolean oldCnESet = cnESet;
 		cn = CN_EDEFAULT;
 		cnESet = false;
 		if (eNotificationRequired())
@@ -1519,9 +1540,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setDuration(int newDuration) {
-		final int oldDuration = duration;
+		int oldDuration = duration;
 		duration = newDuration;
-		final boolean oldDurationESet = durationESet;
+		boolean oldDurationESet = durationESet;
 		durationESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__DURATION, oldDuration, duration, !oldDurationESet));
@@ -1533,8 +1554,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetDuration() {
-		final int oldDuration = duration;
-		final boolean oldDurationESet = durationESet;
+		int oldDuration = duration;
+		boolean oldDurationESet = durationESet;
 		duration = DURATION_EDEFAULT;
 		durationESet = false;
 		if (eNotificationRequired())
@@ -1567,9 +1588,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setVolumeLimitsUnit(VolumeUnits newVolumeLimitsUnit) {
-		final VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
+		VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
 		volumeLimitsUnit = newVolumeLimitsUnit == null ? VOLUME_LIMITS_UNIT_EDEFAULT : newVolumeLimitsUnit;
-		final boolean oldVolumeLimitsUnitESet = volumeLimitsUnitESet;
+		boolean oldVolumeLimitsUnitESet = volumeLimitsUnitESet;
 		volumeLimitsUnitESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VOLUME_LIMITS_UNIT, oldVolumeLimitsUnit, volumeLimitsUnit, !oldVolumeLimitsUnitESet));
@@ -1582,8 +1603,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetVolumeLimitsUnit() {
-		final VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
-		final boolean oldVolumeLimitsUnitESet = volumeLimitsUnitESet;
+		VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
+		boolean oldVolumeLimitsUnitESet = volumeLimitsUnitESet;
 		volumeLimitsUnit = VOLUME_LIMITS_UNIT_EDEFAULT;
 		volumeLimitsUnitESet = false;
 		if (eNotificationRequired())
@@ -1615,9 +1636,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setMinQuantity(int newMinQuantity) {
-		final int oldMinQuantity = minQuantity;
+		int oldMinQuantity = minQuantity;
 		minQuantity = newMinQuantity;
-		final boolean oldMinQuantityESet = minQuantityESet;
+		boolean oldMinQuantityESet = minQuantityESet;
 		minQuantityESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MIN_QUANTITY, oldMinQuantity, minQuantity, !oldMinQuantityESet));
@@ -1629,8 +1650,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetMinQuantity() {
-		final int oldMinQuantity = minQuantity;
-		final boolean oldMinQuantityESet = minQuantityESet;
+		int oldMinQuantity = minQuantity;
+		boolean oldMinQuantityESet = minQuantityESet;
 		minQuantity = MIN_QUANTITY_EDEFAULT;
 		minQuantityESet = false;
 		if (eNotificationRequired())
@@ -1661,9 +1682,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setMaxQuantity(int newMaxQuantity) {
-		final int oldMaxQuantity = maxQuantity;
+		int oldMaxQuantity = maxQuantity;
 		maxQuantity = newMaxQuantity;
-		final boolean oldMaxQuantityESet = maxQuantityESet;
+		boolean oldMaxQuantityESet = maxQuantityESet;
 		maxQuantityESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MAX_QUANTITY, oldMaxQuantity, maxQuantity, !oldMaxQuantityESet));
@@ -1675,8 +1696,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetMaxQuantity() {
-		final int oldMaxQuantity = maxQuantity;
-		final boolean oldMaxQuantityESet = maxQuantityESet;
+		int oldMaxQuantity = maxQuantity;
+		boolean oldMaxQuantityESet = maxQuantityESet;
 		maxQuantity = MAX_QUANTITY_EDEFAULT;
 		maxQuantityESet = false;
 		if (eNotificationRequired())
@@ -1709,9 +1730,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setOperationalTolerance(double newOperationalTolerance) {
-		final double oldOperationalTolerance = operationalTolerance;
+		double oldOperationalTolerance = operationalTolerance;
 		operationalTolerance = newOperationalTolerance;
-		final boolean oldOperationalToleranceESet = operationalToleranceESet;
+		boolean oldOperationalToleranceESet = operationalToleranceESet;
 		operationalToleranceESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__OPERATIONAL_TOLERANCE, oldOperationalTolerance, operationalTolerance, !oldOperationalToleranceESet));
@@ -1724,8 +1745,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetOperationalTolerance() {
-		final double oldOperationalTolerance = operationalTolerance;
-		final boolean oldOperationalToleranceESet = operationalToleranceESet;
+		double oldOperationalTolerance = operationalTolerance;
+		boolean oldOperationalToleranceESet = operationalToleranceESet;
 		operationalTolerance = OPERATIONAL_TOLERANCE_EDEFAULT;
 		operationalToleranceESet = false;
 		if (eNotificationRequired())
@@ -1759,9 +1780,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setFullCargoLot(boolean newFullCargoLot) {
-		final boolean oldFullCargoLot = fullCargoLot;
+		boolean oldFullCargoLot = fullCargoLot;
 		fullCargoLot = newFullCargoLot;
-		final boolean oldFullCargoLotESet = fullCargoLotESet;
+		boolean oldFullCargoLotESet = fullCargoLotESet;
 		fullCargoLotESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__FULL_CARGO_LOT, oldFullCargoLot, fullCargoLot, !oldFullCargoLotESet));
@@ -1774,8 +1795,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetFullCargoLot() {
-		final boolean oldFullCargoLot = fullCargoLot;
-		final boolean oldFullCargoLotESet = fullCargoLotESet;
+		boolean oldFullCargoLot = fullCargoLot;
+		boolean oldFullCargoLotESet = fullCargoLotESet;
 		fullCargoLot = FULL_CARGO_LOT_EDEFAULT;
 		fullCargoLotESet = false;
 		if (eNotificationRequired())
@@ -1809,7 +1830,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setOptional(boolean newOptional) {
-		final boolean oldOptional = optional;
+		boolean oldOptional = optional;
 		optional = newOptional;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__OPTIONAL, oldOptional, optional));
@@ -1832,9 +1853,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setPriceExpression(String newPriceExpression) {
-		final String oldPriceExpression = priceExpression;
+		String oldPriceExpression = priceExpression;
 		priceExpression = newPriceExpression;
-		final boolean oldPriceExpressionESet = priceExpressionESet;
+		boolean oldPriceExpressionESet = priceExpressionESet;
 		priceExpressionESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PRICE_EXPRESSION, oldPriceExpression, priceExpression, !oldPriceExpressionESet));
@@ -1847,8 +1868,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetPriceExpression() {
-		final String oldPriceExpression = priceExpression;
-		final boolean oldPriceExpressionESet = priceExpressionESet;
+		String oldPriceExpression = priceExpression;
+		boolean oldPriceExpressionESet = priceExpressionESet;
 		priceExpression = PRICE_EXPRESSION_EDEFAULT;
 		priceExpressionESet = false;
 		if (eNotificationRequired())
@@ -1873,7 +1894,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public Cargo getCargo() {
 		if (cargo != null && cargo.eIsProxy()) {
-			final InternalEObject oldCargo = (InternalEObject)cargo;
+			InternalEObject oldCargo = (InternalEObject)cargo;
 			cargo = (Cargo)eResolveProxy(oldCargo);
 			if (cargo != oldCargo) {
 				if (eNotificationRequired())
@@ -1898,10 +1919,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated
 	 */
 	public NotificationChain basicSetCargo(Cargo newCargo, NotificationChain msgs) {
-		final Cargo oldCargo = cargo;
+		Cargo oldCargo = cargo;
 		cargo = newCargo;
 		if (eNotificationRequired()) {
-			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CARGO, oldCargo, newCargo);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CARGO, oldCargo, newCargo);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -1944,9 +1965,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setPricingEvent(PricingEvent newPricingEvent) {
-		final PricingEvent oldPricingEvent = pricingEvent;
+		PricingEvent oldPricingEvent = pricingEvent;
 		pricingEvent = newPricingEvent == null ? PRICING_EVENT_EDEFAULT : newPricingEvent;
-		final boolean oldPricingEventESet = pricingEventESet;
+		boolean oldPricingEventESet = pricingEventESet;
 		pricingEventESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PRICING_EVENT, oldPricingEvent, pricingEvent, !oldPricingEventESet));
@@ -1959,8 +1980,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetPricingEvent() {
-		final PricingEvent oldPricingEvent = pricingEvent;
-		final boolean oldPricingEventESet = pricingEventESet;
+		PricingEvent oldPricingEvent = pricingEvent;
+		boolean oldPricingEventESet = pricingEventESet;
 		pricingEvent = PRICING_EVENT_EDEFAULT;
 		pricingEventESet = false;
 		if (eNotificationRequired())
@@ -1994,9 +2015,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setPricingDate(LocalDate newPricingDate) {
-		final LocalDate oldPricingDate = pricingDate;
+		LocalDate oldPricingDate = pricingDate;
 		pricingDate = newPricingDate;
-		final boolean oldPricingDateESet = pricingDateESet;
+		boolean oldPricingDateESet = pricingDateESet;
 		pricingDateESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PRICING_DATE, oldPricingDate, pricingDate, !oldPricingDateESet));
@@ -2009,8 +2030,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetPricingDate() {
-		final LocalDate oldPricingDate = pricingDate;
-		final boolean oldPricingDateESet = pricingDateESet;
+		LocalDate oldPricingDate = pricingDate;
+		boolean oldPricingDateESet = pricingDateESet;
 		pricingDate = PRICING_DATE_EDEFAULT;
 		pricingDateESet = false;
 		if (eNotificationRequired())
@@ -2044,7 +2065,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setNotes(String newNotes) {
-		final String oldNotes = notes;
+		String oldNotes = notes;
 		notes = newNotes;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__NOTES, oldNotes, notes));
@@ -2067,9 +2088,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setDivertible(boolean newDivertible) {
-		final boolean oldDivertible = divertible;
+		boolean oldDivertible = divertible;
 		divertible = newDivertible;
-		final boolean oldDivertibleESet = divertibleESet;
+		boolean oldDivertibleESet = divertibleESet;
 		divertibleESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__DIVERTIBLE, oldDivertible, divertible, !oldDivertibleESet));
@@ -2082,8 +2103,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetDivertible() {
-		final boolean oldDivertible = divertible;
-		final boolean oldDivertibleESet = divertibleESet;
+		boolean oldDivertible = divertible;
+		boolean oldDivertibleESet = divertibleESet;
 		divertible = DIVERTIBLE_EDEFAULT;
 		divertibleESet = false;
 		if (eNotificationRequired())
@@ -2117,9 +2138,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setShippingDaysRestriction(int newShippingDaysRestriction) {
-		final int oldShippingDaysRestriction = shippingDaysRestriction;
+		int oldShippingDaysRestriction = shippingDaysRestriction;
 		shippingDaysRestriction = newShippingDaysRestriction;
-		final boolean oldShippingDaysRestrictionESet = shippingDaysRestrictionESet;
+		boolean oldShippingDaysRestrictionESet = shippingDaysRestrictionESet;
 		shippingDaysRestrictionESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION, oldShippingDaysRestriction, shippingDaysRestriction, !oldShippingDaysRestrictionESet));
@@ -2132,8 +2153,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetShippingDaysRestriction() {
-		final int oldShippingDaysRestriction = shippingDaysRestriction;
-		final boolean oldShippingDaysRestrictionESet = shippingDaysRestrictionESet;
+		int oldShippingDaysRestriction = shippingDaysRestriction;
+		boolean oldShippingDaysRestrictionESet = shippingDaysRestrictionESet;
 		shippingDaysRestriction = SHIPPING_DAYS_RESTRICTION_EDEFAULT;
 		shippingDaysRestrictionESet = false;
 		if (eNotificationRequired())
@@ -2158,7 +2179,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
-			final InternalEObject oldEntity = (InternalEObject)entity;
+			InternalEObject oldEntity = (InternalEObject)entity;
 			entity = (BaseLegalEntity)eResolveProxy(oldEntity);
 			if (entity != oldEntity) {
 				if (eNotificationRequired())
@@ -2184,9 +2205,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setEntity(BaseLegalEntity newEntity) {
-		final BaseLegalEntity oldEntity = entity;
+		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;
-		final boolean oldEntityESet = entityESet;
+		boolean oldEntityESet = entityESet;
 		entityESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__ENTITY, oldEntity, entity, !oldEntityESet));
@@ -2199,8 +2220,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetEntity() {
-		final BaseLegalEntity oldEntity = entity;
-		final boolean oldEntityESet = entityESet;
+		BaseLegalEntity oldEntity = entity;
+		boolean oldEntityESet = entityESet;
 		entity = null;
 		entityESet = false;
 		if (eNotificationRequired())
@@ -2247,9 +2268,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setRestrictedContractsArePermissive(boolean newRestrictedContractsArePermissive) {
-		final boolean oldRestrictedContractsArePermissive = restrictedContractsArePermissive;
+		boolean oldRestrictedContractsArePermissive = restrictedContractsArePermissive;
 		restrictedContractsArePermissive = newRestrictedContractsArePermissive;
-		final boolean oldRestrictedContractsArePermissiveESet = restrictedContractsArePermissiveESet;
+		boolean oldRestrictedContractsArePermissiveESet = restrictedContractsArePermissiveESet;
 		restrictedContractsArePermissiveESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE, oldRestrictedContractsArePermissive, restrictedContractsArePermissive, !oldRestrictedContractsArePermissiveESet));
@@ -2262,8 +2283,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetRestrictedContractsArePermissive() {
-		final boolean oldRestrictedContractsArePermissive = restrictedContractsArePermissive;
-		final boolean oldRestrictedContractsArePermissiveESet = restrictedContractsArePermissiveESet;
+		boolean oldRestrictedContractsArePermissive = restrictedContractsArePermissive;
+		boolean oldRestrictedContractsArePermissiveESet = restrictedContractsArePermissiveESet;
 		restrictedContractsArePermissive = RESTRICTED_CONTRACTS_ARE_PERMISSIVE_EDEFAULT;
 		restrictedContractsArePermissiveESet = false;
 		if (eNotificationRequired())
@@ -2297,7 +2318,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setRestrictedContractsOverride(boolean newRestrictedContractsOverride) {
-		final boolean oldRestrictedContractsOverride = restrictedContractsOverride;
+		boolean oldRestrictedContractsOverride = restrictedContractsOverride;
 		restrictedContractsOverride = newRestrictedContractsOverride;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_CONTRACTS_OVERRIDE, oldRestrictedContractsOverride, restrictedContractsOverride));
@@ -2333,9 +2354,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setRestrictedPortsArePermissive(boolean newRestrictedPortsArePermissive) {
-		final boolean oldRestrictedPortsArePermissive = restrictedPortsArePermissive;
+		boolean oldRestrictedPortsArePermissive = restrictedPortsArePermissive;
 		restrictedPortsArePermissive = newRestrictedPortsArePermissive;
-		final boolean oldRestrictedPortsArePermissiveESet = restrictedPortsArePermissiveESet;
+		boolean oldRestrictedPortsArePermissiveESet = restrictedPortsArePermissiveESet;
 		restrictedPortsArePermissiveESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE, oldRestrictedPortsArePermissive, restrictedPortsArePermissive, !oldRestrictedPortsArePermissiveESet));
@@ -2348,8 +2369,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetRestrictedPortsArePermissive() {
-		final boolean oldRestrictedPortsArePermissive = restrictedPortsArePermissive;
-		final boolean oldRestrictedPortsArePermissiveESet = restrictedPortsArePermissiveESet;
+		boolean oldRestrictedPortsArePermissive = restrictedPortsArePermissive;
+		boolean oldRestrictedPortsArePermissiveESet = restrictedPortsArePermissiveESet;
 		restrictedPortsArePermissive = RESTRICTED_PORTS_ARE_PERMISSIVE_EDEFAULT;
 		restrictedPortsArePermissiveESet = false;
 		if (eNotificationRequired())
@@ -2383,7 +2404,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setRestrictedPortsOverride(boolean newRestrictedPortsOverride) {
-		final boolean oldRestrictedPortsOverride = restrictedPortsOverride;
+		boolean oldRestrictedPortsOverride = restrictedPortsOverride;
 		restrictedPortsOverride = newRestrictedPortsOverride;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_PORTS_OVERRIDE, oldRestrictedPortsOverride, restrictedPortsOverride));
@@ -2419,7 +2440,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setRestrictedSlotsArePermissive(boolean newRestrictedSlotsArePermissive) {
-		final boolean oldRestrictedSlotsArePermissive = restrictedSlotsArePermissive;
+		boolean oldRestrictedSlotsArePermissive = restrictedSlotsArePermissive;
 		restrictedSlotsArePermissive = newRestrictedSlotsArePermissive;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE, oldRestrictedSlotsArePermissive, restrictedSlotsArePermissive));
@@ -2455,9 +2476,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setRestrictedVesselsArePermissive(boolean newRestrictedVesselsArePermissive) {
-		final boolean oldRestrictedVesselsArePermissive = restrictedVesselsArePermissive;
+		boolean oldRestrictedVesselsArePermissive = restrictedVesselsArePermissive;
 		restrictedVesselsArePermissive = newRestrictedVesselsArePermissive;
-		final boolean oldRestrictedVesselsArePermissiveESet = restrictedVesselsArePermissiveESet;
+		boolean oldRestrictedVesselsArePermissiveESet = restrictedVesselsArePermissiveESet;
 		restrictedVesselsArePermissiveESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE, oldRestrictedVesselsArePermissive, restrictedVesselsArePermissive, !oldRestrictedVesselsArePermissiveESet));
@@ -2470,8 +2491,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetRestrictedVesselsArePermissive() {
-		final boolean oldRestrictedVesselsArePermissive = restrictedVesselsArePermissive;
-		final boolean oldRestrictedVesselsArePermissiveESet = restrictedVesselsArePermissiveESet;
+		boolean oldRestrictedVesselsArePermissive = restrictedVesselsArePermissive;
+		boolean oldRestrictedVesselsArePermissiveESet = restrictedVesselsArePermissiveESet;
 		restrictedVesselsArePermissive = RESTRICTED_VESSELS_ARE_PERMISSIVE_EDEFAULT;
 		restrictedVesselsArePermissiveESet = false;
 		if (eNotificationRequired())
@@ -2505,7 +2526,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setRestrictedVesselsOverride(boolean newRestrictedVesselsOverride) {
-		final boolean oldRestrictedVesselsOverride = restrictedVesselsOverride;
+		boolean oldRestrictedVesselsOverride = restrictedVesselsOverride;
 		restrictedVesselsOverride = newRestrictedVesselsOverride;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_VESSELS_OVERRIDE, oldRestrictedVesselsOverride, restrictedVesselsOverride));
@@ -2528,7 +2549,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setHedges(int newHedges) {
-		final int oldHedges = hedges;
+		int oldHedges = hedges;
 		hedges = newHedges;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__HEDGES, oldHedges, hedges));
@@ -2550,7 +2571,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setMiscCosts(int newMiscCosts) {
-		final int oldMiscCosts = miscCosts;
+		int oldMiscCosts = miscCosts;
 		miscCosts = newMiscCosts;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MISC_COSTS, oldMiscCosts, miscCosts));
@@ -2573,9 +2594,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setCancellationExpression(String newCancellationExpression) {
-		final String oldCancellationExpression = cancellationExpression;
+		String oldCancellationExpression = cancellationExpression;
 		cancellationExpression = newCancellationExpression;
-		final boolean oldCancellationExpressionESet = cancellationExpressionESet;
+		boolean oldCancellationExpressionESet = cancellationExpressionESet;
 		cancellationExpressionESet = true;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CANCELLATION_EXPRESSION, oldCancellationExpression, cancellationExpression, !oldCancellationExpressionESet));
@@ -2588,8 +2609,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void unsetCancellationExpression() {
-		final String oldCancellationExpression = cancellationExpression;
-		final boolean oldCancellationExpressionESet = cancellationExpressionESet;
+		String oldCancellationExpression = cancellationExpression;
+		boolean oldCancellationExpressionESet = cancellationExpressionESet;
 		cancellationExpression = CANCELLATION_EXPRESSION_EDEFAULT;
 		cancellationExpressionESet = false;
 		if (eNotificationRequired())
@@ -2614,7 +2635,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public Vessel getNominatedVessel() {
 		if (nominatedVessel != null && nominatedVessel.eIsProxy()) {
-			final InternalEObject oldNominatedVessel = (InternalEObject)nominatedVessel;
+			InternalEObject oldNominatedVessel = (InternalEObject)nominatedVessel;
 			nominatedVessel = (Vessel)eResolveProxy(oldNominatedVessel);
 			if (nominatedVessel != oldNominatedVessel) {
 				if (eNotificationRequired())
@@ -2640,7 +2661,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setNominatedVessel(Vessel newNominatedVessel) {
-		final Vessel oldNominatedVessel = nominatedVessel;
+		Vessel oldNominatedVessel = nominatedVessel;
 		nominatedVessel = newNominatedVessel;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__NOMINATED_VESSEL, oldNominatedVessel, nominatedVessel));
@@ -2663,7 +2684,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setLocked(boolean newLocked) {
-		final boolean oldLocked = locked;
+		boolean oldLocked = locked;
 		locked = newLocked;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__LOCKED, oldLocked, locked));
@@ -2686,7 +2707,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public void setCancelled(boolean newCancelled) {
-		final boolean oldCancelled = cancelled;
+		boolean oldCancelled = cancelled;
 		cancelled = newCancelled;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CANCELLED, oldCancelled, cancelled));
@@ -2695,12 +2716,44 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 								/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isWindowCounterParty() {
+		return windowCounterParty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setWindowCounterParty(boolean newWindowCounterParty) {
+		boolean oldWindowCounterParty = windowCounterParty;
+		windowCounterParty = newWindowCounterParty;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_COUNTER_PARTY, oldWindowCounterParty, windowCounterParty));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
 	 */
 	@Override
 	public int getSlotOrDelegateDuration() {
-		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__DURATION);
+		if (!this.isWindowCounterParty()) {
+			return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__DURATION);
+		}
+		else {
+			int duration = (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__DURATION);
+			int window = this.getWindowSizeInHours();
+			int flex = this.getWindowFlexInHours();
+			duration = duration + window + flex;
+			return duration;
+		}
 	}
 
 	/**
@@ -2849,7 +2902,12 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public int getSlotOrDelegateWindowSize() {
-		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE);
+		if (!this.isWindowCounterParty()) {
+			return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE);
+		}
+		else {
+			return 0;
+		}
 	}
 
 	/**
@@ -3070,6 +3128,67 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public int getSlotOrDelegateFlex() {
+		if (!this.isWindowCounterParty()) {
+			return this.getWindowFlex();
+		}
+		else {
+			return 0;
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public int getWindowFlexInHours() {
+		final ZonedDateTime start = getWindowStartWithSlotOrPortTime();
+		ZonedDateTime end = start;
+		ZonedDateTime endFlex = start;
+		final TimePeriod wu  = getWindowSizeUnits();
+		final TimePeriod fu  = getWindowFlexUnits();
+		final int windowSize = getWindowSize();
+		final int windowFlex = getWindowFlex();
+		
+		switch (wu) {
+		case DAYS:
+			end = end.plusDays(windowSize).minusHours(1);
+			break;
+		case HOURS:
+			end = end.plusHours(windowSize) ;
+			break;
+		case MONTHS:
+			end = end.plusMonths(windowSize).minusHours(1);
+			break;
+		default:
+			break;
+		}
+
+		switch (fu) {
+		case DAYS:
+			endFlex = end.plusDays(windowFlex).minusHours(1);
+			break;
+		case HOURS:
+			endFlex = end.plusHours(windowFlex) ;
+			break;
+		case MONTHS:
+			endFlex = end.plusMonths(windowFlex).minusHours(1);
+			break;
+		default:
+			break;
+		}
+
+		return Hours.between(end, endFlex);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -3215,6 +3334,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isLocked();
 			case CargoPackage.SLOT__CANCELLED:
 				return isCancelled();
+			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
+				return isWindowCounterParty();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -3360,6 +3481,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__CANCELLED:
 				setCancelled((Boolean)newValue);
 				return;
+			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
+				setWindowCounterParty((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -3500,6 +3624,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__CANCELLED:
 				setCancelled(CANCELLED_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
+				setWindowCounterParty(WINDOW_COUNTER_PARTY_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -3614,6 +3741,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return locked != LOCKED_EDEFAULT;
 			case CargoPackage.SLOT__CANCELLED:
 				return cancelled != CANCELLED_EDEFAULT;
+			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
+				return windowCounterParty != WINDOW_COUNTER_PARTY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -3745,6 +3874,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSlotOrDelegatePortRestrictions();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS:
 				return getSlotOrDelegateVesselRestrictions();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_FLEX:
+				return getSlotOrDelegateFlex();
+			case CargoPackage.SLOT___GET_WINDOW_FLEX_IN_HOURS:
+				return getWindowFlexInHours();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -3759,7 +3892,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		final StringBuilder result = new StringBuilder(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(", counterparty: ");
@@ -3828,6 +3961,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		result.append(locked);
 		result.append(", cancelled: ");
 		result.append(cancelled);
+		result.append(", windowCounterParty: ");
+		result.append(windowCounterParty);
 		result.append(')');
 		return result.toString();
 	}

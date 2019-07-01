@@ -74,6 +74,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getNominatedVessel <em>Nominated Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isCancelled <em>Cancelled</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isWindowCounterParty <em>Window Counter Party</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot()
@@ -1836,6 +1837,33 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	void setCancelled(boolean value);
 
 	/**
+	 * Returns the value of the '<em><b>Window Counter Party</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Window Counter Party</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Window Counter Party</em>' attribute.
+	 * @see #setWindowCounterParty(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowCounterParty()
+	 * @model default="false"
+	 * @generated
+	 */
+	boolean isWindowCounterParty();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isWindowCounterParty <em>Window Counter Party</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Counter Party</em>' attribute.
+	 * @see #isWindowCounterParty()
+	 * @generated
+	 */
+	void setWindowCounterParty(boolean value);
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
@@ -2060,6 +2088,22 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	EList<AVesselSet<Vessel>> getSlotOrDelegateVesselRestrictions();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getSlotOrDelegateFlex();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getWindowFlexInHours();
 
 } // end of  Slot
 
