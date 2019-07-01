@@ -342,15 +342,6 @@
                   toolbarPath="forkgroup"
                   tooltip="Fork scenario and continue editing">
             </action>
-            <action
-                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.MtMScenarioEditorActionDelegate"
-                  definitionId="com.mmxlabs.scenario.service.ui.mtm"
-                  id="com.mmxlabs.scenario.service.ui.mtm"
-                  label="MtM"
-                  style="push"
-                  toolbarPath="forkgroup"
-                  tooltip="Mark open slots to markets in scenario and continue editing">
-            </action>
          </editorContribution>
       </extension>
       
@@ -420,7 +411,11 @@
          <PluginXMLEnablement
                feature="charter-length"
                plugin.xml="charter-length.plugin.xml">
-         </PluginXMLEnablement>         
+         </PluginXMLEnablement>    
+         <PluginXMLEnablement
+               feature="mtm-action"
+               plugin.xml="mtm-action.plugin.xml">
+         </PluginXMLEnablement>      
       </extension>
       <extension
             point="org.eclipse.ui.startup">
