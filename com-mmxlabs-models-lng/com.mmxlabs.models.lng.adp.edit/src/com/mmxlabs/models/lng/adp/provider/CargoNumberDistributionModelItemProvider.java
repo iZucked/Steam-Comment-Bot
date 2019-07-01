@@ -77,7 +77,7 @@ public class CargoNumberDistributionModelItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_CargoNumberDistributionModel_numberOfCargoes_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoNumberDistributionModel_numberOfCargoes_feature", "_UI_CargoNumberDistributionModel_type"),
+				 getString("_UI_CargoNumberDistributionModel_numberOfCargoes_description"),
 				 ADPPackage.Literals.CARGO_NUMBER_DISTRIBUTION_MODEL__NUMBER_OF_CARGOES,
 				 true,
 				 false,

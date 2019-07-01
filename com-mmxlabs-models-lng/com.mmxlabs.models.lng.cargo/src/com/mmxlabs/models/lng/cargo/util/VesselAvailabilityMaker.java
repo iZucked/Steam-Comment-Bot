@@ -187,6 +187,37 @@ public class VesselAvailabilityMaker {
 		return this;
 
 	}
+	public VesselAvailabilityMaker withEndHeel(final int minVolumeInM3, final int maxVolumeInM3, @NonNull final EVesselTankState state, boolean useLastPrice) {
+		
+		if (minVolumeInM3 < 0) {
+			throw new IllegalArgumentException();
+		}
+		
+		if (maxVolumeInM3 < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (minVolumeInM3 > maxVolumeInM3) {
+			throw new IllegalArgumentException();
+		}
+		
+		if (state == EVesselTankState.MUST_BE_WARM) {
+			if (minVolumeInM3 > 0) {
+				throw new IllegalArgumentException();
+			}
+			if (maxVolumeInM3 > 0) {
+				throw new IllegalArgumentException();
+			}
+		}
+		
+		vesselAvailability.getEndHeel().setMinimumEndHeel(minVolumeInM3);
+		vesselAvailability.getEndHeel().setMaximumEndHeel(maxVolumeInM3);
+		vesselAvailability.getEndHeel().setTankState(state);
+		vesselAvailability.getEndHeel().setPriceExpression("");
+		vesselAvailability.getEndHeel().setUseLastHeelPrice(useLastPrice);
+		
+		return this;
+		
+	}
 
 	@NonNull
 	public VesselAvailabilityMaker withCharterRate(final @NonNull String priceExpression) {

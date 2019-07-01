@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.emf.validation.constraintProviders">
+      <category
+            id="com.mmxlabs.models.lng.nominations.validation.base"
+            mandatory="true"
+            name="Nominations Validation">
+      </category>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/nominations/1/">
+         </package>
+         <constraints categories=" com.mmxlabs.models.lng.nominations.base">
+            <constraint
+                  class="com.mmxlabs.models.lng.nominations.validation.RefererIdConstraint"
+                  id="com.mmxlabs.models.lng.nominations.validation.RefererIdConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Referer Id Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.nominations.validation.NomineeIdConstraint"
+                  id="com.mmxlabs.models.lng.nominations.validation.NomineeIdConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Nominee Id Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.nominations.validation.NominationTypeConstraint"
+                  id="com.mmxlabs.models.lng.nominations.validation.NominationTypeConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Nomination Type Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
+         </constraints>
+      </constraintProvider>
+   </extension>
+</plugin>

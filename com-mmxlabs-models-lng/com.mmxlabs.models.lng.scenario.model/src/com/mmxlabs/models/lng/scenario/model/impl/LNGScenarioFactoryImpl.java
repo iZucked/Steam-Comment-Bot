@@ -74,6 +74,7 @@ public class LNGScenarioFactoryImpl extends EFactoryImpl implements LNGScenarioF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LNGScenarioModel createLNGScenarioModel() {
 		LNGScenarioModelImpl lngScenarioModel = new LNGScenarioModelImpl();
 		return lngScenarioModel;
@@ -84,6 +85,7 @@ public class LNGScenarioFactoryImpl extends EFactoryImpl implements LNGScenarioF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LNGReferenceModel createLNGReferenceModel() {
 		LNGReferenceModelImpl lngReferenceModel = new LNGReferenceModelImpl();
 		return lngReferenceModel;
@@ -94,6 +96,7 @@ public class LNGScenarioFactoryImpl extends EFactoryImpl implements LNGScenarioF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LNGScenarioPackage getLNGScenarioPackage() {
 		return (LNGScenarioPackage)getEPackage();
 	}

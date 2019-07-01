@@ -441,7 +441,10 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			text += name != null ? "\"" + name + "\"" : "<unspecified>";
 		} else {
 			final IItemLabelProvider itemLabelProvider = (IItemLabelProvider) FACTORY.adapt(selection, IItemLabelProvider.class);
-			text += "\"" + itemLabelProvider.getText(selection) + "\"";
+			String providedText = itemLabelProvider.getText(selection);
+			if (providedText != null && !"".equals(providedText)) {
+				text += "\"" + providedText + "\"";
+			}
 		}
 		getShell().setText(text);
 

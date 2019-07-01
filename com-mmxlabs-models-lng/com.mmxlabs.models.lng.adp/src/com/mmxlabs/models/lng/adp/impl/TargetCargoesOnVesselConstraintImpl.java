@@ -131,6 +131,7 @@ public class TargetCargoesOnVesselConstraintImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Vessel getVessel() {
 		if (vessel != null && vessel.eIsProxy()) {
 			InternalEObject oldVessel = (InternalEObject)vessel;
@@ -157,6 +158,7 @@ public class TargetCargoesOnVesselConstraintImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVessel(Vessel newVessel) {
 		Vessel oldVessel = vessel;
 		vessel = newVessel;
@@ -169,6 +171,7 @@ public class TargetCargoesOnVesselConstraintImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getTargetNumberOfCargoes() {
 		return targetNumberOfCargoes;
 	}
@@ -178,6 +181,7 @@ public class TargetCargoesOnVesselConstraintImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTargetNumberOfCargoes(int newTargetNumberOfCargoes) {
 		int oldTargetNumberOfCargoes = targetNumberOfCargoes;
 		targetNumberOfCargoes = newTargetNumberOfCargoes;
@@ -190,6 +194,7 @@ public class TargetCargoesOnVesselConstraintImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IntervalType getIntervalType() {
 		return intervalType;
 	}
@@ -199,6 +204,7 @@ public class TargetCargoesOnVesselConstraintImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIntervalType(IntervalType newIntervalType) {
 		IntervalType oldIntervalType = intervalType;
 		intervalType = newIntervalType == null ? INTERVAL_TYPE_EDEFAULT : newIntervalType;
@@ -211,6 +217,7 @@ public class TargetCargoesOnVesselConstraintImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getWeight() {
 		return weight;
 	}
@@ -220,6 +227,7 @@ public class TargetCargoesOnVesselConstraintImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWeight(int newWeight) {
 		int oldWeight = weight;
 		weight = newWeight;

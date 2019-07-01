@@ -71,7 +71,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		final LoadSlot notionalLoadSlot = makeNotionalLoad(loadPort, loadTime, vessel, cargoCVValue);
 
 		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPrice);
-		HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, ConstantHeelPriceCalculator.ZERO);
+		HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, ConstantHeelPriceCalculator.ZERO, false);
 		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-end", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), heelOptions);
 
 		final PortTimesRecord portTimesRecord = new PortTimesRecord();
@@ -81,7 +81,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 		portTimesRecord.setSlotDuration(notionalLoadSlot, loadDuration);
 		portTimesRecord.setSlotDuration(notionalDischargeSlot, dischargeDuration);
-		
+
 		portTimesRecord.setSlotExtraIdleTime(notionalLoadSlot, 0);
 		portTimesRecord.setSlotExtraIdleTime(notionalDischargeSlot, 0);
 
@@ -144,7 +144,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPriceCalculator);
 
-		HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, ConstantHeelPriceCalculator.ZERO);
+		HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, ConstantHeelPriceCalculator.ZERO, false);
 		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-end", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), heelOptions);
 
 		final PortTimesRecord portTimesRecord = new PortTimesRecord();
@@ -154,7 +154,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 		portTimesRecord.setSlotDuration(notionalLoadSlot, loadDuration);
 		portTimesRecord.setSlotDuration(notionalDischargeSlot, dischargeDuration);
-		
+
 		portTimesRecord.setSlotExtraIdleTime(notionalLoadSlot, 0);
 		portTimesRecord.setSlotExtraIdleTime(notionalDischargeSlot, 0);
 

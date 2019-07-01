@@ -134,7 +134,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPriceCalculator);
 
-		final HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, ConstantHeelPriceCalculator.ZERO);
+		final HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, ConstantHeelPriceCalculator.ZERO, false);
 
 		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), heelOptions);
 
@@ -162,7 +162,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPricePerMMBTu);
 
-		final HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0));
+		final HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false);
 
 		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), heelOptions);
 

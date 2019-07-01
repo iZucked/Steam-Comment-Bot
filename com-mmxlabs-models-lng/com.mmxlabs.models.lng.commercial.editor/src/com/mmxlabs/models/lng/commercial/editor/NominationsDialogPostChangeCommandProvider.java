@@ -4,40 +4,13 @@
  */
 package com.mmxlabs.models.lng.commercial.editor;
 
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
-
-import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.util.NominationUtils;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.types.TimePeriod;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editors.dialogs.IDialogPostChangeCommandProvider;
-
 /**
  * 19-10-2018
  * Not used at the moment due to user override.
  * @author SG & FM
  *
  */
+/*
 public class NominationsDialogPostChangeCommandProvider implements IDialogPostChangeCommandProvider {
 
 	@SuppressWarnings("unused")
@@ -156,3 +129,4 @@ public class NominationsDialogPostChangeCommandProvider implements IDialogPostCh
 	}
 
 }
+*/

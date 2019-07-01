@@ -51,6 +51,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
+import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -471,6 +472,8 @@ public class ImportCSVFilesPage extends WizardPage {
 			scenarioModel.setActualsModel((ActualsModel) subModel);
 		} else if (subModel instanceof ScheduleModel) {
 			scenarioModel.setScheduleModel((ScheduleModel) subModel);
+		} else if (subModel instanceof NominationsModel) {
+			scenarioModel.setNominationsModel((NominationsModel) subModel);
 		} else {
 			log.error("Unknown sub model type: " + subModel.eClass().getName());
 		}

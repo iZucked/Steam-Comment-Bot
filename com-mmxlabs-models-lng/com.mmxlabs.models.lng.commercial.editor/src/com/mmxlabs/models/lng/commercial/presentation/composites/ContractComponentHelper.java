@@ -98,21 +98,6 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_cancellationExpressionEditor(detailComposite, topClass);
 		add_divertibleEditor(detailComposite, topClass);
 		add_shippingDaysRestrictionEditor(detailComposite, topClass);
-		add_windowNominationSizeEditor(detailComposite, topClass);
-		add_windowNominationSizeUnitsEditor(detailComposite, topClass);
-		add_windowNominationCounterpartyEditor(detailComposite, topClass);
-		add_vesselNominationSizeEditor(detailComposite, topClass);
-		add_vesselNominationSizeUnitsEditor(detailComposite, topClass);
-		add_vesselNominationCounterpartyEditor(detailComposite, topClass);
-		add_volumeNominationSizeEditor(detailComposite, topClass);
-		add_volumeNominationSizeUnitsEditor(detailComposite, topClass);
-		add_volumeNominationCounterpartyEditor(detailComposite, topClass);
-		add_portNominationSizeEditor(detailComposite, topClass);
-		add_portNominationSizeUnitsEditor(detailComposite, topClass);
-		add_portNominationCounterpartyEditor(detailComposite, topClass);
-		add_portLoadNominationSizeEditor(detailComposite, topClass);
-		add_portLoadNominationSizeUnitsEditor(detailComposite, topClass);
-		add_portLoadNominationCounterpartyEditor(detailComposite, topClass);
 	}
 	
 	/**
@@ -162,38 +147,6 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__CANCELLATION_EXPRESSION));
 	}
 
-	/**
-	 * Create the editor for the windowNominationSize feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_windowNominationSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE));
-		}
-	}
-
-	/**
-	 * Create the editor for the windowNominationSizeUnits feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_windowNominationSizeUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_SIZE_UNITS));
-		}
-	}
-
-	/**
-	 * Create the editor for the windowNominationCounterparty feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_windowNominationCounterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__WINDOW_NOMINATION_COUNTERPARTY));
-		}
-	}
 
 	/**
 	 * Create the editor for the divertible feature on Contract
@@ -201,7 +154,7 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_divertibleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__DIVERTIBLE);
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__DIVERTIBLE);
 		editor.addNotificationChangedListener(new DivertibleContractInlineEditorChangedListener());
 		detailComposite.addInlineEditor(editor);
 	}
@@ -212,141 +165,9 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_shippingDaysRestrictionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__SHIPPING_DAYS_RESTRICTION);
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__SHIPPING_DAYS_RESTRICTION);
 		editor.addNotificationChangedListener(new DivertibleContractInlineEditorChangedListener());
 		detailComposite.addInlineEditor(editor);
-	}
-
-	/**
-	 * Create the editor for the portLoadNominationSize feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_portLoadNominationSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE));
-		}
-	}
-
-	/**
-	 * Create the editor for the portLoadNominationSizeUnits feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_portLoadNominationSizeUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_SIZE_UNITS));
-		}
-	}
-
-	/**
-	 * Create the editor for the portLoadNominationCounterparty feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_portLoadNominationCounterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PORT_LOAD_NOMINATION_COUNTERPARTY));
-		}
-	}
-
-	/**
-	 * Create the editor for the vesselNominationSize feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_vesselNominationSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_SIZE));
-		}
-	}
-
-	/**
-	 * Create the editor for the vesselNominationSizeUnits feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_vesselNominationSizeUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_SIZE_UNITS));
-		}
-	}
-
-	/**
-	 * Create the editor for the vesselNominationCounterparty feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_vesselNominationCounterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__VESSEL_NOMINATION_COUNTERPARTY));
-		}
-	}
-
-	/**
-	 * Create the editor for the volumeNominationSize feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_volumeNominationSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_SIZE));
-		}
-	}
-
-	/**
-	 * Create the editor for the volumeNominationSizeUnits feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_volumeNominationSizeUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_SIZE_UNITS));
-		}
-	}
-
-	/**
-	 * Create the editor for the volumeNominationCounterparty feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_volumeNominationCounterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__VOLUME_NOMINATION_COUNTERPARTY));
-		}
-	}
-
-	/**
-	 * Create the editor for the portNominationSize feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_portNominationSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_SIZE));
-		}
-	}
-
-	/**
-	 * Create the editor for the portNominationSizeUnits feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_portNominationSizeUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_SIZE_UNITS));
-		}
-	}
-
-	/**
-	 * Create the editor for the portNominationCounterparty feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_portNominationCounterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:nominations")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PORT_NOMINATION_COUNTERPARTY));
-		}
 	}
 
 	/**

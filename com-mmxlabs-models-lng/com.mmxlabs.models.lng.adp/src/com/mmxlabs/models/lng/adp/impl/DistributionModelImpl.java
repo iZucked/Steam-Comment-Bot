@@ -126,6 +126,7 @@ public abstract class DistributionModelImpl extends MMXObjectImpl implements Dis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getVolumePerCargo() {
 		return volumePerCargo;
 	}
@@ -135,6 +136,7 @@ public abstract class DistributionModelImpl extends MMXObjectImpl implements Dis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumePerCargo(double newVolumePerCargo) {
 		double oldVolumePerCargo = volumePerCargo;
 		volumePerCargo = newVolumePerCargo;
@@ -149,6 +151,7 @@ public abstract class DistributionModelImpl extends MMXObjectImpl implements Dis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetVolumePerCargo() {
 		double oldVolumePerCargo = volumePerCargo;
 		boolean oldVolumePerCargoESet = volumePerCargoESet;
@@ -163,6 +166,7 @@ public abstract class DistributionModelImpl extends MMXObjectImpl implements Dis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetVolumePerCargo() {
 		return volumePerCargoESet;
 	}
@@ -172,6 +176,7 @@ public abstract class DistributionModelImpl extends MMXObjectImpl implements Dis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LNGVolumeUnit getVolumeUnit() {
 		return volumeUnit;
 	}
@@ -181,6 +186,7 @@ public abstract class DistributionModelImpl extends MMXObjectImpl implements Dis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeUnit(LNGVolumeUnit newVolumeUnit) {
 		LNGVolumeUnit oldVolumeUnit = volumeUnit;
 		volumeUnit = newVolumeUnit == null ? VOLUME_UNIT_EDEFAULT : newVolumeUnit;
@@ -195,6 +201,7 @@ public abstract class DistributionModelImpl extends MMXObjectImpl implements Dis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetVolumeUnit() {
 		LNGVolumeUnit oldVolumeUnit = volumeUnit;
 		boolean oldVolumeUnitESet = volumeUnitESet;
@@ -209,6 +216,7 @@ public abstract class DistributionModelImpl extends MMXObjectImpl implements Dis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetVolumeUnit() {
 		return volumeUnitESet;
 	}

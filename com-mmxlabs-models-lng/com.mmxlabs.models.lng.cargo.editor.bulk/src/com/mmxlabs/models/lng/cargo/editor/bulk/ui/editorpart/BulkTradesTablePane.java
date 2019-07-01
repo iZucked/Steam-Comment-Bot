@@ -1387,11 +1387,12 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 						}
 					}
 
-					populateMultipleSelectionMenu(cargoes, loads, discharges, selection);
+					populateMultipleSelectionMenu(cargoes, loads, discharges, selection, loadSide, dischargeSide);
 				}
 			}
 
-			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes, Set<LoadSlot> loads, Set<DischargeSlot> discharges, final IStructuredSelection selection) {
+			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes, Set<LoadSlot> loads, Set<DischargeSlot> discharges, final IStructuredSelection selection, boolean loadSide,
+					boolean dischargeSide) {
 				if (menu == null) {
 					menu = mgr.createContextMenu(scenarioViewer.getGrid());
 				}
@@ -1403,7 +1404,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 						item.dispose();
 					}
 				}
-				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes, loads, discharges);
+				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes, loads, discharges, loadSide, dischargeSide);
 				listener.menuAboutToShow(mgr);
 
 				if (contextMenuExtensions != null) {
@@ -1539,7 +1540,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	private LocalDate getEarliestScenarioDate(final IScenarioDataProvider sdp) {
 		LocalDate result = LocalDate.now();
 
-		//final IScenarioDataProvider sdp = scenarioEditingLocation.getScenarioDataProvider();
+		// final IScenarioDataProvider sdp = scenarioEditingLocation.getScenarioDataProvider();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 
 		LocalDate erl = result;
@@ -1564,7 +1565,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	private LocalDate getLatestScenarioDate(final IScenarioDataProvider sdp) {
 		LocalDate result = LocalDate.now();
 
-		//final IScenarioDataProvider sdp = scenarioEditingLocation.getScenarioDataProvider();
+		// final IScenarioDataProvider sdp = scenarioEditingLocation.getScenarioDataProvider();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 
 		LocalDate erl = result;
@@ -1585,7 +1586,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 		return result;
 	}
-	
+
 	private class AddAction extends DefaultMenuCreatorAction {
 
 		private final Action[] actions;
@@ -1599,7 +1600,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		 * Subclasses should fill their menu with actions here.
 		 * 
 		 * @param menu
-		 *                 the menu which is about to be displayed
+		 *            the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
 			{

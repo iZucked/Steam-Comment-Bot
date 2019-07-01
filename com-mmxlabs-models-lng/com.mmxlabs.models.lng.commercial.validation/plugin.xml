@@ -105,6 +105,19 @@
                </message>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.commercial.validation.ContractADPPeriodConstraint"
+                  id="com.mmxlabs.models.lng.commercial.validation.ContractADPPeriodConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Contract ADP Period Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.commercial.validation.ContractRestrictionsConstraint"
                   id="com.mmxlabs.models.lng.commercial.validation.ContractRestrictionsConstraint"
                   isEnabledByDefault="true"
@@ -204,22 +217,6 @@
                   lang="java"
                   mode="Batch"
                   name="ContractCancellationFeeConstraint"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <target
-                     class="Contract">
-               </target>
-            </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.commercial.validation.NominationTimePeriodUnitsConstraint"
-                  id="com.mmxlabs.models.lng.commercial.validation.NominationTimePeriodUnitsConstraint"
-                  isEnabledByDefault="true"
-                  lang="java"
-                  mode="Batch"
-                  name="NominationTimePeriodUnitsConstraint"
                   severity="ERROR"
                   statusCode="1">
                <message>

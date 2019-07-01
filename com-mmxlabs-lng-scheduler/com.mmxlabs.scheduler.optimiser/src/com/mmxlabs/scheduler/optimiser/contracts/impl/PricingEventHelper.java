@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.contracts.impl;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
+import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -14,6 +15,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
@@ -22,6 +24,12 @@ public final class PricingEventHelper {
 	@Inject
 	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
 
+	@Inject
+	private IElementDurationProvider durationProvider;
+	
+	@Inject
+	private IPortSlotProvider portSlotProvider;
+	
 	public IPort getLoadTimingPort(@NonNull final ILoadOption loadOption, @NonNull final IDischargeOption dischargeOption) {
 
 		if (!(loadOption instanceof ILoadSlot)) {
@@ -76,8 +84,8 @@ public final class PricingEventHelper {
 	public int getDischargePricingDateFromEventType(@NonNull final PricingEventType pricingEvent, @NonNull final IDischargeOption dischargeOption, @NonNull final IPortTimesRecord portTimesRecord) {
 		int pricingDate;
 		final ILoadOption loadOption = findFirstLoadOption(portTimesRecord);
-		IPort timingPortForLoad = getLoadTimingPort(loadOption, dischargeOption);
-		IPort timingPortForDischarge = getDischargeTimingPort(loadOption, dischargeOption);
+		final IPort timingPortForLoad = getLoadTimingPort(loadOption, dischargeOption);
+		final IPort timingPortForDischarge = getDischargeTimingPort(loadOption, dischargeOption);
 		switch (pricingEvent) {
 		case END_OF_DISCHARGE: {
 			final int dischargeDuration = portTimesRecord.getSlotDuration(dischargeOption);
@@ -113,7 +121,7 @@ public final class PricingEventHelper {
 			// Default is start of discharge
 		case START_OF_DISCHARGE: {
 			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(dischargeOption), timingPortForDischarge);
-			;
+			
 			break;
 		}
 		}
@@ -123,8 +131,8 @@ public final class PricingEventHelper {
 	public int getLoadPricingDateFromEventType(@NonNull final PricingEventType pricingEvent, @NonNull final ILoadOption loadOption, @NonNull final IDischargeOption dischargeOption,
 			@NonNull final IPortTimesRecord portTimesRecord) {
 		int pricingDate;
-		IPort timingPortForLoad = getLoadTimingPort(loadOption, dischargeOption);
-		IPort timingPortForDischarge = getDischargeTimingPort(loadOption, dischargeOption);
+		final IPort timingPortForLoad = getLoadTimingPort(loadOption, dischargeOption);
+		final IPort timingPortForDischarge = getDischargeTimingPort(loadOption, dischargeOption);
 
 		switch (pricingEvent) {
 		case END_OF_DISCHARGE:

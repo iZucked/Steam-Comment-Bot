@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.cargo.EndHeelOptions;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.EndHeelOptionsImpl#getTankState <em>Tank State</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.EndHeelOptionsImpl#getMinimumEndHeel <em>Minimum End Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.EndHeelOptionsImpl#getMaximumEndHeel <em>Maximum End Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.EndHeelOptionsImpl#isUseLastHeelPrice <em>Use Last Heel Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.EndHeelOptionsImpl#getPriceExpression <em>Price Expression</em>}</li>
  * </ul>
  *
@@ -91,6 +92,26 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	 * @ordered
 	 */
 	protected int maximumEndHeel = MAXIMUM_END_HEEL_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isUseLastHeelPrice() <em>Use Last Heel Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isUseLastHeelPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean USE_LAST_HEEL_PRICE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isUseLastHeelPrice() <em>Use Last Heel Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isUseLastHeelPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean useLastHeelPrice = USE_LAST_HEEL_PRICE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getPriceExpression() <em>Price Expression</em>}' attribute.
@@ -206,6 +227,29 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	 * @generated
 	 */
 	@Override
+	public boolean isUseLastHeelPrice() {
+		return useLastHeelPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setUseLastHeelPrice(boolean newUseLastHeelPrice) {
+		boolean oldUseLastHeelPrice = useLastHeelPrice;
+		useLastHeelPrice = newUseLastHeelPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE, oldUseLastHeelPrice, useLastHeelPrice));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String getPriceExpression() {
 		return priceExpression;
 	}
@@ -237,6 +281,8 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 				return getMinimumEndHeel();
 			case CargoPackage.END_HEEL_OPTIONS__MAXIMUM_END_HEEL:
 				return getMaximumEndHeel();
+			case CargoPackage.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE:
+				return isUseLastHeelPrice();
 			case CargoPackage.END_HEEL_OPTIONS__PRICE_EXPRESSION:
 				return getPriceExpression();
 		}
@@ -259,6 +305,9 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 				return;
 			case CargoPackage.END_HEEL_OPTIONS__MAXIMUM_END_HEEL:
 				setMaximumEndHeel((Integer)newValue);
+				return;
+			case CargoPackage.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE:
+				setUseLastHeelPrice((Boolean)newValue);
 				return;
 			case CargoPackage.END_HEEL_OPTIONS__PRICE_EXPRESSION:
 				setPriceExpression((String)newValue);
@@ -284,6 +333,9 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 			case CargoPackage.END_HEEL_OPTIONS__MAXIMUM_END_HEEL:
 				setMaximumEndHeel(MAXIMUM_END_HEEL_EDEFAULT);
 				return;
+			case CargoPackage.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE:
+				setUseLastHeelPrice(USE_LAST_HEEL_PRICE_EDEFAULT);
+				return;
 			case CargoPackage.END_HEEL_OPTIONS__PRICE_EXPRESSION:
 				setPriceExpression(PRICE_EXPRESSION_EDEFAULT);
 				return;
@@ -305,6 +357,8 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 				return minimumEndHeel != MINIMUM_END_HEEL_EDEFAULT;
 			case CargoPackage.END_HEEL_OPTIONS__MAXIMUM_END_HEEL:
 				return maximumEndHeel != MAXIMUM_END_HEEL_EDEFAULT;
+			case CargoPackage.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE:
+				return useLastHeelPrice != USE_LAST_HEEL_PRICE_EDEFAULT;
 			case CargoPackage.END_HEEL_OPTIONS__PRICE_EXPRESSION:
 				return PRICE_EXPRESSION_EDEFAULT == null ? priceExpression != null : !PRICE_EXPRESSION_EDEFAULT.equals(priceExpression);
 		}
@@ -327,6 +381,8 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 		result.append(minimumEndHeel);
 		result.append(", maximumEndHeel: ");
 		result.append(maximumEndHeel);
+		result.append(", useLastHeelPrice: ");
+		result.append(useLastHeelPrice);
 		result.append(", priceExpression: ");
 		result.append(priceExpression);
 		result.append(')');

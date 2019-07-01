@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
@@ -34,6 +35,7 @@ public class PortCVConstraintTest {
 	}
 
 	@Test
+	@Disabled("Zero CV is now permitted")
 	public void testLoadPort_CV_TooLow() {
 
 		final Port port = PortFactory.eINSTANCE.createPort();

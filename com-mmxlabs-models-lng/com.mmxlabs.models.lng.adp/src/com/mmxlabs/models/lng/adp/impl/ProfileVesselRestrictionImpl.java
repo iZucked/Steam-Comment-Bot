@@ -67,6 +67,7 @@ public class ProfileVesselRestrictionImpl extends SubProfileConstraintImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Vessel> getVessels() {
 		if (vessels == null) {
 			vessels = new EObjectResolvingEList<Vessel>(Vessel.class, this, ADPPackage.PROFILE_VESSEL_RESTRICTION__VESSELS);

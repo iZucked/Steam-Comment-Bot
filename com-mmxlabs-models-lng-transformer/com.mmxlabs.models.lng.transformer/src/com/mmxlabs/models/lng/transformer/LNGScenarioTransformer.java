@@ -3372,7 +3372,7 @@ public class LNGScenarioTransformer {
 				if (maxDurationInDays != 0 || minDurationInDays != 0) {
 					if (charterInEndRule == null) {
 						charterInEndRule = createSpotEndRequirement(builder, portAssociation, null,
-								new HeelOptionConsumer(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)));
+								new HeelOptionConsumer(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false));
 					}
 					if (maxDurationInDays != 0) {
 						charterInEndRule.setMaxDurationInHours(maxDurationInDays * 24);
@@ -3478,7 +3478,7 @@ public class LNGScenarioTransformer {
 					}
 					if (end == null) {
 						final IHeelOptionConsumer heelConsumer = builder.createHeelConsumer(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD,
-								new ConstantHeelPriceCalculator(0));
+								new ConstantHeelPriceCalculator(0), false);
 						end = createSpotEndRequirement(builder, portAssociation, Collections.emptySet(), heelConsumer);
 					}
 
@@ -3558,7 +3558,7 @@ public class LNGScenarioTransformer {
 		@NonNull
 		final IEndRequirement allDischargeCharterInEndRequirement = createSpotEndRequirement(builder, portAssociation,
 				modelEntityMap.getAllModelObjects(Port.class).stream().filter(p -> p.getCapabilities().contains(PortCapability.DISCHARGE)).collect(Collectors.toSet()),
-				new HeelOptionConsumer(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)));
+				new HeelOptionConsumer(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false));
 		return allDischargeCharterInEndRequirement;
 	}
 
@@ -3812,24 +3812,44 @@ public class LNGScenarioTransformer {
 		final long maximumEndHeelInM3 = (heelOptions.getTankState() != EVesselTankState.MUST_BE_WARM && heelOptions.getMaximumEndHeel() == 0) ? Long.MAX_VALUE
 				: OptimiserUnitConvertor.convertToInternalVolume(heelOptions.getMaximumEndHeel());
 		final IHeelPriceCalculator heelPriceCalculator;
+		final boolean useLastPrice;
+		if (heelOptions.isUseLastHeelPrice()) {
+			useLastPrice = true;
+			heelPriceCalculator = new IHeelPriceCalculator() {
 
-		final String expression = heelOptions.getPriceExpression();
-		if (expression == null || expression.isEmpty()) {
-			heelPriceCalculator = ConstantHeelPriceCalculator.ZERO;
-		} else {
-			final IExpression<ISeries> parsedExpression = commodityIndices.parse(expression);
-			final ISeries parsedSeries = parsedExpression.evaluate();
-
-			final StepwiseIntegerCurve expressionCurve = new StepwiseIntegerCurve();
-			if (parsedSeries.getChangePoints().length == 0) {
-				expressionCurve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsedSeries.evaluate(0).doubleValue()));
-			} else {
-				for (final int i : parsedSeries.getChangePoints()) {
-					expressionCurve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsedSeries.evaluate(i).doubleValue()));
+				@Override
+				public int getHeelPrice(long heelVolume, int localTime, @NonNull IPort port) {
+					// Should be using last heel price, not computing a new one
+					throw new IllegalStateException();
 				}
+
+				@Override
+				public int getHeelPrice(long heelVolumeInM3, int utcTime) {
+					// Should be using last heel price, not computing a new one
+					throw new IllegalStateException();
+				}
+			};
+		} else {
+			useLastPrice = false;
+
+			final String expression = heelOptions.getPriceExpression();
+			if (expression == null || expression.isEmpty()) {
+				heelPriceCalculator = ConstantHeelPriceCalculator.ZERO;
+			} else {
+				final IExpression<ISeries> parsedExpression = commodityIndices.parse(expression);
+				final ISeries parsedSeries = parsedExpression.evaluate();
+
+				final StepwiseIntegerCurve expressionCurve = new StepwiseIntegerCurve();
+				if (parsedSeries.getChangePoints().length == 0) {
+					expressionCurve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsedSeries.evaluate(0).doubleValue()));
+				} else {
+					for (final int i : parsedSeries.getChangePoints()) {
+						expressionCurve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsedSeries.evaluate(i).doubleValue()));
+					}
+				}
+				heelPriceCalculator = new ExpressionHeelPriceCalculator(expression, expressionCurve);
+				injector.injectMembers(heelPriceCalculator);
 			}
-			heelPriceCalculator = new ExpressionHeelPriceCalculator(expression, expressionCurve);
-			injector.injectMembers(heelPriceCalculator);
 		}
 		final VesselTankState vesselTankState;
 		switch (heelOptions.getTankState()) {
@@ -3845,7 +3865,7 @@ public class LNGScenarioTransformer {
 		default:
 			throw new IllegalArgumentException();
 		}
-		return builder.createHeelConsumer(minimumEndHeelInM3, maximumEndHeelInM3, vesselTankState, heelPriceCalculator);
+		return builder.createHeelConsumer(minimumEndHeelInM3, maximumEndHeelInM3, vesselTankState, heelPriceCalculator, useLastPrice);
 	}
 
 	private @NonNull IHeelOptionSupplier createHeelSupplier(@NonNull final StartHeelOptions heelOptions) {

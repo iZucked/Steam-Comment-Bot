@@ -10,6 +10,8 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences.HeelValueRecord;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence.HeelRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -23,11 +25,64 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class ProfitAndLossSequences {
 
+	private final Map<IPortSlot, HeelValueRecord> heelValueRecords = new HashMap<>();
 	private final Map<IPortSlot, Long> unusedSlotGroupValue = new HashMap<>();
 	private final Map<VoyagePlan, Long> voyagePlanGroupValue = new HashMap<>();
 
 	private final @NonNull VolumeAllocatedSequences volumeAllocatedSequences;
-	private Map<VoyagePlan, CargoValueAnnotation> planToValueAnnotation = new HashMap<>();
+	private final Map<VoyagePlan, CargoValueAnnotation> planToValueAnnotation = new HashMap<>();
+
+	public static class HeelValueRecord {
+		private final long heelRevenue;
+		private final long heelCost;
+		private final int revenueUnitPrice;
+		private final int costUnitPrice;
+
+		public HeelValueRecord(final long cost, final int costUnitPrice, final long revenue, final int revenueUnitPrice) {
+			this.heelCost = cost;
+			this.costUnitPrice = costUnitPrice;
+			this.heelRevenue = revenue;
+			this.revenueUnitPrice = revenueUnitPrice;
+		}
+
+		public int getRevenueUnitPrice() {
+			return revenueUnitPrice;
+		}
+
+		public int getCostUnitPrice() {
+			return costUnitPrice;
+		}
+
+		public long getHeelRevenue() {
+			return heelRevenue;
+		}
+
+		public long getHeelCost() {
+			return heelCost;
+		}
+
+		public static HeelValueRecord withRevenue(final long revenue, final int unitPrice) {
+			return new HeelValueRecord(0, 0, revenue, unitPrice);
+
+		}
+
+		public static HeelValueRecord withCost(final long cost, final int unitPrice) {
+			return new HeelValueRecord(cost, unitPrice, 0, 0);
+		}
+
+		public static HeelValueRecord merge(final HeelValueRecord a, final HeelValueRecord b) {
+			final long cost = a.getHeelCost() + b.getHeelCost();
+			final long revenue = a.getHeelRevenue() + b.getHeelRevenue();
+			final int costUnitPrice = a.getCostUnitPrice() + b.getCostUnitPrice();
+			final int revenueUnitPrice = a.getRevenueUnitPrice() + b.getRevenueUnitPrice();
+
+			// Only expect one heel price to be present at a time.
+			assert a.getCostUnitPrice() == costUnitPrice || b.getCostUnitPrice() == costUnitPrice;
+			assert a.getRevenueUnitPrice() == revenueUnitPrice || b.getRevenueUnitPrice() == revenueUnitPrice;
+
+			return new HeelValueRecord(cost, costUnitPrice, revenue, revenueUnitPrice);
+		}
+	}
 
 	public ProfitAndLossSequences(final @NonNull VolumeAllocatedSequences volumeAllocatedSequences) {
 		this.volumeAllocatedSequences = volumeAllocatedSequences;
@@ -61,11 +116,19 @@ public class ProfitAndLossSequences {
 		return volumeAllocatedSequences;
 	}
 
-	public void setCargoValueAnnotation(VoyagePlan plan, CargoValueAnnotation cargoValueAnnotation) {
+	public void setCargoValueAnnotation(final VoyagePlan plan, final CargoValueAnnotation cargoValueAnnotation) {
 		planToValueAnnotation.put(plan, cargoValueAnnotation);
 	}
 
-	public CargoValueAnnotation getCargoValueAnnotation(VoyagePlan plan) {
+	public CargoValueAnnotation getCargoValueAnnotation(final VoyagePlan plan) {
 		return planToValueAnnotation.get(plan);
+	}
+
+	public void mergeHeelValueRecord(final IPortSlot slot, final HeelValueRecord record) {
+		heelValueRecords.merge(slot, record, HeelValueRecord::merge);
+	}
+
+	public HeelValueRecord getPortHeelRecord(final IPortSlot slot) {
+		return heelValueRecords.getOrDefault(slot, new HeelValueRecord(0, 0, 0, 0));
 	}
 }

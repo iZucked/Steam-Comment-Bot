@@ -69,9 +69,10 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.SplitCharterOutVesselEventEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.SplitCharterOutVesselEventStartPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence.HeelRecord;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence.HeelValueRecord;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences.HeelValueRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
@@ -149,6 +150,7 @@ public class AnnotatedSolutionExporter {
 		assert output != null;
 		// get domain level sequences
 		final VolumeAllocatedSequences scheduledSequences = annotatedSolution.getEvaluationState().getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+		final ProfitAndLossSequences profitAndLossSequences = annotatedSolution.getEvaluationState().getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
 
 		// go through the annotated solution and build stuff for the EMF;
 
@@ -256,7 +258,7 @@ public class AnnotatedSolutionExporter {
 			final boolean pIsRoundTripSequence = isRoundTripSequence;
 			final boolean pIsFOBSequence = isFOBSequence;
 			final boolean pIsDESSequence = isDESSequence;
-			exportEvents(scheduledSequence, annotatedSolution, modelEntityMap, output, events -> {
+			exportEvents(scheduledSequence, profitAndLossSequences, annotatedSolution, modelEntityMap, output, events -> {
 
 				if (!events.isEmpty()) {
 
@@ -516,7 +518,7 @@ public class AnnotatedSolutionExporter {
 		}
 	}
 
-	public void exportEvents(final VolumeAllocatedSequence scheduledSequence, final IAnnotatedSolution annotatedSolution, final ModelEntityMap modelEntityMap, final Schedule output,
+	public void exportEvents(final VolumeAllocatedSequence scheduledSequence, ProfitAndLossSequences pnlSequences, final IAnnotatedSolution annotatedSolution, final ModelEntityMap modelEntityMap, final Schedule output,
 			final Consumer<List<Event>> eventsAction) {
 
 		final List<Event> events = new LinkedList<>();
@@ -567,22 +569,35 @@ public class AnnotatedSolutionExporter {
 				if (event != null) {
 					// Heel tracking
 					{
-						final HeelValueRecord heelRecord = scheduledSequence.getPortHeelRecord(currentPortSlot);
+						final HeelRecord heelRecord = scheduledSequence.getPortHeelRecord(currentPortSlot);
 						if (heelRecord != null) {
 							event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
 							event.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
-							event.setHeelCost(OptimiserUnitConvertor.convertToExternalFixedCost(heelRecord.getHeelCost()));
-							event.setHeelRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(heelRecord.getHeelRevenue()));
+//							event.setHeelCost(OptimiserUnitConvertor.convertToExternalFixedCost(heelRecord.getHeelCost()));
+//							event.setHeelRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(heelRecord.getHeelRevenue()));
+						}
+						final HeelValueRecord heelValueRecord = pnlSequences.getPortHeelRecord(currentPortSlot);
+						if (heelValueRecord != null) {
+//							event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
+//							event.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
+							event.setHeelCost(OptimiserUnitConvertor.convertToExternalFixedCost(heelValueRecord.getHeelCost()));
+							event.setHeelRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(heelValueRecord.getHeelRevenue()));
+							event.setHeelCostUnitPrice(OptimiserUnitConvertor.convertToExternalPrice(heelValueRecord.getCostUnitPrice()));
+							event.setHeelRevenueUnitPrice(OptimiserUnitConvertor.convertToExternalPrice(heelValueRecord.getRevenueUnitPrice()));
 						}
 					}
 					event.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(charterRatePerDay, details.getOptions().getVisitDuration()) / 24L));
 
 					if (patchupRedirectCharterEvent) {
 						final IPortSlot startSlot = redirectedCharterOutStart.getOptions().getPortSlot();
-						final HeelValueRecord heelRecord = scheduledSequence.getPortHeelRecord(startSlot);
+						
+						final HeelRecord heelRecord = scheduledSequence.getPortHeelRecord(currentPortSlot);
 						if (heelRecord != null) {
 							event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
-							event.setHeelRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(heelRecord.getHeelRevenue()));
+						}
+						final HeelValueRecord heelValueRecord = pnlSequences.getPortHeelRecord(currentPortSlot);
+						if (heelValueRecord != null) {
+							event.setHeelRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(heelValueRecord.getHeelRevenue()));
 						}
 
 						((VesselEventVisit) event).setRedeliveryPort(event.getPort());

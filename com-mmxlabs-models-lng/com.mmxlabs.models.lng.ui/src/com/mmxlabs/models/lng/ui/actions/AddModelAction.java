@@ -8,16 +8,13 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.common.command.CommandStack;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -28,11 +25,8 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
-import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
-import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
-import com.mmxlabs.rcp.common.actions.LockableAction;
 
 /**
  * Action
@@ -81,62 +75,20 @@ public final class AddModelAction {
 		return new MultiAddContextAction(factoryPairs, additionalActions);
 	}
 
+	public final static Action create(final EClass eClass, final IAddContext context, final Action[] additionalActions) {
+		return create(eClass, context, additionalActions, null);
+	}
+	
 	/**
 	 */
-	public final static Action create(final EClass eClass, final IAddContext context, final Action[] additionalActions) {
+	public final static Action create(final EClass eClass, final IAddContext context, final Action[] additionalActions, Viewer viewer) {
 		final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(eClass);
 
 		if (factories.isEmpty())
 			return null;
 		else
-			return new MenuAddAction(factories, context, additionalActions);
+			return new MenuAddAction(factories, context, additionalActions, viewer);
 
-	}
-}
-
-class SingleAddAction extends LockableAction {
-	private final IAddContext context;
-	private final IModelFactory factory;
-
-	/**
-	 * @param iModelFactory
-	 * @param context
-	 */
-	public SingleAddAction(final IModelFactory factory, final IAddContext context) {
-		super(factory.getLabel(), PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
-		setToolTipText("Create new " + factory.getLabel());
-		this.factory = factory;
-		this.context = context;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.action.Action#run()
-	 */
-	@Override
-	public void run() {
-		final Collection<? extends ISetting> settings = factory.createInstance(context.getRootObject(), context.getContainer(), context.getContainment(), context.getCurrentSelection());
-		if (settings.isEmpty() == false) {
-
-			final CompoundCommand add = new CompoundCommand();
-			for (final ISetting setting : settings) {
-				add.append(AddCommand.create(context.getCommandHandler().getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance(), getInsertionIndex(setting)));
-			}
-			final CommandStack commandStack = context.getCommandHandler().getEditingDomain().getCommandStack();
-			commandStack.execute(add);
-			DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(context.getEditorPart(), settings.iterator().next().getInstance(), commandStack.getMostRecentCommand());
-		}
-	}
-
-	/**
-	 * Overridable method to customise {@link AddCommand} insertion index location. Default is {@link CommandParameter#NO_INDEX}
-	 * 
-	 * @param setting
-	 * @return
-	 */
-	protected int getInsertionIndex(final ISetting setting) {
-		return CommandParameter.NO_INDEX;
 	}
 }
 
@@ -144,23 +96,29 @@ class MenuAddAction extends AbstractMenuLockableAction {
 	private final List<IModelFactory> factories;
 	private final IAddContext context;
 	private final Action[] additionalActions;
-
+	private Viewer viewer = null;
+	
 	public MenuAddAction(final List<IModelFactory> factories, final IAddContext context) {
 		this(factories, context, new Action[0]);
 	}
 
 	public MenuAddAction(final List<IModelFactory> factories, final IAddContext context, final Action[] additionalActions) {
+		this(factories, context, additionalActions, null);
+	}
+	
+	public MenuAddAction(final List<IModelFactory> factories, final IAddContext context, final Action[] additionalActions, Viewer viewer) {
 		super("Create new element");
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		this.context = context;
 		this.factories = factories;
 		this.additionalActions = additionalActions;
+		this.viewer = viewer;
 	}
 
 	@Override
 	protected void populate(final Menu menu) {
 		for (final IModelFactory factory : factories) {
-			addActionToMenu(new SingleAddAction(factory, context), menu);
+			addActionToMenu(new SingleAddAction(factory, context, viewer), menu);
 		}
 		for (final Action action : additionalActions) {
 			addActionToMenu(action, menu);

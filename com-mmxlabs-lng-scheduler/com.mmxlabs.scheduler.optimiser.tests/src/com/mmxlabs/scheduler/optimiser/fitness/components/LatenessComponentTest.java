@@ -160,7 +160,7 @@ public class LatenessComponentTest {
 		final StartPortSlot startSlot = new StartPortSlot("start", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), null);
 		final PortDetails startDetails = new PortDetails(new PortOptions(startSlot));
 
-		IHeelOptionConsumer heelOptions = new HeelOptionConsumer(0L, 0L, VesselTankState.EITHER, new ConstantHeelPriceCalculator(0));
+		IHeelOptionConsumer heelOptions = new HeelOptionConsumer(0L, 0L, VesselTankState.EITHER, new ConstantHeelPriceCalculator(0), false);
 		final IEndPortSlot endSlot = new NotionalEndPortSlot("end", null, null, heelOptions);
 		final PortDetails endDetails = new PortDetails(new PortOptions(endSlot));
 

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.entities.impl;
 
+import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences.HeelValueRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -76,22 +78,25 @@ public class CheckingEntityValueCalculator implements IEntityValueCalculator {
 	}
 
 	@Override
-	public long evaluateNonCargoPlan(EvaluationMode evaluationMode, @NonNull final VoyagePlan plan, final @NonNull IPortTimesRecord portTimesRecord, @NonNull final IVesselAvailability vesselAvailability,
-			final int planStartTime, final int vesselStartTime, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
+	public Pair<Map<IPortSlot, HeelValueRecord>, @NonNull Long> evaluateNonCargoPlan(EvaluationMode evaluationMode, @NonNull final VoyagePlan plan, final @NonNull IPortTimesRecord portTimesRecord,
+			@NonNull final IVesselAvailability vesselAvailability, final int planStartTime, final int vesselStartTime, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences,
+			int lastHeelPricePerMMBTU, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		long a = System.currentTimeMillis();
-		final long value_d = delegate.evaluateNonCargoPlan(evaluationMode, plan, portTimesRecord, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
+		final Pair<Map<IPortSlot, HeelValueRecord>, @NonNull Long> value_d = delegate.evaluateNonCargoPlan(evaluationMode, plan, portTimesRecord, vesselAvailability, planStartTime, vesselStartTime,
+				volumeAllocatedSequences, lastHeelPricePerMMBTU, annotatedSolution);
 		long b = System.currentTimeMillis();
-		final long value_r = reference.evaluateNonCargoPlan(evaluationMode, plan, portTimesRecord, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
+		final Pair<Map<IPortSlot, HeelValueRecord>, @NonNull Long> value_r = reference.evaluateNonCargoPlan(evaluationMode, plan, portTimesRecord, vesselAvailability, planStartTime, vesselStartTime,
+				volumeAllocatedSequences, lastHeelPricePerMMBTU, annotatedSolution);
 		long c = System.currentTimeMillis();
 
 		delegateSeconds += (b - a);
 		referenceSeconds += (c - b);
 		check();
-		if (value_d != value_r) {
+		if (Long.compare(value_d.getSecond(), value_r.getSecond()) != 0) {
 			log.error("Checking EVC Error: (Evaluate non-cargo P&L differs)");
-			log.error("   reference value:" + value_r);
-			log.error("    delegate value:" + value_d);
+			log.error("   reference value:" + value_r.getSecond());
+			log.error("    delegate value:" + value_d.getSecond());
 			throw new RuntimeException("Cache consistency failure");
 		}
 

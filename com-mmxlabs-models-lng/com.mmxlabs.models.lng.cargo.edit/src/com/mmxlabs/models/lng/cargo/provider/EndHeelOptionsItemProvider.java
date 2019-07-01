@@ -67,6 +67,7 @@ public class EndHeelOptionsItemProvider
 			addTankStatePropertyDescriptor(object);
 			addMinimumEndHeelPropertyDescriptor(object);
 			addMaximumEndHeelPropertyDescriptor(object);
+			addUseLastHeelPricePropertyDescriptor(object);
 			addPriceExpressionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -139,6 +140,28 @@ public class EndHeelOptionsItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Use Last Heel Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addUseLastHeelPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_EndHeelOptions_useLastHeelPrice_feature"),
+				 getString("_UI_EndHeelOptions_useLastHeelPrice_description"),
+				 CargoPackage.Literals.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Price Expression feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -201,6 +224,7 @@ public class EndHeelOptionsItemProvider
 			case CargoPackage.END_HEEL_OPTIONS__TANK_STATE:
 			case CargoPackage.END_HEEL_OPTIONS__MINIMUM_END_HEEL:
 			case CargoPackage.END_HEEL_OPTIONS__MAXIMUM_END_HEEL:
+			case CargoPackage.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE:
 			case CargoPackage.END_HEEL_OPTIONS__PRICE_EXPRESSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

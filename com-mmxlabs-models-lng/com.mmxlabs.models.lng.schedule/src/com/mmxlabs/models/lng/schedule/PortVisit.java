@@ -17,6 +17,8 @@ package com.mmxlabs.models.lng.schedule;
  *   <li>{@link com.mmxlabs.models.lng.schedule.PortVisit#getLateness <em>Lateness</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.PortVisit#getHeelCost <em>Heel Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.PortVisit#getHeelRevenue <em>Heel Revenue</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.PortVisit#getHeelCostUnitPrice <em>Heel Cost Unit Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.PortVisit#getHeelRevenueUnitPrice <em>Heel Revenue Unit Price</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getPortVisit()
@@ -127,6 +129,58 @@ public interface PortVisit extends Event, CapacityViolationsHolder {
 	 * @generated
 	 */
 	void setHeelRevenue(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Heel Cost Unit Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Heel Cost Unit Price</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Heel Cost Unit Price</em>' attribute.
+	 * @see #setHeelCostUnitPrice(double)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getPortVisit_HeelCostUnitPrice()
+	 * @model
+	 * @generated
+	 */
+	double getHeelCostUnitPrice();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.PortVisit#getHeelCostUnitPrice <em>Heel Cost Unit Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Heel Cost Unit Price</em>' attribute.
+	 * @see #getHeelCostUnitPrice()
+	 * @generated
+	 */
+	void setHeelCostUnitPrice(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Heel Revenue Unit Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Heel Revenue Unit Price</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Heel Revenue Unit Price</em>' attribute.
+	 * @see #setHeelRevenueUnitPrice(double)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getPortVisit_HeelRevenueUnitPrice()
+	 * @model
+	 * @generated
+	 */
+	double getHeelRevenueUnitPrice();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.PortVisit#getHeelRevenueUnitPrice <em>Heel Revenue Unit Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Heel Revenue Unit Price</em>' attribute.
+	 * @see #getHeelRevenueUnitPrice()
+	 * @generated
+	 */
+	void setHeelRevenueUnitPrice(double value);
 
 } // end of  PortVisit
 

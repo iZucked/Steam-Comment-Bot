@@ -10,6 +10,7 @@ package com.mmxlabs.scheduler.optimiser.schedule;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Provider;
 
@@ -23,9 +24,14 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumerPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplier;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplierPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
@@ -42,6 +48,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.EvaluationMode;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences.HeelValueRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -108,6 +115,9 @@ public class ProfitAndLossCalculator {
 			}
 		}
 
+		int lastHeelPricePerMMBTU = 0;
+		// int lastHeelCV = 0;
+
 		for (final VolumeAllocatedSequence volumeAllocatedSequence : profitAndLossSequences.getVolumeAllocatedSequences()) {
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(volumeAllocatedSequence.getResource());
 			assert vesselAvailability != null;
@@ -138,7 +148,7 @@ public class ProfitAndLossCalculator {
 					final boolean isDesFobCase = ((vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE
 							|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan.getSequence().length == 2);
 					if (currentAllocation != null) {
-						final CargoValueAnnotation cargoValueAnnotation;// = new CargoValueAnnotation(currentAllocation);
+						final CargoValueAnnotation cargoValueAnnotation;
 						cargo = true;
 						if (isDesFobCase) {
 							// for now, only handle single load/discharge case
@@ -151,6 +161,8 @@ public class ProfitAndLossCalculator {
 							profitAndLossSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
 							profitAndLossSequences.setCargoValueAnnotation(plan, cargoValueAnnotation);
 
+							// Reset to zero. We Don't expect it to be used anyway
+							lastHeelPricePerMMBTU = 0;
 						} else {
 							final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculatorProvider.get().evaluate(EvaluationMode.FullPNL, plan, currentAllocation,
 									vesselAvailability, volumeAllocatedSequence.getStartTime(), volumeAllocatedSequences, annotatedSolution);
@@ -158,6 +170,10 @@ public class ProfitAndLossCalculator {
 							final long cargoGroupValue = p.getSecond();
 							profitAndLossSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
 							profitAndLossSequences.setCargoValueAnnotation(plan, cargoValueAnnotation);
+
+							int numSlots = cargoValueAnnotation.getSlots().size();
+							IPortSlot lastSlot = cargoValueAnnotation.getSlots().get(numSlots - 1);
+							lastHeelPricePerMMBTU =	cargoValueAnnotation.getSlotPricePerMMBTu(lastSlot);
 						}
 
 						// Store annotations if required
@@ -174,9 +190,25 @@ public class ProfitAndLossCalculator {
 				}
 
 				if (!cargo) {
-					final long otherGroupValue = entityValueCalculatorProvider.get().evaluateNonCargoPlan(EvaluationMode.FullPNL, plan, portTimesRecord, vesselAvailability, time, volumeAllocatedSequence.getStartTime(),
-							volumeAllocatedSequences, annotatedSolution);
+					Pair<Map<IPortSlot, HeelValueRecord>, Long> p = entityValueCalculatorProvider.get().evaluateNonCargoPlan(EvaluationMode.FullPNL, plan, portTimesRecord, vesselAvailability, time,
+							volumeAllocatedSequence.getStartTime(), volumeAllocatedSequences, lastHeelPricePerMMBTU, annotatedSolution);
+					final long otherGroupValue = p.getSecond();
 					profitAndLossSequences.setVoyagePlanGroupValue(plan, otherGroupValue);
+
+					// Merge records
+					for (Map.Entry<IPortSlot, HeelValueRecord> e : p.getFirst().entrySet()) {
+						profitAndLossSequences.mergeHeelValueRecord(e.getKey(), e.getValue());
+					}
+					// Lookup last heel price
+					for (IPortSlot slot : portTimesRecord.getSlots()) {
+						if (slot instanceof IHeelOptionConsumerPortSlot) {
+							// Heel consumed, so reset the price
+							lastHeelPricePerMMBTU = 0;
+						}
+						if (slot instanceof IHeelOptionSupplierPortSlot) {
+							lastHeelPricePerMMBTU = profitAndLossSequences.getPortHeelRecord(slot).getCostUnitPrice();
+						}
+					}
 				}
 				time += getPlanDuration(plan);
 			}

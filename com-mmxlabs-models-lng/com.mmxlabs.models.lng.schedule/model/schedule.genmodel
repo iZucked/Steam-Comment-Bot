@@ -173,6 +173,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//PortVisit/lateness"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//PortVisit/heelCost"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//PortVisit/heelRevenue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//PortVisit/heelCostUnitPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//PortVisit/heelRevenueUnitPrice"/>
     </genClasses>
     <genClasses image="false" ecoreClass="schedule.ecore#//SlotVisit">
       <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"

@@ -17,4 +17,6 @@ public interface IHeelOptionConsumer {
 	long getMinimumHeelAcceptedInM3();
 
 	long getMaximumHeelAcceptedInM3();
+
+	boolean isUseLastPrice();
 }

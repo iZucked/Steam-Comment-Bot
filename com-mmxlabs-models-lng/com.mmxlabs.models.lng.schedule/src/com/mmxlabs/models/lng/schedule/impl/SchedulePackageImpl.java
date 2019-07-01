@@ -1598,6 +1598,26 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EAttribute getPortVisit_HeelCostUnitPrice() {
+		return (EAttribute)portVisitEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPortVisit_HeelRevenueUnitPrice() {
+		return (EAttribute)portVisitEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getStartEvent() {
 		return startEventEClass;
 	}
@@ -3014,6 +3034,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(portVisitEClass, PORT_VISIT__LATENESS);
 		createEAttribute(portVisitEClass, PORT_VISIT__HEEL_COST);
 		createEAttribute(portVisitEClass, PORT_VISIT__HEEL_REVENUE);
+		createEAttribute(portVisitEClass, PORT_VISIT__HEEL_COST_UNIT_PRICE);
+		createEAttribute(portVisitEClass, PORT_VISIT__HEEL_REVENUE_UNIT_PRICE);
 
 		slotVisitEClass = createEClass(SLOT_VISIT);
 		createEReference(slotVisitEClass, SLOT_VISIT__SLOT_ALLOCATION);
@@ -3410,6 +3432,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getPortVisit_Lateness(), this.getPortVisitLateness(), null, "lateness", null, 0, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPortVisit_HeelCost(), ecorePackage.getEInt(), "heelCost", null, 0, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPortVisit_HeelRevenue(), ecorePackage.getEInt(), "heelRevenue", null, 0, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPortVisit_HeelCostUnitPrice(), ecorePackage.getEDouble(), "heelCostUnitPrice", null, 0, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPortVisit_HeelRevenueUnitPrice(), ecorePackage.getEDouble(), "heelRevenueUnitPrice", null, 0, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(slotVisitEClass, SlotVisit.class, "SlotVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSlotVisit_SlotAllocation(), this.getSlotAllocation(), this.getSlotAllocation_SlotVisit(), "slotAllocation", null, 1, 1, SlotVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

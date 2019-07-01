@@ -9,10 +9,12 @@ package com.mmxlabs.models.lng.scenario.model;
 import java.time.LocalDate;
 
 import org.eclipse.emf.common.util.EList;
+
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -37,6 +39,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAnalyticsModel <em>Analytics Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAdpModel <em>Adp Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAdpModels <em>Adp Models</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getNominationsModel <em>Nominations Model</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel()
@@ -346,5 +349,31 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * @generated
 	 */
 	EList<ADPModel> getAdpModels();
+
+	/**
+	 * Returns the value of the '<em><b>Nominations Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Nominations Model</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Nominations Model</em>' containment reference.
+	 * @see #setNominationsModel(NominationsModel)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_NominationsModel()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	NominationsModel getNominationsModel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getNominationsModel <em>Nominations Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Nominations Model</em>' containment reference.
+	 * @see #getNominationsModel()
+	 * @generated
+	 */
+	void setNominationsModel(NominationsModel value);
 
 } // LNGScenarioModel

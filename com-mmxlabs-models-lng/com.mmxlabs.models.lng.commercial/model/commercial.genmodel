@@ -77,33 +77,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/cancellationExpression"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/divertible"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/shippingDaysRestriction"/>
-      <genFeatures createChild="false" propertyDescription="Trade date nomination time period"
-          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/windowNominationSize"/>
-      <genFeatures createChild="false" propertyDescription="Trade date nomination time period unit"
-          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/windowNominationSizeUnits"/>
-      <genFeatures createChild="false" propertyDescription="Trade date nomination set by counterparty"
-          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/windowNominationCounterparty"/>
-      <genFeatures createChild="false" propertyDescription="Vessel nomination time period"
-          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/vesselNominationSize"/>
-      <genFeatures createChild="false" propertyDescription="Vessel nomination time period unit"
-          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/vesselNominationSizeUnits"/>
-      <genFeatures createChild="false" propertyDescription="Vessel nomination set by counterparty"
-          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/vesselNominationCounterparty"/>
-      <genFeatures createChild="false" propertyDescription="Volume nomination time period"
-          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/volumeNominationSize"/>
-      <genFeatures createChild="false" propertyDescription="Volume nomination time period unit"
-          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/volumeNominationSizeUnits"/>
-      <genFeatures createChild="false" propertyDescription="Volume nomination set by counterparty"
-          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/volumeNominationCounterparty"/>
-      <genFeatures createChild="false" propertyDescription="Port nomination time period"
-          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/portNominationSize"/>
-      <genFeatures createChild="false" propertyDescription="Port nomination time period unit"
-          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/portNominationSizeUnits"/>
-      <genFeatures createChild="false" propertyDescription="Port nomination set by counterparty"
-          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/portNominationCounterparty"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/portLoadNominationSize"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/portLoadNominationSizeUnits"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/portLoadNominationCounterparty"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//SalesContract">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//SalesContract/minCvValue"/>

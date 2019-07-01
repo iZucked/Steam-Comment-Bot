@@ -97,8 +97,6 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 					final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
 					final ScenarioInstance scenarioInstance = getScenarioInstance();
 					final IScenarioDataProvider sdp = getScenarioDataProvider();
-					//FIXME : code doesn't work properly without the line below. Magic?
-					//final AnalyticsModel analyticsModelZero = ScenarioModelUtil.getAnalyticsModel(sdp);
 
 					if (scenarioModel == null) {
 						return;
@@ -106,8 +104,8 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 					final ExecutorService executor = Executors.newFixedThreadPool(1);
 					try {
 						executor.submit(() -> {
-							final MTMModel model = MTMUtils.createModelFromScenario(scenarioModel, "mtm", true);
-							MTMSandboxEvaluator.evaluate(sdp, scenarioInstance, model);
+							
+							final MTMModel model = MTMUtils.evaluateMTMModel(scenarioModel, scenarioInstance, sdp, true, "mtm", false);
 
 							RunnerHelper.asyncExec(() -> {
 								final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);

@@ -16,15 +16,14 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 public class NominationsReportPublisher implements IReportPublisherExtension {
 
 	@Override
-	public void publishReport(IScenarioDataProvider scenarioDataProvider, ScheduleModel scheduleModel, OutputStream outputStream) throws Exception{
-		LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		List<Nominations> nominationsExportModels = NominationsJSONGenerator.createNominationsData(scenarioModel);
+	public void publishReport(final IScenarioDataProvider scenarioDataProvider, final ScheduleModel scheduleModel, final OutputStream outputStream) throws Exception {
+		final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		final List<Nominations> nominationsExportModels = NominationsJSONGenerator.createNominationsData(scenarioModel);
 
-		ObjectMapper objectMapper = new ObjectMapper();
+		final ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.writeValue(outputStream, nominationsExportModels);
-		
 	}
-	
+
 	@Override
 	public String getReportType() {
 		return "NominationsReport";

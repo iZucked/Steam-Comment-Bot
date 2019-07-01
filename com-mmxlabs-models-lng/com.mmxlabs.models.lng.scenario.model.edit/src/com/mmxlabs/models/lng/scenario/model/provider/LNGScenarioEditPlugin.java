@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.analytics.provider.AnalyticsEditPlugin;
 import com.mmxlabs.models.lng.cargo.provider.CargoEditPlugin;
 import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
 import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
+import com.mmxlabs.models.lng.nominations.provider.NominationsEditPlugin;
 import com.mmxlabs.models.lng.parameters.provider.ParametersEditPlugin;
 import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
 import com.mmxlabs.models.lng.pricing.provider.PricingEditPlugin;
@@ -68,6 +69,7 @@ public final class LNGScenarioEditPlugin extends EMFPlugin {
 		     PricingEditPlugin.INSTANCE,
 		     ScheduleEditPlugin.INSTANCE,
 		     SpotMarketsEditPlugin.INSTANCE,
+		     NominationsEditPlugin.INSTANCE,
 		   });
 	}
 

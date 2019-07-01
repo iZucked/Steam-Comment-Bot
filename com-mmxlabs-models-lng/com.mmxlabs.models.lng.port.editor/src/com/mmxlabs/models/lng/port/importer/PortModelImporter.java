@@ -79,7 +79,7 @@ public class PortModelImporter implements ISubmodelImporter {
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PANAMA_CANAL)) {
 			inputs.put(PANAMA_KEY, "Panama Distance Matrix");
 		}
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PANAMA_CANAL)) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CONTINGENCY_IDLE_TIME)) {
 			inputs.put(CONTINGENCY_MATRIX_KEY, "Contingency Matrix");
 		}
 	}
@@ -207,7 +207,7 @@ public class PortModelImporter implements ISubmodelImporter {
 				context.registerNamedObject(suez);
 			}
 		}
-		if (LicenseFeatures.isPermitted("features:panama-canal")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PANAMA_CANAL)) {
 			if (inputs.containsKey(PANAMA_KEY)) {
 				final Route panama = routeImporter.importRoute(inputs.get(PANAMA_KEY), context);
 				if (panama != null) {

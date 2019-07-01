@@ -77,7 +77,7 @@ public class CargoSizeDistributionModelItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_CargoSizeDistributionModel_exact_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoSizeDistributionModel_exact_feature", "_UI_CargoSizeDistributionModel_type"),
+				 getString("_UI_CargoSizeDistributionModel_exact_description"),
 				 ADPPackage.Literals.CARGO_SIZE_DISTRIBUTION_MODEL__EXACT,
 				 true,
 				 false,

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Dataserver: LiNGO - Hub Reports integration
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.integration.reports;singleton:=true
 Automatic-Module-Name: com.mmxlabs.lngdataserver.integration.reports
-Bundle-Version: 4.6.17.qualifier
+Bundle-Version: 4.6.18.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
@@ -17,12 +17,13 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.port,
  com.mmxlabs.models.lng.schedule,
  com.mmxlabs.lingo.reports,
- com.mmxlabs.models.ui.tabular;bundle-version="4.6.17",
+ com.mmxlabs.models.ui.tabular;bundle-version="4.6.18",
  com.mmxlabs.models.lng.cargo.editor,
  com.mmxlabs.lngdataserver.integration.ui.scenarios,
- com.mmxlabs.scenario.service.ui;bundle-version="4.6.17",
- com.mmxlabs.rcp.common;bundle-version="4.6.17",
- com.mmxlabs.models.lng.commercial.editor;bundle-version="4.6.17"
+ com.mmxlabs.scenario.service.ui;bundle-version="4.6.18",
+ com.mmxlabs.rcp.common;bundle-version="4.6.18",
+ com.mmxlabs.models.lng.commercial.editor;bundle-version="4.6.18",
+ com.mmxlabs.models.lng.nominations.editor;bundle-version="4.6.18"
 Import-Package: org.slf4j
 Bundle-Vendor: Minimax Labs Ltd.
 Export-Package: com.mmxlabs.lngdataserver.integration.reports.cargo,

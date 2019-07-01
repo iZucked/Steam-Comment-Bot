@@ -42,7 +42,7 @@ public class PreDefinedSlotGenerator implements IProfileGenerator {
 			slot.setWindowStart(preDefinedDate.getDate());
 			slot.setWindowSize(model.getWindowSize());
 			slot.setWindowSizeUnits(model.getWindowSizeUnits());
-			ADPModelUtil.setSlotVolumeFrom(model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot);
+			ADPModelUtil.setSlotVolumeFrom(model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot, false);
 			slots.add(slot);
 		}
 		return slots;

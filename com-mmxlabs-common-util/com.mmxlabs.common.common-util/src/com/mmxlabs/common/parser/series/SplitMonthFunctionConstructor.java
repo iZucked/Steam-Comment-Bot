@@ -49,6 +49,6 @@ public class SplitMonthFunctionConstructor implements IExpression<ISeries> {
 	
 	@Override
 	public @NonNull ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
-		return new SplitMonthSeries(series1.evaluate(), series2.evaluate(), splitPoint, calendarMonthMapper, earliestAndLatestTime);
+		return new SplitMonthSeries(series1.evaluate(earliestAndLatestTime), series2.evaluate(earliestAndLatestTime), splitPoint, calendarMonthMapper, earliestAndLatestTime);
 	}
 }

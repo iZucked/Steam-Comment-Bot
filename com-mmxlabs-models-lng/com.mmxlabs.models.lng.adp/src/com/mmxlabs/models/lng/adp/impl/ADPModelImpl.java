@@ -163,6 +163,7 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public YearMonth getYearEnd() {
 		return yearEnd;
 	}
@@ -172,6 +173,7 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setYearEnd(YearMonth newYearEnd) {
 		YearMonth oldYearEnd = yearEnd;
 		yearEnd = newYearEnd;
@@ -210,6 +212,7 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FleetProfile getFleetProfile() {
 		if (fleetProfile != null && fleetProfile.eIsProxy()) {
 			InternalEObject oldFleetProfile = (InternalEObject)fleetProfile;
@@ -257,6 +260,7 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFleetProfile(FleetProfile newFleetProfile) {
 		if (newFleetProfile != fleetProfile) {
 			NotificationChain msgs = null;

@@ -29,6 +29,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 	private final GridTableViewer viewer;
 	private final EObjectTableViewerSortingSupport sortingSupport;
 	private final EObjectTableViewerFilterSupport filterSupport;
+	
 
 	public GridTableViewerColumnFactory(final GridTableViewer viewer, final EObjectTableViewerSortingSupport sortingSupport, final EObjectTableViewerFilterSupport filterSupport) {
 		this.viewer = viewer;
@@ -79,16 +80,6 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 					}
 				}
 
-//				if (element instanceof Row) {
-//					for (final EMFPath p : path) {
-//						final Object x = p.get((EObject) element);
-//						if (x != null) {
-//							element = x;
-//							break;
-//						}
-//					}
-//
-//				}
 				if (col.isVisible()) {
 					setRowSpan(formatter, cell, element);
 				}
@@ -99,78 +90,6 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 			}
 		});
 
-		// But try and create an observable based label provider for better data linkage.
-		try {
-//			if (viewer.getContentProvider() instanceof ObservableListContentProvider) {
-//
-//				final ObservableListContentProvider contentProvider = (ObservableListContentProvider) viewer.getContentProvider();
-//				// We can pass EOperations into this, if so, throw a class cast exception to break out.
-//
-//				final IObservableMap[] attributeMap = new IObservableMap[features.length];
-//
-//				boolean foundFeaturePath = features.length > 0;
-//				for (int i = 0; i < features.length; ++i) {
-//					final EStructuralFeature[] f = new EStructuralFeature[features[i].length];
-//					int idx = 0;
-//					for (final ETypedElement element : features[i]) {
-//						if (!(element instanceof EStructuralFeature)) {
-//							// Fall back to non-listening approach
-//							throw new ClassCastException();
-//						}
-//						f[idx++] = (EStructuralFeature) element;
-//					}
-//					// If idx is zero, then we have not found any features, so ignore
-//					if (idx == 0) {
-//						foundFeaturePath = false;
-//					} else {
-//						attributeMap[i] = EMFProperties.value(FeaturePath.fromList(f)).observeDetail(contentProvider.getKnownElements());
-//					}
-//				}
-//
-//				if (foundFeaturePath) {
-//
-//					column.setLabelProvider(new ObservableMapCellLabelProvider(attributeMap) {
-//
-//						@Override
-//						public void update(final ViewerCell cell) {
-//
-//							Object element = cell.getElement();
-//							if (element != null) {
-//								boolean found = false;
-//								for (final IObservableMap attributeMap : attributeMaps) {
-//									if (attributeMap != null) {
-//										final Object x = attributeMap.get(element);
-//										if (x != null) {
-//											element = x;
-//											found = true;
-//											break;
-//										}
-//									}
-//								}
-//								if (!found) {
-//									element = null;
-//								}
-//							}
-//
-//							if (col.isVisible()) {
-//								setRowSpan(formatter, cell, element);
-//							}
-//							cell.setText(formatter.render(element));
-//
-//							if (formatter instanceof IImageProvider) {
-//								cell.setImage(((IImageProvider) formatter).getImage(cell.getElement()));
-//							}
-//
-//						}
-//
-//					}
-//
-//					);
-//				}
-//			}
-		} catch (final Exception cce) {
-			// Ignore
-		}
 		final GridColumn tc = column.getColumn();
 
 		tc.setData(ColumnHandler.COLUMN_HANDLER, this);

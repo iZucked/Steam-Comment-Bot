@@ -218,7 +218,7 @@
    <command
          defaultHandler="com.mmxlabs.models.lng.adp.actions.CreateADPCommandHandler"
          id="com.mmxlabs.models.lng.adp.create"
-         name="Create ADP">
+         name="Convert to ADP scenario">
    </command>
 </extension>
 <extension

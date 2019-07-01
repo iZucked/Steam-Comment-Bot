@@ -90,6 +90,7 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<FleetConstraint> getConstraints() {
 		if (constraints == null) {
 			constraints = new EObjectContainmentEList.Resolving<FleetConstraint>(FleetConstraint.class, this, ADPPackage.FLEET_PROFILE__CONSTRAINTS);
@@ -102,6 +103,7 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterInMarket getDefaultNominalMarket() {
 		if (defaultNominalMarket != null && defaultNominalMarket.eIsProxy()) {
 			InternalEObject oldDefaultNominalMarket = (InternalEObject)defaultNominalMarket;
@@ -128,6 +130,7 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDefaultNominalMarket(CharterInMarket newDefaultNominalMarket) {
 		CharterInMarket oldDefaultNominalMarket = defaultNominalMarket;
 		defaultNominalMarket = newDefaultNominalMarket;
