@@ -1900,9 +1900,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		} else if (cargo.getVesselAvailability_MaxDuration() == feature) {
 			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getCharterContract_MaxDuration(), (Integer) 0);
 		} else if (cargo.getVesselAvailability_Entity() == feature) {
-			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getBallastBonusCharterContract_Entity(), (Integer) 0);
+			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getBallastBonusCharterContract_Entity(), null);
 		} else if (cargo.getVesselAvailability_RepositioningFee() == feature) {
-			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getBallastBonusCharterContract_RepositioningFee(), (Integer) 0);
+			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getBallastBonusCharterContract_RepositioningFee(), null);
 		}
 		
 		return super.getUnsetValueOrDelegate(feature);
