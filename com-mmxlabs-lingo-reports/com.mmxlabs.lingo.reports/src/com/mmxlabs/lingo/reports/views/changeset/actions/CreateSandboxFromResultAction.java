@@ -36,14 +36,19 @@ import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.VesselEventOption;
+import com.mmxlabs.models.lng.analytics.VesselEventReference;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -76,6 +81,7 @@ public class CreateSandboxFromResultAction extends Action {
 		final Map<SpotMarket, SellMarket> sellMarketOptions = new HashMap<>();
 		final Map<LoadSlot, BuyOption> buyOptions = new HashMap<>();
 		final Map<DischargeSlot, SellOption> sellOptions = new HashMap<>();
+		final Map<VesselEvent, VesselEventOption> eventOptions = new HashMap<>();
 		final Map<Pair<CharterInMarket, Integer>, ExistingCharterMarketOption> roundTripMap = new HashMap<>();
 		final Map<VesselAvailability, ExistingVesselCharterOption> vesselAvailOptionMap = new HashMap<>();
 		final Function<VesselAvailability, ExistingVesselCharterOption> availOptionComputer = (va) -> {
@@ -132,6 +138,13 @@ public class CreateSandboxFromResultAction extends Action {
 			}
 		});
 
+		final Function<VesselEvent, VesselEventOption> eventGetter = evt -> eventOptions.computeIfAbsent(evt, s -> {
+			final VesselEventReference ref = AnalyticsFactory.eINSTANCE.createVesselEventReference();
+			ref.setEvent(s);
+			newModel.getVesselEvents().add(ref);
+			return ref;
+		});
+
 		final ScenarioResult baseScenarioResult = changeSetTableGroup.getBaseScenario();
 		final LNGScenarioModel scenarioModel = baseScenarioResult.getTypedRoot(LNGScenarioModel.class);
 		assert scenarioModel != null;
@@ -150,6 +163,11 @@ public class CreateSandboxFromResultAction extends Action {
 						if (loadAllocation != null) {
 							final LoadSlot slot = (LoadSlot) loadAllocation.getSlot();
 							bRow.setBuyOption(buyGetter.apply(slot));
+						}
+						final Event evt = lhsData.getLhsEvent();
+						if (evt instanceof VesselEventVisit) {
+							VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
+							bRow.setVesselEventOption(eventGetter.apply(vesselEventVisit.getVesselEvent()));
 						}
 					}
 					final ChangeSetRowData rhsData = row.getLhsBefore();
@@ -198,7 +216,7 @@ public class CreateSandboxFromResultAction extends Action {
 					// Do not add
 				} else if (bRow.getBuyOption() == null && bRow.getSellOption() instanceof SellMarket) {
 					// Do not add
-				} else if (bRow.getBuyOption() != null || bRow.getSellOption() != null) {
+				} else if (bRow.getBuyOption() != null || bRow.getSellOption() != null || bRow.getVesselEventOption() != null) {
 					baseCase.getBaseCase().add(bRow);
 				}
 				// } else if (row.isVesselChange()) {
@@ -210,14 +228,19 @@ public class CreateSandboxFromResultAction extends Action {
 		final PartialCase partialCase = AnalyticsFactory.eINSTANCE.createPartialCase();
 		partialCase.setKeepExistingScenario(true);
 
-		final Map<BuyOption, Pair<Collection<SellOption>, Collection<ShippingOption>>> dataBlobs = new HashMap<>();
-
 		for (final ChangeSetTableRow row : changeSetTableGroup.getRows()) {
 			final PartialCaseRow pRow = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
 			if (row.isWiringChange() || row.isVesselChange()) {
 				{
 					final ChangeSetRowData lhsData = row.getLhsAfter();
 					if (lhsData != null) {
+
+						final Event evt = lhsData.getLhsEvent();
+						if (evt instanceof VesselEventVisit) {
+							VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
+							pRow.getVesselEventOptions().add(eventGetter.apply(vesselEventVisit.getVesselEvent()));
+						}
+
 						final SlotAllocation loadAllocation = lhsData.getLoadAllocation();
 						if (loadAllocation != null) {
 							final LoadSlot slot = (LoadSlot) loadAllocation.getSlot();
@@ -292,7 +315,7 @@ public class CreateSandboxFromResultAction extends Action {
 					}
 				}
 
-				if (!pRow.getBuyOptions().isEmpty() || !pRow.getSellOptions().isEmpty()) {
+				if (!pRow.getBuyOptions().isEmpty() || !pRow.getSellOptions().isEmpty() || !pRow.getVesselEventOptions().isEmpty()) {
 					partialCase.getPartialCase().add(pRow);
 				}
 
