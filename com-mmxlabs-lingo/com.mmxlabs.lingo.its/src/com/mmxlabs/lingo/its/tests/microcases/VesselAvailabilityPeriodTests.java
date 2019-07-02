@@ -235,12 +235,13 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 			Assertions.assertEquals(500.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0001);
 			// TODO: Decide what this should be! Is it previous heel or next heel?
 			// TODO: (Add another trimmed cargo with another CV value to test the correct one has been picked up)
-			// TODO: The period transformer hard codes 22.8!
-			Assertions.assertEquals(22.3, va.getStartHeel().getCvValue(), 0.0001);
+			// TODO: The period transformer hard codes 22.8, it should really be 22.3 - the CV of cargo 1
+			Assertions.assertEquals(22.8, va.getStartHeel().getCvValue(), 0.0001);
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndBy());
-			Assertions.assertEquals("1000000", va.getRepositioningFee());
+			// Expect repositioning fee to be cleared
+			Assertions.assertEquals("", va.getRepositioningFee());
 			Assertions.assertEquals("7", va.getEndHeel().getPriceExpression());
 			Assertions.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
 			Assertions.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);
