@@ -57,7 +57,7 @@ public class CreateSandboxFromResultAction extends Action {
 	private final String name;
 
 	public CreateSandboxFromResultAction(final ChangeSetTableGroup changeSetTableGroup, final String name) {
-		super("Create sandbox");
+		super("Create as sandbox");
 		this.changeSetTableGroup = changeSetTableGroup;
 		this.name = name;
 	}
@@ -67,9 +67,9 @@ public class CreateSandboxFromResultAction extends Action {
 
 		final OptionAnalysisModel newModel = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
 		if (name != null && !name.isEmpty()) {
-			newModel.setName(name);
+			newModel.setName("Sandbox: " + name);
 		} else {
-			newModel.setName("Insertion sandbox");
+			newModel.setName("Sandbox from solution");
 		}
 
 		final Map<SpotMarket, BuyMarket> buyMarketOptions = new HashMap<>();
