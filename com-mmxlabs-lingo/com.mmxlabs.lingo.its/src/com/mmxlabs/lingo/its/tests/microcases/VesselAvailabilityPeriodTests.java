@@ -11,8 +11,10 @@ import java.time.YearMonth;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -34,6 +36,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 	 * Vessel availability and cargoes are within the period. No change to start/end information.
 	 */
 	@Test
+	@Tag(TestCategories.MICRO_TEST)
 	public void testContainedAvailability() {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -105,6 +108,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 	 * Vessel availability and cargoes are within the period. No change to start/end information.
 	 */
 	@Test
+	@Tag(TestCategories.MICRO_TEST)
 	public void testAvailabilityOverlapsEnd() {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -176,6 +180,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 	 * Vessel availability and cargoes are within the period. No change to start/end information.
 	 */
 	@Test
+	@Tag(TestCategories.MICRO_TEST)
 	public void testAvailabilityLooseCargo1() {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -253,6 +258,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 	 * Vessel availability and cargoes are within the period. No change to start/end information.
 	 */
 	@Test
+	@Tag(TestCategories.MICRO_TEST)
 	public void testAvailabilityLooseCargo2() {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
