@@ -131,6 +131,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.ComplexCargoAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
+import com.mmxlabs.models.lng.cargo.ui.util.TimeWindowHelper;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -1037,11 +1038,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final GridViewerColumn loadDateColumn = addTradesColumn(loadColumns, "Window", new LocalDateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
 			public String renderSetValue(final Object owner, final Object object) {
-				final String v = super.renderSetValue(owner, object);
+				String v = super.renderSetValue(owner, object);
 				if (!v.isEmpty()) {
-					final String suffix = getTimeWindowSuffix(owner);
-					return v + suffix;
+					final String suffix = TimeWindowHelper.getTimeWindowSuffix(owner);
+					v = v + suffix;
 				}
+				v = v + (v.isEmpty() ? "" : " ");
+				v = v + TimeWindowHelper.getCPWindowSuffix(owner);
 				return v;
 			}
 
@@ -1087,11 +1090,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			@Override
 			public String renderSetValue(final Object owner, final Object object) {
-				final String v = super.renderSetValue(owner, object);
+				String v = super.renderSetValue(owner, object);
 				if (!v.isEmpty()) {
-					final String suffix = getTimeWindowSuffix(owner);
-					return v + suffix;
+					final String suffix = TimeWindowHelper.getTimeWindowSuffix(owner);
+					v = v + suffix;
 				}
+				v = v + (v.isEmpty() ? "" : " ");
+				v = v + TimeWindowHelper.getCPWindowSuffix(owner);
 				return v;
 			}
 
@@ -1412,35 +1417,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 
 		return result;
-	}
-
-	protected String getTimeWindowSuffix(final Object owner) {
-		if (owner instanceof Slot<?>) {
-			final Slot<?> slot = (Slot<?>) owner;
-			final int size = slot.getSlotOrDelegateWindowSize();
-			final TimePeriod units = slot.getSlotOrDelegateWindowSizeUnits();
-			String suffix;
-			switch (units) {
-			case DAYS:
-				suffix = "d";
-				break;
-			case HOURS:
-				suffix = "h";
-				break;
-			case MONTHS:
-				suffix = "m";
-				break;
-			default:
-				return "";
-			}
-			if (slot.isWindowCounterParty()) {
-				suffix += " CP";
-			}
-			if (size > 0) {
-				return String.format(" +%d%s", size, suffix);
-			}		
-		}
-		return "";
 	}
 
 	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addPNLColumn(final String columnName, final EStructuralFeature bookContainmentFeature, final T manipulator,

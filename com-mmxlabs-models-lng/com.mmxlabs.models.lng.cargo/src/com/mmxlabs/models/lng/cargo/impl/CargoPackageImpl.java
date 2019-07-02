@@ -1202,7 +1202,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EOperation getSlot__GetSlotOrDelegateFlex() {
+	public EOperation getSlot__GetSlotOrDelegateWithoutCPWindowSize() {
 		return slotEClass.getEOperations().get(28);
 	}
 
@@ -1212,7 +1212,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EOperation getSlot__GetWindowFlexInHours() {
+	public EOperation getSlot__GetSlotOrDelegateWithoutCPDuration() {
 		return slotEClass.getEOperations().get(29);
 	}
 
@@ -3188,8 +3188,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS);
-		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_FLEX);
-		createEOperation(slotEClass, SLOT___GET_WINDOW_FLEX_IN_HOURS);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_WINDOW_SIZE);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION);
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CV);
@@ -3637,9 +3637,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		g1.getETypeArguments().add(g2);
 		initEOperation(op, g1);
 
-		initEOperation(getSlot__GetSlotOrDelegateFlex(), ecorePackage.getEInt(), "getSlotOrDelegateFlex", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getSlot__GetSlotOrDelegateWithoutCPWindowSize(), ecorePackage.getEInt(), "getSlotOrDelegateWithoutCPWindowSize", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEOperation(getSlot__GetWindowFlexInHours(), ecorePackage.getEInt(), "getWindowFlexInHours", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getSlot__GetSlotOrDelegateWithoutCPDuration(), ecorePackage.getEInt(), "getSlotOrDelegateWithoutCPDuration", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

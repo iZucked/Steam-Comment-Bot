@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorP
 import com.mmxlabs.models.lng.cargo.ui.editorpart.AssignmentManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
+import com.mmxlabs.models.lng.cargo.ui.util.TimeWindowHelper;
 import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortSingleReferenceManipulatorExtension;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
@@ -224,7 +225,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							public String renderSetValue(final Object owner, final Object object) {
 								String v = super.renderSetValue(owner, object);
 								if (!v.isEmpty()) {
-									final String suffix = getTimeWindowSuffix(owner);
+									final String suffix = TimeWindowHelper.getTimeWindowSuffix(owner);
 									v = v + suffix;
 								}
 								if (!v.isEmpty()) {
@@ -235,7 +236,8 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 										}
 									}
 								}
-
+								v = v + (v.isEmpty() ? "" : " ");
+								v = v + TimeWindowHelper.getCPWindowSuffix(owner);
 								return v;
 							}
 						};
@@ -672,7 +674,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							public String renderSetValue(final Object owner, final Object object) {
 								String v = super.renderSetValue(owner, object);
 								if (!v.isEmpty()) {
-									final String suffix = getTimeWindowSuffix(owner);
+									final String suffix = TimeWindowHelper.getTimeWindowSuffix(owner);
 									v = v + suffix;
 								}
 								if (!v.isEmpty()) {
@@ -683,7 +685,8 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 										}
 									}
 								}
-
+								v = v + (v.isEmpty() ? "" : " ");
+								v = v + TimeWindowHelper.getCPWindowSuffix(owner);
 								return v;
 							}
 						};
@@ -1312,34 +1315,6 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			}
 
 		};
-	}
-
-	protected String getTimeWindowSuffix(final Object owner) {
-		if (owner instanceof Slot) {
-			final Slot<?> slot = (Slot<?>) owner;
-			final int size = slot.getSlotOrDelegateWindowSize();
-			final TimePeriod units = slot.getSlotOrDelegateWindowSizeUnits();
-			final String suffix;
-			switch (units) {
-			case DAYS:
-				suffix = "d";
-				break;
-			case HOURS:
-				suffix = "h";
-				break;
-			case MONTHS:
-				suffix = "m";
-				break;
-			default:
-				return "";
-
-			}
-			if (size > 0) {
-				return String.format(" +%d%s", size, suffix);
-			}
-
-		}
-		return "";
 	}
 
 	private static String mapName(final VolumeUnits units) {

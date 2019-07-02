@@ -162,8 +162,8 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateContractRestrictions"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortRestrictions"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVesselRestrictions"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateFlex"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowFlexInHours"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWithoutCPWindowSize"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWithoutCPDuration"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//LoadSlot">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/cargoCV"/>

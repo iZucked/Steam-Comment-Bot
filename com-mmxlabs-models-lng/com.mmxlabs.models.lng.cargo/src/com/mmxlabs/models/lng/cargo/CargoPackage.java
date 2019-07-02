@@ -1139,22 +1139,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 28;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Flex</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegate Without CP Window Size</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_FLEX = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 29;
+	int SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 29;
 
 	/**
-	 * The operation id for the '<em>Get Window Flex In Hours</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegate Without CP Duration</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_WINDOW_FLEX_IN_HOURS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 30;
+	int SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 30;
 
 	/**
 	 * The number of operations of the '<em>Slot</em>' class.
@@ -1922,22 +1922,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Flex</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegate Without CP Window Size</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_FLEX = SLOT___GET_SLOT_OR_DELEGATE_FLEX;
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_WINDOW_SIZE = SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_WINDOW_SIZE;
 
 	/**
-	 * The operation id for the '<em>Get Window Flex In Hours</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegate Without CP Duration</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT___GET_WINDOW_FLEX_IN_HOURS = SLOT___GET_WINDOW_FLEX_IN_HOURS;
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION = SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -2723,22 +2723,22 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Flex</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegate Without CP Window Size</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_FLEX = SLOT___GET_SLOT_OR_DELEGATE_FLEX;
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_WINDOW_SIZE = SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_WINDOW_SIZE;
 
 	/**
-	 * The operation id for the '<em>Get Window Flex In Hours</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegate Without CP Duration</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT___GET_WINDOW_FLEX_IN_HOURS = SLOT___GET_WINDOW_FLEX_IN_HOURS;
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION = SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -3625,22 +3625,22 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Flex</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegate Without CP Window Size</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_FLEX = LOAD_SLOT___GET_SLOT_OR_DELEGATE_FLEX;
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_WINDOW_SIZE = LOAD_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_WINDOW_SIZE;
 
 	/**
-	 * The operation id for the '<em>Get Window Flex In Hours</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegate Without CP Duration</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_LOAD_SLOT___GET_WINDOW_FLEX_IN_HOURS = LOAD_SLOT___GET_WINDOW_FLEX_IN_HOURS;
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION = LOAD_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -4446,22 +4446,22 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Flex</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegate Without CP Window Size</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_FLEX = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_FLEX;
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_WINDOW_SIZE = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_WINDOW_SIZE;
 
 	/**
-	 * The operation id for the '<em>Get Window Flex In Hours</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegate Without CP Duration</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_DISCHARGE_SLOT___GET_WINDOW_FLEX_IN_HOURS = DISCHARGE_SLOT___GET_WINDOW_FLEX_IN_HOURS;
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -8484,24 +8484,24 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrDelegateVesselRestrictions();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateFlex() <em>Get Slot Or Delegate Flex</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateWithoutCPWindowSize() <em>Get Slot Or Delegate Without CP Window Size</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Slot Or Delegate Flex</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateFlex()
+	 * @return the meta object for the '<em>Get Slot Or Delegate Without CP Window Size</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateWithoutCPWindowSize()
 	 * @generated
 	 */
-	EOperation getSlot__GetSlotOrDelegateFlex();
+	EOperation getSlot__GetSlotOrDelegateWithoutCPWindowSize();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowFlexInHours() <em>Get Window Flex In Hours</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateWithoutCPDuration() <em>Get Slot Or Delegate Without CP Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Window Flex In Hours</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getWindowFlexInHours()
+	 * @return the meta object for the '<em>Get Slot Or Delegate Without CP Duration</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateWithoutCPDuration()
 	 * @generated
 	 */
-	EOperation getSlot__GetWindowFlexInHours();
+	EOperation getSlot__GetSlotOrDelegateWithoutCPDuration();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -11132,20 +11132,20 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = eINSTANCE.getSlot__GetSlotOrDelegateVesselRestrictions();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Slot Or Delegate Flex</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Without CP Window Size</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation SLOT___GET_SLOT_OR_DELEGATE_FLEX = eINSTANCE.getSlot__GetSlotOrDelegateFlex();
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_WINDOW_SIZE = eINSTANCE.getSlot__GetSlotOrDelegateWithoutCPWindowSize();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Window Flex In Hours</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Without CP Duration</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation SLOT___GET_WINDOW_FLEX_IN_HOURS = eINSTANCE.getSlot__GetWindowFlexInHours();
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION = eINSTANCE.getSlot__GetSlotOrDelegateWithoutCPDuration();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

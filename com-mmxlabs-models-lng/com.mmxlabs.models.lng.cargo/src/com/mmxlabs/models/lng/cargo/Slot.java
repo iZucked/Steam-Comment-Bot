@@ -2092,10 +2092,10 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation"
+	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	int getSlotOrDelegateFlex();
+	int getSlotOrDelegateWithoutCPWindowSize();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2103,7 +2103,7 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @model kind="operation"
 	 * @generated
 	 */
-	int getWindowFlexInHours();
+	int getSlotOrDelegateWithoutCPDuration();
 
 } // end of  Slot
 
