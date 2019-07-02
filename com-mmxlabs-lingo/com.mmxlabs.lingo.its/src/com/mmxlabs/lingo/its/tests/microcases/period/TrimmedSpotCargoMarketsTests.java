@@ -17,24 +17,14 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
-import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.port.util.PortModelFinder;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
-import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
@@ -48,29 +38,12 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 
 	@Test
-	@Tag(TestCategories.QUICK_TEST)
 	@Tag(TestCategories.MICRO_TEST)
 	public void basicMarketTrim() throws Exception {
 
 		// Load in the basic scenario from CSV
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		SpotMarketsModelBuilder spotMarketsBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
 		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
@@ -89,7 +62,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 					.build(); //
 
 		}
-		SpotMarket market = spotMarketsBuilder.makeDESSaleMarket("DES-SaleMarket", portFinder.findPort("Point Fortin"), entity, "5") //
+		SpotMarket market = spotMarketsModelBuilder.makeDESSaleMarket("DES-SaleMarket", portFinder.findPort("Point Fortin"), entity, "5") //
 				.withAvailabilityConstant(5)//
 				.withAvailabilityDate(YearMonth.of(2015, 12), 6) //
 				.build();
@@ -164,29 +137,12 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Tag(TestCategories.QUICK_TEST)
 	@Tag(TestCategories.MICRO_TEST)
 	public void basicMarketTrim_PartMonth() throws Exception {
 
 		// Load in the basic scenario from CSV
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		SpotMarketsModelBuilder spotMarketsBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
 		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
@@ -205,7 +161,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 					.build(); //
 
 		}
-		SpotMarket market = spotMarketsBuilder.makeDESSaleMarket("DES-SaleMarket", portFinder.findPort("Point Fortin"), entity, "5") //
+		SpotMarket market = spotMarketsModelBuilder.makeDESSaleMarket("DES-SaleMarket", portFinder.findPort("Point Fortin"), entity, "5") //
 				.withAvailabilityConstant(5)//
 				.withAvailabilityDate(YearMonth.of(2015, 12), 6) //
 				.build();
