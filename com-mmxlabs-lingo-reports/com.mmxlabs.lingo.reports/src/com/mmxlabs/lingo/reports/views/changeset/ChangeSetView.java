@@ -100,7 +100,7 @@ import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetToTableTransformer.SortMode;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewColumnHelper.VesselData;
 import com.mmxlabs.lingo.reports.views.changeset.InsertionPlanGrouperAndFilter.GroupMode;
-import com.mmxlabs.lingo.reports.views.changeset.actions.CreateSandboxFromInsertionAction;
+import com.mmxlabs.lingo.reports.views.changeset.actions.CreateSandboxFromResultAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.ExportChangeAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.MergeChangesAction;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
@@ -1393,7 +1393,7 @@ public class ChangeSetView extends ViewPart {
 							// This does not work as insertion scenario is read-only. Data model is also
 							// unstable (not sure if containment works right.
 							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
-							helper.addAction(new CreateSandboxFromInsertionAction(changeSetTableGroup, changeSetTableGroup.getDescription()));
+							helper.addAction(new CreateSandboxFromResultAction(changeSetTableGroup, changeSetTableGroup.getDescription()));
 							showMenu = true;
 						}
 						if (ChangeSetView.this.viewMode == ViewMode.SANDBOX && ChangeSetView.this.showToggleAltPNLBaseAction) {
