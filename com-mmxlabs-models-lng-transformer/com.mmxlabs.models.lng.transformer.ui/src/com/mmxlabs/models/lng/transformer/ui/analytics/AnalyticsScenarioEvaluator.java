@@ -566,6 +566,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			final OptionAnalysisModel model) {
 
 		final SandboxResult sandboxResult = AnalyticsFactory.eINSTANCE.createSandboxResult();
+		sandboxResult.setUseScenarioBase(false);
 
 		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
 
@@ -596,6 +597,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			final OptionAnalysisModel model) {
 
 		final SlotInsertionOptions sandboxResult = AnalyticsFactory.eINSTANCE.createSlotInsertionOptions();
+		sandboxResult.setUseScenarioBase(false);
 
 		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
 
@@ -663,6 +665,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			final OptionAnalysisModel model) {
 
 		final OptimisationResult sandboxResult = AnalyticsFactory.eINSTANCE.createOptimisationResult();
+		sandboxResult.setUseScenarioBase(false);
 
 		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
 

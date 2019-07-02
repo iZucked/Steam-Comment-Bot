@@ -206,6 +206,7 @@ public interface AbstractSolutionSet extends UUIDObject, NamedObject {
 
 	/**
 	 * Returns the value of the '<em><b>Use Scenario Base</b></em>' attribute.
+	 * The default value is <code>"true"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Use Scenario Base</em>' attribute isn't clear,
@@ -215,7 +216,7 @@ public interface AbstractSolutionSet extends UUIDObject, NamedObject {
 	 * @return the value of the '<em>Use Scenario Base</em>' attribute.
 	 * @see #setUseScenarioBase(boolean)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAbstractSolutionSet_UseScenarioBase()
-	 * @model
+	 * @model default="true"
 	 * @generated
 	 */
 	boolean isUseScenarioBase();

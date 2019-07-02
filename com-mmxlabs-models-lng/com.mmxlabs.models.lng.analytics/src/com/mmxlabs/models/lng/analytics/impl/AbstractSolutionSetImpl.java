@@ -210,7 +210,7 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean USE_SCENARIO_BASE_EDEFAULT = false;
+	protected static final boolean USE_SCENARIO_BASE_EDEFAULT = true;
 
 	/**
 	 * The cached value of the '{@link #isUseScenarioBase() <em>Use Scenario Base</em>}' attribute.
