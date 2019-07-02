@@ -137,6 +137,8 @@ public class EvaluateSolutionSetHelper {
 			};
 
 			scheduleSpecificationHelper.addJobs(r);
+		} else if (scheduleModel != null) {
+			processSolution(scheduleModel);
 		}
 	}
 
@@ -333,7 +335,7 @@ public class EvaluateSolutionSetHelper {
 		try {
 			recomputeSolution(sdp, scenarioInstance, abstractSolutionSet, fromSpecifications, open, true, true);
 		} finally {
-			sdp.close();
+			// sdp.close();
 		}
 	}
 
@@ -344,62 +346,64 @@ public class EvaluateSolutionSetHelper {
 
 			ICoreRunnable runnable = (monitor) -> {
 				try {
-					final EvaluateSolutionSetHelper helper = new EvaluateSolutionSetHelper(sdp);
+					sdp.getModelReference().executeWithLock(true, () -> {
+						final EvaluateSolutionSetHelper helper = new EvaluateSolutionSetHelper(sdp);
 
-					if (abstractSolutionSet != null) {
-						UserSettings userSettings = abstractSolutionSet.getUserSettings();
-						helper.processExtraData(abstractSolutionSet);
+						if (abstractSolutionSet != null) {
+							UserSettings userSettings = abstractSolutionSet.getUserSettings();
+							helper.processExtraData(abstractSolutionSet);
 
-						Consumer<SolutionOption> action = opt -> {
-							helper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
-							if (opt instanceof DualModeSolutionOption) {
-								final DualModeSolutionOption dualModeSolutionOption = (DualModeSolutionOption) opt;
+							Consumer<SolutionOption> action = opt -> {
+								helper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
+								if (opt instanceof DualModeSolutionOption) {
+									final DualModeSolutionOption dualModeSolutionOption = (DualModeSolutionOption) opt;
 
-								final SolutionOptionMicroCase base = dualModeSolutionOption.getMicroBaseCase();
-								if (base != null) {
-									// Re-evaluate from schedule
-									helper.processExtraData(base);
-									if (fromSpecifications) {
-										// (Experimental version) Re-evaluate from change specification)
-										helper.processSolution(base.getScheduleSpecification(), base.getScheduleModel());
-									} else {
-										helper.processSolution(base.getScheduleModel());
+									final SolutionOptionMicroCase base = dualModeSolutionOption.getMicroBaseCase();
+									if (base != null) {
+										// Re-evaluate from schedule
+										helper.processExtraData(base);
+										if (fromSpecifications) {
+											// (Experimental version) Re-evaluate from change specification)
+											helper.processSolution(base.getScheduleSpecification(), base.getScheduleModel());
+										} else {
+											helper.processSolution(base.getScheduleModel());
+										}
 									}
-								}
 
-								final SolutionOptionMicroCase target = dualModeSolutionOption.getMicroTargetCase();
-								if (target != null) {
-									// Re-evaluate from schedule
-									helper.processExtraData(target);
+									final SolutionOptionMicroCase target = dualModeSolutionOption.getMicroTargetCase();
+									if (target != null) {
+										// Re-evaluate from schedule
+										helper.processExtraData(target);
 
-									if (fromSpecifications) {
-										// (Experimental version) Re-evaluate from change specification)
-										helper.processSolution(target.getScheduleSpecification(), target.getScheduleModel());
-									} else {
-										helper.processSolution(target.getScheduleModel());
+										if (fromSpecifications) {
+											// (Experimental version) Re-evaluate from change specification)
+											helper.processSolution(target.getScheduleSpecification(), target.getScheduleModel());
+										} else {
+											helper.processSolution(target.getScheduleModel());
+										}
 									}
-								}
 
+								}
+							};
+
+							{
+								SolutionOption opt = abstractSolutionSet.getBaseOption();
+								if (opt != null) {
+									action.accept(opt);
+								}
 							}
-						};
 
-						{
-							SolutionOption opt = abstractSolutionSet.getBaseOption();
-							if (opt != null) {
+							for (final SolutionOption opt : abstractSolutionSet.getOptions()) {
 								action.accept(opt);
 							}
-						}
 
-						for (final SolutionOption opt : abstractSolutionSet.getOptions()) {
-							action.accept(opt);
+							final UserSettings copy = EcoreUtil.copy(userSettings);
+							helper.generateResults(scenarioInstance, copy, sdp.getEditingDomain(), monitor);
+							if (open) {
+								new AnalyticsSolution(scenarioInstance, abstractSolutionSet, abstractSolutionSet.getName()).open();
+							}
 						}
-
-						final UserSettings copy = EcoreUtil.copy(userSettings);
-						helper.generateResults(scenarioInstance, copy, sdp.getEditingDomain(), monitor);
-						if (open) {
-							new AnalyticsSolution(scenarioInstance, abstractSolutionSet, abstractSolutionSet.getName()).open();
-						}
-					}
+					});
 				} finally {
 					if (closeSDP) {
 						sdp.close();
@@ -407,7 +411,7 @@ public class EvaluateSolutionSetHelper {
 				}
 			};
 			if (runAsync) {
-				Job job = Job.create("Evaluate solution", runnable);
+				Job job = Job.create("Re-calculate solution(s)", runnable);
 				job.setUser(true);
 				job.setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 				job.schedule();
