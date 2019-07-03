@@ -382,18 +382,18 @@ public class Exposures {
 					k+=1.0;
 				}
 			}
-		}
-		if (!hcs.isEmpty()) {
-			// extra holidays
-			for (final HolidayCalendar hc : hcs) {
-				for (final HolidayCalendarEntry hce: hc.getEntries()) {
-					if (hce.getDate().isAfter(cutoff) //
-							&& hce.getDate().isBefore(pricingCalendarEntry.getEnd())) {
-						i-=1.0;
-					}
-					if (hce.getDate().isAfter(pricingCalendarEntry.getStart()) //
-							&& hce.getDate().isBefore(pricingCalendarEntry.getEnd())) {
-						k-=1.0;
+			if (!hcs.isEmpty()) {
+				// extra holidays
+				for (final HolidayCalendar hc : hcs) {
+					for (final HolidayCalendarEntry hce: hc.getEntries()) {
+						if (hce.getDate().isAfter(cutoff) //
+								&& hce.getDate().isBefore(pricingCalendarEntry.getEnd())) {
+							i-=1.0;
+						}
+						if (hce.getDate().isAfter(pricingCalendarEntry.getStart()) //
+								&& hce.getDate().isBefore(pricingCalendarEntry.getEnd())) {
+							k-=1.0;
+						}
 					}
 				}
 			}
