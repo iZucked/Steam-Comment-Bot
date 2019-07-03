@@ -100,7 +100,7 @@ public class Exposures {
 	}
 
 	public enum ValueMode {
-		VOLUME_MMBTU, VOLUME_NATIVE, NATIVE_VALUE
+		VOLUME_MMBTU, VOLUME_TBTU, VOLUME_NATIVE, NATIVE_VALUE
 	}
 	
 	public enum AggregationMode {
@@ -515,6 +515,9 @@ public class Exposures {
 						case VOLUME_MMBTU:
 							result.merge(detail.getDate(), detail.getVolumeInMMBTU(), (a, b) -> (a + b));
 							break;
+						case VOLUME_TBTU:
+							result.merge(detail.getDate(), detail.getVolumeInMMBTU()/1_000_000L, (a, b) -> (a + b));
+							break;
 						case VOLUME_NATIVE:
 							result.merge(detail.getDate(), detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
 							break;
@@ -542,6 +545,9 @@ public class Exposures {
 						switch (mode) {
 						case VOLUME_MMBTU:
 							result.merge(detail.getDate(), detail.getVolumeInMMBTU(), (a, b) -> (a + b));
+							break;
+						case VOLUME_TBTU:
+							result.merge(detail.getDate(), detail.getVolumeInMMBTU()/1_000_000L, (a, b) -> (a + b));
 							break;
 						case VOLUME_NATIVE:
 							result.merge(detail.getDate(), detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
