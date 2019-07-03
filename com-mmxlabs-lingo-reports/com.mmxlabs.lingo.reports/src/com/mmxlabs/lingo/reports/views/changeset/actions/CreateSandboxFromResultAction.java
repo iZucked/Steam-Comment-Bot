@@ -51,12 +51,12 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
-public class CreateSandboxFromInsertionAction extends Action {
+public class CreateSandboxFromResultAction extends Action {
 
 	private final ChangeSetTableGroup changeSetTableGroup;
 	private final String name;
 
-	public CreateSandboxFromInsertionAction(final ChangeSetTableGroup changeSetTableGroup, final String name) {
+	public CreateSandboxFromResultAction(final ChangeSetTableGroup changeSetTableGroup, final String name) {
 		super("Create sandbox");
 		this.changeSetTableGroup = changeSetTableGroup;
 		this.name = name;
