@@ -65,31 +65,13 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 		return resourcesToManipulate.contains(resource);
 	}
 	
-//	public boolean getShouldConditionedRemoveStartLocation(final IResource resource, final IModifiableSequence sequence) {
-//		final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
-//		if ((vesselInstanceType != VesselInstanceType.DES_PURCHASE && vesselInstanceType != VesselInstanceType.FOB_SALE) && 
-//				//Should keep? ---->v
-//				vesselProvider.getVesselAvailability(resource).isOptional() && sequence.size() == 2) {
-//			return true;
-//		} else {
-//			return false;
-//		}
-//	}
-
-
-	/**
-	 */
 	@Inject
 	public void init(final IPhaseOptimisationData data) {
-
 		for (final IResource resource : data.getResources()) {
 			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
 			if (vesselInstanceType == VesselInstanceType.ROUND_TRIP) {
 				setShouldAlwaysRemoveStartLocation(resource, true);
 			} 
-			//else if (vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER)) {
-			//	setShouldAlwaysRemoveStartLocation(resource, true);
-			//} 
 		}
 	}
 }
