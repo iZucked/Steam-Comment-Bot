@@ -220,7 +220,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 							} else {
 								result = data.exposures.get(columnName);
 							}
-							return String.format("%,.01f", result);
+							if(mode == ValueMode.VOLUME_TBTU) {
+								return String.format("%,.03f", result);
+							} else {
+								return String.format("%,.01f", result);
+							}
 						}
 						return "";
 					}
@@ -712,6 +716,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			break;
 		case VOLUME_MMBTU:
 			modeStr = "mmBtu";
+			break;
+		case VOLUME_TBTU:
+			modeStr = "TBtu";
 			break;
 		case VOLUME_NATIVE:
 			modeStr = "native";

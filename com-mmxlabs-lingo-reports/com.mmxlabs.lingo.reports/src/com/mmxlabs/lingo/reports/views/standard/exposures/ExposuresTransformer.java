@@ -108,6 +108,10 @@ public class ExposuresTransformer {
 										result.merge(indexName, detail.getVolumeInMMBTU(), (a, b) -> (a + b));
 										dealResult.merge(indexName, detail.getVolumeInMMBTU(), (a, b) -> (a + b));
 										break;
+									case VOLUME_TBTU:
+										result.merge(indexName, detail.getVolumeInMMBTU()/1_000_000L, (a, b) -> (a + b));
+										dealResult.merge(indexName, detail.getVolumeInMMBTU()/1_000_000L, (a, b) -> (a + b));
+										break;
 									case VOLUME_NATIVE:
 										result.merge(indexName, detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
 										dealResult.merge(indexName, detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
@@ -169,6 +173,10 @@ public class ExposuresTransformer {
 							case VOLUME_MMBTU:
 								result.merge(indexName, detail.getVolumeInMMBTU(), (a, b) -> (a + b));
 								dealResult.merge(indexName, detail.getVolumeInMMBTU(), (a, b) -> (a + b));
+								break;
+							case VOLUME_TBTU:
+								result.merge(indexName, detail.getVolumeInMMBTU()/1_000_000L, (a, b) -> (a + b));
+								dealResult.merge(indexName, detail.getVolumeInMMBTU()/1_000_000L, (a, b) -> (a + b));
 								break;
 							case VOLUME_NATIVE:
 								result.merge(indexName, detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
