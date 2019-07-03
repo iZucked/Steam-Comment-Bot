@@ -277,24 +277,17 @@ public class ExporterExtensionUtils {
 					}
 					boolean correctVessel = false;
 					if (charterInMarket != null) {
-						//TODO: remove if(true) + comment below, as now we will have start events for spot market vessels in order to facilitate positioningFees.
-						// Spot market vessels have no start event.
-						if (true) {
-							@Nullable
-							ISpotCharterInMarket iSpotCharterInMarket = modelEntityMap.getOptimiserObject(charterInMarket, ISpotCharterInMarket.class);
-							if (iSpotCharterInMarket == null) {
-								continue;
-							}
-							IVesselAvailability iVesselAvailability = vesselProvider.getVesselAvailability(res);
-							@Nullable
-							ISpotCharterInMarket oSpotCharterInMarket = iVesselAvailability.getSpotCharterInMarket();
-							if (oSpotCharterInMarket == iSpotCharterInMarket && iVesselAvailability.getSpotIndex() == sequence.getSpotIndex()) {
-								correctVessel = true;
-							}
+						@Nullable
+						ISpotCharterInMarket iSpotCharterInMarket = modelEntityMap.getOptimiserObject(charterInMarket, ISpotCharterInMarket.class);
+						if (iSpotCharterInMarket == null) {
+							continue;
 						}
-
-						//return null;
-
+						IVesselAvailability iVesselAvailability = vesselProvider.getVesselAvailability(res);
+						@Nullable
+						ISpotCharterInMarket oSpotCharterInMarket = iVesselAvailability.getSpotCharterInMarket();
+						if (oSpotCharterInMarket == iSpotCharterInMarket && iVesselAvailability.getSpotIndex() == sequence.getSpotIndex()) {
+							correctVessel = true;
+						}
 					} else {
 						// non-spot case
 						// Find the matching
