@@ -41,10 +41,6 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void basicMarketTrim() throws Exception {
 
-		// Load in the basic scenario from CSV
-		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
-		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
 		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		// Build some data to evaluate the scenario with
@@ -139,10 +135,6 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void basicMarketTrim_PartMonth() throws Exception {
-
-		// Load in the basic scenario from CSV
-		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
-		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
