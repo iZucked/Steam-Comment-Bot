@@ -85,6 +85,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.service.event.EventHandler;
 
 import com.google.common.base.Objects;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.internal.Activator;
@@ -535,6 +537,8 @@ public class ChangeSetView extends ViewPart {
 	protected boolean showNegativePNLChangesMenu = false;
 
 	private RunnableAction reEvaluateAction;
+	private ActionContributionItem reEvaluateActionItem;
+	private boolean reEvaluateActionItemAdded = false;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -986,91 +990,26 @@ public class ChangeSetView extends ViewPart {
 
 			getViewSite().getActionBars().getToolBarManager().add(packAction);
 		}
-		if (false) {
-			reEvaluateAction = new RunnableAction("Re-evaluate", () ->
 
-			{
-
-				final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
-
-				final Iterator<?> itr = selection.iterator();
-				while (itr.hasNext()) {
-					final Object obj = itr.next();
-					if (obj instanceof ChangeSetTableGroup) {
-						final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) obj;
-						final ScenarioResult result = changeSetTableGroup.getCurrentScenario();
-
-						final EvaluateSolutionSetHelper helper = new EvaluateSolutionSetHelper(result.getScenarioDataProvider());
-
-						final AnalyticsSolution solution = currentViewState.lastSolution;
-						UserSettings userSettings = null;
-						if (solution != null) {
-							final UUIDObject object = solution.getSolution();
-							helper.processSolution(ScenarioModelUtil.getScheduleModel(result.getScenarioDataProvider()));
-
-							if (object instanceof AbstractSolutionSet) {
-								final AbstractSolutionSet abstractSolutionSet = (AbstractSolutionSet) object;
-								helper.processExtraData(abstractSolutionSet);
-
-								userSettings = abstractSolutionSet.getUserSettings();
-								for (final SolutionOption opt : abstractSolutionSet.getOptions()) {
-									helper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
-									if (opt instanceof DualModeSolutionOption) {
-										final DualModeSolutionOption dualModeSolutionOption = (DualModeSolutionOption) opt;
-
-										final SolutionOptionMicroCase base = dualModeSolutionOption.getMicroBaseCase();
-										if (base != null) {
-											// Re-evaluate from schedule
-											helper.processExtraData(base);
-											helper.processSolution(base.getScheduleModel());
-											// (Experimental version) Re-evaluate from change specification)
-											// helper.processSolution(base.getScheduleSpecification(), base.getScheduleModel());
-										}
-
-										final SolutionOptionMicroCase target = dualModeSolutionOption.getMicroTargetCase();
-										if (target != null) {
-											// Re-evaluate from schedule
-											helper.processExtraData(target);
-
-											helper.processSolution(target.getScheduleModel());
-											// (Experimental version) Re-evaluate from change specification)
-											// helper.processSolution(target.getScheduleSpecification(), target.getScheduleModel());
-										}
-
-									}
-								}
-							}
-						}
-						if (userSettings == null) {
-							userSettings = result.getTypedRoot(LNGScenarioModel.class).getUserSettings();
-						}
-						try {
-							final UserSettings copy = EcoreUtil.copy(userSettings);
-
-							Job job = Job.create("Evalute solution", (monitor) -> {
-								helper.generateResults(result.getScenarioInstance(), copy, result.getScenarioDataProvider().getEditingDomain(), monitor);
-								final ViewState viewState = currentViewState;
-
-								if (viewState != null) {
-									final String id = viewState.getTargetSlotID();
-									RunnerHelper.asyncExec(() -> openAnalyticsSolution(viewState.lastSolution, id));
-								}
-							});
-							job.setUser(true);
-							job.setRule(schedulingRule);
-							job.schedule();
-						} catch (final Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_RE_EVALUATE_SOLUTIONS)) {
+			reEvaluateAction = new RunnableAction("Re-evaluate", () -> {
+				final AnalyticsSolution solution = currentViewState.lastSolution;
+				// solution.
+				if (solution != null) {
+					final UUIDObject object = solution.getSolution();
+					if (object instanceof AbstractSolutionSet) {
+						final AbstractSolutionSet abstractSolutionSet = (AbstractSolutionSet) object;
+						final ScenarioModelRecord record = SSDataManager.Instance.getModelRecord(solution.getScenarioInstance());
+						EvaluateSolutionSetHelper.recomputeSolution(record, solution.getScenarioInstance(), abstractSolutionSet, //
+								false, // Generate from specification model only
+								true // Open once complete
+						);
 					}
 				}
 			});
 			reEvaluateAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/iu_update_obj.gif"));
-
-			getViewSite().getActionBars().getToolBarManager().add(reEvaluateAction);
-
+			reEvaluateAction.setToolTipText("Re-evaluate the solution(s) using current scenario data");
+			reEvaluateActionItem = new ActionContributionItem(reEvaluateAction);
 		}
 
 		getViewSite().getActionBars().getToolBarManager().update(true);
@@ -1087,7 +1026,7 @@ public class ChangeSetView extends ViewPart {
 		if (target == null) {
 			setEmptyData();
 		} else {
-			ICoreRunnable runnable = (monitor) -> {
+			final ICoreRunnable runnable = (monitor) -> {
 				final ViewState newViewState = action.apply(monitor, targetSlotId);
 				final ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
 				newViewState.tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newViewState.root, true, newViewState.lastTargetSlot, newViewState.displaySortMode);
@@ -1110,14 +1049,14 @@ public class ChangeSetView extends ViewPart {
 			try {
 
 				if (runAsync) {
-					Job job = Job.create("Open solution", runnable);
+					final Job job = Job.create("Open solution", runnable);
 					job.setUser(true);
 					job.setRule(schedulingRule);
 					job.schedule();
 				} else {
 					runnable.run(new NullProgressMonitor());
 				}
-			} catch (CoreException e) {
+			} catch (final CoreException e) {
 				final Throwable cause = e.getCause();
 				if (cause instanceof ScenarioNotEvaluatedException) {
 					MessageDialog.openError(activeShell, "Error opening result", cause.getMessage());
@@ -1389,12 +1328,12 @@ public class ChangeSetView extends ViewPart {
 							showMenu = true;
 						}
 						// Experimental code to generate a sandbox scenario.
-						if (false && ChangeSetView.this.viewMode == ViewMode.INSERTIONS) {
-							// This does not work as insertion scenario is read-only. Data model is also
-							// unstable (not sure if containment works right.
-							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
-							helper.addAction(new CreateSandboxFromResultAction(changeSetTableGroup, changeSetTableGroup.getDescription()));
-							showMenu = true;
+						if (ChangeSetView.this.viewMode != ViewMode.COMPARE && ChangeSetView.this.viewMode != ViewMode.OLD_ACTION_SET) {
+							if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX)) {
+								final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
+								helper.addAction(new CreateSandboxFromResultAction(changeSetTableGroup, changeSetTableGroup.getDescription()));
+								showMenu = true;
+							}
 						}
 						if (ChangeSetView.this.viewMode == ViewMode.SANDBOX && ChangeSetView.this.showToggleAltPNLBaseAction) {
 
@@ -1405,7 +1344,7 @@ public class ChangeSetView extends ViewPart {
 								idx = root.getGroups().indexOf(changeSetTableGroup);
 							}
 
-							Action action = new RunnableAction("Re-evaluate", () -> {
+							final Action action = new RunnableAction("Compute full change", () -> {
 
 								final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
 
@@ -1413,7 +1352,7 @@ public class ChangeSetView extends ViewPart {
 
 								final AnalyticsSolution solution = currentViewState.lastSolution;
 								if (solution != null && solution.getSolution() instanceof SandboxResult) {
-									SandboxResult sandboxResult = (SandboxResult) solution.getSolution();
+									final SandboxResult sandboxResult = (SandboxResult) solution.getSolution();
 
 									UserSettings userSettings = null;
 
@@ -1470,7 +1409,7 @@ public class ChangeSetView extends ViewPart {
 									}
 
 									final UserSettings copy = EcoreUtil.copy(userSettings);
-									Job job = Job.create("Open solution", monitor -> {
+									final Job job = Job.create("Open solution", monitor -> {
 										ssHelper.generateResults(scenarioResult.getScenarioInstance(), copy, scenarioResult.getScenarioDataProvider().getEditingDomain(), monitor);
 										final ViewState viewState = currentViewState;
 
@@ -1592,7 +1531,7 @@ public class ChangeSetView extends ViewPart {
 				final SandboxResultPlanTransformer transformer = new SandboxResultPlanTransformer();
 				insertionPlanFilter.setMaxComplexity(100);
 
-				SandboxResult sandboxResult = (SandboxResult) plan;
+				final SandboxResult sandboxResult = (SandboxResult) plan;
 				// Sorting by Group as the label provider uses the provided ordering for indexing
 				final ViewState viewState = new ViewState(transformer.createDataModel(target, sandboxResult, monitor), SortMode.BY_PNL);
 				viewState.lastSolution = solution;
@@ -1802,6 +1741,23 @@ public class ChangeSetView extends ViewPart {
 			getViewSite().getActionBars().getToolBarManager().update(true);
 		}
 		columnHelper.showAlternativePNLColumn(dualPNLMode);
+
+		if (reEvaluateAction != null) {
+
+			if (viewMode != ViewMode.COMPARE && viewMode != ViewMode.OLD_ACTION_SET) {
+				if (!reEvaluateActionItemAdded) {
+					getViewSite().getActionBars().getToolBarManager().add(reEvaluateActionItem);
+					reEvaluateActionItemAdded = true;
+					getViewSite().getActionBars().getToolBarManager().update(true);
+				}
+			} else {
+				if (reEvaluateActionItemAdded) {
+					getViewSite().getActionBars().getToolBarManager().remove(reEvaluateActionItem);
+					reEvaluateActionItemAdded = false;
+					getViewSite().getActionBars().getToolBarManager().update(true);
+				}
+			}
+		}
 
 		if (viewMode == ViewMode.INSERTIONS) {
 			columnHelper.showCompareColumns(false);
