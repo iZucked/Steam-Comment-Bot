@@ -269,24 +269,26 @@ public class EvaluationHelper {
 		return evaluationState;
 	}
 
-	public long @Nullable [] evaluateState(@NonNull final ISequences currentRawSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources,
+	public long @Nullable [] evaluateState(@NonNull final ISequences currentRawSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources, final boolean checkConstraintCheckers,
 			final boolean checkEvaluatedStateCheckers, final long @Nullable [] referenceMetrics, @Nullable final ISearchStatisticsLogger logger) {
 
 		// Do normal manipulation
 		final @NonNull ISequences currentFullSequences = sequenceManipulator.createManipulatedSequences(currentRawSequences);
 
-		return evaluateState(currentRawSequences, currentFullSequences, currentChangedResources, checkEvaluatedStateCheckers, referenceMetrics, logger);
+		return evaluateState(currentRawSequences, currentFullSequences, currentChangedResources, checkConstraintCheckers, checkEvaluatedStateCheckers, referenceMetrics, logger);
 	}
 
 	public long @Nullable [] evaluateState(@NonNull final ISequences currentRawSequences, final @NonNull ISequences currentFullSequences,
-			@Nullable final Collection<@NonNull IResource> currentChangedResources, final boolean checkEvaluatedStateCheckers, final long @Nullable [] referenceMetrics,
-			@Nullable final ISearchStatisticsLogger logger) {
+			@Nullable final Collection<@NonNull IResource> currentChangedResources, final boolean checkConstraintCheckers, final boolean checkEvaluatedStateCheckers,
+			final long @Nullable [] referenceMetrics, @Nullable final ISearchStatisticsLogger logger) {
 		// Apply hard constraint checkers
-		if (!checkConstraints(currentFullSequences, currentChangedResources)) {
-			if (logger != null) {
-				logger.logEvaluationsFailedConstraints();
+		if (checkConstraintCheckers) {
+			if (!checkConstraints(currentFullSequences, currentChangedResources)) {
+				if (logger != null) {
+					logger.logEvaluationsFailedConstraints();
+				}
+				return null;
 			}
-			return null;
 		}
 		final long thisUnusedCompulsarySlotCount = calculateUnusedCompulsarySlot(currentRawSequences);
 		if (referenceMetrics != null && thisUnusedCompulsarySlotCount > referenceMetrics[MetricType.COMPULSARY_SLOT.ordinal()]) {

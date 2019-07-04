@@ -71,7 +71,7 @@ public class ActionableSetOptimiser {
 			// now evaluate
 			initialFitness = fitnessCalculator.evaluateSequencesFitness(currentFullSequences, evaluationState, null);
 
-			initialMetrics = evaluationHelper.evaluateState(inputRawSequences, currentFullSequences, null, /* use Evaluated state checkers */ false, null, null);
+			initialMetrics = evaluationHelper.evaluateState(inputRawSequences, currentFullSequences, null, true, /* use Evaluated state checkers */ false, null, null);
 			if (initialMetrics == null) {
 				throw new IllegalStateException();
 

@@ -101,8 +101,8 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 		final GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
 		providedRawSequences = lookupManager.getRawSequences();
 
-		final long[] initialMetrics = evaluationHelper.evaluateState(providedRawSequences, sequenceManipulator.createManipulatedSequences(providedRawSequences), null, options.isCheckEvaluatedState(),
-				null, null);
+		final long[] initialMetrics = evaluationHelper.evaluateState(providedRawSequences, sequenceManipulator.createManipulatedSequences(providedRawSequences), null, true,
+				options.isCheckEvaluatedState(), null, null);
 		final MoveResult p = generateMove(rawSequences, random, Collections.emptyList(), initialMetrics, options);
 		if (p != null) {
 			return p.move;
@@ -199,8 +199,8 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 				long[] moveMetrics = null;
 				if (options.isCheckingMove()) {
 					// Check metrics - this return null if we increase lateness, capacity etc (but loss of P&L is ok)
-					moveMetrics = evaluationHelper.evaluateState(currentRawSequences, sequenceManipulator.createManipulatedSequences(currentRawSequences), null, options.isCheckEvaluatedState(),
-							initialMetrics, null);
+					moveMetrics = evaluationHelper.evaluateState(currentRawSequences, sequenceManipulator.createManipulatedSequences(currentRawSequences), null,
+							/* constraints already checked */ false, options.isCheckEvaluatedState(), initialMetrics, null);
 					if (moveMetrics == null) {
 						continue;
 					}

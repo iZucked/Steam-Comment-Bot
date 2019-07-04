@@ -69,7 +69,7 @@ public class SlotInsertionOptimiser {
 
 	@Inject
 	private Provider<LookupManager> lookupManagerProvider;
-	
+
 	private @Nullable Pair<ISequences, Long> insert(final SlotInsertionOptimiserInitialState state, final int seed, final List<ISequenceElement> _slots) {
 
 		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
@@ -125,7 +125,7 @@ public class SlotInsertionOptimiser {
 			move.apply(mSequences);
 
 			if (mSequences.getUnusedElements().contains(slot)) {
-				System.out.println("Generated move does not include target element");
+				// System.out.println("Generated move does not include target element");
 				return null;
 			}
 
@@ -147,7 +147,7 @@ public class SlotInsertionOptimiser {
 				final ILookupManager beforeManager = state.lookupManager;
 				final LookupManager afterManager = lookupManagerProvider.get();
 				afterManager.createLookup(currentSequences);
-				
+
 				for (final ISequenceElement slot : slots) {
 					IResource afterResource;
 					List<ISequenceElement> afterSegment;
@@ -194,7 +194,7 @@ public class SlotInsertionOptimiser {
 				for (final ISequenceElement slot : slots) {
 					if (phaseOptimisationData.isElementRequired(slot) || phaseOptimisationData.getSoftRequiredElements().contains(slot)) {
 						if (simpleSeq.getUnusedElements().contains(slot)) {
-							System.out.println("Generated move does not include target element");
+							// System.out.println("Generated move does not include target element");
 							return null;
 						}
 					}
@@ -205,7 +205,7 @@ public class SlotInsertionOptimiser {
 				for (final ISequenceElement e : simpleSeq.getUnusedElements()) {
 					if (phaseOptimisationData.isElementRequired(e) || phaseOptimisationData.getSoftRequiredElements().contains(e)) {
 						if (!state.initiallyUnused.contains(e)) {
-							System.out.println("New required element is in unused list");
+							// System.out.println("New required element is in unused list");
 							return null;
 						}
 					}
@@ -216,7 +216,7 @@ public class SlotInsertionOptimiser {
 				@NonNull
 				final IModifiableSequences simpleSeqFull = manipulator.createManipulatedSequences(simpleSeq);
 
-				metrics = evaluationHelper.evaluateState(simpleSeq, simpleSeqFull, null, true, null, null);
+				metrics = evaluationHelper.evaluateState(simpleSeq, simpleSeqFull, null, true, true, null, null);
 				if (metrics == null) {
 					valid = false;
 				}
@@ -241,7 +241,7 @@ public class SlotInsertionOptimiser {
 					for (final ISequenceElement e : currentSequences.getUnusedElements()) {
 						if (phaseOptimisationData.isElementRequired(e) || phaseOptimisationData.getSoftRequiredElements().contains(e)) {
 							if (!state.initiallyUnused.contains(e)) {
-								System.out.println("New required element is in unused list");
+//								System.out.println("New required element is in unused list");
 								return null;
 							}
 						}

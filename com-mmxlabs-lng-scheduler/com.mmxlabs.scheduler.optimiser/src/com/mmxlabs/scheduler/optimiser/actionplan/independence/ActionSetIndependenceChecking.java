@@ -452,7 +452,7 @@ public class ActionSetIndependenceChecking {
 		final IModifiableSequences currentFullSequences = new ModifiableSequences(currentSequences);
 		sequencesManipulator.manipulate(currentFullSequences);
 
-		long[] metrics = evaluationHelper.evaluateState(currentSequences, currentFullSequences, null, /* evaluated state checkers */ false, similarityState.getBaseMetrics(), null);
+		long[] metrics = evaluationHelper.evaluateState(currentSequences, currentFullSequences, null, true, /* evaluated state checkers */ false, similarityState.getBaseMetrics(), null);
 		if (metrics == null) {
 			return null;
 		}

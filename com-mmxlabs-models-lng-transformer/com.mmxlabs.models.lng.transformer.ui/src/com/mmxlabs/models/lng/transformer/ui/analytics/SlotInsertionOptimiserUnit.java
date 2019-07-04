@@ -230,7 +230,7 @@ public class SlotInsertionOptimiserUnit {
 						final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
 						final EvaluationHelper evaluationHelper = injector.getInstance(EvaluationHelper.class);
 						final ISequences initialRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)));
-						state.initialMetrics = evaluationHelper.evaluateState(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences), null, true, null, null);
+						state.initialMetrics = evaluationHelper.evaluateState(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences), null, true, true, null, null);
 						if (state.initialMetrics == null) {
 							throw new UserFeedbackException(
 									"Unable to perform insertion on this scenario. This is most likely caused by late and overlapping cargoes. Please check validation messages.");
@@ -390,8 +390,7 @@ public class SlotInsertionOptimiserUnit {
 							try {
 								final SlotInsertionOptimiser calculator = injector.getInstance(SlotInsertionOptimiser.class);
 								@Nullable
-								final
-								Pair<ISequences, Long> result = calculator.generate(optionElements, state, pTryNo);
+								final Pair<ISequences, Long> result = calculator.generate(optionElements, state, pTryNo);
 
 								// Sometimes due to spot slot equivalence we can obtain solutions which do not change the target elements.
 								if (result != null) {
