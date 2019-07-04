@@ -87,6 +87,8 @@ public class PortComponentHelper extends BaseComponentHelper {
 		add_defaultWindowSizeUnitsEditor(detailComposite, topClass);
 		add_minCvValueEditor(detailComposite, topClass);
 		add_maxCvValueEditor(detailComposite, topClass);
+		add_minVesselSizeEditor(detailComposite, topClass);
+		add_maxVesselSizeEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -217,6 +219,24 @@ public class PortComponentHelper extends BaseComponentHelper {
 	protected void add_maxCvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__MAX_CV_VALUE);
 		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.DISCHARGE, editor));
+	}
+
+	/**
+	 * Create the editor for the minVesselSize feature on Port
+	 *
+	 * @generated
+	 */
+	protected void add_minVesselSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__MIN_VESSEL_SIZE));
+	}
+
+	/**
+	 * Create the editor for the maxVesselSize feature on Port
+	 *
+	 * @generated
+	 */
+	protected void add_maxVesselSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__MAX_VESSEL_SIZE));
 	}
 
 	/**

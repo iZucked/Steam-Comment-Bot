@@ -26,6 +26,19 @@
          </package>
          <constraints
                categories=" com.mmxlabs.models.lng.cargo.validation.base">
+             <constraint
+                     class="com.mmxlabs.models.lng.cargo.validation.VesselCapacityPortMinMaxVesselSizeValidator"
+                     id="com.mmxlabs.models.lng.cargo.validation.VesselPortCapacityConstraint"
+                     isEnabledByDefault="true"
+                     lang="java"
+                     mode="Batch"
+                     name="VesselPortCapacityConstraint"
+                     severity="ERROR"
+                     statusCode="1">
+                  <message>
+                     {0}
+                  </message>
+            </constraint>   
             <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.CargoVolumeConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.CargoVolumeConstraint"
@@ -951,7 +964,7 @@
                   <target
                         class="PaperDeal">
                   </target>
-               </constraint>       
+               </constraint>
         </constraints>
       </constraintProvider>
       <constraintProvider
@@ -1027,7 +1040,7 @@
                <target
                      class="Vessel">
                </target>
-            </constraint>
+               </constraint>    
          </constraints>
       </constraintProvider>
    </extension>

@@ -47,6 +47,8 @@ import java.time.ZoneId;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDefaultWindowSizeUnits <em>Default Window Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMaxCvValue <em>Max Cv Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMinVesselSize <em>Min Vessel Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMaxVesselSize <em>Max Vessel Size</em>}</li>
  * </ul>
  *
  * @generated
@@ -309,6 +311,64 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected boolean maxCvValueESet;
+
+	/**
+	 * The default value of the '{@link #getMinVesselSize() <em>Min Vessel Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinVesselSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MIN_VESSEL_SIZE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMinVesselSize() <em>Min Vessel Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinVesselSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected int minVesselSize = MIN_VESSEL_SIZE_EDEFAULT;
+
+	/**
+	 * This is true if the Min Vessel Size attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean minVesselSizeESet;
+
+	/**
+	 * The default value of the '{@link #getMaxVesselSize() <em>Max Vessel Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxVesselSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MAX_VESSEL_SIZE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMaxVesselSize() <em>Max Vessel Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxVesselSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected int maxVesselSize = MAX_VESSEL_SIZE_EDEFAULT;
+
+	/**
+	 * This is true if the Max Vessel Size attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean maxVesselSizeESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -674,6 +734,106 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getMinVesselSize() {
+		return minVesselSize;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMinVesselSize(int newMinVesselSize) {
+		int oldMinVesselSize = minVesselSize;
+		minVesselSize = newMinVesselSize;
+		boolean oldMinVesselSizeESet = minVesselSizeESet;
+		minVesselSizeESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__MIN_VESSEL_SIZE, oldMinVesselSize, minVesselSize, !oldMinVesselSizeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetMinVesselSize() {
+		int oldMinVesselSize = minVesselSize;
+		boolean oldMinVesselSizeESet = minVesselSizeESet;
+		minVesselSize = MIN_VESSEL_SIZE_EDEFAULT;
+		minVesselSizeESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, PortPackage.PORT__MIN_VESSEL_SIZE, oldMinVesselSize, MIN_VESSEL_SIZE_EDEFAULT, oldMinVesselSizeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetMinVesselSize() {
+		return minVesselSizeESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getMaxVesselSize() {
+		return maxVesselSize;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMaxVesselSize(int newMaxVesselSize) {
+		int oldMaxVesselSize = maxVesselSize;
+		maxVesselSize = newMaxVesselSize;
+		boolean oldMaxVesselSizeESet = maxVesselSizeESet;
+		maxVesselSizeESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__MAX_VESSEL_SIZE, oldMaxVesselSize, maxVesselSize, !oldMaxVesselSizeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetMaxVesselSize() {
+		int oldMaxVesselSize = maxVesselSize;
+		boolean oldMaxVesselSizeESet = maxVesselSizeESet;
+		maxVesselSize = MAX_VESSEL_SIZE_EDEFAULT;
+		maxVesselSizeESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, PortPackage.PORT__MAX_VESSEL_SIZE, oldMaxVesselSize, MAX_VESSEL_SIZE_EDEFAULT, oldMaxVesselSizeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetMaxVesselSize() {
+		return maxVesselSizeESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public ZoneId getZoneId() {
@@ -776,6 +936,10 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return getMinCvValue();
 			case PortPackage.PORT__MAX_CV_VALUE:
 				return getMaxCvValue();
+			case PortPackage.PORT__MIN_VESSEL_SIZE:
+				return getMinVesselSize();
+			case PortPackage.PORT__MAX_VESSEL_SIZE:
+				return getMaxVesselSize();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -829,6 +993,12 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__MAX_CV_VALUE:
 				setMaxCvValue((Double)newValue);
 				return;
+			case PortPackage.PORT__MIN_VESSEL_SIZE:
+				setMinVesselSize((Integer)newValue);
+				return;
+			case PortPackage.PORT__MAX_VESSEL_SIZE:
+				setMaxVesselSize((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -880,6 +1050,12 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__MAX_CV_VALUE:
 				unsetMaxCvValue();
 				return;
+			case PortPackage.PORT__MIN_VESSEL_SIZE:
+				unsetMinVesselSize();
+				return;
+			case PortPackage.PORT__MAX_VESSEL_SIZE:
+				unsetMaxVesselSize();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -918,6 +1094,10 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return isSetMinCvValue();
 			case PortPackage.PORT__MAX_CV_VALUE:
 				return isSetMaxCvValue();
+			case PortPackage.PORT__MIN_VESSEL_SIZE:
+				return isSetMinVesselSize();
+			case PortPackage.PORT__MAX_VESSEL_SIZE:
+				return isSetMaxVesselSize();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -974,6 +1154,10 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 		if (minCvValueESet) result.append(minCvValue); else result.append("<unset>");
 		result.append(", maxCvValue: ");
 		if (maxCvValueESet) result.append(maxCvValue); else result.append("<unset>");
+		result.append(", minVesselSize: ");
+		if (minVesselSizeESet) result.append(minVesselSize); else result.append("<unset>");
+		result.append(", maxVesselSize: ");
+		if (maxVesselSizeESet) result.append(maxVesselSize); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.transformer.extensions.fcl.FullCargoLotModule;
 import com.mmxlabs.models.lng.transformer.extensions.inventory.InventoryLevelsOutputScheduleProcessorFactory;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsModule;
 import com.mmxlabs.models.lng.transformer.extensions.paperdeals.PaperDealsScheduleProcessorFactory;
+import com.mmxlabs.models.lng.transformer.extensions.portshipsizeconstraint.PortShipSizeModule;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsModule;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedslots.RestrictedSlotsModule;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementModule;
@@ -35,6 +36,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 
 	@Override
 	protected void configure() {
+		install(new PortShipSizeModule());
 		install(new RestrictedElementsModule());
 		install(new RestrictedSlotsModule());
 		install(new ContingencyIdleTimeModule());		

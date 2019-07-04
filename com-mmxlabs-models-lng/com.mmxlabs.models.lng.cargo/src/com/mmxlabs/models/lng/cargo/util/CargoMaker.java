@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 
 public class CargoMaker {
 	@NonNull
@@ -144,5 +145,10 @@ public class CargoMaker {
 		cargoModelBuilder.getCargoModel().getCargoes().add(cargo);
 
 		return cargo;
+	}
+
+	public CargoMaker withAssignmentType(VesselAssignmentType vesselAssignmentType) {
+		cargo.setVesselAssignmentType(vesselAssignmentType);
+		return this;
 	}
 }
