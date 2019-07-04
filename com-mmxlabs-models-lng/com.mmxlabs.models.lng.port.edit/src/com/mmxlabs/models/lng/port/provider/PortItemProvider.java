@@ -62,6 +62,8 @@ public class PortItemProvider
 			addDefaultWindowSizeUnitsPropertyDescriptor(object);
 			addMinCvValuePropertyDescriptor(object);
 			addMaxCvValuePropertyDescriptor(object);
+			addMinVesselSizePropertyDescriptor(object);
+			addMaxVesselSizePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -309,6 +311,50 @@ public class PortItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Min Vessel Size feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinVesselSizePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_minVesselSize_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_minVesselSize_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__MIN_VESSEL_SIZE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Max Vessel Size feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMaxVesselSizePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_maxVesselSize_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_maxVesselSize_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__MAX_VESSEL_SIZE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Short Name feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -409,6 +455,8 @@ public class PortItemProvider
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE_UNITS:
 			case PortPackage.PORT__MIN_CV_VALUE:
 			case PortPackage.PORT__MAX_CV_VALUE:
+			case PortPackage.PORT__MIN_VESSEL_SIZE:
+			case PortPackage.PORT__MAX_VESSEL_SIZE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PortPackage.PORT__LOCATION:

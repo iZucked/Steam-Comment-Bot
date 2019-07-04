@@ -19,6 +19,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IResourceElementConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
@@ -28,7 +29,7 @@ import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
  * @author Simon Goodall
  * 
  */
-public final class ResourceAllocationConstraintChecker implements IPairwiseConstraintChecker {
+public final class ResourceAllocationConstraintChecker implements IPairwiseConstraintChecker, IResourceElementConstraintChecker {
 	@NonNull
 	private final String name;
 
@@ -106,6 +107,7 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 		return checkElement(first, resource) && checkElement(second, resource);
 	}
 
+	@Override
 	public final boolean checkElement(@NonNull final ISequenceElement element, @NonNull final IResource resource) {
 
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(element);

@@ -18,6 +18,8 @@ import com.google.inject.Module;
 import com.mmxlabs.models.lng.transformer.extensions.contingencytime.ContingencyIdleTimeTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsTransformerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.portshipsizeconstraint.PortShipSizeConstraintCheckerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.portshipsizeconstraint.PortShipSizeTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementConstraintCheckerFactory;
@@ -86,6 +88,7 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 						transformerExtensionFactories.add(new RestrictedElementsTransformerFactory());
 						transformerExtensionFactories.add(new ShippingTypeRequirementTransformerFactory());
 						transformerExtensionFactories.add(new PanamaSlotsTransformerFactory());
+						transformerExtensionFactories.add(new PortShipSizeTransformerFactory());
 						transformerExtensionFactories.add(new ContingencyIdleTimeTransformerFactory());
 						bind(TypeLiterals.iterable(ITransformerExtensionFactory.class)).toInstance(transformerExtensionFactories);
 
@@ -205,6 +208,7 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortTypeConstraintCheckerFactory());
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new TravelTimeConstraintCheckerFactory());
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortExclusionConstraintCheckerFactory());
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortShipSizeConstraintCheckerFactory());
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new VirtualVesselConstraintCheckerFactory());
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new SlotGroupCountConstraintCheckerFactory());
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new TimeSortConstraintCheckerFactory());

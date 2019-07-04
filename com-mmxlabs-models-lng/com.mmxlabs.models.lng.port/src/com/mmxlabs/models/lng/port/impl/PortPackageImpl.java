@@ -340,6 +340,26 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getPort_MinVesselSize() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPort_MaxVesselSize() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(14);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getPort__GetZoneId() {
 		return portEClass.getEOperations().get(0);
 	}
@@ -927,6 +947,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(portEClass, PORT__DEFAULT_WINDOW_SIZE_UNITS);
 		createEAttribute(portEClass, PORT__MIN_CV_VALUE);
 		createEAttribute(portEClass, PORT__MAX_CV_VALUE);
+		createEAttribute(portEClass, PORT__MIN_VESSEL_SIZE);
+		createEAttribute(portEClass, PORT__MAX_VESSEL_SIZE);
 		createEOperation(portEClass, PORT___GET_ZONE_ID);
 		createEOperation(portEClass, PORT___MMX_ID);
 		createEOperation(portEClass, PORT___GET_TEMP_MMXID);
@@ -1070,6 +1092,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getPort_DefaultWindowSizeUnits(), theTypesPackage.getTimePeriod(), "defaultWindowSizeUnits", "HOURS", 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_MinCvValue(), ecorePackage.getEDouble(), "minCvValue", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_MaxCvValue(), ecorePackage.getEDouble(), "maxCvValue", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_MinVesselSize(), ecorePackage.getEInt(), "minVesselSize", "0", 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_MaxVesselSize(), ecorePackage.getEInt(), "maxVesselSize", "0", 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getPort__GetZoneId(), theDateTimePackage.getZoneId(), "getZoneId", 0, 1, IS_UNIQUE, IS_ORDERED);
 
