@@ -30,6 +30,10 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.TimePeriod;
@@ -73,110 +77,56 @@ public class MTMSandboxEvaluator {
 			dischargeDates.add(YearMonth.from(windowStart.minusMonths(2)));
 			dischargeDates.add(YearMonth.from(windowStart.minusMonths(3)));
 		}
-
-		final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(clone);
-		for (final SpotMarket market : spotMarketsModel.getFobPurchasesSpotMarket().getMarkets()) {
-			if (!market.isMtm()) {
-				continue;
-			}
+		
+		for (final SpotMarket market : clonedModel.getMarkets()) {
 			for (final YearMonth date : dischargeDates) {
-				final BuyMarket m = AnalyticsFactory.eINSTANCE.createBuyMarket();
-				m.setMarket(market);
-				final LoadSlot slot_original = AnalyticsBuilder.makeLoadSlot(m, clone, SlotMode.ORIGINAL_SLOT);
-				final LoadSlot slot_breakEven = AnalyticsBuilder.makeLoadSlot(m, clone, SlotMode.BREAK_EVEN_VARIANT);
-				final LoadSlot slot_changable = AnalyticsBuilder.makeLoadSlot(m, clone, SlotMode.CHANGE_PRICE_VARIANT);
+				
+				if (market instanceof FOBPurchasesMarket 
+						|| market instanceof DESPurchaseMarket) {
+					final BuyMarket m = AnalyticsFactory.eINSTANCE.createBuyMarket();
+					m.setMarket(market);
+					final LoadSlot slot_original = AnalyticsBuilder.makeLoadSlot(m, clone, SlotMode.ORIGINAL_SLOT);
+					final LoadSlot slot_breakEven = AnalyticsBuilder.makeLoadSlot(m, clone, SlotMode.BREAK_EVEN_VARIANT);
+					final LoadSlot slot_changable = AnalyticsBuilder.makeLoadSlot(m, clone, SlotMode.CHANGE_PRICE_VARIANT);
 
-				slot_original.setWindowStart(date.atDay(1));
-				slot_original.setWindowSize(1);
-				slot_original.setWindowSizeUnits(TimePeriod.MONTHS);
+					slot_original.setWindowStart(date.atDay(1));
+					slot_original.setWindowSize(1);
+					slot_original.setWindowSizeUnits(TimePeriod.MONTHS);
 
-				slot_breakEven.setWindowStart(date.atDay(1));
-				slot_breakEven.setWindowSize(1);
-				slot_breakEven.setWindowSizeUnits(TimePeriod.MONTHS);
+					slot_breakEven.setWindowStart(date.atDay(1));
+					slot_breakEven.setWindowSize(1);
+					slot_breakEven.setWindowSizeUnits(TimePeriod.MONTHS);
 
-				slot_changable.setWindowStart(date.atDay(1));
-				slot_changable.setWindowSize(1);
-				slot_changable.setWindowSizeUnits(TimePeriod.MONTHS);
+					slot_changable.setWindowStart(date.atDay(1));
+					slot_changable.setWindowSize(1);
+					slot_changable.setWindowSizeUnits(TimePeriod.MONTHS);
 
-				mapper.addMapping(market, date, slot_original, slot_breakEven, slot_changable);
-			}
-		}
-		for (final SpotMarket market : spotMarketsModel.getDesPurchaseSpotMarket().getMarkets()) {
-			if (!market.isMtm()) {
-				continue;
-			}
-			for (final YearMonth date : dischargeDates) {
-				final BuyMarket m = AnalyticsFactory.eINSTANCE.createBuyMarket();
-				m.setMarket(market);
-				final LoadSlot slot_original = AnalyticsBuilder.makeLoadSlot(m, clone, SlotMode.ORIGINAL_SLOT);
-				final LoadSlot slot_breakEven = AnalyticsBuilder.makeLoadSlot(m, clone, SlotMode.BREAK_EVEN_VARIANT);
-				final LoadSlot slot_changable = AnalyticsBuilder.makeLoadSlot(m, clone, SlotMode.CHANGE_PRICE_VARIANT);
-
-				slot_original.setWindowStart(date.atDay(1));
-				slot_original.setWindowSize(1);
-				slot_original.setWindowSizeUnits(TimePeriod.MONTHS);
-
-				slot_breakEven.setWindowStart(date.atDay(1));
-				slot_breakEven.setWindowSize(1);
-				slot_breakEven.setWindowSizeUnits(TimePeriod.MONTHS);
-
-				slot_changable.setWindowStart(date.atDay(1));
-				slot_changable.setWindowSize(1);
-				slot_changable.setWindowSizeUnits(TimePeriod.MONTHS);
-
-				mapper.addMapping(market, date, slot_original, slot_breakEven, slot_changable);
-			}
-		}
-		for (final SpotMarket market : spotMarketsModel.getDesSalesSpotMarket().getMarkets()) {
-			if (!market.isMtm()) {
-				continue;
+					mapper.addMapping(market, date, slot_original, slot_breakEven, slot_changable);
+				}
 			}
 			for (final YearMonth date : loadDates) {
-				final SellMarket m = AnalyticsFactory.eINSTANCE.createSellMarket();
-				m.setMarket(market);
-				final DischargeSlot slot_original = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.ORIGINAL_SLOT);
-				final DischargeSlot slot_breakEven = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.BREAK_EVEN_VARIANT);
-				final DischargeSlot slot_changable = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.CHANGE_PRICE_VARIANT);
+				 if (market instanceof FOBSalesMarket
+						|| market instanceof DESSalesMarket){
+					final SellMarket m = AnalyticsFactory.eINSTANCE.createSellMarket();
+					m.setMarket(market);
+					final DischargeSlot slot_original = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.ORIGINAL_SLOT);
+					final DischargeSlot slot_breakEven = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.BREAK_EVEN_VARIANT);
+					final DischargeSlot slot_changable = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.CHANGE_PRICE_VARIANT);
 
-				slot_original.setWindowStart(date.atDay(1));
-				slot_original.setWindowSize(1);
-				slot_original.setWindowSizeUnits(TimePeriod.MONTHS);
+					slot_original.setWindowStart(date.atDay(1));
+					slot_original.setWindowSize(1);
+					slot_original.setWindowSizeUnits(TimePeriod.MONTHS);
 
-				slot_breakEven.setWindowStart(date.atDay(1));
-				slot_breakEven.setWindowSize(1);
-				slot_breakEven.setWindowSizeUnits(TimePeriod.MONTHS);
+					slot_breakEven.setWindowStart(date.atDay(1));
+					slot_breakEven.setWindowSize(1);
+					slot_breakEven.setWindowSizeUnits(TimePeriod.MONTHS);
 
-				slot_changable.setWindowStart(date.atDay(1));
-				slot_changable.setWindowSize(1);
-				slot_changable.setWindowSizeUnits(TimePeriod.MONTHS);
+					slot_changable.setWindowStart(date.atDay(1));
+					slot_changable.setWindowSize(1);
+					slot_changable.setWindowSizeUnits(TimePeriod.MONTHS);
 
-				mapper.addMapping(market, date, slot_original, slot_breakEven, slot_changable);
-			}
-		}
-		for (final SpotMarket market : spotMarketsModel.getFobSalesSpotMarket().getMarkets()) {
-			if (!market.isMtm()) {
-				continue;
-			}
-			for (final YearMonth date : loadDates) {
-				final SellMarket m = AnalyticsFactory.eINSTANCE.createSellMarket();
-				m.setMarket(market);
-				final DischargeSlot slot_original = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.ORIGINAL_SLOT);
-				final DischargeSlot slot_breakEven = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.BREAK_EVEN_VARIANT);
-				final DischargeSlot slot_changable = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.CHANGE_PRICE_VARIANT);
-
-				slot_original.setWindowStart(date.atDay(1));
-				slot_original.setWindowSize(1);
-				slot_original.setWindowSizeUnits(TimePeriod.MONTHS);
-
-				slot_breakEven.setWindowStart(date.atDay(1));
-				slot_breakEven.setWindowSize(1);
-				slot_breakEven.setWindowSizeUnits(TimePeriod.MONTHS);
-
-				slot_changable.setWindowStart(date.atDay(1));
-				slot_changable.setWindowSize(1);
-				slot_changable.setWindowSizeUnits(TimePeriod.MONTHS);
-
-				mapper.addMapping(market, date, slot_original, slot_breakEven, slot_changable);
+					mapper.addMapping(market, date, slot_original, slot_breakEven, slot_changable);
+				}
 			}
 		}
 	}

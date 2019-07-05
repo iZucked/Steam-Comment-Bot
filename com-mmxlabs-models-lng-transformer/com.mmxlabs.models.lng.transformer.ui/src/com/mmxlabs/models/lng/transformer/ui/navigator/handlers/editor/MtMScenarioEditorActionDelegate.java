@@ -70,162 +70,165 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				final ScenarioModelRecord modelRecord =	SSDataManager.Instance.getModelRecord(instance);
 				if (modelRecord != null) {
 					try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("MtMScenarioEditorActionDelegate")) {
+						sdp.getModelReference().executeWithTryLock(true, () -> {
 						
-						final List<Command> setCommands = new LinkedList();
-						final List<EObject> deleteObjects = new LinkedList();
-						
-						final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(sdp);
-						final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
-						final MTMModel[] model = new MTMModel[1];
-						
-						final ExecutorService executor = Executors.newFixedThreadPool(1);
-						try {
-							executor.submit(() -> {
-								model[0] = MTMUtils.evaluateMTMModel(scenarioModel, instance, sdp, false, "MtMScenarioEditorActionDelegate", true);
-							}).get();
-						} catch (Exception e) {
-							throw new RuntimeException("Unable to evaluate MTM model", e);
-						} finally {
-							executor.shutdown();
-						}
-						if (model[0] == null) {
-							return;
-						}
-						
-						final EditingDomain editingDomain = sdp.getEditingDomain();
-						
-						final Set<String> usedDischargeIDStrings = new HashSet<>();
-						for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
-							usedDischargeIDStrings.add(slot.getName());
-						}
-						final Set<String> usedLoadIDStrings = new HashSet<>();
-						for (final LoadSlot slot : cargoModel.getLoadSlots()) {
-							usedLoadIDStrings.add(slot.getName());
-						}
+							final List<Command> setCommands = new LinkedList();
+							final List<EObject> deleteObjects = new LinkedList();
 
-						for (final MTMRow row : model[0].getRows()) {
-							if (row.getBuyOption() != null) {
-								final BuyOption bo = row.getBuyOption();
-								final LoadSlot loadSlot;
-								if (bo instanceof BuyReference) {
-									final BuyReference br = (BuyReference) bo;
-									loadSlot = br.getSlot();
-								} else {
-									continue;
-								}
-								
-								double price = Double.MIN_VALUE;
-								MTMResult bestResult = null;
-								
-								// make sure that there's a vessel availability
-								for (final MTMResult result : row.getRhsResults()) {
-									if (result.getEarliestETA() == null) continue;
-									if (price < result.getEarliestPrice()){
-										price = result.getEarliestPrice();
-										bestResult = result;
+							final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(sdp);
+							final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
+							final MTMModel model = MTMUtils.createModelFromScenario(scenarioModel, "MtMScenarioEditorActionDelegate", false, true);
+							if (model == null) {
+								throw new RuntimeException("Unable to create an MTM model");
+							}
+
+							final ExecutorService executor = Executors.newFixedThreadPool(1);
+							try {
+								executor.submit(() -> {
+									MTMUtils.evaluateMTMModel(model, instance, sdp);
+								}).get();
+							} catch (Exception e) {
+								throw new RuntimeException("Unable to evaluate MTM model", e);
+							} finally {
+								executor.shutdown();
+							}
+
+							final EditingDomain editingDomain = sdp.getEditingDomain();
+
+							final Set<String> usedDischargeIDStrings = new HashSet<>();
+							for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
+								usedDischargeIDStrings.add(slot.getName());
+							}
+							final Set<String> usedLoadIDStrings = new HashSet<>();
+							for (final LoadSlot slot : cargoModel.getLoadSlots()) {
+								usedLoadIDStrings.add(slot.getName());
+							}
+
+							for (final MTMRow row : model.getRows()) {
+								if (row.getBuyOption() != null) {
+									final BuyOption bo = row.getBuyOption();
+									final LoadSlot loadSlot;
+									if (bo instanceof BuyReference) {
+										final BuyReference br = (BuyReference) bo;
+										loadSlot = br.getSlot();
+									} else {
+										continue;
 									}
-								}
-								
-								if (bestResult != null) {
-									final SpotMarket market = bestResult.getTarget();
-									if (market != null) {
-										
-										// find the existing shipping option
-										final ShippingOption so = bestResult.getShipping();
-										int spotIndex = -2;
-										CharterInMarket cim = null;
-										if (so != null) {
-											final ExistingCharterMarketOption ecmo = (ExistingCharterMarketOption) so;
-											cim = ecmo.getCharterInMarket();
-											if (cim != null) {
-												spotIndex = ecmo.getSpotIndex();
-											}
+
+									double price = Double.MIN_VALUE;
+									MTMResult bestResult = null;
+
+									// make sure that there's a vessel availability
+									for (final MTMResult result : row.getRhsResults()) {
+										if (result.getEarliestETA() == null) continue;
+										if (price < result.getEarliestPrice()){
+											price = result.getEarliestPrice();
+											bestResult = result;
 										}
-										
-										// create dischargeSlot
-										final DischargeSlot dischargeSlot = CargoEditingCommands.createNewSpotDischarge(editingDomain, setCommands, cargoModel, market);
-										
-										// making up the dischargeSlot
-										{
-											Vessel assignedVessel = null;
-											if (cim != null) {
-												assignedVessel = cim.getVessel();
-											}
-											CargoEditorMenuHelper.makeUpDischargeSlot(usedDischargeIDStrings, loadSlot, dischargeSlot, market, sdp, assignedVessel);
-										}
-										//										
-										CargoEditingCommands.runWiringUpdate(editingDomain, cargoModel, setCommands, deleteObjects, loadSlot, dischargeSlot, cim, spotIndex);
 									}
-								}
-								
-							} else if (row.getSellOption() != null) {
-								final SellOption so = row.getSellOption();
-								final DischargeSlot dischargeSlot;
-								if (so instanceof SellReference) {
-									final SellReference sr = (SellReference) so;
-									dischargeSlot = sr.getSlot();
-								} else {
-									continue;
-								}
-								
-								double price = Double.MIN_VALUE;
-								MTMResult bestResult = null;
-								
-								// make sure that there's a vessel availability
-								for (final MTMResult result : row.getLhsResults()) {
-									if (result.getEarliestETA() == null) continue;
-									if (price < result.getEarliestPrice()){
-										price = result.getEarliestPrice();
-										bestResult = result;
+
+									if (bestResult != null) {
+										final SpotMarket market = bestResult.getTarget();
+										if (market != null) {
+
+											// find the existing shipping option
+											final ShippingOption so = bestResult.getShipping();
+											int spotIndex = -2;
+											CharterInMarket cim = null;
+											if (so != null) {
+												final ExistingCharterMarketOption ecmo = (ExistingCharterMarketOption) so;
+												cim = ecmo.getCharterInMarket();
+												if (cim != null) {
+													spotIndex = ecmo.getSpotIndex();
+												}
+											}
+
+											// create dischargeSlot
+											final DischargeSlot dischargeSlot = CargoEditingCommands.createNewSpotDischarge(editingDomain, setCommands, cargoModel, market);
+
+											// making up the dischargeSlot
+											{
+												Vessel assignedVessel = null;
+												if (cim != null) {
+													assignedVessel = cim.getVessel();
+												}
+												CargoEditorMenuHelper.makeUpDischargeSlot(usedDischargeIDStrings, loadSlot, dischargeSlot, market, sdp, assignedVessel);
+											}
+											//										
+											CargoEditingCommands.runWiringUpdate(editingDomain, cargoModel, setCommands, deleteObjects, loadSlot, dischargeSlot, cim, spotIndex);
+										}
 									}
-								}
-								
-								if (bestResult != null) {
-									final SpotMarket market = bestResult.getTarget();
-									if (market != null) {
-										
-										// find the existing shipping option
-										final ShippingOption sop = bestResult.getShipping();
-										int spotIndex = -2;
-										CharterInMarket cim = null;
-										if (sop != null) {
-											final ExistingCharterMarketOption ecmo = (ExistingCharterMarketOption) sop;
-											cim = ecmo.getCharterInMarket();
-											if (cim != null) {
-												spotIndex = ecmo.getSpotIndex();
-											}
+
+								} else if (row.getSellOption() != null) {
+									final SellOption so = row.getSellOption();
+									final DischargeSlot dischargeSlot;
+									if (so instanceof SellReference) {
+										final SellReference sr = (SellReference) so;
+										dischargeSlot = sr.getSlot();
+									} else {
+										continue;
+									}
+
+									double price = Double.MIN_VALUE;
+									MTMResult bestResult = null;
+
+									// make sure that there's a vessel availability
+									for (final MTMResult result : row.getLhsResults()) {
+										if (result.getEarliestETA() == null) continue;
+										if (price < result.getEarliestPrice()){
+											price = result.getEarliestPrice();
+											bestResult = result;
 										}
-										
-										final LoadSlot loadSlot = CargoEditingCommands.createNewSpotLoad(editingDomain, setCommands, cargoModel, !dischargeSlot.isFOBSale(), market);										
-										// making up the loadSlot
-										{
-											Vessel assignedVessel = null;
-											if (cim != null) {
-												assignedVessel = cim.getVessel();
+									}
+
+									if (bestResult != null) {
+										final SpotMarket market = bestResult.getTarget();
+										if (market != null) {
+
+											// find the existing shipping option
+											final ShippingOption sop = bestResult.getShipping();
+											int spotIndex = -2;
+											CharterInMarket cim = null;
+											if (sop != null) {
+												final ExistingCharterMarketOption ecmo = (ExistingCharterMarketOption) sop;
+												cim = ecmo.getCharterInMarket();
+												if (cim != null) {
+													spotIndex = ecmo.getSpotIndex();
+												}
 											}
-											CargoEditorMenuHelper.makeUpLoadSlot(usedDischargeIDStrings, loadSlot, dischargeSlot, market, sdp, assignedVessel);
+
+											final LoadSlot loadSlot = CargoEditingCommands.createNewSpotLoad(editingDomain, setCommands, cargoModel, !dischargeSlot.isFOBSale(), market);										
+											// making up the loadSlot
+											{
+												Vessel assignedVessel = null;
+												if (cim != null) {
+													assignedVessel = cim.getVessel();
+												}
+												CargoEditorMenuHelper.makeUpLoadSlot(usedDischargeIDStrings, loadSlot, dischargeSlot, market, sdp, assignedVessel);
+											}
+											//										
+											CargoEditingCommands.runWiringUpdate(editingDomain, cargoModel, setCommands, deleteObjects, loadSlot, dischargeSlot, cim, spotIndex);
 										}
-										//										
-										CargoEditingCommands.runWiringUpdate(editingDomain, cargoModel, setCommands, deleteObjects, loadSlot, dischargeSlot, cim, spotIndex);
 									}
 								}
 							}
-						}
+
+							if (!setCommands.isEmpty()) {
+								final CompoundCommand currentWiringCommand = new CompoundCommand("MtMScenarioEditorActionDelegate.currentWiringCommand");
+								// Process set before delete
+								for (final Command c : setCommands) {
+									currentWiringCommand.append(c);
+								}
+								if (!deleteObjects.isEmpty()) {
+									currentWiringCommand.append(DeleteCommand.create(editingDomain, deleteObjects));
+								}
+
+								assert currentWiringCommand.canExecute();
+
+								editingDomain.getCommandStack().execute(currentWiringCommand);
+							}
 						
-						if (!setCommands.isEmpty()) {
-							final CompoundCommand currentWiringCommand = new CompoundCommand("MtMScenarioEditorActionDelegate.currentWiringCommand");
-							// Process set before delete
-							for (final Command c : setCommands) {
-								currentWiringCommand.append(c);
-							}
-							if (!deleteObjects.isEmpty()) {
-								currentWiringCommand.append(DeleteCommand.create(editingDomain, deleteObjects));
-							}
-
-							assert currentWiringCommand.canExecute();
-
-							editingDomain.getCommandStack().execute(currentWiringCommand);
-						}
+						});
 						//
 					} catch (final Exception e) {
 						throw new RuntimeException("Unable to mark scenario to market", e);
