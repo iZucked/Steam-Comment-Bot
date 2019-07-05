@@ -38,7 +38,7 @@ public class VesselAvailabilityEntityTransformer implements IVesselAvailabilityT
 
 	@Override
 	public void vesselAvailabilityTransformed(@NonNull VesselAvailability eVesselAvailability, @NonNull IVesselAvailability vesselAvailability) {
-		final IEntity entity = modelEntityMap.getOptimiserObjectNullChecked(eVesselAvailability.getEntity(), IEntity.class);
+		final IEntity entity = modelEntityMap.getOptimiserObjectNullChecked(eVesselAvailability.getCharterOrDelegateEntity(), IEntity.class);
 		entityProvider.setEntityForVesselAvailability(entity, vesselAvailability);
 	}
 

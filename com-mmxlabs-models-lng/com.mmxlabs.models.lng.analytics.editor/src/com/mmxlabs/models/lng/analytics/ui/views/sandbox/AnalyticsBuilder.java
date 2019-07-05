@@ -789,7 +789,7 @@ public class AnalyticsBuilder {
 								if (opt.getVessel() != vesselAvailability.getVessel()) {
 									continue;
 								}
-								if (opt.getEntity() != vesselAvailability.getEntity()) {
+								if (opt.getEntity() != vesselAvailability.getCharterOrDelegateEntity()) {
 									continue;
 								}
 								if (!opt.getHireCost().equals(vesselAvailability.getTimeCharterRate())) {
@@ -803,7 +803,7 @@ public class AnalyticsBuilder {
 						}
 
 						final SimpleVesselCharterOption opt = AnalyticsFactory.eINSTANCE.createSimpleVesselCharterOption();
-						opt.setEntity(vesselAvailability.getEntity());
+						opt.setEntity(vesselAvailability.getCharterOrDelegateEntity());
 						opt.setHireCost(vesselAvailability.getTimeCharterRate());
 						opt.setVessel(vesselAvailability.getVessel());
 

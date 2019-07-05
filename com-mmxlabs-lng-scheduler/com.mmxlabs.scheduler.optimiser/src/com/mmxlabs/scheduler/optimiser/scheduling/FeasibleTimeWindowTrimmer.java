@@ -214,7 +214,7 @@ public class FeasibleTimeWindowTrimmer {
 
 		final int size = sequence.size();
 		// filters out solutions with less than 2 elements (i.e. spot charters, etc.)
-		if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
+		if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
 			return;
 		}
 
@@ -474,7 +474,7 @@ public class FeasibleTimeWindowTrimmer {
 
 		final int size = sequence.size();
 		// filters out solutions with less than 2 elements (i.e. spot charters, etc.)
-		if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
+		if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
 			return;
 		}
 

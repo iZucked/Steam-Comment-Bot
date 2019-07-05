@@ -349,7 +349,7 @@ public class PeriodTransformer {
 			for (final VesselAvailability vesselAvailability : ScenarioModelUtil.getCargoModel(wholeScenarioDataProvider).getVesselAvailabilities()) {
 				if (newVA.getVessel() == mapping.getCopyFromOriginal(vesselAvailability.getVessel())) {
 					if (newVA.getCharterNumber() == vesselAvailability.getCharterNumber()) {
-						newVA.setEntity(mapping.getCopyFromOriginal(vesselAvailability.getEntity()));
+						newVA.setEntity(mapping.getCopyFromOriginal(vesselAvailability.getCharterOrDelegateEntity()));
 						if (vesselAvailability.isSetTimeCharterRate()) {
 							newVA.setTimeCharterRate(vesselAvailability.getTimeCharterRate());
 						}
@@ -815,7 +815,7 @@ public class PeriodTransformer {
 							newVesselAvailability.setFleet(vesselAvailability.isFleet());
 
 							newVesselAvailability.setFleet(vesselAvailability.isFleet());
-							newVesselAvailability.setEntity(vesselAvailability.getEntity());
+							newVesselAvailability.setEntity(vesselAvailability.getCharterOrDelegateEntity());
 
 							// Ignore Ballast bonus/repositioning - should not be part of P&L...
 							// ... unless linked to a curve price.
@@ -1090,8 +1090,8 @@ public class PeriodTransformer {
 
 			// The rounding is over-constraining the problem
 			if (vesselAvailability != null) {
-				if (vesselAvailability.getAvailabilityOrContractMinDuration() != 0) {
-					int minDurationInDays = vesselAvailability.getAvailabilityOrContractMinDuration();
+				if (vesselAvailability.getCharterOrDelegateMinDuration() != 0) {
+					int minDurationInDays = vesselAvailability.getCharterOrDelegateMinDuration();
 
 					if (hoursBeforeNewStart > 0 && hoursAfterNewEnd > 0) {
 						vesselAvailability.setMinDuration(0);
@@ -1103,8 +1103,8 @@ public class PeriodTransformer {
 						vesselAvailability.setMinDuration(minDurationInDays);
 					}
 				}
-				if (vesselAvailability.getAvailabilityOrContractMaxDuration() != 0) {
-					int maxDurationInDays = vesselAvailability.getAvailabilityOrContractMaxDuration();
+				if (vesselAvailability.getCharterOrDelegateMaxDuration() != 0) {
+					int maxDurationInDays = vesselAvailability.getCharterOrDelegateMaxDuration();
 
 					if (hoursBeforeNewStart > 0 && hoursAfterNewEnd > 0) {
 						vesselAvailability.setMaxDuration(0);

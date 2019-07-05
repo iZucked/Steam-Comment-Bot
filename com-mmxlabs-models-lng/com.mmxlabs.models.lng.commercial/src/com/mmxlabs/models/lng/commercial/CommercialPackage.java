@@ -1974,13 +1974,22 @@ public interface CommercialPackage extends EPackage {
 	int BALLAST_BONUS_CHARTER_CONTRACT__ENTITY = CHARTER_CONTRACT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE = CHARTER_CONTRACT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Ballast Bonus Charter Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BALLAST_BONUS_CHARTER_CONTRACT_FEATURE_COUNT = CHARTER_CONTRACT_FEATURE_COUNT + 2;
+	int BALLAST_BONUS_CHARTER_CONTRACT_FEATURE_COUNT = CHARTER_CONTRACT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl <em>Simple Ballast Bonus Charter Contract</em>}' class.
@@ -2045,6 +2054,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__ENTITY = BALLAST_BONUS_CHARTER_CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE = BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE;
 
 	/**
 	 * The number of structural features of the '<em>Simple Ballast Bonus Charter Contract</em>' class.
@@ -2977,6 +2995,17 @@ public interface CommercialPackage extends EPackage {
 	EReference getBallastBonusCharterContract_Entity();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.BallastBonusCharterContract#getRepositioningFee <em>Repositioning Fee</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Repositioning Fee</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BallastBonusCharterContract#getRepositioningFee()
+	 * @see #getBallastBonusCharterContract()
+	 * @generated
+	 */
+	EAttribute getBallastBonusCharterContract_RepositioningFee();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract <em>Simple Ballast Bonus Charter Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3745,6 +3774,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference BALLAST_BONUS_CHARTER_CONTRACT__ENTITY = eINSTANCE.getBallastBonusCharterContract_Entity();
+
+		/**
+		 * The meta object literal for the '<em><b>Repositioning Fee</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE = eINSTANCE.getBallastBonusCharterContract_RepositioningFee();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl <em>Simple Ballast Bonus Charter Contract</em>}' class.

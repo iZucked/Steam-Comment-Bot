@@ -62,8 +62,8 @@ public class VesselAvailabilityMinMaxConstraint extends AbstractModelMultiConstr
 					 * Constraints check for min/max duration settings.
 					 */
 					// Min duration can't be greater than max duration
-					if (vesselAvailability.getAvailabilityOrContractMinDuration() != 0 && vesselAvailability.getAvailabilityOrContractMaxDuration() != 0) {
-						if (vesselAvailability.getAvailabilityOrContractMaxDuration() < vesselAvailability.getAvailabilityOrContractMinDuration()) {
+					if (vesselAvailability.getCharterOrDelegateMinDuration() != 0 && vesselAvailability.getCharterOrDelegateMaxDuration() != 0) {
+						if (vesselAvailability.getCharterOrDelegateMaxDuration() < vesselAvailability.getCharterOrDelegateMinDuration()) {
 							final String message = String.format("Vessel|%s min duration is superior to the max duration.", vessel.getName());
 							createErrorMessage(message, ctx, failures, vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_MinDuration(), //
 									CargoPackage.eINSTANCE.getVesselAvailability_MaxDuration(), CargoPackage.eINSTANCE.getCargoModel_VesselAvailabilities());
@@ -81,7 +81,7 @@ public class VesselAvailabilityMinMaxConstraint extends AbstractModelMultiConstr
 						if (startDate != null) {
 							// Compute the date corresponding to the max duration
 							// Depending on the starting date
-							final int maxDuration = vesselAvailability.getAvailabilityOrContractMaxDuration();
+							final int maxDuration = vesselAvailability.getCharterOrDelegateMaxDuration();
 							final LocalDateTime maxDate = startDate.plusDays(maxDuration);
 
 							if (vesselAvailability.isSetEndAfter()) {
@@ -111,7 +111,7 @@ public class VesselAvailabilityMinMaxConstraint extends AbstractModelMultiConstr
 						if (startDate != null) {
 							// Compute the date corresponding to the min duration
 							// Depending on the ending date
-							final int minDuration = vesselAvailability.getAvailabilityOrContractMinDuration();
+							final int minDuration = vesselAvailability.getCharterOrDelegateMinDuration();
 							final LocalDateTime minDate = startDate.plusDays(minDuration);
 
 							if (vesselAvailability.isSetEndBy()) {

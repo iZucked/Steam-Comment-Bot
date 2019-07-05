@@ -1151,6 +1151,16 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
+	public EAttribute getBallastBonusCharterContract_RepositioningFee() {
+		return (EAttribute)ballastBonusCharterContractEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSimpleBallastBonusCharterContract() {
 		return simpleBallastBonusCharterContractEClass;
 	}
@@ -1310,6 +1320,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		ballastBonusCharterContractEClass = createEClass(BALLAST_BONUS_CHARTER_CONTRACT);
 		createEReference(ballastBonusCharterContractEClass, BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT);
 		createEReference(ballastBonusCharterContractEClass, BALLAST_BONUS_CHARTER_CONTRACT__ENTITY);
+		createEAttribute(ballastBonusCharterContractEClass, BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE);
 
 		simpleBallastBonusCharterContractEClass = createEClass(SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT);
 
@@ -1498,6 +1509,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEClass(ballastBonusCharterContractEClass, BallastBonusCharterContract.class, "BallastBonusCharterContract", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBallastBonusCharterContract_BallastBonusContract(), this.getBallastBonusContract(), null, "ballastBonusContract", null, 0, 1, BallastBonusCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBallastBonusCharterContract_Entity(), this.getBaseLegalEntity(), null, "entity", null, 0, 1, BallastBonusCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBallastBonusCharterContract_RepositioningFee(), ecorePackage.getEString(), "repositioningFee", null, 1, 1, BallastBonusCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(simpleBallastBonusCharterContractEClass, SimpleBallastBonusCharterContract.class, "SimpleBallastBonusCharterContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1616,6 +1628,12 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 			   "unit", "days",
 			   "formatString", "##0"
 		   });
+		addAnnotation
+		  (getBallastBonusCharterContract_RepositioningFee(),
+		   source,
+		   new String[] {
+			   "unit", "$/day"
+		   });
 	}
 
 	/**
@@ -1664,6 +1682,12 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   });
 		addAnnotation
 		  (getNotionalJourneyBallastBonusContractLine_HirePriceExpression(),
+		   source,
+		   new String[] {
+			   "type", "charter"
+		   });
+		addAnnotation
+		  (getBallastBonusCharterContract_RepositioningFee(),
 		   source,
 		   new String[] {
 			   "type", "charter"

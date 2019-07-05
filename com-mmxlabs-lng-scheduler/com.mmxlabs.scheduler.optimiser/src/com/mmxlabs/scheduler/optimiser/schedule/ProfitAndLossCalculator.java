@@ -54,6 +54,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -117,14 +118,18 @@ public class ProfitAndLossCalculator {
 		int lastHeelPricePerMMBTU = 0;
 		// int lastHeelCV = 0;
 
-		for (final VolumeAllocatedSequence sequence : profitAndLossSequences.getVolumeAllocatedSequences()) {
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(sequence.getResource());
+		for (final VolumeAllocatedSequence volumeAllocatedSequence : profitAndLossSequences.getVolumeAllocatedSequences()) {
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(volumeAllocatedSequence.getResource());
 			assert vesselAvailability != null;
 
-			int time = sequence.getStartTime();
+			if (SequenceEvaluationUtils.shouldIgnoreSequence(sequences.getSequence(volumeAllocatedSequence.getResource()), vesselAvailability)) {
+				continue;
+			}
+			
+			int time = volumeAllocatedSequence.getStartTime();
 
 			// for (final VoyagePlan plan : sequence.getVoyagePlans()) {
-			for (final Pair<VoyagePlan, IPortTimesRecord> entry : sequence.getVoyagePlans()) {
+			for (final Pair<VoyagePlan, IPortTimesRecord> entry : volumeAllocatedSequence.getVoyagePlans()) {
 				boolean cargo = false;
 				final VoyagePlan plan = entry.getFirst();
 				final IPortTimesRecord portTimesRecord = entry.getSecond();
@@ -160,7 +165,7 @@ public class ProfitAndLossCalculator {
 							lastHeelPricePerMMBTU = 0;
 						} else {
 							final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculatorProvider.get().evaluate(EvaluationMode.FullPNL, plan, currentAllocation,
-									vesselAvailability, sequence.getStartTime(), volumeAllocatedSequences, annotatedSolution);
+									vesselAvailability, volumeAllocatedSequence.getStartTime(), volumeAllocatedSequences, annotatedSolution);
 							cargoValueAnnotation = p.getFirst();
 							final long cargoGroupValue = p.getSecond();
 							profitAndLossSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
@@ -179,7 +184,6 @@ public class ProfitAndLossCalculator {
 							for (final IPortSlot portSlot : slots) {
 								final ISequenceElement portElement = portSlotProvider.getElement(portSlot);
 								elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_cargoValueAllocationInfo, cargoValueAnnotation);
-
 							}
 						}
 					}
@@ -187,7 +191,7 @@ public class ProfitAndLossCalculator {
 
 				if (!cargo) {
 					Pair<Map<IPortSlot, HeelValueRecord>, Long> p = entityValueCalculatorProvider.get().evaluateNonCargoPlan(EvaluationMode.FullPNL, plan, portTimesRecord, vesselAvailability, time,
-							sequence.getStartTime(), volumeAllocatedSequences, lastHeelPricePerMMBTU, annotatedSolution);
+							volumeAllocatedSequence.getStartTime(), volumeAllocatedSequences, lastHeelPricePerMMBTU, annotatedSolution);
 					final long otherGroupValue = p.getSecond();
 					profitAndLossSequences.setVoyagePlanGroupValue(plan, otherGroupValue);
 

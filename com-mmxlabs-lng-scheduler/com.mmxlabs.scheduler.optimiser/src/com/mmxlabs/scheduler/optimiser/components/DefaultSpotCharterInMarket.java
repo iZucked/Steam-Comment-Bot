@@ -17,15 +17,17 @@ public final class DefaultSpotCharterInMarket implements ISpotCharterInMarket {
 	private final int availabilityCount;
 	private final IBallastBonusContract ballastBonusContract;
 	private final IEndRequirement end;
-
+	private final ILongCurve repositioningFee;
+	
 	public DefaultSpotCharterInMarket(@NonNull final String name, @NonNull final IVessel vessel, @NonNull final ILongCurve dailyCharterInRateCurve, final int availabilityCount, IEndRequirement end,
-			IBallastBonusContract ballastBonusContract) {
+			IBallastBonusContract ballastBonusContract, final ILongCurve repositioningFee) {
 		this.name = name;
 		this.vessel = vessel;
 		this.dailyCharterInRateCurve = dailyCharterInRateCurve;
 		this.availabilityCount = availabilityCount;
 		this.end = end;
 		this.ballastBonusContract = ballastBonusContract;
+		this.repositioningFee = repositioningFee;
 	}
 
 	@Override
@@ -59,5 +61,10 @@ public final class DefaultSpotCharterInMarket implements ISpotCharterInMarket {
 	@Override
 	public IEndRequirement getEndRequirement() {
 		return end;
+	}
+
+	@Override
+	public ILongCurve getRepositioningFee() {
+		return this.repositioningFee;
 	}
 }

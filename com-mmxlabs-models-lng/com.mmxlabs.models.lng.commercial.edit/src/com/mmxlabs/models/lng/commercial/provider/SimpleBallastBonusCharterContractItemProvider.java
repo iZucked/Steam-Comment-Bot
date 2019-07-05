@@ -56,6 +56,7 @@ public class SimpleBallastBonusCharterContractItemProvider extends NamedObjectIt
 			addMinDurationPropertyDescriptor(object);
 			addMaxDurationPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
+			addRepositioningFeePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -122,6 +123,28 @@ public class SimpleBallastBonusCharterContractItemProvider extends NamedObjectIt
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Repositioning Fee feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRepositioningFeePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BallastBonusCharterContract_repositioningFee_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BallastBonusCharterContract_repositioningFee_feature", "_UI_BallastBonusCharterContract_type"),
+				 CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -196,6 +219,7 @@ public class SimpleBallastBonusCharterContractItemProvider extends NamedObjectIt
 		switch (notification.getFeatureID(SimpleBallastBonusCharterContract.class)) {
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION:
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION:
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT:

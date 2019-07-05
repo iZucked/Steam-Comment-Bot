@@ -247,7 +247,7 @@ public class ScheduleWithChangeToScheduleSpecification {
 			newAvailability.setCharterContract(oldAvailability.getCharterContract());
 		}
 
-		if (oldAvailability.getAvailabilityOrContractMinDuration() != 0 || oldAvailability.getAvailabilityOrContractMaxDuration() != 0) {
+		if (oldAvailability.getCharterOrDelegateMinDuration() != 0 || oldAvailability.getCharterOrDelegateMaxDuration() != 0) {
 
 			final Event firstSequenceEvent = segmentStart.getSequence().getEvents().get(0);
 			final ZonedDateTime vesselStart = newAvailability.getStartAfterAsDateTime();
@@ -255,16 +255,16 @@ public class ScheduleWithChangeToScheduleSpecification {
 
 			final int hours = Hours.between(sequenceStart, vesselStart);
 			if (hours > 0) {
-				if (oldAvailability.getAvailabilityOrContractMinDuration() != 0) {
-					int minDurationInHours = oldAvailability.getAvailabilityOrContractMinDuration() * 24;
+				if (oldAvailability.getCharterOrDelegateMinDuration() != 0) {
+					int minDurationInHours = oldAvailability.getCharterOrDelegateMinDuration() * 24;
 					minDurationInHours -= hours;
 					if (minDurationInHours < 0) {
 						minDurationInHours = 0;
 					}
 					newAvailability.setMinDuration(minDurationInHours / 24);
 				}
-				if (oldAvailability.getAvailabilityOrContractMaxDuration() != 0) {
-					int maxDurationInHours = oldAvailability.getAvailabilityOrContractMaxDuration() * 24;
+				if (oldAvailability.getCharterOrDelegateMaxDuration() != 0) {
+					int maxDurationInHours = oldAvailability.getCharterOrDelegateMaxDuration() * 24;
 					maxDurationInHours -= hours;
 					if (maxDurationInHours < 0) {
 						maxDurationInHours = 0;

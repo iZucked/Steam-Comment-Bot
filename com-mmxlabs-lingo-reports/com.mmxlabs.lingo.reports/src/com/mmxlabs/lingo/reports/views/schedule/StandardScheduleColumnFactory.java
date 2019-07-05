@@ -1770,7 +1770,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						}
 						final VesselAvailability va = sequence.getVesselAvailability();
 						if (va != null) {
-							final BaseLegalEntity entity = va.getEntity();
+							final BaseLegalEntity entity = va.getCharterOrDelegateEntity();
 							if (entity != null) {
 								return entity.getName();
 							}
