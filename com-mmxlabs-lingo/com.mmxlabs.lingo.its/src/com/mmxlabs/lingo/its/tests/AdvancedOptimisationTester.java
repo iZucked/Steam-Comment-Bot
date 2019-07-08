@@ -33,6 +33,13 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 		final List<DynamicNode> tests = new LinkedList<>();
 
 		for (final boolean withLimited : BOOLS) {
+
+			if (withLimited && !RUN_LIMITED_ITERATION_CASES) {
+				continue;
+			} else if (!withLimited && !RUN_FULL_ITERATION_CASES) {
+				continue;
+			}
+
 			final String limitedLabel = withLimited ? "Limited_" : "";
 			final String gcoLabel = withGCO ? "GCO_" : "";
 			for (final boolean withActionSets : BOOLS) {
