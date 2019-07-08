@@ -43,8 +43,8 @@ public abstract class ScenarioInstanceViewWithUndoSupport extends ScenarioInstan
 	}
 
 	@Override
-	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
-		super.doDisplayScenarioInstance(scenarioInstance, rootObject);
+	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable Object target) {
+		super.doDisplayScenarioInstance(scenarioInstance, rootObject, target);
 		updateUndoActions(getEditingDomain());
 	}
 

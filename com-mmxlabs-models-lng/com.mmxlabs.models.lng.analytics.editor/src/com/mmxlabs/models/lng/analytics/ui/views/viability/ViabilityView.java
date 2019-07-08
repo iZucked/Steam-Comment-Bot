@@ -148,7 +148,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 		});
 		go.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif"));
 		getViewSite().getActionBars().getToolBarManager().add(go);
-		
+
 		final Action remove = new Action("Remove", Action.AS_PUSH_BUTTON) {
 			@Override
 			public void run() {
@@ -158,7 +158,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 				final EditingDomain editingDomain = sdp.getEditingDomain();
 				final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
 				final ViabilityModel model = analyticsModel.getViabilityModel();
-				
+
 				if (model != null) {
 					final CompoundCommand cmd = new CompoundCommand("Remove viability matrix");
 					cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), SetCommand.UNSET_VALUE));
@@ -187,11 +187,9 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 	}
 
 	@Override
-	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
-		doDisplayScenarioInstance(scenarioInstance, rootObject, null);
-	}
+	protected synchronized void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable Object target) {
 
-	synchronized void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable ViabilityModel model) {
+		ViabilityModel model = (ViabilityModel) target;
 
 		if (errorLabel != null) {
 			errorLabel.dispose();
@@ -217,7 +215,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 			if (model != this.currentModel) {
 				update = true;
 				if (model != null) {
-					//extractPlainForTest(model);
+					// extractPlainForTest(model);
 				}
 			}
 		}
@@ -317,7 +315,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 				}
 			}
 			if (doDisplay) {
-				displayScenarioInstance(getScenarioInstance());
+				displayScenarioInstance(getScenarioInstance(), getRootObject(), currentModel);
 			}
 		};
 
@@ -326,7 +324,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 				return;
 			}
 			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel()) {
-				displayScenarioInstance(getScenarioInstance());
+				displayScenarioInstance(getScenarioInstance(), getRootObject(), currentModel);
 			}
 		}
 	};
@@ -420,7 +418,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 
 	@Override
 	public void commandStackChanged(final EventObject event) {
-		displayScenarioInstance(getScenarioInstance());
+		displayScenarioInstance(getScenarioInstance(), getRootObject(), currentModel);
 	}
 
 	@Override

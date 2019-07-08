@@ -56,6 +56,7 @@ import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
+
 /*
  * author Simon Goodall and FM
  * Based on ViabilityView
@@ -104,7 +105,7 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 					final ExecutorService executor = Executors.newFixedThreadPool(1);
 					try {
 						executor.submit(() -> {
-							
+
 							final MTMModel model = MTMUtils.evaluateMTMModel(scenarioModel, scenarioInstance, sdp, true, "mtm", false);
 
 							RunnerHelper.asyncExec(() -> {
@@ -130,7 +131,7 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 		});
 		go.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif"));
 		getViewSite().getActionBars().getToolBarManager().add(go);
-		
+
 		final Action remove = new Action("Remove", Action.AS_PUSH_BUTTON) {
 			@Override
 			public void run() {
@@ -140,7 +141,7 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 				final EditingDomain editingDomain = sdp.getEditingDomain();
 				final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
 				final MTMModel model = analyticsModel.getMtmModel();
-				
+
 				if (model != null) {
 					final CompoundCommand cmd = new CompoundCommand("Remove mtm matrix");
 					cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_MtmModel(), SetCommand.UNSET_VALUE));
@@ -165,16 +166,12 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 		service = getSite().getService(ESelectionService.class);
 
 		listenToScenarioSelection();
-		
-		
+
 	}
 
 	@Override
-	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
-		doDisplayScenarioInstance(scenarioInstance, rootObject, null);
-	}
-
-	synchronized void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable MTMModel model) {
+	protected synchronized void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable Object target) {
+		MTMModel model = (MTMModel) target;
 
 		if (errorLabel != null) {
 			errorLabel.dispose();
@@ -225,7 +222,7 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 				}
 			}
 			if (doDisplay) {
-				displayScenarioInstance(getScenarioInstance());
+				displayScenarioInstance(getScenarioInstance(), getRootObject(), currentModel);
 			}
 		};
 
@@ -234,7 +231,7 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 				return;
 			}
 			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_MtmModel()) {
-				displayScenarioInstance(getScenarioInstance());
+				displayScenarioInstance(getScenarioInstance(), getRootObject(), currentModel);
 			}
 		}
 	};
@@ -272,7 +269,7 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 			service.removePostSelectionListener(selectionListener);
 			selectionListener = null;
 		}
-		if(mainTableComponent != null) {
+		if (mainTableComponent != null) {
 			mainTableComponent.dispose();
 		}
 
@@ -331,40 +328,41 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 
 	@Override
 	public void commandStackChanged(final EventObject event) {
-		displayScenarioInstance(getScenarioInstance());
+		displayScenarioInstance(getScenarioInstance(), getRootObject(), currentModel);
 	}
 
 	@Override
 	public void setFocus() {
 		mainTableComponent.setFocus();
 	}
-	
-	public class ExportMTMToExcellAction extends Action{
+
+	public class ExportMTMToExcellAction extends Action {
 
 		public ExportMTMToExcellAction(final String label) {
 			super(label);
 		}
+
 		@Override
 		public void run() {
-			//MTMExporter.export(getTable(), getFile(), dates.getStartMonth(), dates.getEndMonth());
+			// MTMExporter.export(getTable(), getFile(), dates.getStartMonth(), dates.getEndMonth());
 		}
-		
+
 		private String getFile() {
 
-	        FileDialog dialog = new FileDialog(getViewSite().getShell(), SWT.SAVE);
-	        String [] filterNames = new String [] {"Excel files", "All Files (*)"};
-	    	String [] filterExtensions = new String [] {"*.xlsx;*.xls;", "*"};
-	        dialog.setFilterNames(filterNames);
-	        dialog.setFilterExtensions(filterExtensions);
-	        String file = dialog.open();
-	        if (file != null) {
-	            file = file.trim();
-	            if (file.length() > 0) {
+			FileDialog dialog = new FileDialog(getViewSite().getShell(), SWT.SAVE);
+			String[] filterNames = new String[] { "Excel files", "All Files (*)" };
+			String[] filterExtensions = new String[] { "*.xlsx;*.xls;", "*" };
+			dialog.setFilterNames(filterNames);
+			dialog.setFilterExtensions(filterExtensions);
+			String file = dialog.open();
+			if (file != null) {
+				file = file.trim();
+				if (file.length() > 0) {
 					return file;
 				}
-	        }
-	        return "";
-	    }
+			}
+			return "";
+		}
 	}
 
 }

@@ -320,8 +320,8 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 	}
 
 	@Override
-	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
-		doDisplayScenarioInstance(scenarioInstance, rootObject, null);
+	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable Object target) {
+		doDisplayScenarioInstance(scenarioInstance, rootObject, target);
 
 		updateActions(getEditingDomain());
 	}
@@ -432,13 +432,13 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_BreakevenModels()) {
 				if (notification.getEventType() == Notification.REMOVE) {
 					if (model != null && notification.getOldValue() == model) {
-						displayScenarioInstance(getScenarioInstance());
+						displayScenarioInstance(getScenarioInstance(), getRootObject(), null);
 						if (getCurrentRoot() == model) {
 							setCurrentRoot(null);
 						}
 						// navigationHistory.remove(model);
 					} else if (rootOptionsModel != null && notification.getOldValue() == rootOptionsModel) {
-						displayScenarioInstance(getScenarioInstance());
+						displayScenarioInstance(getScenarioInstance(), getRootObject(), null);
 						if (getCurrentRoot() == rootOptionsModel) {
 							setCurrentRoot(null);
 						}

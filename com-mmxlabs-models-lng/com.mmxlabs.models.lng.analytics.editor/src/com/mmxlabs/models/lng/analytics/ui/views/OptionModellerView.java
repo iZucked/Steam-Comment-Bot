@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views;
 
-import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -13,7 +12,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -52,10 +50,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -65,6 +61,7 @@ import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.features.KnownFeatures;
@@ -102,16 +99,20 @@ import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class OptionModellerView extends ScenarioInstanceView implements CommandStackListener {
+
+	public static final String ID = "com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView";
 
 	private UndoAction undoAction;
 	private RedoAction redoAction;
 	private CommandStack currentCommandStack;
 
-	private OptionAnalysisModel model;
-
+	private OptionAnalysisModel currentModel;
 	private final Map<Object, IStatus> validationErrors = new HashMap<>();
 
 	private DialogValidationSupport validationSupport;
@@ -136,9 +137,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private BaseCaseComponent baseCaseComponent;
 	private PartialCaseCompoment partialCaseComponent;
-
-	private final WeakHashMap<OptionAnalysisModel, WeakReference<OptionAnalysisModel>> navigationHistory = new WeakHashMap<>();
-	private WeakReference<OptionAnalysisModel> currentRoot = null;
 
 	protected Collection<Consumer<Boolean>> lockedListeners = Sets.newConcurrentHashSet();
 
@@ -321,15 +319,39 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	}
 
 	@Override
-	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
-		doDisplayScenarioInstance(scenarioInstance, rootObject, null);
+	protected void activeEditorChange(final ScenarioInstance instance) {
+		if (instance == null) {
+			displayScenarioInstance(null, null, null);
 
-		updateActions(getEditingDomain());
+		} else {
+			ScenarioModelRecord mr = SSDataManager.Instance.getModelRecord(instance);
+			try (IScenarioDataProvider sdp = mr.aquireScenarioDataProvider("ScenarioInstanceView:1")) {
+				MMXRootObject ro = sdp.getTypedScenario(MMXRootObject.class);
+
+				if (Objects.equal(instance, this.scenarioInstance)) {
+					return;
+				}
+
+				displayScenarioInstance(instance, ro, null);
+			}
+		}
+	}
+	//
+	// @Override
+	// protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
+	// doDisplayScenarioInstance(scenarioInstance, rootObject, null);
+
+	// updateActions(getEditingDomain());
+	// }
+
+	public synchronized void openSandboxScenario(@Nullable final SandboxScenario sandboxScenario) {
+		displayScenarioInstance(sandboxScenario.getScenarioInstance(), sandboxScenario.getRootObject(), sandboxScenario.getSandboxModel());
 	}
 
-	void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable final OptionAnalysisModel model) {
+	@Override
+	protected synchronized void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable final Object target) {
 
-		if (model != null && getModel() == model) {
+		if (target != null && ((EObject) target).eContainer() != null && currentModel == target) {
 			return;
 		}
 		if (errorLabel != null) {
@@ -356,32 +378,29 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			mainComposite.getParent().layout(true);
 
-			if (model != null) {
-				setModel(model);
+			OptionAnalysisModel newModel = null;
+
+			if (target instanceof OptionAnalysisModel) {
+				newModel = (OptionAnalysisModel) target;
 			} else if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final @NonNull AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(lngScenarioModel);
 
 				if (analyticsModel.getOptionModels().isEmpty()) {
-					setModel(null);
 					createNewLink = new Link(mainComposite.getParent(), SWT.NONE);
-					createNewLink.addListener(SWT.Selection, new Listener() {
+					createNewLink.addListener(SWT.Selection, event -> {
+						final OptionAnalysisModel tmpNewModel = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
 
-						@Override
-						public void handleEvent(final Event event) {
-							final OptionAnalysisModel model = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
+						tmpNewModel.setName("New sandbox");
 
-							model.setName("New sandbox");
+						tmpNewModel.setBaseCase(AnalyticsFactory.eINSTANCE.createBaseCase());
+						tmpNewModel.setPartialCase(AnalyticsFactory.eINSTANCE.createPartialCase());
 
-							model.setBaseCase(AnalyticsFactory.eINSTANCE.createBaseCase());
-							model.setPartialCase(AnalyticsFactory.eINSTANCE.createPartialCase());
+						final CompoundCommand cmd = new CompoundCommand("Create sandbox");
+						cmd.append(AddCommand.create(getEditingDomain(), analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels(), Collections.singletonList(tmpNewModel)));
+						getEditingDomain().getCommandStack().execute(cmd);
 
-							final CompoundCommand cmd = new CompoundCommand("Create sandbox");
-							cmd.append(AddCommand.create(getEditingDomain(), analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels(), Collections.singletonList(model)));
-							getEditingDomain().getCommandStack().execute(cmd);
-
-							doDisplayScenarioInstance(getScenarioInstance(), getRootObject(), model);
-						}
+						doDisplayScenarioInstance(getScenarioInstance(), getRootObject(), tmpNewModel);
 					});
 					createNewLink.setText("<A>Create new sandbox</A>");
 					createNewLink.setToolTipText("Create new sandbox");
@@ -391,17 +410,17 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					setInput(null);
 					return;
 				} else {
-					final WeakReference<OptionAnalysisModel> root = getCurrentRoot();
-					if (root == null || root.get() == null) {
-						setCurrentRoot(new WeakReference<OptionAnalysisModel>(analyticsModel.getOptionModels().get(0)));
+					if (currentModel != null) {
+						newModel = currentModel;
+					} else {
+						newModel = analyticsModel.getOptionModels().get(0);
 					}
-					final WeakReference<OptionAnalysisModel> modelToUse = navigationHistory.get(getCurrentRoot().get());
-					setModel(modelToUse == null || (modelToUse != null && modelToUse.get() == null) ? rootOptionsModel : modelToUse.get());
 				}
 			}
-			setInput(getModel());
+			setInput(newModel);
 		}
 
+		updateActions(getEditingDomain());
 	}
 
 	private final @NonNull EContentAdapter historyRenameAdaptor = new EContentAdapter() {
@@ -426,19 +445,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels()) {
 				if (notification.getEventType() == Notification.REMOVE) {
-					WeakReference<OptionAnalysisModel> currentRoot2 = getCurrentRoot();
-					if (model != null && notification.getOldValue() == model) {
-						displayScenarioInstance(getScenarioInstance());
-						if (currentRoot2 != null && currentRoot2.get() == model) {
-							setCurrentRoot(null);
-						}
-						navigationHistory.remove(model);
-					} else if (rootOptionsModel != null && notification.getOldValue() == rootOptionsModel) {
-						displayScenarioInstance(getScenarioInstance());
-						if (currentRoot2 != null && currentRoot2.get() == rootOptionsModel) {
-							setCurrentRoot(null);
-						}
-						navigationHistory.remove(rootOptionsModel);
+					if (currentModel != null && notification.getOldValue() == currentModel) {
+						displayScenarioInstance(getScenarioInstance(), getRootObject(), null);
 					}
 				}
 			}
@@ -466,7 +474,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		 * @since 2.2
 		 */
 		@Override
-		protected void missedNotifications(final List<Notification> missed) {
+		protected synchronized void missedNotifications(final List<Notification> missed) {
 			doValidate();
 
 			boolean refreshSections = false;
@@ -545,29 +553,25 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private Composite mainComposite;
 	private Composite lhsComposite;
 	private Composite centralComposite;
-	private OptionAnalysisModel rootOptionsModel;
-	private MMXRootObject rootObject;
+
 	private boolean partialCaseValid;
 
 	public void setInput(final @Nullable OptionAnalysisModel model) {
 
-		if (this.getModel() != null) {
-			if (this.getModel().eAdapters().contains(refreshAdapter)) {
-				this.getModel().eAdapters().remove(refreshAdapter);
+		if (currentModel != null) {
+			if (currentModel.eAdapters().contains(refreshAdapter)) {
+				currentModel.eAdapters().remove(refreshAdapter);
 			}
-		}
-		if (rootOptionsModel != null) {
-			rootOptionsModel.eAdapters().remove(deletedOptionModelAdapter);
-			rootOptionsModel.eAdapters().remove(historyRenameAdaptor);
+			currentModel.eAdapters().remove(historyRenameAdaptor);
 			optionsModelComponent.setInput(Collections.emptySet());
-			rootOptionsModel = null;
+			currentModel = null;
 		}
 		if (rootObject != null) {
 			rootObject.eAdapters().remove(deletedOptionModelAdapter);
-			rootObject = null;
 		}
 
-		this.setModel(model);
+		this.currentModel = model;
+		this.targetObject = model;
 
 		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getScenarioDataProvider(), false, false));
 		if (model != null) {
@@ -585,13 +589,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			data.open();
 		}
 
-		rootOptionsModel = getRootOptionsModel(model);
-		if (rootOptionsModel != null) {
-			rootOptionsModel.eAdapters().add(historyRenameAdaptor);
-			optionsModelComponent.setInput(Collections.singleton(rootOptionsModel));
-			// create a weak reference to avoid memory leaks
-			final WeakReference<OptionAnalysisModel> weakReferenceToModel = new WeakReference<>(model);
-			navigationHistory.put(rootOptionsModel, weakReferenceToModel);
+		if (currentModel != null) {
+			optionsModelComponent.setInput(Collections.singleton(currentModel));
 		}
 
 		rootObject = getRootObject();
@@ -604,6 +603,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			if (!model.eAdapters().contains(refreshAdapter)) {
 				model.eAdapters().add(refreshAdapter);
+			}
+			if (!model.eAdapters().contains(historyRenameAdaptor)) {
+				model.eAdapters().add(historyRenameAdaptor);
 			}
 		} else {
 			setPartName("Sandbox");
@@ -700,7 +702,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				}
 				return true;
 			};
-			if (model != null) {
+			if (currentModel != null) {
 				// {
 				// boolean baseCaseValid = true;
 				// final BaseCase baseCase = model.getBaseCase();
@@ -724,7 +726,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				// }
 				{
 					boolean l_partialCaseValid = true;
-					final PartialCase partialCase = model.getPartialCase();
+					final PartialCase partialCase = currentModel.getPartialCase();
 					if (!checker.apply(partialCase)) {
 						l_partialCaseValid = false;
 					} else {
@@ -799,17 +801,13 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		disposables.forEach(Runnable::run);
 
-		if (model != null) {
-			model.eAdapters().remove(refreshAdapter);
-			model = null;
-		}
-		if (rootOptionsModel != null) {
-			rootOptionsModel.eAdapters().remove(historyRenameAdaptor);
-			rootOptionsModel = null;
+		if (currentModel != null) {
+			currentModel.eAdapters().remove(refreshAdapter);
+			currentModel.eAdapters().remove(historyRenameAdaptor);
+			currentModel = null;
 		}
 		if (rootObject != null) {
 			rootObject.eAdapters().remove(deletedOptionModelAdapter);
-			rootObject = null;
 		}
 
 		final CommandStack pCurrentCommandStack = currentCommandStack;
@@ -844,12 +842,13 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	}
 
 	public OptionAnalysisModel getModel() {
-		return model;
+		return currentModel;
 	}
-
-	public void setModel(final OptionAnalysisModel model) {
-		this.model = model;
-	}
+	//
+	// public void setModel(final OptionAnalysisModel model) {
+	// this.targetObject = model;
+	// this.currentModel = model;
+	// }
 
 	@Override
 	public synchronized ICommandHandler getDefaultCommandHandler() {
@@ -866,12 +865,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 					if (domain instanceof CommandProviderAwareEditingDomain) {
 						final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
-						commandProviderAwareEditingDomain.disableAdapters(model);
+						commandProviderAwareEditingDomain.disableAdapters(currentModel);
 					}
 					superHandler.handleCommand(command, target, feature);
 					if (domain instanceof CommandProviderAwareEditingDomain) {
 						final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
-						commandProviderAwareEditingDomain.enableAdapters(model, false);
+						commandProviderAwareEditingDomain.enableAdapters(currentModel, false);
 					}
 
 				}
@@ -896,14 +895,14 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		return commandHandler;
 
 	}
+	//
+	// public WeakReference<OptionAnalysisModel> getCurrentRoot() {
+	// return currentRoot;
+	// }
 
-	public WeakReference<OptionAnalysisModel> getCurrentRoot() {
-		return currentRoot;
-	}
-
-	public void setCurrentRoot(final WeakReference<OptionAnalysisModel> currentRoot) {
-		this.currentRoot = currentRoot;
-	}
+	// public void setCurrentRoot(final WeakReference<OptionAnalysisModel> currentRoot) {
+	// this.currentRoot = currentRoot;
+	// }
 
 	private Composite createRunButton(final Composite parent) {
 		//
@@ -926,7 +925,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				if (isLocked()) {
 					return;
 				}
-				final OptionAnalysisModel m = getModel();
+				final OptionAnalysisModel m = currentModel;
 				if (m != null) {
 					int mode = m.getMode();
 					if (mode > 0 || partialCaseValid) {
@@ -976,7 +975,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		});
 
-		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> generateButton.setEnabled(getModel() != null && !locked)));
+		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> generateButton.setEnabled(currentModel != null && !locked)));
 
 		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
 
@@ -990,7 +989,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		final GridData gdM = new GridData(SWT.LEFT, SWT.BEGINNING, false, false);
 		gdM.horizontalSpan = 2;
 		matching.setLayoutData(gdM);
-		 new Label(matching, SWT.NONE).setText("Mode:");
+		new Label(matching, SWT.NONE).setText("Mode:");
 		Combo combo = new Combo(matching, SWT.DROP_DOWN);
 		// final Button matchingButton = new Button(matching, SWT.CHECK | SWT.LEFT);
 		combo.setItems("Sandbox", "Optimise", "Optionise");
@@ -1003,7 +1002,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				if (isLocked()) {
 					return;
 				}
-				final OptionAnalysisModel m = getModel();
+				final OptionAnalysisModel m = currentModel;
 				if (m != null) {
 					int mode = combo.getSelectionIndex();
 					// boolean selection = matchingButton.getSelection();
@@ -1049,7 +1048,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				if (isLocked()) {
 					return;
 				}
-				final OptionAnalysisModel m = getModel();
+				final OptionAnalysisModel m = currentModel;
 				if (m != null) {
 
 					CompoundCommand cmd = new CompoundCommand();
@@ -1090,8 +1089,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				if (isLocked()) {
 					return;
 				}
-				final OptionAnalysisModel m = getModel();
-				if (m != null) {
+				final OptionAnalysisModel m = currentModel;
+				if (currentModel != null) {
 					getDefaultCommandHandler().handleCommand(SetCommand.create(getEditingDomain(), m, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL, matchingButton.getSelection()),
 							m, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
 				}

@@ -24,6 +24,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -65,7 +66,7 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 	protected abstract void initViewerPane(T pane);
 
 	@Override
-	protected void displayScenarioInstance(final ScenarioInstance instance) {
+	protected void displayScenarioInstance(final ScenarioInstance instance, @Nullable MMXRootObject rootObject, @Nullable Object targetObject) {
 
 		// Clear existing settings
 		updateActions(null);
@@ -85,7 +86,7 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 			childComposite = new Composite(parent, SWT.NONE);
 			childComposite.setLayout(new FillLayout());
 
-			super.displayScenarioInstance(instance);
+			super.displayScenarioInstance(instance, rootObject, targetObject);
 			if (instance != null) {
 				// Pin the reference
 				final T pViewerPane = createViewerPane();
@@ -102,13 +103,13 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 			updateActions(getEditingDomain());
 		}
 	}
-	
+
 	protected Composite wrapChildComposite(final Composite composite) {
 		return composite;
 	}
-	
+
 	protected void cleanUpInstance(final ScenarioInstance instance) {
-		
+
 	}
 
 	private void updateActions(final EditingDomain editingDomain) {

@@ -1,20 +1,17 @@
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
- * All rights reserved.
- */
-package com.mmxlabs.lingo.reports.services;
+package com.mmxlabs.models.lng.analytics.ui.views;
 
 import org.eclipse.core.runtime.IAdapterFactory;
 
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.scenario.service.model.util.IScenarioFragmentOpenHandler;
 
-public class AnalyticsSolutionAdapterFactory implements IAdapterFactory {
+public class SandboxScenarioAdapterFactory implements IAdapterFactory {
 
 	@Override
 	public <T> T getAdapter(final Object adaptableObject, final Class<T> adapterType) {
-		if (adaptableObject instanceof AbstractSolutionSet) {
+		if (adaptableObject instanceof OptionAnalysisModel) {
 			return adapterType.cast(openSolution());
 		}
 		return adapterType.cast(null);
@@ -28,9 +25,9 @@ public class AnalyticsSolutionAdapterFactory implements IAdapterFactory {
 	private IScenarioFragmentOpenHandler openSolution() {
 		return (fragment, scenarioInstance) -> {
 			final Object object = fragment.getFragment();
-			if (object instanceof AbstractSolutionSet) {
-				final AbstractSolutionSet solutionSet = (AbstractSolutionSet) object;
-				new AnalyticsSolution(scenarioInstance, solutionSet, solutionSet.getName()).open();
+			if (object instanceof OptionAnalysisModel) {
+				final OptionAnalysisModel model = (OptionAnalysisModel) object;
+				SandboxScenario.open(scenarioInstance, model);
 			}
 		};
 	}

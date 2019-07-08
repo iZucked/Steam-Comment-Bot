@@ -83,10 +83,8 @@ public class AnalyticsModelEditorContribution extends BaseJointModelEditorContri
 
 				}
 				if (oPart instanceof OptionModellerView) {
-					final OptionModellerView vesselViewerPane_View = (OptionModellerView) oPart;
-					vesselViewerPane_View.setInput(optionAnalysisModel);
-					WeakReference<OptionAnalysisModel> currentRoot = vesselViewerPane_View.getCurrentRoot();
-					vesselViewerPane_View.setCurrentRoot(new WeakReference<OptionAnalysisModel>(optionAnalysisModel));
+					final OptionModellerView sandboxView = (OptionModellerView) oPart;
+					sandboxView.setInput(optionAnalysisModel);
 				}
 			}
 		}

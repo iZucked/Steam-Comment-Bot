@@ -4,9 +4,11 @@
  */
 package com.mmxlabs.models.lng.port.editor.views;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -19,34 +21,30 @@ public class DistanceMatrixView extends ScenarioInstanceView {
 
 	private Composite childComposite;
 
-	
 	/**
 	 * The constructor.
 	 */
 	public DistanceMatrixView() {
-		
+
 	}
-	
-	
+
 	/**
-	 * This is a callback that will allow us
-	 * to create the viewer and initialize it.
+	 * This is a callback that will allow us to create the viewer and initialize it.
 	 */
 	public void createPartControl(Composite parent) {
 		this.childComposite = new Composite(parent, SWT.NONE);
 		listenToScenarioSelection();
-		
+
 		// add toolbar buttons ? (I, E, +, -, name, sync?)
-		
+
 	}
-	
+
 	@Override
-	protected void displayScenarioInstance(ScenarioInstance instance) {
+	protected void displayScenarioInstance(final ScenarioInstance instance, @Nullable MMXRootObject rootObject, @Nullable Object targetObject) {
 		if (instance != getScenarioInstance()) {
 			// update display
 		}
 	}
-	
 
 	/**
 	 * Passing the focus request to the viewer's control.
@@ -54,5 +52,5 @@ public class DistanceMatrixView extends ScenarioInstanceView {
 	public void setFocus() {
 		childComposite.setFocus();
 	}
-	
+
 }

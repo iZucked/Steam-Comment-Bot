@@ -63,6 +63,7 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 							final ModelReference ref = modelRecord.aquireReference("OpenScenarioCommandHandler");
 							RunnerHelper.asyncExec(() -> {
 								try {
+									// Wait a little until the scenario is loaded.
 									int i = 10;
 									while (scenarioFragment.getFragment() == null) {
 										try {

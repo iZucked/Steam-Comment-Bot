@@ -16,7 +16,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Shell;
@@ -44,7 +43,6 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.IScenarioLockListener;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -53,35 +51,27 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public abstract class ScenarioInstanceView extends ViewPart implements IScenarioEditingLocation, ISelectionListener, IScenarioInstanceProvider, IMMXRootObjectProvider, IValidationStatusGoto {
 
-	private ScenarioInstance scenarioInstance;
+	protected ScenarioInstance scenarioInstance;
 	private ScenarioModelRecord modelRecord;
 	private IScenarioDataProvider scenarioDataProvider;
-	private ModelReference modelReference;
+	protected MMXRootObject rootObject;
+	protected Object targetObject;
+
 	private ScenarioInstanceStatusProvider scenarioInstanceStatusProvider;
 	private ReferenceValueProviderCache valueProviderCache;
 
-	// private ScenarioLock editorLock;
+	private final Stack<IExtraValidationContext> extraValidationContext = new Stack<>();
 
 	private boolean locked;
 
-	private final IScenarioLockListener lockListener = (modelRecord, writeLocked) -> {
+	private final IScenarioLockListener lockListener = (pModelRecord, writeLocked) -> {
 		RunnerHelper.runNowOrAsync(() -> setLocked(writeLocked || (scenarioInstance != null && scenarioInstance.isReadonly())));
 	};
 	private IPartListener partListener;
 
 	protected void listenToScenarioSelection() {
 		partListener = new IPartListener() {
-			IWorkbenchPart lastPart = null;
-
-			@Override
-			public void partOpened(final IWorkbenchPart part) {
-
-			}
-
-			@Override
-			public void partDeactivated(final IWorkbenchPart part) {
-
-			}
+			private IWorkbenchPart lastPart = null;
 
 			@Override
 			public void partClosed(final IWorkbenchPart part) {
@@ -92,37 +82,41 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			}
 
 			@Override
-			public void partBroughtToTop(final IWorkbenchPart part) {
-
-			}
-
-			@Override
 			public void partActivated(final IWorkbenchPart part) {
 				if (part instanceof IEditorPart) {
 					final IEditorPart editorPart = (IEditorPart) part;
 					final IEditorInput editorInput = editorPart.getEditorInput();
-					final ScenarioInstance scenarioInstance = editorInput.getAdapter(ScenarioInstance.class);
+					final ScenarioInstance editorEcenarioInstance = editorInput.getAdapter(ScenarioInstance.class);
 					lastPart = part;
-					if (scenarioInstance != null) {
-						try {
-							selectionChanged(part, new StructuredSelection(scenarioInstance));
-						} catch (final Exception e) {
-							selectionChanged(part, new StructuredSelection());
-						}
+					if (editorEcenarioInstance != null) {
+						activeEditorChange(editorEcenarioInstance);
 					} else {
-						selectionChanged(part, new StructuredSelection());
+						activeEditorChange(null);
 					}
 				}
 			}
+
+			@Override
+			public void partOpened(final IWorkbenchPart part) {
+				// Nothing needed here
+			}
+
+			@Override
+			public void partDeactivated(final IWorkbenchPart part) {
+				// Nothing needed here
+			}
+
+			@Override
+			public void partBroughtToTop(final IWorkbenchPart part) {
+				// Nothing needed here
+			}
 		};
 		getSite().getPage().addPartListener(partListener);
-		// getSite().getPage().addSelectionListener(SCENARIO_NAVIGATOR_ID, this);
 		partListener.partActivated(getSite().getPage().getActiveEditor());
-		// selectionChanged(null, getSite().getPage().getSelection(SCENARIO_NAVIGATOR_ID));
 	}
 
 	@Override
-	public <T> T getAdapter(Class<T> adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter.isAssignableFrom(IValidationStatusGoto.class)) {
 			return adapter.cast(this);
 		}
@@ -133,7 +127,6 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	public void dispose() {
 		resetState();
 
-		// getSite().getPage().removeSelectionListener(SCENARIO_NAVIGATOR_ID, this);
 		if (partListener != null) {
 			getSite().getPage().removePartListener(partListener);
 		}
@@ -142,52 +135,59 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public synchronized void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structured = (IStructuredSelection) selection;
-			if (structured.size() == 1) {
-				if (structured.getFirstElement() instanceof ScenarioInstance) {
-					final ScenarioInstance instance = (ScenarioInstance) structured.getFirstElement();
-					displayScenarioInstance(instance);
-					return;
-				}
-			}
-		}
-		displayScenarioInstance(null);
+		// Nothing to do now. Maybe remove interface
 	}
 
-	protected synchronized void displayScenarioInstance(final ScenarioInstance instance) {
-
+	protected void activeEditorChange(final ScenarioInstance instance) {
 		if (Objects.equal(instance, this.scenarioInstance)) {
+			return;
+		}
+
+		if (instance == null) {
+			displayScenarioInstance(null, null, null);
+		} else {
+			final ScenarioModelRecord mr = SSDataManager.Instance.getModelRecord(instance);
+			try (IScenarioDataProvider sdp = mr.aquireScenarioDataProvider("ScenarioInstanceView:1")) {
+				final MMXRootObject ro = sdp.getTypedScenario(MMXRootObject.class);
+				displayScenarioInstance(instance, ro, null);
+			}
+		}
+	}
+
+	protected synchronized void displayScenarioInstance(final ScenarioInstance instance, @Nullable final MMXRootObject rootObject, @Nullable final Object targetObject) {
+
+		// Has input changed?
+		if (Objects.equal(instance, this.scenarioInstance) && Objects.equal(rootObject, this.rootObject) && Objects.equal(targetObject, this.targetObject)) {
 			return;
 		}
 
 		resetState();
 
 		if (instance != null) {
-			scenarioInstanceStatusProvider = createScenarioValidationProvider(instance);
 			this.scenarioInstance = instance;
-			this.modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-			this.modelReference = modelRecord.aquireReference("ScenarioInstanceView:1");
-			this.scenarioDataProvider = new ModelRecordScenarioDataProvider(modelRecord);
-			modelReference.getLock().addLockListener(lockListener);
-			setLocked(modelReference.isLocked() || instance.isReadonly());
-			MMXRootObject rootObject = getRootObject();
+			this.rootObject = rootObject;
+			this.targetObject = targetObject;
+
+			this.modelRecord = SSDataManager.Instance.getModelRecord(this.scenarioInstance);
+			this.scenarioDataProvider = new ModelRecordScenarioDataProvider(this.modelRecord);
+			this.scenarioDataProvider.getModelReference().getLock().addLockListener(lockListener);
+
+			scenarioInstanceStatusProvider = createScenarioValidationProvider(instance);
+			setLocked(this.scenarioDataProvider.getModelReference().isLocked() || instance.isReadonly());
 
 			this.valueProviderCache = new ReferenceValueProviderCache(rootObject);
 
 			boolean relaxedValidation = false;
-			final ScenarioInstance scenarioInstance = modelRecord.getScenarioInstance();
 			if (scenarioInstance != null) {
 				relaxedValidation = "Period Scenario".equals(scenarioInstance.getName());
 			}
 
 			extraValidationContext.push(new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation));
-			doDisplayScenarioInstance(scenarioInstance, getRootObject());
+			doDisplayScenarioInstance(scenarioInstance, rootObject, targetObject);
 		} else {
 			scenarioInstanceStatusProvider = null;
 			valueProviderCache = null;
-			doDisplayScenarioInstance(null, null);
+			doDisplayScenarioInstance(null, null, null);
 		}
 	}
 
@@ -196,6 +196,9 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	}
 
 	private void resetState() {
+		targetObject = null;
+		rootObject = null;
+
 		extraValidationContext.clear();
 		if (valueProviderCache != null) {
 			valueProviderCache.dispose();
@@ -206,22 +209,17 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		}
 
 		if (scenarioDataProvider != null) {
+			scenarioDataProvider.getModelReference().getLock().removeLockListener(lockListener);
 			scenarioDataProvider.close();
 			scenarioDataProvider = null;
 		}
 
-		if (modelReference != null) {
-			modelReference.getLock().removeLockListener(lockListener);
-			modelReference.close();
-			modelReference = null;
-		}
-		modelRecord = null;
-
 		scenarioInstance = null;
+		modelRecord = null;
 	}
 
-	protected synchronized void doDisplayScenarioInstance(@Nullable ScenarioInstance scenarioInstance, @Nullable MMXRootObject rootObject) {
-
+	protected synchronized void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable final Object target) {
+		// Sublclasses can override to customise behaviour
 	}
 
 	@Override
@@ -232,8 +230,6 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	public void setLocked(final boolean locked) {
 		this.locked = locked;
 	}
-
-	private final Stack<IExtraValidationContext> extraValidationContext = new Stack<>();
 
 	@Override
 	public IExtraValidationContext getExtraValidationContext() {
@@ -252,16 +248,19 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public EditingDomain getEditingDomain() {
-		if (modelReference == null) {
+		if (scenarioDataProvider == null) {
 			return null;
 		}
 
-		return modelReference.getEditingDomain();
+		return scenarioDataProvider.getEditingDomain();
 	}
 
 	@Override
 	public ModelReference getModelReference() {
-		return modelReference;
+		if (scenarioDataProvider == null) {
+			throw new IllegalStateException();
+		}
+		return scenarioDataProvider.getModelReference();
 	}
 
 	@Override
@@ -311,11 +310,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public MMXRootObject getRootObject() {
-
-		if (modelReference == null) {
-			return null;
-		}
-		return (MMXRootObject) modelReference.getInstance();
+		return rootObject;
 	}
 
 	@Override
@@ -356,7 +351,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public ScenarioLock getEditorLock() {
-		return modelReference.getLock();
+		return scenarioDataProvider.getModelReference().getLock();
 	}
 
 	@Override
@@ -369,7 +364,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		// Do nothing by default
 	}
 
-	public void editObject(@Nullable EObject target) {
+	public void editObject(@Nullable final EObject target) {
 		if (target != null) {
 			final DetailCompositeDialog dcd = new DetailCompositeDialog(this.getShell(), this.getDefaultCommandHandler());
 			dcd.open(this, this.getRootObject(), Collections.singletonList((EObject) target));
