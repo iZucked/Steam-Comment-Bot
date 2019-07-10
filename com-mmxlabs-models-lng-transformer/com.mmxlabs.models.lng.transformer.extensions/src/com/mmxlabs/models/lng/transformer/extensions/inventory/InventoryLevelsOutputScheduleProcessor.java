@@ -269,6 +269,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 				final TreeMap<LocalDate, Integer> maxLevels = new TreeMap<>();
 
 				for (final InventoryCapacityRow r : facility.getCapacities()) {
+					if (r.getDate() == null) continue;
 					minLevels.put(r.getDate(), r.getMinVolume());
 					maxLevels.put(r.getDate(), r.getMaxVolume());
 				}
