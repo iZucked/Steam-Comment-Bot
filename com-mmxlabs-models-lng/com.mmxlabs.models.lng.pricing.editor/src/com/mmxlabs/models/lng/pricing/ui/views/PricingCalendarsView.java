@@ -59,7 +59,8 @@ public class PricingCalendarsView extends ScenarioTableViewerView<PricingCalenda
 			}
 
 			if (msg.getFeature() == PricingPackage.Literals.PRICING_MODEL__PRICING_CALENDARS) {
-				if (calendarSelectionViewer != null) {
+				if (calendarSelectionViewer != null && calendarSelectionViewer.getControl() != null 
+						&& !calendarSelectionViewer.getControl().isDisposed()) {
 
 					List<PricingCalendar> models = pricingModel.getPricingCalendars().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
 					calendarSelectionViewer.setInput(models);

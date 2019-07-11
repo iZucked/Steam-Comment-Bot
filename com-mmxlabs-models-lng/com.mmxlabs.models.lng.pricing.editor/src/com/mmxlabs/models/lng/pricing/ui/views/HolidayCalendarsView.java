@@ -58,7 +58,8 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 			}
 
 			if (msg.getFeature() == PricingPackage.Literals.PRICING_MODEL__HOLIDAY_CALENDARS) {
-				if (calendarSelectionViewer != null) {
+				if (calendarSelectionViewer != null && calendarSelectionViewer.getControl() != null 
+						&& !calendarSelectionViewer.getControl().isDisposed()) {
 
 					List<HolidayCalendar> models = pricingModel.getHolidayCalendars().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
 					calendarSelectionViewer.setInput(models);

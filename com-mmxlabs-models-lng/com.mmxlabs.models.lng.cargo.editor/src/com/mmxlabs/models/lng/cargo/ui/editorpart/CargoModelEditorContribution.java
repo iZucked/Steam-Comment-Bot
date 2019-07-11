@@ -99,7 +99,8 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			}
 
 			if (msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__INVENTORY_MODELS) {
-				if (inventorySelectionViewer != null) {
+				if (inventorySelectionViewer != null && inventorySelectionViewer.getControl() != null 
+						&& !inventorySelectionViewer.getControl().isDisposed()) {
 
 					List<Inventory> models = modelObject.getInventoryModels().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
 					inventorySelectionViewer.setInput(models);
