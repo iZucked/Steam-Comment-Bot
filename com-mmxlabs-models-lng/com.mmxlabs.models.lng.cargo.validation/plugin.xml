@@ -336,6 +336,60 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.InventoryModelConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.InventoryModelConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Inventory Model Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Various sanity checks for Inventory model
+               </description>
+               <target
+                     class="Inventory">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.InventoryEventRowConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.InventoryEventRowConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Inventory Event Row Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Dates sanity checks for Inventory Event Rows
+               </description>
+               <target
+                     class="InventoryEventRow">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.InventoryCapacityRowConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.InventoryCapacityRowConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Inventory Capacity Row Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Date and min/max volume sanity check for Inventory Capacity Rows
+               </description>
+               <target
+                     class="InventoryCapacityRow">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.MarketSlotConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.MarketSlotContraint"
                   lang="Java"
