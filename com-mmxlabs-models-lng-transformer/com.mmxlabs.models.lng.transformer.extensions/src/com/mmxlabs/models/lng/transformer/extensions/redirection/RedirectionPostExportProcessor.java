@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.transformer.IPostExportProcessor;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
- * {@link IPostExportProcessor} to remove duplicate slots created by the {@link PetronasRedirectionContractTransformer}
+ * {@link IPostExportProcessor} to remove duplicate slots created by the {@link RedirectionContractTransformer}
  * 
  * @author Simon Goodall
  * 
