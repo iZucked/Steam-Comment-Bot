@@ -2812,6 +2812,21 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		
 		return startTime.plusHours(getWindowSizeInHours());
 	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public ZonedDateTime getWindowEndWithSlotOrPortTimeWithoutCP() {
+		final ZonedDateTime startTime = getWindowStartWithSlotOrPortTime();
+		if (startTime == null) {
+			return null;
+		}
+		
+		return startTime.plusHours(getWindowSizeInHoursWithoutCP());
+	}
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -2862,6 +2877,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		dateTime = dateTime.withHour(startTime);
 		return dateTime;
 	}
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2917,7 +2933,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public TimePeriod getSlotOrDelegateWindowSizeUnits() {
 		return (TimePeriod) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS);
-
 	}
 
 	/**
@@ -2952,6 +2967,38 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		return Hours.between(start, end);
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public int getWindowSizeInHoursWithoutCP() {
+		final ZonedDateTime start = getWindowStartWithSlotOrPortTime();
+		ZonedDateTime end = start;
+		final TimePeriod p  = getSlotOrDelegateWindowSizeUnits();
+		final int windowSize = getSlotOrDelegateWithoutCPWindowSize();
+		if (windowSize == 0) {
+			return 0;
+		}
+		
+		switch (p) {
+		case DAYS:
+			end = end.plusDays(windowSize).minusHours(1);
+			break;
+		case HOURS:
+			end = end.plusHours(windowSize) ;
+			break;
+		case MONTHS:
+			end = end.plusMonths(windowSize).minusHours(1);
+			break;
+		default:
+			break;
+		}
+		
+		return Hours.between(start, end);
+	}
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3836,6 +3883,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSlotOrDelegateWithoutCPWindowSize();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION:
 				return getSlotOrDelegateWithoutCPDuration();
+			case CargoPackage.SLOT___GET_WINDOW_SIZE_IN_HOURS_WITHOUT_CP:
+				return getWindowSizeInHoursWithoutCP();
+			case CargoPackage.SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP:
+				return getWindowEndWithSlotOrPortTimeWithoutCP();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}

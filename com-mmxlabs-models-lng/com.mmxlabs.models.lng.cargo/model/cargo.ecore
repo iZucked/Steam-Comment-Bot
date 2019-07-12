@@ -95,6 +95,8 @@
     </eOperations>
     <eOperations name="getSlotOrDelegateWithoutCPWindowSize" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getSlotOrDelegateWithoutCPDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getWindowSizeInHoursWithoutCP" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getWindowEndWithSlotOrPortTimeWithoutCP" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
         unsettable="true">
       <eGenericType eTypeParameter="#//Slot/T"/>

@@ -2105,6 +2105,22 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 */
 	int getSlotOrDelegateWithoutCPDuration();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	int getWindowSizeInHoursWithoutCP();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
+	 * @generated
+	 */
+	ZonedDateTime getWindowEndWithSlotOrPortTimeWithoutCP();
+
 } // end of  Slot
 
 // finish type fixing

@@ -1157,13 +1157,31 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 30;
 
 	/**
+	 * The operation id for the '<em>Get Window Size In Hours Without CP</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_WINDOW_SIZE_IN_HOURS_WITHOUT_CP = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 31;
+
+	/**
+	 * The operation id for the '<em>Get Window End With Slot Or Port Time Without CP</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 32;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 31;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 33;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1938,6 +1956,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION = SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION;
+
+	/**
+	 * The operation id for the '<em>Get Window Size In Hours Without CP</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_WINDOW_SIZE_IN_HOURS_WITHOUT_CP = SLOT___GET_WINDOW_SIZE_IN_HOURS_WITHOUT_CP;
+
+	/**
+	 * The operation id for the '<em>Get Window End With Slot Or Port Time Without CP</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP = SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -2739,6 +2775,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION = SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION;
+
+	/**
+	 * The operation id for the '<em>Get Window Size In Hours Without CP</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_WINDOW_SIZE_IN_HOURS_WITHOUT_CP = SLOT___GET_WINDOW_SIZE_IN_HOURS_WITHOUT_CP;
+
+	/**
+	 * The operation id for the '<em>Get Window End With Slot Or Port Time Without CP</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP = SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -3643,6 +3697,24 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION = LOAD_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION;
 
 	/**
+	 * The operation id for the '<em>Get Window Size In Hours Without CP</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_WINDOW_SIZE_IN_HOURS_WITHOUT_CP = LOAD_SLOT___GET_WINDOW_SIZE_IN_HOURS_WITHOUT_CP;
+
+	/**
+	 * The operation id for the '<em>Get Window End With Slot Or Port Time Without CP</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP = LOAD_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4462,6 +4534,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION;
+
+	/**
+	 * The operation id for the '<em>Get Window Size In Hours Without CP</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_WINDOW_SIZE_IN_HOURS_WITHOUT_CP = DISCHARGE_SLOT___GET_WINDOW_SIZE_IN_HOURS_WITHOUT_CP;
+
+	/**
+	 * The operation id for the '<em>Get Window End With Slot Or Port Time Without CP</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP = DISCHARGE_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -8504,6 +8594,26 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrDelegateWithoutCPDuration();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowSizeInHoursWithoutCP() <em>Get Window Size In Hours Without CP</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Window Size In Hours Without CP</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getWindowSizeInHoursWithoutCP()
+	 * @generated
+	 */
+	EOperation getSlot__GetWindowSizeInHoursWithoutCP();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowEndWithSlotOrPortTimeWithoutCP() <em>Get Window End With Slot Or Port Time Without CP</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Window End With Slot Or Port Time Without CP</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getWindowEndWithSlotOrPortTimeWithoutCP()
+	 * @generated
+	 */
+	EOperation getSlot__GetWindowEndWithSlotOrPortTimeWithoutCP();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11146,6 +11256,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION = eINSTANCE.getSlot__GetSlotOrDelegateWithoutCPDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Window Size In Hours Without CP</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_WINDOW_SIZE_IN_HOURS_WITHOUT_CP = eINSTANCE.getSlot__GetWindowSizeInHoursWithoutCP();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Window End With Slot Or Port Time Without CP</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP = eINSTANCE.getSlot__GetWindowEndWithSlotOrPortTimeWithoutCP();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
