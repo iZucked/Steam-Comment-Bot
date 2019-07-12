@@ -40,6 +40,19 @@
                   </message>
             </constraint>   
             <constraint
+                     class="com.mmxlabs.models.lng.cargo.validation.SlotPermissiveVesselListVolumeValidator"
+                     id="com.mmxlabs.models.lng.cargo.validation.SlotPermissiveVesselListVolumeValidator"
+                     isEnabledByDefault="true"
+                     lang="java"
+                     mode="Batch"
+                     name="SlotPermissiveVesselListVolumeValidator"
+                     severity="ERROR"
+                     statusCode="1">
+                  <message>
+                     {0}
+                  </message>
+            </constraint>               
+            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.CargoVolumeConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.CargoVolumeConstraint"
                   isEnabledByDefault="true"
