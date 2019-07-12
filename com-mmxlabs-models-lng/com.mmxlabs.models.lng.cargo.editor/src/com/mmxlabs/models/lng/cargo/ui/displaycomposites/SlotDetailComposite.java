@@ -191,7 +191,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					final TimePeriod ePeriod = (TimePeriod) mmxEo.eGetWithDefault(WindowSizeUnits);
 					if (mmxEo instanceof Slot) {
 						final Slot slot = (Slot) mmxEo;
-						final ZonedDateTime ed = slot.getWindowEndWithSlotOrPortTime();
+						final ZonedDateTime ed = slot.getWindowEndWithSlotOrPortTimeWithoutCP();
 						final String text = formatDate(d, time) + " - " + formatDate(ed.toLocalDate(), ed.toLocalDateTime().getHour());
 						textClient.setText(text);
 					} else {
