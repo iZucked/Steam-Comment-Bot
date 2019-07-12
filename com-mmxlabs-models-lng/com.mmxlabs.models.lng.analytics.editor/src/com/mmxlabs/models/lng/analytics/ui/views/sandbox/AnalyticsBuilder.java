@@ -122,7 +122,10 @@ public class AnalyticsBuilder {
 				slot.setDESPurchase(originalLoadSlot.isDESPurchase());
 				slot.setDivertible(originalLoadSlot.getSlotOrDelegateDivertible());
 				slot.setCounterparty(originalLoadSlot.getCounterparty());
-				slot.setDuration(originalLoadSlot.getSlotOrDelegateDuration());
+				slot.setDuration(originalLoadSlot.getSlotOrDelegateWithoutCPDuration());
+				slot.setWindowSize(originalLoadSlot.getSlotOrDelegateWithoutCPWindowSize());
+				slot.setWindowSizeUnits(originalLoadSlot.getSlotOrDelegateWindowSizeUnits());
+				slot.setWindowCounterParty(originalLoadSlot.isWindowCounterParty());
 
 				if (originalLoadSlot.getSlotOrDelegateCV() != 0.0) {
 					slot.setCargoCV(originalLoadSlot.getSlotOrDelegateCV());
@@ -289,7 +292,11 @@ public class AnalyticsBuilder {
 				slot.setFOBSale(originalDischargeSlot.isFOBSale());
 				slot.setDivertible(originalDischargeSlot.getSlotOrDelegateDivertible());
 				slot.setCounterparty(originalDischargeSlot.getSlotOrDelegateCounterparty());
-				slot.setDuration(originalDischargeSlot.getSlotOrDelegateDuration());
+				slot.setDuration(originalDischargeSlot.getSlotOrDelegateWithoutCPDuration());
+				slot.setWindowSize(originalDischargeSlot.getSlotOrDelegateWithoutCPWindowSize());
+				slot.setWindowSizeUnits(originalDischargeSlot.getSlotOrDelegateWindowSizeUnits());
+				slot.setWindowCounterParty(originalDischargeSlot.isWindowCounterParty());
+				
 				// TODO: Copy other params!
 				if (slotMode == SlotMode.CHANGE_PRICE_VARIANT) {
 					slot.setPriceExpression("??");
