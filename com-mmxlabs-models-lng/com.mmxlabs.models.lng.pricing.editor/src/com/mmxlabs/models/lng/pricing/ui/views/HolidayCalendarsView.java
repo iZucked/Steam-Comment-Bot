@@ -58,10 +58,9 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 			}
 
 			if (msg.getFeature() == PricingPackage.Literals.PRICING_MODEL__HOLIDAY_CALENDARS) {
-				if (calendarSelectionViewer != null && calendarSelectionViewer.getControl() != null 
-						&& !calendarSelectionViewer.getControl().isDisposed()) {
+				if (calendarSelectionViewer != null) {
 
-					List<HolidayCalendar> models = pricingModel.getHolidayCalendars().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
+					final List<HolidayCalendar> models = pricingModel.getHolidayCalendars().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
 					calendarSelectionViewer.setInput(models);
 					HolidayCalendar selectedCalendar = null;
 					if (!models.isEmpty()) {
@@ -237,5 +236,12 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 			pricingModel.eAdapters().remove(calendarListener);
 			pricingModel = null;
 		}
+		lastSelectedCalendar = "";
+	}
+	
+	@Override
+	public void dispose() {
+		cleanUpInstance(null);
+		super.dispose();
 	}
 }

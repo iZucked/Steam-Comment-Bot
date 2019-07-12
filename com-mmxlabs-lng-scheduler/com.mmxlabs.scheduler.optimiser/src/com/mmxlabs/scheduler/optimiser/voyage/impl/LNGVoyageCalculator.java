@@ -457,6 +457,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			// or minimum speed.
 
 			if (distance != 0) {
+				if (availableTimeInHours == 0) {
+					return vessel.getMaxSpeed();
+				}
 				// Check NBO speed
 				if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS) {
 					final int nboSpeed = options.getNBOSpeed();

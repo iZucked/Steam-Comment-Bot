@@ -59,8 +59,7 @@ public class PricingCalendarsView extends ScenarioTableViewerView<PricingCalenda
 			}
 
 			if (msg.getFeature() == PricingPackage.Literals.PRICING_MODEL__PRICING_CALENDARS) {
-				if (calendarSelectionViewer != null && calendarSelectionViewer.getControl() != null 
-						&& !calendarSelectionViewer.getControl().isDisposed()) {
+				if (calendarSelectionViewer != null) {
 
 					List<PricingCalendar> models = pricingModel.getPricingCalendars().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
 					calendarSelectionViewer.setInput(models);
@@ -239,5 +238,12 @@ public class PricingCalendarsView extends ScenarioTableViewerView<PricingCalenda
 			pricingModel.eAdapters().remove(calendarListener);
 			pricingModel = null;
 		}
+		lastSelectedCalendar = "";
+	}
+	
+	@Override
+	public void dispose() {
+		cleanUpInstance(null);
+		super.dispose();
 	}
 }
