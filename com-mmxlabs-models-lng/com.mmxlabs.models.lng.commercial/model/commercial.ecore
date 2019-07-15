@@ -210,7 +210,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
       <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
-        <details key="type" value="commodity"/>
+        <details key="type" value="charter"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

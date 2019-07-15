@@ -6,100 +6,181 @@ package com.mmxlabs.models.lng.pricing.ui.autocomplete;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ICellEditorListener;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editors.autocomplete.AutoCompleteHelper;
 import com.mmxlabs.models.ui.editors.autocomplete.IMMXContentProposalProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.ui.tabular.manipulators.CellEditorWrapper;
 
-/**
- * Displays a textbox for editing an EAttribute.
- * 
- * @author hinton
- */
 public class PriceAttributeManipulator implements ICellManipulator, ICellRenderer {
-	protected final EStructuralFeature field;
-	protected final EditingDomain editingDomain;
-	protected boolean isOverridable;
-	private final EAnnotation overrideAnnotation;
-	private IMMXContentProposalProvider proposalHelper;
-	private String expressionType;
+
+	private final EAttribute attribute;
+	
+	private final EditingDomain editingDomain;
+
+	/**
+	 * Label provider to map between NamedObjects and price expressions to strings.
+	 */
+	private final LabelProvider labelProvider;
+
 	private IExtraCommandsHook extraCommandsHook;
+
 	private Object parent;
-
-	public PriceAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain, String expressionType) {
-		super();
-		this.field = field;
+	
+	/**
+	 * Create a manipulator for the given field in the target object, taking values from the given valueProvider and creating set commands in the provided editingDomain.
+	 * 
+	 * @param attribute
+	 *            the field to set
+	 * @param editingDomain
+	 *            editing domain for setting
+	 * @param expressionAnnotationType
+	 */
+	public PriceAttributeManipulator(final EAttribute attribute, final EditingDomain editingDomain) {
+		this.attribute = attribute;
 		this.editingDomain = editingDomain;
-		this.expressionType = expressionType;
-
-		overrideAnnotation = field == null ? null : field.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
-		if (overrideAnnotation != null) {
-			if (field.isUnsettable()) {
-				isOverridable = true;
-			} else {
-				if (field.isMany()) {
-					for (EStructuralFeature f : field.getEContainingClass().getEAllAttributes()) {
-						if (f.getName().equals(field.getName() + "Override")) {
-							isOverridable = true;
-						}
-					}
+		this.labelProvider = new LabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				// Is the element missing?
+				if (element == null || "".equals(element)) {
+					return "";
 				}
+				if (element instanceof NamedObject) {
+					return ((NamedObject) element).getName();
+				}
+				return super.getText(element);
 			}
-		}
+		};
 	}
 
 	@Override
 	public String render(final Object object) {
-
 		if (object == null) {
 			return null;
 		}
+		final Object superValue = getValue(object);
+		return labelProvider.getText(superValue);
+	}
 
-		// if the object for some reason does not support the field (e.g. it's a
-		// placeholder row in a table)
-		// ignore it
-		if (object instanceof EObject && !((EObject) object).eClass().getEAllStructuralFeatures().contains(field)) {
-			return null;
+	public void doSetValue(final Object object, Object value) {
+		doSetValue(object, value, true);
+	}
+
+	protected void doSetValue(final Object object, Object value, final boolean forceCommandExecution) {
+		Object currentValue = getValue(object);
+		if (Objects.equals(currentValue, value)) {
+			return;
 		}
+		final String text = (String) value;
+		if (forceCommandExecution || !(((currentValue != null && value != null) && currentValue.equals(value)))) {
+			runSetCommand(object, (String) text);
+		}
+	}
+		
+	public CellEditor createCellEditor(final Composite c, final Object object) {
+		TextCellEditor editor = new TextCellEditor(c, SWT.FLAT | SWT.BORDER) {
+			private IMMXContentProposalProvider proposalHelper;
 
-		if ((object instanceof EObject) && (field.isUnsettable()) && !((EObject) object).eIsSet(field)) {
-			if (isOverridable) {
-				EList<EObject> references = overrideAnnotation.getReferences();
-				for (EObject o : references) {
-					if (o instanceof EStructuralFeature) {
-						EStructuralFeature eStructuralFeature = (EStructuralFeature) o;
-						EObject parent = (EObject) ((EObject) object).eGet(eStructuralFeature);
-						if (parent != null) {
-							return renderUnsetValue(object, parent.eGet(field));
+			@Override
+			protected Control createControl(Composite parent) {
+				Control control = super.createControl(parent);
+				this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(control, attribute);
+				for (Resource r : editingDomain.getResourceSet().getResources()) {
+					for (EObject o : r.getContents()) {
+						if (o instanceof MMXRootObject) {
+							this.proposalHelper.setRootObject((MMXRootObject) o);
 						}
 					}
 				}
+				return control;
 			}
-			return renderUnsetValue(object, (object instanceof MMXObject) ? ((MMXObject) object).getUnsetValue(field) : null);
-		} else {
-			return renderSetValue(object, getValue(object));
+			
+		    @Override
+			protected void doSetValue(Object value) {
+				if (value == null) {
+					value = "";
+				}
+				super.doSetValue(value);
+		    }
+		};
+
+		editor.addListener(new ICellEditorListener() {
+
+			@Override
+			public void applyEditorValue() { }
+
+			@Override
+			public void cancelEditor() { }
+
+			@Override
+			public void editorValueChanged(boolean oldValidState, boolean newValidState) {	
+				Text text = ((Text)editor.getControl());
+				if (!editor.isActivated()) {
+					PriceAttributeManipulator.this.doSetValue(object, text.getText(), false);
+				}
+			}
+		});
+		
+		return editor;
+	}
+
+	@Override
+	public Object getValue(final Object object) {
+		if (object == null || "".equals(object)) {
+			return "";
 		}
+
+		if (object instanceof EObject) {
+			final EObject eObject = (EObject) object;
+
+			if (eObject.eIsSet(attribute)) {
+				return eObject.eGet(attribute);
+			} else {
+				return "";
+			}
+		}
+		else if (object instanceof String) {
+			return object;
+		}
+		else {
+			return "";
+		}
+	}
+
+	@Override
+	public boolean canEdit(final Object object) {
+		if (object == null) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
+		return Collections.emptySet();
 	}
 
 	protected String renderUnsetValue(final Object container, final Object unsetDefault) {
@@ -107,28 +188,32 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 	}
 
 	protected String renderSetValue(final Object container, final Object setValue) {
-		return setValue == null ? null : setValue.toString();
+		return setValue == null ? "" : setValue.toString();
 	}
 
 	@Override
-	public final void setValue(final Object object, final Object value) {
-		if (value == null && isOverridable) {
-			runSetCommand(object, SetCommand.UNSET_VALUE);
-
-		} else if (value == SetCommand.UNSET_VALUE && field.isUnsettable()) {
-			runSetCommand(object, value);
-		} else {
-			doSetValue(object, value);
+	public boolean isValueUnset(final Object object) {
+		if (object == null) {
+			return false;
 		}
+		if (attribute.isUnsettable() && ((EObject) object).eIsSet(attribute) == false) {
+			return true;
+		}
+		return false;
 	}
-
-	public void runSetCommand(final Object object, final Object value) {
+	
+	public void runSetCommand(final Object object, final String value) {
 		final Object currentValue = reallyGetValue(object);
-		if (((currentValue == null) && (value == null)) || (((currentValue != null) && (value != null)) && currentValue.equals(value))) {
+		if (Objects.equals(currentValue, value)) {
 			return;
 		}
+		final Command command;
+		if (value != null && !value.isEmpty()) {
+			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, attribute, value));
+		} else {
+			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, attribute, SetCommand.UNSET_VALUE));
 
-		final Command command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, field, value));
+		}
 		CompoundCommand cmd = new CompoundCommand();
 		cmd.append(command);
 		if (extraCommandsHook != null) {
@@ -137,44 +222,9 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 		editingDomain.getCommandStack().execute(cmd);
 	}
 
-	public void doSetValue(final Object object, final Object value) {
-		runSetCommand(object, value);
-	}
-
 	@Override
 	public final CellEditor getCellEditor(final Composite c, final Object object) {
-		if (object == null) {
-			return null;
-		}
-
-		if (field.isUnsettable()) {
-			final CellEditorWrapper wrapper = new CellEditorWrapper(c);
-			wrapper.setDelegate(createCellEditor(wrapper.getInnerComposite(), object));
-			return wrapper;
-		}
 		return createCellEditor(c, object);
-	}
-
-	protected CellEditor createCellEditor(final Composite c, final Object object) {
-		TextCellEditor text = new TextCellEditor(c);
-		this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(text.getControl(), expressionType);
-		for (Resource r : editingDomain.getResourceSet().getResources()) {
-			for (EObject o : r.getContents()) {
-				if (o instanceof MMXRootObject) {
-					this.proposalHelper.setRootObject((MMXRootObject) o);
-				}
-			}
-		}
-		return text;
-	}
-
-	@Override
-	public Object getValue(final Object object) {
-		if (object == null) {
-			return null;
-		}
-
-		return reallyGetValue(object);
 	}
 
 	@Override
@@ -183,33 +233,20 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 	}
 
 	private Object reallyGetValue(final Object object) {
-		if (object == null) {
-			return null;
+		Object v = null;
+		
+		if (object instanceof EObject) {
+			final EObject eObject = (EObject) object;
+			if (eObject.eIsSet(this.attribute)) {
+				v = eObject.eGet(this.attribute);
+			}
 		}
-		if (field.isUnsettable() && ((EObject) object).eIsSet(field) == false)
-			return SetCommand.UNSET_VALUE;
-		final Object result = ((EObject) object).eGet(field);
-		if ((result == null) && (field.getEType() == EcorePackage.eINSTANCE.getEString())) {
+		if (v == null || v == SetCommand.UNSET_VALUE) {
 			return "";
-		} else {
-			return result;
 		}
-	}
-
-	@Override
-	public boolean isValueUnset(final Object object) {
-		if (object == null) {
-			return false;
+		else {
+			return v;
 		}
-		if (field.isUnsettable() && ((EObject) object).eIsSet(field) == false) {
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean canEdit(final Object object) {
-		return object != null;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -219,19 +256,21 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 	}
 
 	@Override
-	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
-		return Collections.emptySet();
-	}
-
-	@Override
 	public void setParent(Object parent, Object object) {
 		this.parent = parent;
-
 	}
 
 	@Override
 	public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
 		this.extraCommandsHook = extraCommandsHook;
+	}
 
+	@Override
+	public final void setValue(final Object object, final Object value) {
+		if (value == SetCommand.UNSET_VALUE && attribute.isUnsettable()) {
+			runSetCommand(object, (String)value);
+		} else {
+			doSetValue(object, value);
+		}
 	}
 }

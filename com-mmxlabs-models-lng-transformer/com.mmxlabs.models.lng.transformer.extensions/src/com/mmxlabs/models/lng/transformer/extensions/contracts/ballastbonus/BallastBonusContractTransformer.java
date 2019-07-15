@@ -110,7 +110,7 @@ public class BallastBonusContractTransformer implements IBallastBonusContractTra
 				IBallastBonusContractRule oRule = null;
 				if (ballastBonusContractLine instanceof LumpSumBallastBonusContractLine) {
 					String priceExpression = ((LumpSumBallastBonusContractLine) ballastBonusContractLine).getPriceExpression();
-					ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, commodityIndices);
+					ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
 					oRule = new DefaultLumpSumBallastBonusContractRule(redeliveryPorts, lumpSumCurve);
 				} else if (ballastBonusContractLine instanceof NotionalJourneyBallastBonusContractLine) {
 					String fuelPriceExpression = ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).getFuelPriceExpression();
