@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.nominations.ui.editorpart;
 
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
@@ -16,8 +17,10 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 
-abstract public class AbstractNominationsViewerPane extends ScenarioTableViewerPane {	
+public abstract class AbstractNominationsViewerPane extends ScenarioTableViewerPane {	
 	public AbstractNominationsViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, IActionBars actionBars) {
 		super(page, part, location, actionBars);
 	}
@@ -35,5 +38,13 @@ abstract public class AbstractNominationsViewerPane extends ScenarioTableViewerP
 	@Override
 	public void refresh() {
 		
+	}
+	
+	@Override
+	protected Action createCopyToClipboardAction() {
+		CopyGridToHtmlClipboardAction action = CopyToClipboardActionFactory.createCopyToHtmlClipboardAction(scenarioViewer, false);
+		action.setShowForegroundColours(true);
+		action.setShowBackgroundColours(true);
+		return action;
 	}
 }
