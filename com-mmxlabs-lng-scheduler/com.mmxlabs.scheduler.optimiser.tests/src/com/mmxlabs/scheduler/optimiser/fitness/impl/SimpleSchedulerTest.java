@@ -19,7 +19,6 @@ import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Module;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
@@ -68,7 +67,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionR
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
-import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker.ModuleBuilder;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
@@ -235,6 +233,7 @@ public class SimpleSchedulerTest {
 	private IPhaseOptimisationData createPhaseOptimisationData(Injector injector, IOptimisationData optimisationData) {
 		PhaseOptimisationData phase = injector.getInstance(PhaseOptimisationData.class);
 		phase.setSequenceElements(optimisationData.getSequenceElements());
+		phase.setResources(optimisationData.getResources());
 		return phase;
 	}
 
@@ -282,7 +281,7 @@ public class SimpleSchedulerTest {
 				}
 			};
 
-			final ILocalSearchOptimiser optimiser = GeneralTestUtils.buildOptimiser(context, data, pData, new Random(seed), 1000, 5, monitor);
+			final ILocalSearchOptimiser optimiser = GeneralTestUtils.buildOptimiser(injector, context, data, pData, new Random(seed), 1000, 5, monitor);
 
 			for (final IConstraintChecker c : optimiser.getConstraintCheckers()) {
 				injector.injectMembers(c);
@@ -338,8 +337,7 @@ public class SimpleSchedulerTest {
 					protected void configure() {
 						bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
 					}
-				}
-		);
+				});
 	}
 
 	void printSequences(final Collection<ISequences> sequences) {

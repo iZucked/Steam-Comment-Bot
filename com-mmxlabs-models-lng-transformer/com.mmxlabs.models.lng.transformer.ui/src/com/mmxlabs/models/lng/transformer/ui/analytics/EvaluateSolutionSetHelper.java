@@ -69,6 +69,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
 public class EvaluateSolutionSetHelper {
@@ -346,7 +347,7 @@ public class EvaluateSolutionSetHelper {
 
 			ICoreRunnable runnable = (monitor) -> {
 				try {
-					sdp.getModelReference().executeWithLock(true, () -> {
+					Runnable exportAction = () -> {
 						final EvaluateSolutionSetHelper helper = new EvaluateSolutionSetHelper(sdp);
 
 						if (abstractSolutionSet != null) {
@@ -403,7 +404,13 @@ public class EvaluateSolutionSetHelper {
 								new AnalyticsSolution(scenarioInstance, abstractSolutionSet, abstractSolutionSet.getName()).open();
 							}
 						}
-					});
+					};
+					if (sdp instanceof SimpleScenarioDataProvider) {
+						// ITS case may come here and we do not have a model reference to execute lock on
+						exportAction.run();
+					} else {
+						sdp.getModelReference().executeWithLock(true, exportAction);
+					}
 				} finally {
 					if (closeSDP) {
 						sdp.close();
