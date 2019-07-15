@@ -98,6 +98,7 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(IFitnessHelper.class).to(FitnessHelper.class);
 
 		bind(IOptimisationData.class).toInstance(data);
+		bind(IPhaseOptimisationData.class).toInstance(pData);
 
 		// bind(LNGScenarioTransformer.class).in(Singleton.class);
 
@@ -229,7 +230,7 @@ public class ScheduleTestModule extends AbstractModule {
 	@Singleton
 	@Named(FitnessFunctionInstantiatorModule.ENABLED_FITNESS_NAMES)
 	private List<String> provideEnabledFitnessFunctionNames(final IFitnessFunctionRegistry registry) {
-		final List<String> result = new ArrayList<String>(registry.getFitnessComponentNames());
+		final List<String> result = new ArrayList<>(registry.getFitnessComponentNames());
 		return result;
 	}
 
@@ -237,7 +238,7 @@ public class ScheduleTestModule extends AbstractModule {
 	@Singleton
 	@Named(EvaluationProcessInstantiatorModule.ENABLED_EVALUATION_PROCESS_NAMES)
 	private List<String> provideEnabledEvaluationProcessNames(final IEvaluationProcessRegistry registry) {
-		final List<String> result = new ArrayList<String>(registry.getEvaluationProcessNames());
+		final List<String> result = new ArrayList<>(registry.getEvaluationProcessNames());
 		return result;
 	}
 
@@ -245,7 +246,7 @@ public class ScheduleTestModule extends AbstractModule {
 	@Singleton
 	@Named(EvaluatedStateConstraintCheckerInstantiatorModule.ENABLED_EVALUATED_STATE_CONSTRAINT_NAMES)
 	private List<String> provideEnabledEvaluatedStateCheckerNames(final IEvaluatedStateConstraintCheckerRegistry registry) {
-		final List<String> result = new ArrayList<String>(registry.getConstraintCheckerNames());
+		final List<String> result = new ArrayList<>(registry.getConstraintCheckerNames());
 		return result;
 	}
 
@@ -307,10 +308,5 @@ public class ScheduleTestModule extends AbstractModule {
 		lcp.setLowWeight(Interval.BEYOND, 1);
 		lcp.setHighWeight(Interval.BEYOND, 1);
 		return lcp;
-	}
-
-	@Provides
-	private IPhaseOptimisationData providePhaseOptimisationData() {
-		return this.pData;
 	}
 }
