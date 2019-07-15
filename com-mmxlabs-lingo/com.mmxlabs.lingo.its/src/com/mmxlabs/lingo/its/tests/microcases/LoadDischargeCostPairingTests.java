@@ -7,7 +7,6 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.core.runtime.NullProgressMonitor;

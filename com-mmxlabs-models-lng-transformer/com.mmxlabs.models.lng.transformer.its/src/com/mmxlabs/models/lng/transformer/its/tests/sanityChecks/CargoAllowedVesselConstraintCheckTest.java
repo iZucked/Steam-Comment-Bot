@@ -139,7 +139,7 @@ public class CargoAllowedVesselConstraintCheckTest {
 
 		// constrain all cargoes so none of class four can carry any.
 		for (final Cargo c : cargoes) {
-			csc.addAllowedVesselsOnCargo(c, allowedVessels.parallelStream().map(VesselAvailability::getVessel).collect(Collectors.toList()));
+			csc.addAllowedVesselsOnCargo(c, allowedVessels.stream().map(VesselAvailability::getVessel).collect(Collectors.toList()));
 		}
 
 		// build and run the scenario
