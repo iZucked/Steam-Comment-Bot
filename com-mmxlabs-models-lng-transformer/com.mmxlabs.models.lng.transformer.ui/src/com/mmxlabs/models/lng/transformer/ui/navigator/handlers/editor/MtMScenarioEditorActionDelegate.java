@@ -112,6 +112,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 								usedLoadIDStrings.add(slot.getName());
 							}
 							final Map<LoadSlot, SlotAllocation> discharges = new HashMap();
+							final Map<DischargeSlot, SlotAllocation> loads = new HashMap();
 							final ScheduleModel sm = scenarioModel.getScheduleModel();
 							if (sm != null) {
 								final Schedule schedule = sm.getSchedule();
@@ -119,16 +120,23 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 									for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 										LoadSlot ls = null;
 										SlotAllocation dischargeSlotAllocation = null;
+										DischargeSlot ds = null;
+										SlotAllocation loadSlotAllocation = null;
 										for (final SlotAllocation sa : ca.getSlotAllocations()) {
 											if (sa.getSlot() instanceof LoadSlot) {
 												ls = (LoadSlot) sa.getSlot();
+												loadSlotAllocation = sa;
 											}
 											if (sa.getSlot() instanceof DischargeSlot) {
 												dischargeSlotAllocation = sa;
-											}
+												ds = (DischargeSlot) sa.getSlot();
+											} 
 										}
 										if (ls != null && dischargeSlotAllocation != null) {
 											discharges.putIfAbsent(ls, dischargeSlotAllocation);
+										}
+										if (ds != null && loadSlotAllocation != null) {
+											loads.putIfAbsent(ds, loadSlotAllocation);
 										}
 									}
 								}
@@ -147,21 +155,11 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 
 									double price = Double.MIN_VALUE;
 									
-									//TODO: add a price of the existing cargo
+									// getting the price of the original cargo
 									if (!discharges.isEmpty()) {
 										final SlotAllocation sa = discharges.get(loadSlot);
 										if (sa instanceof SlotAllocation) {
 											price = sa.getPrice();
-										}
-									}
-									
-									if (loadSlot.getCargo() != null) {
-										final Cargo cargo = loadSlot.getCargo();
-										for (final Slot slot : cargo.getSlots()) {
-											if (slot instanceof DischargeSlot) {
-												final DischargeSlot ds = (DischargeSlot) slot;
-
-											}
 										}
 									}
 									
@@ -219,6 +217,14 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 									}
 
 									double price = Double.MIN_VALUE;
+									
+									if (!loads.isEmpty()) {
+										final SlotAllocation sa = loads.get(dischargeSlot);
+										if (sa != null) {
+											price = sa.getPrice();
+										}
+									}
+									
 									MTMResult bestResult = null;
 
 									// make sure that there's a vessel availability
