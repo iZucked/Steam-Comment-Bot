@@ -198,6 +198,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
+
 /**
  * Tabular editor displaying cargoes and slots with a custom wiring editor. This implementation is "stupid" in that any changes to the data cause a full update. This has the disadvantage of loosing
  * the current ordering of items. Each row is a cargo. Changing the wiring will re-order slots. The {@link CargoWiringComposite} based view only re-orders slots when requested permitting the original
@@ -208,6 +209,9 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
  * 
  */
 public class TradesWiringViewer extends ScenarioTableViewerPane {
+	
+	private static int LineWrap = 40;
+	private static String nl = System.getProperty("line.separator");
 
 	private Iterable<ITradesTableContextMenuExtension> contextMenuExtensions;
 
@@ -565,11 +569,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				if (lString.length() + dString.length() == 0) {
 					return null;
 				} else {
-					if (lString.length() > 40)
-						lString = lString.substring(0, 40) + "...";
-					if (dString.length() > 40)
-						dString = dString.substring(0, 40) + "...";
-					return lString + "\n\n" + dString;
+					if (lString.length() > LineWrap) {
+						lString = wrapString(lString, LineWrap);
+					}
+					if (dString.length() > LineWrap) {
+						dString = wrapString(dString, LineWrap);
+					}
+					return (lString.length()>0? lString : "") + (dString.length()> 0 ? nl + " --- " + nl + dString : "");
 				}
 			}
 
@@ -832,6 +838,50 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 
 		return scenarioViewer;
+	}
+	
+	/**
+	 * Break up inputString into lines, then break up those input lines into wrapped lines lineLength 
+	 * characters long.
+	 * @param inputString
+	 * @param lineLength
+	 * @return the wrapped lines
+	 */
+	protected static String wrapString(String inputString, int lineLength) {		
+		//		System.out.println("It's a wrap yo: \n" + inputString);
+		String newString = "";
+		// Split input string into inputLineStrings, each of which is a list of words 
+		// which will result in one or more lines of formatted text
+		String[] inputLineStrings = inputString.split(nl);
+		for (int i = 0; i < inputLineStrings.length; i++) {
+			String inputLine = inputLineStrings[i];
+			// Wrap inputLine
+			if(inputLine.length() > lineLength) {
+				// Split on spaces and decompose into wrapped lines, adding each word to newLine 
+				// up to line wrap limit, then starting a newLine.
+				String[] words = inputLine.split(" ");
+				String newLine = words[0] + " ";
+				for (int j = 1; j < words.length; j++) {
+					String word = words[j];
+					// Add word if within limit
+					if(newLine.length() + word.length() <= lineLength) {						
+						newLine += word + " ";
+					}
+					else {
+					// else add line and start a new line with this word	
+						newString += newLine + nl;
+						newLine = word + " ";
+					}
+				}
+				// Any last words...
+				newString += newLine + nl;				
+			}
+			else {
+				// inputLine needs no wrapping.
+				newString += inputLine + nl;
+			}
+		}
+		return newString;
 	}
 
 	@Override
