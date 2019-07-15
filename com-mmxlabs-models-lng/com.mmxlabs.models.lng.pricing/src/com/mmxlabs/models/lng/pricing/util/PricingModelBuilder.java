@@ -9,6 +9,7 @@ import java.time.YearMonth;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
@@ -67,7 +68,7 @@ public class PricingModelBuilder {
 		curve.getPoints().clear();
 	}
 
-	public void addDataToCommodityIndex(final CommodityCurve curve, final YearMonth date, final double value) {
+	public void addDataToCommodityIndex(final AbstractYearMonthCurve curve, final YearMonth date, final double value) {
 		final YearMonthPoint pt = PricingFactory.eINSTANCE.createYearMonthPoint();
 		pt.setDate(date);
 		pt.setValue(value);
@@ -75,7 +76,6 @@ public class PricingModelBuilder {
 	}
 
 	public DataCurveBuilder<CommodityCurve> makeCommodityDataCurve(String name, String currencyUnit, String volumeUnit) {
-
 		final CommodityCurve curve = PricingFactory.eINSTANCE.createCommodityCurve();
 		curve.setName(name);
 		curve.setCurrencyUnit(currencyUnit);
@@ -83,6 +83,17 @@ public class PricingModelBuilder {
 
 		return new DataCurveBuilder<CommodityCurve>(curve, idx -> {
 			pricingModel.getCommodityCurves().add(idx);
+		});
+	}
+	
+	public DataCurveBuilder<CharterCurve> makeCharterDataCurve(String name, String currencyUnit, String volumeUnit) {
+		final CharterCurve curve = PricingFactory.eINSTANCE.createCharterCurve();
+		curve.setName(name);
+		curve.setCurrencyUnit(currencyUnit);
+		curve.setVolumeUnit(volumeUnit);
+
+		return new DataCurveBuilder<CharterCurve>(curve, idx -> {
+			pricingModel.getCharterCurves().add(idx);
 		});
 	}
 

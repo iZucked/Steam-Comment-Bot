@@ -4,11 +4,10 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
-import java.util.concurrent.Executors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
@@ -19,8 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
-import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -35,6 +32,7 @@ import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
+import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -52,6 +50,8 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 @SuppressWarnings({ "unused", "null" })
 @ExtendWith(ShiroRunner.class)
 public class BallastBonusContractTests extends AbstractMicroTestCase {
+
+	private static final String TEST_CHARTER_CURVE_NAME = "TestCharterCurve";
 
 	@Override
 	protected int getThreadCount() {
@@ -124,7 +124,10 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(vesselAvailability);
-		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Sakai"), "1000000");
+		
+		createCharterPriceCurve();
+		
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Sakai"), TEST_CHARTER_CURVE_NAME);
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -144,6 +147,14 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		});
 	}
 
+	private CharterCurve createCharterPriceCurve() {
+		return pricingModelBuilder.makeCharterDataCurve(TEST_CHARTER_CURVE_NAME, "$", "mmBtu") 
+				.addIndexPoint(YearMonth.of(2015, 12), 100000) 
+				.addIndexPoint(YearMonth.of(2016, 1), 500000) 
+				.addIndexPoint(YearMonth.of(2016, 2), 1000000)
+				.build();
+	}
+	
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testLumpSumBallastBonusOn_NotMatching() throws Exception {

@@ -1666,7 +1666,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		  (getLumpSumBallastBonusContractLine_PriceExpression(),
 		   source,
 		   new String[] {
-			   "type", "commodity"
+			   "type", "charter"
 		   });
 		addAnnotation
 		  (getNotionalJourneyBallastBonusContractLine_Speed(),

@@ -123,7 +123,7 @@ public class BallastBonusCharterContractConstraint extends AbstractModelMultiCon
 	private boolean lumpSumBallastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures,
 			final LumpSumBallastBonusContractLine line) {
 		final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, line, CommercialPackage.Literals.LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE__PRICE_EXPRESSION,
-				line.getPriceExpression(), PriceIndexType.COMMODITY);
+				line.getPriceExpression(), PriceExpressionUtils.getPriceIndexType(CommercialPackage.Literals.LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE__PRICE_EXPRESSION));
 		if (!result.isOk()) {
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
 					(IConstraintStatus) ctx.createFailureStatus(String.format("Ballast bonus contract lump sum is invalid")));

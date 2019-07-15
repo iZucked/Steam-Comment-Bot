@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.AssignmentManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
 import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortSingleReferenceManipulatorExtension;
+import com.mmxlabs.models.lng.pricing.ui.autocomplete.PriceAttributeManipulator;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -362,7 +363,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().setDetail(true);
 					}
 					{
-						final StringAttributeManipulator rendMan = new StringAttributeManipulator(CargoPackage.eINSTANCE.getSlot_PriceExpression(), editingDomain);
+						final PriceAttributeManipulator rendMan = new PriceAttributeManipulator(CargoPackage.eINSTANCE.getSlot_PriceExpression(), editingDomain);
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Expression", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.setTooltip("Price expression");
 						createColumn.column.getColumn().setSummary(false);

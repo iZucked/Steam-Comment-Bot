@@ -103,6 +103,11 @@ public class PriceExpressionUtils {
 
 	public static void validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull List<IStatus> failures, final @NonNull DetailConstraintStatusFactory factory,
 			final @NonNull EObject target, EAttribute feature, boolean missingIsOk, Pair<EObject, EStructuralFeature>... otherFeatures) {
+		PriceIndexType priceIndexType = getPriceIndexType(feature);
+		validatePriceExpression(ctx, failures, factory, target, feature, priceIndexType, missingIsOk, otherFeatures);
+	}
+
+	public static @NonNull PriceIndexType getPriceIndexType(EAttribute feature) {
 		PriceIndexType priceIndexType = null;
 		final EAnnotation eAnnotation = feature.getEAnnotation(ExpressionAnnotationConstants.ANNOTATION_NAME);
 		if (eAnnotation != null) {
@@ -120,9 +125,9 @@ public class PriceExpressionUtils {
 		if (priceIndexType == null) {
 			throw new IllegalArgumentException();
 		}
-		validatePriceExpression(ctx, failures, factory, target, feature, priceIndexType, missingIsOk, otherFeatures);
+		return priceIndexType;
 	}
-
+	
 	public static void validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull List<IStatus> failures, final @NonNull DetailConstraintStatusFactory factory,
 			final @NonNull EObject target, EAttribute feature, final @NonNull PriceIndexType priceIndexType, boolean missingIsOk, Pair<EObject, EStructuralFeature>... otherFeatures) {
 		String expression = (String) target.eGet(feature);
@@ -157,7 +162,7 @@ public class PriceExpressionUtils {
 			final @Nullable String priceExpression, @NonNull final PriceIndexType priceIndexType) {
 		return validatePriceExpression(ctx, object, feature, priceExpression, getIndexParser(priceIndexType));
 	}
-
+	
 	/**
 	 * @author Simon McGregor
 	 * 
