@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.lngdataserver</groupId>
 	<artifactId>com.mmxlabs.lngdataserver.parent</artifactId>
-	<version>4.6.18-SNAPSHOT</version>
+	<version>4.7.0.RELEASE</version>
 	<packaging>pom</packaging>
 
 	<parent>
