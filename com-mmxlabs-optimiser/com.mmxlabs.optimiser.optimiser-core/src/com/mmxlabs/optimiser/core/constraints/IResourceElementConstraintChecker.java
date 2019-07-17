@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * All rights reserved.
+ */
 package com.mmxlabs.optimiser.core.constraints;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
