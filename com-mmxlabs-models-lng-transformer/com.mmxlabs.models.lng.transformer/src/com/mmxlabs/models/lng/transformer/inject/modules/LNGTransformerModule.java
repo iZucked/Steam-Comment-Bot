@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.inject.modules;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 
@@ -53,6 +55,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharter
 import com.mmxlabs.scheduler.optimiser.curves.CachingPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.impl.CachingEntityValueCalculator;
@@ -114,6 +117,8 @@ public class LNGTransformerModule extends AbstractModule {
 	private final @NonNull LNGScenarioModel scenario;
 
 	public static final String MONTH_ALIGNED_INTEGER_INTERVAL_CURVE = "MonthAlignedIntegerCurve";
+
+	public static final String MIDNIGHT_ALIGNED_INTEGER_INTERVAL_CURVE = "MidnightAlignedIntegerCurve";
 
 	private final boolean shippingOnly;
 
@@ -341,6 +346,24 @@ public class LNGTransformerModule extends AbstractModule {
 		return integerIntervalCurveHelper.getMonthAlignedIntegerIntervalCurve(//
 				integerIntervalCurveHelper.getPreviousMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getEarliestTime())), //
 				integerIntervalCurveHelper.getNextMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getLatestTime())), 0);
+	}
+	
+	@Provides
+	@Singleton
+	@Named(MIDNIGHT_ALIGNED_INTEGER_INTERVAL_CURVE)
+	private IIntegerIntervalCurve provideDailyMidnightIIntegerIntervalCurve(@NonNull final DateAndCurveHelper dateAndCurveHelper) {
+		IntegerIntervalCurve iic = new IntegerIntervalCurve();
+		
+		ZonedDateTime zdt = dateAndCurveHelper.getEarliestTime();
+		int hourAtZDT = dateAndCurveHelper.convertTime(zdt.withZoneSameInstant(ZoneId.of("UTC")).withHour(0));
+		int latestTime = dateAndCurveHelper.convertTime(dateAndCurveHelper.getLatestTime());
+		assert (hourAtZDT <= 0);
+		for (int i = hourAtZDT; i <= latestTime; i+=24) {
+			iic.add(i);
+		}
+		iic.add(latestTime);
+		
+		return iic;
 	}
 
 	@Provides
