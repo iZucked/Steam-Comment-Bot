@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.portrotation;
 
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
@@ -31,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -441,6 +441,9 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					if (object instanceof Journey) {
 						total += ((Journey) object).getToll();
+					}
+					if (object instanceof Purge) {
+						total += ((Purge) object).getCost();
 					}
 					if (object instanceof Cooldown) {
 						total += ((Cooldown) object).getCost();

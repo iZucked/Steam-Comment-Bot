@@ -175,6 +175,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public RouteOption getRouteOption() {
 		return routeOption;
 	}
@@ -184,6 +185,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRouteOption(RouteOption newRouteOption) {
 		RouteOption oldRouteOption = routeOption;
 		routeOption = newRouteOption == null ? ROUTE_OPTION_EDEFAULT : newRouteOption;
@@ -196,6 +198,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getExtraTransitTime() {
 		return extraTransitTime;
 	}
@@ -205,6 +208,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setExtraTransitTime(int newExtraTransitTime) {
 		int oldExtraTransitTime = extraTransitTime;
 		extraTransitTime = newExtraTransitTime;
@@ -217,6 +221,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getLadenConsumptionRate() {
 		return ladenConsumptionRate;
 	}
@@ -226,6 +231,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLadenConsumptionRate(double newLadenConsumptionRate) {
 		double oldLadenConsumptionRate = ladenConsumptionRate;
 		ladenConsumptionRate = newLadenConsumptionRate;
@@ -238,6 +244,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getLadenNBORate() {
 		return ladenNBORate;
 	}
@@ -247,6 +254,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLadenNBORate(double newLadenNBORate) {
 		double oldLadenNBORate = ladenNBORate;
 		ladenNBORate = newLadenNBORate;
@@ -258,6 +266,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- begin-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getBallastConsumptionRate() {
 		return ballastConsumptionRate;
 	}
@@ -267,6 +276,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBallastConsumptionRate(double newBallastConsumptionRate) {
 		double oldBallastConsumptionRate = ballastConsumptionRate;
 		ballastConsumptionRate = newBallastConsumptionRate;
@@ -279,6 +289,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getBallastNBORate() {
 		return ballastNBORate;
 	}
@@ -288,6 +299,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBallastNBORate(double newBallastNBORate) {
 		double oldBallastNBORate = ballastNBORate;
 		ballastNBORate = newBallastNBORate;

@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -97,6 +98,8 @@ public class EventGroupPropertySource implements IPropertySource {
 			displayName += vesselEventVisit.type();
 		} else if (evt instanceof Cooldown) {
 			displayName += "Cooldown";
+		} else if (evt instanceof Purge) {
+			displayName += "Purge";
 		} else if (evt instanceof Journey) {
 			Journey journey = (Journey) evt;
 			displayName += "Journey " + (journey.isLaden() ? " (Laden)" : "(Ballast)");

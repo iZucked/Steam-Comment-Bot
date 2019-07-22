@@ -200,6 +200,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Cooldown/volume"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Cooldown/cost"/>
     </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//Purge">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Purge/volume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Purge/cost"/>
+    </genClasses>
     <genClasses ecoreClass="schedule.ecore#//FuelUsage">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//FuelUsage/fuels"/>
       <genOperations ecoreOperation="schedule.ecore#//FuelUsage/getFuelCost" body="int sum = 0;&#xA;for (final FuelQuantity fq : getFuels()) {&#xA;&#x9;sum += fq.getCost();&#xA;}&#xA;return sum;"/>

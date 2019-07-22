@@ -158,7 +158,7 @@ public class TestCalculations {
 			final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
 			final int baseFuelEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(4);
 			baseFuel.setEquivalenceFactor(baseFuelEquivalence);
-			final IVessel vessel1 = builder.createVessel("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
+			final IVessel vessel1 = builder.createVessel("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, 0, false);
 
 			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<>();
 			ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -191,7 +191,7 @@ public class TestCalculations {
 
 			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25, 0, false);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
-					false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+					false, false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
 
 			final ITimeWindow dischargeWindow = TimeWindowMaker.createInclusiveInclusive(50, 50);
 			final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
@@ -469,7 +469,7 @@ public class TestCalculations {
 			final int baseFuelUnitEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(4.0);
 			baseFuel.setEquivalenceFactor(baseFuelUnitEquivalence);
 
-			final IVessel vessel1 = builder.createVessel("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
+			final IVessel vessel1 = builder.createVessel("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, 0, false);
 
 			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<>();
 			ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -508,7 +508,7 @@ public class TestCalculations {
 
 			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25, 0, false);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
-					false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+					false, false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
 
 			final ITimeWindow dischargeWindow = TimeWindowMaker.createInclusiveInclusive(50, 50, 0, false);
 			final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
@@ -790,7 +790,7 @@ public class TestCalculations {
 			final int baseFuelEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(4);
 
 			baseFuel.setEquivalenceFactor(baseFuelEquivalence);
-			final IVessel vessel1 = builder.createVessel("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
+			final IVessel vessel1 = builder.createVessel("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, 0, false);
 
 			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<>();
 			ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -827,7 +827,7 @@ public class TestCalculations {
 
 			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
-					false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+					false, false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
 
 			final ITimeWindow dischargeWindow = TimeWindowMaker.createInclusiveInclusive(50, 50);
 			final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,

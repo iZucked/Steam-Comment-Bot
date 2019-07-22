@@ -19,6 +19,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
 import com.google.inject.Module;
+import com.google.inject.name.Names;
 import com.google.inject.util.Modules;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 
@@ -59,6 +60,43 @@ public class OptimiserInjectorServiceMaker {
 			@Override
 			protected void configure() {
 				bind(clz).toInstance(object);
+			}
+		});
+		return this;
+	}
+	
+	/**
+	 * Create a new module to bind the instance type
+	 * 
+	 * @param moduleType
+	 * @param clz
+	 * @param object
+	 * @return
+	 */
+	public <T> OptimiserInjectorServiceMaker withModuleBindNamedInstance(final ModuleType moduleType,String named, final Class<T> clz, final @NonNull T object) {
+		moduleMap.computeIfAbsent(moduleType, t -> new LinkedList<>()).add(hints -> new AbstractModule() {
+			
+			@Override
+			protected void configure() {
+				bind(clz).annotatedWith(Names.named(named)).toInstance(object);
+			}
+		});
+		return this;
+	}
+	/**
+	 * Create a new module to bind the instance type
+	 * 
+	 * @param moduleType
+	 * @param clz
+	 * @param object
+	 * @return
+	 */
+	public <T> OptimiserInjectorServiceMaker withModuleOverrideBindNamedInstance(final ModuleType moduleType,String named, final Class<T> clz, final @NonNull T object) {
+		moduleOverrideMap.computeIfAbsent(moduleType, t -> new LinkedList<>()).add(hints -> new AbstractModule() {
+			
+			@Override
+			protected void configure() {
+				bind(clz).annotatedWith(Names.named(named)).toInstance(object);
 			}
 		});
 		return this;

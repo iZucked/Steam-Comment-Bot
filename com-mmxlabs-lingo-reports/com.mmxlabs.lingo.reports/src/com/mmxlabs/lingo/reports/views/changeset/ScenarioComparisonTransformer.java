@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -241,6 +242,8 @@ public class ScenarioComparisonTransformer {
 						} else if (event instanceof Idle) {
 							continue;
 						} else if (event instanceof Cooldown) {
+							continue;
+						} else if (event instanceof Purge) {
 							continue;
 						}
 

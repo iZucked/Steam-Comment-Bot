@@ -62,6 +62,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -124,6 +125,8 @@ public final class ChangeSetTransformerUtil {
 					} else if (event instanceof Idle) {
 						continue;
 					} else if (event instanceof Cooldown) {
+						continue;
+					} else if (event instanceof Purge) {
 						continue;
 					}
 

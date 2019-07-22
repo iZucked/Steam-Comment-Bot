@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.ui.inlineeditors.RouteExclusionMultiInlineEditor;
@@ -83,6 +84,7 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		add_safetyHeelEditor(detailComposite, topClass);
 		add_coolingVolumeEditor(detailComposite, topClass);
 		add_warmingTimeEditor(detailComposite, topClass);
+		add_purgeTimeEditor(detailComposite, topClass);
 		add_ladenAttributesEditor(detailComposite, topClass);
 		add_ballastAttributesEditor(detailComposite, topClass);
 		add_minSpeedEditor(detailComposite, topClass);
@@ -222,6 +224,17 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_warmingTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__WARMING_TIME));
+	}
+
+	/**
+	 * Create the editor for the purgeTime feature on Vessel
+	 *
+	 * @generated NOT
+	 */
+	protected void add_purgeTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PURGE)) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__PURGE_TIME));
+		}
 	}
 
 	/**

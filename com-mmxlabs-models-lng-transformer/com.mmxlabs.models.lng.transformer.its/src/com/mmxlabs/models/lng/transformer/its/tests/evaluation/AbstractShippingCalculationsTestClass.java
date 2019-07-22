@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -100,6 +101,8 @@ public class AbstractShippingCalculationsTestClass {
 		case OVERHEAD_COSTS: {
 			if (event instanceof Journey) {
 				return ((Journey) event).getToll();
+			} else if (event instanceof Purge) {
+				return ((Purge) event).getCost();
 			} else if (event instanceof Cooldown) {
 				return ((Cooldown) event).getCost();
 			} else if (event instanceof SlotVisit) {

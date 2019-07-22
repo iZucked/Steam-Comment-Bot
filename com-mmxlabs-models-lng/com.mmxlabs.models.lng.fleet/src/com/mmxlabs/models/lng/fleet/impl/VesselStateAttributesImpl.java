@@ -272,6 +272,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getNboRate() {
 		return nboRate;
 	}
@@ -281,6 +282,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNboRate(double newNboRate) {
 		double oldNboRate = nboRate;
 		nboRate = newNboRate;
@@ -295,6 +297,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetNboRate() {
 		double oldNboRate = nboRate;
 		boolean oldNboRateESet = nboRateESet;
@@ -309,6 +312,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetNboRate() {
 		return nboRateESet;
 	}
@@ -318,6 +322,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getIdleNBORate() {
 		return idleNBORate;
 	}
@@ -346,6 +351,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIdleNBORate(double newIdleNBORate) {
 		double oldIdleNBORate = idleNBORate;
 		idleNBORate = newIdleNBORate;
@@ -360,6 +366,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetIdleNBORate() {
 		double oldIdleNBORate = idleNBORate;
 		boolean oldIdleNBORateESet = idleNBORateESet;
@@ -374,6 +381,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetIdleNBORate() {
 		return idleNBORateESet;
 	}
@@ -383,6 +391,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getIdleBaseRate() {
 		return idleBaseRate;
 	}
@@ -411,6 +420,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIdleBaseRate(double newIdleBaseRate) {
 		double oldIdleBaseRate = idleBaseRate;
 		idleBaseRate = newIdleBaseRate;
@@ -425,6 +435,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetIdleBaseRate() {
 		double oldIdleBaseRate = idleBaseRate;
 		boolean oldIdleBaseRateESet = idleBaseRateESet;
@@ -439,6 +450,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetIdleBaseRate() {
 		return idleBaseRateESet;
 	}
@@ -448,6 +460,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getInPortBaseRate() {
 		return inPortBaseRate;
 	}
@@ -476,6 +489,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInPortBaseRate(double newInPortBaseRate) {
 		double oldInPortBaseRate = inPortBaseRate;
 		inPortBaseRate = newInPortBaseRate;
@@ -490,6 +504,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetInPortBaseRate() {
 		double oldInPortBaseRate = inPortBaseRate;
 		boolean oldInPortBaseRateESet = inPortBaseRateESet;
@@ -504,6 +519,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetInPortBaseRate() {
 		return inPortBaseRateESet;
 	}
@@ -513,6 +529,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isFuelConsumptionOverride() {
 		return fuelConsumptionOverride;
 	}
@@ -522,6 +539,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFuelConsumptionOverride(boolean newFuelConsumptionOverride) {
 		boolean oldFuelConsumptionOverride = fuelConsumptionOverride;
 		fuelConsumptionOverride = newFuelConsumptionOverride;
@@ -534,6 +552,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<FuelConsumption> getFuelConsumption() {
 		if (fuelConsumption == null) {
 			fuelConsumption = new EObjectContainmentEList<FuelConsumption>(FuelConsumption.class, this, FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION);
@@ -546,6 +565,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getServiceSpeed() {
 		return serviceSpeed;
 	}
@@ -593,6 +613,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setServiceSpeed(double newServiceSpeed) {
 		double oldServiceSpeed = serviceSpeed;
 		serviceSpeed = newServiceSpeed;
@@ -607,6 +628,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetServiceSpeed() {
 		double oldServiceSpeed = serviceSpeed;
 		boolean oldServiceSpeedESet = serviceSpeedESet;
@@ -621,6 +643,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetServiceSpeed() {
 		return serviceSpeedESet;
 	}
@@ -630,6 +653,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getInPortNBORate() {
 		return inPortNBORate;
 	}
@@ -658,6 +682,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInPortNBORate(double newInPortNBORate) {
 		double oldInPortNBORate = inPortNBORate;
 		inPortNBORate = newInPortNBORate;
@@ -672,6 +697,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetInPortNBORate() {
 		double oldInPortNBORate = inPortNBORate;
 		boolean oldInPortNBORateESet = inPortNBORateESet;
@@ -686,6 +712,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetInPortNBORate() {
 		return inPortNBORateESet;
 	}

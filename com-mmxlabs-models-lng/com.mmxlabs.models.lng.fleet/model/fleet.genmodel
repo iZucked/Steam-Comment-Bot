@@ -45,6 +45,7 @@
           ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/coolingVolume"/>
       <genFeatures createChild="false" propertyDescription="The number of hours the vessel has to sit empty to require a cooldow"
           ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/warmingTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/purgeTime"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//Vessel/ladenAttributes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//Vessel/ballastAttributes"/>
       <genFeatures createChild="false" propertyDescription="The minimum speed of vessels of this class"
@@ -78,6 +79,7 @@
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateMinSpeed"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateMaxSpeed"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateSafetyHeel"/>
+      <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegatePurgeTime"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateWarmingTime"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateCoolingVolume"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateRouteParameters"/>

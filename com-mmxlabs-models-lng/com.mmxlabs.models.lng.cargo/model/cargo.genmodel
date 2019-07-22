@@ -164,6 +164,7 @@
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//LoadSlot">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/cargoCV"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/schedulePurge"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/arriveCold"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/DESPurchase"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//LoadSlot/transferFrom"/>

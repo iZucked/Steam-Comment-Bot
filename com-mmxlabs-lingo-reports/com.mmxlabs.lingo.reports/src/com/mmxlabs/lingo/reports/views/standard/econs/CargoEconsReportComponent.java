@@ -69,6 +69,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -470,6 +471,9 @@ public class CargoEconsReportComponent implements IAdaptable {
 							}
 						});
 					}
+				} else if (obj instanceof Purge) {
+					validObjects.add(obj);
+					
 				}
 			}
 			// Remove invalid items

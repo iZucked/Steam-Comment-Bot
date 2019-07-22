@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getCargoCV <em>Cargo CV</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#isSchedulePurge <em>Schedule Purge</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#isArriveCold <em>Arrive Cold</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#isDESPurchase <em>DES Purchase</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getTransferFrom <em>Transfer From</em>}</li>
@@ -69,6 +70,26 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * @ordered
 	 */
 	protected boolean cargoCVESet;
+
+	/**
+	 * The default value of the '{@link #isSchedulePurge() <em>Schedule Purge</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSchedulePurge()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean SCHEDULE_PURGE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isSchedulePurge() <em>Schedule Purge</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSchedulePurge()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean schedulePurge = SCHEDULE_PURGE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isArriveCold() <em>Arrive Cold</em>}' attribute.
@@ -236,6 +257,29 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	@Override
 	public boolean isSetCargoCV() {
 		return cargoCVESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSchedulePurge() {
+		return schedulePurge;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSchedulePurge(boolean newSchedulePurge) {
+		boolean oldSchedulePurge = schedulePurge;
+		schedulePurge = newSchedulePurge;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.LOAD_SLOT__SCHEDULE_PURGE, oldSchedulePurge, schedulePurge));
 	}
 
 	/**
@@ -481,6 +525,8 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 		switch (featureID) {
 			case CargoPackage.LOAD_SLOT__CARGO_CV:
 				return getCargoCV();
+			case CargoPackage.LOAD_SLOT__SCHEDULE_PURGE:
+				return isSchedulePurge();
 			case CargoPackage.LOAD_SLOT__ARRIVE_COLD:
 				return isArriveCold();
 			case CargoPackage.LOAD_SLOT__DES_PURCHASE:
@@ -504,6 +550,9 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 		switch (featureID) {
 			case CargoPackage.LOAD_SLOT__CARGO_CV:
 				setCargoCV((Double)newValue);
+				return;
+			case CargoPackage.LOAD_SLOT__SCHEDULE_PURGE:
+				setSchedulePurge((Boolean)newValue);
 				return;
 			case CargoPackage.LOAD_SLOT__ARRIVE_COLD:
 				setArriveCold((Boolean)newValue);
@@ -532,6 +581,9 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 			case CargoPackage.LOAD_SLOT__CARGO_CV:
 				unsetCargoCV();
 				return;
+			case CargoPackage.LOAD_SLOT__SCHEDULE_PURGE:
+				setSchedulePurge(SCHEDULE_PURGE_EDEFAULT);
+				return;
 			case CargoPackage.LOAD_SLOT__ARRIVE_COLD:
 				unsetArriveCold();
 				return;
@@ -558,6 +610,8 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 		switch (featureID) {
 			case CargoPackage.LOAD_SLOT__CARGO_CV:
 				return isSetCargoCV();
+			case CargoPackage.LOAD_SLOT__SCHEDULE_PURGE:
+				return schedulePurge != SCHEDULE_PURGE_EDEFAULT;
 			case CargoPackage.LOAD_SLOT__ARRIVE_COLD:
 				return isSetArriveCold();
 			case CargoPackage.LOAD_SLOT__DES_PURCHASE:
@@ -598,6 +652,8 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (cargoCV: ");
 		if (cargoCVESet) result.append(cargoCV); else result.append("<unset>");
+		result.append(", schedulePurge: ");
+		result.append(schedulePurge);
 		result.append(", arriveCold: ");
 		if (arriveColdESet) result.append(arriveCold); else result.append("<unset>");
 		result.append(", DESPurchase: ");

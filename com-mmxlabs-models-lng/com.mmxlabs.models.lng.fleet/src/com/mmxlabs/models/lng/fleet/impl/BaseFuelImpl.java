@@ -89,6 +89,7 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -98,6 +99,7 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -110,6 +112,7 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getEquivalenceFactor() {
 		return equivalenceFactor;
 	}
@@ -119,6 +122,7 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEquivalenceFactor(double newEquivalenceFactor) {
 		double oldEquivalenceFactor = equivalenceFactor;
 		equivalenceFactor = newEquivalenceFactor;

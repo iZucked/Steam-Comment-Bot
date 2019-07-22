@@ -1212,7 +1212,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getLoadSlot_ArriveCold() {
+	public EAttribute getLoadSlot_SchedulePurge() {
 		return (EAttribute)loadSlotEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -1222,7 +1222,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getLoadSlot_DESPurchase() {
+	public EAttribute getLoadSlot_ArriveCold() {
 		return (EAttribute)loadSlotEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -1232,8 +1232,18 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getLoadSlot_DESPurchase() {
+		return (EAttribute)loadSlotEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getLoadSlot_TransferFrom() {
-		return (EReference)loadSlotEClass.getEStructuralFeatures().get(3);
+		return (EReference)loadSlotEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1243,7 +1253,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getLoadSlot_SalesDeliveryType() {
-		return (EAttribute)loadSlotEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)loadSlotEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -3180,6 +3190,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CV);
+		createEAttribute(loadSlotEClass, LOAD_SLOT__SCHEDULE_PURGE);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__ARRIVE_COLD);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__DES_PURCHASE);
 		createEReference(loadSlotEClass, LOAD_SLOT__TRANSFER_FROM);
@@ -3628,6 +3639,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLoadSlot_SchedulePurge(), ecorePackage.getEBoolean(), "schedulePurge", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLoadSlot_ArriveCold(), ecorePackage.getEBoolean(), "arriveCold", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLoadSlot_DESPurchase(), ecorePackage.getEBoolean(), "DESPurchase", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLoadSlot_TransferFrom(), this.getDischargeSlot(), this.getDischargeSlot_TransferTo(), "transferFrom", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3895,6 +3907,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createNumberFormatAnnotations();
 		// http://www.mmxlabs.com/models/pricing/expressionType
 		createExpressionTypeAnnotations();
+		// http://www.mmxlabs.com/models/ui/featureEnablement
+		createFeatureEnablementAnnotations();
 	}
 
 	/**
@@ -4231,6 +4245,22 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source,
 		   new String[] {
 			   "type", "commodity"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/ui/featureEnablement</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createFeatureEnablementAnnotations() {
+		String source = "http://www.mmxlabs.com/models/ui/featureEnablement";
+		addAnnotation
+		  (getLoadSlot_SchedulePurge(),
+		   source,
+		   new String[] {
+			   "feature", "purge"
 		   });
 	}
 

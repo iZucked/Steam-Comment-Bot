@@ -53,6 +53,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getSafetyHeel <em>Safety Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCoolingVolume <em>Cooling Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getWarmingTime <em>Warming Time</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getPurgeTime <em>Purge Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getMinSpeed <em>Min Speed</em>}</li>
@@ -423,6 +424,35 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	protected boolean warmingTimeESet;
 
 	/**
+	 * The default value of the '{@link #getPurgeTime() <em>Purge Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPurgeTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PURGE_TIME_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getPurgeTime() <em>Purge Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPurgeTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected int purgeTime = PURGE_TIME_EDEFAULT;
+
+	/**
+	 * This is true if the Purge Time attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean purgeTimeESet;
+
+	/**
 	 * The cached value of the '{@link #getLadenAttributes() <em>Laden Attributes</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -720,6 +750,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getShortName() {
 		return shortName;
 	}
@@ -729,6 +760,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShortName(String newShortName) {
 		String oldShortName = shortName;
 		shortName = newShortName;
@@ -741,6 +773,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getIMO() {
 		return imo;
 	}
@@ -750,6 +783,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIMO(String newIMO) {
 		String oldIMO = imo;
 		imo = newIMO;
@@ -762,6 +796,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getType() {
 		return type;
 	}
@@ -771,6 +806,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setType(String newType) {
 		String oldType = type;
 		type = newType;
@@ -783,6 +819,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Vessel getReference() {
 		if (reference != null && reference.eIsProxy()) {
 			InternalEObject oldReference = (InternalEObject)reference;
@@ -809,6 +846,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setReference(Vessel newReference) {
 		Vessel oldReference = reference;
 		reference = newReference;
@@ -832,6 +870,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isInaccessibleRoutesOverride() {
 		return inaccessibleRoutesOverride;
 	}
@@ -841,6 +880,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInaccessibleRoutesOverride(boolean newInaccessibleRoutesOverride) {
 		boolean oldInaccessibleRoutesOverride = inaccessibleRoutesOverride;
 		inaccessibleRoutesOverride = newInaccessibleRoutesOverride;
@@ -853,6 +893,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<RouteOption> getInaccessibleRoutes() {
 		if (inaccessibleRoutes == null) {
 			inaccessibleRoutes = new EDataTypeUniqueEList<RouteOption>(RouteOption.class, this, FleetPackage.VESSEL__INACCESSIBLE_ROUTES);
@@ -865,6 +906,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseFuel getBaseFuel() {
 		if (baseFuel != null && baseFuel.eIsProxy()) {
 			InternalEObject oldBaseFuel = (InternalEObject)baseFuel;
@@ -895,6 +937,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCapacity(int newCapacity) {
 		int oldCapacity = capacity;
 		capacity = newCapacity;
@@ -909,6 +952,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCapacity() {
 		int oldCapacity = capacity;
 		boolean oldCapacityESet = capacityESet;
@@ -923,6 +967,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCapacity() {
 		return capacityESet;
 	}
@@ -932,6 +977,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getFillCapacity() {
 		return fillCapacity;
 	}
@@ -953,6 +999,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFillCapacity(double newFillCapacity) {
 		double oldFillCapacity = fillCapacity;
 		fillCapacity = newFillCapacity;
@@ -967,6 +1014,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetFillCapacity() {
 		double oldFillCapacity = fillCapacity;
 		boolean oldFillCapacityESet = fillCapacityESet;
@@ -981,6 +1029,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetFillCapacity() {
 		return fillCapacityESet;
 	}
@@ -990,6 +1039,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselStateAttributes getLadenAttributes() {
 		return ladenAttributes;
 	}
@@ -1014,6 +1064,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLadenAttributes(VesselStateAttributes newLadenAttributes) {
 		if (newLadenAttributes != ladenAttributes) {
 			NotificationChain msgs = null;
@@ -1033,6 +1084,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselStateAttributes getBallastAttributes() {
 		return ballastAttributes;
 	}
@@ -1057,6 +1109,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBallastAttributes(VesselStateAttributes newBallastAttributes) {
 		if (newBallastAttributes != ballastAttributes) {
 			NotificationChain msgs = null;
@@ -1076,6 +1129,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getMinSpeed() {
 		return minSpeed;
 	}
@@ -1097,6 +1151,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinSpeed(double newMinSpeed) {
 		double oldMinSpeed = minSpeed;
 		minSpeed = newMinSpeed;
@@ -1111,6 +1166,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMinSpeed() {
 		double oldMinSpeed = minSpeed;
 		boolean oldMinSpeedESet = minSpeedESet;
@@ -1125,6 +1181,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMinSpeed() {
 		return minSpeedESet;
 	}
@@ -1134,6 +1191,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getMaxSpeed() {
 		return maxSpeed;
 	}
@@ -1155,6 +1213,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxSpeed(double newMaxSpeed) {
 		double oldMaxSpeed = maxSpeed;
 		maxSpeed = newMaxSpeed;
@@ -1169,6 +1228,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMaxSpeed() {
 		double oldMaxSpeed = maxSpeed;
 		boolean oldMaxSpeedESet = maxSpeedESet;
@@ -1183,6 +1243,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMaxSpeed() {
 		return maxSpeedESet;
 	}
@@ -1192,6 +1253,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSafetyHeel() {
 		return safetyHeel;
 	}
@@ -1211,8 +1273,22 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public int getVesselOrDelegatePurgeTime() {
+		if (getReference() != null && !isSetPurgeTime()) {
+			return getReference().getPurgeTime();
+		}
+		return getPurgeTime();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSafetyHeel(int newSafetyHeel) {
 		int oldSafetyHeel = safetyHeel;
 		safetyHeel = newSafetyHeel;
@@ -1227,6 +1303,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetSafetyHeel() {
 		int oldSafetyHeel = safetyHeel;
 		boolean oldSafetyHeelESet = safetyHeelESet;
@@ -1241,6 +1318,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetSafetyHeel() {
 		return safetyHeelESet;
 	}
@@ -1250,6 +1328,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getWarmingTime() {
 		return warmingTime;
 	}
@@ -1271,6 +1350,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWarmingTime(int newWarmingTime) {
 		int oldWarmingTime = warmingTime;
 		warmingTime = newWarmingTime;
@@ -1285,6 +1365,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetWarmingTime() {
 		int oldWarmingTime = warmingTime;
 		boolean oldWarmingTimeESet = warmingTimeESet;
@@ -1299,6 +1380,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetWarmingTime() {
 		return warmingTimeESet;
 	}
@@ -1308,6 +1390,57 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public int getPurgeTime() {
+		return purgeTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPurgeTime(int newPurgeTime) {
+		int oldPurgeTime = purgeTime;
+		purgeTime = newPurgeTime;
+		boolean oldPurgeTimeESet = purgeTimeESet;
+		purgeTimeESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__PURGE_TIME, oldPurgeTime, purgeTime, !oldPurgeTimeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetPurgeTime() {
+		int oldPurgeTime = purgeTime;
+		boolean oldPurgeTimeESet = purgeTimeESet;
+		purgeTime = PURGE_TIME_EDEFAULT;
+		purgeTimeESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__PURGE_TIME, oldPurgeTime, PURGE_TIME_EDEFAULT, oldPurgeTimeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetPurgeTime() {
+		return purgeTimeESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public int getCoolingVolume() {
 		return coolingVolume;
 	}
@@ -1329,6 +1462,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCoolingVolume(int newCoolingVolume) {
 		int oldCoolingVolume = coolingVolume;
 		coolingVolume = newCoolingVolume;
@@ -1343,6 +1477,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCoolingVolume() {
 		int oldCoolingVolume = coolingVolume;
 		boolean oldCoolingVolumeESet = coolingVolumeESet;
@@ -1357,6 +1492,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCoolingVolume() {
 		return coolingVolumeESet;
 	}
@@ -1366,6 +1502,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isRouteParametersOverride() {
 		return routeParametersOverride;
 	}
@@ -1375,6 +1512,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRouteParametersOverride(boolean newRouteParametersOverride) {
 		boolean oldRouteParametersOverride = routeParametersOverride;
 		routeParametersOverride = newRouteParametersOverride;
@@ -1387,6 +1525,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VesselClassRouteParameters> getRouteParameters() {
 		if (routeParameters == null) {
 			routeParameters = new EObjectContainmentEList<VesselClassRouteParameters>(VesselClassRouteParameters.class, this, FleetPackage.VESSEL__ROUTE_PARAMETERS);
@@ -1399,6 +1538,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getPilotLightRate() {
 		return pilotLightRate;
 	}
@@ -1432,6 +1572,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPilotLightRate(double newPilotLightRate) {
 		double oldPilotLightRate = pilotLightRate;
 		pilotLightRate = newPilotLightRate;
@@ -1446,6 +1587,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPilotLightRate() {
 		double oldPilotLightRate = pilotLightRate;
 		boolean oldPilotLightRateESet = pilotLightRateESet;
@@ -1460,6 +1602,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPilotLightRate() {
 		return pilotLightRateESet;
 	}
@@ -1469,6 +1612,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getMinBaseFuelConsumption() {
 		return minBaseFuelConsumption;
 	}
@@ -1514,6 +1658,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinBaseFuelConsumption(double newMinBaseFuelConsumption) {
 		double oldMinBaseFuelConsumption = minBaseFuelConsumption;
 		minBaseFuelConsumption = newMinBaseFuelConsumption;
@@ -1528,6 +1673,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMinBaseFuelConsumption() {
 		double oldMinBaseFuelConsumption = minBaseFuelConsumption;
 		boolean oldMinBaseFuelConsumptionESet = minBaseFuelConsumptionESet;
@@ -1542,6 +1688,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMinBaseFuelConsumption() {
 		return minBaseFuelConsumptionESet;
 	}
@@ -1551,6 +1698,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isHasReliqCapabilityOverride() {
 		return hasReliqCapabilityOverride;
 	}
@@ -1560,6 +1708,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHasReliqCapabilityOverride(boolean newHasReliqCapabilityOverride) {
 		boolean oldHasReliqCapabilityOverride = hasReliqCapabilityOverride;
 		hasReliqCapabilityOverride = newHasReliqCapabilityOverride;
@@ -1572,6 +1721,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isHasReliqCapability() {
 		return hasReliqCapability;
 	}
@@ -1581,6 +1731,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHasReliqCapability(boolean newHasReliqCapability) {
 		boolean oldHasReliqCapability = hasReliqCapability;
 		hasReliqCapability = newHasReliqCapability;
@@ -1593,6 +1744,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getNotes() {
 		return notes;
 	}
@@ -1602,6 +1754,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNotes(String newNotes) {
 		String oldNotes = notes;
 		notes = newNotes;
@@ -1614,6 +1767,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getMmxId() {
 		return mmxId;
 	}
@@ -1623,6 +1777,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMmxId(String newMmxId) {
 		String oldMmxId = mmxId;
 		mmxId = newMmxId;
@@ -1635,6 +1790,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getScnt() {
 		return scnt;
 	}
@@ -1644,6 +1800,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setScnt(int newScnt) {
 		int oldScnt = scnt;
 		scnt = newScnt;
@@ -1658,6 +1815,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetScnt() {
 		int oldScnt = scnt;
 		boolean oldScntESet = scntESet;
@@ -1672,6 +1830,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetScnt() {
 		return scntESet;
 	}
@@ -1681,6 +1840,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isInaccessiblePortsOverride() {
 		return inaccessiblePortsOverride;
 	}
@@ -1690,6 +1850,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInaccessiblePortsOverride(boolean newInaccessiblePortsOverride) {
 		boolean oldInaccessiblePortsOverride = inaccessiblePortsOverride;
 		inaccessiblePortsOverride = newInaccessiblePortsOverride;
@@ -1702,6 +1863,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<APortSet<Port>> getInaccessiblePorts() {
 		if (inaccessiblePorts == null) {
 			inaccessiblePorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, FleetPackage.VESSEL__INACCESSIBLE_PORTS);
@@ -1783,6 +1945,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBaseFuel(BaseFuel newBaseFuel) {
 		BaseFuel oldBaseFuel = baseFuel;
 		baseFuel = newBaseFuel;
@@ -1797,6 +1960,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetBaseFuel() {
 		BaseFuel oldBaseFuel = baseFuel;
 		boolean oldBaseFuelESet = baseFuelESet;
@@ -1811,6 +1975,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetBaseFuel() {
 		return baseFuelESet;
 	}
@@ -1820,6 +1985,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseFuel getInPortBaseFuel() {
 		if (inPortBaseFuel != null && inPortBaseFuel.eIsProxy()) {
 			InternalEObject oldInPortBaseFuel = (InternalEObject)inPortBaseFuel;
@@ -1846,6 +2012,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInPortBaseFuel(BaseFuel newInPortBaseFuel) {
 		BaseFuel oldInPortBaseFuel = inPortBaseFuel;
 		inPortBaseFuel = newInPortBaseFuel;
@@ -1860,6 +2027,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetInPortBaseFuel() {
 		BaseFuel oldInPortBaseFuel = inPortBaseFuel;
 		boolean oldInPortBaseFuelESet = inPortBaseFuelESet;
@@ -1874,6 +2042,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetInPortBaseFuel() {
 		return inPortBaseFuelESet;
 	}
@@ -1883,6 +2052,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseFuel getPilotLightBaseFuel() {
 		if (pilotLightBaseFuel != null && pilotLightBaseFuel.eIsProxy()) {
 			InternalEObject oldPilotLightBaseFuel = (InternalEObject)pilotLightBaseFuel;
@@ -1909,6 +2079,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPilotLightBaseFuel(BaseFuel newPilotLightBaseFuel) {
 		BaseFuel oldPilotLightBaseFuel = pilotLightBaseFuel;
 		pilotLightBaseFuel = newPilotLightBaseFuel;
@@ -1923,6 +2094,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPilotLightBaseFuel() {
 		BaseFuel oldPilotLightBaseFuel = pilotLightBaseFuel;
 		boolean oldPilotLightBaseFuelESet = pilotLightBaseFuelESet;
@@ -1937,6 +2109,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPilotLightBaseFuel() {
 		return pilotLightBaseFuelESet;
 	}
@@ -1946,6 +2119,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseFuel getIdleBaseFuel() {
 		if (idleBaseFuel != null && idleBaseFuel.eIsProxy()) {
 			InternalEObject oldIdleBaseFuel = (InternalEObject)idleBaseFuel;
@@ -1972,6 +2146,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIdleBaseFuel(BaseFuel newIdleBaseFuel) {
 		BaseFuel oldIdleBaseFuel = idleBaseFuel;
 		idleBaseFuel = newIdleBaseFuel;
@@ -1986,6 +2161,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetIdleBaseFuel() {
 		BaseFuel oldIdleBaseFuel = idleBaseFuel;
 		boolean oldIdleBaseFuelESet = idleBaseFuelESet;
@@ -2000,6 +2176,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetIdleBaseFuel() {
 		return idleBaseFuelESet;
 	}
@@ -2009,6 +2186,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCapacity() {
 		return capacity;
 	}
@@ -2121,6 +2299,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return getCoolingVolume();
 			case FleetPackage.VESSEL__WARMING_TIME:
 				return getWarmingTime();
+			case FleetPackage.VESSEL__PURGE_TIME:
+				return getPurgeTime();
 			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:
 				return getLadenAttributes();
 			case FleetPackage.VESSEL__BALLAST_ATTRIBUTES:
@@ -2207,6 +2387,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return;
 			case FleetPackage.VESSEL__WARMING_TIME:
 				setWarmingTime((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL__PURGE_TIME:
+				setPurgeTime((Integer)newValue);
 				return;
 			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:
 				setLadenAttributes((VesselStateAttributes)newValue);
@@ -2312,6 +2495,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__WARMING_TIME:
 				unsetWarmingTime();
 				return;
+			case FleetPackage.VESSEL__PURGE_TIME:
+				unsetPurgeTime();
+				return;
 			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:
 				setLadenAttributes((VesselStateAttributes)null);
 				return;
@@ -2398,6 +2584,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return isSetCoolingVolume();
 			case FleetPackage.VESSEL__WARMING_TIME:
 				return isSetWarmingTime();
+			case FleetPackage.VESSEL__PURGE_TIME:
+				return isSetPurgeTime();
 			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:
 				return ladenAttributes != null;
 			case FleetPackage.VESSEL__BALLAST_ATTRIBUTES:
@@ -2461,6 +2649,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		if (coolingVolumeESet) result.append(coolingVolume); else result.append("<unset>");
 		result.append(", warmingTime: ");
 		if (warmingTimeESet) result.append(warmingTime); else result.append("<unset>");
+		result.append(", purgeTime: ");
+		if (purgeTimeESet) result.append(purgeTime); else result.append("<unset>");
 		result.append(", minSpeed: ");
 		if (minSpeedESet) result.append(minSpeed); else result.append("<unset>");
 		result.append(", maxSpeed: ");

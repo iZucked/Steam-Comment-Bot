@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -65,6 +64,7 @@ import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -395,7 +395,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			final int days = event.getDuration() / 24;
 			final int hours = event.getDuration() % 24;
 			final String durationTime = days + " day" + (days > 1 || days == 0 ? "s" : "") + ", " + hours + " hour" + (hours > 1 || hours == 0 ? "s" : "");
-		
+
 			// build event specific text
 			if (element instanceof Journey) {
 				eventText.append("Travel time: " + durationTime + " \n");
@@ -594,7 +594,13 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			}
 			return (port == null) ? "" : ("At " + port);
 		} else if (element instanceof Event) {
-			return (port == null) ? "" : ("At " + port) + (element instanceof Cooldown ? " (Cooldown)" : ""); // + displayTypeName;
+			String base = (port == null) ? "" : ("At " + port);
+			if (element instanceof Cooldown) {
+				return base + " (Cooldown)";
+			} else if (element instanceof Purge) {
+				return base + " (Purge)";
+			}
+			return base;
 		} else if (element instanceof SlotVisit) {
 			final SlotVisit sv = (SlotVisit) element;
 			return (port == null) ? "" : ("At " + port + " ") + (sv.getSlotAllocation().getSlot() instanceof LoadSlot ? "(Load)" : "(Discharge)"); // + displayTypeName;

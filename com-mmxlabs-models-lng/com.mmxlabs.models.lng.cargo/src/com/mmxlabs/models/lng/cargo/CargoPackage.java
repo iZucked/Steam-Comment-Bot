@@ -1653,13 +1653,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__CARGO_CV = SLOT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Schedule Purge</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__SCHEDULE_PURGE = SLOT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Arrive Cold</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__ARRIVE_COLD = SLOT_FEATURE_COUNT + 1;
+	int LOAD_SLOT__ARRIVE_COLD = SLOT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>DES Purchase</b></em>' attribute.
@@ -1668,7 +1677,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__DES_PURCHASE = SLOT_FEATURE_COUNT + 2;
+	int LOAD_SLOT__DES_PURCHASE = SLOT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Transfer From</b></em>' reference.
@@ -1677,7 +1686,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__TRANSFER_FROM = SLOT_FEATURE_COUNT + 3;
+	int LOAD_SLOT__TRANSFER_FROM = SLOT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Sales Delivery Type</b></em>' attribute.
@@ -1686,7 +1695,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__SALES_DELIVERY_TYPE = SLOT_FEATURE_COUNT + 4;
+	int LOAD_SLOT__SALES_DELIVERY_TYPE = SLOT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Load Slot</em>' class.
@@ -1695,7 +1704,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 5;
+	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3271,6 +3280,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__CARGO_CV = LOAD_SLOT__CARGO_CV;
+
+	/**
+	 * The feature id for the '<em><b>Schedule Purge</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__SCHEDULE_PURGE = LOAD_SLOT__SCHEDULE_PURGE;
 
 	/**
 	 * The feature id for the '<em><b>Arrive Cold</b></em>' attribute.
@@ -8385,6 +8403,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getLoadSlot_CargoCV();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.LoadSlot#isSchedulePurge <em>Schedule Purge</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Schedule Purge</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#isSchedulePurge()
+	 * @see #getLoadSlot()
+	 * @generated
+	 */
+	EAttribute getLoadSlot_SchedulePurge();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11030,6 +11059,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute LOAD_SLOT__CARGO_CV = eINSTANCE.getLoadSlot_CargoCV();
+
+		/**
+		 * The meta object literal for the '<em><b>Schedule Purge</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOAD_SLOT__SCHEDULE_PURGE = eINSTANCE.getLoadSlot_SchedulePurge();
 
 		/**
 		 * The meta object literal for the '<em><b>Arrive Cold</b></em>' attribute feature.

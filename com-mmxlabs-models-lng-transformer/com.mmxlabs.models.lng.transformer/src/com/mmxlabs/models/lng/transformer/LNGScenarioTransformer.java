@@ -1951,7 +1951,8 @@ public class LNGScenarioTransformer {
 		} else {
 			load = builder.createLoadSlot(elementName, portAssociation.lookupNullChecked(loadSlot.getPort()), loadWindow, minVolume, maxVolume, loadPriceCalculator,
 					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegateCV()), loadSlot.getSlotOrDelegateDuration(), loadSlot.isSetArriveCold(), loadSlot.isArriveCold(),
-					slotPricingDate, transformPricingEvent(loadSlot.getSlotOrDelegatePricingEvent()), loadSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3, slotCancelled);
+					loadSlot.isSchedulePurge(), slotPricingDate, transformPricingEvent(loadSlot.getSlotOrDelegatePricingEvent()), loadSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3,
+					slotCancelled);
 		}
 		// Store market slots for lookup when building spot markets.
 		modelEntityMap.addModelObject(loadSlot, load);
@@ -2652,7 +2653,7 @@ public class LNGScenarioTransformer {
 
 								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(internalID, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSlotOrDelegateDuration(),
-										fobSlot.isArriveCold(), true, IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3, false);
+										fobSlot.isArriveCold(), true, false, IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3, false);
 
 								// Key piece of information
 								fobSlot.setMarket(fobPurchaseMarket);
@@ -3341,7 +3342,7 @@ public class LNGScenarioTransformer {
 				@Nullable
 				IBallastBonusContract ballastBonusContract = null;
 				IEndRequirement charterInEndRule = null;
-			
+
 				String repositioningFee = null;
 
 				if (charterInMarket.getCharterContract() instanceof BallastBonusCharterContract) {
@@ -3356,7 +3357,7 @@ public class LNGScenarioTransformer {
 							charterInEndRule = createDefaultCharterInEndRequirement(builder, portAssociation, modelEntityMap, oVessel);
 						}
 					}
-					
+
 				}
 
 				final ILongCurve repositioningFeeCurve;
@@ -3366,7 +3367,7 @@ public class LNGScenarioTransformer {
 					repositioningFeeCurve = new ConstantValueLongCurve(0);
 				}
 				assert repositioningFeeCurve != null;
-				
+
 				final int minDurationInDays = charterInMarket.getMarketOrContractMinDuration();
 				final int maxDurationInDays = charterInMarket.getMarketOrContractMaxDuration();
 				if (maxDurationInDays != 0 || minDurationInDays != 0) {
@@ -3381,9 +3382,9 @@ public class LNGScenarioTransformer {
 						charterInEndRule.setMinDurationInHours(minDurationInDays * 24);
 					}
 				}
-				
-				final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterInMarket.getName(), oVessel, charterInCurve, 
-						charterCount, charterInEndRule, ballastBonusContract, repositioningFeeCurve);
+
+				final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterInMarket.getName(), oVessel, charterInCurve, charterCount, charterInEndRule,
+						ballastBonusContract, repositioningFeeCurve);
 				modelEntityMap.addModelObject(charterInMarket, spotCharterInMarket);
 
 				// Only create a nominal vessel if enabled

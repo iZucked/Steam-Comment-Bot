@@ -124,6 +124,11 @@ public interface IVessel {
 	int getWarmupTime();
 
 	/**
+	 * The time in hours needed to purge tanks.
+	 */
+	int getPurgeTime();
+
+	/**
 	 * The volume of LNG in M3 (scaled, see {@link Calculator#ScaleFactor}) required to cool down the tanks if they have warmed up.
 	 * 
 	 * In a future version this API may take more parameters, for example an estimate of the tanks' temperature, or the time spent warming up.

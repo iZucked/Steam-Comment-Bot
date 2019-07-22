@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -53,6 +54,7 @@ import com.mmxlabs.models.lng.transformer.export.exporters.CooldownExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.GeneratedCharterOutEventExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.IdleEventExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.JourneyEventExporter;
+import com.mmxlabs.models.lng.transformer.export.exporters.PurgeExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.VisitEventExporter;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotation;
@@ -70,9 +72,9 @@ import com.mmxlabs.scheduler.optimiser.components.impl.SplitCharterOutVesselEven
 import com.mmxlabs.scheduler.optimiser.components.impl.SplitCharterOutVesselEventStartPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences.HeelValueRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence.HeelRecord;
-import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences.HeelValueRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
@@ -124,6 +126,9 @@ public class AnnotatedSolutionExporter {
 
 	@Inject
 	private CooldownExporter cooldownDetailsExporter;
+	
+	@Inject
+	private PurgeExporter purgeDetailsExporter;
 
 	@Inject
 	private Injector injector;
@@ -349,6 +354,8 @@ public class AnnotatedSolutionExporter {
 					eventGrouping.getEvents().add(event);
 				} else if (event instanceof Idle && eventGrouping != null) {
 					eventGrouping.getEvents().add(event);
+				} else if (event instanceof Purge && eventGrouping != null) {
+					eventGrouping.getEvents().add(event);
 				} else if (event instanceof Cooldown && eventGrouping != null) {
 					eventGrouping.getEvents().add(event);
 				}
@@ -522,8 +529,8 @@ public class AnnotatedSolutionExporter {
 		}
 	}
 
-	public void exportEvents(final VolumeAllocatedSequence scheduledSequence, ProfitAndLossSequences pnlSequences, final IAnnotatedSolution annotatedSolution, final ModelEntityMap modelEntityMap, final Schedule output,
-			final Consumer<List<Event>> eventsAction) {
+	public void exportEvents(final VolumeAllocatedSequence scheduledSequence, ProfitAndLossSequences pnlSequences, final IAnnotatedSolution annotatedSolution, final ModelEntityMap modelEntityMap,
+			final Schedule output, final Consumer<List<Event>> eventsAction) {
 
 		final List<Event> events = new LinkedList<>();
 
@@ -577,13 +584,13 @@ public class AnnotatedSolutionExporter {
 						if (heelRecord != null) {
 							event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
 							event.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
-//							event.setHeelCost(OptimiserUnitConvertor.convertToExternalFixedCost(heelRecord.getHeelCost()));
-//							event.setHeelRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(heelRecord.getHeelRevenue()));
+							// event.setHeelCost(OptimiserUnitConvertor.convertToExternalFixedCost(heelRecord.getHeelCost()));
+							// event.setHeelRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(heelRecord.getHeelRevenue()));
 						}
 						final HeelValueRecord heelValueRecord = pnlSequences.getPortHeelRecord(currentPortSlot);
 						if (heelValueRecord != null) {
-//							event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
-//							event.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
+							// event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
+							// event.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
 							event.setHeelCost(OptimiserUnitConvertor.convertToExternalFixedCost(heelValueRecord.getHeelCost()));
 							event.setHeelRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(heelValueRecord.getHeelRevenue()));
 							event.setHeelCostUnitPrice(OptimiserUnitConvertor.convertToExternalPrice(heelValueRecord.getCostUnitPrice()));
@@ -594,7 +601,7 @@ public class AnnotatedSolutionExporter {
 
 					if (patchupRedirectCharterEvent) {
 						final IPortSlot startSlot = redirectedCharterOutStart.getOptions().getPortSlot();
-						
+
 						final HeelRecord heelRecord = scheduledSequence.getPortHeelRecord(currentPortSlot);
 						if (heelRecord != null) {
 							event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
@@ -686,6 +693,18 @@ public class AnnotatedSolutionExporter {
 				}
 				voyage_currentTime += details.getIdleTime();
 
+				final Purge purge = purgeDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
+				if (purge != null) {
+					events.add(purge);
+					if (lastEvent != null) {
+						// Is this really needed - if we have a purge, then by definition heel should be zero.
+						purge.setHeelAtStart(lastEvent.getHeelAtStart());
+						purge.setHeelAtEnd(lastEvent.getHeelAtEnd());
+					}
+					purge.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(charterRatePerDay, details.getPurgeDuration()) / 24L));
+
+					voyage_currentTime += details.getPurgeDuration();
+				}
 				final Cooldown cooldown = cooldownDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 				if (cooldown != null) {
 					events.add(cooldown);
@@ -694,6 +713,8 @@ public class AnnotatedSolutionExporter {
 						cooldown.setHeelAtStart(lastEvent.getHeelAtStart());
 						cooldown.setHeelAtEnd(lastEvent.getHeelAtEnd());
 					}
+					// voyage_currentTime += details.getCooldownDuration();
+
 				}
 			}
 		}

@@ -82,6 +82,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Vessel createVessel() {
 		VesselImpl vessel = new VesselImpl();
 		return vessel;
@@ -92,6 +93,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FleetModel createFleetModel() {
 		FleetModelImpl fleetModel = new FleetModelImpl();
 		return fleetModel;
@@ -102,6 +104,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseFuel createBaseFuel() {
 		BaseFuelImpl baseFuel = new BaseFuelImpl();
 		return baseFuel;
@@ -112,6 +115,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselStateAttributes createVesselStateAttributes() {
 		VesselStateAttributesImpl vesselStateAttributes = new VesselStateAttributesImpl();
 		return vesselStateAttributes;
@@ -122,6 +126,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FuelConsumption createFuelConsumption() {
 		FuelConsumptionImpl fuelConsumption = new FuelConsumptionImpl();
 		return fuelConsumption;
@@ -132,6 +137,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselClassRouteParameters createVesselClassRouteParameters() {
 		VesselClassRouteParametersImpl vesselClassRouteParameters = new VesselClassRouteParametersImpl();
 		return vesselClassRouteParameters;
@@ -142,6 +148,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselGroup createVesselGroup() {
 		VesselGroupImpl vesselGroup = new VesselGroupImpl();
 		return vesselGroup;
@@ -152,6 +159,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FleetPackage getFleetPackage() {
 		return (FleetPackage)getEPackage();
 	}

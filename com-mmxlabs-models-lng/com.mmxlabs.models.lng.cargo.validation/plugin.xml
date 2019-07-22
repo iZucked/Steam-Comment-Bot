@@ -515,6 +515,22 @@
                      class="LoadSlot">
                </target>
             </constraint>
+ <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.LoadSlotPurgeConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.LoadSlotPurgeConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Load Slot Purge Constraint"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="LoadSlot">
+               </target>
+            </constraint>            
                         <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.KeepOpenSlotConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.KeepOpenSlotConstraint"

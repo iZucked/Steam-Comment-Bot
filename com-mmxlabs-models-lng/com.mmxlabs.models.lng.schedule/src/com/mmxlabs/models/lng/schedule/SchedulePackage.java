@@ -375,7 +375,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUsage()
 	 * @generated
 	 */
-	int FUEL_USAGE = 20;
+	int FUEL_USAGE = 21;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelQuantityImpl <em>Fuel Quantity</em>}' class.
@@ -385,7 +385,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelQuantity()
 	 * @generated
 	 */
-	int FUEL_QUANTITY = 21;
+	int FUEL_QUANTITY = 22;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CooldownImpl <em>Cooldown</em>}' class.
@@ -425,7 +425,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelAmount()
 	 * @generated
 	 */
-	int FUEL_AMOUNT = 22;
+	int FUEL_AMOUNT = 23;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FitnessImpl <em>Fitness</em>}' class.
@@ -664,7 +664,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationsHolder()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATIONS_HOLDER = 23;
+	int CAPACITY_VIOLATIONS_HOLDER = 24;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl <em>Capacity Map Entry</em>}' class.
@@ -674,7 +674,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityMapEntry()
 	 * @generated
 	 */
-	int CAPACITY_MAP_ENTRY = 24;
+	int CAPACITY_MAP_ENTRY = 25;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl <em>Profit And Loss Container</em>}' class.
@@ -684,7 +684,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getProfitAndLossContainer()
 	 * @generated
 	 */
-	int PROFIT_AND_LOSS_CONTAINER = 25;
+	int PROFIT_AND_LOSS_CONTAINER = 26;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4283,6 +4283,223 @@ public interface SchedulePackage extends EPackage {
 	int COOLDOWN_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.PurgeImpl <em>Purge</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.PurgeImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPurge()
+	 * @generated
+	 */
+	int PURGE = 20;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE__EXTENSIONS = EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE__START = EVENT__START;
+
+	/**
+	 * The feature id for the '<em><b>End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE__END = EVENT__END;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE__PORT = EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE__NEXT_EVENT = EVENT__NEXT_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE__CHARTER_COST = EVENT__CHARTER_COST;
+
+	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE__HEEL_AT_START = EVENT__HEEL_AT_START;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE__FUELS = EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE__VOLUME = EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE__COST = EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Purge</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE___ECONTAINER_OP = EVENT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE___GET_DURATION = EVENT___GET_DURATION;
+
+	/**
+	 * The operation id for the '<em>Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE___TYPE = EVENT___TYPE;
+
+	/**
+	 * The operation id for the '<em>Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE___NAME = EVENT___NAME;
+
+	/**
+	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE___GET_FUEL_COST = EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Purge</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4524,7 +4741,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupProfitAndLoss()
 	 * @generated
 	 */
-	int GROUP_PROFIT_AND_LOSS = 26;
+	int GROUP_PROFIT_AND_LOSS = 27;
 
 	/**
 	 * The feature id for the '<em><b>Profit And Loss</b></em>' attribute.
@@ -4588,7 +4805,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEntityProfitAndLoss()
 	 * @generated
 	 */
-	int ENTITY_PROFIT_AND_LOSS = 27;
+	int ENTITY_PROFIT_AND_LOSS = 28;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -4652,7 +4869,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEntityPNLDetails()
 	 * @generated
 	 */
-	int ENTITY_PNL_DETAILS = 28;
+	int ENTITY_PNL_DETAILS = 29;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneralPNLDetailsImpl <em>General PNL Details</em>}' class.
@@ -4662,7 +4879,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneralPNLDetails()
 	 * @generated
 	 */
-	int GENERAL_PNL_DETAILS = 30;
+	int GENERAL_PNL_DETAILS = 31;
 
 	/**
 	 * The number of structural features of the '<em>General PNL Details</em>' class.
@@ -4726,7 +4943,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotPNLDetails()
 	 * @generated
 	 */
-	int SLOT_PNL_DETAILS = 29;
+	int SLOT_PNL_DETAILS = 30;
 
 	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
@@ -4772,7 +4989,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getBasicSlotPNLDetails()
 	 * @generated
 	 */
-	int BASIC_SLOT_PNL_DETAILS = 31;
+	int BASIC_SLOT_PNL_DETAILS = 32;
 
 	/**
 	 * The feature id for the '<em><b>Extra Shipping PNL</b></em>' attribute.
@@ -4854,7 +5071,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEventGrouping()
 	 * @generated
 	 */
-	int EVENT_GROUPING = 32;
+	int EVENT_GROUPING = 33;
 
 	/**
 	 * The feature id for the '<em><b>Events</b></em>' reference list.
@@ -4891,7 +5108,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisitLateness()
 	 * @generated
 	 */
-	int PORT_VISIT_LATENESS = 33;
+	int PORT_VISIT_LATENESS = 34;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -4937,7 +5154,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getExposureDetail()
 	 * @generated
 	 */
-	int EXPOSURE_DETAIL = 34;
+	int EXPOSURE_DETAIL = 35;
 
 	/**
 	 * The feature id for the '<em><b>Index Name</b></em>' attribute.
@@ -5046,7 +5263,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getBallastBonusFeeDetails()
 	 * @generated
 	 */
-	int BALLAST_BONUS_FEE_DETAILS = 35;
+	int BALLAST_BONUS_FEE_DETAILS = 36;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5137,7 +5354,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getMatchingContractDetails()
 	 * @generated
 	 */
-	int MATCHING_CONTRACT_DETAILS = 36;
+	int MATCHING_CONTRACT_DETAILS = 37;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5219,7 +5436,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getLumpSumContractDetails()
 	 * @generated
 	 */
-	int LUMP_SUM_CONTRACT_DETAILS = 37;
+	int LUMP_SUM_CONTRACT_DETAILS = 38;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5310,7 +5527,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getNotionalJourneyContractDetails()
 	 * @generated
 	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS = 38;
+	int NOTIONAL_JOURNEY_CONTRACT_DETAILS = 39;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5482,7 +5699,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCharterAvailableToEvent()
 	 * @generated
 	 */
-	int CHARTER_AVAILABLE_TO_EVENT = 39;
+	int CHARTER_AVAILABLE_TO_EVENT = 40;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5672,7 +5889,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCharterAvailableFromEvent()
 	 * @generated
 	 */
-	int CHARTER_AVAILABLE_FROM_EVENT = 41;
+	int CHARTER_AVAILABLE_FROM_EVENT = 42;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupedCharterLengthEventImpl <em>Grouped Charter Length Event</em>}' class.
@@ -5682,7 +5899,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupedCharterLengthEvent()
 	 * @generated
 	 */
-	int GROUPED_CHARTER_LENGTH_EVENT = 42;
+	int GROUPED_CHARTER_LENGTH_EVENT = 43;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CanalBookingEventImpl <em>Canal Booking Event</em>}' class.
@@ -5692,7 +5909,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCanalBookingEvent()
 	 * @generated
 	 */
-	int CANAL_BOOKING_EVENT = 40;
+	int CANAL_BOOKING_EVENT = 41;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6278,7 +6495,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getInventoryEvents()
 	 * @generated
 	 */
-	int INVENTORY_EVENTS = 43;
+	int INVENTORY_EVENTS = 44;
 
 	/**
 	 * The feature id for the '<em><b>Facility</b></em>' reference.
@@ -6324,7 +6541,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getInventoryChangeEvent()
 	 * @generated
 	 */
-	int INVENTORY_CHANGE_EVENT = 44;
+	int INVENTORY_CHANGE_EVENT = 45;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -6442,7 +6659,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPaperDealAllocation()
 	 * @generated
 	 */
-	int PAPER_DEAL_ALLOCATION = 45;
+	int PAPER_DEAL_ALLOCATION = 46;
 
 	/**
 	 * The feature id for the '<em><b>Paper Deal</b></em>' reference.
@@ -6488,7 +6705,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPaperDealAllocationEntry()
 	 * @generated
 	 */
-	int PAPER_DEAL_ALLOCATION_ENTRY = 46;
+	int PAPER_DEAL_ALLOCATION_ENTRY = 47;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -6570,7 +6787,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 49;
+	int FUEL_UNIT = 50;
 
 
 	/**
@@ -6581,7 +6798,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 48;
+	int FUEL = 49;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -6591,7 +6808,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 47;
+	int SEQUENCE_TYPE = 48;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -6601,7 +6818,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 50;
+	int CAPACITY_VIOLATION_TYPE = 51;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PortVisitLatenessType <em>Port Visit Lateness Type</em>}' enum.
@@ -6611,7 +6828,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisitLatenessType()
 	 * @generated
 	 */
-	int PORT_VISIT_LATENESS_TYPE = 51;
+	int PORT_VISIT_LATENESS_TYPE = 52;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocationType <em>Slot Allocation Type</em>}' enum.
@@ -6621,7 +6838,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocationType()
 	 * @generated
 	 */
-	int SLOT_ALLOCATION_TYPE = 52;
+	int SLOT_ALLOCATION_TYPE = 53;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PanamaBookingPeriod <em>Panama Booking Period</em>}' enum.
@@ -6631,7 +6848,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPanamaBookingPeriod()
 	 * @generated
 	 */
-	int PANAMA_BOOKING_PERIOD = 53;
+	int PANAMA_BOOKING_PERIOD = 54;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -6641,7 +6858,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 54;
+	int CALENDAR = 55;
 
 
 	/**
@@ -6652,7 +6869,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 55;
+	int ITERABLE = 56;
 
 
 	/**
@@ -6663,7 +6880,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 56;
+	int OBJECT = 57;
 
 
 	/**
@@ -7348,6 +7565,38 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCooldown_Cost();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Purge <em>Purge</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Purge</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Purge
+	 * @generated
+	 */
+	EClass getPurge();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Purge#getVolume <em>Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Purge#getVolume()
+	 * @see #getPurge()
+	 * @generated
+	 */
+	EAttribute getPurge_Volume();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Purge#getCost <em>Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cost</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Purge#getCost()
+	 * @see #getPurge()
+	 * @generated
+	 */
+	EAttribute getPurge_Cost();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CargoAllocation <em>Cargo Allocation</em>}'.
@@ -9768,6 +10017,32 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute COOLDOWN__COST = eINSTANCE.getCooldown_Cost();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.PurgeImpl <em>Purge</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.PurgeImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPurge()
+		 * @generated
+		 */
+		EClass PURGE = eINSTANCE.getPurge();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PURGE__VOLUME = eINSTANCE.getPurge_Volume();
+
+		/**
+		 * The meta object literal for the '<em><b>Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PURGE__COST = eINSTANCE.getPurge_Cost();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl <em>Cargo Allocation</em>}' class.
