@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,7 +11,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
@@ -31,13 +28,11 @@ import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
-import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider.RouteOptionDirection;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
@@ -50,9 +45,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
  */
 public class TimeWindowsTrimming {
 
-	@Inject
-	private @NonNull ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
-	
 	@Inject
 	private PriceIntervalProviderHelper priceIntervalProviderHelper;
 
@@ -73,11 +65,6 @@ public class TimeWindowsTrimming {
 
 	@Inject
 	private PanamaBookingHelper panamaBookingHelper;
-	
-	@Inject
-	@Named("MidnightAlignedIntegerCurve")
-	private IIntegerIntervalCurve midnightIntervalsInHoursCurve;
-	
 
 	/**
 	 * Trim time windows for a given set of slots
@@ -181,10 +168,7 @@ public class TimeWindowsTrimming {
 							|| priceIntervalProviderHelper.isPricingDateSpecified(discharge, PriceIntervalProviderHelper.getPriceEventFromSlotOrContract(discharge, portTimeWindowRecord)))) {
 				// simplest case
 				@NonNull
-				List<int[]> dischargePriceIntervalsIndependentOfLoad = getDischargePriceIntervalsIndependentOfLoad(portTimeWindowRecord, discharge);
-				if (end != null) {
-					dischargePriceIntervalsIndependentOfLoad = subDividePriceIntervals(dischargePriceIntervalsIndependentOfLoad, midnightIntervalsInHoursCurve, 24, discharge);
-				}
+				final List<int[]> dischargePriceIntervalsIndependentOfLoad = getDischargePriceIntervalsIndependentOfLoad(portTimeWindowRecord, discharge);
 				trimLoadAndDischargeWindowsWithRouteChoice(resource, portTimeWindowRecord, load, discharge, getLoadPriceIntervalsIndependentOfDischarge(portTimeWindowRecord, load),
 						dischargePriceIntervalsIndependentOfLoad, dischargePriceIntervalsIndependentOfLoad, charterRateForDecision, false);
 			} else if (priceIntervalProviderHelper.isDischargePricingEventTime(load, portTimeWindowRecord) && (priceIntervalProviderHelper.isLoadPricingEventTime(discharge, portTimeWindowRecord))) {
@@ -219,9 +203,7 @@ public class TimeWindowsTrimming {
 			}
 			// if last cargo, process end elements
 			if (end != null) {
-				final List<int[]> temp = getDischargePriceIntervalsIndependentOfLoad(portTimeWindowRecord, discharge);
-				final List<int[]> dischargePriceIntervalsIndependentOfLoad = subDividePriceIntervals(temp, midnightIntervalsInHoursCurve, 24, discharge);
-				
+				final List<int[]> dischargePriceIntervalsIndependentOfLoad = getDischargePriceIntervalsIndependentOfLoad(portTimeWindowRecord, discharge);
 				final IVessel vessel = getVesselFromPortTimeWindowsRecord(resource);
 				final int[] endElementTimes = trimEndElementTimeWindowsWithRouteOptimisationAndBoilOff(resource, portTimeWindowRecord, load, discharge, end, vessel,
 						dischargePriceIntervalsIndependentOfLoad, dischargePriceIntervalsIndependentOfLoad, vesselStartTime, portTimeWindowRecordStart);
@@ -582,30 +564,6 @@ public class TimeWindowsTrimming {
 		final ITimeWindow dischargeTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
 		return priceIntervalProviderHelper.getFeasibleIntervalSubSet(dischargeTimeWindow.getInclusiveStart(), dischargeTimeWindow.getExclusiveEnd(),
 				priceIntervalProducer.getDischargeWindowIndependentOfLoad(discharge, portTimeWindowRecord));
-	}
-	
-	private List<int[]> subDividePriceIntervals(final List<int[]> input, final IIntegerIntervalCurve midnights, final int x, final @Nullable IPortSlot port){
-		List<int[]> output = new LinkedList();
-		for (int i = 1; i < input.size(); i++) {
-			
-			int[] from = input.get(i-1);
-			int[] to = input.get(i);
-			
-			int a = timeZoneToUtcOffsetProvider.UTC(to[0], port) - timeZoneToUtcOffsetProvider.UTC(from[0], port);
-			
-			output.add(from);
-			if (a > x) {
-				int [] ir = midnights.getIntervalRange(timeZoneToUtcOffsetProvider.UTC(from[0],port), //
-						timeZoneToUtcOffsetProvider.UTC(to[0], port));
-				for (int j = 0; j < ir.length; j++) {
-					int foo = timeZoneToUtcOffsetProvider.localTime(ir[j], port);
-					output.add(new int[] {foo, from[1]});
-				}
-			}
-			output.add(to);
-		}
-		
-		return output;
 	}
 
 	@NonNull
