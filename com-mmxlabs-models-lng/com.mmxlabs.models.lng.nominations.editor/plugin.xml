@@ -177,6 +177,7 @@
  <extension
        point="com.mmxlabs.models.lng.nominations.editor.NominationType">
     <!-- Removed:  "Source port", "Destination port" as redundant: -->
+    <!-- Some reports are using the hard-coded strings from here -->
     <NominationType
     	type="Buy window">
     </NominationType>

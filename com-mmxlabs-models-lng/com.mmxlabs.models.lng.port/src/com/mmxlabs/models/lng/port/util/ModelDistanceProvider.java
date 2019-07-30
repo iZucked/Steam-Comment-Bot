@@ -35,13 +35,15 @@ public class ModelDistanceProvider extends EContentAdapter {
 
 	private SoftReference<@Nullable Map<RouteOption, Map<Pair<String, String>, Double>>> distanceCache = new SoftReference<>(null);
 	private SoftReference<@Nullable Map<Pair<String, String>, Integer>> portToPortContingencyIdleTimeCache = new SoftReference<>(null);
+	private Map<String, Port> mmxIDtoPort = new HashMap<>();
 
 	public synchronized Map<RouteOption, Map<Pair<String, String>, Double>> buildDistanceCache() {
 
-		final Map<String, Port> portMap = new HashMap<>();
 		for (final Port p : portModel.getPorts()) {
 			Location l = p.getLocation();
-			portMap.put(l.getTempMMXID(), p);
+			if (l != null) {
+				mmxIDtoPort.put(l.getMmxId(), p);
+			}
 		}
 
 		final Map<RouteOption, Map<Pair<String, String>, Double>> distanceCacheObj = new EnumMap<>(RouteOption.class);
@@ -99,10 +101,18 @@ public class ModelDistanceProvider extends EContentAdapter {
 		}
 		return port.getName();
 	}
+	
+	public Port getPortByMMXID(final String mmxID) {
+		if (mmxIDtoPort.isEmpty()) {
+			buildDistanceCache();
+		}
+		return mmxIDtoPort.get(mmxID);
+	}
 
 	public synchronized void clearCache() {
 		distanceCache.clear();
 		portToPortContingencyIdleTimeCache.clear();
+		mmxIDtoPort.clear();
 	}
 
 	public ModelDistanceProvider(final PortModel portModel) {
