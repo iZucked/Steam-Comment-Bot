@@ -9,12 +9,17 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -187,14 +192,22 @@ public class ScheduleModelUtils {
 		return fuelTotal;
 	}
 
-	public static @Nullable Vessel getVessel(final Sequence seq) {
+	public static @Nullable Vessel getVessel(final @Nullable Sequence seq) {
+		if (seq == null) return null;
 		final VesselAvailability vesselAvailability = seq.getVesselAvailability();
 		if (vesselAvailability != null) {
 			return vesselAvailability.getVessel();
 		}
-		final CharterInMarket charterInMarket = seq.getCharterInMarket();
+		CharterInMarket charterInMarket = seq.getCharterInMarket();
 		if (charterInMarket != null) {
 			return charterInMarket.getVessel();
+		}
+		final CharterInMarketOverride charterInMarketOverride = seq.getCharterInMarketOverride();
+		if (charterInMarketOverride != null) {
+			charterInMarket = charterInMarketOverride.getCharterInMarket();
+			if (charterInMarket != null) {
+				return charterInMarket.getVessel();
+			}
 		}
 		return null;
 	}
@@ -240,4 +253,131 @@ public class ScheduleModelUtils {
 		}
 		return container;
 	}
+	
+	public static SlotAllocation getDischargeAllocation(final @NonNull CargoAllocation cargoAllocation) {
+		for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
+			if (sa.getSlot() instanceof DischargeSlot) {
+				return sa;
+			}
+		}
+		return null;
+	}
+	
+	public static SlotAllocation getLoadAllocation(final @NonNull CargoAllocation cargoAllocation) {
+		for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
+			if (sa.getSlot() instanceof LoadSlot) {
+				return sa;
+			}
+		}
+		return null;
+	}
+	
+	public static LoadSlot getLoadSlot(final Object allocation) {
+		LoadSlot slot = null;
+		if (allocation instanceof CargoAllocation) {
+			final CargoAllocation ca = (CargoAllocation) allocation;
+			for (final SlotAllocation sa : ca.getSlotAllocations()) {
+				if (sa != null) {
+					if (sa.getSlot() instanceof LoadSlot) {
+						slot = (LoadSlot) sa.getSlot();
+					}
+				}
+			}
+		} else if (allocation instanceof SlotAllocation) {
+			final SlotAllocation sa = (SlotAllocation) allocation;
+			if (sa.getSlot() instanceof LoadSlot) {
+				slot = (LoadSlot) sa.getSlot();
+			}
+		} else if (allocation instanceof OpenSlotAllocation) {
+			final OpenSlotAllocation sa = (OpenSlotAllocation) allocation;
+			if (sa.getSlot() instanceof LoadSlot) {
+				slot = (LoadSlot) sa.getSlot();
+			}
+		}
+		return slot;
+	}
+	
+	public static DischargeSlot getDischargeSlot(final Object allocation) {
+		DischargeSlot slot = null;
+		if (allocation instanceof CargoAllocation) {
+			final CargoAllocation ca = (CargoAllocation) allocation;
+			for (final SlotAllocation sa : ca.getSlotAllocations()) {
+				if (sa != null) {
+					if (sa.getSlot() instanceof DischargeSlot) {
+						slot = (DischargeSlot) sa.getSlot();
+					}
+				}
+			}
+		} else if (allocation instanceof SlotAllocation) {
+			final SlotAllocation sa = (SlotAllocation) allocation;
+			if (sa.getSlot() instanceof DischargeSlot) {
+				slot = (DischargeSlot) sa.getSlot();
+			}
+		} else if (allocation instanceof OpenSlotAllocation) {
+			final OpenSlotAllocation sa = (OpenSlotAllocation) allocation;
+			if (sa.getSlot() instanceof DischargeSlot) {
+				slot = (DischargeSlot) sa.getSlot();
+			}
+		}
+		return slot;
+	}
+	
+	public static String getLoadPortName(Object allocation) {
+		return getPortNameFromSlot(getLoadSlot(allocation));
+	}
+	
+	public static String getLoadPortFullName(Object allocation) {
+		return getPortFullNameFromSlot(getLoadSlot(allocation));
+	}
+	
+	public static String getDischargePortName(Object allocation) {
+		return getPortNameFromSlot(getDischargeSlot(allocation));
+	}
+	
+	private static String getPortNameFromSlot(final Slot<?> slot) {
+		if (slot != null) {
+			if (slot.getPort() != null) {
+				final Port port = slot.getPort();
+				if (port.getShortName() != null && !port.getShortName().isEmpty()) {
+					return port.getShortName();
+				}
+				return port.getName();
+			}
+		}
+		return "";
+	}
+	
+	private static String getPortFullNameFromSlot(final Slot<?> slot) {
+		if (slot != null) {
+			if (slot.getPort() != null) {
+				final Port port = slot.getPort();
+				return port.getName();
+			}
+		}
+		return "";
+	}
+	
+	public static Port getLoadPort(Object allocation) {
+		return getPortFromSlot(getLoadSlot(allocation));
+	}
+	
+	public static Port getDischargePort(Object allocation) {
+		return getPortFromSlot(getDischargeSlot(allocation));
+	}
+	
+	private static Port getPortFromSlot(final Slot<?> slot) {
+		if (slot != null) {
+			return slot.getPort() != null ? slot.getPort() : null;
+		}
+		return null;
+	}
+	
+	public static Vessel getVesselFromAllocation(Object allocation) {
+		if (allocation instanceof CargoAllocation) {
+			final CargoAllocation cargoAllocation = (CargoAllocation) allocation;
+			return getVessel(cargoAllocation.getSequence());
+		}
+		return null;
+	}
+	
 }
