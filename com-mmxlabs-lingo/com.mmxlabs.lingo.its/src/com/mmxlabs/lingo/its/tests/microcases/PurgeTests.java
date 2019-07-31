@@ -85,7 +85,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability, 2) //
 				.build();
 
-		evaluateTest(null, null, scenarioRunner -> {
+		evaluatePurgeTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 			// Check spot index has been updated
@@ -281,7 +281,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 		LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
 				.withUserSettings(userSettings) //
 				.withOptimiserInjectorService(OptimiserInjectorServiceMaker.begin() //
-						.withModuleOverrideBindNamedInstance(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, SchedulerConstants.Key_SchedulePurges, boolean.class, Boolean.FALSE) //
+						.withModuleOverrideBindNamedInstance(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, SchedulerConstants.Key_SchedulePurges, boolean.class, Boolean.TRUE) //
 						.make()) //
 				.withThreadCount(1) //
 				.buildDefaultRunner();
