@@ -333,6 +333,9 @@ public class ScheduleModelUtils {
 	public static String getDischargePortName(Object allocation) {
 		return getPortNameFromSlot(getDischargeSlot(allocation));
 	}
+	public static String getDischargePortFullName(Object allocation) {
+		return getPortFullNameFromSlot(getDischargeSlot(allocation));
+	}
 	
 	private static String getPortNameFromSlot(final Slot<?> slot) {
 		if (slot != null) {
