@@ -83,8 +83,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -185,6 +183,7 @@ import com.mmxlabs.models.util.emfpath.EMFMultiPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.models.util.emfpath.IEMFPath;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
@@ -254,7 +253,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private final TimePeriodFilter monthFilter = new TimePeriodFilter();
 	private LocalDate earliest;
 	private LocalDate latest;
-
+	
 	private Action resetSortOrder;
 
 	private PromptToolbarEditor promptToolbarEditor;
@@ -263,6 +262,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private IPropertyChangeListener propertyChangeListener;
 	private final Set<String> filtersOpenContracts = new HashSet<>();
+	private IExtraFiltersProvider extraFiltersProvider;
 
 	public TradesWiringViewer(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation scenarioEditingLocation, final IActionBars actionBars) {
 		super(page, part, scenarioEditingLocation, actionBars);
@@ -272,6 +272,19 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				ScenarioModelUtil.getCommercialModel(scenarioModel), Activator.getDefault().getModelFactoryRegistry());
 		this.menuHelper = new CargoEditorMenuHelper(part.getSite().getShell(), scenarioEditingLocation, scenarioModel);
 		notesImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_NOTES);
+		
+		ServiceHelper.withOptionalServiceConsumer(IExtraFiltersProvider.class, p -> {
+			if (p == null) {
+				setExtraFiltersProvider(new DefaultExtraFiltersProvider());
+			} else {
+				setExtraFiltersProvider(p);
+			}
+		});
+		
+	}
+	
+	private void setExtraFiltersProvider(final IExtraFiltersProvider provider) {
+		this.extraFiltersProvider = provider;
 	}
 
 	@Override
@@ -472,10 +485,20 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 				});
 
+				addFilters();
+			}
+			
+			private void addFilters() {
 				addFilter(tradesFilter);
 				addFilter(tradesCargoFilter);
 				addFilter(shippedCargoFilter);
 				addFilter(monthFilter);
+				
+				if (extraFiltersProvider != null) {
+					for (final ViewerFilter vf : extraFiltersProvider.getExtraFilters()) {
+						addFilter(vf);
+					}
+				}
 			}
 
 			@Override
@@ -2158,6 +2181,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					tradesCargoFilter.option = CargoFilterOption.NONE;
 					shippedCargoFilter.option = ShippedCargoFilterOption.NONE;
 					monthFilter.type = TimeFilterType.NONE;
+					extraFiltersProvider.clear();
 					scenarioViewer.refresh(false);
 				}
 			};
@@ -2298,6 +2322,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			};
 
 			addActionToMenu(dmcaTimePeriod, menu);
+			
+			if (extraFiltersProvider != null) {
+				for (final DefaultMenuCreatorAction edmca : extraFiltersProvider.getExtraMenuActions(scenarioViewer)) {
+					addActionToMenu(edmca, menu);
+				}
+			}
+			
 			// TODO : Consider using TradesBasedFilterHandler!
 		}
 	}
