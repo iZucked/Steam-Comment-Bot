@@ -84,8 +84,6 @@ public class SlotNameUniquenessConstraint extends AbstractModelMultiConstraint {
 				// 1). We only generate  slot type!
 				// 2). Not easy to do all the tyes as0
 
-				// for (LoadSlot )
-
 				final Collection<Type> slotTypes = getSlotTypes(slot);
 				for (Type slotType : slotTypes) {
 					Set<String> bad = badNames.get(slotType);
@@ -99,13 +97,17 @@ public class SlotNameUniquenessConstraint extends AbstractModelMultiConstraint {
 						for (final EObject no : objects) {
 							if (no instanceof Slot) {
 								final Slot slot2 = (Slot) no;
-								if (getSlotTypes(slot2).contains(Type.LOAD) || getSlotTypes(slot2).contains(Type.DISCHARGE)) {
-									final String n = slot2.getName();
-									if (temp.contains(n)) {
-										bad.add(n);
-									}
-									temp.add(n);
+								/**
+								 * All slots should have unique name! Otherwise we can see some wiring glitches!
+								 * 
+								 * if (getSlotTypes(slot2).contains(Type.LOAD) || getSlotTypes(slot2).contains(Type.DISCHARGE)) {
+								 * 
+								 */
+								final String n = slot2.getName();
+								if (temp.contains(n)) {
+									bad.add(n);
 								}
+								temp.add(n);
 							}
 						}
 					}
