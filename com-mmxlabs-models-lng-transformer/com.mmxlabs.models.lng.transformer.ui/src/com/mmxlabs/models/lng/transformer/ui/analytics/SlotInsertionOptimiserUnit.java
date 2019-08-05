@@ -71,6 +71,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionEvaluator;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiser;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserInitialState;
+import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
@@ -191,12 +192,13 @@ public class SlotInsertionOptimiserUnit {
 		this.inputState = inputState;
 	}
 
-	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, @NonNull final IProgressMonitor monitor) {
-		return run(slotsToInsert, eventsToInsert, stage.getIterations(), monitor);
+	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, SlotInsertionOptimiserLogger logger, @NonNull final IProgressMonitor monitor) {
+		return run(slotsToInsert, eventsToInsert, stage.getIterations(), logger, monitor);
 	}
 
-	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, final int tries, @NonNull final IProgressMonitor monitor) {
+	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, final int tries, SlotInsertionOptimiserLogger logger, @NonNull final IProgressMonitor monitor) {
 		try {
+			logger.begin();
 
 			@NonNull
 			final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
@@ -356,6 +358,8 @@ public class SlotInsertionOptimiserUnit {
 			// Step 1: Exhaustive search of non-shipped pairs
 			try {
 				{
+					logger.beginStage(SlotInsertionOptimiserLogger.STAGE_NON_SHIPPED_PAIRS);
+					
 					for (final Pair<ISequenceElement, ISequenceElement> p : nonShippedPairs) {
 						final ISequenceElement buy = p.getFirst();
 						final ISequenceElement sell = p.getSecond();
@@ -376,10 +380,12 @@ public class SlotInsertionOptimiserUnit {
 						}));
 					}
 
+					logger.doneStage(SlotInsertionOptimiserLogger.STAGE_NON_SHIPPED_PAIRS);
 				}
 
 				// Step 2: full search
 				{
+					logger.beginStage(SlotInsertionOptimiserLogger.STAGE_FULL_SEARCH);
 					for (int tryNo = 0; tryNo < tries; ++tryNo) {
 						final int pTryNo = tryNo;
 
@@ -465,12 +471,15 @@ public class SlotInsertionOptimiserUnit {
 						e.printStackTrace();
 					}
 				}
+				logger.doneStage(SlotInsertionOptimiserLogger.STAGE_FULL_SEARCH);
 				if (monitor.isCanceled()) {
 					return null;
 				}
 				if (results.isEmpty()) {
 					throw new UserFeedbackException("No feasible solutions found.");
 				}
+				logger.beginStage(SlotInsertionOptimiserLogger.STAGE_PROCESS_SOLUTIONS);
+
 				// Reduce result to unique solutions
 				results = results.parallelStream().distinct().collect(Collectors.toList());
 
@@ -562,9 +571,12 @@ public class SlotInsertionOptimiserUnit {
 
 				solutions.add(0, new NonNullPair<ISequences, Map<String, Object>>(inputState.getBestSolution().getFirst(), new HashMap<>()));
 
+				logger.doneStage(SlotInsertionOptimiserLogger.STAGE_PROCESS_SOLUTIONS);
+
 				return new MultiStateResult(inputState.getBestSolution(), solutions);
 			} finally {
 				monitor.done();
+				logger.done();
 			}
 
 		} finally {

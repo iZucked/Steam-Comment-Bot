@@ -7,12 +7,11 @@ package com.mmxlabs.models.lng.transformer.ui.analytics;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalLong;
-import java.util.Set;
+import java.util.function.Consumer;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -68,13 +67,12 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
-import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGSchedulerInsertSlotJobRunner {
@@ -117,6 +115,12 @@ public class LNGSchedulerInsertSlotJobRunner {
 	public LNGSchedulerInsertSlotJobRunner(@Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider, final EditingDomain editingDomain,
 			final UserSettings userSettings, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents, @Nullable ExtraDataProvider extraDataProvider,
 			@Nullable TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider) {
+		this(scenarioInstance, scenarioDataProvider, editingDomain, userSettings, targetSlots, targetEvents, extraDataProvider, initialSolutionProvider, null);
+	}
+	
+	public LNGSchedulerInsertSlotJobRunner(@Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider, final EditingDomain editingDomain,
+			final UserSettings userSettings, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents, @Nullable ExtraDataProvider extraDataProvider,
+			@Nullable TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider, @Nullable Consumer<LNGOptimisationBuilder> builderCustomiser) {
 
 		this.originalScenarioDataProvider = scenarioDataProvider;
 		this.originalEditingDomain = editingDomain;
@@ -153,14 +157,18 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 		// TODO: Only disable caches if we do a break-even (caches *should* be ok otherwise?)
 		final String[] hints = isBreakEven ? hint_with_breakeven : hint_without_breakeven;
-		final LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
+		final LNGOptimisationBuilder builder = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
 				.withExtraDataProvider(extraDataProvider) //
 				.withOptimisationPlan(plan) //
 				.withOptimiserInjectorService(extraService) //
 				.withOptimiseHint() //
 				.withHints(hints) //
-				.buildDefaultRunner();
+		;
 
+		if (builderCustomiser != null) {
+			builderCustomiser.accept(builder);
+		}
+		final LNGOptimisationRunnerBuilder runner = builder.buildDefaultRunner();
 		scenarioRunner = runner.getScenarioRunner();
 
 		if (userSettings.isSetPeriodStartDate() || userSettings.isSetPeriodEnd()) {
@@ -288,12 +296,13 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 	public SlotInsertionOptions doRunJob(final IProgressMonitor progressMonitor) {
 		final long start = System.currentTimeMillis();
+		SlotInsertionOptimiserLogger logger = new SlotInsertionOptimiserLogger();
 		final SubMonitor subMonitor = SubMonitor.convert(progressMonitor, "Inserting option(s)", 100);
 		try {
 			final Schedule schedule = ScenarioModelUtil.getScheduleModel(scenarioToOptimiserBridge.getOptimiserScenario()).getSchedule();
 			final long targetPNL = performBreakEven ? ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule) : 0L;
 
-			final IMultiStateResult results = runInsertion(subMonitor.split(90));
+			final IMultiStateResult results = runInsertion(logger, subMonitor.split(90));
 			if (results == null) {
 				System.out.println("Found no solutions");
 				return null;
@@ -309,6 +318,8 @@ public class LNGSchedulerInsertSlotJobRunner {
 				return null;
 			}
 
+			logger.setSolutionsFound(solutions.size());
+
 			return exportSolutions(results, targetPNL, subMonitor.split(10));
 		} finally {
 			SubMonitor.done(progressMonitor);
@@ -319,12 +330,12 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 	}
 
-	public IMultiStateResult runInsertion(final IProgressMonitor progressMonitor) {
+	public IMultiStateResult runInsertion(SlotInsertionOptimiserLogger logger, final IProgressMonitor progressMonitor) {
 
 		final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), insertionStage,
 				scenarioRunner.getExecutorService(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
 
-		return slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, progressMonitor);
+		return slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, logger, progressMonitor);
 	}
 
 	public SlotInsertionOptions exportSolutions(final @NonNull IMultiStateResult results, final long targetPNL, final @NonNull IProgressMonitor monitor) {

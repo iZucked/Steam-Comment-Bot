@@ -7,12 +7,13 @@ package com.mmxlabs.models.lng.transformer.ui.internal;
 import java.util.Collection;
 
 import javax.inject.Inject;
-
+import org.eclipse.osgi.framework.console.CommandProvider;
 import org.eclipse.ui.progress.IProgressConstants2;
 import org.ops4j.peaberry.Export;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.eclipse.EclipseRegistry;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.google.inject.Guice;
@@ -21,6 +22,8 @@ import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadessOptioniserRunnerConsoleCommand;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadessOptimiserRunnerConsoleCommand;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.impl.ParameterModesExtensionModule;
 import com.mmxlabs.models.ui.validation.ValidationPlugin;
@@ -100,6 +103,12 @@ public class Activator extends ValidationPlugin {
 	public Activator() {
 	}
 
+	private HeadessOptioniserRunnerConsoleCommand optioniserConsole = new HeadessOptioniserRunnerConsoleCommand();
+	private HeadessOptimiserRunnerConsoleCommand optimiserConsole = new HeadessOptimiserRunnerConsoleCommand();
+
+	private ServiceRegistration<CommandProvider> optioniserConsoleService;
+	private ServiceRegistration<CommandProvider> optimiserConsoleService;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -125,6 +134,9 @@ public class Activator extends ValidationPlugin {
 		// Bind our module together with the hooks to the eclipse registry to get plugin extensions.
 		final Injector inj = Guice.createInjector(Peaberry.osgiModule(context, EclipseRegistry.eclipseRegistry()), new ParameterModesExtensionModule());
 		inj.injectMembers(this);
+
+		// optioniserConsoleService = context.registerService(CommandProvider.class, optioniserConsole, null);
+		// optimiserConsoleService = context.registerService(CommandProvider.class, optimiserConsole, null);
 	}
 
 	/*
@@ -134,7 +146,14 @@ public class Activator extends ValidationPlugin {
 	 */
 	@Override
 	public void stop(final BundleContext context) throws Exception {
-
+		if (optioniserConsoleService != null) {
+			optioniserConsoleService.unregister();
+			optioniserConsoleService = null;
+		}
+		if (optimiserConsoleService != null) {
+			optimiserConsoleService.unregister();
+			optimiserConsoleService = null;
+		}
 		{
 			final IScenarioServiceSelectionProvider service = scenarioServiceSelectionProviderTracker.getService();
 			if (service != null) {

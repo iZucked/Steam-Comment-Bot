@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.SlotInsertionOptimiserUni
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 
 public class AbstractSlotInsertionTests {
 
@@ -83,7 +84,7 @@ public class AbstractSlotInsertionTests {
 			runner.setIteration(iterations);
 			runner.prepare();
 
-			final IMultiStateResult results = runner.runInsertion(new NullProgressMonitor());
+			final IMultiStateResult results = runner.runInsertion(new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 
 			solutionChecker.accept(runner.getLNGScenarioRunner(), results);
 		} finally {
