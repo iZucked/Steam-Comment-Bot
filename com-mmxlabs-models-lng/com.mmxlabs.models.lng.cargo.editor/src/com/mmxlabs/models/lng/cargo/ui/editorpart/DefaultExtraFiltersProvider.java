@@ -11,11 +11,11 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorActi
 public class DefaultExtraFiltersProvider implements IExtraFiltersProvider{
 	
 	public List<ViewerFilter> getExtraFilters(){
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 	
 	public List<DefaultMenuCreatorAction> getExtraMenuActions(final StructuredViewer viewer){
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 	
 	public void clear() {
