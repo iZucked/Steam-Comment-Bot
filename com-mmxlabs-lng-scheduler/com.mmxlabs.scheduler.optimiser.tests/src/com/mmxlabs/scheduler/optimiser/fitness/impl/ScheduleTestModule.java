@@ -143,6 +143,7 @@ public class ScheduleTestModule extends AbstractModule {
 
 		bind(int.class).annotatedWith(Names.named(SchedulerConstants.CHARTER_LENGTH_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);
 		bind(int.class).annotatedWith(Names.named(SchedulerConstants.COOLDOWN_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_SchedulePurges)).toInstance(Boolean.FALSE);
 
 		bind(IPanamaBookingsProvider.class).toInstance(Mockito.mock(IPanamaBookingsProvider.class));
 
