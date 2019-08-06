@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getCargoCV <em>Cargo CV</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isSchedulePurge <em>Schedule Purge</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isDESPurchase <em>DES Purchase</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom <em>Transfer From</em>}</li>
@@ -81,6 +82,33 @@ public interface LoadSlot extends Slot<PurchaseContract> {
 	 * @generated
 	 */
 	boolean isSetCargoCV();
+
+	/**
+	 * Returns the value of the '<em><b>Schedule Purge</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Schedule Purge</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Schedule Purge</em>' attribute.
+	 * @see #setSchedulePurge(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot_SchedulePurge()
+	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/featureEnablement feature='purge'"
+	 * @generated
+	 */
+	boolean isSchedulePurge();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#isSchedulePurge <em>Schedule Purge</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Schedule Purge</em>' attribute.
+	 * @see #isSchedulePurge()
+	 * @generated
+	 */
+	void setSchedulePurge(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Arrive Cold</b></em>' attribute.

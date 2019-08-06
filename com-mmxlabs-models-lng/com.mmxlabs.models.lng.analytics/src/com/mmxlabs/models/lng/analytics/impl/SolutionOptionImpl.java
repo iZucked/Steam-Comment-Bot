@@ -90,6 +90,7 @@ public class SolutionOptionImpl extends EObjectImpl implements SolutionOption {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ChangeDescription getChangeDescription() {
 		return changeDescription;
 	}
@@ -114,6 +115,7 @@ public class SolutionOptionImpl extends EObjectImpl implements SolutionOption {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setChangeDescription(ChangeDescription newChangeDescription) {
 		if (newChangeDescription != changeDescription) {
 			NotificationChain msgs = null;
@@ -133,6 +135,7 @@ public class SolutionOptionImpl extends EObjectImpl implements SolutionOption {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScheduleSpecification getScheduleSpecification() {
 		return scheduleSpecification;
 	}
@@ -157,6 +160,7 @@ public class SolutionOptionImpl extends EObjectImpl implements SolutionOption {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setScheduleSpecification(ScheduleSpecification newScheduleSpecification) {
 		if (newScheduleSpecification != scheduleSpecification) {
 			NotificationChain msgs = null;
@@ -176,6 +180,7 @@ public class SolutionOptionImpl extends EObjectImpl implements SolutionOption {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScheduleModel getScheduleModel() {
 		return scheduleModel;
 	}
@@ -200,6 +205,7 @@ public class SolutionOptionImpl extends EObjectImpl implements SolutionOption {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setScheduleModel(ScheduleModel newScheduleModel) {
 		if (newScheduleModel != scheduleModel) {
 			NotificationChain msgs = null;

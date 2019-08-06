@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 
+import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import java.util.Collection;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -28,6 +29,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getBuyOptions <em>Buy Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getSellOptions <em>Sell Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getVesselEventOptions <em>Vessel Event Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getShipping <em>Shipping</em>}</li>
  * </ul>
  *
@@ -53,6 +55,16 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 	 * @ordered
 	 */
 	protected EList<SellOption> sellOptions;
+
+	/**
+	 * The cached value of the '{@link #getVesselEventOptions() <em>Vessel Event Options</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselEventOptions()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselEventOption> vesselEventOptions;
 
 	/**
 	 * The cached value of the '{@link #getShipping() <em>Shipping</em>}' reference list.
@@ -88,6 +100,7 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<BuyOption> getBuyOptions() {
 		if (buyOptions == null) {
 			buyOptions = new EObjectResolvingEList<BuyOption>(BuyOption.class, this, AnalyticsPackage.PARTIAL_CASE_ROW__BUY_OPTIONS);
@@ -100,6 +113,7 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<SellOption> getSellOptions() {
 		if (sellOptions == null) {
 			sellOptions = new EObjectResolvingEList<SellOption>(SellOption.class, this, AnalyticsPackage.PARTIAL_CASE_ROW__SELL_OPTIONS);
@@ -112,6 +126,20 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EList<VesselEventOption> getVesselEventOptions() {
+		if (vesselEventOptions == null) {
+			vesselEventOptions = new EObjectResolvingEList<VesselEventOption>(VesselEventOption.class, this, AnalyticsPackage.PARTIAL_CASE_ROW__VESSEL_EVENT_OPTIONS);
+		}
+		return vesselEventOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<ShippingOption> getShipping() {
 		if (shipping == null) {
 			shipping = new EObjectResolvingEList<ShippingOption>(ShippingOption.class, this, AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING);
@@ -131,6 +159,8 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 				return getBuyOptions();
 			case AnalyticsPackage.PARTIAL_CASE_ROW__SELL_OPTIONS:
 				return getSellOptions();
+			case AnalyticsPackage.PARTIAL_CASE_ROW__VESSEL_EVENT_OPTIONS:
+				return getVesselEventOptions();
 			case AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING:
 				return getShipping();
 		}
@@ -154,6 +184,10 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 				getSellOptions().clear();
 				getSellOptions().addAll((Collection<? extends SellOption>)newValue);
 				return;
+			case AnalyticsPackage.PARTIAL_CASE_ROW__VESSEL_EVENT_OPTIONS:
+				getVesselEventOptions().clear();
+				getVesselEventOptions().addAll((Collection<? extends VesselEventOption>)newValue);
+				return;
 			case AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING:
 				getShipping().clear();
 				getShipping().addAll((Collection<? extends ShippingOption>)newValue);
@@ -176,6 +210,9 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 			case AnalyticsPackage.PARTIAL_CASE_ROW__SELL_OPTIONS:
 				getSellOptions().clear();
 				return;
+			case AnalyticsPackage.PARTIAL_CASE_ROW__VESSEL_EVENT_OPTIONS:
+				getVesselEventOptions().clear();
+				return;
 			case AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING:
 				getShipping().clear();
 				return;
@@ -195,6 +232,8 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 				return buyOptions != null && !buyOptions.isEmpty();
 			case AnalyticsPackage.PARTIAL_CASE_ROW__SELL_OPTIONS:
 				return sellOptions != null && !sellOptions.isEmpty();
+			case AnalyticsPackage.PARTIAL_CASE_ROW__VESSEL_EVENT_OPTIONS:
+				return vesselEventOptions != null && !vesselEventOptions.isEmpty();
 			case AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING:
 				return shipping != null && !shipping.isEmpty();
 		}

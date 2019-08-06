@@ -26,11 +26,11 @@ import org.apache.shiro.SecurityUtils;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -1269,7 +1269,7 @@ public class CargoEditorMenuHelper {
 						ZonedDateTime cal = source.getWindowStartWithSlotOrPortTime();
 						// Take into account travel time
 						if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
-							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel());
+							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel(), scenarioEditingLocation.getScenarioDataProvider());
 							cal = cal.plusHours(travelTime);
 							cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());
 						} else if (!loadSlot.isDESPurchase() && !dischargeSlot.isFOBSale()) {
@@ -1285,7 +1285,7 @@ public class CargoEditorMenuHelper {
 									assignedVessel = ((CharterInMarketOverride) vesselAssignmentType).getCharterInMarket().getVessel();
 								}
 							}
-							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
+							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel, scenarioEditingLocation.getScenarioDataProvider());
 							if (travelTime == Integer.MAX_VALUE) {
 								final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
 										dischargeSlot.getPort().getName(), travelTime);
@@ -1346,7 +1346,7 @@ public class CargoEditorMenuHelper {
 									assignedVessel = ((CharterInMarketOverride) vesselAssignmentType).getCharterInMarket().getVessel();
 								}
 							}
-							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
+							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel,scenarioEditingLocation.getScenarioDataProvider());
 							if (travelTime == Integer.MAX_VALUE) {
 								final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
 										dischargeSlot.getPort().getName(), travelTime);
@@ -1406,17 +1406,17 @@ public class CargoEditorMenuHelper {
 
 		}
 	}
+	
+	public static String getKeyForDate(final LocalDate date) {
+		final String key = String.format("%04d-%02d", date.getYear(), date.getMonthValue());
+		return key;
+	}
 
 	class CreateSlotAction extends Action {
 
 		private final Collection<Slot<?>> sourceSlots;
 		private final SpotMarket market;
 		private final boolean isDesPurchaseOrFobSale;
-
-		private String getKeyForDate(final LocalDate date) {
-			final String key = String.format("%04d-%02d", date.getYear(), date.getMonthValue());
-			return key;
-		}
 
 		public CreateSlotAction(final String name, final Collection<Slot<?>> sourceSlots, final SpotMarket market, final boolean isDesPurchaseOrFobSale) {
 			super(name);
@@ -1451,62 +1451,12 @@ public class CargoEditorMenuHelper {
 					loadSlot = (LoadSlot) source;
 					if (market == null) {
 						dischargeSlot = cec.createNewDischarge(setCommands, cargoModel, isDesPurchaseOrFobSale);
-						dischargeSlot.setWindowStart(source.getWindowStart());
+						dischargeSlot.setWindowStart(loadSlot.getWindowStart());
 					} else {
 						dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, market);
-						// Get start of month and create full sized window
-						ZonedDateTime cal = source.getWindowStartWithSlotOrPortTime();
-						// Take into account travel time
-						if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
-							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel());
-							cal = cal.plusHours(travelTime);
-							cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());
-						} else if (!loadSlot.isDESPurchase() && !dischargeSlot.isFOBSale()) {
-
-							Vessel assignedVessel = null;
-							if (loadSlot.getCargo() != null) {
-								final VesselAssignmentType vesselAssignmentType = loadSlot.getCargo().getVesselAssignmentType();
-								if (vesselAssignmentType instanceof VesselAvailability) {
-									assignedVessel = ((VesselAvailability) vesselAssignmentType).getVessel();
-								} else if (vesselAssignmentType instanceof CharterInMarket) {
-									assignedVessel = ((CharterInMarket) vesselAssignmentType).getVessel();
-								} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
-									assignedVessel = ((CharterInMarketOverride) vesselAssignmentType).getCharterInMarket().getVessel();
-								}
-							}
-							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
-							if (travelTime == Integer.MAX_VALUE) {
-								final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
-										dischargeSlot.getPort().getName(), travelTime);
-								throw new RuntimeException(message);
-							}
-							cal = cal.plusHours(travelTime);
-							cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());
-						}
-
-						// Set back to start of month
-						cal = cal.withDayOfMonth(1).withHour(0);
-						final LocalDate dishargeCal = cal.toLocalDate();
-						final String yearMonthString = getKeyForDate(dishargeCal);
-						dischargeSlot.setWindowStart(dishargeCal);
-						dischargeSlot.setWindowStartTime(0);
-
-						dischargeSlot.setWindowSize(1);
-						dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-
-						final String idPrefix = market.getName() + "-" + yearMonthString + "-";
-						int i = 0;
-						String id = idPrefix + (i++);
-						while (usedDischargeIDStrings.contains(id)) {
-							id = idPrefix + (i++);
-						}
-						dischargeSlot.setName(id);
-						usedDischargeIDStrings.add(id);
-
+						makeUpDischargeSlot(usedDischargeIDStrings, loadSlot, dischargeSlot, market, scenarioEditingLocation.getScenarioDataProvider(), getAssignedVessel(loadSlot));
 					}
-					if (dischargeSlot.isFOBSale()) {
-						dischargeSlot.setPort(source.getPort());
-					}
+					
 				} else {
 					dischargeSlot = (DischargeSlot) source;
 					if (market == null) {
@@ -1514,54 +1464,7 @@ public class CargoEditorMenuHelper {
 						loadSlot.setWindowStart(source.getWindowStart());
 					} else {
 						loadSlot = cec.createNewSpotLoad(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
-						// Get start of month and create full sized window
-						ZonedDateTime cal = source.getWindowStartWithSlotOrPortTime();
-						// Take into account travel time
-						if (!dischargeSlot.isFOBSale() && !loadSlot.isDESPurchase()) {
-
-							Vessel assignedVessel = null;
-							if (loadSlot.getCargo() != null) {
-								final VesselAssignmentType vesselAssignmentType = loadSlot.getCargo().getVesselAssignmentType();
-								if (vesselAssignmentType instanceof VesselAvailability) {
-									assignedVessel = ((VesselAvailability) vesselAssignmentType).getVessel();
-								} else if (vesselAssignmentType instanceof CharterInMarket) {
-									assignedVessel = ((CharterInMarket) vesselAssignmentType).getVessel();
-								} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
-									assignedVessel = ((CharterInMarketOverride) vesselAssignmentType).getCharterInMarket().getVessel();
-								}
-							}
-							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
-							if (travelTime == Integer.MAX_VALUE) {
-								final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
-										dischargeSlot.getPort().getName(), travelTime);
-								throw new RuntimeException(message);
-							}
-							cal = cal.minusHours(travelTime);
-							cal = cal.minusHours(loadSlot.getSlotOrDelegateDuration());
-						}
-
-						// Set back to start of month
-						cal = cal.withDayOfMonth(1).withHour(0);
-						final LocalDate loadCal = cal.toLocalDate();
-						final String yearMonthString = getKeyForDate(loadCal);
-						loadSlot.setWindowStart(loadCal);
-						loadSlot.setWindowStartTime(0);
-						// Subtract 1 hour to limit within calendar month
-						loadSlot.setWindowSize(1);
-						loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-
-						final String idPrefix = market.getName() + "-" + yearMonthString + "-";
-						int i = 0;
-						String id = idPrefix + (i++);
-						while (usedLoadIDStrings.contains(id)) {
-							id = idPrefix + (i++);
-						}
-
-						loadSlot.setName(id);
-						usedLoadIDStrings.add(id);
-					}
-					if (loadSlot.isDESPurchase()) {
-						loadSlot.setPort(source.getPort());
+						makeUpLoadSlot(usedLoadIDStrings, loadSlot, dischargeSlot, market, scenarioEditingLocation.getScenarioDataProvider(), getAssignedVessel(loadSlot));
 					}
 				}
 				cec.runWiringUpdate(setCommands, deleteObjects, loadSlot, dischargeSlot);
@@ -1583,6 +1486,106 @@ public class CargoEditorMenuHelper {
 					cec.verifyCargoModel(ScenarioModelUtil.getCargoModel((LNGScenarioModel) scenarioEditingLocation.getRootObject()));
 				}
 			}
+		}
+
+		private Vessel getAssignedVessel(final LoadSlot loadSlot) {
+			Vessel assignedVessel = null;
+			if (loadSlot.getCargo() != null) {
+				final VesselAssignmentType vesselAssignmentType = loadSlot.getCargo().getVesselAssignmentType();
+				if (vesselAssignmentType instanceof VesselAvailability) {
+					assignedVessel = ((VesselAvailability) vesselAssignmentType).getVessel();
+				} else if (vesselAssignmentType instanceof CharterInMarket) {
+					assignedVessel = ((CharterInMarket) vesselAssignmentType).getVessel();
+				} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
+					assignedVessel = ((CharterInMarketOverride) vesselAssignmentType).getCharterInMarket().getVessel();
+				}
+			}
+			return assignedVessel;
+		}
+	}
+	
+	public static void makeUpLoadSlot(final Set<String> usedLoadIDStrings, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, 
+			final SpotMarket market, final IScenarioDataProvider sdp, final Vessel assignedVessel) {
+		// Get start of month and create full sized window
+		ZonedDateTime cal = dischargeSlot.getWindowStartWithSlotOrPortTime();
+		// Take into account travel time
+		if (!dischargeSlot.isFOBSale() && !loadSlot.isDESPurchase()) {
+
+			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel, sdp);
+			if (travelTime == Integer.MAX_VALUE) {
+				final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
+						dischargeSlot.getPort().getName(), travelTime);
+				throw new RuntimeException(message);
+			}
+			cal = cal.minusHours(travelTime);
+			cal = cal.minusHours(loadSlot.getSlotOrDelegateDuration());
+		}
+
+		// Set back to start of month
+		cal = cal.withDayOfMonth(1).withHour(0);
+		final LocalDate loadCal = cal.toLocalDate();
+		final String yearMonthString = getKeyForDate(loadCal);
+		loadSlot.setWindowStart(loadCal);
+		loadSlot.setWindowStartTime(0);
+		// Subtract 1 hour to limit within calendar month
+		loadSlot.setWindowSize(1);
+		loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+
+		final String idPrefix = market.getName() + "-" + yearMonthString + "-";
+		int i = 0;
+		String id = idPrefix + (i++);
+		while (usedLoadIDStrings.contains(id)) {
+			id = idPrefix + (i++);
+		}
+
+		loadSlot.setName(id);
+		usedLoadIDStrings.add(id);
+		if (loadSlot.isDESPurchase()) {
+			loadSlot.setPort(dischargeSlot.getPort());
+		}
+	}
+
+	public static void makeUpDischargeSlot(final Set<String> usedDischargeIDStrings, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, 
+			final SpotMarket market, final IScenarioDataProvider sdp, final Vessel assignedVessel) {
+		// Get start of month and create full sized window
+		ZonedDateTime cal = loadSlot.getWindowStartWithSlotOrPortTime();
+		// Take into account travel time
+		if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
+			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel(),sdp);
+			cal = cal.plusHours(travelTime);
+			cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());
+		} else if (!loadSlot.isDESPurchase() && !dischargeSlot.isFOBSale()) {
+
+			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel,sdp);
+			if (travelTime == Integer.MAX_VALUE) {
+				final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
+						dischargeSlot.getPort().getName(), travelTime);
+				throw new RuntimeException(message);
+			}
+			cal = cal.plusHours(travelTime);
+			cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());
+		}
+
+		// Set back to start of month
+		cal = cal.withDayOfMonth(1).withHour(0);
+		final LocalDate dishargeCal = cal.toLocalDate();
+		final String yearMonthString = getKeyForDate(dishargeCal);
+		dischargeSlot.setWindowStart(dishargeCal);
+		dischargeSlot.setWindowStartTime(0);
+
+		dischargeSlot.setWindowSize(1);
+		dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+
+		final String idPrefix = market.getName() + "-" + yearMonthString + "-";
+		int i = 0;
+		String id = idPrefix + (i++);
+		while (usedDischargeIDStrings.contains(id)) {
+			id = idPrefix + (i++);
+		}
+		dischargeSlot.setName(id);
+		usedDischargeIDStrings.add(id);
+		if (dischargeSlot.isFOBSale()) {
+			dischargeSlot.setPort(loadSlot.getPort());
 		}
 	}
 
@@ -1808,14 +1811,13 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	private int getTravelTime(final Port from, final Port to, final @Nullable Vessel vessel) {
+	public static int getTravelTime(final Port from, final Port to, final @Nullable Vessel vessel, final @NonNull IScenarioDataProvider scenarioDataProvider) {
 
 		double maxSpeed = 19.0;
 		if (vessel != null) {
 			maxSpeed = vessel.getVesselOrDelegateMaxSpeed();
 		}
-
-		final IScenarioDataProvider scenarioDataProvider = scenarioEditingLocation.getScenarioDataProvider();
+		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(scenarioDataProvider);
 		for (final Route route : scenarioModel.getReferenceModel().getPortModel().getRoutes()) {
 			if (route.getRouteOption() == RouteOption.DIRECT) {
 				return TravelTimeUtils.getTimeForRoute(vessel, maxSpeed, route, from, to,

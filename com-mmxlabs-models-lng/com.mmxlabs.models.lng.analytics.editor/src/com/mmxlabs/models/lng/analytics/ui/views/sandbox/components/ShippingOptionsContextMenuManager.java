@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -20,6 +21,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridItem;
+import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.widgets.Menu;
@@ -66,22 +68,26 @@ public class ShippingOptionsContextMenuManager implements MenuDetectListener {
 				item.dispose();
 			}
 		}
+		
+		if (scenarioEditingLocation.isLocked()) {
+			return;
+		}
+		
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {
 			mgr.add(new RunnableAction("Delete option(s)", () -> {
-				final Collection<EObject> c = new LinkedList<>();
+				final Collection<EObject> c = new LinkedHashSet<>();
 				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
 				final CompoundCommand compoundCommand = new CompoundCommand("Delete shipping option");
-				compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c));
 				if (abstractAnalysisModel instanceof OptionAnalysisModel) {
 					final Collection<EObject> linkedResults = ResultsSetDeletionHelper.getRelatedResultSets(c, (OptionAnalysisModel) abstractAnalysisModel);
-					compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c));
-					if (!linkedResults.isEmpty()) {
-						compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), linkedResults));
-					}
+					c.addAll(linkedResults);
 				}
-				scenarioEditingLocation.getDefaultCommandHandler().handleCommand(compoundCommand, null, null);
+				if (!c.isEmpty()) {
+					compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c));
+					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(compoundCommand, null, null);
+				}
 			}));
 		}
 

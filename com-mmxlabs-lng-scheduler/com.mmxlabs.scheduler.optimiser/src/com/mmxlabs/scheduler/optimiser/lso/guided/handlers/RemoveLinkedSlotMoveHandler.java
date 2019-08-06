@@ -106,7 +106,7 @@ public class RemoveLinkedSlotMoveHandler implements IGuidedMoveHandler {
 				}
 			});
 
-			return new Pair<IMove, Hints>(builder.create(), hints);
+			return Pair.of(builder.create(), hints);
 		}
 
 		return null;

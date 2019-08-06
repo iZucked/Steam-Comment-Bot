@@ -27,7 +27,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/featureOverrideByContainer"
  * @generated
  */
 public interface VesselStateAttributes extends MMXObject {

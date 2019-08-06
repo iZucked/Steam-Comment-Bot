@@ -73,6 +73,7 @@ public class VesselBasedOnReferenceInlineEditor extends ReferenceInlineEditor {
 						copyFeature(cmd, reference, vessel, FleetPackage.Literals.VESSEL__FILL_CAPACITY);
 						copyFeature(cmd, reference, vessel, FleetPackage.Literals.VESSEL__SCNT);
 						copyFeature(cmd, reference, vessel, FleetPackage.Literals.VESSEL__WARMING_TIME);
+						copyFeature(cmd, reference, vessel, FleetPackage.Literals.VESSEL__PURGE_TIME);
 						copyFeature(cmd, reference, vessel, FleetPackage.Literals.VESSEL__COOLING_VOLUME);
 						copyFeature(cmd, reference, vessel, FleetPackage.Literals.VESSEL__HAS_RELIQ_CAPABILITY);
 						copyFeature(cmd, reference, vessel, FleetPackage.Literals.VESSEL__MAX_SPEED);

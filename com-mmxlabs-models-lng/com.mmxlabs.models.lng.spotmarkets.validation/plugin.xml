@@ -22,6 +22,22 @@
          <constraints
                categories=" com.mmxlabs.models.lng.spotmarkets.validation.base">
             <constraint
+                  class="com.mmxlabs.models.lng.spotmarkets.validation.SpotMarketsModelConstraint"
+                  id="com.mmxlabs.models.lng.spotmarkets.validation.SpotMarketsModelConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Spot Markets Model Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="SpotMarketsModel">
+               </target>
+            </constraint>   
+            <constraint
                   class="com.mmxlabs.models.lng.spotmarkets.validation.SpotMarketConstraint"
                   id="com.mmxlabs.models.lng.spotmarkets.validation.SpotMarketConstraint"
                   isEnabledByDefault="true"

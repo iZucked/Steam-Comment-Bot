@@ -98,7 +98,8 @@ public class GeneratedCharterOutVesselEventPortSlot implements IGeneratedCharter
 			return true;
 		}
 		if (obj instanceof GeneratedCharterOutVesselEventPortSlot) {
-			return Objects.equals(event, ((GeneratedCharterOutVesselEventPortSlot) obj).getVesselEvent());
+			return Objects.equals(id, ((GeneratedCharterOutVesselEventPortSlot) obj).id) && 
+			 Objects.equals(event, ((GeneratedCharterOutVesselEventPortSlot) obj).getVesselEvent());
 		}
 		return false;
 	}

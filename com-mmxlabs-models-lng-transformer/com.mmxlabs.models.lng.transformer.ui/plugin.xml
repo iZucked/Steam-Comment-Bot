@@ -211,6 +211,13 @@
                   type="com.mmxlabs.jobmanager.jobs.IJobControl">
             </adapter>
          </factory>         
+         <factory
+               adaptableType="com.mmxlabs.models.lng.transformer.ui.analytics.LNGSandboxJobDescriptor"
+               class="com.mmxlabs.models.lng.transformer.ui.adapterfactories.LNGJobControlAdapterFactory">
+            <adapter
+                  type="com.mmxlabs.jobmanager.jobs.IJobControl">
+            </adapter>
+         </factory>         
       </extension>
    
       <extension
@@ -411,7 +418,11 @@
          <PluginXMLEnablement
                feature="charter-length"
                plugin.xml="charter-length.plugin.xml">
-         </PluginXMLEnablement>         
+         </PluginXMLEnablement>    
+         <PluginXMLEnablement
+               feature="mtm-action"
+               plugin.xml="mtm-action.plugin.xml">
+         </PluginXMLEnablement>      
       </extension>
       <extension
             point="org.eclipse.ui.startup">

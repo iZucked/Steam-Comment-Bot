@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IResourceElementConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -28,7 +29,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
-public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstraintChecker {
+public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstraintChecker, IResourceElementConstraintChecker {
 
 	@Inject
 	@NonNull
@@ -119,6 +120,7 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 		return checkElement(first, resource) && checkElement(second, resource);
 	}
 
+	@Override
 	public boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource) {
 		// Skip these element types
 		if (portTypeProvider.getPortType(element) == PortType.Start) {

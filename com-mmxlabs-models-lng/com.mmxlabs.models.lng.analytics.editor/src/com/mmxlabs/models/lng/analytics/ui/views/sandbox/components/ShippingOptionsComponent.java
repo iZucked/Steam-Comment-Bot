@@ -21,6 +21,7 @@ import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -32,11 +33,12 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.FleetShippingOption;
-import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
+import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
-import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.ShippingOptionsContentProvider;
@@ -44,6 +46,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 
@@ -65,7 +68,7 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 				final ShippingOptionsDropTargetListener listener = new ShippingOptionsDropTargetListener(scenarioEditingLocation, shippingOptionsViewer);
 				inputWants.add(model -> listener.setModel(model));
 				// Control control = getControl();
-				final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
+				final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_LINK);
 				dropTarget.setTransfer(types);
 				dropTarget.addDropListener(listener);
 			}
@@ -75,12 +78,7 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 			addShipping.setImage(image_grey_add);
 
 			addShipping.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.BOTTOM).grab(true, false).create());
-			addShipping.addMouseTrackListener(new MouseTrackListener() {
-
-				@Override
-				public void mouseHover(final MouseEvent e) {
-
-				}
+			addShipping.addMouseTrackListener(new MouseTrackAdapter() {
 
 				@Override
 				public void mouseExit(final MouseEvent e) {
@@ -96,16 +94,28 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 			addShipping.addMouseListener(new MouseListener() {
 
 				LocalMenuHelper helper = new LocalMenuHelper(addShipping.getParent());
-				{
-					helper.addAction(new RunnableAction("Nomination", () -> {
-						final NominatedShippingOption opt = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
 
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-								modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+				void buildMenu() {
+					boolean portfolioMode = false;
+					{
+						AbstractAnalysisModel abstractAnalysisModel = modelProvider.get();
+						if (abstractAnalysisModel instanceof OptionAnalysisModel) {
+							OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel) abstractAnalysisModel;
+							portfolioMode = optionAnalysisModel.getBaseCase().isKeepExistingScenario();
+						}
 
-						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-					}));
+					}
+					if (!portfolioMode) {
+						helper.addAction(new RunnableAction("Nomination", () -> {
+							final NominatedShippingOption opt = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
+
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+									modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+
+							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+						}));
+					}
 					helper.addAction(new RunnableAction("Round trip", () -> {
 						final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 
@@ -115,20 +125,34 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					}));
-					helper.addAction(new RunnableAction("Availability", () -> {
-						final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createOptionalAvailabilityShippingOption();
-						AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-								modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
-
-						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-					}));
-					if (true) {
-						helper.addAction(new RunnableAction("Full Availability", () -> {
-							final NewVesselAvailability opt = AnalyticsFactory.eINSTANCE.createNewVesselAvailability();
-							opt.setVesselAvailability(CargoFactory.eINSTANCE.createVesselAvailability());
+					if (!portfolioMode) {
+						helper.addAction(new RunnableAction("Simple Charter", () -> {
+							final SimpleVesselCharterOption opt = AnalyticsFactory.eINSTANCE.createOptionalSimpleVesselCharterOption();
 							AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+									modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+
+							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+						}));
+						if (true) {
+							helper.addAction(new RunnableAction("Full Charter", () -> {
+								final FullVesselCharterOption opt = AnalyticsFactory.eINSTANCE.createFullVesselCharterOption();
+								opt.setVesselCharter(CargoFactory.eINSTANCE.createVesselAvailability());
+								AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
+								scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+										AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+										modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+
+								DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+							}));
+						}
+					}
+					if (portfolioMode) {
+						helper.addAction(new RunnableAction("Existing Charter", () -> {
+							final ExistingVesselCharterOption opt = AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption();
+							// opt.setVesselAvailability(CargoFactory.eINSTANCE.createVesselAvailability());
+							// AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 									AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
 									modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
@@ -146,6 +170,8 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 				@Override
 				public void mouseDown(final MouseEvent e) {
 					if (modelProvider.get() != null) {
+						helper.clearActions();
+						buildMenu();
 						helper.open();
 					}
 
@@ -193,7 +219,9 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 
 		inputWants.add(model -> shippingOptionsViewer.setInput(model));
 		inputWants.add(model -> listener.setModel(model));
-
+		lockedListeners.add(locked -> {
+			RunnerHelper.asyncExec(() -> shippingOptionsViewer.getGrid().setEnabled(!locked));
+		});
 		return shippingOptionsViewer;
 	}
 

@@ -361,17 +361,17 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		}
 	}
 
-	public Object getAdapter(final Class c) {
+	public <T> T getAdapter(final Class<T> c) {
 		if (GridTreeViewer.class.isAssignableFrom(c)) {
-			return getScenarioViewer();
+			return c.cast(getScenarioViewer());
 		}
 		if (Table.class.isAssignableFrom(c)) {
-			return getTable();
+			return c.cast(getTable());
 		}
 		if (EObjectTableViewer.class.isAssignableFrom(c)) {
-			return getScenarioViewer();
+			return c.cast(getScenarioViewer());
 		}
-		return null;
+		return c.cast(null);
 	}
 
 	private void buildToolbar() {
@@ -1730,6 +1730,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			}
 			{
 				final Action newFOBSale = new Action("FOB Sale") {
+					
+					@Override
 					public void run() {
 
 						final List<Command> setCommands = new LinkedList<>();
@@ -1738,7 +1740,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 						initialiseSlot(newDischarge, false, referenceRowData);
 
 						final CompoundCommand cmd = new CompoundCommand("FOB Sale");
-						setCommands.forEach(c -> cmd.append(c));
+						setCommands.forEach(cmd::append);
 
 						commandStack.execute(cmd);
 						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getJointModelEditorPart(), newDischarge, commandStack.getMostRecentCommand());

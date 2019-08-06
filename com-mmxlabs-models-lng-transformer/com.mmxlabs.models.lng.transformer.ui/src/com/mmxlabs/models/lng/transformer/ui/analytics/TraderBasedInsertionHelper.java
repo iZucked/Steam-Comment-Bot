@@ -19,6 +19,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.ChangeDescription;
@@ -49,8 +50,7 @@ public class TraderBasedInsertionHelper {
 	final ScheduleSpecificationHelper scheduleSpecificationHelper;
 	private final IScenarioDataProvider scenarioDataProvider;
 	private @NonNull final LNGDataTransformer dataTransformer;
-	// private Function<ISequences, ChangeDescription> generateChangeDescription;
-	SequencesToChangeDescriptionTransformer sequencesToChangeDescriptionTransformer;
+	private SequencesToChangeDescriptionTransformer sequencesToChangeDescriptionTransformer;
 
 	public TraderBasedInsertionHelper(final IScenarioDataProvider scenarioDataProvider, final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {
 		this.scenarioDataProvider = scenarioDataProvider;
@@ -69,15 +69,15 @@ public class TraderBasedInsertionHelper {
 
 		ChangeModelToSandboxScheduleSpecification builder = new ChangeModelToSandboxScheduleSpecification();
 		final Pair<Pair<ScheduleSpecification, ExtraDataProvider>, Pair<ScheduleSpecification, ExtraDataProvider>> t = builder.generateScheduleSpecifications(
-				scenarioDataProvider.getTypedScenario(LNGScenarioModel.class), ScenarioModelUtil.getScheduleModel(scenarioDataProvider), scheduleModel, changeDescription);
+				scenarioDataProvider.getTypedScenario(LNGScenarioModel.class), ScenarioModelUtil.getScheduleModel(scenarioDataProvider).getSchedule(), scheduleModel.getSchedule(), changeDescription);
 
 		scheduleSpecificationHelper.processExtraDataProvider(t.getFirst().getSecond());
 		scheduleSpecificationHelper.processExtraDataProvider(t.getSecond().getSecond());
 
 		final BiFunction<LNGScenarioToOptimiserBridge, Injector, Supplier<Command>> r = (bridge, injector) -> {
 			final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
-			final ISequences base = transformer.createSequences(t.getFirst().getFirst(), bridge.getDataTransformer());
-			final ISequences target = transformer.createSequences(t.getSecond().getFirst(), bridge.getDataTransformer());
+			final ISequences base = transformer.createSequences(t.getFirst().getFirst(), bridge.getDataTransformer(), false);
+			final ISequences target = transformer.createSequences(t.getSecond().getFirst(), bridge.getDataTransformer(), false);
 
 			List<Supplier<Command>> commandSuppliers = new LinkedList<>();
 			try {
@@ -124,10 +124,8 @@ public class TraderBasedInsertionHelper {
 		scheduleSpecificationHelper.addJobs(r);
 	}
 
-	public void generateResults(final ScenarioInstance scenarioInstance, final UserSettings userSettings, final EditingDomain editingDomain, final List<LoadSlot> extraLoads,
-			final List<DischargeSlot> extraDischarges) {
-		scheduleSpecificationHelper.processExtraData_Loads(extraLoads);
-		scheduleSpecificationHelper.processExtraData_Discharges(extraDischarges);
+	public void generateResults(final ScenarioInstance scenarioInstance, final UserSettings userSettings, final EditingDomain editingDomain, final AbstractSolutionSet solution) {
+		scheduleSpecificationHelper.processExtraData(solution);
 		scheduleSpecificationHelper.generateResults(scenarioInstance, userSettings, editingDomain, new LinkedList<>(dataTransformer.getHints()), new NullProgressMonitor());
 	}
 }

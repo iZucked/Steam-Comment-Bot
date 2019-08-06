@@ -10,6 +10,7 @@ package com.mmxlabs.models.lng.analytics.provider;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,7 +28,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ExistingCharterMarketOptionItemProvider extends ShippingOptionItemProvider {
+public class ExistingCharterMarketOptionItemProvider extends UUIDObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -118,8 +119,10 @@ public class ExistingCharterMarketOptionItemProvider extends ShippingOptionItemP
 	 */
 	@Override
 	public String getText(Object object) {
-		ExistingCharterMarketOption existingCharterMarketOption = (ExistingCharterMarketOption)object;
-		return getString("_UI_ExistingCharterMarketOption_type") + " " + existingCharterMarketOption.getSpotIndex();
+		String label = ((ExistingCharterMarketOption)object).getUuid();
+		return label == null || label.length() == 0 ?
+			getString("_UI_ExistingCharterMarketOption_type") :
+			getString("_UI_ExistingCharterMarketOption_type") + " " + label;
 	}
 	
 

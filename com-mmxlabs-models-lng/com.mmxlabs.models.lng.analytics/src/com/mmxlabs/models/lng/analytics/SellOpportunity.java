@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -38,7 +39,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * @model
  * @generated
  */
-public interface SellOpportunity extends MMXObject, SellOption {
+public interface SellOpportunity extends UUIDObject, SellOption {
 	/**
 	 * Returns the value of the '<em><b>Fob Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->

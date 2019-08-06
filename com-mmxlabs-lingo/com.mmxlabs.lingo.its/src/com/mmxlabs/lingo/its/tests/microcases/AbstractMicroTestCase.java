@@ -54,6 +54,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
@@ -101,7 +102,7 @@ public abstract class AbstractMicroTestCase {
 
 		Assertions.assertTrue(updateCommand.canExecute());
 
-		editingDomain.getCommandStack().execute(updateCommand);
+		RunnerHelper.syncExecDisplayOptional(() -> editingDomain.getCommandStack().execute(updateCommand));
 
 		// Ensure updated.
 		Assertions.assertEquals(distanceVersion.getIdentifier(), portModel.getDistanceVersionRecord().getVersion());
@@ -122,7 +123,7 @@ public abstract class AbstractMicroTestCase {
 
 		Assertions.assertTrue(updateCommand.canExecute());
 
-		editingDomain.getCommandStack().execute(updateCommand);
+		RunnerHelper.syncExecDisplayOptional(() -> editingDomain.getCommandStack().execute(updateCommand));
 
 		// Ensure updated.
 		Assertions.assertEquals(version.getIdentifier(), portModel.getPortVersionRecord().getVersion());

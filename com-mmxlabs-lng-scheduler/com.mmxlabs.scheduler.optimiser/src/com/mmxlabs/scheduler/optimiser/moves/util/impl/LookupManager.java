@@ -76,36 +76,37 @@ public class LookupManager implements ILookupManager {
 			updateSequence(rawSequences, resource);
 		}
 
-		if (lookAtUnused) {
+		if (true || lookAtUnused) {
 			updateUnusedElements(rawSequences);
 		}
 	}
 
 	@Override
 	public void updateLookup(final @NonNull ISequences rawSequences, IResource... changedResources) {
-
-		if (changedResources == null || changedResources.length == 0) {
-			createLookup(rawSequences);
-			return;
-		}
-
-		this.rawSequences = rawSequences;
-
-		boolean lookAtUnused = false;
-
-		// build table for elements in conventional sequences
-		for (final IResource resource : changedResources) {
-			if (resource == null) {
-				lookAtUnused = true;
-				continue;
-			}
-
-			updateSequence(rawSequences, resource);
-		}
-
-		if (lookAtUnused) {
-			updateUnusedElements(rawSequences);
-		}
+		createLookup(rawSequences);
+//		return;
+//		if (changedResources == null || changedResources.length == 0) {
+//			createLookup(rawSequences);
+//			return;
+//		}
+//
+//		this.rawSequences = rawSequences;
+//
+//		boolean lookAtUnused = false;
+//
+//		// build table for elements in conventional sequences
+//		for (final IResource resource : changedResources) {
+//			if (resource == null) {
+//				lookAtUnused = true;
+//				continue;
+//			}
+//
+//			updateSequence(rawSequences, resource);
+//		}
+//
+//		if (lookAtUnused) {
+//			updateUnusedElements(rawSequences);
+//		}
 	}
 
 	private void updateUnusedElements(final @NonNull ISequences rawSequences) {

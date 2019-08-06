@@ -9,6 +9,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
+@FunctionalInterface
 @NonNullByDefault
 public interface IScenarioFragmentOpenHandler {
 

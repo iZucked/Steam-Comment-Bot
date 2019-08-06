@@ -7,10 +7,7 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Function;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
@@ -19,21 +16,14 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.google.inject.Injector;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
-import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
-import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
-import com.mmxlabs.lingo.its.verifier.SolutionData;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
-import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -42,14 +32,8 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.SlotInsertionOptimiserUnit;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
-import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
+import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 
 @SuppressWarnings("unused")
 @ExtendWith(ShiroRunner.class)
@@ -75,12 +59,12 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES1), Collections.emptyList(), 10, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES1), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 			Assertions.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
-			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_DES1), Collections.emptyList(), 10, new NullProgressMonitor());
+			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_DES1), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result2);
 			Assertions.assertTrue(result2.getSolutions().size() == 2);
 			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
@@ -113,7 +97,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES2), Collections.emptyList(), 10, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES2), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 			Assertions.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().size() == 1;
@@ -151,7 +135,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES2), Collections.emptyList(), 10, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES2), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 
 			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
@@ -195,12 +179,12 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB1), Collections.emptyList(), 10, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB1), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 			Assertions.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
-			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_FOB1), Collections.emptyList(), 10, new NullProgressMonitor());
+			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_FOB1), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result2);
 			Assertions.assertTrue(result2.getSolutions().size() == 2);
 			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
@@ -235,7 +219,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 10, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 10,  new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 
 			Assertions.assertTrue(result1.getSolutions().size() == 2);
@@ -274,7 +258,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_FOB2), Collections.emptyList(), 10, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_FOB2), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 
 			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
@@ -310,12 +294,12 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB1), Collections.emptyList(), 10, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB1), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 			Assertions.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
-			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_DES1), Collections.emptyList(), 10, new NullProgressMonitor());
+			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_DES1), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result2);
 			Assertions.assertTrue(result2.getSolutions().size() == 2);
 			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
@@ -358,7 +342,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 10, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 
 			Assertions.assertEquals(2, result1.getSolutions().size());
@@ -404,7 +388,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES2), Collections.emptyList(), 10, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES2), Collections.emptyList(), 10,  new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 
 			Assertions.assertEquals(2, result1.getSolutions().size());
@@ -464,12 +448,12 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 20, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 20,  new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 
 			final AtomicBoolean bool = new AtomicBoolean(false);
 			Assertions.assertTrue(result1.getSolutions().size() > 1);
-			result1.getSolutions().parallelStream().map(p -> p.getFirst()).forEach(seq -> {
+			result1.getSolutions().stream().map(p -> p.getFirst()).forEach(seq -> {
 				if (result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty()) {
 					bool.set(true);
 				}
@@ -517,7 +501,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES), Collections.emptyList(), 10, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 
 			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
@@ -596,7 +580,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult results = slotInserter.run(Collections.singletonList(discharge_DES4), Collections.emptyList(), 10, new NullProgressMonitor());
+			final IMultiStateResult results = slotInserter.run(Collections.singletonList(discharge_DES4), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 
 			Assertions.assertTrue(results.getSolutions().size() > 1);
 			// Next validate solution types exist

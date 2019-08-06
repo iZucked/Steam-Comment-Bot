@@ -26,4 +26,11 @@ public interface ISpotCharterInMarket {
 
 	IBallastBonusContract getBallastBonusContract();
 
+	/**
+	 * Returns the repositioning fee of the vessel.
+	 * 
+	 * @return repositioning fee
+	 */
+	@NonNull
+	ILongCurve getRepositioningFee();
 }

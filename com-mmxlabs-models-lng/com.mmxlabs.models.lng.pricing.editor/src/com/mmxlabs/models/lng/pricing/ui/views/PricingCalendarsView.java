@@ -238,5 +238,12 @@ public class PricingCalendarsView extends ScenarioTableViewerView<PricingCalenda
 			pricingModel.eAdapters().remove(calendarListener);
 			pricingModel = null;
 		}
+		lastSelectedCalendar = "";
+	}
+	
+	@Override
+	public void dispose() {
+		cleanUpInstance(null);
+		super.dispose();
 	}
 }

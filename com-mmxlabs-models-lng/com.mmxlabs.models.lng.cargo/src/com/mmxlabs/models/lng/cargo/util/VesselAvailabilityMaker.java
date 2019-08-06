@@ -19,13 +19,13 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 
 public class VesselAvailabilityMaker {
-	@NonNull
+
 	private final CargoModelBuilder cargoModelBuilder;
 
 	@NonNull
 	private final VesselAvailability vesselAvailability;
 
-	public VesselAvailabilityMaker(@NonNull final CargoModelBuilder cargoModelBuilder, @NonNull final Vessel vessel, @NonNull final BaseLegalEntity entity) {
+	public VesselAvailabilityMaker(final CargoModelBuilder cargoModelBuilder, @NonNull final Vessel vessel, @NonNull final BaseLegalEntity entity) {
 		this.cargoModelBuilder = cargoModelBuilder;
 		this.vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 		this.vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
@@ -123,6 +123,7 @@ public class VesselAvailabilityMaker {
 	public VesselAvailabilityMaker withSafeyStartHeel() {
 		return withStartHeel(vesselAvailability.getVessel().getSafetyHeel(), vesselAvailability.getVessel().getSafetyHeel(), 22.6, "0");
 	}
+
 	/**
 	 * Use the safety heel as the end heel, 0 price
 	 * 
@@ -187,19 +188,20 @@ public class VesselAvailabilityMaker {
 		return this;
 
 	}
+
 	public VesselAvailabilityMaker withEndHeel(final int minVolumeInM3, final int maxVolumeInM3, @NonNull final EVesselTankState state, boolean useLastPrice) {
-		
+
 		if (minVolumeInM3 < 0) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		if (maxVolumeInM3 < 0) {
 			throw new IllegalArgumentException();
 		}
 		if (minVolumeInM3 > maxVolumeInM3) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		if (state == EVesselTankState.MUST_BE_WARM) {
 			if (minVolumeInM3 > 0) {
 				throw new IllegalArgumentException();
@@ -208,15 +210,15 @@ public class VesselAvailabilityMaker {
 				throw new IllegalArgumentException();
 			}
 		}
-		
+
 		vesselAvailability.getEndHeel().setMinimumEndHeel(minVolumeInM3);
 		vesselAvailability.getEndHeel().setMaximumEndHeel(maxVolumeInM3);
 		vesselAvailability.getEndHeel().setTankState(state);
 		vesselAvailability.getEndHeel().setPriceExpression("");
 		vesselAvailability.getEndHeel().setUseLastHeelPrice(useLastPrice);
-		
+
 		return this;
-		
+
 	}
 
 	@NonNull

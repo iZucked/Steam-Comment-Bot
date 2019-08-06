@@ -84,7 +84,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		}
 
 		// TODO: This should be static / central service?
-		executorService = LNGScenarioChainBuilder.createExecutorService();// Executors.newSingleThreadExecutor();
+		executorService = LNGScenarioChainBuilder.createExecutorService();
 
 		@Nullable
 		IRunnerHook runnerHook = null;

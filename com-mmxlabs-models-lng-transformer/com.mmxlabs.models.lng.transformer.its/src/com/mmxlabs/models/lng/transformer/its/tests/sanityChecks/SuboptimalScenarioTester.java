@@ -238,7 +238,7 @@ public class SuboptimalScenarioTester {
 
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		final Set<String> hints = LNGTransformerHelper.getHints(settings);
-		final LNGDataTransformer transformer = new LNGDataTransformer(scenarioDataProvider, settings, ScenarioUtils.createDefaultSolutionBuilderSettings(), 1, hints,
+		final LNGDataTransformer transformer = new LNGDataTransformer(scenarioDataProvider, null, settings, ScenarioUtils.createDefaultSolutionBuilderSettings(), 1, hints,
 				LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null));
 
 		// final LNGDataTransformer transformer = new LNGDataTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestBootstrapModule(), null);

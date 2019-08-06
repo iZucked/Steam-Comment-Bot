@@ -131,6 +131,7 @@ public class BreakEvenAnalysisResultImpl extends EObjectImpl implements BreakEve
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EObject getTarget() {
 		if (target != null && target.eIsProxy()) {
 			InternalEObject oldTarget = (InternalEObject)target;
@@ -157,6 +158,7 @@ public class BreakEvenAnalysisResultImpl extends EObjectImpl implements BreakEve
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTarget(EObject newTarget) {
 		EObject oldTarget = target;
 		target = newTarget;
@@ -169,6 +171,7 @@ public class BreakEvenAnalysisResultImpl extends EObjectImpl implements BreakEve
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getPrice() {
 		return price;
 	}
@@ -178,6 +181,7 @@ public class BreakEvenAnalysisResultImpl extends EObjectImpl implements BreakEve
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPrice(double newPrice) {
 		double oldPrice = price;
 		price = newPrice;
@@ -190,6 +194,7 @@ public class BreakEvenAnalysisResultImpl extends EObjectImpl implements BreakEve
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getEta() {
 		return eta;
 	}
@@ -199,6 +204,7 @@ public class BreakEvenAnalysisResultImpl extends EObjectImpl implements BreakEve
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEta(LocalDate newEta) {
 		LocalDate oldEta = eta;
 		eta = newEta;
@@ -211,6 +217,7 @@ public class BreakEvenAnalysisResultImpl extends EObjectImpl implements BreakEve
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getReferencePrice() {
 		return referencePrice;
 	}
@@ -220,6 +227,7 @@ public class BreakEvenAnalysisResultImpl extends EObjectImpl implements BreakEve
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setReferencePrice(double newReferencePrice) {
 		double oldReferencePrice = referencePrice;
 		referencePrice = newReferencePrice;

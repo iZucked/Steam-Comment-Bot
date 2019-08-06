@@ -53,9 +53,9 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimisationResultTester {
 
 	// This should only be committed as false to avoid crazy test run times.
-	private static final boolean RUN_FULL_ITERATION_CASES = false;
+	protected static final boolean RUN_FULL_ITERATION_CASES = false;
 	// This should only be committed as true.
-	private static final boolean RUN_LIMITED_ITERATION_CASES = true;
+	protected static final boolean RUN_LIMITED_ITERATION_CASES = true;
 
 	protected @Nullable String scenarioURL;
 	protected @Nullable LocalDate periodStart;

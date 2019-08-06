@@ -24,6 +24,7 @@ import com.google.inject.Module;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -47,6 +48,7 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker;
 import com.mmxlabs.models.lng.transformer.period.PeriodExporter;
 import com.mmxlabs.models.lng.transformer.period.PeriodTransformer;
 import com.mmxlabs.models.lng.transformer.period.ScenarioEntityMapping;
+import com.mmxlabs.models.lng.transformer.period.PeriodTransformer.PeriodTransformResult;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -55,6 +57,7 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ClonedScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 /**
@@ -76,6 +79,9 @@ public class LNGScenarioToOptimiserBridge {
 
 	@NonNull
 	private IScenarioDataProvider optimiserScenarioDataProvider;
+
+	private ExtraDataProvider optimiserExtraDataProvider;
+	private final ExtraDataProvider originalExtraDataProvider;
 
 	@NonNull
 	private EditingDomain optimiserEditingDomain;
@@ -110,10 +116,12 @@ public class LNGScenarioToOptimiserBridge {
 
 	private PeriodExporter periodExporter;
 
-	public LNGScenarioToOptimiserBridge(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance, @NonNull final UserSettings userSettings,
-			@NonNull final SolutionBuilderSettings solutionBuilderSettings, @NonNull final EditingDomain editingDomain, int concurrencyLevel, @Nullable final Module bootstrapModule,
-			@Nullable final IOptimiserInjectorService localOverrides, final boolean evaluationOnly, final @NonNull String @Nullable... initialHints) {
+	public LNGScenarioToOptimiserBridge(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance,
+			@Nullable final ExtraDataProvider extraDataProvider, @NonNull final UserSettings userSettings, @NonNull final SolutionBuilderSettings solutionBuilderSettings,
+			@NonNull final EditingDomain editingDomain, final int concurrencyLevel, @Nullable final Module bootstrapModule, @Nullable final IOptimiserInjectorService localOverrides,
+			final boolean evaluationOnly, final @NonNull String @Nullable... initialHints) {
 		this.originalScenarioDataProvider = scenarioDataProvider;
+		this.originalExtraDataProvider = extraDataProvider;
 		this.scenarioInstance = scenarioInstance;
 		this.userSettings = userSettings;
 		this.solutionBuilderSettings = solutionBuilderSettings;
@@ -122,21 +130,22 @@ public class LNGScenarioToOptimiserBridge {
 
 		final Collection<@NonNull IOptimiserInjectorService> services = LNGTransformerHelper.getOptimiserInjectorServices(bootstrapModule, localOverrides);
 
-		originalDataTransformer = new LNGDataTransformer(this.originalScenarioDataProvider, userSettings, solutionBuilderSettings, concurrencyLevel, hints, services);
+		originalDataTransformer = new LNGDataTransformer(this.originalScenarioDataProvider, extraDataProvider, userSettings, solutionBuilderSettings, concurrencyLevel, hints, services);
 
 		// TODO: These ideally should be final, but #overwrite currently needs these variables set.
 		this.optimiserEditingDomain = originalEditingDomain;
 		this.optimiserDataTransformer = originalDataTransformer;
 		this.optimiserScenarioDataProvider = originalScenarioDataProvider;
+		this.optimiserExtraDataProvider = originalExtraDataProvider;
 
 		if (!evaluationOnly) {
-			final Triple<com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider, @NonNull EditingDomain, @Nullable IScenarioEntityMapping> t = initPeriodOptimisationData(scenarioInstance,
-					originalScenarioDataProvider, originalEditingDomain, userSettings);
+			final PeriodTransformData t = initPeriodOptimisationData(scenarioInstance, originalScenarioDataProvider, extraDataProvider, originalEditingDomain, userSettings);
 
 			// TODO: Replaces the above with that return in the triple (this could be original or optimiser)
-			this.optimiserScenarioDataProvider = t.getFirst();
-			this.optimiserEditingDomain = t.getSecond();
-			this.periodMapping = t.getThird();
+			this.optimiserScenarioDataProvider = t.sdp;
+			this.optimiserEditingDomain = t.editingDomain;
+			this.periodMapping = t.periodMapping;
+			this.optimiserExtraDataProvider = t.extraDataProvider;
 
 		} else {
 			this.periodMapping = null;
@@ -149,7 +158,10 @@ public class LNGScenarioToOptimiserBridge {
 			wrapper.append(IdentityCommand.INSTANCE);
 			optimiserEditingDomain.getCommandStack().execute(wrapper);
 
-			optimiserDataTransformer = new LNGDataTransformer(this.optimiserScenarioDataProvider, userSettings, solutionBuilderSettings, concurrencyLevel, hints, services);
+			final Collection<@NonNull String> periodHints = new HashSet<>(hints);
+			periodHints.add(LNGTransformerHelper.HINT_PERIOD_SCENARIO);
+			optimiserDataTransformer = new LNGDataTransformer(this.optimiserScenarioDataProvider, optimiserExtraDataProvider, userSettings, solutionBuilderSettings, concurrencyLevel, periodHints,
+					services);
 
 			periodExporter = new PeriodExporter(originalDataTransformer, optimiserDataTransformer, periodMapping);
 		}
@@ -158,10 +170,16 @@ public class LNGScenarioToOptimiserBridge {
 		canExportAsCopy = true;
 	}
 
+	class PeriodTransformData {
+		IScenarioDataProvider sdp;
+		EditingDomain editingDomain;
+		IScenarioEntityMapping periodMapping;
+		ExtraDataProvider extraDataProvider;
+	}
+
 	@NonNull
-	private Triple<com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider, @NonNull EditingDomain, @Nullable IScenarioEntityMapping> initPeriodOptimisationData(
-			@Nullable final ScenarioInstance scenarioInstance, @NonNull final IScenarioDataProvider originalScenarioDataProvider, @NonNull final EditingDomain originalEditingDomain,
-			@NonNull final UserSettings userSettings) {
+	private PeriodTransformData initPeriodOptimisationData(@Nullable final ScenarioInstance scenarioInstance, @NonNull final IScenarioDataProvider originalScenarioDataProvider,
+			@Nullable final ExtraDataProvider extraDataProvider, @NonNull final EditingDomain originalEditingDomain, @NonNull final UserSettings userSettings) {
 
 		IScenarioEntityMapping periodMapping = null;
 		{
@@ -177,8 +195,8 @@ public class LNGScenarioToOptimiserBridge {
 
 			final Schedule schedule = createSchedule(originalDataTransformer.getInitialSequences(), null);
 
-			final NonNullPair<IScenarioDataProvider, EditingDomain> p = t.transform(originalScenarioDataProvider, schedule, userSettings, periodMapping);
-			IScenarioDataProvider periodScenarioDataProvider = p.getFirst();
+			final PeriodTransformResult p = t.transform(originalScenarioDataProvider, schedule, extraDataProvider, userSettings, periodMapping);
+			final IScenarioDataProvider periodScenarioDataProvider = p.sdp;
 
 			// DEBUGGING - store sub scenario as a "fork"
 			if (scenarioInstance != null) {
@@ -193,11 +211,23 @@ public class LNGScenarioToOptimiserBridge {
 					}
 				}
 			}
-			return new Triple<>(periodScenarioDataProvider, p.getSecond(), periodMapping);
-		} else {
-			return new Triple<>(originalScenarioDataProvider, originalEditingDomain, null);
-		}
 
+			final PeriodTransformData data = new PeriodTransformData();
+			data.sdp = p.sdp;
+			data.editingDomain = p.editingDomain;
+			data.extraDataProvider = p.extraDataProvider;
+			data.periodMapping = periodMapping;
+
+			return data;
+		} else {
+			final PeriodTransformData data = new PeriodTransformData();
+			data.sdp = originalScenarioDataProvider;
+			data.editingDomain = originalEditingDomain;
+			data.extraDataProvider = extraDataProvider;
+			data.periodMapping = null;
+
+			return data;
+		}
 	}
 
 	private Command previousOverwriteCommand = null;
@@ -337,7 +367,7 @@ public class LNGScenarioToOptimiserBridge {
 		// Export the solution onto the scenario
 		final LNGScenarioModel copy = exportAsCopy(rawSequences, extraAnnotations);
 
-		ClonedScenarioDataProvider cloneDataProvider = ClonedScenarioDataProvider.make(copy, originalScenarioDataProvider);
+		final ClonedScenarioDataProvider cloneDataProvider = ClonedScenarioDataProvider.make(copy, originalScenarioDataProvider);
 
 		// Save the scenario as a fork.
 		try {
@@ -384,7 +414,7 @@ public class LNGScenarioToOptimiserBridge {
 	}
 
 	@NonNull
-	public Schedule createSchedule(@NonNull final ISequences rawOptimiserSequences, @Nullable final Map<String, Object> extraAnnotations, @Nullable Long be_targetProfitAndLoss) {
+	public Schedule createSchedule(@NonNull final ISequences rawOptimiserSequences, @Nullable final Map<String, Object> extraAnnotations, @Nullable final Long be_targetProfitAndLoss) {
 		final ISequences rawSequences = getTransformedOriginalRawSequences(rawOptimiserSequences);
 
 		final Injector injector;
@@ -411,7 +441,8 @@ public class LNGScenarioToOptimiserBridge {
 
 			if (be_targetProfitAndLoss != null) {
 				final BreakEvenOptimiser instance = injector.getInstance(BreakEvenOptimiser.class);
-				instance.optimise(rawSequences, be_targetProfitAndLoss);
+				// instance.optimise(rawSequences,be_targetProfitAndLoss);
+				instance.optimise(rawSequences, OptimiserUnitConvertor.convertToInternalFixedCost(be_targetProfitAndLoss));
 			}
 
 			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, rawSequences).getFirst();
@@ -473,5 +504,13 @@ public class LNGScenarioToOptimiserBridge {
 	 */
 	public Schedule createOptimiserInitialSchedule() {
 		return createOptimiserSchedule(optimiserDataTransformer.getInitialSequences(), null);
+	}
+
+	public ExtraDataProvider getOptimiserExtraDataProvider() {
+		return optimiserExtraDataProvider;
+	}
+
+	public ExtraDataProvider getOriginalExtraDataProvider() {
+		return originalExtraDataProvider;
 	}
 }

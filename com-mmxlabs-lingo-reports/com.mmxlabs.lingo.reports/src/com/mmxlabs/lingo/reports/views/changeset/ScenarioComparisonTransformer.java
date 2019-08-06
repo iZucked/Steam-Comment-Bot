@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -57,8 +58,8 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ScenarioComparisonTransformer {
 
-	public ChangeSetRoot createDataModel(final Map<EObject, Set<EObject>> equivalancesMap, @NonNull final Table table,
-			@NonNull final ScenarioResult from, @NonNull final ScenarioResult to, final IProgressMonitor monitor) {
+	public ChangeSetRoot createDataModel(final Map<EObject, Set<EObject>> equivalancesMap, @NonNull final Table table, @NonNull final ScenarioResult from, @NonNull final ScenarioResult to,
+			final IProgressMonitor monitor) {
 		monitor.beginTask("Opening change sets", 1);
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 		assert root != null;
@@ -242,6 +243,8 @@ public class ScenarioComparisonTransformer {
 							continue;
 						} else if (event instanceof Cooldown) {
 							continue;
+						} else if (event instanceof Purge) {
+							continue;
 						}
 
 						else if (event instanceof StartEvent //
@@ -366,7 +369,7 @@ public class ScenarioComparisonTransformer {
 			if (beforeData != null) {
 				pnl -= ChangeSetTransformerUtil.getRowProfitAndLossValue(beforeData, ScheduleModelKPIUtils::getGroupProfitAndLoss);
 
-				if (beforeData.getMembers().size() > 0) {
+				if (!beforeData.getMembers().isEmpty()) {
 					ChangeSetRowData rd = beforeData.getMembers().get(0);
 					EventGrouping eventGrouping = rd.getEventGrouping();
 					if (eventGrouping != null) {

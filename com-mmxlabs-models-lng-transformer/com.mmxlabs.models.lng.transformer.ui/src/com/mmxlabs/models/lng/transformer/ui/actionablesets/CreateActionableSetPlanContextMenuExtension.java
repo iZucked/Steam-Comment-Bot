@@ -156,11 +156,8 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 											if (newState == EJobState.COMPLETED) {
 												final ActionableSetPlan plan = (ActionableSetPlan) jobControl.getJobOutput();
 												if (plan != null) {
-
-													final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 													final AnalyticsSolution data = new AnalyticsSolution(instance, plan, "My Action Set");
-													data.setCreateDiffToBaseAction(true);
-													eventBroker.post(ChangeSetViewCreatorService_Topic, data);
+													data.open();
 												}
 											}
 

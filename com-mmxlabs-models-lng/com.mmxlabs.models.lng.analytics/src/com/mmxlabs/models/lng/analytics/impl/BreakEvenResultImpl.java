@@ -115,6 +115,7 @@ public class BreakEvenResultImpl extends AnalysisResultDetailImpl implements Bre
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getPrice() {
 		return price;
 	}
@@ -124,6 +125,7 @@ public class BreakEvenResultImpl extends AnalysisResultDetailImpl implements Bre
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPrice(double newPrice) {
 		double oldPrice = price;
 		price = newPrice;
@@ -136,6 +138,7 @@ public class BreakEvenResultImpl extends AnalysisResultDetailImpl implements Bre
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getPriceString() {
 		return priceString;
 	}
@@ -145,6 +148,7 @@ public class BreakEvenResultImpl extends AnalysisResultDetailImpl implements Bre
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPriceString(String newPriceString) {
 		String oldPriceString = priceString;
 		priceString = newPriceString;
@@ -157,6 +161,7 @@ public class BreakEvenResultImpl extends AnalysisResultDetailImpl implements Bre
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getCargoPNL() {
 		return cargoPNL;
 	}
@@ -166,6 +171,7 @@ public class BreakEvenResultImpl extends AnalysisResultDetailImpl implements Bre
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargoPNL(double newCargoPNL) {
 		double oldCargoPNL = cargoPNL;
 		cargoPNL = newCargoPNL;

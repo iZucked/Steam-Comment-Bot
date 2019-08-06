@@ -317,6 +317,11 @@ public class SequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createPurge()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
 				 ScheduleFactory.eINSTANCE.createCharterAvailableToEvent()));
 
 		newChildDescriptors.add

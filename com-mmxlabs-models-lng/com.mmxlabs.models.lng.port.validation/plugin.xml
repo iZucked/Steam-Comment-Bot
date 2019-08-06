@@ -40,6 +40,21 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.port.validation.PortMinMaxVesselSizeValidator"
+                  id="com.mmxlabs.models.lng.port.validation.PortVesselCapacityRangeConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Port Vessel Capacity Range"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Port">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.port.validation.RouteLineValidityConstraint"
                   id="com.mmxlabs.models.lng.port.validation.RouteLineValidityConstraint"
                   lang="Java"

@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
@@ -62,6 +63,7 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 			addNamePropertyDescriptor(object);
 			addHasDualModeSolutionsPropertyDescriptor(object);
 			addPortfolioBreakEvenModePropertyDescriptor(object);
+			addUseScenarioBasePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -133,6 +135,28 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 	}
 
 	/**
+	 * This adds a property descriptor for the Use Scenario Base feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addUseScenarioBasePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AbstractSolutionSet_useScenarioBase_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AbstractSolutionSet_useScenarioBase_feature", "_UI_AbstractSolutionSet_type"),
+				 AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -148,6 +172,10 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_SLOTS);
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__BASE_OPTION);
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__OPTIONS);
+			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS);
+			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES);
+			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES);
+			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS);
 		}
 		return childrenFeatures;
 	}
@@ -206,12 +234,17 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__NAME:
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS:
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE:
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__USER_SETTINGS:
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_SLOTS:
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__BASE_OPTION:
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS:
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES:
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES:
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -273,6 +306,36 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 			(createChildParameter
 				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__OPTIONS,
 				 AnalyticsFactory.eINSTANCE.createDualModeSolutionOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS,
+				 CargoFactory.eINSTANCE.createMaintenanceEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS,
+				 CargoFactory.eINSTANCE.createDryDockEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS,
+				 CargoFactory.eINSTANCE.createCharterOutEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES,
+				 CargoFactory.eINSTANCE.createVesselAvailability()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES,
+				 CargoFactory.eINSTANCE.createCharterInMarketOverride()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS,
+				 SpotMarketsFactory.eINSTANCE.createCharterInMarket()));
 	}
 
 	/**

@@ -72,6 +72,7 @@ public class ChangeDescriptionImpl extends EObjectImpl implements ChangeDescript
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Change> getChanges() {
 		if (changes == null) {
 			changes = new EObjectContainmentEList<Change>(Change.class, this, AnalyticsPackage.CHANGE_DESCRIPTION__CHANGES);

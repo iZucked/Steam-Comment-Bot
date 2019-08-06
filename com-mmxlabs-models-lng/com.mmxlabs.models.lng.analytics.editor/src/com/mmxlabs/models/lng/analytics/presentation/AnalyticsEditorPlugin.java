@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.presentation;
 
+import com.mmxlabs.models.lng.analytics.ui.views.SandboxViewCreatorService;
 import com.mmxlabs.models.lng.cargo.provider.CargoEditPlugin;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
@@ -89,6 +90,8 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 	 */
 	public static class Implementation extends EclipseUIPlugin {
 
+		private SandboxViewCreatorService sandboxCreatorService = new SandboxViewCreatorService();
+		
 		/**
 		 * Creates an instance.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -110,6 +113,7 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 		@Override
 		public void start(final BundleContext context) throws Exception {
 			super.start(context);
+			sandboxCreatorService.start();
 		}
 
 		/*
@@ -119,6 +123,7 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 		 */
 		@Override
 		public void stop(final BundleContext context) throws Exception {
+			sandboxCreatorService.stop();
 			super.stop(context);
 		}
 	}

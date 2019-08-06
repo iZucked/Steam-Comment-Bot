@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.SellReference;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -31,7 +32,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class SellReferenceImpl extends EObjectImpl implements SellReference {
+public class SellReferenceImpl extends UUIDObjectImpl implements SellReference {
 	/**
 	 * The cached value of the '{@link #getSlot() <em>Slot</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -66,6 +67,7 @@ public class SellReferenceImpl extends EObjectImpl implements SellReference {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DischargeSlot getSlot() {
 		if (slot != null && slot.eIsProxy()) {
 			InternalEObject oldSlot = (InternalEObject)slot;
@@ -92,6 +94,7 @@ public class SellReferenceImpl extends EObjectImpl implements SellReference {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlot(DischargeSlot newSlot) {
 		DischargeSlot oldSlot = slot;
 		slot = newSlot;

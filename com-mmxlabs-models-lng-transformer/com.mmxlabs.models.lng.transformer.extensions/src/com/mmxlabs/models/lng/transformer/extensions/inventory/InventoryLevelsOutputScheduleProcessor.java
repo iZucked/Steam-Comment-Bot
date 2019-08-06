@@ -19,6 +19,7 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -47,7 +48,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 
 	@Override
 	public void process(final Schedule schedule) {
-		if (LicenseFeatures.isPermitted("features:inventory-model")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_MODEL)) {
 
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 
@@ -269,6 +270,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 				final TreeMap<LocalDate, Integer> maxLevels = new TreeMap<>();
 
 				for (final InventoryCapacityRow r : facility.getCapacities()) {
+					if (r.getDate() == null) continue;
 					minLevels.put(r.getDate(), r.getMinVolume());
 					maxLevels.put(r.getDate(), r.getMaxVolume());
 				}

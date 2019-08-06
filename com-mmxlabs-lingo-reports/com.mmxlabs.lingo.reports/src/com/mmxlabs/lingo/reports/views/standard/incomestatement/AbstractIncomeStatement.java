@@ -43,6 +43,7 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
@@ -506,6 +507,10 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 				shippingCost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
 			}
 
+			if (event instanceof Purge) {
+				final Purge purge = (Purge) event;
+				shippingCost += purge.getCost();
+			}
 			if (event instanceof Cooldown) {
 				final Cooldown cooldown = (Cooldown) event;
 				shippingCost += cooldown.getCost();

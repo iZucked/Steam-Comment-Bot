@@ -386,7 +386,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		viewer.setContentProvider(new ArrayContentProvider());
 
 		// Add a filter to only show certain rows.
-		viewer.setFilters(new ViewerFilter[] { super.filterSupport.createViewerFilter(), new ViewerFilter() {
+		viewer.setFilters(super.filterSupport.createViewerFilter(), new ViewerFilter() {
 
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
@@ -448,7 +448,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 				return true;
 			}
-		} });
+		});
 
 		// Try and set initial selection. Do not abort on exceptions
 		try {

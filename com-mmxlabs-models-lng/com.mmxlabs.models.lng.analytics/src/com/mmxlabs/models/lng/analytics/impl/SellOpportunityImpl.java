@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -43,7 +44,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *
  * @generated
  */
-public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunity {
+public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportunity {
 	/**
 	 * The default value of the '{@link #isFobSale() <em>Fob Sale</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -278,6 +279,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isFobSale() {
 		return fobSale;
 	}
@@ -287,6 +289,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFobSale(boolean newFobSale) {
 		boolean oldFobSale = fobSale;
 		fobSale = newFobSale;
@@ -425,6 +428,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
@@ -451,6 +455,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEntity(BaseLegalEntity newEntity) {
 		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;
@@ -463,6 +468,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCancellationExpression() {
 		return cancellationExpression;
 	}
@@ -472,6 +478,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCancellationExpression(String newCancellationExpression) {
 		String oldCancellationExpression = cancellationExpression;
 		cancellationExpression = newCancellationExpression;
@@ -484,6 +491,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMiscCosts() {
 		return miscCosts;
 	}
@@ -493,6 +501,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMiscCosts(int newMiscCosts) {
 		int oldMiscCosts = miscCosts;
 		miscCosts = newMiscCosts;
@@ -505,6 +514,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VolumeMode getVolumeMode() {
 		return volumeMode;
 	}
@@ -514,6 +524,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeMode(VolumeMode newVolumeMode) {
 		VolumeMode oldVolumeMode = volumeMode;
 		volumeMode = newVolumeMode == null ? VOLUME_MODE_EDEFAULT : newVolumeMode;
@@ -526,6 +537,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VolumeUnits getVolumeUnits() {
 		return volumeUnits;
 	}
@@ -535,6 +547,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeUnits(VolumeUnits newVolumeUnits) {
 		VolumeUnits oldVolumeUnits = volumeUnits;
 		volumeUnits = newVolumeUnits == null ? VOLUME_UNITS_EDEFAULT : newVolumeUnits;
@@ -547,6 +560,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinVolume() {
 		return minVolume;
 	}
@@ -556,6 +570,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinVolume(int newMinVolume) {
 		int oldMinVolume = minVolume;
 		minVolume = newMinVolume;
@@ -568,6 +583,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaxVolume() {
 		return maxVolume;
 	}
@@ -577,6 +593,7 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxVolume(int newMaxVolume) {
 		int oldMaxVolume = maxVolume;
 		maxVolume = newMaxVolume;

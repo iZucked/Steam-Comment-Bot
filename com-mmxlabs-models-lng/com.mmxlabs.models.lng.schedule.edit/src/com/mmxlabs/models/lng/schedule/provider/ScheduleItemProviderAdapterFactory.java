@@ -157,6 +157,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.OtherPNL} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OtherPNLItemProvider otherPNLItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.OtherPNL}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOtherPNLAdapter() {
+		if (otherPNLItemProvider == null) {
+			otherPNLItemProvider = new OtherPNLItemProvider(this);
+		}
+
+		return otherPNLItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.Event} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -361,6 +384,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		}
 
 		return cooldownItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.Purge} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PurgeItemProvider purgeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.Purge}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPurgeAdapter() {
+		if (purgeItemProvider == null) {
+			purgeItemProvider = new PurgeItemProvider(this);
+		}
+
+		return purgeItemProvider;
 	}
 
 	/**
@@ -1233,6 +1279,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (openSlotAllocationItemProvider != null) openSlotAllocationItemProvider.dispose();
 		if (slotAllocationItemProvider != null) slotAllocationItemProvider.dispose();
 		if (sequenceItemProvider != null) sequenceItemProvider.dispose();
+		if (otherPNLItemProvider != null) otherPNLItemProvider.dispose();
 		if (eventItemProvider != null) eventItemProvider.dispose();
 		if (startEventItemProvider != null) startEventItemProvider.dispose();
 		if (endEventItemProvider != null) endEventItemProvider.dispose();
@@ -1244,6 +1291,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (generatedCharterOutItemProvider != null) generatedCharterOutItemProvider.dispose();
 		if (charterLengthEventItemProvider != null) charterLengthEventItemProvider.dispose();
 		if (cooldownItemProvider != null) cooldownItemProvider.dispose();
+		if (purgeItemProvider != null) purgeItemProvider.dispose();
 		if (fuelUsageItemProvider != null) fuelUsageItemProvider.dispose();
 		if (fuelQuantityItemProvider != null) fuelQuantityItemProvider.dispose();
 		if (fuelAmountItemProvider != null) fuelAmountItemProvider.dispose();

@@ -10,6 +10,7 @@ package com.mmxlabs.models.lng.analytics.provider;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,7 +28,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class RoundTripShippingOptionItemProvider extends ShippingOptionItemProvider {
+public class RoundTripShippingOptionItemProvider extends UUIDObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -118,7 +119,7 @@ public class RoundTripShippingOptionItemProvider extends ShippingOptionItemProvi
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((RoundTripShippingOption)object).getHireCost();
+		String label = ((RoundTripShippingOption)object).getUuid();
 		return label == null || label.length() == 0 ?
 			getString("_UI_RoundTripShippingOption_type") :
 			getString("_UI_RoundTripShippingOption_type") + " " + label;

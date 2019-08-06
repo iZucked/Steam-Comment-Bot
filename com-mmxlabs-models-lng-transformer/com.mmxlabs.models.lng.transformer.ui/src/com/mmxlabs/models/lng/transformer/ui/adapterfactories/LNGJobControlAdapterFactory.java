@@ -14,6 +14,8 @@ import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerManyJobsControl;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerOptimiserJobControl;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerRunMultipleSeedsJobControl;
+import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSandboxJobControl;
+import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSandboxJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobControl;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSlotInsertionJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.actionablesets.CreateActionableSetPlanJobControl;
@@ -64,6 +66,9 @@ public class LNGJobControlAdapterFactory implements IAdapterFactory {
 		} else if (adaptableObject instanceof LNGSlotInsertionJobDescriptor) {
 			final LNGSlotInsertionJobDescriptor descriptor = (LNGSlotInsertionJobDescriptor) adaptableObject;
 			return (T) new LNGSchedulerInsertSlotJobControl(descriptor);
+		} else if (adaptableObject instanceof LNGSandboxJobDescriptor) {
+			final LNGSandboxJobDescriptor descriptor = (LNGSandboxJobDescriptor) adaptableObject;
+			return (T) new LNGSandboxJobControl(descriptor);
 		} else if (adaptableObject instanceof CreateActionableSetPlanJobDescriptor) {
 			final CreateActionableSetPlanJobDescriptor descriptor = (CreateActionableSetPlanJobDescriptor) adaptableObject;
 			return (T) new CreateActionableSetPlanJobControl(descriptor);

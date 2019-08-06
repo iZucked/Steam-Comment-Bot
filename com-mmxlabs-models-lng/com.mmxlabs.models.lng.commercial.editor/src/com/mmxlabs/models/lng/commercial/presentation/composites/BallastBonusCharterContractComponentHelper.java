@@ -70,6 +70,7 @@ public class BallastBonusCharterContractComponentHelper extends BaseComponentHel
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_ballastBonusContractEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
+		add_repositioningFeeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the ballastBonusContract feature on BallastBonusCharterContract
@@ -86,5 +87,14 @@ public class BallastBonusCharterContractComponentHelper extends BaseComponentHel
 	 */
 	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT__ENTITY));
+	}
+
+	/**
+	 * Create the editor for the repositioningFee feature on BallastBonusCharterContract
+	 *
+	 * @generated
+	 */
+	protected void add_repositioningFeeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE));
 	}
 }

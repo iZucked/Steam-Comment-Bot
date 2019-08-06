@@ -52,7 +52,7 @@ public class SchedulerBuilderTest {
 
 		final IBaseFuel baseFuel = new BaseFuel(indexingContext, "test");
 		baseFuel.setEquivalenceFactor(1000);
-		final IVessel vessel = builder.createVessel("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, baseFuel, baseFuel, baseFuel, 0, 35353, 10101, 0, false);
+		final IVessel vessel = builder.createVessel("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, baseFuel, baseFuel, baseFuel, 0, 0, 35353, 10101, 0, false);
 		// createVesselClass("name", minSpeed,
 		// maxSpeed, capacity, safetyHeel, 700;
 
@@ -90,7 +90,7 @@ public class SchedulerBuilderTest {
 		final int safetyHeel = 4;
 
 		final SchedulerBuilder builder = createScheduleBuilder();
-		final IVessel vessel = builder.createVessel("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, idleBaseFuel, inPortBaseFuel, pilotLightBaseFuel, 0, 35353, 10101, 0, false);
+		final IVessel vessel = builder.createVessel("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, idleBaseFuel, inPortBaseFuel, pilotLightBaseFuel, 0, 0, 35353, 10101, 0, false);
 		Assertions.assertEquals(baseFuel, vessel.getTravelBaseFuel());
 		Assertions.assertEquals(idleBaseFuel, vessel.getIdleBaseFuel());
 		Assertions.assertEquals(inPortBaseFuel, vessel.getInPortBaseFuel());

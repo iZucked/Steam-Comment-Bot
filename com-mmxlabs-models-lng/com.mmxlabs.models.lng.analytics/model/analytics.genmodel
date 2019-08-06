@@ -28,6 +28,8 @@
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//BuyOption"/>
     <genClasses ecoreClass="analytics.ecore#//SellOption"/>
+    <genClasses ecoreClass="analytics.ecore#//OpenSell"/>
+    <genClasses ecoreClass="analytics.ecore#//OpenBuy"/>
     <genClasses ecoreClass="analytics.ecore#//BuyOpportunity">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/desPurchase"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyOpportunity/port"/>
@@ -69,30 +71,42 @@
     <genClasses ecoreClass="analytics.ecore#//SellReference">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellReference/slot"/>
     </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//VesselEventOption"/>
+    <genClasses ecoreClass="analytics.ecore#//VesselEventReference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//VesselEventReference/event"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//CharterOutOpportunity">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//CharterOutOpportunity/hireCost"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//CharterOutOpportunity/port"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//CharterOutOpportunity/date"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//CharterOutOpportunity/duration"/>
+    </genClasses>
     <genClasses ecoreClass="analytics.ecore#//BaseCaseRow">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCaseRow/buyOption"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCaseRow/sellOption"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCaseRow/vesselEventOption"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCaseRow/shipping"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//PartialCaseRow">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/buyOptions"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/sellOptions"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/vesselEventOptions"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/shipping"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//ShippingOption"/>
-    <genClasses ecoreClass="analytics.ecore#//FleetShippingOption">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//FleetShippingOption/vessel"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//FleetShippingOption/hireCost"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//FleetShippingOption/entity"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//FleetShippingOption/useSafetyHeel"/>
+    <genClasses ecoreClass="analytics.ecore#//SimpleVesselCharterOption">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SimpleVesselCharterOption/vessel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SimpleVesselCharterOption/hireCost"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SimpleVesselCharterOption/entity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SimpleVesselCharterOption/useSafetyHeel"/>
     </genClasses>
-    <genClasses ecoreClass="analytics.ecore#//OptionalAvailabilityShippingOption">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//OptionalAvailabilityShippingOption/ballastBonus"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//OptionalAvailabilityShippingOption/repositioningFee"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//OptionalAvailabilityShippingOption/start"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//OptionalAvailabilityShippingOption/end"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionalAvailabilityShippingOption/startPort"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionalAvailabilityShippingOption/endPort"/>
+    <genClasses ecoreClass="analytics.ecore#//OptionalSimpleVesselCharterOption">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//OptionalSimpleVesselCharterOption/ballastBonus"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//OptionalSimpleVesselCharterOption/repositioningFee"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//OptionalSimpleVesselCharterOption/start"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//OptionalSimpleVesselCharterOption/end"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionalSimpleVesselCharterOption/startPort"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionalSimpleVesselCharterOption/endPort"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//RoundTripShippingOption">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//RoundTripShippingOption/vessel"/>
@@ -101,17 +115,11 @@
     <genClasses ecoreClass="analytics.ecore#//NominatedShippingOption">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//NominatedShippingOption/nominatedVessel"/>
     </genClasses>
-    <genClasses ecoreClass="analytics.ecore#//AnalysisResultRow">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalysisResultRow/buyOption"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalysisResultRow/sellOption"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalysisResultRow/resultDetail"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalysisResultRow/shipping"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalysisResultRow/resultDetails"/>
+    <genClasses ecoreClass="analytics.ecore#//FullVesselCharterOption">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//FullVesselCharterOption/vesselCharter"/>
     </genClasses>
-    <genClasses ecoreClass="analytics.ecore#//ResultContainer">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ResultContainer/cargoAllocation"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ResultContainer/openSlotAllocations"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ResultContainer/slotAllocations"/>
+    <genClasses ecoreClass="analytics.ecore#//ExistingVesselCharterOption">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//ExistingVesselCharterOption/vesselCharter"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//AnalysisResultDetail"/>
     <genClasses ecoreClass="analytics.ecore#//ProfitAndLossResult">
@@ -125,28 +133,17 @@
     <genClasses image="false" ecoreClass="analytics.ecore#//AbstractAnalysisModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractAnalysisModel/buys"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractAnalysisModel/sells"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractAnalysisModel/vesselEvents"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractAnalysisModel/shippingTemplates"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//OptionAnalysisModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionAnalysisModel/baseCase"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionAnalysisModel/partialCase"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionAnalysisModel/baseCaseResult"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionAnalysisModel/results"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//OptionAnalysisModel/useTargetPNL"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionAnalysisModel/children"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//OptionAnalysisModel/mode"/>
     </genClasses>
-    <genClasses ecoreClass="analytics.ecore#//ResultSet">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ResultSet/rows"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//ResultSet/profitAndLoss"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ResultSet/scheduleModel"/>
-    </genClasses>
-    <genClasses ecoreClass="analytics.ecore#//Result">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//Result/extraSlots"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//Result/resultSets"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//Result/extraVesselAvailabilities"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//Result/charterInMarketOverrides"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//Result/extraCharterInMarkets"/>
-    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//SandboxResult"/>
     <genClasses ecoreClass="analytics.ecore#//BaseCase">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCase/baseCase"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCase/profitAndLoss"/>
@@ -155,12 +152,6 @@
     <genClasses ecoreClass="analytics.ecore#//PartialCase">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCase/partialCase"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//PartialCase/keepExistingScenario"/>
-    </genClasses>
-    <genClasses ecoreClass="analytics.ecore#//NewVesselAvailability">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//NewVesselAvailability/vesselAvailability"/>
-    </genClasses>
-    <genClasses ecoreClass="analytics.ecore#//ExistingVesselAvailability">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//ExistingVesselAvailability/vesselAvailability"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//ExistingCharterMarketOption">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//ExistingCharterMarketOption/charterInMarket"/>
@@ -173,6 +164,11 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractSolutionSet/extraSlots"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractSolutionSet/baseOption"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractSolutionSet/options"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractSolutionSet/extraVesselEvents"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractSolutionSet/extraVesselAvailabilities"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractSolutionSet/charterInMarketOverrides"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractSolutionSet/extraCharterInMarkets"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//AbstractSolutionSet/useScenarioBase"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//ActionableSetPlan"/>
     <genClasses ecoreClass="analytics.ecore#//SlotInsertionOptions">

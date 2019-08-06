@@ -21,7 +21,7 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
-import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
+import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.ViabilityResult;
@@ -98,8 +98,8 @@ public class ViabilityTest extends AbstractMicroTestCase {
 			assert so != null;
 			VesselAvailability va = null;
 			
-			if (so instanceof ExistingVesselAvailability) {
-				va = ((ExistingVesselAvailability)so).getVesselAvailability();
+			if (so instanceof ExistingVesselCharterOption) {
+				va = ((ExistingVesselCharterOption)so).getVesselCharter();
 			}
 			
 			assert va != null;

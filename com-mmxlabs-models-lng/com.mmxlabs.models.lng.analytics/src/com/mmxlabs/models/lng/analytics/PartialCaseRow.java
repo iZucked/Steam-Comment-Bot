@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getBuyOptions <em>Buy Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getSellOptions <em>Sell Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getVesselEventOptions <em>Vessel Event Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getShipping <em>Shipping</em>}</li>
  * </ul>
  *
@@ -59,6 +60,22 @@ public interface PartialCaseRow extends EObject {
 	 * @generated
 	 */
 	EList<SellOption> getSellOptions();
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Event Options</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.VesselEventOption}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Event Options</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Event Options</em>' reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getPartialCaseRow_VesselEventOptions()
+	 * @model
+	 * @generated
+	 */
+	EList<VesselEventOption> getVesselEventOptions();
 
 	/**
 	 * Returns the value of the '<em><b>Shipping</b></em>' reference list.

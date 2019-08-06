@@ -217,13 +217,31 @@ public interface PortPackage extends EPackage {
 	int PORT__MAX_CV_VALUE = TypesPackage.APORT_SET_FEATURE_COUNT + 12;
 
 	/**
+	 * The feature id for the '<em><b>Min Vessel Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__MIN_VESSEL_SIZE = TypesPackage.APORT_SET_FEATURE_COUNT + 13;
+
+	/**
+	 * The feature id for the '<em><b>Max Vessel Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__MAX_VESSEL_SIZE = TypesPackage.APORT_SET_FEATURE_COUNT + 14;
+
+	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 13;
+	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 15;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1533,6 +1551,28 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_MaxCvValue();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getMinVesselSize <em>Min Vessel Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Vessel Size</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getMinVesselSize()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_MinVesselSize();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getMaxVesselSize <em>Max Vessel Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Vessel Size</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getMaxVesselSize()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_MaxVesselSize();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.port.Port#getZoneId() <em>Get Zone Id</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2246,6 +2286,22 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT__MAX_CV_VALUE = eINSTANCE.getPort_MaxCvValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Vessel Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__MIN_VESSEL_SIZE = eINSTANCE.getPort_MinVesselSize();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Vessel Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__MAX_VESSEL_SIZE = eINSTANCE.getPort_MaxVesselSize();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Zone Id</b></em>' operation.

@@ -96,7 +96,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		allFeatures = new HashSet<>();
 
 		nameFeatures = new ArrayList<>();
-		nameFeatures.add(new EStructuralFeature[] { MMXCorePackage.eINSTANCE.getNamedObject_Name(), CargoFeatures.getSlot_Optional(), CargoFeatures.getSlot_Locked(), CargoFeatures.getSlot_Cancelled() });
+		nameFeatures
+				.add(new EStructuralFeature[] { MMXCorePackage.eINSTANCE.getNamedObject_Name(), CargoFeatures.getSlot_Optional(), CargoFeatures.getSlot_Locked(), CargoFeatures.getSlot_Cancelled() });
 		allFeatures.addAll(getAllFeatures(nameFeatures));
 
 		mainFeatures = new ArrayList<>();
@@ -125,10 +126,14 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		allFeatures.addAll(getAllFeatures(windowFeatures));
 
 		loadTermsFeatures = new ArrayList<EStructuralFeature[]>();
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_SchedulePurge() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold(), CargoFeatures.getLoadSlot_CargoCV() });
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPortsOverride(), CargoFeatures.getSlot_RestrictedPorts(), CargoFeatures.getSlot_RestrictedPortsArePermissive() });
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContractsOverride(), CargoFeatures.getSlot_RestrictedContracts(), CargoFeatures.getSlot_RestrictedContractsArePermissive() });
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedVesselsOverride(), CargoFeatures.getSlot_RestrictedVessels(), CargoFeatures.getSlot_RestrictedVesselsArePermissive() });
+		loadTermsFeatures
+				.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPortsOverride(), CargoFeatures.getSlot_RestrictedPorts(), CargoFeatures.getSlot_RestrictedPortsArePermissive() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContractsOverride(), CargoFeatures.getSlot_RestrictedContracts(),
+				CargoFeatures.getSlot_RestrictedContractsArePermissive() });
+		loadTermsFeatures
+				.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedVesselsOverride(), CargoFeatures.getSlot_RestrictedVessels(), CargoFeatures.getSlot_RestrictedVesselsArePermissive() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedSlots(), CargoFeatures.getSlot_RestrictedSlotsArePermissive() });
 
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_NominatedVessel() });
@@ -139,9 +144,12 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		dischargeTermsFeatures = new ArrayList<EStructuralFeature[]>();
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_PurchaseDeliveryType() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_MinCvValue(), CargoFeatures.getDischargeSlot_MaxCvValue() });
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts(), CargoFeatures.getSlot_RestrictedPortsArePermissive(), CargoFeatures.getSlot_RestrictedPortsOverride()});
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts(), CargoFeatures.getSlot_RestrictedContractsArePermissive(), CargoFeatures.getSlot_RestrictedContractsOverride() });
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedVessels(), CargoFeatures.getSlot_RestrictedVesselsArePermissive(), CargoFeatures.getSlot_RestrictedVesselsOverride() });
+		dischargeTermsFeatures
+				.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts(), CargoFeatures.getSlot_RestrictedPortsArePermissive(), CargoFeatures.getSlot_RestrictedPortsOverride() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts(), CargoFeatures.getSlot_RestrictedContractsArePermissive(),
+				CargoFeatures.getSlot_RestrictedContractsOverride() });
+		dischargeTermsFeatures
+				.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedVessels(), CargoFeatures.getSlot_RestrictedVesselsArePermissive(), CargoFeatures.getSlot_RestrictedVesselsOverride() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedSlots(), CargoFeatures.getSlot_RestrictedSlotsArePermissive() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_NominatedVessel() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertible(), CargoFeatures.getSlot_ShippingDaysRestriction() });
@@ -236,9 +244,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				// Special case for min/max volumes - ensure text box has enough width for around 7 digits.
 				// Note: Should really render the font to get width - this is ok on my system, but other systems (default font & size, resolution, dpi etc) could make this wrong
 				final EStructuralFeature feature = editor.getFeature();
-				if (feature == CargoPackage.Literals.SLOT__MAX_QUANTITY 
-						|| feature == CargoPackage.Literals.SLOT__MIN_QUANTITY 
-						|| feature == CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE) {
+				if (feature == CargoPackage.Literals.SLOT__MAX_QUANTITY || feature == CargoPackage.Literals.SLOT__MIN_QUANTITY || feature == CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
 					// gd.widthHint = 80;
@@ -278,7 +284,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 						editor.setLabel(null);
 					}
 					return gd;
-				}	
+				}
 				if (feature == CargoPackage.Literals.SLOT__WINDOW_FLEX || feature == CargoPackage.Literals.SLOT__WINDOW_FLEX_UNITS) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
@@ -301,9 +307,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					gd.widthHint = 100;
 					return gd;
 				}
-				
-				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS 
-						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE 
+
+				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS || feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE
 						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_OVERRIDE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
@@ -327,8 +332,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					}
 					return gd;
 				}
-				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS 
-						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE 
+				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS || feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE
 						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS_OVERRIDE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
@@ -352,8 +356,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					}
 					return gd;
 				}
-				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS 
-						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE 
+				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS || feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE
 						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_OVERRIDE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
@@ -377,8 +380,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					}
 					return gd;
 				}
-				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_SLOTS 
-						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE ) {
+				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_SLOTS || feature == CargoPackage.Literals.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
 					// gd.widthHint = 80;

@@ -116,6 +116,7 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<OptionAnalysisModel> getOptionModels() {
 		if (optionModels == null) {
 			optionModels = new EObjectContainmentEList<OptionAnalysisModel>(OptionAnalysisModel.class, this, AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS);
@@ -128,6 +129,7 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<AbstractSolutionSet> getOptimisations() {
 		if (optimisations == null) {
 			optimisations = new EObjectContainmentEList<AbstractSolutionSet>(AbstractSolutionSet.class, this, AnalyticsPackage.ANALYTICS_MODEL__OPTIMISATIONS);
@@ -140,6 +142,7 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ViabilityModel getViabilityModel() {
 		return viabilityModel;
 	}
@@ -164,6 +167,7 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setViabilityModel(ViabilityModel newViabilityModel) {
 		if (newViabilityModel != viabilityModel) {
 			NotificationChain msgs = null;
@@ -183,6 +187,7 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MTMModel getMtmModel() {
 		return mtmModel;
 	}
@@ -207,6 +212,7 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMtmModel(MTMModel newMtmModel) {
 		if (newMtmModel != mtmModel) {
 			NotificationChain msgs = null;
@@ -226,6 +232,7 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<BreakEvenAnalysisModel> getBreakevenModels() {
 		if (breakevenModels == null) {
 			breakevenModels = new EObjectContainmentEList<BreakEvenAnalysisModel>(BreakEvenAnalysisModel.class, this, AnalyticsPackage.ANALYTICS_MODEL__BREAKEVEN_MODELS);

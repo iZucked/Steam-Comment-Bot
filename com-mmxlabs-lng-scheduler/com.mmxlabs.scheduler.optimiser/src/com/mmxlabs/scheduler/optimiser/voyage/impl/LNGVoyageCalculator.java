@@ -33,6 +33,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IScheduledPurgeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
@@ -70,12 +71,19 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	private IPortCostProvider portCostProvider;
 
 	@Inject
+	private IScheduledPurgeProvider scheduledPurgeProvider;
+
+	@Inject
 	private IPortCooldownDataProvider portCooldownDataProvider;
 
 	// See default binding in LNGTransformerModule
 	@Inject
 	@Named(SchedulerConstants.COOLDOWN_MIN_IDLE_HOURS)
 	private int hoursBeforeCooldownsNoLongerForced;
+
+	@Inject
+	@Named(SchedulerConstants.Key_SchedulePurges)
+	private boolean purgeSchedulingEnabled;
 
 	/**
 	 * Calculate the fuel requirements between a pair of {@link IPortSlot}s. The {@link VoyageOptions} provides the specific choices to evaluate for this voyage (e.g. fuel choice, route, ...).
@@ -110,12 +118,30 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// Calculate the appropriate speed
 		final int speed = calculateSpeed(options, availableTimeInHours);
 		output.setSpeed(speed);
+
+		// Check purge
+		int purgeTime = 0;
+
+		if (purgeSchedulingEnabled) {
+			if (options.getFromPortSlot().getPortType() == PortType.DryDock) {
+				purgeTime = vessel.getPurgeTime();
+				output.setPurgePerformed(true);
+				output.setPurgeDuration(purgeTime);
+			} else if (options.getToPortSlot().getPortType() == PortType.Load) {
+				if (scheduledPurgeProvider.isPurgeScheduled(options.getToPortSlot())) {
+					purgeTime = vessel.getPurgeTime();
+					output.setPurgePerformed(true);
+					output.setPurgeDuration(purgeTime);
+				}
+			}
+		}
+
 		// Calculate total, travel and idle time
 
 		// May be longer than available time
 		final int travelTimeInHours = speed == 0 ? 0 : Calculator.getTimeFromSpeedDistance(speed, distance);
 		// If idle time is negative, then there is not enough time for this voyage! This should be caught by the caller
-		final int idleTimeInHours = extraIdleTime + Math.max(0, availableTimeInHours - travelTimeInHours);
+		final int idleTimeInHours = extraIdleTime + Math.max(0, availableTimeInHours - travelTimeInHours) - purgeTime;
 
 		// We output travel time + canal time, but the calculations
 		// below only need to care about travel time
@@ -457,6 +483,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			// or minimum speed.
 
 			if (distance != 0) {
+				if (availableTimeInHours == 0) {
+					return vessel.getMaxSpeed();
+				}
 				// Check NBO speed
 				if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS) {
 					final int nboSpeed = options.getNBOSpeed();
@@ -1349,9 +1378,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 *         Populate a PortDetails object with correct fuel costs based on a PortOptions object.
 	 * 
 	 * @param options
-	 *                    The PortOptions to use, specifying vessel class, vessel state and port visit duration.
+	 *            The PortOptions to use, specifying vessel class, vessel state and port visit duration.
 	 * @param details
-	 *                    The PortDetails to set the correct fuel consumption for.
+	 *            The PortDetails to set the correct fuel consumption for.
 	 */
 	public final void calculatePortFuelRequirements(final PortOptions options, final PortDetails details) {
 		details.setOptions(options);

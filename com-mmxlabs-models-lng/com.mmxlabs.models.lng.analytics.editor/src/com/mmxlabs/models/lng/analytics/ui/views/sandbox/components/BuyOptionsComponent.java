@@ -21,6 +21,7 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -38,6 +39,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatter
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.OptionsViewerContentProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class BuyOptionsComponent extends AbstractSandboxComponent<Object, AbstractAnalysisModel> {
 
@@ -50,13 +52,12 @@ public class BuyOptionsComponent extends AbstractSandboxComponent<Object, Abstra
 
 	@Override
 	public void createControls(Composite parent, boolean expanded, IExpansionListener expansionListener, Object optionModellerView) {
-		ExpandableComposite expandable = wrapInExpandable(parent, "Buys", p -> createBuyOptionsViewer(p), expandableComposite -> {
+		ExpandableComposite expandable = wrapInExpandable(parent, "Buys", this::createBuyOptionsViewer, expandableComposite -> {
 
 			{
 				final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 				final BuysDropTargetListener listener = new BuysDropTargetListener(scenarioEditingLocation, buyOptionsViewer);
-				inputWants.add(model -> listener.setModel(model));
-				// Control control = getControl();
+				inputWants.add(listener::setModel);
 				final DropTarget dropTarget = new DropTarget(expandableComposite, DND.DROP_MOVE);
 				dropTarget.setTransfer(types);
 				dropTarget.addDropListener(listener);
@@ -66,12 +67,7 @@ public class BuyOptionsComponent extends AbstractSandboxComponent<Object, Abstra
 			expandableComposite.setTextClient(c);
 			c.setImage(image_grey_add);
 			c.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).hint(16, 16).grab(true, false).create());
-			c.addMouseTrackListener(new MouseTrackListener() {
-
-				@Override
-				public void mouseHover(final MouseEvent e) {
-
-				}
+			c.addMouseTrackListener(new MouseTrackAdapter() {
 
 				@Override
 				public void mouseExit(final MouseEvent e) {
@@ -109,16 +105,20 @@ public class BuyOptionsComponent extends AbstractSandboxComponent<Object, Abstra
 		{
 			mgr = new MenuManager();
 			final BuyOptionsContextMenuManager listener = new BuyOptionsContextMenuManager(buyOptionsViewer, scenarioEditingLocation, mgr);
-			inputWants.add(model -> listener.setModel(model));
+			inputWants.add(listener::setModel);
 			buyOptionsViewer.getGrid().addMenuDetectListener(listener);
 		}
 		{
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 			final BuysDropTargetListener listener = new BuysDropTargetListener(scenarioEditingLocation, buyOptionsViewer);
-			inputWants.add(model -> listener.setModel(model));
+			inputWants.add(listener::setModel);
 			buyOptionsViewer.addDropSupport(DND.DROP_MOVE, types, listener);
 		}
 		inputWants.add(model -> buyOptionsViewer.setInput(model));
+
+		lockedListeners.add(locked -> {
+			RunnerHelper.asyncExec(() -> buyOptionsViewer.getGrid().setEnabled(!locked));
+		});
 
 		return buyOptionsViewer.getControl();
 	}

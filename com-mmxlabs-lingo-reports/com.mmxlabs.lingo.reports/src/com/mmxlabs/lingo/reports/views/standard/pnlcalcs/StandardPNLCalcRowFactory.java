@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.standard.pnlcalcs;
 
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +27,7 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -42,6 +41,7 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 
 		boolean containsCargo = false;
 		boolean containsCooldown = false;
+		boolean containsPurge = false;
 		if (targets == null || targets.isEmpty()) {
 			containsCargo = true;
 		} else {
@@ -52,7 +52,9 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 					for (final Event evt : cargoAllocation.getEvents()) {
 						if (evt instanceof Cooldown) {
 							containsCooldown = true;
-							break;
+						}
+						if (evt instanceof Purge) {
+							containsPurge = true;
 						}
 					}
 				}
@@ -138,10 +140,12 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 					createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(visit, travel, idle, FuelUnit.MMBTU, Fuel.NBO, Fuel.FBO))))));
 			rows.add(createRow(base + 50, "    Charter Cost", true, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class,
 					legIdx, (visit, travel, idle) -> (getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost))))));
-			
-			rows.add(createRow(base + 51, "    Charter Rate", true, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class,
-					legIdx, (visit, travel, idle) -> getOrZero(visit, event -> { return (int) ((double)event.getCharterCost()*24/(double)event.getDuration()); }  )))));
-			
+
+			rows.add(createRow(base + 51, "    Charter Rate", true, "$", "", true,
+					createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> getOrZero(visit, event -> {
+						return (int) ((double) event.getCharterCost() * 24 / (double) event.getDuration());
+					})))));
+
 			rows.add(createRow(base + 60, "    Bunkers (MT)", false, "", "", false, createBasicFormatter(options, true, Integer.class, VolumeM3Format::format,
 					createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(visit, travel, idle, FuelUnit.MT, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT))))));
 			rows.add(createRow(base + 70, "    Bunkers cost", false, "", "", false, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
@@ -227,6 +231,10 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 				shippingCost += fuelUsageFunc.apply(fuelUsage);
 			}
 
+			if (event instanceof Purge) {
+				final Purge purge = (Purge) event;
+				shippingCost += purge.getCost();
+			}
 			if (event instanceof Cooldown) {
 				final Cooldown cooldown = (Cooldown) event;
 				shippingCost += cooldown.getCost();
@@ -277,6 +285,10 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 				shippingCost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
 			}
 
+			if (event instanceof Purge) {
+				final Purge purge = (Purge) event;
+				shippingCost += purge.getCost();
+			}
 			if (event instanceof Cooldown) {
 				final Cooldown cooldown = (Cooldown) event;
 				shippingCost += cooldown.getCost();

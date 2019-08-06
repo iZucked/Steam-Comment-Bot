@@ -37,7 +37,7 @@ public interface LumpSumBallastBonusContractLine extends BallastBonusContractLin
 	 * @see #setPriceExpression(String)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getLumpSumBallastBonusContractLine_PriceExpression()
 	 * @model default="" required="true"
-	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='commodity'"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='charter'"
 	 * @generated
 	 */
 	String getPriceExpression();

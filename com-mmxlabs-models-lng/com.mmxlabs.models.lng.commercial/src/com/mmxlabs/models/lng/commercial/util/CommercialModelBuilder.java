@@ -12,6 +12,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
+import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -185,6 +187,19 @@ public class CommercialModelBuilder {
 		return ballastBonusContract;
 	}
 
+	public @NonNull BallastBonusCharterContract createLumpSumBallastBonusCharterContract(@NonNull final Port redeliveryPort, @NonNull final BaseLegalEntity legalEntity,
+			@NonNull final String priceExpression, @NonNull final String repositioningFee) {
+		
+		final BallastBonusContract ballastBonusContract = createSimpleLumpSumBallastBonusContract(redeliveryPort, priceExpression);
+		
+		final BallastBonusCharterContract ballastBonusCharterContract = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
+		ballastBonusCharterContract.setRepositioningFee(repositioningFee);
+		ballastBonusCharterContract.setBallastBonusContract(ballastBonusContract);
+		ballastBonusCharterContract.setEntity(legalEntity);
+		
+		return ballastBonusCharterContract;
+	}
+	
 	public @NonNull RuleBasedBallastBonusContract createSimpleNotionalJourneyBallastBonusContract(final @NonNull Collection<@NonNull APortSet<Port>> redeliveryPorts, final double speed,
 			final @NonNull String hireExpression, final @NonNull String fuelExpression, final boolean includeCanal, final @NonNull Collection<@NonNull APortSet<Port>> returnPorts) {
 

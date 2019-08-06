@@ -86,6 +86,7 @@ public class ShippingCostHelper {
 				final VoyageDetails voyageDetails = (VoyageDetails) o;
 				planDuration += voyageDetails.getTravelTime();
 				planDuration += voyageDetails.getIdleTime();
+				planDuration += voyageDetails.getPurgeDuration();
 			} else {
 				planDuration += ((PortDetails) o).getOptions().getVisitDuration();
 			}

@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.analytics;
 
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +25,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
  * @model
  * @generated
  */
-public interface BuyMarket extends BuyOption {
+public interface BuyMarket extends UUIDObject, BuyOption {
 	/**
 	 * Returns the value of the '<em><b>Market</b></em>' reference.
 	 * <!-- begin-user-doc -->

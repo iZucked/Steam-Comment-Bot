@@ -20,6 +20,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -86,8 +87,11 @@ public class SlotOverridesTest {
 			modules.add(new PerChainUnitScopeModule());
 			modules.add(new LNGSharedDataTransformerModule(scenarioDataProvider, new SharedDataTransformerService()));
 			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
-			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenarioDataProvider, settings, 1, hints), services,
-					IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
+
+			List<Module> transformerModules = new ArrayList<>(2);
+			transformerModules.add(new LNGTransformerModule(scenarioDataProvider, settings, 1, hints));
+			transformerModules.add(ExtraDataProvider.createDefaultModule());
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(transformerModules, services, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
 
 			parentInjector = Guice.createInjector(modules);
 

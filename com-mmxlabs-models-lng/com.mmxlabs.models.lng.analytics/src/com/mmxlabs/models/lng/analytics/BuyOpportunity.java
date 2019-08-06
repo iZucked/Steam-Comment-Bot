@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -39,7 +40,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * @model
  * @generated
  */
-public interface BuyOpportunity extends MMXObject, BuyOption {
+public interface BuyOpportunity extends UUIDObject, BuyOption {
 	/**
 	 * Returns the value of the '<em><b>Des Purchase</b></em>' attribute.
 	 * <!-- begin-user-doc -->

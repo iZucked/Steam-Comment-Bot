@@ -75,7 +75,7 @@ public class SlotInsertionEvaluator {
 
 		long[] metrics = null;
 		final IModifiableSequences simpleSeqFull = manipulator.createManipulatedSequences(mSequences);
-		metrics = evaluationHelper.evaluateState(mSequences, simpleSeqFull, null, true, null, null);
+		metrics = evaluationHelper.evaluateState(mSequences, simpleSeqFull, null, true, true, null, null);
 		if (metrics == null) {
 			return null;
 		}

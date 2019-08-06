@@ -28,11 +28,11 @@ public class SingleAddAction extends LockableAction {
 	protected final IAddContext context;
 	protected final IModelFactory factory;
 	protected final Viewer viewer;
-	
+
 	public SingleAddAction(final IModelFactory factory, final IAddContext context) {
 		this(factory, context, null);
 	}
-	
+
 	/**
 	 * @param iModelFactory
 	 * @param context
@@ -54,7 +54,7 @@ public class SingleAddAction extends LockableAction {
 	@Override
 	public void run() {
 		final Collection<? extends ISetting> settings = factory.createInstance(context.getRootObject(), context.getContainer(), context.getContainment(), context.getCurrentSelection());
-		if (settings.isEmpty() == false) {
+		if (!settings.isEmpty()) {
 
 			final CompoundCommand add = new CompoundCommand();
 			for (final ISetting setting : settings) {
@@ -63,10 +63,10 @@ public class SingleAddAction extends LockableAction {
 			final CommandStack commandStack = context.getCommandHandler().getEditingDomain().getCommandStack();
 			commandStack.execute(add);
 			EObject obj = settings.iterator().next().getInstance();
-			int ret = DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(context.getEditorPart(), obj, commandStack.getMostRecentCommand());				
-			if (ret == Window.OK) {
+			int ret = DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(context.getEditorPart(), obj, commandStack.getMostRecentCommand());
+			if (ret == Window.OK && viewer != null) {
 				viewer.setSelection(new StructuredSelection(obj));
-			}	
+			}
 		}
 	}
 

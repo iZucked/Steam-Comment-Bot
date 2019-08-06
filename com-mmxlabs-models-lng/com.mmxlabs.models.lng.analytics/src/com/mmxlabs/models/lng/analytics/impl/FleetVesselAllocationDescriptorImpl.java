@@ -94,6 +94,7 @@ public class FleetVesselAllocationDescriptorImpl extends VesselAllocationDescrip
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -103,6 +104,7 @@ public class FleetVesselAllocationDescriptorImpl extends VesselAllocationDescrip
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -115,6 +117,7 @@ public class FleetVesselAllocationDescriptorImpl extends VesselAllocationDescrip
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCharterIndex() {
 		return charterIndex;
 	}
@@ -124,6 +127,7 @@ public class FleetVesselAllocationDescriptorImpl extends VesselAllocationDescrip
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterIndex(int newCharterIndex) {
 		int oldCharterIndex = charterIndex;
 		charterIndex = newCharterIndex;

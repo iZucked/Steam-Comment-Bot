@@ -45,6 +45,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -219,6 +220,8 @@ public abstract class AbstractVerticalReportVisualiser {
 			}
 		} else if (event instanceof Cooldown) {
 			return "Cooldown";
+		} else if (event instanceof Purge) {
+			return "Purge";
 		}
 
 		final EClass eventClass = event.eClass();

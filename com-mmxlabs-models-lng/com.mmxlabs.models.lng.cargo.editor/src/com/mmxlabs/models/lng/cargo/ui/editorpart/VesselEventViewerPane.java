@@ -10,11 +10,17 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
@@ -42,6 +48,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateTimeAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
+import com.mmxlabs.rcp.common.dnd.BasicDragSource;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class VesselEventViewerPane extends ScenarioTableViewerPane {
@@ -167,5 +174,11 @@ public class VesselEventViewerPane extends ScenarioTableViewerPane {
 				return null;
 			}
 		});
+
+		final DragSource source = new DragSource(getScenarioViewer().getControl(), DND.DROP_MOVE);
+		final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+		source.setTransfer(types);
+
+		source.addDragListener(new BasicDragSource(viewer));
 	}
 }

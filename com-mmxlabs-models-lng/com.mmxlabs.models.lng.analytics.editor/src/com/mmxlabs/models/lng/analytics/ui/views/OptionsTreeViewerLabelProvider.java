@@ -18,7 +18,7 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
-import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.DefaultSandboxLabelProvider;
@@ -81,7 +81,7 @@ public class OptionsTreeViewerLabelProvider extends DefaultSandboxLabelProvider 
 		} else {
 			if (element instanceof RoundTripShippingOption) {
 				return imgShippingRoundTrip;
-			} else if (element instanceof FleetShippingOption) {
+			} else if (element instanceof SimpleVesselCharterOption) {
 				return imgShippingFleet;
 			} else if (element instanceof OptionAnalysisModel && element == optionModellerView.getModel()) {
 				return imgModel;

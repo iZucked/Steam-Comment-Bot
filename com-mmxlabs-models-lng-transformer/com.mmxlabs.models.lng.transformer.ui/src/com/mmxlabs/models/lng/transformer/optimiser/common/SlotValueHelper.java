@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.extensions.portshipsizeconstraint.PortShipSizeConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.LoadDischargePairValueCalculatorStep;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
@@ -37,6 +38,9 @@ public class SlotValueHelper {
 				iterator.remove();
 			}
 			if (constraint.getName().equals(PortExclusionConstraintCheckerFactory.NAME)) {
+				iterator.remove();
+			}
+			if (constraint.getName().equals(PortShipSizeConstraintCheckerFactory.NAME)) {
 				iterator.remove();
 			}
 		}

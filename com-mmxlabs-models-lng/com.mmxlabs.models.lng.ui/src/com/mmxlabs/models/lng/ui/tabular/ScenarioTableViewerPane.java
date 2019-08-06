@@ -63,6 +63,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -289,16 +290,7 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
 		}
 
-		Action copyToClipboardAction = null;
-		if (viewer instanceof TableViewer) {
-			copyToClipboardAction = new CopyTableToClipboardAction(((TableViewer) viewer).getTable());
-		} else if (viewer instanceof TreeViewer) {
-			copyToClipboardAction = new CopyTreeToClipboardAction(((TreeViewer) viewer).getTree());
-		} else if (viewer instanceof GridTableViewer) {
-			copyToClipboardAction = new CopyGridToClipboardAction(((GridTableViewer) viewer).getGrid());
-		} else if (viewer instanceof GridTreeViewer) {
-			copyToClipboardAction = new CopyGridToClipboardAction(((GridTreeViewer) viewer).getGrid());
-		}
+		Action copyToClipboardAction = createCopyToClipboardAction();
 
 		if (copyToClipboardAction != null) {
 			toolbar.add(copyToClipboardAction);
@@ -309,6 +301,10 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 		}
 
 		toolbar.update(true);
+	}
+
+	protected Action createCopyToClipboardAction() {
+		return CopyToClipboardActionFactory.createCopyToClipboardAction(scenarioViewer);
 	}
 
 	/**

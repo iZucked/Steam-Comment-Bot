@@ -12,6 +12,7 @@ import org.ops4j.peaberry.util.TypeLiterals;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsModule;
+import com.mmxlabs.models.lng.transformer.extensions.portshipsizeconstraint.PortShipSizeModule;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsModule;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementModule;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -31,6 +32,7 @@ public class TransformerExtensionTestBootstrapModule extends AbstractModule {
 			final List<IOptimiserInjectorService> injectorServices = Lists.<IOptimiserInjectorService> newArrayList(//
 					new ShippingTypeRequirementModule.DesPermissionInjectorService(), //
 					new RestrictedElementsModule.RestrictedElementsInjectorService(), //
+					new PortShipSizeModule.PortShipSizeInjectorService(),
 					new PanamaSlotsModule.PanamaSlotsInjectorService(), //
 					createTradingInjectorService());
 

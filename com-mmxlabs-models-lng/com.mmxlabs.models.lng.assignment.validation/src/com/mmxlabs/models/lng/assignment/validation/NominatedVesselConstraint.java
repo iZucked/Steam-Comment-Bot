@@ -13,6 +13,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
@@ -25,6 +26,9 @@ public class NominatedVesselConstraint extends AbstractModelMultiConstraint {
 	@Override
 	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
+		if (!(extraContext.getContainer(object) instanceof CargoModel)) {
+			return Activator.PLUGIN_ID;
+		}
 
 		final LoadSlot slot = getValidObject(object);
 		if (slot == null) {

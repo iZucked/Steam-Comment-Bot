@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 
+import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -29,6 +30,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowImpl#getBuyOption <em>Buy Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowImpl#getSellOption <em>Sell Option</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowImpl#getVesselEventOption <em>Vessel Event Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowImpl#getShipping <em>Shipping</em>}</li>
  * </ul>
  *
@@ -54,6 +56,16 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 	 * @ordered
 	 */
 	protected SellOption sellOption;
+
+	/**
+	 * The cached value of the '{@link #getVesselEventOption() <em>Vessel Event Option</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselEventOption()
+	 * @generated
+	 * @ordered
+	 */
+	protected VesselEventOption vesselEventOption;
 
 	/**
 	 * The cached value of the '{@link #getShipping() <em>Shipping</em>}' reference.
@@ -89,6 +101,7 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BuyOption getBuyOption() {
 		if (buyOption != null && buyOption.eIsProxy()) {
 			InternalEObject oldBuyOption = (InternalEObject)buyOption;
@@ -115,6 +128,7 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBuyOption(BuyOption newBuyOption) {
 		BuyOption oldBuyOption = buyOption;
 		buyOption = newBuyOption;
@@ -127,6 +141,7 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SellOption getSellOption() {
 		if (sellOption != null && sellOption.eIsProxy()) {
 			InternalEObject oldSellOption = (InternalEObject)sellOption;
@@ -153,6 +168,7 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSellOption(SellOption newSellOption) {
 		SellOption oldSellOption = sellOption;
 		sellOption = newSellOption;
@@ -165,6 +181,47 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public VesselEventOption getVesselEventOption() {
+		if (vesselEventOption != null && vesselEventOption.eIsProxy()) {
+			InternalEObject oldVesselEventOption = (InternalEObject)vesselEventOption;
+			vesselEventOption = (VesselEventOption)eResolveProxy(oldVesselEventOption);
+			if (vesselEventOption != oldVesselEventOption) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.BASE_CASE_ROW__VESSEL_EVENT_OPTION, oldVesselEventOption, vesselEventOption));
+			}
+		}
+		return vesselEventOption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselEventOption basicGetVesselEventOption() {
+		return vesselEventOption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setVesselEventOption(VesselEventOption newVesselEventOption) {
+		VesselEventOption oldVesselEventOption = vesselEventOption;
+		vesselEventOption = newVesselEventOption;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BASE_CASE_ROW__VESSEL_EVENT_OPTION, oldVesselEventOption, vesselEventOption));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ShippingOption getShipping() {
 		if (shipping != null && shipping.eIsProxy()) {
 			InternalEObject oldShipping = (InternalEObject)shipping;
@@ -191,6 +248,7 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShipping(ShippingOption newShipping) {
 		ShippingOption oldShipping = shipping;
 		shipping = newShipping;
@@ -212,6 +270,9 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 			case AnalyticsPackage.BASE_CASE_ROW__SELL_OPTION:
 				if (resolve) return getSellOption();
 				return basicGetSellOption();
+			case AnalyticsPackage.BASE_CASE_ROW__VESSEL_EVENT_OPTION:
+				if (resolve) return getVesselEventOption();
+				return basicGetVesselEventOption();
 			case AnalyticsPackage.BASE_CASE_ROW__SHIPPING:
 				if (resolve) return getShipping();
 				return basicGetShipping();
@@ -232,6 +293,9 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 				return;
 			case AnalyticsPackage.BASE_CASE_ROW__SELL_OPTION:
 				setSellOption((SellOption)newValue);
+				return;
+			case AnalyticsPackage.BASE_CASE_ROW__VESSEL_EVENT_OPTION:
+				setVesselEventOption((VesselEventOption)newValue);
 				return;
 			case AnalyticsPackage.BASE_CASE_ROW__SHIPPING:
 				setShipping((ShippingOption)newValue);
@@ -254,6 +318,9 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 			case AnalyticsPackage.BASE_CASE_ROW__SELL_OPTION:
 				setSellOption((SellOption)null);
 				return;
+			case AnalyticsPackage.BASE_CASE_ROW__VESSEL_EVENT_OPTION:
+				setVesselEventOption((VesselEventOption)null);
+				return;
 			case AnalyticsPackage.BASE_CASE_ROW__SHIPPING:
 				setShipping((ShippingOption)null);
 				return;
@@ -273,6 +340,8 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 				return buyOption != null;
 			case AnalyticsPackage.BASE_CASE_ROW__SELL_OPTION:
 				return sellOption != null;
+			case AnalyticsPackage.BASE_CASE_ROW__VESSEL_EVENT_OPTION:
+				return vesselEventOption != null;
 			case AnalyticsPackage.BASE_CASE_ROW__SHIPPING:
 				return shipping != null;
 		}

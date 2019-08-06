@@ -233,14 +233,11 @@ public class MTMSanboxUnit {
 						
 						for (final CharterInMarket shipping : model.getNominalMarkets()) {
 
-							if (!shipping.isEnabled() || !shipping.isNominal() || !shipping.isMtm()) {
+							if (!shipping.isEnabled()) {
 								continue;
 							}
 	
 							for (final SpotMarket market : model.getMarkets()) {
-								if (!market.isMtm()) {
-									continue;
-								}
 								final Callable<Runnable> job = () -> {
 									if (monitor.isCanceled()) {
 										return null;

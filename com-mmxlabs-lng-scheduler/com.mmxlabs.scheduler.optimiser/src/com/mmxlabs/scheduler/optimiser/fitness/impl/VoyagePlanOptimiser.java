@@ -294,7 +294,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			// changed by further iterations through choices, so lets loop
 			// through the plan and replace the voyage details options with
 			// cloned ones.
-			for (final Object obj : currentPlan.getSequence()) {
+			for (final IDetailsSequenceElement obj : currentPlan.getSequence()) {
 				if (obj instanceof VoyageDetails) {
 					final VoyageDetails details = (VoyageDetails) obj;
 					// Skip cast check as we created the object in the first

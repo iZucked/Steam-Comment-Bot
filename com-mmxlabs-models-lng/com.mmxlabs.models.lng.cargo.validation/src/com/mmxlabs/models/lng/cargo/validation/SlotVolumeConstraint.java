@@ -55,14 +55,16 @@ public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 					if (slot.getOperationalTolerance() < 0.0) {
 						final String failureMessage = String.format("Operational tolerance is less than zero");
 
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(), failureMessage));
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
+								String.format("%s %s", slot.getName(), failureMessage)));
 						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE);
 						failures.add(dsd);
 					}
 					if (slot.getOperationalTolerance() > 1.0) {
 						final String failureMessage = String.format("Operational tolerance is greater than 100%");
 
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(), failureMessage));
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
+								String.format("%s %s", slot.getName(), failureMessage)));
 						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE);
 						failures.add(dsd);
 					}
@@ -74,7 +76,7 @@ public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 
 	private void checkSensibleValues(@NonNull IValidationContext ctx, @NonNull List<IStatus> failures, Slot slot, String name) {
 		if (slot.getSlotOrDelegateMinQuantity() > SENSIBLE_M3 && slot.getSlotOrDelegateVolumeLimitsUnit() == VolumeUnits.M3) {
-			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(),
+			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
 					String.format("Slot|%s min volume limit (%s) is not sensible, note units are in M3", slot.getName(), slot.getSlotOrDelegateMinQuantity()), IStatus.ERROR));
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit());
@@ -82,7 +84,7 @@ public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 		}
 		if (slot.getSlotOrDelegateMaxQuantity() != 0 && slot.getSlotOrDelegateMaxQuantity() != Integer.MAX_VALUE) {
 			if (slot.getSlotOrDelegateMaxQuantity() > SENSIBLE_M3 && slot.getSlotOrDelegateVolumeLimitsUnit() == VolumeUnits.M3) {
-				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(),
+				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
 						String.format("Slot|%s max volume limit (%s) is not sensible, note units are in M3", slot.getName(), slot.getSlotOrDelegateMaxQuantity()), IStatus.ERROR));
 				status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 				status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit());
@@ -122,8 +124,8 @@ public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 		if (slot.isSetVolumeLimitsUnit() && (slot.getVolumeLimitsUnit() != slot.getUnsetValue(CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT))) {
 			boolean volLimitsOverriden = checkVolumeLimitsOverriden(slot);
 			if (!volLimitsOverriden) {
-				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(),
-						String.format("volume limit units have been set [%s], min and max volume limits must also be set.", getString(slot.getVolumeLimitsUnit()))), IStatus.ERROR);
+				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
+						String.format("%s volume limit units have been set [%s], min and max volume limits must also be set.", slot.getName(), getString(slot.getVolumeLimitsUnit()))), IStatus.ERROR);
 				status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 				status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 				status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit());

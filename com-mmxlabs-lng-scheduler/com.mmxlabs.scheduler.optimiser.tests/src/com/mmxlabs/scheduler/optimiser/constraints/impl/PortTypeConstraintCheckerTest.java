@@ -683,4 +683,81 @@ public class PortTypeConstraintCheckerTest {
 		});
 		return injector.getInstance(PortTypeConstraintChecker.class);
 	}
+	
+	@Test
+	public void testCheckSpotCharterIn() {
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
+
+		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
+		final ISequenceElement o2 = Mockito.mock(ISequenceElement.class, "2");
+
+		portTypeProvider.setPortType(o1, PortType.Start);
+		portTypeProvider.setPortType(o2, PortType.End);
+
+		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2));
+
+		final List<String> messages = new ArrayList<String>(1);
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.SPOT_CHARTER, false));
+
+		Assertions.assertEquals(0, messages.size());
+	}
+	
+	@Test
+	public void testCheckSpotCharterInFailsWithOnlyEnd() {
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
+
+		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
+		portTypeProvider.setPortType(o1, PortType.End);
+
+		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1));
+
+		final List<String> messages = new ArrayList<String>(1);
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.SPOT_CHARTER, false));
+
+		Assertions.assertEquals(1, messages.size());
+	}
+	
+	@Test
+	public void testCheckRoundtripWithOnlyEnd() {
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
+
+		final ISequence sequence = new ListSequence(java.util.Collections.emptyList());
+
+		final List<String> messages = new ArrayList<String>(1);
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.ROUND_TRIP, false));
+
+		Assertions.assertEquals(0, messages.size());
+	}
+	
+	@Test
+	public void testCheckRoundtripWithLoadDischargeEnd() {
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
+
+		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
+		final ISequenceElement o2 = Mockito.mock(ISequenceElement.class, "2");
+		final ISequenceElement o3 = Mockito.mock(ISequenceElement.class, "3");
+		
+		portTypeProvider.setPortType(o1, PortType.Load);
+		portTypeProvider.setPortType(o2, PortType.Discharge);
+		portTypeProvider.setPortType(o3, PortType.Round_Trip_Cargo_End);
+		
+		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3));
+
+		final List<String> messages = new ArrayList<String>(1);
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.ROUND_TRIP, false));
+
+		Assertions.assertEquals(0, messages.size());
+	}
 }

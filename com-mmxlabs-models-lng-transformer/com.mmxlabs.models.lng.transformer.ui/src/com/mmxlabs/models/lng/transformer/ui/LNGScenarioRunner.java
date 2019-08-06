@@ -101,6 +101,13 @@ public class LNGScenarioRunner {
 		return result;
 	}
 
+	public void applyBest(final IMultiStateResult result) {
+		final NonNullPair<ISequences, Map<String, Object>> bestSolution = result.getBestSolution();
+		RunnerHelper.syncExecDisplayOptional(() -> {
+			this.schedule = getScenarioToOptimiserBridge().overwrite(100, bestSolution.getFirst(), bestSolution.getSecond());
+		});
+	}
+
 	/**
 	 * used by {@link AbstractEclipseJobControl} / {@link LNGSchedulerOptimiserJobControl}
 	 * 

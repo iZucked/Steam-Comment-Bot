@@ -90,6 +90,7 @@ public class VesselEventChangeImpl extends ChangeImpl implements VesselEventChan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselEventDescriptor getVesselEventDescriptor() {
 		return vesselEventDescriptor;
 	}
@@ -114,6 +115,7 @@ public class VesselEventChangeImpl extends ChangeImpl implements VesselEventChan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselEventDescriptor(VesselEventDescriptor newVesselEventDescriptor) {
 		if (newVesselEventDescriptor != vesselEventDescriptor) {
 			NotificationChain msgs = null;
@@ -133,6 +135,7 @@ public class VesselEventChangeImpl extends ChangeImpl implements VesselEventChan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselAllocationDescriptor getVesselAllocation() {
 		return vesselAllocation;
 	}
@@ -157,6 +160,7 @@ public class VesselEventChangeImpl extends ChangeImpl implements VesselEventChan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselAllocation(VesselAllocationDescriptor newVesselAllocation) {
 		if (newVesselAllocation != vesselAllocation) {
 			NotificationChain msgs = null;
@@ -176,6 +180,7 @@ public class VesselEventChangeImpl extends ChangeImpl implements VesselEventChan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PositionDescriptor getPosition() {
 		return position;
 	}
@@ -200,6 +205,7 @@ public class VesselEventChangeImpl extends ChangeImpl implements VesselEventChan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPosition(PositionDescriptor newPosition) {
 		if (newPosition != position) {
 			NotificationChain msgs = null;

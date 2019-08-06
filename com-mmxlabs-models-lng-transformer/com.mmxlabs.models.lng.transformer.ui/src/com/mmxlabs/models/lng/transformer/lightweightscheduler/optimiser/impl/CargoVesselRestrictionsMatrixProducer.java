@@ -15,12 +15,14 @@ import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mmxlabs.models.lng.transformer.extensions.portshipsizeconstraint.PortShipSizeConstraintChecker;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoVesselRestrictionsMatrixProducer;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IResourceElementConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintChecker;
@@ -29,7 +31,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestrictionsMatrixProducer {
-
+	
+	/**
+	 * Set of lightweight constraints types considered by this class.
+	 */
+	private static final Set<Class<?>> LIGHTWEIGHT_CONSTRAINTS = Set.of(PortExclusionConstraintChecker.class, ResourceAllocationConstraintChecker.class, AllowedVesselPermissionConstraintChecker.class, PortShipSizeConstraintChecker.class);
+	
 	@Inject
 	private IVesselProvider vesselProvider;
 	
@@ -54,30 +61,14 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 
 	@Override
 	public Map<List<IPortSlot>, List<IVesselAvailability>> getCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels) {
-		ResourceAllocationConstraintChecker resourceAllocationConstraintChecker = getResourceAllocationConstraintChecker(constraintCheckers);
-		PortExclusionConstraintChecker portExclusionConstraintChecker = getPortExclusionConstraintChecker(constraintCheckers);
-		AllowedVesselPermissionConstraintChecker allowedVesselPermissionConstraintChecker = getConstraintChecker(constraintCheckers, AllowedVesselPermissionConstraintChecker.class);
+	
+		List<IConstraintChecker> lightWeightConstraintCheckers = getLightWeightConstraintCheckers(constraintCheckers);
+
 		Map<List<IPortSlot>, List<IVesselAvailability>> cargoMap = new HashMap<>();
 		for (List<IPortSlot> cargo : cargoes) {
 			List<IVesselAvailability> restrictedVessels = new LinkedList<>();
-			for (IVesselAvailability vessel : vessels) {
-				boolean valid = true;
-				for(IPortSlot slot : cargo) {
-					if (resourceAllocationConstraintChecker != null && !resourceAllocationConstraintChecker.checkElement(portSlotProvider.getElement(slot), vesselProvider.getResource(vessel))) {
-						valid = false;
-						break;
-					}
-					if (allowedVesselPermissionConstraintChecker != null && !allowedVesselPermissionConstraintChecker.checkElement(portSlotProvider.getElement(slot), vesselProvider.getResource(vessel))) {
-						valid = false;
-						break;
-					}
-				}
-				if (cargo.size() == 2) {
-					if (portExclusionConstraintChecker != null && !portExclusionConstraintChecker.checkPairwiseConstraint(portSlotProvider.getElement(cargo.get(0)), portSlotProvider.getElement(cargo.get(1)), vesselProvider.getResource(vessel))) {
-						valid = false;
-					}
-				}
-				if (!valid) {
+			for (IVesselAvailability vessel : vessels) {				
+				if (!checkConstraints(lightWeightConstraintCheckers, cargo, vessel)) {
 					restrictedVessels.add(vessel);
 				}
 			}
@@ -86,19 +77,42 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 		}
 		return cargoMap;
 	}
+
+	private boolean checkConstraints(List<IConstraintChecker> constraints, List<IPortSlot> cargo, IVesselAvailability vessel) {
+		for (IConstraintChecker con : constraints) {
+			if (con instanceof IResourceElementConstraintChecker) {
+				IResourceElementConstraintChecker c = (IResourceElementConstraintChecker)con;
+				for(IPortSlot slot : cargo) {
+					if (!c.checkElement(portSlotProvider.getElement(slot), vesselProvider.getResource(vessel))) {
+						return false;
+					}
+				}
+			}
+			else if (cargo.size() == 2 && con instanceof IPairwiseConstraintChecker) {
+				IPairwiseConstraintChecker c = (IPairwiseConstraintChecker)con;
+				if (!c.checkPairwiseConstraint(portSlotProvider.getElement(cargo.get(0)), portSlotProvider.getElement(cargo.get(1)), vesselProvider.getResource(vessel))) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}	
 	
-	private ResourceAllocationConstraintChecker getResourceAllocationConstraintChecker(List<IConstraintChecker> constraintCheckers) {
-		return constraintCheckers.parallelStream().filter(c -> (c instanceof ResourceAllocationConstraintChecker)).map(c -> (ResourceAllocationConstraintChecker) c).findFirst().get();
+	private List<IConstraintChecker> getLightWeightConstraintCheckers(List<IConstraintChecker> constraintCheckers) {
+		List<IConstraintChecker> lightWeightConstraints = new ArrayList<>();
+		Set<Class<?>> lightWeightConstraintTypes = getLightWeightConstraintClasses();
+		constraintCheckers.forEach(c -> 
+		{ 
+			if (lightWeightConstraintTypes.contains(c.getClass())) {
+				lightWeightConstraints.add(c); 
+			}
+		});
+		return lightWeightConstraints;
 	}
 
-	private PortExclusionConstraintChecker getPortExclusionConstraintChecker(List<IConstraintChecker> constraintCheckers) {
-		return constraintCheckers.parallelStream().filter(c -> (c instanceof PortExclusionConstraintChecker)).map(c -> (PortExclusionConstraintChecker) c).findFirst().get();
+	private Set<Class<?>> getLightWeightConstraintClasses() {
+		return LIGHTWEIGHT_CONSTRAINTS;
 	}
-
-	private <T extends IConstraintChecker> T getConstraintChecker(List<IConstraintChecker> constraintCheckers, Class<? extends IConstraintChecker> constraintClass) {
-		return constraintCheckers.parallelStream().filter(c -> c.getClass().isAssignableFrom(constraintClass)).map(c -> (T) c).findFirst().get();
-	}
-
 
 	@Override
 	public ArrayList<Set<Integer>> getIntegerCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, Map<List<IPortSlot>, List<IVesselAvailability>> restrictions) {
@@ -120,5 +134,4 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 	public ArrayList<Set<Integer>> getIntegerCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels) {
 		return getIntegerCargoVesselRestrictions(cargoes, vessels, getCargoVesselRestrictions(cargoes, vessels));
 	}
-
 }

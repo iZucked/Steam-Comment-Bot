@@ -11,8 +11,10 @@ import java.time.YearMonth;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -34,6 +36,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 	 * Vessel availability and cargoes are within the period. No change to start/end information.
 	 */
 	@Test
+	@Tag(TestCategories.MICRO_TEST)
 	public void testContainedAvailability() {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -85,7 +88,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartBy());
-			Assertions.assertEquals("1000000", va.getRepositioningFee());
+			Assertions.assertEquals("1000000", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("5", va.getStartHeel().getPriceExpression());
 			Assertions.assertEquals(1000.0, va.getStartHeel().getMinVolumeAvailable(), 0.0001);
 			Assertions.assertEquals(3000.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0001);
@@ -93,7 +96,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndBy());
-			Assertions.assertEquals("1000000", va.getRepositioningFee());
+			Assertions.assertEquals("1000000", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("7", va.getEndHeel().getPriceExpression());
 			Assertions.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
 			Assertions.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);
@@ -105,6 +108,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 	 * Vessel availability and cargoes are within the period. No change to start/end information.
 	 */
 	@Test
+	@Tag(TestCategories.MICRO_TEST)
 	public void testAvailabilityOverlapsEnd() {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -156,7 +160,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartBy());
-			Assertions.assertEquals("1000000", va.getRepositioningFee());
+			Assertions.assertEquals("1000000", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("5", va.getStartHeel().getPriceExpression());
 			Assertions.assertEquals(1000.0, va.getStartHeel().getMinVolumeAvailable(), 0.0001);
 			Assertions.assertEquals(3000.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0001);
@@ -164,7 +168,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndBy());
-			Assertions.assertEquals("1000000", va.getRepositioningFee());
+			Assertions.assertEquals("1000000", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("7", va.getEndHeel().getPriceExpression());
 			Assertions.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
 			Assertions.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);
@@ -176,6 +180,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 	 * Vessel availability and cargoes are within the period. No change to start/end information.
 	 */
 	@Test
+	@Tag(TestCategories.MICRO_TEST)
 	public void testAvailabilityLooseCargo1() {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -229,18 +234,20 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getStartAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getStartBy());
-			Assertions.assertEquals("", va.getRepositioningFee());
+			Assertions.assertEquals("", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("", va.getStartHeel().getPriceExpression());
 			Assertions.assertEquals(500.0, va.getStartHeel().getMinVolumeAvailable(), 0.0001);
 			Assertions.assertEquals(500.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0001);
 			// TODO: Decide what this should be! Is it previous heel or next heel?
 			// TODO: (Add another trimmed cargo with another CV value to test the correct one has been picked up)
-			// TODO: The period transformer hard codes 22.8!
-			Assertions.assertEquals(22.3, va.getStartHeel().getCvValue(), 0.0001);
+			// TODO: The period transformer hard codes 22.8, it should really be 22.3 - the CV of cargo 1
+			Assertions.assertEquals(22.8, va.getStartHeel().getCvValue(), 0.0001);
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndBy());
-			Assertions.assertEquals("1000000", va.getRepositioningFee());
+
+			// Expect repositioning fee to be cleared
+			Assertions.assertEquals("", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("7", va.getEndHeel().getPriceExpression());
 			Assertions.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
 			Assertions.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);
@@ -252,6 +259,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 	 * Vessel availability and cargoes are within the period. No change to start/end information.
 	 */
 	@Test
+	@Tag(TestCategories.MICRO_TEST)
 	public void testAvailabilityLooseCargo2() {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -304,7 +312,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartBy());
-			Assertions.assertEquals("1000000", va.getRepositioningFee());
+			Assertions.assertEquals("1000000", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("5", va.getStartHeel().getPriceExpression());
 			Assertions.assertEquals(1000.0, va.getStartHeel().getMinVolumeAvailable(), 0.0001);
 			Assertions.assertEquals(3000.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0001);
@@ -312,7 +320,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getEndAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getEndBy());
-			Assertions.assertEquals("1000000", va.getRepositioningFee());
+			Assertions.assertEquals("1000000", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("", va.getEndHeel().getPriceExpression());
 			Assertions.assertEquals(500.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
 			Assertions.assertEquals(500.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);

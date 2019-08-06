@@ -85,6 +85,7 @@ public class BreakEvenAnalysisModelImpl extends AbstractAnalysisModelImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<BreakEvenAnalysisRow> getRows() {
 		if (rows == null) {
 			rows = new EObjectContainmentEList<BreakEvenAnalysisRow>(BreakEvenAnalysisRow.class, this, AnalyticsPackage.BREAK_EVEN_ANALYSIS_MODEL__ROWS);
@@ -97,6 +98,7 @@ public class BreakEvenAnalysisModelImpl extends AbstractAnalysisModelImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<SpotMarket> getMarkets() {
 		if (markets == null) {
 			markets = new EObjectResolvingEList<SpotMarket>(SpotMarket.class, this, AnalyticsPackage.BREAK_EVEN_ANALYSIS_MODEL__MARKETS);

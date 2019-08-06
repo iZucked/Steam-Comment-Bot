@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.lingo.reports.services.ScenarioNotEvaluatedException;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
@@ -16,6 +17,7 @@ import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -29,34 +31,31 @@ public class InsertionPlanTransformer {
 		try {
 			final ScheduleResultListTransformer transformer = new ScheduleResultListTransformer();
 			monitor.beginTask("Opening solutions", plan.getOptions().size());
-			boolean first = true;
+			// boolean first = true;
 			UserSettings userSettings = plan.getUserSettings();
-			ScenarioResult base = null;
 
-			if (plan.getBaseOption() != null) {
-				// Take the original base?
-				base = new ScenarioResult(scenarioInstance, plan.getBaseOption().getScheduleModel());
-				first = false;
-			}
+			final ScenarioResult base;
+			if (plan.isUseScenarioBase() || plan.getBaseOption() == null) {
+				// Hacky - compare to evaluated state
+				LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(plan);
 
-			{// Take the current scenario base
-				final AnalyticsModel analyticsModel = (AnalyticsModel) plan.eContainer();
-				final LNGScenarioModel scenarioModel = (LNGScenarioModel) analyticsModel.eContainer();
-				if (scenarioModel.getScheduleModel().getSchedule() == null) {
+				if (scenarioModel == null || scenarioModel.getScheduleModel().getSchedule() == null) {
 					throw new ScenarioNotEvaluatedException("Unable to perform comparison, scenario needs to be evaluated");
 				}
 				base = new ScenarioResult(scenarioInstance, scenarioModel.getScheduleModel());
-
-				first = false;
+			} else {
+				base = new ScenarioResult(scenarioInstance, plan.getBaseOption().getScheduleModel());
 			}
 
 			for (final SolutionOption option : plan.getOptions()) {
 				ChangeDescription changeDescription = option.getChangeDescription();
 				final ScenarioResult current = new ScenarioResult(scenarioInstance, option.getScheduleModel());
-				if (first) {
-					base = current;
-					first = false;
-				} else {
+				// if (first) {
+				// base = current;
+				// first = false;
+				// } else]
+				{
+
 					ScenarioResult altBase = null;
 					ScenarioResult altCurrent = null;
 					if (option instanceof DualModeSolutionOption) {
@@ -80,6 +79,14 @@ public class InsertionPlanTransformer {
 
 		return root;
 
+	}
+
+	private LNGScenarioModel findScenario(final SlotInsertionOptions plan) {
+		EObject container = plan.eContainer();
+		while (container != null && !(container instanceof LNGScenarioModel)) {
+			container = container.eContainer();
+		}
+		return (LNGScenarioModel) container;
 	}
 
 }

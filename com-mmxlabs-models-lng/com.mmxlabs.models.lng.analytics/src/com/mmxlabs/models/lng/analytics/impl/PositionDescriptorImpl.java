@@ -95,6 +95,7 @@ public class PositionDescriptorImpl extends EObjectImpl implements PositionDescr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getAfter() {
 		return after;
 	}
@@ -104,6 +105,7 @@ public class PositionDescriptorImpl extends EObjectImpl implements PositionDescr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAfter(String newAfter) {
 		String oldAfter = after;
 		after = newAfter;
@@ -116,6 +118,7 @@ public class PositionDescriptorImpl extends EObjectImpl implements PositionDescr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getBefore() {
 		return before;
 	}
@@ -125,6 +128,7 @@ public class PositionDescriptorImpl extends EObjectImpl implements PositionDescr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBefore(String newBefore) {
 		String oldBefore = before;
 		before = newBefore;

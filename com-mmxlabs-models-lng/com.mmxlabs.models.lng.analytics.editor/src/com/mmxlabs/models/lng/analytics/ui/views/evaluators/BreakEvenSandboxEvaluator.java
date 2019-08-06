@@ -23,8 +23,8 @@ import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
-import com.mmxlabs.models.lng.analytics.FleetShippingOption;
-import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
@@ -192,12 +192,12 @@ public class BreakEvenSandboxEvaluator {
 
 		for (final ShippingOption shipping : model.getShippingTemplates()) {
 
-			if (shipping instanceof OptionalAvailabilityShippingOption) {
+			if (shipping instanceof OptionalSimpleVesselCharterOption) {
 				// Do not re-add
 				if (availabilitiesMap.containsKey(shipping)) {
 					continue;
 				}
-				final OptionalAvailabilityShippingOption optionalAvailabilityShippingOption = (OptionalAvailabilityShippingOption) shipping;
+				final OptionalSimpleVesselCharterOption optionalAvailabilityShippingOption = (OptionalSimpleVesselCharterOption) shipping;
 				final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 				vesselAvailability.setTimeCharterRate(optionalAvailabilityShippingOption.getHireCost());
 				final Vessel vessel = optionalAvailabilityShippingOption.getVessel();
@@ -235,12 +235,12 @@ public class BreakEvenSandboxEvaluator {
 				availabilitiesMap.put(optionalAvailabilityShippingOption, vesselAvailability);
 
 				mapper.addMapping(optionalAvailabilityShippingOption, vesselAvailability);
-			} else if (shipping instanceof FleetShippingOption) {
+			} else if (shipping instanceof SimpleVesselCharterOption) {
 				// Do not re-add
 				if (availabilitiesMap.containsKey(shipping)) {
 					continue;
 				}
-				final FleetShippingOption fleetShippingOption = (FleetShippingOption) shipping;
+				final SimpleVesselCharterOption fleetShippingOption = (SimpleVesselCharterOption) shipping;
 				final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 				vesselAvailability.setTimeCharterRate(fleetShippingOption.getHireCost());
 				final Vessel vessel = fleetShippingOption.getVessel();
@@ -336,7 +336,7 @@ public class BreakEvenSandboxEvaluator {
 		final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-			final IMapperClass mapper = new Mapper(lngScenarioModel);
+			final IMapperClass mapper = new Mapper(lngScenarioModel, true);
 			final Map<ShippingOption, VesselAssignmentType> shippingMap = buildFullScenario(lngScenarioModel, model, mapper);
 
 			final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();

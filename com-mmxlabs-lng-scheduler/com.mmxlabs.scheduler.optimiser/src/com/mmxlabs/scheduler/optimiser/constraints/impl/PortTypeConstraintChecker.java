@@ -147,15 +147,13 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		for (final ISequenceElement t : sequence) {
 			final PortType type = portTypeProvider.getPortType(t);
 			if (previous == null) {
-				if (!(((type == PortType.Start) && (instanceType != VesselInstanceType.SPOT_CHARTER)) || ((instanceType == VesselInstanceType.ROUND_TRIP) && (type == PortType.Load))
-						|| (((instanceType == VesselInstanceType.SPOT_CHARTER)
-								|| ((instanceType == VesselInstanceType.FLEET || instanceType == VesselInstanceType.TIME_CHARTER) && isOptionalVesselAvailability))
-								&& ((type == PortType.Load) || (type == PortType.End))))) {
-					// must either start with Start and be not a spot charter,
-					// or must start with a load or an End and be a spot charter
+				if ((instanceType == VesselInstanceType.ROUND_TRIP && !(type == PortType.Load || type == PortType.End)) ||
+					(instanceType != VesselInstanceType.ROUND_TRIP && (type != PortType.Start))) {
+					// must either start with Start and be not a round trip,
+					// or must start with a load or an End and be a round trip.
 
 					if (messages != null) {
-						messages.add("Sequence must begin with PortType.Start or, if charter, End or Load, but actually begins with " + type + " (for instance type " + instanceType + ")");
+						messages.add("Sequence must begin with PortType.Start or, if roundtrip, End or Load, but actually begins with " + type + " (for instance type " + instanceType + ")");
 					}
 					return false;
 				}

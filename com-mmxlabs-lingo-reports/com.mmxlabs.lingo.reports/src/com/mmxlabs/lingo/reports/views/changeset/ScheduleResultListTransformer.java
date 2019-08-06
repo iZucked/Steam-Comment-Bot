@@ -14,6 +14,8 @@ import com.mmxlabs.lingo.reports.views.changeset.ChangeSetTransformerUtil.Mappin
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.analytics.ChangeDescription;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -122,6 +124,32 @@ public class ScheduleResultListTransformer {
 		final MappingModel afterDifferences = ChangeSetTransformerUtil.generateMappingModel(afterTargets);
 
 		final List<ChangeSetRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeDifferences, afterDifferences);
+		// Other PNL segment
+		{
+			ChangeSetRow row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+			ChangeSetRowDataGroup afterGroup = ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup();
+			ChangeSetRowDataGroup beforeGroup = ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup();
+			ChangeSetRowData beforeData = ChangesetFactory.eINSTANCE.createChangeSetRowData();
+			ChangeSetRowData afterData = ChangesetFactory.eINSTANCE.createChangeSetRowData();
+
+			beforeData.setPrimaryRecord(true);
+			afterData.setPrimaryRecord(true);
+
+			beforeData.setLhsGroupProfitAndLoss(beforeSchedule.getOtherPNL());
+			afterData.setLhsGroupProfitAndLoss(afterSchedule.getOtherPNL());
+			
+			beforeGroup.getMembers().add(beforeData);
+			afterGroup.getMembers().add(afterData);
+			
+			row.setBeforeData(beforeGroup);
+			row.setAfterData(afterGroup);
+			
+			beforeData.setLhsName("Knock-on P&L");
+			afterData.setLhsName("Knock-on P&L");
+			
+			rows.add(row);
+		}
+
 		// //
 
 		// Add to data model

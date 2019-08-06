@@ -79,6 +79,12 @@ public class BasicShippingDetailsProperties extends AbstractDetailPropertyFactor
 			addDetailProperty("Canal", "", "$", "", value, new StringFormatLabelProvider("%,d"), details);
 		}
 		{
+			final long value = ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, false, ShippingCostType.PURGE_COSTS);
+			if (value != 0) {
+				addDetailProperty("Purge", "", "$", "", value, new StringFormatLabelProvider("%,d"), details);
+			}
+		}
+		{
 			final long value = ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, false, ShippingCostType.COOLDOWN_COSTS);
 			addDetailProperty("Cooldown", "", "$", "", value, new StringFormatLabelProvider("%,d"), details);
 		}

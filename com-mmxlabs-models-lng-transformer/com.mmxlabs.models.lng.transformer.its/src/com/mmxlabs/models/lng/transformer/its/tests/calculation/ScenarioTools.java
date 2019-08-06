@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -370,7 +371,7 @@ public class ScenarioTools {
 		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 		userSettings.setGenerateCharterOuts(withCharterOutGeneration);
 		final Set<String> hints = LNGTransformerHelper.getHints(userSettings);
-		final LNGDataTransformer dataTransformer = new LNGDataTransformer(scenarioDataProvider, userSettings, ScenarioUtils.createDefaultSolutionBuilderSettings(), 1, hints,
+		final LNGDataTransformer dataTransformer = new LNGDataTransformer(scenarioDataProvider, null, userSettings, ScenarioUtils.createDefaultSolutionBuilderSettings(), 1, hints,
 				LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null));
 
 		Injector evaluationInjector;
@@ -545,6 +546,12 @@ public class ScenarioTools {
 					System.err.println("\tHire cost: " + sv.getCharterCost());
 
 				}
+			} else if (e instanceof Purge) {
+				final Purge cd = (Purge) e;
+				System.err.println("Purge:");
+				System.err.println("\tDuration: " + cd.getDuration());
+				System.err.println("\tStart: " + cd.getStart() + ", End: " + cd.getEnd());
+				ScenarioTools.printFuel(cd.getFuels());
 			} else if (e instanceof Cooldown) {
 				final Cooldown cd = (Cooldown) e;
 				System.err.println("Cooldown:");

@@ -165,7 +165,7 @@ public class AssignmentEditorHelper {
 	public static @Nullable List<@NonNull CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final PortModel portModel,
 			@NonNull final SpotMarketsModel spotMarketsModel, @NonNull ModelDistanceProvider modelDistanceProvider, @Nullable final IAssignableElementDateProvider assignableElementDateProvider) {
 
-		// Map the vessel availability to assignents
+		// Map the vessel availability to assignments
 		final Map<VesselAvailability, List<AssignableElement>> fleetGrouping = new HashMap<>();
 		final Map<CharterInMarketOverride, List<AssignableElement>> marketOverridesGrouping = new HashMap<>();
 		// Keep the same order as the EMF data model

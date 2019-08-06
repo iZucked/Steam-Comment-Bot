@@ -94,6 +94,7 @@ public class MarketVesselAllocationDescriptorImpl extends VesselAllocationDescri
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getMarketName() {
 		return marketName;
 	}
@@ -103,6 +104,7 @@ public class MarketVesselAllocationDescriptorImpl extends VesselAllocationDescri
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMarketName(String newMarketName) {
 		String oldMarketName = marketName;
 		marketName = newMarketName;
@@ -115,6 +117,7 @@ public class MarketVesselAllocationDescriptorImpl extends VesselAllocationDescri
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSpotIndex() {
 		return spotIndex;
 	}
@@ -124,6 +127,7 @@ public class MarketVesselAllocationDescriptorImpl extends VesselAllocationDescri
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpotIndex(int newSpotIndex) {
 		int oldSpotIndex = spotIndex;
 		spotIndex = newSpotIndex;

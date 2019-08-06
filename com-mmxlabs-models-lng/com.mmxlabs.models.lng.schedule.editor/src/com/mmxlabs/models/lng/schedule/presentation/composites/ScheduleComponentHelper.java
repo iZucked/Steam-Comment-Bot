@@ -73,6 +73,7 @@ public class ScheduleComponentHelper extends BaseComponentHelper {
 		add_unusedElementsEditor(detailComposite, topClass);
 		add_inventoryLevelsEditor(detailComposite, topClass);
 		add_paperDealAllocationsEditor(detailComposite, topClass);
+		add_otherPNLEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the sequences feature on Schedule
@@ -152,5 +153,14 @@ public class ScheduleComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_paperDealAllocationsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE__PAPER_DEAL_ALLOCATIONS));
+	}
+
+	/**
+	 * Create the editor for the otherPNL feature on Schedule
+	 *
+	 * @generated
+	 */
+	protected void add_otherPNLEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE__OTHER_PNL));
 	}
 }

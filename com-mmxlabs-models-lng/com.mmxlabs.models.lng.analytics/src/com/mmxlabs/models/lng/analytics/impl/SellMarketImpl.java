@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.analytics.SellMarket;
 
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -32,7 +33,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class SellMarketImpl extends EObjectImpl implements SellMarket {
+public class SellMarketImpl extends UUIDObjectImpl implements SellMarket {
 	/**
 	 * The cached value of the '{@link #getMarket() <em>Market</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -67,6 +68,7 @@ public class SellMarketImpl extends EObjectImpl implements SellMarket {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotMarket getMarket() {
 		if (market != null && market.eIsProxy()) {
 			InternalEObject oldMarket = (InternalEObject)market;
@@ -93,6 +95,7 @@ public class SellMarketImpl extends EObjectImpl implements SellMarket {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMarket(SpotMarket newMarket) {
 		SpotMarket oldMarket = market;
 		market = newMarket;

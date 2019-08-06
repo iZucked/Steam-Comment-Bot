@@ -48,6 +48,7 @@ public class Vessel {
 	private OptionalDouble maxSpeed = OptionalDouble.empty();
 	private OptionalInt safetyHeel = OptionalInt.empty();
 	private OptionalInt warmingTime = OptionalInt.empty();
+	private OptionalInt purgeTime = OptionalInt.empty();
 	private OptionalInt coolingVolume = OptionalInt.empty();
 	private OptionalDouble pilotLightRate = OptionalDouble.empty();
 	private Optional<Boolean> hasReliqCapacity = Optional.empty();
@@ -242,6 +243,14 @@ public class Vessel {
 
 	public void setWarmingTime(OptionalInt warmingTime) {
 		this.warmingTime = warmingTime;
+	}
+
+	public OptionalInt getPurgeTime() {
+		return purgeTime;
+	}
+	
+	public void setPurgeTime(OptionalInt purgeTime) {
+		this.purgeTime = purgeTime;
 	}
 
 	public OptionalInt getCoolingVolume() {

@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.OtherPNL;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -27,6 +28,14 @@ public class LatenessUtils {
 			if (portVisitLateness != null) {
 				return true;
 			}
+		}
+		return false;
+	}
+
+	public static boolean isLateExcludingFlex(final OtherPNL e) {
+		final PortVisitLateness portVisitLateness = e.getLateness();
+		if (portVisitLateness != null) {
+			return true;
 		}
 		return false;
 	}
@@ -108,6 +117,15 @@ public class LatenessUtils {
 		return 0;
 	}
 
+	public static int getLatenessInHours(final OtherPNL visit) {
+
+		final PortVisitLateness portVisitLateness = visit.getLateness();
+		if (portVisitLateness != null) {
+			return portVisitLateness.getLatenessInHours();
+		}
+		return 0;
+	}
+
 	public static int getLatenessAfterFlex(@Nullable final EventGrouping eventGrouping) {
 		int lateness = 0;
 		if (eventGrouping != null) {
@@ -137,6 +155,18 @@ public class LatenessUtils {
 						lateness += LatenessUtils.getLatenessInHours(visit);
 					}
 				}
+			}
+		}
+		return lateness;
+	}
+
+	public static long getLatenessExcludingFlex(@Nullable final OtherPNL otherPNL) {
+		long lateness = 0;
+		if (otherPNL != null) {
+
+			final boolean isLate = LatenessUtils.isLateExcludingFlex(otherPNL);
+			if (isLate) {
+				lateness += LatenessUtils.getLatenessInHours(otherPNL);
 			}
 		}
 		return lateness;

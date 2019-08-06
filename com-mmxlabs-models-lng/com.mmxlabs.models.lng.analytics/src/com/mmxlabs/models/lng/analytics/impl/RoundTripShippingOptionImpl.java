@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -31,7 +32,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class RoundTripShippingOptionImpl extends ShippingOptionImpl implements RoundTripShippingOption {
+public class RoundTripShippingOptionImpl extends UUIDObjectImpl implements RoundTripShippingOption {
 	/**
 	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -86,6 +87,7 @@ public class RoundTripShippingOptionImpl extends ShippingOptionImpl implements R
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Vessel getVessel() {
 		if (vessel != null && vessel.eIsProxy()) {
 			InternalEObject oldVessel = (InternalEObject)vessel;
@@ -112,6 +114,7 @@ public class RoundTripShippingOptionImpl extends ShippingOptionImpl implements R
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVessel(Vessel newVessel) {
 		Vessel oldVessel = vessel;
 		vessel = newVessel;
@@ -124,6 +127,7 @@ public class RoundTripShippingOptionImpl extends ShippingOptionImpl implements R
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getHireCost() {
 		return hireCost;
 	}
@@ -133,6 +137,7 @@ public class RoundTripShippingOptionImpl extends ShippingOptionImpl implements R
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHireCost(String newHireCost) {
 		String oldHireCost = hireCost;
 		hireCost = newHireCost;

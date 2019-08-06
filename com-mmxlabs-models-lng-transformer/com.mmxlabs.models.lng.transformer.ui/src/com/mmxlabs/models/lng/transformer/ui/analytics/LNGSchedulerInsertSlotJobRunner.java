@@ -6,10 +6,15 @@ package com.mmxlabs.models.lng.transformer.ui.analytics;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalLong;
+import java.util.function.Consumer;
+
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -21,12 +26,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Exposed;
+import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.PrivateModule;
+import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.common.util.TriFunction;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolutionHelper;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -41,12 +52,14 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGInitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
@@ -55,8 +68,11 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.impl.MultiStateResult;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGSchedulerInsertSlotJobRunner {
@@ -97,7 +113,14 @@ public class LNGSchedulerInsertSlotJobRunner {
 	private InsertionOptimisationStage insertionStage;
 
 	public LNGSchedulerInsertSlotJobRunner(@Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider, final EditingDomain editingDomain,
-			final UserSettings userSettings, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents) {
+			final UserSettings userSettings, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents, @Nullable ExtraDataProvider extraDataProvider,
+			@Nullable TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider) {
+		this(scenarioInstance, scenarioDataProvider, editingDomain, userSettings, targetSlots, targetEvents, extraDataProvider, initialSolutionProvider, null);
+	}
+	
+	public LNGSchedulerInsertSlotJobRunner(@Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider, final EditingDomain editingDomain,
+			final UserSettings userSettings, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents, @Nullable ExtraDataProvider extraDataProvider,
+			@Nullable TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider, @Nullable Consumer<LNGOptimisationBuilder> builderCustomiser) {
 
 		this.originalScenarioDataProvider = scenarioDataProvider;
 		this.originalEditingDomain = editingDomain;
@@ -120,7 +143,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 		}
 		assert insertionStage != null;
 
-		final IOptimiserInjectorService extraService = buildSpotSlotLimitModule();
+		final IOptimiserInjectorService extraService = buildExtraModules(extraDataProvider, initialSolutionProvider);
 
 		boolean isBreakEven = false;
 		for (final Slot<?> slot : targetSlots) {
@@ -134,13 +157,18 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 		// TODO: Only disable caches if we do a break-even (caches *should* be ok otherwise?)
 		final String[] hints = isBreakEven ? hint_with_breakeven : hint_without_breakeven;
-		final LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
+		final LNGOptimisationBuilder builder = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
+				.withExtraDataProvider(extraDataProvider) //
 				.withOptimisationPlan(plan) //
 				.withOptimiserInjectorService(extraService) //
 				.withOptimiseHint() //
 				.withHints(hints) //
-				.buildDefaultRunner();
+		;
 
+		if (builderCustomiser != null) {
+			builderCustomiser.accept(builder);
+		}
+		final LNGOptimisationRunnerBuilder runner = builder.buildDefaultRunner();
 		scenarioRunner = runner.getScenarioRunner();
 
 		if (userSettings.isSetPeriodStartDate() || userSettings.isSetPeriodEnd()) {
@@ -148,6 +176,13 @@ public class LNGSchedulerInsertSlotJobRunner {
 			targetOptimiserSlots = new LinkedList<>();
 			targetOptimiserEvents = new LinkedList<>();
 			final CargoModelFinder finder = new CargoModelFinder(ScenarioModelUtil.getCargoModel(scenarioRunner.getScenarioToOptimiserBridge().getOptimiserScenario()));
+			ExtraDataProvider edp = scenarioRunner.getScenarioToOptimiserBridge().getOptimiserExtraDataProvider();
+			if (edp != null) {
+				finder.includeLoads(edp.extraLoads);
+			}
+			if (edp != null) {
+				finder.includeDischarges(edp.extraDischarges);
+			}
 			for (final Slot<?> original : targetSlots) {
 				try {
 					if (original instanceof LoadSlot) {
@@ -183,7 +218,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 		}
 	}
 
-	private IOptimiserInjectorService buildSpotSlotLimitModule() {
+	private IOptimiserInjectorService buildExtraModules(ExtraDataProvider extraDataProvider, @Nullable TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider) {
 		return new IOptimiserInjectorService() {
 
 			@Override
@@ -194,15 +229,56 @@ public class LNGSchedulerInsertSlotJobRunner {
 			@Override
 			public @Nullable List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 
+				if (moduleType == ModuleType.Module_InitialSolution) {
+					if (!hints.contains(LNGTransformerHelper.HINT_PERIOD_SCENARIO) && initialSolutionProvider != null) {
+						return Collections.singletonList(new PrivateModule() {
+
+							@Override
+							protected void configure() {
+								// Nothing to do here - see provides methods
+							}
+
+							@Provides
+							@Singleton
+							@Named("EXTERNAL_SOLUTION")
+							private ISequences provideSequences(final Injector injector, ModelEntityMap mem, IOptimisationData data) {
+								ISequences sequences = initialSolutionProvider.apply(mem, data, injector);
+								return sequences;
+							}
+
+							@Provides
+							@Singleton
+							@Named(LNGInitialSequencesModule.KEY_GENERATED_RAW_SEQUENCES)
+							@Exposed
+							private ISequences provideInitialSequences(@Named("EXTERNAL_SOLUTION") final ISequences sequences) {
+								return sequences;
+							}
+
+							@Provides
+							@Singleton
+							@Named(LNGInitialSequencesModule.KEY_GENERATED_SOLUTION_PAIR)
+							@Exposed
+							private IMultiStateResult provideSolutionPair(@Named("EXTERNAL_SOLUTION") final ISequences sequences) {
+
+								return new MultiStateResult(sequences, new HashMap<>());
+							}
+
+						});
+					}
+				}
+
 				if (moduleType == ModuleType.Module_LNGTransformerModule) {
-					return Collections.singletonList(new AbstractModule() {
+					List<Module> modules = new LinkedList<>();
+					modules.add(new AbstractModule() {
 
 						@Override
 						protected void configure() {
 							// Only one new option per month
 							bind(int.class).annotatedWith(Names.named(LNGScenarioTransformer.LIMIT_SPOT_SLOT_CREATION)).toInstance(1);
 						}
+
 					});
+					return modules;
 				}
 				return null;
 			}
@@ -220,12 +296,13 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 	public SlotInsertionOptions doRunJob(final IProgressMonitor progressMonitor) {
 		final long start = System.currentTimeMillis();
+		SlotInsertionOptimiserLogger logger = new SlotInsertionOptimiserLogger();
 		final SubMonitor subMonitor = SubMonitor.convert(progressMonitor, "Inserting option(s)", 100);
 		try {
 			final Schedule schedule = ScenarioModelUtil.getScheduleModel(scenarioToOptimiserBridge.getOptimiserScenario()).getSchedule();
 			final long targetPNL = performBreakEven ? ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule) : 0L;
 
-			final IMultiStateResult results = runInsertion(subMonitor.split(90));
+			final IMultiStateResult results = runInsertion(logger, subMonitor.split(90));
 			if (results == null) {
 				System.out.println("Found no solutions");
 				return null;
@@ -241,6 +318,8 @@ public class LNGSchedulerInsertSlotJobRunner {
 				return null;
 			}
 
+			logger.setSolutionsFound(solutions.size());
+
 			return exportSolutions(results, targetPNL, subMonitor.split(10));
 		} finally {
 			SubMonitor.done(progressMonitor);
@@ -251,12 +330,12 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 	}
 
-	public IMultiStateResult runInsertion(final IProgressMonitor progressMonitor) {
+	public IMultiStateResult runInsertion(SlotInsertionOptimiserLogger logger, final IProgressMonitor progressMonitor) {
 
 		final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), insertionStage,
 				scenarioRunner.getExecutorService(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
 
-		return slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, progressMonitor);
+		return slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, logger, progressMonitor);
 	}
 
 	public SlotInsertionOptions exportSolutions(final @NonNull IMultiStateResult results, final long targetPNL, final @NonNull IProgressMonitor monitor) {

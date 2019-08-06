@@ -126,6 +126,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProvi
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IScheduledPurgeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IScheduledPurgeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
@@ -382,6 +384,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	private IFOBDESCompatibilityProviderEditor fobdesCompatibilityProviderEditor;
 
+	@Inject
+	private IScheduledPurgeProviderEditor scheduledPurgeProvider;
+
 	private final List<@NonNull IPortSlot> permittedRoundTripVesselSlots = new LinkedList<>();
 
 	@NonNull
@@ -434,7 +439,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// setup fake vessels for virtual elements.
 		virtualVessel = createVessel("virtual", 0, 0, Long.MAX_VALUE, 0, createBaseFuel("fakeFuel", 0), createBaseFuel("fakeIdleFuel", 0), createBaseFuel("fakeInPortFuel", 0),
-				createBaseFuel("fakePilotLightFuel", 0), 0, 0, 0, 0, false);
+				createBaseFuel("fakePilotLightFuel", 0), 0, 0, 0, 0, 0, false);
 	}
 
 	/**
@@ -442,7 +447,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public ILoadSlot createLoadSlot(final @NonNull String id, final @NonNull IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
-			final ILoadPriceCalculator loadContract, final int cargoCVValue, final int durationHours, final boolean cooldownSet, final boolean cooldownForbidden, final int pricingDate,
+			final ILoadPriceCalculator loadContract, final int cargoCVValue, final int durationHours, final boolean cooldownSet, final boolean cooldownForbidden, boolean purgeScheduled, final int pricingDate,
 			final PricingEventType pricingEvent, final boolean optional, final boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3, final boolean cancelled) {
 
 		boolean fooLocked = locked || cancelled;
@@ -453,7 +458,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				isVolumeLimitInM3);
 
 		elementDurationsProvider.setElementDuration(element, durationHours);
-
+		if (purgeScheduled) {
+			scheduledPurgeProvider.setPurgeScheduled(element, slot);
+		}
 		return slot;
 	}
 
@@ -760,7 +767,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// End cold already enforced in VoyagePlanner#getVoyageOptionsAndSetVpoChoices
 		final IVesselAvailability spotAvailability = createVesselAvailability(vessel, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, spotCharterInMarket,
-				spotCharterInMarket.getBallastBonusContract(), spotIndex, new ZeroLongCurve(), true);
+				spotCharterInMarket.getBallastBonusContract(), spotIndex, spotCharterInMarket.getRepositioningFee(), true);
 		spotCharterInMarketProviderEditor.addSpotMarketAvailability(spotAvailability, spotCharterInMarket, spotIndex);
 
 		return spotAvailability;
@@ -787,7 +794,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	private IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, final ILongCurve dailyCharterInRate, @NonNull final VesselInstanceType vesselInstanceType,
 			@NonNull final IStartRequirement start, @NonNull final IEndRequirement end, @Nullable final ISpotCharterInMarket spotCharterInMarket, IBallastBonusContract ballastBonusContract,
-			final int spotIndex, final ILongCurve repositioningFee, final boolean isOptional) {
+			final int spotIndex, final ILongCurve positioningFee, final boolean isOptional) {
 		if (!vessels.contains(vessel)) {
 			throw new IllegalArgumentException("IVessel was not created using this builder");
 		}
@@ -876,7 +883,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 
 		vesselAvailability.setOptional(isOptional);
-		vesselAvailability.setRepositioningFee(repositioningFee);
+		vesselAvailability.setRepositioningFee(positioningFee);
 
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 		return vesselAvailability;
@@ -1184,7 +1191,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public IVessel createVessel(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long safetyHeelInM3, final IBaseFuel baseFuel, final IBaseFuel idleBaseFuel,
-			final IBaseFuel inPortBaseFuel, final IBaseFuel pilotLightBaseFuel, final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3,
+			final IBaseFuel inPortBaseFuel, final IBaseFuel pilotLightBaseFuel, final int pilotLightRate, final int warmupTimeHours, final int purgeTimeHours, final long cooldownVolumeM3,
 			final int minBaseFuelConsumptionPerDay, final boolean hasReliqCapability) {
 
 		final Vessel vessel = new Vessel(name, capacityInM3);
@@ -1195,6 +1202,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vessel.setSafetyHeel(safetyHeelInM3);
 
 		vessel.setWarmupTime(warmupTimeHours);
+		vessel.setPurgeTime(purgeTimeHours);
 		vessel.setCooldownVolume(cooldownVolumeM3);
 
 		vessel.setPilotLightRate(pilotLightRate);
@@ -1899,8 +1907,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public ISpotCharterInMarket createSpotCharterInMarket(@NonNull final String name, @NonNull final IVessel vessel, @NonNull final ILongCurve dailyCharterInRateCurve, final int availabilityCount,
-			@Nullable IEndRequirement endRequirement, @Nullable IBallastBonusContract ballastBonusContract) {
-		return new DefaultSpotCharterInMarket(name, vessel, dailyCharterInRateCurve, availabilityCount, endRequirement, ballastBonusContract);
+			@Nullable IEndRequirement endRequirement, @Nullable IBallastBonusContract ballastBonusContract, final ILongCurve repositioningFee) {
+		return new DefaultSpotCharterInMarket(name, vessel, dailyCharterInRateCurve, availabilityCount, endRequirement, ballastBonusContract, repositioningFee);
 	}
 
 	@Override

@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
-import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatterLabelProvider;
@@ -74,7 +74,7 @@ public class DefaultSandboxLabelProvider extends CellFormatterLabelProvider {
 		} else {
 			if (element instanceof RoundTripShippingOption) {
 				return imgShippingRoundTrip;
-			} else if (element instanceof FleetShippingOption) {
+			} else if (element instanceof SimpleVesselCharterOption) {
 				return imgShippingFleet;
 			}
 		}

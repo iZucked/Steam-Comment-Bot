@@ -57,6 +57,7 @@ import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.MatchingContractDetails;
 import com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.OtherPNL;
 import com.mmxlabs.models.lng.schedule.PanamaBookingPeriod;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
@@ -64,6 +65,7 @@ import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.PortVisitLatenessType;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -108,6 +110,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass sequenceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass otherPNLEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -171,6 +180,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass cooldownEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass purgeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -688,6 +704,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EReference getSchedule_OtherPNL() {
+		return (EReference)scheduleEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSequence() {
 		return sequenceEClass;
 	}
@@ -800,6 +826,26 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	@Override
 	public EOperation getSequence__IsTimeCharterVessel() {
 		return sequenceEClass.getEOperations().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getOtherPNL() {
+		return otherPNLEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getOtherPNL_Lateness() {
+		return (EReference)otherPNLEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1160,6 +1206,36 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	@Override
 	public EAttribute getCooldown_Cost() {
 		return (EAttribute)cooldownEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getPurge() {
+		return purgeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPurge_Volume() {
+		return (EAttribute)purgeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPurge_Cost() {
+		return (EAttribute)purgeEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -2936,6 +3012,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(scheduleEClass, SCHEDULE__UNUSED_ELEMENTS);
 		createEReference(scheduleEClass, SCHEDULE__INVENTORY_LEVELS);
 		createEReference(scheduleEClass, SCHEDULE__PAPER_DEAL_ALLOCATIONS);
+		createEReference(scheduleEClass, SCHEDULE__OTHER_PNL);
 
 		fitnessEClass = createEClass(FITNESS);
 		createEAttribute(fitnessEClass, FITNESS__FITNESS_VALUE);
@@ -2988,6 +3065,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEOperation(sequenceEClass, SEQUENCE___IS_SPOT_VESSEL);
 		createEOperation(sequenceEClass, SEQUENCE___IS_FLEET_VESSEL);
 		createEOperation(sequenceEClass, SEQUENCE___IS_TIME_CHARTER_VESSEL);
+
+		otherPNLEClass = createEClass(OTHER_PNL);
+		createEReference(otherPNLEClass, OTHER_PNL__LATENESS);
 
 		eventEClass = createEClass(EVENT);
 		createEAttribute(eventEClass, EVENT__START);
@@ -3054,6 +3134,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		cooldownEClass = createEClass(COOLDOWN);
 		createEAttribute(cooldownEClass, COOLDOWN__VOLUME);
 		createEAttribute(cooldownEClass, COOLDOWN__COST);
+
+		purgeEClass = createEClass(PURGE);
+		createEAttribute(purgeEClass, PURGE__VOLUME);
+		createEAttribute(purgeEClass, PURGE__COST);
 
 		fuelUsageEClass = createEClass(FUEL_USAGE);
 		createEReference(fuelUsageEClass, FUEL_USAGE__FUELS);
@@ -3257,6 +3341,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		openSlotAllocationEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 		slotAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		sequenceEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		otherPNLEClass.getESuperTypes().add(this.getProfitAndLossContainer());
+		otherPNLEClass.getESuperTypes().add(this.getCapacityViolationsHolder());
 		eventEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		eventEClass.getESuperTypes().add(theTypesPackage.getITimezoneProvider());
 		startEventEClass.getESuperTypes().add(this.getEvent());
@@ -3291,6 +3377,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		charterLengthEventEClass.getESuperTypes().add(this.getFuelUsage());
 		cooldownEClass.getESuperTypes().add(this.getEvent());
 		cooldownEClass.getESuperTypes().add(this.getFuelUsage());
+		purgeEClass.getESuperTypes().add(this.getEvent());
+		purgeEClass.getESuperTypes().add(this.getFuelUsage());
 		capacityViolationsHolderEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		profitAndLossContainerEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		entityPNLDetailsEClass.getESuperTypes().add(this.getGeneralPNLDetails());
@@ -3323,6 +3411,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getSchedule_UnusedElements(), ecorePackage.getEObject(), null, "unusedElements", null, 0, -1, Schedule.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_InventoryLevels(), this.getInventoryEvents(), null, "inventoryLevels", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_PaperDealAllocations(), this.getPaperDealAllocation(), null, "paperDealAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSchedule_OtherPNL(), this.getOtherPNL(), null, "otherPNL", null, 0, 1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fitnessEClass, Fitness.class, "Fitness", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFitness_FitnessValue(), ecorePackage.getELong(), "fitnessValue", null, 1, 1, Fitness.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3383,6 +3472,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEOperation(getSequence__IsFleetVessel(), ecorePackage.getEBoolean(), "isFleetVessel", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSequence__IsTimeCharterVessel(), ecorePackage.getEBoolean(), "isTimeCharterVessel", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(otherPNLEClass, OtherPNL.class, "OtherPNL", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getOtherPNL_Lateness(), this.getPortVisitLateness(), null, "lateness", null, 0, 1, OtherPNL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(eventEClass, Event.class, "Event", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEvent_Start(), theDateTimePackage.getDateTime(), "start", null, 1, 1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3452,6 +3544,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(cooldownEClass, Cooldown.class, "Cooldown", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCooldown_Volume(), ecorePackage.getEInt(), "volume", null, 1, 1, Cooldown.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCooldown_Cost(), ecorePackage.getEInt(), "cost", null, 1, 1, Cooldown.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(purgeEClass, Purge.class, "Purge", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPurge_Volume(), ecorePackage.getEInt(), "volume", null, 1, 1, Purge.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPurge_Cost(), ecorePackage.getEInt(), "cost", null, 1, 1, Purge.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fuelUsageEClass, FuelUsage.class, "FuelUsage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFuelUsage_Fuels(), this.getFuelQuantity(), null, "fuels", null, 0, -1, FuelUsage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

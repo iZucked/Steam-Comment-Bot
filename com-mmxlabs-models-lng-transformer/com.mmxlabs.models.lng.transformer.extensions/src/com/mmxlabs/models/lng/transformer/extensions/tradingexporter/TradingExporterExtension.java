@@ -11,6 +11,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -35,6 +36,7 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.export.ExporterExtensionUtils;
 import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
 import com.mmxlabs.models.lng.transformer.export.IPortSlotEventProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -92,10 +94,10 @@ public class TradingExporterExtension implements IExporterExtension {
 		if (allElements != null) {
 			for (final ISequenceElement element : allElements) {
 				{
-					final IProfitAndLossAnnotation profitAndLossWithTimeCharter = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLoss,
+					final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLoss,
 							IProfitAndLossAnnotation.class);
 
-					if (profitAndLossWithTimeCharter != null) {
+					if (profitAndLoss != null) {
 						// emit p&l entry - depends on the type of slot associated with the element.
 						final IPortSlot slot = slotProvider.getPortSlot(element);
 
@@ -111,7 +113,7 @@ public class TradingExporterExtension implements IExporterExtension {
 								}
 							}
 							if (cargoAllocation != null) {
-								setPandLentries(profitAndLossWithTimeCharter, cargoAllocation);
+								setPandLentries(profitAndLoss, cargoAllocation);
 							} else {
 
 								OpenSlotAllocation openSlotAllocation = null;
@@ -122,7 +124,7 @@ public class TradingExporterExtension implements IExporterExtension {
 									}
 								}
 								if (openSlotAllocation != null) {
-									setPandLentries(profitAndLossWithTimeCharter, openSlotAllocation);
+									setPandLentries(profitAndLoss, openSlotAllocation);
 								} else {
 									MarketAllocation marketAllocation = null;
 									for (final MarketAllocation allocation : outputSchedule.getMarketAllocations()) {
@@ -132,7 +134,7 @@ public class TradingExporterExtension implements IExporterExtension {
 										}
 									}
 									if (marketAllocation != null) {
-										setPandLentries(profitAndLossWithTimeCharter, marketAllocation);
+										setPandLentries(profitAndLoss, marketAllocation);
 									}
 								}
 							}
@@ -147,7 +149,7 @@ public class TradingExporterExtension implements IExporterExtension {
 								}
 							}
 							if (openSlotAllocation != null) {
-								setPandLentries(profitAndLossWithTimeCharter, openSlotAllocation);
+								setPandLentries(profitAndLoss, openSlotAllocation);
 							} else {
 								MarketAllocation marketAllocation = null;
 								for (final MarketAllocation allocation : outputSchedule.getMarketAllocations()) {
@@ -157,19 +159,19 @@ public class TradingExporterExtension implements IExporterExtension {
 									}
 								}
 								if (marketAllocation != null) {
-									setPandLentries(profitAndLossWithTimeCharter, marketAllocation);
+									setPandLentries(profitAndLoss, marketAllocation);
 								}
 							}
 						} else if (slot instanceof IVesselEventPortSlot) {
 							if (slot instanceof IGeneratedCharterOutVesselEventPortSlot) {
 								final GeneratedCharterOut gco = portSlotEventProvider.getEventFromPortSlot(slot, GeneratedCharterOut.class);
 								if (gco != null) {
-									setPandLentries(profitAndLossWithTimeCharter, gco);
+									setPandLentries(profitAndLoss, gco);
 								}
 							} else if (slot instanceof IGeneratedCharterLengthEventPortSlot) {
 								final CharterLengthEvent gco = portSlotEventProvider.getEventFromPortSlot(slot, CharterLengthEvent.class);
 								if (gco != null) {
-									setPandLentries(profitAndLossWithTimeCharter, gco);
+									setPandLentries(profitAndLoss, gco);
 								}
 							} else {
 								final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = modelEntityMap.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
@@ -178,27 +180,28 @@ public class TradingExporterExtension implements IExporterExtension {
 								for (final Sequence sequence : outputSchedule.getSequences()) {
 									for (final Event event : sequence.getEvents()) {
 										if (event instanceof VesselEventVisit) {
-											if (((VesselEventVisit) event).getVesselEvent() == modelEvent) {
-												visit = (VesselEventVisit) event;
+											VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+											if (vesselEventVisit.getVesselEvent() == modelEvent) {
+												visit = vesselEventVisit;
 											}
 										}
 									}
 								}
 								if (visit != null) {
-									setPandLentries(profitAndLossWithTimeCharter, visit);
+									setPandLentries(profitAndLoss, visit);
 								}
 							}
 						} else if (slot instanceof StartPortSlot) {
 							final StartEvent startEvent = findStartEvent(vesselProvider, element);
 
 							if (startEvent != null) {
-								setPandLentries(profitAndLossWithTimeCharter, startEvent);
+								setPandLentries(profitAndLoss, startEvent);
 							}
 						} else if (slot.getPortType() == PortType.End) {
 							final EndEvent endEvent = findEndEvent(element);
 
 							if (endEvent != null) {
-								setPandLentries(profitAndLossWithTimeCharter, endEvent);
+								setPandLentries(profitAndLoss, endEvent);
 							}
 						}
 					}
@@ -213,96 +216,11 @@ public class TradingExporterExtension implements IExporterExtension {
 	}
 
 	private EndEvent findEndEvent(final ISequenceElement element) {
-		EndEvent endEvent = null;
-		//
-		// for (int i = 0; i < annotatedSolution.getFullSequences().size(); ++i) {
-		LOOP_OUTER: for (final Map.Entry<IResource, ISequence> e : annotatedSolution.getFullSequences().getSequences().entrySet()) {
-			final IResource res = e.getKey();
-			final ISequence seq = e.getValue();
-			if (seq.size() == 0) {
-				continue;
-			}
-			if (seq.get(seq.size() - 1) == element) {
-				for (final Sequence sequence : outputSchedule.getSequences()) {
-					CharterInMarket charterInMarket = sequence.getCharterInMarket();
-					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-					if (charterInMarket == null && vesselAvailability == null) {
-						continue;
-					}
-
-					boolean correctVessel = false;
-					if (charterInMarket != null) {
-						@Nullable
-						ISpotCharterInMarket iSpotCharterInMarket = modelEntityMap.getOptimiserObject(charterInMarket, ISpotCharterInMarket.class);
-						if (iSpotCharterInMarket == null) {
-							continue;
-						}
-						IVesselAvailability iVesselAvailability = vesselProvider.getVesselAvailability(res);
-						@Nullable
-						ISpotCharterInMarket oSpotCharterInMarket = iVesselAvailability.getSpotCharterInMarket();
-						if (oSpotCharterInMarket == iSpotCharterInMarket && iVesselAvailability.getSpotIndex() == sequence.getSpotIndex()) {
-							correctVessel = true;
-						}
-					} else {
-						// non-spot case
-						// Find the matching
-						final IVesselAvailability o_VesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
-						if (o_VesselAvailability == vesselProvider.getVesselAvailability(res)) {
-							correctVessel = true;
-						}
-					}
-
-					if (correctVessel) {
-						if (sequence.getEvents().size() > 0) {
-							final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
-							if (evt instanceof EndEvent) {
-								endEvent = (EndEvent) evt;
-								break LOOP_OUTER;
-							}
-						}
-					}
-				}
-			}
-		}
-		return endEvent;
+		return ExporterExtensionUtils.findEndEvent(element, modelEntityMap, outputSchedule, annotatedSolution, vesselProvider);
 	}
 
 	private StartEvent findStartEvent(final IVesselProvider vesselProvider, final ISequenceElement element) {
-		StartEvent startEvent = null;
-		//
-		// Find the optimiser sequence for the start element
-		LOOP_OUTER: for (final Map.Entry<IResource, ISequence> e : annotatedSolution.getFullSequences().getSequences().entrySet()) {
-			final IResource res = e.getKey();
-			final ISequence seq = e.getValue();
-			if (seq.size() == 0) {
-				continue;
-			}
-
-			if (seq.get(0) == element) {
-				// Found the sequence, so no find the matching EMF sequence
-				for (final Sequence sequence : outputSchedule.getSequences()) {
-					// Get the EMF Vessel
-					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-					if (vesselAvailability == null) {
-						continue;
-					}
-					// Find the matching
-					final IVesselAvailability iVesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
-
-					// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.
-					if (iVesselAvailability == vesselProvider.getVesselAvailability(res)) {
-						if (sequence.getEvents().size() > 0) {
-							final Event evt = sequence.getEvents().get(0);
-							if (evt instanceof StartEvent) {
-								startEvent = (StartEvent) evt;
-								break LOOP_OUTER;
-							}
-						}
-					}
-				}
-			}
-		}
-		return startEvent;
+		return ExporterExtensionUtils.findStartEvent(element, modelEntityMap, outputSchedule, annotatedSolution, vesselProvider);
 	}
 
 	private void setPandLentries(final IProfitAndLossAnnotation profitAndLoss, final ProfitAndLossContainer container) {

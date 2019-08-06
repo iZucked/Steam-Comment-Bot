@@ -16,7 +16,6 @@ import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.AnalysisResultDetail;
-import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -34,30 +33,31 @@ import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.CargoChange;
 import com.mmxlabs.models.lng.analytics.Change;
 import com.mmxlabs.models.lng.analytics.ChangeDescription;
+import com.mmxlabs.models.lng.analytics.CharterOutOpportunity;
 import com.mmxlabs.models.lng.analytics.DualModeSolutionOption;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
-import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
-import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.FleetVesselAllocationDescriptor;
 import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.MTMResult;
 import com.mmxlabs.models.lng.analytics.MTMRow;
 import com.mmxlabs.models.lng.analytics.MarketVesselAllocationDescriptor;
-import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
+import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
+import com.mmxlabs.models.lng.analytics.OpenBuy;
+import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.OpenSlotChange;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
+import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.PositionDescriptor;
 import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
 import com.mmxlabs.models.lng.analytics.RealSlotDescriptor;
-import com.mmxlabs.models.lng.analytics.Result;
-import com.mmxlabs.models.lng.analytics.ResultContainer;
-import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
+import com.mmxlabs.models.lng.analytics.SandboxResult;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
@@ -72,6 +72,8 @@ import com.mmxlabs.models.lng.analytics.SpotMarketSlotDescriptor;
 import com.mmxlabs.models.lng.analytics.VesselAllocationDescriptor;
 import com.mmxlabs.models.lng.analytics.VesselEventChange;
 import com.mmxlabs.models.lng.analytics.VesselEventDescriptor;
+import com.mmxlabs.models.lng.analytics.VesselEventOption;
+import com.mmxlabs.models.lng.analytics.VesselEventReference;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.ViabilityResult;
 import com.mmxlabs.models.lng.analytics.ViabilityRow;
@@ -86,7 +88,6 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.scenario.service.ui.dnd.IChangeSource;
 
 /**
  * <!-- begin-user-doc -->
@@ -115,6 +116,20 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass sellOptionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass openSellEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass openBuyEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -163,6 +178,27 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass vesselEventOptionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass vesselEventReferenceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass charterOutOpportunityEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass baseCaseRowEClass = null;
 
 	/**
@@ -184,14 +220,14 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass fleetShippingOptionEClass = null;
+	private EClass simpleVesselCharterOptionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass optionalAvailabilityShippingOptionEClass = null;
+	private EClass optionalSimpleVesselCharterOptionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -212,14 +248,14 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass analysisResultRowEClass = null;
+	private EClass fullVesselCharterOptionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass resultContainerEClass = null;
+	private EClass existingVesselCharterOptionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -261,14 +297,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass resultSetEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass resultEClass = null;
+	private EClass sandboxResultEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -283,20 +312,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass partialCaseEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass newVesselAvailabilityEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass existingVesselAvailabilityEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -618,6 +633,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getAnalyticsModel_OptionModels() {
 		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -627,6 +643,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getAnalyticsModel_Optimisations() {
 		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -636,6 +653,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getAnalyticsModel_ViabilityModel() {
 		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(2);
 	}
@@ -645,6 +663,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getAnalyticsModel_MtmModel() {
 		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(3);
 	}
@@ -654,6 +673,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getAnalyticsModel_BreakevenModels() {
 		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(4);
 	}
@@ -663,6 +683,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBuyOption() {
 		return buyOptionEClass;
 	}
@@ -672,8 +693,29 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSellOption() {
 		return sellOptionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getOpenSell() {
+		return openSellEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getOpenBuy() {
+		return openBuyEClass;
 	}
 
 	/**
@@ -691,6 +733,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBuyOpportunity_DesPurchase() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(0);
 	}
@@ -740,6 +783,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBuyOpportunity_Entity() {
 		return (EReference)buyOpportunityEClass.getEStructuralFeatures().get(5);
 	}
@@ -749,6 +793,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBuyOpportunity_Cv() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(6);
 	}
@@ -758,6 +803,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBuyOpportunity_CancellationExpression() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(7);
 	}
@@ -767,6 +813,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBuyOpportunity_MiscCosts() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(8);
 	}
@@ -776,6 +823,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBuyOpportunity_VolumeMode() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(9);
 	}
@@ -785,6 +833,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBuyOpportunity_VolumeUnits() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(10);
 	}
@@ -794,6 +843,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBuyOpportunity_MinVolume() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(11);
 	}
@@ -803,6 +853,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBuyOpportunity_MaxVolume() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(12);
 	}
@@ -822,6 +873,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSellOpportunity_FobSale() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(0);
 	}
@@ -871,6 +923,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSellOpportunity_Entity() {
 		return (EReference)sellOpportunityEClass.getEStructuralFeatures().get(5);
 	}
@@ -880,6 +933,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSellOpportunity_CancellationExpression() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(6);
 	}
@@ -889,6 +943,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSellOpportunity_MiscCosts() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(7);
 	}
@@ -898,6 +953,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSellOpportunity_VolumeMode() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(8);
 	}
@@ -907,6 +963,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSellOpportunity_VolumeUnits() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(9);
 	}
@@ -916,6 +973,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSellOpportunity_MinVolume() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(10);
 	}
@@ -925,6 +983,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSellOpportunity_MaxVolume() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(11);
 	}
@@ -934,6 +993,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBuyMarket() {
 		return buyMarketEClass;
 	}
@@ -943,6 +1003,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBuyMarket_Market() {
 		return (EReference)buyMarketEClass.getEStructuralFeatures().get(0);
 	}
@@ -952,6 +1013,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSellMarket() {
 		return sellMarketEClass;
 	}
@@ -961,6 +1023,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSellMarket_Market() {
 		return (EReference)sellMarketEClass.getEStructuralFeatures().get(0);
 	}
@@ -970,6 +1033,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBuyReference() {
 		return buyReferenceEClass;
 	}
@@ -979,6 +1043,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBuyReference_Slot() {
 		return (EReference)buyReferenceEClass.getEStructuralFeatures().get(0);
 	}
@@ -988,6 +1053,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSellReference() {
 		return sellReferenceEClass;
 	}
@@ -997,6 +1063,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSellReference_Slot() {
 		return (EReference)sellReferenceEClass.getEStructuralFeatures().get(0);
 	}
@@ -1006,6 +1073,87 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EClass getVesselEventOption() {
+		return vesselEventOptionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getVesselEventReference() {
+		return vesselEventReferenceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getVesselEventReference_Event() {
+		return (EReference)vesselEventReferenceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getCharterOutOpportunity() {
+		return charterOutOpportunityEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCharterOutOpportunity_HireCost() {
+		return (EAttribute)charterOutOpportunityEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCharterOutOpportunity_Port() {
+		return (EReference)charterOutOpportunityEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCharterOutOpportunity_Date() {
+		return (EAttribute)charterOutOpportunityEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCharterOutOpportunity_Duration() {
+		return (EAttribute)charterOutOpportunityEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getBaseCaseRow() {
 		return baseCaseRowEClass;
 	}
@@ -1015,6 +1163,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBaseCaseRow_BuyOption() {
 		return (EReference)baseCaseRowEClass.getEStructuralFeatures().get(0);
 	}
@@ -1024,6 +1173,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBaseCaseRow_SellOption() {
 		return (EReference)baseCaseRowEClass.getEStructuralFeatures().get(1);
 	}
@@ -1033,7 +1183,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getBaseCaseRow_Shipping() {
+	@Override
+	public EReference getBaseCaseRow_VesselEventOption() {
 		return (EReference)baseCaseRowEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -1042,6 +1193,17 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EReference getBaseCaseRow_Shipping() {
+		return (EReference)baseCaseRowEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getPartialCaseRow() {
 		return partialCaseRowEClass;
 	}
@@ -1051,6 +1213,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPartialCaseRow_BuyOptions() {
 		return (EReference)partialCaseRowEClass.getEStructuralFeatures().get(0);
 	}
@@ -1060,6 +1223,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPartialCaseRow_SellOptions() {
 		return (EReference)partialCaseRowEClass.getEStructuralFeatures().get(1);
 	}
@@ -1069,7 +1233,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getPartialCaseRow_Shipping() {
+	@Override
+	public EReference getPartialCaseRow_VesselEventOptions() {
 		return (EReference)partialCaseRowEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -1078,6 +1243,17 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EReference getPartialCaseRow_Shipping() {
+		return (EReference)partialCaseRowEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getShippingOption() {
 		return shippingOptionEClass;
 	}
@@ -1087,8 +1263,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getFleetShippingOption() {
-		return fleetShippingOptionEClass;
+	@Override
+	public EClass getSimpleVesselCharterOption() {
+		return simpleVesselCharterOptionEClass;
 	}
 
 	/**
@@ -1096,8 +1273,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getFleetShippingOption_Vessel() {
-		return (EReference)fleetShippingOptionEClass.getEStructuralFeatures().get(0);
+	@Override
+	public EReference getSimpleVesselCharterOption_Vessel() {
+		return (EReference)simpleVesselCharterOptionEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1105,8 +1283,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getFleetShippingOption_HireCost() {
-		return (EAttribute)fleetShippingOptionEClass.getEStructuralFeatures().get(1);
+	@Override
+	public EAttribute getSimpleVesselCharterOption_HireCost() {
+		return (EAttribute)simpleVesselCharterOptionEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1114,8 +1293,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getFleetShippingOption_Entity() {
-		return (EReference)fleetShippingOptionEClass.getEStructuralFeatures().get(2);
+	@Override
+	public EReference getSimpleVesselCharterOption_Entity() {
+		return (EReference)simpleVesselCharterOptionEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1123,8 +1303,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getFleetShippingOption_UseSafetyHeel() {
-		return (EAttribute)fleetShippingOptionEClass.getEStructuralFeatures().get(3);
+	@Override
+	public EAttribute getSimpleVesselCharterOption_UseSafetyHeel() {
+		return (EAttribute)simpleVesselCharterOptionEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -1132,8 +1313,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getOptionalAvailabilityShippingOption() {
-		return optionalAvailabilityShippingOptionEClass;
+	@Override
+	public EClass getOptionalSimpleVesselCharterOption() {
+		return optionalSimpleVesselCharterOptionEClass;
 	}
 
 	/**
@@ -1141,8 +1323,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getOptionalAvailabilityShippingOption_BallastBonus() {
-		return (EAttribute)optionalAvailabilityShippingOptionEClass.getEStructuralFeatures().get(0);
+	@Override
+	public EAttribute getOptionalSimpleVesselCharterOption_BallastBonus() {
+		return (EAttribute)optionalSimpleVesselCharterOptionEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1150,8 +1333,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getOptionalAvailabilityShippingOption_RepositioningFee() {
-		return (EAttribute)optionalAvailabilityShippingOptionEClass.getEStructuralFeatures().get(1);
+	@Override
+	public EAttribute getOptionalSimpleVesselCharterOption_RepositioningFee() {
+		return (EAttribute)optionalSimpleVesselCharterOptionEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1159,8 +1343,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getOptionalAvailabilityShippingOption_Start() {
-		return (EAttribute)optionalAvailabilityShippingOptionEClass.getEStructuralFeatures().get(2);
+	@Override
+	public EAttribute getOptionalSimpleVesselCharterOption_Start() {
+		return (EAttribute)optionalSimpleVesselCharterOptionEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1168,8 +1353,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getOptionalAvailabilityShippingOption_End() {
-		return (EAttribute)optionalAvailabilityShippingOptionEClass.getEStructuralFeatures().get(3);
+	@Override
+	public EAttribute getOptionalSimpleVesselCharterOption_End() {
+		return (EAttribute)optionalSimpleVesselCharterOptionEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -1177,8 +1363,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getOptionalAvailabilityShippingOption_StartPort() {
-		return (EReference)optionalAvailabilityShippingOptionEClass.getEStructuralFeatures().get(4);
+	@Override
+	public EReference getOptionalSimpleVesselCharterOption_StartPort() {
+		return (EReference)optionalSimpleVesselCharterOptionEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1186,8 +1373,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getOptionalAvailabilityShippingOption_EndPort() {
-		return (EReference)optionalAvailabilityShippingOptionEClass.getEStructuralFeatures().get(5);
+	@Override
+	public EReference getOptionalSimpleVesselCharterOption_EndPort() {
+		return (EReference)optionalSimpleVesselCharterOptionEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -1195,6 +1383,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getRoundTripShippingOption() {
 		return roundTripShippingOptionEClass;
 	}
@@ -1204,6 +1393,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getRoundTripShippingOption_Vessel() {
 		return (EReference)roundTripShippingOptionEClass.getEStructuralFeatures().get(0);
 	}
@@ -1213,6 +1403,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRoundTripShippingOption_HireCost() {
 		return (EAttribute)roundTripShippingOptionEClass.getEStructuralFeatures().get(1);
 	}
@@ -1222,6 +1413,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getNominatedShippingOption() {
 		return nominatedShippingOptionEClass;
 	}
@@ -1231,6 +1423,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getNominatedShippingOption_NominatedVessel() {
 		return (EReference)nominatedShippingOptionEClass.getEStructuralFeatures().get(0);
 	}
@@ -1240,8 +1433,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getAnalysisResultRow() {
-		return analysisResultRowEClass;
+	@Override
+	public EClass getFullVesselCharterOption() {
+		return fullVesselCharterOptionEClass;
 	}
 
 	/**
@@ -1249,8 +1443,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAnalysisResultRow_BuyOption() {
-		return (EReference)analysisResultRowEClass.getEStructuralFeatures().get(0);
+	@Override
+	public EReference getFullVesselCharterOption_VesselCharter() {
+		return (EReference)fullVesselCharterOptionEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1258,8 +1453,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAnalysisResultRow_SellOption() {
-		return (EReference)analysisResultRowEClass.getEStructuralFeatures().get(1);
+	@Override
+	public EClass getExistingVesselCharterOption() {
+		return existingVesselCharterOptionEClass;
 	}
 
 	/**
@@ -1267,8 +1463,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAnalysisResultRow_ResultDetail() {
-		return (EReference)analysisResultRowEClass.getEStructuralFeatures().get(2);
+	@Override
+	public EReference getExistingVesselCharterOption_VesselCharter() {
+		return (EReference)existingVesselCharterOptionEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1276,60 +1473,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAnalysisResultRow_Shipping() {
-		return (EReference)analysisResultRowEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getAnalysisResultRow_ResultDetails() {
-		return (EReference)analysisResultRowEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getResultContainer() {
-		return resultContainerEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getResultContainer_CargoAllocation() {
-		return (EReference)resultContainerEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getResultContainer_OpenSlotAllocations() {
-		return (EReference)resultContainerEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getResultContainer_SlotAllocations() {
-		return (EReference)resultContainerEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@Override
 	public EClass getAnalysisResultDetail() {
 		return analysisResultDetailEClass;
 	}
@@ -1339,6 +1483,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getProfitAndLossResult() {
 		return profitAndLossResultEClass;
 	}
@@ -1348,6 +1493,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getProfitAndLossResult_Value() {
 		return (EAttribute)profitAndLossResultEClass.getEStructuralFeatures().get(0);
 	}
@@ -1357,6 +1503,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBreakEvenResult() {
 		return breakEvenResultEClass;
 	}
@@ -1366,6 +1513,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBreakEvenResult_Price() {
 		return (EAttribute)breakEvenResultEClass.getEStructuralFeatures().get(0);
 	}
@@ -1375,6 +1523,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBreakEvenResult_PriceString() {
 		return (EAttribute)breakEvenResultEClass.getEStructuralFeatures().get(1);
 	}
@@ -1384,6 +1533,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBreakEvenResult_CargoPNL() {
 		return (EAttribute)breakEvenResultEClass.getEStructuralFeatures().get(2);
 	}
@@ -1393,6 +1543,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getAbstractAnalysisModel() {
 		return abstractAnalysisModelEClass;
 	}
@@ -1402,6 +1553,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getAbstractAnalysisModel_Buys() {
 		return (EReference)abstractAnalysisModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -1411,6 +1563,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getAbstractAnalysisModel_Sells() {
 		return (EReference)abstractAnalysisModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -1420,7 +1573,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAbstractAnalysisModel_ShippingTemplates() {
+	@Override
+	public EReference getAbstractAnalysisModel_VesselEvents() {
 		return (EReference)abstractAnalysisModelEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -1429,6 +1583,17 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EReference getAbstractAnalysisModel_ShippingTemplates() {
+		return (EReference)abstractAnalysisModelEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getOptionAnalysisModel() {
 		return optionAnalysisModelEClass;
 	}
@@ -1438,6 +1603,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptionAnalysisModel_BaseCase() {
 		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -1447,6 +1613,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBaseCase() {
 		return baseCaseEClass;
 	}
@@ -1456,6 +1623,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBaseCase_BaseCase() {
 		return (EReference)baseCaseEClass.getEStructuralFeatures().get(0);
 	}
@@ -1465,6 +1633,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBaseCase_ProfitAndLoss() {
 		return (EAttribute)baseCaseEClass.getEStructuralFeatures().get(1);
 	}
@@ -1474,6 +1643,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBaseCase_KeepExistingScenario() {
 		return (EAttribute)baseCaseEClass.getEStructuralFeatures().get(2);
 	}
@@ -1483,6 +1653,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPartialCase() {
 		return partialCaseEClass;
 	}
@@ -1492,6 +1663,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPartialCase_PartialCase() {
 		return (EReference)partialCaseEClass.getEStructuralFeatures().get(0);
 	}
@@ -1501,6 +1673,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPartialCase_KeepExistingScenario() {
 		return (EAttribute)partialCaseEClass.getEStructuralFeatures().get(1);
 	}
@@ -1510,42 +1683,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getNewVesselAvailability() {
-		return newVesselAvailabilityEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getNewVesselAvailability_VesselAvailability() {
-		return (EReference)newVesselAvailabilityEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getExistingVesselAvailability() {
-		return existingVesselAvailabilityEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getExistingVesselAvailability_VesselAvailability() {
-		return (EReference)existingVesselAvailabilityEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@Override
 	public EClass getExistingCharterMarketOption() {
 		return existingCharterMarketOptionEClass;
 	}
@@ -1555,6 +1693,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getExistingCharterMarketOption_CharterInMarket() {
 		return (EReference)existingCharterMarketOptionEClass.getEStructuralFeatures().get(0);
 	}
@@ -1564,6 +1703,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getExistingCharterMarketOption_SpotIndex() {
 		return (EAttribute)existingCharterMarketOptionEClass.getEStructuralFeatures().get(1);
 	}
@@ -1573,6 +1713,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getAbstractSolutionSet() {
 		return abstractSolutionSetEClass;
 	}
@@ -1582,6 +1723,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getAbstractSolutionSet_HasDualModeSolutions() {
 		return (EAttribute)abstractSolutionSetEClass.getEStructuralFeatures().get(0);
 	}
@@ -1591,6 +1733,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getAbstractSolutionSet_PortfolioBreakEvenMode() {
 		return (EAttribute)abstractSolutionSetEClass.getEStructuralFeatures().get(1);
 	}
@@ -1600,6 +1743,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getAbstractSolutionSet_UserSettings() {
 		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(2);
 	}
@@ -1609,6 +1753,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getAbstractSolutionSet_Options() {
 		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(5);
 	}
@@ -1618,6 +1763,57 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EReference getAbstractSolutionSet_ExtraVesselEvents() {
+		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getAbstractSolutionSet_ExtraVesselAvailabilities() {
+		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getAbstractSolutionSet_CharterInMarketOverrides() {
+		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getAbstractSolutionSet_ExtraCharterInMarkets() {
+		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAbstractSolutionSet_UseScenarioBase() {
+		return (EAttribute)abstractSolutionSetEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getAbstractSolutionSet_ExtraSlots() {
 		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(3);
 	}
@@ -1627,6 +1823,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getAbstractSolutionSet_BaseOption() {
 		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(4);
 	}
@@ -1636,6 +1833,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getActionableSetPlan() {
 		return actionableSetPlanEClass;
 	}
@@ -1645,6 +1843,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSlotInsertionOptions() {
 		return slotInsertionOptionsEClass;
 	}
@@ -1654,6 +1853,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSlotInsertionOptions_SlotsInserted() {
 		return (EReference)slotInsertionOptionsEClass.getEStructuralFeatures().get(0);
 	}
@@ -1663,6 +1863,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSlotInsertionOptions_EventsInserted() {
 		return (EReference)slotInsertionOptionsEClass.getEStructuralFeatures().get(1);
 	}
@@ -1672,6 +1873,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getChangeDescription() {
 		return changeDescriptionEClass;
 	}
@@ -1681,6 +1883,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeDescription_Changes() {
 		return (EReference)changeDescriptionEClass.getEStructuralFeatures().get(0);
 	}
@@ -1690,6 +1893,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getChange() {
 		return changeEClass;
 	}
@@ -1699,6 +1903,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getOpenSlotChange() {
 		return openSlotChangeEClass;
 	}
@@ -1708,6 +1913,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOpenSlotChange_SlotDescriptor() {
 		return (EReference)openSlotChangeEClass.getEStructuralFeatures().get(0);
 	}
@@ -1717,6 +1923,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCargoChange() {
 		return cargoChangeEClass;
 	}
@@ -1726,6 +1933,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCargoChange_SlotDescriptors() {
 		return (EReference)cargoChangeEClass.getEStructuralFeatures().get(0);
 	}
@@ -1735,6 +1943,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCargoChange_VesselAllocation() {
 		return (EReference)cargoChangeEClass.getEStructuralFeatures().get(1);
 	}
@@ -1744,6 +1953,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCargoChange_Position() {
 		return (EReference)cargoChangeEClass.getEStructuralFeatures().get(2);
 	}
@@ -1753,6 +1963,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getVesselEventChange() {
 		return vesselEventChangeEClass;
 	}
@@ -1762,6 +1973,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getVesselEventChange_VesselEventDescriptor() {
 		return (EReference)vesselEventChangeEClass.getEStructuralFeatures().get(0);
 	}
@@ -1771,6 +1983,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getVesselEventChange_VesselAllocation() {
 		return (EReference)vesselEventChangeEClass.getEStructuralFeatures().get(1);
 	}
@@ -1780,6 +1993,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getVesselEventChange_Position() {
 		return (EReference)vesselEventChangeEClass.getEStructuralFeatures().get(2);
 	}
@@ -1789,6 +2003,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getVesselEventDescriptor() {
 		return vesselEventDescriptorEClass;
 	}
@@ -1798,6 +2013,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getVesselEventDescriptor_EventName() {
 		return (EAttribute)vesselEventDescriptorEClass.getEStructuralFeatures().get(0);
 	}
@@ -1807,6 +2023,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSlotDescriptor() {
 		return slotDescriptorEClass;
 	}
@@ -1816,6 +2033,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSlotDescriptor_SlotType() {
 		return (EAttribute)slotDescriptorEClass.getEStructuralFeatures().get(0);
 	}
@@ -1825,6 +2043,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getRealSlotDescriptor() {
 		return realSlotDescriptorEClass;
 	}
@@ -1834,6 +2053,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRealSlotDescriptor_SlotName() {
 		return (EAttribute)realSlotDescriptorEClass.getEStructuralFeatures().get(0);
 	}
@@ -1843,6 +2063,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSpotMarketSlotDescriptor() {
 		return spotMarketSlotDescriptorEClass;
 	}
@@ -1852,6 +2073,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSpotMarketSlotDescriptor_Date() {
 		return (EAttribute)spotMarketSlotDescriptorEClass.getEStructuralFeatures().get(0);
 	}
@@ -1861,6 +2083,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSpotMarketSlotDescriptor_MarketName() {
 		return (EAttribute)spotMarketSlotDescriptorEClass.getEStructuralFeatures().get(1);
 	}
@@ -1870,6 +2093,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSpotMarketSlotDescriptor_PortName() {
 		return (EAttribute)spotMarketSlotDescriptorEClass.getEStructuralFeatures().get(2);
 	}
@@ -1879,6 +2103,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getVesselAllocationDescriptor() {
 		return vesselAllocationDescriptorEClass;
 	}
@@ -1888,6 +2113,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMarketVesselAllocationDescriptor() {
 		return marketVesselAllocationDescriptorEClass;
 	}
@@ -1897,6 +2123,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMarketVesselAllocationDescriptor_MarketName() {
 		return (EAttribute)marketVesselAllocationDescriptorEClass.getEStructuralFeatures().get(0);
 	}
@@ -1906,6 +2133,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMarketVesselAllocationDescriptor_SpotIndex() {
 		return (EAttribute)marketVesselAllocationDescriptorEClass.getEStructuralFeatures().get(1);
 	}
@@ -1915,6 +2143,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFleetVesselAllocationDescriptor() {
 		return fleetVesselAllocationDescriptorEClass;
 	}
@@ -1924,6 +2153,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFleetVesselAllocationDescriptor_Name() {
 		return (EAttribute)fleetVesselAllocationDescriptorEClass.getEStructuralFeatures().get(0);
 	}
@@ -1933,6 +2163,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFleetVesselAllocationDescriptor_CharterIndex() {
 		return (EAttribute)fleetVesselAllocationDescriptorEClass.getEStructuralFeatures().get(1);
 	}
@@ -1942,6 +2173,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPositionDescriptor() {
 		return positionDescriptorEClass;
 	}
@@ -1951,6 +2183,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPositionDescriptor_After() {
 		return (EAttribute)positionDescriptorEClass.getEStructuralFeatures().get(0);
 	}
@@ -1960,6 +2193,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPositionDescriptor_Before() {
 		return (EAttribute)positionDescriptorEClass.getEStructuralFeatures().get(1);
 	}
@@ -1969,6 +2203,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getViabilityModel() {
 		return viabilityModelEClass;
 	}
@@ -1978,6 +2213,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getViabilityModel_Rows() {
 		return (EReference)viabilityModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -1987,6 +2223,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getViabilityModel_Markets() {
 		return (EReference)viabilityModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -1996,6 +2233,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getViabilityRow() {
 		return viabilityRowEClass;
 	}
@@ -2005,6 +2243,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getViabilityRow_BuyOption() {
 		return (EReference)viabilityRowEClass.getEStructuralFeatures().get(0);
 	}
@@ -2014,6 +2253,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getViabilityRow_SellOption() {
 		return (EReference)viabilityRowEClass.getEStructuralFeatures().get(1);
 	}
@@ -2023,6 +2263,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getViabilityRow_Shipping() {
 		return (EReference)viabilityRowEClass.getEStructuralFeatures().get(2);
 	}
@@ -2032,6 +2273,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getViabilityRow_LhsResults() {
 		return (EReference)viabilityRowEClass.getEStructuralFeatures().get(3);
 	}
@@ -2041,6 +2283,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getViabilityRow_RhsResults() {
 		return (EReference)viabilityRowEClass.getEStructuralFeatures().get(4);
 	}
@@ -2050,6 +2293,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getViabilityRow_Target() {
 		return (EReference)viabilityRowEClass.getEStructuralFeatures().get(5);
 	}
@@ -2059,6 +2303,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getViabilityRow_Price() {
 		return (EAttribute)viabilityRowEClass.getEStructuralFeatures().get(6);
 	}
@@ -2068,6 +2313,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getViabilityRow_Eta() {
 		return (EAttribute)viabilityRowEClass.getEStructuralFeatures().get(7);
 	}
@@ -2077,6 +2323,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getViabilityRow_ReferencePrice() {
 		return (EAttribute)viabilityRowEClass.getEStructuralFeatures().get(8);
 	}
@@ -2086,6 +2333,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getViabilityRow_StartVolume() {
 		return (EAttribute)viabilityRowEClass.getEStructuralFeatures().get(9);
 	}
@@ -2095,6 +2343,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getViabilityResult() {
 		return viabilityResultEClass;
 	}
@@ -2104,6 +2353,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getViabilityResult_Target() {
 		return (EReference)viabilityResultEClass.getEStructuralFeatures().get(0);
 	}
@@ -2113,6 +2363,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getViabilityResult_EarliestETA() {
 		return (EAttribute)viabilityResultEClass.getEStructuralFeatures().get(1);
 	}
@@ -2122,6 +2373,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getViabilityResult_LatestETA() {
 		return (EAttribute)viabilityResultEClass.getEStructuralFeatures().get(2);
 	}
@@ -2131,6 +2383,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getViabilityResult_EarliestVolume() {
 		return (EAttribute)viabilityResultEClass.getEStructuralFeatures().get(3);
 	}
@@ -2140,6 +2393,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getViabilityResult_LatestVolume() {
 		return (EAttribute)viabilityResultEClass.getEStructuralFeatures().get(4);
 	}
@@ -2149,6 +2403,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getViabilityResult_EarliestPrice() {
 		return (EAttribute)viabilityResultEClass.getEStructuralFeatures().get(5);
 	}
@@ -2158,6 +2413,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getViabilityResult_LatestPrice() {
 		return (EAttribute)viabilityResultEClass.getEStructuralFeatures().get(6);
 	}
@@ -2167,6 +2423,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMTMModel() {
 		return mtmModelEClass;
 	}
@@ -2176,6 +2433,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMTMModel_Rows() {
 		return (EReference)mtmModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -2185,6 +2443,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMTMModel_Markets() {
 		return (EReference)mtmModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -2194,6 +2453,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMTMModel_NominalMarkets() {
 		return (EReference)mtmModelEClass.getEStructuralFeatures().get(2);
 	}
@@ -2203,6 +2463,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMTMResult() {
 		return mtmResultEClass;
 	}
@@ -2212,6 +2473,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMTMResult_Target() {
 		return (EReference)mtmResultEClass.getEStructuralFeatures().get(0);
 	}
@@ -2221,6 +2483,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMTMResult_EarliestETA() {
 		return (EAttribute)mtmResultEClass.getEStructuralFeatures().get(1);
 	}
@@ -2230,6 +2493,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMTMResult_EarliestVolume() {
 		return (EAttribute)mtmResultEClass.getEStructuralFeatures().get(2);
 	}
@@ -2239,6 +2503,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMTMResult_EarliestPrice() {
 		return (EAttribute)mtmResultEClass.getEStructuralFeatures().get(3);
 	}
@@ -2248,6 +2513,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMTMResult_Shipping() {
 		return (EReference)mtmResultEClass.getEStructuralFeatures().get(4);
 	}
@@ -2257,6 +2523,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMTMResult_ShippingCost() {
 		return (EAttribute)mtmResultEClass.getEStructuralFeatures().get(5);
 	}
@@ -2266,6 +2533,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMTMRow() {
 		return mtmRowEClass;
 	}
@@ -2275,6 +2543,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMTMRow_BuyOption() {
 		return (EReference)mtmRowEClass.getEStructuralFeatures().get(0);
 	}
@@ -2284,6 +2553,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMTMRow_SellOption() {
 		return (EReference)mtmRowEClass.getEStructuralFeatures().get(1);
 	}
@@ -2293,6 +2563,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMTMRow_LhsResults() {
 		return (EReference)mtmRowEClass.getEStructuralFeatures().get(2);
 	}
@@ -2302,6 +2573,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMTMRow_RhsResults() {
 		return (EReference)mtmRowEClass.getEStructuralFeatures().get(3);
 	}
@@ -2311,6 +2583,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMTMRow_Target() {
 		return (EReference)mtmRowEClass.getEStructuralFeatures().get(4);
 	}
@@ -2320,6 +2593,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMTMRow_Price() {
 		return (EAttribute)mtmRowEClass.getEStructuralFeatures().get(5);
 	}
@@ -2329,6 +2603,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMTMRow_Eta() {
 		return (EAttribute)mtmRowEClass.getEStructuralFeatures().get(6);
 	}
@@ -2338,6 +2613,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMTMRow_ReferencePrice() {
 		return (EAttribute)mtmRowEClass.getEStructuralFeatures().get(7);
 	}
@@ -2347,6 +2623,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMTMRow_StartVolume() {
 		return (EAttribute)mtmRowEClass.getEStructuralFeatures().get(8);
 	}
@@ -2356,6 +2633,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBreakEvenAnalysisModel() {
 		return breakEvenAnalysisModelEClass;
 	}
@@ -2365,6 +2643,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBreakEvenAnalysisModel_Rows() {
 		return (EReference)breakEvenAnalysisModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -2374,6 +2653,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBreakEvenAnalysisModel_Markets() {
 		return (EReference)breakEvenAnalysisModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -2383,6 +2663,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBreakEvenAnalysisRow() {
 		return breakEvenAnalysisRowEClass;
 	}
@@ -2392,6 +2673,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBreakEvenAnalysisRow_BuyOption() {
 		return (EReference)breakEvenAnalysisRowEClass.getEStructuralFeatures().get(0);
 	}
@@ -2401,6 +2683,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBreakEvenAnalysisRow_SellOption() {
 		return (EReference)breakEvenAnalysisRowEClass.getEStructuralFeatures().get(1);
 	}
@@ -2410,6 +2693,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBreakEvenAnalysisRow_Shipping() {
 		return (EReference)breakEvenAnalysisRowEClass.getEStructuralFeatures().get(2);
 	}
@@ -2419,6 +2703,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBreakEvenAnalysisRow_LhsResults() {
 		return (EReference)breakEvenAnalysisRowEClass.getEStructuralFeatures().get(3);
 	}
@@ -2428,6 +2713,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBreakEvenAnalysisRow_RhsResults() {
 		return (EReference)breakEvenAnalysisRowEClass.getEStructuralFeatures().get(4);
 	}
@@ -2437,6 +2723,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBreakEvenAnalysisRow_LhsBasedOn() {
 		return (EReference)breakEvenAnalysisRowEClass.getEStructuralFeatures().get(5);
 	}
@@ -2446,6 +2733,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBreakEvenAnalysisRow_RhsBasedOn() {
 		return (EReference)breakEvenAnalysisRowEClass.getEStructuralFeatures().get(6);
 	}
@@ -2455,6 +2743,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBreakEvenAnalysisResultSet() {
 		return breakEvenAnalysisResultSetEClass;
 	}
@@ -2464,6 +2753,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBreakEvenAnalysisResultSet_BasedOn() {
 		return (EReference)breakEvenAnalysisResultSetEClass.getEStructuralFeatures().get(0);
 	}
@@ -2473,6 +2763,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBreakEvenAnalysisResultSet_Results() {
 		return (EReference)breakEvenAnalysisResultSetEClass.getEStructuralFeatures().get(1);
 	}
@@ -2482,6 +2773,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBreakEvenAnalysisResultSet_Price() {
 		return (EAttribute)breakEvenAnalysisResultSetEClass.getEStructuralFeatures().get(2);
 	}
@@ -2491,6 +2783,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBreakEvenAnalysisResult() {
 		return breakEvenAnalysisResultEClass;
 	}
@@ -2500,6 +2793,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBreakEvenAnalysisResult_Target() {
 		return (EReference)breakEvenAnalysisResultEClass.getEStructuralFeatures().get(0);
 	}
@@ -2509,6 +2803,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBreakEvenAnalysisResult_Price() {
 		return (EAttribute)breakEvenAnalysisResultEClass.getEStructuralFeatures().get(1);
 	}
@@ -2518,6 +2813,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBreakEvenAnalysisResult_Eta() {
 		return (EAttribute)breakEvenAnalysisResultEClass.getEStructuralFeatures().get(2);
 	}
@@ -2527,6 +2823,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBreakEvenAnalysisResult_ReferencePrice() {
 		return (EAttribute)breakEvenAnalysisResultEClass.getEStructuralFeatures().get(3);
 	}
@@ -2536,6 +2833,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSolutionOption() {
 		return solutionOptionEClass;
 	}
@@ -2545,6 +2843,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSolutionOption_ChangeDescription() {
 		return (EReference)solutionOptionEClass.getEStructuralFeatures().get(0);
 	}
@@ -2554,6 +2853,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSolutionOption_ScheduleSpecification() {
 		return (EReference)solutionOptionEClass.getEStructuralFeatures().get(1);
 	}
@@ -2563,6 +2863,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSolutionOption_ScheduleModel() {
 		return (EReference)solutionOptionEClass.getEStructuralFeatures().get(2);
 	}
@@ -2572,6 +2873,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getOptimisationResult() {
 		return optimisationResultEClass;
 	}
@@ -2581,6 +2883,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDualModeSolutionOption() {
 		return dualModeSolutionOptionEClass;
 	}
@@ -2590,6 +2893,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getDualModeSolutionOption_MicroBaseCase() {
 		return (EReference)dualModeSolutionOptionEClass.getEStructuralFeatures().get(0);
 	}
@@ -2599,6 +2903,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getDualModeSolutionOption_MicroTargetCase() {
 		return (EReference)dualModeSolutionOptionEClass.getEStructuralFeatures().get(1);
 	}
@@ -2608,6 +2913,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSolutionOptionMicroCase() {
 		return solutionOptionMicroCaseEClass;
 	}
@@ -2617,6 +2923,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSolutionOptionMicroCase_ScheduleSpecification() {
 		return (EReference)solutionOptionMicroCaseEClass.getEStructuralFeatures().get(0);
 	}
@@ -2626,6 +2933,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSolutionOptionMicroCase_ScheduleModel() {
 		return (EReference)solutionOptionMicroCaseEClass.getEStructuralFeatures().get(1);
 	}
@@ -2635,6 +2943,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSolutionOptionMicroCase_ExtraVesselAvailabilities() {
 		return (EReference)solutionOptionMicroCaseEClass.getEStructuralFeatures().get(2);
 	}
@@ -2644,6 +2953,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSolutionOptionMicroCase_CharterInMarketOverrides() {
 		return (EReference)solutionOptionMicroCaseEClass.getEStructuralFeatures().get(3);
 	}
@@ -2653,6 +2963,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptionAnalysisModel_PartialCase() {
 		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -2662,7 +2973,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getOptionAnalysisModel_BaseCaseResult() {
+	@Override
+	public EReference getOptionAnalysisModel_Results() {
 		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -2671,8 +2983,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getOptionAnalysisModel_Results() {
-		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(3);
+	@Override
+	public EAttribute getOptionAnalysisModel_UseTargetPNL() {
+		return (EAttribute)optionAnalysisModelEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -2680,7 +2993,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getOptionAnalysisModel_UseTargetPNL() {
+	@Override
+	public EAttribute getOptionAnalysisModel_Mode() {
 		return (EAttribute)optionAnalysisModelEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -2689,8 +3003,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getOptionAnalysisModel_Children() {
-		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(5);
+	@Override
+	public EClass getSandboxResult() {
+		return sandboxResultEClass;
 	}
 
 	/**
@@ -2698,96 +3013,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getResultSet() {
-		return resultSetEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getResultSet_Rows() {
-		return (EReference)resultSetEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getResultSet_ProfitAndLoss() {
-		return (EAttribute)resultSetEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getResultSet_ScheduleModel() {
-		return (EReference)resultSetEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getResult() {
-		return resultEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getResult_ExtraSlots() {
-		return (EReference)resultEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getResult_ResultSets() {
-		return (EReference)resultEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getResult_ExtraVesselAvailabilities() {
-		return (EReference)resultEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getResult_CharterInMarketOverrides() {
-		return (EReference)resultEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getResult_ExtraCharterInMarkets() {
-		return (EReference)resultEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@Override
 	public EEnum getVolumeMode() {
 		return volumeModeEEnum;
 	}
@@ -2797,6 +3023,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getSlotType() {
 		return slotTypeEEnum;
 	}
@@ -2841,6 +3068,10 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		sellOptionEClass = createEClass(SELL_OPTION);
 
+		openSellEClass = createEClass(OPEN_SELL);
+
+		openBuyEClass = createEClass(OPEN_BUY);
+
 		buyOpportunityEClass = createEClass(BUY_OPPORTUNITY);
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__DES_PURCHASE);
 		createEReference(buyOpportunityEClass, BUY_OPPORTUNITY__PORT);
@@ -2882,31 +3113,44 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		sellReferenceEClass = createEClass(SELL_REFERENCE);
 		createEReference(sellReferenceEClass, SELL_REFERENCE__SLOT);
 
+		vesselEventOptionEClass = createEClass(VESSEL_EVENT_OPTION);
+
+		vesselEventReferenceEClass = createEClass(VESSEL_EVENT_REFERENCE);
+		createEReference(vesselEventReferenceEClass, VESSEL_EVENT_REFERENCE__EVENT);
+
+		charterOutOpportunityEClass = createEClass(CHARTER_OUT_OPPORTUNITY);
+		createEAttribute(charterOutOpportunityEClass, CHARTER_OUT_OPPORTUNITY__HIRE_COST);
+		createEReference(charterOutOpportunityEClass, CHARTER_OUT_OPPORTUNITY__PORT);
+		createEAttribute(charterOutOpportunityEClass, CHARTER_OUT_OPPORTUNITY__DATE);
+		createEAttribute(charterOutOpportunityEClass, CHARTER_OUT_OPPORTUNITY__DURATION);
+
 		baseCaseRowEClass = createEClass(BASE_CASE_ROW);
 		createEReference(baseCaseRowEClass, BASE_CASE_ROW__BUY_OPTION);
 		createEReference(baseCaseRowEClass, BASE_CASE_ROW__SELL_OPTION);
+		createEReference(baseCaseRowEClass, BASE_CASE_ROW__VESSEL_EVENT_OPTION);
 		createEReference(baseCaseRowEClass, BASE_CASE_ROW__SHIPPING);
 
 		partialCaseRowEClass = createEClass(PARTIAL_CASE_ROW);
 		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__BUY_OPTIONS);
 		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__SELL_OPTIONS);
+		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__VESSEL_EVENT_OPTIONS);
 		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__SHIPPING);
 
 		shippingOptionEClass = createEClass(SHIPPING_OPTION);
 
-		fleetShippingOptionEClass = createEClass(FLEET_SHIPPING_OPTION);
-		createEReference(fleetShippingOptionEClass, FLEET_SHIPPING_OPTION__VESSEL);
-		createEAttribute(fleetShippingOptionEClass, FLEET_SHIPPING_OPTION__HIRE_COST);
-		createEReference(fleetShippingOptionEClass, FLEET_SHIPPING_OPTION__ENTITY);
-		createEAttribute(fleetShippingOptionEClass, FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL);
+		simpleVesselCharterOptionEClass = createEClass(SIMPLE_VESSEL_CHARTER_OPTION);
+		createEReference(simpleVesselCharterOptionEClass, SIMPLE_VESSEL_CHARTER_OPTION__VESSEL);
+		createEAttribute(simpleVesselCharterOptionEClass, SIMPLE_VESSEL_CHARTER_OPTION__HIRE_COST);
+		createEReference(simpleVesselCharterOptionEClass, SIMPLE_VESSEL_CHARTER_OPTION__ENTITY);
+		createEAttribute(simpleVesselCharterOptionEClass, SIMPLE_VESSEL_CHARTER_OPTION__USE_SAFETY_HEEL);
 
-		optionalAvailabilityShippingOptionEClass = createEClass(OPTIONAL_AVAILABILITY_SHIPPING_OPTION);
-		createEAttribute(optionalAvailabilityShippingOptionEClass, OPTIONAL_AVAILABILITY_SHIPPING_OPTION__BALLAST_BONUS);
-		createEAttribute(optionalAvailabilityShippingOptionEClass, OPTIONAL_AVAILABILITY_SHIPPING_OPTION__REPOSITIONING_FEE);
-		createEAttribute(optionalAvailabilityShippingOptionEClass, OPTIONAL_AVAILABILITY_SHIPPING_OPTION__START);
-		createEAttribute(optionalAvailabilityShippingOptionEClass, OPTIONAL_AVAILABILITY_SHIPPING_OPTION__END);
-		createEReference(optionalAvailabilityShippingOptionEClass, OPTIONAL_AVAILABILITY_SHIPPING_OPTION__START_PORT);
-		createEReference(optionalAvailabilityShippingOptionEClass, OPTIONAL_AVAILABILITY_SHIPPING_OPTION__END_PORT);
+		optionalSimpleVesselCharterOptionEClass = createEClass(OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION);
+		createEAttribute(optionalSimpleVesselCharterOptionEClass, OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__BALLAST_BONUS);
+		createEAttribute(optionalSimpleVesselCharterOptionEClass, OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__REPOSITIONING_FEE);
+		createEAttribute(optionalSimpleVesselCharterOptionEClass, OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__START);
+		createEAttribute(optionalSimpleVesselCharterOptionEClass, OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__END);
+		createEReference(optionalSimpleVesselCharterOptionEClass, OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__START_PORT);
+		createEReference(optionalSimpleVesselCharterOptionEClass, OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__END_PORT);
 
 		roundTripShippingOptionEClass = createEClass(ROUND_TRIP_SHIPPING_OPTION);
 		createEReference(roundTripShippingOptionEClass, ROUND_TRIP_SHIPPING_OPTION__VESSEL);
@@ -2915,17 +3159,11 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		nominatedShippingOptionEClass = createEClass(NOMINATED_SHIPPING_OPTION);
 		createEReference(nominatedShippingOptionEClass, NOMINATED_SHIPPING_OPTION__NOMINATED_VESSEL);
 
-		analysisResultRowEClass = createEClass(ANALYSIS_RESULT_ROW);
-		createEReference(analysisResultRowEClass, ANALYSIS_RESULT_ROW__BUY_OPTION);
-		createEReference(analysisResultRowEClass, ANALYSIS_RESULT_ROW__SELL_OPTION);
-		createEReference(analysisResultRowEClass, ANALYSIS_RESULT_ROW__RESULT_DETAIL);
-		createEReference(analysisResultRowEClass, ANALYSIS_RESULT_ROW__SHIPPING);
-		createEReference(analysisResultRowEClass, ANALYSIS_RESULT_ROW__RESULT_DETAILS);
+		fullVesselCharterOptionEClass = createEClass(FULL_VESSEL_CHARTER_OPTION);
+		createEReference(fullVesselCharterOptionEClass, FULL_VESSEL_CHARTER_OPTION__VESSEL_CHARTER);
 
-		resultContainerEClass = createEClass(RESULT_CONTAINER);
-		createEReference(resultContainerEClass, RESULT_CONTAINER__CARGO_ALLOCATION);
-		createEReference(resultContainerEClass, RESULT_CONTAINER__OPEN_SLOT_ALLOCATIONS);
-		createEReference(resultContainerEClass, RESULT_CONTAINER__SLOT_ALLOCATIONS);
+		existingVesselCharterOptionEClass = createEClass(EXISTING_VESSEL_CHARTER_OPTION);
+		createEReference(existingVesselCharterOptionEClass, EXISTING_VESSEL_CHARTER_OPTION__VESSEL_CHARTER);
 
 		analysisResultDetailEClass = createEClass(ANALYSIS_RESULT_DETAIL);
 
@@ -2940,27 +3178,17 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		abstractAnalysisModelEClass = createEClass(ABSTRACT_ANALYSIS_MODEL);
 		createEReference(abstractAnalysisModelEClass, ABSTRACT_ANALYSIS_MODEL__BUYS);
 		createEReference(abstractAnalysisModelEClass, ABSTRACT_ANALYSIS_MODEL__SELLS);
+		createEReference(abstractAnalysisModelEClass, ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS);
 		createEReference(abstractAnalysisModelEClass, ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 
 		optionAnalysisModelEClass = createEClass(OPTION_ANALYSIS_MODEL);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__BASE_CASE);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
-		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__RESULTS);
 		createEAttribute(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
-		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__CHILDREN);
+		createEAttribute(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__MODE);
 
-		resultSetEClass = createEClass(RESULT_SET);
-		createEReference(resultSetEClass, RESULT_SET__ROWS);
-		createEAttribute(resultSetEClass, RESULT_SET__PROFIT_AND_LOSS);
-		createEReference(resultSetEClass, RESULT_SET__SCHEDULE_MODEL);
-
-		resultEClass = createEClass(RESULT);
-		createEReference(resultEClass, RESULT__EXTRA_SLOTS);
-		createEReference(resultEClass, RESULT__RESULT_SETS);
-		createEReference(resultEClass, RESULT__EXTRA_VESSEL_AVAILABILITIES);
-		createEReference(resultEClass, RESULT__CHARTER_IN_MARKET_OVERRIDES);
-		createEReference(resultEClass, RESULT__EXTRA_CHARTER_IN_MARKETS);
+		sandboxResultEClass = createEClass(SANDBOX_RESULT);
 
 		baseCaseEClass = createEClass(BASE_CASE);
 		createEReference(baseCaseEClass, BASE_CASE__BASE_CASE);
@@ -2970,12 +3198,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		partialCaseEClass = createEClass(PARTIAL_CASE);
 		createEReference(partialCaseEClass, PARTIAL_CASE__PARTIAL_CASE);
 		createEAttribute(partialCaseEClass, PARTIAL_CASE__KEEP_EXISTING_SCENARIO);
-
-		newVesselAvailabilityEClass = createEClass(NEW_VESSEL_AVAILABILITY);
-		createEReference(newVesselAvailabilityEClass, NEW_VESSEL_AVAILABILITY__VESSEL_AVAILABILITY);
-
-		existingVesselAvailabilityEClass = createEClass(EXISTING_VESSEL_AVAILABILITY);
-		createEReference(existingVesselAvailabilityEClass, EXISTING_VESSEL_AVAILABILITY__VESSEL_AVAILABILITY);
 
 		existingCharterMarketOptionEClass = createEClass(EXISTING_CHARTER_MARKET_OPTION);
 		createEReference(existingCharterMarketOptionEClass, EXISTING_CHARTER_MARKET_OPTION__CHARTER_IN_MARKET);
@@ -2988,6 +3210,11 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__EXTRA_SLOTS);
 		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__BASE_OPTION);
 		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__OPTIONS);
+		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS);
+		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES);
+		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES);
+		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS);
+		createEAttribute(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE);
 
 		actionableSetPlanEClass = createEClass(ACTIONABLE_SET_PLAN);
 
@@ -3168,8 +3395,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		SpotMarketsPackage theSpotMarketsPackage = (SpotMarketsPackage)EPackage.Registry.INSTANCE.getEPackage(SpotMarketsPackage.eNS_URI);
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
-		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
 		ParametersPackage theParametersPackage = (ParametersPackage)EPackage.Registry.INSTANCE.getEPackage(ParametersPackage.eNS_URI);
+		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
 
 		// Create type parameters
 
@@ -3177,24 +3404,43 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		// Add supertypes to classes
 		analyticsModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		buyOpportunityEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		openSellEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		openSellEClass.getESuperTypes().add(this.getSellOption());
+		openBuyEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		openBuyEClass.getESuperTypes().add(this.getBuyOption());
+		buyOpportunityEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		buyOpportunityEClass.getESuperTypes().add(this.getBuyOption());
-		sellOpportunityEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		sellOpportunityEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		sellOpportunityEClass.getESuperTypes().add(this.getSellOption());
+		buyMarketEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		buyMarketEClass.getESuperTypes().add(this.getBuyOption());
+		sellMarketEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		sellMarketEClass.getESuperTypes().add(this.getSellOption());
+		buyReferenceEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		buyReferenceEClass.getESuperTypes().add(this.getBuyOption());
+		sellReferenceEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		sellReferenceEClass.getESuperTypes().add(this.getSellOption());
-		fleetShippingOptionEClass.getESuperTypes().add(this.getShippingOption());
-		optionalAvailabilityShippingOptionEClass.getESuperTypes().add(this.getFleetShippingOption());
+		vesselEventReferenceEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		vesselEventReferenceEClass.getESuperTypes().add(this.getVesselEventOption());
+		charterOutOpportunityEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		charterOutOpportunityEClass.getESuperTypes().add(this.getVesselEventOption());
+		simpleVesselCharterOptionEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		simpleVesselCharterOptionEClass.getESuperTypes().add(this.getShippingOption());
+		optionalSimpleVesselCharterOptionEClass.getESuperTypes().add(this.getSimpleVesselCharterOption());
+		roundTripShippingOptionEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		roundTripShippingOptionEClass.getESuperTypes().add(this.getShippingOption());
+		nominatedShippingOptionEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		nominatedShippingOptionEClass.getESuperTypes().add(this.getShippingOption());
+		fullVesselCharterOptionEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		fullVesselCharterOptionEClass.getESuperTypes().add(this.getShippingOption());
+		existingVesselCharterOptionEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		existingVesselCharterOptionEClass.getESuperTypes().add(this.getShippingOption());
 		profitAndLossResultEClass.getESuperTypes().add(this.getAnalysisResultDetail());
 		breakEvenResultEClass.getESuperTypes().add(this.getAnalysisResultDetail());
 		abstractAnalysisModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		optionAnalysisModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
-		newVesselAvailabilityEClass.getESuperTypes().add(this.getShippingOption());
-		existingVesselAvailabilityEClass.getESuperTypes().add(this.getShippingOption());
+		sandboxResultEClass.getESuperTypes().add(this.getAbstractSolutionSet());
+		existingCharterMarketOptionEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		existingCharterMarketOptionEClass.getESuperTypes().add(this.getShippingOption());
 		abstractSolutionSetEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		abstractSolutionSetEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
@@ -3224,6 +3470,10 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(buyOptionEClass, BuyOption.class, "BuyOption", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(sellOptionEClass, SellOption.class, "SellOption", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(openSellEClass, OpenSell.class, "OpenSell", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(openBuyEClass, OpenBuy.class, "OpenBuy", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(buyOpportunityEClass, BuyOpportunity.class, "BuyOpportunity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getBuyOpportunity_DesPurchase(), ecorePackage.getEBoolean(), "desPurchase", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3266,31 +3516,44 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(sellReferenceEClass, SellReference.class, "SellReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSellReference_Slot(), theCargoPackage.getDischargeSlot(), null, "slot", null, 0, 1, SellReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(vesselEventOptionEClass, VesselEventOption.class, "VesselEventOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(vesselEventReferenceEClass, VesselEventReference.class, "VesselEventReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getVesselEventReference_Event(), theCargoPackage.getVesselEvent(), null, "event", null, 0, 1, VesselEventReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(charterOutOpportunityEClass, CharterOutOpportunity.class, "CharterOutOpportunity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCharterOutOpportunity_HireCost(), ecorePackage.getEInt(), "hireCost", null, 0, 1, CharterOutOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCharterOutOpportunity_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, CharterOutOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOutOpportunity_Date(), theDateTimePackage.getLocalDate(), "date", null, 0, 1, CharterOutOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOutOpportunity_Duration(), ecorePackage.getEInt(), "duration", null, 0, 1, CharterOutOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(baseCaseRowEClass, BaseCaseRow.class, "BaseCaseRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBaseCaseRow_BuyOption(), this.getBuyOption(), null, "buyOption", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBaseCaseRow_SellOption(), this.getSellOption(), null, "sellOption", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBaseCaseRow_VesselEventOption(), this.getVesselEventOption(), null, "vesselEventOption", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBaseCaseRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(partialCaseRowEClass, PartialCaseRow.class, "PartialCaseRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPartialCaseRow_BuyOptions(), this.getBuyOption(), null, "buyOptions", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPartialCaseRow_SellOptions(), this.getSellOption(), null, "sellOptions", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPartialCaseRow_VesselEventOptions(), this.getVesselEventOption(), null, "vesselEventOptions", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPartialCaseRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(shippingOptionEClass, ShippingOption.class, "ShippingOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(fleetShippingOptionEClass, FleetShippingOption.class, "FleetShippingOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getFleetShippingOption_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 0, 1, FleetShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getFleetShippingOption_HireCost(), ecorePackage.getEString(), "hireCost", null, 0, 1, FleetShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getFleetShippingOption_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, FleetShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getFleetShippingOption_UseSafetyHeel(), ecorePackage.getEBoolean(), "useSafetyHeel", null, 0, 1, FleetShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(simpleVesselCharterOptionEClass, SimpleVesselCharterOption.class, "SimpleVesselCharterOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSimpleVesselCharterOption_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 0, 1, SimpleVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSimpleVesselCharterOption_HireCost(), ecorePackage.getEString(), "hireCost", null, 0, 1, SimpleVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSimpleVesselCharterOption_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, SimpleVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSimpleVesselCharterOption_UseSafetyHeel(), ecorePackage.getEBoolean(), "useSafetyHeel", null, 0, 1, SimpleVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(optionalAvailabilityShippingOptionEClass, OptionalAvailabilityShippingOption.class, "OptionalAvailabilityShippingOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getOptionalAvailabilityShippingOption_BallastBonus(), ecorePackage.getEString(), "ballastBonus", null, 0, 1, OptionalAvailabilityShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getOptionalAvailabilityShippingOption_RepositioningFee(), ecorePackage.getEString(), "repositioningFee", null, 0, 1, OptionalAvailabilityShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getOptionalAvailabilityShippingOption_Start(), theDateTimePackage.getLocalDate(), "start", null, 0, 1, OptionalAvailabilityShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getOptionalAvailabilityShippingOption_End(), theDateTimePackage.getLocalDate(), "end", null, 0, 1, OptionalAvailabilityShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOptionalAvailabilityShippingOption_StartPort(), thePortPackage.getPort(), null, "startPort", null, 0, 1, OptionalAvailabilityShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOptionalAvailabilityShippingOption_EndPort(), thePortPackage.getPort(), null, "endPort", null, 0, 1, OptionalAvailabilityShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(optionalSimpleVesselCharterOptionEClass, OptionalSimpleVesselCharterOption.class, "OptionalSimpleVesselCharterOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getOptionalSimpleVesselCharterOption_BallastBonus(), ecorePackage.getEString(), "ballastBonus", null, 0, 1, OptionalSimpleVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOptionalSimpleVesselCharterOption_RepositioningFee(), ecorePackage.getEString(), "repositioningFee", null, 0, 1, OptionalSimpleVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOptionalSimpleVesselCharterOption_Start(), theDateTimePackage.getLocalDate(), "start", null, 0, 1, OptionalSimpleVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOptionalSimpleVesselCharterOption_End(), theDateTimePackage.getLocalDate(), "end", null, 0, 1, OptionalSimpleVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOptionalSimpleVesselCharterOption_StartPort(), thePortPackage.getPort(), null, "startPort", null, 0, 1, OptionalSimpleVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOptionalSimpleVesselCharterOption_EndPort(), thePortPackage.getPort(), null, "endPort", null, 0, 1, OptionalSimpleVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(roundTripShippingOptionEClass, RoundTripShippingOption.class, "RoundTripShippingOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRoundTripShippingOption_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 0, 1, RoundTripShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3299,17 +3562,11 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(nominatedShippingOptionEClass, NominatedShippingOption.class, "NominatedShippingOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getNominatedShippingOption_NominatedVessel(), theFleetPackage.getVessel(), null, "nominatedVessel", null, 0, 1, NominatedShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(analysisResultRowEClass, AnalysisResultRow.class, "AnalysisResultRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAnalysisResultRow_BuyOption(), this.getBuyOption(), null, "buyOption", null, 0, 1, AnalysisResultRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAnalysisResultRow_SellOption(), this.getSellOption(), null, "sellOption", null, 0, 1, AnalysisResultRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAnalysisResultRow_ResultDetail(), this.getAnalysisResultDetail(), null, "resultDetail", null, 0, 1, AnalysisResultRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAnalysisResultRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, 1, AnalysisResultRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAnalysisResultRow_ResultDetails(), this.getResultContainer(), null, "resultDetails", null, 0, 1, AnalysisResultRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(fullVesselCharterOptionEClass, FullVesselCharterOption.class, "FullVesselCharterOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getFullVesselCharterOption_VesselCharter(), theCargoPackage.getVesselAvailability(), null, "vesselCharter", null, 0, 1, FullVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(resultContainerEClass, ResultContainer.class, "ResultContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getResultContainer_CargoAllocation(), theSchedulePackage.getCargoAllocation(), null, "cargoAllocation", null, 0, 1, ResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getResultContainer_OpenSlotAllocations(), theSchedulePackage.getOpenSlotAllocation(), null, "openSlotAllocations", null, 0, -1, ResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getResultContainer_SlotAllocations(), theSchedulePackage.getSlotAllocation(), null, "slotAllocations", null, 0, -1, ResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(existingVesselCharterOptionEClass, ExistingVesselCharterOption.class, "ExistingVesselCharterOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getExistingVesselCharterOption_VesselCharter(), theCargoPackage.getVesselAvailability(), null, "vesselCharter", null, 0, 1, ExistingVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(analysisResultDetailEClass, AnalysisResultDetail.class, "AnalysisResultDetail", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -3324,27 +3581,17 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(abstractAnalysisModelEClass, AbstractAnalysisModel.class, "AbstractAnalysisModel", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAbstractAnalysisModel_Buys(), this.getBuyOption(), null, "buys", null, 0, -1, AbstractAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractAnalysisModel_Sells(), this.getSellOption(), null, "sells", null, 0, -1, AbstractAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAbstractAnalysisModel_VesselEvents(), this.getVesselEventOption(), null, "vesselEvents", null, 0, -1, AbstractAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractAnalysisModel_ShippingTemplates(), this.getShippingOption(), null, "shippingTemplates", null, 0, -1, AbstractAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(optionAnalysisModelEClass, OptionAnalysisModel.class, "OptionAnalysisModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getOptionAnalysisModel_BaseCase(), this.getBaseCase(), null, "baseCase", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_PartialCase(), this.getPartialCase(), null, "partialCase", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOptionAnalysisModel_BaseCaseResult(), this.getResult(), null, "baseCaseResult", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOptionAnalysisModel_Results(), this.getResult(), null, "results", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOptionAnalysisModel_Results(), this.getAbstractSolutionSet(), null, "results", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getOptionAnalysisModel_UseTargetPNL(), ecorePackage.getEBoolean(), "useTargetPNL", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOptionAnalysisModel_Children(), this.getOptionAnalysisModel(), null, "children", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOptionAnalysisModel_Mode(), ecorePackage.getEInt(), "mode", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(resultSetEClass, ResultSet.class, "ResultSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getResultSet_Rows(), this.getAnalysisResultRow(), null, "rows", null, 0, -1, ResultSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getResultSet_ProfitAndLoss(), ecorePackage.getELong(), "profitAndLoss", null, 0, 1, ResultSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getResultSet_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, ResultSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(resultEClass, Result.class, "Result", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getResult_ExtraSlots(), theCargoPackage.getSlot(), null, "extraSlots", null, 0, -1, Result.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getResult_ResultSets(), this.getResultSet(), null, "resultSets", null, 0, -1, Result.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getResult_ExtraVesselAvailabilities(), theCargoPackage.getVesselAvailability(), null, "extraVesselAvailabilities", null, 0, -1, Result.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getResult_CharterInMarketOverrides(), theCargoPackage.getCharterInMarketOverride(), null, "charterInMarketOverrides", null, 0, -1, Result.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getResult_ExtraCharterInMarkets(), theSpotMarketsPackage.getCharterInMarket(), null, "extraCharterInMarkets", null, 0, -1, Result.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(sandboxResultEClass, SandboxResult.class, "SandboxResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(baseCaseEClass, BaseCase.class, "BaseCase", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBaseCase_BaseCase(), this.getBaseCaseRow(), null, "baseCase", null, 0, -1, BaseCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3354,12 +3601,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(partialCaseEClass, PartialCase.class, "PartialCase", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPartialCase_PartialCase(), this.getPartialCaseRow(), null, "partialCase", null, 0, -1, PartialCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPartialCase_KeepExistingScenario(), ecorePackage.getEBoolean(), "keepExistingScenario", null, 0, 1, PartialCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(newVesselAvailabilityEClass, NewVesselAvailability.class, "NewVesselAvailability", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getNewVesselAvailability_VesselAvailability(), theCargoPackage.getVesselAvailability(), null, "vesselAvailability", null, 0, 1, NewVesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(existingVesselAvailabilityEClass, ExistingVesselAvailability.class, "ExistingVesselAvailability", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getExistingVesselAvailability_VesselAvailability(), theCargoPackage.getVesselAvailability(), null, "vesselAvailability", null, 0, 1, ExistingVesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(existingCharterMarketOptionEClass, ExistingCharterMarketOption.class, "ExistingCharterMarketOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getExistingCharterMarketOption_CharterInMarket(), theSpotMarketsPackage.getCharterInMarket(), null, "charterInMarket", null, 0, 1, ExistingCharterMarketOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3372,6 +3613,11 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getAbstractSolutionSet_ExtraSlots(), theCargoPackage.getSlot(), null, "extraSlots", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractSolutionSet_BaseOption(), this.getSolutionOption(), null, "baseOption", null, 0, 1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractSolutionSet_Options(), this.getSolutionOption(), null, "options", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAbstractSolutionSet_ExtraVesselEvents(), theCargoPackage.getVesselEvent(), null, "extraVesselEvents", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAbstractSolutionSet_ExtraVesselAvailabilities(), theCargoPackage.getVesselAvailability(), null, "extraVesselAvailabilities", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAbstractSolutionSet_CharterInMarketOverrides(), theCargoPackage.getCharterInMarketOverride(), null, "charterInMarketOverrides", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAbstractSolutionSet_ExtraCharterInMarkets(), theSpotMarketsPackage.getCharterInMarket(), null, "extraCharterInMarkets", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAbstractSolutionSet_UseScenarioBase(), ecorePackage.getEBoolean(), "useScenarioBase", "true", 0, 1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(actionableSetPlanEClass, ActionableSetPlan.class, "ActionableSetPlan", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -3600,19 +3846,19 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 			   "type", "commodity"
 		   });
 		addAnnotation
-		  (getFleetShippingOption_HireCost(),
+		  (getSimpleVesselCharterOption_HireCost(),
 		   source,
 		   new String[] {
 			   "type", "charter"
 		   });
 		addAnnotation
-		  (getOptionalAvailabilityShippingOption_BallastBonus(),
+		  (getOptionalSimpleVesselCharterOption_BallastBonus(),
 		   source,
 		   new String[] {
 			   "type", "charter"
 		   });
 		addAnnotation
-		  (getOptionalAvailabilityShippingOption_RepositioningFee(),
+		  (getOptionalSimpleVesselCharterOption_RepositioningFee(),
 		   source,
 		   new String[] {
 			   "type", "charter"
@@ -3640,7 +3886,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 			   "nonUniqueChildren", "true"
 		   });
 		addAnnotation
-		  (resultEClass,
+		  (sandboxResultEClass,
 		   source,
 		   new String[] {
 			   "nonUniqueChildren", "true"

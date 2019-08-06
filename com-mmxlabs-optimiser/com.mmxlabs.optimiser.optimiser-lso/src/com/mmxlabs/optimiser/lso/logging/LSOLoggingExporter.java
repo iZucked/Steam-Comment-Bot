@@ -24,14 +24,12 @@ public class LSOLoggingExporter {
 
 	private PrintWriter writer;
 	private final String path;
-	private final String foldername;
 	private final String phase;
 
 	private final LSOLogger lsoLogger;
 
-	public LSOLoggingExporter(final String path, final String foldername, final String phase, final LSOLogger lsoLogger) {
+	public LSOLoggingExporter(final String path, final String phase, final LSOLogger lsoLogger) {
 		this.path = path;
-		this.foldername = foldername;
 		this.phase = phase;
 		this.lsoLogger = lsoLogger;
 		final String pathToFolder = Paths.get(path, phase).toString();
@@ -313,11 +311,11 @@ public class LSOLoggingExporter {
 	}
 
 	private Path getPath(final String fileType) {
-		return Paths.get(path, phase, String.format("%s.%s.txt", foldername, fileType));
+		return Paths.get(path, String.format("%s.%s.txt", phase, fileType));
 	}
 
 	private Path getJSONPath(final String fileType) {
-		return Paths.get(path, phase, String.format("%s.%s.json", foldername, fileType));
+		return Paths.get(path, String.format("%s.%s.json", phase, fileType));
 	}
 
 }

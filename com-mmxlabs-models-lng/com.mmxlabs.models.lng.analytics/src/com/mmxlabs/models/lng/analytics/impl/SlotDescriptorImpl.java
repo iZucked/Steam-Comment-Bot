@@ -75,6 +75,7 @@ public abstract class SlotDescriptorImpl extends EObjectImpl implements SlotDesc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotType getSlotType() {
 		return slotType;
 	}
@@ -84,6 +85,7 @@ public abstract class SlotDescriptorImpl extends EObjectImpl implements SlotDesc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlotType(SlotType newSlotType) {
 		SlotType oldSlotType = slotType;
 		slotType = newSlotType == null ? SLOT_TYPE_EDEFAULT : newSlotType;

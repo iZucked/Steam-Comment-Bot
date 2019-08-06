@@ -78,6 +78,7 @@ public class SlotInsertionOptionsImpl extends AbstractSolutionSetImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Slot> getSlotsInserted() {
 		if (slotsInserted == null) {
 			slotsInserted = new EObjectResolvingEList<Slot>(Slot.class, this, AnalyticsPackage.SLOT_INSERTION_OPTIONS__SLOTS_INSERTED);
@@ -90,6 +91,7 @@ public class SlotInsertionOptionsImpl extends AbstractSolutionSetImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VesselEvent> getEventsInserted() {
 		if (eventsInserted == null) {
 			eventsInserted = new EObjectResolvingEList<VesselEvent>(VesselEvent.class, this, AnalyticsPackage.SLOT_INSERTION_OPTIONS__EVENTS_INSERTED);

@@ -33,6 +33,8 @@ import java.time.ZoneId;
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDefaultWindowSizeUnits <em>Default Window Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getMaxCvValue <em>Max Cv Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getMinVesselSize <em>Min Vessel Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getMaxVesselSize <em>Max Vessel Size</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getPort()
@@ -410,6 +412,114 @@ public interface Port extends APortSet<Port> {
 	 * @generated
 	 */
 	boolean isSetMaxCvValue();
+
+	/**
+	 * Returns the value of the '<em><b>Min Vessel Size</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Min Vessel Size</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Min Vessel Size</em>' attribute.
+	 * @see #isSetMinVesselSize()
+	 * @see #unsetMinVesselSize()
+	 * @see #setMinVesselSize(int)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_MinVesselSize()
+	 * @model default="0" unsettable="true"
+	 * @generated
+	 */
+	int getMinVesselSize();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getMinVesselSize <em>Min Vessel Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Min Vessel Size</em>' attribute.
+	 * @see #isSetMinVesselSize()
+	 * @see #unsetMinVesselSize()
+	 * @see #getMinVesselSize()
+	 * @generated
+	 */
+	void setMinVesselSize(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.port.Port#getMinVesselSize <em>Min Vessel Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetMinVesselSize()
+	 * @see #getMinVesselSize()
+	 * @see #setMinVesselSize(int)
+	 * @generated
+	 */
+	void unsetMinVesselSize();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.port.Port#getMinVesselSize <em>Min Vessel Size</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Min Vessel Size</em>' attribute is set.
+	 * @see #unsetMinVesselSize()
+	 * @see #getMinVesselSize()
+	 * @see #setMinVesselSize(int)
+	 * @generated
+	 */
+	boolean isSetMinVesselSize();
+
+	/**
+	 * Returns the value of the '<em><b>Max Vessel Size</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Max Vessel Size</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Max Vessel Size</em>' attribute.
+	 * @see #isSetMaxVesselSize()
+	 * @see #unsetMaxVesselSize()
+	 * @see #setMaxVesselSize(int)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_MaxVesselSize()
+	 * @model default="0" unsettable="true"
+	 * @generated
+	 */
+	int getMaxVesselSize();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getMaxVesselSize <em>Max Vessel Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Max Vessel Size</em>' attribute.
+	 * @see #isSetMaxVesselSize()
+	 * @see #unsetMaxVesselSize()
+	 * @see #getMaxVesselSize()
+	 * @generated
+	 */
+	void setMaxVesselSize(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.port.Port#getMaxVesselSize <em>Max Vessel Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetMaxVesselSize()
+	 * @see #getMaxVesselSize()
+	 * @see #setMaxVesselSize(int)
+	 * @generated
+	 */
+	void unsetMaxVesselSize();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.port.Port#getMaxVesselSize <em>Max Vessel Size</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Max Vessel Size</em>' attribute is set.
+	 * @see #unsetMaxVesselSize()
+	 * @see #getMaxVesselSize()
+	 * @see #setMaxVesselSize(int)
+	 * @generated
+	 */
+	boolean isSetMaxVesselSize();
 
 	/**
 	 * <!-- begin-user-doc -->

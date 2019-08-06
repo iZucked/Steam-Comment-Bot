@@ -104,172 +104,173 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider,
 					new ActualsAssignableDateProvider(actualsModel));
+			if (collectAssignments != null) {
+				// Check sequencing for each grouping
+				for (final CollectedAssignment collectedAssignment : collectAssignments) {
+					VesselAvailability va = collectedAssignment.getVesselAvailability();
 
-			// Check sequencing for each grouping
-			for (final CollectedAssignment collectedAssignment : collectAssignments) {
-				VesselAvailability va = collectedAssignment.getVesselAvailability();
+					// Assume vessel start is Actualised, but check state!
+					boolean previousElementHasActuals = true;
 
-				// Assume vessel start is Actualised, but check state!
-				boolean previousElementHasActuals = true;
+					AssignableElement prevObject = null;
+					CargoActuals prevActuals = null;
+					for (final AssignableElement assignment : collectedAssignment.getAssignedObjects()) {
+						boolean currentElementHasActuals = false;
+						CargoActuals currentActuals = null;
 
-				AssignableElement prevObject = null;
-				CargoActuals prevActuals = null;
-				for (final AssignableElement assignment : collectedAssignment.getAssignedObjects()) {
-					boolean currentElementHasActuals = false;
-					CargoActuals currentActuals = null;
-
-					LoadActuals loadActuals = null;
-					if (assignment instanceof Cargo) {
-						final Cargo cargo = (Cargo) assignment;
-						if (cargoActualsMap.containsKey(cargo)) {
-							currentActuals = cargoActualsMap.get(cargo);
-							{
-								final Slot slot = currentActuals.getCargo().getSortedSlots().get(0);
-								if (slot instanceof LoadSlot) {
-									loadActuals = loadActualsMap.get(slot);
+						LoadActuals loadActuals = null;
+						if (assignment instanceof Cargo) {
+							final Cargo cargo = (Cargo) assignment;
+							if (cargoActualsMap.containsKey(cargo)) {
+								currentActuals = cargoActualsMap.get(cargo);
+								{
+									final Slot slot = currentActuals.getCargo().getSortedSlots().get(0);
+									if (slot instanceof LoadSlot) {
+										loadActuals = loadActualsMap.get(slot);
+									}
 								}
+								currentElementHasActuals = true;
 							}
-							currentElementHasActuals = true;
+						} else if (assignment instanceof VesselEvent) {
+							currentElementHasActuals = false;
 						}
-					} else if (assignment instanceof VesselEvent) {
-						currentElementHasActuals = false;
-					}
 
-					if (va != null && currentElementHasActuals && loadActuals != null) {
+						if (va != null && currentElementHasActuals && loadActuals != null) {
 
-						final Port actualPort = loadActuals.getTitleTransferPoint();
-						final ZonedDateTime actualOperationsStart = loadActuals.getOperationsStartAsDateTime();
-						if (actualOperationsStart != null) {
-							final Port startPort = va.getStartAt();
-							if (startPort != null && !startPort.equals(actualPort)) {
-								// Error
-								final String msg = String.format("Actualised Cargo %s and vessel %s starting port do not match (%s - %s)", getID(assignment), getVesselName(va.getVessel()),
-										getPortName(actualPort), getPortName(startPort));
-
-								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
-								failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AT);
-								failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__TITLE_TRANSFER_POINT);
-
-								statuses.add(failure);
-							} else {
-								// Too many ports, should be picked up by a different constraint.
-							}
-							if (va.isSetStartAfter() || va.isSetStartBy()) {
-								// check dates match. Note start by/after is UTC, cargo/event local time.
-
-								ZonedDateTime startAfterAsDateTime = va.getStartAfterAsDateTime();
-								if (startAfterAsDateTime != null && !startAfterAsDateTime.isEqual(actualOperationsStart)) {
-									final String msg = String.format("Actualised Cargo %s and vessel %s operations start date do not match (%s - %s)", getID(assignment), getVesselName(va.getVessel()),
-											getDateString(actualOperationsStart.toLocalDateTime()), getDateString(va.getStartAfter()));
+							final Port actualPort = loadActuals.getTitleTransferPoint();
+							final ZonedDateTime actualOperationsStart = loadActuals.getOperationsStartAsDateTime();
+							if (actualOperationsStart != null) {
+								final Port startPort = va.getStartAt();
+								if (startPort != null && !startPort.equals(actualPort)) {
+									// Error
+									final String msg = String.format("Actualised Cargo %s and vessel %s starting port do not match (%s - %s)", getID(assignment), getVesselName(va.getVessel()),
+											getPortName(actualPort), getPortName(startPort));
 
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
-									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER);
-									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
+									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AT);
+									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__TITLE_TRANSFER_POINT);
 
 									statuses.add(failure);
-
+								} else {
+									// Too many ports, should be picked up by a different constraint.
 								}
-								ZonedDateTime startByAsDateTime = va.getStartByAsDateTime();
-								if (startByAsDateTime != null && !startByAsDateTime.isEqual(actualOperationsStart)) {
-									final String msg = String.format("Actualised Cargo %s and vessel %s operations start date do not match (%s - %s)", getID(assignment), getVesselName(va.getVessel()),
-											getDateString(actualOperationsStart.toLocalDateTime()), getDateString(va.getStartBy()));
+								if (va.isSetStartAfter() || va.isSetStartBy()) {
+									// check dates match. Note start by/after is UTC, cargo/event local time.
 
-									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
-									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY);
-									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
-									statuses.add(failure);
+									ZonedDateTime startAfterAsDateTime = va.getStartAfterAsDateTime();
+									if (startAfterAsDateTime != null && !startAfterAsDateTime.isEqual(actualOperationsStart)) {
+										final String msg = String.format("Actualised Cargo %s and vessel %s operations start date do not match (%s - %s)", getID(assignment),
+												getVesselName(va.getVessel()), getDateString(actualOperationsStart.toLocalDateTime()), getDateString(va.getStartAfter()));
 
+										final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
+										failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER);
+										failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
+
+										statuses.add(failure);
+
+									}
+									ZonedDateTime startByAsDateTime = va.getStartByAsDateTime();
+									if (startByAsDateTime != null && !startByAsDateTime.isEqual(actualOperationsStart)) {
+										final String msg = String.format("Actualised Cargo %s and vessel %s operations start date do not match (%s - %s)", getID(assignment),
+												getVesselName(va.getVessel()), getDateString(actualOperationsStart.toLocalDateTime()), getDateString(va.getStartBy()));
+
+										final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
+										failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY);
+										failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
+										statuses.add(failure);
+
+									}
 								}
-							}
 
-							final StartHeelOptions startHeel = va.getStartHeel();
-							if (loadActuals.getStartingHeelM3() > 0 || startHeel.getMaxVolumeAvailable() > 0) {
-								if (Math.abs(loadActuals.getCV() - startHeel.getCvValue()) > 0.0005) {
-									final String msg = String.format("Actualised Cargo %s and vessel %s starting heel CV do not match (%.3f - %.3f)", getID(assignment), getVesselName(va.getVessel()),
-											loadActuals.getCV(), startHeel.getCvValue());
+								final StartHeelOptions startHeel = va.getStartHeel();
+								if (loadActuals.getStartingHeelM3() > 0 || startHeel.getMaxVolumeAvailable() > 0) {
+									if (Math.abs(loadActuals.getCV() - startHeel.getCvValue()) > 0.0005) {
+										final String msg = String.format("Actualised Cargo %s and vessel %s starting heel CV do not match (%.3f - %.3f)", getID(assignment),
+												getVesselName(va.getVessel()), loadActuals.getCV(), startHeel.getCvValue());
+
+										final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
+										failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
+										failure.addEObjectAndFeature(startHeel, CargoPackage.Literals.START_HEEL_OPTIONS__CV_VALUE);
+										failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__CV);
+
+										statuses.add(failure);
+
+									}
+								}
+								if (loadActuals.getStartingHeelM3() < startHeel.getMinVolumeAvailable() || loadActuals.getStartingHeelM3() > startHeel.getMaxVolumeAvailable()) {
+									// Error
+									final String msg = String.format("Actualised Cargo %s and vessel %s starting heel quantities do not match (%,.3f - [%,.3f, %,.3f])", getID(assignment),
+											getVesselName(va.getVessel()), (double) loadActuals.getStartingHeelM3(), (double) startHeel.getMinVolumeAvailable(),
+											(double) startHeel.getMaxVolumeAvailable());
 
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
 									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
-									failure.addEObjectAndFeature(startHeel, CargoPackage.Literals.START_HEEL_OPTIONS__CV_VALUE);
-									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__CV);
+									failure.addEObjectAndFeature(startHeel, CargoPackage.Literals.START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE);
+									failure.addEObjectAndFeature(startHeel, CargoPackage.Literals.START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE);
+									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_M3);
 
+									statuses.add(failure);
+								}
+							}
+							// Reset this variable so no longer in scope for future iterations. We could also use a "firstElement" boolean.
+							va = null;
+						}
+
+						if (prevObject != null && previousElementHasActuals == false && currentElementHasActuals == true) {
+							// Only warn about previous missing actuals if an event.
+							final int status = /* prevObject instanceof VesselEvent ? IStatus.WARNING : */ IStatus.ERROR;
+
+							final String msg = String.format("Cargo %s is not preceded by another actualised event.", getID(prevObject));
+
+							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), status);
+							failure.addEObjectAndFeature(prevObject, MMXCorePackage.Literals.NAMED_OBJECT__NAME);
+							failure.addEObjectAndFeature(assignment, MMXCorePackage.Literals.NAMED_OBJECT__NAME);
+							failure.addEObjectAndFeature(cargoActualsMap.get(assignment), MMXCorePackage.Literals.NAMED_OBJECT__NAME);
+
+							statuses.add(failure);
+						}
+
+						// If current actuals is false, check the window!/port matches
+
+						// Check previous return actuals data matches current data
+						if (currentActuals != null && prevActuals != null) {
+							final ReturnActuals returnActuals = prevActuals.getReturnActuals();
+
+							if (returnActuals != null && loadActuals != null) {
+								if (returnActuals.getTitleTransferPoint() != loadActuals.getTitleTransferPoint()) {
+									final String message = String.format("Load actuals and previous return actuals %s does not match", "Port");
+									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+									failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.SLOT_ACTUALS__TITLE_TRANSFER_POINT);
+									failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__TITLE_TRANSFER_POINT);
+									statuses.add(failure);
+
+								}
+								if (Math.abs(returnActuals.getEndHeelM3() - loadActuals.getStartingHeelM3()) > 0.0005) {
+									final String message = String.format("Load actuals and previous return actuals %s does not match", "heel in m3");
+									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+									failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_M3);
+									failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_M3);
+									statuses.add(failure);
+
+								}
+
+								if (returnActuals.getOperationsStart() == null || loadActuals.getOperationsStart() == null
+										|| !returnActuals.getOperationsStart().equals(loadActuals.getOperationsStart())) {
+									final String message = String.format("Load actuals and previous return actuals %s does not match", "operations start");
+									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+									failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
+									failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START);
 									statuses.add(failure);
 
 								}
 							}
-							if (loadActuals.getStartingHeelM3() < startHeel.getMinVolumeAvailable() || loadActuals.getStartingHeelM3() > startHeel.getMaxVolumeAvailable()) {
-								// Error
-								final String msg = String.format("Actualised Cargo %s and vessel %s starting heel quantities do not match (%,.3f - [%,.3f, %,.3f])", getID(assignment),
-										getVesselName(va.getVessel()), (double) loadActuals.getStartingHeelM3(), (double) startHeel.getMinVolumeAvailable(),
-										(double) startHeel.getMaxVolumeAvailable());
 
-								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
-								failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
-								failure.addEObjectAndFeature(startHeel, CargoPackage.Literals.START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE);
-								failure.addEObjectAndFeature(startHeel, CargoPackage.Literals.START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE);
-								failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_M3);
-
-								statuses.add(failure);
-							}
-						}
-						// Reset this variable so no longer in scope for future iterations. We could also use a "firstElement" boolean.
-						va = null;
-					}
-
-					if (prevObject != null && previousElementHasActuals == false && currentElementHasActuals == true) {
-						// Only warn about previous missing actuals if an event.
-						final int status = /* prevObject instanceof VesselEvent ? IStatus.WARNING : */ IStatus.ERROR;
-
-						final String msg = String.format("Cargo %s is not preceded by another actualised event.", getID(prevObject));
-
-						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), status);
-						failure.addEObjectAndFeature(prevObject, MMXCorePackage.Literals.NAMED_OBJECT__NAME);
-						failure.addEObjectAndFeature(assignment, MMXCorePackage.Literals.NAMED_OBJECT__NAME);
-						failure.addEObjectAndFeature(cargoActualsMap.get(assignment), MMXCorePackage.Literals.NAMED_OBJECT__NAME);
-
-						statuses.add(failure);
-					}
-
-					// If current actuals is false, check the window!/port matches
-
-					// Check previous return actuals data matches current data
-					if (currentActuals != null && prevActuals != null) {
-						final ReturnActuals returnActuals = prevActuals.getReturnActuals();
-
-						if (returnActuals != null && loadActuals != null) {
-							if (returnActuals.getTitleTransferPoint() != loadActuals.getTitleTransferPoint()) {
-								final String message = String.format("Load actuals and previous return actuals %s does not match", "Port");
-								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-								failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.SLOT_ACTUALS__TITLE_TRANSFER_POINT);
-								failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__TITLE_TRANSFER_POINT);
-								statuses.add(failure);
-
-							}
-							if (Math.abs(returnActuals.getEndHeelM3() - loadActuals.getStartingHeelM3()) > 0.0005) {
-								final String message = String.format("Load actuals and previous return actuals %s does not match", "heel in m3");
-								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-								failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_M3);
-								failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_M3);
-								statuses.add(failure);
-
-							}
-
-							if (returnActuals.getOperationsStart() == null || loadActuals.getOperationsStart() == null
-									|| !returnActuals.getOperationsStart().equals(loadActuals.getOperationsStart())) {
-								final String message = String.format("Load actuals and previous return actuals %s does not match", "operations start");
-								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-								failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
-								failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START);
-								statuses.add(failure);
-
-							}
 						}
 
+						prevObject = assignment;
+						previousElementHasActuals = currentElementHasActuals;
+						prevActuals = currentActuals;
 					}
-
-					prevObject = assignment;
-					previousElementHasActuals = currentElementHasActuals;
-					prevActuals = currentActuals;
 				}
 			}
 

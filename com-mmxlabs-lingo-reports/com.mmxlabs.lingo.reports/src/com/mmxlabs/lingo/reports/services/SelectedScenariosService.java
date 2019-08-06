@@ -44,8 +44,6 @@ public class SelectedScenariosService {
 
 	private final Map<ScenarioResult, MyCommandStackListener> commandStacks = new HashMap<>();
 	private final Map<ScenarioResult, ModelReference> scenarioReferences = new HashMap<>();
-	// private final Map<CommandStack, ScenarioResult> commandStackMap = new
-	// HashMap<>();
 	// TODO: Create an explicitly remove/updateRecord method set to ensure
 	// record.dispose() is called.
 	private final Map<ScenarioResult, KeyValueRecord> scenarioRecords = new HashMap<>();
@@ -57,14 +55,12 @@ public class SelectedScenariosService {
 	private final Set<ISelectedScenariosServiceListener> listeners = new HashSet<>();
 
 	/**
-	 * Special counter to try and avoid multiple update requests happening at once.
-	 * TODO: What happens if we hit Integer.MAX_VALUE?
+	 * Special counter to try and avoid multiple update requests happening at once. TODO: What happens if we hit Integer.MAX_VALUE?
 	 */
 	private final AtomicInteger counter = new AtomicInteger();
 
 	/**
-	 * Command stack listener method, cause the linked viewer to refresh on command
-	 * execution
+	 * Command stack listener method, cause the linked viewer to refresh on command execution
 	 * 
 	 */
 	private class MyCommandStackListener implements CommandStackListener {
@@ -110,31 +106,30 @@ public class SelectedScenariosService {
 		@Override
 		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> selected, final boolean block) {
 			for (final ScenarioResult instance : selected) {
-				assert instance != null;
-				attachScenarioInstance(instance);
+				if (instance != null) {
+					attachScenarioInstance(instance);
+				}
 			}
-			// updateSelectedScenarios(block);
 		}
 
 		@Override
 		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioResult oldPin, final ScenarioResult newPin, final boolean block) {
-			// updateSelectedScenarios(block);
+			// Do nothing
 		}
 
 		@Override
 		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> deselected, final boolean block) {
 			for (final ScenarioResult instance : deselected) {
-				assert instance != null;
-				detachScenarioInstance(instance);
+				if (instance != null) {
+					detachScenarioInstance(instance);
+				}
 			}
-			// updateSelectedScenarios(block);
 		}
 
 		@Override
 		public void selectionChanged(final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
 			updateSelectedScenarios(block);
 		}
-
 	};
 
 	public void bindScenarioServiceSelectionProvider(@Nullable final IScenarioServiceSelectionProvider selectionProvider) {
@@ -432,7 +427,9 @@ public class SelectedScenariosService {
 
 		final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
 		for (final ScenarioResult scenarioResult : selectionProvider.getSelection()) {
-			assert scenarioResult != null;
+			if (scenarioResult == null) {
+				continue;
+			}
 			final KeyValueRecord record;
 			// Cannot reuse existing record as we do not know if it has changed or not.
 			// If we re-evaluate, the ScenarioResult is the same, the ScenarioInstance is

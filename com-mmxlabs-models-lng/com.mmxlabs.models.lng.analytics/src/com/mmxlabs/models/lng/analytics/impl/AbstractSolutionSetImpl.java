@@ -10,9 +10,13 @@ import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.Slot;
 
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
@@ -48,6 +52,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getExtraSlots <em>Extra Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getBaseOption <em>Base Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getOptions <em>Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getExtraVesselEvents <em>Extra Vessel Events</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getExtraVesselAvailabilities <em>Extra Vessel Availabilities</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getExtraCharterInMarkets <em>Extra Charter In Markets</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#isUseScenarioBase <em>Use Scenario Base</em>}</li>
  * </ul>
  *
  * @generated
@@ -154,6 +163,66 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	protected EList<SolutionOption> options;
 
 	/**
+	 * The cached value of the '{@link #getExtraVesselEvents() <em>Extra Vessel Events</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getExtraVesselEvents()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselEvent> extraVesselEvents;
+
+	/**
+	 * The cached value of the '{@link #getExtraVesselAvailabilities() <em>Extra Vessel Availabilities</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getExtraVesselAvailabilities()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselAvailability> extraVesselAvailabilities;
+
+	/**
+	 * The cached value of the '{@link #getCharterInMarketOverrides() <em>Charter In Market Overrides</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterInMarketOverrides()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<CharterInMarketOverride> charterInMarketOverrides;
+
+	/**
+	 * The cached value of the '{@link #getExtraCharterInMarkets() <em>Extra Charter In Markets</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getExtraCharterInMarkets()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<CharterInMarket> extraCharterInMarkets;
+
+	/**
+	 * The default value of the '{@link #isUseScenarioBase() <em>Use Scenario Base</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isUseScenarioBase()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean USE_SCENARIO_BASE_EDEFAULT = true;
+
+	/**
+	 * The cached value of the '{@link #isUseScenarioBase() <em>Use Scenario Base</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isUseScenarioBase()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean useScenarioBase = USE_SCENARIO_BASE_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -177,6 +246,7 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -186,6 +256,7 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -198,6 +269,7 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isHasDualModeSolutions() {
 		return hasDualModeSolutions;
 	}
@@ -207,6 +279,7 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHasDualModeSolutions(boolean newHasDualModeSolutions) {
 		boolean oldHasDualModeSolutions = hasDualModeSolutions;
 		hasDualModeSolutions = newHasDualModeSolutions;
@@ -219,6 +292,7 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isPortfolioBreakEvenMode() {
 		return portfolioBreakEvenMode;
 	}
@@ -228,6 +302,7 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortfolioBreakEvenMode(boolean newPortfolioBreakEvenMode) {
 		boolean oldPortfolioBreakEvenMode = portfolioBreakEvenMode;
 		portfolioBreakEvenMode = newPortfolioBreakEvenMode;
@@ -240,6 +315,7 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public UserSettings getUserSettings() {
 		return userSettings;
 	}
@@ -264,6 +340,7 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUserSettings(UserSettings newUserSettings) {
 		if (newUserSettings != userSettings) {
 			NotificationChain msgs = null;
@@ -283,6 +360,7 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<SolutionOption> getOptions() {
 		if (options == null) {
 			options = new EObjectContainmentEList<SolutionOption>(SolutionOption.class, this, AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS);
@@ -295,6 +373,82 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EList<VesselEvent> getExtraVesselEvents() {
+		if (extraVesselEvents == null) {
+			extraVesselEvents = new EObjectContainmentEList<VesselEvent>(VesselEvent.class, this, AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS);
+		}
+		return extraVesselEvents;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<VesselAvailability> getExtraVesselAvailabilities() {
+		if (extraVesselAvailabilities == null) {
+			extraVesselAvailabilities = new EObjectContainmentEList<VesselAvailability>(VesselAvailability.class, this, AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES);
+		}
+		return extraVesselAvailabilities;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<CharterInMarketOverride> getCharterInMarketOverrides() {
+		if (charterInMarketOverrides == null) {
+			charterInMarketOverrides = new EObjectContainmentEList<CharterInMarketOverride>(CharterInMarketOverride.class, this, AnalyticsPackage.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES);
+		}
+		return charterInMarketOverrides;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<CharterInMarket> getExtraCharterInMarkets() {
+		if (extraCharterInMarkets == null) {
+			extraCharterInMarkets = new EObjectContainmentEList<CharterInMarket>(CharterInMarket.class, this, AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS);
+		}
+		return extraCharterInMarkets;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isUseScenarioBase() {
+		return useScenarioBase;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setUseScenarioBase(boolean newUseScenarioBase) {
+		boolean oldUseScenarioBase = useScenarioBase;
+		useScenarioBase = newUseScenarioBase;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE, oldUseScenarioBase, useScenarioBase));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<Slot> getExtraSlots() {
 		if (extraSlots == null) {
 			extraSlots = new EObjectContainmentEList<Slot>(Slot.class, this, AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_SLOTS);
@@ -307,6 +461,7 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SolutionOption getBaseOption() {
 		return baseOption;
 	}
@@ -331,6 +486,7 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBaseOption(SolutionOption newBaseOption) {
 		if (newBaseOption != baseOption) {
 			NotificationChain msgs = null;
@@ -361,6 +517,14 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 				return basicSetBaseOption(null, msgs);
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
 				return ((InternalEList<?>)getOptions()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS:
+				return ((InternalEList<?>)getExtraVesselEvents()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES:
+				return ((InternalEList<?>)getExtraVesselAvailabilities()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES:
+				return ((InternalEList<?>)getCharterInMarketOverrides()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS:
+				return ((InternalEList<?>)getExtraCharterInMarkets()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -387,6 +551,16 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 				return getBaseOption();
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
 				return getOptions();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS:
+				return getExtraVesselEvents();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES:
+				return getExtraVesselAvailabilities();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES:
+				return getCharterInMarketOverrides();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS:
+				return getExtraCharterInMarkets();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE:
+				return isUseScenarioBase();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -423,6 +597,25 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 				getOptions().clear();
 				getOptions().addAll((Collection<? extends SolutionOption>)newValue);
 				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS:
+				getExtraVesselEvents().clear();
+				getExtraVesselEvents().addAll((Collection<? extends VesselEvent>)newValue);
+				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES:
+				getExtraVesselAvailabilities().clear();
+				getExtraVesselAvailabilities().addAll((Collection<? extends VesselAvailability>)newValue);
+				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES:
+				getCharterInMarketOverrides().clear();
+				getCharterInMarketOverrides().addAll((Collection<? extends CharterInMarketOverride>)newValue);
+				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS:
+				getExtraCharterInMarkets().clear();
+				getExtraCharterInMarkets().addAll((Collection<? extends CharterInMarket>)newValue);
+				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE:
+				setUseScenarioBase((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -456,6 +649,21 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
 				getOptions().clear();
 				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS:
+				getExtraVesselEvents().clear();
+				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES:
+				getExtraVesselAvailabilities().clear();
+				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES:
+				getCharterInMarketOverrides().clear();
+				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS:
+				getExtraCharterInMarkets().clear();
+				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE:
+				setUseScenarioBase(USE_SCENARIO_BASE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -482,6 +690,16 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 				return baseOption != null;
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
 				return options != null && !options.isEmpty();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS:
+				return extraVesselEvents != null && !extraVesselEvents.isEmpty();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES:
+				return extraVesselAvailabilities != null && !extraVesselAvailabilities.isEmpty();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES:
+				return charterInMarketOverrides != null && !charterInMarketOverrides.isEmpty();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS:
+				return extraCharterInMarkets != null && !extraCharterInMarkets.isEmpty();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE:
+				return useScenarioBase != USE_SCENARIO_BASE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -534,6 +752,8 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 		result.append(hasDualModeSolutions);
 		result.append(", portfolioBreakEvenMode: ");
 		result.append(portfolioBreakEvenMode);
+		result.append(", useScenarioBase: ");
+		result.append(useScenarioBase);
 		result.append(')');
 		return result.toString();
 	}

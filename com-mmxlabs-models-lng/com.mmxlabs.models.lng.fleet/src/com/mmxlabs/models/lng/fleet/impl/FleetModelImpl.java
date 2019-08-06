@@ -125,6 +125,7 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Vessel> getVessels() {
 		if (vessels == null) {
 			vessels = new EObjectContainmentEList<Vessel>(Vessel.class, this, FleetPackage.FLEET_MODEL__VESSELS);
@@ -137,6 +138,7 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<BaseFuel> getBaseFuels() {
 		if (baseFuels == null) {
 			baseFuels = new EObjectContainmentEList<BaseFuel>(BaseFuel.class, this, FleetPackage.FLEET_MODEL__BASE_FUELS);
@@ -149,6 +151,7 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VesselGroup> getVesselGroups() {
 		if (vesselGroups == null) {
 			vesselGroups = new EObjectContainmentEList<VesselGroup>(VesselGroup.class, this, FleetPackage.FLEET_MODEL__VESSEL_GROUPS);
@@ -161,6 +164,7 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VersionRecord getFleetVersionRecord() {
 		return fleetVersionRecord;
 	}
@@ -185,6 +189,7 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFleetVersionRecord(VersionRecord newFleetVersionRecord) {
 		if (newFleetVersionRecord != fleetVersionRecord) {
 			NotificationChain msgs = null;
@@ -204,6 +209,7 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VersionRecord getVesselGroupVersionRecord() {
 		return vesselGroupVersionRecord;
 	}
@@ -228,6 +234,7 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselGroupVersionRecord(VersionRecord newVesselGroupVersionRecord) {
 		if (newVesselGroupVersionRecord != vesselGroupVersionRecord) {
 			NotificationChain msgs = null;
@@ -247,6 +254,7 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VersionRecord getBunkerFuelsVersionRecord() {
 		return bunkerFuelsVersionRecord;
 	}
@@ -271,6 +279,7 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBunkerFuelsVersionRecord(VersionRecord newBunkerFuelsVersionRecord) {
 		if (newBunkerFuelsVersionRecord != bunkerFuelsVersionRecord) {
 			NotificationChain msgs = null;

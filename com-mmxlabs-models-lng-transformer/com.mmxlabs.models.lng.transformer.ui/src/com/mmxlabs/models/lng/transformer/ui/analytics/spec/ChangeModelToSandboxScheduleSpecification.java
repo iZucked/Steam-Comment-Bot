@@ -247,27 +247,27 @@ public class ChangeModelToSandboxScheduleSpecification {
 			newAvailability.setCharterContract(oldAvailability.getCharterContract());
 		}
 
-		if (oldAvailability.getAvailabilityOrContractMinDuration() != 0 || oldAvailability.getAvailabilityOrContractMaxDuration() != 0) {
+		if (oldAvailability.getCharterOrDelegateMinDuration() != 0 || oldAvailability.getCharterOrDelegateMaxDuration() != 0) {
 
 			final Event firstSequenceEvent = segmentStart.getSequence().getEvents().get(0);
 			final ZonedDateTime vesselStart = newAvailability.getStartAfterAsDateTime();
 			final ZonedDateTime sequenceStart = firstSequenceEvent.getStart();
 
-			newAvailability.setMinDuration(oldAvailability.getAvailabilityOrContractMinDuration());
-			newAvailability.setMaxDuration(oldAvailability.getAvailabilityOrContractMaxDuration());
+			newAvailability.setMinDuration(oldAvailability.getCharterOrDelegateMinDuration());
+			newAvailability.setMaxDuration(oldAvailability.getCharterOrDelegateMaxDuration());
 
 			final int hours = Hours.between(sequenceStart, vesselStart);
 			if (hours > 0) {
-				if (oldAvailability.getAvailabilityOrContractMinDuration() != 0) {
-					int minDurationInHours = oldAvailability.getAvailabilityOrContractMinDuration() * 24;
+				if (oldAvailability.getCharterOrDelegateMinDuration() != 0) {
+					int minDurationInHours = oldAvailability.getCharterOrDelegateMinDuration() * 24;
 					minDurationInHours -= hours;
 					if (minDurationInHours < 0) {
 						minDurationInHours = 0;
 					}
 					newAvailability.setMinDuration(minDurationInHours / 24);
 				}
-				if (oldAvailability.getAvailabilityOrContractMaxDuration() != 0) {
-					int maxDurationInHours = oldAvailability.getAvailabilityOrContractMaxDuration() * 24;
+				if (oldAvailability.getCharterOrDelegateMaxDuration() != 0) {
+					int maxDurationInHours = oldAvailability.getCharterOrDelegateMaxDuration() * 24;
 					maxDurationInHours -= hours;
 					if (maxDurationInHours < 0) {
 						maxDurationInHours = 0;
@@ -280,7 +280,7 @@ public class ChangeModelToSandboxScheduleSpecification {
 	};
 
 	public Pair<Pair<ScheduleSpecification, ExtraDataProvider>, Pair<ScheduleSpecification, ExtraDataProvider>> generateScheduleSpecifications(final LNGScenarioModel scenarioModel,
-			final ScheduleModel baseSchedule, final ScheduleModel targetSchedule, final ChangeDescription changeDescription) {
+			final Schedule baseSchedule, final Schedule targetSchedule, final ChangeDescription changeDescription) {
 
 		// Maybe do this in two passes, old then new
 
@@ -295,8 +295,8 @@ public class ChangeModelToSandboxScheduleSpecification {
 		final Set<VesselEventVisit> targetVesselEventVisits = new LinkedHashSet<>();
 		final Set<OpenSlotAllocation> targetOpenSlotAllocations = new LinkedHashSet<>();
 
-		final Function<String, EObject> baseFinderFunction = buildFinderFunction(baseSchedule.getSchedule());
-		final Function<String, EObject> targetFinderFunction = buildFinderFunction(targetSchedule.getSchedule());
+		final Function<String, EObject> baseFinderFunction = buildFinderFunction(baseSchedule);
+		final Function<String, EObject> targetFinderFunction = buildFinderFunction(targetSchedule);
 
 		for (final Change change : changeDescription.getChanges()) {
 			if (change instanceof CargoChange) {
@@ -540,7 +540,7 @@ public class ChangeModelToSandboxScheduleSpecification {
 			scheduleSpecification.getOpenEvents().add(spec);
 		}
 
-		return new Pair<>(scheduleSpecification, new ExtraDataProvider(newAvailabilities, null, newCharterInMarketOverrides, null, null));
+		return new Pair<>(scheduleSpecification, new ExtraDataProvider(newAvailabilities, null, newCharterInMarketOverrides, null, null, null, null));
 	}
 
 	private <K, V extends VesselAssignmentType> void buildAvailabilities(final ScheduleSpecification scheduleSpecification, final List<V> newAvailabilities,

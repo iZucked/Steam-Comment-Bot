@@ -75,7 +75,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 						.withMessage("Vessel must be specified.") //
 						.make(ctx));
 			}
-			if (availability.getEntity() == null) {
+			if (availability.getCharterOrDelegateEntity() == null) {
 				statuses.add(baseFactory.copyName() //
 						.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__ENTITY) //
 						.withMessage("Entity must be specified.") //
@@ -162,7 +162,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 
-				final String repositioningFee = availability.getRepositioningFee();
+				final String repositioningFee = availability.getCharterOrDelegateRepositioningFee();
 				if (repositioningFee != null && !repositioningFee.trim().isEmpty()) {
 					for (final AbstractYearMonthCurve index : PriceExpressionUtils.getLinkedCurves(repositioningFee)) {
 						@Nullable
@@ -316,7 +316,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 	private boolean lumpSumBallastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final DetailConstraintStatusFactory baseFactory,
 			final List<IStatus> failures, final VesselAvailability va, final LumpSumBallastBonusContractLine line) {
 		final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, line, CommercialPackage.Literals.LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE__PRICE_EXPRESSION,
-				line.getPriceExpression(), PriceIndexType.COMMODITY);
+				line.getPriceExpression(), PriceExpressionUtils.getPriceIndexType(CommercialPackage.Literals.LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE__PRICE_EXPRESSION));
 		if (!result.isOk()) {
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
 					(IConstraintStatus) ctx.createFailureStatus(String.format("Charter |'%s': Ballast bonus lump sum is invalid", va.getVessel().getName())));

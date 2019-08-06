@@ -77,6 +77,11 @@ public class AbstractSolutionSetComponentHelper extends BaseComponentHelper {
 		add_extraSlotsEditor(detailComposite, topClass);
 		add_baseOptionEditor(detailComposite, topClass);
 		add_optionsEditor(detailComposite, topClass);
+		add_extraVesselEventsEditor(detailComposite, topClass);
+		add_extraVesselAvailabilitiesEditor(detailComposite, topClass);
+		add_charterInMarketOverridesEditor(detailComposite, topClass);
+		add_extraCharterInMarketsEditor(detailComposite, topClass);
+		add_useScenarioBaseEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the hasDualModeSolutions feature on AbstractSolutionSet
@@ -113,6 +118,51 @@ public class AbstractSolutionSetComponentHelper extends BaseComponentHelper {
 	protected void add_optionsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__OPTIONS));
 	}
+	/**
+	 * Create the editor for the extraVesselEvents feature on AbstractSolutionSet
+	 *
+	 * @generated
+	 */
+	protected void add_extraVesselEventsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS));
+	}
+
+	/**
+	 * Create the editor for the extraVesselAvailabilities feature on AbstractSolutionSet
+	 *
+	 * @generated
+	 */
+	protected void add_extraVesselAvailabilitiesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES));
+	}
+
+	/**
+	 * Create the editor for the charterInMarketOverrides feature on AbstractSolutionSet
+	 *
+	 * @generated
+	 */
+	protected void add_charterInMarketOverridesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES));
+	}
+
+	/**
+	 * Create the editor for the extraCharterInMarkets feature on AbstractSolutionSet
+	 *
+	 * @generated
+	 */
+	protected void add_extraCharterInMarketsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS));
+	}
+
+	/**
+	 * Create the editor for the useScenarioBase feature on AbstractSolutionSet
+	 *
+	 * @generated
+	 */
+	protected void add_useScenarioBaseEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE));
+	}
+
 	/**
 	 * Create the editor for the extraSlots feature on AbstractSolutionSet
 	 *

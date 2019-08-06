@@ -18,6 +18,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
@@ -47,8 +48,13 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 
 		final EObject object = ctx.getTarget();
 		if (object instanceof SpotSlot) {
-
 			final SpotSlot spotSlot = (SpotSlot) object;
+
+			// Ignore extra spot slots.
+			if (!(extraContext.getContainer(spotSlot) instanceof CargoModel)) {
+				return Activator.PLUGIN_ID;
+			}
+
 			final SpotMarket market = spotSlot.getMarket();
 			if (market == null) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
@@ -126,6 +132,15 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should not have window flex."));
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowFlex());
 					failures.add(dsd);
+				}
+				if (slot instanceof SpotLoadSlot) {
+					SpotLoadSlot spotLoadSlot = (SpotLoadSlot) slot;
+					if (spotLoadSlot.isSchedulePurge()) {
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should not have a purge scheduled."));
+						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getLoadSlot_SchedulePurge());
+						failures.add(dsd);
+					}
 				}
 				if (!extraContext.isRelaxedChecking()) {
 					if (slot.getWindowStart() != null && slot.getWindowStart().getDayOfMonth() != 1) {

@@ -3,38 +3,23 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.utils;
+
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class AnalyticsSolution {
 	private String title;
 	private final String id;
 	private ScenarioInstance scenarioInstance;
 	private UUIDObject solution;
-	private boolean createDiffToBaseAction;
-	private boolean createInsertionOptions;
 	private final ModelReference modelReference;
-
-	public boolean isCreateInsertionOptions() {
-		return createInsertionOptions;
-	}
-
-	public void setCreateInsertionOptions(boolean createInsertionOptions) {
-		this.createInsertionOptions = createInsertionOptions;
-	}
-
-	public boolean isCreateDiffToBaseAction() {
-		return createDiffToBaseAction;
-	}
-
-	public void setCreateDiffToBaseAction(boolean createDiffToBaseAction) {
-		this.createDiffToBaseAction = createDiffToBaseAction;
-	}
 
 	public AnalyticsSolution(final ScenarioInstance instance, final UUIDObject solution, final String title) {
 		scenarioInstance = instance;
@@ -81,5 +66,10 @@ public class AnalyticsSolution {
 
 	public String getID() {
 		return id;
+	}
+
+	public void open() {
+		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		eventBroker.post("create-change-set-view", this);
 	}
 }

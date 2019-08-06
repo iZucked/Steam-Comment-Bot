@@ -101,6 +101,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IScheduledPurgeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IScheduledPurgeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
@@ -134,6 +136,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultMaxSlotConstraintDa
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultRoundTripVesselPermissionProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultScheduledPurgeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultSpotCharterInMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselCharterCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapActualsDataProviderEditor;
@@ -435,6 +438,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(HashMapFullCargoLotProvider.class).in(Singleton.class);
 		bind(IFullCargoLotProvider.class).to(HashMapFullCargoLotProvider.class);
 		bind(IFullCargoLotProviderEditor.class).to(HashMapFullCargoLotProvider.class);
+		
+		bind(DefaultScheduledPurgeProvider.class).in(Singleton.class);
+		bind(IScheduledPurgeProvider.class).to(DefaultScheduledPurgeProvider.class);
+		bind(IScheduledPurgeProviderEditor.class).to(DefaultScheduledPurgeProvider.class);
 
 	}
 }

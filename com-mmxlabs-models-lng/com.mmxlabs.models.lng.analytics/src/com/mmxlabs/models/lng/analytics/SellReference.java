@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.analytics;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +25,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
  * @model
  * @generated
  */
-public interface SellReference extends SellOption {
+public interface SellReference extends UUIDObject, SellOption {
 	/**
 	 * Returns the value of the '<em><b>Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->

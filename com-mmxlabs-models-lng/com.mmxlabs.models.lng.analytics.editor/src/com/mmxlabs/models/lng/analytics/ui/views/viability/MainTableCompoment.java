@@ -38,7 +38,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
-import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.ViabilityResult;
@@ -326,7 +326,7 @@ public class MainTableCompoment {
 
 				if (element instanceof RoundTripShippingOption) {
 					return imgShippingRoundTrip;
-				} else if (element instanceof FleetShippingOption) {
+				} else if (element instanceof SimpleVesselCharterOption) {
 					return imgShippingFleet;
 				}
 				return null;

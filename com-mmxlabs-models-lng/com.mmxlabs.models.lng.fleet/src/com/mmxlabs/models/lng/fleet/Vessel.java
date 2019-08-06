@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getSafetyHeel <em>Safety Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getCoolingVolume <em>Cooling Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getWarmingTime <em>Warming Time</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getPurgeTime <em>Purge Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getMinSpeed <em>Min Speed</em>}</li>
@@ -52,7 +53,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/featureOverride"
  * @generated
  */
 public interface Vessel extends AVesselSet<Vessel> {
@@ -577,6 +578,61 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	boolean isSetWarmingTime();
+
+	/**
+	 * Returns the value of the '<em><b>Purge Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Purge Time</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Purge Time</em>' attribute.
+	 * @see #isSetPurgeTime()
+	 * @see #unsetPurgeTime()
+	 * @see #setPurgeTime(int)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_PurgeTime()
+	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hrs' formatString='##0'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/featureEnablement feature='purge'"
+	 * @generated
+	 */
+	int getPurgeTime();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getPurgeTime <em>Purge Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Purge Time</em>' attribute.
+	 * @see #isSetPurgeTime()
+	 * @see #unsetPurgeTime()
+	 * @see #getPurgeTime()
+	 * @generated
+	 */
+	void setPurgeTime(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getPurgeTime <em>Purge Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPurgeTime()
+	 * @see #getPurgeTime()
+	 * @see #setPurgeTime(int)
+	 * @generated
+	 */
+	void unsetPurgeTime();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getPurgeTime <em>Purge Time</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Purge Time</em>' attribute is set.
+	 * @see #unsetPurgeTime()
+	 * @see #getPurgeTime()
+	 * @see #setPurgeTime(int)
+	 * @generated
+	 */
+	boolean isSetPurgeTime();
 
 	/**
 	 * Returns the value of the '<em><b>Cooling Volume</b></em>' attribute.
@@ -1290,6 +1346,14 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	int getVesselOrDelegateSafetyHeel();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	int getVesselOrDelegatePurgeTime();
 
 	/**
 	 * <!-- begin-user-doc -->

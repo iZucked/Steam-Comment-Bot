@@ -65,7 +65,7 @@ public class GuidedMoveMultipleSolutionOptimiser {
 			// now evaluate
 			initialFitness = fitnessCalculator.evaluateSequencesFitness(currentFullSequences, evaluationState, null);
 
-			initialMetrics = evaluationHelper.evaluateState(inputRawSequences, currentFullSequences, null, /* use Evaluated state checkers */ false, null, null);
+			initialMetrics = evaluationHelper.evaluateState(inputRawSequences, currentFullSequences, null, true, /* use Evaluated state checkers */ false, null, null);
 			if (initialMetrics == null) {
 				throw new IllegalStateException();
 
@@ -108,14 +108,14 @@ public class GuidedMoveMultipleSolutionOptimiser {
 			});
 			// Retain top 1_000 results;
 			System.out.printf("Iteration %d: %d solutions\n", iteration, jobStates.size());
-//			jobStates = jobStates.stream().limit(100).collect(Collectors.toList());
+			// jobStates = jobStates.stream().limit(100).collect(Collectors.toList());
 			System.out.printf("jobStates %s\n", jobStates.size());
 		}
-//		jobStates = jobStates.stream().limit(10).collect(Collectors.toList());
+		// jobStates = jobStates.stream().limit(10).collect(Collectors.toList());
 
 		progressReporter.done();
 
-//		Collections.sort(jobStates, (a, b) -> metric(a, b));
+		// Collections.sort(jobStates, (a, b) -> metric(a, b));
 
 		final List<ISequences> results = new LinkedList<>();
 		for (final ActionableSetJobState state : jobStates) {
@@ -126,7 +126,7 @@ public class GuidedMoveMultipleSolutionOptimiser {
 		}
 		System.out.printf("results %s\n", results.size());
 		return results.stream().limit(100000).collect(Collectors.toList());
-//		return results;
+		// return results;
 
 	}
 

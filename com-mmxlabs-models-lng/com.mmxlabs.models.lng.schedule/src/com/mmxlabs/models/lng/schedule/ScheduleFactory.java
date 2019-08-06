@@ -51,6 +51,15 @@ public interface ScheduleFactory extends EFactory {
 	Sequence createSequence();
 
 	/**
+	 * Returns a new object of class '<em>Other PNL</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Other PNL</em>'.
+	 * @generated
+	 */
+	OtherPNL createOtherPNL();
+
+	/**
 	 * Returns a new object of class '<em>Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -130,6 +139,15 @@ public interface ScheduleFactory extends EFactory {
 	 * @generated
 	 */
 	Cooldown createCooldown();
+
+	/**
+	 * Returns a new object of class '<em>Purge</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Purge</em>'.
+	 * @generated
+	 */
+	Purge createPurge();
 
 	/**
 	 * Returns a new object of class '<em>Cargo Allocation</em>'.

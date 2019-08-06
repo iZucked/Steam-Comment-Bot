@@ -119,6 +119,7 @@ public class ScheduleItemProvider
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FITNESSES);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__INVENTORY_LEVELS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__PAPER_DEAL_ALLOCATIONS);
+			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__OTHER_PNL);
 		}
 		return childrenFeatures;
 	}
@@ -177,6 +178,7 @@ public class ScheduleItemProvider
 			case SchedulePackage.SCHEDULE__FITNESSES:
 			case SchedulePackage.SCHEDULE__INVENTORY_LEVELS:
 			case SchedulePackage.SCHEDULE__PAPER_DEAL_ALLOCATIONS:
+			case SchedulePackage.SCHEDULE__OTHER_PNL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -228,6 +230,11 @@ public class ScheduleItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__PAPER_DEAL_ALLOCATIONS,
 				 ScheduleFactory.eINSTANCE.createPaperDealAllocation()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__OTHER_PNL,
+				 ScheduleFactory.eINSTANCE.createOtherPNL()));
 	}
 
 }

@@ -13,8 +13,8 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.FleetShippingOption;
-import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
@@ -29,25 +29,25 @@ public class ShippingExpressionConstraint extends AbstractModelMultiConstraint {
 	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof FleetShippingOption) {
-			final FleetShippingOption shippingOption = (FleetShippingOption) target;
-			final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, shippingOption, AnalyticsPackage.eINSTANCE.getFleetShippingOption_HireCost(), shippingOption.getHireCost(),
+		if (target instanceof SimpleVesselCharterOption) {
+			final SimpleVesselCharterOption shippingOption = (SimpleVesselCharterOption) target;
+			final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, shippingOption, AnalyticsPackage.eINSTANCE.getSimpleVesselCharterOption_HireCost(), shippingOption.getHireCost(),
 					PriceIndexType.CHARTER);
 			if (!result.isOk()) {
 				final String message = String.format("%s", result.getErrorDetails());
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
-				dsd.addEObjectAndFeature(shippingOption, AnalyticsPackage.Literals.FLEET_SHIPPING_OPTION__HIRE_COST);
+				dsd.addEObjectAndFeature(shippingOption, AnalyticsPackage.Literals.SIMPLE_VESSEL_CHARTER_OPTION__HIRE_COST);
 				failures.add(dsd);
 			}
-			if (target instanceof OptionalAvailabilityShippingOption) {
-				OptionalAvailabilityShippingOption optionalAvailabilityShippingOption = (OptionalAvailabilityShippingOption) target;
+			if (target instanceof OptionalSimpleVesselCharterOption) {
+				OptionalSimpleVesselCharterOption optionalAvailabilityShippingOption = (OptionalSimpleVesselCharterOption) target;
 				if (optionalAvailabilityShippingOption.getStart() != null) {
 					LocalDate date = optionalAvailabilityShippingOption.getStart();
 					if (date.getYear() < 1900) {
 						final String message = String.format("Availability start date has invalid year");
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-						dsd.addEObjectAndFeature(optionalAvailabilityShippingOption, AnalyticsPackage.Literals.OPTIONAL_AVAILABILITY_SHIPPING_OPTION__START);
+						dsd.addEObjectAndFeature(optionalAvailabilityShippingOption, AnalyticsPackage.Literals.OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__START);
 						failures.add(dsd);
 					}
 				}
@@ -56,26 +56,26 @@ public class ShippingExpressionConstraint extends AbstractModelMultiConstraint {
 					if (date.getYear() > 2025) {
 						final String message = String.format("Availability end date has invalid year");
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-						dsd.addEObjectAndFeature(optionalAvailabilityShippingOption, AnalyticsPackage.Literals.OPTIONAL_AVAILABILITY_SHIPPING_OPTION__START);
+						dsd.addEObjectAndFeature(optionalAvailabilityShippingOption, AnalyticsPackage.Literals.OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__END);
 						failures.add(dsd);
 					}
 				}
-				final ValidationResult ballastBonus = PriceExpressionUtils.validatePriceExpression(ctx, optionalAvailabilityShippingOption, AnalyticsPackage.eINSTANCE.getOptionalAvailabilityShippingOption_BallastBonus(), optionalAvailabilityShippingOption.getBallastBonus(),
+				final ValidationResult ballastBonus = PriceExpressionUtils.validatePriceExpression(ctx, optionalAvailabilityShippingOption, AnalyticsPackage.eINSTANCE.getOptionalSimpleVesselCharterOption_BallastBonus(), optionalAvailabilityShippingOption.getBallastBonus(),
 						PriceIndexType.CHARTER);
 				if (!ballastBonus.isOk()) {
 					final String message = String.format("%s", ballastBonus.getErrorDetails());
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
-					dsd.addEObjectAndFeature(shippingOption, AnalyticsPackage.Literals.OPTIONAL_AVAILABILITY_SHIPPING_OPTION__BALLAST_BONUS);
+					dsd.addEObjectAndFeature(shippingOption, AnalyticsPackage.Literals.OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__BALLAST_BONUS);
 					failures.add(dsd);
 				}
-				final ValidationResult repositioningFee = PriceExpressionUtils.validatePriceExpression(ctx, optionalAvailabilityShippingOption, AnalyticsPackage.eINSTANCE.getOptionalAvailabilityShippingOption_RepositioningFee(), optionalAvailabilityShippingOption.getBallastBonus(),
+				final ValidationResult repositioningFee = PriceExpressionUtils.validatePriceExpression(ctx, optionalAvailabilityShippingOption, AnalyticsPackage.eINSTANCE.getOptionalSimpleVesselCharterOption_RepositioningFee(), optionalAvailabilityShippingOption.getBallastBonus(),
 						PriceIndexType.CHARTER);
 				if (!repositioningFee.isOk()) {
 					final String message = String.format("%s", repositioningFee.getErrorDetails());
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 					
-					dsd.addEObjectAndFeature(shippingOption, AnalyticsPackage.Literals.OPTIONAL_AVAILABILITY_SHIPPING_OPTION__REPOSITIONING_FEE);
+					dsd.addEObjectAndFeature(shippingOption, AnalyticsPackage.Literals.OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__REPOSITIONING_FEE);
 					failures.add(dsd);
 				}
 			}

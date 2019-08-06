@@ -72,6 +72,7 @@ public class AbstractAnalysisModelComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_buysEditor(detailComposite, topClass);
 		add_sellsEditor(detailComposite, topClass);
+		add_vesselEventsEditor(detailComposite, topClass);
 		add_shippingTemplatesEditor(detailComposite, topClass);
 	}
 	/**
@@ -90,6 +91,15 @@ public class AbstractAnalysisModelComponentHelper extends BaseComponentHelper {
 	protected void add_sellsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS));
 	}
+	/**
+	 * Create the editor for the vesselEvents feature on AbstractAnalysisModel
+	 *
+	 * @generated
+	 */
+	protected void add_vesselEventsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS));
+	}
+
 	/**
 	 * Create the editor for the shippingTemplates feature on AbstractAnalysisModel
 	 *

@@ -219,6 +219,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BuyOption getBuyOption() {
 		if (buyOption != null && buyOption.eIsProxy()) {
 			InternalEObject oldBuyOption = (InternalEObject)buyOption;
@@ -245,6 +246,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBuyOption(BuyOption newBuyOption) {
 		BuyOption oldBuyOption = buyOption;
 		buyOption = newBuyOption;
@@ -257,6 +259,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SellOption getSellOption() {
 		if (sellOption != null && sellOption.eIsProxy()) {
 			InternalEObject oldSellOption = (InternalEObject)sellOption;
@@ -283,6 +286,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSellOption(SellOption newSellOption) {
 		SellOption oldSellOption = sellOption;
 		sellOption = newSellOption;
@@ -295,6 +299,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ShippingOption getShipping() {
 		if (shipping != null && shipping.eIsProxy()) {
 			InternalEObject oldShipping = (InternalEObject)shipping;
@@ -321,6 +326,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShipping(ShippingOption newShipping) {
 		ShippingOption oldShipping = shipping;
 		shipping = newShipping;
@@ -333,6 +339,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ViabilityResult> getLhsResults() {
 		if (lhsResults == null) {
 			lhsResults = new EObjectContainmentEList<ViabilityResult>(ViabilityResult.class, this, AnalyticsPackage.VIABILITY_ROW__LHS_RESULTS);
@@ -345,6 +352,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ViabilityResult> getRhsResults() {
 		if (rhsResults == null) {
 			rhsResults = new EObjectContainmentEList<ViabilityResult>(ViabilityResult.class, this, AnalyticsPackage.VIABILITY_ROW__RHS_RESULTS);
@@ -357,6 +365,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EObject getTarget() {
 		if (target != null && target.eIsProxy()) {
 			InternalEObject oldTarget = (InternalEObject)target;
@@ -383,6 +392,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTarget(EObject newTarget) {
 		EObject oldTarget = target;
 		target = newTarget;
@@ -395,6 +405,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getPrice() {
 		return price;
 	}
@@ -404,6 +415,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPrice(double newPrice) {
 		double oldPrice = price;
 		price = newPrice;
@@ -416,6 +428,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getEta() {
 		return eta;
 	}
@@ -425,6 +438,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEta(LocalDate newEta) {
 		LocalDate oldEta = eta;
 		eta = newEta;
@@ -437,6 +451,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getReferencePrice() {
 		return referencePrice;
 	}
@@ -446,6 +461,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setReferencePrice(double newReferencePrice) {
 		double oldReferencePrice = referencePrice;
 		referencePrice = newReferencePrice;
@@ -458,6 +474,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getStartVolume() {
 		return startVolume;
 	}
@@ -467,6 +484,7 @@ public class ViabilityRowImpl extends EObjectImpl implements ViabilityRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartVolume(long newStartVolume) {
 		long oldStartVolume = startVolume;
 		startVolume = newStartVolume;

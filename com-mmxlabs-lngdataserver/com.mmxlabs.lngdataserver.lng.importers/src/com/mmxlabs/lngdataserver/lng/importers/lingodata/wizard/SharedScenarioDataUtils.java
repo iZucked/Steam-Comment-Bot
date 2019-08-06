@@ -32,6 +32,7 @@ import org.eclipse.emf.edit.command.ReplaceCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.slf4j.Logger;
@@ -43,6 +44,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerFactory;
+import com.mmxlabs.common.util.ToBooleanFunction;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.integration.models.bunkerfuels.BunkerFuelsVersion;
@@ -70,6 +72,9 @@ import com.mmxlabs.lngdataserver.lng.io.vesselgroups.VesselGroupsToScenarioImpor
 import com.mmxlabs.lngdataserver.lng.io.vessels.VesselsFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.vessels.VesselsToScenarioCopier;
 import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -95,6 +100,7 @@ import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -104,6 +110,8 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.json.EMFDeserializationContext;
 import com.mmxlabs.rcp.common.json.EMFJacksonModule;
+import com.mmxlabs.rcp.common.json.IJSONSerialisationConfigProvider;
+import com.mmxlabs.rcp.common.json.JSONReference;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.MigrationForbiddenException;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
@@ -341,7 +349,7 @@ public final class SharedScenarioDataUtils {
 						final FleetModel fm = ScenarioModelUtil.getFleetModel(target);
 						fm.getVessels().forEach(ctx::registerType);
 						fm.getVesselGroups().forEach(ctx::registerType);
-						
+
 						final CommercialModel cm = ScenarioModelUtil.getCommercialModel(target);
 						cm.getCharteringContracts().forEach(ctx::registerType);
 
@@ -1177,5 +1185,185 @@ public final class SharedScenarioDataUtils {
 				cmd.appendAndExecute(SetCommand.create(editingDomain, oldValue.eContainer(), oldValue.eContainmentFeature(), newValue));
 			}
 		}
+	}
+
+	public static String createSandboxJSON(final IScenarioDataProvider sdp, OptionAnalysisModel sandbox) throws JsonProcessingException {
+		if (sandbox == null) {
+			return null;
+		}
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.registerModule(new EMFJacksonModule(createSandboxConfig()));
+		final String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(sandbox);
+
+		return json;
+	}
+
+	private static @Nullable IJSONSerialisationConfigProvider createSandboxConfig() {
+		return new IJSONSerialisationConfigProvider() {
+
+			@Override
+			public boolean isFeatureIgnored(EStructuralFeature feature) {
+				// Ignore schedule models.
+				return //
+				feature == SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE //
+				// || feature == AnalyticsPackage.Literals.SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL //
+				;
+			}
+		};
+	}
+
+	public static BiConsumer<CompoundCommand, IScenarioDataProvider> createSandboxUpdater(final String json, @Nullable ToBooleanFunction<JSONReference> missingReferenceHandler,
+			OptionAnalysisModel[] ref) {
+
+		return (cmd, target) -> {
+			cmd.append(new CompoundCommand() {
+
+				@Override
+				protected boolean prepare() {
+					super.prepare();
+					return true;
+				}
+
+				@Override
+				public void execute() {
+					final EMFDeserializationContext ctx = new EMFDeserializationContext(BeanDeserializerFactory.instance);
+					if (missingReferenceHandler != null) {
+						ctx.setMissingFeatureHandler(missingReferenceHandler);
+					}
+
+					final PortModel pm = ScenarioModelUtil.getPortModel(target);
+					pm.getPorts().forEach(ctx::registerType);
+					pm.getPortGroups().forEach(ctx::registerType);
+					pm.getPortCountryGroups().forEach(ctx::registerType);
+
+					final FleetModel fm = ScenarioModelUtil.getFleetModel(target);
+					fm.getVessels().forEach(ctx::registerType);
+					fm.getVesselGroups().forEach(ctx::registerType);
+
+					final CommercialModel cm = ScenarioModelUtil.getCommercialModel(target);
+					cm.getPurchaseContracts().forEach(ctx::registerType);
+					cm.getSalesContracts().forEach(ctx::registerType);
+					cm.getEntities().forEach(ctx::registerType);
+
+					final SpotMarketsModel smm = ScenarioModelUtil.getSpotMarketsModel(target);
+					smm.getCharterInMarkets().forEach(ctx::registerType);
+					smm.getDesPurchaseSpotMarket().getMarkets().forEach(ctx::registerType);
+					smm.getDesSalesSpotMarket().getMarkets().forEach(ctx::registerType);
+					smm.getFobPurchasesSpotMarket().getMarkets().forEach(ctx::registerType);
+					smm.getFobSalesSpotMarket().getMarkets().forEach(ctx::registerType);
+
+					final CargoModel cgm = ScenarioModelUtil.getCargoModel(target);
+					cgm.getLoadSlots().forEach(ctx::registerType);
+					cgm.getDischargeSlots().forEach(ctx::registerType);
+					cgm.getVesselEvents().forEach(ctx::registerType);
+					cgm.getVesselAvailabilities().forEach(ctx::registerType);
+
+					final ObjectMapper mapper = new ObjectMapper(null, null, ctx);
+					mapper.registerModule(new EMFJacksonModule());
+
+					try {
+						final OptionAnalysisModel newModel = mapper.readValue(json, OptionAnalysisModel.class);
+						ctx.runDeferredActions();
+						final EditingDomain editingDomain = target.getEditingDomain();
+						appendAndExecute(AddCommand.create(editingDomain, ScenarioModelUtil.getAnalyticsModel(target), AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels(), newModel));
+
+						ref[0] = newModel;
+					} catch (final Exception e1) {
+						e1.printStackTrace();
+						appendAndExecute(UnexecutableCommand.INSTANCE);
+					}
+				}
+			});
+		};
+	}
+
+	public static String createAbstractSolutionSetJSON(final IScenarioDataProvider sdp, AbstractSolutionSet solutionSet, boolean includeScheduleModel) throws JsonProcessingException {
+		if (solutionSet == null) {
+			return null;
+		}
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.registerModule(new EMFJacksonModule(createAbstractSolutionSetConfig(includeScheduleModel)));
+		final String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(solutionSet);
+
+		return json;
+	}
+
+	private static @Nullable IJSONSerialisationConfigProvider createAbstractSolutionSetConfig(boolean includeScheduleModel) {
+		return new IJSONSerialisationConfigProvider() {
+
+			@Override
+			public boolean isFeatureIgnored(EStructuralFeature feature) {
+				// Ignore schedule models.
+				return //
+				(!includeScheduleModel && feature == SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE) // Optionally ignore
+				// || feature == AnalyticsPackage.Literals.SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL //
+				;
+			}
+		};
+	}
+
+	public static BiConsumer<CompoundCommand, IScenarioDataProvider> createAbstractSolutionSetUpdater(final String json, @Nullable ToBooleanFunction<JSONReference> missingReferenceHandler,
+			AbstractSolutionSet[] ref) {
+
+		return (cmd, target) -> {
+			cmd.append(new CompoundCommand() {
+
+				@Override
+				protected boolean prepare() {
+					super.prepare();
+					return true;
+				}
+
+				@Override
+				public void execute() {
+					final EMFDeserializationContext ctx = new EMFDeserializationContext(BeanDeserializerFactory.instance);
+					if (missingReferenceHandler != null) {
+						ctx.setMissingFeatureHandler(missingReferenceHandler);
+					}
+
+					final PortModel pm = ScenarioModelUtil.getPortModel(target);
+					pm.getPorts().forEach(ctx::registerType);
+					pm.getPortGroups().forEach(ctx::registerType);
+					pm.getPortCountryGroups().forEach(ctx::registerType);
+
+					final FleetModel fm = ScenarioModelUtil.getFleetModel(target);
+					fm.getVessels().forEach(ctx::registerType);
+					fm.getVesselGroups().forEach(ctx::registerType);
+
+					final CommercialModel cm = ScenarioModelUtil.getCommercialModel(target);
+					cm.getPurchaseContracts().forEach(ctx::registerType);
+					cm.getSalesContracts().forEach(ctx::registerType);
+					cm.getEntities().forEach(ctx::registerType);
+
+					final SpotMarketsModel smm = ScenarioModelUtil.getSpotMarketsModel(target);
+					smm.getCharterInMarkets().forEach(ctx::registerType);
+					smm.getDesPurchaseSpotMarket().getMarkets().forEach(ctx::registerType);
+					smm.getDesSalesSpotMarket().getMarkets().forEach(ctx::registerType);
+					smm.getFobPurchasesSpotMarket().getMarkets().forEach(ctx::registerType);
+					smm.getFobSalesSpotMarket().getMarkets().forEach(ctx::registerType);
+
+					final CargoModel cgm = ScenarioModelUtil.getCargoModel(target);
+					cgm.getLoadSlots().forEach(ctx::registerType);
+					cgm.getDischargeSlots().forEach(ctx::registerType);
+					cgm.getVesselEvents().forEach(ctx::registerType);
+					cgm.getVesselAvailabilities().forEach(ctx::registerType);
+
+					final ObjectMapper mapper = new ObjectMapper(null, null, ctx);
+					mapper.registerModule(new EMFJacksonModule());
+
+					try {
+						final AbstractSolutionSet newModel = mapper.readValue(json, AbstractSolutionSet.class);
+						ctx.runDeferredActions();
+						final EditingDomain editingDomain = target.getEditingDomain();
+						appendAndExecute(AddCommand.create(editingDomain, ScenarioModelUtil.getAnalyticsModel(target), AnalyticsPackage.eINSTANCE.getAnalyticsModel_Optimisations(), newModel));
+
+						ref[0] = newModel;
+					} catch (final Exception e1) {
+						e1.printStackTrace();
+						appendAndExecute(UnexecutableCommand.INSTANCE);
+					}
+				}
+			});
+		};
 	}
 }

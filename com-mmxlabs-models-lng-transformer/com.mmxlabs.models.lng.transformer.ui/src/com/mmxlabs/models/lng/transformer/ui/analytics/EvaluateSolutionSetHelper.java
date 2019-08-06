@@ -13,9 +13,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.apache.http.impl.client.NullBackoffStrategy;
+import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
@@ -25,9 +30,15 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
+import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
+import com.mmxlabs.models.lng.analytics.DualModeSolutionOption;
+import com.mmxlabs.models.lng.analytics.SolutionOption;
+import com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase;
+import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
@@ -48,6 +59,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificationHelper;
@@ -56,6 +68,9 @@ import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
+import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
 public class EvaluateSolutionSetHelper {
 	final ScheduleSpecificationHelper scheduleSpecificationHelper;
@@ -64,6 +79,18 @@ public class EvaluateSolutionSetHelper {
 	public EvaluateSolutionSetHelper(final IScenarioDataProvider scenarioDataProvider) {
 		this.scheduleSpecificationHelper = new ScheduleSpecificationHelper(scenarioDataProvider);
 		this.editingDomain = scenarioDataProvider.getEditingDomain();
+	}
+
+	public void processExtraData(SolutionOptionMicroCase solutionSet) {
+		if (solutionSet != null) {
+			scheduleSpecificationHelper.processExtraData_VesselAvailabilities(solutionSet.getExtraVesselAvailabilities());
+			scheduleSpecificationHelper.processExtraData_CharterInMarketOverrides(solutionSet.getCharterInMarketOverrides());
+		}
+
+	}
+
+	public void processExtraData(@Nullable AbstractSolutionSet solutionSet) {
+		scheduleSpecificationHelper.processExtraData(solutionSet);
 	}
 
 	public void processSolution(ScheduleModel scheduleModel) {
@@ -94,7 +121,7 @@ public class EvaluateSolutionSetHelper {
 		if (scheduleSpecification != null) {
 			final BiFunction<LNGScenarioToOptimiserBridge, Injector, Supplier<Command>> r = (bridge, injector) -> {
 				final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
-				final ISequences base = transformer.createSequences(scheduleSpecification, bridge.getDataTransformer());
+				final ISequences base = transformer.createSequences(scheduleSpecification, bridge.getDataTransformer(), false);
 
 				try {
 					final Schedule baseSchedule = bridge.createSchedule(base, Collections.emptyMap());
@@ -111,13 +138,12 @@ public class EvaluateSolutionSetHelper {
 			};
 
 			scheduleSpecificationHelper.addJobs(r);
+		} else if (scheduleModel != null) {
+			processSolution(scheduleModel);
 		}
 	}
 
-	public void generateResults(final ScenarioInstance scenarioInstance, final UserSettings userSettings, final EditingDomain editingDomain, final List<LoadSlot> extraLoads,
-			final List<DischargeSlot> extraDischarges, IProgressMonitor monitor) {
-		scheduleSpecificationHelper.processExtraData_Loads(extraLoads);
-		scheduleSpecificationHelper.processExtraData_Discharges(extraDischarges);
+	public void generateResults(final ScenarioInstance scenarioInstance, final UserSettings userSettings, final EditingDomain editingDomain, IProgressMonitor monitor) {
 
 		List<String> hints = Lists.newArrayList(LNGTransformerHelper.HINT_DISABLE_CACHES, //
 				LNGTransformerHelper.HINT_KEEP_NOMINALS_IN_PROMPT //
@@ -174,6 +200,15 @@ public class EvaluateSolutionSetHelper {
 				}
 				if (sequence.getCharterInMarketOverride() != null) {
 					usedCharterInMarketOverrides.add(sequence.getCharterInMarketOverride());
+				}
+				if (sequence.getCharterInMarket() != null) {
+					if (!(sequence.getCharterInMarket().eContainer() instanceof SpotMarketsModel)) {
+
+						EObject container = sequence.getCharterInMarket().eContainer();
+						if (container != null) {
+							((Collection) container.eGet(sequence.getCharterInMarket().eContainmentFeature())).remove(sequence.getCharterInMarket());
+						}
+					}
 				}
 				for (final Event event : sequence.getEvents()) {
 					if (event instanceof VesselEventVisit) {
@@ -292,6 +327,112 @@ public class EvaluateSolutionSetHelper {
 		};
 
 		scheduleSpecificationHelper.addJobs(r);
+	}
+
+	public static void recomputeSolution(ScenarioModelRecord modelRecord, @Nullable ScenarioInstance scenarioInstance, @Nullable AbstractSolutionSet abstractSolutionSet, boolean fromSpecifications,
+			boolean open) {
+
+		IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("EvaluateSolutionSetHelper:recomputeSolution");
+		try {
+			recomputeSolution(sdp, scenarioInstance, abstractSolutionSet, fromSpecifications, open, true, true);
+		} finally {
+			// sdp.close();
+		}
+	}
+
+	public static void recomputeSolution(IScenarioDataProvider sdp, @Nullable ScenarioInstance scenarioInstance, @Nullable AbstractSolutionSet abstractSolutionSet, boolean fromSpecifications,
+			boolean open, boolean runAsync, boolean closeSDP) {
+
+		try {
+
+			ICoreRunnable runnable = (monitor) -> {
+				try {
+					Runnable exportAction = () -> {
+						final EvaluateSolutionSetHelper helper = new EvaluateSolutionSetHelper(sdp);
+
+						if (abstractSolutionSet != null) {
+							UserSettings userSettings = abstractSolutionSet.getUserSettings();
+							helper.processExtraData(abstractSolutionSet);
+
+							Consumer<SolutionOption> action = opt -> {
+								helper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
+								if (opt instanceof DualModeSolutionOption) {
+									final DualModeSolutionOption dualModeSolutionOption = (DualModeSolutionOption) opt;
+
+									final SolutionOptionMicroCase base = dualModeSolutionOption.getMicroBaseCase();
+									if (base != null) {
+										// Re-evaluate from schedule
+										helper.processExtraData(base);
+										if (fromSpecifications) {
+											// (Experimental version) Re-evaluate from change specification)
+											helper.processSolution(base.getScheduleSpecification(), base.getScheduleModel());
+										} else {
+											helper.processSolution(base.getScheduleModel());
+										}
+									}
+
+									final SolutionOptionMicroCase target = dualModeSolutionOption.getMicroTargetCase();
+									if (target != null) {
+										// Re-evaluate from schedule
+										helper.processExtraData(target);
+
+										if (fromSpecifications) {
+											// (Experimental version) Re-evaluate from change specification)
+											helper.processSolution(target.getScheduleSpecification(), target.getScheduleModel());
+										} else {
+											helper.processSolution(target.getScheduleModel());
+										}
+									}
+
+								}
+							};
+
+							{
+								SolutionOption opt = abstractSolutionSet.getBaseOption();
+								if (opt != null) {
+									action.accept(opt);
+								}
+							}
+
+							for (final SolutionOption opt : abstractSolutionSet.getOptions()) {
+								action.accept(opt);
+							}
+
+							final UserSettings copy = EcoreUtil.copy(userSettings);
+							helper.generateResults(scenarioInstance, copy, sdp.getEditingDomain(), monitor);
+							if (open) {
+								new AnalyticsSolution(scenarioInstance, abstractSolutionSet, abstractSolutionSet.getName()).open();
+							}
+						}
+					};
+					if (sdp instanceof SimpleScenarioDataProvider) {
+						// ITS case may come here and we do not have a model reference to execute lock on
+						exportAction.run();
+					} else {
+						sdp.getModelReference().executeWithLock(true, exportAction);
+					}
+				} finally {
+					if (closeSDP) {
+						sdp.close();
+					}
+				}
+			};
+			if (runAsync) {
+				Job job = Job.create("Re-calculate solution(s)", runnable);
+				job.setUser(true);
+				job.setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
+				job.schedule();
+			} else {
+				runnable.run(new NullProgressMonitor());
+			}
+		} catch (final Exception e) {
+			if (closeSDP) {
+				sdp.close();
+			}
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 }

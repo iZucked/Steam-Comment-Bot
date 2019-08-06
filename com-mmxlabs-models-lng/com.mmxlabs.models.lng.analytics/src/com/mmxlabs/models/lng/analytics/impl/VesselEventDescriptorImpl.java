@@ -74,6 +74,7 @@ public class VesselEventDescriptorImpl extends EObjectImpl implements VesselEven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getEventName() {
 		return eventName;
 	}
@@ -83,6 +84,7 @@ public class VesselEventDescriptorImpl extends EObjectImpl implements VesselEven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEventName(String newEventName) {
 		String oldEventName = eventName;
 		eventName = newEventName;

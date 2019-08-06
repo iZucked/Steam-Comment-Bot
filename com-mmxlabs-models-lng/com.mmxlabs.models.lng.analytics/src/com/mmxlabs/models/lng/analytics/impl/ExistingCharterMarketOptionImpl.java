@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -32,7 +33,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class ExistingCharterMarketOptionImpl extends ShippingOptionImpl implements ExistingCharterMarketOption {
+public class ExistingCharterMarketOptionImpl extends UUIDObjectImpl implements ExistingCharterMarketOption {
 	/**
 	 * The cached value of the '{@link #getCharterInMarket() <em>Charter In Market</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -87,6 +88,7 @@ public class ExistingCharterMarketOptionImpl extends ShippingOptionImpl implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterInMarket getCharterInMarket() {
 		if (charterInMarket != null && charterInMarket.eIsProxy()) {
 			InternalEObject oldCharterInMarket = (InternalEObject)charterInMarket;
@@ -113,6 +115,7 @@ public class ExistingCharterMarketOptionImpl extends ShippingOptionImpl implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterInMarket(CharterInMarket newCharterInMarket) {
 		CharterInMarket oldCharterInMarket = charterInMarket;
 		charterInMarket = newCharterInMarket;
@@ -125,6 +128,7 @@ public class ExistingCharterMarketOptionImpl extends ShippingOptionImpl implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSpotIndex() {
 		return spotIndex;
 	}
@@ -134,6 +138,7 @@ public class ExistingCharterMarketOptionImpl extends ShippingOptionImpl implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpotIndex(int newSpotIndex) {
 		int oldSpotIndex = spotIndex;
 		spotIndex = newSpotIndex;

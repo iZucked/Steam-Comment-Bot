@@ -106,8 +106,8 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	IVessel createVessel(@NonNull String name, int minSpeed, int maxSpeed, long capacity, long safetyHeel, @NonNull IBaseFuel baseFuel, @NonNull IBaseFuel idleBaseFuel,
-			@NonNull IBaseFuel inPortBaseFuel, @NonNull IBaseFuel pilotLightBaseFuel,int pilotLightRate, int warmupTimeInHours, long cooldownVolumeInM3, int minBaseFuelConsumptionPerDay,
-			boolean hasReliqCapability);
+			@NonNull IBaseFuel inPortBaseFuel, @NonNull IBaseFuel pilotLightBaseFuel, int pilotLightRate, int warmupTimeInHours, int purgeTimeInHours, long cooldownVolumeInM3,
+			int minBaseFuelConsumptionPerDay, boolean hasReliqCapability);
 
 	/**
 	 * Set {@link IVessel} parameters that depend upon the {@link VesselState}.
@@ -353,14 +353,15 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	ILoadSlot createLoadSlot(@NonNull String id, @NonNull IPort port, @NonNull ITimeWindow window, long minVolume, long maxVolume, @NonNull ILoadPriceCalculator priceCalculator, int cargoCVValue,
-			int durationHours, boolean cooldownSet, boolean cooldownForbidden, int pricingDate, @NonNull PricingEventType pricingEvent, boolean slotIsOptional, boolean slotIsLocked,
-			boolean isSpotMarketSlot, boolean isVolumeLimitInM3, boolean isCancelled);
+			int durationHours, boolean cooldownSet, boolean cooldownForbidden, boolean purgeScheduled, int pricingDate, @NonNull PricingEventType pricingEvent, boolean slotIsOptional,
+			boolean slotIsLocked, boolean isSpotMarketSlot, boolean isVolumeLimitInM3, boolean isCancelled);
 
 	/**
 	 */
 	@NonNull
 	ILoadOption createDESPurchaseLoadSlot(String id, @Nullable IPort port, ITimeWindow window, long minVolume, long maxVolume, @NonNull ILoadPriceCalculator priceCalculator, int cargoCVValue,
-			int durationInHours, int pricingDate, @NonNull PricingEventType pricingEvent, boolean slotIsOptional, boolean slotIslocked, boolean isSpotMarketSlot, boolean isVolumeLimitInM3, boolean slotIsLocked);
+			int durationInHours, int pricingDate, @NonNull PricingEventType pricingEvent, boolean slotIsOptional, boolean slotIslocked, boolean isSpotMarketSlot, boolean isVolumeLimitInM3,
+			boolean slotIsLocked);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected to be assigned to a cargo.
@@ -669,7 +670,7 @@ public interface ISchedulerBuilder {
 
 	@NonNull
 	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVessel oVessel, @NonNull ILongCurve charterInCurve, int charterCount, IEndRequirement endRequiremenbt,
-			IBallastBonusContract ballastBonusContract);
+			IBallastBonusContract ballastBonusContract, ILongCurve repositioningFee);
 
 	/***
 	 * Create a sequence element
@@ -681,6 +682,7 @@ public interface ISchedulerBuilder {
 	SequenceElement createSequenceElement(@NonNull String name);
 
 	void setDivertibleDESAllowedRoute(@NonNull ILoadOption desPurchase, @NonNull List<ERouteOption> allowedRoutes);
+
 	void setDivertibleFOBAllowedRoute(@NonNull IDischargeOption fobSale, @NonNull List<ERouteOption> allowedRoutes);
 
 	@NonNull
@@ -709,5 +711,4 @@ public interface ISchedulerBuilder {
 	 */
 	void setVesselInaccessibleRoutes(@NonNull IVessel vessel, Set<ERouteOption> inaccessibleRoutes);
 
-	
 }

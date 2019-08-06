@@ -26,6 +26,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getUnusedElements <em>Unused Elements</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getInventoryLevels <em>Inventory Levels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getPaperDealAllocations <em>Paper Deal Allocations</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getOtherPNL <em>Other PNL</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule()
@@ -176,6 +177,32 @@ public interface Schedule extends MMXObject {
 	 * @generated
 	 */
 	EList<PaperDealAllocation> getPaperDealAllocations();
+
+	/**
+	 * Returns the value of the '<em><b>Other PNL</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Other PNL</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Other PNL</em>' containment reference.
+	 * @see #setOtherPNL(OtherPNL)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_OtherPNL()
+	 * @model containment="true"
+	 * @generated
+	 */
+	OtherPNL getOtherPNL();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Schedule#getOtherPNL <em>Other PNL</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Other PNL</em>' containment reference.
+	 * @see #getOtherPNL()
+	 * @generated
+	 */
+	void setOtherPNL(OtherPNL value);
 
 } // end of  Schedule
 

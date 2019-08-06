@@ -6,22 +6,21 @@
  */
 package com.mmxlabs.models.lng.analytics.presentation.composites;
 
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
-
 import org.eclipse.emf.ecore.EClass;
+
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.fleet.ui.inlineeditors.TextualVesselReferenceInlineEditor;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
  * A component helper for RoundTripShippingOption instances
@@ -47,6 +46,7 @@ public class RoundTripShippingOptionComponentHelper extends BaseComponentHelper 
 	 */
 	public RoundTripShippingOptionComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
 		superClassesHelpers.addAll(registry.getComponentHelpers(AnalyticsPackage.Literals.SHIPPING_OPTION));
 	}
 	
@@ -74,10 +74,11 @@ public class RoundTripShippingOptionComponentHelper extends BaseComponentHelper 
 	/**
 	 * Create the editor for the vessel feature on RoundTripShippingOption
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_vesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ROUND_TRIP_SHIPPING_OPTION__VESSEL));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ROUND_TRIP_SHIPPING_OPTION__VESSEL));
+		detailComposite.addInlineEditor(new TextualVesselReferenceInlineEditor(AnalyticsPackage.Literals.ROUND_TRIP_SHIPPING_OPTION__VESSEL));
 	}
 
 	/**

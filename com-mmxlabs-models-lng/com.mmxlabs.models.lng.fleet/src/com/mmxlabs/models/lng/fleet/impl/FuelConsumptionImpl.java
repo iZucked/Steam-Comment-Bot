@@ -90,6 +90,7 @@ public class FuelConsumptionImpl extends EObjectImpl implements FuelConsumption 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getSpeed() {
 		return speed;
 	}
@@ -99,6 +100,7 @@ public class FuelConsumptionImpl extends EObjectImpl implements FuelConsumption 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpeed(double newSpeed) {
 		double oldSpeed = speed;
 		speed = newSpeed;
@@ -111,6 +113,7 @@ public class FuelConsumptionImpl extends EObjectImpl implements FuelConsumption 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getConsumption() {
 		return consumption;
 	}
@@ -120,6 +123,7 @@ public class FuelConsumptionImpl extends EObjectImpl implements FuelConsumption 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setConsumption(double newConsumption) {
 		double oldConsumption = consumption;
 		consumption = newConsumption;

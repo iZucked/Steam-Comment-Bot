@@ -82,7 +82,7 @@ public class LNGParameters_AnnealingSettingsModule extends AbstractModule {
 	private int getRestartIterationsThreshold() {
 		return settings.getRestartIterationsThreshold();
 	}
-	
+
 	@Provides
 	@Named(LocalSearchOptimiserModule.NEW_SIMILARITY_OPTIMISER)
 	private boolean isUsingNewSimilarityModule() {
@@ -94,19 +94,17 @@ public class LNGParameters_AnnealingSettingsModule extends AbstractModule {
 	private int getParallelLSOBatchSize() {
 		return 100;
 	}
-	
+
 	@Provides
 	@Named(ParallelLSOConstants.PARALLEL_MOO_BATCH_SIZE)
 	private int getParallelMOOBatchSize() {
 		return 100;
 	}
-	
+
 	@Provides
 	@Named(LocalSearchOptimiserModule.OPTIMISER_DEBUG_MODE)
 	private boolean getDebugMode() {
 		return false;
 	}
-
-
 
 }

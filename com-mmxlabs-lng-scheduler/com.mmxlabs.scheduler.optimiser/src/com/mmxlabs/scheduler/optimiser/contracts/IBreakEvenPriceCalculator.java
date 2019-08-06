@@ -16,4 +16,6 @@ public interface IBreakEvenPriceCalculator {
 	 */
 	void setPrice(int newPrice);
 	
+	int getPrice();
+	
 }

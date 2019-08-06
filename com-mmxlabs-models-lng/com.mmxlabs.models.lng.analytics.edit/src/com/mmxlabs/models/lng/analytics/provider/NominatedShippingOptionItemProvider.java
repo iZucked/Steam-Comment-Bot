@@ -9,6 +9,8 @@ package com.mmxlabs.models.lng.analytics.provider;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 
+import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,7 +26,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
  * <!-- end-user-doc -->
  * @generated
  */
-public class NominatedShippingOptionItemProvider extends ShippingOptionItemProvider {
+public class NominatedShippingOptionItemProvider extends UUIDObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -92,7 +94,10 @@ public class NominatedShippingOptionItemProvider extends ShippingOptionItemProvi
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_NominatedShippingOption_type");
+		String label = ((NominatedShippingOption)object).getUuid();
+		return label == null || label.length() == 0 ?
+			getString("_UI_NominatedShippingOption_type") :
+			getString("_UI_NominatedShippingOption_type") + " " + label;
 	}
 	
 

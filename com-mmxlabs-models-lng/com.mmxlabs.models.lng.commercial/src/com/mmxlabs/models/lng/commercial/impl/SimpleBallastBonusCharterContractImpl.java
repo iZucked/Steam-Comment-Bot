@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl#getMaxDuration <em>Max Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl#getBallastBonusContract <em>Ballast Bonus Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
  * </ul>
  *
  * @generated
@@ -114,6 +115,26 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * @ordered
 	 */
 	protected BaseLegalEntity entity;
+
+	/**
+	 * The default value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRepositioningFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String REPOSITIONING_FEE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRepositioningFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected String repositioningFee = REPOSITIONING_FEE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -325,6 +346,29 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * @generated
 	 */
 	@Override
+	public String getRepositioningFee() {
+		return repositioningFee;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRepositioningFee(String newRepositioningFee) {
+		String oldRepositioningFee = repositioningFee;
+		repositioningFee = newRepositioningFee;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE, oldRepositioningFee, repositioningFee));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT:
@@ -350,6 +394,8 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__ENTITY:
 				if (resolve) return getEntity();
 				return basicGetEntity();
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE:
+				return getRepositioningFee();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -373,6 +419,9 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 				return;
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__ENTITY:
 				setEntity((BaseLegalEntity)newValue);
+				return;
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE:
+				setRepositioningFee((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -398,6 +447,9 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__ENTITY:
 				setEntity((BaseLegalEntity)null);
 				return;
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE:
+				setRepositioningFee(REPOSITIONING_FEE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -418,6 +470,8 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 				return ballastBonusContract != null;
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__ENTITY:
 				return entity != null;
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE:
+				return REPOSITIONING_FEE_EDEFAULT == null ? repositioningFee != null : !REPOSITIONING_FEE_EDEFAULT.equals(repositioningFee);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -436,6 +490,8 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 		if (minDurationESet) result.append(minDuration); else result.append("<unset>");
 		result.append(", maxDuration: ");
 		if (maxDurationESet) result.append(maxDuration); else result.append("<unset>");
+		result.append(", repositioningFee: ");
+		result.append(repositioningFee);
 		result.append(')');
 		return result.toString();
 	}

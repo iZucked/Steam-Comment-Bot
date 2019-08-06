@@ -1,9 +1,8 @@
-package com.mmxlabs.models.lng.nominations.importer;
 /**
  * Copyright (C) Minimax Labs Ltd., 2010 - 2019
  * All rights reserved.
  */
-
+package com.mmxlabs.models.lng.nominations.importer;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -28,6 +27,9 @@ import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
+/**
+ * Used when importing nominations and nominations specifications from CSV when importing an entire scenario.
+ */
 public class NominationsModelImporter implements ISubmodelImporter {
 
 	public static final String NOMINATIONS_KEY = "NOMINATIONS";
@@ -72,7 +74,6 @@ public class NominationsModelImporter implements ISubmodelImporter {
 	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IMMXImportContext context) {
 		final NominationsModel nominationsModel = NominationsModelUtils.createNominationsModel();
 		if (inputs.containsKey(NOMINATIONS_KEY)) {
-			//Check the kind column.
 			nominationsModel.getNominations().addAll((Collection<? extends AbstractNomination>)
 					nominationsImporter.importObjects(NominationsPackage.eINSTANCE.getAbstractNomination(), inputs.get(NOMINATIONS_KEY), context));
 		}

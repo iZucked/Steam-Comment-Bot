@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -29,6 +30,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -71,7 +73,7 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 	}
 
 	@Override
-	protected void displayScenarioInstance(final ScenarioInstance instance) {
+	protected void displayScenarioInstance(final ScenarioInstance instance, @Nullable MMXRootObject rootObject, @Nullable Object targetObject) {
 		updateActions(null);
 
 		if (instance != getScenarioInstance()) {
@@ -89,7 +91,7 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 			childComposite = createChildControl(parent);
 			childComposite.setLayout(new FillLayout());
 
-			super.displayScenarioInstance(instance);
+			super.displayScenarioInstance(instance, rootObject, targetObject);
 			if (instance != null) {
 				viewerPanes.addAll(createViewerPanes());
 				for (final ScenarioTableViewerPane pane : viewerPanes) {

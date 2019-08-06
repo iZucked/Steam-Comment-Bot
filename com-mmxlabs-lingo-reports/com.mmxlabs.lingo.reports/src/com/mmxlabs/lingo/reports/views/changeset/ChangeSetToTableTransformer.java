@@ -70,6 +70,9 @@ public class ChangeSetToTableTransformer {
 			final List<ChangeSetTableRow> changeSetTableGroupRows = convertRows(changeSetRows);
 			ChangeSetTransformerUtil.filterRows(changeSetTableGroupRows);
 
+			
+			
+			// -------------
 			if (!changeSetTableGroupRows.isEmpty()) {
 				final ChangeSetTableGroup changeSetTableGroup = ChangesetFactory.eINSTANCE.createChangeSetTableGroup();
 				++groupIdx;
@@ -84,7 +87,24 @@ public class ChangeSetToTableTransformer {
 
 				changeSetTableGroup.setBaseScenario(baseResult);
 				changeSetTableGroup.setCurrentScenario(currentResult);
-
+			// -------------	Below is an alternative version. When showing dual result mode, we need to keep dual data mode in sync. 		
+//			final ChangeSetTableGroup changeSetTableGroup = ChangesetFactory.eINSTANCE.createChangeSetTableGroup();
+//			// Note: We always add to the root otherwise when binding DUAL data models we can get out of sync if the
+//			// changeSetTableGroupRows.isEmpty() is different. However this can lead to empty solutions being displayed.
+//			// This was changed as part of the Sandbox V4 work ~ SG, June 2019
+//			changeSetTableRoot.getGroups().add(changeSetTableGroup);
+//			++groupIdx;
+//			changeSetTableGroup.setChangeSet(changeSet);
+//
+//			changeSetTableGroup.setBaseScenario(baseResult);
+//			changeSetTableGroup.setCurrentScenario(currentResult);
+//			changeSetTableGroup.setDescription(changeSet.getDescription());
+//			changeSetTableGroup.setDeltaMetrics(EcoreUtil.copy(isAlternative ? changeSet.getMetricsToAlternativeBase() : changeSet.getMetricsToDefaultBase()));
+//			changeSetTableGroup.setCurrentMetrics(EcoreUtil.copy(changeSet.getCurrentMetrics()));
+//			if (!changeSetTableGroupRows.isEmpty()) {
+//				ChangeSetTransformerUtil.sortRows(changeSetTableGroupRows, targetToSortFirst);
+//				changeSetTableGroup.getRows().addAll(changeSetTableGroupRows);
+/// -------------
 				int structuralChanges = 0;
 				for (final ChangeSetRow row : changeSetRows) {
 					final ChangeSetRowDataGroup afterData = row.getAfterData();

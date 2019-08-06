@@ -207,6 +207,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BuyOption getBuyOption() {
 		if (buyOption != null && buyOption.eIsProxy()) {
 			InternalEObject oldBuyOption = (InternalEObject)buyOption;
@@ -233,6 +234,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBuyOption(BuyOption newBuyOption) {
 		BuyOption oldBuyOption = buyOption;
 		buyOption = newBuyOption;
@@ -245,6 +247,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SellOption getSellOption() {
 		if (sellOption != null && sellOption.eIsProxy()) {
 			InternalEObject oldSellOption = (InternalEObject)sellOption;
@@ -271,6 +274,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSellOption(SellOption newSellOption) {
 		SellOption oldSellOption = sellOption;
 		sellOption = newSellOption;
@@ -283,6 +287,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<MTMResult> getLhsResults() {
 		if (lhsResults == null) {
 			lhsResults = new EObjectContainmentEList<MTMResult>(MTMResult.class, this, AnalyticsPackage.MTM_ROW__LHS_RESULTS);
@@ -295,6 +300,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<MTMResult> getRhsResults() {
 		if (rhsResults == null) {
 			rhsResults = new EObjectContainmentEList<MTMResult>(MTMResult.class, this, AnalyticsPackage.MTM_ROW__RHS_RESULTS);
@@ -307,6 +313,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EObject getTarget() {
 		if (target != null && target.eIsProxy()) {
 			InternalEObject oldTarget = (InternalEObject)target;
@@ -333,6 +340,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTarget(EObject newTarget) {
 		EObject oldTarget = target;
 		target = newTarget;
@@ -345,6 +353,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getPrice() {
 		return price;
 	}
@@ -354,6 +363,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPrice(double newPrice) {
 		double oldPrice = price;
 		price = newPrice;
@@ -366,6 +376,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LocalDate getEta() {
 		return eta;
 	}
@@ -375,6 +386,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEta(LocalDate newEta) {
 		LocalDate oldEta = eta;
 		eta = newEta;
@@ -387,6 +399,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getReferencePrice() {
 		return referencePrice;
 	}
@@ -396,6 +409,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setReferencePrice(double newReferencePrice) {
 		double oldReferencePrice = referencePrice;
 		referencePrice = newReferencePrice;
@@ -408,6 +422,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getStartVolume() {
 		return startVolume;
 	}
@@ -417,6 +432,7 @@ public class MTMRowImpl extends EObjectImpl implements MTMRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartVolume(long newStartVolume) {
 		long oldStartVolume = startVolume;
 		startVolume = newStartVolume;

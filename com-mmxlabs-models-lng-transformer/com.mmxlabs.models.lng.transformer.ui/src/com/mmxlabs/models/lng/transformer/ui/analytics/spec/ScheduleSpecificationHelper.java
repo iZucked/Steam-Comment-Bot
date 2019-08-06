@@ -28,8 +28,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.Provides;
-import com.google.inject.name.Named;
+import com.mmxlabs.common.util.TriConsumer;
+import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.SlotType;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
@@ -37,11 +37,11 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InitialPhaseOptimisationDataModule;
@@ -62,12 +62,8 @@ import com.mmxlabs.scheduler.optimiser.scheduling.ICustomTimeWindowTrimmer;
 
 public class ScheduleSpecificationHelper {
 	private final List<BiFunction<LNGScenarioToOptimiserBridge, Injector, Supplier<Command>>> jobs = new LinkedList<>();
-	private final List<VesselAvailability> extraAvailabilities = new LinkedList<>();
-	private final List<CharterInMarketOverride> extraCharterInMarketOverrides = new LinkedList<>();
-	private final List<CharterInMarket> extraCharterInMarkets = new LinkedList<>();
 
-	private final List<LoadSlot> extraLoads = new LinkedList<>();
-	private final List<DischargeSlot> extraDischarges = new LinkedList<>();
+	private ExtraDataProvider extraDataProvider = new ExtraDataProvider();
 
 	private IScenarioDataProvider scenarioDataProvider;
 	private @Nullable IOptimiserInjectorService extraInjectorService;
@@ -76,31 +72,16 @@ public class ScheduleSpecificationHelper {
 		this.scenarioDataProvider = scenarioDataProvider;
 	}
 
-	public void processExtraDataProvider(ExtraDataProvider extraDataProvider) {
+	public synchronized void processExtraDataProvider(ExtraDataProvider extraDataProvider) {
 
-		// Null Check
-		if (extraDataProvider.extraVesselAvailabilities != null) {
-			extraAvailabilities.addAll(extraDataProvider.extraVesselAvailabilities);
-		}
-		if (extraDataProvider.extraCharterInMarkets != null) {
-			extraCharterInMarkets.addAll(extraDataProvider.extraCharterInMarkets);
-		}
-		if (extraDataProvider.extraCharterInMarketOverrides != null) {
-			extraCharterInMarketOverrides.addAll(extraDataProvider.extraCharterInMarketOverrides);
-		}
-		if (extraDataProvider.extraLoads != null) {
-			extraLoads.addAll(extraDataProvider.extraLoads);
-		}
-		if (extraDataProvider.extraDischarges != null) {
-			extraDischarges.addAll(extraDataProvider.extraDischarges);
-		}
+		this.extraDataProvider.merge(extraDataProvider);
 	}
 
-	public void addJobs(BiFunction<LNGScenarioToOptimiserBridge, Injector, Supplier<Command>> job) {
+	public synchronized void addJobs(BiFunction<LNGScenarioToOptimiserBridge, Injector, Supplier<Command>> job) {
 		jobs.add(job);
 	}
 
-	public void generateWith(final ScenarioInstance scenarioInstance, final UserSettings userSettings, final EditingDomain editingDomain, Collection<String> initialHints,
+	public synchronized void generateWith(final ScenarioInstance scenarioInstance, final UserSettings userSettings, final EditingDomain editingDomain, Collection<String> initialHints,
 			Consumer<LNGScenarioToOptimiserBridge> action) {
 
 		final UserSettings settings = EcoreUtil.copy(userSettings);
@@ -113,12 +94,12 @@ public class ScheduleSpecificationHelper {
 
 		final SolutionBuilderSettings solutionBuilderSettings = ParametersFactory.eINSTANCE.createSolutionBuilderSettings();
 		solutionBuilderSettings.setConstraintAndFitnessSettings(ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings());
-		
+
 		final int cores = LNGScenarioChainBuilder.getNumberOfAvailableCores();
 
 		final LNGScenarioToOptimiserBridge bridge = new LNGScenarioToOptimiserBridge(scenarioDataProvider, //
 				scenarioInstance, //
-				settings, //
+				extraDataProvider, settings, //
 				solutionBuilderSettings, //
 				editingDomain, //
 				cores, //
@@ -128,40 +109,10 @@ public class ScheduleSpecificationHelper {
 
 							@Override
 							protected void configure() {
-
 								bind(ViabilityWindowTrimmer.class).in(Singleton.class);
 								bind(ICustomTimeWindowTrimmer.class).to(ViabilityWindowTrimmer.class);
 							}
 
-							@Provides
-							@Named(LNGScenarioTransformer.EXTRA_VESSEL_AVAILABILITIES)
-							private List<VesselAvailability> provideExtraAvailabilities() {
-								return extraAvailabilities;
-							}
-
-							@Provides
-							@Named(LNGScenarioTransformer.EXTRA_CHARTER_IN_MARKET_OVERRIDES)
-							private List<CharterInMarketOverride> provideCharterInMarketOverrides() {
-								return extraCharterInMarketOverrides;
-							}
-
-							@Provides
-							@Named(LNGScenarioTransformer.EXTRA_CHARTER_IN_MARKETS)
-							private List<CharterInMarket> provideCharterInMarkets() {
-								return extraCharterInMarkets;
-							}
-
-							@Provides
-							@Named(LNGScenarioTransformer.EXTRA_LOAD_SLOTS)
-							private List<LoadSlot> provideLoadSlots() {
-								return extraLoads;
-							}
-
-							@Provides
-							@Named(LNGScenarioTransformer.EXTRA_DISCHARGE_SLOTS)
-							private List<DischargeSlot> provideDischargeSlots() {
-								return extraDischarges;
-							}
 						})//
 
 						.make(), //
@@ -172,129 +123,106 @@ public class ScheduleSpecificationHelper {
 		action.accept(bridge);
 	}
 
-	public void generateResults(final ScenarioInstance scenarioInstance, final UserSettings userSettings, final EditingDomain editingDomain, Collection<String> initialHints,
+	public synchronized void generateResults(final ScenarioInstance scenarioInstance, final UserSettings userSettings, final EditingDomain editingDomain, Collection<String> initialHints,
 			IProgressMonitor monitor) {
 
 		monitor.beginTask("Evaluate", jobs.size());
 		try {
-			final UserSettings settings = EcoreUtil.copy(userSettings);
-			settings.unsetPeriodStartDate();
-			settings.unsetPeriodEnd();
 
-			@NonNull
-			final Collection<@NonNull String> hints = new LinkedList<>(initialHints);
-			hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+			TriConsumer<LNGScenarioToOptimiserBridge, Injector, Integer> action = (bridge, injector, cores) -> {
 
-			final SolutionBuilderSettings solutionBuilderSettings = ParametersFactory.eINSTANCE.createSolutionBuilderSettings();
-			solutionBuilderSettings.setConstraintAndFitnessSettings(ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings());
-			final int cores = LNGScenarioChainBuilder.getNumberOfAvailableCores();
-			final LNGScenarioToOptimiserBridge bridge = new LNGScenarioToOptimiserBridge(scenarioDataProvider, //
-					scenarioInstance, //
-					settings, //
-					solutionBuilderSettings, //
-					editingDomain, //
-					cores, //
-					null, //
-					OptimiserInjectorServiceMaker.begin()//
-							.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, new AbstractModule() {
-
-								@Override
-								protected void configure() {
-									// Nothing to do here - all in providers
-								}
-
-								@Provides
-								@Named(LNGScenarioTransformer.EXTRA_VESSEL_AVAILABILITIES)
-								private List<VesselAvailability> provideExtraAvailabilities() {
-									return extraAvailabilities;
-								}
-
-								@Provides
-								@Named(LNGScenarioTransformer.EXTRA_CHARTER_IN_MARKET_OVERRIDES)
-								private List<CharterInMarketOverride> provideCharterInMarketOverrides() {
-									return extraCharterInMarketOverrides;
-								}
-
-								@Provides
-								@Named(LNGScenarioTransformer.EXTRA_CHARTER_IN_MARKETS)
-								private List<CharterInMarket> provideCharterInMarkets() {
-									return extraCharterInMarkets;
-								}
-
-								@Provides
-								@Named(LNGScenarioTransformer.EXTRA_LOAD_SLOTS)
-								private List<LoadSlot> provideLoadSlots() {
-									return extraLoads;
-								}
-
-								@Provides
-								@Named(LNGScenarioTransformer.EXTRA_DISCHARGE_SLOTS)
-								private List<DischargeSlot> provideDischargeSlots() {
-									return extraDischarges;
-								}
-							})//
-							.make(extraInjectorService), //
-
-					true, // evaluation only?
-					hints.toArray(new String[hints.size()]) // Hints? No Caching?
-			);
-			// Probably need to bring in the evaluation modules
-			final Collection<IOptimiserInjectorService> services = bridge.getDataTransformer().getModuleServices();
-
-			// FIXME: Disable main break even evaluator
-			// FIXME: Disable caches!
-
-			final List<Module> modules = new LinkedList<>();
-
-			ISequences emptySequences = new ModifiableSequences(new LinkedList<>());
-			modules.add(new InitialSequencesModule(emptySequences));
-			modules.add(new InputSequencesModule(emptySequences));
-			modules.add(new InitialPhaseOptimisationDataModule());
-
-			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings()),
-					services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
-			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
-
-			final Injector injector = bridge.getInjector().createChildInjector(modules);
-			ExecutorService executor = LNGScenarioChainBuilder.createExecutorService(cores);
-			try {
-				List<Future<?>> futures = new ArrayList<>(jobs.size());
-				List<Supplier<Command>> commandSuppliers = new LinkedList<>();
-				jobs.forEach(c -> futures.add(executor.submit(() -> {
-					Supplier<Command> cc = c.apply(bridge, injector);
-					if (cc != null) {
-						commandSuppliers.add(cc);
-					}
-					monitor.worked(1);
-				})));
-				futures.forEach(f -> {
-					try {
-						f.get();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				});
-				if (!commandSuppliers.isEmpty()) {
-					CommandStack commandStack = editingDomain.getCommandStack();
-					CompoundCommand cmd = new CompoundCommand();
-					for (Supplier<Command> s : commandSuppliers) {
-						Command c = s.get();
-						if (c != null) {
-							cmd.append(c);
+				ExecutorService executor = LNGScenarioChainBuilder.createExecutorService(cores);
+				try {
+					List<Future<?>> futures = new ArrayList<>(jobs.size());
+					List<Supplier<Command>> commandSuppliers = new LinkedList<>();
+					jobs.forEach(c -> futures.add(executor.submit(() -> {
+						Supplier<Command> cc = c.apply(bridge, injector);
+						if (cc != null) {
+							synchronized (commandSuppliers) {
+								commandSuppliers.add(cc);
+							}
 						}
-					}
-					RunnerHelper.syncExecDisplayOptional(() -> {
-						CommandStack commandStack1 = editingDomain.getCommandStack();
-						commandStack.execute(cmd);
+						monitor.worked(1);
+					})));
+					futures.forEach(f -> {
+						try {
+							f.get();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					});
+					if (!commandSuppliers.isEmpty()) {
+						CommandStack commandStack = editingDomain.getCommandStack();
+						CompoundCommand cmd = new CompoundCommand();
+						for (Supplier<Command> s : commandSuppliers) {
+							Command c = s.get();
+							if (c != null) {
+								cmd.append(c);
+							}
+						}
+						RunnerHelper.syncExecDisplayOptional(() -> {
+							CommandStack commandStack1 = editingDomain.getCommandStack();
+							commandStack.execute(cmd);
+						});
+					}
+				} finally {
+					executor.shutdownNow();
 				}
-			} finally {
-				executor.shutdownNow();
-			}
+			};
+			withRunner(scenarioInstance, userSettings, editingDomain, initialHints, action);
 		} finally {
 			monitor.done();
 		}
+	}
+
+	public synchronized void withRunner(final ScenarioInstance scenarioInstance, final UserSettings userSettings, final EditingDomain editingDomain, Collection<String> initialHints,
+			TriConsumer<LNGScenarioToOptimiserBridge, Injector, Integer> action) {
+
+		final UserSettings settings = EcoreUtil.copy(userSettings);
+		settings.unsetPeriodStartDate();
+		settings.unsetPeriodEnd();
+
+		@NonNull
+		final Collection<@NonNull String> hints = new LinkedList<>(initialHints);
+		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+
+		final SolutionBuilderSettings solutionBuilderSettings = ParametersFactory.eINSTANCE.createSolutionBuilderSettings();
+		solutionBuilderSettings.setConstraintAndFitnessSettings(ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings());
+		final int cores = LNGScenarioChainBuilder.getNumberOfAvailableCores();
+		final LNGScenarioToOptimiserBridge bridge = new LNGScenarioToOptimiserBridge(scenarioDataProvider, //
+				scenarioInstance, //
+				extraDataProvider, //
+				settings, //
+				solutionBuilderSettings, //
+				editingDomain, //
+				cores, //
+				null, //
+				extraInjectorService, //
+				true, // evaluation only?
+				hints.toArray(new String[hints.size()]) // Hints? No Caching?
+		);
+		// Probably need to bring in the evaluation modules
+		final Collection<IOptimiserInjectorService> services = bridge.getDataTransformer().getModuleServices();
+
+		// FIXME: Disable main break even evaluator
+		// FIXME: Disable caches!
+
+		final List<Module> modules = new LinkedList<>();
+		//
+		ISequences emptySequences = new ModifiableSequences(new LinkedList<>());
+		modules.add(new InitialSequencesModule(emptySequences));
+		modules.add(new InputSequencesModule(emptySequences));
+		modules.add(new InitialPhaseOptimisationDataModule());
+
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings()),
+				services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
+
+		final Injector injector = bridge.getInjector().createChildInjector(modules);
+
+		action.accept(bridge, injector, cores);
+
 	}
 
 	public static SlotType getSlotType(final Slot slot) {
@@ -310,16 +238,45 @@ public class ScheduleSpecificationHelper {
 		throw new IllegalArgumentException();
 	}
 
-	public void processExtraData_Loads(List<LoadSlot> extraLoads2) {
-		this.extraLoads.addAll(extraLoads2);
+	public synchronized void processExtraData_Loads(List<LoadSlot> extraLoads2) {
+		this.extraDataProvider.extraLoads.addAll(extraLoads2);
 
 	}
 
-	public void processExtraData_Discharges(List<DischargeSlot> extraDischarges2) {
-		this.extraDischarges.addAll(extraDischarges2);
+	public synchronized void processExtraData_Discharges(List<DischargeSlot> extraDischarges2) {
+		this.extraDataProvider.extraDischarges.addAll(extraDischarges2);
 	}
 
-	public void withModuleService(@NonNull IOptimiserInjectorService extraInjectorService) {
+	public synchronized void processExtraData_VesselEvents(List<VesselEvent> extraEvents) {
+		this.extraDataProvider.extraVesselEvents.addAll(extraEvents);
+	}
+
+	public synchronized void withModuleService(@NonNull IOptimiserInjectorService extraInjectorService) {
 		this.extraInjectorService = extraInjectorService;
 	}
+
+	public synchronized void processExtraData_VesselAvailabilities(List<VesselAvailability> extraVesselAvailabilities) {
+		if (extraVesselAvailabilities != null) {
+			this.extraDataProvider.extraVesselAvailabilities.addAll(extraVesselAvailabilities);
+		}
+	}
+
+	public synchronized void processExtraData_CharterInMarkets(List<CharterInMarket> extraCharterInMarkets) {
+		if (extraCharterInMarkets != null) {
+			this.extraDataProvider.extraCharterInMarkets.addAll(extraCharterInMarkets);
+		}
+	}
+
+	public synchronized void processExtraData_CharterInMarketOverrides(List<CharterInMarketOverride> extraCharterInMarketOverrides) {
+		if (extraCharterInMarketOverrides != null) {
+			this.extraDataProvider.extraCharterInMarketOverrides.addAll(extraCharterInMarketOverrides);
+		}
+	}
+
+	public void processExtraData(@Nullable AbstractSolutionSet solutionSet) {
+		if (solutionSet != null) {
+			extraDataProvider.merge(solutionSet);
+		}
+	}
+
 }

@@ -81,6 +81,9 @@ public class VesselsFromScenarioCopier {
 			if (lingo_vessel.isSetWarmingTime()) {
 				vessel.setWarmingTime(OptionalInt.of(lingo_vessel.getWarmingTime()));
 			}
+			if (lingo_vessel.isSetPurgeTime()) {
+				vessel.setPurgeTime(OptionalInt.of(lingo_vessel.getPurgeTime()));
+			}
 
 			if (lingo_vessel.isSetPilotLightRate()) {
 				vessel.setPilotLightRate(OptionalDouble.of(lingo_vessel.getPilotLightRate()));

@@ -31,7 +31,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionC
 @ExtendWith(ShiroRunner.class)
 public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
-	private static final boolean RESTRICTION_APPLY_TO_NON_SHIPPED_CARGOES = false;
+//	private static final boolean RESTRICTION_APPLY_TO_NON_SHIPPED_CARGOES = false;
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
@@ -344,8 +344,8 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
+	@Disabled("Restrictions do no apply to non-shipped cargoes")
 	public void testDESPurchaseVesselRestrictions_VesselExists() throws Exception {
-		Assumptions.assumeTrue(RESTRICTION_APPLY_TO_NON_SHIPPED_CARGOES);
 
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -436,8 +436,8 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
+	@Disabled("Restrictions do no apply to non-shipped cargoes")
 	public void testDESPurchaseVesselRestrictions_VesselExists2() throws Exception {
-		Assumptions.assumeTrue(RESTRICTION_APPLY_TO_NON_SHIPPED_CARGOES);
 
 		// Create the required basic elements
 		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
@@ -468,8 +468,8 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
+	@Disabled("Restrictions do no apply to non-shipped cargoes")
 	public void testFOBSaleVesselRestrictions_VesselExists() throws Exception {
-		Assumptions.assumeTrue(RESTRICTION_APPLY_TO_NON_SHIPPED_CARGOES);
 
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -497,8 +497,8 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
+	@Disabled("Restrictions do no apply to non-shipped cargoes")
 	public void testFOBSaleVesselRestrictions_VesselExists2() throws Exception {
-		Assumptions.assumeTrue(RESTRICTION_APPLY_TO_NON_SHIPPED_CARGOES);
 
 		// Create the required basic elements
 		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
@@ -529,8 +529,8 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
+	@Disabled("Restrictions do no apply to non-shipped cargoes")
 	public void testDESPurchaseVesselRestrictions_WrongVessel() throws Exception {
-		Assumptions.assumeTrue(RESTRICTION_APPLY_TO_NON_SHIPPED_CARGOES);
 
 		// Create the required basic elements
 		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
@@ -560,8 +560,8 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
+	@Disabled("Restrictions do no apply to non-shipped cargoes")
 	public void testDESPurchaseVesselRestrictions_WrongVesselClass() throws Exception {
-		Assumptions.assumeTrue(RESTRICTION_APPLY_TO_NON_SHIPPED_CARGOES);
 
 		// Create the required basic elements
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -590,8 +590,8 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
+	@Disabled("Restrictions do no apply to non-shipped cargoes")
 	public void testFOBSaleVesselRestrictions_WrongVessel() throws Exception {
-		Assumptions.assumeTrue(RESTRICTION_APPLY_TO_NON_SHIPPED_CARGOES);
 
 		// Create the required basic elements
 		final Vessel source = fleetModelFinder.findVessel("STEAM-145");

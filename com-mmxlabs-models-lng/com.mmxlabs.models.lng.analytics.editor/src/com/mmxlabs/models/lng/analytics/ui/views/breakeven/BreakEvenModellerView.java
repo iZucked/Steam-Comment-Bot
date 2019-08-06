@@ -320,8 +320,8 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 	}
 
 	@Override
-	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
-		doDisplayScenarioInstance(scenarioInstance, rootObject, null);
+	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable Object target) {
+		doDisplayScenarioInstance(scenarioInstance, rootObject, target);
 
 		updateActions(getEditingDomain());
 	}
@@ -371,7 +371,7 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 							// model.setBaseCase(AnalyticsFactory.eINSTANCE.createBaseCase());
 							// model.setPartialCase(AnalyticsFactory.eINSTANCE.createPartialCase());
 
-							final CompoundCommand cmd = new CompoundCommand("Create sandbox");
+							final CompoundCommand cmd = new CompoundCommand("Create B/E  sandbox");
 							cmd.append(AddCommand.create(getEditingDomain(), analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_BreakevenModels(), Collections.singletonList(model)));
 							getEditingDomain().getCommandStack().execute(cmd);
 
@@ -381,8 +381,8 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 					});
 					// createNewLink.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 					// createNewLink.setText("No sandbox selected");
-					createNewLink.setText("<A>Create new sandbox</A>");
-					createNewLink.setToolTipText("Create new sandbox");
+					createNewLink.setText("<A>Create new B/E  sandbox</A>");
+					createNewLink.setToolTipText("Create new B/E  sandbox");
 					// createNewLink.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 					//
 					// createNewLink.addMouseListener(new MouseAdapter() {
@@ -432,13 +432,13 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_BreakevenModels()) {
 				if (notification.getEventType() == Notification.REMOVE) {
 					if (model != null && notification.getOldValue() == model) {
-						displayScenarioInstance(getScenarioInstance());
+						displayScenarioInstance(getScenarioInstance(), getRootObject(), null);
 						if (getCurrentRoot() == model) {
 							setCurrentRoot(null);
 						}
 						// navigationHistory.remove(model);
 					} else if (rootOptionsModel != null && notification.getOldValue() == rootOptionsModel) {
-						displayScenarioInstance(getScenarioInstance());
+						displayScenarioInstance(getScenarioInstance(), getRootObject(), null);
 						if (getCurrentRoot() == rootOptionsModel) {
 							setCurrentRoot(null);
 						}

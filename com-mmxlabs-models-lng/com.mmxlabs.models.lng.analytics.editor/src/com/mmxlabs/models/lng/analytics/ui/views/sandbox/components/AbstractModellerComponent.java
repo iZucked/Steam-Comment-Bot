@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -50,8 +52,9 @@ import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
-import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.EditObjectMouseListener;
@@ -72,6 +75,8 @@ public abstract class AbstractModellerComponent<T, U> {
 	protected final Image image_grey_add;
 
 	protected final Font boldFont;
+	protected boolean locked;
+	protected Collection<Consumer<Boolean>> lockedListeners = Sets.newConcurrentHashSet();
 
 	protected AbstractModellerComponent(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors, @NonNull Supplier<U> modelProvider) {
 		this.scenarioEditingLocation = scenarioEditingLocation;
@@ -126,11 +131,24 @@ public abstract class AbstractModellerComponent<T, U> {
 
 	protected void hookDragSource(final GridTreeViewer viewer) {
 
-		final DragSource source = new DragSource(viewer.getGrid(), DND.DROP_MOVE);
+		final DragSource source = new DragSource(viewer.getGrid(), DND.DROP_LINK);
 		final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 		source.setTransfer(types);
 
-		source.addDragListener(new BasicDragSource(viewer));
+		source.addDragListener(new BasicDragSource(viewer) {
+			@Override
+			public void dragSetData(final DragSourceEvent event) {
+				super.dragSetData(event);
+
+				if (locked) {
+					event.doit = false;
+					event.detail = DND.DROP_NONE;
+				} else {
+					event.detail = DND.DROP_LINK;
+				}
+			}
+		});
+		;
 	}
 
 	protected void hookOpenEditor(final @NonNull GridTreeViewer viewer) {
@@ -187,7 +205,7 @@ public abstract class AbstractModellerComponent<T, U> {
 				} else {
 					if (element instanceof RoundTripShippingOption) {
 						return imgShippingRoundTrip;
-					} else if (element instanceof FleetShippingOption) {
+					} else if (element instanceof SimpleVesselCharterOption) {
 						return imgShippingFleet;
 					}
 				}
@@ -471,4 +489,25 @@ public abstract class AbstractModellerComponent<T, U> {
 		};
 	}
 
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+		lockedListeners.forEach(e -> e.accept(locked));
+		doSetLocked(locked);
+	}
+
+	protected void doSetLocked(boolean locked) {
+		// Subclasses should override this method to react to new locked state (or use the locked listeners).
+	}
+
+	protected void addLockedListener(Consumer<Boolean> l) {
+		lockedListeners.add(l);
+	}
+
+	protected void removeLockedListener(Consumer<Boolean> l) {
+		lockedListeners.remove(l);
+	}
 }

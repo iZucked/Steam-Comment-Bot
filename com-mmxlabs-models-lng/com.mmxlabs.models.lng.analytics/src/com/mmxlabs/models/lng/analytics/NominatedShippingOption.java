@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.analytics;
 
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +25,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
  * @model
  * @generated
  */
-public interface NominatedShippingOption extends ShippingOption {
+public interface NominatedShippingOption extends UUIDObject, ShippingOption {
 	/**
 	 * Returns the value of the '<em><b>Nominated Vessel</b></em>' reference.
 	 * <!-- begin-user-doc -->

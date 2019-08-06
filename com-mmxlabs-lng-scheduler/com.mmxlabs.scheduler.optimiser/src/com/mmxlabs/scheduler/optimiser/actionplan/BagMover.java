@@ -172,7 +172,7 @@ public class BagMover {
 		if (tryDepth == 0 || differencesList.size() == 0) {
 			boolean failedEvaluation = false;
 
-			final long @Nullable [] thisMetrics = evaluationHelper.evaluateState(currentRawSequences, currentFullSequences, currentChangedResources, /* run evaluated state checkers */ false,
+			final long @Nullable [] thisMetrics = evaluationHelper.evaluateState(currentRawSequences, currentFullSequences, currentChangedResources, true, /* run evaluated state checkers */ false,
 					similarityState.getBaseMetrics(), searchStatistics);
 			if (thisMetrics != null) {
 				final long thisLateness = thisMetrics[MetricType.LATENESS.ordinal()];

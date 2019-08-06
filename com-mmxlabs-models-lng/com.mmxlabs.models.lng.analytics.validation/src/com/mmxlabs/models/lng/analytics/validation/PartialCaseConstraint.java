@@ -61,19 +61,19 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 			});
 			// Second pass, report problem slots
 			processPartialCase(partialCase, (row, slot) -> {
-				if (duplicatedLoadSlots.contains(slot)) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus(String.format("%s - existing slot used multiple times.", viewName, IConstraintStatus.ERROR)));
-					deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS);
-					statuses.add(deco);
-				}
+//				if (duplicatedLoadSlots.contains(slot)) {
+//					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+//							(IConstraintStatus) ctx.createFailureStatus(String.format("%s - existing slot used multiple times.", viewName, IConstraintStatus.ERROR)));
+//					deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS);
+//					statuses.add(deco);
+//				}
 			}, (row, slot) -> {
-				if (duplicatdDischargeSlots.contains(slot)) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus(String.format("%s - existing slot used multiple times.", viewName, IConstraintStatus.ERROR)));
-					deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS);
-					statuses.add(deco);
-				}
+//				if (duplicatdDischargeSlots.contains(slot)) {
+//					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+//							(IConstraintStatus) ctx.createFailureStatus(String.format("%s - existing slot used multiple times.", viewName, IConstraintStatus.ERROR)));
+//					deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS);
+//					statuses.add(deco);
+//				}
 			});
 
 			final Set<PartialCaseRow> loadQuestion = new HashSet<>();

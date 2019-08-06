@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -37,6 +38,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.ui.editorpart.PortGroupEditorPane;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -144,7 +146,7 @@ public class PortGroupView extends ScenarioInstanceView {
 	};
 
 	@Override
-	protected void displayScenarioInstance(ScenarioInstance instance) {
+	protected void displayScenarioInstance(final ScenarioInstance instance, @Nullable MMXRootObject rootObject, @Nullable Object targetObject) {
 		if (instance != getScenarioInstance()) {
 			if (viewerPane != null) {
 				viewerPane.dispose();
@@ -156,14 +158,14 @@ public class PortGroupView extends ScenarioInstanceView {
 			sash.dispose();
 			sash = new SashForm(parent, SWT.HORIZONTAL);
 
-			super.displayScenarioInstance(instance);
+			super.displayScenarioInstance(instance, rootObject, targetObject);
 			if (instance != null) {
 				viewerPane = new PortGroupEditorPane(getSite().getPage(), this, this, getViewSite().getActionBars());
 				viewerPane.setExternalMenuManager((MenuManager) getViewSite().getActionBars().getMenuManager());
 				viewerPane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
 				viewerPane.createControl(sash);
-				viewerPane.init(Lists.newArrayList(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_PortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups()), getAdapterFactory(),
-						 getModelReference());
+				viewerPane.init(Lists.newArrayList(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_PortModel(),
+						PortPackage.eINSTANCE.getPortModel_PortGroups()), getAdapterFactory(), getModelReference());
 				viewerPane.getViewer().setInput(getRootObject());
 
 				contentViewer = CheckboxTableViewer.newCheckList(sash, SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);

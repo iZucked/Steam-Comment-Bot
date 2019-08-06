@@ -68,6 +68,8 @@ public final class Vessel implements IVessel {
 	 * The time in hours required for empty tanks to warm up on vessels of this class.
 	 */
 	private int warmupTime;
+	
+	private int purgeTime;
 
 	private IBaseFuel baseFuel = null;
 	private IBaseFuel inPortBaseFuel = null;
@@ -213,6 +215,11 @@ public final class Vessel implements IVessel {
 	public int getWarmupTime() {
 		return warmupTime;
 	}
+	
+	@Override
+	public int getPurgeTime() {
+		return purgeTime;
+	}
 
 	@Override
 	public long getCooldownVolume() {
@@ -225,6 +232,10 @@ public final class Vessel implements IVessel {
 
 	public void setWarmupTime(final int warmupTime) {
 		this.warmupTime = warmupTime;
+	}
+	
+	public void setPurgeTime(final int purgeTime) {
+		this.purgeTime = purgeTime;
 	}
 
 	@Override

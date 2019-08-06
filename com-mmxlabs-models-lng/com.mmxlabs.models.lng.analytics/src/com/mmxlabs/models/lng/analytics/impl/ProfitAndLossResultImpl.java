@@ -73,6 +73,7 @@ public class ProfitAndLossResultImpl extends AnalysisResultDetailImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getValue() {
 		return value;
 	}
@@ -82,6 +83,7 @@ public class ProfitAndLossResultImpl extends AnalysisResultDetailImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValue(double newValue) {
 		double oldValue = value;
 		value = newValue;

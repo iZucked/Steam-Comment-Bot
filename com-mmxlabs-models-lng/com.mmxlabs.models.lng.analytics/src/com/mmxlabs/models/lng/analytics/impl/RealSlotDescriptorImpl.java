@@ -73,6 +73,7 @@ public class RealSlotDescriptorImpl extends SlotDescriptorImpl implements RealSl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getSlotName() {
 		return slotName;
 	}
@@ -82,6 +83,7 @@ public class RealSlotDescriptorImpl extends SlotDescriptorImpl implements RealSl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlotName(String newSlotName) {
 		String oldSlotName = slotName;
 		slotName = newSlotName;

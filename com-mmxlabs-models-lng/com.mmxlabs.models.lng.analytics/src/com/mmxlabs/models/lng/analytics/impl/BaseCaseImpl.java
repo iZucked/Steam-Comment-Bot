@@ -116,6 +116,7 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<BaseCaseRow> getBaseCase() {
 		if (baseCase == null) {
 			baseCase = new EObjectContainmentEList<BaseCaseRow>(BaseCaseRow.class, this, AnalyticsPackage.BASE_CASE__BASE_CASE);
@@ -128,6 +129,7 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getProfitAndLoss() {
 		return profitAndLoss;
 	}
@@ -137,6 +139,7 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setProfitAndLoss(long newProfitAndLoss) {
 		long oldProfitAndLoss = profitAndLoss;
 		profitAndLoss = newProfitAndLoss;
@@ -149,6 +152,7 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isKeepExistingScenario() {
 		return keepExistingScenario;
 	}
@@ -158,6 +162,7 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setKeepExistingScenario(boolean newKeepExistingScenario) {
 		boolean oldKeepExistingScenario = keepExistingScenario;
 		keepExistingScenario = newKeepExistingScenario;

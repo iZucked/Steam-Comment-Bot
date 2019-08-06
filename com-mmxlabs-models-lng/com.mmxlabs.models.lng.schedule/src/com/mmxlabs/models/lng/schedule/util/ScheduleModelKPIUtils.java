@@ -41,9 +41,14 @@ import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.OtherPNL;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.PortVisitLateness;
+import com.mmxlabs.models.lng.schedule.PortVisitLatenessType;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
@@ -102,6 +107,12 @@ public class ScheduleModelKPIUtils {
 			}
 		}
 
+		if (schedule.getOtherPNL() != null) {
+			totalTradingPNL += getElementTradingPNL(schedule.getOtherPNL());
+			totalShippingPNL += getElementShippingPNL(schedule.getOtherPNL());
+			totalShippingPNL += getElementUpstreamPNL(schedule.getOtherPNL());
+		}
+
 		final long[] result = new long[PNL_COMPONENT_COUNT];
 		result[SHIPPING_PNL_IDX] = totalShippingPNL;
 		result[TRADING_PNL_IDX] = totalTradingPNL;
@@ -134,6 +145,9 @@ public class ScheduleModelKPIUtils {
 		}
 		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
 			totalPNL += getElementPNL(openSlotAllocation);
+		}
+		if (schedule.getOtherPNL() != null) {
+			totalPNL += schedule.getOtherPNL().getGroupProfitAndLoss().getProfitAndLoss();
 		}
 
 		return totalPNL;
@@ -204,6 +218,14 @@ public class ScheduleModelKPIUtils {
 						totalLatenessHoursIncludingFlex += Math.abs(latenessInHours);
 					}
 				}
+			}
+		}
+		if (schedule.getOtherPNL() != null) {
+
+			final long latenessInHours = LatenessUtils.getLatenessInHours(schedule.getOtherPNL());
+			if (LatenessUtils.isLateExcludingFlex(schedule.getOtherPNL())) {
+				// Ensure positive
+				totalLatenessHoursExcludingFlex += Math.abs(latenessInHours);
 			}
 		}
 		final int[] result = new int[LATENESS_COMPONENT_COUNT];
@@ -343,10 +365,10 @@ public class ScheduleModelKPIUtils {
 		return addnPNL;
 	}
 
-	public static long getEntityProfitAndLoss(@Nullable final ProfitAndLossContainer profitAndLossContainer, BaseLegalEntity targetEntity) {
+	public static long getEntityProfitAndLoss(@Nullable final ProfitAndLossContainer profitAndLossContainer, final BaseLegalEntity targetEntity) {
 		long pnl = 0L;
 		if (profitAndLossContainer != null) {
-			GroupProfitAndLoss groupPnL = profitAndLossContainer.getGroupProfitAndLoss();
+			final GroupProfitAndLoss groupPnL = profitAndLossContainer.getGroupProfitAndLoss();
 			for (final EntityProfitAndLoss entityPnL : groupPnL.getEntityProfitAndLosses()) {
 				final BaseLegalEntity entity = entityPnL.getEntity();
 				if (entity == targetEntity) {
@@ -390,7 +412,7 @@ public class ScheduleModelKPIUtils {
 	}
 
 	public static Set<CapacityViolationType> getCapacityViolations(@Nullable final EventGrouping eventGrouping) {
-		Set<CapacityViolationType> violations = new HashSet<CapacityViolationType>();
+		final Set<CapacityViolationType> violations = new HashSet<CapacityViolationType>();
 		if (eventGrouping != null) {
 			for (final Event evt : eventGrouping.getEvents()) {
 				if (evt instanceof SlotVisit) {
@@ -457,8 +479,9 @@ public class ScheduleModelKPIUtils {
 		}
 		return null;
 	}
-	
-	public static Integer calculateLegFuel(final Object object, final EStructuralFeature cargoAllocationRef, final EStructuralFeature allocationRef,  ShippingCostType shippingCostType, @NonNull final TotalType totalType) {
+
+	public static Integer calculateLegFuel(final Object object, final EStructuralFeature cargoAllocationRef, final EStructuralFeature allocationRef, final ShippingCostType shippingCostType,
+			@NonNull final TotalType totalType) {
 		if (object instanceof EObject) {
 			final EObject eObject = (EObject) object;
 			final CargoAllocation cargoAllocation = (CargoAllocation) eObject.eGet(cargoAllocationRef);
@@ -537,7 +560,7 @@ public class ScheduleModelKPIUtils {
 		if (allocation != null && cargoAllocation != null) {
 
 			boolean collecting = false;
-			int total = 0;
+			final int total = 0;
 			for (final Event event : cargoAllocation.getEvents()) {
 				if (event instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) event;
@@ -561,15 +584,15 @@ public class ScheduleModelKPIUtils {
 	}
 
 	public enum ShippingCostType {
-		ALL, LNG_COSTS, PORT_COSTS, BUNKER_COSTS, CANAL_COSTS, COOLDOWN_COSTS, HIRE_COSTS, OTHER_COSTS, HEEL_COST, HEEL_REVENUE, //
+		ALL, LNG_COSTS, PORT_COSTS, BUNKER_COSTS, CANAL_COSTS, COOLDOWN_COSTS, PURGE_COSTS, HIRE_COSTS, OTHER_COSTS, HEEL_COST, HEEL_REVENUE, //
 		HOURS // Not included in all
 	}
-	
+
 	public enum TotalType {
 		QUANTITY_M3, QUANTITY_MMBTU, QUANTITY_MT, COST
 	}
 
-	public static Long calculateEventShippingCost(final @Nullable EventGrouping grouping, final boolean includeAllLNG, final boolean includeRevenue, ShippingCostType costType) {
+	public static Long calculateEventShippingCost(final @Nullable EventGrouping grouping, final boolean includeAllLNG, final boolean includeRevenue, final ShippingCostType costType) {
 		long hours = 0;
 		if (grouping != null) {
 			boolean priceBOG = false;
@@ -604,6 +627,12 @@ public class ScheduleModelKPIUtils {
 
 					if (costType == ShippingCostType.ALL || costType == ShippingCostType.COOLDOWN_COSTS) {
 						total += cooldown.getCost();
+					}
+				} else if (event instanceof Purge) {
+					final Purge purge = (Purge) event;
+
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.PURGE_COSTS) {
+						total += purge.getCost();
 					}
 				} else if (event instanceof GeneratedCharterOut) {
 					final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) event;
@@ -682,7 +711,7 @@ public class ScheduleModelKPIUtils {
 		}
 		return sum;
 	}
-	
+
 	protected static long getFuelDetails(final FuelUsage fuelUser, final TotalType totalType, final Fuel... fuels) {
 		final Set<Fuel> fuelsOfInterest = Sets.newHashSet(fuels);
 		long sum = 0L;
@@ -693,17 +722,17 @@ public class ScheduleModelKPIUtils {
 					if (totalType == TotalType.COST) {
 						sum += fq.getCost();
 					} else if (totalType == TotalType.QUANTITY_M3) {
-						Optional<FuelAmount> quantity = fq.getAmounts().stream().filter(a -> a.getUnit() == FuelUnit.M3).findFirst();
+						final Optional<FuelAmount> quantity = fq.getAmounts().stream().filter(a -> a.getUnit() == FuelUnit.M3).findFirst();
 						if (quantity.isPresent()) {
 							sum += quantity.get().getQuantity();
 						}
 					} else if (totalType == TotalType.QUANTITY_MMBTU) {
-						Optional<FuelAmount> quantity = fq.getAmounts().stream().filter(a -> a.getUnit() == FuelUnit.MMBTU).findFirst();
+						final Optional<FuelAmount> quantity = fq.getAmounts().stream().filter(a -> a.getUnit() == FuelUnit.MMBTU).findFirst();
 						if (quantity.isPresent()) {
 							sum += quantity.get().getQuantity();
 						}
 					} else if (totalType == TotalType.QUANTITY_MT) {
-						Optional<FuelAmount> quantity = fq.getAmounts().stream().filter(a -> a.getUnit() == FuelUnit.MMBTU).findFirst();
+						final Optional<FuelAmount> quantity = fq.getAmounts().stream().filter(a -> a.getUnit() == FuelUnit.MMBTU).findFirst();
 						if (quantity.isPresent()) {
 							sum += quantity.get().getQuantity();
 						}
@@ -724,5 +753,119 @@ public class ScheduleModelKPIUtils {
 			shippingCost += calculateLegCost(cargoAllocation, slotAllocation);
 		}
 		return shippingCost;
+	}
+
+	public enum Mode {
+		INCREMENT, DECREMENT
+	}
+
+	private static void updateOtherPNLInternal(final GroupProfitAndLoss target, final ProfitAndLossContainer source, final Mode mode) {
+		// Pre-tax value
+		{
+			final GroupProfitAndLoss sourceG = source.getGroupProfitAndLoss();
+			if (sourceG != null) {
+				long value = target.getProfitAndLossPreTax();
+				value += (mode == Mode.INCREMENT) ? sourceG.getProfitAndLossPreTax() : -sourceG.getProfitAndLossPreTax();
+				target.setProfitAndLossPreTax(value);
+			}
+		}
+		// Post-tax value
+
+		{
+			final GroupProfitAndLoss sourceG = source.getGroupProfitAndLoss();
+			long value = target.getProfitAndLoss();
+			value += (mode == Mode.INCREMENT) ? sourceG.getProfitAndLoss() : -sourceG.getProfitAndLoss();
+			target.setProfitAndLoss(value);
+		}
+		{
+			final GroupProfitAndLoss sourceG = source.getGroupProfitAndLoss();
+			for (final EntityProfitAndLoss sourcePL : sourceG.getEntityProfitAndLosses()) {
+				EntityProfitAndLoss targetPL = null;
+				// Find existing match...
+				for (final EntityProfitAndLoss e : target.getEntityProfitAndLosses()) {
+					if (e.getEntity() == sourcePL.getEntity()) {
+						if (e.getEntityBook() == sourcePL.getEntityBook()) {
+							targetPL = e;
+							break;
+						}
+					}
+				}
+				// ...or create new one
+				if (targetPL == null) {
+					targetPL = ScheduleFactory.eINSTANCE.createEntityProfitAndLoss();
+					targetPL.setEntity(sourcePL.getEntity());
+					targetPL.setEntityBook(sourcePL.getEntityBook());
+					target.getEntityProfitAndLosses().add(targetPL);
+				}
+
+				// Update pre-tax counter
+				{
+					long value = targetPL.getProfitAndLossPreTax();
+					value += (mode == Mode.INCREMENT) ? sourcePL.getProfitAndLossPreTax() : -sourcePL.getProfitAndLossPreTax();
+					targetPL.setProfitAndLossPreTax(value);
+				}
+				// Update post-tax value
+				{
+					long value = targetPL.getProfitAndLoss();
+					value += (mode == Mode.INCREMENT) ? sourcePL.getProfitAndLoss() : -sourcePL.getProfitAndLoss();
+					targetPL.setProfitAndLoss(value);
+				}
+			}
+		}
+	}
+
+	public static void updateOtherPNL(final OtherPNL otherPNL, final Schedule schedule, final Mode mode) {
+
+		GroupProfitAndLoss groupProfitAndLoss = otherPNL.getGroupProfitAndLoss();
+		if (groupProfitAndLoss == null) {
+			groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
+			otherPNL.setGroupProfitAndLoss(groupProfitAndLoss);
+		}
+
+		for (final Sequence seq : schedule.getSequences()) {
+
+			for (final Event evt : seq.getEvents()) {
+				if (evt instanceof SlotVisit) {
+					final SlotVisit visit = (SlotVisit) evt;
+
+					if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+						final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
+						if (cargoAllocation != null) {
+							updateOtherPNLInternal(groupProfitAndLoss, cargoAllocation, mode);
+						}
+					}
+				} else if (evt instanceof ProfitAndLossContainer) {
+					updateOtherPNLInternal(groupProfitAndLoss, (ProfitAndLossContainer) evt, mode);
+				}
+
+				if (evt instanceof PortVisit) {
+					final PortVisit visit = (PortVisit) evt;
+					if (visit.getLateness() != null) {
+						final PortVisitLateness visitLateness = visit.getLateness();
+						if (otherPNL.getLateness() == null) {
+							otherPNL.setLateness(ScheduleFactory.eINSTANCE.createPortVisitLateness());
+							otherPNL.getLateness().setType(PortVisitLatenessType.BEYOND);
+						}
+						final PortVisitLateness otherLateness = otherPNL.getLateness();
+						// Set lateness type to highest priority.
+						otherLateness.setType(PortVisitLatenessType.values()[Math.min(visitLateness.getType().ordinal(), otherLateness.getType().ordinal())]);
+						final int latenessInHours = visitLateness.getLatenessInHours();
+						if (mode == Mode.INCREMENT) {
+							final int total = otherLateness.getLatenessInHours() + latenessInHours;
+							otherLateness.setLatenessInHours(total);
+						} else {
+							final int total = otherLateness.getLatenessInHours() - latenessInHours;
+							otherLateness.setLatenessInHours(total);
+						}
+
+					}
+				}
+			}
+		}
+		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
+			if (openSlotAllocation != null) {
+				updateOtherPNLInternal(groupProfitAndLoss, openSlotAllocation, mode);
+			}
+		}
 	}
 }

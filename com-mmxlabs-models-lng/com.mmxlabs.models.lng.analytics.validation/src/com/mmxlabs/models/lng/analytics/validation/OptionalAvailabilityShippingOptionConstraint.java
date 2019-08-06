@@ -12,7 +12,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
+import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
@@ -27,38 +27,38 @@ public class OptionalAvailabilityShippingOptionConstraint extends AbstractModelM
 	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof OptionalAvailabilityShippingOption) {
-			final OptionalAvailabilityShippingOption option = (OptionalAvailabilityShippingOption) target;
+		if (target instanceof OptionalSimpleVesselCharterOption) {
+			final OptionalSimpleVesselCharterOption option = (OptionalSimpleVesselCharterOption) target;
 			{
-				ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, option, AnalyticsPackage.Literals.OPTIONAL_AVAILABILITY_SHIPPING_OPTION__REPOSITIONING_FEE,
+				ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, option, AnalyticsPackage.Literals.OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__REPOSITIONING_FEE,
 						option.getRepositioningFee(), PriceIndexType.CHARTER);
 				if (!result.isOk()) {
 					final String message = String.format("%s", result.getErrorDetails());
 					DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
-					dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.OPTIONAL_AVAILABILITY_SHIPPING_OPTION__REPOSITIONING_FEE);
+					dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__REPOSITIONING_FEE);
 					failures.add(dsd);
 				}
 			}
 			{
-				ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, option, AnalyticsPackage.Literals.OPTIONAL_AVAILABILITY_SHIPPING_OPTION__BALLAST_BONUS,
+				ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, option, AnalyticsPackage.Literals.OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__BALLAST_BONUS,
 						option.getBallastBonus(), PriceIndexType.CHARTER);
 				if (!result.isOk()) {
 					final String message = String.format("%s", result.getErrorDetails());
 					DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
-					dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.OPTIONAL_AVAILABILITY_SHIPPING_OPTION__BALLAST_BONUS);
+					dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__BALLAST_BONUS);
 					failures.add(dsd);
 				}
 			}
 			{
-				ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, option, AnalyticsPackage.Literals.FLEET_SHIPPING_OPTION__HIRE_COST, option.getHireCost(),
+				ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, option, AnalyticsPackage.Literals.SIMPLE_VESSEL_CHARTER_OPTION__HIRE_COST, option.getHireCost(),
 						PriceIndexType.CHARTER);
 				if (!result.isOk()) {
 					final String message = String.format("%s", result.getErrorDetails());
 					DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
-					dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.FLEET_SHIPPING_OPTION__HIRE_COST);
+					dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.SIMPLE_VESSEL_CHARTER_OPTION__HIRE_COST);
 					failures.add(dsd);
 				}
 			}
@@ -66,13 +66,13 @@ public class OptionalAvailabilityShippingOptionConstraint extends AbstractModelM
 			if (option.getStart() == null) {
 				final String message = String.format("No start date set");
 				DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-				dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.OPTIONAL_AVAILABILITY_SHIPPING_OPTION__START);
+				dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__START);
 				failures.add(dsd);
 			}
 			if (option.getEnd() == null) {
 				final String message = String.format("No end date set");
 				DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-				dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.OPTIONAL_AVAILABILITY_SHIPPING_OPTION__END);
+				dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__END);
 				failures.add(dsd);
 			}
 		}
