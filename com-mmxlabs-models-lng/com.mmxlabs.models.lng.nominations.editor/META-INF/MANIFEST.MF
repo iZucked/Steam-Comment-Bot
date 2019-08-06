@@ -8,7 +8,8 @@ Bundle-Activator: com.mmxlabs.models.lng.nominations.presentation.NominationsEdi
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-10
-Export-Package: com.mmxlabs.models.lng.nominations.presentation,
+Export-Package: com.mmxlabs.models.lng.nominations.importer,
+ com.mmxlabs.models.lng.nominations.presentation,
  com.mmxlabs.models.lng.nominations.presentation.composites,
  com.mmxlabs.models.lng.nominations.utils
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",

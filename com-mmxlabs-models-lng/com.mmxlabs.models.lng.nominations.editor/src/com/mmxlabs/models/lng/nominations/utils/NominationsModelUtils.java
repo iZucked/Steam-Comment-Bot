@@ -29,8 +29,6 @@ import com.mmxlabs.models.lng.nominations.DatePeriodPrior;
 import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.Side;
-import com.mmxlabs.models.lng.nominations.SlotNomination;
-import com.mmxlabs.models.lng.nominations.SlotNominationSpec;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -540,5 +538,62 @@ public class NominationsModelUtils {
 			}
 		}
 		return contract;
+	}
+
+	public static boolean containsNomination(List<AbstractNomination> existingNominations, AbstractNomination nomination) {
+		for (AbstractNomination n : existingNominations) {
+			if (n == nomination) {
+				return true;
+			}
+			if (nomination != null && n != null && 
+				trimmedEquals(n.getType(), nomination.getType()) && 
+				Objects.equals(n.getSide(), nomination.getSide()) && 
+				Objects.equals(n.isCounterparty(), nomination.isCounterparty()) &&
+				trimmedEquals(n.getRemark(), nomination.getRemark()) &&
+				trimmedEquals(n.getNomineeId(), nomination.getNomineeId()) &&
+				trimmedEquals(n.getRefererId(), nomination.getRefererId()) &&
+				Objects.equals(n.getDueDate(), nomination.getDueDate()) &&
+				Objects.equals(n.getAlertSize(), nomination.getAlertSize()) && 
+				Objects.equals(n.getAlertDate(), nomination.getAlertDate()) &&
+				Objects.equals(n.getAlertSizeUnits(), nomination.getAlertSizeUnits()) &&
+				trimmedEquals(n.getSpecUuid(), nomination.getSpecUuid()) &&
+				Objects.equals(n.getDayOfMonth(),  nomination.getDayOfMonth()) &&
+				Objects.equals(n.getSize(), nomination.getSize()) && 
+				Objects.equals(n.getSizeUnits(), nomination.getSizeUnits()) &&
+				Objects.equals(n.isDone(), nomination.isDone())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean trimmedEquals(String str1, String str2) {
+		if (str1 != null && str2 != null) {
+			str1 = str1.trim();
+			str2 = str2.trim();
+		}
+		return Objects.equals(str1, str2);
+	}
+	
+	public static boolean containsNominationSpec(List<AbstractNominationSpec> existingNominationSpec, AbstractNominationSpec nominationSpec) {
+		for (AbstractNominationSpec ns : existingNominationSpec) {
+			if (ns == nominationSpec) {
+				return true;
+			}
+			if (nominationSpec != null && ns != null && 
+				Objects.equals(ns.getType(), nominationSpec.getType()) && 
+				Objects.equals(ns.getSide(), nominationSpec.getSide()) && 
+				Objects.equals(ns.isCounterparty(), nominationSpec.isCounterparty()) &&
+				Objects.equals(ns.getRemark(), nominationSpec.getRemark()) &&
+				Objects.equals(ns.getRefererId(), nominationSpec.getRefererId()) &&
+				Objects.equals(ns.getAlertSize(), nominationSpec.getAlertSize()) && 
+				Objects.equals(ns.getAlertSizeUnits(), nominationSpec.getAlertSizeUnits()) &&
+				Objects.equals(ns.getDayOfMonth(),  nominationSpec.getDayOfMonth()) &&
+				Objects.equals(ns.getSize(), nominationSpec.getSize()) && 
+				Objects.equals(ns.getSizeUnits(),  nominationSpec.getSizeUnits())) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
