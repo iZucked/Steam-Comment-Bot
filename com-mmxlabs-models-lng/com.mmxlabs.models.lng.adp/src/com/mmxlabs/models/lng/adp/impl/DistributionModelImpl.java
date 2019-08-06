@@ -6,28 +6,22 @@
  */
 package com.mmxlabs.models.lng.adp.impl;
 
-import com.mmxlabs.models.lng.adp.ADPPackage;
-import com.mmxlabs.models.lng.adp.ContractProfile;
-import com.mmxlabs.models.lng.adp.DistributionModel;
-import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.util.NominationUtils;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.types.TimePeriod;
-import com.mmxlabs.models.lng.types.VolumeUnits;
-import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-
 import java.lang.reflect.InvocationTargetException;
-import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import com.mmxlabs.models.lng.adp.ADPPackage;
+import com.mmxlabs.models.lng.adp.ContractProfile;
+import com.mmxlabs.models.lng.adp.DistributionModel;
+import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.types.VolumeUnits;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
  * <!-- begin-user-doc -->

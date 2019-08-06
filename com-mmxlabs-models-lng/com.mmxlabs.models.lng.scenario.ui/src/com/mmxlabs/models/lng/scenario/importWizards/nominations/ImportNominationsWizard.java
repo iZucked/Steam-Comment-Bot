@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.models.lng.scenario.importWizards.nominations;
 
+import java.util.List;
+
+import org.eclipse.jface.dialogs.MessageDialog;
+
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportPage;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportWizard;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -25,5 +29,23 @@ public class ImportNominationsWizard extends AbstractImportWizard {
 	@Override
 	protected AbstractImportPage getImportPage(final String pageName, final ScenarioInstance currentScenario) {
 		return new ImportNominationsPage(pageName, currentScenario);
+	}
+	
+	@Override
+	protected void displayWarningDialog(final List<String> allProblems) {
+		// pop up a dialog showing the problems
+		final StringBuilder sb = new StringBuilder();
+		if (allProblems.contains("Duplicate nomination")) {
+			sb.append("Some duplicate nominations were detected during csv import - these were ignored as already present in the model.\n");
+		}
+		else {
+			sb.append("There were problems with the import (perhaps a wrong delimiter character was used): \n");
+			for (final String problem : allProblems) {
+				sb.append("\n- ");
+				sb.append(problem);
+			}
+		}
+		sb.append("\nPlease check the error log for more details.");
+		MessageDialog.openWarning(getShell(), "Import Problems", sb.toString());
 	}
 }

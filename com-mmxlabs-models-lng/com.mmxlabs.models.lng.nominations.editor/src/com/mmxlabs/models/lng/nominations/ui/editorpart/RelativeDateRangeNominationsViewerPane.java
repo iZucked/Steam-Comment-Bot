@@ -284,19 +284,20 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		return new ScenarioTableViewerDeleteAction(callback) {
 			@Override
 			protected boolean isApplicableToSelection(final ISelection selection) {
-				if (selection instanceof IStructuredSelection) {
-					final IStructuredSelection s = (IStructuredSelection)selection;
-					final Iterator<?> it = s.iterator();
-					while (it.hasNext()) {
-						final Object o = it.next();
-						if (o instanceof AbstractNomination) {
-							final AbstractNomination n = (AbstractNomination)o;
-							if (n.isSetSpecUuid()) {
-								return false;
-							}
-						}
-					}
-				}
+				//Allow deletion of overridden nominations generated from specs (otherwise no way to get rid of them).
+//				if (selection instanceof IStructuredSelection) {
+//					final IStructuredSelection s = (IStructuredSelection)selection;
+//					final Iterator<?> it = s.iterator();
+//					while (it.hasNext()) {
+//						final Object o = it.next();
+//						if (o instanceof AbstractNomination) {
+//							final AbstractNomination n = (AbstractNomination)o;
+//							if (n.isSetSpecUuid()) {
+//								return false;
+//							}
+//						}
+//					}
+//				}
 				return selection.isEmpty() == false && selection instanceof IStructuredSelection;
 			}
 		};

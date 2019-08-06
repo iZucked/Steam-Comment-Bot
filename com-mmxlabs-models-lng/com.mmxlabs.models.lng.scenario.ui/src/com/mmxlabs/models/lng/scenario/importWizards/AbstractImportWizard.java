@@ -146,15 +146,19 @@ public abstract class AbstractImportWizard extends Wizard implements IImportWiza
 			monitor.done();
 		}
 		if (!allProblems.isEmpty()) {
-			// pop up a dialog showing the problems
-			final StringBuilder sb = new StringBuilder("There were problems with the import (perhaps a wrong delimiter character was used): \n");
-			for (final String problem : allProblems) {
-				sb.append("\n- ");
-				sb.append(problem);
-			}
-			sb.append("\n Please check the error log for more details.");
-			MessageDialog.openWarning(getShell(), "Import Problems", sb.toString());
+			displayWarningDialog(allProblems);
 		}
+	}
+
+	protected void displayWarningDialog(final List<String> allProblems) {
+		// pop up a dialog showing the problems
+		final StringBuilder sb = new StringBuilder("There were problems with the import (perhaps a wrong delimiter character was used): \n");
+		for (final String problem : allProblems) {
+			sb.append("\n- ");
+			sb.append(problem);
+		}
+		sb.append("\n Please check the error log for more details.");
+		MessageDialog.openWarning(getShell(), "Import Problems", sb.toString());
 	}
 
 	private void doImportAction(final String filename, final char listSeparator, final char decimalSeparator, final ScenarioModelRecord modelRecord, final Set<String> uniqueProblems,
