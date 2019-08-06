@@ -10,9 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
-import com.google.common.util.concurrent.Monitor;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.CargoIntervalDistributionModel;
@@ -55,6 +52,12 @@ public class CargoIntervalGenerator implements IProfileGenerator {
 		case WEEKLY:
 			nextDateGenerator = date -> date.plusWeeks(1 * model.getSpacing());
 			break;
+		case BIMONTHLY:
+			nextDateGenerator = date -> date.plusMonths(2 * model.getSpacing());
+			break;
+		case YEARLY:
+			nextDateGenerator = date -> date.plusMonths(12 * model.getSpacing());
+			break;
 		default:
 			throw new IllegalArgumentException();
 
@@ -96,6 +99,10 @@ public class CargoIntervalGenerator implements IProfileGenerator {
 						} else if (model.getIntervalType() == IntervalType.YEARLY) {
 							slot.setWindowStart(date);
 							slot.setWindowSize(12);
+							slot.setWindowSizeUnits(TimePeriod.MONTHS);
+						} else if (model.getIntervalType() == IntervalType.BIMONTHLY) {
+							slot.setWindowStart(date);
+							slot.setWindowSize(2);
 							slot.setWindowSizeUnits(TimePeriod.MONTHS);
 						}
 					}
