@@ -18,6 +18,7 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
@@ -38,10 +39,9 @@ import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
 
 public class HeadlessApplication implements IApplication {
 
-	private static final String FITNESS_TRACE = "exportFitnessTrace";
-	private static final String OUTPUT = "output";
-	private static final String OUTPUT_PATH = "outputPath";
-	private static final String OUTPUT_NAME = "outputFolderName";
+	private static final String INPUT_SCENARIO = "scenario";
+	private static final String OUTPUT_SCENARIO = "outputScenario";
+	private static final String OUTPUT_FOLDER = "outputFolder";
 	private static final String JSON = "json";
 
 	@Override
@@ -50,7 +50,7 @@ public class HeadlessApplication implements IApplication {
 		// check to see if the user has a valid license
 		final LicenseState validity = LicenseChecker.checkLicense();
 		if (validity != LicenseState.Valid) {
-			System.err.println("Licence is invalid");
+			System.err.println("License is invalid");
 			return IApplication.EXIT_OK;
 		}
 
@@ -66,16 +66,14 @@ public class HeadlessApplication implements IApplication {
 			System.err.println("Error parsing the command line settings");
 			return IApplication.EXIT_OK;
 		}
-/*
-		if (options.turnPerfOptsOn) {
-			OptOptions.getInstance().setAllOnOff(options.turnPerfOptsOn);
-		}
-*/
+		/*
+		 * if (options.turnPerfOptsOn) { OptOptions.getInstance().setAllOnOff(options.turnPerfOptsOn); }
+		 */
 		File scenarioFile = new File(options.scenarioFileName);
 		{
 			HeadlessOptimiserRunner runner = new HeadlessOptimiserRunner();
 			try {
-				runner.run(scenarioFile, options, null);
+				runner.run(scenarioFile, options, new NullProgressMonitor(), null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -124,14 +122,13 @@ public class HeadlessApplication implements IApplication {
 		final Options options = new Options();
 
 		// Headless application options
-		
-		options.addOption(OptionBuilder.withLongOpt(OUTPUT).withDescription("Output scenario file").hasArg().create());
-		options.addOption(OptionBuilder.withLongOpt(OUTPUT_PATH).withDescription("Path to directory for output files").hasArg().isRequired().create());
-		options.addOption(OptionBuilder.withLongOpt(OUTPUT_NAME).withDescription("Output folder name (e.g. job number, datetime, uuid)").hasArg().create());
+
+		options.addOption(OptionBuilder.withLongOpt(INPUT_SCENARIO).withDescription("inut scenario file").hasArg().isRequired().create());
+		options.addOption(OptionBuilder.withLongOpt(OUTPUT_SCENARIO).withDescription("Output scenario file").hasArg().create());
+		options.addOption(OptionBuilder.withLongOpt(OUTPUT_FOLDER).withDescription("Path to directory for output files").hasArg().create());
+		// options.addOption(OptionBuilder.withLongOpt(OUTPUT_NAME).withDescription("Output folder name (e.g. job number, datetime, uuid)").hasArg().create());
 		options.addOption(JSON, true, "json");
 
-		
-		
 		// Options for OSGi/Eclipse compat - not used, but needs to be specified
 		options.addOption("application", true, "(OSGi) Application ID");
 		options.addOption("arch", true, "(OSGi) Set arch");
@@ -180,24 +177,22 @@ public class HeadlessApplication implements IApplication {
 		options.addOption("automem", false, "(LiNGO) Automatically determine upper bound for heap size");
 		options.addOption("noautomem", false, "(LiNGO) Do not automatically determine upper bound for heap size");
 
-		// Enable Fitness Exporter
-		options.addOption(OptionBuilder.withLongOpt(FITNESS_TRACE).isRequired(false).withDescription("Export fitness trace to a file").hasArg().create());
-
 		// create the command line parser
+
 		final CommandLineParser parser = new PosixParser();
 		try {
 			final CommandLine line = parser.parse(options, commandLineArgs);
-			if (line.hasOption(OUTPUT)) {
-				settings.output = line.getOptionValue(OUTPUT);
+			if (line.hasOption(OUTPUT_SCENARIO)) {
+				settings.outputScenarioFileName = line.getOptionValue(OUTPUT_SCENARIO);
 			}
-			if (line.hasOption(OUTPUT_PATH)) {
-				settings.outputPath = line.getOptionValue(OUTPUT_PATH);
+			if (line.hasOption(OUTPUT_FOLDER)) {
+				settings.outputLoggingFolder = line.getOptionValue(OUTPUT_FOLDER);
 			}
 			if (line.hasOption(JSON)) {
-				settings.json = line.getOptionValue(JSON);
+				settings.jsonFile = line.getOptionValue(JSON);
 			}
-			if (line.hasOption(OUTPUT_NAME)) {
-				settings.outputName = line.getOptionValue(OUTPUT_NAME);
+			if (line.hasOption(INPUT_SCENARIO)) {
+				settings.scenarioFileName = line.getOptionValue(INPUT_SCENARIO);
 			}
 
 		} catch (final ParseException ex) {

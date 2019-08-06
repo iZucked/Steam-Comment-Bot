@@ -52,13 +52,13 @@ public final class SettingsOverride {
 
 	private int iterations = 30000;
 	private int seed = 1;
-
-	private String scenario;
-	private String output;
-	private String outputPath;
-
-	private String json;
-	private String outputName;
+//
+//	private String scenario;
+//	private String output;
+//	private String outputPath;
+//
+//	private String json;
+//	private String outputName;
 
 	
 
@@ -146,30 +146,30 @@ public final class SettingsOverride {
 	public void setIdleTimeHigh(int idleTimeHigh) {
 		this.idleTimeHigh = idleTimeHigh;
 	}
-
-	public String getOutputName() {
-		return outputName;
-	}
-
-	public void setOutputName(String outputName) {
-		this.outputName = outputName;
-	}
-
-	public String getOutputPath() {
-		return outputPath;
-	}
-
-	public void setOutputPath(String outputPath) {
-		this.outputPath = outputPath;
-	}
-
-	public final String getScenario() {
-		return scenario;
-	}
-
-	public final void setScenario(final String scenario) {
-		this.scenario = scenario;
-	}
+//
+//	public String getOutputName() {
+//		return outputName;
+//	}
+//
+//	public void setOutputName(String outputName) {
+//		this.outputName = outputName;
+//	}
+//
+//	public String getOutputPath() {
+//		return outputPath;
+//	}
+//
+//	public void setOutputPath(String outputPath) {
+//		this.outputPath = outputPath;
+//	}
+//
+//	public final String getScenario() {
+//		return scenario;
+//	}
+//
+//	public final void setScenario(final String scenario) {
+//		this.scenario = scenario;
+//	}
 
 	public final int getIterations() {
 		return iterations;
@@ -183,25 +183,25 @@ public final class SettingsOverride {
 		return seed;
 	}
 
-	public final String getJSON() {
-		return json;
-	}
+//	public final String getJSON() {
+//		return json;
+//	}
 
 	public final void setSeed(final int seed) {
 		this.seed = seed;
 	}
-
-	protected String getOutput() {
-		return output;
-	}
-
-	protected void setOutput(String output) {
-		this.output = output;
-	}
-
-	protected void setJSON(String json) {
-		this.json = json;
-	}
+//
+//	protected String getOutput() {
+//		return output;
+//	}
+//
+//	protected void setOutput(String output) {
+//		this.output = output;
+//	}
+//
+//	protected void setJSON(String json) {
+//		this.json = json;
+//	}
 
 	public int getActionPlanTotalEvals() {
 		return actionPlanTotalEvals;

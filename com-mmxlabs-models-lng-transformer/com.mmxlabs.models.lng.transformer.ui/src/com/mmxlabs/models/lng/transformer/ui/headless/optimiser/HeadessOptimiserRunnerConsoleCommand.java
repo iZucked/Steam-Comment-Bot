@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.osgi.framework.console.CommandInterpreter;
 import org.eclipse.osgi.framework.console.CommandProvider;
 
@@ -15,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class HeadessOptimiserRunnerConsoleCommand implements CommandProvider {
 
 	private static SimpleDateFormat sdfTimestamp = new SimpleDateFormat("yyyyMMdd_HHmmss");
-	
+
 	public void _optimise(CommandInterpreter ci) throws Exception {
 
 		String scenarioFileName = null;
@@ -36,17 +37,17 @@ public class HeadessOptimiserRunnerConsoleCommand implements CommandProvider {
 				outputName = arg;
 			}
 		}
-//
-//		ObjectMapper mapper = new ObjectMapper();
-//		mapper.registerModule(new JavaTimeModule());
-//		mapper.registerModule(new Jdk8Module());
-//
-		HeadlessOptimiserRunner.Options options = new HeadlessOptimiserRunner.Options (); 
-		options.json = paramsFileName;
-		options.scenarioFileName =scenarioFileName;
-		options.outputName =outputName;
-		options.outputPath =outputPath;
-		
+		//
+		// ObjectMapper mapper = new ObjectMapper();
+		// mapper.registerModule(new JavaTimeModule());
+		// mapper.registerModule(new Jdk8Module());
+		//
+		HeadlessOptimiserRunner.Options options = new HeadlessOptimiserRunner.Options();
+		options.jsonFile = paramsFileName;
+		options.scenarioFileName = scenarioFileName;
+		options.outputScenarioFileName = outputName;
+		options.outputLoggingFolder = outputPath;
+
 		File scenarioFile = new File(scenarioFileName);
 		ThreadGroup tg = new ThreadGroup("Console optimiser");
 
@@ -55,36 +56,36 @@ public class HeadessOptimiserRunnerConsoleCommand implements CommandProvider {
 			public void run() {
 				final String timestampStr = getTimestamp();
 				PrintStream pst = System.out;
-//				if (options.filename != null && !options.filename.equals("")) {
-//					final String filenameStr = scenarioFile.getAbsolutePath().replace(scenarioFile.getName(), "") + options.filename + "_"+timestampStr+ ".csv";
-//					try {
-//						pst = new PrintStream(new File(filenameStr));
-//					} catch (FileNotFoundException e) {
-//						System.err.printf("Error opening options.filename, %s outputting to stdout instead:\n", filenameStr);
-//						e.printStackTrace(System.err);
-//					}
-//				}
+				// if (options.filename != null && !options.filename.equals("")) {
+				// final String filenameStr = scenarioFile.getAbsolutePath().replace(scenarioFile.getName(), "") + options.filename + "_"+timestampStr+ ".csv";
+				// try {
+				// pst = new PrintStream(new File(filenameStr));
+				// } catch (FileNotFoundException e) {
+				// System.err.printf("Error opening options.filename, %s outputting to stdout instead:\n", filenameStr);
+				// e.printStackTrace(System.err);
+				// }
+				// }
 				pst.println("Run,#Threads,Time(millis),GCTime(millis)");
-//				for (int threads = minThreads; threads <= maxThreads; threads *= 2) 
+				// for (int threads = minThreads; threads <= maxThreads; threads *= 2)
 				{
-//					options.threadCount = threads;
-//					HeadlessOptimiserJSON json = setOptionParamsInJSONOutputObject(options, scenarioFile, threads);
-					
-					//Do the runs with this set of parameters.
-//					for (int run = 1; run <= options.numRuns; run++)
+					// options.threadCount = threads;
+					// HeadlessOptimiserJSON json = setOptionParamsInJSONOutputObject(options, scenarioFile, threads);
+
+					// Do the runs with this set of parameters.
+					// for (int run = 1; run <= options.numRuns; run++)
 					{
 						HeadlessOptimiserRunner runner = new HeadlessOptimiserRunner();
 						try {
-							runner.run( scenarioFile, options, null);
+							runner.run(scenarioFile, options, new NullProgressMonitor(), null);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
-					
-					//Write out the result of all runs.
+
+					// Write out the result of all runs.
 					try {
 						ObjectMapper mapper = new ObjectMapper();
-//						mapper.writerWithDefaultPrettyPrinter().writeValue(new File(scenarioFile.getAbsoluteFile() + "." + UUID.randomUUID().toString() + ".json"), json);
+						// mapper.writerWithDefaultPrettyPrinter().writeValue(new File(scenarioFile.getAbsoluteFile() + "." + UUID.randomUUID().toString() + ".json"), json);
 					} catch (Exception e) {
 						System.err.println("Error writing to file:");
 						e.printStackTrace();
@@ -92,32 +93,32 @@ public class HeadessOptimiserRunnerConsoleCommand implements CommandProvider {
 				}
 			}
 
-//			private HeadlessOptimiserJSON setOptionParamsInJSONOutputObject(HeadlessOptimiserRunner.Options options, File scenarioFile, int threads) {
-//				//Set up JSON object to write all results out with.
-//				HeadlessOptimiserJSON json = HeadlessOptimiserJSONTransformer.createJSONResultObject();
-//				json.getMeta().setClient("V");
-//				json.getMeta().setScenario(scenarioFile.getName());
-//				json.getMeta().setMachineType(getMachineInfo());
-//				json.getMeta().setVersion("Dev");
-//
-//				json.getParams().setCores(threads);
-//				json.getParams().getOptioniserProperties().setOptions(OptOptions.getInstance().toString());
-//				json.getParams().getOptioniserProperties().setIterations(options.iterations);
-//
-//				return json;
-//			}
+			// private HeadlessOptimiserJSON setOptionParamsInJSONOutputObject(HeadlessOptimiserRunner.Options options, File scenarioFile, int threads) {
+			// //Set up JSON object to write all results out with.
+			// HeadlessOptimiserJSON json = HeadlessOptimiserJSONTransformer.createJSONResultObject();
+			// json.getMeta().setClient("V");
+			// json.getMeta().setScenario(scenarioFile.getName());
+			// json.getMeta().setMachineType(getMachineInfo());
+			// json.getMeta().setVersion("Dev");
+			//
+			// json.getParams().setCores(threads);
+			// json.getParams().getOptioniserProperties().setOptions(OptOptions.getInstance().toString());
+			// json.getParams().getOptioniserProperties().setIterations(options.iterations);
+			//
+			// return json;
+			// }
 		}.start();
 	}
-	
+
 	private String getTimestamp() {
 		return sdfTimestamp.format(new Date());
 	}
-	
+
 	private String getMachineInfo() {
-		String machInfo = "AvailableProcessors:"+Integer.toString(Runtime.getRuntime().availableProcessors());
+		String machInfo = "AvailableProcessors:" + Integer.toString(Runtime.getRuntime().availableProcessors());
 		return machInfo;
 	}
-	
+
 	@Override
 	public String getHelp() {
 		StringBuffer buffer = new StringBuffer();

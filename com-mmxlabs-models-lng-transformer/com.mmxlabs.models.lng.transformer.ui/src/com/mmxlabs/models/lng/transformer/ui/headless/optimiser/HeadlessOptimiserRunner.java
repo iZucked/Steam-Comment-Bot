@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -50,6 +51,7 @@ import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.exporter.util.He
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.exporter.util.JMap;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.exporter.util.JSONParseResult;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.exporter.util.LNGHeadlessParameters;
+import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 import com.mmxlabs.optimiser.lso.logging.LSOLoggingExporter;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -62,42 +64,30 @@ public class HeadlessOptimiserRunner {
 	public static class Options {
 
 		public String scenarioFileName;
-		public String output;
-		public String outputPath;
-		public String outputName;
-		public String json;
+		public String jsonFile;
+
+		public String outputScenarioFileName;
+		public String outputLoggingFolder;
+		// public String output;
+		// public String outputPath;
+		// public String outputName;
 
 		public boolean exportResults = false;
 		public boolean turnPerfOptsOn = true;
 	}
 
-	public void run(final File lingoFile, final Options options, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
+	public void run(final File lingoFile, final Options options, IProgressMonitor monitor, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
 		// Get the root object
 		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(lingoFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-			run(options, modelRecord, scenarioDataProvider, completedHook);
+			run(options, modelRecord, scenarioDataProvider, monitor, completedHook);
 		});
 	}
 
-	public boolean run(final Options options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
+	public boolean run(final Options options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp, IProgressMonitor monitor,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
 		final SettingsOverride overrideSettings = new SettingsOverride(); // ?some settings for the optimiser?
 
-		{
-			if (options.output != null) {
-				overrideSettings.setOutput(options.output);
-			}
-			if (options.outputPath != null) {
-				overrideSettings.setOutputPath(options.outputPath);
-			}
-			if (options.json != null) {
-				overrideSettings.setJSON(options.json);
-			}
-			if (options.outputName != null) {
-				overrideSettings.setOutputName(options.outputName);
-			}
-		}
-
-		final String jsonFilePath = overrideSettings.getJSON();
+		final String jsonFilePath = options.jsonFile;
 		final Pair<JSONParseResult, LNGHeadlessParameters> jsonParse = setParametersFromJSON(overrideSettings, jsonFilePath);
 		if (!jsonParse.getFirst().allRequirementsPassed()) {
 			// json parse failed
@@ -108,15 +98,15 @@ public class HeadlessOptimiserRunner {
 		}
 		final LNGHeadlessParameters headlessParameters = jsonParse.getSecond();
 
-		// set output file
-		final String path = overrideSettings.getOutputPath();
-
-		// set scenario file
-		if (options.scenarioFileName != null) {
-			overrideSettings.setScenario(options.scenarioFileName);
-		} else {
-			overrideSettings.setScenario(headlessParameters.getParameterValue("scenario-path", String.class) + "/" + headlessParameters.getParameterValue("scenario", String.class));
-		}
+		// // set output file
+		// final String path = overrideSettings.getOutputPath();
+		//
+		// // set scenario file
+		// if (options.scenarioFileName != null) {
+		// overrideSettings.setScenario(options.scenarioFileName);
+		// } else {
+		// overrideSettings.setScenario(headlessParameters.getParameterValue("scenario-path", String.class) + "/" + headlessParameters.getParameterValue("scenario", String.class));
+		// }
 
 		// Set Idle time levels
 		// overrideSettings.setIdleTimeLow(headlessParameters.getParameterValue("idle-time-low", Integer.class));
@@ -127,15 +117,11 @@ public class HeadlessOptimiserRunner {
 		// overrideSettings.setUseRouletteWheel(headlessParameters.getParameterValue("use-roulette-wheel", Boolean.class));
 		// overrideSettings.setUseLegacyCheck(headlessParameters.getParameterValue("use-legacy-check", Boolean.class));
 		// overrideSettings.setUseGuidedMoves(headlessParameters.getParameterValue("use-guided-moves", Boolean.class));
-		final String scenarioFile = overrideSettings.getScenario();
+		final String scenarioFile = options.scenarioFileName;
 		if (scenarioFile == null || scenarioFile.isEmpty()) {
 			System.err.println("No scenario specified");
 			return false;
 		}
-
-		// Get the root object
-
-		final String outputFile = overrideSettings.getOutput();
 
 		OptimisationPlan optimisationPlan = ScenarioUtils.createDefaultOptimisationPlan();
 		assert optimisationPlan != null;
@@ -146,12 +132,15 @@ public class HeadlessOptimiserRunner {
 		// Add in required extensions, but do not run custom hooks.
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan, true, false);
 
-		assert overrideSettings.getOutputName() != null;//
+		// assert overrideSettings.getOutputName() != null;//
 		// final String outputFolderName = overrideSettings.getOutputName() == null ? getFolderNameFromSettings(optimisationPlan) : getFolderNameFromSettings(overrideSettings);
-		final String outputFolderName = getFolderNameFromSettings(overrideSettings);
+		// final String outputFolderName = getFolderNameFromSettings(overrideSettings);
 
 		// Ensure dir structure is in place
-		Paths.get(path, outputFolderName).toFile().mkdirs();
+		boolean exportLogs = options.outputLoggingFolder != null;
+		if (options.outputLoggingFolder != null) {
+			new File(options.outputLoggingFolder).mkdirs();
+		}
 
 		// Create logging module
 		final int num_threads = getNumThreads(headlessParameters);
@@ -162,7 +151,7 @@ public class HeadlessOptimiserRunner {
 		final ActionSetLogger actionSetLogger = optimisationPlan.getUserSettings().isBuildActionSets() ? new ActionSetLogger() : null;
 		try {
 
-			final AbstractRunnerHook runnerHook = new AbstractRunnerHook() {
+			final AbstractRunnerHook runnerHook = !exportLogs ? null : new AbstractRunnerHook() {
 
 				@Override
 				protected void doEndStageJob(@NonNull final String stage, final int jobID, @Nullable final Injector injector) {
@@ -170,7 +159,7 @@ public class HeadlessOptimiserRunner {
 					final String stageAndJobID = getStageAndJobID();
 					final LSOLogger logger = phaseToLoggerMap.remove(stageAndJobID);
 					if (logger != null) {
-						final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(path, stageAndJobID, outputFolderName, logger);
+						final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(options.outputLoggingFolder, stageAndJobID, logger);
 						lsoLoggingExporter.exportData("best-fitness", "current-fitness");
 					}
 				}
@@ -195,7 +184,9 @@ public class HeadlessOptimiserRunner {
 					}
 					if (moduleType == ModuleType.Module_Optimisation) {
 						final LinkedList<@NonNull Module> modules = new LinkedList<>();
-						modules.add(createLoggingModule(phaseToLoggerMap, actionSetLogger, runnerHook));
+						if (exportLogs) {
+							modules.add(createLoggingModule(phaseToLoggerMap, actionSetLogger, runnerHook));
+						}
 						modules.add(new LNGOptimsationOverrideModule(overrideSettings));
 						return modules;
 					}
@@ -221,8 +212,8 @@ public class HeadlessOptimiserRunner {
 				runner.evaluateInitialState();
 				System.out.println("LNGResult(");
 				System.out.println("\tscenario='" + scenarioFile + "',");
-				if (outputFile != null) {
-					System.out.println("\toutput='" + outputFile + "',");
+				if (options.outputScenarioFileName != null) {
+					System.out.println("\toutput='" + options.outputScenarioFileName + "',");
 				}
 				// System.out.println("\titerations=" + optimiserSettings.getAnnealingSettings().getIterations() + ",");
 				// System.out.println("\tseed=" + optimiserSettings.getSeed() + ",");
@@ -232,7 +223,8 @@ public class HeadlessOptimiserRunner {
 
 				System.err.println("Starting run...");
 
-				runner.runAndApplyBest();
+				IMultiStateResult result = runner.runWithProgress(monitor);
+				runner.applyBest(result);
 
 				final long runTime = System.currentTimeMillis() - startTime;
 				final Schedule finalSchedule = runner.getSchedule();
@@ -244,11 +236,13 @@ public class HeadlessOptimiserRunner {
 
 				System.err.println("Optimised!");
 
-				if (outputFile != null) {
-					saveScenario(Paths.get(path, outputFolderName, outputFile).toString(), scenarioModelRecord);
+				if (options.outputScenarioFileName != null) {
+					new File(options.outputScenarioFileName).getParentFile().mkdirs();
+					saveScenario(options.outputScenarioFileName, scenarioModelRecord);
 				}
-
-				exportData(phaseToLoggerMap, actionSetLogger, path, outputFolderName, jsonFilePath, overrideSettings.isActionPlanVerboseLogger());
+				if (exportLogs) {
+					exportData(phaseToLoggerMap, actionSetLogger, options.outputLoggingFolder, jsonFilePath, overrideSettings.isActionPlanVerboseLogger());
+				}
 
 				return true;
 			} catch (final Exception e) {
@@ -453,9 +447,9 @@ public class HeadlessOptimiserRunner {
 		return name;
 	}
 
-	private String getFolderNameFromSettings(final SettingsOverride settings) {
-		return settings.getOutputName();
-	}
+	// private String getFolderNameFromSettings(final SettingsOverride settings) {
+	// return settings.getOutputName();
+	// }
 
 	private Map<String, Object> getSettingsFileNameMap(final OptimisationPlan settings) {
 		final Map<String, Object> nameMap = new LinkedHashMap<>();
@@ -469,8 +463,7 @@ public class HeadlessOptimiserRunner {
 		return nameMap;
 	}
 
-	private void exportData(final Map<String, LSOLogger> loggerMap, final ActionSetLogger actionSetLogger, final String path, final String foldername, final String jsonFilePath,
-			final boolean verbose) {
+	private void exportData(final Map<String, LSOLogger> loggerMap, final ActionSetLogger actionSetLogger, final String path, final String jsonFilePath, final boolean verbose) {
 		// // first export logging data
 		// for (final String phase : IRunnerHook.PHASE_ORDER) {
 		// final LSOLogger logger = loggerMap.get(phase);
@@ -482,13 +475,13 @@ public class HeadlessOptimiserRunner {
 		if (actionSetLogger != null) {
 			System.out.println(verbose);
 			if (!verbose)
-				actionSetLogger.shortExport(Paths.get(path, foldername).toString(), "actionSets");
+				actionSetLogger.shortExport(Paths.get(path).toString(), "actionSets");
 			else
-				actionSetLogger.export(Paths.get(path, foldername).toString(), "action");
+				actionSetLogger.export(Paths.get(path).toString(), "action");
 		}
-		HeadlessJSONParser.copyJSONFile(jsonFilePath, Paths.get(path, foldername, "parameters.json").toString());
+		HeadlessJSONParser.copyJSONFile(jsonFilePath, Paths.get(path, "parameters.json").toString());
 
-		final PrintWriter writer = WriterFactory.getWriter(Paths.get(path, foldername, "machineData.txt").toString());
+		final PrintWriter writer = WriterFactory.getWriter(Paths.get(path, "machineData.txt").toString());
 		writer.write(String.format("maxCPUs,%s", Runtime.getRuntime().availableProcessors()));
 		writer.close();
 
