@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EOperation;
@@ -49,6 +50,7 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.StartHeelOptions;
+import com.mmxlabs.models.lng.cargo.TimeWindow;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
@@ -344,6 +346,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EEnum inventoryFrequencyEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType timeWindowEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -1234,6 +1243,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	@Override
 	public EOperation getSlot__GetWindowEndWithSlotOrPortTimeWithoutCP() {
 		return slotEClass.getEOperations().get(31);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getSlot__GetSchedulingWindow() {
+		return slotEClass.getEOperations().get(32);
 	}
 
 	/**
@@ -3092,6 +3111,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EDataType getTimeWindow() {
+		return timeWindowEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public CargoFactory getCargoFactory() {
 		return (CargoFactory)getEFactoryInstance();
 	}
@@ -3212,6 +3241,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_WITHOUT_CP_DURATION);
 		createEOperation(slotEClass, SLOT___GET_WINDOW_SIZE_IN_HOURS_WITHOUT_CP);
 		createEOperation(slotEClass, SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP);
+		createEOperation(slotEClass, SLOT___GET_SCHEDULING_WINDOW);
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CV);
@@ -3418,6 +3448,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		vesselTypeEEnum = createEEnum(VESSEL_TYPE);
 		eVesselTankStateEEnum = createEEnum(EVESSEL_TANK_STATE);
 		inventoryFrequencyEEnum = createEEnum(INVENTORY_FREQUENCY);
+
+		// Create data types
+		timeWindowEDataType = createEDataType(TIME_WINDOW);
 	}
 
 	/**
@@ -3666,6 +3699,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEOperation(getSlot__GetWindowSizeInHoursWithoutCP(), ecorePackage.getEInt(), "getWindowSizeInHoursWithoutCP", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSlot__GetWindowEndWithSlotOrPortTimeWithoutCP(), theDateTimePackage.getDateTime(), "getWindowEndWithSlotOrPortTimeWithoutCP", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetSchedulingWindow(), this.getTimeWindow(), "getSchedulingWindow", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3917,6 +3952,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		addEEnumLiteral(inventoryFrequencyEEnum, InventoryFrequency.DAILY);
 		addEEnumLiteral(inventoryFrequencyEEnum, InventoryFrequency.MONTHLY);
 		addEEnumLiteral(inventoryFrequencyEEnum, InventoryFrequency.LEVEL);
+
+		// Initialize data types
+		initEDataType(timeWindowEDataType, TimeWindow.class, "TimeWindow", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

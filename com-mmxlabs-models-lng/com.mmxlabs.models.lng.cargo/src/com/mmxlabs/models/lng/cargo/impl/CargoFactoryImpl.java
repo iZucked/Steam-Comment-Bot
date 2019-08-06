@@ -125,6 +125,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 				return createEVesselTankStateFromString(eDataType, initialValue);
 			case CargoPackage.INVENTORY_FREQUENCY:
 				return createInventoryFrequencyFromString(eDataType, initialValue);
+			case CargoPackage.TIME_WINDOW:
+				return createTimeWindowFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -146,6 +148,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 				return convertEVesselTankStateToString(eDataType, instanceValue);
 			case CargoPackage.INVENTORY_FREQUENCY:
 				return convertInventoryFrequencyToString(eDataType, instanceValue);
+			case CargoPackage.TIME_WINDOW:
+				return convertTimeWindowToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -559,6 +563,24 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 */
 	public String convertInventoryFrequencyToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public TimeWindow createTimeWindowFromString(EDataType eDataType, String initialValue) {
+		return (TimeWindow)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertTimeWindowToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/**

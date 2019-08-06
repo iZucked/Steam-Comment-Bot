@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
@@ -1175,13 +1176,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 32;
 
 	/**
+	 * The operation id for the '<em>Get Scheduling Window</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SCHEDULING_WINDOW = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 33;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 33;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 34;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1974,6 +1984,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP = SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP;
+
+	/**
+	 * The operation id for the '<em>Get Scheduling Window</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SCHEDULING_WINDOW = SLOT___GET_SCHEDULING_WINDOW;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -2793,6 +2812,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP = SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP;
+
+	/**
+	 * The operation id for the '<em>Get Scheduling Window</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SCHEDULING_WINDOW = SLOT___GET_SCHEDULING_WINDOW;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -3715,6 +3743,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP = LOAD_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP;
 
 	/**
+	 * The operation id for the '<em>Get Scheduling Window</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SCHEDULING_WINDOW = LOAD_SLOT___GET_SCHEDULING_WINDOW;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4552,6 +4589,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP = DISCHARGE_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP;
+
+	/**
+	 * The operation id for the '<em>Get Scheduling Window</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SCHEDULING_WINDOW = DISCHARGE_SLOT___GET_SCHEDULING_WINDOW;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -7739,6 +7785,17 @@ public interface CargoPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '<em>Time Window</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.TimeWindow
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getTimeWindow()
+	 * @generated
+	 */
+	int TIME_WINDOW = 39;
+
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Cargo <em>Cargo</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8612,6 +8669,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getSlot__GetWindowEndWithSlotOrPortTimeWithoutCP();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSchedulingWindow() <em>Get Scheduling Window</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Scheduling Window</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSchedulingWindow()
+	 * @generated
+	 */
+	EOperation getSlot__GetSchedulingWindow();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -10592,6 +10659,17 @@ public interface CargoPackage extends EPackage {
 	EEnum getInventoryFrequency();
 
 	/**
+	 * Returns the meta object for data type '{@link com.mmxlabs.models.lng.cargo.TimeWindow <em>Time Window</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Time Window</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.TimeWindow
+	 * @model instanceClass="com.mmxlabs.models.lng.cargo.TimeWindow"
+	 * @generated
+	 */
+	EDataType getTimeWindow();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11272,6 +11350,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP = eINSTANCE.getSlot__GetWindowEndWithSlotOrPortTimeWithoutCP();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Scheduling Window</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SCHEDULING_WINDOW = eINSTANCE.getSlot__GetSchedulingWindow();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
@@ -12826,6 +12912,16 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum INVENTORY_FREQUENCY = eINSTANCE.getInventoryFrequency();
+
+		/**
+		 * The meta object literal for the '<em>Time Window</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.TimeWindow
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getTimeWindow()
+		 * @generated
+		 */
+		EDataType TIME_WINDOW = eINSTANCE.getTimeWindow();
 
 	}
 

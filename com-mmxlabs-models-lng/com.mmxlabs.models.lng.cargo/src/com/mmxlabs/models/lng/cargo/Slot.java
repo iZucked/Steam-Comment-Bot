@@ -2121,6 +2121,14 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 */
 	ZonedDateTime getWindowEndWithSlotOrPortTimeWithoutCP();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.lng.cargo.TimeWindow"
+	 * @generated
+	 */
+	TimeWindow getSchedulingWindow();
+
 } // end of  Slot
 
 // finish type fixing

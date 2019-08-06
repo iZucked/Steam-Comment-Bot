@@ -27,6 +27,7 @@ import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.TimeWindow;
 import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -2831,6 +2832,32 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public TimeWindow getSchedulingWindow() {
+		return new TimeWindow() {
+
+			@Override
+			public LocalDate getStartDate() {
+				return getWindowStart();
+			}
+
+			@Override
+			public ZonedDateTime getEndDate() {
+				return getWindowEndWithSlotOrPortTime();
+			}
+
+			@Override
+			public int getDuration() {
+				return getDuration();
+			}	
+		};
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	@Override
@@ -3887,6 +3914,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getWindowSizeInHoursWithoutCP();
 			case CargoPackage.SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITHOUT_CP:
 				return getWindowEndWithSlotOrPortTimeWithoutCP();
+			case CargoPackage.SLOT___GET_SCHEDULING_WINDOW:
+				return getSchedulingWindow();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
