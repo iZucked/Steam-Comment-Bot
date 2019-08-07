@@ -1869,7 +1869,7 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @model kind="operation"
 	 * @generated
 	 */
-	int getSlotOrDelegateDuration();
+	//int getSlotOrDelegateDuration();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1934,30 +1934,6 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	ZonedDateTime getWindowStartWithSlotOrPortTimeWithFlex();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	int getSlotOrDelegateWindowSize();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	TimePeriod getSlotOrDelegateWindowSizeUnits();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	int getWindowSizeInHours();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2088,38 +2064,6 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	EList<AVesselSet<Vessel>> getSlotOrDelegateVesselRestrictions();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	int getSlotOrDelegateWithoutCPWindowSize();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-	int getSlotOrDelegateWithoutCPDuration();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	int getWindowSizeInHoursWithoutCP();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
-	ZonedDateTime getWindowEndWithSlotOrPortTimeWithoutCP();
 
 	/**
 	 * <!-- begin-user-doc -->

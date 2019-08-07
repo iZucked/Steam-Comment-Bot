@@ -135,7 +135,6 @@
       <genFeatures createChild="false" propertyDescription="Is current slot cancelled?"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancelled"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowCounterParty"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateDuration"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMinQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMaxQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateOperationalTolerance"/>
@@ -144,9 +143,6 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowStartWithSlotOrPortTime"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowEndWithSlotOrPortTimeWithFlex"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowStartWithSlotOrPortTimeWithFlex"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWindowSize"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWindowSizeUnits"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowSizeInHours"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateEntity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateCancellationExpression"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePricingEvent"/>
@@ -163,10 +159,6 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateContractRestrictions"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortRestrictions"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVesselRestrictions"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWithoutCPWindowSize"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWithoutCPDuration"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowSizeInHoursWithoutCP"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowEndWithSlotOrPortTimeWithoutCP"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSchedulingWindow"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//LoadSlot">

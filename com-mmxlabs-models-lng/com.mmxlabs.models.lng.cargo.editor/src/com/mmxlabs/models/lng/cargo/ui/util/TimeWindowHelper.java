@@ -8,8 +8,8 @@ public class TimeWindowHelper {
 	public static String getTimeWindowSuffix(final Object owner) {
 		if (owner instanceof Slot<?>) {
 			final Slot<?> slot = (Slot<?>) owner;
-			final int size = slot.getSlotOrDelegateWithoutCPWindowSize();
-			final TimePeriod units = slot.getSlotOrDelegateWindowSizeUnits();
+			final int size = slot.getWindowSize();
+			final TimePeriod units = slot.getWindowSizeUnits();
 			String suffix;
 			switch (units) {
 			case DAYS:

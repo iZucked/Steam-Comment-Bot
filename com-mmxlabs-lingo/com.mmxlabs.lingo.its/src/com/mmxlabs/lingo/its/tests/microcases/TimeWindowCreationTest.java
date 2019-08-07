@@ -240,7 +240,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 
 			Assertions.assertEquals(LocalDate.of(2015, 12, 1), dischargeSlot.getWindowStart());
 			Assertions.assertEquals(0, dischargeSlot.getWindowStartTime());
-			Assertions.assertEquals(31 * 24 - 1, dischargeSlot.getWindowSizeInHours());
+			Assertions.assertEquals(31 * 24 - 1, dischargeSlot.getSchedulingWindow().getSizeInHours());
 		});
 	}
 
@@ -404,27 +404,27 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		loadSlot.setWindowStartTime(0);
 
 		loadSlot.setWindowSize(0);
-		Assertions.assertEquals(0, loadSlot.getWindowSizeInHours());
+		Assertions.assertEquals(0, loadSlot.getSchedulingWindow().getSizeInHours());
 		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 1, 0, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
 
 		loadSlot.setWindowSize(23);
 		loadSlot.setWindowSizeUnits(TimePeriod.HOURS);
-		Assertions.assertEquals(23, loadSlot.getWindowSizeInHours());
+		Assertions.assertEquals(23, loadSlot.getSchedulingWindow().getSizeInHours());
 		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 1, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
 
 		loadSlot.setWindowSize(1);
 		loadSlot.setWindowSizeUnits(TimePeriod.DAYS);
-		Assertions.assertEquals(23, loadSlot.getWindowSizeInHours());
+		Assertions.assertEquals(23, loadSlot.getSchedulingWindow().getSizeInHours());
 		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 1, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
 
 		loadSlot.setWindowSize(2);
 		loadSlot.setWindowSizeUnits(TimePeriod.DAYS);
-		Assertions.assertEquals(47, loadSlot.getWindowSizeInHours());
+		Assertions.assertEquals(47, loadSlot.getSchedulingWindow().getSizeInHours());
 		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 2, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
 
 		loadSlot.setWindowSize(1);
 		loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-		Assertions.assertEquals(31 * 24 - 1, loadSlot.getWindowSizeInHours());
+		Assertions.assertEquals(31 * 24 - 1, loadSlot.getSchedulingWindow().getSizeInHours());
 		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 31, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
 
 	}

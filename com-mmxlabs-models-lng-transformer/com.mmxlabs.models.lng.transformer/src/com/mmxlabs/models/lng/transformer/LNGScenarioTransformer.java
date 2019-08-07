@@ -1476,7 +1476,7 @@ public class LNGScenarioTransformer {
 				}
 			}
 		}
-		LocalDateTime endTime = wStart.plusHours(slot.getWindowSizeInHours());
+		LocalDateTime endTime = wStart.plusHours(slot.getSchedulingWindow().getSizeInHours());
 		{
 			if (slotFlex > 0) {
 
@@ -1520,7 +1520,7 @@ public class LNGScenarioTransformer {
 
 					// Re-use the real date objects to map back to integer timezones to avoid mismatching windows caused by half hour timezone shifts
 					final ZonedDateTime portWindowStart = spotSlot.getWindowStart().atStartOfDay(ZoneId.of(port.getTimeZoneId()));
-					final ZonedDateTime portWindowEnd = portWindowStart.plusHours(spotSlot.getWindowSizeInHours());
+					final ZonedDateTime portWindowEnd = portWindowStart.plusHours(spotSlot.getSchedulingWindow().getSizeInHours());
 					// Re-check against opt start date.
 					// final int trimmedPortWindowStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
 					// Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(portWindowStart)));
@@ -1584,7 +1584,7 @@ public class LNGScenarioTransformer {
 				for (final IPort port : marketPorts) {
 					// Re-use the real date objects to map back to integer timezones to avoid mismatching windows caused by half hour timezone shifts
 					final ZonedDateTime portWindowStart = spotLoadSlot.getWindowStart().atStartOfDay(ZoneId.of(port.getTimeZoneId()));
-					final ZonedDateTime portWindowEnd = portWindowStart.plusHours(spotLoadSlot.getWindowSizeInHours());
+					final ZonedDateTime portWindowEnd = portWindowStart.plusHours(spotLoadSlot.getSchedulingWindow().getSizeInHours());
 					// // Re-check against opt start date.
 					// final int trimmedPortWindowStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
 					// Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(portWindowStart)));
@@ -1777,7 +1777,7 @@ public class LNGScenarioTransformer {
 					port = portAssociation.lookup(dischargeSlot.getPort());
 				}
 
-				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrDelegateDuration(),
+				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSchedulingWindow().getDuration(),
 						pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatePricingEvent()), dischargeSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3, slotCancelled);
 
 				if (dischargeSlot.getSlotOrDelegateDivertible()) {
@@ -1785,7 +1785,7 @@ public class LNGScenarioTransformer {
 				}
 			} else {
 				discharge = builder.createDischargeSlot(name, portAssociation.lookupNullChecked(dischargeSlot.getPort()), dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator,
-						dischargeSlot.getSlotOrDelegateDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatePricingEvent()), dischargeSlot.isOptional(), slotLocked, isSpot,
+						dischargeSlot.getSchedulingWindow().getDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatePricingEvent()), dischargeSlot.isOptional(), slotLocked, isSpot,
 						isVolumeLimitInM3, slotCancelled);
 			}
 		}
@@ -1942,7 +1942,7 @@ public class LNGScenarioTransformer {
 				port = portAssociation.lookup(loadSlot.getPort());
 			}
 			load = builder.createDESPurchaseLoadSlot(elementName, port, localTimeWindow, minVolume, maxVolume, loadPriceCalculator,
-					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegateCV()), loadSlot.getSlotOrDelegateDuration(), slotPricingDate,
+					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegateCV()), loadSlot.getSchedulingWindow().getDuration(), slotPricingDate,
 					transformPricingEvent(loadSlot.getSlotOrDelegatePricingEvent()), loadSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3, slotCancelled);
 
 			if (loadSlot.getSlotOrDelegateDivertible()) {
@@ -1950,7 +1950,7 @@ public class LNGScenarioTransformer {
 			}
 		} else {
 			load = builder.createLoadSlot(elementName, portAssociation.lookupNullChecked(loadSlot.getPort()), loadWindow, minVolume, maxVolume, loadPriceCalculator,
-					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegateCV()), loadSlot.getSlotOrDelegateDuration(), loadSlot.isSetArriveCold(), loadSlot.isArriveCold(),
+					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegateCV()), loadSlot.getSchedulingWindow().getDuration(), loadSlot.isSetArriveCold(), loadSlot.isArriveCold(),
 					loadSlot.isSchedulePurge(), slotPricingDate, transformPricingEvent(loadSlot.getSlotOrDelegatePricingEvent()), loadSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3,
 					slotCancelled);
 		}
@@ -2201,7 +2201,7 @@ public class LNGScenarioTransformer {
 								for (final IPort port : marketPorts) {
 									// Re-use the real date objects to map back to integer timezones to avoid mismatching windows caused by half hour timezone shifts
 									final ZonedDateTime portWindowStart = desSlot.getWindowStart().atStartOfDay(ZoneId.of(port.getTimeZoneId()));
-									final ZonedDateTime portWindowEnd = portWindowStart.plusHours(desSlot.getWindowSizeInHours());
+									final ZonedDateTime portWindowEnd = portWindowStart.plusHours(desSlot.getSchedulingWindow().getSizeInHours());
 									// Re-check against opt start date.
 									final int trimmedPortWindowStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
 											Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(portWindowStart)));
@@ -2361,7 +2361,7 @@ public class LNGScenarioTransformer {
 
 									// Re-use the real date objects to map back to integer timezones to avoid mismatching windows caused by half hour timezone shifts
 									final ZonedDateTime portWindowStart = fobSlot.getWindowStart().atStartOfDay(ZoneId.of(port.getTimeZoneId()));
-									final ZonedDateTime portWindowEnd = portWindowStart.plusHours(fobSlot.getWindowSizeInHours());
+									final ZonedDateTime portWindowEnd = portWindowStart.plusHours(fobSlot.getSchedulingWindow().getSizeInHours());
 									// Re-check against opt start date.
 									final int trimmedPortWindowStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
 											Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(portWindowStart)));
@@ -2512,7 +2512,7 @@ public class LNGScenarioTransformer {
 								final boolean isVolumeLimitInM3 = desSalesMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
 
 								final IDischargeOption desSalesSlot = builder.createDischargeSlot(internalID, notionalIPort, tw, minVolume, maxVolume, 0, Long.MAX_VALUE, priceCalculator,
-										desSlot.getSlotOrDelegateDuration(), pricingDate, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3, false);
+										desSlot.getSchedulingWindow().getDuration(), pricingDate, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3, false);
 
 								// Key piece of information
 								desSlot.setMarket(desSalesMarket);
@@ -2652,7 +2652,7 @@ public class LNGScenarioTransformer {
 								fobSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 
 								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(internalID, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
-										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSlotOrDelegateDuration(),
+										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSchedulingWindow().getDuration(),
 										fobSlot.isArriveCold(), true, false, IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3, false);
 
 								// Key piece of information

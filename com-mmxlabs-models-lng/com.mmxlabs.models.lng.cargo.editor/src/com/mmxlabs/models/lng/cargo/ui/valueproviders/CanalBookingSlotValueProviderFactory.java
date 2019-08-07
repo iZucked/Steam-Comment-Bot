@@ -21,6 +21,7 @@ import com.mmxlabs.common.time.TimeUtils;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.TimeWindow;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -84,18 +85,19 @@ public class CanalBookingSlotValueProviderFactory implements IReferenceValueProv
 					if (slot == canalBookingSlot.getSlot()) {
 						filteredList.add(value);
 					} else {
-						LocalDate windowStart = slot.getWindowStart();
+						TimeWindow tw = slot.getSchedulingWindow();
+						LocalDate windowStart = tw.getStartDate();
 						LocalDate windowEnd = windowStart;
 
-						switch (slot.getSlotOrDelegateWindowSizeUnits()) {
+						switch (tw.getSizeUnits()) {
 						case DAYS:
-							windowEnd = windowStart.plusDays(slot.getSlotOrDelegateWindowSize());
+							windowEnd = windowStart.plusDays(tw.getSize());
 							break;
 						case HOURS:
-							windowEnd = windowStart.plusDays((slot.getSlotOrDelegateWindowSize() + 12) / 24);
+							windowEnd = windowStart.plusDays((tw.getSize() + 12) / 24);
 							break;
 						case MONTHS:
-							windowEnd = windowStart.plusMonths(slot.getSlotOrDelegateWindowSize());
+							windowEnd = windowStart.plusMonths(tw.getSize());
 							break;
 						default:
 							break;

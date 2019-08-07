@@ -198,8 +198,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					final int wsize = (Integer) mmxEo.eGetWithDefault(WindowSize);
 					final TimePeriod ePeriod = (TimePeriod) mmxEo.eGetWithDefault(WindowSizeUnits);
 					if (mmxEo instanceof Slot) {
-						final Slot slot = (Slot) mmxEo;
-						final ZonedDateTime ed = slot.getWindowEndWithSlotOrPortTimeWithoutCP();
+						final Slot<?> slot = (Slot<?>) mmxEo;
+						final ZonedDateTime ed = getDisplayedWindowEndTime(slot);
 						final String text = formatDate(d, time) + " - " + formatDate(ed.toLocalDate(), ed.toLocalDateTime().getHour());
 						textClient.setText(text);
 					} else {
@@ -209,6 +209,31 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				}
 			}
 
+			private ZonedDateTime getDisplayedWindowEndTime(Slot<?> slot) {
+				final ZonedDateTime start = slot.getWindowStartWithSlotOrPortTime();
+				final TimePeriod p = slot.getWindowSizeUnits();
+				int windowSize = slot.getWindowSize();
+				ZonedDateTime end = start;
+
+				if (windowSize > 0) {
+					switch (p) {
+					case DAYS:
+						end = end.plusDays(windowSize).minusHours(1);
+						break;
+					case HOURS:
+						end = end.plusHours(windowSize) ;
+						break;
+					case MONTHS:
+						end = end.plusMonths(windowSize).minusHours(1);
+						break;
+					default:
+						break;
+					}
+				}
+				
+				return end;
+			}
+			
 			private String getUnits(final TimePeriod ePeriod) {
 				switch (ePeriod) {
 				case HOURS:

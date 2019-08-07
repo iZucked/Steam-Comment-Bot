@@ -132,9 +132,9 @@ public class AnalyticsBuilder {
 				slot.setDESPurchase(originalLoadSlot.isDESPurchase());
 				slot.setDivertible(originalLoadSlot.getSlotOrDelegateDivertible());
 				slot.setCounterparty(originalLoadSlot.getCounterparty());
-				slot.setDuration(originalLoadSlot.getSlotOrDelegateWithoutCPDuration());
-				slot.setWindowSize(originalLoadSlot.getSlotOrDelegateWithoutCPWindowSize());
-				slot.setWindowSizeUnits(originalLoadSlot.getSlotOrDelegateWindowSizeUnits());
+				slot.setDuration(originalLoadSlot.getDuration());
+				slot.setWindowSize(originalLoadSlot.getWindowSize());
+				slot.setWindowSizeUnits(originalLoadSlot.getWindowSizeUnits());
 				slot.setWindowCounterParty(originalLoadSlot.isWindowCounterParty());
 
 				if (originalLoadSlot.getSlotOrDelegateCV() != 0.0) {
@@ -300,9 +300,9 @@ public class AnalyticsBuilder {
 				slot.setFOBSale(originalDischargeSlot.isFOBSale());
 				slot.setDivertible(originalDischargeSlot.getSlotOrDelegateDivertible());
 				slot.setCounterparty(originalDischargeSlot.getSlotOrDelegateCounterparty());
-				slot.setDuration(originalDischargeSlot.getSlotOrDelegateWithoutCPDuration());
-				slot.setWindowSize(originalDischargeSlot.getSlotOrDelegateWithoutCPWindowSize());
-				slot.setWindowSizeUnits(originalDischargeSlot.getSlotOrDelegateWindowSizeUnits());
+				slot.setDuration(originalDischargeSlot.getDuration());
+				slot.setWindowSize(originalDischargeSlot.getWindowSize());
+				slot.setWindowSizeUnits(originalDischargeSlot.getWindowSizeUnits());
 				slot.setWindowCounterParty(originalDischargeSlot.isWindowCounterParty());
 				
 				// TODO: Copy other params!
@@ -1341,7 +1341,7 @@ public class AnalyticsBuilder {
 			final SellReference sellReference = (SellReference) option;
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
-				return slot.getSlotOrDelegateDuration();
+				return slot.getSchedulingWindow().getDuration();
 			}
 		} else if (option instanceof SellMarket) {
 
@@ -1369,7 +1369,7 @@ public class AnalyticsBuilder {
 			final BuyReference buyReference = (BuyReference) option;
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
-				return slot.getSlotOrDelegateDuration();
+				return slot.getSchedulingWindow().getDuration();
 			}
 		} else if (option instanceof BuyMarket) {
 

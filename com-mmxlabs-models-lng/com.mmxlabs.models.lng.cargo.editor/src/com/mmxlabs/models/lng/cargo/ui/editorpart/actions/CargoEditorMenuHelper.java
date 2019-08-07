@@ -56,6 +56,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.TimeWindow;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.editor.editors.ldd.ComplexCargoEditor;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
@@ -1271,7 +1272,7 @@ public class CargoEditorMenuHelper {
 						if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel(), scenarioEditingLocation.getScenarioDataProvider());
 							cal = cal.plusHours(travelTime);
-							cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());
+							cal = cal.plusHours(loadSlot.getSchedulingWindow().getDuration());
 						} else if (!loadSlot.isDESPurchase() && !dischargeSlot.isFOBSale()) {
 
 							Vessel assignedVessel = null;
@@ -1292,7 +1293,7 @@ public class CargoEditorMenuHelper {
 								throw new RuntimeException(message);
 							}
 							cal = cal.plusHours(travelTime);
-							cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());
+							cal = cal.plusHours(loadSlot.getSchedulingWindow().getDuration());
 						}
 
 						// Get existing names
@@ -1353,7 +1354,7 @@ public class CargoEditorMenuHelper {
 								throw new RuntimeException(message);
 							}
 							cal = cal.minusHours(travelTime);
-							cal = cal.minusHours(loadSlot.getSlotOrDelegateDuration());
+							cal = cal.minusHours(loadSlot.getSchedulingWindow().getDuration());
 						}
 
 						// Set back to start of month
@@ -1518,7 +1519,7 @@ public class CargoEditorMenuHelper {
 				throw new RuntimeException(message);
 			}
 			cal = cal.minusHours(travelTime);
-			cal = cal.minusHours(loadSlot.getSlotOrDelegateDuration());
+			cal = cal.minusHours(loadSlot.getSchedulingWindow().getDuration());
 		}
 
 		// Set back to start of month
@@ -1553,7 +1554,7 @@ public class CargoEditorMenuHelper {
 		if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
 			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel(),sdp);
 			cal = cal.plusHours(travelTime);
-			cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());
+			cal = cal.plusHours(loadSlot.getSchedulingWindow().getDuration());
 		} else if (!loadSlot.isDESPurchase() && !dischargeSlot.isFOBSale()) {
 
 			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel,sdp);
@@ -1563,7 +1564,7 @@ public class CargoEditorMenuHelper {
 				throw new RuntimeException(message);
 			}
 			cal = cal.plusHours(travelTime);
-			cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());
+			cal = cal.plusHours(loadSlot.getSchedulingWindow().getDuration());
 		}
 
 		// Set back to start of month
@@ -1725,19 +1726,20 @@ public class CargoEditorMenuHelper {
 				canalBookingHandle = String.format("%s [%s]", canalbooking.getBookingDate(), canalbooking.getSlot().getName());
 			}
 
-			final LocalDate windowStart = slot.getWindowStart();
+			TimeWindow tw = slot.getSchedulingWindow();
+			final LocalDate windowStart = tw.getStartDate();
 			LocalDate windowEnd = windowStart;
 
-			switch (slot.getSlotOrDelegateWindowSizeUnits()) {
+			switch (slot.getSchedulingWindow().getSizeUnits()) {
 
 			case DAYS:
-				windowEnd = windowStart.plusDays(slot.getSlotOrDelegateWindowSize());
+				windowEnd = windowStart.plusDays(tw.getSize());
 				break;
 			case HOURS:
-				windowEnd = windowStart.plusDays((slot.getSlotOrDelegateWindowSize() + 12) / 24);
+				windowEnd = windowStart.plusDays((tw.getSize() + 12) / 24);
 				break;
 			case MONTHS:
-				windowEnd = windowStart.plusMonths(slot.getSlotOrDelegateWindowSize());
+				windowEnd = windowStart.plusMonths(tw.getSize());
 				break;
 			default:
 				break;

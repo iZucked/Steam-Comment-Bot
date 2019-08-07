@@ -453,7 +453,7 @@ public class WrappedAssignableElement {
 				return duration.getAsInt();
 			}
 		}
-		return slot.getSlotOrDelegateDuration();
+		return slot.getSchedulingWindow().getDuration();
 	}
 
 	public boolean isCargo() {

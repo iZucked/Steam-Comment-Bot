@@ -171,8 +171,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										return Activator.PLUGIN_ID;
 									}
 
-									final int loadDurationInHours = desPurchase.getSlotOrDelegateDuration();
-									final int dischargeDurationInHours = dischargeSlot.getSlotOrDelegateDuration();
+									final int loadDurationInHours = desPurchase.getSchedulingWindow().getDuration();
+									final int dischargeDurationInHours = dischargeSlot.getSchedulingWindow().getDuration();
 
 									@NonNull
 									PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
@@ -269,8 +269,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										return Activator.PLUGIN_ID;
 									}
 
-									final int loadDurationInHours = fobPurchase.getSlotOrDelegateDuration();
-									final int dischargeDurationInHours = fobSale.getSlotOrDelegateDuration();
+									final int loadDurationInHours = fobPurchase.getSchedulingWindow().getDuration();
+									final int dischargeDurationInHours = fobSale.getSchedulingWindow().getDuration();
 
 									@NonNull
 									PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
