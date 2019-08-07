@@ -350,6 +350,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 				final Slot s = slotAllocation.getSlot();
+				if (s == null) continue;
 				final String year = String.format("%d", s.getWindowStart().getYear());
 				if(!result.contains(year)) {
 					result.add(year);
@@ -373,6 +374,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 				final Slot s = slotAllocation.getSlot();
+				if (s == null) continue;
 				if (s.getSlotOrDelegateEntity() == null) continue;
 				final String entity = s.getSlotOrDelegateEntity().getName();
 				if(!result.contains(entity)) {
