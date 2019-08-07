@@ -34,7 +34,11 @@ Require-Bundle: com.mmxlabs.models.lng.transformer;bundle-version="[4.7.3,5.0.0)
  com.mmxlabs.license.ssl;bundle-version="[4.7.3,5.0.0)",
  com.mmxlabs.models.lng.parameters;bundle-version="[4.7.3,5.0.0)",
  com.googlecode.json-simple,
- org.apache.commons.cli;bundle-version="1.2.0"
+ org.apache.commons.cli;bundle-version="1.2.0",
+ com.fasterxml.jackson.core.jackson-databind,
+ com.fasterxml.jackson.datatype.jackson-datatype-jdk8,
+ com.fasterxml.jackson.datatype.jackson-datatype-jsr310,
+ com.fasterxml.jackson.core.jackson-core;bundle-version="2.9.2"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lingo.app.headless.internal.Activator
 Automatic-Module-Name: com.mmxlabs.lingo.app.headless
