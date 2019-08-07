@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Dataserver: LiNGO Server
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.server;singleton:=true
-Bundle-Version: 4.7.3.RELEASE
+Bundle-Version: 4.7.4.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: config,
@@ -13,7 +13,7 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.google.inject,
  org.ops4j.peaberry.eclipse,
  org.ops4j.peaberry;bundle-version="1.3.0",
- com.mmxlabs.lngdataserver.lib;bundle-version="4.7.3",
+ com.mmxlabs.lngdataserver.lib;bundle-version="4.7.4",
  org.eclipse.core.resources,
  org.eclipse.ui.workbench,
  org.eclipse.ui;bundle-version="3.109.0",
