@@ -5,6 +5,8 @@
 package com.mmxlabs.lingo.app.headless;
 
 import java.io.File;
+import java.io.FileReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,6 +30,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.base.Charsets;
+import com.google.common.io.CharStreams;
+import com.google.common.io.Files;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 import com.mmxlabs.license.ssl.LicenseChecker;
@@ -48,7 +53,11 @@ import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 
 public class HeadlessOptioniserApplication implements IApplication {
 
+	private static final String MACHINE_INFO = "machineInfo";
+	private static final String CLIENT_CODE = "clientCode";
+	private static final String BUILD_VERSION = "buildId";
 	private static final String BATCH_FILE = "batchfile";
+
 	private static final String INPUT_SCENARIO = "scenario";
 	private static final String OUTPUT_SCENARIO = "outputScenario";
 	private static final String OUTPUT_FOLDER = "outputFolder";
@@ -75,6 +84,19 @@ public class HeadlessOptioniserApplication implements IApplication {
 		if (commandLine == null) {
 			System.err.println("Error parsing the command line settings");
 			return IApplication.EXIT_OK;
+		}
+
+		String machineInfo = getMachineInfo();
+		String clientCode = "V";
+		if (commandLine.hasOption(CLIENT_CODE)) {
+			clientCode = commandLine.getOptionValue(CLIENT_CODE);
+		}
+		String buildVersion = "Dev";
+		if (commandLine.hasOption(BUILD_VERSION)) {
+			buildVersion = commandLine.getOptionValue(BUILD_VERSION);
+		}
+		if (commandLine.hasOption(MACHINE_INFO)) {
+			machineInfo = CharStreams.toString(new FileReader(commandLine.getOptionValue(MACHINE_INFO)));
 		}
 
 		List<HeadlessOptions> optionsList = new LinkedList<>();
@@ -129,6 +151,10 @@ public class HeadlessOptioniserApplication implements IApplication {
 					runner.run(1, scenarioFile, logger, options, null);
 
 					HeadlessOptioniserJSON json = setOptionParamsInJSONOutputObject(options, scenarioFile, options.minOptioniserThreads);
+					json.getMeta().setClient(clientCode);
+					json.getMeta().setVersion(buildVersion);
+					json.getMeta().setMachineType(machineInfo);
+
 					HeadlessOptioniserJSONTransformer.addRunResult(logger, json);
 
 					try {
@@ -187,7 +213,11 @@ public class HeadlessOptioniserApplication implements IApplication {
 
 		// Headless application options
 
-		options.addOption(OptionBuilder.withLongOpt(INPUT_SCENARIO).withDescription("input scenario file").hasArg().create());
+		options.addOption(OptionBuilder.withLongOpt(MACHINE_INFO).withDescription("JSON file containing machine info").hasArg().create());
+		options.addOption(OptionBuilder.withLongOpt(BUILD_VERSION).withDescription("Build Version").hasArg().create());
+		options.addOption(OptionBuilder.withLongOpt(CLIENT_CODE).withDescription("Client code for build").hasArg().create());
+
+		options.addOption(OptionBuilder.withLongOpt(BATCH_FILE).withDescription("file list a batch of jobs to run").hasArg().create());
 
 		options.addOption(OptionBuilder.withLongOpt(INPUT_SCENARIO).withDescription("input scenario file").hasArg().create());
 		options.addOption(OptionBuilder.withLongOpt(OUTPUT_SCENARIO).withDescription("Output scenario file").hasArg().create());
