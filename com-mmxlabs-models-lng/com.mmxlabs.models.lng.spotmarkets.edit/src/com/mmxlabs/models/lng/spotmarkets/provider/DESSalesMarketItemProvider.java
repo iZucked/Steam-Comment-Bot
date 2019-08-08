@@ -13,6 +13,8 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 
@@ -46,6 +48,7 @@ public class DESSalesMarketItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNotionalPortPropertyDescriptor(object);
+			addDaysPaddingPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -68,6 +71,28 @@ public class DESSalesMarketItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Days Padding feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDaysPaddingPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DESSalesMarket_daysPadding_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DESSalesMarket_daysPadding_feature", "_UI_DESSalesMarket_type"),
+				 SpotMarketsPackage.Literals.DES_SALES_MARKET__DAYS_PADDING,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -107,6 +132,12 @@ public class DESSalesMarketItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(DESSalesMarket.class)) {
+			case SpotMarketsPackage.DES_SALES_MARKET__DAYS_PADDING:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

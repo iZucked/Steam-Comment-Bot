@@ -90,6 +90,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="DESSalesMarket" eSuperTypes="#//SpotMarket">
     <eStructuralFeatures xsi:type="ecore:EReference" name="notionalPort" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="daysPadding" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FOBPurchasesMarket" eSuperTypes="#//SpotMarket">
     <eStructuralFeatures xsi:type="ecore:EReference" name="notionalPort" lowerBound="1"

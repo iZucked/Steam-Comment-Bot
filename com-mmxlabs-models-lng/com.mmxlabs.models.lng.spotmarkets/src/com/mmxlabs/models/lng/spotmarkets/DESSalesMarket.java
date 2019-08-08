@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getNotionalPort <em>Notional Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getDaysPadding <em>Days Padding</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getDESSalesMarket()
@@ -50,6 +51,32 @@ public interface DESSalesMarket extends SpotMarket {
 	 * @generated
 	 */
 	void setNotionalPort(Port value);
+
+	/**
+	 * Returns the value of the '<em><b>Days Padding</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Days Padding</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Days Padding</em>' attribute.
+	 * @see #setDaysPadding(int)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getDESSalesMarket_DaysPadding()
+	 * @model
+	 * @generated
+	 */
+	int getDaysPadding();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getDaysPadding <em>Days Padding</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Days Padding</em>' attribute.
+	 * @see #getDaysPadding()
+	 * @generated
+	 */
+	void setDaysPadding(int value);
 
 } // end of  DESSalesMarket
 
