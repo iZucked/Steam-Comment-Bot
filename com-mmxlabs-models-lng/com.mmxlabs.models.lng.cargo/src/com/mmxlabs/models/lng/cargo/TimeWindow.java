@@ -12,4 +12,5 @@ public interface TimeWindow {
 	int getSize();
 	int getDuration();
 	int getSizeInHours();
+	boolean isCounterParty();
 }

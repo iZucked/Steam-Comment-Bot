@@ -2841,6 +2841,11 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			}	
 			
 			@Override
+			public boolean isCounterParty() {
+				return isWindowCounterParty();
+			}
+			
+			@Override
 			public int getSizeInHours() {
 				final ZonedDateTime start = getWindowStartWithSlotOrPortTime();
 				ZonedDateTime end = start;
