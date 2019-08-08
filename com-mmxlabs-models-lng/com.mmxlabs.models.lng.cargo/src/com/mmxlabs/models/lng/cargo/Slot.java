@@ -1869,14 +1869,6 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @model kind="operation"
 	 * @generated
 	 */
-	//int getSlotOrDelegateDuration();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
 	int getSlotOrDelegateMinQuantity();
 
 	/**
