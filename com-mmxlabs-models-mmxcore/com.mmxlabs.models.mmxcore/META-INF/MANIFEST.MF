@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.mmxcore;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.mmxcore
-Bundle-Version: 4.7.1.qualifier
+Bundle-Version: 4.7.3.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin

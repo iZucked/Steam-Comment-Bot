@@ -70,7 +70,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 	@Override
 	public void run(final IAction action) {
 
-		if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
+		if (editor != null && editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
 			final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
 			final ScenarioInstance instance = scenarioServiceEditorInput.getScenarioInstance();
 			
