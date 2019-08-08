@@ -273,7 +273,7 @@ public class InclusionChecker {
 	public ZonedDateTime getScheduledEnd(@NonNull final Slot<?> slot, @Nullable final PortVisit portVisit) {
 		final ZonedDateTime visitTime = portVisit == null ? null : portVisit.getEnd();
 		if (visitTime == null) {
-			return slot.getWindowEndWithSlotOrPortTime().plusHours(slot.getDuration());
+			return slot.getWindowEndWithSlotOrPortTime().plusHours(slot.getSchedulingWindow().getDuration());
 		} else {
 			return visitTime;
 		}
