@@ -156,7 +156,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		for (final Cargo cargo : cargoes) {
 			final EList<Slot<?>> slots = cargo.getSortedSlots();
 			final Slot<?> slot = slots.get(slots.size() - 1);
-			final ZonedDateTime slotDate = slot.getWindowEndWithSlotOrPortTime();
+			final ZonedDateTime slotDate = slot.getSchedulingTimeWindow().getEnd();
 
 			if (date == null || date.isBefore(slotDate)) {
 				date = slotDate;
@@ -195,7 +195,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		for (final Cargo cargo : cargoes) {
 			final EList<Slot<?>> slots = cargo.getSortedSlots();
 			final Slot<?> slot = slots.get(0);
-			final ZonedDateTime slotDate = slot.getWindowStartWithSlotOrPortTime();
+			final ZonedDateTime slotDate = slot.getSchedulingTimeWindow().getStart();
 
 			if (date == null || date.isAfter(slotDate)) {
 				date = slotDate;
@@ -262,7 +262,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	public CharterOutEvent makeCharterOut(@NonNull Port startPort, @Nullable Port endPort) {
 
 		// change to default: add a charter out event 2-3 hrs after discharge window ends
-		final ZonedDateTime endLoad = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final ZonedDateTime endLoad = cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd();
 		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZoneSameInstant(startPort.getZoneId()).toLocalDateTime();
 		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZoneSameInstant(startPort.getZoneId()).toLocalDateTime();
 

@@ -48,8 +48,8 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 				if (loadSlot.getWindowStart() == null) {
 					return Activator.PLUGIN_ID;
 				}
-				final ZonedDateTime start = loadSlot.getWindowStartWithSlotOrPortTime();
-				ZonedDateTime end = loadSlot.getWindowEndWithSlotOrPortTime();
+				final ZonedDateTime start = loadSlot.getSchedulingTimeWindow().getStart();
+				ZonedDateTime end = loadSlot.getSchedulingTimeWindow().getEnd();
 				// For divertible cargoes, we should find the round trip time
 				if (loadSlot.getSlotOrDelegateDivertible()) {
 					end = end.plusDays(loadSlot.getSlotOrDelegateShippingDaysRestriction());
@@ -66,8 +66,8 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 				}
 
 				nominatedVessel = dischargeSlot.getNominatedVessel();
-				final ZonedDateTime start = dischargeSlot.getWindowStartWithSlotOrPortTime();
-				final ZonedDateTime end = dischargeSlot.getWindowEndWithSlotOrPortTime();
+				final ZonedDateTime start = dischargeSlot.getSchedulingTimeWindow().getStart();
+				final ZonedDateTime end = dischargeSlot.getSchedulingTimeWindow().getEnd();
 				interval = new NonNullPair<>(start, end);
 				type = "FOB Sale";
 				name = dischargeSlot.getName();

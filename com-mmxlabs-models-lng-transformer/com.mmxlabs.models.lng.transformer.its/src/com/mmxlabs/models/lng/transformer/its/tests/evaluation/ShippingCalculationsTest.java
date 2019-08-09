@@ -645,7 +645,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
 		final VesselAvailability av = msc.vesselAvailability;
-		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
+		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd().toLocalDateTime();
 
 		// return 3 hrs after discharge window ends
 		final LocalDateTime returnDate = endDischarge.plusHours(3);
@@ -680,7 +680,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
 		final VesselAvailability av = msc.vesselAvailability;
-		final LocalDateTime startLoad = msc.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime().toLocalDateTime();
+		final LocalDateTime startLoad = msc.cargo.getSlots().get(0).getSchedulingTimeWindow().getStartWithFlex().toLocalDateTime();
 
 		// start 3 hrs before load window begins
 		final LocalDateTime startDate = startLoad.minusHours(3);
@@ -715,8 +715,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
 		final VesselAvailability av = msc.vesselAvailability;
-		final LocalDateTime startLoad = msc.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime().toLocalDateTime();
-		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
+		final LocalDateTime startLoad = msc.cargo.getSlots().get(0).getSchedulingTimeWindow().getStart().toLocalDateTime();
+		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd().toLocalDateTime();
 
 		// start within 5 hrs before load window starts
 		final LocalDateTime startDate = startLoad.minusHours(5);
@@ -1096,7 +1096,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// change to default: add a dry dock event 2-3 hrs after discharge window ends
-		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
+		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd().toLocalDateTime();
 		final LocalDateTime dryDockStartByDate = endLoad.plusHours(3);
 		final LocalDateTime dryDockStartAfterDate = endLoad.plusHours(2);
 		DryDockEvent event = msc.vesselEventCreator.createDryDockEvent("DryDock", msc.loadPort, dryDockStartByDate, dryDockStartAfterDate);
@@ -1129,7 +1129,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// change to default: add a dry dock event 2-3 hrs after discharge window ends
-		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
+		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd().toLocalDateTime();
 		final LocalDateTime maintenanceDockStartByDate = endLoad.plusHours(3);
 		final LocalDateTime maintenanceDockStartAfterDate = endLoad.plusHours(2);
 		MaintenanceEvent event = msc.vesselEventCreator.createMaintenanceEvent("Maintenance", msc.loadPort, maintenanceDockStartByDate, maintenanceDockStartAfterDate);
@@ -1228,7 +1228,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		final Slot loadSlot = msc.cargo.getSlots().get(0);
-		final LocalDateTime loadDate = loadSlot.getWindowStartWithSlotOrPortTime().toLocalDateTime();
+		final LocalDateTime loadDate = loadSlot.getSchedulingTimeWindow().getStart().toLocalDateTime();
 
 		final double maxSpeed = msc.vessel.getVesselOrDelegateMaxSpeed();
 		final int firstIdle = 1;
@@ -1265,7 +1265,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
 		final VesselAvailability av = msc.vesselAvailability;
-		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
+		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd().toLocalDateTime();
 
 		// return 37 hrs after discharge window ends
 		final LocalDateTime returnDate = endDischarge.plusHours(37);
@@ -1324,7 +1324,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
 		final VesselAvailability av = msc.vesselAvailability;
-		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
+		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd().toLocalDateTime();
 
 		final int charterRatePerDay = 240000;
 		// change from default scenario: vessel has time charter rate 240 per day (10 per hour)

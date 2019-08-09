@@ -41,8 +41,8 @@ public class CargoSlotSorter {
 				return c;
 			}
 
-			final ZonedDateTime d1 = o1.getWindowStartWithSlotOrPortTime();
-			final ZonedDateTime d2 = o2.getWindowStartWithSlotOrPortTime();
+			final ZonedDateTime d1 = o1.getSchedulingTimeWindow().getStart();
+			final ZonedDateTime d2 = o2.getSchedulingTimeWindow().getStart();
 			if (d1 == null) {
 				return -1;
 			} else if (d2 == null) {

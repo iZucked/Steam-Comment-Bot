@@ -31,7 +31,7 @@
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Monthly"/>
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Level"/>
     </genEnums>
-    <genDataTypes ecoreDataType="cargo.ecore#//TimeWindow"/>
+    <genDataTypes ecoreDataType="cargo.ecore#//SchedulingTimeWindow"/>
     <genClasses ecoreClass="cargo.ecore#//CargoModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/loadSlots"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/dischargeSlots"/>
@@ -159,7 +159,7 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateContractRestrictions"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortRestrictions"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVesselRestrictions"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSchedulingWindow"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSchedulingTimeWindow"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//LoadSlot">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/cargoCV"/>

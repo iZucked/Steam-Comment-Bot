@@ -1571,13 +1571,13 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		LocalDate erl = result;
 
 		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
-			if (erl.isBefore(ls.getWindowEndWithSlotOrPortTime().toLocalDate())) {
-				erl = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+			if (erl.isBefore(ls.getSchedulingTimeWindow().getEnd().toLocalDate())) {
+				erl = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 		}
 		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
-			if (erl.isBefore(ds.getWindowEndWithSlotOrPortTime().toLocalDate())) {
-				erl = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+			if (erl.isBefore(ds.getSchedulingTimeWindow().getEnd().toLocalDate())) {
+				erl = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 		}
 		if (erl.isAfter(result)) {

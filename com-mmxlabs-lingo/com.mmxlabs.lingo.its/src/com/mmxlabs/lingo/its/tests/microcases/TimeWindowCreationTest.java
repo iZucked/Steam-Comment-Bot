@@ -240,7 +240,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 
 			Assertions.assertEquals(LocalDate.of(2015, 12, 1), dischargeSlot.getWindowStart());
 			Assertions.assertEquals(0, dischargeSlot.getWindowStartTime());
-			Assertions.assertEquals(31 * 24 - 1, dischargeSlot.getSchedulingWindow().getSizeInHours());
+			Assertions.assertEquals(31 * 24 - 1, dischargeSlot.getSchedulingTimeWindow().getSizeInHours());
 		});
 	}
 
@@ -274,8 +274,8 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		final DischargeSlot dischargeSlot = (DischargeSlot) cargo.getSlots().get(1);
 
 		// Check expected window end date
-		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 5, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
-		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 11, 23, 0, 0, 0, ZoneId.of("UTC")), dischargeSlot.getWindowEndWithSlotOrPortTime());
+		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 5, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getSchedulingTimeWindow().getEnd());
+		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 11, 23, 0, 0, 0, ZoneId.of("UTC")), dischargeSlot.getSchedulingTimeWindow().getEnd());
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -331,8 +331,8 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		final DischargeSlot dischargeSlot = (DischargeSlot) cargo.getSlots().get(1);
 
 		// Check expected window end date
-		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 5, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
-		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 11, 23, 0, 0, 0, ZoneId.of("UTC")), dischargeSlot.getWindowEndWithSlotOrPortTime());
+		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 5, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getSchedulingTimeWindow().getEnd());
+		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 11, 23, 0, 0, 0, ZoneId.of("UTC")), dischargeSlot.getSchedulingTimeWindow().getEnd());
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -404,28 +404,28 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		loadSlot.setWindowStartTime(0);
 
 		loadSlot.setWindowSize(0);
-		Assertions.assertEquals(0, loadSlot.getSchedulingWindow().getSizeInHours());
-		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 1, 0, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
+		Assertions.assertEquals(0, loadSlot.getSchedulingTimeWindow().getSizeInHours());
+		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 1, 0, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getSchedulingTimeWindow().getEnd());
 
 		loadSlot.setWindowSize(23);
 		loadSlot.setWindowSizeUnits(TimePeriod.HOURS);
-		Assertions.assertEquals(23, loadSlot.getSchedulingWindow().getSizeInHours());
-		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 1, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
+		Assertions.assertEquals(23, loadSlot.getSchedulingTimeWindow().getSizeInHours());
+		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 1, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getSchedulingTimeWindow().getEnd());
 
 		loadSlot.setWindowSize(1);
 		loadSlot.setWindowSizeUnits(TimePeriod.DAYS);
-		Assertions.assertEquals(23, loadSlot.getSchedulingWindow().getSizeInHours());
-		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 1, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
+		Assertions.assertEquals(23, loadSlot.getSchedulingTimeWindow().getSizeInHours());
+		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 1, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getSchedulingTimeWindow().getEnd());
 
 		loadSlot.setWindowSize(2);
 		loadSlot.setWindowSizeUnits(TimePeriod.DAYS);
-		Assertions.assertEquals(47, loadSlot.getSchedulingWindow().getSizeInHours());
-		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 2, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
+		Assertions.assertEquals(47, loadSlot.getSchedulingTimeWindow().getSizeInHours());
+		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 2, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getSchedulingTimeWindow().getEnd());
 
 		loadSlot.setWindowSize(1);
 		loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-		Assertions.assertEquals(31 * 24 - 1, loadSlot.getSchedulingWindow().getSizeInHours());
-		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 31, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
+		Assertions.assertEquals(31 * 24 - 1, loadSlot.getSchedulingTimeWindow().getSizeInHours());
+		Assertions.assertEquals(ZonedDateTime.of(2015, 12, 31, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getSchedulingTimeWindow().getEnd());
 
 	}
 
@@ -465,9 +465,9 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 7, 13));
 
 		// Check expected window end date
-		Assertions.assertEquals(ZonedDateTime.of(2017, 7, 1, 0, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowStartWithSlotOrPortTime());
-		Assertions.assertEquals(ZonedDateTime.of(2017, 8, 1, 0, 0, 0, 0, ZoneId.of("UTC")).minusHours(1), loadSlot.getWindowEndWithSlotOrPortTime());
-		Assertions.assertEquals(ZonedDateTime.of(2017, 7, 23, 0, 0, 0, 0, ZoneId.of("UTC")), dischargeSlot.getWindowEndWithSlotOrPortTime());
+		Assertions.assertEquals(ZonedDateTime.of(2017, 7, 1, 0, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getSchedulingTimeWindow().getStart());
+		Assertions.assertEquals(ZonedDateTime.of(2017, 8, 1, 0, 0, 0, 0, ZoneId.of("UTC")).minusHours(1), loadSlot.getSchedulingTimeWindow().getEnd());
+		Assertions.assertEquals(ZonedDateTime.of(2017, 7, 23, 0, 0, 0, 0, ZoneId.of("UTC")), dischargeSlot.getSchedulingTimeWindow().getEnd());
 
 		evaluateWithLSOTest(plan -> plan.getUserSettings().setWithSpotCargoMarkets(true), scenarioRunner -> {
 
@@ -539,9 +539,9 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 7, 13));
 
 		// Check expected window end date
-		Assertions.assertEquals(ZonedDateTime.of(2017, 7, 1, 0, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowStartWithSlotOrPortTime());
-		Assertions.assertEquals(ZonedDateTime.of(2017, 8, 1, 0, 0, 0, 0, ZoneId.of("UTC")).minusHours(1), loadSlot.getWindowEndWithSlotOrPortTime());
-		Assertions.assertEquals(ZonedDateTime.of(2017, 7, 23, 0, 0, 0, 0, ZoneId.of("UTC")), dischargeSlot.getWindowEndWithSlotOrPortTime());
+		Assertions.assertEquals(ZonedDateTime.of(2017, 7, 1, 0, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getSchedulingTimeWindow().getStart());
+		Assertions.assertEquals(ZonedDateTime.of(2017, 8, 1, 0, 0, 0, 0, ZoneId.of("UTC")).minusHours(1), loadSlot.getSchedulingTimeWindow().getEnd());
+		Assertions.assertEquals(ZonedDateTime.of(2017, 7, 23, 0, 0, 0, 0, ZoneId.of("UTC")), dischargeSlot.getSchedulingTimeWindow().getEnd());
 
 		evaluateWithLSOTest(plan -> {
 			plan.getUserSettings().setWithSpotCargoMarkets(true);
@@ -631,9 +631,9 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 7, 13));
 
 		// Check expected window end date
-		Assertions.assertEquals(ZonedDateTime.of(2017, 7, 1, 0, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowStartWithSlotOrPortTime());
-		Assertions.assertEquals(ZonedDateTime.of(2017, 8, 1, 0, 0, 0, 0, ZoneId.of("UTC")).minusHours(1), loadSlot.getWindowEndWithSlotOrPortTime());
-		Assertions.assertEquals(ZonedDateTime.of(2017, 7, 23, 0, 0, 0, 0, ZoneId.of("UTC")), dischargeSlot.getWindowEndWithSlotOrPortTime());
+		Assertions.assertEquals(ZonedDateTime.of(2017, 7, 1, 0, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getSchedulingTimeWindow().getStart());
+		Assertions.assertEquals(ZonedDateTime.of(2017, 8, 1, 0, 0, 0, 0, ZoneId.of("UTC")).minusHours(1), loadSlot.getSchedulingTimeWindow().getEnd());
+		Assertions.assertEquals(ZonedDateTime.of(2017, 7, 23, 0, 0, 0, 0, ZoneId.of("UTC")), dischargeSlot.getSchedulingTimeWindow().getEnd());
 
 		evaluateWithLSOTest(plan -> {
 			plan.getUserSettings().setWithSpotCargoMarkets(true);

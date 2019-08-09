@@ -210,7 +210,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			}
 
 			private ZonedDateTime getDisplayedWindowEndTime(Slot<?> slot) {
-				final ZonedDateTime start = slot.getWindowStartWithSlotOrPortTime();
+				final ZonedDateTime start = slot.getSchedulingTimeWindow().getStart();
 				final TimePeriod p = slot.getWindowSizeUnits();
 				int windowSize = slot.getWindowSize();
 				ZonedDateTime end = start;

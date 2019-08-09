@@ -594,7 +594,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// change to default: add a charter out event 2-3 hrs after discharge window ends
-		final ZonedDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final ZonedDateTime endLoad = msc.cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd();
 		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZoneSameInstant(msc.loadPort.getZoneId()).toLocalDateTime();
 		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZoneSameInstant(msc.loadPort.getZoneId()).toLocalDateTime();
 
@@ -683,7 +683,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// change to default: add a charter out event 2-3 hrs after discharge window ends
-		final ZonedDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final ZonedDateTime endLoad = msc.cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd();
 		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZoneSameInstant(msc.loadPort.getZoneId()).toLocalDateTime();
 		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZoneSameInstant(msc.loadPort.getZoneId()).toLocalDateTime();
 
@@ -780,7 +780,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		msc.vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 
 		// change to default: add a dry dock event 2-3 hrs after discharge window ends
-		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
+		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd().toLocalDateTime();
 		final LocalDateTime dryDockStartByDate = endLoad.plusHours(3);
 		final LocalDateTime dryDockStartAfterDate = endLoad.plusHours(2);
 

@@ -49,7 +49,7 @@ public class AssignmentEditorHelper {
 					if (slot instanceof SpotSlot) {
 						continue;
 					}
-					return new Pair<>(slot.getWindowStartWithSlotOrPortTime(), slot.getWindowEndWithSlotOrPortTime());
+					return new Pair<>(slot.getSchedulingTimeWindow().getStart(), slot.getSchedulingTimeWindow().getEnd());
 				}
 			}
 		}
@@ -65,7 +65,7 @@ public class AssignmentEditorHelper {
 					if (slot instanceof SpotSlot) {
 						continue;
 					}
-					return slot.getWindowStartWithSlotOrPortTime();
+					return slot.getSchedulingTimeWindow().getStart();
 				}
 			}
 		}
@@ -81,14 +81,14 @@ public class AssignmentEditorHelper {
 				return null;
 			}
 			final Slot<?> firstSlot = slots.get(0);
-			return new Pair<>(firstSlot.getWindowStartWithSlotOrPortTime(), firstSlot.getWindowEndWithSlotOrPortTime());
+			return new Pair<>(firstSlot.getSchedulingTimeWindow().getStart(), firstSlot.getSchedulingTimeWindow().getEnd());
 		} else if (element instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) element;
 
 			return new Pair<>(vesselEvent.getStartAfterAsDateTime(), vesselEvent.getStartByAsDateTime());
 		} else if (element instanceof Slot<?>) {
 			final Slot<?> slot = (Slot<?>) element;
-			return new Pair<>(slot.getWindowStartWithSlotOrPortTime(), slot.getWindowEndWithSlotOrPortTime());
+			return new Pair<>(slot.getSchedulingTimeWindow().getStart(), slot.getSchedulingTimeWindow().getEnd());
 		} else {
 			return null;
 		}
@@ -103,11 +103,11 @@ public class AssignmentEditorHelper {
 				return null;
 			}
 			final Slot<?> firstSlot = slots.get(0);
-			return firstSlot.getWindowStartWithSlotOrPortTime();
+			return firstSlot.getSchedulingTimeWindow().getStart();
 		} else if (element instanceof VesselEvent) {
 			return ((VesselEvent) element).getStartByAsDateTime();
 		} else if (element instanceof Slot<?>) {
-			return ((Slot<?>) element).getWindowStartWithSlotOrPortTime();
+			return ((Slot<?>) element).getSchedulingTimeWindow().getStart();
 		} else {
 			return null;
 		}
@@ -124,7 +124,7 @@ public class AssignmentEditorHelper {
 					if (slot instanceof SpotSlot) {
 						continue;
 					}
-					return slot.getWindowEndWithSlotOrPortTime();
+					return slot.getSchedulingTimeWindow().getEnd();
 				}
 			}
 		}
@@ -141,7 +141,7 @@ public class AssignmentEditorHelper {
 			}
 			final Slot<?> lastSlot = slots.get(slots.size() - 1);
 			if (lastSlot.getWindowStart() != null) {
-				return lastSlot.getWindowEndWithSlotOrPortTime();
+				return lastSlot.getSchedulingTimeWindow().getEnd();
 			}
 		} else if (element instanceof VesselEvent) {
 			final ZonedDateTime dateTime = ((VesselEvent) element).getStartByAsDateTime();
@@ -151,7 +151,7 @@ public class AssignmentEditorHelper {
 		} else if (element instanceof Slot) {
 			final Slot<?> slot = (Slot<?>) element;
 			if (slot.getWindowStart() != null) {
-				return slot.getWindowEndWithSlotOrPortTime();
+				return slot.getSchedulingTimeWindow().getEnd();
 			}
 		}
 		return null;

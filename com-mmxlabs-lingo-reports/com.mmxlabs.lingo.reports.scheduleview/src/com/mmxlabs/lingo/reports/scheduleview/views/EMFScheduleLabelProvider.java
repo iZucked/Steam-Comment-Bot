@@ -459,7 +459,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				if (slot != null) {
 					eventText.append("Time in port: " + durationTime + " \n");
 					// eventText.append("Window Start: " + dateToString(slot.getWindowStartWithSlotOrPortTime()) + "\n");
-					eventText.append("Window End: " + dateToString(slot.getWindowEndWithSlotOrPortTime()) + "\n");
+					eventText.append("Window End: " + dateToString(slot.getSchedulingTimeWindow().getEnd()) + "\n");
 					eventText.append(" \n");
 				}
 				boolean checkLateness = true;

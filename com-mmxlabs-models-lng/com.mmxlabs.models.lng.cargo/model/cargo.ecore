@@ -89,7 +89,7 @@
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
       </eGenericType>
     </eOperations>
-    <eOperations name="getSchedulingWindow" eType="#//TimeWindow"/>
+    <eOperations name="getSchedulingTimeWindow" eType="#//SchedulingTimeWindow"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
         unsettable="true">
       <eGenericType eTypeParameter="#//Slot/T"/>
@@ -675,5 +675,5 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="paperDeals" upperBound="-1"
         eType="#//PaperDeal"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EDataType" name="TimeWindow" instanceClassName="com.mmxlabs.models.lng.cargo.TimeWindow"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="SchedulingTimeWindow" instanceClassName="com.mmxlabs.models.lng.cargo.SchedulingTimeWindow"/>
 </ecore:EPackage>

@@ -56,7 +56,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.TimeWindow;
+import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.editor.editors.ldd.ComplexCargoEditor;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
@@ -803,10 +803,10 @@ public class CargoEditorMenuHelper {
 	}
 
 	private boolean areSlotWindowsCompatible(final LoadSlot load, final DischargeSlot discharge) {
-		final ZonedDateTime loadStart = load.getWindowStartWithSlotOrPortTimeWithFlex();
-		final ZonedDateTime loadEnd = load.getWindowEndWithSlotOrPortTimeWithFlex();
-		final ZonedDateTime dischargeStart = discharge.getWindowStartWithSlotOrPortTimeWithFlex();
-		final ZonedDateTime dischargeEnd = discharge.getWindowEndWithSlotOrPortTimeWithFlex();
+		final ZonedDateTime loadStart = load.getSchedulingTimeWindow().getStartWithFlex();
+		final ZonedDateTime loadEnd = load.getSchedulingTimeWindow().getEndWithFlex();
+		final ZonedDateTime dischargeStart = discharge.getSchedulingTimeWindow().getStartWithFlex();
+		final ZonedDateTime dischargeEnd = discharge.getSchedulingTimeWindow().getEndWithFlex();
 
 		// slots with unknown time windows are incompatible
 		if (loadStart == null || dischargeStart == null || loadEnd == null || dischargeEnd == null) {
@@ -962,8 +962,8 @@ public class CargoEditorMenuHelper {
 					continue;
 				}
 				// TODO: Check the change in rounding - does this round down as the previous code did?
-				final ZonedDateTime a = loadSlot.getWindowStartWithSlotOrPortTime();
-				final ZonedDateTime b = dischargeSlot.getWindowStartWithSlotOrPortTime();
+				final ZonedDateTime a = loadSlot.getSchedulingTimeWindow().getStart();
+				final ZonedDateTime b = dischargeSlot.getSchedulingTimeWindow().getStart();
 				if (a != null && b != null) {
 					daysDifference = Days.between(a, b);
 				} else {
@@ -1267,12 +1267,12 @@ public class CargoEditorMenuHelper {
 					} else {
 						dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, market);
 						// Get start of month and create full sized window
-						ZonedDateTime cal = source.getWindowStartWithSlotOrPortTime();
+						ZonedDateTime cal = source.getSchedulingTimeWindow().getStart();
 						// Take into account travel time
 						if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel(), scenarioEditingLocation.getScenarioDataProvider());
 							cal = cal.plusHours(travelTime);
-							cal = cal.plusHours(loadSlot.getSchedulingWindow().getDuration());
+							cal = cal.plusHours(loadSlot.getSchedulingTimeWindow().getDuration());
 						} else if (!loadSlot.isDESPurchase() && !dischargeSlot.isFOBSale()) {
 
 							Vessel assignedVessel = null;
@@ -1293,7 +1293,7 @@ public class CargoEditorMenuHelper {
 								throw new RuntimeException(message);
 							}
 							cal = cal.plusHours(travelTime);
-							cal = cal.plusHours(loadSlot.getSchedulingWindow().getDuration());
+							cal = cal.plusHours(loadSlot.getSchedulingTimeWindow().getDuration());
 						}
 
 						// Get existing names
@@ -1332,7 +1332,7 @@ public class CargoEditorMenuHelper {
 					} else {
 						loadSlot = cec.createNewSpotLoad(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
 						// Get start of month and create full sized window
-						ZonedDateTime cal = source.getWindowStartWithSlotOrPortTime();
+						ZonedDateTime cal = source.getSchedulingTimeWindow().getStart();
 						// Take into account travel time
 						if (!dischargeSlot.isFOBSale() && !loadSlot.isDESPurchase()) {
 
@@ -1354,7 +1354,7 @@ public class CargoEditorMenuHelper {
 								throw new RuntimeException(message);
 							}
 							cal = cal.minusHours(travelTime);
-							cal = cal.minusHours(loadSlot.getSchedulingWindow().getDuration());
+							cal = cal.minusHours(loadSlot.getSchedulingTimeWindow().getDuration());
 						}
 
 						// Set back to start of month
@@ -1508,7 +1508,7 @@ public class CargoEditorMenuHelper {
 	public static void makeUpLoadSlot(final Set<String> usedLoadIDStrings, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, 
 			final SpotMarket market, final IScenarioDataProvider sdp, final Vessel assignedVessel) {
 		// Get start of month and create full sized window
-		ZonedDateTime cal = dischargeSlot.getWindowStartWithSlotOrPortTime();
+		ZonedDateTime cal = dischargeSlot.getSchedulingTimeWindow().getStart();
 		// Take into account travel time
 		if (!dischargeSlot.isFOBSale() && !loadSlot.isDESPurchase()) {
 
@@ -1519,7 +1519,7 @@ public class CargoEditorMenuHelper {
 				throw new RuntimeException(message);
 			}
 			cal = cal.minusHours(travelTime);
-			cal = cal.minusHours(loadSlot.getSchedulingWindow().getDuration());
+			cal = cal.minusHours(loadSlot.getSchedulingTimeWindow().getDuration());
 		}
 
 		// Set back to start of month
@@ -1549,12 +1549,12 @@ public class CargoEditorMenuHelper {
 	public static void makeUpDischargeSlot(final Set<String> usedDischargeIDStrings, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, 
 			final SpotMarket market, final IScenarioDataProvider sdp, final Vessel assignedVessel) {
 		// Get start of month and create full sized window
-		ZonedDateTime cal = loadSlot.getWindowStartWithSlotOrPortTime();
+		ZonedDateTime cal = loadSlot.getSchedulingTimeWindow().getStart();
 		// Take into account travel time
 		if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
 			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel(),sdp);
 			cal = cal.plusHours(travelTime);
-			cal = cal.plusHours(loadSlot.getSchedulingWindow().getDuration());
+			cal = cal.plusHours(loadSlot.getSchedulingTimeWindow().getDuration());
 		} else if (!loadSlot.isDESPurchase() && !dischargeSlot.isFOBSale()) {
 
 			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel,sdp);
@@ -1564,7 +1564,7 @@ public class CargoEditorMenuHelper {
 				throw new RuntimeException(message);
 			}
 			cal = cal.plusHours(travelTime);
-			cal = cal.plusHours(loadSlot.getSchedulingWindow().getDuration());
+			cal = cal.plusHours(loadSlot.getSchedulingTimeWindow().getDuration());
 		}
 
 		// Set back to start of month
@@ -1628,8 +1628,8 @@ public class CargoEditorMenuHelper {
 							continue;
 						}
 
-						final ZonedDateTime slotDate = slot.getWindowStartWithSlotOrPortTime();
-						if (slotDate == null || target.getWindowEndWithSlotOrPortTime().isBefore(slotDate)) {
+						final ZonedDateTime slotDate = slot.getSchedulingTimeWindow().getStart();
+						if (slotDate == null || target.getSchedulingTimeWindow().getEnd().isBefore(slotDate)) {
 							currentWiringCommand.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, MMXCorePackage.eINSTANCE.getNamedObject_Name(), target.getName()));
 						} else {
 							break;
@@ -1726,11 +1726,11 @@ public class CargoEditorMenuHelper {
 				canalBookingHandle = String.format("%s [%s]", canalbooking.getBookingDate(), canalbooking.getSlot().getName());
 			}
 
-			TimeWindow tw = slot.getSchedulingWindow();
-			final LocalDate windowStart = tw.getStartDate();
+			SchedulingTimeWindow tw = slot.getSchedulingTimeWindow();
+			final LocalDate windowStart = slot.getWindowStart();
 			LocalDate windowEnd = windowStart;
 
-			switch (slot.getSchedulingWindow().getSizeUnits()) {
+			switch (slot.getSchedulingTimeWindow().getSizeUnits()) {
 
 			case DAYS:
 				windowEnd = windowStart.plusDays(tw.getSize());

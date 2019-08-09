@@ -431,7 +431,7 @@ public class WrappedAssignableElement {
 				return date;
 			}
 		}
-		return slot.getWindowStartWithSlotOrPortTime();
+		return slot.getSchedulingTimeWindow().getStart();
 	}
 
 	private @NonNull ZonedDateTime getWindowEnd(@NonNull final Slot<?> slot, @Nullable final IAssignableElementDateProvider dateProvider) {
@@ -442,7 +442,7 @@ public class WrappedAssignableElement {
 				return date;
 			}
 		}
-		return slot.getWindowEndWithSlotOrPortTime();
+		return slot.getSchedulingTimeWindow().getEnd();
 	}
 
 	private int getDurationInHours(@NonNull final Slot<?> slot, @Nullable final IAssignableElementDateProvider dateProvider) {
@@ -453,7 +453,7 @@ public class WrappedAssignableElement {
 				return duration.getAsInt();
 			}
 		}
-		return slot.getSchedulingWindow().getDuration();
+		return slot.getSchedulingTimeWindow().getDuration();
 	}
 
 	public boolean isCargo() {

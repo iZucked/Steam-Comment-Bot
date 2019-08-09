@@ -157,8 +157,8 @@ public class PeriodTestUtils {
 		final Slot slot = slotAllocation.getSlot();
 
 		slotVisit.setSlotAllocation(slotAllocation);
-		slotVisit.setStart(slot.getWindowStartWithSlotOrPortTime());
-		slotVisit.setEnd(slot.getWindowStartWithSlotOrPortTime());
+		slotVisit.setStart(slot.getSchedulingTimeWindow().getStart());
+		slotVisit.setEnd(slot.getSchedulingTimeWindow().getStart());
 
 		return slotVisit;
 	}

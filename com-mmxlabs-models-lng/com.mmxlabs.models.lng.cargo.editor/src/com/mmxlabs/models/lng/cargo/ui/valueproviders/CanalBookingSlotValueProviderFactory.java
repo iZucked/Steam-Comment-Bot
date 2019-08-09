@@ -21,7 +21,7 @@ import com.mmxlabs.common.time.TimeUtils;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.TimeWindow;
+import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -85,8 +85,8 @@ public class CanalBookingSlotValueProviderFactory implements IReferenceValueProv
 					if (slot == canalBookingSlot.getSlot()) {
 						filteredList.add(value);
 					} else {
-						TimeWindow tw = slot.getSchedulingWindow();
-						LocalDate windowStart = tw.getStartDate();
+						SchedulingTimeWindow tw = slot.getSchedulingTimeWindow();
+						LocalDate windowStart = slot.getWindowStart();
 						LocalDate windowEnd = windowStart;
 
 						switch (tw.getSizeUnits()) {

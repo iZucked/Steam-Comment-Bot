@@ -1476,13 +1476,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		LocalDate erl = result;
 
 		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
-			if (erl.isBefore(ls.getWindowEndWithSlotOrPortTime().toLocalDate())) {
-				erl = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+			if (erl.isBefore(ls.getSchedulingTimeWindow().getEnd().toLocalDate())) {
+				erl = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 		}
 		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
-			if (erl.isBefore(ds.getWindowEndWithSlotOrPortTime().toLocalDate())) {
-				erl = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+			if (erl.isBefore(ds.getSchedulingTimeWindow().getEnd().toLocalDate())) {
+				erl = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 		}
 		if (erl.isAfter(result)) {
@@ -2062,8 +2062,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			LocalDate end = null;
 			final LoadSlot ls = row.getLoadSlot();
 			if (ls != null) {
-				start = ls.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if ((start != null) && (end != null)) {
 				final YearMonth yms = YearMonth.from(start);
@@ -2074,8 +2074,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 			final DischargeSlot ds = row.getDischargeSlot();
 			if (ds != null) {
-				start = ds.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if ((start != null) && (end != null)) {
 				final YearMonth yms = YearMonth.from(start);
@@ -2095,8 +2095,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			final LocalDate prompt = today.plusMonths(month);
 			final LoadSlot ls = row.getLoadSlot();
 			if (ls != null) {
-				start = ls.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if (start != null && end != null) {
 				if (start.isAfter(today) && start.isBefore(prompt)) {
@@ -2108,8 +2108,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 			final DischargeSlot ds = row.getDischargeSlot();
 			if (ds != null) {
-				start = ds.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if (start != null && end != null) {
 				if (start.isAfter(today) && start.isBefore(prompt)) {

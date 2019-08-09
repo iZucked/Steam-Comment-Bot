@@ -121,13 +121,13 @@ public class InclusionChecker {
 				InclusionType type = InclusionType.In;
 				Position pos = Position.Unknown;
 				if (periodRecord.upperBoundary != null) {
-					if (lastSlot.getWindowEndWithSlotOrPortTime().isAfter(periodRecord.upperBoundary)) {
+					if (lastSlot.getSchedulingTimeWindow().getEnd().isAfter(periodRecord.upperBoundary)) {
 						type = InclusionType.Boundary;
 						pos = Position.After;
 					}
 				}
 				if (periodRecord.lowerBoundary != null) {
-					if (firstSlot.getWindowStartWithSlotOrPortTime().isBefore(periodRecord.lowerBoundary)) {
+					if (firstSlot.getSchedulingTimeWindow().getStart().isBefore(periodRecord.lowerBoundary)) {
 						type = InclusionType.Boundary;
 						if (pos != Position.Unknown) {
 							pos = Position.Both;
@@ -145,12 +145,12 @@ public class InclusionChecker {
 			// This should just be open positions and thus are only IN or OUT
 
 			if (periodRecord.upperBoundary != null) {
-				if (slot.getWindowStartWithSlotOrPortTime().isAfter(periodRecord.upperBoundary)) {
+				if (slot.getSchedulingTimeWindow().getStart().isAfter(periodRecord.upperBoundary)) {
 					return new NonNullPair<>(InclusionType.Out, Position.After);
 				}
 			}
 			if (periodRecord.lowerBoundary != null) {
-				if (slot.getWindowEndWithSlotOrPortTime().isBefore(periodRecord.lowerBoundary)) {
+				if (slot.getSchedulingTimeWindow().getEnd().isBefore(periodRecord.lowerBoundary)) {
 					return new NonNullPair<>(InclusionType.Out, Position.Before);
 				}
 			}
@@ -263,7 +263,7 @@ public class InclusionChecker {
 	public ZonedDateTime getScheduledStart(@NonNull final Slot<?> slot, @Nullable final PortVisit portVisit) {
 		final ZonedDateTime visitTime = portVisit == null ? null : portVisit.getStart();
 		if (visitTime == null) {
-			return slot.getWindowStartWithSlotOrPortTime();
+			return slot.getSchedulingTimeWindow().getStart();
 		} else {
 			return visitTime;
 		}
@@ -273,7 +273,7 @@ public class InclusionChecker {
 	public ZonedDateTime getScheduledEnd(@NonNull final Slot<?> slot, @Nullable final PortVisit portVisit) {
 		final ZonedDateTime visitTime = portVisit == null ? null : portVisit.getEnd();
 		if (visitTime == null) {
-			return slot.getWindowEndWithSlotOrPortTime().plusHours(slot.getSchedulingWindow().getDuration());
+			return slot.getSchedulingTimeWindow().getEnd().plusHours(slot.getSchedulingTimeWindow().getDuration());
 		} else {
 			return visitTime;
 		}

@@ -50,7 +50,7 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.StartHeelOptions;
-import com.mmxlabs.models.lng.cargo.TimeWindow;
+import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
@@ -352,7 +352,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EDataType timeWindowEDataType = null;
+	private EDataType schedulingTimeWindowEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -1171,7 +1171,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EOperation getSlot__GetSchedulingWindow() {
+	public EOperation getSlot__GetSchedulingTimeWindow() {
 		return slotEClass.getEOperations().get(24);
 	}
 
@@ -3061,8 +3061,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EDataType getTimeWindow() {
-		return timeWindowEDataType;
+	public EDataType getSchedulingTimeWindow() {
+		return schedulingTimeWindowEDataType;
 	}
 
 	/**
@@ -3183,7 +3183,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS);
-		createEOperation(slotEClass, SLOT___GET_SCHEDULING_WINDOW);
+		createEOperation(slotEClass, SLOT___GET_SCHEDULING_TIME_WINDOW);
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CV);
@@ -3396,7 +3396,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		inventoryFrequencyEEnum = createEEnum(INVENTORY_FREQUENCY);
 
 		// Create data types
-		timeWindowEDataType = createEDataType(TIME_WINDOW);
+		schedulingTimeWindowEDataType = createEDataType(SCHEDULING_TIME_WINDOW);
 	}
 
 	/**
@@ -3630,7 +3630,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		g1.getETypeArguments().add(g2);
 		initEOperation(op, g1);
 
-		initEOperation(getSlot__GetSchedulingWindow(), this.getTimeWindow(), "getSchedulingWindow", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getSlot__GetSchedulingTimeWindow(), this.getSchedulingTimeWindow(), "getSchedulingTimeWindow", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3891,7 +3891,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		addEEnumLiteral(inventoryFrequencyEEnum, InventoryFrequency.LEVEL);
 
 		// Initialize data types
-		initEDataType(timeWindowEDataType, TimeWindow.class, "TimeWindow", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(schedulingTimeWindowEDataType, SchedulingTimeWindow.class, "SchedulingTimeWindow", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

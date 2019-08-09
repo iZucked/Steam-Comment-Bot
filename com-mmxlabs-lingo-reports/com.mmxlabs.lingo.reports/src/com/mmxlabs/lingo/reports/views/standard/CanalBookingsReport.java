@@ -213,8 +213,8 @@ public class CanalBookingsReport extends AbstractReportView {
 				rowData -> (rowData.nextSlot == null ? null : rowData.nextSlot.getWindowStart()));
 
 		createColumn(sortingSupport, "Next Slot Window End",
-				rowData -> (rowData.nextSlot == null ? "" : Formatters.asLocalDateFormatter.render(rowData.nextSlot.getWindowStart().plusDays(rowData.nextSlot.getSchedulingWindow().getSizeInHours() / 24))),
-				rowData -> (rowData.nextSlot == null ? null : rowData.nextSlot.getSchedulingWindow().getSizeInHours() / 24));
+				rowData -> (rowData.nextSlot == null ? "" : Formatters.asLocalDateFormatter.render(rowData.nextSlot.getWindowStart().plusDays(rowData.nextSlot.getSchedulingTimeWindow().getSizeInHours() / 24))),
+				rowData -> (rowData.nextSlot == null ? null : rowData.nextSlot.getSchedulingTimeWindow().getSizeInHours() / 24));
 
 		createColumn(sortingSupport, "Period", rowData -> rowData.period, rowData -> rowData.period);
 

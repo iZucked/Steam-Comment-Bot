@@ -1235,7 +1235,7 @@ public class AnalyticsBuilder {
 			final BuyReference buyReference = (BuyReference) option;
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
-				return slot.getWindowStartWithSlotOrPortTime();
+				return slot.getSchedulingTimeWindow().getStart();
 			}
 		}
 		return null;
@@ -1252,7 +1252,7 @@ public class AnalyticsBuilder {
 			final SellReference sellReference = (SellReference) option;
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
-				return slot.getWindowStartWithSlotOrPortTime();
+				return slot.getSchedulingTimeWindow().getStart();
 			}
 		}
 		return null;
@@ -1279,7 +1279,7 @@ public class AnalyticsBuilder {
 			final BuyReference buyReference = (BuyReference) option;
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
-				return slot.getWindowEndWithSlotOrPortTime();
+				return slot.getSchedulingTimeWindow().getEnd();
 			}
 		}
 		return null;
@@ -1309,7 +1309,7 @@ public class AnalyticsBuilder {
 			final SellReference sellReference = (SellReference) option;
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
-				return slot.getWindowEndWithSlotOrPortTime();
+				return slot.getSchedulingTimeWindow().getEnd();
 			}
 		}
 		return null;
@@ -1341,7 +1341,7 @@ public class AnalyticsBuilder {
 			final SellReference sellReference = (SellReference) option;
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
-				return slot.getSchedulingWindow().getDuration();
+				return slot.getSchedulingTimeWindow().getDuration();
 			}
 		} else if (option instanceof SellMarket) {
 
@@ -1369,7 +1369,7 @@ public class AnalyticsBuilder {
 			final BuyReference buyReference = (BuyReference) option;
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
-				return slot.getSchedulingWindow().getDuration();
+				return slot.getSchedulingTimeWindow().getDuration();
 			}
 		} else if (option instanceof BuyMarket) {
 

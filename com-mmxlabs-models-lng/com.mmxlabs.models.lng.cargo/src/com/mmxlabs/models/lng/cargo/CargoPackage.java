@@ -1204,13 +1204,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 24;
 
 	/**
-	 * The operation id for the '<em>Get Scheduling Window</em>' operation.
+	 * The operation id for the '<em>Get Scheduling Time Window</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SCHEDULING_WINDOW = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 25;
+	int SLOT___GET_SCHEDULING_TIME_WINDOW = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 25;
 
 	/**
 	 * The number of operations of the '<em>Slot</em>' class.
@@ -1951,13 +1951,13 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
 
 	/**
-	 * The operation id for the '<em>Get Scheduling Window</em>' operation.
+	 * The operation id for the '<em>Get Scheduling Time Window</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT___GET_SCHEDULING_WINDOW = SLOT___GET_SCHEDULING_WINDOW;
+	int LOAD_SLOT___GET_SCHEDULING_TIME_WINDOW = SLOT___GET_SCHEDULING_TIME_WINDOW;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -2707,13 +2707,13 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
 
 	/**
-	 * The operation id for the '<em>Get Scheduling Window</em>' operation.
+	 * The operation id for the '<em>Get Scheduling Time Window</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT___GET_SCHEDULING_WINDOW = SLOT___GET_SCHEDULING_WINDOW;
+	int DISCHARGE_SLOT___GET_SCHEDULING_TIME_WINDOW = SLOT___GET_SCHEDULING_TIME_WINDOW;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -3553,13 +3553,13 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
 
 	/**
-	 * The operation id for the '<em>Get Scheduling Window</em>' operation.
+	 * The operation id for the '<em>Get Scheduling Time Window</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_LOAD_SLOT___GET_SCHEDULING_WINDOW = LOAD_SLOT___GET_SCHEDULING_WINDOW;
+	int SPOT_LOAD_SLOT___GET_SCHEDULING_TIME_WINDOW = LOAD_SLOT___GET_SCHEDULING_TIME_WINDOW;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -4318,13 +4318,13 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
 
 	/**
-	 * The operation id for the '<em>Get Scheduling Window</em>' operation.
+	 * The operation id for the '<em>Get Scheduling Time Window</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_DISCHARGE_SLOT___GET_SCHEDULING_WINDOW = DISCHARGE_SLOT___GET_SCHEDULING_WINDOW;
+	int SPOT_DISCHARGE_SLOT___GET_SCHEDULING_TIME_WINDOW = DISCHARGE_SLOT___GET_SCHEDULING_TIME_WINDOW;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -7469,15 +7469,14 @@ public interface CargoPackage extends EPackage {
 
 
 	/**
-	 * The meta object id for the '<em>Time Window</em>' data type.
+	 * The meta object id for the '<em>Scheduling Time Window</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.TimeWindow
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getTimeWindow()
+	 * @see com.mmxlabs.models.lng.cargo.SchedulingTimeWindow
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
 	 * @generated
 	 */
-	int TIME_WINDOW = 39;
-
+	int SCHEDULING_TIME_WINDOW = 39;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Cargo <em>Cargo</em>}'.
@@ -8275,14 +8274,14 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrDelegateVesselRestrictions();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSchedulingWindow() <em>Get Scheduling Window</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSchedulingTimeWindow() <em>Get Scheduling Time Window</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Scheduling Window</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getSchedulingWindow()
+	 * @return the meta object for the '<em>Get Scheduling Time Window</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSchedulingTimeWindow()
 	 * @generated
 	 */
-	EOperation getSlot__GetSchedulingWindow();
+	EOperation getSlot__GetSchedulingTimeWindow();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -10304,15 +10303,15 @@ public interface CargoPackage extends EPackage {
 	EEnum getInventoryFrequency();
 
 	/**
-	 * Returns the meta object for data type '{@link com.mmxlabs.models.lng.cargo.TimeWindow <em>Time Window</em>}'.
+	 * Returns the meta object for data type '{@link com.mmxlabs.models.lng.cargo.SchedulingTimeWindow <em>Scheduling Time Window</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for data type '<em>Time Window</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.TimeWindow
-	 * @model instanceClass="com.mmxlabs.models.lng.cargo.TimeWindow"
+	 * @return the meta object for data type '<em>Scheduling Time Window</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.SchedulingTimeWindow
+	 * @model instanceClass="com.mmxlabs.models.lng.cargo.SchedulingTimeWindow"
 	 * @generated
 	 */
-	EDataType getTimeWindow();
+	EDataType getSchedulingTimeWindow();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -10933,12 +10932,12 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = eINSTANCE.getSlot__GetSlotOrDelegateVesselRestrictions();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Scheduling Window</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Scheduling Time Window</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation SLOT___GET_SCHEDULING_WINDOW = eINSTANCE.getSlot__GetSchedulingWindow();
+		EOperation SLOT___GET_SCHEDULING_TIME_WINDOW = eINSTANCE.getSlot__GetSchedulingTimeWindow();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
@@ -12527,14 +12526,14 @@ public interface CargoPackage extends EPackage {
 		EEnum INVENTORY_FREQUENCY = eINSTANCE.getInventoryFrequency();
 
 		/**
-		 * The meta object literal for the '<em>Time Window</em>' data type.
+		 * The meta object literal for the '<em>Scheduling Time Window</em>' data type.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.cargo.TimeWindow
-		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getTimeWindow()
+		 * @see com.mmxlabs.models.lng.cargo.SchedulingTimeWindow
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
 		 * @generated
 		 */
-		EDataType TIME_WINDOW = eINSTANCE.getTimeWindow();
+		EDataType SCHEDULING_TIME_WINDOW = eINSTANCE.getSchedulingTimeWindow();
 
 	}
 

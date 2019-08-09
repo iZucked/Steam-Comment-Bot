@@ -23,11 +23,10 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.TimeWindow;
 import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -2786,15 +2785,15 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	@Override
-	public ZonedDateTime getWindowEndWithSlotOrPortTime() {
-		final ZonedDateTime startTime = getWindowStartWithSlotOrPortTime();
-		if (startTime == null) {
-			return null;
-		}
-		
-		return startTime.plusHours(getSchedulingWindow().getSizeInHours());
-	}
+//	@Override
+//	public ZonedDateTime getWindowEndWithSlotOrPortTime() {
+//		final ZonedDateTime startTime = getWindowStartWithSlotOrPortTime();
+//		if (startTime == null) {
+//			return null;
+//		}
+//		
+//		return startTime.plusHours(getSchedulingTimeWindow().getSizeInHours());
+//	}
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -2802,76 +2801,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated NOT
 	 */
 	@Override
-	public TimeWindow getSchedulingWindow() {
-		return new TimeWindow() {
-
-			@Override
-			public LocalDate getStartDate() {
-				return getWindowStart();
-			}
-
-			@Override
-			public ZonedDateTime getEndDate() {
-				return getWindowEndWithSlotOrPortTime();
-			}
-
-			@Override
-			public int getDuration() {
-				if (isWindowCounterParty()) {
-					return SlotImpl.this.getWindowSize() + SlotImpl.this.getDuration();
-				}
-				else {
-					return SlotImpl.this.getDuration();
-				}
-			}
-
-			@Override
-			public TimePeriod getSizeUnits() {
-				return getWindowSizeUnits();
-			}
-
-			@Override
-			public int getSize() {
-				if (isWindowCounterParty()) {
-					return 0;
-				}
-				else {
-					return SlotImpl.this.getWindowSize();
-				}
-			}	
-			
-			@Override
-			public boolean isCounterParty() {
-				return isWindowCounterParty();
-			}
-			
-			@Override
-			public int getSizeInHours() {
-				final ZonedDateTime start = getWindowStartWithSlotOrPortTime();
-				ZonedDateTime end = start;
-				final TimePeriod p = getSizeUnits();
-				final int windowSize = getSize();
-				if (windowSize == 0) {
-					return 0;
-				}
-
-				switch (p) {
-				case DAYS:
-					end = end.plusDays(windowSize).minusHours(1);
-					break;
-				case HOURS:
-					end = end.plusHours(windowSize) ;
-					break;
-				case MONTHS:
-					end = end.plusMonths(windowSize).minusHours(1);
-					break;
-				default:
-					break;
-				}
-
-				return Hours.between(start, end);
-			}
-		};
+	public SchedulingTimeWindow getSchedulingTimeWindow() {
+		return new SchedulingTimeWindowImpl(this);
 	}
 
 	/**
@@ -2879,32 +2810,32 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	@Override
-	public ZonedDateTime getWindowEndWithSlotOrPortTimeWithFlex() {
-		ZonedDateTime endTime = getWindowEndWithSlotOrPortTime();
-		if (endTime == null) {
-			return null;
-		}
-		final int slotFlex = getWindowFlex();
-		if (slotFlex > 0) {
-			final TimePeriod p = getWindowFlexUnits();
-			switch (p) {
-			case DAYS:
-				endTime = endTime.plusDays(slotFlex).minusHours(1);
-				break;
-			case HOURS:
-				endTime = endTime.plusHours(slotFlex) ;
-				break;
-			case MONTHS:
-				endTime = endTime.plusMonths(slotFlex).minusHours(1);
-				break;
-			default:
-				break;
-			}
-		}
-		return endTime;
-		
-	}
+//	@Override
+//	public ZonedDateTime getWindowEndWithSlotOrPortTimeWithFlex() {
+//		ZonedDateTime endTime = getWindowEndWithSlotOrPortTime();
+//		if (endTime == null) {
+//			return null;
+//		}
+//		final int slotFlex = getWindowFlex();
+//		if (slotFlex > 0) {
+//			final TimePeriod p = getWindowFlexUnits();
+//			switch (p) {
+//			case DAYS:
+//				endTime = endTime.plusDays(slotFlex).minusHours(1);
+//				break;
+//			case HOURS:
+//				endTime = endTime.plusHours(slotFlex) ;
+//				break;
+//			case MONTHS:
+//				endTime = endTime.plusMonths(slotFlex).minusHours(1);
+//				break;
+//			default:
+//				break;
+//			}
+//		}
+//		return endTime;
+//		
+//	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2912,17 +2843,17 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * 
 	 * @generated NOT
 	 */
-	@Override
-	public ZonedDateTime getWindowStartWithSlotOrPortTime() {
-		final LocalDate wStart = getWindowStart();
-		if (wStart == null) {
-			return null;
-		}
-		ZonedDateTime dateTime = wStart.atStartOfDay(ZoneId.of(getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
-		final int startTime = (Integer) eGetWithDefault(CargoPackage.eINSTANCE.getSlot_WindowStartTime());
-		dateTime = dateTime.withHour(startTime);
-		return dateTime;
-	}
+//	@Override
+//	public ZonedDateTime getWindowStartWithSlotOrPortTime() {
+//		final LocalDate wStart = getWindowStart();
+//		if (wStart == null) {
+//			return null;
+//		}
+//		ZonedDateTime dateTime = wStart.atStartOfDay(ZoneId.of(getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
+//		final int startTime = (Integer) eGetWithDefault(CargoPackage.eINSTANCE.getSlot_WindowStartTime());
+//		dateTime = dateTime.withHour(startTime);
+//		return dateTime;
+//	}
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -2930,31 +2861,31 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * 
 	 * @generated NOT
 	 */
-	@Override
-	public ZonedDateTime getWindowStartWithSlotOrPortTimeWithFlex() {
-		ZonedDateTime startTime = getWindowStartWithSlotOrPortTime();
-		if (startTime == null) {
-			return null;
-		}
-		final int slotFlex = getWindowFlex();
-		if (slotFlex < 0) {
-			final TimePeriod p  = getWindowFlexUnits();
-			switch (p) {
-			case DAYS:
-				startTime = startTime.minusDays(slotFlex).plusHours(1);
-				break;
-			case HOURS:
-				startTime = startTime.minusHours(slotFlex) ;
-				break;
-			case MONTHS:
-				startTime = startTime.minusMonths(slotFlex).plusHours(1);
-				break;
-			default:
-				break;
-			}
-		}
-		return startTime;
-	}
+//	@Override
+//	public ZonedDateTime getWindowStartWithSlotOrPortTimeWithFlex() {
+//		ZonedDateTime startTime = getWindowStartWithSlotOrPortTime();
+//		if (startTime == null) {
+//			return null;
+//		}
+//		final int slotFlex = getWindowFlex();
+//		if (slotFlex < 0) {
+//			final TimePeriod p  = getWindowFlexUnits();
+//			switch (p) {
+//			case DAYS:
+//				startTime = startTime.minusDays(slotFlex).plusHours(1);
+//				break;
+//			case HOURS:
+//				startTime = startTime.minusHours(slotFlex) ;
+//				break;
+//			case MONTHS:
+//				startTime = startTime.minusMonths(slotFlex).plusHours(1);
+//				break;
+//			default:
+//				break;
+//			}
+//		}
+//		return startTime;
+//	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -3768,14 +3699,14 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSlotOrDelegateOperationalTolerance();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VOLUME_LIMITS_UNIT:
 				return getSlotOrDelegateVolumeLimitsUnit();
-			case CargoPackage.SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME:
-				return getWindowEndWithSlotOrPortTime();
-			case CargoPackage.SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME:
-				return getWindowStartWithSlotOrPortTime();
-			case CargoPackage.SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX:
-				return getWindowEndWithSlotOrPortTimeWithFlex();
-			case CargoPackage.SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX:
-				return getWindowStartWithSlotOrPortTimeWithFlex();
+//			case CargoPackage.SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME:
+//				return getWindowEndWithSlotOrPortTime();
+//			case CargoPackage.SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME:
+//				return getWindowStartWithSlotOrPortTime();
+//			case CargoPackage.SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX:
+//				return getWindowEndWithSlotOrPortTimeWithFlex();
+//			case CargoPackage.SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX:
+//				return getWindowStartWithSlotOrPortTimeWithFlex();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_ENTITY:
 				return getSlotOrDelegateEntity();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_CANCELLATION_EXPRESSION:
@@ -3808,8 +3739,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSlotOrDelegatePortRestrictions();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS:
 				return getSlotOrDelegateVesselRestrictions();
-			case CargoPackage.SLOT___GET_SCHEDULING_WINDOW:
-				return getSchedulingWindow();
+			case CargoPackage.SLOT___GET_SCHEDULING_TIME_WINDOW:
+				return getSchedulingTimeWindow();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}

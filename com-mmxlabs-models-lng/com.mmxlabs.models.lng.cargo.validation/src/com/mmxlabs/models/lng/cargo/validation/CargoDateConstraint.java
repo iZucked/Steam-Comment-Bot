@@ -234,12 +234,12 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 						final Port dischargePort = slot.getPort();
 						if ((loadPort != null) && (dischargePort != null)) {
 
-							final ZonedDateTime windowEndWithSlotOrPortTime = slot.getWindowEndWithSlotOrPortTimeWithFlex();
-							final ZonedDateTime windowStartWithSlotOrPortTime = prevSlot.getWindowStartWithSlotOrPortTimeWithFlex();
+							final ZonedDateTime windowEndWithSlotOrPortTime = slot.getSchedulingTimeWindow().getEndWithFlex();
+							final ZonedDateTime windowStartWithSlotOrPortTime = prevSlot.getSchedulingTimeWindow().getStartWithFlex();
 
 							if (windowEndWithSlotOrPortTime != null && windowStartWithSlotOrPortTime != null) {
 
-								final int availableTime = Hours.between(windowStartWithSlotOrPortTime, windowEndWithSlotOrPortTime) - prevSlot.getSchedulingWindow().getDuration();
+								final int availableTime = Hours.between(windowStartWithSlotOrPortTime, windowEndWithSlotOrPortTime) - prevSlot.getSchedulingTimeWindow().getDuration();
 
 								if (constraintID.equals(DATE_ORDER_ID)) {
 									validateSlotOrder(ctx, cargo, prevSlot, availableTime, failures);
@@ -295,8 +295,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					final int travelTime = CargoTravelTimeUtils.getDivertibleDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(scenarioModel), vessel,
 							CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true),
 							extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
-					final int slotDur = from.getSchedulingWindow().getDuration();
-					if (travelTime + from.getSchedulingWindow().getDuration() > windowLength) {
+					final int slotDur = from.getSchedulingTimeWindow().getDuration();
+					if (travelTime + from.getSchedulingTimeWindow().getDuration() > windowLength) {
 						// final String message = String.format("Purchase %s is being shipped to %s but the laden leg (%s travel, %s loading) is greater than the shortest journey by %s.",
 						// from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(travelTime),TravelTimeUtils.formatShortHours(slotDur),
 						// TravelTimeUtils.formatHours((travelTime + slotDur) - windowLength));
@@ -317,8 +317,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private Integer getLadenMaxWindow(final Slot<?> startSlot, final Slot<?> endSlot) {
-		final ZonedDateTime dateStart = startSlot.getWindowStartWithSlotOrPortTimeWithFlex();
-		final ZonedDateTime dateEnd = endSlot.getWindowEndWithSlotOrPortTimeWithFlex();
+		final ZonedDateTime dateStart = startSlot.getSchedulingTimeWindow().getStartWithFlex();
+		final ZonedDateTime dateEnd = endSlot.getSchedulingTimeWindow().getEndWithFlex();
 
 		if (dateStart != null && dateEnd != null) {
 			return Hours.between(dateStart, dateEnd);

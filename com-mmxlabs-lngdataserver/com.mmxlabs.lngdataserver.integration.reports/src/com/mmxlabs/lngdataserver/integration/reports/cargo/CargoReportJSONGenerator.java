@@ -81,14 +81,14 @@ public class CargoReportJSONGenerator {
 				model.loadComment = slot.getNotes();
 				model.purchaseContract = slot.getContract() == null ? null : slot.getContract().getName();
 				model.purchaseCounterparty = slot.getSlotOrDelegateCounterparty();
-				model.loadScheduledDate = slot.getWindowStartWithSlotOrPortTime().toLocalDateTime();
+				model.loadScheduledDate = slot.getSchedulingTimeWindow().getStart().toLocalDateTime();
 				model.loadPortName = slot.getPort().getName();
 			} else {
 				model.dischargeName = slot.getName();
 				model.dischargeComment = slot.getNotes();
 				model.saleContract = slot.getContract() == null ? null : slot.getContract().getName();
 				model.saleCounterparty = slot.getSlotOrDelegateCounterparty();
-				model.dischargeScheduledDate = slot.getWindowStartWithSlotOrPortTime().toLocalDateTime();
+				model.dischargeScheduledDate = slot.getSchedulingTimeWindow().getStart().toLocalDateTime();
 				model.dischargePortName = slot.getPort().getName();
 			}
 

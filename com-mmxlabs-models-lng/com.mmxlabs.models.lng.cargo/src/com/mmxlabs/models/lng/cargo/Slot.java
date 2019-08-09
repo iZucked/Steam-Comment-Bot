@@ -1901,7 +1901,7 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	ZonedDateTime getWindowEndWithSlotOrPortTime();
+	//ZonedDateTime getWindowEndWithSlotOrPortTime();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1909,7 +1909,7 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	ZonedDateTime getWindowStartWithSlotOrPortTime();
+	//ZonedDateTime getWindowStartWithSlotOrPortTime();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1917,7 +1917,7 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	ZonedDateTime getWindowEndWithSlotOrPortTimeWithFlex();
+	//ZonedDateTime getWindowEndWithSlotOrPortTimeWithFlex();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1925,7 +1925,7 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	ZonedDateTime getWindowStartWithSlotOrPortTimeWithFlex();
+	//ZonedDateTime getWindowStartWithSlotOrPortTimeWithFlex();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2060,10 +2060,10 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.lng.cargo.TimeWindow"
+	 * @model kind="operation" dataType="com.mmxlabs.models.lng.cargo.SchedulingTimeWindow"
 	 * @generated
 	 */
-	TimeWindow getSchedulingWindow();
+	SchedulingTimeWindow getSchedulingTimeWindow();
 
 } // end of  Slot
 
