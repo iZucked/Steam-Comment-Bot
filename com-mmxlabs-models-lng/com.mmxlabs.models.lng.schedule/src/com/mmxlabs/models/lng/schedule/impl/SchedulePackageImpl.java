@@ -1054,6 +1054,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EAttribute getIdle_ContingencyHours() {
+		return (EAttribute)idleEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getGeneratedCharterOut() {
 		return generatedCharterOutEClass;
 	}
@@ -1224,18 +1234,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getPurge_Volume() {
-		return (EAttribute)purgeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getPurge_Cost() {
-		return (EAttribute)purgeEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)purgeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -3108,6 +3108,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		idleEClass = createEClass(IDLE);
 		createEAttribute(idleEClass, IDLE__LADEN);
+		createEAttribute(idleEClass, IDLE__CONTINGENCY_HOURS);
 
 		portVisitEClass = createEClass(PORT_VISIT);
 		createEAttribute(portVisitEClass, PORT_VISIT__PORT_COST);
@@ -3136,7 +3137,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(cooldownEClass, COOLDOWN__COST);
 
 		purgeEClass = createEClass(PURGE);
-		createEAttribute(purgeEClass, PURGE__VOLUME);
 		createEAttribute(purgeEClass, PURGE__COST);
 
 		fuelUsageEClass = createEClass(FUEL_USAGE);
@@ -3518,6 +3518,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(idleEClass, Idle.class, "Idle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIdle_Laden(), ecorePackage.getEBoolean(), "laden", null, 1, 1, Idle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIdle_ContingencyHours(), ecorePackage.getEInt(), "contingencyHours", null, 0, 1, Idle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portVisitEClass, PortVisit.class, "PortVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPortVisit_PortCost(), ecorePackage.getEInt(), "portCost", null, 1, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3546,7 +3547,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getCooldown_Cost(), ecorePackage.getEInt(), "cost", null, 1, 1, Cooldown.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(purgeEClass, Purge.class, "Purge", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getPurge_Volume(), ecorePackage.getEInt(), "volume", null, 1, 1, Purge.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPurge_Cost(), ecorePackage.getEInt(), "cost", null, 1, 1, Purge.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fuelUsageEClass, FuelUsage.class, "FuelUsage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

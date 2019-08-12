@@ -2635,13 +2635,22 @@ public interface SchedulePackage extends EPackage {
 	int IDLE__LADEN = EVENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Contingency Hours</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE__CONTINGENCY_HOURS = EVENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Idle</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int IDLE_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
+	int IDLE_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -4392,22 +4401,13 @@ public interface SchedulePackage extends EPackage {
 	int PURGE__FUELS = EVENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PURGE__VOLUME = EVENT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PURGE__COST = EVENT_FEATURE_COUNT + 2;
+	int PURGE__COST = EVENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Purge</em>' class.
@@ -4416,7 +4416,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PURGE_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
+	int PURGE_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7397,6 +7397,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getIdle_Laden();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Idle#getContingencyHours <em>Contingency Hours</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Contingency Hours</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Idle#getContingencyHours()
+	 * @see #getIdle()
+	 * @generated
+	 */
+	EAttribute getIdle_ContingencyHours();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut <em>Generated Charter Out</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7575,17 +7586,6 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getPurge();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Purge#getVolume <em>Volume</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Volume</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Purge#getVolume()
-	 * @see #getPurge()
-	 * @generated
-	 */
-	EAttribute getPurge_Volume();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Purge#getCost <em>Cost</em>}'.
@@ -9881,6 +9881,14 @@ public interface SchedulePackage extends EPackage {
 		EAttribute IDLE__LADEN = eINSTANCE.getIdle_Laden();
 
 		/**
+		 * The meta object literal for the '<em><b>Contingency Hours</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute IDLE__CONTINGENCY_HOURS = eINSTANCE.getIdle_ContingencyHours();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl <em>Generated Charter Out</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -10027,14 +10035,6 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EClass PURGE = eINSTANCE.getPurge();
-
-		/**
-		 * The meta object literal for the '<em><b>Volume</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PURGE__VOLUME = eINSTANCE.getPurge_Volume();
 
 		/**
 		 * The meta object literal for the '<em><b>Cost</b></em>' attribute feature.

@@ -58,6 +58,9 @@ public class IdleEventExporter {
 
 		idle.getFuels().addAll(exportFuelData(voyageDetails));
 
+		//TODO check does not include purge time.
+		idle.setContingencyHours(voyageDetails.getOptions().getExtraIdleTime());
+		
 		return idle;
 	}
 
