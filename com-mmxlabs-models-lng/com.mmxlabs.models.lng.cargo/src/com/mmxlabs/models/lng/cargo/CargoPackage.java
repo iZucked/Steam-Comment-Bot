@@ -1213,13 +1213,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SCHEDULING_TIME_WINDOW = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 25;
 
 	/**
+	 * The operation id for the '<em>Get Buffer Days</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_BUFFER_DAYS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 26;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 26;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 27;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1958,6 +1967,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SCHEDULING_TIME_WINDOW = SLOT___GET_SCHEDULING_TIME_WINDOW;
+
+	/**
+	 * The operation id for the '<em>Get Buffer Days</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_BUFFER_DAYS = SLOT___GET_BUFFER_DAYS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -2714,6 +2732,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SCHEDULING_TIME_WINDOW = SLOT___GET_SCHEDULING_TIME_WINDOW;
+
+	/**
+	 * The operation id for the '<em>Get Buffer Days</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_BUFFER_DAYS = SLOT___GET_BUFFER_DAYS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -3562,6 +3589,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SCHEDULING_TIME_WINDOW = LOAD_SLOT___GET_SCHEDULING_TIME_WINDOW;
 
 	/**
+	 * The operation id for the '<em>Get Buffer Days</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_BUFFER_DAYS = LOAD_SLOT___GET_BUFFER_DAYS;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4325,6 +4361,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SCHEDULING_TIME_WINDOW = DISCHARGE_SLOT___GET_SCHEDULING_TIME_WINDOW;
+
+	/**
+	 * The operation id for the '<em>Get Buffer Days</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_BUFFER_DAYS = DISCHARGE_SLOT___GET_BUFFER_DAYS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -8284,6 +8329,16 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSchedulingTimeWindow();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getDaysBuffer() <em>Get Buffer Days</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Buffer Days</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getDaysBuffer()
+	 * @generated
+	 */
+	EOperation getSlot__GetBufferDays();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10938,6 +10993,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SCHEDULING_TIME_WINDOW = eINSTANCE.getSlot__GetSchedulingTimeWindow();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Buffer Days</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_BUFFER_DAYS = eINSTANCE.getSlot__GetBufferDays();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
