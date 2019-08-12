@@ -576,13 +576,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		final Map<String, Double> exposuresByMonth = new HashMap<>();
 		
 		Collection<String> k = new LinkedHashSet<>();
-		Map<String, IndexExposureData> pc = new HashMap();
-		Map<String, IndexExposureData> oc = new HashMap();
+		Map<String, IndexExposureData> pc = new HashMap<>();
+		Map<String, IndexExposureData> oc = new HashMap<>();
 		if (pinData != null) {
 			for (final Map.Entry<String, Double> e : pinData.exposures.entrySet()) {
-				final double val = exposuresByMonth.getOrDefault(e.getKey(), 0.0);
-				//exposuresByMonth.put(e.getKey(), val + e.getValue());
-				exposuresByMonth.putIfAbsent(e.getKey(), e.getValue());
+				exposuresByMonth.merge(e.getKey(), e.getValue(), Double::sum);
 			}
 			if (pinData.children != null) {
 				for (IndexExposureData d : pinData.children) {
@@ -593,7 +591,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		if (otherData != null) {
 			for (final Map.Entry<String, Double> e : otherData.exposures.entrySet()) {
-				exposuresByMonth.merge(e.getKey(), e.getValue(), (a, b) -> a - b);
+				exposuresByMonth.merge(e.getKey(), -e.getValue(), Double::sum);
 			}
 			if (otherData.children != null) {
 				for (IndexExposureData d : otherData.children) {
