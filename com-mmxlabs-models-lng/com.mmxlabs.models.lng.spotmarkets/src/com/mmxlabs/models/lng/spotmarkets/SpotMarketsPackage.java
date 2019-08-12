@@ -777,13 +777,13 @@ public interface SpotMarketsPackage extends EPackage {
 	int DES_SALES_MARKET__NOTIONAL_PORT = SPOT_MARKET_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Days Padding</b></em>' attribute.
+	 * The feature id for the '<em><b>Days Buffer</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DES_SALES_MARKET__DAYS_PADDING = SPOT_MARKET_FEATURE_COUNT + 1;
+	int DES_SALES_MARKET__DAYS_BUFFER = SPOT_MARKET_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>DES Sales Market</em>' class.
@@ -1891,15 +1891,15 @@ public interface SpotMarketsPackage extends EPackage {
 	EReference getDESSalesMarket_NotionalPort();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getDaysPadding <em>Days Padding</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getDaysBuffer <em>Days Buffer</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Days Padding</em>'.
-	 * @see com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getDaysPadding()
+	 * @return the meta object for the attribute '<em>Days Buffer</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getDaysBuffer()
 	 * @see #getDESSalesMarket()
 	 * @generated
 	 */
-	EAttribute getDESSalesMarket_DaysPadding();
+	EAttribute getDESSalesMarket_DaysBuffer();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket <em>FOB Purchases Market</em>}'.
@@ -2542,12 +2542,12 @@ public interface SpotMarketsPackage extends EPackage {
 		EReference DES_SALES_MARKET__NOTIONAL_PORT = eINSTANCE.getDESSalesMarket_NotionalPort();
 
 		/**
-		 * The meta object literal for the '<em><b>Days Padding</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Days Buffer</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute DES_SALES_MARKET__DAYS_PADDING = eINSTANCE.getDESSalesMarket_DaysPadding();
+		EAttribute DES_SALES_MARKET__DAYS_BUFFER = eINSTANCE.getDESSalesMarket_DaysBuffer();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.FOBPurchasesMarketImpl <em>FOB Purchases Market</em>}' class.
