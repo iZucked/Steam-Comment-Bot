@@ -54,17 +54,17 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.editor.editors.ldd.ComplexCargoEditor;
+import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
@@ -1270,7 +1270,7 @@ public class CargoEditorMenuHelper {
 						ZonedDateTime cal = source.getSchedulingTimeWindow().getStart();
 						// Take into account travel time
 						if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
-							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel(), scenarioEditingLocation.getScenarioDataProvider());
+							final int travelTime = getTravelTime(loadSlot, dischargeSlot, loadSlot.getNominatedVessel(), scenarioEditingLocation.getScenarioDataProvider());
 							cal = cal.plusHours(travelTime);
 							cal = cal.plusHours(loadSlot.getSchedulingTimeWindow().getDuration());
 						} else if (!loadSlot.isDESPurchase() && !dischargeSlot.isFOBSale()) {
@@ -1286,7 +1286,7 @@ public class CargoEditorMenuHelper {
 									assignedVessel = ((CharterInMarketOverride) vesselAssignmentType).getCharterInMarket().getVessel();
 								}
 							}
-							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel, scenarioEditingLocation.getScenarioDataProvider());
+							final int travelTime = getTravelTime(loadSlot, dischargeSlot, assignedVessel, scenarioEditingLocation.getScenarioDataProvider());
 							if (travelTime == Integer.MAX_VALUE) {
 								final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
 										dischargeSlot.getPort().getName(), travelTime);
@@ -1347,7 +1347,7 @@ public class CargoEditorMenuHelper {
 									assignedVessel = ((CharterInMarketOverride) vesselAssignmentType).getCharterInMarket().getVessel();
 								}
 							}
-							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel,scenarioEditingLocation.getScenarioDataProvider());
+							final int travelTime = getTravelTime(loadSlot, dischargeSlot, assignedVessel,scenarioEditingLocation.getScenarioDataProvider());
 							if (travelTime == Integer.MAX_VALUE) {
 								final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
 										dischargeSlot.getPort().getName(), travelTime);
@@ -1512,7 +1512,7 @@ public class CargoEditorMenuHelper {
 		// Take into account travel time
 		if (!dischargeSlot.isFOBSale() && !loadSlot.isDESPurchase()) {
 
-			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel, sdp);
+			final int travelTime = getTravelTime(loadSlot, dischargeSlot, assignedVessel, sdp);
 			if (travelTime == Integer.MAX_VALUE) {
 				final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
 						dischargeSlot.getPort().getName(), travelTime);
@@ -1552,12 +1552,12 @@ public class CargoEditorMenuHelper {
 		ZonedDateTime cal = loadSlot.getSchedulingTimeWindow().getStart();
 		// Take into account travel time
 		if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
-			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel(),sdp);
+			final int travelTime = getTravelTime(loadSlot, dischargeSlot, loadSlot.getNominatedVessel(),sdp);
 			cal = cal.plusHours(travelTime);
 			cal = cal.plusHours(loadSlot.getSchedulingTimeWindow().getDuration());
 		} else if (!loadSlot.isDESPurchase() && !dischargeSlot.isFOBSale()) {
 
-			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel,sdp);
+			final int travelTime = getTravelTime(loadSlot, dischargeSlot, assignedVessel,sdp);
 			if (travelTime == Integer.MAX_VALUE) {
 				final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
 						dischargeSlot.getPort().getName(), travelTime);
@@ -1813,7 +1813,7 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	public static int getTravelTime(final Port from, final Port to, final @Nullable Vessel vessel, final @NonNull IScenarioDataProvider scenarioDataProvider) {
+	public static int getTravelTime(final Slot<?> from, final Slot<?> to, final @Nullable Vessel vessel, final @NonNull IScenarioDataProvider scenarioDataProvider) {
 
 		double maxSpeed = 19.0;
 		if (vessel != null) {
@@ -1822,7 +1822,7 @@ public class CargoEditorMenuHelper {
 		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(scenarioDataProvider);
 		for (final Route route : scenarioModel.getReferenceModel().getPortModel().getRoutes()) {
 			if (route.getRouteOption() == RouteOption.DIRECT) {
-				return TravelTimeUtils.getTimeForRoute(vessel, maxSpeed, route, from, to,
+				return CargoTravelTimeUtils.getTimeForRoute(vessel, maxSpeed, route, from, to,
 						scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
 			}
 		}

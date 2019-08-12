@@ -37,7 +37,6 @@ import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.CharterOutOpportunity;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
-import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OpenBuy;
@@ -51,6 +50,7 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.analytics.VesselEventReference;
 import com.mmxlabs.models.lng.analytics.VolumeMode;
@@ -69,6 +69,7 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -405,7 +406,7 @@ public class AnalyticsBuilder {
 		if (fromPort != null && toPort != null && vessel != null) {
 			// TODO: Get from input
 			final double speed = vessel.getVesselOrDelegateMaxSpeed();
-			final int travelTime = TravelTimeUtils.getMinTimeFromAllowedRoutes(fromPort, toPort, vessel, speed, portModel.getRoutes(), modelDistanceProvider);
+			final int travelTime = CargoTravelTimeUtils.getMinTimeFromAllowedRoutes(loadSlot, dischargeSlot, vessel, speed, portModel.getRoutes(), modelDistanceProvider);
 			return travelTime;
 		}
 
@@ -422,7 +423,7 @@ public class AnalyticsBuilder {
 		if (fromPort != null && toPort != null && vessel != null) {
 			// TODO: Get from input
 			final double speed = vessel.getVesselOrDelegateMaxSpeed();
-			final int travelTime = TravelTimeUtils.getMinTimeFromAllowedRoutes(fromPort, toPort, vessel, speed, portModel.getRoutes(), modelDistanceProvider);
+			final int travelTime = CargoTravelTimeUtils.getMinTimeFromAllowedRoutes(loadSlot, dischargeSlot, vessel, speed, portModel.getRoutes(), modelDistanceProvider);
 			return travelTime;
 		}
 
