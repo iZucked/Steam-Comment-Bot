@@ -102,6 +102,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * @generated
  */
 public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implements Slot<T> {
+	
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -1072,6 +1073,12 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	protected boolean windowCounterParty = WINDOW_COUNTER_PARTY_EDEFAULT;
 
+	/**
+	 * Clump of methods for computing the schedule time window start and end times etc.
+	 * @generated NOT
+	 */
+	private final SchedulingTimeWindow schedulingTimeWindow = new SchedulingTimeWindowImpl(this);
+	
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
@@ -2783,6 +2790,54 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ZonedDateTime getWindowEndWithSlotOrPortTime() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ZonedDateTime getWindowStartWithSlotOrPortTime() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ZonedDateTime getWindowEndWithSlotOrPortTimeWithFlex() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ZonedDateTime getWindowStartWithSlotOrPortTimeWithFlex() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 //	@Override
@@ -2802,7 +2857,17 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public SchedulingTimeWindow getSchedulingTimeWindow() {
-		return new SchedulingTimeWindowImpl(this);
+		return this.schedulingTimeWindow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT.
+	 */
+	@Override
+	public int getDaysBuffer() {
+		return 0;
 	}
 
 	/**
@@ -3699,14 +3764,14 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSlotOrDelegateOperationalTolerance();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VOLUME_LIMITS_UNIT:
 				return getSlotOrDelegateVolumeLimitsUnit();
-//			case CargoPackage.SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME:
-//				return getWindowEndWithSlotOrPortTime();
-//			case CargoPackage.SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME:
-//				return getWindowStartWithSlotOrPortTime();
-//			case CargoPackage.SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX:
-//				return getWindowEndWithSlotOrPortTimeWithFlex();
-//			case CargoPackage.SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX:
-//				return getWindowStartWithSlotOrPortTimeWithFlex();
+			case CargoPackage.SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME:
+				return getWindowEndWithSlotOrPortTime();
+			case CargoPackage.SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME:
+				return getWindowStartWithSlotOrPortTime();
+			case CargoPackage.SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX:
+				return getWindowEndWithSlotOrPortTimeWithFlex();
+			case CargoPackage.SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX:
+				return getWindowStartWithSlotOrPortTimeWithFlex();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_ENTITY:
 				return getSlotOrDelegateEntity();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_CANCELLATION_EXPRESSION:
@@ -3741,6 +3806,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSlotOrDelegateVesselRestrictions();
 			case CargoPackage.SLOT___GET_SCHEDULING_TIME_WINDOW:
 				return getSchedulingTimeWindow();
+			case CargoPackage.SLOT___GET_BUFFER_DAYS:
+				return getDaysBuffer();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}

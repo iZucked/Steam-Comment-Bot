@@ -90,6 +90,7 @@
       </eGenericType>
     </eOperations>
     <eOperations name="getSchedulingTimeWindow" eType="#//SchedulingTimeWindow"/>
+    <eOperations name="getDaysBuffer" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
         unsettable="true">
       <eGenericType eTypeParameter="#//Slot/T"/>

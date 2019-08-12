@@ -334,5 +334,4 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		}
 		return null;
 	}
-
 }
