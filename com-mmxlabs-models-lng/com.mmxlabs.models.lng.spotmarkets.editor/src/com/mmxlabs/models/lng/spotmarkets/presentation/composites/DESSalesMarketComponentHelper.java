@@ -64,7 +64,7 @@ public class DESSalesMarketComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_notionalPortEditor(detailComposite, topClass);
-		add_daysPaddingEditor(detailComposite, topClass);
+		add_daysBufferEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the notionalPort feature on DESSalesMarket
@@ -76,12 +76,12 @@ public class DESSalesMarketComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the daysPadding feature on DESSalesMarket
+	 * Create the editor for the daysBuffer feature on DESSalesMarket
 	 *
 	 * @generated
 	 */
-	protected void add_daysPaddingEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.DES_SALES_MARKET__DAYS_PADDING));
+	protected void add_daysBufferEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.DES_SALES_MARKET__DAYS_BUFFER));
 	}
 
 	/**

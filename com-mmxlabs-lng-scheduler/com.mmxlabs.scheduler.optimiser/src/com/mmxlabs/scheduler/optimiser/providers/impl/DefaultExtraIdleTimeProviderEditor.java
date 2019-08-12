@@ -22,46 +22,24 @@ public class DefaultExtraIdleTimeProviderEditor implements IExtraIdleTimeProvide
 	private static final Integer ZERO = Integer.valueOf(0);
 
 	private final Map<Pair<IPort, IPort>, Integer> portPairSlotToIdleTime = new HashMap<>();
-	// private final Map<IPortSlot, Integer> portSlotToIdleTime = new HashMap<>();
-	// private final Map<ISequenceElement, Integer> elementToIdleTime = new HashMap<>();
+	private final Map<IPortSlot, Integer> portSlotToIdleTimeBeforeVisit = new HashMap<>();
+	//private final Map<ISequenceElement, Integer> elementToIdleTime = new HashMap<>();
 
 	@Override
 	public int getExtraIdleTimeInHours(final IPortSlot fromPortSlot, final IPortSlot toPortSlot) {
-		return portPairSlotToIdleTime.getOrDefault(new Pair<>(fromPortSlot.getPort(), toPortSlot.getPort()), ZERO);
+		int portPairSlotIdleTime = portPairSlotToIdleTime.getOrDefault(new Pair<>(fromPortSlot.getPort(), toPortSlot.getPort()), ZERO);
+		int toPortSlotIdleTimeBeforeVisit = portSlotToIdleTimeBeforeVisit.getOrDefault(toPortSlot, ZERO);
+		return portPairSlotIdleTime + toPortSlotIdleTimeBeforeVisit;
 	}
-//
-//	@Override
-//	public int getExtraIdleTimeInHours(final ISequenceElement fromElement, final ISequenceElement toElement) {
-////		 final TODO Auto-final generated method stub
-//		return 0;
-//	}
 
 	@Override
 	public void setExtraIdleTimeOnVoyage(final IPort fromPort, final IPort toPort, final int extraIdleTimeInHours) {
 		portPairSlotToIdleTime.put(new Pair<>(fromPort, toPort), extraIdleTimeInHours);
-
 	}
 
 	@Override
-	public void setExtraIdleTimeAfterVisit(final IPort port, final PortType portType, final int extraIdleTimeInHours) {
-		// TODO Auto-generated method stub
-
+	public void setExtraIdleTimeBeforeVisit(final ISequenceElement element, final IPortSlot toPortSlot, final int extraIdleTimeInHours) {
+		//TODO add mapping from sequence element to extraIdleTime if getter added for this.
+		portSlotToIdleTimeBeforeVisit.put(toPortSlot, extraIdleTimeInHours);
 	}
-
-	// @Override
-	// public int getExtraIdleTimeInHours(final IPortSlot portSlot) {
-	// return 48;// portSlotToIdleTime.getOrDefault(portSlot, ZERO);
-	// }
-	//
-	// @Override
-	// public int getExtraIdleTimeInHours(final ISequenceElement element) {
-	// return 48;// elementToIdleTime.getOrDefault(element, ZERO);
-	// }
-	//
-	// @Override
-	// public void setExtraIdleTime(final ISequenceElement element, final IPortSlot portSlot, final int extraIdleTimeInHours) {
-	// elementToIdleTime.put(element, extraIdleTimeInHours);
-	// portSlotToIdleTime.put(portSlot, extraIdleTimeInHours);
-	// }
-
 }

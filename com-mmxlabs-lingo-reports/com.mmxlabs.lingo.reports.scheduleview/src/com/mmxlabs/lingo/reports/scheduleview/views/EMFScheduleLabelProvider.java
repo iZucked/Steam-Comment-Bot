@@ -392,9 +392,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			final String end = dateToString(event.getEnd());
 			tt.append("Start: " + start + "\n");
 			tt.append("End: " + end + "\n");
-			final int days = event.getDuration() / 24;
-			final int hours = event.getDuration() % 24;
-			final String durationTime = days + " day" + (days > 1 || days == 0 ? "s" : "") + ", " + hours + " hour" + (hours > 1 || hours == 0 ? "s" : "");
+			final String durationTime = convertHoursToDaysHoursString(event.getDuration());
 
 			// build event specific text
 			if (element instanceof Journey) {
@@ -497,6 +495,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			} else if (element instanceof Idle) {
 				final Idle idle = (Idle) element;
 				eventText.append("Idle time: " + durationTime);
+				if (idle.getContingencyHours() > 0) {
+					String contigencyTimeStr = convertHoursToDaysHoursString(idle.getContingencyHours());
+					eventText.append("\n(Contingency idle time: " + contigencyTimeStr + ")");
+				}
 				for (final FuelQuantity fq : idle.getFuels()) {
 					eventText.append(String.format("\n%s\n", mapFuel(fq.getFuel())));
 				}
@@ -540,6 +542,18 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		}
 		return null;
 
+	}
+
+	/**
+	 * Split nOfHours into the number of days and/or hours as a user readable String.
+	 * @param nOfHours
+	 * @return a String
+	 */
+	private String convertHoursToDaysHoursString(int nOfHours) {
+		final int days = nOfHours / 24;
+		final int hours = nOfHours % 24;
+		final String durationTime = days + " day" + (days > 1 || days == 0 ? "s" : "") + ", " + hours + " hour" + (hours > 1 || hours == 0 ? "s" : "");
+		return durationTime;
 	}
 
 	@Override

@@ -2530,7 +2530,6 @@ public class LNGScenarioTransformer {
 								registerSpotMarketSlot(modelEntityMap, desSlot, desSalesSlot);
 
 								applySlotVesselRestrictions(desSlot.getRestrictedVessels(), desSlot.isRestrictedVesselsArePermissive(), desSalesSlot, vesselAssociation);
-
 							}
 						}
 						builder.createSlotGroupCount(marketSlots, count);

@@ -26,7 +26,7 @@ import java.util.Collection;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.DESSalesMarketImpl#getNotionalPort <em>Notional Port</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.DESSalesMarketImpl#getDaysPadding <em>Days Padding</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.DESSalesMarketImpl#getDaysBuffer <em>Days Buffer</em>}</li>
  * </ul>
  *
  * @generated
@@ -43,23 +43,24 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 	protected Port notionalPort;
 
 	/**
-	 * The default value of the '{@link #getDaysPadding() <em>Days Padding</em>}' attribute.
+	 * The default value of the '{@link #getDaysBuffer() <em>Days Buffer</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDaysPadding()
+	 * @see #getDaysBuffer()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int DAYS_PADDING_EDEFAULT = 0;
+	protected static final int DAYS_BUFFER_EDEFAULT = 0;
+
 	/**
-	 * The cached value of the '{@link #getDaysPadding() <em>Days Padding</em>}' attribute.
+	 * The cached value of the '{@link #getDaysBuffer() <em>Days Buffer</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDaysPadding()
+	 * @see #getDaysBuffer()
 	 * @generated
 	 * @ordered
 	 */
-	protected int daysPadding = DAYS_PADDING_EDEFAULT;
+	protected int daysBuffer = DAYS_BUFFER_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -126,8 +127,8 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 	 * @generated
 	 */
 	@Override
-	public int getDaysPadding() {
-		return daysPadding;
+	public int getDaysBuffer() {
+		return daysBuffer;
 	}
 
 	/**
@@ -136,11 +137,11 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 	 * @generated
 	 */
 	@Override
-	public void setDaysPadding(int newDaysPadding) {
-		int oldDaysPadding = daysPadding;
-		daysPadding = newDaysPadding;
+	public void setDaysBuffer(int newDaysBuffer) {
+		int oldDaysBuffer = daysBuffer;
+		daysBuffer = newDaysBuffer;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.DES_SALES_MARKET__DAYS_PADDING, oldDaysPadding, daysPadding));
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.DES_SALES_MARKET__DAYS_BUFFER, oldDaysBuffer, daysBuffer));
 	}
 
 	/**
@@ -154,8 +155,8 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 			case SpotMarketsPackage.DES_SALES_MARKET__NOTIONAL_PORT:
 				if (resolve) return getNotionalPort();
 				return basicGetNotionalPort();
-			case SpotMarketsPackage.DES_SALES_MARKET__DAYS_PADDING:
-				return getDaysPadding();
+			case SpotMarketsPackage.DES_SALES_MARKET__DAYS_BUFFER:
+				return getDaysBuffer();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -172,8 +173,8 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 			case SpotMarketsPackage.DES_SALES_MARKET__NOTIONAL_PORT:
 				setNotionalPort((Port)newValue);
 				return;
-			case SpotMarketsPackage.DES_SALES_MARKET__DAYS_PADDING:
-				setDaysPadding((Integer)newValue);
+			case SpotMarketsPackage.DES_SALES_MARKET__DAYS_BUFFER:
+				setDaysBuffer((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -190,8 +191,8 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 			case SpotMarketsPackage.DES_SALES_MARKET__NOTIONAL_PORT:
 				setNotionalPort((Port)null);
 				return;
-			case SpotMarketsPackage.DES_SALES_MARKET__DAYS_PADDING:
-				setDaysPadding(DAYS_PADDING_EDEFAULT);
+			case SpotMarketsPackage.DES_SALES_MARKET__DAYS_BUFFER:
+				setDaysBuffer(DAYS_BUFFER_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -207,8 +208,8 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 		switch (featureID) {
 			case SpotMarketsPackage.DES_SALES_MARKET__NOTIONAL_PORT:
 				return notionalPort != null;
-			case SpotMarketsPackage.DES_SALES_MARKET__DAYS_PADDING:
-				return daysPadding != DAYS_PADDING_EDEFAULT;
+			case SpotMarketsPackage.DES_SALES_MARKET__DAYS_BUFFER:
+				return daysBuffer != DAYS_BUFFER_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -223,8 +224,8 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (daysPadding: ");
-		result.append(daysPadding);
+		result.append(" (daysBuffer: ");
+		result.append(daysBuffer);
 		result.append(')');
 		return result.toString();
 	}

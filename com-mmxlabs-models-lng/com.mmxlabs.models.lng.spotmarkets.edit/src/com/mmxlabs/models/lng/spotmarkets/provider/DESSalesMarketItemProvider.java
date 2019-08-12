@@ -48,7 +48,7 @@ public class DESSalesMarketItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNotionalPortPropertyDescriptor(object);
-			addDaysPaddingPropertyDescriptor(object);
+			addDaysBufferPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -76,19 +76,19 @@ public class DESSalesMarketItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Days Padding feature.
+	 * This adds a property descriptor for the Days Buffer feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addDaysPaddingPropertyDescriptor(Object object) {
+	protected void addDaysBufferPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_DESSalesMarket_daysPadding_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_DESSalesMarket_daysPadding_feature", "_UI_DESSalesMarket_type"),
-				 SpotMarketsPackage.Literals.DES_SALES_MARKET__DAYS_PADDING,
+				 getString("_UI_DESSalesMarket_daysBuffer_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DESSalesMarket_daysBuffer_feature", "_UI_DESSalesMarket_type"),
+				 SpotMarketsPackage.Literals.DES_SALES_MARKET__DAYS_BUFFER,
 				 true,
 				 false,
 				 false,
@@ -134,7 +134,7 @@ public class DESSalesMarketItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(DESSalesMarket.class)) {
-			case SpotMarketsPackage.DES_SALES_MARKET__DAYS_PADDING:
+			case SpotMarketsPackage.DES_SALES_MARKET__DAYS_BUFFER:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
