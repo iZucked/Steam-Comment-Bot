@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -23,7 +24,9 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -76,12 +79,66 @@ public class CargoTravelTimeUtils {
 		return getMinTimeFromAllowedRoutes(from, to, vesselAssignmentTypeData.getFirst(), maxSpeed, allowedRoutes, modelDistanceProvider);
 	}
 
-	private static int getMinTimeFromAllowedRoutes(final Slot<?> from, final Slot<?> to, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes,
+	public static int getMinTimeFromAllowedRoutes(final Slot<?> from, final Slot<?> to, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes,
 			final ModelDistanceProvider modelDistanceProvider) {
-
-		return TravelTimeUtils.getMinTimeFromAllowedRoutes(from.getPort(), to.getPort(), vessel, referenceSpeed, allowedRoutes, modelDistanceProvider);
+		int minDuration = Integer.MAX_VALUE;
+		if (from != null && from.getPort() != null && to != null && to.getPort() != null) {
+			for (final Route route : allowedRoutes) {
+				assert route != null;
+				final int totalTime = getTimeForRoute(vessel, referenceSpeed, route, from, to, modelDistanceProvider);
+				if (totalTime < minDuration) {
+					minDuration = totalTime;
+				}
+			}
+		}
+		return minDuration;
 	}
 
+	public static int getTimeForRoute(final @Nullable Vessel vessel, final double referenceSpeed, final @NonNull Route route, final @NonNull Slot<?> fromSlot, final @NonNull Slot<?> toSlot,
+			ModelDistanceProvider modelDistanceProvider) {
+		final Port fromPort = fromSlot.getPort();
+		final Port toPort = toSlot.getPort();
+		int bufferTime = toSlot.getDaysBuffer() * 24;
+		if (fromPort != null && toPort != null) {
+			return getTimeForRoute(vessel, referenceSpeed, route, fromPort, toPort, modelDistanceProvider) + bufferTime;
+		}
+		else {
+			return bufferTime;
+		}
+	}
+
+	private static int getTimeForRoute(final @Nullable Vessel vessel, final double referenceSpeed, final @NonNull Route route, final @NonNull Port fromPort, final @NonNull Port toPort,
+			ModelDistanceProvider modelDistanceProvider) {
+
+		final int distance = getDistance(route, fromPort, toPort, modelDistanceProvider);
+		if (distance == Integer.MAX_VALUE) {
+			return Integer.MAX_VALUE;
+		}
+		final int extraIdleTime = getContingencyIdleTimeInHours(fromPort, toPort, modelDistanceProvider);
+
+		int extraTime = 0;
+		if (vessel != null) {
+			for (final VesselClassRouteParameters vcrp : vessel.getVesselOrDelegateRouteParameters()) {
+				if (vcrp.getRouteOption() == route.getRouteOption()) {
+					extraTime = vcrp.getExtraTransitTime();
+				}
+			}
+		}
+
+		final double travelTime = distance / referenceSpeed;
+		final int totalTime = (int) (Math.floor(travelTime) + extraTime) + extraIdleTime;
+
+		return totalTime;
+	}
+
+	private static int getDistance(@NonNull final Route route, @NonNull final Port from, @NonNull final Port to, @NonNull ModelDistanceProvider modelDistanceProvider) {
+		return modelDistanceProvider.getDistance(from, to, route.getRouteOption());
+	}
+
+	private static int getContingencyIdleTimeInHours(@NonNull final Port from, @NonNull final Port to, @NonNull ModelDistanceProvider modelDistanceProvider) {
+		return modelDistanceProvider.getPortToPortContingencyIdleTimeInHours(from, to);
+	}
+	
 	private static List<Route> getAllowedRoutes(final VesselAssignmentType vesselAssignmentType, final PortModel portModel) {
 		if (vesselAssignmentType == null) {
 			// allow all routes if not on a vessel
