@@ -103,20 +103,20 @@ public class ExposuresTransformer {
 
 							switch (mode) {
 							case VOLUME_MMBTU:
-								result.merge(indexName, detail.getVolumeInMMBTU(), (a, b) -> (a + b));
-								dealResult.merge(indexName, detail.getVolumeInMMBTU(), (a, b) -> (a + b));
+								result.merge(indexName, detail.getVolumeInMMBTU(), Double::sum);
+								dealResult.merge(indexName, detail.getVolumeInMMBTU(), Double::sum);
 								break;
 							case VOLUME_TBTU:
-								result.merge(indexName, detail.getVolumeInMMBTU() / 1_000_000L, (a, b) -> (a + b));
-								dealResult.merge(indexName, detail.getVolumeInMMBTU() / 1_000_000L, (a, b) -> (a + b));
+								result.merge(indexName, detail.getVolumeInMMBTU() / 1_000_000L, Double::sum);
+								dealResult.merge(indexName, detail.getVolumeInMMBTU() / 1_000_000L, Double::sum);
 								break;
 							case VOLUME_NATIVE:
-								result.merge(indexName, detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
-								dealResult.merge(indexName, detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
+								result.merge(indexName, detail.getVolumeInNativeUnits(), Double::sum);
+								dealResult.merge(indexName, detail.getVolumeInNativeUnits(), Double::sum);
 								break;
 							case NATIVE_VALUE:
-								result.merge(indexName, detail.getNativeValue(), (a, b) -> (a + b));
-								dealResult.merge(indexName, detail.getNativeValue(), (a, b) -> (a + b));
+								result.merge(indexName, detail.getNativeValue(), Double::sum);
+								dealResult.merge(indexName, detail.getNativeValue(), Double::sum);
 								break;
 							default:
 								throw new IllegalArgumentException();
@@ -169,20 +169,20 @@ public class ExposuresTransformer {
 							final Map<String, Double> dealResult = dealMap.computeIfAbsent(paperDeal.getName(), k -> new HashMap<>());
 							switch (mode) {
 							case VOLUME_MMBTU:
-								result.merge(indexName, detail.getVolumeInMMBTU(), (a, b) -> (a + b));
-								dealResult.merge(indexName, detail.getVolumeInMMBTU(), (a, b) -> (a + b));
+								result.merge(indexName, detail.getVolumeInMMBTU(), Double::sum);
+								dealResult.merge(indexName, detail.getVolumeInMMBTU(), Double::sum);
 								break;
 							case VOLUME_TBTU:
-								result.merge(indexName, detail.getVolumeInMMBTU() / 1_000_000L, (a, b) -> (a + b));
-								dealResult.merge(indexName, detail.getVolumeInMMBTU() / 1_000_000L, (a, b) -> (a + b));
+								result.merge(indexName, detail.getVolumeInMMBTU() / 1_000_000L, Double::sum);
+								dealResult.merge(indexName, detail.getVolumeInMMBTU() / 1_000_000L, Double::sum);
 								break;
 							case VOLUME_NATIVE:
-								result.merge(indexName, detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
-								dealResult.merge(indexName, detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
+								result.merge(indexName, detail.getVolumeInNativeUnits(), Double::sum);
+								dealResult.merge(indexName, detail.getVolumeInNativeUnits(), Double::sum);
 								break;
 							case NATIVE_VALUE:
-								result.merge(indexName, detail.getNativeValue(), (a, b) -> (a + b));
-								dealResult.merge(indexName, detail.getNativeValue(), (a, b) -> (a + b));
+								result.merge(indexName, detail.getNativeValue(), Double::sum);
+								dealResult.merge(indexName, detail.getNativeValue(), Double::sum);
 								break;
 							default:
 								throw new IllegalArgumentException();

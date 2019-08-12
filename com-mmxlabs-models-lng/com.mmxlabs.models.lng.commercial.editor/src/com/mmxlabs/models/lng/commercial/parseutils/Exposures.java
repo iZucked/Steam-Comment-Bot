@@ -525,16 +525,16 @@ public class Exposures {
 					if (Objects.equals(detail.getIndexName(), index.getName())) {
 						switch (mode) {
 						case VOLUME_MMBTU:
-							result.merge(detail.getDate(), detail.getVolumeInMMBTU(), (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getVolumeInMMBTU(), Double::sum);
 							break;
 						case VOLUME_TBTU:
-							result.merge(detail.getDate(), detail.getVolumeInMMBTU() / 1_000_000L, (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getVolumeInMMBTU() / 1_000_000L, Double::sum);
 							break;
 						case VOLUME_NATIVE:
-							result.merge(detail.getDate(), detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getVolumeInNativeUnits(), Double::sum);
 							break;
 						case NATIVE_VALUE:
-							result.merge(detail.getDate(), detail.getNativeValue(), (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getNativeValue(), Double::sum);
 							break;
 						default:
 							throw new IllegalArgumentException();
@@ -556,16 +556,16 @@ public class Exposures {
 					if (Objects.equals(detail.getIndexName(), index.getName())) {
 						switch (mode) {
 						case VOLUME_MMBTU:
-							result.merge(detail.getDate(), detail.getVolumeInMMBTU(), (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getVolumeInMMBTU(), Double::sum);
 							break;
 						case VOLUME_TBTU:
-							result.merge(detail.getDate(), detail.getVolumeInMMBTU() / 1_000_000L, (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getVolumeInMMBTU() / 1_000_000L, Double::sum);
 							break;
 						case VOLUME_NATIVE:
-							result.merge(detail.getDate(), detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getVolumeInNativeUnits(), Double::sum);
 							break;
 						case NATIVE_VALUE:
-							result.merge(detail.getDate(), detail.getNativeValue(), (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getNativeValue(), Double::sum);
 							break;
 						default:
 							throw new IllegalArgumentException();
