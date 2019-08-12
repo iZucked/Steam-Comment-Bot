@@ -157,7 +157,7 @@ public class HeadessOptioniserRunnerConsoleCommand implements CommandProvider {
 				pst.printf("%d,%d,%d,%d\n",run,threads,logger.getRuntime(),GCStats.getGCTimeInMillis());
 		
 				if (options.outputToJSON) {
-					HeadlessOptioniserJSONTransformer.addRunResult(logger, json);
+					HeadlessOptioniserJSONTransformer.addRunResult(startTry, logger, json);
 
 					//Write out the result of all runs.
 					try {
