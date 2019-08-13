@@ -21,6 +21,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -73,6 +74,7 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 		add_transferToEditor(detailComposite, topClass);
 		add_minCvValueEditor(detailComposite, topClass);
 		add_maxCvValueEditor(detailComposite, topClass);
+		add_fobSaleDealTypeEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -129,6 +131,16 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_maxCvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__MAX_CV_VALUE));
+	}
+
+	/**
+	 * Create the editor for the fobSaleDealType feature on DischargeSlot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_fobSaleDealTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE);
+		detailComposite.addInlineEditor(new NonShppedDealTypeInlineEditorWrapper(editor));
 	}
 
 	@Override

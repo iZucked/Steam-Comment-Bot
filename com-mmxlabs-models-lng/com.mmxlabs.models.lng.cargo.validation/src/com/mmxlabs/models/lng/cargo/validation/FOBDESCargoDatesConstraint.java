@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 import org.eclipse.core.runtime.IStatus;
@@ -65,8 +66,11 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 						if (loadSlot.getWindowStart() == null || dischargeSlot.getWindowStart() == null) {
 							valid = false;
 						} else {
-							valid = checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTimeWithFlex(), dischargeSlot.getWindowStartWithSlotOrPortTime(),
-									dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex());
+							// Compare local times rather than zoned times.
+							valid = checkDates(loadSlot.getWindowStartWithSlotOrPortTime().toLocalDateTime(), // 
+									loadSlot.getWindowEndWithSlotOrPortTimeWithFlex().toLocalDateTime(), //
+									 dischargeSlot.getWindowStartWithSlotOrPortTime().toLocalDateTime(), //
+									dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex().toLocalDateTime()); 
 						}
 						if (!valid) {
 
@@ -101,6 +105,25 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 
 		if ((loadWindowEnd.equals(dischargeWindowStart) && !(loadWindowStart.equals(loadWindowEnd)))) {
 			return false;
+		}
+		return true;
+	}
+	private boolean checkDates(final LocalDateTime loadWindowStart, final LocalDateTime loadWindowEnd, final LocalDateTime dischargeWindowStart, final LocalDateTime dischargeWindowEnd) {
+		
+		if (loadWindowStart == null || loadWindowEnd == null || dischargeWindowStart == null || dischargeWindowEnd == null) {
+			return false;
+		}
+		
+		if (loadWindowEnd.isBefore(dischargeWindowStart)) {
+			return false;
+		}
+		
+		if (loadWindowStart.isAfter(dischargeWindowEnd)) {
+			return false;
+		}
+		
+		if ((loadWindowEnd.equals(dischargeWindowStart) && !(loadWindowStart.equals(loadWindowEnd)))) {
+//			return false;
 		}
 		return true;
 	}

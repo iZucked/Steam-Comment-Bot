@@ -29,6 +29,8 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -104,7 +106,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	public void testDESPurchase_M3() throws Exception {
 
 		@NonNull
-		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", false, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5", 20.0, null)
+		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5", 20.0, null)
 				.withVolumeLimits(5_000, 10_000, VolumeUnits.M3)//
 				.build();
 
@@ -132,7 +134,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	public void testDESPurchase_MMBTU() throws Exception {
 
 		@NonNull
-		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", false, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5", 20.0, null)
+		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5", 20.0, null)
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU)//
 				.build();
 
@@ -219,7 +221,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	public void testFobSale_M3() throws Exception {
 
 		@NonNull
-		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", false, LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", null)//
+		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", null)//
 				.withVolumeLimits(5_000, 10_000, VolumeUnits.M3)//
 				.build();
 
@@ -249,7 +251,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	public void testFobSale_MMBTU() throws Exception {
 
 		@NonNull
-		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", false, LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", null)//
+		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", null)//
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU)//
 				.build();
 
@@ -349,7 +351,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 		contract.setCargoCV(20.0);
 
 		@NonNull
-		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", false, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), contract, null, null, null, null).build();
+		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), contract, null, null, null, null).build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -379,7 +381,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 		contract.setVolumeLimitsUnit(VolumeUnits.MMBTU);
 		contract.setCargoCV(20.0);
 		@NonNull
-		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", false, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), contract, null, null, null, null).build();
+		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), contract, null, null, null, null).build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -474,7 +476,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 		contract.setVolumeLimitsUnit(VolumeUnits.M3);
 
 		@NonNull
-		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", false, LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), contract, null, null, null)//
+		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), contract, null, null, null)//
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -506,7 +508,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 		contract.setMaxQuantity(20 * 10_000);
 		contract.setVolumeLimitsUnit(VolumeUnits.MMBTU);
 		@NonNull
-		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", false, LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), contract, null, null, null)//
+		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), contract, null, null, null)//
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {

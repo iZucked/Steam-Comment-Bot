@@ -39,6 +39,8 @@ import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -103,11 +105,11 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 			cargoModel.getVesselAvailabilities().forEach(va -> endPorts.addAll(SetUtils.getObjects(va.getEndAt())));
 
 			cargoModel.getLoadSlots().stream() //
-					.filter(s -> !s.isDESPurchase() || s.getSlotOrDelegateDivertible()) //
+					.filter(s -> !s.isDESPurchase() || s.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) //
 					.forEach(s -> loadPorts.add(s.getPort()));
 
 			cargoModel.getDischargeSlots().stream() //
-					.filter(s -> !s.isFOBSale() || s.getSlotOrDelegateDivertible()) //
+					.filter(s -> !s.isFOBSale() || s.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) //
 					.forEach(s -> dischargePorts.add(s.getPort()));
 
 			// TODO: Complex cargoes will also have load -> load and discharge -> discharge distance requirements

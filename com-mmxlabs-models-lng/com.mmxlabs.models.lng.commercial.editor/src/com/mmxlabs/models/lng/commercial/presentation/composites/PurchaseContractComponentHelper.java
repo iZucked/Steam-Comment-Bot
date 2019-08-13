@@ -12,10 +12,12 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.ui.displaycomposites.DivertibleContractInlineEditorChangedListener;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -64,8 +66,9 @@ public class PurchaseContractComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_cargoCVEditor(detailComposite, topClass);
 		add_salesDeliveryTypeEditor(detailComposite, topClass);
+		add_desPurchaseDealTypeEditor(detailComposite, topClass);
+		add_cargoCVEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -84,5 +87,16 @@ public class PurchaseContractComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_salesDeliveryTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PURCHASE_CONTRACT__SALES_DELIVERY_TYPE));
+	}
+
+	/**
+	 * Create the editor for the desPurchaseDealType feature on PurchaseContract
+	 *
+	 * @generated NOT
+	 */
+	protected void add_desPurchaseDealTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PURCHASE_CONTRACT__DES_PURCHASE_DEAL_TYPE);
+		editor.addNotificationChangedListener(new DivertibleContractInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
 	}
 }

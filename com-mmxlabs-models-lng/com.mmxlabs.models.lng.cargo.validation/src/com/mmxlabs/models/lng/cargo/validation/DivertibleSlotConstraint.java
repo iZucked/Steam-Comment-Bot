@@ -16,6 +16,8 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -32,22 +34,26 @@ public class DivertibleSlotConstraint extends AbstractModelMultiConstraint {
 			if (object instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) object;
 				if (loadSlot.isDESPurchase()) {
-					if (loadSlot.getSlotOrDelegateDivertible() && (loadSlot.getPort() != null && !loadSlot.getPort().getCapabilities().contains(PortCapability.LOAD))) {
-						final String message = String.format("DES Purchase|%s is divertible and needs a load port.", loadSlot.getName());
-						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
-						dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Divertible());
-						dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Port());
-						failures.add(dsd);
+					if (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_ONLY) {
+						if ((loadSlot.getPort() != null && !loadSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE))) {
+							final String message = String.format("DES Purchase|%s is not divertible and needs a discharge port.", loadSlot.getName());
+							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
+							dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_DesPurchaseDealType());
+							dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Port());
+							failures.add(dsd);
+						}
+					} else {
+						if ((loadSlot.getPort() != null && !loadSlot.getPort().getCapabilities().contains(PortCapability.LOAD))) {
+							final String message = String.format("DES Purchase|%s is divertible and needs a load port.", loadSlot.getName());
+							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
+							dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_DesPurchaseDealType());
+							dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Port());
+							failures.add(dsd);
+						}
 					}
-					if (!loadSlot.getSlotOrDelegateDivertible() && (loadSlot.getPort() != null && !loadSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE))) {
-						final String message = String.format("DES Purchase|%s is not divertible and needs a discharge port.", loadSlot.getName());
-						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
-						dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Divertible());
-						dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Port());
-						failures.add(dsd);
-					}
+
 				}
 
 			}
@@ -55,21 +61,24 @@ public class DivertibleSlotConstraint extends AbstractModelMultiConstraint {
 			else if (object instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) object;
 				if (dischargeSlot.isFOBSale()) {
-					if (dischargeSlot.getSlotOrDelegateDivertible() && (dischargeSlot.getPort() != null && !dischargeSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE))) {
-						final String message = String.format("FOB Sale|%s is divertible and needs a discharge port.", dischargeSlot.getName());
-						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
-						dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Divertible());
-						dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port());
-						failures.add(dsd);
-					}
-					if (!dischargeSlot.getSlotOrDelegateDivertible() && (dischargeSlot.getPort() != null && !dischargeSlot.getPort().getCapabilities().contains(PortCapability.LOAD))) {
-						final String message = String.format("FOB Sale|%s is not divertible and needs a load port.", dischargeSlot.getName());
-						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
-						dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Divertible());
-						dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port());
-						failures.add(dsd);
+					if (dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.SOURCE_ONLY) {
+						if ((dischargeSlot.getPort() != null && !dischargeSlot.getPort().getCapabilities().contains(PortCapability.LOAD))) {
+							final String message = String.format("FOB Sale|%s is not divertible and needs a load port.", dischargeSlot.getName());
+							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
+							dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getDischargeSlot_FobSaleDealType());
+							dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port());
+							failures.add(dsd);
+						}
+					} else {
+						if ((dischargeSlot.getPort() != null && !dischargeSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE))) {
+							final String message = String.format("FOB Sale|%s is divertible and needs a discharge port.", dischargeSlot.getName());
+							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
+							dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getDischargeSlot_FobSaleDealType());
+							dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port());
+							failures.add(dsd);
+						}
 					}
 				}
 			}

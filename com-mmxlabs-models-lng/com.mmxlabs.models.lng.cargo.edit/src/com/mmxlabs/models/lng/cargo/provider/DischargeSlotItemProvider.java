@@ -52,6 +52,7 @@ public class DischargeSlotItemProvider
 			addTransferToPropertyDescriptor(object);
 			addMinCvValuePropertyDescriptor(object);
 			addMaxCvValuePropertyDescriptor(object);
+			addFobSaleDealTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -167,6 +168,28 @@ public class DischargeSlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Fob Sale Deal Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFobSaleDealTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DischargeSlot_fobSaleDealType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DischargeSlot_fobSaleDealType_feature", "_UI_DischargeSlot_type"),
+				 CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns DischargeSlot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -207,6 +230,7 @@ public class DischargeSlotItemProvider
 			case CargoPackage.DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE:
 			case CargoPackage.DISCHARGE_SLOT__MIN_CV_VALUE:
 			case CargoPackage.DISCHARGE_SLOT__MAX_CV_VALUE:
+			case CargoPackage.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

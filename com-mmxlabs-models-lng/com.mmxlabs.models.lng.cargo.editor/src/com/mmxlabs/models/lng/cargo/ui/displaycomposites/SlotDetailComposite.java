@@ -97,6 +97,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		nameFeatures = new ArrayList<>();
 		nameFeatures
 				.add(new EStructuralFeature[] { MMXCorePackage.eINSTANCE.getNamedObject_Name(), CargoFeatures.getSlot_Optional(), CargoFeatures.getSlot_Locked(), CargoFeatures.getSlot_Cancelled() });
+		nameFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_DesPurchaseDealType(), CargoFeatures.getDischargeSlot_FobSaleDealType() });
 		allFeatures.addAll(getAllFeatures(nameFeatures));
 
 		mainFeatures = new ArrayList<>();
@@ -135,7 +136,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedSlots(), CargoFeatures.getSlot_RestrictedSlotsArePermissive() });
 
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_NominatedVessel() });
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertible(), CargoFeatures.getSlot_ShippingDaysRestriction() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_ShippingDaysRestriction() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_SalesDeliveryType() });
 		allFeatures.addAll(getAllFeatures(loadTermsFeatures));
 
@@ -150,7 +151,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedVessels(), CargoFeatures.getSlot_RestrictedVesselsArePermissive(), CargoFeatures.getSlot_RestrictedVesselsOverride() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedSlots(), CargoFeatures.getSlot_RestrictedSlotsArePermissive() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_NominatedVessel() });
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertible(), CargoFeatures.getSlot_ShippingDaysRestriction() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_ShippingDaysRestriction() });
 		allFeatures.addAll(getAllFeatures(dischargeTermsFeatures));
 
 		noteFeatures = new ArrayList<>();
@@ -196,7 +197,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					final int wsize = (Integer) mmxEo.eGetWithDefault(WindowSize);
 					final TimePeriod ePeriod = (TimePeriod) mmxEo.eGetWithDefault(WindowSizeUnits);
 					if (mmxEo instanceof Slot) {
-						final Slot slot = (Slot) mmxEo;
+						final Slot<?> slot = (Slot<?>) mmxEo;
 						final ZonedDateTime ed = slot.getWindowEndWithSlotOrPortTime();
 						final String text = formatDate(d, time) + " - " + formatDate(ed.toLocalDate(), ed.toLocalDateTime().getHour());
 						textClient.setText(text);

@@ -47,8 +47,9 @@ public class PurchaseContractItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addCargoCVPropertyDescriptor(object);
 			addSalesDeliveryTypePropertyDescriptor(object);
+			addDesPurchaseDealTypePropertyDescriptor(object);
+			addCargoCVPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -98,6 +99,28 @@ public class PurchaseContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Des Purchase Deal Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDesPurchaseDealTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PurchaseContract_desPurchaseDealType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PurchaseContract_desPurchaseDealType_feature", "_UI_PurchaseContract_type"),
+				 CommercialPackage.Literals.PURCHASE_CONTRACT__DES_PURCHASE_DEAL_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -123,8 +146,9 @@ public class PurchaseContractItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(PurchaseContract.class)) {
-			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
 			case CommercialPackage.PURCHASE_CONTRACT__SALES_DELIVERY_TYPE:
+			case CommercialPackage.PURCHASE_CONTRACT__DES_PURCHASE_DEAL_TYPE:
+			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

@@ -74,6 +74,8 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -351,7 +353,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			{
 				if (element instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) element;
-					final Slot slot = ((SlotVisit) element).getSlotAllocation().getSlot();
+					final Slot<?> slot = ((SlotVisit) element).getSlotAllocation().getSlot();
 					if (slot != null) {
 						final Contract contract = slot.getContract();
 						if (contract != null) {
@@ -455,7 +457,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				}
 			} else if (element instanceof SlotVisit) {
 				final SlotVisit slotVisit = (SlotVisit) element;
-				final Slot slot = ((SlotVisit) element).getSlotAllocation().getSlot();
+				final Slot<?> slot = ((SlotVisit) element).getSlotAllocation().getSlot();
 				if (slot != null) {
 					eventText.append("Time in port: " + durationTime + " \n");
 					// eventText.append("Window Start: " + dateToString(slot.getWindowStartWithSlotOrPortTime()) + "\n");
@@ -466,12 +468,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				// Do not check divertible slots
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
-					if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
+					if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 						checkLateness = false;
 					}
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
-					if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateDivertible()) {
+					if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
 						checkLateness = false;
 					}
 				}

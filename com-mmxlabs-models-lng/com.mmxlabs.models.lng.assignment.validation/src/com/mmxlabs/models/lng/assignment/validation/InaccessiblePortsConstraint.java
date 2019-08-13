@@ -28,6 +28,8 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -125,7 +127,7 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 			final List<Slot> slotsToValidate = new LinkedList<>();
 			if (target instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) target;
-				if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
+				if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 					final Vessel nominatedVessel = loadSlot.getNominatedVessel();
 					if (nominatedVessel != null) {
 						inaccessiblePorts = nominatedVessel.getVesselOrDelegateInaccessiblePorts();
@@ -135,7 +137,7 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 
 			else if (target instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) target;
-				if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateDivertible()) {
+				if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
 					final Vessel nominatedVessel = dischargeSlot.getNominatedVessel();
 					if (nominatedVessel != null) {
 						inaccessiblePorts = nominatedVessel.getVesselOrDelegateInaccessiblePorts();

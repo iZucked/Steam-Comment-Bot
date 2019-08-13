@@ -14,6 +14,7 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 
 /**
  * 
@@ -26,7 +27,7 @@ public class NoSpotCargoMarketsOptiTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void spotCargoMarketPermitted() throws Exception {
 
-		final Slot load2 = cargoModelBuilder.makeDESPurchase("DP", false, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "1", null, null) //
+		final Slot load2 = cargoModelBuilder.makeDESPurchase("DP", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "1", null, null) //
 				.withOptional(true) //
 				.build();
 
@@ -47,7 +48,7 @@ public class NoSpotCargoMarketsOptiTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void spotCargoMarket_NotPermitted() throws Exception {
 
-		final Slot load1 = cargoModelBuilder.makeDESPurchase("DP", false, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "1", null, null) //
+		final Slot load1 = cargoModelBuilder.makeDESPurchase("DP", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "1", null, null) //
 				.withOptional(true) //
 				.build();
 

@@ -53,6 +53,7 @@ public class LoadSlotItemProvider
 			addDESPurchasePropertyDescriptor(object);
 			addTransferFromPropertyDescriptor(object);
 			addSalesDeliveryTypePropertyDescriptor(object);
+			addDesPurchaseDealTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -190,6 +191,28 @@ public class LoadSlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Des Purchase Deal Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDesPurchaseDealTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LoadSlot_desPurchaseDealType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LoadSlot_desPurchaseDealType_feature", "_UI_LoadSlot_type"),
+				 CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns LoadSlot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -231,6 +254,7 @@ public class LoadSlotItemProvider
 			case CargoPackage.LOAD_SLOT__ARRIVE_COLD:
 			case CargoPackage.LOAD_SLOT__DES_PURCHASE:
 			case CargoPackage.LOAD_SLOT__SALES_DELIVERY_TYPE:
+			case CargoPackage.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

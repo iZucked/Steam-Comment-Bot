@@ -80,6 +80,8 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -802,9 +804,9 @@ public class CargoEditorMenuHelper {
 	}
 
 	private boolean areSlotWindowsCompatible(final LoadSlot load, final DischargeSlot discharge) {
-		final ZonedDateTime loadStart = load.getWindowStartWithSlotOrPortTimeWithFlex();
+		final ZonedDateTime loadStart = load.getWindowStartWithSlotOrPortTime();
 		final ZonedDateTime loadEnd = load.getWindowEndWithSlotOrPortTimeWithFlex();
-		final ZonedDateTime dischargeStart = discharge.getWindowStartWithSlotOrPortTimeWithFlex();
+		final ZonedDateTime dischargeStart = discharge.getWindowStartWithSlotOrPortTime();
 		final ZonedDateTime dischargeEnd = discharge.getWindowEndWithSlotOrPortTimeWithFlex();
 
 		// slots with unknown time windows are incompatible
@@ -825,7 +827,7 @@ public class CargoEditorMenuHelper {
 		// DES load
 		if (load.isDESPurchase()) {
 			// divertible DES - discharge time should be within shipping restriction window for load slot
-			if (load.getSlotOrDelegateDivertible()) {
+			if (load.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 				final int restriction = load.getSlotOrDelegateShippingDaysRestriction();
 				return (daysDifference <= restriction);
 			}
@@ -838,7 +840,7 @@ public class CargoEditorMenuHelper {
 		else {
 			// FOB sale - windows should overlap
 			if (discharge.isFOBSale()) {
-				if (discharge.getSlotOrDelegateDivertible()) {
+				if (discharge.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
 					final int restriction = discharge.getSlotOrDelegateShippingDaysRestriction();
 					return (daysDifference <= restriction);
 				}
@@ -872,14 +874,14 @@ public class CargoEditorMenuHelper {
 			}
 			// DES sale - only at the same port or divertible
 			else {
-				return load.getSlotOrDelegateDivertible() || (load.getPort() == discharge.getPort());
+				return load.getSlotOrDelegateDESPurchaseDealType() != DESPurchaseDealType.DEST_ONLY || (load.getPort() == discharge.getPort());
 			}
 		}
 		// FOB purchase
 		else {
 			// FOB sale - only at the same port or divertible
 			if (discharge.isFOBSale()) {
-				return discharge.getSlotOrDelegateDivertible() || (load.getPort() == discharge.getPort());
+				return discharge.getSlotOrDelegateFOBSaleDealType() != FOBSaleDealType.SOURCE_ONLY || (load.getPort() == discharge.getPort());
 			}
 			// DES sale - compatible
 			else {
@@ -1268,7 +1270,7 @@ public class CargoEditorMenuHelper {
 						// Get start of month and create full sized window
 						ZonedDateTime cal = source.getWindowStartWithSlotOrPortTime();
 						// Take into account travel time
-						if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
+						if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel(), scenarioEditingLocation.getScenarioDataProvider());
 							cal = cal.plusHours(travelTime);
 							cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());
@@ -1346,7 +1348,7 @@ public class CargoEditorMenuHelper {
 									assignedVessel = ((CharterInMarketOverride) vesselAssignmentType).getCharterInMarket().getVessel();
 								}
 							}
-							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel,scenarioEditingLocation.getScenarioDataProvider());
+							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel, scenarioEditingLocation.getScenarioDataProvider());
 							if (travelTime == Integer.MAX_VALUE) {
 								final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
 										dischargeSlot.getPort().getName(), travelTime);
@@ -1406,7 +1408,7 @@ public class CargoEditorMenuHelper {
 
 		}
 	}
-	
+
 	public static String getKeyForDate(final LocalDate date) {
 		final String key = String.format("%04d-%02d", date.getYear(), date.getMonthValue());
 		return key;
@@ -1456,7 +1458,7 @@ public class CargoEditorMenuHelper {
 						dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, market);
 						makeUpDischargeSlot(usedDischargeIDStrings, loadSlot, dischargeSlot, market, scenarioEditingLocation.getScenarioDataProvider(), getAssignedVessel(loadSlot));
 					}
-					
+
 				} else {
 					dischargeSlot = (DischargeSlot) source;
 					if (market == null) {
@@ -1503,13 +1505,17 @@ public class CargoEditorMenuHelper {
 			return assignedVessel;
 		}
 	}
-	
-	public static void makeUpLoadSlot(final Set<String> usedLoadIDStrings, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, 
-			final SpotMarket market, final IScenarioDataProvider sdp, final Vessel assignedVessel) {
+
+	public static void makeUpLoadSlot(final Set<String> usedLoadIDStrings, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final SpotMarket market, final IScenarioDataProvider sdp,
+			final Vessel assignedVessel) {
 		// Get start of month and create full sized window
 		ZonedDateTime cal = dischargeSlot.getWindowStartWithSlotOrPortTime();
 		// Take into account travel time
-		if (!dischargeSlot.isFOBSale() && !loadSlot.isDESPurchase()) {
+		if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
+			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), dischargeSlot.getNominatedVessel(), sdp);
+			cal = cal.minusHours(travelTime);
+			cal = cal.minusHours(loadSlot.getSlotOrDelegateDuration());
+		} else if (!dischargeSlot.isFOBSale() && !loadSlot.isDESPurchase()) {
 
 			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel, sdp);
 			if (travelTime == Integer.MAX_VALUE) {
@@ -1545,18 +1551,18 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	public static void makeUpDischargeSlot(final Set<String> usedDischargeIDStrings, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, 
-			final SpotMarket market, final IScenarioDataProvider sdp, final Vessel assignedVessel) {
+	public static void makeUpDischargeSlot(final Set<String> usedDischargeIDStrings, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final SpotMarket market,
+			final IScenarioDataProvider sdp, final Vessel assignedVessel) {
 		// Get start of month and create full sized window
 		ZonedDateTime cal = loadSlot.getWindowStartWithSlotOrPortTime();
 		// Take into account travel time
-		if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
-			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel(),sdp);
+		if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
+			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel(), sdp);
 			cal = cal.plusHours(travelTime);
 			cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());
 		} else if (!loadSlot.isDESPurchase() && !dischargeSlot.isFOBSale()) {
 
-			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel,sdp);
+			final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel, sdp);
 			if (travelTime == Integer.MAX_VALUE) {
 				final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
 						dischargeSlot.getPort().getName(), travelTime);

@@ -156,7 +156,7 @@ public class ValueListInlineEditor<T> extends UnsettableInlineEditor {
 
 	@Override
 	protected void setControlsVisible(final boolean visible) {
-		if (!combo.isDisposed()) {
+		if (combo!= null && !combo.isDisposed()) {
 			combo.setVisible(visible);
 		}
 		super.setControlsVisible(visible);

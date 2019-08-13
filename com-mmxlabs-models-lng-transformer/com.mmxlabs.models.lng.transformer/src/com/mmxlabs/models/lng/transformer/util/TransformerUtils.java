@@ -138,8 +138,8 @@ public final class TransformerUtils {
 				updateMinMax(result, pat.getEndAfterAsDateTime());
 				updateMinMax(result, pat.getEndByAsDateTime());
 			} else if (o instanceof Slot) {
-				final Slot slot = (Slot) o;
-				updateMinMax(result, slot.getWindowStartWithSlotOrPortTimeWithFlex());
+				final Slot<?> slot = (Slot<?>) o;
+				updateMinMax(result, slot.getWindowStartWithSlotOrPortTime());
 				updateMinMax(result, slot.getWindowEndWithSlotOrPortTimeWithFlex());
 			} else if (o instanceof VesselEvent) {
 				updateMinMax(result, ((VesselEvent) o).getStartAfterAsDateTime());
@@ -292,8 +292,9 @@ public final class TransformerUtils {
 	 */
 	public static boolean allSameEClass(final Collection<? extends EObject> objects) {
 		final Iterator<? extends EObject> it = objects.iterator();
-		if (it.hasNext() == false)
+		if (!it.hasNext()) {
 			return true;
+		}
 		final EClass firstClass = it.next().eClass();
 		while (it.hasNext()) {
 			if (it.next().eClass() != firstClass)

@@ -753,22 +753,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 22;
 
 	/**
-	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__DIVERTIBLE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
-
-	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
+	int SLOT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -777,7 +768,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
+	int SLOT__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
@@ -786,7 +777,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
+	int SLOT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts Are Permissive</b></em>' attribute.
@@ -795,7 +786,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
+	int SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts Override</b></em>' attribute.
@@ -804,7 +795,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_CONTRACTS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
+	int SLOT__RESTRICTED_CONTRACTS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
@@ -813,7 +804,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
+	int SLOT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Ports Are Permissive</b></em>' attribute.
@@ -822,7 +813,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 30;
+	int SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Ports Override</b></em>' attribute.
@@ -831,7 +822,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_PORTS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 31;
+	int SLOT__RESTRICTED_PORTS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 30;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Vessels</b></em>' reference list.
@@ -840,7 +831,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 32;
+	int SLOT__RESTRICTED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 31;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Vessels Are Permissive</b></em>' attribute.
@@ -849,7 +840,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 33;
+	int SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 32;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Vessels Override</b></em>' attribute.
@@ -858,7 +849,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_VESSELS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 34;
+	int SLOT__RESTRICTED_VESSELS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 33;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Slots</b></em>' reference list.
@@ -867,7 +858,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 35;
+	int SLOT__RESTRICTED_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 34;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Slots Are Permissive</b></em>' attribute.
@@ -876,7 +867,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 36;
+	int SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 35;
 
 	/**
 	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
@@ -885,7 +876,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__HEDGES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 37;
+	int SLOT__HEDGES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 36;
 
 	/**
 	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
@@ -894,7 +885,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 38;
+	int SLOT__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 37;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -903,7 +894,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 39;
+	int SLOT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 38;
 
 	/**
 	 * The feature id for the '<em><b>Nominated Vessel</b></em>' reference.
@@ -912,7 +903,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 40;
+	int SLOT__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 39;
 
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
@@ -921,7 +912,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 41;
+	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 40;
 
 	/**
 	 * The feature id for the '<em><b>Cancelled</b></em>' attribute.
@@ -930,7 +921,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CANCELLED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
+	int SLOT__CANCELLED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 41;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -939,7 +930,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1050,22 +1041,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 8;
 
 	/**
-	 * The operation id for the '<em>Get Window Start With Slot Or Port Time With Flex</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 9;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Window Size</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 10;
+	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 9;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Window Size Units</em>' operation.
@@ -1074,7 +1056,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 11;
+	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Get Window Size In Hours</em>' operation.
@@ -1083,7 +1065,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_WINDOW_SIZE_IN_HOURS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 12;
+	int SLOT___GET_WINDOW_SIZE_IN_HOURS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Entity</em>' operation.
@@ -1092,7 +1074,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 13;
+	int SLOT___GET_SLOT_OR_DELEGATE_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 12;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Cancellation Expression</em>' operation.
@@ -1101,7 +1083,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 14;
+	int SLOT___GET_SLOT_OR_DELEGATE_CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 13;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Pricing Event</em>' operation.
@@ -1110,7 +1092,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_PRICING_EVENT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 15;
+	int SLOT___GET_SLOT_OR_DELEGATE_PRICING_EVENT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Get Pricing Date As Date Time</em>' operation.
@@ -1119,7 +1101,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_PRICING_DATE_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 16;
+	int SLOT___GET_PRICING_DATE_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 15;
 
 	/**
 	 * The operation id for the '<em>Get Slot Contract Params</em>' operation.
@@ -1128,7 +1110,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_CONTRACT_PARAMS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 17;
+	int SLOT___GET_SLOT_CONTRACT_PARAMS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 16;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Counterparty</em>' operation.
@@ -1137,7 +1119,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 18;
+	int SLOT___GET_SLOT_OR_DELEGATE_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 17;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CN</em>' operation.
@@ -1146,16 +1128,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_CN = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 19;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Divertible</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 20;
+	int SLOT___GET_SLOT_OR_DELEGATE_CN = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 18;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Shipping Days Restriction</em>' operation.
@@ -1164,7 +1137,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 21;
+	int SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 19;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Full Cargo Lot</em>' operation.
@@ -1173,7 +1146,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 22;
+	int SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 20;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Contract Restrictions Are Permissive</em>' operation.
@@ -1182,7 +1155,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 23;
+	int SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 21;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Port Restrictions Are Permissive</em>' operation.
@@ -1191,7 +1164,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 24;
+	int SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 22;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Vessel Restrictions Are Permissive</em>' operation.
@@ -1200,7 +1173,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 25;
+	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 23;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Contract Restrictions</em>' operation.
@@ -1209,7 +1182,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 26;
+	int SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 24;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Port Restrictions</em>' operation.
@@ -1218,7 +1191,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 27;
+	int SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 25;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Vessel Restrictions</em>' operation.
@@ -1227,7 +1200,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 28;
+	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 26;
 
 	/**
 	 * The number of operations of the '<em>Slot</em>' class.
@@ -1236,7 +1209,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 29;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 27;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1464,15 +1437,6 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__NOTES = SLOT__NOTES;
 
 	/**
-	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__DIVERTIBLE = SLOT__DIVERTIBLE;
-
-	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1698,13 +1662,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__SALES_DELIVERY_TYPE = SLOT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Des Purchase Deal Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__DES_PURCHASE_DEAL_TYPE = SLOT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 6;
+	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1815,15 +1788,6 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX;
 
 	/**
-	 * The operation id for the '<em>Get Window Start With Slot Or Port Time With Flex</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Window Size</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1912,15 +1876,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_CN = SLOT___GET_SLOT_OR_DELEGATE_CN;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Divertible</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE = SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Shipping Days Restriction</em>' operation.
@@ -2013,13 +1968,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_DELIVERY_TYPE = SLOT_OPERATION_COUNT + 1;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegate DES Purchase Deal Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_DES_PURCHASE_DEAL_TYPE = SLOT_OPERATION_COUNT + 2;
+
+	/**
 	 * The number of operations of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 2;
+	int LOAD_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2247,15 +2211,6 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__NOTES = SLOT__NOTES;
 
 	/**
-	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__DIVERTIBLE = SLOT__DIVERTIBLE;
-
-	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2472,13 +2427,22 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__MAX_CV_VALUE = SLOT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Fob Sale Deal Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE = SLOT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Discharge Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 5;
+	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2589,15 +2553,6 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX;
 
 	/**
-	 * The operation id for the '<em>Get Window Start With Slot Or Port Time With Flex</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Window Size</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2686,15 +2641,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_CN = SLOT___GET_SLOT_OR_DELEGATE_CN;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Divertible</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE = SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Shipping Days Restriction</em>' operation.
@@ -2796,13 +2742,22 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DELIVERY_TYPE = SLOT_OPERATION_COUNT + 2;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegate FOB Sale Deal Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_FOB_SALE_DEAL_TYPE = SLOT_OPERATION_COUNT + 3;
+
+	/**
 	 * The number of operations of the '<em>Discharge Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 3;
+	int DISCHARGE_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -3093,15 +3048,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__NOTES = LOAD_SLOT__NOTES;
 
 	/**
-	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__DIVERTIBLE = LOAD_SLOT__DIVERTIBLE;
-
-	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3327,6 +3273,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__SALES_DELIVERY_TYPE = LOAD_SLOT__SALES_DELIVERY_TYPE;
 
 	/**
+	 * The feature id for the '<em><b>Des Purchase Deal Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__DES_PURCHASE_DEAL_TYPE = LOAD_SLOT__DES_PURCHASE_DEAL_TYPE;
+
+	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3453,15 +3408,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = LOAD_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX;
 
 	/**
-	 * The operation id for the '<em>Get Window Start With Slot Or Port Time With Flex</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = LOAD_SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Window Size</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3552,15 +3498,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_CN = LOAD_SLOT___GET_SLOT_OR_DELEGATE_CN;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Divertible</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE = LOAD_SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Shipping Days Restriction</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3649,6 +3586,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_DELIVERY_TYPE = LOAD_SLOT___GET_SLOT_OR_DELEGATE_DELIVERY_TYPE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate DES Purchase Deal Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_DES_PURCHASE_DEAL_TYPE = LOAD_SLOT___GET_SLOT_OR_DELEGATE_DES_PURCHASE_DEAL_TYPE;
 
 	/**
 	 * The number of operations of the '<em>Spot Load Slot</em>' class.
@@ -3885,15 +3831,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__NOTES = DISCHARGE_SLOT__NOTES;
 
 	/**
-	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT__DIVERTIBLE = DISCHARGE_SLOT__DIVERTIBLE;
-
-	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4110,6 +4047,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__MAX_CV_VALUE = DISCHARGE_SLOT__MAX_CV_VALUE;
 
 	/**
+	 * The feature id for the '<em><b>Fob Sale Deal Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE = DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE;
+
+	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4236,15 +4182,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = DISCHARGE_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX;
 
 	/**
-	 * The operation id for the '<em>Get Window Start With Slot Or Port Time With Flex</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = DISCHARGE_SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Window Size</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4333,15 +4270,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_CN = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_CN;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Divertible</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Shipping Days Restriction</em>' operation.
@@ -4441,6 +4369,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DELIVERY_TYPE = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DELIVERY_TYPE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate FOB Sale Deal Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_FOB_SALE_DEAL_TYPE = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_FOB_SALE_DEAL_TYPE;
 
 	/**
 	 * The number of operations of the '<em>Spot Discharge Slot</em>' class.
@@ -7882,17 +7819,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_Notes();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isDivertible <em>Divertible</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Divertible</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#isDivertible()
-	 * @see #getSlot()
-	 * @generated
-	 */
-	EAttribute getSlot_Divertible();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction <em>Shipping Days Restriction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8182,16 +8108,6 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetWindowEndWithSlotOrPortTimeWithFlex();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStartWithSlotOrPortTimeWithFlex() <em>Get Window Start With Slot Or Port Time With Flex</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Window Start With Slot Or Port Time With Flex</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getWindowStartWithSlotOrPortTimeWithFlex()
-	 * @generated
-	 */
-	EOperation getSlot__GetWindowStartWithSlotOrPortTimeWithFlex();
-
-	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateWindowSize() <em>Get Slot Or Delegate Window Size</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8290,16 +8206,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getSlot__GetSlotOrDelegateCN();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateDivertible() <em>Get Slot Or Delegate Divertible</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Slot Or Delegate Divertible</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateDivertible()
-	 * @generated
-	 */
-	EOperation getSlot__GetSlotOrDelegateDivertible();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateShippingDaysRestriction() <em>Get Slot Or Delegate Shipping Days Restriction</em>}' operation.
@@ -8458,6 +8364,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getLoadSlot_SalesDeliveryType();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Des Purchase Deal Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getDesPurchaseDealType()
+	 * @see #getLoadSlot()
+	 * @generated
+	 */
+	EAttribute getLoadSlot_DesPurchaseDealType();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrDelegateCV() <em>Get Slot Or Delegate CV</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8476,6 +8393,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getLoadSlot__GetSlotOrDelegateDeliveryType();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrDelegateDESPurchaseDealType() <em>Get Slot Or Delegate DES Purchase Deal Type</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate DES Purchase Deal Type</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrDelegateDESPurchaseDealType()
+	 * @generated
+	 */
+	EOperation getLoadSlot__GetSlotOrDelegateDESPurchaseDealType();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.DischargeSlot <em>Discharge Slot</em>}'.
@@ -8543,6 +8470,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getDischargeSlot_MaxCvValue();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getFobSaleDealType <em>Fob Sale Deal Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Fob Sale Deal Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getFobSaleDealType()
+	 * @see #getDischargeSlot()
+	 * @generated
+	 */
+	EAttribute getDischargeSlot_FobSaleDealType();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrDelegateMinCv() <em>Get Slot Or Delegate Min Cv</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8571,6 +8509,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getDischargeSlot__GetSlotOrDelegateDeliveryType();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrDelegateFOBSaleDealType() <em>Get Slot Or Delegate FOB Sale Deal Type</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate FOB Sale Deal Type</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrDelegateFOBSaleDealType()
+	 * @generated
+	 */
+	EOperation getDischargeSlot__GetSlotOrDelegateFOBSaleDealType();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CargoModel <em>Model</em>}'.
@@ -10659,14 +10607,6 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__NOTES = eINSTANCE.getSlot_Notes();
 
 		/**
-		 * The meta object literal for the '<em><b>Divertible</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SLOT__DIVERTIBLE = eINSTANCE.getSlot_Divertible();
-
-		/**
 		 * The meta object literal for the '<em><b>Shipping Days Restriction</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -10883,14 +10823,6 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = eINSTANCE.getSlot__GetWindowEndWithSlotOrPortTimeWithFlex();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Window Start With Slot Or Port Time With Flex</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = eINSTANCE.getSlot__GetWindowStartWithSlotOrPortTimeWithFlex();
-
-		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Window Size</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -10969,14 +10901,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_CN = eINSTANCE.getSlot__GetSlotOrDelegateCN();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Slot Or Delegate Divertible</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE = eINSTANCE.getSlot__GetSlotOrDelegateDivertible();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Shipping Days Restriction</b></em>' operation.
@@ -11101,6 +11025,14 @@ public interface CargoPackage extends EPackage {
 		EAttribute LOAD_SLOT__SALES_DELIVERY_TYPE = eINSTANCE.getLoadSlot_SalesDeliveryType();
 
 		/**
+		 * The meta object literal for the '<em><b>Des Purchase Deal Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOAD_SLOT__DES_PURCHASE_DEAL_TYPE = eINSTANCE.getLoadSlot_DesPurchaseDealType();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate CV</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11115,6 +11047,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation LOAD_SLOT___GET_SLOT_OR_DELEGATE_DELIVERY_TYPE = eINSTANCE.getLoadSlot__GetSlotOrDelegateDeliveryType();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate DES Purchase Deal Type</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation LOAD_SLOT___GET_SLOT_OR_DELEGATE_DES_PURCHASE_DEAL_TYPE = eINSTANCE.getLoadSlot__GetSlotOrDelegateDESPurchaseDealType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl <em>Discharge Slot</em>}' class.
@@ -11167,6 +11107,14 @@ public interface CargoPackage extends EPackage {
 		EAttribute DISCHARGE_SLOT__MAX_CV_VALUE = eINSTANCE.getDischargeSlot_MaxCvValue();
 
 		/**
+		 * The meta object literal for the '<em><b>Fob Sale Deal Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE = eINSTANCE.getDischargeSlot_FobSaleDealType();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Min Cv</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11189,6 +11137,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DELIVERY_TYPE = eINSTANCE.getDischargeSlot__GetSlotOrDelegateDeliveryType();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate FOB Sale Deal Type</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_FOB_SALE_DEAL_TYPE = eINSTANCE.getDischargeSlot__GetSlotOrDelegateFOBSaleDealType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl <em>Model</em>}' class.

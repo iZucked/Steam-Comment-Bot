@@ -64,7 +64,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getContractType <em>Contract Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isDivertible <em>Divertible</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  * </ul>
  *
@@ -547,26 +546,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected String cancellationExpression = CANCELLATION_EXPRESSION_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isDivertible() <em>Divertible</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isDivertible()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean DIVERTIBLE_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isDivertible() <em>Divertible</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isDivertible()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean divertible = DIVERTIBLE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getShippingDaysRestriction() <em>Shipping Days Restriction</em>}' attribute.
@@ -1156,29 +1135,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @generated
 	 */
 	@Override
-	public boolean isDivertible() {
-		return divertible;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setDivertible(boolean newDivertible) {
-		boolean oldDivertible = divertible;
-		divertible = newDivertible;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__DIVERTIBLE, oldDivertible, divertible));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public int getShippingDaysRestriction() {
 		return shippingDaysRestriction;
 	}
@@ -1464,8 +1420,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getPricingEvent();
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				return getCancellationExpression();
-			case CommercialPackage.CONTRACT__DIVERTIBLE:
-				return isDivertible();
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				return getShippingDaysRestriction();
 		}
@@ -1563,9 +1517,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				setCancellationExpression((String)newValue);
 				return;
-			case CommercialPackage.CONTRACT__DIVERTIBLE:
-				setDivertible((Boolean)newValue);
-				return;
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				setShippingDaysRestriction((Integer)newValue);
 				return;
@@ -1659,9 +1610,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				setCancellationExpression(CANCELLATION_EXPRESSION_EDEFAULT);
 				return;
-			case CommercialPackage.CONTRACT__DIVERTIBLE:
-				setDivertible(DIVERTIBLE_EDEFAULT);
-				return;
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				setShippingDaysRestriction(SHIPPING_DAYS_RESTRICTION_EDEFAULT);
 				return;
@@ -1729,8 +1677,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return pricingEvent != PRICING_EVENT_EDEFAULT;
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				return CANCELLATION_EXPRESSION_EDEFAULT == null ? cancellationExpression != null : !CANCELLATION_EXPRESSION_EDEFAULT.equals(cancellationExpression);
-			case CommercialPackage.CONTRACT__DIVERTIBLE:
-				return divertible != DIVERTIBLE_EDEFAULT;
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				return shippingDaysRestriction != SHIPPING_DAYS_RESTRICTION_EDEFAULT;
 		}
@@ -1817,8 +1763,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(pricingEvent);
 		result.append(", cancellationExpression: ");
 		result.append(cancellationExpression);
-		result.append(", divertible: ");
-		result.append(divertible);
 		result.append(", shippingDaysRestriction: ");
 		result.append(shippingDaysRestriction);
 		result.append(')');

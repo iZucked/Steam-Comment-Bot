@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -63,7 +64,7 @@ public class InsertFOBSaleMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build();
 		//
 		final DischargeSlot discharge1 = cargoModelBuilder//
-				.makeFOBSale("D1", false, LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "7", null) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "7", null) //
 				.build();
 
 		runTest((injector, scenarioRunner) -> {
@@ -138,7 +139,7 @@ public class InsertFOBSaleMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build();
 		//
 		final DischargeSlot discharge1 = cargoModelBuilder//
-				.makeFOBSale("D1", false, LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "7", vessel1) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "7", vessel1) //
 				.build();
 
 		runTest((injector, scenarioRunner) -> {
@@ -194,7 +195,7 @@ public class InsertFOBSaleMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build();
 		//
 		final DischargeSlot discharge1 = cargoModelBuilder//
-				.makeFOBSale("D1", false, LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "7", null) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "7", null) //
 				.build();
 
 		runTest((injector, scenarioRunner) -> {

@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -87,7 +88,7 @@ public class DivertibleDESTests extends AbstractMicroTestCase {
 		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		cargoModelBuilder.makeCargo()//
-				.makeDESPurchase("L1", true, LocalDate.of(2015, 4, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "5", vessel_1) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2015, 4, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "5", vessel_1) //
 				// .withShippingDaysRestriction() //
 				.build() //
 

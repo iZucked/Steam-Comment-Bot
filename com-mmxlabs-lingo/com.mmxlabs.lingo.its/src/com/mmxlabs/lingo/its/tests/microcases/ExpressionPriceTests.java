@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
@@ -49,7 +50,7 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 				.build();
 
 		Cargo testCargo = cargoModelBuilder.makeCargo() ///
-				.makeDESPurchase("F1", false, LocalDate.of(2018, 6, 1), portFinder.findPort("Chita LNG"), null, entity, "5", null)//
+				.makeDESPurchase("F1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2018, 6, 1), portFinder.findPort("Chita LNG"), null, entity, "5", null)//
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				//
@@ -108,7 +109,7 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 				.build();
 
 		Cargo testCargo = cargoModelBuilder.makeCargo() ///
-				.makeDESPurchase("F1", false, LocalDate.of(2018, 6, 1), portFinder.findPort("Chita LNG"), null, entity, "5", null)//
+				.makeDESPurchase("F1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2018, 6, 1), portFinder.findPort("Chita LNG"), null, entity, "5", null)//
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				//
