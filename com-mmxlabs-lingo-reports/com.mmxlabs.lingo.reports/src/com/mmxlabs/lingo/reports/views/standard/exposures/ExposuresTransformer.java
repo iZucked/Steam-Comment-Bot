@@ -49,13 +49,12 @@ public class ExposuresTransformer {
 	 * @param filterOn
 	 * @return
 	 */
-	public static IndexExposureData getExposuresByMonth(ScenarioResult scenarioResult, final @NonNull Schedule schedule, final @NonNull YearMonth date,
-			final ValueMode mode, final Collection<Object> filterOn, final String selectedEntity, final int selectedFiscalYear, final AssetType selectedAssetType) {
-		
+	public static IndexExposureData getExposuresByMonth(ScenarioResult scenarioResult, final @NonNull Schedule schedule, final @NonNull YearMonth date, final ValueMode mode,
+			final Collection<Object> filterOn, final String selectedEntity, final int selectedFiscalYear, final AssetType selectedAssetType) {
+
 		final Map<String, Double> result = new HashMap<>();
 		final Map<String, Map<String, Double>> dealMap = new HashMap<>();
-		final List<IndexExposureData> children = new LinkedList<>();
-		
+
 		final IScenarioDataProvider sdp = scenarioResult.getScenarioDataProvider();
 		final PricingModel pm = ScenarioModelUtil.getPricingModel(sdp);
 		if (selectedAssetType != AssetType.PAPER) {
@@ -63,27 +62,27 @@ public class ExposuresTransformer {
 				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 					if (!filterOn.isEmpty()) {
 						final boolean include = filterOn.contains(slotAllocation) || filterOn.contains(slotAllocation.getSlot()) || filterOn.contains(cargoAllocation)
-								// || filterOn.contains(cargoAllocation.getInputCargo())
-								;
+						// || filterOn.contains(cargoAllocation.getInputCargo())
+						;
 						if (!include) {
 							continue;
 						}
 					}
-					final Slot s = slotAllocation.getSlot();
+					final Slot<?> s = slotAllocation.getSlot();
 					String entity = "";
 					if (s != null) {
 						final BaseLegalEntity le = s.getEntity();
-						if (le!= null) {
+						if (le != null) {
 							entity = le.getName();
 						}
 					}
-					if(selectedEntity != null) {
-						if(!entity.equals(selectedEntity)) {
+					if (selectedEntity != null) {
+						if (!entity.equals(selectedEntity)) {
 							continue;
 						}
 					}
-					if(selectedFiscalYear != -1) {
-						if(s.getWindowStart().getYear() != selectedFiscalYear) {
+					if (selectedFiscalYear != -1) {
+						if (s.getWindowStart().getYear() != selectedFiscalYear) {
 							continue;
 						}
 					}
@@ -95,34 +94,33 @@ public class ExposuresTransformer {
 							}
 						}
 						if (detail.getDate().equals(date)) {
-							String indexName = detail.getIndexName().equals("Physical") ? 
-									detail.getIndexName() : ModelMarketCurveProvider.getMarketIndexName(pm, detail.getIndexName());
-									if(indexName == null) {
-										continue;
-									}
+							String indexName = detail.getIndexName().equals("Physical") ? detail.getIndexName() : ModelMarketCurveProvider.getMarketIndexName(pm, detail.getIndexName());
+							if (indexName == null) {
+								continue;
+							}
 
-									final Map<String, Double> dealResult = dealMap.computeIfAbsent(slotAllocation.getName(), k -> new HashMap<>());
+							final Map<String, Double> dealResult = dealMap.computeIfAbsent(slotAllocation.getName(), k -> new HashMap<>());
 
-									switch (mode) {
-									case VOLUME_MMBTU:
-										result.merge(indexName, detail.getVolumeInMMBTU(), (a, b) -> (a + b));
-										dealResult.merge(indexName, detail.getVolumeInMMBTU(), (a, b) -> (a + b));
-										break;
-									case VOLUME_TBTU:
-										result.merge(indexName, detail.getVolumeInMMBTU()/1_000_000L, (a, b) -> (a + b));
-										dealResult.merge(indexName, detail.getVolumeInMMBTU()/1_000_000L, (a, b) -> (a + b));
-										break;
-									case VOLUME_NATIVE:
-										result.merge(indexName, detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
-										dealResult.merge(indexName, detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
-										break;
-									case NATIVE_VALUE:
-										result.merge(indexName, detail.getNativeValue(), (a, b) -> (a + b));
-										dealResult.merge(indexName, detail.getNativeValue(), (a, b) -> (a + b));
-										break;
-									default:
-										throw new IllegalArgumentException();
-									}
+							switch (mode) {
+							case VOLUME_MMBTU:
+								result.merge(indexName, detail.getVolumeInMMBTU(), Double::sum);
+								dealResult.merge(indexName, detail.getVolumeInMMBTU(), Double::sum);
+								break;
+							case VOLUME_TBTU:
+								result.merge(indexName, detail.getVolumeInMMBTU() / 1_000_000L, Double::sum);
+								dealResult.merge(indexName, detail.getVolumeInMMBTU() / 1_000_000L, Double::sum);
+								break;
+							case VOLUME_NATIVE:
+								result.merge(indexName, detail.getVolumeInNativeUnits(), Double::sum);
+								dealResult.merge(indexName, detail.getVolumeInNativeUnits(), Double::sum);
+								break;
+							case NATIVE_VALUE:
+								result.merge(indexName, detail.getNativeValue(), Double::sum);
+								dealResult.merge(indexName, detail.getNativeValue(), Double::sum);
+								break;
+							default:
+								throw new IllegalArgumentException();
+							}
 						}
 					}
 				}
@@ -146,15 +144,15 @@ public class ExposuresTransformer {
 
 				String entity = "";
 				final BaseLegalEntity le = paperDeal.getEntity();
-				if (le!= null) {
+				if (le != null) {
 					entity = le.getName();
 				}
-				if(selectedEntity != null) {
-					if(!entity.equals(selectedEntity)) {
+				if (selectedEntity != null) {
+					if (!entity.equals(selectedEntity)) {
 						continue;
 					}
 				}
-				if(selectedFiscalYear != -1) {
+				if (selectedFiscalYear != -1) {
 					if (selectedFiscalYear != paperDeal.getYear()) {
 						continue;
 					}
@@ -164,27 +162,27 @@ public class ExposuresTransformer {
 					for (final ExposureDetail detail : paperDealAllocationEntry.getExposures()) {
 						if (detail.getDate().equals(date)) {
 							String indexName = ModelMarketCurveProvider.getMarketIndexName(pm, detail.getIndexName());
-							if(indexName == null) {
+							if (indexName == null) {
 								continue;
 							}
 
 							final Map<String, Double> dealResult = dealMap.computeIfAbsent(paperDeal.getName(), k -> new HashMap<>());
 							switch (mode) {
 							case VOLUME_MMBTU:
-								result.merge(indexName, detail.getVolumeInMMBTU(), (a, b) -> (a + b));
-								dealResult.merge(indexName, detail.getVolumeInMMBTU(), (a, b) -> (a + b));
+								result.merge(indexName, detail.getVolumeInMMBTU(), Double::sum);
+								dealResult.merge(indexName, detail.getVolumeInMMBTU(), Double::sum);
 								break;
 							case VOLUME_TBTU:
-								result.merge(indexName, detail.getVolumeInMMBTU()/1_000_000L, (a, b) -> (a + b));
-								dealResult.merge(indexName, detail.getVolumeInMMBTU()/1_000_000L, (a, b) -> (a + b));
+								result.merge(indexName, detail.getVolumeInMMBTU() / 1_000_000L, Double::sum);
+								dealResult.merge(indexName, detail.getVolumeInMMBTU() / 1_000_000L, Double::sum);
 								break;
 							case VOLUME_NATIVE:
-								result.merge(indexName, detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
-								dealResult.merge(indexName, detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
+								result.merge(indexName, detail.getVolumeInNativeUnits(), Double::sum);
+								dealResult.merge(indexName, detail.getVolumeInNativeUnits(), Double::sum);
 								break;
 							case NATIVE_VALUE:
-								result.merge(indexName, detail.getNativeValue(), (a, b) -> (a + b));
-								dealResult.merge(indexName, detail.getNativeValue(), (a, b) -> (a + b));
+								result.merge(indexName, detail.getNativeValue(), Double::sum);
+								dealResult.merge(indexName, detail.getNativeValue(), Double::sum);
 								break;
 							default:
 								throw new IllegalArgumentException();
@@ -196,12 +194,13 @@ public class ExposuresTransformer {
 		}
 		return addDealSetData(new IndexExposureData(scenarioResult, schedule, date, result, dealMap), scenarioResult);
 	}
-	
+
 	public static List<IndexExposureData> aggregateBy(final AggregationMode viewMode, final List<IndexExposureData> data, final @NonNull ScenarioResult scenarioResult) {
-		if (data == null) return new ArrayList<>();
-		final List<IndexExposureData> result = new ArrayList<>();
-		
-		switch(viewMode) {
+		if (data == null) {
+			return new ArrayList<>();
+		}
+
+		switch (viewMode) {
 		case BY_MONTH_NO_TOTAL:
 			return data;
 		case BY_MONTH:
@@ -209,36 +208,38 @@ public class ExposuresTransformer {
 		case BY_DEALSET:
 			return reTransformByDealSet(data, scenarioResult);
 		default:
-			throw(new IllegalArgumentException());
+			throw (new IllegalArgumentException());
 		}
 	}
-	
+
 	protected static IndexExposureData addDealSetData(final IndexExposureData ied, final @NonNull ScenarioResult scenarioResult) {
 		final IScenarioDataProvider sdp = scenarioResult.getScenarioDataProvider();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 		final List<DealSet> dealSets = cargoModel.getDealSets();
-		
-			if (ied.children == null) return ied;
-			for (final IndexExposureData child : ied.children) {
-				FOUND:for (final DealSet ds : dealSets) {
-					final String dealSetName = ds.getName();
-					for (final Slot slot : ds.getSlots()) {
-						if (slot.getName().equals(child.childName)){
-							child.setDealSet(dealSetName);
-							continue FOUND;
-						}
+
+		if (ied.children == null) {
+			return ied;
+		}
+		for (final IndexExposureData child : ied.children) {
+			FOUND: for (final DealSet ds : dealSets) {
+				final String dealSetName = ds.getName();
+				for (final Slot<?> slot : ds.getSlots()) {
+					if (slot.getName().equals(child.childName)) {
+						child.setDealSet(dealSetName);
+						continue FOUND;
 					}
-					for (final PaperDeal paperDeal : ds.getPaperDeals()) {
-						if (paperDeal.getName().equals(child.childName)) {
-							child.setDealSet(dealSetName);
-							continue FOUND;
-						}
+				}
+				for (final PaperDeal paperDeal : ds.getPaperDeals()) {
+					if (paperDeal.getName().equals(child.childName)) {
+						child.setDealSet(dealSetName);
+						continue FOUND;
 					}
 				}
 			}
+		}
 		return ied;
 	}
-	
+
 	protected static IndexExposureData mergeChildren(final IndexExposureData data1, final IndexExposureData data2) {
 		if (data2 == null) {
 			return data1;
@@ -249,7 +250,7 @@ public class ExposuresTransformer {
 		data2.exposures.entrySet().forEach(e -> {
 			data1.exposures.merge(e.getKey(), e.getValue(), Double::sum);
 		});
-		for(final IndexExposureData ied1 : data1.children) {
+		for (final IndexExposureData ied1 : data1.children) {
 			Iterator<IndexExposureData> iedIterator = data2.children.iterator();
 			while (iedIterator.hasNext()) {
 				IndexExposureData ied2 = iedIterator.next();
@@ -262,33 +263,33 @@ public class ExposuresTransformer {
 		data1.children.addAll(data2.children);
 		return data1;
 	}
-	
+
 	protected static void mergeExposures(final IndexExposureData data1, final IndexExposureData data2) {
 		if (data2 == null) {
 			return;
 		}
-		if (data2.exposures.isEmpty()){
+		if (data2.exposures.isEmpty()) {
 			return;
 		}
 		data2.exposures.entrySet().forEach(e -> data1.exposures.merge(e.getKey(), e.getValue(), Double::sum));
 	}
-	
+
 	protected static List<IndexExposureData> addAnnualQuarterTotals(final List<IndexExposureData> output) {
-		if(output.isEmpty()) {
+		if (output.isEmpty()) {
 			return output;
 		}
 
 		int firstYear = output.get(0).year;
-		int lastYear = output.get(output.size()-1).year;
-		
+		int lastYear = output.get(output.size() - 1).year;
+
 		List<IndexExposureData> result = new LinkedList<>();
-		
+
 		for (int i = firstYear; i < lastYear + 1; i++) {
 			final int ifin = i;
+
 			IndexExposureData ied = null;
-			Iterator<IndexExposureData> foo1 = output.stream()
-					.filter(a -> a.date.getYear() == ifin).iterator();
-			while(foo1.hasNext()) {
+			Iterator<IndexExposureData> foo1 = output.stream().filter(a -> a.date.getYear() == ifin).iterator();
+			while (foo1.hasNext()) {
 				if (ied == null) {
 					ied = new IndexExposureData(foo1.next());
 					ied.setType(IndexExposureType.ANNUAL);
@@ -297,12 +298,14 @@ public class ExposuresTransformer {
 				}
 			}
 			result.add(ied);
+
 			for (int j = 1; j < 4 + 1; j++) {
 				final int jfin = j;
 				IndexExposureData jed = null;
-				Iterator<IndexExposureData> foo2 = output.stream()
-						.filter(a -> a.year == ifin && a.quarter == jfin).iterator();
-				while(foo2.hasNext()) {
+				Iterator<IndexExposureData> foo2 = output.stream() //
+						.filter(a -> a.year == ifin && a.quarter == jfin) //
+						.iterator();
+				while (foo2.hasNext()) {
 					if (jed == null) {
 						jed = new IndexExposureData(foo2.next());
 						jed.setType(IndexExposureType.QUARTERLY);
@@ -310,37 +313,39 @@ public class ExposuresTransformer {
 						mergeExposures(jed, foo2.next());
 					}
 				}
-				if(jed != null) {
+				if (jed != null) {
 					result.add(jed);
 				}
 			}
-			result.addAll(output.stream()
-					.filter(a -> a.date.getYear() == ifin)
+
+			result.addAll(output.stream() //
+					.filter(a -> a.date.getYear() == ifin) //
 					.collect(Collectors.toList()));
 		}
 		return result;
 	}
-	
+
 	protected static List<IndexExposureData> reTransformByDealSet(final List<IndexExposureData> data, final @NonNull ScenarioResult scenarioResult) {
-		if(data.isEmpty()) {
+		if (data.isEmpty()) {
 			return data;
 		}
-		
+
 		final IScenarioDataProvider sdp = scenarioResult.getScenarioDataProvider();
 		final Schedule schedule = ScenarioModelUtil.getScheduleModel(sdp).getSchedule();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 		final List<DealSet> dealSets = cargoModel.getDealSets();
 		final List<IndexExposureData> result = new ArrayList<>();
-		
+
 		for (final DealSet ds : dealSets) {
 			final String dealSetName = ds.getName();
 			final IndexExposureData iedFoo = new IndexExposureData(scenarioResult, schedule, dealSetName);
-			
+
 			for (final IndexExposureData ied : data) {
-				if (ied.children == null) continue;
+				if (ied.children == null)
+					continue;
 				for (final IndexExposureData child : ied.children) {
 					if (dealSetName.equals(child.dealSet)) {
-						
+
 						final IndexExposureData iedTemp;
 						List<IndexExposureData> iedTempList = iedFoo.children.stream().filter(a -> a.date == ied.date).collect(Collectors.toList());
 						if (iedTempList.isEmpty()) {
@@ -370,7 +375,9 @@ public class ExposuresTransformer {
 				if (cChild.children != null) {
 					reCalculateChildExposures(cChild);
 				}
-				if (cChild.exposures.isEmpty()) continue;
+				if (cChild.exposures.isEmpty()) {
+					continue;
+				}
 				for (final Map.Entry<String, Double> entry : cChild.exposures.entrySet()) {
 					cExposures.merge(entry.getKey(), entry.getValue(), Double::sum);
 				}
@@ -379,7 +386,7 @@ public class ExposuresTransformer {
 			child.exposures.putAll(cExposures);
 		}
 	}
-	
+
 	protected static boolean inspectChildrenAndExposures(final IndexExposureData fd) {
 		if (fd == null) {
 			return false;

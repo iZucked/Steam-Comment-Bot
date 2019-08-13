@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.headless;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,6 +91,16 @@ public class HeadlessOptioniserJSON {
 
 	public static class Metrics {
 		private long runtime;
+		private long seed;
+		
+		public long getSeed() {
+			return seed;
+		}
+
+		public void setSeed(long seed) {
+			this.seed = seed;
+		}
+
 		private OptioniserMetrics optioniserMetrics;
 
 		public long getRuntime() {
@@ -145,6 +156,16 @@ public class HeadlessOptioniserJSON {
 	public static class Meta {
 		private String machineType;
 		private String scenario;
+		private LocalDateTime date;
+
+
+		public LocalDateTime getDate() {
+			return date;
+		}
+
+		public void setDate(LocalDateTime date) {
+			this.date = date;
+		}
 
 		public String getScenario() {
 			return scenario;

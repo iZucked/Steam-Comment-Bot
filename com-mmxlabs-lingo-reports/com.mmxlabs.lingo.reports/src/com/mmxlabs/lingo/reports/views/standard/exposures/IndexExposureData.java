@@ -39,8 +39,7 @@ public class IndexExposureData {
 
 	public IndexExposureData(ScenarioResult scenarioResult, //
 			final Schedule schedule, //
-			final YearMonth date,
-			final @NonNull Map<String, Double> exposuresByMonth, //
+			final YearMonth date, final @NonNull Map<String, Double> exposuresByMonth, //
 			final @Nullable Map<String, Map<String, Double>> dealExposuresByMonth) {
 		this.scenarioResult = scenarioResult;
 		this.schedule = schedule;
@@ -52,35 +51,35 @@ public class IndexExposureData {
 		this.children = makeChildren(dealExposuresByMonth, date);
 		this.type = IndexExposureType.MONTHLY;
 	}
-	
+
 	public IndexExposureData(ScenarioResult scenarioResult, //
 			final Schedule schedule, //
 			final String dealSet) {
 		this.scenarioResult = scenarioResult;
 		this.schedule = schedule;
 		this.dealSet = dealSet;
-		this.exposures = new HashMap<String, Double>();
+		this.exposures = new HashMap<>();
 		this.childName = "";
-		this.children = new ArrayList<IndexExposureData>();
+		this.children = new ArrayList<>();
 		this.type = IndexExposureType.MONTHLY;
-		
+
 		this.date = YearMonth.from(LocalDate.now());
 		this.year = 0;
 		this.quarter = 0;
 	}
-	
+
 	public IndexExposureData(IndexExposureData data) {
 		this.scenarioResult = data.scenarioResult;
 		this.schedule = data.schedule;
 		this.date = data.date;
 		this.year = data.year;
 		this.quarter = getQuarter(date.getMonthValue());
-		this.exposures = new HashMap<String, Double>();
+		this.exposures = new HashMap<>();
 		this.exposures.putAll(data.exposures);
 		this.childName = "";
-		this.children = new ArrayList<IndexExposureData>();
+		this.children = new ArrayList<>();
 	}
-	
+
 	public IndexExposureData(final ScenarioResult scenarioResult, //
 			final Schedule schedule, //
 			final YearMonth date, //
@@ -96,13 +95,12 @@ public class IndexExposureData {
 		this.children = children;
 		this.type = IndexExposureType.MONTHLY;
 	}
-	
+
 	public IndexExposureData(final ScenarioResult scenarioResult, //
 			final Schedule schedule, //
 			final YearMonth date, //
 			final String childName, //
-			final @NonNull Map<String, Double> exposuresByMonth,
-			final String entity) {
+			final @NonNull Map<String, Double> exposuresByMonth, final String entity) {
 		this.date = date;
 		this.year = date.getYear();
 		this.quarter = getQuarter(date.getMonthValue());
@@ -115,53 +113,56 @@ public class IndexExposureData {
 		this.type = IndexExposureType.MONTHLY;
 		this.entity = entity;
 	}
-	
+
 	public void setType(final IndexExposureType type) {
 		this.type = type;
 	}
-	
+
 	public void setDealSet(final String dealSet) {
 		this.dealSet = dealSet;
 	}
-	
+
 	public static IndexExposureData flatten(final List<IndexExposureData> data) {
-		if (data.isEmpty()){
+		if (data.isEmpty()) {
 			return null;
 		}
 		final IndexExposureData temp = data.get(0);
 		for (IndexExposureData ied : data) {
-			if (ied.equals(temp)) continue;
-			//temp.exposures.putAll(ied.exposures);
+			if (ied.equals(temp)) {
+				continue;
+			}
 			ied.exposures.entrySet().forEach(e -> temp.exposures.merge(e.getKey(), e.getValue(), Double::sum));
 			temp.children.addAll(ied.children);
 		}
 		return temp;
 	}
-	
+
 	private List<IndexExposureData> makeChildren(final Map<String, Map<String, Double>> dealExposuresByMonth, final YearMonth date) {
 		if (dealExposuresByMonth != null) {
-			List<IndexExposureData> children = new LinkedList<IndexExposureData>();
+			List<IndexExposureData> lchildren = new LinkedList<>();
 			for (Map.Entry<String, Map<String, Double>> e : dealExposuresByMonth.entrySet()) {
 				IndexExposureData child = new IndexExposureData(scenarioResult, schedule, date, e.getKey(), e.getValue(), null);
-				children.add(child);
+				lchildren.add(child);
 			}
-			return children;
+			return lchildren;
 		}
 		return null;
 	}
-	
-	public enum IndexExposureType{
+
+	public enum IndexExposureType {
 		MONTHLY(2), QUARTERLY(1), ANNUAL(0);
 		private int value;
+
 		private IndexExposureType(int value) {
 			this.value = value;
 		}
+
 		public int getValue() {
 			return value;
 		}
 	}
-	
+
 	private int getQuarter(final int month) {
-		return (date.getMonthValue()-1)/3 + 1;
+		return (date.getMonthValue() - 1) / 3 + 1;
 	}
 }

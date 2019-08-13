@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketMaker.DESSaleSpotMarketMaker;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 
 public class CargoMaker {
@@ -45,9 +46,13 @@ public class CargoMaker {
 
 		@NonNull
 		public CargoMaker build() {
-
 			CargoMaker.this.slots.add(slot);
 			return CargoMaker.this;
+		}
+		
+		public CargoMakerSlotMaker withWindowCounterParty(boolean counterPartyWindow) {
+			this.slot.setWindowCounterParty(counterPartyWindow);
+			return this;
 		}
 	}
 

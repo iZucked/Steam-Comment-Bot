@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketMaker.DESSaleSpotMarketMaker;
 import com.mmxlabs.models.lng.types.APortSet;
 
 public class SpotMarketsModelBuilder {
@@ -66,7 +67,7 @@ public class SpotMarketsModelBuilder {
 	}
 
 	@NonNull
-	public SpotMarketMaker makeDESSaleMarket(@NonNull final String name, @NonNull final Port notionalPort, @Nullable final BaseLegalEntity entity, @NonNull final String priceExpression) {
+	public DESSaleSpotMarketMaker makeDESSaleMarket(@NonNull final String name, @NonNull final Port notionalPort, @Nullable final BaseLegalEntity entity, @NonNull final String priceExpression) {
 		final SpotMarketMaker maker = new SpotMarketMaker(this);
 		return maker.withDESSaleMarket(name, notionalPort, entity, priceExpression);
 	}

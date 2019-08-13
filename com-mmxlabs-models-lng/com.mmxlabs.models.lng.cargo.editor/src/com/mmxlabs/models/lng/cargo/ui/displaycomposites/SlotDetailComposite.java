@@ -117,10 +117,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		windowFeatures = new ArrayList<>();
 		windowFeatures.add(new EStructuralFeature[] { WindowStart, WindowStartTime });
-		windowFeatures.add(new EStructuralFeature[] { WindowSize, WindowSizeUnits });
-		windowFeatures.add(new EStructuralFeature[] { WindowFlex, WindowFlexUnits });
+		windowFeatures.add(new EStructuralFeature[] { WindowSize, WindowSizeUnits,  WindowCounterParty });
 		windowFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Duration() });
-		windowFeatures.add(new EStructuralFeature[] { WindowCounterParty });
+		windowFeatures.add(new EStructuralFeature[] { WindowFlex, WindowFlexUnits });
 		windowFeatures.add(new EStructuralFeature[] {});
 		windowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize, WindowSizeUnits, WindowCounterParty);
 		allFeatures.addAll(getAllFeatures(windowFeatures));

@@ -94,13 +94,129 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	protected AssetType selectedAssetType = AssetType.NET;
 	
 	// -------------------------------------Transformer class starts-------------------------------------
-	private final class ExposureData extends AbstractSimpleTabularReportTransformer<IndexExposureData> {
+	protected class ExposureData extends AbstractSimpleTabularReportTransformer<IndexExposureData> {
 		@Override
 		public List<ColumnManager<IndexExposureData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
+			
 			final ArrayList<ColumnManager<IndexExposureData>> result = new ArrayList<ColumnManager<IndexExposureData>>();
 			if (selectedDataProvider.getScenarioResults().isEmpty()) {
 				return result;
 			}
+			createGenericColumns(selectedDataProvider, result);
+			final List<String> columnNames = getGenericColumnNames(selectedDataProvider);
+			
+			customiseColumnList(columnNames);
+						
+			generateColumnsFromList(result, columnNames);
+
+			return result;
+		}
+
+		protected void generateColumnsFromList(final ArrayList<ColumnManager<IndexExposureData>> result, final List<String> columnNames) {
+			for (final String columnName : columnNames) {
+				result.add(new ColumnManager<IndexExposureData>(columnName) {
+					@Override
+					public String getColumnText(final IndexExposureData data) {
+						if (data == null) return "";
+						if (data.exposures.isEmpty()) return "";
+						if (data.exposures.containsKey(columnName)) {
+							final double result;
+							if (pinnedMode) {
+								if (useImage(data)) {
+									result = Math.abs(data.exposures.get(columnName));
+								} else {
+									result = data.exposures.get(columnName);
+								}
+							} else {
+								result = data.exposures.get(columnName);
+							}
+							if(mode == ValueMode.VOLUME_TBTU) {
+								return String.format("%,.03f", result);
+							} else {
+								return String.format("%,.01f", result);
+							}
+						}
+						return "";
+					}
+
+					@Override
+					public Image getColumnImage(final IndexExposureData ied) {
+						if (!useImage(ied)) return null;
+						if (!pinnedMode) return null;
+						if (ied.exposures.containsKey(columnName)) {
+							final double result = ied.exposures.get(columnName);
+							if(result > 0.0) {
+								return cellImageDarkArrowUp;
+							} else if (result < 0.0){
+								return cellImageDarkArrowDown;
+							}
+						}
+						return null;
+					}
+
+					@Override
+					public Color getBackground(final IndexExposureData element) {
+						return colorByType(element, columnName);
+					}
+					
+					@Override
+					public Font getFont(final IndexExposureData element) {
+						return fontByType(element);
+					}
+
+					@Override
+					public int compare(final IndexExposureData o1, final IndexExposureData o2) {
+						final double result1 = o1.exposures.containsKey(columnName) ? o1.exposures.get(columnName) : 0;
+						final double result2 = o2.exposures.containsKey(columnName) ? o2.exposures.get(columnName) : 0;
+						return Double.compare(result1, result2);
+					}
+				});
+			}
+		}
+
+		protected List<String> getGenericColumnNames(final ISelectedDataProvider selectedDataProvider) {
+			final List<String> columnNames = new ArrayList<String>();
+			{
+				final ScenarioResult sr = selectedDataProvider.getScenarioResults().get(0);
+				final IScenarioDataProvider sdp = sr.getScenarioDataProvider();
+				final PricingModel pm = ScenarioModelUtil.getPricingModel(sdp);
+
+				final EList<CommodityCurve> indices = pm.getCommodityCurves();
+				for (final CommodityCurve index : indices) {
+					if(index.getMarketIndex() == null) {
+						continue;
+					}
+					String indexName = index.getMarketIndex().getName();
+					if (!columnNames.contains(indexName)) {
+						columnNames.add(indexName);
+					}
+				}
+			}
+			return columnNames;
+		}
+		
+		protected boolean useImage(IndexExposureData ied) {
+			return true;
+		}
+		
+		protected Color colorByType(final IndexExposureData ied, final String customColumnName) {
+			if(IndexExposureType.ANNUAL.equals(ied.type)) {
+				return colourBlue;
+			} else if(IndexExposureType.QUARTERLY.equals(ied.type)) {
+				return colourLightBlue;
+			}
+			return null;
+		}
+		
+		protected Font fontByType(final IndexExposureData ied) {
+			if(!IndexExposureType.MONTHLY.equals(ied.type)) {
+				return fontBold;
+			}
+			return null;
+		}
+
+		protected void createGenericColumns(final ISelectedDataProvider selectedDataProvider, final ArrayList<ColumnManager<IndexExposureData>> result) {
+
 			if (selectedDataProvider.getScenarioResults().size() > 1 && selectedDataProvider.getPinnedScenarioResult() == null) {
 				result.add(new ColumnManager<IndexExposureData>("Scenario") {
 
@@ -141,6 +257,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			result.add(new ColumnManager<IndexExposureData>("Date") {
 				@Override
 				public String getColumnText(final IndexExposureData data) {
+					if (data == null) return "";
 					if (data.isChild) {
 						return data.childName;
 					}
@@ -161,7 +278,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 				@Override
 				public Color getForeground(final IndexExposureData element) {
-					return colorByType(element);
+					return colorByType(element, "");
 				}
 				
 				@Override
@@ -188,71 +305,6 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					return true;
 				}
 			});
-
-			final List<String> columnNames = new ArrayList<String>();
-			{
-				final ScenarioResult sr = selectedDataProvider.getScenarioResults().get(0);
-				final IScenarioDataProvider sdp = sr.getScenarioDataProvider();
-				final PricingModel pm = ScenarioModelUtil.getPricingModel(sdp);
-
-				final EList<CommodityCurve> indices = pm.getCommodityCurves();
-				for (final CommodityCurve index : indices) {
-					if(index.getMarketIndex() == null) {
-						continue;
-					}
-					String indexName = index.getMarketIndex().getName();
-					columnNames.add(indexName);
-				}
-
-				columnNames.add("Physical");
-			}
-						
-			for (final String columnName : columnNames) {
-				result.add(new ColumnManager<IndexExposureData>(columnName) {
-					@Override
-					public String getColumnText(final IndexExposureData data) {
-						if (data == null) return "";
-						if (data.exposures.isEmpty()) return "";
-						if (data.exposures.containsKey(columnName)) {
-							final double result;
-							if (pinnedMode) {
-								result = Math.abs(data.exposures.get(columnName));
-							} else {
-								result = data.exposures.get(columnName);
-							}
-							if(mode == ValueMode.VOLUME_TBTU) {
-								return String.format("%,.03f", result);
-							} else {
-								return String.format("%,.01f", result);
-							}
-						}
-						return "";
-					}
-
-					@Override
-					public Image getColumnImage(final IndexExposureData ied) {
-						if (!pinnedMode) return null;
-						if (ied.exposures.containsKey(columnName)) {
-							final double result = ied.exposures.get(columnName);
-							if(result > 0.0) {
-								return cellImageDarkArrowUp;
-							} else if (result < 0.0){
-								return cellImageDarkArrowDown;
-							}
-						}
-						return null;
-					}
-
-					@Override
-					public int compare(final IndexExposureData o1, final IndexExposureData o2) {
-						final double result1 = o1.exposures.containsKey(columnName) ? o1.exposures.get(columnName) : 0;
-						final double result2 = o2.exposures.containsKey(columnName) ? o2.exposures.get(columnName) : 0;
-						return Double.compare(result1, result2);
-					}
-				});
-			}
-
-			return result;
 		}
 
 		@Override
@@ -282,11 +334,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 						}
 					}
 					output.add(createDiffData(refData, null));
-
 				}
 				for (final IndexExposureData otherData : other) {
 					output.add(createDiffData(null, otherData));
-
 				}
 			} else {
 				if (pinnedPair != null) {
@@ -310,20 +360,29 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 
 		public List<IndexExposureData> createData(final @NonNull Schedule schedule, final @NonNull ScenarioResult scenarioResult) {
-			final List<IndexExposureData> output = new LinkedList<>();
 
+			entities = getEntities(schedule);
+			fiscalYears = getFiscalYears(schedule);
 			final YearMonth ymStart = getEarliestExposureDate(scenarioResult.getScenarioDataProvider());
 			final YearMonth ymEnd = getLatestExposureDate(scenarioResult.getScenarioDataProvider());
 
 			final LNGScenarioModel rootObject = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 			if (rootObject == null) {
-				return output;
+				return Collections.emptyList();
 			}
 
 			List<Object> selected = (!selectionMode || selection == null) ? Collections.emptyList() : SelectionHelper.convertToList(selection, Object.class);
 			selected = selected.stream().filter(s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation || s instanceof PaperDeal)
 					.collect(Collectors.toList());
 
+			final List<IndexExposureData> output = getExposuresByMonth(schedule, scenarioResult, ymStart, ymEnd, selected);
+
+			return output;
+		}
+
+		protected List<IndexExposureData> getExposuresByMonth(final Schedule schedule, final ScenarioResult scenarioResult, final YearMonth ymStart, final YearMonth ymEnd,
+				List<Object> selected) {
+			final List<IndexExposureData> output = new LinkedList<>();
 			for (YearMonth cym = ymStart; cym.isBefore(ymEnd.plusMonths(1)); cym = cym.plusMonths(1)) {
 				IndexExposureData exposuresByMonth = 
 						ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, mode, selected, selectedEntity, selectedFiscalYear, selectedAssetType);
@@ -331,9 +390,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					output.add(exposuresByMonth);
 				}
 			}
-			entities = getEntities(schedule);
-			fiscalYears = getFiscalYears(schedule);
 			return ExposuresTransformer.aggregateBy(viewMode, output, scenarioResult);
+		}
+
+		protected void customiseColumnList(final List<String> columnNames) {
+			columnNames.add("Physical");
 		}
 	}
 	// -------------------------------------Transformer class ends----------------------------------------
@@ -496,7 +557,10 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 			@Override
 			public boolean hasChildren(final Object element) {
-				return element instanceof Collection<?> || (element instanceof IndexExposureData && ((IndexExposureData) element).children != null && ((IndexExposureData) element).type == IndexExposureType.MONTHLY);
+				return element instanceof Collection<?> || 
+						(element instanceof IndexExposureData 
+								&& ((IndexExposureData) element).children != null 
+						&& ((IndexExposureData) element).type == IndexExposureType.MONTHLY);
 			}
 		};
 	}
@@ -512,12 +576,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		final Map<String, Double> exposuresByMonth = new HashMap<>();
 		
 		Collection<String> k = new LinkedHashSet<>();
-		Map<String, IndexExposureData> pc = new HashMap();
-		Map<String, IndexExposureData> oc = new HashMap();
+		Map<String, IndexExposureData> pc = new HashMap<>();
+		Map<String, IndexExposureData> oc = new HashMap<>();
 		if (pinData != null) {
 			for (final Map.Entry<String, Double> e : pinData.exposures.entrySet()) {
-				final double val = exposuresByMonth.getOrDefault(e.getKey(), 0.0);
-				exposuresByMonth.put(e.getKey(), val + e.getValue());
+				exposuresByMonth.merge(e.getKey(), e.getValue(), Double::sum);
 			}
 			if (pinData.children != null) {
 				for (IndexExposureData d : pinData.children) {
@@ -528,7 +591,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		if (otherData != null) {
 			for (final Map.Entry<String, Double> e : otherData.exposures.entrySet()) {
-				exposuresByMonth.merge(e.getKey(), e.getValue(), (a, b) -> a - b);
+				exposuresByMonth.merge(e.getKey(), -e.getValue(), Double::sum);
 			}
 			if (otherData.children != null) {
 				for (IndexExposureData d : otherData.children) {
@@ -847,21 +910,5 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		
 		return false;
-	}
-	
-	protected Color colorByType(final IndexExposureData ied) {
-		if(IndexExposureType.ANNUAL.equals(ied.type)) {
-			return colourBlue;
-		} else if(IndexExposureType.QUARTERLY.equals(ied.type)) {
-			return colourLightBlue;
-		}
-		return null;
-	}
-	
-	protected Font fontByType(final IndexExposureData ied) {
-		if(!IndexExposureType.MONTHLY.equals(ied.type)) {
-			return fontBold;
-		}
-		return null;
 	}
 }

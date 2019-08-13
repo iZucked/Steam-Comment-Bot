@@ -79,14 +79,22 @@ public class SpotMarketMaker {
 	}
 
 	public class DESSaleSpotMarketMaker extends SpotMarketMaker {
-
+		private int daysBuffer = 0;
+		
 		private DESSaleSpotMarketMaker(@NonNull final SpotMarketsModelBuilder spotMarketsModelBuilder, @NonNull final SpotMarket spotMarket) {
 			super(spotMarketsModelBuilder, spotMarket);
 		}
 
 		@Override
 		public DESSalesMarket build() {
-			return (DESSalesMarket) super.build();
+			DESSalesMarket dsm = (DESSalesMarket) super.build();
+			dsm.setDaysBuffer(daysBuffer);
+			return dsm;
+		}
+		
+		public DESSaleSpotMarketMaker withDaysBuffer(int daysBuffer) {
+			this.daysBuffer = daysBuffer;
+			return this;
 		}
 	}
 
