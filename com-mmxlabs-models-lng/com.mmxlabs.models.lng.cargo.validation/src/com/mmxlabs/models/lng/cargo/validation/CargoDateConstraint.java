@@ -295,12 +295,13 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					final int travelTime = CargoTravelTimeUtils.getDivertibleDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(scenarioModel), vessel,
 							CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true),
 							extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
-					final int slotDur = from.getSchedulingTimeWindow().getDuration();
+					int slotDur = from.getSchedulingTimeWindow().getDuration();
+					final boolean isCP = from.isWindowCounterParty();
 					if (travelTime + from.getSchedulingTimeWindow().getDuration() > windowLength) {
 						// final String message = String.format("Purchase %s is being shipped to %s but the laden leg (%s travel, %s loading) is greater than the shortest journey by %s.",
 						// from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(travelTime),TravelTimeUtils.formatShortHours(slotDur),
 						// TravelTimeUtils.formatHours((travelTime + slotDur) - windowLength));
-						final String message = String.format("Purchase '%s': Laden leg to %s is too long: %s loading, %s travel is %s more than the %s available.", from.getName(),
+						final String message = String.format("Purchase '%s': Laden leg to %s is too long: %s " + (isCP ? "C/P window and " : "")  + "loading, %s travel is %s more than the %s available.", from.getName(),
 								to.getPort().getName(), TravelTimeUtils.formatShortHours(slotDur), TravelTimeUtils.formatShortHours(travelTime),
 								TravelTimeUtils.formatShortHours((travelTime + slotDur) - windowLength), TravelTimeUtils.formatShortHours(windowLength));
 						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
