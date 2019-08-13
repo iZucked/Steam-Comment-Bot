@@ -13,15 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
-/**
- * 
- * @author Simon Goodall
- *
- */
 @ExtendWith(value = ShiroRunner.class)
 public class CounterPartyWindowIdleTimeTest extends AbstractIdleTimeTests {
 	
