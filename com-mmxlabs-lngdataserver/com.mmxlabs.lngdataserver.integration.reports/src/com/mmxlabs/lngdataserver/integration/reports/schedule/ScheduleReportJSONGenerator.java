@@ -71,6 +71,10 @@ public class ScheduleReportJSONGenerator {
 
 			if (sequence.isSpotVessel()) {
 				vesselName = AssignmentLabelProvider.getLabelFor(sequence.getCharterInMarket(), sequence.getSpotIndex(), true);
+				// Skip nominal cargoes as they render badly on the hub
+				if (sequence.getSpotIndex() < 0) {
+					continue;
+				}
 			} else {
 				if (sequence.getVesselAvailability() != null) {
 					vesselName = AssignmentLabelProvider.getLabelFor(sequence.getVesselAvailability());
