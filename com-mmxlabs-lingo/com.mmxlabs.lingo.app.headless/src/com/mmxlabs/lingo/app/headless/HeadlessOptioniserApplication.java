@@ -6,8 +6,11 @@ package com.mmxlabs.lingo.app.headless;
 
 import java.io.File;
 import java.io.FileReader;
-import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -28,11 +31,10 @@ import org.eclipse.equinox.app.IApplicationContext;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
-import com.google.common.io.Files;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 import com.mmxlabs.license.ssl.LicenseChecker;
@@ -88,6 +90,7 @@ public class HeadlessOptioniserApplication implements IApplication {
 
 		String machineInfo = getMachineInfo();
 		String clientCode = "V";
+		
 		if (commandLine.hasOption(CLIENT_CODE)) {
 			clientCode = commandLine.getOptionValue(CLIENT_CODE);
 		}
@@ -105,16 +108,13 @@ public class HeadlessOptioniserApplication implements IApplication {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.registerModule(new JavaTimeModule());
 			mapper.registerModule(new Jdk8Module());
-			optionsList.addAll(mapper.readValue(new File(commandLine.getOptionValue(BATCH_FILE)), new TypeReference<List<HeadlessOptioniserRunner.Options>>() {
+			optionsList.addAll(mapper.readValue(new File(commandLine.getOptionValue(BATCH_FILE)), new TypeReference<List<HeadlessOptions>>() {
 			}));
 		} else {
 			HeadlessOptions settings = new HeadlessOptions();
 
 			if (commandLine.hasOption(OUTPUT_SCENARIO)) {
 				settings.outputScenarioFileName = commandLine.getOptionValue(OUTPUT_SCENARIO);
-			}
-			if (commandLine.hasOption(OUTPUT_FOLDER)) {
-				settings.outputLoggingFolder = commandLine.getOptionValue(OUTPUT_FOLDER);
 			}
 			if (commandLine.hasOption(JSON)) {
 				settings.jsonFile = commandLine.getOptionValue(JSON);
@@ -127,12 +127,14 @@ public class HeadlessOptioniserApplication implements IApplication {
 		}
 
 		for (HeadlessOptions hoptions : optionsList) {
+			if (commandLine.hasOption(OUTPUT_FOLDER)) {
+				hoptions.outputLoggingFolder = commandLine.getOptionValue(OUTPUT_FOLDER);
+			}
 			/*
 			 * if (options.turnPerfOptsOn) { OptOptions.getInstance().setAllOnOff(options.turnPerfOptsOn); }
 			 */
 			File scenarioFile = new File(hoptions.scenarioFileName);
 			{
-				HeadlessOptioniserRunner runner = new HeadlessOptioniserRunner();
 				try {
 
 					ObjectMapper mapper = new ObjectMapper();
@@ -140,29 +142,32 @@ public class HeadlessOptioniserApplication implements IApplication {
 					mapper.registerModule(new Jdk8Module());
 
 					HeadlessOptioniserRunner.Options options = mapper.readValue(new File(hoptions.jsonFile), HeadlessOptioniserRunner.Options.class);
-
-					final int minThreads = options.minWorkerThreads;
-					final int maxThreads = options.maxWorkerThreads;
+					
 					if (options.turnPerfOptsOn) {
 						// OptOptions.getInstance().setAllOnOff(options.turnPerfOptsOn);
 					}
-					SlotInsertionOptimiserLogger logger = new SlotInsertionOptimiserLogger();
+					
+					int numRuns = options.numRuns;
+					int iterations = options.iterations;
 
-					runner.run(1, scenarioFile, logger, options, null);
+					for (int run = 1; run <= numRuns; run++) {
+						
+						int startTry = (run - 1) * iterations; //every run should start at a different point.
 
-					HeadlessOptioniserJSON json = setOptionParamsInJSONOutputObject(options, scenarioFile, options.minOptioniserThreads);
-					json.getMeta().setClient(clientCode);
-					json.getMeta().setVersion(buildVersion);
-					json.getMeta().setMachineType(machineInfo);
-
-					HeadlessOptioniserJSONTransformer.addRunResult(logger, json);
-
-					try {
-						ObjectMapper mapper1 = new ObjectMapper();
-						mapper1.writerWithDefaultPrettyPrinter().writeValue(new File(hoptions.outputLoggingFolder + "/" + UUID.randomUUID().toString() + ".json"), json);
-					} catch (Exception e) {
-						System.err.println("Error writing to file:");
-						e.printStackTrace();
+						File outFile = new File(hoptions.outputLoggingFolder + "/" + UUID.randomUUID().toString() + ".json");
+						try {
+							int threads = 1; // we don't try anything complex with multiple threads
+							HeadlessOptioniserJSON json = setOptionParamsInJSONOutputObject(options, scenarioFile, threads);							
+							json.getMeta().setClient(clientCode);
+							json.getMeta().setVersion(buildVersion);
+							json.getMeta().setMachineType(machineInfo);
+							
+							runAndWriteResults(startTry, options, scenarioFile, outFile, json);
+						}
+						catch (Exception e) {
+							outFile.delete();
+							throw e;
+						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -170,6 +175,32 @@ public class HeadlessOptioniserApplication implements IApplication {
 			}
 		}
 		return IApplication.EXIT_OK;
+	}
+	
+	private void runAndWriteResults(int startTry, HeadlessOptioniserRunner.Options options, File scenarioFile, File outputFile, HeadlessOptioniserJSON json) throws Exception {
+		SlotInsertionOptimiserLogger logger = new SlotInsertionOptimiserLogger();
+		
+		HeadlessOptioniserRunner runner = new HeadlessOptioniserRunner();
+		runner.run(1, scenarioFile, logger, options, null);
+		
+		HeadlessOptioniserJSONTransformer.addRunResult(startTry, logger, json);
+
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.registerModule(new JavaTimeModule());
+			mapper.registerModule(new Jdk8Module());
+			
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm a z");
+			//mapper.setDateFormat(df);
+			mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+			mapper.disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS);
+			
+			mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, json);
+		} catch (Exception e) {
+			System.err.println("Error writing to file:");
+			e.printStackTrace();
+		}
+		
 	}
 
 	/**
@@ -205,25 +236,14 @@ public class HeadlessOptioniserApplication implements IApplication {
 		// Nothing special needed
 	}
 
+	/**
+	 * Returns an {@link Options} object with the default required options for an OSGI application.
+	 * @return
+	 */
 	@SuppressWarnings("static-access")
-	private CommandLine parseOptions(final String[] commandLineArgs) {
-
+	private Options getRequiredOsgiOptions() {
 		// create the Options
 		final Options options = new Options();
-
-		// Headless application options
-
-		options.addOption(OptionBuilder.withLongOpt(MACHINE_INFO).withDescription("JSON file containing machine info").hasArg().create());
-		options.addOption(OptionBuilder.withLongOpt(BUILD_VERSION).withDescription("Build Version").hasArg().create());
-		options.addOption(OptionBuilder.withLongOpt(CLIENT_CODE).withDescription("Client code for build").hasArg().create());
-
-		options.addOption(OptionBuilder.withLongOpt(BATCH_FILE).withDescription("file list a batch of jobs to run").hasArg().create());
-
-		options.addOption(OptionBuilder.withLongOpt(INPUT_SCENARIO).withDescription("input scenario file").hasArg().create());
-		options.addOption(OptionBuilder.withLongOpt(OUTPUT_SCENARIO).withDescription("Output scenario file").hasArg().create());
-		options.addOption(OptionBuilder.withLongOpt(OUTPUT_FOLDER).withDescription("Path to directory for output files").hasArg().create());
-		// options.addOption(OptionBuilder.withLongOpt(OUTPUT_NAME).withDescription("Output folder name (e.g. job number, datetime, uuid)").hasArg().create());
-		options.addOption(JSON, true, "json");
 
 		// Options for OSGi/Eclipse compat - not used, but needs to be specified
 		options.addOption("application", true, "(OSGi) Application ID");
@@ -272,6 +292,29 @@ public class HeadlessOptioniserApplication implements IApplication {
 		// Memory command line args (Not used by headless, but added to maintain compat with main laucher arg set.
 		options.addOption("automem", false, "(LiNGO) Automatically determine upper bound for heap size");
 		options.addOption("noautomem", false, "(LiNGO) Do not automatically determine upper bound for heap size");
+		
+		return options;
+		
+	}
+	
+	@SuppressWarnings("static-access")
+	private CommandLine parseOptions(final String[] commandLineArgs) {
+		Options options = getRequiredOsgiOptions();
+
+		// Headless application options
+
+		options.addOption(OptionBuilder.withLongOpt(MACHINE_INFO).withDescription("JSON file containing machine info").hasArg().create());
+		options.addOption(OptionBuilder.withLongOpt(BUILD_VERSION).withDescription("Build Version").hasArg().create());
+		options.addOption(OptionBuilder.withLongOpt(CLIENT_CODE).withDescription("Client code for build").hasArg().create());
+
+		options.addOption(OptionBuilder.withLongOpt(BATCH_FILE).withDescription("file list a batch of jobs to run").hasArg().create());
+
+		options.addOption(OptionBuilder.withLongOpt(INPUT_SCENARIO).withDescription("input scenario file").hasArg().create());
+		options.addOption(OptionBuilder.withLongOpt(OUTPUT_SCENARIO).withDescription("Output scenario file").hasArg().create());
+		options.addOption(OptionBuilder.withLongOpt(OUTPUT_FOLDER).withDescription("Path to directory for output files").hasArg().create());
+		// options.addOption(OptionBuilder.withLongOpt(OUTPUT_NAME).withDescription("Output folder name (e.g. job number, datetime, uuid)").hasArg().create());
+		options.addOption(JSON, true, "json");
+
 
 		// create the command line parser
 

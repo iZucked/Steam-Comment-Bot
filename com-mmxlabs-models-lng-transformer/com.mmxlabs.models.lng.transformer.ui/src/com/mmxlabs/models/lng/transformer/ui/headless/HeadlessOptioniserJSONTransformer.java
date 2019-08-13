@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.headless;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,8 +20,9 @@ public class HeadlessOptioniserJSONTransformer {
 		return result;
 	}
 
-	public static void addRunResult(SlotInsertionOptimiserLogger logger, HeadlessOptioniserJSON result) {
+	public static void addRunResult(int startTry, SlotInsertionOptimiserLogger logger, HeadlessOptioniserJSON result) {
 		HeadlessOptioniserJSON.Metrics metrics = new HeadlessOptioniserJSON.Metrics();
+		metrics.setSeed(startTry);
 		metrics.setRuntime(logger.getRuntime());
 
 		HeadlessOptioniserJSON.OptioniserMetrics om = new HeadlessOptioniserJSON.OptioniserMetrics();
@@ -68,6 +70,7 @@ public class HeadlessOptioniserJSONTransformer {
 		meta.setVersion("");
 		meta.setScenario("");
 		meta.setClient("");
+		meta.setDate(LocalDateTime.now());
 
 		result.setMeta(meta);
 	}
