@@ -44,7 +44,7 @@ public class DESMarketSaleBufferIdleTimeTest extends AbstractIdleTimeTests {
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
-			validateIdleTime(scenarioRunner, 24 * 100, 0);
+			validateCargoIdleTime(scenarioRunner, 24 * 100, 0);
 		});
 	}
 }
