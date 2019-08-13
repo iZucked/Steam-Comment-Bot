@@ -44,10 +44,10 @@ public class VesselCapacityPortMinMaxVesselSizeValidator extends AbstractModelMu
 				if (vessel != null) {
 					for (Slot<?> slot : cargo.getSlots()) {					
 						Port port = slot.getPort();
-						if (port.isSetMinVesselSize() && vessel.getVesselOrDelegateCapacity() < port.getMinVesselSize()) {
+						if (port != null && port.isSetMinVesselSize() && vessel.getVesselOrDelegateCapacity() < port.getMinVesselSize()) {
 							statuses.add(createInvalidVesselPortAssignmentStatus("is less than", "min", ctx, vessel, slot, port, port.getMinVesselSize()));	
 						}
-						if (port.isSetMaxVesselSize() && vessel.getVesselOrDelegateCapacity() > port.getMaxVesselSize()) {
+						if (port != null && port.isSetMaxVesselSize() && vessel.getVesselOrDelegateCapacity() > port.getMaxVesselSize()) {
 							statuses.add(createInvalidVesselPortAssignmentStatus("exceeds", "max", ctx, vessel, slot, port, port.getMaxVesselSize()));							
 						}						
 					}
