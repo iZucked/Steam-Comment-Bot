@@ -1901,38 +1901,6 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	ZonedDateTime getWindowEndWithSlotOrPortTime();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
-	ZonedDateTime getWindowStartWithSlotOrPortTime();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
-	ZonedDateTime getWindowEndWithSlotOrPortTimeWithFlex();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
-	ZonedDateTime getWindowStartWithSlotOrPortTimeWithFlex();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
 	//ZonedDateTime getWindowEndWithSlotOrPortTime();
 
 	/**

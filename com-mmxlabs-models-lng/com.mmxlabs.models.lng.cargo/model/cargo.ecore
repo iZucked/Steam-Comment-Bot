@@ -61,10 +61,6 @@
     <eOperations name="getSlotOrDelegateMaxQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getSlotOrDelegateOperationalTolerance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eOperations name="getSlotOrDelegateVolumeLimitsUnit" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VolumeUnits"/>
-    <eOperations name="getWindowEndWithSlotOrPortTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
-    <eOperations name="getWindowStartWithSlotOrPortTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
-    <eOperations name="getWindowEndWithSlotOrPortTimeWithFlex" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
-    <eOperations name="getWindowStartWithSlotOrPortTimeWithFlex" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
     <eOperations name="getSlotOrDelegateEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
     <eOperations name="getSlotOrDelegateCancellationExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eOperations name="getSlotOrDelegatePricingEvent" eType="ecore:EEnum ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PricingEvent"/>
