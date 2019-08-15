@@ -18,14 +18,18 @@ public class SchedulingTimeWindowImpl implements SchedulingTimeWindow {
 		this.slot = slot;
 	}
 
+	private int getSlotOrDelegateDuration() {
+		return (Integer) slot.eGetWithDefault(CargoPackage.Literals.SLOT__DURATION);
+	}
+	
 	@Override
 	public int getDuration() {
 		//NB: must reference original slot values.
 		if (slot.isWindowCounterParty()) {
-			return convertToHours(slot.getWindowSize(), slot.getWindowSizeUnits()) + slot.getDuration();
+			return convertToHours(slot.getWindowSize(), slot.getWindowSizeUnits()) + getSlotOrDelegateDuration();
 		}
 		else {
-			return slot.getDuration();
+			return getSlotOrDelegateDuration();
 		}
 	}
 

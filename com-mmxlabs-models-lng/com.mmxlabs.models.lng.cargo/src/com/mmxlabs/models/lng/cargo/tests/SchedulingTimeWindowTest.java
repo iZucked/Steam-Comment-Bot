@@ -11,6 +11,7 @@ class SchedulingTimeWindowTest {
 		LocalDate date = LocalDate.of(2015, 12, 5);
 		TestSlotImpl sl = new TestSlotImpl();
 		sl.setWindowStart(date);
+		sl.setDuration(10);
 		return sl;
 	}
 
@@ -20,6 +21,7 @@ class SchedulingTimeWindowTest {
 		TestSlotImpl sl = new TestSlotImpl();
 		sl.setWindowStart(date);
 		sl.setWindowCounterParty(true);
+		//Set add 
 		//TODO add duration, window size.
 		return sl;
 	}
@@ -80,7 +82,7 @@ class SchedulingTimeWindowTest {
 	@Test
 	void testGetDuration() {
 		TestSlotImpl sl = getTestSlotImpl();
-		Assertions.assertEquals(sl.getSchedulingTimeWindow().getDuration(), sl.getDuration());		
+		Assertions.assertEquals(sl.getSchedulingTimeWindow().getDuration(), sl.getSlotOrDelegateDuration());		
 	}
 	
 	@Test

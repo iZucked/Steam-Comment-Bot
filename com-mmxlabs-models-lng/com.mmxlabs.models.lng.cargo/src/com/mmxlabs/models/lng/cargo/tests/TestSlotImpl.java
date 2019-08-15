@@ -121,6 +121,10 @@ public class TestSlotImpl extends SlotImpl {
 		return (TimePeriod) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS);
 	}
 
+	public int getSlotOrDelegateDuration() {
+		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__DURATION);
+	}
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
