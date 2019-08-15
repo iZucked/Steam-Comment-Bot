@@ -20,6 +20,7 @@ import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -37,6 +38,8 @@ public class InclusionCheckerTests {
 
 		final Slot slot = Mockito.mock(Slot.class);
 
+		final SchedulingTimeWindow stw = Mockito.mock(SchedulingTimeWindow.class);
+		Mockito.when(slot.getSchedulingTimeWindow()).thenReturn(stw);
 		Mockito.when(slot.getSchedulingTimeWindow().getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
 		Mockito.when(slot.getSchedulingTimeWindow().getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 
@@ -51,7 +54,9 @@ public class InclusionCheckerTests {
 		final InclusionChecker checker = new InclusionChecker();
 
 		final Slot slot = Mockito.mock(Slot.class);
-
+		final SchedulingTimeWindow stw = Mockito.mock(SchedulingTimeWindow.class);
+		
+		Mockito.when(slot.getSchedulingTimeWindow()).thenReturn(stw);
 		Mockito.when(slot.getSchedulingTimeWindow().getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
 		Mockito.when(slot.getSchedulingTimeWindow().getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 
@@ -74,6 +79,8 @@ public class InclusionCheckerTests {
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
 
 		final Slot slot = Mockito.mock(Slot.class);
+		final SchedulingTimeWindow stw = Mockito.mock(SchedulingTimeWindow.class);
+		Mockito.when(slot.getSchedulingTimeWindow()).thenReturn(stw);
 		Mockito.when(slot.getSchedulingTimeWindow().getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 
 		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
@@ -96,6 +103,8 @@ public class InclusionCheckerTests {
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
 
 		final Slot slot = Mockito.mock(Slot.class);
+		final SchedulingTimeWindow stw = Mockito.mock(SchedulingTimeWindow.class);
+		Mockito.when(slot.getSchedulingTimeWindow()).thenReturn(stw);
 		Mockito.when(slot.getSchedulingTimeWindow().getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 0));
 
 		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
@@ -121,6 +130,8 @@ public class InclusionCheckerTests {
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
 
 		final Slot slot = Mockito.mock(Slot.class);
+		final SchedulingTimeWindow stw = Mockito.mock(SchedulingTimeWindow.class);
+		Mockito.when(slot.getSchedulingTimeWindow()).thenReturn(stw);
 		Mockito.when(slot.getSchedulingTimeWindow().getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 0));
 
 		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
@@ -149,9 +160,13 @@ public class InclusionCheckerTests {
 		Mockito.when(cargo.getSlots()).thenReturn(slotsList);
 		Mockito.when(cargo.getSortedSlots()).thenReturn(slotsList);
 
+		final SchedulingTimeWindow stw = Mockito.mock(SchedulingTimeWindow.class);
+		Mockito.when(loadSlot.getSchedulingTimeWindow()).thenReturn(stw);
 		Mockito.when(loadSlot.getSchedulingTimeWindow().getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
 		Mockito.when(loadSlot.getSchedulingTimeWindow().getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 
+		final SchedulingTimeWindow stw2 = Mockito.mock(SchedulingTimeWindow.class);
+		Mockito.when(dischargeSlot.getSchedulingTimeWindow()).thenReturn(stw2);
 		Mockito.when(dischargeSlot.getSchedulingTimeWindow().getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 15));
 		Mockito.when(dischargeSlot.getSchedulingTimeWindow().getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 16));
 
@@ -211,9 +226,13 @@ public class InclusionCheckerTests {
 		Mockito.when(cargo.getSlots()).thenReturn(slotsList);
 		Mockito.when(cargo.getSortedSlots()).thenReturn(slotsList);
 
+		final SchedulingTimeWindow stw = Mockito.mock(SchedulingTimeWindow.class);
+		Mockito.when(loadSlot.getSchedulingTimeWindow()).thenReturn(stw);
 		Mockito.when(loadSlot.getSchedulingTimeWindow().getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
 		Mockito.when(loadSlot.getSchedulingTimeWindow().getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 
+		final SchedulingTimeWindow stw2 = Mockito.mock(SchedulingTimeWindow.class);
+		Mockito.when(dischargeSlot.getSchedulingTimeWindow()).thenReturn(stw2);
 		Mockito.when(dischargeSlot.getSchedulingTimeWindow().getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 15));
 		Mockito.when(dischargeSlot.getSchedulingTimeWindow().getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 16));
 
@@ -238,9 +257,13 @@ public class InclusionCheckerTests {
 		Mockito.when(cargo.getSlots()).thenReturn(slotsList);
 		Mockito.when(cargo.getSortedSlots()).thenReturn(slotsList);
 
+		final SchedulingTimeWindow stw = Mockito.mock(SchedulingTimeWindow.class);
+		Mockito.when(loadSlot.getSchedulingTimeWindow()).thenReturn(stw);
 		Mockito.when(loadSlot.getSchedulingTimeWindow().getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
 		Mockito.when(loadSlot.getSchedulingTimeWindow().getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 
+		final SchedulingTimeWindow stw2 = Mockito.mock(SchedulingTimeWindow.class);
+		Mockito.when(dischargeSlot.getSchedulingTimeWindow()).thenReturn(stw2);
 		Mockito.when(dischargeSlot.getSchedulingTimeWindow().getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 15));
 		Mockito.when(dischargeSlot.getSchedulingTimeWindow().getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 16));
 
@@ -284,9 +307,13 @@ public class InclusionCheckerTests {
 		Mockito.when(cargo.getSlots()).thenReturn(slotsList);
 		Mockito.when(cargo.getSortedSlots()).thenReturn(slotsList);
 
+		final SchedulingTimeWindow stw = Mockito.mock(SchedulingTimeWindow.class);
+		Mockito.when(loadSlot.getSchedulingTimeWindow()).thenReturn(stw);
 		Mockito.when(loadSlot.getSchedulingTimeWindow().getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
 		Mockito.when(loadSlot.getSchedulingTimeWindow().getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 
+		final SchedulingTimeWindow stw2 = Mockito.mock(SchedulingTimeWindow.class);
+		Mockito.when(dischargeSlot.getSchedulingTimeWindow()).thenReturn(stw2);
 		Mockito.when(dischargeSlot.getSchedulingTimeWindow().getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 15));
 		Mockito.when(dischargeSlot.getSchedulingTimeWindow().getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 16));
 
@@ -394,9 +421,13 @@ public class InclusionCheckerTests {
 		Mockito.when(cargo.getSlots()).thenReturn(slotsList);
 		Mockito.when(cargo.getSortedSlots()).thenReturn(slotsList);
 
+		final SchedulingTimeWindow stw = Mockito.mock(SchedulingTimeWindow.class);
+		Mockito.when(loadSlot.getSchedulingTimeWindow()).thenReturn(stw);
 		Mockito.when(loadSlot.getSchedulingTimeWindow().getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
 		Mockito.when(loadSlot.getSchedulingTimeWindow().getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 
+		final SchedulingTimeWindow stw2 = Mockito.mock(SchedulingTimeWindow.class);
+		Mockito.when(dischargeSlot.getSchedulingTimeWindow()).thenReturn(stw2);
 		Mockito.when(dischargeSlot.getSchedulingTimeWindow().getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 15));
 		Mockito.when(dischargeSlot.getSchedulingTimeWindow().getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 16));
 
