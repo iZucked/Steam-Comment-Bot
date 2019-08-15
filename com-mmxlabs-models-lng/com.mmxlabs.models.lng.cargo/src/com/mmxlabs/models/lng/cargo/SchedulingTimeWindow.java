@@ -9,8 +9,13 @@ public interface SchedulingTimeWindow {
 	ZonedDateTime getEnd();
 	ZonedDateTime getStartWithFlex();
 	ZonedDateTime getEndWithFlex();
+	
 	int getSize();
 	TimePeriod getSizeUnits();
+	
+	/**
+	 * Get the duration in hours.
+	 */
 	int getDuration();
 	int getSizeInHours();
 }
