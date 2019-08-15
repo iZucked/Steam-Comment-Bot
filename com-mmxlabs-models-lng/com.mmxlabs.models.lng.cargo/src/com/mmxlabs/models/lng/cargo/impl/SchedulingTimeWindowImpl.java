@@ -32,6 +32,7 @@ public class SchedulingTimeWindowImpl implements SchedulingTimeWindow {
 	private int convertToHours(int windowSize, TimePeriod p) {
 		final ZonedDateTime start = getStart();
 		ZonedDateTime end = start;
+		
 		if (windowSize == 0) {
 			return 0;
 		}
@@ -52,11 +53,10 @@ public class SchedulingTimeWindowImpl implements SchedulingTimeWindow {
 
 		return Hours.between(start, end);
 	}
-
 	
 	@Override
 	public TimePeriod getSizeUnits() {
-		return slot.getWindowSizeUnits();
+		return (TimePeriod) slot.eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS);
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class SchedulingTimeWindowImpl implements SchedulingTimeWindow {
 			return 0;
 		}
 		else {
-			return slot.getWindowSize();
+			return (Integer) slot.eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE);
 		}
 	}	
 	
