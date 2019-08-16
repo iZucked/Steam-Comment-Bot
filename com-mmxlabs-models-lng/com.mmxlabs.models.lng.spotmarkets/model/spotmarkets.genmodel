@@ -58,7 +58,8 @@
     </genClasses>
     <genClasses ecoreClass="spotmarkets.ecore#//DESSalesMarket">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//DESSalesMarket/notionalPort"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//DESSalesMarket/daysBuffer"/>
+      <genFeatures createChild="false" propertyDescription="The number of days buffer to add prior to delivery."
+          ecoreFeature="ecore:EAttribute spotmarkets.ecore#//DESSalesMarket/daysBuffer"/>
     </genClasses>
     <genClasses ecoreClass="spotmarkets.ecore#//FOBPurchasesMarket">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//FOBPurchasesMarket/notionalPort"/>

@@ -54,6 +54,7 @@ public interface DESSalesMarket extends SpotMarket {
 
 	/**
 	 * Returns the value of the '<em><b>Days Buffer</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Days Padding</em>' attribute isn't clear,
@@ -63,7 +64,7 @@ public interface DESSalesMarket extends SpotMarket {
 	 * @return the value of the '<em>Days Buffer</em>' attribute.
 	 * @see #setDaysBuffer(int)
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getDESSalesMarket_DaysBuffer()
-	 * @model
+	 * @model default="0"
 	 * @generated
 	 */
 	int getDaysBuffer();

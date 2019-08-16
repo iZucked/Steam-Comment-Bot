@@ -1032,7 +1032,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_windowCounterParty_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_windowCounterParty_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_windowCounterParty_description"),
 				 CargoPackage.Literals.SLOT__WINDOW_COUNTER_PARTY,
 				 true,
 				 false,

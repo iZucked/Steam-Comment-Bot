@@ -87,7 +87,7 @@ public class DESSalesMarketItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_DESSalesMarket_daysBuffer_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_DESSalesMarket_daysBuffer_feature", "_UI_DESSalesMarket_type"),
+				 getString("_UI_DESSalesMarket_daysBuffer_description"),
 				 SpotMarketsPackage.Literals.DES_SALES_MARKET__DAYS_BUFFER,
 				 true,
 				 false,
