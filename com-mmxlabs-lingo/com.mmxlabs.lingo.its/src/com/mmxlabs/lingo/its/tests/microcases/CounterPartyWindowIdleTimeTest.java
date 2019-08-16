@@ -23,6 +23,9 @@ public class CounterPartyWindowIdleTimeTest extends AbstractIdleTimeTests {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDESSaleCounterPartyWindow() {
 
+		//Set all times for ports to UTC, so we don't end up with -2 hours off expected durations.
+		portModelBuilder.setAllExistingPortsToUTC();
+		 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final CharterInMarket charterInMarket1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
@@ -40,14 +43,16 @@ public class CounterPartyWindowIdleTimeTest extends AbstractIdleTimeTests {
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
-			//TODO: check why this is 2 hours less than expected?
-			validateSlotVisitDuration(scenarioRunner, "D1", (24 * 100) + 36 - 2);
+			validateSlotVisitDuration(scenarioRunner, "D1", (24 * 100) + 36 - 1);
 		});
 	}
 	
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testFOBPurchaseCounterPartyWindow() {
+
+		portModelBuilder.setAllExistingPortsToUTC();
+		
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final CharterInMarket charterInMarket1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
