@@ -102,7 +102,7 @@ public class BasicShippingDetailsProperties extends AbstractDetailPropertyFactor
 		}
 		{
 			final long value = ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, false, ShippingCostType.HEEL_REVENUE);
-			addDetailProperty("Heel revenue", "", "$", "", value, new StringFormatLabelProvider("%,d"), details);
+			addDetailProperty("Heel revenue", "", "$", "", -value, new StringFormatLabelProvider("%,d"), details);
 			// add child heel volumes
 		}
 
