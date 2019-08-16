@@ -98,7 +98,7 @@ public class CargoTravelTimeUtils {
 			ModelDistanceProvider modelDistanceProvider) {
 		final Port fromPort = fromSlot.getPort();
 		final Port toPort = toSlot.getPort();
-		int bufferTime = toSlot.getDaysBuffer() * 24;
+		int bufferTime = toSlot.getSlotOrDelegateDaysBuffer() * 24;
 		if (fromPort != null && toPort != null) {
 			return getTimeForRoute(vessel, referenceSpeed, route, fromPort, toPort, modelDistanceProvider) + bufferTime;
 		}

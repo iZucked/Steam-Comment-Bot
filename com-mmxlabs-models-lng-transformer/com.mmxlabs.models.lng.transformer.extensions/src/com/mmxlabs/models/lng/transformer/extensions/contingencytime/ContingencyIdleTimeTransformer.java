@@ -74,7 +74,7 @@ public class ContingencyIdleTimeTransformer implements ISlotTransformer {
 	@Override
 	public void slotTransformed(@NonNull final Slot<?> modelSlot, @NonNull final IPortSlot optimiserSlot) {
 		//Add in extra idle time prior to visit.
-		int bufferTime = modelSlot.getDaysBuffer();
+		int bufferTime = modelSlot.getSlotOrDelegateDaysBuffer();
 		if (bufferTime > 0) {
 			ISequenceElement element = this.portSlotProvider.getElement(optimiserSlot);
 			int extraIdleTimeInHours = 24 * bufferTime;

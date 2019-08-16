@@ -1159,13 +1159,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SCHEDULING_TIME_WINDOW = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 20;
 
 	/**
-	 * The operation id for the '<em>Get Days Buffer</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegate Days Buffer</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_DAYS_BUFFER = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 21;
+	int SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 21;
 
 	/**
 	 * The number of operations of the '<em>Slot</em>' class.
@@ -1870,13 +1870,13 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SCHEDULING_TIME_WINDOW = SLOT___GET_SCHEDULING_TIME_WINDOW;
 
 	/**
-	 * The operation id for the '<em>Get Days Buffer</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegate Days Buffer</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT___GET_DAYS_BUFFER = SLOT___GET_DAYS_BUFFER;
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -2599,13 +2599,13 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT___GET_SCHEDULING_TIME_WINDOW = SLOT___GET_SCHEDULING_TIME_WINDOW;
 
 	/**
-	 * The operation id for the '<em>Get Days Buffer</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegate Days Buffer</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT___GET_DAYS_BUFFER = SLOT___GET_DAYS_BUFFER;
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -3418,13 +3418,13 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SCHEDULING_TIME_WINDOW = LOAD_SLOT___GET_SCHEDULING_TIME_WINDOW;
 
 	/**
-	 * The operation id for the '<em>Get Days Buffer</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegate Days Buffer</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_LOAD_SLOT___GET_DAYS_BUFFER = LOAD_SLOT___GET_DAYS_BUFFER;
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = LOAD_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -4156,13 +4156,13 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT___GET_SCHEDULING_TIME_WINDOW = DISCHARGE_SLOT___GET_SCHEDULING_TIME_WINDOW;
 
 	/**
-	 * The operation id for the '<em>Get Days Buffer</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegate Days Buffer</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_DISCHARGE_SLOT___GET_DAYS_BUFFER = DISCHARGE_SLOT___GET_DAYS_BUFFER;
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -8070,14 +8070,14 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSchedulingTimeWindow();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getDaysBuffer() <em>Get Days Buffer</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateDaysBuffer() <em>Get Slot Or Delegate Days Buffer</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Days Buffer</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getDaysBuffer()
+	 * @return the meta object for the '<em>Get Slot Or Delegate Days Buffer</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateDaysBuffer()
 	 * @generated
 	 */
-	EOperation getSlot__GetDaysBuffer();
+	EOperation getSlot__GetSlotOrDelegateDaysBuffer();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -10730,12 +10730,12 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_SCHEDULING_TIME_WINDOW = eINSTANCE.getSlot__GetSchedulingTimeWindow();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Days Buffer</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Days Buffer</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation SLOT___GET_DAYS_BUFFER = eINSTANCE.getSlot__GetDaysBuffer();
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = eINSTANCE.getSlot__GetSlotOrDelegateDaysBuffer();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

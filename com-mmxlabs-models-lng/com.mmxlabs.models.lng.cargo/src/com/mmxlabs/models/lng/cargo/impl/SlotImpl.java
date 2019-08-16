@@ -2723,7 +2723,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated NOT.
 	 */
 	@Override
-	public int getDaysBuffer() {
+	public int getSlotOrDelegateDaysBuffer() {
 		return 0;
 	}
 
@@ -3551,8 +3551,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSlotOrDelegateVesselRestrictions();
 			case CargoPackage.SLOT___GET_SCHEDULING_TIME_WINDOW:
 				return getSchedulingTimeWindow();
-			case CargoPackage.SLOT___GET_DAYS_BUFFER:
-				return getDaysBuffer();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER:
+				return getSlotOrDelegateDaysBuffer();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}

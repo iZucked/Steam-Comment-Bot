@@ -153,7 +153,7 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortRestrictions"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVesselRestrictions"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSchedulingTimeWindow"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getDaysBuffer"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateDaysBuffer"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//LoadSlot">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/cargoCV"/>

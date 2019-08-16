@@ -1977,7 +1977,7 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @model kind="operation"
 	 * @generated
 	 */
-	int getDaysBuffer();
+	int getSlotOrDelegateDaysBuffer();
 
 } // end of  Slot
 

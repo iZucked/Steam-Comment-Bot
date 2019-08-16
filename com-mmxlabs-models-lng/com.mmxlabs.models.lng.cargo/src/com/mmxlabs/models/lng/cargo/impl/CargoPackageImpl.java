@@ -1121,7 +1121,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EOperation getSlot__GetDaysBuffer() {
+	public EOperation getSlot__GetSlotOrDelegateDaysBuffer() {
 		return slotEClass.getEOperations().get(20);
 	}
 
@@ -3168,7 +3168,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS);
 		createEOperation(slotEClass, SLOT___GET_SCHEDULING_TIME_WINDOW);
-		createEOperation(slotEClass, SLOT___GET_DAYS_BUFFER);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER);
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CV);
@@ -3610,7 +3610,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEOperation(getSlot__GetSchedulingTimeWindow(), this.getSchedulingTimeWindow(), "getSchedulingTimeWindow", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEOperation(getSlot__GetDaysBuffer(), ecorePackage.getEInt(), "getDaysBuffer", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getSlot__GetSlotOrDelegateDaysBuffer(), ecorePackage.getEInt(), "getSlotOrDelegateDaysBuffer", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

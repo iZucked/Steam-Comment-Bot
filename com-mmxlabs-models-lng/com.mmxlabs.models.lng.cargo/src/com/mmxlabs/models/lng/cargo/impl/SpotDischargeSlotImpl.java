@@ -345,11 +345,11 @@ public class SpotDischargeSlotImpl extends DischargeSlotImpl implements SpotDisc
 	 * @generated NOT.
 	 */
 	@Override
-	public int getDaysBuffer() {
+	public int getSlotOrDelegateDaysBuffer() {
 		if (this.getMarket() instanceof DESSalesMarket) {
 			return ((DESSalesMarket)this.getMarket()).getDaysBuffer();
 		}
-		return super.getDaysBuffer();
+		return super.getSlotOrDelegateDaysBuffer();
 	}
 } // end of SpotDischargeSlotImpl
 
