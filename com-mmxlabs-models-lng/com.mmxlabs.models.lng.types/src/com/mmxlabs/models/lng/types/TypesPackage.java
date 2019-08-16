@@ -450,6 +450,26 @@ public interface TypesPackage extends EPackage {
 	int DEAL_TYPE = 9;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.DESPurchaseDealType <em>DES Purchase Deal Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.types.DESPurchaseDealType
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getDESPurchaseDealType()
+	 * @generated
+	 */
+	int DES_PURCHASE_DEAL_TYPE = 10;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.FOBSaleDealType <em>FOB Sale Deal Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.types.FOBSaleDealType
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getFOBSaleDealType()
+	 * @generated
+	 */
+	int FOB_SALE_DEAL_TYPE = 11;
+
+	/**
 	 * The meta object id for the '<em>Iterable</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -457,7 +477,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 10;
+	int ITERABLE = 12;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APortSet <em>APort Set</em>}'.
@@ -578,6 +598,26 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getDealType();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.DESPurchaseDealType <em>DES Purchase Deal Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>DES Purchase Deal Type</em>'.
+	 * @see com.mmxlabs.models.lng.types.DESPurchaseDealType
+	 * @generated
+	 */
+	EEnum getDESPurchaseDealType();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.FOBSaleDealType <em>FOB Sale Deal Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>FOB Sale Deal Type</em>'.
+	 * @see com.mmxlabs.models.lng.types.FOBSaleDealType
+	 * @generated
+	 */
+	EEnum getFOBSaleDealType();
 
 	/**
 	 * Returns the meta object for data type '{@link java.lang.Iterable <em>Iterable</em>}'.
@@ -728,6 +768,26 @@ public interface TypesPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum DEAL_TYPE = eINSTANCE.getDealType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.DESPurchaseDealType <em>DES Purchase Deal Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.types.DESPurchaseDealType
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getDESPurchaseDealType()
+		 * @generated
+		 */
+		EEnum DES_PURCHASE_DEAL_TYPE = eINSTANCE.getDESPurchaseDealType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.FOBSaleDealType <em>FOB Sale Deal Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.types.FOBSaleDealType
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getFOBSaleDealType()
+		 * @generated
+		 */
+		EEnum FOB_SALE_DEAL_TYPE = eINSTANCE.getFOBSaleDealType();
 
 		/**
 		 * The meta object literal for the '<em>Iterable</em>' data type.

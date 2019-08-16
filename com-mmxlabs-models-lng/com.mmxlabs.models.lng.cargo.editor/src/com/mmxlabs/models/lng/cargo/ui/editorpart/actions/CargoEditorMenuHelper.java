@@ -81,6 +81,8 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -803,9 +805,9 @@ public class CargoEditorMenuHelper {
 	}
 
 	private boolean areSlotWindowsCompatible(final LoadSlot load, final DischargeSlot discharge) {
-		final ZonedDateTime loadStart = load.getSchedulingTimeWindow().getStartWithFlex();
+		final ZonedDateTime loadStart = load.getSchedulingTimeWindow().getStart();
 		final ZonedDateTime loadEnd = load.getSchedulingTimeWindow().getEndWithFlex();
-		final ZonedDateTime dischargeStart = discharge.getSchedulingTimeWindow().getStartWithFlex();
+		final ZonedDateTime dischargeStart = discharge.getSchedulingTimeWindow().getStart();
 		final ZonedDateTime dischargeEnd = discharge.getSchedulingTimeWindow().getEndWithFlex();
 
 		// slots with unknown time windows are incompatible
@@ -826,7 +828,7 @@ public class CargoEditorMenuHelper {
 		// DES load
 		if (load.isDESPurchase()) {
 			// divertible DES - discharge time should be within shipping restriction window for load slot
-			if (load.getSlotOrDelegateDivertible()) {
+			if (load.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 				final int restriction = load.getSlotOrDelegateShippingDaysRestriction();
 				return (daysDifference <= restriction);
 			}
@@ -839,7 +841,7 @@ public class CargoEditorMenuHelper {
 		else {
 			// FOB sale - windows should overlap
 			if (discharge.isFOBSale()) {
-				if (discharge.getSlotOrDelegateDivertible()) {
+				if (discharge.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
 					final int restriction = discharge.getSlotOrDelegateShippingDaysRestriction();
 					return (daysDifference <= restriction);
 				}
@@ -873,14 +875,14 @@ public class CargoEditorMenuHelper {
 			}
 			// DES sale - only at the same port or divertible
 			else {
-				return load.getSlotOrDelegateDivertible() || (load.getPort() == discharge.getPort());
+				return load.getSlotOrDelegateDESPurchaseDealType() != DESPurchaseDealType.DEST_ONLY || (load.getPort() == discharge.getPort());
 			}
 		}
 		// FOB purchase
 		else {
 			// FOB sale - only at the same port or divertible
 			if (discharge.isFOBSale()) {
-				return discharge.getSlotOrDelegateDivertible() || (load.getPort() == discharge.getPort());
+				return discharge.getSlotOrDelegateFOBSaleDealType() != FOBSaleDealType.SOURCE_ONLY || (load.getPort() == discharge.getPort());
 			}
 			// DES sale - compatible
 			else {
@@ -1269,7 +1271,7 @@ public class CargoEditorMenuHelper {
 						// Get start of month and create full sized window
 						ZonedDateTime cal = source.getSchedulingTimeWindow().getStart();
 						// Take into account travel time
-						if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
+						if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 							final int travelTime = getTravelTime(loadSlot, dischargeSlot, loadSlot.getNominatedVessel(), scenarioEditingLocation.getScenarioDataProvider());
 							cal = cal.plusHours(travelTime);
 							cal = cal.plusHours(loadSlot.getSchedulingTimeWindow().getDuration());
@@ -1407,7 +1409,7 @@ public class CargoEditorMenuHelper {
 
 		}
 	}
-	
+
 	public static String getKeyForDate(final LocalDate date) {
 		final String key = String.format("%04d-%02d", date.getYear(), date.getMonthValue());
 		return key;
@@ -1457,7 +1459,7 @@ public class CargoEditorMenuHelper {
 						dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, market);
 						makeUpDischargeSlot(usedDischargeIDStrings, loadSlot, dischargeSlot, market, scenarioEditingLocation.getScenarioDataProvider(), getAssignedVessel(loadSlot));
 					}
-					
+
 				} else {
 					dischargeSlot = (DischargeSlot) source;
 					if (market == null) {
@@ -1510,7 +1512,11 @@ public class CargoEditorMenuHelper {
 		// Get start of month and create full sized window
 		ZonedDateTime cal = dischargeSlot.getSchedulingTimeWindow().getStart();
 		// Take into account travel time
-		if (!dischargeSlot.isFOBSale() && !loadSlot.isDESPurchase()) {
+		if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
+			final int travelTime = getTravelTime(loadSlot, dischargeSlot, dischargeSlot.getNominatedVessel(), sdp);
+			cal = cal.minusHours(travelTime);
+			cal = cal.minusHours(loadSlot.getSchedulingTimeWindow().getDuration());
+		} else if (!dischargeSlot.isFOBSale() && !loadSlot.isDESPurchase()) {
 
 			final int travelTime = getTravelTime(loadSlot, dischargeSlot, assignedVessel, sdp);
 			if (travelTime == Integer.MAX_VALUE) {
@@ -1551,8 +1557,8 @@ public class CargoEditorMenuHelper {
 		// Get start of month and create full sized window
 		ZonedDateTime cal = loadSlot.getSchedulingTimeWindow().getStart();
 		// Take into account travel time
-		if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
-			final int travelTime = getTravelTime(loadSlot, dischargeSlot, loadSlot.getNominatedVessel(),sdp);
+		if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
+			final int travelTime = getTravelTime(loadSlot, dischargeSlot, loadSlot.getNominatedVessel(), sdp);
 			cal = cal.plusHours(travelTime);
 			cal = cal.plusHours(loadSlot.getSchedulingTimeWindow().getDuration());
 		} else if (!loadSlot.isDESPurchase() && !dischargeSlot.isFOBSale()) {
@@ -1730,7 +1736,7 @@ public class CargoEditorMenuHelper {
 			final LocalDate windowStart = slot.getWindowStart();
 			LocalDate windowEnd = windowStart;
 
-			switch (slot.getSchedulingTimeWindow().getSizeUnits()) {
+			switch (tw.getSizeUnits()) {
 
 			case DAYS:
 				windowEnd = windowStart.plusDays(tw.getSize());

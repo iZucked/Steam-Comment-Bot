@@ -560,22 +560,13 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
 
 	/**
-	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__DIVERTIBLE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
-
-	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
+	int CONTRACT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
 
 	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
@@ -584,7 +575,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
+	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -849,15 +840,6 @@ public interface CommercialPackage extends EPackage {
 	int SALES_CONTRACT__CANCELLATION_EXPRESSION = CONTRACT__CANCELLATION_EXPRESSION;
 
 	/**
-	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SALES_CONTRACT__DIVERTIBLE = CONTRACT__DIVERTIBLE;
-
-	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -894,13 +876,22 @@ public interface CommercialPackage extends EPackage {
 	int SALES_CONTRACT__PURCHASE_DELIVERY_TYPE = CONTRACT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Fob Sale Deal Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__FOB_SALE_DEAL_TYPE = CONTRACT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Sales Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SALES_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 3;
+	int SALES_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl <em>Purchase Contract</em>}' class.
@@ -1165,15 +1156,6 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__CANCELLATION_EXPRESSION = CONTRACT__CANCELLATION_EXPRESSION;
 
 	/**
-	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PURCHASE_CONTRACT__DIVERTIBLE = CONTRACT__DIVERTIBLE;
-
-	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1183,22 +1165,31 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__SHIPPING_DAYS_RESTRICTION = CONTRACT__SHIPPING_DAYS_RESTRICTION;
 
 	/**
-	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PURCHASE_CONTRACT__CARGO_CV = CONTRACT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Sales Delivery Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PURCHASE_CONTRACT__SALES_DELIVERY_TYPE = CONTRACT_FEATURE_COUNT + 1;
+	int PURCHASE_CONTRACT__SALES_DELIVERY_TYPE = CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Des Purchase Deal Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__DES_PURCHASE_DEAL_TYPE = CONTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__CARGO_CV = CONTRACT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Purchase Contract</em>' class.
@@ -1207,7 +1198,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 2;
+	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl <em>Tax Rate</em>}' class.
@@ -2431,17 +2422,6 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getContract_CancellationExpression();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#isDivertible <em>Divertible</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Divertible</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.Contract#isDivertible()
-	 * @see #getContract()
-	 * @generated
-	 */
-	EAttribute getContract_Divertible();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getShippingDaysRestriction <em>Shipping Days Restriction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2562,6 +2542,17 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getSalesContract_PurchaseDeliveryType();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.SalesContract#getFobSaleDealType <em>Fob Sale Deal Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Fob Sale Deal Type</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.SalesContract#getFobSaleDealType()
+	 * @see #getSalesContract()
+	 * @generated
+	 */
+	EAttribute getSalesContract_FobSaleDealType();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.PurchaseContract <em>Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2592,6 +2583,17 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPurchaseContract_SalesDeliveryType();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Des Purchase Deal Type</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getDesPurchaseDealType()
+	 * @see #getPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getPurchaseContract_DesPurchaseDealType();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.TaxRate <em>Tax Rate</em>}'.
@@ -3314,14 +3316,6 @@ public interface CommercialPackage extends EPackage {
 		EAttribute CONTRACT__CANCELLATION_EXPRESSION = eINSTANCE.getContract_CancellationExpression();
 
 		/**
-		 * The meta object literal for the '<em><b>Divertible</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CONTRACT__DIVERTIBLE = eINSTANCE.getContract_Divertible();
-
-		/**
 		 * The meta object literal for the '<em><b>Shipping Days Restriction</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3412,6 +3406,14 @@ public interface CommercialPackage extends EPackage {
 		EAttribute SALES_CONTRACT__PURCHASE_DELIVERY_TYPE = eINSTANCE.getSalesContract_PurchaseDeliveryType();
 
 		/**
+		 * The meta object literal for the '<em><b>Fob Sale Deal Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SALES_CONTRACT__FOB_SALE_DEAL_TYPE = eINSTANCE.getSalesContract_FobSaleDealType();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl <em>Purchase Contract</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3436,6 +3438,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PURCHASE_CONTRACT__SALES_DELIVERY_TYPE = eINSTANCE.getPurchaseContract_SalesDeliveryType();
+
+		/**
+		 * The meta object literal for the '<em><b>Des Purchase Deal Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PURCHASE_CONTRACT__DES_PURCHASE_DEAL_TYPE = eINSTANCE.getPurchaseContract_DesPurchaseDealType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl <em>Tax Rate</em>}' class.

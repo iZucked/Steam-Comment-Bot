@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -51,7 +52,7 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 				final ZonedDateTime start = loadSlot.getSchedulingTimeWindow().getStart();
 				ZonedDateTime end = loadSlot.getSchedulingTimeWindow().getEnd();
 				// For divertible cargoes, we should find the round trip time
-				if (loadSlot.getSlotOrDelegateDivertible()) {
+				if (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 					end = end.plusDays(loadSlot.getSlotOrDelegateShippingDaysRestriction());
 				}
 				interval = new NonNullPair<>(start, end);

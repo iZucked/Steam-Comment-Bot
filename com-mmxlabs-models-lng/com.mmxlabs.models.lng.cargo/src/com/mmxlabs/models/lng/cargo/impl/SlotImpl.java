@@ -76,7 +76,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingDate <em>Pricing Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNotes <em>Notes</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isDivertible <em>Divertible</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
@@ -649,35 +648,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected String notes = NOTES_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isDivertible() <em>Divertible</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isDivertible()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean DIVERTIBLE_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isDivertible() <em>Divertible</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isDivertible()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean divertible = DIVERTIBLE_EDEFAULT;
-
-	/**
-	 * This is true if the Divertible attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean divertibleESet;
 
 	/**
 	 * The default value of the '{@link #getShippingDaysRestriction() <em>Shipping Days Restriction</em>}' attribute.
@@ -2084,56 +2054,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated
 	 */
 	@Override
-	public boolean isDivertible() {
-		return divertible;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setDivertible(boolean newDivertible) {
-		boolean oldDivertible = divertible;
-		divertible = newDivertible;
-		boolean oldDivertibleESet = divertibleESet;
-		divertibleESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__DIVERTIBLE, oldDivertible, divertible, !oldDivertibleESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetDivertible() {
-		boolean oldDivertible = divertible;
-		boolean oldDivertibleESet = divertibleESet;
-		divertible = DIVERTIBLE_EDEFAULT;
-		divertibleESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__DIVERTIBLE, oldDivertible, DIVERTIBLE_EDEFAULT, oldDivertibleESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetDivertible() {
-		return divertibleESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public int getShippingDaysRestriction() {
 		return shippingDaysRestriction;
 	}
@@ -2786,21 +2706,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	public VolumeUnits getSlotOrDelegateVolumeLimitsUnit() {
 		return (VolumeUnits) eGetWithDefault(CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT);
 	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-//	@Override
-//	public ZonedDateTime getWindowEndWithSlotOrPortTime() {
-//		final ZonedDateTime startTime = getWindowStartWithSlotOrPortTime();
-//		if (startTime == null) {
-//			return null;
-//		}
-//		
-//		return startTime.plusHours(getSchedulingTimeWindow().getSizeInHours());
-//	}
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -2821,88 +2726,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	public int getDaysBuffer() {
 		return 0;
 	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-//	@Override
-//	public ZonedDateTime getWindowEndWithSlotOrPortTimeWithFlex() {
-//		ZonedDateTime endTime = getWindowEndWithSlotOrPortTime();
-//		if (endTime == null) {
-//			return null;
-//		}
-//		final int slotFlex = getWindowFlex();
-//		if (slotFlex > 0) {
-//			final TimePeriod p = getWindowFlexUnits();
-//			switch (p) {
-//			case DAYS:
-//				endTime = endTime.plusDays(slotFlex).minusHours(1);
-//				break;
-//			case HOURS:
-//				endTime = endTime.plusHours(slotFlex) ;
-//				break;
-//			case MONTHS:
-//				endTime = endTime.plusMonths(slotFlex).minusHours(1);
-//				break;
-//			default:
-//				break;
-//			}
-//		}
-//		return endTime;
-//		
-//	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
-	 * @generated NOT
-	 */
-//	@Override
-//	public ZonedDateTime getWindowStartWithSlotOrPortTime() {
-//		final LocalDate wStart = getWindowStart();
-//		if (wStart == null) {
-//			return null;
-//		}
-//		ZonedDateTime dateTime = wStart.atStartOfDay(ZoneId.of(getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
-//		final int startTime = (Integer) eGetWithDefault(CargoPackage.eINSTANCE.getSlot_WindowStartTime());
-//		dateTime = dateTime.withHour(startTime);
-//		return dateTime;
-//	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
-	 * @generated NOT
-	 */
-//	@Override
-//	public ZonedDateTime getWindowStartWithSlotOrPortTimeWithFlex() {
-//		ZonedDateTime startTime = getWindowStartWithSlotOrPortTime();
-//		if (startTime == null) {
-//			return null;
-//		}
-//		final int slotFlex = getWindowFlex();
-//		if (slotFlex < 0) {
-//			final TimePeriod p  = getWindowFlexUnits();
-//			switch (p) {
-//			case DAYS:
-//				startTime = startTime.minusDays(slotFlex).plusHours(1);
-//				break;
-//			case HOURS:
-//				startTime = startTime.minusHours(slotFlex) ;
-//				break;
-//			case MONTHS:
-//				startTime = startTime.minusMonths(slotFlex).plusHours(1);
-//				break;
-//			default:
-//				break;
-//			}
-//		}
-//		return startTime;
-//	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2977,16 +2800,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public String getSlotOrDelegateCN() {
 		return (String) eGetWithDefault(CargoPackage.Literals.SLOT__CN);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	@Override
-	public boolean getSlotOrDelegateDivertible() {
-		return (Boolean) eGetWithDefault(CargoPackage.Literals.SLOT__DIVERTIBLE);
 	}
 
 	/**
@@ -3182,8 +2995,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getPricingDate();
 			case CargoPackage.SLOT__NOTES:
 				return getNotes();
-			case CargoPackage.SLOT__DIVERTIBLE:
-				return isDivertible();
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 				return getShippingDaysRestriction();
 			case CargoPackage.SLOT__ENTITY:
@@ -3306,9 +3117,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return;
 			case CargoPackage.SLOT__NOTES:
 				setNotes((String)newValue);
-				return;
-			case CargoPackage.SLOT__DIVERTIBLE:
-				setDivertible((Boolean)newValue);
 				return;
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 				setShippingDaysRestriction((Integer)newValue);
@@ -3454,9 +3262,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__NOTES:
 				setNotes(NOTES_EDEFAULT);
 				return;
-			case CargoPackage.SLOT__DIVERTIBLE:
-				unsetDivertible();
-				return;
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 				unsetShippingDaysRestriction();
 				return;
@@ -3591,8 +3396,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isSetPricingDate();
 			case CargoPackage.SLOT__NOTES:
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
-			case CargoPackage.SLOT__DIVERTIBLE:
-				return isSetDivertible();
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 				return isSetShippingDaysRestriction();
 			case CargoPackage.SLOT__ENTITY:
@@ -3730,8 +3533,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSlotOrDelegateCounterparty();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_CN:
 				return getSlotOrDelegateCN();
-			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_DIVERTIBLE:
-				return getSlotOrDelegateDivertible();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION:
 				return getSlotOrDelegateShippingDaysRestriction();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT:
@@ -3807,8 +3608,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		if (pricingDateESet) result.append(pricingDate); else result.append("<unset>");
 		result.append(", notes: ");
 		result.append(notes);
-		result.append(", divertible: ");
-		if (divertibleESet) result.append(divertible); else result.append("<unset>");
 		result.append(", shippingDaysRestriction: ");
 		if (shippingDaysRestrictionESet) result.append(shippingDaysRestriction); else result.append("<unset>");
 		result.append(", restrictedContractsArePermissive: ");
@@ -3860,8 +3659,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Entity(), null);
 		} else if (CargoPackage.Literals.SLOT__COUNTERPARTY == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Counterparty(), null);
-		} else if (cargo.getSlot_Divertible() == feature) {
-			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Divertible(), Boolean.FALSE);
 		} else if (cargo.getSlot_ShippingDaysRestriction() == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_ShippingDaysRestriction(), 0);
 		} else if (CargoPackage.Literals.SLOT__CN == feature) {

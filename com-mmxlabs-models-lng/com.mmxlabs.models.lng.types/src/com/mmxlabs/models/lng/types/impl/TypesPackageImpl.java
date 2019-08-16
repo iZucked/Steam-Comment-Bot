@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
@@ -16,7 +17,9 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.DealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.ObjectSet;
 import com.mmxlabs.models.lng.types.PortCapability;
@@ -110,6 +113,20 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EEnum desPurchaseDealTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum fobSaleDealTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EDataType iterableEDataType = null;
 
 	/**
@@ -140,7 +157,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link TypesPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -155,12 +172,14 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 			return (TypesPackage) EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 
 		// Obtain or create and register package
-		TypesPackageImpl theTypesPackage = (TypesPackageImpl) (EPackage.Registry.INSTANCE.get(eNS_URI) instanceof TypesPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new TypesPackageImpl());
+		Object registeredTypesPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		TypesPackageImpl theTypesPackage = registeredTypesPackage instanceof TypesPackageImpl ? (TypesPackageImpl) registeredTypesPackage : new TypesPackageImpl();
 
 		isInited = true;
 
 		// Initialize simple dependencies
 		MMXCorePackage.eINSTANCE.eClass();
+		DateTimePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theTypesPackage.createPackageContents();
@@ -181,6 +200,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getAPortSet() {
 		return aPortSetEClass;
 	}
@@ -190,6 +210,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getAVesselSet() {
 		return aVesselSetEClass;
 	}
@@ -199,6 +220,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getITimezoneProvider() {
 		return iTimezoneProviderEClass;
 	}
@@ -208,6 +230,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getITimezoneProvider__GetTimeZone__EAttribute() {
 		return iTimezoneProviderEClass.getEOperations().get(0);
 	}
@@ -217,6 +240,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getVesselAssignmentType() {
 		return vesselAssignmentTypeEClass;
 	}
@@ -226,6 +250,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getObjectSet() {
 		return objectSetEClass;
 	}
@@ -235,6 +260,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getObjectSet__Collect__EList() {
 		return objectSetEClass.getEOperations().get(0);
 	}
@@ -244,6 +270,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getPortCapability() {
 		return portCapabilityEEnum;
 	}
@@ -253,6 +280,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getCargoDeliveryType() {
 		return cargoDeliveryTypeEEnum;
 	}
@@ -262,6 +290,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getVolumeUnits() {
 		return volumeUnitsEEnum;
 	}
@@ -271,6 +300,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getTimePeriod() {
 		return timePeriodEEnum;
 	}
@@ -280,6 +310,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getDealType() {
 		return dealTypeEEnum;
 	}
@@ -289,6 +320,27 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EEnum getDESPurchaseDealType() {
+		return desPurchaseDealTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getFOBSaleDealType() {
+		return fobSaleDealTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EDataType getIterable() {
 		return iterableEDataType;
 	}
@@ -298,6 +350,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TypesFactory getTypesFactory() {
 		return (TypesFactory) getEFactoryInstance();
 	}
@@ -340,6 +393,8 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		volumeUnitsEEnum = createEEnum(VOLUME_UNITS);
 		timePeriodEEnum = createEEnum(TIME_PERIOD);
 		dealTypeEEnum = createEEnum(DEAL_TYPE);
+		desPurchaseDealTypeEEnum = createEEnum(DES_PURCHASE_DEAL_TYPE);
+		fobSaleDealTypeEEnum = createEEnum(FOB_SALE_DEAL_TYPE);
 
 		// Create data types
 		iterableEDataType = createEDataType(ITERABLE);
@@ -452,6 +507,16 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		initEEnum(dealTypeEEnum, DealType.class, "DealType");
 		addEEnumLiteral(dealTypeEEnum, DealType.PHYSICAL);
 		addEEnumLiteral(dealTypeEEnum, DealType.FINANCIAL);
+
+		initEEnum(desPurchaseDealTypeEEnum, DESPurchaseDealType.class, "DESPurchaseDealType");
+		addEEnumLiteral(desPurchaseDealTypeEEnum, DESPurchaseDealType.DEST_ONLY);
+		addEEnumLiteral(desPurchaseDealTypeEEnum, DESPurchaseDealType.DEST_WITH_SOURCE);
+		addEEnumLiteral(desPurchaseDealTypeEEnum, DESPurchaseDealType.DIVERT_FROM_SOURCE);
+
+		initEEnum(fobSaleDealTypeEEnum, FOBSaleDealType.class, "FOBSaleDealType");
+		addEEnumLiteral(fobSaleDealTypeEEnum, FOBSaleDealType.SOURCE_ONLY);
+		addEEnumLiteral(fobSaleDealTypeEEnum, FOBSaleDealType.SOURCE_WITH_DEST);
+		addEEnumLiteral(fobSaleDealTypeEEnum, FOBSaleDealType.DIVERT_TO_DEST);
 
 		// Initialize data types
 		initEDataType(iterableEDataType, Iterable.class, "Iterable", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

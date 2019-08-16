@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.commercial;
 
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 
 /**
  * <!-- begin-user-doc -->
@@ -18,6 +19,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  *   <li>{@link com.mmxlabs.models.lng.commercial.SalesContract#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.SalesContract#getMaxCvValue <em>Max Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.SalesContract#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.SalesContract#getFobSaleDealType <em>Fob Sale Deal Type</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getSalesContract()
@@ -163,6 +165,35 @@ public interface SalesContract extends Contract {
 	 * @generated
 	 */
 	void setPurchaseDeliveryType(CargoDeliveryType value);
+
+	/**
+	 * Returns the value of the '<em><b>Fob Sale Deal Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.FOBSaleDealType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fob Sale Deal Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fob Sale Deal Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.FOBSaleDealType
+	 * @see #setFobSaleDealType(FOBSaleDealType)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getSalesContract_FobSaleDealType()
+	 * @model
+	 * @generated
+	 */
+	FOBSaleDealType getFobSaleDealType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.SalesContract#getFobSaleDealType <em>Fob Sale Deal Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Fob Sale Deal Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.FOBSaleDealType
+	 * @see #getFobSaleDealType()
+	 * @generated
+	 */
+	void setFobSaleDealType(FOBSaleDealType value);
 } // end of  SalesContract
 
 // finish type fixing

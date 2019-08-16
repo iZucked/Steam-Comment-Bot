@@ -140,13 +140,14 @@ public class CharterMarketImporter extends DefaultClassImporter {
 
 			if (obj instanceof CharterOutMarketParameters) {
 				final CharterOutMarketParameters charterOutMarketParameters = (CharterOutMarketParameters) obj;
-				final Map<String, String> dateRow = new HashMap<>();
 
 				if (charterOutMarketParameters.isSetCharterOutStartDate()) {
+					final Map<String, String> dateRow = new HashMap<>();
 					dateRow.put(START_DATE_KEY, dateAttributeImporter.formatLocalDate(charterOutMarketParameters.getCharterOutStartDate()));
 					exportedObjects.add(dateRow);
 				}
 				if (charterOutMarketParameters.isSetCharterOutEndDate()) {
+					final Map<String, String> dateRow = new HashMap<>();
 					dateRow.put(END_DATE_KEY, dateAttributeImporter.formatLocalDate(charterOutMarketParameters.getCharterOutEndDate()));
 					exportedObjects.add(dateRow);
 				}

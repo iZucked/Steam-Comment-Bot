@@ -131,7 +131,7 @@ public class AnalyticsBuilder {
 
 				slot.setArriveCold(originalLoadSlot.isArriveCold());
 				slot.setDESPurchase(originalLoadSlot.isDESPurchase());
-				slot.setDivertible(originalLoadSlot.getSlotOrDelegateDivertible());
+				slot.setDesPurchaseDealType(originalLoadSlot.getSlotOrDelegateDESPurchaseDealType());
 				slot.setCounterparty(originalLoadSlot.getCounterparty());
 				slot.setDuration(originalLoadSlot.getDuration());
 				slot.setWindowSize(originalLoadSlot.getWindowSize());
@@ -299,7 +299,7 @@ public class AnalyticsBuilder {
 				slot.setPort(originalDischargeSlot.getPort());
 
 				slot.setFOBSale(originalDischargeSlot.isFOBSale());
-				slot.setDivertible(originalDischargeSlot.getSlotOrDelegateDivertible());
+				slot.setFobSaleDealType(originalDischargeSlot.getSlotOrDelegateFOBSaleDealType());
 				slot.setCounterparty(originalDischargeSlot.getSlotOrDelegateCounterparty());
 				slot.setDuration(originalDischargeSlot.getDuration());
 				slot.setWindowSize(originalDischargeSlot.getWindowSize());

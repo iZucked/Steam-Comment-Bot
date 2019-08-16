@@ -22,6 +22,8 @@ import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 
 /**
  * <!-- begin-user-doc -->
@@ -36,6 +38,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#getTransferTo <em>Transfer To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#getMaxCvValue <em>Max Cv Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#getFobSaleDealType <em>Fob Sale Deal Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -151,6 +154,33 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * @ordered
 	 */
 	protected boolean maxCvValueESet;
+
+	/**
+	 * The default value of the '{@link #getFobSaleDealType() <em>Fob Sale Deal Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFobSaleDealType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final FOBSaleDealType FOB_SALE_DEAL_TYPE_EDEFAULT = FOBSaleDealType.SOURCE_ONLY;
+	/**
+	 * The cached value of the '{@link #getFobSaleDealType() <em>Fob Sale Deal Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFobSaleDealType()
+	 * @generated
+	 * @ordered
+	 */
+	protected FOBSaleDealType fobSaleDealType = FOB_SALE_DEAL_TYPE_EDEFAULT;
+	/**
+	 * This is true if the Fob Sale Deal Type attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean fobSaleDealTypeESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -420,6 +450,56 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public FOBSaleDealType getFobSaleDealType() {
+		return fobSaleDealType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setFobSaleDealType(FOBSaleDealType newFobSaleDealType) {
+		FOBSaleDealType oldFobSaleDealType = fobSaleDealType;
+		fobSaleDealType = newFobSaleDealType == null ? FOB_SALE_DEAL_TYPE_EDEFAULT : newFobSaleDealType;
+		boolean oldFobSaleDealTypeESet = fobSaleDealTypeESet;
+		fobSaleDealTypeESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE, oldFobSaleDealType, fobSaleDealType, !oldFobSaleDealTypeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetFobSaleDealType() {
+		FOBSaleDealType oldFobSaleDealType = fobSaleDealType;
+		boolean oldFobSaleDealTypeESet = fobSaleDealTypeESet;
+		fobSaleDealType = FOB_SALE_DEAL_TYPE_EDEFAULT;
+		fobSaleDealTypeESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE, oldFobSaleDealType, FOB_SALE_DEAL_TYPE_EDEFAULT, oldFobSaleDealTypeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetFobSaleDealType() {
+		return fobSaleDealTypeESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public double getSlotOrDelegateMinCv() {
@@ -442,6 +522,16 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 */
 	public CargoDeliveryType getSlotOrDelegateDeliveryType() {
 		return (CargoDeliveryType) eGetWithDefault(CargoPackage.Literals.DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE);	
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public FOBSaleDealType getSlotOrDelegateFOBSaleDealType() {
+		return (FOBSaleDealType) eGetWithDefault(CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE);
 	}
 
 	/**
@@ -493,6 +583,8 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 				return getMinCvValue();
 			case CargoPackage.DISCHARGE_SLOT__MAX_CV_VALUE:
 				return getMaxCvValue();
+			case CargoPackage.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE:
+				return getFobSaleDealType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -519,6 +611,9 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 				return;
 			case CargoPackage.DISCHARGE_SLOT__MAX_CV_VALUE:
 				setMaxCvValue((Double)newValue);
+				return;
+			case CargoPackage.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE:
+				setFobSaleDealType((FOBSaleDealType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -547,6 +642,9 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 			case CargoPackage.DISCHARGE_SLOT__MAX_CV_VALUE:
 				unsetMaxCvValue();
 				return;
+			case CargoPackage.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE:
+				unsetFobSaleDealType();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -569,6 +667,8 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 				return isSetMinCvValue();
 			case CargoPackage.DISCHARGE_SLOT__MAX_CV_VALUE:
 				return isSetMaxCvValue();
+			case CargoPackage.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE:
+				return isSetFobSaleDealType();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -587,6 +687,8 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 				return getSlotOrDelegateMaxCv();
 			case CargoPackage.DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DELIVERY_TYPE:
 				return getSlotOrDelegateDeliveryType();
+			case CargoPackage.DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_FOB_SALE_DEAL_TYPE:
+				return getSlotOrDelegateFOBSaleDealType();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -609,6 +711,8 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 		if (minCvValueESet) result.append(minCvValue); else result.append("<unset>");
 		result.append(", maxCvValue: ");
 		if (maxCvValueESet) result.append(maxCvValue); else result.append("<unset>");
+		result.append(", fobSaleDealType: ");
+		if (fobSaleDealTypeESet) result.append(fobSaleDealType); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
@@ -631,6 +735,9 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.SALES_CONTRACT__MAX_CV_VALUE, 0.0);
 		} else if (feature == CargoPackage.Literals.SLOT__PRICING_EVENT) {
 			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.CONTRACT__PRICING_EVENT, PricingEvent.START_DISCHARGE);
+			
+		} else if (CargoPackage.eINSTANCE.getDischargeSlot_FobSaleDealType() == feature) {
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.eINSTANCE.getSalesContract_FobSaleDealType(), FOBSaleDealType.SOURCE_ONLY);
 		}
 		
 		return super.getUnsetValueOrDelegate(feature);

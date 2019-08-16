@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,6 +23,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getTransferTo <em>Transfer To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getMaxCvValue <em>Max Cv Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getFobSaleDealType <em>Fob Sale Deal Type</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getDischargeSlot()
@@ -250,6 +252,62 @@ public interface DischargeSlot extends Slot<SalesContract> {
 	boolean isSetMaxCvValue();
 
 	/**
+	 * Returns the value of the '<em><b>Fob Sale Deal Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.FOBSaleDealType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fob Sale Deal Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fob Sale Deal Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.FOBSaleDealType
+	 * @see #isSetFobSaleDealType()
+	 * @see #unsetFobSaleDealType()
+	 * @see #setFobSaleDealType(FOBSaleDealType)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getDischargeSlot_FobSaleDealType()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	FOBSaleDealType getFobSaleDealType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getFobSaleDealType <em>Fob Sale Deal Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Fob Sale Deal Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.FOBSaleDealType
+	 * @see #isSetFobSaleDealType()
+	 * @see #unsetFobSaleDealType()
+	 * @see #getFobSaleDealType()
+	 * @generated
+	 */
+	void setFobSaleDealType(FOBSaleDealType value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getFobSaleDealType <em>Fob Sale Deal Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetFobSaleDealType()
+	 * @see #getFobSaleDealType()
+	 * @see #setFobSaleDealType(FOBSaleDealType)
+	 * @generated
+	 */
+	void unsetFobSaleDealType();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getFobSaleDealType <em>Fob Sale Deal Type</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Fob Sale Deal Type</em>' attribute is set.
+	 * @see #unsetFobSaleDealType()
+	 * @see #getFobSaleDealType()
+	 * @see #setFobSaleDealType(FOBSaleDealType)
+	 * @generated
+	 */
+	boolean isSetFobSaleDealType();
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
@@ -272,6 +330,14 @@ public interface DischargeSlot extends Slot<SalesContract> {
 	 * @generated
 	 */
 	CargoDeliveryType getSlotOrDelegateDeliveryType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	FOBSaleDealType getSlotOrDelegateFOBSaleDealType();
 } // end of  DischargeSlot
 
 // finish type fixing

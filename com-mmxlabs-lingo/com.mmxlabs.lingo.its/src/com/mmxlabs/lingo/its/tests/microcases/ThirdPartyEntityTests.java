@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -81,7 +82,7 @@ public class ThirdPartyEntityTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", false, LocalDate.of(2019, 4, 1), portFinder.findPort("Futtsu"), null, entity, "5", 23.5, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2019, 4, 1), portFinder.findPort("Futtsu"), null, entity, "5", 23.5, null) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2019, 5, 1), portFinder.findPort("Futtsu"), null, entity, "7") //
 				.build() //

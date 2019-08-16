@@ -15,9 +15,10 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
-import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -30,28 +31,38 @@ public class NominatedVesselConstraint extends AbstractModelMultiConstraint {
 			return Activator.PLUGIN_ID;
 		}
 
-		final LoadSlot slot = getValidObject(object);
-		if (slot == null) {
-			return Activator.PLUGIN_ID;
+		if (object instanceof LoadSlot) {
+			final LoadSlot slot = (LoadSlot) object;
+
+			// DES Purchase
+			if (slot.isDESPurchase() && slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
+				if (slot.getNominatedVessel() == null) {
+					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
+							(IConstraintStatus) ctx.createFailureStatus(String.format("Divertible DES Purchase|%s needs a nominated vessel", slot.getName())));
+					failure.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
+					failures.add(failure);
+				}
+			}
 		}
 
-		// DES Purchase
-		if (SlotClassifier.classify(slot) == SlotType.DES_Buy_AnyDisPort) {
+		else if (object instanceof DischargeSlot) {
+			final DischargeSlot slot = (DischargeSlot) object;
 
-			if (slot.getNominatedVessel() == null) {
-				final String type = slot.isDESPurchase() ? "DES" : "FOB";
-				final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
-						"Divertible %s Purchase|%s needs a nominated vessel", type, slot.getName())));
-				failure.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
-				failures.add(failure);
+			// FOB Sale
+			if (slot.isFOBSale() && slot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
+				if (slot.getNominatedVessel() == null) {
+					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
+							(IConstraintStatus) ctx.createFailureStatus(String.format("Divertible FOB Sale|%s needs a nominated vessel", slot.getName())));
+					failure.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
+					failures.add(failure);
+				}
 			}
 		}
 
 		return Activator.PLUGIN_ID;
 	}
 
-	private @Nullable
-	LoadSlot getValidObject(@Nullable final EObject eObj) {
+	private @Nullable LoadSlot getValidObject(@Nullable final EObject eObj) {
 
 		if (eObj instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) eObj;

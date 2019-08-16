@@ -39,7 +39,7 @@ public class EndHeelOptionsDetailComposite extends DefaultDetailComposite {
 			@Override
 			public Object createEditorLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control) {
 
-				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICE_HEEL_ON_LAST_EVENT)) {
+				{
 					final EStructuralFeature feature = editor.getFeature();
 					if (feature == CargoPackage.Literals.END_HEEL_OPTIONS__PRICE_EXPRESSION || feature == CargoPackage.Literals.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE) {
 						return super.createEditorLayoutData(root, value, editor, control);

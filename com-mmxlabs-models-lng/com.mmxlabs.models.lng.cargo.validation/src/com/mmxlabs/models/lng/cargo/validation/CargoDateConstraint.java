@@ -37,6 +37,8 @@ import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -61,10 +63,6 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 * This is the maximum sensible amount of travel time in a cargo, in days
 	 */
 	private static final int SENSIBLE_TRAVEL_TIME = 160;
-
-	public CargoDateConstraint() {
-
-	}
 
 	/**
 	 * Validate that the available time is not negative.
@@ -111,7 +109,6 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	private void validateSlotTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final Cargo cargo, final Slot<?> from, final Slot<?> to, final long availableTime,
 			final List<IStatus> failures) {
 		// Skip for FOB/DES cargoes.
-		// TODO: Roll in common des redirection travel time
 		if (cargo.getCargoType() != CargoType.FLEET) {
 			return;
 		}
@@ -185,7 +182,6 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 						failures.add(dsd);
 					}
-
 				}
 			}
 		}
@@ -211,7 +207,6 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 			failures.add(status);
 		}
-
 	}
 
 	@Override
@@ -221,12 +216,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		if (object instanceof Cargo) {
 			final String constraintID = ctx.getCurrentConstraintId();
 			final Cargo cargo = (Cargo) object;
-			// final Slot loadSlot = cargo.getLoadSlot();
-			// final Slot dischargeSlot = cargo.getDischargeSlot();
 			if (cargo.getCargoType().equals(CargoType.FLEET)) {
 
-				// && (loadSlot != null) && (dischargeSlot != null) && (loadSlot.getWindowStart() != null) && (dischargeSlot.getWindowStart() != null)) {
-				// }
 				Slot<?> prevSlot = null;
 				for (final Slot<?> slot : cargo.getSortedSlots()) {
 					if (prevSlot != null) {
@@ -235,7 +226,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 						if ((loadPort != null) && (dischargePort != null)) {
 
 							final ZonedDateTime windowEndWithSlotOrPortTime = slot.getSchedulingTimeWindow().getEndWithFlex();
-							final ZonedDateTime windowStartWithSlotOrPortTime = prevSlot.getSchedulingTimeWindow().getStartWithFlex();
+							final ZonedDateTime windowStartWithSlotOrPortTime = prevSlot.getSchedulingTimeWindow().getStart();
 
 							if (windowEndWithSlotOrPortTime != null && windowStartWithSlotOrPortTime != null) {
 
@@ -258,7 +249,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 				if (cargo.getSortedSlots().size() == 2) {
 					final LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
 					final DischargeSlot dischargeSlot = (DischargeSlot) cargo.getSortedSlots().get(1);
-					if (loadSlot.getSlotOrDelegateDivertible()) {
+					if (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE //
+							|| dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
 						validateNonShippedSlotTravelTime(ctx, extraContext, cargo, loadSlot, dischargeSlot, failures);
 					}
 				}
@@ -270,10 +262,18 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 	private void validateNonShippedSlotTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final Cargo cargo, final LoadSlot from, final DischargeSlot to,
 			final List<IStatus> failures) {
-		final Vessel vessel = from.getNominatedVessel();
-		if (vessel == null) {
+
+		Vessel lVessel = null;
+		if (from.isDESPurchase()) {
+			lVessel = from.getNominatedVessel();
+		} else if (to.isFOBSale()) {
+			lVessel = to.getNominatedVessel();
+		}
+		if (lVessel == null) {
 			return;
 		}
+
+		final Vessel vessel = lVessel;
 		final Integer windowLength = getLadenMaxWindow(from, to);
 		if (windowLength == null) {
 			return;
@@ -292,9 +292,16 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 				final LNGScenarioModel scenarioModel = getScenarioModel(extraContext);
 				if (scenarioModel != null) {
-					final int travelTime = CargoTravelTimeUtils.getDivertibleDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(scenarioModel), vessel,
-							CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true),
-							extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
+					final int travelTime;
+					if (from.isDESPurchase()) {
+						travelTime = CargoTravelTimeUtils.getDivertibleDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(scenarioModel), vessel,
+								CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true),
+								extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
+					} else {
+						travelTime = CargoTravelTimeUtils.getDivertibleFOBMinRouteTimeInHours(to, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(scenarioModel), vessel,
+								CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true),
+								extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
+					}
 					int slotDur = from.getSchedulingTimeWindow().getDuration();
 					final boolean isCP = from.isWindowCounterParty();
 					if (travelTime + from.getSchedulingTimeWindow().getDuration() > windowLength) {
@@ -318,7 +325,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private Integer getLadenMaxWindow(final Slot<?> startSlot, final Slot<?> endSlot) {
-		final ZonedDateTime dateStart = startSlot.getSchedulingTimeWindow().getStartWithFlex();
+		final ZonedDateTime dateStart = startSlot.getSchedulingTimeWindow().getStart();
 		final ZonedDateTime dateEnd = endSlot.getSchedulingTimeWindow().getEndWithFlex();
 
 		if (dateStart != null && dateEnd != null) {

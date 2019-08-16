@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 
 /**
  * <!-- begin-user-doc -->
@@ -37,6 +38,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#isDESPurchase <em>DES Purchase</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getTransferFrom <em>Transfer From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -178,6 +180,35 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * @ordered
 	 */
 	protected boolean salesDeliveryTypeESet;
+
+	/**
+	 * The default value of the '{@link #getDesPurchaseDealType() <em>Des Purchase Deal Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDesPurchaseDealType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final DESPurchaseDealType DES_PURCHASE_DEAL_TYPE_EDEFAULT = DESPurchaseDealType.DEST_ONLY;
+
+	/**
+	 * The cached value of the '{@link #getDesPurchaseDealType() <em>Des Purchase Deal Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDesPurchaseDealType()
+	 * @generated
+	 * @ordered
+	 */
+	protected DESPurchaseDealType desPurchaseDealType = DES_PURCHASE_DEAL_TYPE_EDEFAULT;
+
+	/**
+	 * This is true if the Des Purchase Deal Type attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean desPurchaseDealTypeESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -470,6 +501,56 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DESPurchaseDealType getDesPurchaseDealType() {
+		return desPurchaseDealType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDesPurchaseDealType(DESPurchaseDealType newDesPurchaseDealType) {
+		DESPurchaseDealType oldDesPurchaseDealType = desPurchaseDealType;
+		desPurchaseDealType = newDesPurchaseDealType == null ? DES_PURCHASE_DEAL_TYPE_EDEFAULT : newDesPurchaseDealType;
+		boolean oldDesPurchaseDealTypeESet = desPurchaseDealTypeESet;
+		desPurchaseDealTypeESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE, oldDesPurchaseDealType, desPurchaseDealType, !oldDesPurchaseDealTypeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetDesPurchaseDealType() {
+		DESPurchaseDealType oldDesPurchaseDealType = desPurchaseDealType;
+		boolean oldDesPurchaseDealTypeESet = desPurchaseDealTypeESet;
+		desPurchaseDealType = DES_PURCHASE_DEAL_TYPE_EDEFAULT;
+		desPurchaseDealTypeESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE, oldDesPurchaseDealType, DES_PURCHASE_DEAL_TYPE_EDEFAULT, oldDesPurchaseDealTypeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetDesPurchaseDealType() {
+		return desPurchaseDealTypeESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public double getSlotOrDelegateCV() {
@@ -483,6 +564,16 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 */
 	public CargoDeliveryType getSlotOrDelegateDeliveryType() {
 		return (CargoDeliveryType) eGetWithDefault(CargoPackage.Literals.LOAD_SLOT__SALES_DELIVERY_TYPE);	
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public DESPurchaseDealType getSlotOrDelegateDESPurchaseDealType() {
+		return (DESPurchaseDealType) eGetWithDefault(CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE);
 	}
 
 	/**
@@ -536,6 +627,8 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 				return basicGetTransferFrom();
 			case CargoPackage.LOAD_SLOT__SALES_DELIVERY_TYPE:
 				return getSalesDeliveryType();
+			case CargoPackage.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE:
+				return getDesPurchaseDealType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -565,6 +658,9 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 				return;
 			case CargoPackage.LOAD_SLOT__SALES_DELIVERY_TYPE:
 				setSalesDeliveryType((CargoDeliveryType)newValue);
+				return;
+			case CargoPackage.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE:
+				setDesPurchaseDealType((DESPurchaseDealType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -596,6 +692,9 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 			case CargoPackage.LOAD_SLOT__SALES_DELIVERY_TYPE:
 				unsetSalesDeliveryType();
 				return;
+			case CargoPackage.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE:
+				unsetDesPurchaseDealType();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -620,6 +719,8 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 				return transferFrom != null;
 			case CargoPackage.LOAD_SLOT__SALES_DELIVERY_TYPE:
 				return isSetSalesDeliveryType();
+			case CargoPackage.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE:
+				return isSetDesPurchaseDealType();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -636,6 +737,8 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 				return getSlotOrDelegateCV();
 			case CargoPackage.LOAD_SLOT___GET_SLOT_OR_DELEGATE_DELIVERY_TYPE:
 				return getSlotOrDelegateDeliveryType();
+			case CargoPackage.LOAD_SLOT___GET_SLOT_OR_DELEGATE_DES_PURCHASE_DEAL_TYPE:
+				return getSlotOrDelegateDESPurchaseDealType();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -660,6 +763,8 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 		result.append(desPurchase);
 		result.append(", salesDeliveryType: ");
 		if (salesDeliveryTypeESet) result.append(salesDeliveryType); else result.append("<unset>");
+		result.append(", desPurchaseDealType: ");
+		if (desPurchaseDealTypeESet) result.append(desPurchaseDealType); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
@@ -699,6 +804,8 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.PURCHASE_CONTRACT__SALES_DELIVERY_TYPE, CargoDeliveryType.ANY);
 		} else if (feature == CargoPackage.Literals.SLOT__PRICING_EVENT) {
 			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.CONTRACT__PRICING_EVENT, PricingEvent.START_LOAD);
+		} else if (CargoPackage.eINSTANCE.getLoadSlot_DesPurchaseDealType() == feature) {
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.eINSTANCE.getPurchaseContract_DesPurchaseDealType(), DESPurchaseDealType.DEST_ONLY);			
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}

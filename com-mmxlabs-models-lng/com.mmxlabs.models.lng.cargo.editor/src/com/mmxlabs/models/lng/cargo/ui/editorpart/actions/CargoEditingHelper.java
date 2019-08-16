@@ -32,6 +32,8 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.ui.Activator;
@@ -343,7 +345,7 @@ public class CargoEditingHelper {
 
 	public void convertToFOBPurchase(@NonNull final String description, @NonNull final LoadSlot loadSlot) {
 		assert loadSlot.isDESPurchase();
-		assert loadSlot.getSlotOrDelegateDivertible();
+		assert loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE;
 
 		final CompoundCommand cc = new CompoundCommand(description);
 		cc.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE, Boolean.FALSE));
@@ -366,7 +368,7 @@ public class CargoEditingHelper {
 
 		final CompoundCommand cc = new CompoundCommand(description);
 		cc.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE, Boolean.TRUE));
-		cc.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.Literals.SLOT__DIVERTIBLE, Boolean.TRUE));
+		cc.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE, DESPurchaseDealType.DIVERT_FROM_SOURCE));
 		final Cargo cargo = loadSlot.getCargo();
 		if (cargo != null) {
 			cc.append(SetCommand.create(editingDomain, cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, SetCommand.UNSET_VALUE));
@@ -378,7 +380,7 @@ public class CargoEditingHelper {
 
 		if (VERIFY_CHANGES) {
 			assert loadSlot.isDESPurchase();
-			assert loadSlot.getSlotOrDelegateDivertible();
+			assert loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE;
 			if (cargo != null) {
 				assert cargo.getVesselAssignmentType() == null;
 				assert cargo.getSpotIndex() == -1;
@@ -391,7 +393,7 @@ public class CargoEditingHelper {
 
 	public void convertToDESSale(@NonNull final String description, @NonNull final DischargeSlot dischargeSlot) {
 		assert dischargeSlot.isFOBSale();
-		assert dischargeSlot.getSlotOrDelegateDivertible();
+		assert dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST;
 
 		final CompoundCommand cc = new CompoundCommand(description);
 		cc.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE, Boolean.FALSE));
@@ -414,7 +416,7 @@ public class CargoEditingHelper {
 
 		final CompoundCommand cc = new CompoundCommand(description);
 		cc.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE, Boolean.TRUE));
-		cc.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.Literals.SLOT__DIVERTIBLE, Boolean.TRUE));
+		cc.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE, FOBSaleDealType.DIVERT_TO_DEST));
 		final Cargo cargo = dischargeSlot.getCargo();
 		if (cargo != null) {
 			cc.append(SetCommand.create(editingDomain, cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, SetCommand.UNSET_VALUE));
@@ -426,7 +428,7 @@ public class CargoEditingHelper {
 
 		if (VERIFY_CHANGES) {
 			assert dischargeSlot.isFOBSale();
-			assert dischargeSlot.getSlotOrDelegateDivertible();
+			assert dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST;
 			if (cargo != null) {
 				assert cargo.getVesselAssignmentType() == null;
 				assert cargo.getSpotIndex() == -1;

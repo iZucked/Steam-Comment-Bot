@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
@@ -101,7 +100,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 	private void addStartDateFeature(final DetailConstraintStatusDecorator failure, final AssignableElement uuidObject) {
 		if (uuidObject instanceof Cargo) {
 			final Cargo cargo = (Cargo) uuidObject;
-			final Slot slot = cargo.getSortedSlots().get(0);
+			final Slot<?> slot = cargo.getSortedSlots().get(0);
 			failure.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;

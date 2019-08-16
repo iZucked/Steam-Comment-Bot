@@ -54,9 +54,6 @@ public enum CargoDeliveryType implements Enumerator {
 	 * The '<em><b>Any</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Any possible delivery method is permitted
-	 * <!-- end-model-doc -->
 	 * @see #ANY
 	 * @model name="Any"
 	 * @generated
@@ -68,9 +65,6 @@ public enum CargoDeliveryType implements Enumerator {
 	 * The '<em><b>Shipped</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The cargo must be shipped directly by the first party.
-	 * <!-- end-model-doc -->
 	 * @see #SHIPPED
 	 * @model name="Shipped"
 	 * @generated
@@ -82,9 +76,6 @@ public enum CargoDeliveryType implements Enumerator {
 	 * The '<em><b>Not Shipped</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The cargo must be delivered by a third party.
-	 * <!-- end-model-doc -->
 	 * @see #NOT_SHIPPED
 	 * @model name="NotShipped"
 	 * @generated
@@ -202,6 +193,7 @@ public enum CargoDeliveryType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getValue() {
 		return value;
 	}
@@ -211,6 +203,7 @@ public enum CargoDeliveryType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -220,6 +213,7 @@ public enum CargoDeliveryType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getLiteral() {
 		return literal;
 	}

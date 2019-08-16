@@ -6,7 +6,7 @@
     dynamicTemplates="true" modelName="LNGTypes" featureMapWrapperInternalInterface=""
     featureMapWrapperClass="" codeFormatting="true" testsDirectory="" booleanFlagsField=""
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
-    runtimeVersion="2.11" language="" usedGenPackages="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore"
+    runtimeVersion="2.11" language="" usedGenPackages="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore platform:/plugin/com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime"
     operationReflection="true">
   <foreignModel>lngtypes.ecore</foreignModel>
   <genPackages prefix="Types" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
@@ -35,6 +35,16 @@
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="lngtypes.ecore#//DealType">
       <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//DealType/PHYSICAL"/>
       <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//DealType/FINANCIAL"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="lngtypes.ecore#//DESPurchaseDealType">
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//DESPurchaseDealType/DEST_ONLY"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//DESPurchaseDealType/DEST_WITH_SOURCE"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//DESPurchaseDealType/DIVERT_FROM_SOURCE"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="lngtypes.ecore#//FOBSaleDealType">
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//FOBSaleDealType/SOURCE_ONLY"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//FOBSaleDealType/SOURCE_WITH_DEST"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//FOBSaleDealType/DIVERT_TO_DEST"/>
     </genEnums>
     <genDataTypes ecoreDataType="lngtypes.ecore#//Iterable">
       <genTypeParameters ecoreTypeParameter="lngtypes.ecore#//Iterable/T"/>

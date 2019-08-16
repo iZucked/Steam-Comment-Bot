@@ -58,6 +58,7 @@ import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -180,7 +181,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 						loadPort = loadSlot.getPort();
 						slotActuals = ActualsFactory.eINSTANCE.createLoadActuals();
 						if (loadSlot.isDESPurchase()) {
-							isDivertibleDESPurchase = loadSlot.getSlotOrDelegateDivertible();
+							isDivertibleDESPurchase = loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE;
 							cargoActuals.setVessel(slot.getNominatedVessel());
 						}
 						slotActuals.setCV(((LoadSlot) slot).getSlotOrDelegateCV());

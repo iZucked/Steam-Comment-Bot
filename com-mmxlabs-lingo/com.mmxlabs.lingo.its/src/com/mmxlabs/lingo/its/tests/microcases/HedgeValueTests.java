@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 
 @SuppressWarnings("unused")
 @ExtendWith(ShiroRunner.class)
@@ -93,7 +94,7 @@ public class HedgeValueTests extends AbstractMicroTestCase {
 
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 
-				.makeDESPurchase("L", false, LocalDate.of(2015, 12, 9), portFinder.findPort("Sakai"), null, entity, "5", null) //
+				.makeDESPurchase("L", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 9), portFinder.findPort("Sakai"), null, entity, "5", null) //
 				.withHedgeValue(1000) //
 				.build()//
 

@@ -54,7 +54,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getNotes <em>Notes</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isDivertible <em>Divertible</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}</li>
@@ -443,7 +442,7 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @return the value of the '<em>Window Flex</em>' attribute.
 	 * @see #setWindowFlex(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowFlex()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='-##0'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='##0'"
 	 * @generated
 	 */
 	int getWindowFlex();
@@ -1109,59 +1108,6 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	void setNotes(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Divertible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Divertible</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Divertible</em>' attribute.
-	 * @see #isSetDivertible()
-	 * @see #unsetDivertible()
-	 * @see #setDivertible(boolean)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Divertible()
-	 * @model unsettable="true"
-	 * @generated
-	 */
-	boolean isDivertible();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isDivertible <em>Divertible</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Divertible</em>' attribute.
-	 * @see #isSetDivertible()
-	 * @see #unsetDivertible()
-	 * @see #isDivertible()
-	 * @generated
-	 */
-	void setDivertible(boolean value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isDivertible <em>Divertible</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetDivertible()
-	 * @see #isDivertible()
-	 * @see #setDivertible(boolean)
-	 * @generated
-	 */
-	void unsetDivertible();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isDivertible <em>Divertible</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Divertible</em>' attribute is set.
-	 * @see #unsetDivertible()
-	 * @see #isDivertible()
-	 * @see #setDivertible(boolean)
-	 * @generated
-	 */
-	boolean isSetDivertible();
 
 	/**
 	 * Returns the value of the '<em><b>Shipping Days Restriction</b></em>' attribute.
@@ -1898,38 +1844,6 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
-	//ZonedDateTime getWindowEndWithSlotOrPortTime();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
-	//ZonedDateTime getWindowStartWithSlotOrPortTime();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
-	//ZonedDateTime getWindowEndWithSlotOrPortTimeWithFlex();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
-	//ZonedDateTime getWindowStartWithSlotOrPortTimeWithFlex();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated
 	 */
@@ -1984,14 +1898,6 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	String getSlotOrDelegateCN();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-	boolean getSlotOrDelegateDivertible();
 
 	/**
 	 * <!-- begin-user-doc -->

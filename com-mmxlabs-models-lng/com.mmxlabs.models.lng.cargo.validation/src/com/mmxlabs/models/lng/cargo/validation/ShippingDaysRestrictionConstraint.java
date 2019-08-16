@@ -34,6 +34,8 @@ import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -81,7 +83,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 
 						failures.add(dsd);
 					}
-				} else if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy) {
+				} else if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_ONLY) {
+
 					final Cargo cargo = loadSlot.getCargo();
 					if (cargo != null) {
 						for (final Slot slot : cargo.getSlots()) {
@@ -115,10 +118,10 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 				// failures.add(dsd);
 				// }
 				// } else
-				if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale) {
+				if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.SOURCE_ONLY) {
 					final Cargo cargo = dischargeSlot.getCargo();
 					if (cargo != null) {
-						for (final Slot slot : cargo.getSlots()) {
+						for (final Slot<?> slot : cargo.getSlots()) {
 							if (slot instanceof LoadSlot) {
 								final LoadSlot loadSlot = (LoadSlot) slot;
 								if (loadSlot.getPort() != dischargeSlot.getPort()) {

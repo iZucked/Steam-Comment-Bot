@@ -38,6 +38,8 @@ import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
@@ -134,11 +136,11 @@ public class CargoModelBuilder {
 		return slot;
 	}
 
-	public @NonNull LoadSlot createDESPurchase(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port,
+	public @NonNull LoadSlot createDESPurchase(@NonNull final String name, final DESPurchaseDealType dealType, @NonNull final LocalDate windowStart, @NonNull final Port port,
 			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable final Double cv,
 			@Nullable final Vessel nominatedVessel) {
 
-		validatePortCapability(port, divertible ? PortCapability.LOAD : PortCapability.DISCHARGE);
+		validatePortCapability(port, dealType == DESPurchaseDealType.DEST_ONLY ? PortCapability.DISCHARGE : PortCapability.LOAD);
 
 		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		configureSlot(slot, name, windowStart, port, purchaseContract, entity, priceExpression);
@@ -147,11 +149,9 @@ public class CargoModelBuilder {
 		}
 
 		slot.setDESPurchase(true);
-		slot.setDivertible(divertible);
+		slot.setDesPurchaseDealType(dealType);
 		if (nominatedVessel != null) {
 			slot.setNominatedVessel(nominatedVessel);
-		} else if (divertible) {
-			// throw new IllegalArgumentException("Divertible DES Purchases need a nominated vessel");
 		}
 		cargoModel.getLoadSlots().add(slot);
 		return slot;
@@ -203,10 +203,10 @@ public class CargoModelBuilder {
 		return slot;
 	}
 
-	public @NonNull DischargeSlot createFOBSale(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port,
+	public @NonNull DischargeSlot createFOBSale(@NonNull final String name, final FOBSaleDealType dealType, @NonNull final LocalDate windowStart, @NonNull final Port port,
 			@Nullable final SalesContract salesContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable final Vessel nominatedVessel) {
 
-		if (!divertible) {
+		if (dealType == FOBSaleDealType.SOURCE_ONLY) {
 			validatePortCapability(port, PortCapability.LOAD);
 		}
 
@@ -214,11 +214,9 @@ public class CargoModelBuilder {
 		configureSlot(slot, name, windowStart, port, salesContract, entity, priceExpression);
 		if (nominatedVessel != null) {
 			slot.setNominatedVessel(nominatedVessel);
-		} else if (divertible) {
-			// throw new IllegalArgumentException("Divertible FOB sale need a nominated vessel");
 		}
 		slot.setFOBSale(true);
-		slot.setDivertible(divertible);
+		slot.setFobSaleDealType(dealType);
 		cargoModel.getDischargeSlots().add(slot);
 
 		return slot;
@@ -232,11 +230,11 @@ public class CargoModelBuilder {
 	}
 
 	@NonNull
-	public SlotMaker<LoadSlot> makeDESPurchase(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port,
+	public SlotMaker<LoadSlot> makeDESPurchase(@NonNull final String name, final DESPurchaseDealType dealType, @NonNull final LocalDate windowStart, @NonNull final Port port,
 			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable Double cv,
 			@Nullable final Vessel nominatedVessel) {
 
-		return new SlotMaker<LoadSlot>(this).withDESPurchase(name, divertible, windowStart, port, purchaseContract, entity, priceExpression, cv, nominatedVessel);
+		return new SlotMaker<LoadSlot>(this).withDESPurchase(name, dealType, windowStart, port, purchaseContract, entity, priceExpression, cv, nominatedVessel);
 	}
 
 	@NonNull
@@ -247,10 +245,10 @@ public class CargoModelBuilder {
 	}
 
 	@NonNull
-	public SlotMaker<DischargeSlot> makeFOBSale(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port,
+	public SlotMaker<DischargeSlot> makeFOBSale(@NonNull final String name, final FOBSaleDealType dealType, @NonNull final LocalDate windowStart, @NonNull final Port port,
 			@Nullable final SalesContract salesContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable final Vessel nominatedVessel) {
 
-		return new SlotMaker<DischargeSlot>(this).withFOBSale(name, divertible, windowStart, port, salesContract, entity, priceExpression, nominatedVessel);
+		return new SlotMaker<DischargeSlot>(this).withFOBSale(name, dealType, windowStart, port, salesContract, entity, priceExpression, nominatedVessel);
 	}
 
 	public @NonNull SpotDischargeSlot createSpotDESSale(@NonNull final String name, @NonNull final DESSalesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {

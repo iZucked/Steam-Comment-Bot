@@ -85,6 +85,10 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 			return createTimePeriodFromString(eDataType, initialValue);
 		case TypesPackage.DEAL_TYPE:
 			return createDealTypeFromString(eDataType, initialValue);
+		case TypesPackage.DES_PURCHASE_DEAL_TYPE:
+			return createDESPurchaseDealTypeFromString(eDataType, initialValue);
+		case TypesPackage.FOB_SALE_DEAL_TYPE:
+			return createFOBSaleDealTypeFromString(eDataType, initialValue);
 		case TypesPackage.ITERABLE:
 			return createIterableFromString(eDataType, initialValue);
 		default:
@@ -110,6 +114,10 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 			return convertTimePeriodToString(eDataType, instanceValue);
 		case TypesPackage.DEAL_TYPE:
 			return convertDealTypeToString(eDataType, instanceValue);
+		case TypesPackage.DES_PURCHASE_DEAL_TYPE:
+			return convertDESPurchaseDealTypeToString(eDataType, instanceValue);
+		case TypesPackage.FOB_SALE_DEAL_TYPE:
+			return convertFOBSaleDealTypeToString(eDataType, instanceValue);
 		case TypesPackage.ITERABLE:
 			return convertIterableToString(eDataType, instanceValue);
 		default:
@@ -227,6 +235,48 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public DESPurchaseDealType createDESPurchaseDealTypeFromString(EDataType eDataType, String initialValue) {
+		DESPurchaseDealType result = DESPurchaseDealType.get(initialValue);
+		if (result == null)
+			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertDESPurchaseDealTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FOBSaleDealType createFOBSaleDealTypeFromString(EDataType eDataType, String initialValue) {
+		FOBSaleDealType result = FOBSaleDealType.get(initialValue);
+		if (result == null)
+			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertFOBSaleDealTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public Iterable<?> createIterableFromString(EDataType eDataType, String initialValue) {
 		return (Iterable<?>) super.createFromString(initialValue);
 	}
@@ -245,6 +295,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TypesPackage getTypesPackage() {
 		return (TypesPackage) getEPackage();
 	}

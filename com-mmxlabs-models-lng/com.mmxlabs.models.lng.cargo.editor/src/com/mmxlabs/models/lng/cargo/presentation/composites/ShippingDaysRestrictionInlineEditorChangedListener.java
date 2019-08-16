@@ -12,6 +12,8 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
@@ -30,13 +32,17 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 
 	@Override
 	public void notifyChanged(final Notification notification) {
-		if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase() || notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()
-				|| notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Divertible()) {
+		if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase() // 
+				|| notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DesPurchaseDealType() //
+				|| notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale() //
+				|| notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FobSaleDealType() //
+				|| notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Contract() //
+				) {
 
 			if (input instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) input;
 				if (loadSlot.isDESPurchase()) {
-					if (loadSlot.getSlotOrDelegateDivertible()) {
+					if (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 						editor.setEditorEnabled(true);
 						editor.setEditorVisible(true);
 					} else {
@@ -50,7 +56,7 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 			} else if (input instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) input;
 				if (dischargeSlot.isFOBSale()) {
-					if (dischargeSlot.getSlotOrDelegateDivertible()) {
+					if (dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
 						editor.setEditorEnabled(true);
 						editor.setEditorVisible(true);
 					} else {
@@ -72,7 +78,7 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 		if (input instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) input;
 			if (loadSlot.isDESPurchase()) {
-				if (loadSlot.getSlotOrDelegateDivertible()) {
+				if (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 					editor.setEditorEnabled(true);
 					editor.setEditorVisible(true);
 				} else {
@@ -86,7 +92,7 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 		} else if (input instanceof DischargeSlot) {
 			final DischargeSlot dischargeSlot = (DischargeSlot) input;
 			if (dischargeSlot.isFOBSale()) {
-				if (dischargeSlot.getSlotOrDelegateDivertible()) {
+				if (dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
 					editor.setEditorEnabled(true);
 					editor.setEditorVisible(true);
 				} else {

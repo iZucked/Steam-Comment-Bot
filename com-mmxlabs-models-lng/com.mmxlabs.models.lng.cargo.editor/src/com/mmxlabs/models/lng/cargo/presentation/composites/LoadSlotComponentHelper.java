@@ -27,6 +27,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -80,6 +81,7 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 		add_DESPurchaseEditor(detailComposite, topClass);
 		add_transferFromEditor(detailComposite, topClass);
 		add_salesDeliveryTypeEditor(detailComposite, topClass);
+		add_desPurchaseDealTypeEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -150,6 +152,16 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_salesDeliveryTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__SALES_DELIVERY_TYPE));
+	}
+
+	/**
+	 * Create the editor for the desPurchaseDealType feature on LoadSlot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_desPurchaseDealTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE);
+		detailComposite.addInlineEditor(new NonShppedDealTypeInlineEditorWrapper(editor));
 	}
 
 	@Override

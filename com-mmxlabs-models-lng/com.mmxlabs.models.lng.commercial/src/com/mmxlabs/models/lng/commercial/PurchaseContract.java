@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.commercial;
 
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 
 
 /**
@@ -16,8 +17,9 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV <em>Cargo CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV <em>Cargo CV</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getPurchaseContract()
@@ -109,6 +111,35 @@ public interface PurchaseContract extends Contract {
 	 * @generated
 	 */
 	void setSalesDeliveryType(CargoDeliveryType value);
+
+	/**
+	 * Returns the value of the '<em><b>Des Purchase Deal Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.DESPurchaseDealType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Des Purchase Deal Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Des Purchase Deal Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.DESPurchaseDealType
+	 * @see #setDesPurchaseDealType(DESPurchaseDealType)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getPurchaseContract_DesPurchaseDealType()
+	 * @model
+	 * @generated
+	 */
+	DESPurchaseDealType getDesPurchaseDealType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Des Purchase Deal Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.DESPurchaseDealType
+	 * @see #getDesPurchaseDealType()
+	 * @generated
+	 */
+	void setDesPurchaseDealType(DESPurchaseDealType value);
 } // end of  PurchaseContract
 
 // finish type fixing

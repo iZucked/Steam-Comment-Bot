@@ -75,7 +75,7 @@ public class DefaultDivertibleFOBShippingTimesCalculator implements IDivertibleF
 		ITimeWindow baseTime = shippingHoursRestrictionProvider.getBaseTime(sellElement);
 		int earlyFOBDischargeTime = buyOption.getTimeWindow().getInclusiveStart() + loadDuration + notionalLadenTime;
 		if (earlyFOBDischargeTime >= baseTime.getInclusiveStart()) {
-			// Arriva after window start (or may even by late)
+			// Arrive after window start (or may even by late)
 			int startOfDischarge = earlyFOBDischargeTime;
 			int returnTime = startOfDischarge + dischargeDuration + notionalBallastTime;
 			return new Triple<>(buyOption.getTimeWindow().getInclusiveStart(), startOfDischarge, returnTime);

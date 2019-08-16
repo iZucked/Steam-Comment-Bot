@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,6 +23,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl#getMaxCvValue <em>Max Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl#getFobSaleDealType <em>Fob Sale Deal Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -98,6 +100,24 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * @ordered
 	 */
 	protected CargoDeliveryType purchaseDeliveryType = PURCHASE_DELIVERY_TYPE_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getFobSaleDealType() <em>Fob Sale Deal Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFobSaleDealType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final FOBSaleDealType FOB_SALE_DEAL_TYPE_EDEFAULT = FOBSaleDealType.SOURCE_ONLY;
+	/**
+	 * The cached value of the '{@link #getFobSaleDealType() <em>Fob Sale Deal Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFobSaleDealType()
+	 * @generated
+	 * @ordered
+	 */
+	protected FOBSaleDealType fobSaleDealType = FOB_SALE_DEAL_TYPE_EDEFAULT;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -246,6 +266,29 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * @generated
 	 */
 	@Override
+	public FOBSaleDealType getFobSaleDealType() {
+		return fobSaleDealType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setFobSaleDealType(FOBSaleDealType newFobSaleDealType) {
+		FOBSaleDealType oldFobSaleDealType = fobSaleDealType;
+		fobSaleDealType = newFobSaleDealType == null ? FOB_SALE_DEAL_TYPE_EDEFAULT : newFobSaleDealType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.SALES_CONTRACT__FOB_SALE_DEAL_TYPE, oldFobSaleDealType, fobSaleDealType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case CommercialPackage.SALES_CONTRACT__MIN_CV_VALUE:
@@ -254,6 +297,8 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 				return getMaxCvValue();
 			case CommercialPackage.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE:
 				return getPurchaseDeliveryType();
+			case CommercialPackage.SALES_CONTRACT__FOB_SALE_DEAL_TYPE:
+				return getFobSaleDealType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -274,6 +319,9 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 				return;
 			case CommercialPackage.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE:
 				setPurchaseDeliveryType((CargoDeliveryType)newValue);
+				return;
+			case CommercialPackage.SALES_CONTRACT__FOB_SALE_DEAL_TYPE:
+				setFobSaleDealType((FOBSaleDealType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -296,6 +344,9 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 			case CommercialPackage.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE:
 				setPurchaseDeliveryType(PURCHASE_DELIVERY_TYPE_EDEFAULT);
 				return;
+			case CommercialPackage.SALES_CONTRACT__FOB_SALE_DEAL_TYPE:
+				setFobSaleDealType(FOB_SALE_DEAL_TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -314,6 +365,8 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 				return isSetMaxCvValue();
 			case CommercialPackage.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE:
 				return purchaseDeliveryType != PURCHASE_DELIVERY_TYPE_EDEFAULT;
+			case CommercialPackage.SALES_CONTRACT__FOB_SALE_DEAL_TYPE:
+				return fobSaleDealType != FOB_SALE_DEAL_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -334,6 +387,8 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 		if (maxCvValueESet) result.append(maxCvValue); else result.append("<unset>");
 		result.append(", PurchaseDeliveryType: ");
 		result.append(purchaseDeliveryType);
+		result.append(", fobSaleDealType: ");
+		result.append(fobSaleDealType);
 		result.append(')');
 		return result.toString();
 	}

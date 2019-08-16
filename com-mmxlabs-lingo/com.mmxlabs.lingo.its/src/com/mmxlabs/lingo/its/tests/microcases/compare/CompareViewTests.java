@@ -79,6 +79,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -115,7 +116,7 @@ public class CompareViewTests {
 		runTest(maker -> {
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
 					.withVolumeLimits(3_000_000, 3_000_000, VolumeUnits.MMBTU) //
 					.build() //
 					// Sale
@@ -128,7 +129,7 @@ public class CompareViewTests {
 
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP2", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "3", null) //
+					.makeDESPurchase("DP2", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "3", null) //
 					.withVolumeLimits(3_000_000, 3_000_000, VolumeUnits.MMBTU) //
 
 					.build() //
@@ -143,7 +144,7 @@ public class CompareViewTests {
 		}, maker -> {
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "3", null) //
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "3", null) //
 					.withVolumeLimits(3_000_000, 3_000_000, VolumeUnits.MMBTU) //
 					.build() //
 					// Sale
@@ -155,7 +156,7 @@ public class CompareViewTests {
 
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP2", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
+					.makeDESPurchase("DP2", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
 					.withVolumeLimits(3_000_000, 3_000_000, VolumeUnits.MMBTU) //
 					.build() //
 					// Sale
@@ -201,7 +202,7 @@ public class CompareViewTests {
 		runTest(maker -> {
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
 					.withOptional(true) //
 					.withCancellationFee("50000") //
 					.build() //
@@ -214,7 +215,7 @@ public class CompareViewTests {
 					.build();
 
 		}, maker -> {
-			maker.cargoModelBuilder.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
+			maker.cargoModelBuilder.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
 					.withOptional(true) //
 					.withCancellationFee("50000") //
 					.build();
@@ -266,7 +267,7 @@ public class CompareViewTests {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSlotCancellationFee_OpenToCargo() throws Exception {
 		runTest(maker -> {
-			maker.cargoModelBuilder.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
+			maker.cargoModelBuilder.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
 					.withOptional(true) //
 					.withCancellationFee("50000") //
 					.build();
@@ -279,7 +280,7 @@ public class CompareViewTests {
 		}, maker -> {
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
 					.withOptional(true) //
 					.withCancellationFee("50000") //
 					.build() //
@@ -324,7 +325,7 @@ public class CompareViewTests {
 		runTest(maker -> {
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
 					.withOptional(true) //
 					.withHedgeValue(50000) //
 					.build() //
@@ -337,7 +338,7 @@ public class CompareViewTests {
 					.build();
 
 		}, maker -> {
-			maker.cargoModelBuilder.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
+			maker.cargoModelBuilder.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
 					.withOptional(true) //
 					.withHedgeValue(50000) //
 					.build();
@@ -384,7 +385,7 @@ public class CompareViewTests {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSlotHedgingValue_OpenToCargo() throws Exception {
 		runTest(maker -> {
-			maker.cargoModelBuilder.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
+			maker.cargoModelBuilder.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
 					.withOptional(true) //
 					.withHedgeValue(50000) //
 					.build();
@@ -397,7 +398,7 @@ public class CompareViewTests {
 		}, maker -> {
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
 					.withOptional(true) //
 					.withHedgeValue(50000) //
 					.build() //
@@ -443,7 +444,7 @@ public class CompareViewTests {
 		runTest(maker -> {
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
 					.withOptional(true) //
 					.withMiscCosts(50000) //
 					.build() //
@@ -456,7 +457,7 @@ public class CompareViewTests {
 					.build();
 
 		}, maker -> {
-			maker.cargoModelBuilder.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
+			maker.cargoModelBuilder.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
 					.withOptional(true) //
 					.withMiscCosts(50000) //
 					.build();
@@ -508,7 +509,7 @@ public class CompareViewTests {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSlotMiscCosts_OpenToCargo() throws Exception {
 		runTest(maker -> {
-			maker.cargoModelBuilder.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
+			maker.cargoModelBuilder.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
 					.withOptional(true) //
 					.withMiscCosts(50000) //
 					.build();
@@ -521,7 +522,7 @@ public class CompareViewTests {
 		}, maker -> {
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
 					.withOptional(true) //
 					.withMiscCosts(50000) //
 					.build() //

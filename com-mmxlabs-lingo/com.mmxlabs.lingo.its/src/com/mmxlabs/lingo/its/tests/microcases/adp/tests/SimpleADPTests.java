@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 
@@ -191,7 +192,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		purchaseContract.setVolumeLimitsUnit(VolumeUnits.MMBTU);
 		purchaseContract.setPreferredPort(darwin);
 		purchaseContract.setContractType(ContractType.DES);
-		purchaseContract.setDivertible(true);
+		purchaseContract.setDesPurchaseDealType(DESPurchaseDealType.DIVERT_FROM_SOURCE);
 		purchaseContract.setShippingDaysRestriction(60);
 		purchaseContract.setStartDate(YearMonth.of(2018, 10));
 		purchaseContract.setEndDate(YearMonth.of(2019, 10));

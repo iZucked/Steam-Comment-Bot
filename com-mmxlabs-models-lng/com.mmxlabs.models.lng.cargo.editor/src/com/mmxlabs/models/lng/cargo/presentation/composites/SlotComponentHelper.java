@@ -108,7 +108,6 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_pricingEventEditor(detailComposite, topClass);
 		add_pricingDateEditor(detailComposite, topClass);
 		add_notesEditor(detailComposite, topClass);
-		add_divertibleEditor(detailComposite, topClass);
 		add_shippingDaysRestrictionEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
 		add_restrictedContractsEditor(detailComposite, topClass);
@@ -164,17 +163,6 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_notesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(new MultiTextInlineEditor(CargoPackage.Literals.SLOT__NOTES));
-	}
-
-	/**
-	 * Create the editor for the divertible feature on Slot
-	 * 
-	 * @generated NOT
-	 */
-	protected void add_divertibleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__DIVERTIBLE);
-		editor.addNotificationChangedListener(new SlotDivertibleInlineEditorChangedListener());
-		detailComposite.addInlineEditor(editor);
 	}
 
 	/**
