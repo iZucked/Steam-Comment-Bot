@@ -161,6 +161,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Idle" eSuperTypes="#//Event #//FuelUsage">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="laden" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="contingencyHours" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PortVisit" eSuperTypes="#//Event #//CapacityViolationsHolder">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="portCost" lowerBound="1"
