@@ -14,8 +14,10 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -46,7 +48,7 @@ public class BasicShippingDetailsProperties extends AbstractDetailPropertyFactor
 
 		// Check for unshipped cargoes
 		if (eventGrouping instanceof CargoAllocation) {
-			CargoAllocation cargoAllocation = (CargoAllocation) eventGrouping;
+			final CargoAllocation cargoAllocation = (CargoAllocation) eventGrouping;
 			if (cargoAllocation.getSequence().getSequenceType() == SequenceType.FOB_SALE) {
 				return null;
 			}
@@ -96,14 +98,28 @@ public class BasicShippingDetailsProperties extends AbstractDetailPropertyFactor
 		// TODO: Add in volume
 		{
 			final long value = ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, false, ShippingCostType.HEEL_COST);
-			addDetailProperty("Heel cost", "", "$", "", value, new StringFormatLabelProvider("%,d"), details);
-
+			final DetailProperty dp = addDetailProperty("Heel cost", "", "$", "", value, new StringFormatLabelProvider("%,d"), details);
+			for (final Event event : eventGrouping.getEvents()) {
+				if (event instanceof PortVisit) {
+					final PortVisit portVisit = (PortVisit) event;
+					if (portVisit.getHeelCost() != 0.0) {
+						addDetailProperty("Price", "", "$", "/mmBtu", portVisit.getHeelCostUnitPrice(), new StringFormatLabelProvider("%.2f"), dp);
+					}
+				}
+			}
 			// add child heel volumes
 		}
 		{
 			final long value = ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, false, ShippingCostType.HEEL_REVENUE);
-			addDetailProperty("Heel revenue", "", "$", "", -value, new StringFormatLabelProvider("%,d"), details);
-			// add child heel volumes
+			final DetailProperty dp = addDetailProperty("Heel revenue", "", "$", "", -value, new StringFormatLabelProvider("%,d"), details);
+			for (final Event event : eventGrouping.getEvents()) {
+				if (event instanceof PortVisit) {
+					final PortVisit portVisit = (PortVisit) event;
+					if (portVisit.getHeelRevenue() != 0.0) {
+						addDetailProperty("Price", "", "$", "/mmBtu", portVisit.getHeelRevenueUnitPrice(), new StringFormatLabelProvider("%.2f"), dp);
+					}
+				}
+			}
 		}
 
 		if (eventGrouping instanceof GeneratedCharterOut) {
@@ -119,7 +135,7 @@ public class BasicShippingDetailsProperties extends AbstractDetailPropertyFactor
 		}
 
 		if (eventGrouping instanceof StartEvent) {
-			StartEvent startEvent = (StartEvent) eventGrouping;
+			final StartEvent startEvent = (StartEvent) eventGrouping;
 			{
 				// addDetailProperty("Repositioning", "", "$", "", 0, new StringFormatLabelProvider("%,d"), details);
 			}
