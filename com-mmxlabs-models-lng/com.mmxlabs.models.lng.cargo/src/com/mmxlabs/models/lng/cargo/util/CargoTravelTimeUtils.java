@@ -100,10 +100,16 @@ public class CargoTravelTimeUtils {
 		final Port toPort = toSlot.getPort();
 		int bufferTime = toSlot.getSlotOrDelegateDaysBuffer() * 24;
 		if (fromPort != null && toPort != null) {
-			return getTimeForRoute(vessel, referenceSpeed, route, fromPort, toPort, modelDistanceProvider) + bufferTime;
+			int timeForRoute = getTimeForRoute(vessel, referenceSpeed, route, fromPort, toPort, modelDistanceProvider);
+			if (timeForRoute != Integer.MAX_VALUE) {
+				return timeForRoute + bufferTime;
+			}
+			else {
+				return Integer.MAX_VALUE; //do not add on bufferTime, as would cause extreme -ve time for route.
+			}
 		}
 		else {
-			return bufferTime;
+			return Integer.MAX_VALUE;
 		}
 	}
 
