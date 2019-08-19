@@ -503,8 +503,12 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		boolean isUnshipped = false;
 		if (object instanceof Slot<?>) {
 			Slot<?> slot = (Slot<?>)object;
-			if (slot.getCargo() == null || slot.getCargo().getCargoType() != CargoType.FLEET) {
+			if (slot.getCargo() != null && slot.getCargo().getCargoType() != CargoType.FLEET) {
 				isUnshipped = true;
+			}
+			if (slot.isWindowCounterParty()) {
+				//Validation will flag it as bad. Let them undo it.
+				isUnshipped = false;
 			}
 		}
 		
