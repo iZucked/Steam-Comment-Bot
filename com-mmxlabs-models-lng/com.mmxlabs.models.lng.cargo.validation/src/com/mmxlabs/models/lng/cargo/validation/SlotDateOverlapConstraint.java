@@ -85,7 +85,7 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 					
 					// Non-divertible FOB purchase and DES sale slots don't need to be validated
 					if (slotType == SlotType.DES_Sale && overlapSlotType == SlotType.FOB_Sale || overlapSlotType == SlotType.DES_Sale && slotType == SlotType.FOB_Sale 
-							|| slotType == SlotType.FOB_Buy && overlapSlotType == SlotType.DES_Buy || overlapSlotType == SlotType.DES_Buy && slotType == SlotType.FOB_Buy) {
+							|| slotType == SlotType.FOB_Buy && overlapSlotType == SlotType.DES_Buy || slotType == SlotType.DES_Buy && overlapSlotType == SlotType.FOB_Buy) {
 						ii.remove();
 						continue;
 					}
