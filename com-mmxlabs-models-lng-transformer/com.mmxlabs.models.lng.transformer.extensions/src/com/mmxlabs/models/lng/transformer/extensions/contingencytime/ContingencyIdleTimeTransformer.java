@@ -18,10 +18,12 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 
 /**
@@ -30,6 +32,9 @@ public class ContingencyIdleTimeTransformer implements ISlotTransformer {
 
 	@Inject
 	private IPortProvider portProvider;
+	
+	@Inject
+	private IPortSlotProvider portSlotProvider;
 
 	@Inject
 	private IExtraIdleTimeProviderEditor extraIdleTimeProviderEditor;
@@ -68,11 +73,12 @@ public class ContingencyIdleTimeTransformer implements ISlotTransformer {
 
 	@Override
 	public void slotTransformed(@NonNull final Slot<?> modelSlot, @NonNull final IPortSlot optimiserSlot) {
-		// final ISequenceElement sequenceElement = portSlotProvider.getElement(optimiserSlot);
-
-		// if (false) { // modelSlot.hasIdleTimeOverride()) {
-		// // extraIdleTimeProviderEditor.setOverrideExtraIdleTimeAfterVisit(optimiserSlot, extraIdleTime);
-		// }
+		//Add in extra idle time prior to visit.
+		int bufferTime = modelSlot.getSlotOrDelegateDaysBuffer();
+		if (bufferTime > 0) {
+			ISequenceElement element = this.portSlotProvider.getElement(optimiserSlot);
+			int extraIdleTimeInHours = 24 * bufferTime;
+			this.extraIdleTimeProviderEditor.setExtraIdleTimeBeforeVisit(element, optimiserSlot, extraIdleTimeInHours);
+		}
 	}
-
 }

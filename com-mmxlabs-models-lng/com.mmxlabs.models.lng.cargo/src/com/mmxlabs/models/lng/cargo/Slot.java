@@ -73,6 +73,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getNominatedVessel <em>Nominated Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isCancelled <em>Cancelled</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isWindowCounterParty <em>Window Counter Party</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot()
@@ -1782,12 +1783,31 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	void setCancelled(boolean value);
 
 	/**
+	 * Returns the value of the '<em><b>Window Counter Party</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
 	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Window Counter Party</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
 	 * <!-- end-user-doc -->
-	 * @model kind="operation"
+	 * @return the value of the '<em>Window Counter Party</em>' attribute.
+	 * @see #setWindowCounterParty(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowCounterParty()
+	 * @model default="false"
 	 * @generated
 	 */
-	int getSlotOrDelegateDuration();
+	boolean isWindowCounterParty();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isWindowCounterParty <em>Window Counter Party</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Counter Party</em>' attribute.
+	 * @see #isWindowCounterParty()
+	 * @generated
+	 */
+	void setWindowCounterParty(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1820,54 +1840,6 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	VolumeUnits getSlotOrDelegateVolumeLimitsUnit();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
-	ZonedDateTime getWindowEndWithSlotOrPortTime();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
-	ZonedDateTime getWindowStartWithSlotOrPortTime();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
-	ZonedDateTime getWindowEndWithSlotOrPortTimeWithFlex();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	int getSlotOrDelegateWindowSize();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	TimePeriod getSlotOrDelegateWindowSizeUnits();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	int getWindowSizeInHours();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1990,6 +1962,22 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	EList<AVesselSet<Vessel>> getSlotOrDelegateVesselRestrictions();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.lng.cargo.SchedulingTimeWindow"
+	 * @generated
+	 */
+	@NonNull SchedulingTimeWindow getSchedulingTimeWindow();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getSlotOrDelegateDaysBuffer();
 
 } // end of  Slot
 

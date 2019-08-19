@@ -31,6 +31,7 @@
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Monthly"/>
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Level"/>
     </genEnums>
+    <genDataTypes ecoreDataType="cargo.ecore#//SchedulingTimeWindow"/>
     <genClasses ecoreClass="cargo.ecore#//CargoModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/loadSlots"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/dischargeSlots"/>
@@ -131,17 +132,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/locked"/>
       <genFeatures createChild="false" propertyDescription="Is current slot cancelled?"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancelled"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateDuration"/>
+      <genFeatures createChild="false" propertyDescription="This is the counter party's time window."
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowCounterParty"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMinQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMaxQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateOperationalTolerance"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVolumeLimitsUnit"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowEndWithSlotOrPortTime"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowStartWithSlotOrPortTime"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowEndWithSlotOrPortTimeWithFlex"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWindowSize"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWindowSizeUnits"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowSizeInHours"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateEntity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateCancellationExpression"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePricingEvent"/>
@@ -157,6 +153,8 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateContractRestrictions"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortRestrictions"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVesselRestrictions"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSchedulingTimeWindow"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateDaysBuffer"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//LoadSlot">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/cargoCV"/>

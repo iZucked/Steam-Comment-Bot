@@ -102,7 +102,7 @@ public class ScheduleSequenceData {
 						SlotVisit slotVisit = (SlotVisit) event;
 						Slot slot = slotVisit.getSlotAllocation().getSlot();
 
-						final LocalDate sWDate = verticalReportVisualiser.getLocalDateFor(slot.getWindowStartWithSlotOrPortTime());
+						final LocalDate sWDate = verticalReportVisualiser.getLocalDateFor(slot.getSchedulingTimeWindow().getStart());
 
 						if (startDate == null || startDate.isAfter(sWDate)) {
 							startDate = sWDate;
@@ -134,7 +134,7 @@ public class ScheduleSequenceData {
 
 		// Run this after the interesting event selection to ensure we keep these events.
 		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
-			final LocalDate sDate = verticalReportVisualiser.getLocalDateFor(openSlotAllocation.getSlot().getWindowStartWithSlotOrPortTime());
+			final LocalDate sDate = verticalReportVisualiser.getLocalDateFor(openSlotAllocation.getSlot().getSchedulingTimeWindow().getStart());
 			final LocalDate eDate = sDate;// verticalReportVisualiser.getLocalDateFor(openSlotAllocation.getSlot().getWindowStartWithSlotOrPortTime());
 
 			// final Date sDate = event.getStart();

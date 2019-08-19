@@ -71,7 +71,7 @@ public class LatenessUtils {
 
 	public static ZonedDateTime getWindowStartDate(final Object object) {
 		if (object instanceof SlotVisit) {
-			return ((SlotVisit) object).getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime();
+			return ((SlotVisit) object).getSlotAllocation().getSlot().getSchedulingTimeWindow().getStart();
 		} else if (object instanceof VesselEventVisit) {
 			return ((VesselEventVisit) object).getVesselEvent().getStartAfterAsDateTime();
 		}
@@ -80,7 +80,7 @@ public class LatenessUtils {
 
 	public static ZonedDateTime getWindowEndDate(final Object object) {
 		if (object instanceof SlotVisit) {
-			return ((SlotVisit) object).getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime();
+			return ((SlotVisit) object).getSlotAllocation().getSlot().getSchedulingTimeWindow().getEnd();
 		} else if (object instanceof VesselEventVisit) {
 			return ((VesselEventVisit) object).getVesselEvent().getStartByAsDateTime();
 		} else if (object instanceof PortVisit) {

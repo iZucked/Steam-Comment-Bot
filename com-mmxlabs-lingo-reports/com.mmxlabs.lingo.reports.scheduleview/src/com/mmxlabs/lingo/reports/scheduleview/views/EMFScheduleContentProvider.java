@@ -329,7 +329,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 			final SlotVisit visit = (SlotVisit) element;
 			final Slot<?> slot = visit.getSlotAllocation().getSlot();
 			if (slot != null) {
-				final ZonedDateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
+				final ZonedDateTime windowStartWithSlotOrPortTime = slot.getSchedulingTimeWindow().getStart();
 				if (windowStartWithSlotOrPortTime != null) {
 					return GregorianCalendar.from(windowStartWithSlotOrPortTime);
 				}
@@ -345,7 +345,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 			final SlotVisit visit = (SlotVisit) element;
 			final Slot<?> slot = visit.getSlotAllocation().getSlot();
 			if (slot != null) {
-				final ZonedDateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
+				final ZonedDateTime windowStartWithSlotOrPortTime = slot.getSchedulingTimeWindow().getStart();
 				if (windowStartWithSlotOrPortTime != null) {
 					return GregorianCalendar.from(windowStartWithSlotOrPortTime);
 				}

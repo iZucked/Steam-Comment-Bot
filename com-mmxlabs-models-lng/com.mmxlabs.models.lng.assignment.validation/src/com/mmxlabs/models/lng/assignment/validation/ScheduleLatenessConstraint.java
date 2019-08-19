@@ -128,7 +128,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			if (slot instanceof SpotSlot) {
 				return null;
 			}
-			return isStartOfWindow ? slot.getWindowStartWithSlotOrPortTime() : slot.getWindowEndWithSlotOrPortTimeWithFlex();
+			return isStartOfWindow ? slot.getSchedulingTimeWindow().getStart() : slot.getSchedulingTimeWindow().getEndWithFlex();
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
 			return vesselEvent.getStartByAsDateTime();
@@ -144,9 +144,9 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			if (slot instanceof SpotSlot) {
 				return null;
 			}
-			final ZonedDateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
+			final ZonedDateTime windowStartWithSlotOrPortTime = slot.getSchedulingTimeWindow().getStartWithFlex();
 			if (windowStartWithSlotOrPortTime != null) {
-				return windowStartWithSlotOrPortTime.plusHours(slot.getSlotOrDelegateDuration());
+				return windowStartWithSlotOrPortTime.plusHours(slot.getSchedulingTimeWindow().getDuration());
 			}
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;

@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
@@ -924,13 +925,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT__CANCELLED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 41;
 
 	/**
+	 * The feature id for the '<em><b>Window Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__WINDOW_COUNTER_PARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -969,22 +979,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_TIME_ZONE__EATTRIBUTE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Duration</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 1;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Quantity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 2;
+	int SLOT___GET_SLOT_OR_DELEGATE_MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Max Quantity</em>' operation.
@@ -993,7 +994,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 3;
+	int SLOT___GET_SLOT_OR_DELEGATE_MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Operational Tolerance</em>' operation.
@@ -1002,7 +1003,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_OPERATIONAL_TOLERANCE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
+	int SLOT___GET_SLOT_OR_DELEGATE_OPERATIONAL_TOLERANCE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Volume Limits Unit</em>' operation.
@@ -1011,61 +1012,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_VOLUME_LIMITS_UNIT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 5;
-
-	/**
-	 * The operation id for the '<em>Get Window End With Slot Or Port Time</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 6;
-
-	/**
-	 * The operation id for the '<em>Get Window Start With Slot Or Port Time</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
-
-	/**
-	 * The operation id for the '<em>Get Window End With Slot Or Port Time With Flex</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 8;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Window Size</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 9;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Window Size Units</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 10;
-
-	/**
-	 * The operation id for the '<em>Get Window Size In Hours</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___GET_WINDOW_SIZE_IN_HOURS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 11;
+	int SLOT___GET_SLOT_OR_DELEGATE_VOLUME_LIMITS_UNIT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Entity</em>' operation.
@@ -1074,7 +1021,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 12;
+	int SLOT___GET_SLOT_OR_DELEGATE_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Cancellation Expression</em>' operation.
@@ -1083,7 +1030,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 13;
+	int SLOT___GET_SLOT_OR_DELEGATE_CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Pricing Event</em>' operation.
@@ -1092,7 +1039,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_PRICING_EVENT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 14;
+	int SLOT___GET_SLOT_OR_DELEGATE_PRICING_EVENT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Pricing Date As Date Time</em>' operation.
@@ -1101,7 +1048,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_PRICING_DATE_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 15;
+	int SLOT___GET_PRICING_DATE_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Slot Contract Params</em>' operation.
@@ -1110,7 +1057,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_CONTRACT_PARAMS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 16;
+	int SLOT___GET_SLOT_CONTRACT_PARAMS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 9;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Counterparty</em>' operation.
@@ -1119,7 +1066,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 17;
+	int SLOT___GET_SLOT_OR_DELEGATE_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CN</em>' operation.
@@ -1128,7 +1075,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_CN = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 18;
+	int SLOT___GET_SLOT_OR_DELEGATE_CN = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Shipping Days Restriction</em>' operation.
@@ -1137,7 +1084,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 19;
+	int SLOT___GET_SLOT_OR_DELEGATE_SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 12;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Full Cargo Lot</em>' operation.
@@ -1146,7 +1093,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 20;
+	int SLOT___GET_SLOT_OR_DELEGATE_FULL_CARGO_LOT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 13;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Contract Restrictions Are Permissive</em>' operation.
@@ -1155,7 +1102,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 21;
+	int SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Port Restrictions Are Permissive</em>' operation.
@@ -1164,7 +1111,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 22;
+	int SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 15;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Vessel Restrictions Are Permissive</em>' operation.
@@ -1173,7 +1120,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 23;
+	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 16;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Contract Restrictions</em>' operation.
@@ -1182,7 +1129,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 24;
+	int SLOT___GET_SLOT_OR_DELEGATE_CONTRACT_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 17;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Port Restrictions</em>' operation.
@@ -1191,7 +1138,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 25;
+	int SLOT___GET_SLOT_OR_DELEGATE_PORT_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 18;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Vessel Restrictions</em>' operation.
@@ -1200,7 +1147,25 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 26;
+	int SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 19;
+
+	/**
+	 * The operation id for the '<em>Get Scheduling Time Window</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SCHEDULING_TIME_WINDOW = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 20;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Days Buffer</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 21;
 
 	/**
 	 * The number of operations of the '<em>Slot</em>' class.
@@ -1209,7 +1174,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 27;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 22;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1608,6 +1573,15 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__CANCELLED = SLOT__CANCELLED;
 
 	/**
+	 * The feature id for the '<em><b>Window Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__WINDOW_COUNTER_PARTY = SLOT__WINDOW_COUNTER_PARTY;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1716,15 +1690,6 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_TIME_ZONE__EATTRIBUTE = SLOT___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Duration</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_DURATION = SLOT___GET_SLOT_OR_DELEGATE_DURATION;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Quantity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1759,60 +1724,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_VOLUME_LIMITS_UNIT = SLOT___GET_SLOT_OR_DELEGATE_VOLUME_LIMITS_UNIT;
-
-	/**
-	 * The operation id for the '<em>Get Window End With Slot Or Port Time</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME = SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME;
-
-	/**
-	 * The operation id for the '<em>Get Window Start With Slot Or Port Time</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME = SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME;
-
-	/**
-	 * The operation id for the '<em>Get Window End With Slot Or Port Time With Flex</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Window Size</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE = SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Window Size Units</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE_UNITS = SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE_UNITS;
-
-	/**
-	 * The operation id for the '<em>Get Window Size In Hours</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___GET_WINDOW_SIZE_IN_HOURS = SLOT___GET_WINDOW_SIZE_IN_HOURS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Entity</em>' operation.
@@ -1948,6 +1859,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Scheduling Time Window</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SCHEDULING_TIME_WINDOW = SLOT___GET_SCHEDULING_TIME_WINDOW;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Days Buffer</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -2382,6 +2311,15 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__CANCELLED = SLOT__CANCELLED;
 
 	/**
+	 * The feature id for the '<em><b>Window Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__WINDOW_COUNTER_PARTY = SLOT__WINDOW_COUNTER_PARTY;
+
+	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2481,15 +2419,6 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT___GET_TIME_ZONE__EATTRIBUTE = SLOT___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Duration</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DURATION = SLOT___GET_SLOT_OR_DELEGATE_DURATION;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Quantity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2524,60 +2453,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VOLUME_LIMITS_UNIT = SLOT___GET_SLOT_OR_DELEGATE_VOLUME_LIMITS_UNIT;
-
-	/**
-	 * The operation id for the '<em>Get Window End With Slot Or Port Time</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME = SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME;
-
-	/**
-	 * The operation id for the '<em>Get Window Start With Slot Or Port Time</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME = SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME;
-
-	/**
-	 * The operation id for the '<em>Get Window End With Slot Or Port Time With Flex</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Window Size</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE = SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Window Size Units</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE_UNITS = SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE_UNITS;
-
-	/**
-	 * The operation id for the '<em>Get Window Size In Hours</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___GET_WINDOW_SIZE_IN_HOURS = SLOT___GET_WINDOW_SIZE_IN_HOURS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Entity</em>' operation.
@@ -2713,6 +2588,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Scheduling Time Window</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SCHEDULING_TIME_WINDOW = SLOT___GET_SCHEDULING_TIME_WINDOW;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Days Buffer</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -3219,6 +3112,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__CANCELLED = LOAD_SLOT__CANCELLED;
 
 	/**
+	 * The feature id for the '<em><b>Window Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__WINDOW_COUNTER_PARTY = LOAD_SLOT__WINDOW_COUNTER_PARTY;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3336,15 +3238,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_TIME_ZONE__EATTRIBUTE = LOAD_SLOT___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Duration</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_DURATION = LOAD_SLOT___GET_SLOT_OR_DELEGATE_DURATION;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Quantity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3379,60 +3272,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_VOLUME_LIMITS_UNIT = LOAD_SLOT___GET_SLOT_OR_DELEGATE_VOLUME_LIMITS_UNIT;
-
-	/**
-	 * The operation id for the '<em>Get Window End With Slot Or Port Time</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME = LOAD_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME;
-
-	/**
-	 * The operation id for the '<em>Get Window Start With Slot Or Port Time</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME = LOAD_SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME;
-
-	/**
-	 * The operation id for the '<em>Get Window End With Slot Or Port Time With Flex</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = LOAD_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Window Size</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE = LOAD_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Window Size Units</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE_UNITS = LOAD_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE_UNITS;
-
-	/**
-	 * The operation id for the '<em>Get Window Size In Hours</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___GET_WINDOW_SIZE_IN_HOURS = LOAD_SLOT___GET_WINDOW_SIZE_IN_HOURS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Entity</em>' operation.
@@ -3568,6 +3407,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = LOAD_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Scheduling Time Window</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SCHEDULING_TIME_WINDOW = LOAD_SLOT___GET_SCHEDULING_TIME_WINDOW;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Days Buffer</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = LOAD_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -4002,6 +3859,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__CANCELLED = DISCHARGE_SLOT__CANCELLED;
 
 	/**
+	 * The feature id for the '<em><b>Window Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__WINDOW_COUNTER_PARTY = DISCHARGE_SLOT__WINDOW_COUNTER_PARTY;
+
+	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4110,15 +3976,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT___GET_TIME_ZONE__EATTRIBUTE = DISCHARGE_SLOT___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Duration</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DURATION = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DURATION;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Quantity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4153,60 +4010,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VOLUME_LIMITS_UNIT = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VOLUME_LIMITS_UNIT;
-
-	/**
-	 * The operation id for the '<em>Get Window End With Slot Or Port Time</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME = DISCHARGE_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME;
-
-	/**
-	 * The operation id for the '<em>Get Window Start With Slot Or Port Time</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME = DISCHARGE_SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME;
-
-	/**
-	 * The operation id for the '<em>Get Window End With Slot Or Port Time With Flex</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = DISCHARGE_SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Window Size</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Delegate Window Size Units</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE_UNITS = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE_UNITS;
-
-	/**
-	 * The operation id for the '<em>Get Window Size In Hours</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___GET_WINDOW_SIZE_IN_HOURS = DISCHARGE_SLOT___GET_WINDOW_SIZE_IN_HOURS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Entity</em>' operation.
@@ -4342,6 +4145,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS;
+
+	/**
+	 * The operation id for the '<em>Get Scheduling Time Window</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SCHEDULING_TIME_WINDOW = DISCHARGE_SLOT___GET_SCHEDULING_TIME_WINDOW;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Days Buffer</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -7495,6 +7316,16 @@ public interface CargoPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '<em>Scheduling Time Window</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.SchedulingTimeWindow
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
+	 * @generated
+	 */
+	int SCHEDULING_TIME_WINDOW = 39;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Cargo <em>Cargo</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8028,14 +7859,15 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_Cancelled();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateDuration() <em>Get Slot Or Delegate Duration</em>}' operation.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isWindowCounterParty <em>Window Counter Party</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Slot Or Delegate Duration</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateDuration()
+	 * @return the meta object for the attribute '<em>Window Counter Party</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isWindowCounterParty()
+	 * @see #getSlot()
 	 * @generated
 	 */
-	EOperation getSlot__GetSlotOrDelegateDuration();
+	EAttribute getSlot_WindowCounterParty();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateMinQuantity() <em>Get Slot Or Delegate Min Quantity</em>}' operation.
@@ -8076,66 +7908,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getSlot__GetSlotOrDelegateVolumeLimitsUnit();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowEndWithSlotOrPortTime() <em>Get Window End With Slot Or Port Time</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Window End With Slot Or Port Time</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getWindowEndWithSlotOrPortTime()
-	 * @generated
-	 */
-	EOperation getSlot__GetWindowEndWithSlotOrPortTime();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStartWithSlotOrPortTime() <em>Get Window Start With Slot Or Port Time</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Window Start With Slot Or Port Time</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getWindowStartWithSlotOrPortTime()
-	 * @generated
-	 */
-	EOperation getSlot__GetWindowStartWithSlotOrPortTime();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowEndWithSlotOrPortTimeWithFlex() <em>Get Window End With Slot Or Port Time With Flex</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Window End With Slot Or Port Time With Flex</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getWindowEndWithSlotOrPortTimeWithFlex()
-	 * @generated
-	 */
-	EOperation getSlot__GetWindowEndWithSlotOrPortTimeWithFlex();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateWindowSize() <em>Get Slot Or Delegate Window Size</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Slot Or Delegate Window Size</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateWindowSize()
-	 * @generated
-	 */
-	EOperation getSlot__GetSlotOrDelegateWindowSize();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateWindowSizeUnits() <em>Get Slot Or Delegate Window Size Units</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Slot Or Delegate Window Size Units</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateWindowSizeUnits()
-	 * @generated
-	 */
-	EOperation getSlot__GetSlotOrDelegateWindowSizeUnits();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowSizeInHours() <em>Get Window Size In Hours</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Window Size In Hours</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getWindowSizeInHours()
-	 * @generated
-	 */
-	EOperation getSlot__GetWindowSizeInHours();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateEntity() <em>Get Slot Or Delegate Entity</em>}' operation.
@@ -8286,6 +8058,26 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getSlot__GetSlotOrDelegateVesselRestrictions();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSchedulingTimeWindow() <em>Get Scheduling Time Window</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Scheduling Time Window</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSchedulingTimeWindow()
+	 * @generated
+	 */
+	EOperation getSlot__GetSchedulingTimeWindow();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateDaysBuffer() <em>Get Slot Or Delegate Days Buffer</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Days Buffer</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateDaysBuffer()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegateDaysBuffer();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -10349,6 +10141,17 @@ public interface CargoPackage extends EPackage {
 	EEnum getInventoryFrequency();
 
 	/**
+	 * Returns the meta object for data type '{@link com.mmxlabs.models.lng.cargo.SchedulingTimeWindow <em>Scheduling Time Window</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Scheduling Time Window</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.SchedulingTimeWindow
+	 * @model instanceClass="com.mmxlabs.models.lng.cargo.SchedulingTimeWindow"
+	 * @generated
+	 */
+	EDataType getSchedulingTimeWindow();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10759,12 +10562,12 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__CANCELLED = eINSTANCE.getSlot_Cancelled();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Slot Or Delegate Duration</b></em>' operation.
+		 * The meta object literal for the '<em><b>Window Counter Party</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation SLOT___GET_SLOT_OR_DELEGATE_DURATION = eINSTANCE.getSlot__GetSlotOrDelegateDuration();
+		EAttribute SLOT__WINDOW_COUNTER_PARTY = eINSTANCE.getSlot_WindowCounterParty();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Min Quantity</b></em>' operation.
@@ -10797,54 +10600,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_VOLUME_LIMITS_UNIT = eINSTANCE.getSlot__GetSlotOrDelegateVolumeLimitsUnit();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Window End With Slot Or Port Time</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME = eINSTANCE.getSlot__GetWindowEndWithSlotOrPortTime();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Window Start With Slot Or Port Time</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME = eINSTANCE.getSlot__GetWindowStartWithSlotOrPortTime();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Window End With Slot Or Port Time With Flex</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX = eINSTANCE.getSlot__GetWindowEndWithSlotOrPortTimeWithFlex();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Slot Or Delegate Window Size</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE = eINSTANCE.getSlot__GetSlotOrDelegateWindowSize();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Slot Or Delegate Window Size Units</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE_UNITS = eINSTANCE.getSlot__GetSlotOrDelegateWindowSizeUnits();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Window Size In Hours</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT___GET_WINDOW_SIZE_IN_HOURS = eINSTANCE.getSlot__GetWindowSizeInHours();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Entity</b></em>' operation.
@@ -10965,6 +10720,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_VESSEL_RESTRICTIONS = eINSTANCE.getSlot__GetSlotOrDelegateVesselRestrictions();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Scheduling Time Window</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SCHEDULING_TIME_WINDOW = eINSTANCE.getSlot__GetSchedulingTimeWindow();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Days Buffer</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = eINSTANCE.getSlot__GetSlotOrDelegateDaysBuffer();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
@@ -12583,6 +12354,16 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum INVENTORY_FREQUENCY = eINSTANCE.getInventoryFrequency();
+
+		/**
+		 * The meta object literal for the '<em>Scheduling Time Window</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.SchedulingTimeWindow
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
+		 * @generated
+		 */
+		EDataType SCHEDULING_TIME_WINDOW = eINSTANCE.getSchedulingTimeWindow();
 
 	}
 

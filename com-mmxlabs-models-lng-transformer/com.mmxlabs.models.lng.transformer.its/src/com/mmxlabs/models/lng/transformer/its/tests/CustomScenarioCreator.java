@@ -254,7 +254,7 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 
 		// Now calculate the correct discharge window start
 		final Slot load = cargo.getSlots().get(0);
-		final ZonedDateTime dischargeDate = load.getWindowStartWithSlotOrPortTime().withZoneSameInstant(dischargeZone).plusHours(travelTime);
+		final ZonedDateTime dischargeDate = load.getSchedulingTimeWindow().getStart().withZoneSameInstant(dischargeZone).plusHours(travelTime);
 
 		final Slot discharge = cargo.getSlots().get(1);
 		discharge.setWindowStart(dischargeDate.toLocalDate());

@@ -129,6 +129,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.ComplexCargoAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
+import com.mmxlabs.models.lng.cargo.ui.util.TimeWindowHelper;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -1110,11 +1111,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final GridViewerColumn loadDateColumn = addTradesColumn(loadColumns, "Window", new LocalDateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
 			public String renderSetValue(final Object owner, final Object object) {
-				final String v = super.renderSetValue(owner, object);
+				String v = super.renderSetValue(owner, object);
 				if (!v.isEmpty()) {
-					final String suffix = getTimeWindowSuffix(owner);
-					return v + suffix;
+					final String suffix = TimeWindowHelper.getTimeWindowSuffix(owner);
+					v = v + suffix;
 				}
+				v = v + (v.isEmpty() ? "" : " ");
+				v = v + TimeWindowHelper.getCPWindowSuffix(owner);
 				return v;
 			}
 
@@ -1160,11 +1163,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			@Override
 			public String renderSetValue(final Object owner, final Object object) {
-				final String v = super.renderSetValue(owner, object);
+				String v = super.renderSetValue(owner, object);
 				if (!v.isEmpty()) {
-					final String suffix = getTimeWindowSuffix(owner);
-					return v + suffix;
+					final String suffix = TimeWindowHelper.getTimeWindowSuffix(owner);
+					v = v + suffix;
 				}
+				v = v + (v.isEmpty() ? "" : " ");
+				v = v + TimeWindowHelper.getCPWindowSuffix(owner);
 				return v;
 			}
 
@@ -1446,12 +1451,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		LocalDate erl = result;
 
 		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
-			if (erl.isAfter(ls.getWindowStart())) {
+			if (ls.getWindowStart() != null && erl.isAfter(ls.getWindowStart())) {
 				erl = ls.getWindowStart();
 			}
 		}
 		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
-			if (erl.isAfter(ds.getWindowStart())) {
+			if (ds.getWindowStart() != null && erl.isAfter(ds.getWindowStart())) {
 				erl = ds.getWindowStart();
 			}
 		}
@@ -1471,13 +1476,15 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		LocalDate erl = result;
 
 		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
-			if (erl.isBefore(ls.getWindowEndWithSlotOrPortTime().toLocalDate())) {
-				erl = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+			if (ls.getSchedulingTimeWindow().getEnd() != null &&
+				erl.isBefore(ls.getSchedulingTimeWindow().getEnd().toLocalDate())) {
+				erl = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 		}
 		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
-			if (erl.isBefore(ds.getWindowEndWithSlotOrPortTime().toLocalDate())) {
-				erl = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+			if (ds.getSchedulingTimeWindow().getEnd() != null &&
+				erl.isBefore(ds.getSchedulingTimeWindow().getEnd().toLocalDate())) {
+				erl = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 		}
 		if (erl.isAfter(result)) {
@@ -1485,34 +1492,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 
 		return result;
-	}
-
-	protected String getTimeWindowSuffix(final Object owner) {
-		if (owner instanceof Slot<?>) {
-			final Slot<?> slot = (Slot<?>) owner;
-			final int size = slot.getSlotOrDelegateWindowSize();
-			final TimePeriod units = slot.getSlotOrDelegateWindowSizeUnits();
-			String suffix;
-			switch (units) {
-			case DAYS:
-				suffix = "d";
-				break;
-			case HOURS:
-				suffix = "h";
-				break;
-			case MONTHS:
-				suffix = "m";
-				break;
-			default:
-				return "";
-
-			}
-			if (size > 0) {
-				return String.format(" +%d%s", size, suffix);
-			}
-
-		}
-		return "";
 	}
 
 	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addPNLColumn(final String columnName, final EStructuralFeature bookContainmentFeature, final T manipulator,
@@ -2085,8 +2064,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			LocalDate end = null;
 			final LoadSlot ls = row.getLoadSlot();
 			if (ls != null) {
-				start = ls.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if ((start != null) && (end != null)) {
 				final YearMonth yms = YearMonth.from(start);
@@ -2097,8 +2076,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 			final DischargeSlot ds = row.getDischargeSlot();
 			if (ds != null) {
-				start = ds.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if ((start != null) && (end != null)) {
 				final YearMonth yms = YearMonth.from(start);
@@ -2118,8 +2097,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			final LocalDate prompt = today.plusMonths(month);
 			final LoadSlot ls = row.getLoadSlot();
 			if (ls != null) {
-				start = ls.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if (start != null && end != null) {
 				if (start.isAfter(today) && start.isBefore(prompt)) {
@@ -2131,8 +2110,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 			final DischargeSlot ds = row.getDischargeSlot();
 			if (ds != null) {
-				start = ds.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if (start != null && end != null) {
 				if (start.isAfter(today) && start.isBefore(prompt)) {

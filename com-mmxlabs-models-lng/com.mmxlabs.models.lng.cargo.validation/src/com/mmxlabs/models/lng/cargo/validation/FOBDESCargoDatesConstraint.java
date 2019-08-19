@@ -66,11 +66,10 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 						if (loadSlot.getWindowStart() == null || dischargeSlot.getWindowStart() == null) {
 							valid = false;
 						} else {
-							// Compare local times rather than zoned times.
-							valid = checkDates(loadSlot.getWindowStartWithSlotOrPortTime().toLocalDateTime(), // 
-									loadSlot.getWindowEndWithSlotOrPortTimeWithFlex().toLocalDateTime(), //
-									 dischargeSlot.getWindowStartWithSlotOrPortTime().toLocalDateTime(), //
-									dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex().toLocalDateTime()); 
+							valid = checkDates(loadSlot.getSchedulingTimeWindow().getStart().toLocalDateTime(), 
+									loadSlot.getSchedulingTimeWindow().getEndWithFlex().toLocalDateTime(), 
+									dischargeSlot.getSchedulingTimeWindow().getStart().toLocalDateTime(),
+									dischargeSlot.getSchedulingTimeWindow().getEndWithFlex().toLocalDateTime());
 						}
 						if (!valid) {
 
@@ -108,6 +107,7 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 		}
 		return true;
 	}
+	
 	private boolean checkDates(final LocalDateTime loadWindowStart, final LocalDateTime loadWindowEnd, final LocalDateTime dischargeWindowStart, final LocalDateTime dischargeWindowEnd) {
 		
 		if (loadWindowStart == null || loadWindowEnd == null || dischargeWindowStart == null || dischargeWindowEnd == null) {

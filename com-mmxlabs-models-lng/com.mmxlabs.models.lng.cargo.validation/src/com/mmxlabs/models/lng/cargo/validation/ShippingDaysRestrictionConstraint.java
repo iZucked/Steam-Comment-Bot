@@ -174,8 +174,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										return Activator.PLUGIN_ID;
 									}
 
-									final int loadDurationInHours = desPurchase.getSlotOrDelegateDuration();
-									final int dischargeDurationInHours = dischargeSlot.getSlotOrDelegateDuration();
+									final int loadDurationInHours = desPurchase.getSchedulingTimeWindow().getDuration();
+									final int dischargeDurationInHours = dischargeSlot.getSchedulingTimeWindow().getDuration();
 
 									@NonNull
 									PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
@@ -189,10 +189,10 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									final int ladenMinWindowInHours;
 									{
 										// TODO: check overlaps
-										final ZonedDateTime loadDateStart = desPurchase.getWindowStartWithSlotOrPortTime();
-										final ZonedDateTime loadDateEnd = desPurchase.getWindowEndWithSlotOrPortTime();
-										final ZonedDateTime dischargeDateStart = dischargeSlot.getWindowStartWithSlotOrPortTime();
-										final ZonedDateTime dischargeDateEnd = dischargeSlot.getWindowEndWithSlotOrPortTime();
+										final ZonedDateTime loadDateStart = desPurchase.getSchedulingTimeWindow().getStart();
+										final ZonedDateTime loadDateEnd = desPurchase.getSchedulingTimeWindow().getEnd();
+										final ZonedDateTime dischargeDateStart = dischargeSlot.getSchedulingTimeWindow().getStart();
+										final ZonedDateTime dischargeDateEnd = dischargeSlot.getSchedulingTimeWindow().getEnd();
 
 										if (loadDateStart != null && dischargeDateEnd != null) {
 											ladenMaxWindowInHours = Math.max(0, Hours.between(loadDateStart, dischargeDateEnd) - (loadDurationInHours));
@@ -272,8 +272,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										return Activator.PLUGIN_ID;
 									}
 
-									final int loadDurationInHours = fobPurchase.getSlotOrDelegateDuration();
-									final int dischargeDurationInHours = fobSale.getSlotOrDelegateDuration();
+									final int loadDurationInHours = fobPurchase.getSchedulingTimeWindow().getDuration();
+									final int dischargeDurationInHours = fobSale.getSchedulingTimeWindow().getDuration();
 
 									@NonNull
 									PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
@@ -288,10 +288,10 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									final int ladenMinWindowInHours;
 									{
 										// TODO: check overlaps
-										final ZonedDateTime loadDateStart = fobPurchase.getWindowStartWithSlotOrPortTime();
-										final ZonedDateTime loadDateEnd = fobPurchase.getWindowEndWithSlotOrPortTime();
-										final ZonedDateTime dischargeDateStart = fobSale.getWindowStartWithSlotOrPortTime();
-										final ZonedDateTime dischargeDateEnd = fobSale.getWindowEndWithSlotOrPortTime();
+										final ZonedDateTime loadDateStart = fobPurchase.getSchedulingTimeWindow().getStart();
+										final ZonedDateTime loadDateEnd = fobPurchase.getSchedulingTimeWindow().getEnd();
+										final ZonedDateTime dischargeDateStart = fobSale.getSchedulingTimeWindow().getStart();
+										final ZonedDateTime dischargeDateEnd = fobSale.getSchedulingTimeWindow().getEnd();
 
 										if (loadDateStart != null && dischargeDateEnd != null) {
 											ladenMaxWindowInHours = Math.max(0, Hours.between(loadDateStart, dischargeDateEnd) - (loadDurationInHours));
@@ -354,8 +354,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 	}
 
 	private void cargoDateConstraint(LoadSlot load, DischargeSlot discharge, int ladenTravelTimeInHours, final IValidationContext ctx, final List<IStatus> failures) {
-		ZonedDateTime windowStartWithSlotOrPortTime = load.getWindowStartWithSlotOrPortTime();
-		ZonedDateTime windowEndWithSlotOrPortTime = discharge.getWindowEndWithSlotOrPortTime();
+		ZonedDateTime windowStartWithSlotOrPortTime = load.getSchedulingTimeWindow().getStart();
+		ZonedDateTime windowEndWithSlotOrPortTime = discharge.getSchedulingTimeWindow().getEnd();
 		long maxTime = ChronoUnit.HOURS.between(windowStartWithSlotOrPortTime, windowEndWithSlotOrPortTime);
 		if (maxTime < ladenTravelTimeInHours) {
 			final DetailConstraintStatusFactory baseFactory = DetailConstraintStatusFactory.makeStatus().withTypedName("Purchase", load.getName());

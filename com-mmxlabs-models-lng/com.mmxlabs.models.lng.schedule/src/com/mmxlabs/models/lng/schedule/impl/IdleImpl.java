@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl#getFuels <em>Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl#isLaden <em>Laden</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl#getContingencyHours <em>Contingency Hours</em>}</li>
  * </ul>
  *
  * @generated
@@ -68,6 +69,26 @@ public class IdleImpl extends EventImpl implements Idle {
 	 * @ordered
 	 */
 	protected boolean laden = LADEN_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getContingencyHours() <em>Contingency Hours</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContingencyHours()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CONTINGENCY_HOURS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getContingencyHours() <em>Contingency Hours</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContingencyHours()
+	 * @generated
+	 * @ordered
+	 */
+	protected int contingencyHours = CONTINGENCY_HOURS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -130,6 +151,29 @@ public class IdleImpl extends EventImpl implements Idle {
 	 * @generated
 	 */
 	@Override
+	public int getContingencyHours() {
+		return contingencyHours;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setContingencyHours(int newContingencyHours) {
+		int oldContingencyHours = contingencyHours;
+		contingencyHours = newContingencyHours;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.IDLE__CONTINGENCY_HOURS, oldContingencyHours, contingencyHours));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public int getFuelCost() {
 		int sum = 0;
 		for (final FuelQuantity fq : getFuels()) {
@@ -164,6 +208,8 @@ public class IdleImpl extends EventImpl implements Idle {
 				return getFuels();
 			case SchedulePackage.IDLE__LADEN:
 				return isLaden();
+			case SchedulePackage.IDLE__CONTINGENCY_HOURS:
+				return getContingencyHours();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -184,6 +230,9 @@ public class IdleImpl extends EventImpl implements Idle {
 			case SchedulePackage.IDLE__LADEN:
 				setLaden((Boolean)newValue);
 				return;
+			case SchedulePackage.IDLE__CONTINGENCY_HOURS:
+				setContingencyHours((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -202,6 +251,9 @@ public class IdleImpl extends EventImpl implements Idle {
 			case SchedulePackage.IDLE__LADEN:
 				setLaden(LADEN_EDEFAULT);
 				return;
+			case SchedulePackage.IDLE__CONTINGENCY_HOURS:
+				setContingencyHours(CONTINGENCY_HOURS_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -218,6 +270,8 @@ public class IdleImpl extends EventImpl implements Idle {
 				return fuels != null && !fuels.isEmpty();
 			case SchedulePackage.IDLE__LADEN:
 				return laden != LADEN_EDEFAULT;
+			case SchedulePackage.IDLE__CONTINGENCY_HOURS:
+				return contingencyHours != CONTINGENCY_HOURS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -296,6 +350,8 @@ public class IdleImpl extends EventImpl implements Idle {
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (laden: ");
 		result.append(laden);
+		result.append(", contingencyHours: ");
+		result.append(contingencyHours);
 		result.append(')');
 		return result.toString();
 	}

@@ -54,32 +54,9 @@ public class PurgeItemProvider extends EventItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addVolumePropertyDescriptor(object);
 			addCostPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Volume feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addVolumePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Purge_volume_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Purge_volume_feature", "_UI_Purge_type"),
-				 SchedulePackage.Literals.PURGE__VOLUME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -173,7 +150,6 @@ public class PurgeItemProvider extends EventItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Purge.class)) {
-			case SchedulePackage.PURGE__VOLUME:
 			case SchedulePackage.PURGE__COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

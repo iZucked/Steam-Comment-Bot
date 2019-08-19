@@ -69,16 +69,7 @@ public class PurgeComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_volumeEditor(detailComposite, topClass);
 		add_costEditor(detailComposite, topClass);
-	}
-	/**
-	 * Create the editor for the volume feature on Purge
-	 *
-	 * @generated
-	 */
-	protected void add_volumeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.PURGE__VOLUME));
 	}
 	/**
 	 * Create the editor for the cost feature on Purge

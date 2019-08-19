@@ -57,14 +57,14 @@ public class LNGScenarioUtils {
 			assert !allDates.contains(null);
 		}
 		for (final Slot<?> s : cargoModel.getLoadSlots()) {
-			allDates.add(s.getWindowStartWithSlotOrPortTime());
-			allDates.add(s.getWindowEndWithSlotOrPortTimeWithFlex());
+			allDates.add(s.getSchedulingTimeWindow().getStart());
+			allDates.add(s.getSchedulingTimeWindow().getEndWithFlex());
 			
 			assert !allDates.contains(null);
 		}
 		for (final Slot<?> s : cargoModel.getDischargeSlots()) {
-			allDates.add(s.getWindowStartWithSlotOrPortTime());
-			allDates.add(s.getWindowEndWithSlotOrPortTimeWithFlex());
+			allDates.add(s.getSchedulingTimeWindow().getStart());
+			allDates.add(s.getSchedulingTimeWindow().getEndWithFlex());
 			
 			assert !allDates.contains(null);
 		}

@@ -18,8 +18,8 @@ import com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl;
 public class VirtualSlotVisit extends SlotVisitImpl {
 	public VirtualSlotVisit(final Slot slot) {
 		super();
-		this.setStart(slot.getWindowStartWithSlotOrPortTime());
-		this.setEnd(slot.getWindowEndWithSlotOrPortTime());
+		this.setStart(slot.getSchedulingTimeWindow().getStart());
+		this.setEnd(slot.getSchedulingTimeWindow().getEnd());
 		this.setPort(slot.getPort());
 		final SlotAllocation sa = ScheduleFactory.eINSTANCE.createSlotAllocation();
 		sa.setSlotAllocationType(slot instanceof LoadSlot ? SlotAllocationType.PURCHASE : SlotAllocationType.SALE);

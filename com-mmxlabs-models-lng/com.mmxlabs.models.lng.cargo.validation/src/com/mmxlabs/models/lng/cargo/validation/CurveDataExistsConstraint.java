@@ -138,7 +138,7 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 			}
 
 			// earliest slot date
-			final ZonedDateTime portLocalDate = slot.getWindowStartWithSlotOrPortTime();
+			final ZonedDateTime portLocalDate = slot.getSchedulingTimeWindow().getStart();
 			if (portLocalDate == null) {
 				return;
 			}

@@ -72,12 +72,6 @@ public class ModelDistanceProvider extends EContentAdapter {
 			return Collections.emptyMap();
 		}
 
-		final Map<String, Port> portMap = new HashMap<>();
-		for (final Port p : portModel.getPorts()) {
-			Location l = p.getLocation();
-			portMap.put(l.getTempMMXID(), p);
-		}
-
 		final Map<Pair<String, String>, Integer> cacheObj = new HashMap<>();
 
 		for (final ContingencyMatrixEntry entry : contingencyMatrix.getEntries()) {

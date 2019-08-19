@@ -42,7 +42,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PurgeImpl#getFuels <em>Fuels</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PurgeImpl#getVolume <em>Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PurgeImpl#getCost <em>Cost</em>}</li>
  * </ul>
  *
@@ -58,26 +57,6 @@ public class PurgeImpl extends EventImpl implements Purge {
 	 * @ordered
 	 */
 	protected EList<FuelQuantity> fuels;
-
-	/**
-	 * The default value of the '{@link #getVolume() <em>Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int VOLUME_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getVolume() <em>Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected int volume = VOLUME_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getCost() <em>Cost</em>}' attribute.
@@ -129,29 +108,6 @@ public class PurgeImpl extends EventImpl implements Purge {
 			fuels = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, SchedulePackage.PURGE__FUELS);
 		}
 		return fuels;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getVolume() {
-		return volume;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVolume(int newVolume) {
-		int oldVolume = volume;
-		volume = newVolume;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.PURGE__VOLUME, oldVolume, volume));
 	}
 
 	/**
@@ -215,8 +171,6 @@ public class PurgeImpl extends EventImpl implements Purge {
 		switch (featureID) {
 			case SchedulePackage.PURGE__FUELS:
 				return getFuels();
-			case SchedulePackage.PURGE__VOLUME:
-				return getVolume();
 			case SchedulePackage.PURGE__COST:
 				return getCost();
 		}
@@ -236,9 +190,6 @@ public class PurgeImpl extends EventImpl implements Purge {
 				getFuels().clear();
 				getFuels().addAll((Collection<? extends FuelQuantity>)newValue);
 				return;
-			case SchedulePackage.PURGE__VOLUME:
-				setVolume((Integer)newValue);
-				return;
 			case SchedulePackage.PURGE__COST:
 				setCost((Integer)newValue);
 				return;
@@ -257,9 +208,6 @@ public class PurgeImpl extends EventImpl implements Purge {
 			case SchedulePackage.PURGE__FUELS:
 				getFuels().clear();
 				return;
-			case SchedulePackage.PURGE__VOLUME:
-				setVolume(VOLUME_EDEFAULT);
-				return;
 			case SchedulePackage.PURGE__COST:
 				setCost(COST_EDEFAULT);
 				return;
@@ -277,8 +225,6 @@ public class PurgeImpl extends EventImpl implements Purge {
 		switch (featureID) {
 			case SchedulePackage.PURGE__FUELS:
 				return fuels != null && !fuels.isEmpty();
-			case SchedulePackage.PURGE__VOLUME:
-				return volume != VOLUME_EDEFAULT;
 			case SchedulePackage.PURGE__COST:
 				return cost != COST_EDEFAULT;
 		}
@@ -357,9 +303,7 @@ public class PurgeImpl extends EventImpl implements Purge {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (volume: ");
-		result.append(volume);
-		result.append(", cost: ");
+		result.append(" (cost: ");
 		result.append(cost);
 		result.append(')');
 		return result.toString();

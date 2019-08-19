@@ -534,7 +534,7 @@ public class ScenarioTools {
 
 				System.err.println("\tArrive: " + sv.getStart() + ",  Depart: " + sv.getEnd());
 				System.err.println(
-						"\tWindowStart: " + sv.getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime() + ",  WindowEnd: " + sv.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime());
+						"\tWindowStart: " + sv.getSlotAllocation().getSlot().getSchedulingTimeWindow().getStart() + ",  WindowEnd: " + sv.getSlotAllocation().getSlot().getSchedulingTimeWindow().getEnd());
 
 				System.err.println("\tDuration: " + sv.getDuration() + ", " + description + volume);
 				ScenarioTools.printFuel(sv.getFuels());

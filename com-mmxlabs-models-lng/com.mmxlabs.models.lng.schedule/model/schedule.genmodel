@@ -171,6 +171,7 @@
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//Idle">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Idle/laden"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Idle/contingencyHours"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//PortVisit">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//PortVisit/portCost"/>
@@ -201,7 +202,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Cooldown/cost"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//Purge">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Purge/volume"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Purge/cost"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//FuelUsage">

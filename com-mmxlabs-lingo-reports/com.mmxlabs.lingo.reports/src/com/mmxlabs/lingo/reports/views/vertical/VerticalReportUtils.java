@@ -64,7 +64,7 @@ public final class VerticalReportUtils {
 				}
 			}
 
-			if (slotVisit.getStart().isAfter(slot.getWindowEndWithSlotOrPortTime())) {
+			if (slotVisit.getStart().isAfter(slot.getSchedulingTimeWindow().getEnd())) {
 				return true;
 			}
 		} else if (event instanceof VesselEventVisit) {

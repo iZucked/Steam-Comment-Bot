@@ -37,7 +37,6 @@ import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.CharterOutOpportunity;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
-import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OpenBuy;
@@ -51,6 +50,7 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.analytics.VesselEventReference;
 import com.mmxlabs.models.lng.analytics.VolumeMode;
@@ -69,6 +69,7 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -132,7 +133,10 @@ public class AnalyticsBuilder {
 				slot.setDESPurchase(originalLoadSlot.isDESPurchase());
 				slot.setDesPurchaseDealType(originalLoadSlot.getSlotOrDelegateDESPurchaseDealType());
 				slot.setCounterparty(originalLoadSlot.getCounterparty());
-				slot.setDuration(originalLoadSlot.getSlotOrDelegateDuration());
+				slot.setDuration(originalLoadSlot.getDuration());
+				slot.setWindowSize(originalLoadSlot.getWindowSize());
+				slot.setWindowSizeUnits(originalLoadSlot.getWindowSizeUnits());
+				slot.setWindowCounterParty(originalLoadSlot.isWindowCounterParty());
 
 				if (originalLoadSlot.getSlotOrDelegateCV() != 0.0) {
 					slot.setCargoCV(originalLoadSlot.getSlotOrDelegateCV());
@@ -297,7 +301,11 @@ public class AnalyticsBuilder {
 				slot.setFOBSale(originalDischargeSlot.isFOBSale());
 				slot.setFobSaleDealType(originalDischargeSlot.getSlotOrDelegateFOBSaleDealType());
 				slot.setCounterparty(originalDischargeSlot.getSlotOrDelegateCounterparty());
-				slot.setDuration(originalDischargeSlot.getSlotOrDelegateDuration());
+				slot.setDuration(originalDischargeSlot.getDuration());
+				slot.setWindowSize(originalDischargeSlot.getWindowSize());
+				slot.setWindowSizeUnits(originalDischargeSlot.getWindowSizeUnits());
+				slot.setWindowCounterParty(originalDischargeSlot.isWindowCounterParty());
+				
 				// TODO: Copy other params!
 				if (slotMode == SlotMode.CHANGE_PRICE_VARIANT) {
 					slot.setPriceExpression("??");
@@ -398,7 +406,7 @@ public class AnalyticsBuilder {
 		if (fromPort != null && toPort != null && vessel != null) {
 			// TODO: Get from input
 			final double speed = vessel.getVesselOrDelegateMaxSpeed();
-			final int travelTime = TravelTimeUtils.getMinTimeFromAllowedRoutes(fromPort, toPort, vessel, speed, portModel.getRoutes(), modelDistanceProvider);
+			final int travelTime = CargoTravelTimeUtils.getMinTimeFromAllowedRoutes(loadSlot, dischargeSlot, vessel, speed, portModel.getRoutes(), modelDistanceProvider);
 			return travelTime;
 		}
 
@@ -415,7 +423,7 @@ public class AnalyticsBuilder {
 		if (fromPort != null && toPort != null && vessel != null) {
 			// TODO: Get from input
 			final double speed = vessel.getVesselOrDelegateMaxSpeed();
-			final int travelTime = TravelTimeUtils.getMinTimeFromAllowedRoutes(fromPort, toPort, vessel, speed, portModel.getRoutes(), modelDistanceProvider);
+			final int travelTime = CargoTravelTimeUtils.getMinTimeFromAllowedRoutes(loadSlot, dischargeSlot, vessel, speed, portModel.getRoutes(), modelDistanceProvider);
 			return travelTime;
 		}
 
@@ -1228,7 +1236,7 @@ public class AnalyticsBuilder {
 			final BuyReference buyReference = (BuyReference) option;
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
-				return slot.getWindowStartWithSlotOrPortTime();
+				return slot.getSchedulingTimeWindow().getStart();
 			}
 		}
 		return null;
@@ -1245,7 +1253,7 @@ public class AnalyticsBuilder {
 			final SellReference sellReference = (SellReference) option;
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
-				return slot.getWindowStartWithSlotOrPortTime();
+				return slot.getSchedulingTimeWindow().getStart();
 			}
 		}
 		return null;
@@ -1272,7 +1280,7 @@ public class AnalyticsBuilder {
 			final BuyReference buyReference = (BuyReference) option;
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
-				return slot.getWindowEndWithSlotOrPortTime();
+				return slot.getSchedulingTimeWindow().getEnd();
 			}
 		}
 		return null;
@@ -1302,7 +1310,7 @@ public class AnalyticsBuilder {
 			final SellReference sellReference = (SellReference) option;
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
-				return slot.getWindowEndWithSlotOrPortTime();
+				return slot.getSchedulingTimeWindow().getEnd();
 			}
 		}
 		return null;
@@ -1334,7 +1342,7 @@ public class AnalyticsBuilder {
 			final SellReference sellReference = (SellReference) option;
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
-				return slot.getSlotOrDelegateDuration();
+				return slot.getSchedulingTimeWindow().getDuration();
 			}
 		} else if (option instanceof SellMarket) {
 
@@ -1362,7 +1370,7 @@ public class AnalyticsBuilder {
 			final BuyReference buyReference = (BuyReference) option;
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
-				return slot.getSlotOrDelegateDuration();
+				return slot.getSchedulingTimeWindow().getDuration();
 			}
 		} else if (option instanceof BuyMarket) {
 

@@ -253,13 +253,13 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 							final InventoryChangeEvent evt = ScheduleFactory.eINSTANCE.createInventoryChangeEvent();
 
 							if (latestLoad == null) {
-								latestLoad = slotAllocation.getSlot().getWindowEndWithSlotOrPortTime().toLocalDate();
+								latestLoad = slotAllocation.getSlot().getSchedulingTimeWindow().getEnd().toLocalDate();
 							} else {
-								latestLoad = f_maxDate.apply(latestLoad, slotAllocation.getSlot().getWindowEndWithSlotOrPortTime().toLocalDate());
+								latestLoad = f_maxDate.apply(latestLoad, slotAllocation.getSlot().getSchedulingTimeWindow().getEnd().toLocalDate());
 							}
 
 							evt.setOpenSlotAllocation(slotAllocation);
-							evt.setDate(slotAllocation.getSlot().getWindowStartWithSlotOrPortTime().toLocalDateTime());
+							evt.setDate(slotAllocation.getSlot().getSchedulingTimeWindow().getStart().toLocalDateTime());
 							evt.setChangeQuantity(change);
 							events.add(evt);
 						}

@@ -127,6 +127,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_nominatedVesselEditor(detailComposite, topClass);
 		add_lockedEditor(detailComposite, topClass);
 		add_cancelledEditor(detailComposite, topClass);
+		add_windowCounterPartyEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -330,6 +331,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cancelledEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CANCELLED));
+	}
+
+	/**
+	 * Create the editor for the windowCounterParty feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_windowCounterPartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_COUNTER_PARTY));
 	}
 
 	/**

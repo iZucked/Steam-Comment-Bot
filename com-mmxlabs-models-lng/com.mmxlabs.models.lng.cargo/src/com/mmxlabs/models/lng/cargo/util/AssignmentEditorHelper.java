@@ -49,7 +49,7 @@ public class AssignmentEditorHelper {
 					if (slot instanceof SpotSlot) {
 						continue;
 					}
-					return new Pair<>(slot.getWindowStartWithSlotOrPortTime(), slot.getWindowEndWithSlotOrPortTime());
+					return new Pair<>(slot.getSchedulingTimeWindow().getStart(), slot.getSchedulingTimeWindow().getEnd());
 				}
 			}
 		}
@@ -65,7 +65,7 @@ public class AssignmentEditorHelper {
 					if (slot instanceof SpotSlot) {
 						continue;
 					}
-					return slot.getWindowStartWithSlotOrPortTime();
+					return slot.getSchedulingTimeWindow().getStart();
 				}
 			}
 		}
@@ -81,14 +81,14 @@ public class AssignmentEditorHelper {
 				return null;
 			}
 			final Slot<?> firstSlot = slots.get(0);
-			return new Pair<>(firstSlot.getWindowStartWithSlotOrPortTime(), firstSlot.getWindowEndWithSlotOrPortTime());
+			return new Pair<>(firstSlot.getSchedulingTimeWindow().getStart(), firstSlot.getSchedulingTimeWindow().getEnd());
 		} else if (element instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) element;
 
 			return new Pair<>(vesselEvent.getStartAfterAsDateTime(), vesselEvent.getStartByAsDateTime());
 		} else if (element instanceof Slot<?>) {
 			final Slot<?> slot = (Slot<?>) element;
-			return new Pair<>(slot.getWindowStartWithSlotOrPortTime(), slot.getWindowEndWithSlotOrPortTime());
+			return new Pair<>(slot.getSchedulingTimeWindow().getStart(), slot.getSchedulingTimeWindow().getEnd());
 		} else {
 			return null;
 		}
@@ -103,11 +103,11 @@ public class AssignmentEditorHelper {
 				return null;
 			}
 			final Slot<?> firstSlot = slots.get(0);
-			return firstSlot.getWindowStartWithSlotOrPortTime();
+			return firstSlot.getSchedulingTimeWindow().getStart();
 		} else if (element instanceof VesselEvent) {
 			return ((VesselEvent) element).getStartByAsDateTime();
 		} else if (element instanceof Slot<?>) {
-			return ((Slot<?>) element).getWindowStartWithSlotOrPortTime();
+			return ((Slot<?>) element).getSchedulingTimeWindow().getStart();
 		} else {
 			return null;
 		}
@@ -124,7 +124,7 @@ public class AssignmentEditorHelper {
 					if (slot instanceof SpotSlot) {
 						continue;
 					}
-					return slot.getWindowEndWithSlotOrPortTime();
+					return slot.getSchedulingTimeWindow().getEnd();
 				}
 			}
 		}
@@ -141,7 +141,7 @@ public class AssignmentEditorHelper {
 			}
 			final Slot<?> lastSlot = slots.get(slots.size() - 1);
 			if (lastSlot.getWindowStart() != null) {
-				return lastSlot.getWindowEndWithSlotOrPortTime();
+				return lastSlot.getSchedulingTimeWindow().getEnd();
 			}
 		} else if (element instanceof VesselEvent) {
 			final ZonedDateTime dateTime = ((VesselEvent) element).getStartByAsDateTime();
@@ -151,7 +151,7 @@ public class AssignmentEditorHelper {
 		} else if (element instanceof Slot) {
 			final Slot<?> slot = (Slot<?>) element;
 			if (slot.getWindowStart() != null) {
-				return slot.getWindowEndWithSlotOrPortTime();
+				return slot.getSchedulingTimeWindow().getEnd();
 			}
 		}
 		return null;
@@ -292,50 +292,6 @@ public class AssignmentEditorHelper {
 		return null;
 	}
 
-	private static boolean isElementInVesselAvailability(@NonNull final AssignableElement element, @NonNull final VesselAvailability vesselAvailability) {
-
-		final ZonedDateTime vesselAvailabilityEndBy = vesselAvailability.getEndByAsDateTime();
-		final ZonedDateTime vesselAvailabilityStartAfter = vesselAvailability.getStartAfterAsDateTime();
-		if (element instanceof Cargo) {
-			final Cargo cargo = (Cargo) element;
-			final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
-			final Slot<?> firstSlot = sortedSlots.get(0);
-			final Slot<?> lastSlot = sortedSlots.get(sortedSlots.size() - 1);
-
-			if (firstSlot.getWindowStart() == null || lastSlot.getWindowStart() == null) {
-				return false;
-			}
-
-			if (vesselAvailabilityEndBy != null) {
-				if (firstSlot.getWindowStartWithSlotOrPortTime().isAfter(vesselAvailabilityEndBy)) {
-					return false;
-				}
-			}
-			if (vesselAvailability.getStartAfter() != null) {
-				if (lastSlot.getWindowEndWithSlotOrPortTime().isAfter(vesselAvailabilityStartAfter)) {
-					return false;
-				}
-			}
-		} else if (element instanceof VesselEvent) {
-			final VesselEvent event = (VesselEvent) element;
-			if (vesselAvailabilityEndBy != null) {
-				final ZonedDateTime eventStartAfter = event.getStartAfterAsDateTime();
-				if (eventStartAfter.isAfter(vesselAvailabilityEndBy)) {
-					return false;
-				}
-			}
-			if (vesselAvailabilityStartAfter != null) {
-				ZonedDateTime eventStartBy = event.getStartByAsDateTime();
-				eventStartBy = eventStartBy.plusDays(event.getDurationInDays());
-				if (eventStartBy.isBefore(vesselAvailabilityStartAfter)) {
-					return false;
-				}
-			}
-		}
-
-		return true;
-	}
-
 	public static int getMaxSpot(@NonNull final CargoModel cargoModel) {
 		int maxSpot = 0;
 		for (final Cargo cargo : cargoModel.getCargoes()) {
@@ -412,28 +368,6 @@ public class AssignmentEditorHelper {
 		BEFORE, AFTER, AMBIGUOUS
 	}
 
-	public static @NonNull OrderingHint checkOrdering(@NonNull final AssignableElement a, @NonNull final AssignableElement b) {
-		if (a instanceof Cargo && b instanceof Cargo) {
-			return checkCargoOrdering((Cargo) a, (Cargo) b);
-		} else if (a instanceof VesselEvent && b instanceof VesselEvent) {
-			return checkEventOrdering((VesselEvent) a, (VesselEvent) b);
-		} else if (a instanceof Cargo && b instanceof VesselEvent) {
-			return checkCargoToEventOrdering((Cargo) a, (VesselEvent) b);
-		} else if (b instanceof Cargo && a instanceof VesselEvent) {
-			// Use same method, but flip return ordering
-			final OrderingHint h = checkCargoToEventOrdering((Cargo) b, (VesselEvent) a);
-			if (h == OrderingHint.BEFORE) {
-				return OrderingHint.AFTER;
-			} else if (h == OrderingHint.AFTER) {
-				return OrderingHint.BEFORE;
-			} else {
-				return h;
-			}
-		} else {
-			throw new IllegalArgumentException();
-		}
-	}
-
 	public static @NonNull OrderingHint checkOrdering(@NonNull final WrappedAssignableElement a, @NonNull final WrappedAssignableElement b) {
 		// Simple check on load events.
 		boolean isBefore = false;
@@ -456,162 +390,8 @@ public class AssignmentEditorHelper {
 		}
 	}
 
-	private static @NonNull OrderingHint checkCargoOrdering(@NonNull final Cargo a, @NonNull final Cargo b) {
-		final Slot a_load = a.getSortedSlots().get(0);
-		final Slot b_load = b.getSortedSlots().get(0);
-
-		final Slot a_discharge = a.getSortedSlots().get(a.getSlots().size() - 1);
-		final Slot b_discharge = b.getSortedSlots().get(a.getSlots().size() - 1);
-
-		// Simple check on load events.
-		if (a_load.getWindowEndWithSlotOrPortTime().isBefore(b_load.getWindowStartWithSlotOrPortTime())) {
-			return OrderingHint.BEFORE;
-		}
-		if (b_load.getWindowEndWithSlotOrPortTime().isBefore(a_load.getWindowStartWithSlotOrPortTime())) {
-			return OrderingHint.AFTER;
-		}
-		// Loads Overlap, so check discharges
-		if (a_discharge.getWindowEndWithSlotOrPortTime().isBefore(b_discharge.getWindowStartWithSlotOrPortTime())) {
-			return OrderingHint.BEFORE;
-		}
-		if (b_discharge.getWindowEndWithSlotOrPortTime().isBefore(a_discharge.getWindowStartWithSlotOrPortTime())) {
-			return OrderingHint.AFTER;
-		}
-
-		// Both loads and discharges overlap, can one cargo sort before the other still?
-
-		// Load a could go after discharge b
-		if (a_load.getWindowEndWithSlotOrPortTime().isAfter(b_discharge.getWindowStartWithSlotOrPortTime())) {
-			return OrderingHint.AFTER;
-		}
-		if (b_load.getWindowEndWithSlotOrPortTime().isAfter(a_discharge.getWindowStartWithSlotOrPortTime())) {
-			return OrderingHint.BEFORE;
-		}
-
-		// End of discharge event is before other cargoes load window end
-		if (getMinEndDate(a).isAfter(b_load.getWindowEndWithSlotOrPortTime()) && !(getMinEndDate(b).isAfter(a_load.getWindowEndWithSlotOrPortTime()))) {
-			return OrderingHint.BEFORE;
-		}
-		if (getMinEndDate(b).isAfter(a_load.getWindowEndWithSlotOrPortTime()) && !(getMinEndDate(a).isAfter(b_load.getWindowEndWithSlotOrPortTime()))) {
-			return OrderingHint.AFTER;
-		}
-
-		return OrderingHint.AMBIGUOUS;
-
-	}
-
-	private static @NonNull OrderingHint checkCargoToEventOrdering(@NonNull final Cargo a, @NonNull final VesselEvent b) {
-		final Slot a_load = a.getSortedSlots().get(0);
-		final Slot a_discharge = a.getSortedSlots().get(a.getSlots().size() - 1);
-
-		// Simple check on windows
-		if (a_discharge.getWindowEndWithSlotOrPortTime().isBefore(b.getStartAfterAsDateTime())) {
-			return OrderingHint.BEFORE;
-		}
-		if (b.getStartByAsDateTime().isBefore(a_load.getWindowStartWithSlotOrPortTime())) {
-			return OrderingHint.AFTER;
-		}
-
-		// Overlapping, but only on one side
-		if (a_load.getWindowEndWithSlotOrPortTime().isBefore(b.getStartAfterAsDateTime()) && a_discharge.getWindowEndWithSlotOrPortTime().isBefore(b.getStartByAsDateTime())) {
-			return OrderingHint.BEFORE;
-		}
-		if (b.getStartByAsDateTime().isBefore(a_discharge.getWindowEndWithSlotOrPortTime()) && b.getStartAfterAsDateTime().isBefore(a_load.getWindowEndWithSlotOrPortTime())) {
-			return OrderingHint.AFTER;
-		}
-
-		// Overlapping both sides, but event duration blocks out one side.
-		if (b.getStartByAsDateTime().isAfter(a_discharge.getWindowEndWithSlotOrPortTime()) //
-				&& getMinEndDate(b).isAfter(a_load.getWindowEndWithSlotOrPortTime())) {
-			return OrderingHint.BEFORE;
-		}
-
-		return OrderingHint.AMBIGUOUS;
-	}
-
-	private static @NonNull OrderingHint checkEventOrdering(@NonNull final VesselEvent a, @NonNull final VesselEvent b) {
-
-		// Simple check on windows
-		if (a.getStartByAsDateTime().isBefore(b.getStartAfterAsDateTime())) {
-			return OrderingHint.BEFORE;
-		}
-		if (b.getStartByAsDateTime().isBefore(a.getStartAfterAsDateTime())) {
-			return OrderingHint.AFTER;
-		}
-
-		// Overlapping, but only on one side
-		if (getMinEndDate(a).isAfter(b.getStartByAsDateTime())) {
-			return OrderingHint.AFTER;
-		}
-		if (getMinEndDate(b).isAfter(a.getStartByAsDateTime())) {
-			return OrderingHint.BEFORE;
-		}
-
-		return OrderingHint.AMBIGUOUS;
-	}
-
-	public static @NonNull ZonedDateTime getMinEndDate(@NonNull final AssignableElement e) {
-		if (e instanceof Cargo) {
-			return getMinEndDate(((Cargo) e));
-		} else if (e instanceof VesselEvent) {
-			return getMinEndDate((VesselEvent) e);
-		}
-		throw new IllegalArgumentException();
-	}
-
 	public static @NonNull ZonedDateTime getMinEndDate(@NonNull final VesselEvent e) {
 		return e.getStartAfterAsDateTime().plusDays(e.getDurationInDays());
-	}
-
-	public static @NonNull ZonedDateTime getMinEndDate(@NonNull final Cargo c) {
-		ZonedDateTime z = null;
-		for (final Slot s : c.getSortedSlots()) {
-			final ZonedDateTime earliestFinish = s.getWindowStartWithSlotOrPortTime().plusHours(s.getSlotOrDelegateDuration());
-			if (z == null) {
-				z = earliestFinish;
-			} else {
-				if (earliestFinish.isAfter(z)) {
-					z = earliestFinish;
-				}
-			}
-
-		}
-		if (z == null) {
-			throw new IllegalStateException();
-		}
-
-		return z;
-	}
-
-	public static boolean checkInsertion(@NonNull final AssignableElement before, @NonNull final AssignableElement e, @NonNull final AssignableElement after) {
-
-		final OrderingHint beforeHint = checkOrdering(before, e);
-		final OrderingHint afterHint = checkOrdering(after, e);
-		// Check for simple cases first
-		if (beforeHint == OrderingHint.BEFORE && afterHint == OrderingHint.AFTER) {
-			return true;
-		}
-		if (beforeHint == OrderingHint.BEFORE && afterHint == OrderingHint.BEFORE) {
-			return false;
-		}
-		if (beforeHint == OrderingHint.AFTER && afterHint == OrderingHint.AFTER) {
-			return false;
-		}
-		// What? - really an error?
-		if (beforeHint == OrderingHint.AFTER && afterHint == OrderingHint.BEFORE) {
-			return false;
-		}
-
-		// If we get here, one or both hints will be AMBIGUOUS
-		@NonNull
-		final ZonedDateTime beforeEarliestEnd = getMinEndDate(before);
-
-		@NonNull
-		final ZonedDateTime afterLatestStart = getStartPeriodIgnoreSpots(after).getSecond();
-
-		// Can we insert the element between windows (ignoring any transit times)
-		return Hours.between(beforeEarliestEnd, afterLatestStart) > getDurationInHours(e);
-
 	}
 
 	public static boolean checkInsertion(@NonNull final WrappedAssignableElement before, @NonNull final WrappedAssignableElement e, @NonNull final WrappedAssignableElement after) {
@@ -643,47 +423,5 @@ public class AssignmentEditorHelper {
 		// Can we insert the element between windows (ignoring any transit times)
 		return Hours.between(beforeEarliestEnd, afterLatestStart) > e.getMinEventDurationInHours();
 
-	}
-
-	private static int getDurationInHours(@NonNull final AssignableElement e) {
-		if (e instanceof Cargo) {
-			return getDurationInHours(((Cargo) e));
-		} else if (e instanceof VesselEvent) {
-			return getDurationInHours((VesselEvent) e);
-		}
-		throw new IllegalArgumentException();
-	}
-
-	private static int getDurationInHours(@NonNull final Cargo c) {
-		ZonedDateTime start = null;
-		ZonedDateTime z = null;
-		for (final Slot s : c.getSortedSlots()) {
-			final ZonedDateTime windowStartWithSlotOrPortTime = s.getWindowStartWithSlotOrPortTime();
-			if (start == null) {
-				start = windowStartWithSlotOrPortTime;
-			}
-			final ZonedDateTime earliestFinish = windowStartWithSlotOrPortTime.plusHours(s.getSlotOrDelegateDuration());
-			if (z == null) {
-				z = earliestFinish;
-			} else {
-				if (earliestFinish.isAfter(z)) {
-					z = earliestFinish;
-				}
-			}
-
-		}
-		if (z == null) {
-			throw new IllegalStateException();
-		}
-		if (start == null) {
-			throw new IllegalStateException();
-		}
-
-		return Hours.between(start, z);
-	}
-
-	private static int getDurationInHours(@NonNull final VesselEvent e) {
-
-		return 24 * e.getDurationInDays();
 	}
 }

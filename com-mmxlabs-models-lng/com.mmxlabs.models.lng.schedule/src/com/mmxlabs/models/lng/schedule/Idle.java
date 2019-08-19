@@ -14,6 +14,7 @@ package com.mmxlabs.models.lng.schedule;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Idle#isLaden <em>Laden</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Idle#getContingencyHours <em>Contingency Hours</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getIdle()
@@ -47,6 +48,32 @@ public interface Idle extends Event, FuelUsage {
 	 * @generated
 	 */
 	void setLaden(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Contingency Hours</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Contigency Hours</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Contingency Hours</em>' attribute.
+	 * @see #setContingencyHours(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getIdle_ContingencyHours()
+	 * @model
+	 * @generated
+	 */
+	int getContingencyHours();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Idle#getContingencyHours <em>Contingency Hours</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Contingency Hours</em>' attribute.
+	 * @see #getContingencyHours()
+	 * @generated
+	 */
+	void setContingencyHours(int value);
 } // end of  Idle
 
 // finish type fixing

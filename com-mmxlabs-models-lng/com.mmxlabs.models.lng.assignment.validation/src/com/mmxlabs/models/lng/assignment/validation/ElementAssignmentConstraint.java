@@ -88,7 +88,7 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 										final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
 										if (!sortedSlots.isEmpty()) {
 											final Slot<?> slot = sortedSlots.get(0);
-											if (slot.getWindowStartWithSlotOrPortTime().toLocalDate().isBefore(promptPeriodEnd)) {
+											if (slot.getSchedulingTimeWindow().getStart().toLocalDate().isBefore(promptPeriodEnd)) {
 												final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
 														(IConstraintStatus) ctx.createFailureStatus("Cargo " + cargo.getLoadName() + " has nominal vessel assignment in the prompt."), IStatus.WARNING);
 												failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);

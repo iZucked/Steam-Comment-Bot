@@ -234,7 +234,7 @@ public class Exposures {
 			if (slot == null) {
 				continue;
 			}
-			final LocalDate date = slot.getWindowEndWithSlotOrPortTime().toLocalDate();
+			final LocalDate date = slot.getSchedulingTimeWindow().getEnd().toLocalDate();
 			if (date.isBefore(promptStart) || slot.getWindowStart().isBefore(promptStart)) {
 				continue;
 			}

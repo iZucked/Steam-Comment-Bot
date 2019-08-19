@@ -53,6 +53,19 @@
                </message>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.SlotWindowCounterPartyConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.SlotWindowCounterPartyConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Slot Counter Party Window"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.CargoSpotCharterConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.CargoSpotCharterConstraint"
                   isEnabledByDefault="true"

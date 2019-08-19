@@ -159,7 +159,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 
 							// Convert to FOB Purchase slot
 							alternativeSlot = builder.createLoadSlot(id, loadOption.getPort(), baseTimeWindow, minVolume, maxVolume, priceCalculator, cargoCVValue,
-									loadSlot.getSlotOrDelegateDuration(), false, true, false, IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, slotIsLocked, isSpotSlot,
+									loadSlot.getSchedulingTimeWindow().getDuration(), false, true, false, IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, slotIsLocked, isSpotSlot,
 									loadOption.isVolumeSetInM3(), slotIsCancelled);
 							generatedOptions.add(alternativeSlot);
 
@@ -199,7 +199,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 
 							final ITimeWindow window = TimeWindowMaker.createInclusiveExclusive(currentWindow.getInclusiveStart(), currentWindow.getExclusiveEnd() + shippingHours, 0, false);
 							alternativeSlot = builder.createDESPurchaseLoadSlot(id, loadOption.getPort(), window, minVolume, maxVolume, priceCalculator, cargoCVValue,
-									loadSlot.getSlotOrDelegateDuration(), IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, slotIsLocked, isSpotSlot,
+									loadSlot.getSchedulingTimeWindow().getDuration(), IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, slotIsLocked, isSpotSlot,
 									loadOption.isVolumeSetInM3(), slotIsCancelled);
 
 							generatedOptions.add(alternativeSlot);
