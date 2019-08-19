@@ -39,6 +39,7 @@ import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
 
 import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -83,7 +84,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private ArrayList<EStructuralFeature[]> mainFeatures;
 	private ArrayList<EStructuralFeature[]> windowFeatures;
 	private HashSet<EStructuralFeature> windowTitleFeatures;
-
+	private ArrayList<EStructuralFeature[]> unshippedWindowFeatures;
+	private HashSet<EStructuralFeature> unshippedWindowTitleFeatures;
+	
 	private ArrayList<EStructuralFeature[]> loadTermsFeatures;
 	private ArrayList<EStructuralFeature[]> dischargeTermsFeatures;
 	private ArrayList<EStructuralFeature[]> noteFeatures;
@@ -125,6 +128,15 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		windowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize, WindowSizeUnits, WindowCounterParty);
 		allFeatures.addAll(getAllFeatures(windowFeatures));
 
+		unshippedWindowFeatures = new ArrayList<>();
+		unshippedWindowFeatures.add(new EStructuralFeature[] { WindowStart, WindowStartTime });
+		unshippedWindowFeatures.add(new EStructuralFeature[] { WindowSize, WindowSizeUnits });
+		unshippedWindowFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Duration() });
+		unshippedWindowFeatures.add(new EStructuralFeature[] { WindowFlex, WindowFlexUnits });
+		unshippedWindowFeatures.add(new EStructuralFeature[] {});
+		unshippedWindowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize, WindowSizeUnits);
+		allFeatures.addAll(getAllFeatures(unshippedWindowFeatures));
+		
 		loadTermsFeatures = new ArrayList<EStructuralFeature[]>();
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_SchedulePurge() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold(), CargoFeatures.getLoadSlot_CargoCV() });
@@ -462,10 +474,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		return editor;
 	}
-
+	
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
-
 		super.display(dialogContext, root, object, range, dbc);
 		final MMXObject eo = (MMXObject) object;
 		esPricing.init(eo);
@@ -476,7 +487,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 	@Override
 	public void createControls(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc) {
-
+		
 		toolkit.adapt(this);
 
 		boolean isLoad;
@@ -489,6 +500,14 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			isLoad = false;
 		}
 
+		boolean isUnshipped = false;
+		if (object instanceof Slot<?>) {
+			Slot<?> slot = (Slot<?>)object;
+			if (slot.getCargo() == null || slot.getCargo().getCargoType() != CargoType.FLEET) {
+				isUnshipped = true;
+			}
+		}
+		
 		contentComposite = toolkit.createComposite(this);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(contentComposite, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot");
 
@@ -524,7 +543,12 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(esPricing.ec, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot_Pricing");
 
 		createSpacer();
-		makeExpandable(dialogContext, root, object, dbc, esWindow, windowFeatures, windowTitleFeatures, true);
+		if (isUnshipped) {
+			makeExpandable(dialogContext, root, object, dbc, esWindow, unshippedWindowFeatures, unshippedWindowTitleFeatures, true);
+		}
+		else {
+			makeExpandable(dialogContext, root, object, dbc, esWindow, windowFeatures, windowTitleFeatures, true);
+		}
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(esWindow.ec, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot_Window");
 
 		createSpacer();
