@@ -1451,12 +1451,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		LocalDate erl = result;
 
 		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
-			if (erl.isAfter(ls.getWindowStart())) {
+			if (ls.getWindowStart() != null && erl.isAfter(ls.getWindowStart())) {
 				erl = ls.getWindowStart();
 			}
 		}
 		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
-			if (erl.isAfter(ds.getWindowStart())) {
+			if (ds.getWindowStart() != null && erl.isAfter(ds.getWindowStart())) {
 				erl = ds.getWindowStart();
 			}
 		}
@@ -1476,12 +1476,14 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		LocalDate erl = result;
 
 		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
-			if (erl.isBefore(ls.getSchedulingTimeWindow().getEnd().toLocalDate())) {
+			if (ls.getSchedulingTimeWindow().getEnd() != null &&
+				erl.isBefore(ls.getSchedulingTimeWindow().getEnd().toLocalDate())) {
 				erl = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 		}
 		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
-			if (erl.isBefore(ds.getSchedulingTimeWindow().getEnd().toLocalDate())) {
+			if (ds.getSchedulingTimeWindow().getEnd() != null &&
+				erl.isBefore(ds.getSchedulingTimeWindow().getEnd().toLocalDate())) {
 				erl = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 		}
