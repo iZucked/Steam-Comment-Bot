@@ -85,7 +85,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	private RelativeDateRangeToolbarEditor relativeDateToolbarEditor;
 	
 	private boolean includeDone = false;
-	private boolean viewSelected = true;
+	private boolean viewSelected = false;
 	private final List<Slot> selectedSlots = new ArrayList<>();
 	private final HashSet<String> previousNominations = new HashSet<>();
 	
