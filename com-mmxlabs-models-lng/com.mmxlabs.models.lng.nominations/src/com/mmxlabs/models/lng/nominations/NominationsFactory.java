@@ -71,6 +71,15 @@ public interface NominationsFactory extends EFactory {
 	ContractNominationSpec createContractNominationSpec();
 
 	/**
+	 * Returns a new object of class '<em>Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Parameters</em>'.
+	 * @generated
+	 */
+	NominationsParameters createNominationsParameters();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

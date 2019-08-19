@@ -80,6 +80,7 @@ public class NominationsModelItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATION_SPECS);
 			childrenFeatures.add(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATIONS);
+			childrenFeatures.add(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATION_PARAMETERS);
 		}
 		return childrenFeatures;
 	}
@@ -137,6 +138,7 @@ public class NominationsModelItemProvider
 		switch (notification.getFeatureID(NominationsModel.class)) {
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_SPECS:
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS:
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -183,6 +185,11 @@ public class NominationsModelItemProvider
 			(createChildParameter
 				(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATIONS,
 				 NominationsFactory.eINSTANCE.createContractNomination()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATION_PARAMETERS,
+				 NominationsFactory.eINSTANCE.createNominationsParameters()));
 	}
 
 	/**

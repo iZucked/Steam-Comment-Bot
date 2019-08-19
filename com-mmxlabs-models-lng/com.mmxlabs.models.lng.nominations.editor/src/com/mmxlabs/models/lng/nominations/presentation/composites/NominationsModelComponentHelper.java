@@ -71,6 +71,7 @@ public class NominationsModelComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_nominationSpecsEditor(detailComposite, topClass);
 		add_nominationsEditor(detailComposite, topClass);
+		add_nominationParametersEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the nominationSpecs feature on NominationsModel
@@ -88,5 +89,14 @@ public class NominationsModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_nominationsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATIONS));
+	}
+
+	/**
+	 * Create the editor for the nominationParameters feature on NominationsModel
+	 *
+	 * @generated
+	 */
+	protected void add_nominationParametersEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATION_PARAMETERS));
 	}
 }

@@ -54,12 +54,6 @@ public class ContractNominationComponentHelper extends BaseComponentHelper {
 	public ContractNominationComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(NominationsPackage.Literals.ABSTRACT_NOMINATION));
-		for (final IComponentHelper ch : superClassesHelpers) {
-			if (ch instanceof AbstractNominationComponentHelper) {
-				this.abstractComponentHelper = (AbstractNominationComponentHelper) ch;
-				this.specComponentHelper = this.abstractComponentHelper.specComponentHelper;
-			}
-		}
 	}
 	
 	/**

@@ -10,10 +10,12 @@ import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.AbstractNominationSpec;
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -22,6 +24,7 @@ import com.mmxlabs.models.lng.nominations.ContractNomination;
 import com.mmxlabs.models.lng.nominations.ContractNominationSpec;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
+import com.mmxlabs.models.lng.nominations.NominationsParameters;
 import com.mmxlabs.models.lng.nominations.SlotNomination;
 import com.mmxlabs.models.lng.nominations.SlotNominationSpec;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -36,6 +39,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl#getNominationSpecs <em>Nomination Specs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl#getNominations <em>Nominations</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl#getNominationParameters <em>Nomination Parameters</em>}</li>
  * </ul>
  *
  * @generated
@@ -60,6 +64,16 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 	 * @ordered
 	 */
 	protected EList<AbstractNomination> nominations;
+
+	/**
+	 * The cached value of the '{@link #getNominationParameters() <em>Nomination Parameters</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNominationParameters()
+	 * @generated
+	 * @ordered
+	 */
+	protected NominationsParameters nominationParameters;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -112,12 +126,59 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 	 * @generated
 	 */
 	@Override
+	public NominationsParameters getNominationParameters() {
+		return nominationParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetNominationParameters(NominationsParameters newNominationParameters, NotificationChain msgs) {
+		NominationsParameters oldNominationParameters = nominationParameters;
+		nominationParameters = newNominationParameters;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS, oldNominationParameters, newNominationParameters);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setNominationParameters(NominationsParameters newNominationParameters) {
+		if (newNominationParameters != nominationParameters) {
+			NotificationChain msgs = null;
+			if (nominationParameters != null)
+				msgs = ((InternalEObject)nominationParameters).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS, null, msgs);
+			if (newNominationParameters != null)
+				msgs = ((InternalEObject)newNominationParameters).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS, null, msgs);
+			msgs = basicSetNominationParameters(newNominationParameters, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS, newNominationParameters, newNominationParameters));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_SPECS:
 				return ((InternalEList<?>)getNominationSpecs()).basicRemove(otherEnd, msgs);
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS:
 				return ((InternalEList<?>)getNominations()).basicRemove(otherEnd, msgs);
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS:
+				return basicSetNominationParameters(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -134,6 +195,8 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 				return getNominationSpecs();
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS:
 				return getNominations();
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS:
+				return getNominationParameters();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -155,6 +218,9 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 				getNominations().clear();
 				getNominations().addAll((Collection<? extends AbstractNomination>)newValue);
 				return;
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS:
+				setNominationParameters((NominationsParameters)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -173,6 +239,9 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS:
 				getNominations().clear();
 				return;
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS:
+				setNominationParameters((NominationsParameters)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -189,6 +258,8 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 				return nominationSpecs != null && !nominationSpecs.isEmpty();
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS:
 				return nominations != null && !nominations.isEmpty();
+			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS:
+				return nominationParameters != null;
 		}
 		return super.eIsSet(featureID);
 	}

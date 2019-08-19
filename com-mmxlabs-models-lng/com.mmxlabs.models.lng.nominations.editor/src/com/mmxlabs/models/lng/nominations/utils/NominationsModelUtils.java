@@ -198,6 +198,9 @@ public class NominationsModelUtils {
 	
 	private static List<AbstractNomination> generateNominations(final LNGScenarioModel scenarioModel, LocalDate startDate, LocalDate endDate) {
 		
+		if (startDate == null) startDate = LocalDate.MIN;
+		if (endDate == null) endDate = LocalDate.MAX;
+		
 		// Get the nominations model, if none, we have no nomination specs, so we can't generate any nominations, so return an empty list.
 		final NominationsModel nominationsModel = scenarioModel.getNominationsModel();
 		if (nominationsModel == null) {

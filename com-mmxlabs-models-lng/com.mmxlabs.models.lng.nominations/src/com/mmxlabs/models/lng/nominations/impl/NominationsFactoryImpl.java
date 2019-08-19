@@ -66,6 +66,7 @@ public class NominationsFactoryImpl extends EFactoryImpl implements NominationsF
 			case NominationsPackage.SLOT_NOMINATION: return createSlotNomination();
 			case NominationsPackage.CONTRACT_NOMINATION: return createContractNomination();
 			case NominationsPackage.CONTRACT_NOMINATION_SPEC: return createContractNominationSpec();
+			case NominationsPackage.NOMINATIONS_PARAMETERS: return createNominationsParameters();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -158,6 +159,17 @@ public class NominationsFactoryImpl extends EFactoryImpl implements NominationsF
 	public ContractNominationSpec createContractNominationSpec() {
 		ContractNominationSpecImpl contractNominationSpec = new ContractNominationSpecImpl();
 		return contractNominationSpec;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NominationsParameters createNominationsParameters() {
+		NominationsParametersImpl nominationsParameters = new NominationsParametersImpl();
+		return nominationsParameters;
 	}
 
 	/**

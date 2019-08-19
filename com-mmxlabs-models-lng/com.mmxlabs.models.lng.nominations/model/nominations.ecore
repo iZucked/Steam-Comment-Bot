@@ -7,6 +7,8 @@
         eType="#//AbstractNominationSpec" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nominations" upperBound="-1"
         eType="#//AbstractNomination" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nominationParameters" eType="#//NominationsParameters"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AbstractNominationSpec" abstract="true"
       eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
@@ -48,5 +50,9 @@
   <eClassifiers xsi:type="ecore:EEnum" name="Side">
     <eLiterals name="Buy"/>
     <eLiterals name="Sell" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NominationsParameters">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
   </eClassifiers>
 </ecore:EPackage>
