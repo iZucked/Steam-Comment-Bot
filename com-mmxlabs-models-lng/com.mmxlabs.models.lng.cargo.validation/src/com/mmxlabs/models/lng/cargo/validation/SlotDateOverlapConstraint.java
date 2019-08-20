@@ -25,8 +25,10 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -77,6 +79,13 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 					// The combinations below are OK, let them pass
 					if (overlapSlotType == SlotType.DES_Buy && slotType == SlotType.DES_Sale || (overlapSlotType == SlotType.DES_Sale && slotType == SlotType.DES_Buy)
 							|| (overlapSlotType == SlotType.FOB_Sale && slotType == SlotType.FOB_Buy) || (overlapSlotType == SlotType.FOB_Buy && slotType == SlotType.FOB_Sale)) {
+						ii.remove();
+						continue;
+					}
+					
+					// Non-divertible FOB purchase and DES sale slots don't need to be validated
+					if (slotType == SlotType.DES_Sale && overlapSlotType == SlotType.FOB_Sale || overlapSlotType == SlotType.DES_Sale && slotType == SlotType.FOB_Sale 
+							|| slotType == SlotType.FOB_Buy && overlapSlotType == SlotType.DES_Buy || slotType == SlotType.DES_Buy && overlapSlotType == SlotType.FOB_Buy) {
 						ii.remove();
 						continue;
 					}

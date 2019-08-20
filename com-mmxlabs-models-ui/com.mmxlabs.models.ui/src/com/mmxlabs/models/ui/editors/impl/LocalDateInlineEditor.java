@@ -32,7 +32,7 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
-		if (formattedText.getControl() == null || formattedText.getControl().isDisposed()) {
+		if (formattedText == null || formattedText.getControl() == null || formattedText.getControl().isDisposed()) {
 			return;
 		}
 		formattedText.setValue(value);
@@ -62,7 +62,7 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void setControlsEnabled(final boolean enabled) {
-
+		if (formattedText == null) return;
 		final Text control = formattedText.getControl();
 		if (control == null || control.isDisposed()) {
 			return;
