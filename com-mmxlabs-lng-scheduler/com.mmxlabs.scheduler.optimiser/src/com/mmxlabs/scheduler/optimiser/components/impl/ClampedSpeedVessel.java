@@ -91,6 +91,11 @@ public class ClampedSpeedVessel implements IVessel {
 	public int getWarmupTime() {
 		return vessel.getWarmupTime();
 	}
+	
+	@Override
+	public int getPurgeTime() {
+		return vessel.getPurgeTime();
+	}
 
 	@Override
 	public long getCooldownVolume() {

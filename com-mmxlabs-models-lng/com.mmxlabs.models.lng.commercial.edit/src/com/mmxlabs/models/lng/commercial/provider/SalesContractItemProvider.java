@@ -50,6 +50,7 @@ public class SalesContractItemProvider
 			addMinCvValuePropertyDescriptor(object);
 			addMaxCvValuePropertyDescriptor(object);
 			addPurchaseDeliveryTypePropertyDescriptor(object);
+			addFobSaleDealTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -121,6 +122,28 @@ public class SalesContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Fob Sale Deal Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFobSaleDealTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SalesContract_fobSaleDealType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SalesContract_fobSaleDealType_feature", "_UI_SalesContract_type"),
+				 CommercialPackage.Literals.SALES_CONTRACT__FOB_SALE_DEAL_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns SalesContract.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -160,6 +183,7 @@ public class SalesContractItemProvider
 			case CommercialPackage.SALES_CONTRACT__MIN_CV_VALUE:
 			case CommercialPackage.SALES_CONTRACT__MAX_CV_VALUE:
 			case CommercialPackage.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE:
+			case CommercialPackage.SALES_CONTRACT__FOB_SALE_DEAL_TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

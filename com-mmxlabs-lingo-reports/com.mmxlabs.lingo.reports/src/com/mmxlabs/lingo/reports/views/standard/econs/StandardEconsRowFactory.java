@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.views.standard.econs;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -40,6 +41,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
@@ -58,6 +60,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		boolean containsCharterOut = false;
 		boolean containsCharterLength = false;
 		boolean containsCooldown = false;
+		boolean containsPurge = false;
 		if (targets == null || targets.isEmpty()) {
 			containsCargo = true;
 		} else {
@@ -68,7 +71,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 					for (final Event evt : cargoAllocation.getEvents()) {
 						if (evt instanceof Cooldown) {
 							containsCooldown = true;
-							break;
+						}
+						if (evt instanceof Purge) {
+							containsPurge = true;
 						}
 					}
 				}
@@ -84,7 +89,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 					for (final Event evt : vesselEventVisit.getEvents()) {
 						if (evt instanceof Cooldown) {
 							containsCooldown = true;
-							break;
+						}
+						if (evt instanceof Purge) {
+							containsPurge = true;
 						}
 					}
 				}
@@ -118,8 +125,11 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			};
 			rows.add(row);
 		}
+		if (containsPurge) {
+			rows.add(createRow(92, "    Purge Cost", true, "$", "", true, createShippingPurgeCosts(options, true)));
+		}
 		if (containsCooldown) {
-			rows.add(createRow(92, "    Cooldown Cost", true, "$", "", true, createShippingCooldownCosts(options, true)));
+			rows.add(createRow(93, "    Cooldown Cost", true, "$", "", true, createShippingCooldownCosts(options, true)));
 		}
 		if (containsCharterOut) {
 			rows.add(createRow(100, "Charter Revenue", true, "$", "", false, createShippingCharterRevenue(options, false)));
@@ -554,11 +564,27 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::genericShippingCharterCostsHelper));
 	}
 
-	private @NonNull ICellRenderer createShippingCooldownCosts(final EconsOptions options, final boolean isCost) {
+	private @NonNull ICellRenderer createShippingPurgeCosts(final EconsOptions options, final boolean isCost) {
 		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
 			if (object instanceof EventGrouping) {
 				final EventGrouping eventGrouping = (EventGrouping) object;
 
+				for (final Event evt : eventGrouping.getEvents()) {
+					if (evt instanceof Purge) {
+						final Purge purge = (Purge) evt;
+						final int cost = purge.getCost();
+						return cost;
+					}
+				}
+			}
+			return 0;
+		}));
+	}
+	private @NonNull ICellRenderer createShippingCooldownCosts(final EconsOptions options, final boolean isCost) {
+		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
+			if (object instanceof EventGrouping) {
+				final EventGrouping eventGrouping = (EventGrouping) object;
+				
 				for (final Event evt : eventGrouping.getEvents()) {
 					if (evt instanceof Cooldown) {
 						final Cooldown cooldown = (Cooldown) evt;
@@ -651,6 +677,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			} else if (object instanceof MarketAllocation) {
 				final MarketAllocation marketAllocation = (MarketAllocation) object;
 				return helper.apply(marketAllocation);
+			} else if (object instanceof VesselEventVisit) {
+				final VesselEventVisit eventVisit = (VesselEventVisit) object;
+				return helper.apply(eventVisit);
 			} else if (object instanceof CargoAllocationPair) {
 				return getFromCargoAllocationPair(Double.class, helper, object);
 			} else if (object instanceof List<?>) {
@@ -712,6 +741,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		} else if (object instanceof CharterLengthEvent) {
 			sequence = ((CharterLengthEvent) object).getSequence();
 			events = ((CharterLengthEvent) object).getEvents();
+		} else if (object instanceof Purge) {
+			sequence = ((Purge) object).getSequence();
+			events = Collections.singletonList((Purge) object);
 		}
 
 		if (sequence == null || events == null) {
@@ -742,6 +774,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				shippingCost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
 			}
 
+			if (event instanceof Purge) {
+				final Purge purge = (Purge) event;
+				shippingCost += purge.getCost();
+			}
 			if (event instanceof Cooldown) {
 				final Cooldown cooldown = (Cooldown) event;
 				shippingCost += cooldown.getCost();

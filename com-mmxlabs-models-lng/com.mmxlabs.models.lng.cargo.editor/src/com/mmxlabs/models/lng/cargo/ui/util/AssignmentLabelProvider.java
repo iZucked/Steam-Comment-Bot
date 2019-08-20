@@ -61,8 +61,7 @@ public class AssignmentLabelProvider {
 		}
 		if(showVolume) {
 			return String.format("%s (%dk) (%s)", charterInMarket.getName(), capacity / 1000, type);
-		}
-		else {
+		} else {
 			return String.format("%s (%s)", charterInMarket.getName(), type);
 		}
 	}

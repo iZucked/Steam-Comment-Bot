@@ -4,38 +4,18 @@
  */
 package com.mmxlabs.models.lng.scenario.importWizards.pricingcalendars;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.handlers.HandlerUtil;
 
+import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportHandler;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
-public class ImportPricingCalendarsHandler extends AbstractHandler {
+public class ImportPricingCalendarsHandler extends AbstractImportHandler {
 
 	@Override
-	public Object execute(final ExecutionEvent event) throws ExecutionException {
-
-		final IWorkbenchWindow activeWorkbenchWindow = HandlerUtil.getActiveWorkbenchWindow(event);
-		if (activeWorkbenchWindow == null) {
-			// action has been disposed
-			return null;
-		}
-
-		final Shell shell = HandlerUtil.getActiveShell(event);
-		final IScenarioServiceEditorInput editor = (IScenarioServiceEditorInput) HandlerUtil.getActiveEditorInput(event);
-
+	public IWizard getImportWizard(final IScenarioServiceEditorInput editor, final IWorkbenchWindow activeWorkbenchWindow) {
 		final ImportPricingCalendarsWizard wizard = new ImportPricingCalendarsWizard(editor != null ? editor.getScenarioInstance() : null, "Import pricing calendars");
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
-
-		final WizardDialog dialog = new WizardDialog(shell, wizard);
-		dialog.create();
-		dialog.open();
-
-		return null;
+		return wizard;
 	}
-
 }

@@ -94,8 +94,8 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 			slot.setMaxQuantity(1000);
 		}
 
-		final ZonedDateTime loadDate = cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
-		final ZonedDateTime lastDischargeDate = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final ZonedDateTime loadDate = cargo.getSlots().get(0).getSchedulingTimeWindow().getStart();
+		final ZonedDateTime lastDischargeDate = cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd();
 
 		final ZonedDateTime startDate = loadDate.minusHours(2 * getTravelTime(originPort, loadPort, RouteOption.DIRECT, (int) maxSpeed));
 		final ZonedDateTime endDate = lastDischargeDate.plusHours(2 * getTravelTime(dischargePort2, originPort, RouteOption.DIRECT, (int) maxSpeed));

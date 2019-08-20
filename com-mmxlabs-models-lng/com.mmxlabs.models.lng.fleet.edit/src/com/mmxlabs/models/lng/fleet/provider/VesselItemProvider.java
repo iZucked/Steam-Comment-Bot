@@ -65,6 +65,7 @@ public class VesselItemProvider
 			addSafetyHeelPropertyDescriptor(object);
 			addCoolingVolumePropertyDescriptor(object);
 			addWarmingTimePropertyDescriptor(object);
+			addPurgeTimePropertyDescriptor(object);
 			addMinSpeedPropertyDescriptor(object);
 			addMaxSpeedPropertyDescriptor(object);
 			addInaccessiblePortsOverridePropertyDescriptor(object);
@@ -338,6 +339,28 @@ public class VesselItemProvider
 				 getString("_UI_Vessel_warmingTime_feature"),
 				 getString("_UI_Vessel_warmingTime_description"),
 				 FleetPackage.Literals.VESSEL__WARMING_TIME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Purge Time feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPurgeTimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_purgeTime_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_purgeTime_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__PURGE_TIME,
 				 true,
 				 false,
 				 false,
@@ -777,6 +800,7 @@ public class VesselItemProvider
 			case FleetPackage.VESSEL__SAFETY_HEEL:
 			case FleetPackage.VESSEL__COOLING_VOLUME:
 			case FleetPackage.VESSEL__WARMING_TIME:
+			case FleetPackage.VESSEL__PURGE_TIME:
 			case FleetPackage.VESSEL__MIN_SPEED:
 			case FleetPackage.VESSEL__MAX_SPEED:
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS_OVERRIDE:

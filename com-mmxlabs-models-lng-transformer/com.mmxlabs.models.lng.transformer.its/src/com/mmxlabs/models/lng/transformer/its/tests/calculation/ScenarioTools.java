@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -533,7 +534,7 @@ public class ScenarioTools {
 
 				System.err.println("\tArrive: " + sv.getStart() + ",  Depart: " + sv.getEnd());
 				System.err.println(
-						"\tWindowStart: " + sv.getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime() + ",  WindowEnd: " + sv.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime());
+						"\tWindowStart: " + sv.getSlotAllocation().getSlot().getSchedulingTimeWindow().getStart() + ",  WindowEnd: " + sv.getSlotAllocation().getSlot().getSchedulingTimeWindow().getEnd());
 
 				System.err.println("\tDuration: " + sv.getDuration() + ", " + description + volume);
 				ScenarioTools.printFuel(sv.getFuels());
@@ -545,6 +546,12 @@ public class ScenarioTools {
 					System.err.println("\tHire cost: " + sv.getCharterCost());
 
 				}
+			} else if (e instanceof Purge) {
+				final Purge cd = (Purge) e;
+				System.err.println("Purge:");
+				System.err.println("\tDuration: " + cd.getDuration());
+				System.err.println("\tStart: " + cd.getStart() + ", End: " + cd.getEnd());
+				ScenarioTools.printFuel(cd.getFuels());
 			} else if (e instanceof Cooldown) {
 				final Cooldown cd = (Cooldown) e;
 				System.err.println("Cooldown:");

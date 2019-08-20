@@ -103,8 +103,8 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 		// setup transfer slots as sts
 		// loadTransferSlot.setTransferTo(dischargeTransferSlot);
 
-		final ZonedDateTime loadDate = loadCargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
-		final ZonedDateTime transferDate = loadCargo.getSlots().get(1).getWindowStartWithSlotOrPortTime();
+		final ZonedDateTime loadDate = loadCargo.getSlots().get(0).getSchedulingTimeWindow().getStart();
+		final ZonedDateTime transferDate = loadCargo.getSlots().get(1).getSchedulingTimeWindow().getStart();
 		// final Date dischargeDate = dischargeCargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 
 		// vessel one will start before the load date and end before the discharge date

@@ -96,10 +96,8 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 			
 			if (this.pricingModel == null) {
 				pricingModel = ScenarioModelUtil.getPricingModel(getScenarioDataProvider());
-				pricingModel.eAdapters().add(calendarListener);
-			} else {
-				pricingModel.eAdapters().add(calendarListener);
 			}
+			pricingModel.eAdapters().add(calendarListener);
 			final List<HolidayCalendar> holidays = pricingModel.getHolidayCalendars();
 			calendarSelectionViewer.setContentProvider(new ArrayContentProvider());
 			calendarSelectionViewer.setLabelProvider(new LabelProvider() {

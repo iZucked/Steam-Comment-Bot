@@ -65,6 +65,7 @@ public class VesselGroupImpl extends AVesselSetImpl<Vessel> implements VesselGro
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Vessel> getVessels() {
 		if (vessels == null) {
 			vessels = new EObjectResolvingEList<Vessel>(Vessel.class, this, FleetPackage.VESSEL_GROUP__VESSELS);

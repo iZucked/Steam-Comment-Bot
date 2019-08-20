@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getNotionalPort <em>Notional Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getDaysBuffer <em>Days Buffer</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getDESSalesMarket()
@@ -50,6 +51,33 @@ public interface DESSalesMarket extends SpotMarket {
 	 * @generated
 	 */
 	void setNotionalPort(Port value);
+
+	/**
+	 * Returns the value of the '<em><b>Days Buffer</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Days Padding</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Days Buffer</em>' attribute.
+	 * @see #setDaysBuffer(int)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getDESSalesMarket_DaysBuffer()
+	 * @model default="0"
+	 * @generated
+	 */
+	int getDaysBuffer();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getDaysBuffer <em>Days Buffer</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Days Buffer</em>' attribute.
+	 * @see #getDaysBuffer()
+	 * @generated
+	 */
+	void setDaysBuffer(int value);
 
 } // end of  DESSalesMarket
 

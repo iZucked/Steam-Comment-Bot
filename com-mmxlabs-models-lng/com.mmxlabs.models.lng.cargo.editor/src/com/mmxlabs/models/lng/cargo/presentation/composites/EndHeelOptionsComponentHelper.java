@@ -102,12 +102,10 @@ public class EndHeelOptionsComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the useLastHeelPrice feature on EndHeelOptions
 	 *
-	 * @generated NOT
+	 * @generated
 	 */
 	protected void add_useLastHeelPriceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICE_HEEL_ON_LAST_EVENT)) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE));
-		}
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE));
 	}
 
 	/**

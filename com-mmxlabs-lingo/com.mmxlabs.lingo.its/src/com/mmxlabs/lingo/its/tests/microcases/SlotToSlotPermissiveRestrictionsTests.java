@@ -29,6 +29,8 @@ import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
@@ -183,7 +185,7 @@ public class SlotToSlotPermissiveRestrictionsTests extends AbstractMicroTestCase
 		final List<Slot> slots = new ArrayList<Slot>();
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeDESPurchase("L", true, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
+				.makeDESPurchase("L", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
 				.with(s -> s.setShippingDaysRestriction(60)) //
 				.with(s -> slots.add(s)).build() //
 				// Discharge
@@ -215,7 +217,7 @@ public class SlotToSlotPermissiveRestrictionsTests extends AbstractMicroTestCase
 		final List<Slot> slots = new ArrayList<Slot>();
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeDESPurchase("L", true, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
+				.makeDESPurchase("L", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
 				.with(s -> s.setShippingDaysRestriction(60)) //
 				.with(s -> slots.add(s)).build() //
 				// Discharge
@@ -296,7 +298,7 @@ public class SlotToSlotPermissiveRestrictionsTests extends AbstractMicroTestCase
 				.makeMarketFOBPurchase("L", spotMarket, YearMonth.of(2017, 1), portFinder.findPort("Point Fortin")) //
 				.with(s -> slots.add(s)).build() //
 				// Discharge
-				.makeFOBSale("D", true, LocalDate.of(2017, 1, 13), portFinder.findPort("Sakai"), null, entity, "7", null)//
+				.makeFOBSale("D", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2017, 1, 13), portFinder.findPort("Sakai"), null, entity, "7", null)//
 				.with(s -> slots.add(s)).build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -371,7 +373,7 @@ public class SlotToSlotPermissiveRestrictionsTests extends AbstractMicroTestCase
 		final List<Slot> slots = new ArrayList<Slot>();
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeDESPurchase("L", true, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
+				.makeDESPurchase("L", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
 				.with(s -> s.setShippingDaysRestriction(60)) //
 				.with(s -> slots.add(s))//
 				.build() //

@@ -7,7 +7,7 @@ Fragment-Host: com.mmxlabs.scheduler.optimiser
 Bundle-SymbolicName: com.mmxlabs.scheduler.optimiser.tests
 Automatic-Module-Name: com.mmxlabs.scheduler.optimiser.tests
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.6.18.qualifier
+Bundle-Version: 4.7.7.qualifier
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.mockito.mockito-core;bundle-version="1.9.5",
  org.junit.jupiter.api;bundle-version="5.0.0",

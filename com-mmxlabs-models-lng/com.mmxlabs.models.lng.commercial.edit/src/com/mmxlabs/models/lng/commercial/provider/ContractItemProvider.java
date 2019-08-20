@@ -77,7 +77,6 @@ public class ContractItemProvider
 			addContractTypePropertyDescriptor(object);
 			addPricingEventPropertyDescriptor(object);
 			addCancellationExpressionPropertyDescriptor(object);
-			addDivertiblePropertyDescriptor(object);
 			addShippingDaysRestrictionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -524,28 +523,6 @@ public class ContractItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Divertible feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDivertiblePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Contract_divertible_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_divertible_feature", "_UI_Contract_type"),
-				 CommercialPackage.Literals.CONTRACT__DIVERTIBLE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Shipping Days Restriction feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -785,7 +762,6 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 			case CommercialPackage.CONTRACT__PRICING_EVENT:
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
-			case CommercialPackage.CONTRACT__DIVERTIBLE:
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -65,6 +64,7 @@ import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -74,6 +74,8 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -351,7 +353,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			{
 				if (element instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) element;
-					final Slot slot = ((SlotVisit) element).getSlotAllocation().getSlot();
+					final Slot<?> slot = ((SlotVisit) element).getSlotAllocation().getSlot();
 					if (slot != null) {
 						final Contract contract = slot.getContract();
 						if (contract != null) {
@@ -392,10 +394,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			final String end = dateToString(event.getEnd());
 			tt.append("Start: " + start + "\n");
 			tt.append("End: " + end + "\n");
-			final int days = event.getDuration() / 24;
-			final int hours = event.getDuration() % 24;
-			final String durationTime = days + " day" + (days > 1 || days == 0 ? "s" : "") + ", " + hours + " hour" + (hours > 1 || hours == 0 ? "s" : "");
-		
+			final String durationTime = convertHoursToDaysHoursString(event.getDuration());
+
 			// build event specific text
 			if (element instanceof Journey) {
 				eventText.append("Travel time: " + durationTime + " \n");
@@ -455,23 +455,23 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				}
 			} else if (element instanceof SlotVisit) {
 				final SlotVisit slotVisit = (SlotVisit) element;
-				final Slot slot = ((SlotVisit) element).getSlotAllocation().getSlot();
+				final Slot<?> slot = ((SlotVisit) element).getSlotAllocation().getSlot();
 				if (slot != null) {
 					eventText.append("Time in port: " + durationTime + " \n");
 					// eventText.append("Window Start: " + dateToString(slot.getWindowStartWithSlotOrPortTime()) + "\n");
-					eventText.append("Window End: " + dateToString(slot.getWindowEndWithSlotOrPortTime()) + "\n");
+					eventText.append("Window End: " + dateToString(slot.getSchedulingTimeWindow().getEnd()) + "\n");
 					eventText.append(" \n");
 				}
 				boolean checkLateness = true;
 				// Do not check divertible slots
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
-					if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
+					if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 						checkLateness = false;
 					}
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
-					if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateDivertible()) {
+					if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
 						checkLateness = false;
 					}
 				}
@@ -497,6 +497,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			} else if (element instanceof Idle) {
 				final Idle idle = (Idle) element;
 				eventText.append("Idle time: " + durationTime);
+				if (idle.getContingencyHours() > 0) {
+					String contigencyTimeStr = convertHoursToDaysHoursString(idle.getContingencyHours());
+					eventText.append("\n(Contingency idle time: " + contigencyTimeStr + ")");
+				}
 				for (final FuelQuantity fq : idle.getFuels()) {
 					eventText.append(String.format("\n%s\n", mapFuel(fq.getFuel())));
 				}
@@ -540,6 +544,18 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		}
 		return null;
 
+	}
+
+	/**
+	 * Split nOfHours into the number of days and/or hours as a user readable String.
+	 * @param nOfHours
+	 * @return a String
+	 */
+	private String convertHoursToDaysHoursString(int nOfHours) {
+		final int days = nOfHours / 24;
+		final int hours = nOfHours % 24;
+		final String durationTime = days + " day" + (days > 1 || days == 0 ? "s" : "") + ", " + hours + " hour" + (hours > 1 || hours == 0 ? "s" : "");
+		return durationTime;
 	}
 
 	@Override
@@ -594,7 +610,13 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			}
 			return (port == null) ? "" : ("At " + port);
 		} else if (element instanceof Event) {
-			return (port == null) ? "" : ("At " + port) + (element instanceof Cooldown ? " (Cooldown)" : ""); // + displayTypeName;
+			String base = (port == null) ? "" : ("At " + port);
+			if (element instanceof Cooldown) {
+				return base + " (Cooldown)";
+			} else if (element instanceof Purge) {
+				return base + " (Purge)";
+			}
+			return base;
 		} else if (element instanceof SlotVisit) {
 			final SlotVisit sv = (SlotVisit) element;
 			return (port == null) ? "" : ("At " + port + " ") + (sv.getSlotAllocation().getSlot() instanceof LoadSlot ? "(Load)" : "(Discharge)"); // + displayTypeName;

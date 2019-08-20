@@ -138,6 +138,7 @@ public class VesselsToScenarioCopier {
 			createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__SAFETY_HEEL, upstreamVessel.getSafetyHeel());
 			createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__COOLING_VOLUME, upstreamVessel.getCoolingVolume());
 			createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__WARMING_TIME, upstreamVessel.getWarmingTime());
+			createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__PURGE_TIME, upstreamVessel.getPurgeTime());
 
 			createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__PILOT_LIGHT_RATE, upstreamVessel.getPilotLightRate());
 			createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__MAX_SPEED, upstreamVessel.getMaxSpeed());

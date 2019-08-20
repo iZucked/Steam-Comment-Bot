@@ -75,17 +75,18 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/contractType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/pricingEvent"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/cancellationExpression"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/divertible"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/shippingDaysRestriction"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//SalesContract">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//SalesContract/minCvValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//SalesContract/maxCvValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//SalesContract/PurchaseDeliveryType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//SalesContract/fobSaleDealType"/>
     </genClasses>
     <genClasses image="false" ecoreClass="commercial.ecore#//PurchaseContract">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//PurchaseContract/cargoCV"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//PurchaseContract/salesDeliveryType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//PurchaseContract/desPurchaseDealType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//PurchaseContract/cargoCV"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//TaxRate">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//TaxRate/date"/>

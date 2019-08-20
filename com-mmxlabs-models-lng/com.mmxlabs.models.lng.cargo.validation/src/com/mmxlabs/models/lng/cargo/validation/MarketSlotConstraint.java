@@ -133,6 +133,15 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowFlex());
 					failures.add(dsd);
 				}
+				if (slot instanceof SpotLoadSlot) {
+					SpotLoadSlot spotLoadSlot = (SpotLoadSlot) slot;
+					if (spotLoadSlot.isSchedulePurge()) {
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should not have a purge scheduled."));
+						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getLoadSlot_SchedulePurge());
+						failures.add(dsd);
+					}
+				}
 				if (!extraContext.isRelaxedChecking()) {
 					if (slot.getWindowStart() != null && slot.getWindowStart().getDayOfMonth() != 1) {
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
@@ -250,7 +259,7 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 			if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				if (lngScenarioModel.getPromptPeriodStart() != null) {
-					final ZonedDateTime windowEndWithSlotOrPortTime = slot.getWindowEndWithSlotOrPortTime();
+					final ZonedDateTime windowEndWithSlotOrPortTime = slot.getSchedulingTimeWindow().getEnd();
 					if (windowEndWithSlotOrPortTime.isBefore(lngScenarioModel.getPromptPeriodStart().atStartOfDay(ZoneId.from(windowEndWithSlotOrPortTime)))) {
 
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(

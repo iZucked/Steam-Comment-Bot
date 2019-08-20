@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
 import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -29,6 +30,7 @@ import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;
+import com.mmxlabs.models.lng.pricing.ui.autocomplete.PriceAttributeManipulator;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
@@ -63,10 +65,12 @@ public class BallastBonusContractTableCreator {
 			}
 		});
 
-		eViewer.addTypicalColumn("Lump sum ($)", new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getLumpSumBallastBonusContractLine_PriceExpression(), sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("Lump sum ($)", new PriceAttributeManipulator(
+				CommercialPackage.eINSTANCE.getLumpSumBallastBonusContractLine_PriceExpression(),
+				sel.getEditingDomain()) {
 
 			@Override
-			public void runSetCommand(final Object object, final Object value) {
+			public void runSetCommand(final Object object, final String value) {
 				if (object instanceof LumpSumBallastBonusContractLine) {
 					super.runSetCommand(object, value);
 

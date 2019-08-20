@@ -102,11 +102,11 @@ public class Exposures {
 	public enum ValueMode {
 		VOLUME_MMBTU, VOLUME_TBTU, VOLUME_NATIVE, NATIVE_VALUE
 	}
-	
+
 	public enum AggregationMode {
 		BY_MONTH_NO_TOTAL, BY_MONTH, BY_DEALSET
 	}
-	
+
 	public static void calculateExposures(final @NonNull IScenarioDataProvider scenarioDataProvider, final @Nullable Schedule schedule) {
 		ServiceHelper.withOptionalServiceConsumer(IExposuresCustomiser.class, p -> {
 			if (p == null) {
@@ -117,23 +117,23 @@ public class Exposures {
 		});
 	}
 
-	public static void calculateExposures(final @NonNull IScenarioDataProvider scenarioDataProvider, final @Nullable Schedule schedule,//
+	public static void calculateExposures(final @NonNull IScenarioDataProvider scenarioDataProvider, final @Nullable Schedule schedule, //
 			final IExposuresCustomiser exposuresCustomiser) {
 
 		if (schedule == null) {
 			return;
 		}
-		
+
 		final ModelMarketCurveProvider mmCurveProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.MARKET_CURVES, ModelMarketCurveProvider.class);
 
 		@NonNull
 		final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		final LocalDate promptStart = scenarioModel.getPromptPeriodStart();
-		
+
 		@NonNull
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
 		final LookupData lookupData = LookupData.createLookupData(pricingModel);
-		
+
 		final CalendarHandler calendarHandler = new CalendarHandler(scenarioDataProvider);
 
 		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
@@ -141,12 +141,12 @@ public class Exposures {
 				slotAllocation.getExposures().clear();
 
 				int volume = slotAllocation.getEnergyTransferred();
-				final Slot slot = slotAllocation.getSlot();
+				final Slot<?> slot = slotAllocation.getSlot();
 
 				if (slot == null) {
 					continue;
 				}
-				
+
 				final String priceExpression;
 				if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICE_EXPRESSION)) {
 					priceExpression = slot.getPriceExpression();
@@ -154,14 +154,18 @@ public class Exposures {
 					priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot, slotAllocation);
 				}
 				final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
-				final List<PricingCalendar> pcs = new ArrayList<PricingCalendar>();
-				final List<HolidayCalendar> hcs = new ArrayList<HolidayCalendar>();
-				
+				final List<PricingCalendar> pcs = new ArrayList<>();
+				final List<HolidayCalendar> hcs = new ArrayList<>();
+
 				for (AbstractYearMonthCurve curve : curves) {
 					if (curve instanceof CommodityCurve) {
 						final CommodityCurve cc = (CommodityCurve) curve;
-						if (calendarHandler.getPricingCalendar(cc) != null) pcs.add(calendarHandler.getPricingCalendar(cc));
-						if (calendarHandler.getHolidayCalendar(cc) != null) hcs.add(calendarHandler.getHolidayCalendar(cc));
+						if (calendarHandler.getPricingCalendar(cc) != null) {
+							pcs.add(calendarHandler.getPricingCalendar(cc));
+						}
+						if (calendarHandler.getHolidayCalendar(cc) != null) {
+							hcs.add(calendarHandler.getHolidayCalendar(cc));
+						}
 					}
 				}
 
@@ -170,9 +174,9 @@ public class Exposures {
 					SlotAllocation sa = exposuresCustomiser.getExposed(slotAllocation);
 					volume = sa.getEnergyTransferred();
 					if (sa.getSlotVisit().getStart().toLocalDate().isAfter(promptStart)) {
-						
+
 						final ExposureDetail physical = ScheduleFactory.eINSTANCE.createExposureDetail();
-	
+
 						physical.setDealType(DealType.PHYSICAL);
 						physical.setVolumeInMMBTU((isPurchase ? 1.0 : -1.0) * sa.getEnergyTransferred());
 						physical.setVolumeInNativeUnits((isPurchase ? 1.0 : -1.0) * sa.getEnergyTransferred());
@@ -180,7 +184,7 @@ public class Exposures {
 						physical.setVolumeUnit("mmBtu");
 						physical.setIndexName("Physical");
 						physical.setDate(YearMonth.from(sa.getSlotVisit().getStart().toLocalDate()));
-						
+
 						slotAllocation.getExposures().add(physical);
 					}
 				}
@@ -220,47 +224,53 @@ public class Exposures {
 				}
 			}
 		}
-		
-		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPEN_SLOT_EXPOSURE)) return;
+
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPEN_SLOT_EXPOSURE)) {
+			return;
+		}
 		for (final OpenSlotAllocation slotAllocation : schedule.getOpenSlotAllocations()) {
 			slotAllocation.getExposures().clear();
 			final Slot slot = slotAllocation.getSlot();
 			if (slot == null) {
 				continue;
 			}
-			final LocalDate date = slot.getWindowEndWithSlotOrPortTime().toLocalDate();
+			final LocalDate date = slot.getSchedulingTimeWindow().getEnd().toLocalDate();
 			if (date.isBefore(promptStart) || slot.getWindowStart().isBefore(promptStart)) {
 				continue;
 			}
-			
+
 			final String priceExpression;
 			if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICE_EXPRESSION)) {
 				priceExpression = slot.getPriceExpression();
 			} else {
 				priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot, null);
 			}
-			
+
 			final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
 			final List<PricingCalendar> pcs = new ArrayList<PricingCalendar>();
 			final List<HolidayCalendar> hcs = new ArrayList<HolidayCalendar>();
-			
+
 			for (AbstractYearMonthCurve curve : curves) {
 				if (curve instanceof CommodityCurve) {
 					final CommodityCurve cc = (CommodityCurve) curve;
-					if (calendarHandler.getPricingCalendar(cc) != null) pcs.add(calendarHandler.getPricingCalendar(cc));
-					if (calendarHandler.getHolidayCalendar(cc) != null) hcs.add(calendarHandler.getHolidayCalendar(cc));
+					if (calendarHandler.getPricingCalendar(cc) != null) {
+						pcs.add(calendarHandler.getPricingCalendar(cc));
+					}
+					if (calendarHandler.getHolidayCalendar(cc) != null) {
+						hcs.add(calendarHandler.getHolidayCalendar(cc));
+					}
 				}
 			}
 
 			final boolean isPurchase = slot instanceof LoadSlot;
 			int volume = 0;
-			
+
 			if (slot.getSlotOrDelegateVolumeLimitsUnit() == VolumeUnits.M3) {
 				double cv = 22.3;
 				if (slot instanceof LoadSlot) {
 					cv = ((LoadSlot) slot).getSlotOrDelegateCV();
 				} else if (slot instanceof DischargeSlot) {
-					cv = ((DischargeSlot)slot).getSlotOrDelegateMaxCv();
+					cv = ((DischargeSlot) slot).getSlotOrDelegateMaxCv();
 				}
 				long tempVolume = OptimiserUnitConvertor.convertToInternalVolume(slot.getSlotOrDelegateMaxQuantity());
 				int tempCV = OptimiserUnitConvertor.convertToInternalConversionFactor(cv);
@@ -269,12 +279,12 @@ public class Exposures {
 			} else {
 				volume = slot.getSlotOrDelegateMaxQuantity();
 			}
-			
+
 			final YearMonth ymDate = YearMonth.from(date);
 
 			final SeriesParser seriesParser = PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.COMMODITY);
 			int volumeValue = 0;
-			
+
 			if (seriesParser != null) {
 				final IExpression<ISeries> expression = seriesParser.parse(priceExpression);
 				final ISeries parsed = expression.evaluate();
@@ -283,7 +293,7 @@ public class Exposures {
 					volumeValue = parsed.evaluate(time).intValue();
 				}
 			}
-			
+
 			{
 				final ExposureDetail physical = ScheduleFactory.eINSTANCE.createExposureDetail();
 				physical.setDealType(DealType.PHYSICAL);
@@ -293,10 +303,10 @@ public class Exposures {
 				physical.setVolumeUnit("mmBtu");
 				physical.setIndexName("Physical");
 				physical.setDate(ymDate);
-				
+
 				slotAllocation.getExposures().add(physical);
 			}
-			
+
 			final LocalDate pricingFullDate = date;
 			if (pricingFullDate != null) {
 				final YearMonth pricingDate = YearMonth.of(pricingFullDate.getYear(), pricingFullDate.getMonth());
@@ -315,9 +325,9 @@ public class Exposures {
 				}
 			}
 		}
-			
+
 	}
-	
+
 	private static void applyProRataCorrection(List<PricingCalendar> pcs, List<HolidayCalendar> hcs, final LocalDate cutoff, final ExposureDetail exposure) {
 		final List<PricingCalendarEntry> lPce = new LinkedList<>();
 		for (final PricingCalendar pc : pcs) {
@@ -333,12 +343,12 @@ public class Exposures {
 			exposure.setNativeValue(proRataCorrection * exposure.getNativeValue());
 		}
 	}
-	
+
 	private static class CalendarHandler {
-		
+
 		private Map<CommodityCurve, PricingCalendar> pricingCalendars = new HashMap<>();
 		private Map<CommodityCurve, HolidayCalendar> holidayCalendars = new HashMap<>();
-		
+
 		public PricingCalendar getPricingCalendar(final CommodityCurve cc) {
 			return pricingCalendars.get(cc);
 		}
@@ -346,8 +356,8 @@ public class Exposures {
 		public HolidayCalendar getHolidayCalendar(final CommodityCurve cc) {
 			return holidayCalendars.get(cc);
 		}
-		
-		public CalendarHandler(final @NonNull IScenarioDataProvider scenarioDataProvider) {	
+
+		public CalendarHandler(final @NonNull IScenarioDataProvider scenarioDataProvider) {
 
 			PricingModel pm = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
 
@@ -355,7 +365,9 @@ public class Exposures {
 				if (curve instanceof CommodityCurve) {
 					final CommodityCurve cc = (CommodityCurve) curve;
 					final MarketIndex mi = cc.getMarketIndex();
-					if (mi == null) continue;
+					if (mi == null) {
+						continue;
+					}
 					if (mi.getPricingCalendar() != null) {
 						pricingCalendars.putIfAbsent(cc, mi.getPricingCalendar());
 					}
@@ -374,31 +386,31 @@ public class Exposures {
 		if (pricingCalendarEntry != null) {
 			for (LocalDate c = cutoff; c.isBefore(pricingCalendarEntry.getEnd().plusDays(1)); c = c.plusDays(1)) {
 				if (c.getDayOfWeek() != DayOfWeek.SATURDAY && c.getDayOfWeek() != DayOfWeek.SUNDAY) {
-					i+=1.0;
+					i += 1.0;
 				}
 			}
 			for (LocalDate c = pricingCalendarEntry.getStart(); c.isBefore(pricingCalendarEntry.getEnd().plusDays(1)); c = c.plusDays(1)) {
 				if (c.getDayOfWeek() != DayOfWeek.SATURDAY && c.getDayOfWeek() != DayOfWeek.SUNDAY) {
-					k+=1.0;
+					k += 1.0;
 				}
 			}
 			if (!hcs.isEmpty()) {
 				// extra holidays
 				for (final HolidayCalendar hc : hcs) {
-					for (final HolidayCalendarEntry hce: hc.getEntries()) {
+					for (final HolidayCalendarEntry hce : hc.getEntries()) {
 						if (hce.getDate().isAfter(cutoff) //
 								&& hce.getDate().isBefore(pricingCalendarEntry.getEnd())) {
-							i-=1.0;
+							i -= 1.0;
 						}
 						if (hce.getDate().isAfter(pricingCalendarEntry.getStart()) //
 								&& hce.getDate().isBefore(pricingCalendarEntry.getEnd())) {
-							k-=1.0;
+							k -= 1.0;
 						}
 					}
 				}
 			}
 		}
-		return i/k;
+		return i / k;
 	}
 
 	/**
@@ -513,16 +525,16 @@ public class Exposures {
 					if (Objects.equals(detail.getIndexName(), index.getName())) {
 						switch (mode) {
 						case VOLUME_MMBTU:
-							result.merge(detail.getDate(), detail.getVolumeInMMBTU(), (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getVolumeInMMBTU(), Double::sum);
 							break;
 						case VOLUME_TBTU:
-							result.merge(detail.getDate(), detail.getVolumeInMMBTU()/1_000_000L, (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getVolumeInMMBTU() / 1_000_000L, Double::sum);
 							break;
 						case VOLUME_NATIVE:
-							result.merge(detail.getDate(), detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getVolumeInNativeUnits(), Double::sum);
 							break;
 						case NATIVE_VALUE:
-							result.merge(detail.getDate(), detail.getNativeValue(), (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getNativeValue(), Double::sum);
 							break;
 						default:
 							throw new IllegalArgumentException();
@@ -544,16 +556,16 @@ public class Exposures {
 					if (Objects.equals(detail.getIndexName(), index.getName())) {
 						switch (mode) {
 						case VOLUME_MMBTU:
-							result.merge(detail.getDate(), detail.getVolumeInMMBTU(), (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getVolumeInMMBTU(), Double::sum);
 							break;
 						case VOLUME_TBTU:
-							result.merge(detail.getDate(), detail.getVolumeInMMBTU()/1_000_000L, (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getVolumeInMMBTU() / 1_000_000L, Double::sum);
 							break;
 						case VOLUME_NATIVE:
-							result.merge(detail.getDate(), detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getVolumeInNativeUnits(), Double::sum);
 							break;
 						case NATIVE_VALUE:
-							result.merge(detail.getDate(), detail.getNativeValue(), (a, b) -> (a + b));
+							result.merge(detail.getDate(), detail.getNativeValue(), Double::sum);
 							break;
 						default:
 							throw new IllegalArgumentException();
@@ -979,4 +991,3 @@ public class Exposures {
 		return n;
 	}
 }
-

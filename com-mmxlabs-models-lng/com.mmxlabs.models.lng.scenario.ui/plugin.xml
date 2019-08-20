@@ -215,6 +215,19 @@
                   </test>
                </visibleWhen>                  
             </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.nominations"
+                  label="Import nominations"
+                  style="push">
+ 				<visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:nominations"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>  
+            </command>
          </menuContribution>
          <menuContribution
                allPopups="false"
@@ -298,6 +311,11 @@
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.pricingcalendars.ImportPricingCalendarsHandler"
                id="com.mmxlabs.models.lng.scenario.import.wizards.pricingcalendars"
                name="Import pricing calendars from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.nominations.ImportNominationsHandler"
+               id="com.mmxlabs.models.lng.scenario.import.wizards.nominations"
+               name="Import nominations from CSV">
          </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportUnifiedCurvesHandler"

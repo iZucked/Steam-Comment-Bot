@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo;
 
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 
 /**
  * <!-- begin-user-doc -->
@@ -17,10 +18,12 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getCargoCV <em>Cargo CV</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isSchedulePurge <em>Schedule Purge</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isDESPurchase <em>DES Purchase</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom <em>Transfer From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot()
@@ -81,6 +84,33 @@ public interface LoadSlot extends Slot<PurchaseContract> {
 	 * @generated
 	 */
 	boolean isSetCargoCV();
+
+	/**
+	 * Returns the value of the '<em><b>Schedule Purge</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Schedule Purge</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Schedule Purge</em>' attribute.
+	 * @see #setSchedulePurge(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot_SchedulePurge()
+	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/featureEnablement feature='purge'"
+	 * @generated
+	 */
+	boolean isSchedulePurge();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#isSchedulePurge <em>Schedule Purge</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Schedule Purge</em>' attribute.
+	 * @see #isSchedulePurge()
+	 * @generated
+	 */
+	void setSchedulePurge(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Arrive Cold</b></em>' attribute.
@@ -247,6 +277,62 @@ public interface LoadSlot extends Slot<PurchaseContract> {
 	boolean isSetSalesDeliveryType();
 
 	/**
+	 * Returns the value of the '<em><b>Des Purchase Deal Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.DESPurchaseDealType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Des Purchase Deal Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Des Purchase Deal Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.DESPurchaseDealType
+	 * @see #isSetDesPurchaseDealType()
+	 * @see #unsetDesPurchaseDealType()
+	 * @see #setDesPurchaseDealType(DESPurchaseDealType)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot_DesPurchaseDealType()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	DESPurchaseDealType getDesPurchaseDealType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Des Purchase Deal Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.DESPurchaseDealType
+	 * @see #isSetDesPurchaseDealType()
+	 * @see #unsetDesPurchaseDealType()
+	 * @see #getDesPurchaseDealType()
+	 * @generated
+	 */
+	void setDesPurchaseDealType(DESPurchaseDealType value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetDesPurchaseDealType()
+	 * @see #getDesPurchaseDealType()
+	 * @see #setDesPurchaseDealType(DESPurchaseDealType)
+	 * @generated
+	 */
+	void unsetDesPurchaseDealType();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Des Purchase Deal Type</em>' attribute is set.
+	 * @see #unsetDesPurchaseDealType()
+	 * @see #getDesPurchaseDealType()
+	 * @see #setDesPurchaseDealType(DESPurchaseDealType)
+	 * @generated
+	 */
+	boolean isSetDesPurchaseDealType();
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
@@ -261,6 +347,14 @@ public interface LoadSlot extends Slot<PurchaseContract> {
 	 * @generated
 	 */
 	CargoDeliveryType getSlotOrDelegateDeliveryType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	DESPurchaseDealType getSlotOrDelegateDESPurchaseDealType();
 
 } // end of  LoadSlot
 

@@ -12,10 +12,12 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.ui.displaycomposites.DivertibleContractInlineEditorChangedListener;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -67,6 +69,7 @@ public class SalesContractComponentHelper extends BaseComponentHelper {
 		add_minCvValueEditor(detailComposite, topClass);
 		add_maxCvValueEditor(detailComposite, topClass);
 		add_PurchaseDeliveryTypeEditor(detailComposite, topClass);
+		add_fobSaleDealTypeEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -95,5 +98,16 @@ public class SalesContractComponentHelper extends BaseComponentHelper {
 	protected void add_PurchaseDeliveryTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE));
 //		detailComposite.addInlineEditor(new (CommercialPackage.Literals.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE));
+	}
+
+	/**
+	 * Create the editor for the fobSaleDealType feature on SalesContract
+	 *	
+	 * @generated NOT
+	 */
+	protected void add_fobSaleDealTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.SALES_CONTRACT__FOB_SALE_DEAL_TYPE);
+		editor.addNotificationChangedListener(new DivertibleContractInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
 	}
 }

@@ -54,7 +54,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getNotes <em>Notes</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isDivertible <em>Divertible</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}</li>
@@ -74,6 +73,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getNominatedVessel <em>Nominated Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isCancelled <em>Cancelled</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isWindowCounterParty <em>Window Counter Party</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot()
@@ -442,7 +442,7 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @return the value of the '<em>Window Flex</em>' attribute.
 	 * @see #setWindowFlex(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowFlex()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='-##0'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='##0'"
 	 * @generated
 	 */
 	int getWindowFlex();
@@ -1108,59 +1108,6 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	void setNotes(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Divertible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Divertible</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Divertible</em>' attribute.
-	 * @see #isSetDivertible()
-	 * @see #unsetDivertible()
-	 * @see #setDivertible(boolean)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Divertible()
-	 * @model unsettable="true"
-	 * @generated
-	 */
-	boolean isDivertible();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isDivertible <em>Divertible</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Divertible</em>' attribute.
-	 * @see #isSetDivertible()
-	 * @see #unsetDivertible()
-	 * @see #isDivertible()
-	 * @generated
-	 */
-	void setDivertible(boolean value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isDivertible <em>Divertible</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetDivertible()
-	 * @see #isDivertible()
-	 * @see #setDivertible(boolean)
-	 * @generated
-	 */
-	void unsetDivertible();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isDivertible <em>Divertible</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Divertible</em>' attribute is set.
-	 * @see #unsetDivertible()
-	 * @see #isDivertible()
-	 * @see #setDivertible(boolean)
-	 * @generated
-	 */
-	boolean isSetDivertible();
 
 	/**
 	 * Returns the value of the '<em><b>Shipping Days Restriction</b></em>' attribute.
@@ -1836,12 +1783,31 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	void setCancelled(boolean value);
 
 	/**
+	 * Returns the value of the '<em><b>Window Counter Party</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
 	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Window Counter Party</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
 	 * <!-- end-user-doc -->
-	 * @model kind="operation"
+	 * @return the value of the '<em>Window Counter Party</em>' attribute.
+	 * @see #setWindowCounterParty(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowCounterParty()
+	 * @model default="false"
 	 * @generated
 	 */
-	int getSlotOrDelegateDuration();
+	boolean isWindowCounterParty();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isWindowCounterParty <em>Window Counter Party</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Counter Party</em>' attribute.
+	 * @see #isWindowCounterParty()
+	 * @generated
+	 */
+	void setWindowCounterParty(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1874,62 +1840,6 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	VolumeUnits getSlotOrDelegateVolumeLimitsUnit();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
-	ZonedDateTime getWindowEndWithSlotOrPortTime();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
-	ZonedDateTime getWindowStartWithSlotOrPortTime();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
-	ZonedDateTime getWindowEndWithSlotOrPortTimeWithFlex();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
-	 * @generated
-	 */
-	ZonedDateTime getWindowStartWithSlotOrPortTimeWithFlex();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	int getSlotOrDelegateWindowSize();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	TimePeriod getSlotOrDelegateWindowSizeUnits();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	int getWindowSizeInHours();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1995,14 +1905,6 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @model kind="operation"
 	 * @generated
 	 */
-	boolean getSlotOrDelegateDivertible();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
 	int getSlotOrDelegateShippingDaysRestriction();
 
 	/**
@@ -2060,6 +1962,22 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	EList<AVesselSet<Vessel>> getSlotOrDelegateVesselRestrictions();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.lng.cargo.SchedulingTimeWindow"
+	 * @generated
+	 */
+	@NonNull SchedulingTimeWindow getSchedulingTimeWindow();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getSlotOrDelegateDaysBuffer();
 
 } // end of  Slot
 

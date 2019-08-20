@@ -142,6 +142,8 @@ public class FleetModelDataCommandProviderTest extends AbstractMicroTestCase {
 		checkAndUpdate(fleetModel, currentVersion, ExpectedChange.FLEET);
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, vessel, FleetPackage.Literals.VESSEL__WARMING_TIME, 1)));
 		checkAndUpdate(fleetModel, currentVersion, ExpectedChange.FLEET);
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, vessel, FleetPackage.Literals.VESSEL__PURGE_TIME, 1)));
+		checkAndUpdate(fleetModel, currentVersion, ExpectedChange.FLEET);
 
 		{
 			final BaseFuel fuel = FleetFactory.eINSTANCE.createBaseFuel();

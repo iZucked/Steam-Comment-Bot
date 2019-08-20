@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.transformer.IPostExportProcessor;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
- * {@link IPostExportProcessor} to remove duplicate slots created by the {@link PetronasRedirectionContractTransformer}
+ * {@link IPostExportProcessor} to remove duplicate slots created by the {@link RedirectionContractTransformer}
  * 
  * @author Simon Goodall
  * 
@@ -76,10 +76,11 @@ public class RedirectionPostExportProcessor implements IPostExportProcessor {
 											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_START, discharge.getWindowStart()));
 											// TODO: We may need a getSlotOrPortWindowStartTime here
 											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_START_TIME, discharge.getWindowStartTime()));
-											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_SIZE, discharge.getSlotOrDelegateWindowSize()));
-											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS, discharge.getSlotOrDelegateWindowSizeUnits()));
-											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__DURATION, discharge.getSlotOrDelegateDuration()));
-
+											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_SIZE, discharge.getWindowSize()));
+											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS, discharge.getWindowSizeUnits()));
+											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__DURATION, discharge.getDuration()));
+											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_COUNTER_PARTY, discharge.isWindowCounterParty()));
+											
 											// TODO: What about volume bounds?
 
 										}

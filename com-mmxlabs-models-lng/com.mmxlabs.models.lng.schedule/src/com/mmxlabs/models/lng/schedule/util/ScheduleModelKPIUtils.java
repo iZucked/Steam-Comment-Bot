@@ -46,6 +46,7 @@ import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.PortVisitLatenessType;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -583,7 +584,7 @@ public class ScheduleModelKPIUtils {
 	}
 
 	public enum ShippingCostType {
-		ALL, LNG_COSTS, PORT_COSTS, BUNKER_COSTS, CANAL_COSTS, COOLDOWN_COSTS, HIRE_COSTS, OTHER_COSTS, HEEL_COST, HEEL_REVENUE, //
+		ALL, LNG_COSTS, PORT_COSTS, BUNKER_COSTS, CANAL_COSTS, COOLDOWN_COSTS, PURGE_COSTS, HIRE_COSTS, OTHER_COSTS, HEEL_COST, HEEL_REVENUE, //
 		HOURS // Not included in all
 	}
 
@@ -626,6 +627,12 @@ public class ScheduleModelKPIUtils {
 
 					if (costType == ShippingCostType.ALL || costType == ShippingCostType.COOLDOWN_COSTS) {
 						total += cooldown.getCost();
+					}
+				} else if (event instanceof Purge) {
+					final Purge purge = (Purge) event;
+
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.PURGE_COSTS) {
+						total += purge.getCost();
 					}
 				} else if (event instanceof GeneratedCharterOut) {
 					final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) event;

@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.port.util.PortModelBuilder;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
@@ -102,7 +103,7 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "4") //
 				.build() //
 
-				.makeFOBSale("D2", false, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //
+				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //
 				.withOptional(true) //
 				.build() //
 
@@ -182,7 +183,7 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "4") //
 				.build() //
 
-				.makeFOBSale("D2", false, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //
+				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //
 				.withOptional(true) //
 				.build() //
 
@@ -244,7 +245,7 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "4") //
 				.build() //
 
-				.makeFOBSale("D2", false, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //
+				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //
 				.withOptional(true) //
 				.build() //
 
@@ -293,7 +294,7 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "4") //
 				.build() //
 
-				.makeFOBSale("D2", false, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //
+				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //
 				.withOptional(true) //
 				.build() //
 

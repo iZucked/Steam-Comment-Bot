@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 
 /**
  * Test cases to make sure "shipping only" mode does not cause wiring changes.
@@ -30,7 +31,7 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", false, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "5", null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "5", null) //
 				.withOptional(true) //
 
 				.build() //
@@ -43,7 +44,7 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 		Slot load1 = cargo1.getSlots().get(0);
 		Slot discharge1 = cargo1.getSlots().get(1);
 
-		final Slot load2 = cargoModelBuilder.makeDESPurchase("L2", false, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "1", null, null) //
+		final Slot load2 = cargoModelBuilder.makeDESPurchase("L2", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "1", null, null) //
 				.withOptional(true) //
 				.build();
 
@@ -64,7 +65,7 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", false, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "5", null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "5", null) //
 				.withOptional(true) //
 
 				.build() //
@@ -77,7 +78,7 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 		Slot load1 = cargo1.getSlots().get(0);
 		Slot discharge1 = cargo1.getSlots().get(1);
 
-		final Slot load2 = cargoModelBuilder.makeDESPurchase("L2", false, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "1", null, null) //
+		final Slot load2 = cargoModelBuilder.makeDESPurchase("L2", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "1", null, null) //
 				.withOptional(true) //
 				.build();
 		evaluateWithLSOTest(true, plan -> plan.getUserSettings().setShippingOnly(true), null, scenarioRunner -> {
@@ -95,7 +96,7 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 
 		// Create cargo 1, cargo 2
-		cargoModelBuilder.makeDESPurchase("L1", false, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "5", null, null) //
+		cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "5", null, null) //
 				.build(); //
 
 		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "7") //
@@ -115,7 +116,7 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 
 		// Create cargo 1, cargo 2
-		cargoModelBuilder.makeDESPurchase("L1", false, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "5", null, null) //
+		cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "5", null, null) //
 				.build(); //
 
 		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "7") //

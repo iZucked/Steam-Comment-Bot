@@ -196,8 +196,8 @@ public class TimePeriodTradesBasedFilterHandler implements ITradesBasedFilterHan
 			LocalDate end = null;
 			final LoadSlot ls = row.getLoadSlot();
 			if (ls != null) {
-				start = ls.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if ((start != null) && (end != null)) {
 				final YearMonth yms = YearMonth.from(start);
@@ -208,8 +208,8 @@ public class TimePeriodTradesBasedFilterHandler implements ITradesBasedFilterHan
 			}
 			final DischargeSlot ds = row.getDischargeSlot();
 			if (ds != null) {
-				start = ds.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if ((start != null) && (end != null)) {
 				final YearMonth yms = YearMonth.from(start);
@@ -229,8 +229,8 @@ public class TimePeriodTradesBasedFilterHandler implements ITradesBasedFilterHan
 			final LocalDate prompt = today.plusMonths(month);
 			final LoadSlot ls = row.getLoadSlot();
 			if (ls != null) {
-				start = ls.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if (start != null && end != null) {
 				if (start.isAfter(today) && start.isBefore(prompt)) {
@@ -242,8 +242,8 @@ public class TimePeriodTradesBasedFilterHandler implements ITradesBasedFilterHan
 			}
 			final DischargeSlot ds = row.getDischargeSlot();
 			if (ds != null) {
-				start = ds.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if (start != null && end != null) {
 				if (start.isAfter(today) && start.isBefore(prompt)) {

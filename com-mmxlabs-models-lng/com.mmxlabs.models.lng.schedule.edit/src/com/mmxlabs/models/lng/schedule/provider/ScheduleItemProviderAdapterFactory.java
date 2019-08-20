@@ -387,6 +387,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.Purge} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PurgeItemProvider purgeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.Purge}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPurgeAdapter() {
+		if (purgeItemProvider == null) {
+			purgeItemProvider = new PurgeItemProvider(this);
+		}
+
+		return purgeItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CargoAllocation} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1268,6 +1291,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (generatedCharterOutItemProvider != null) generatedCharterOutItemProvider.dispose();
 		if (charterLengthEventItemProvider != null) charterLengthEventItemProvider.dispose();
 		if (cooldownItemProvider != null) cooldownItemProvider.dispose();
+		if (purgeItemProvider != null) purgeItemProvider.dispose();
 		if (fuelUsageItemProvider != null) fuelUsageItemProvider.dispose();
 		if (fuelQuantityItemProvider != null) fuelQuantityItemProvider.dispose();
 		if (fuelAmountItemProvider != null) fuelAmountItemProvider.dispose();

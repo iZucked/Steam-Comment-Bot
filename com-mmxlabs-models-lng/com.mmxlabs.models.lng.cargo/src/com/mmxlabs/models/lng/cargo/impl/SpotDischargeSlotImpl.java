@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TimePeriod;
@@ -337,6 +338,19 @@ public class SpotDischargeSlotImpl extends DischargeSlotImpl implements SpotDisc
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}	
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT.
+	 */
+	@Override
+	public int getSlotOrDelegateDaysBuffer() {
+		if (this.getMarket() instanceof DESSalesMarket) {
+			return ((DESSalesMarket)this.getMarket()).getDaysBuffer();
+		}
+		return super.getSlotOrDelegateDaysBuffer();
+	}
 } // end of SpotDischargeSlotImpl
 
 // finish type fixing

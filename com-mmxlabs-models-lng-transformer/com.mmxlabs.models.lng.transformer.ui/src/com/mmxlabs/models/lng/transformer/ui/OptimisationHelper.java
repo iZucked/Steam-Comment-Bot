@@ -1552,13 +1552,13 @@ public final class OptimisationHelper {
 
 				@Override
 				public int compare(final LoadSlot o1, final LoadSlot o2) {
-					return o1.getWindowEndWithSlotOrPortTimeWithFlex().compareTo(o2.getWindowEndWithSlotOrPortTimeWithFlex()) * -1;
+					return o1.getSchedulingTimeWindow().getEndWithFlex().compareTo(o2.getSchedulingTimeWindow().getEndWithFlex()) * -1;
 				}
 			});
 			if (loadSlots.isEmpty()) {
 				return YearMonth.of(2000, 1);
 			}
-			return YearMonth.of(loadSlots.get(0).getWindowStartWithSlotOrPortTime().getYear(), loadSlots.get(0).getWindowStartWithSlotOrPortTime().getMonth());
+			return YearMonth.of(loadSlots.get(0).getSchedulingTimeWindow().getStart().getYear(), loadSlots.get(0).getSchedulingTimeWindow().getStart().getMonth());
 		}
 	}
 
@@ -1573,14 +1573,14 @@ public final class OptimisationHelper {
 
 				@Override
 				public int compare(final LoadSlot o1, final LoadSlot o2) {
-					return o1.getWindowStartWithSlotOrPortTime().compareTo(o2.getWindowStartWithSlotOrPortTime());
+					return o1.getSchedulingTimeWindow().getStart().compareTo(o2.getSchedulingTimeWindow().getStart());
 				}
 			});
 			if (loadSlots.isEmpty()) {
 				// FIXME: (SG) This is not always a good idea... I have seen arrays created to hold data from 2000 to now - and this can take a long time.
 				return LocalDate.of(2000, 1, 1);
 			}
-			return loadSlots.get(0).getWindowStartWithSlotOrPortTime().toLocalDate();
+			return loadSlots.get(0).getSchedulingTimeWindow().getStart().toLocalDate();
 		}
 	}
 

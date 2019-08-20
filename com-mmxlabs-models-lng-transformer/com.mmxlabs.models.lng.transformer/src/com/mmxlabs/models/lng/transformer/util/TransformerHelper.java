@@ -31,13 +31,18 @@ public class TransformerHelper {
 			@NonNull final IBaseFuel inPortBaseFuel, @NonNull final IBaseFuel pilotLightBaseFuel) {
 
 		@NonNull
-		final IVessel vc = builder.createVessel(eVessel.getName(), OptimiserUnitConvertor.convertToInternalSpeed(eVessel.getVesselOrDelegateMinSpeed()),
-				OptimiserUnitConvertor.convertToInternalSpeed(eVessel.getVesselOrDelegateMaxSpeed()),
-				OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrDelegateCapacity() * eVessel.getVesselOrDelegateFillCapacity())),
-				OptimiserUnitConvertor.convertToInternalVolume(eVessel.getVesselOrDelegateSafetyHeel()), baseFuel, idleBaseFuel, inPortBaseFuel, pilotLightBaseFuel,
-				OptimiserUnitConvertor.convertToInternalDailyRate(eVessel.getVesselOrDelegatePilotLightRate()), eVessel.getVesselOrDelegateWarmingTime(),
+		final IVessel vc = builder.createVessel(eVessel.getName(), //
+				OptimiserUnitConvertor.convertToInternalSpeed(eVessel.getVesselOrDelegateMinSpeed()), //
+				OptimiserUnitConvertor.convertToInternalSpeed(eVessel.getVesselOrDelegateMaxSpeed()), //
+				OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrDelegateCapacity() * eVessel.getVesselOrDelegateFillCapacity())), //
+				OptimiserUnitConvertor.convertToInternalVolume(eVessel.getVesselOrDelegateSafetyHeel()), //
+				baseFuel, idleBaseFuel, inPortBaseFuel, pilotLightBaseFuel, //
+				OptimiserUnitConvertor.convertToInternalDailyRate(eVessel.getVesselOrDelegatePilotLightRate()), // 
+				eVessel.getVesselOrDelegateWarmingTime(),
+				eVessel.getVesselOrDelegatePurgeTime(),
 				OptimiserUnitConvertor.convertToInternalVolume(eVessel.getVesselOrDelegateCoolingVolume()),
-				OptimiserUnitConvertor.convertToInternalDailyRate(eVessel.getVesselOrDelegateMinBaseFuelConsumption()), eVessel.getVesselOrDelegateHasReliqCapability());
+				OptimiserUnitConvertor.convertToInternalDailyRate(eVessel.getVesselOrDelegateMinBaseFuelConsumption()), //
+				eVessel.getVesselOrDelegateHasReliqCapability());
 
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVessel.getLadenAttributes());
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVessel.getBallastAttributes());

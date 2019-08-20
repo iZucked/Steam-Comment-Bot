@@ -14,6 +14,7 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.scheduler.optimiser.lso.RouletteWheelMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.lso.TargetedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveHandlerWrapper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveMapper;
@@ -90,6 +91,7 @@ public class MoveGeneratorModule extends AbstractModule {
 		// Guided move generator
 		bind(GuidedMoveMapper.class).in(Singleton.class);
 
+		bind(TargetedMoveGenerator.class).in(Singleton.class);
 		// Stateful!
 		bind(GuidedMoveGenerator.class);
 

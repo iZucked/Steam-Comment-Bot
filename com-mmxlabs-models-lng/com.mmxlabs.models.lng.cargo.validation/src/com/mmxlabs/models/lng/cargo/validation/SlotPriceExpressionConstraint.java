@@ -62,7 +62,7 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 						start = slot.getPricingDateAsDateTime();
 					} else {
 						// Not strictly correct, may differ on pricing event and actual scheduled date
-						start = slot.getWindowStartWithSlotOrPortTime();
+						start = slot.getSchedulingTimeWindow().getStart();
 					}
 					if (start != null) {
 

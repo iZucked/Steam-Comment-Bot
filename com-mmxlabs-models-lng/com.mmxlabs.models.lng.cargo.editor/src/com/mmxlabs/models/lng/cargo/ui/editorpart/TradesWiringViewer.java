@@ -83,8 +83,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -131,6 +129,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.ComplexCargoAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
+import com.mmxlabs.models.lng.cargo.ui.util.TimeWindowHelper;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -185,6 +184,7 @@ import com.mmxlabs.models.util.emfpath.EMFMultiPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.models.util.emfpath.IEMFPath;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
@@ -198,6 +198,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
+
 /**
  * Tabular editor displaying cargoes and slots with a custom wiring editor. This implementation is "stupid" in that any changes to the data cause a full update. This has the disadvantage of loosing
  * the current ordering of items. Each row is a cargo. Changing the wiring will re-order slots. The {@link CargoWiringComposite} based view only re-orders slots when requested permitting the original
@@ -208,6 +209,9 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
  * 
  */
 public class TradesWiringViewer extends ScenarioTableViewerPane {
+	
+	private static int LineWrap = 40;
+	private static String nl = System.getProperty("line.separator");
 
 	private Iterable<ITradesTableContextMenuExtension> contextMenuExtensions;
 
@@ -250,7 +254,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private final TimePeriodFilter monthFilter = new TimePeriodFilter();
 	private LocalDate earliest;
 	private LocalDate latest;
-
+	
 	private Action resetSortOrder;
 
 	private PromptToolbarEditor promptToolbarEditor;
@@ -259,6 +263,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private IPropertyChangeListener propertyChangeListener;
 	private final Set<String> filtersOpenContracts = new HashSet<>();
+	private IExtraFiltersProvider extraFiltersProvider;
 
 	public TradesWiringViewer(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation scenarioEditingLocation, final IActionBars actionBars) {
 		super(page, part, scenarioEditingLocation, actionBars);
@@ -268,6 +273,19 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				ScenarioModelUtil.getCommercialModel(scenarioModel), Activator.getDefault().getModelFactoryRegistry());
 		this.menuHelper = new CargoEditorMenuHelper(part.getSite().getShell(), scenarioEditingLocation, scenarioModel);
 		notesImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_NOTES);
+		
+		ServiceHelper.withOptionalServiceConsumer(IExtraFiltersProvider.class, p -> {
+			if (p == null) {
+				setExtraFiltersProvider(new DefaultExtraFiltersProvider());
+			} else {
+				setExtraFiltersProvider(p);
+			}
+		});
+		
+	}
+	
+	private void setExtraFiltersProvider(final IExtraFiltersProvider provider) {
+		this.extraFiltersProvider = provider;
 	}
 
 	@Override
@@ -468,10 +486,20 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 				});
 
+				addFilters();
+			}
+			
+			private void addFilters() {
 				addFilter(tradesFilter);
 				addFilter(tradesCargoFilter);
 				addFilter(shippedCargoFilter);
 				addFilter(monthFilter);
+				
+				if (extraFiltersProvider != null) {
+					for (final ViewerFilter vf : extraFiltersProvider.getExtraFilters()) {
+						addFilter(vf);
+					}
+				}
 			}
 
 			@Override
@@ -565,11 +593,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				if (lString.length() + dString.length() == 0) {
 					return null;
 				} else {
-					if (lString.length() > 40)
-						lString = lString.substring(0, 40) + "...";
-					if (dString.length() > 40)
-						dString = dString.substring(0, 40) + "...";
-					return lString + "\n\n" + dString;
+					if (lString.length() > LineWrap) {
+						lString = wrapString(lString, LineWrap);
+					}
+					if (dString.length() > LineWrap) {
+						dString = wrapString(dString, LineWrap);
+					}
+					return (lString.length()>0? lString : "") + (dString.length()> 0 ? nl + " --- " + nl + dString : "");
 				}
 			}
 
@@ -833,6 +863,50 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		return scenarioViewer;
 	}
+	
+	/**
+	 * Break up inputString into lines, then break up those input lines into wrapped lines lineLength 
+	 * characters long.
+	 * @param inputString
+	 * @param lineLength
+	 * @return the wrapped lines
+	 */
+	protected static String wrapString(String inputString, int lineLength) {		
+		//		System.out.println("It's a wrap yo: \n" + inputString);
+		String newString = "";
+		// Split input string into inputLineStrings, each of which is a list of words 
+		// which will result in one or more lines of formatted text
+		String[] inputLineStrings = inputString.split(nl);
+		for (int i = 0; i < inputLineStrings.length; i++) {
+			String inputLine = inputLineStrings[i];
+			// Wrap inputLine
+			if(inputLine.length() > lineLength) {
+				// Split on spaces and decompose into wrapped lines, adding each word to newLine 
+				// up to line wrap limit, then starting a newLine.
+				String[] words = inputLine.split(" ");
+				String newLine = words[0] + " ";
+				for (int j = 1; j < words.length; j++) {
+					String word = words[j];
+					// Add word if within limit
+					if(newLine.length() + word.length() <= lineLength) {						
+						newLine += word + " ";
+					}
+					else {
+					// else add line and start a new line with this word	
+						newString += newLine + nl;
+						newLine = word + " ";
+					}
+				}
+				// Any last words...
+				newString += newLine + nl;				
+			}
+			else {
+				// inputLine needs no wrapping.
+				newString += inputLine + nl;
+			}
+		}
+		return newString;
+	}
 
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
@@ -1037,11 +1111,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final GridViewerColumn loadDateColumn = addTradesColumn(loadColumns, "Window", new LocalDateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
 			public String renderSetValue(final Object owner, final Object object) {
-				final String v = super.renderSetValue(owner, object);
+				String v = super.renderSetValue(owner, object);
 				if (!v.isEmpty()) {
-					final String suffix = getTimeWindowSuffix(owner);
-					return v + suffix;
+					final String suffix = TimeWindowHelper.getTimeWindowSuffix(owner);
+					v = v + suffix;
 				}
+				v = v + (v.isEmpty() ? "" : " ");
+				v = v + TimeWindowHelper.getCPWindowSuffix(owner);
 				return v;
 			}
 
@@ -1087,11 +1163,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			@Override
 			public String renderSetValue(final Object owner, final Object object) {
-				final String v = super.renderSetValue(owner, object);
+				String v = super.renderSetValue(owner, object);
 				if (!v.isEmpty()) {
-					final String suffix = getTimeWindowSuffix(owner);
-					return v + suffix;
+					final String suffix = TimeWindowHelper.getTimeWindowSuffix(owner);
+					v = v + suffix;
 				}
+				v = v + (v.isEmpty() ? "" : " ");
+				v = v + TimeWindowHelper.getCPWindowSuffix(owner);
 				return v;
 			}
 
@@ -1373,12 +1451,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		LocalDate erl = result;
 
 		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
-			if (erl.isAfter(ls.getWindowStart())) {
+			if (ls.getWindowStart() != null && erl.isAfter(ls.getWindowStart())) {
 				erl = ls.getWindowStart();
 			}
 		}
 		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
-			if (erl.isAfter(ds.getWindowStart())) {
+			if (ds.getWindowStart() != null && erl.isAfter(ds.getWindowStart())) {
 				erl = ds.getWindowStart();
 			}
 		}
@@ -1398,13 +1476,15 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		LocalDate erl = result;
 
 		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
-			if (erl.isBefore(ls.getWindowEndWithSlotOrPortTime().toLocalDate())) {
-				erl = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+			if (ls.getSchedulingTimeWindow().getEnd() != null &&
+				erl.isBefore(ls.getSchedulingTimeWindow().getEnd().toLocalDate())) {
+				erl = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 		}
 		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
-			if (erl.isBefore(ds.getWindowEndWithSlotOrPortTime().toLocalDate())) {
-				erl = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+			if (ds.getSchedulingTimeWindow().getEnd() != null &&
+				erl.isBefore(ds.getSchedulingTimeWindow().getEnd().toLocalDate())) {
+				erl = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 		}
 		if (erl.isAfter(result)) {
@@ -1412,34 +1492,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 
 		return result;
-	}
-
-	protected String getTimeWindowSuffix(final Object owner) {
-		if (owner instanceof Slot<?>) {
-			final Slot<?> slot = (Slot<?>) owner;
-			final int size = slot.getSlotOrDelegateWindowSize();
-			final TimePeriod units = slot.getSlotOrDelegateWindowSizeUnits();
-			String suffix;
-			switch (units) {
-			case DAYS:
-				suffix = "d";
-				break;
-			case HOURS:
-				suffix = "h";
-				break;
-			case MONTHS:
-				suffix = "m";
-				break;
-			default:
-				return "";
-
-			}
-			if (size > 0) {
-				return String.format(" +%d%s", size, suffix);
-			}
-
-		}
-		return "";
 	}
 
 	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addPNLColumn(final String columnName, final EStructuralFeature bookContainmentFeature, final T manipulator,
@@ -2012,8 +2064,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			LocalDate end = null;
 			final LoadSlot ls = row.getLoadSlot();
 			if (ls != null) {
-				start = ls.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if ((start != null) && (end != null)) {
 				final YearMonth yms = YearMonth.from(start);
@@ -2024,8 +2076,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 			final DischargeSlot ds = row.getDischargeSlot();
 			if (ds != null) {
-				start = ds.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if ((start != null) && (end != null)) {
 				final YearMonth yms = YearMonth.from(start);
@@ -2045,8 +2097,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			final LocalDate prompt = today.plusMonths(month);
 			final LoadSlot ls = row.getLoadSlot();
 			if (ls != null) {
-				start = ls.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ls.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if (start != null && end != null) {
 				if (start.isAfter(today) && start.isBefore(prompt)) {
@@ -2058,8 +2110,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 			final DischargeSlot ds = row.getDischargeSlot();
 			if (ds != null) {
-				start = ds.getWindowStartWithSlotOrPortTime().toLocalDate();
-				end = ds.getWindowEndWithSlotOrPortTime().toLocalDate();
+				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 			if (start != null && end != null) {
 				if (start.isAfter(today) && start.isBefore(prompt)) {
@@ -2108,6 +2160,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					tradesCargoFilter.option = CargoFilterOption.NONE;
 					shippedCargoFilter.option = ShippedCargoFilterOption.NONE;
 					monthFilter.type = TimeFilterType.NONE;
+					extraFiltersProvider.clear();
 					scenarioViewer.refresh(false);
 				}
 			};
@@ -2248,6 +2301,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			};
 
 			addActionToMenu(dmcaTimePeriod, menu);
+			
+			if (extraFiltersProvider != null) {
+				for (final DefaultMenuCreatorAction edmca : extraFiltersProvider.getExtraMenuActions(scenarioViewer)) {
+					addActionToMenu(edmca, menu);
+				}
+			}
+			
 			// TODO : Consider using TradesBasedFilterHandler!
 		}
 	}

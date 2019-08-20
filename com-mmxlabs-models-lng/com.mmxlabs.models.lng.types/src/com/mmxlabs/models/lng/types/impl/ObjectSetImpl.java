@@ -75,6 +75,7 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends UUIDOb
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -84,6 +85,7 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends UUIDOb
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -96,6 +98,7 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends UUIDOb
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<U> collect(EList<T> marked) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
@@ -221,7 +224,7 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends UUIDOb
 		if (eIsProxy())
 			return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(')');

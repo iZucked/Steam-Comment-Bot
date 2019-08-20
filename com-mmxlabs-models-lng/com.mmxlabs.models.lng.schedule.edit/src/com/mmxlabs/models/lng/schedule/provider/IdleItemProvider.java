@@ -51,6 +51,7 @@ public class IdleItemProvider
 			super.getPropertyDescriptors(object);
 
 			addLadenPropertyDescriptor(object);
+			addContingencyHoursPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -73,6 +74,28 @@ public class IdleItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Contingency Hours feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addContingencyHoursPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Idle_contingencyHours_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Idle_contingencyHours_feature", "_UI_Idle_type"),
+				 SchedulePackage.Literals.IDLE__CONTINGENCY_HOURS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -146,6 +169,7 @@ public class IdleItemProvider
 
 		switch (notification.getFeatureID(Idle.class)) {
 			case SchedulePackage.IDLE__LADEN:
+			case SchedulePackage.IDLE__CONTINGENCY_HOURS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.IDLE__FUELS:

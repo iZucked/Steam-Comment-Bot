@@ -50,7 +50,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getContractType <em>Contract Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getCancellationExpression <em>Cancellation Expression</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isDivertible <em>Divertible</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  * </ul>
  *
@@ -582,32 +581,6 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setCancellationExpression(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Divertible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Divertible</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Divertible</em>' attribute.
-	 * @see #setDivertible(boolean)
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_Divertible()
-	 * @model
-	 * @generated
-	 */
-	boolean isDivertible();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#isDivertible <em>Divertible</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Divertible</em>' attribute.
-	 * @see #isDivertible()
-	 * @generated
-	 */
-	void setDivertible(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Shipping Days Restriction</b></em>' attribute.

@@ -141,6 +141,15 @@ public interface ScheduleFactory extends EFactory {
 	Cooldown createCooldown();
 
 	/**
+	 * Returns a new object of class '<em>Purge</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Purge</em>'.
+	 * @generated
+	 */
+	Purge createPurge();
+
+	/**
 	 * Returns a new object of class '<em>Cargo Allocation</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

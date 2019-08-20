@@ -120,9 +120,9 @@ public class LoadDischargePairValueCalculator {
 		if (!(load instanceof ILoadSlot) && !(discharge instanceof IDischargeSlot)) {
 			return false;
 		}
+		boolean isValid = true;
 		for (final IVesselAvailability v : vessels) {
 			if (v == vessel) continue;
-			boolean isValid = true;
 			for (final IPairwiseConstraintChecker checker : constraintCheckers) {
 				if (!checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(v))) {
 					//checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(v));

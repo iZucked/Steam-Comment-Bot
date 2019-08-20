@@ -7,7 +7,6 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -33,6 +32,8 @@ import com.mmxlabs.models.lng.transformer.optimiser.valuepair.LoadDischargePairV
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.ProfitAndLossExtractor;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
@@ -62,7 +63,7 @@ public class LoadDischargeCostPairingTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
-		final LoadSlot load_DES1 = cargoModelBuilder.makeDESPurchase("DES1", false, LocalDate.of(2015, 12, 5), portFinder.findPort("Sakai"), null, entity, "5", 22.8, null).build();
+		final LoadSlot load_DES1 = cargoModelBuilder.makeDESPurchase("DES1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 5), portFinder.findPort("Sakai"), null, entity, "5", 22.8, null).build();
 		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB1", LocalDate.of(2015, 11, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8).build();
 		final LoadSlot load_FOB2 = cargoModelBuilder.makeFOBPurchase("FOB2", LocalDate.of(2015, 11, 4), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8).build();
 		final LoadSlot load_FOB3 = cargoModelBuilder.makeFOBPurchase("FOB2", LocalDate.of(2015, 10, 4), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8).build();
@@ -70,14 +71,14 @@ public class LoadDischargeCostPairingTests extends AbstractMicroTestCase {
 		for (int i = 0; i < 100; ++i) {
 			cargoModelBuilder.makeFOBPurchase("FOBi" + i, LocalDate.of(2015, 11, 4).plusDays(5 * i), portFinder.findPort("Point Fortin"), null, entity, "6", 22.8).build();
 			cargoModelBuilder.makeFOBPurchase("FOBj" + i, LocalDate.of(2015, 11, 4).plusDays(5 * i), portFinder.findPort("Point Fortin"), null, entity, "6", 22.8).build();
-			cargoModelBuilder.makeFOBSale("FOBsi" + i, false, LocalDate.of(2015, 11, 4).plusDays(5 * i), portFinder.findPort("Point Fortin"), null, entity, "7", null).build();
-			cargoModelBuilder.makeDESPurchase("DESpi" + i, false, LocalDate.of(2016, 1, 5).plusDays(5 * i), portFinder.findPort("Sakai"), null, entity, "5", 22.8, null).build();
+			cargoModelBuilder.makeFOBSale("FOBsi" + i, FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 11, 4).plusDays(5 * i), portFinder.findPort("Point Fortin"), null, entity, "7", null).build();
+			cargoModelBuilder.makeDESPurchase("DESpi" + i, DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 1, 5).plusDays(5 * i), portFinder.findPort("Sakai"), null, entity, "5", 22.8, null).build();
 			cargoModelBuilder.makeDESSale("DESi" + i, LocalDate.of(2016, 1, 5).plusDays(5 * i), portFinder.findPort("Sakai"), null, entity, "7").build();
 
 		}
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES1", LocalDate.of(2015, 12, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
 		final DischargeSlot discharge_DES2 = cargoModelBuilder.makeDESSale("DES2", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
-		final DischargeSlot discharge_FOB1 = cargoModelBuilder.makeFOBSale("FOB1", false, LocalDate.of(2015, 11, 5), portFinder.findPort("Point Fortin"), null, entity, "7", null).build();
+		final DischargeSlot discharge_FOB1 = cargoModelBuilder.makeFOBSale("FOB1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 11, 5), portFinder.findPort("Point Fortin"), null, entity, "7", null).build();
 
 		evaluateWithLSOTest(true, (plan) -> {
 			plan.getStages().clear();

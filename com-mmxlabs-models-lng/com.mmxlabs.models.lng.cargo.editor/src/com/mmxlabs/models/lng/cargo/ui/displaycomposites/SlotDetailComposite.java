@@ -39,6 +39,7 @@ import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
 
 import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -66,6 +67,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private static final EStructuralFeature WindowSizeUnits = CargoFeatures.getSlot_WindowSizeUnits();
 	private static final EStructuralFeature WindowFlex = CargoFeatures.getSlot_WindowFlex();
 	private static final EStructuralFeature WindowFlexUnits = CargoFeatures.getSlot_WindowFlexUnits();
+	private static final EStructuralFeature WindowCounterParty = CargoFeatures.getSlot_WindowCounterParty();
 	private static final EStructuralFeature Contract = CargoFeatures.getSlot_Contract();
 	private static final EStructuralFeature PriceExpression = CargoFeatures.getSlot_PriceExpression();
 	private static final EClass SlotContractParams = CommercialPackage.eINSTANCE.getSlotContractParams();
@@ -82,7 +84,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private ArrayList<EStructuralFeature[]> mainFeatures;
 	private ArrayList<EStructuralFeature[]> windowFeatures;
 	private HashSet<EStructuralFeature> windowTitleFeatures;
-
+	private ArrayList<EStructuralFeature[]> unshippedWindowFeatures;
+	private HashSet<EStructuralFeature> unshippedWindowTitleFeatures;
+	
 	private ArrayList<EStructuralFeature[]> loadTermsFeatures;
 	private ArrayList<EStructuralFeature[]> dischargeTermsFeatures;
 	private ArrayList<EStructuralFeature[]> noteFeatures;
@@ -95,7 +99,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		allFeatures = new HashSet<>();
 
 		nameFeatures = new ArrayList<>();
-		nameFeatures.add(new EStructuralFeature[] { MMXCorePackage.eINSTANCE.getNamedObject_Name(), CargoFeatures.getSlot_Optional(), CargoFeatures.getSlot_Locked(), CargoFeatures.getSlot_Cancelled() });
+		nameFeatures
+				.add(new EStructuralFeature[] { MMXCorePackage.eINSTANCE.getNamedObject_Name(), CargoFeatures.getSlot_Optional(), CargoFeatures.getSlot_Locked(), CargoFeatures.getSlot_Cancelled() });
+		nameFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_DesPurchaseDealType(), CargoFeatures.getDischargeSlot_FobSaleDealType() });
 		allFeatures.addAll(getAllFeatures(nameFeatures));
 
 		mainFeatures = new ArrayList<>();
@@ -115,34 +121,50 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		windowFeatures = new ArrayList<>();
 		windowFeatures.add(new EStructuralFeature[] { WindowStart, WindowStartTime });
-		windowFeatures.add(new EStructuralFeature[] { WindowSize, WindowSizeUnits });
-		windowFeatures.add(new EStructuralFeature[] { WindowFlex, WindowFlexUnits });
+		windowFeatures.add(new EStructuralFeature[] { WindowSize, WindowSizeUnits,  WindowCounterParty });
 		windowFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Duration() });
+		windowFeatures.add(new EStructuralFeature[] { WindowFlex, WindowFlexUnits });
 		windowFeatures.add(new EStructuralFeature[] {});
-		windowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize, WindowSizeUnits);
+		windowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize, WindowSizeUnits, WindowCounterParty);
 		allFeatures.addAll(getAllFeatures(windowFeatures));
 
+		unshippedWindowFeatures = new ArrayList<>();
+		unshippedWindowFeatures.add(new EStructuralFeature[] { WindowStart, WindowStartTime });
+		unshippedWindowFeatures.add(new EStructuralFeature[] { WindowSize, WindowSizeUnits });
+		unshippedWindowFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Duration() });
+		unshippedWindowFeatures.add(new EStructuralFeature[] { WindowFlex, WindowFlexUnits });
+		unshippedWindowFeatures.add(new EStructuralFeature[] {});
+		unshippedWindowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize, WindowSizeUnits);
+		allFeatures.addAll(getAllFeatures(unshippedWindowFeatures));
+		
 		loadTermsFeatures = new ArrayList<EStructuralFeature[]>();
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_SchedulePurge() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold(), CargoFeatures.getLoadSlot_CargoCV() });
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPortsOverride(), CargoFeatures.getSlot_RestrictedPorts(), CargoFeatures.getSlot_RestrictedPortsArePermissive() });
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContractsOverride(), CargoFeatures.getSlot_RestrictedContracts(), CargoFeatures.getSlot_RestrictedContractsArePermissive() });
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedVesselsOverride(), CargoFeatures.getSlot_RestrictedVessels(), CargoFeatures.getSlot_RestrictedVesselsArePermissive() });
+		loadTermsFeatures
+				.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPortsOverride(), CargoFeatures.getSlot_RestrictedPorts(), CargoFeatures.getSlot_RestrictedPortsArePermissive() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContractsOverride(), CargoFeatures.getSlot_RestrictedContracts(),
+				CargoFeatures.getSlot_RestrictedContractsArePermissive() });
+		loadTermsFeatures
+				.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedVesselsOverride(), CargoFeatures.getSlot_RestrictedVessels(), CargoFeatures.getSlot_RestrictedVesselsArePermissive() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedSlots(), CargoFeatures.getSlot_RestrictedSlotsArePermissive() });
 
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_NominatedVessel() });
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertible(), CargoFeatures.getSlot_ShippingDaysRestriction() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_ShippingDaysRestriction() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_SalesDeliveryType() });
 		allFeatures.addAll(getAllFeatures(loadTermsFeatures));
 
 		dischargeTermsFeatures = new ArrayList<EStructuralFeature[]>();
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_PurchaseDeliveryType() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_MinCvValue(), CargoFeatures.getDischargeSlot_MaxCvValue() });
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts(), CargoFeatures.getSlot_RestrictedPortsArePermissive(), CargoFeatures.getSlot_RestrictedPortsOverride()});
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts(), CargoFeatures.getSlot_RestrictedContractsArePermissive(), CargoFeatures.getSlot_RestrictedContractsOverride() });
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedVessels(), CargoFeatures.getSlot_RestrictedVesselsArePermissive(), CargoFeatures.getSlot_RestrictedVesselsOverride() });
+		dischargeTermsFeatures
+				.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts(), CargoFeatures.getSlot_RestrictedPortsArePermissive(), CargoFeatures.getSlot_RestrictedPortsOverride() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts(), CargoFeatures.getSlot_RestrictedContractsArePermissive(),
+				CargoFeatures.getSlot_RestrictedContractsOverride() });
+		dischargeTermsFeatures
+				.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedVessels(), CargoFeatures.getSlot_RestrictedVesselsArePermissive(), CargoFeatures.getSlot_RestrictedVesselsOverride() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedSlots(), CargoFeatures.getSlot_RestrictedSlotsArePermissive() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_NominatedVessel() });
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertible(), CargoFeatures.getSlot_ShippingDaysRestriction() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_ShippingDaysRestriction() });
 		allFeatures.addAll(getAllFeatures(dischargeTermsFeatures));
 
 		noteFeatures = new ArrayList<>();
@@ -188,8 +210,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					final int wsize = (Integer) mmxEo.eGetWithDefault(WindowSize);
 					final TimePeriod ePeriod = (TimePeriod) mmxEo.eGetWithDefault(WindowSizeUnits);
 					if (mmxEo instanceof Slot) {
-						final Slot slot = (Slot) mmxEo;
-						final ZonedDateTime ed = slot.getWindowEndWithSlotOrPortTime();
+						final Slot<?> slot = (Slot<?>) mmxEo;
+						final ZonedDateTime ed = getDisplayedWindowEndTime(slot);
 						final String text = formatDate(d, time) + " - " + formatDate(ed.toLocalDate(), ed.toLocalDateTime().getHour());
 						textClient.setText(text);
 					} else {
@@ -199,6 +221,31 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				}
 			}
 
+			private ZonedDateTime getDisplayedWindowEndTime(Slot<?> slot) {
+				final ZonedDateTime start = slot.getSchedulingTimeWindow().getStart();
+				final TimePeriod p = slot.getWindowSizeUnits();
+				int windowSize = slot.getWindowSize();
+				ZonedDateTime end = start;
+
+				if (windowSize > 0) {
+					switch (p) {
+					case DAYS:
+						end = end.plusDays(windowSize).minusHours(1);
+						break;
+					case HOURS:
+						end = end.plusHours(windowSize) ;
+						break;
+					case MONTHS:
+						end = end.plusMonths(windowSize).minusHours(1);
+						break;
+					default:
+						break;
+					}
+				}
+				
+				return end;
+			}
+			
 			private String getUnits(final TimePeriod ePeriod) {
 				switch (ePeriod) {
 				case HOURS:
@@ -234,9 +281,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				// Special case for min/max volumes - ensure text box has enough width for around 7 digits.
 				// Note: Should really render the font to get width - this is ok on my system, but other systems (default font & size, resolution, dpi etc) could make this wrong
 				final EStructuralFeature feature = editor.getFeature();
-				if (feature == CargoPackage.Literals.SLOT__MAX_QUANTITY 
-						|| feature == CargoPackage.Literals.SLOT__MIN_QUANTITY 
-						|| feature == CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE) {
+				if (feature == CargoPackage.Literals.SLOT__MAX_QUANTITY || feature == CargoPackage.Literals.SLOT__MIN_QUANTITY || feature == CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
 					// gd.widthHint = 80;
@@ -276,7 +321,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 						editor.setLabel(null);
 					}
 					return gd;
-				}	
+				}
 				if (feature == CargoPackage.Literals.SLOT__WINDOW_FLEX || feature == CargoPackage.Literals.SLOT__WINDOW_FLEX_UNITS) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
@@ -299,9 +344,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					gd.widthHint = 100;
 					return gd;
 				}
-				
-				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS 
-						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE 
+
+				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS || feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE
 						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_OVERRIDE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
@@ -325,8 +369,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					}
 					return gd;
 				}
-				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS 
-						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE 
+				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS || feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE
 						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS_OVERRIDE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
@@ -350,8 +393,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					}
 					return gd;
 				}
-				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS 
-						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE 
+				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS || feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE
 						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_OVERRIDE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
@@ -375,8 +417,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					}
 					return gd;
 				}
-				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_SLOTS 
-						|| feature == CargoPackage.Literals.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE ) {
+				if (feature == CargoPackage.Literals.SLOT__RESTRICTED_SLOTS || feature == CargoPackage.Literals.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
 					// gd.widthHint = 80;
@@ -433,10 +474,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		return editor;
 	}
-
+	
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
-
 		super.display(dialogContext, root, object, range, dbc);
 		final MMXObject eo = (MMXObject) object;
 		esPricing.init(eo);
@@ -447,7 +487,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 	@Override
 	public void createControls(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc) {
-
+		
 		toolkit.adapt(this);
 
 		boolean isLoad;
@@ -460,6 +500,18 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			isLoad = false;
 		}
 
+		boolean isUnshipped = false;
+		if (object instanceof Slot<?>) {
+			Slot<?> slot = (Slot<?>)object;
+			if (slot.getCargo() != null && slot.getCargo().getCargoType() != CargoType.FLEET) {
+				isUnshipped = true;
+			}
+			if (slot.isWindowCounterParty()) {
+				//Validation will flag it as bad. Let them undo it.
+				isUnshipped = false;
+			}
+		}
+		
 		contentComposite = toolkit.createComposite(this);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(contentComposite, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot");
 
@@ -495,7 +547,12 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(esPricing.ec, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot_Pricing");
 
 		createSpacer();
-		makeExpandable(dialogContext, root, object, dbc, esWindow, windowFeatures, windowTitleFeatures, true);
+		if (isUnshipped) {
+			makeExpandable(dialogContext, root, object, dbc, esWindow, unshippedWindowFeatures, unshippedWindowTitleFeatures, true);
+		}
+		else {
+			makeExpandable(dialogContext, root, object, dbc, esWindow, windowFeatures, windowTitleFeatures, true);
+		}
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(esWindow.ec, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot_Window");
 
 		createSpacer();

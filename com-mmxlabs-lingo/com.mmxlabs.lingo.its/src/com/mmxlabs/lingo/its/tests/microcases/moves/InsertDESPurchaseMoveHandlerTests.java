@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -59,7 +60,7 @@ public class InsertDESPurchaseMoveHandlerTests extends AbstractMoveHandlerTest {
 	public void testInsertDESPurchaseMove() throws Exception {
 
 		final LoadSlot load1 = cargoModelBuilder//
-				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
 				.build();
 		//
 		final DischargeSlot discharge1 = cargoModelBuilder//
@@ -133,7 +134,7 @@ public class InsertDESPurchaseMoveHandlerTests extends AbstractMoveHandlerTest {
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("My Vessel 2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
 		final LoadSlot load1 = cargoModelBuilder//
-				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, vessel1) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, vessel1) //
 				.build();
 		//
 		final DischargeSlot discharge1 = cargoModelBuilder//
@@ -188,7 +189,7 @@ public class InsertDESPurchaseMoveHandlerTests extends AbstractMoveHandlerTest {
 	public void testInsertDESPurchaseMove_Fail_Timewindows() throws Exception {
 
 		final LoadSlot load1 = cargoModelBuilder//
-				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
 				.build();
 		//
 		final DischargeSlot discharge1 = cargoModelBuilder//

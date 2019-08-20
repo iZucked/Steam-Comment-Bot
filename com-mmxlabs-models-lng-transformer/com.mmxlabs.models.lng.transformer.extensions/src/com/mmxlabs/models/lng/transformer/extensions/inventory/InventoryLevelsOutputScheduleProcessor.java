@@ -19,6 +19,7 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -47,7 +48,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 
 	@Override
 	public void process(final Schedule schedule) {
-		if (LicenseFeatures.isPermitted("features:inventory-model")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_MODEL)) {
 
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 
@@ -252,13 +253,13 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 							final InventoryChangeEvent evt = ScheduleFactory.eINSTANCE.createInventoryChangeEvent();
 
 							if (latestLoad == null) {
-								latestLoad = slotAllocation.getSlot().getWindowEndWithSlotOrPortTime().toLocalDate();
+								latestLoad = slotAllocation.getSlot().getSchedulingTimeWindow().getEnd().toLocalDate();
 							} else {
-								latestLoad = f_maxDate.apply(latestLoad, slotAllocation.getSlot().getWindowEndWithSlotOrPortTime().toLocalDate());
+								latestLoad = f_maxDate.apply(latestLoad, slotAllocation.getSlot().getSchedulingTimeWindow().getEnd().toLocalDate());
 							}
 
 							evt.setOpenSlotAllocation(slotAllocation);
-							evt.setDate(slotAllocation.getSlot().getWindowStartWithSlotOrPortTime().toLocalDateTime());
+							evt.setDate(slotAllocation.getSlot().getSchedulingTimeWindow().getStart().toLocalDateTime());
 							evt.setChangeQuantity(change);
 							events.add(evt);
 						}

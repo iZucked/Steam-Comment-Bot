@@ -189,6 +189,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createCooldownAdapter();
 			}
 			@Override
+			public Adapter casePurge(Purge object) {
+				return createPurgeAdapter();
+			}
+			@Override
 			public Adapter caseFuelUsage(FuelUsage object) {
 				return createFuelUsageAdapter();
 			}
@@ -515,6 +519,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCooldownAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.Purge <em>Purge</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.Purge
+	 * @generated
+	 */
+	public Adapter createPurgeAdapter() {
 		return null;
 	}
 

@@ -31,6 +31,7 @@
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Monthly"/>
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Level"/>
     </genEnums>
+    <genDataTypes ecoreDataType="cargo.ecore#//SchedulingTimeWindow"/>
     <genClasses ecoreClass="cargo.ecore#//CargoModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/loadSlots"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/dischargeSlots"/>
@@ -70,7 +71,7 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowSize"/>
       <genFeatures createChild="false" propertyDescription="The units of the arrival window"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowSizeUnits"/>
-      <genFeatures createChild="false" propertyDescription="Number of hours flexibility on the slot time window. Positive values increase the window end, negative values decrease the window start."
+      <genFeatures createChild="false" propertyDescription="Quantity of extra arrival flexibility after the slot time window."
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowFlex"/>
       <genFeatures createChild="false" propertyDescription="The units of the window flex"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowFlexUnits"/>
@@ -95,8 +96,6 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/pricingDate"/>
       <genFeatures createChild="false" propertyDescription="Free-text field for note taking"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/notes"/>
-      <genFeatures createChild="false" propertyDescription="Is this non-shipped slot divertible to a different market?"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/divertible"/>
       <genFeatures createChild="false" propertyDescription="Maximum number of notional round trip days allocated to this trade"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/shippingDaysRestriction"/>
       <genFeatures notify="false" createChild="false" propertyDescription="Group entity this trade falls under"
@@ -133,18 +132,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/locked"/>
       <genFeatures createChild="false" propertyDescription="Is current slot cancelled?"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancelled"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateDuration"/>
+      <genFeatures createChild="false" propertyDescription="This is the counter party's time window."
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowCounterParty"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMinQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMaxQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateOperationalTolerance"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVolumeLimitsUnit"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowEndWithSlotOrPortTime"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowStartWithSlotOrPortTime"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowEndWithSlotOrPortTimeWithFlex"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowStartWithSlotOrPortTimeWithFlex"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWindowSize"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWindowSizeUnits"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowSizeInHours"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateEntity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateCancellationExpression"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePricingEvent"/>
@@ -152,7 +145,6 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotContractParams"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateCounterparty"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateCN"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateDivertible"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateShippingDaysRestriction"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateFullCargoLot"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateContractRestrictionsArePermissive"/>
@@ -161,15 +153,20 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateContractRestrictions"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePortRestrictions"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVesselRestrictions"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSchedulingTimeWindow"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateDaysBuffer"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//LoadSlot">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/cargoCV"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/schedulePurge"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/arriveCold"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/DESPurchase"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//LoadSlot/transferFrom"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/salesDeliveryType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/desPurchaseDealType"/>
       <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrDelegateCV"/>
       <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrDelegateDeliveryType"/>
+      <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrDelegateDESPurchaseDealType"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//DischargeSlot">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/FOBSale"/>
@@ -177,9 +174,11 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//DischargeSlot/transferTo"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/minCvValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/maxCvValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/fobSaleDealType"/>
       <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrDelegateMinCv"/>
       <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrDelegateMaxCv"/>
       <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrDelegateDeliveryType"/>
+      <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrDelegateFOBSaleDealType"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//SpotSlot">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//SpotSlot/market"/>

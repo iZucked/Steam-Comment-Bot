@@ -203,7 +203,6 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			new LegendItemImpl("Dry-dock/Maintenance", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_DryDock, ColourPalette.ColourElements.Background),
 					ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_Maintenance, ColourPalette.ColourElements.Background)),
 			new LegendItemImpl("Charter Length", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_CharterLength, ColourPalette.ColourElements.Background))
-
 	);
 
 	/**

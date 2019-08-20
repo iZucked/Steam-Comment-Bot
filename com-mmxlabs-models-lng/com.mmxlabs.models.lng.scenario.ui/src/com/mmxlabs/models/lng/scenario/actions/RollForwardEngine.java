@@ -221,7 +221,7 @@ public class RollForwardEngine {
 				return new Commitment(slotVisit, slotVisit.getStart());
 			} 
 			else {
-				return new Commitment(slot, slot.getWindowStartWithSlotOrPortTime());
+				return new Commitment(slot, slot.getSchedulingTimeWindow().getStart());
 			}
 			
 		}
@@ -396,7 +396,7 @@ public class RollForwardEngine {
 		EList<Slot<?>> slots = cargo.getSortedSlots();
 		Slot<?> slot = slots.get(slots.size() - 1);
 		
-		LocalDateTime windowEnd = slot.getWindowEndWithSlotOrPortTime().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
+		LocalDateTime windowEnd = slot.getSchedulingTimeWindow().getEnd().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
 		return windowEnd.toLocalDate().isBefore(freezeDate);
 		
 
@@ -430,7 +430,7 @@ public class RollForwardEngine {
 			return false;
 		}
 		
-		LocalDateTime dt = slot.getWindowStartWithSlotOrPortTime().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
+		LocalDateTime dt = slot.getSchedulingTimeWindow().getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
 
 		return dt.toLocalDate().isBefore(freezeDate);
 	}
@@ -673,8 +673,8 @@ public class RollForwardEngine {
 								firstObject = slotVisit;
 							}
 						} else {
-							if (firstDate == null || firstDate.isAfter(slot.getWindowStartWithSlotOrPortTime())) {
-								firstDate = slot.getWindowStartWithSlotOrPortTime();
+							if (firstDate == null || firstDate.isAfter(slot.getSchedulingTimeWindow().getStart())) {
+								firstDate = slot.getSchedulingTimeWindow().getStart();
 								firstObject = slot;
 							}
 						}
@@ -799,7 +799,7 @@ public class RollForwardEngine {
 				// Mark slot as seen.
 				seenSlots.add(s);
 
-				LocalDateTime dt = s.getWindowStartWithSlotOrPortTime().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
+				LocalDateTime dt = s.getSchedulingTimeWindow().getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
 
 				if (freezeDate != null && dt.toLocalDate().isBefore(freezeDate)) {
 					couldFreeze = true;
@@ -829,7 +829,7 @@ public class RollForwardEngine {
 			boolean couldFreeze = false;
 			boolean couldRemove;
 
-			LocalDateTime dt = s.getWindowStartWithSlotOrPortTime().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
+			LocalDateTime dt = s.getSchedulingTimeWindow().getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
 
 			if (freezeDate != null && dt.toLocalDate().isBefore(freezeDate)) {
 				couldFreeze = true;
@@ -857,7 +857,7 @@ public class RollForwardEngine {
 			boolean couldFreeze = false;
 			boolean couldRemove;
 
-			LocalDateTime dt = s.getWindowStartWithSlotOrPortTime().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
+			LocalDateTime dt = s.getSchedulingTimeWindow().getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
 
 			if (freezeDate != null && dt.toLocalDate().isBefore(freezeDate)) {
 				couldFreeze = true;

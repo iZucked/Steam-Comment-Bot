@@ -9,6 +9,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 
 /**
  * 
@@ -28,7 +30,7 @@ public final class SlotClassifier {
 			// "It's a buy!"
 			final LoadSlot load = (LoadSlot) slot;
 			if (load.isDESPurchase()) {
-				if (load.getSlotOrDelegateDivertible()) {
+				if (load.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 					// DES purchase at a load port, so will go to some discharge port.
 					return SlotType.DES_Buy_AnyDisPort;
 				} else {
@@ -42,7 +44,7 @@ public final class SlotClassifier {
 			// It's a sell...
 			final DischargeSlot dis = (DischargeSlot) slot;
 			if (dis.isFOBSale()) {
-				if (dis.getSlotOrDelegateDivertible()) {
+				if (dis.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
 					// This is speculative ATOW, Nov 2013
 					return SlotType.FOB_Sale_AnyLoadPort;
 				} else {

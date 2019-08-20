@@ -24,12 +24,18 @@ import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorP
 import com.mmxlabs.models.lng.cargo.ui.editorpart.AssignmentManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
+import com.mmxlabs.models.lng.cargo.ui.util.TimeWindowHelper;
 import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortSingleReferenceManipulatorExtension;
+import com.mmxlabs.models.lng.pricing.ui.autocomplete.PriceAttributeManipulator;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.DESPurchaseDealTypeManipulator;
+import com.mmxlabs.models.ui.editors.FOBSaleDealTypeManipulator;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
@@ -47,6 +53,7 @@ import com.mmxlabs.models.ui.tabular.columngeneration.SimpleEmfBlockColumnFactor
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.EnumAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.HoursSingleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
@@ -96,7 +103,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					if (loadSlot.isDESPurchase()) {
-						if (slot.getSlotOrDelegateDivertible()) {
+						if (((LoadSlot)slot).getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 							return yesSymbol;
 						}
 					}
@@ -105,7 +112,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					if (dischargeSlot.isFOBSale()) {
-						if (slot.getSlotOrDelegateDivertible()) {
+						if (((DischargeSlot)slot).getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
 							return yesSymbol;
 						}
 					}
@@ -224,7 +231,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							public String renderSetValue(final Object owner, final Object object) {
 								String v = super.renderSetValue(owner, object);
 								if (!v.isEmpty()) {
-									final String suffix = getTimeWindowSuffix(owner);
+									final String suffix = TimeWindowHelper.getTimeWindowSuffix(owner);
 									v = v + suffix;
 								}
 								if (!v.isEmpty()) {
@@ -235,7 +242,8 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 										}
 									}
 								}
-
+								v = v + (v.isEmpty() ? "" : " ");
+								v = v + TimeWindowHelper.getCPWindowSuffix(owner);
 								return v;
 							}
 						};
@@ -311,6 +319,12 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().setSummary(false);
 						createColumn.column.getColumn().setDetail(true);
 					}
+					{
+						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowCounterParty(), editingDomain);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Counter Party", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+						createColumn.column.getColumn().setSummary(false);
+						createColumn.column.getColumn().setDetail(true);
+					}			
 					return null;
 				}
 			});
@@ -362,7 +376,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().setDetail(true);
 					}
 					{
-						final StringAttributeManipulator rendMan = new StringAttributeManipulator(CargoPackage.eINSTANCE.getSlot_PriceExpression(), editingDomain);
+						final PriceAttributeManipulator rendMan = new PriceAttributeManipulator(CargoPackage.eINSTANCE.getSlot_PriceExpression(), editingDomain);
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Expression", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.setTooltip("Price expression");
 						createColumn.column.getColumn().setSummary(false);
@@ -666,7 +680,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							public String renderSetValue(final Object owner, final Object object) {
 								String v = super.renderSetValue(owner, object);
 								if (!v.isEmpty()) {
-									final String suffix = getTimeWindowSuffix(owner);
+									final String suffix = TimeWindowHelper.getTimeWindowSuffix(owner);
 									v = v + suffix;
 								}
 								if (!v.isEmpty()) {
@@ -677,7 +691,8 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 										}
 									}
 								}
-
+								v = v + (v.isEmpty() ? "" : " ");
+								v = v + TimeWindowHelper.getCPWindowSuffix(owner);
 								return v;
 							}
 						};
@@ -746,6 +761,12 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().setSummary(false);
 						createColumn.column.getColumn().setDetail(true);
 					}
+					{
+						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowCounterParty(), editingDomain);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Counter Party", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						createColumn.column.getColumn().setSummary(false);
+						createColumn.column.getColumn().setDetail(true);
+					}		
 					return null;
 				}
 			});
@@ -1044,7 +1065,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 					}
 					{
-						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Divertible(), editingDomain) {
+						final DESPurchaseDealTypeManipulator rendMan = new DESPurchaseDealTypeManipulator(CargoPackage.eINSTANCE.getLoadSlot_DesPurchaseDealType(), editingDomain) {
 							@Override
 							public boolean canEdit(final Object object) {
 
@@ -1069,7 +1090,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return "";
 							}
 						};
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Divertible", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+						final ColumnHandler createColumn = blockManager.createColumn(block, "DES type", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setDetail(true);
 						createColumn.column.getColumn().setSummary(false);
 
@@ -1081,7 +1102,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 								if (object instanceof LoadSlot) {
 									final LoadSlot loadSlot = (LoadSlot) object;
-									return loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible();
+									return loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE;
 
 								}
 								return false;
@@ -1091,7 +1112,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							public String render(final Object object) {
 								if (object instanceof LoadSlot) {
 									final LoadSlot loadSlot = (LoadSlot) object;
-									if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
+									if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 										return super.render(object);
 
 									}
@@ -1149,7 +1170,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 					}
 					{
-						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Divertible(), editingDomain) {
+						final FOBSaleDealTypeManipulator rendMan = new FOBSaleDealTypeManipulator(CargoPackage.eINSTANCE.getDischargeSlot_FobSaleDealType(), editingDomain) {
 
 							@Override
 							public boolean canEdit(final Object object) {
@@ -1175,7 +1196,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							}
 						};
 
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Divertible", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						final ColumnHandler createColumn = blockManager.createColumn(block, "FOB type", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setDetail(true);
 						createColumn.column.getColumn().setSummary(false);
 					}
@@ -1186,8 +1207,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 								if (object instanceof DischargeSlot) {
 									final DischargeSlot dischargeSlot = (DischargeSlot) object;
-									return dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateDivertible();
-
+									return dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST;
 								}
 								return false;
 							}
@@ -1196,7 +1216,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							public String render(final Object object) {
 								if (object instanceof DischargeSlot) {
 									final DischargeSlot dischargeSlot = (DischargeSlot) object;
-									if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateDivertible()) {
+									if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
 										return super.render(object);
 									}
 
@@ -1300,34 +1320,6 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			}
 
 		};
-	}
-
-	protected String getTimeWindowSuffix(final Object owner) {
-		if (owner instanceof Slot) {
-			final Slot<?> slot = (Slot<?>) owner;
-			final int size = slot.getSlotOrDelegateWindowSize();
-			final TimePeriod units = slot.getSlotOrDelegateWindowSizeUnits();
-			final String suffix;
-			switch (units) {
-			case DAYS:
-				suffix = "d";
-				break;
-			case HOURS:
-				suffix = "h";
-				break;
-			case MONTHS:
-				suffix = "m";
-				break;
-			default:
-				return "";
-
-			}
-			if (size > 0) {
-				return String.format(" +%d%s", size, suffix);
-			}
-
-		}
-		return "";
 	}
 
 	private static String mapName(final VolumeUnits units) {

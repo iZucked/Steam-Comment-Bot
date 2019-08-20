@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.its.tests.microcases.sandbox;
 
 import java.time.LocalDate;

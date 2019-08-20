@@ -43,6 +43,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IScheduledPurgeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -128,6 +129,9 @@ public class FeasibleTimeWindowTrimmer {
 	private IVesselProvider vesselProvider;
 
 	@Inject
+	private IScheduledPurgeProvider scheduledPurgeProvider;
+
+	@Inject
 	private IActualsDataProvider actualsDataProvider;
 
 	@Inject
@@ -140,6 +144,10 @@ public class FeasibleTimeWindowTrimmer {
 	private PanamaBookingHelper panamaBookingsHelper;
 
 	private final TimeWindow defaultStartWindow = new TimeWindow(0, Integer.MAX_VALUE);
+
+	@Inject
+	@Named(SchedulerConstants.Key_SchedulePurges)
+	private boolean purgeSchedulingEnabled;
 
 	public FeasibleTimeWindowTrimmer() {
 		super();
@@ -225,6 +233,7 @@ public class FeasibleTimeWindowTrimmer {
 		final boolean[] breakSequence = findSequenceBreaks(sequence, isRoundTripSequence);
 
 		final int vesselMaxSpeed = vesselAvailability.getVessel().getMaxSpeed();
+		final int vesselPurgeTime = vesselAvailability.getVessel().getPurgeTime();
 
 		int index = 0;
 		ISequenceElement prevElement = null;
@@ -286,6 +295,15 @@ public class FeasibleTimeWindowTrimmer {
 				assert prevPortSlot != null;
 
 				extraIdleTime[index - 1] = actualsDataProvider.hasActuals(thisPortSlot) ? 0 : extraIdleTimeProvider.getExtraIdleTimeInHours(prevPortSlot, thisPortSlot);
+				if (purgeSchedulingEnabled) {
+					if (portTypeProvider.getPortType(prevElement) == PortType.DryDock) {
+						extraIdleTime[index - 1] += vesselPurgeTime;
+					} else if (portTypeProvider.getPortType(element) == PortType.Load) {
+						if (scheduledPurgeProvider.isPurgeScheduled(thisPortSlot)) {
+							extraIdleTime[index - 1] += vesselPurgeTime;
+						}
+					}
+				}
 				portTimeWindowsRecord.setSlotExtraIdleTime(prevPortSlot, extraIdleTime[index - 1]);
 
 			}
@@ -331,6 +349,16 @@ public class FeasibleTimeWindowTrimmer {
 				assert prevPortSlot != null;
 
 				extraIdleTime[index - 1] = actualsDataProvider.hasActuals(thisPortSlot) ? 0 : extraIdleTimeProvider.getExtraIdleTimeInHours(prevPortSlot, thisPortSlot);
+
+				if (purgeSchedulingEnabled) {
+					if (portTypeProvider.getPortType(prevElement) == PortType.DryDock) {
+						extraIdleTime[index - 1] += vesselPurgeTime;
+					} else if (portTypeProvider.getPortType(element) == PortType.Load) {
+						if (scheduledPurgeProvider.isPurgeScheduled(thisPortSlot)) {
+							extraIdleTime[index - 1] += vesselPurgeTime;
+						}
+					}
+				}
 
 				final IPort prevPort = portProvider.getPortForElement(prevElement);
 				final IPort port = portProvider.getPortForElement(element);
@@ -956,10 +984,10 @@ public class FeasibleTimeWindowTrimmer {
 				timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
 			} else {
 				try {
-				feasibleWindowStart = Math.max(windowStartTime[portTimeWindowsRecord.getIndex(portSlot)],
-						prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));
-				feasibleWindowEnd = Math.max(windowEndTime[portTimeWindowsRecord.getIndex(portSlot)], feasibleWindowStart + 1);
-				timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
+					feasibleWindowStart = Math.max(windowStartTime[portTimeWindowsRecord.getIndex(portSlot)],
+							prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));
+					feasibleWindowEnd = Math.max(windowEndTime[portTimeWindowsRecord.getIndex(portSlot)], feasibleWindowStart + 1);
+					timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
 				} catch (Exception e) {
 					feasibleWindowStart = Math.max(windowStartTime[portTimeWindowsRecord.getIndex(portSlot)],
 							prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));

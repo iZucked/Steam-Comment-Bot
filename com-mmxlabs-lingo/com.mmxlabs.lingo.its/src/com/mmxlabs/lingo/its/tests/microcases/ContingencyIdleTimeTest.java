@@ -5,18 +5,12 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.List;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.google.common.collect.Lists;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -37,28 +31,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProviderEditor;
  *
  */
 @ExtendWith(value = ShiroRunner.class)
-public class ContingencyIdleTimeTest extends AbstractMicroTestCase {
-
-	private static List<String> requiredFeatures = Lists.newArrayList("contingency-idle-time");
-	private static List<String> addedFeatures = new LinkedList<>();
-
-	@BeforeAll
-	public static void hookIn() {
-		for (final String feature : requiredFeatures) {
-			if (!LicenseFeatures.isPermitted("features:" + feature)) {
-				LicenseFeatures.addFeatureEnablements(feature);
-				addedFeatures.add(feature);
-			}
-		}
-	}
-
-	@AfterAll
-	public static void hookOut() {
-		for (final String feature : addedFeatures) {
-			LicenseFeatures.removeFeatureEnablements(feature);
-		}
-		addedFeatures.clear();
-	}
+public class ContingencyIdleTimeTest extends AbstractIdleTimeTests {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)

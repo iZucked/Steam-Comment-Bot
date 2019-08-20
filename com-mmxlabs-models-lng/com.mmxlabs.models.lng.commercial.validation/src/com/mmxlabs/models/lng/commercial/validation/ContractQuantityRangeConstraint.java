@@ -14,22 +14,22 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class ContractQuantityRangeConstraint extends AbstractModelMultiConstraint {
 
+	private static int SENSIBLE_M3 = 300_000;
+	
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof Contract) {
 			final Contract contract = (Contract) target;
-			DetailConstraintStatusDecorator rangeCheckDSD = checkRange(contract, ctx);
-			if (rangeCheckDSD != null) {
-				failures.add(rangeCheckDSD);
-			}
+			checkRange(contract, ctx, failures);
 			if (contract.getOperationalTolerance() < 0.0) {
 				final String failureMessage = String.format("Contract '%s' operational tolerance is less than zero", contract.getName());
 
@@ -49,8 +49,8 @@ public class ContractQuantityRangeConstraint extends AbstractModelMultiConstrain
 		return Activator.PLUGIN_ID;
 	}
 
-	private DetailConstraintStatusDecorator checkRange(Contract contract, final IValidationContext ctx) {
-		if (contract.getMinQuantity() > 0 && contract.getMaxQuantity() > 0) {
+	private void checkRange(final Contract contract, final IValidationContext ctx, final List<IStatus> failures) {
+		if (contract.getMinQuantity() >= 0 && contract.getMaxQuantity() > 0) {
 			final double minQuantity = contract.getMinQuantity();
 			final double maxQuantity = contract.getMaxQuantity();
 
@@ -59,11 +59,21 @@ public class ContractQuantityRangeConstraint extends AbstractModelMultiConstrain
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
 				dsd.addEObjectAndFeature(contract, CommercialPackage.Literals.CONTRACT__MIN_QUANTITY);
 				dsd.addEObjectAndFeature(contract, CommercialPackage.Literals.CONTRACT__MAX_QUANTITY);
-				return dsd;
+				failures.add(dsd);
 			}
-
+			if (minQuantity > SENSIBLE_M3 && contract.getVolumeLimitsUnit() == VolumeUnits.M3) {
+				final String failureMessage = String.format("Contract '%s' min volume limit (%s) is not sensible, note units are in M3", contract.getName(), minQuantity);
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+				dsd.addEObjectAndFeature(contract, CommercialPackage.Literals.CONTRACT__MIN_QUANTITY);
+				failures.add(dsd);
+			}
+			if (maxQuantity > SENSIBLE_M3 && contract.getVolumeLimitsUnit() == VolumeUnits.M3) {
+				final String failureMessage = String.format("Contract '%s' max volume limit (%s) is not sensible, note units are in M3", contract.getName(), maxQuantity);
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+				dsd.addEObjectAndFeature(contract, CommercialPackage.Literals.CONTRACT__MAX_QUANTITY);
+				failures.add(dsd);
+			}
 		}
-		return null;
 	}
 
 }

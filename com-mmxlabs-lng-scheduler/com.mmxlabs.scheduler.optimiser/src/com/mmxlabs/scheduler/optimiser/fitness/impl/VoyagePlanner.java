@@ -1209,7 +1209,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 				// Take voyage details time as this can be larger than
 				// available time e.g. due to reaching max speed.
-				final int duration = details.getTravelTime() + details.getIdleTime();
+				final int duration = details.getTravelTime() + details.getIdleTime() + details.getPurgeDuration();
 
 				// assert duration >= (availableTime - 1) :
 				// "Duration should exceed available time less one, but is "

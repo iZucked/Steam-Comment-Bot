@@ -310,7 +310,7 @@
                   checkEnabled="false">
                <and>
                   <test
-                        args="features:sandbox"
+                        args="features:break-even-table"
                         forcePluginActivation="true"
                         property="com.mmxlabs.license.features.enablement">
                   </test>

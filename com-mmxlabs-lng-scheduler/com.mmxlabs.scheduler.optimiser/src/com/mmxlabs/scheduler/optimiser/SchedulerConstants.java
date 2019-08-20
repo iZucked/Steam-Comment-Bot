@@ -46,6 +46,9 @@ public final class SchedulerConstants {
 	public static final String Key_UsePriceBasedWindowTrimming = "scheduler-use-price-based-window-trimming";
 	public static final String Key_UseCanalSlotBasedWindowTrimming = "scheduler-use-canal-slot-based-window-trimming";
 
+	public static final String Key_SchedulePurges = "schedule-purges";
+
+	
 	/**
 	 * When there is not other information available, use this capacity limit.
 	 */

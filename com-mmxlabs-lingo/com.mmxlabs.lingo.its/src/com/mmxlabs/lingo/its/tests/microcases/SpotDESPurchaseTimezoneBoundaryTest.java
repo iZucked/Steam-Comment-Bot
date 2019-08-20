@@ -68,7 +68,7 @@ public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationRes
 		for (final SlotAllocation slotAllcocation : cargoAllocation.getSlotAllocations()) {
 			if (slotAllcocation.getSlot() instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slotAllcocation.getSlot();
-				final ZonedDateTime cal = loadSlot.getWindowStartWithSlotOrPortTime();
+				final ZonedDateTime cal = loadSlot.getSchedulingTimeWindow().getStart();
 				final LocalDateTime localDateTime = cal.toLocalDateTime();
 				Assertions.assertEquals(1, localDateTime.getMonthValue());
 				Assertions.assertEquals(1, localDateTime.getDayOfMonth());

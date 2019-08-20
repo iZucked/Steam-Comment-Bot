@@ -107,7 +107,7 @@ public class LDShippingAnnotationHelper {
 
 		shippingAnnotation.ballastRoute = ballastLeg.getOptions().getRoute();
 		shippingAnnotation.ballastDistance = ballastLeg.getOptions().getDistance();
-		shippingAnnotation.ballastHireHours = ballastLeg.getTravelTime() + ballastLeg.getIdleTime();
+		shippingAnnotation.ballastHireHours = ballastLeg.getTravelTime() + ballastLeg.getIdleTime() + ballastLeg.getPurgeDuration();
 		shippingAnnotation.ballastSpeed = ballastLeg.getSpeed();
 		shippingAnnotation.ballastCanalCosts = ballastLeg.getOptions().getRouteCost();
 

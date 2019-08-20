@@ -18,6 +18,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Sequence;
 
 public class FleetEquivalanceGroupBuilder {
@@ -99,7 +100,7 @@ public class FleetEquivalanceGroupBuilder {
 				foundEquivalent = true;
 				for (final EObject referenceElement : referenceElements) {
 					// Skip these elements types - they are supplemental items.
-					if (referenceElement instanceof Journey || referenceElement instanceof Idle || referenceElement instanceof Cooldown) {
+					if (referenceElement instanceof Journey || referenceElement instanceof Idle || referenceElement instanceof Cooldown || referenceElement instanceof Purge) {
 						continue;
 					}
 

@@ -72,7 +72,6 @@ public class SlotItemProvider
 			addPricingEventPropertyDescriptor(object);
 			addPricingDatePropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
-			addDivertiblePropertyDescriptor(object);
 			addShippingDaysRestrictionPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 			addRestrictedContractsPropertyDescriptor(object);
@@ -92,6 +91,7 @@ public class SlotItemProvider
 			addNominatedVesselPropertyDescriptor(object);
 			addLockedPropertyDescriptor(object);
 			addCancelledPropertyDescriptor(object);
+			addWindowCounterPartyPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -603,28 +603,6 @@ public class SlotItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Divertible feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDivertiblePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Slot_divertible_feature"),
-				 getString("_UI_Slot_divertible_description"),
-				 CargoPackage.Literals.SLOT__DIVERTIBLE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Shipping Days Restriction feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1043,6 +1021,28 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Window Counter Party feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWindowCounterPartyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_windowCounterParty_feature"),
+				 getString("_UI_Slot_windowCounterParty_description"),
+				 CargoPackage.Literals.SLOT__WINDOW_COUNTER_PARTY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1099,7 +1099,6 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__PRICING_EVENT:
 			case CargoPackage.SLOT__PRICING_DATE:
 			case CargoPackage.SLOT__NOTES:
-			case CargoPackage.SLOT__DIVERTIBLE:
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 			case CargoPackage.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE:
 			case CargoPackage.SLOT__RESTRICTED_CONTRACTS_OVERRIDE:
@@ -1113,6 +1112,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
 			case CargoPackage.SLOT__LOCKED:
 			case CargoPackage.SLOT__CANCELLED:
+			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

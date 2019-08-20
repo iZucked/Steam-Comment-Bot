@@ -117,6 +117,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
@@ -432,7 +433,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 
-		final ExecutorService executorService = Executors.newFixedThreadPool(6);
+		final ExecutorService executorService = Executors.newFixedThreadPool(LNGScenarioChainBuilder.getNumberOfAvailableCores());
 		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, (bridge) -> {
 			final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
 			final BreakEvenSanboxUnit unit = new BreakEvenSanboxUnit(lngScenarioModel, dataTransformer, "break-even-sandbox", userSettings, constraints, executorService,
@@ -650,7 +651,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 				@Override
 				public IMultiStateResult run(IProgressMonitor monitor) {
-					return insertionRunner.runInsertion(monitor);
+					return insertionRunner.runInsertion(new SlotInsertionOptimiserLogger(), monitor);
 				}
 
 				@Override

@@ -45,6 +45,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -219,6 +220,8 @@ public abstract class AbstractVerticalReportVisualiser {
 			}
 		} else if (event instanceof Cooldown) {
 			return "Cooldown";
+		} else if (event instanceof Purge) {
+			return "Purge";
 		}
 
 		final EClass eventClass = event.eClass();
@@ -279,8 +282,8 @@ public abstract class AbstractVerticalReportVisualiser {
 	 */
 	public boolean isDayInsideWindow(final LocalDate day, final SlotVisit visit) {
 		final Slot slot = visit.getSlotAllocation().getSlot();
-		final LocalDate eventStart = getLocalDateFor(slot.getWindowStartWithSlotOrPortTime());
-		final LocalDate eventEnd = getLocalDateFor(slot.getWindowEndWithSlotOrPortTime());
+		final LocalDate eventStart = getLocalDateFor(slot.getSchedulingTimeWindow().getStart());
+		final LocalDate eventEnd = getLocalDateFor(slot.getSchedulingTimeWindow().getEnd());
 
 		final Range<LocalDate> range = Range.closedOpen(eventStart, eventEnd);
 		return range.contains(day);

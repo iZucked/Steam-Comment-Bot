@@ -23,6 +23,8 @@ import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
@@ -59,9 +61,9 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 	}
 
 	@NonNull
-	public T withDESPurchase(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final PurchaseContract purchaseContract,
+	public T withDESPurchase(@NonNull final String name, final DESPurchaseDealType dealType, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final PurchaseContract purchaseContract,
 			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, final @Nullable Double cv, @Nullable final Vessel nominatedVessel) {
-		final Slot slot = cargoModelBuilder.createDESPurchase(name, divertible, windowStart, port, purchaseContract, entity, priceExpression, cv, nominatedVessel);
+		final Slot slot = cargoModelBuilder.createDESPurchase(name, dealType, windowStart, port, purchaseContract, entity, priceExpression, cv, nominatedVessel);
 		this.slot = slot;
 		return (T) this;
 	}
@@ -82,9 +84,9 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 	}
 
 	@NonNull
-	public T withFOBSale(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final SalesContract salesContract,
+	public T withFOBSale(@NonNull final String name, final FOBSaleDealType dealType, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final SalesContract salesContract,
 			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable final Vessel nominatedVessel) {
-		final Slot slot = cargoModelBuilder.createFOBSale(name, divertible, windowStart, port, salesContract, entity, priceExpression, nominatedVessel);
+		final Slot slot = cargoModelBuilder.createFOBSale(name, dealType, windowStart, port, salesContract, entity, priceExpression, nominatedVessel);
 		this.slot = slot;
 		return (T) this;
 	}
@@ -182,6 +184,9 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 
 	@NonNull
 	public T withWindowFlex(final int flex, @NonNull TimePeriod units) {
+		if (flex < 0) {
+			throw new IllegalArgumentException("Flex must be greater than or equals to zero.");
+		}
 		slot.setWindowFlex(flex);
 		slot.setWindowFlexUnits(units);
 		return (T) this;

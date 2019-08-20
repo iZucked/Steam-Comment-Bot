@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
@@ -79,7 +80,7 @@ public class ReturnActualsInlineEditorChangedListener implements IInlineEditorEx
 						Slot slot = slotActuals.getSlot();
 						if (slot instanceof LoadSlot) {
 							LoadSlot loadSlot = (LoadSlot) slot;
-							if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDivertible()) {
+							if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 								enabled = true;
 								break;
 							}

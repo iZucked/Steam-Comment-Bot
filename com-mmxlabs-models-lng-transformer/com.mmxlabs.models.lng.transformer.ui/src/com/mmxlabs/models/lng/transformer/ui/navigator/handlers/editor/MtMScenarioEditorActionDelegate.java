@@ -4,9 +4,11 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,14 +35,20 @@ import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.mtm.MTMUtils;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditorMenuHelper;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.scenario.service.model.Container;
@@ -62,7 +70,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 	@Override
 	public void run(final IAction action) {
 
-		if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
+		if (editor != null && editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
 			final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
 			final ScenarioInstance instance = scenarioServiceEditorInput.getScenarioInstance();
 			
@@ -103,6 +111,36 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 							for (final LoadSlot slot : cargoModel.getLoadSlots()) {
 								usedLoadIDStrings.add(slot.getName());
 							}
+							final Map<LoadSlot, SlotAllocation> discharges = new HashMap();
+							final Map<DischargeSlot, SlotAllocation> loads = new HashMap();
+							final ScheduleModel sm = scenarioModel.getScheduleModel();
+							if (sm != null) {
+								final Schedule schedule = sm.getSchedule();
+								if (schedule != null) {
+									for (final CargoAllocation ca : schedule.getCargoAllocations()) {
+										LoadSlot ls = null;
+										SlotAllocation dischargeSlotAllocation = null;
+										DischargeSlot ds = null;
+										SlotAllocation loadSlotAllocation = null;
+										for (final SlotAllocation sa : ca.getSlotAllocations()) {
+											if (sa.getSlot() instanceof LoadSlot) {
+												ls = (LoadSlot) sa.getSlot();
+												loadSlotAllocation = sa;
+											}
+											if (sa.getSlot() instanceof DischargeSlot) {
+												dischargeSlotAllocation = sa;
+												ds = (DischargeSlot) sa.getSlot();
+											} 
+										}
+										if (ls != null && dischargeSlotAllocation != null) {
+											discharges.putIfAbsent(ls, dischargeSlotAllocation);
+										}
+										if (ds != null && loadSlotAllocation != null) {
+											loads.putIfAbsent(ds, loadSlotAllocation);
+										}
+									}
+								}
+							}
 
 							for (final MTMRow row : model.getRows()) {
 								if (row.getBuyOption() != null) {
@@ -116,6 +154,15 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 									}
 
 									double price = Double.MIN_VALUE;
+									
+									// getting the price of the original cargo
+									if (!discharges.isEmpty()) {
+										final SlotAllocation sa = discharges.get(loadSlot);
+										if (sa instanceof SlotAllocation) {
+											price = sa.getPrice();
+										}
+									}
+									
 									MTMResult bestResult = null;
 
 									// make sure that there's a vessel availability
@@ -170,6 +217,14 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 									}
 
 									double price = Double.MIN_VALUE;
+									
+									if (!loads.isEmpty()) {
+										final SlotAllocation sa = loads.get(dischargeSlot);
+										if (sa != null) {
+											price = sa.getPrice();
+										}
+									}
+									
 									MTMResult bestResult = null;
 
 									// make sure that there's a vessel availability

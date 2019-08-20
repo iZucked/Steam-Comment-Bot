@@ -190,6 +190,8 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.FALSE);
+		
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_SchedulePurges)).toInstance(Boolean.FALSE);
 
 		bind(PriceIntervalProviderHelper.class);
 		bind(PriceIntervalProducer.class);

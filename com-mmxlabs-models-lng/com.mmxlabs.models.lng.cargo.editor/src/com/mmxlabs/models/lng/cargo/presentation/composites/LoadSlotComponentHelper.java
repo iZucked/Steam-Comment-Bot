@@ -17,6 +17,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -25,6 +27,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -73,10 +76,12 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_cargoCVEditor(detailComposite, topClass);
+		add_schedulePurgeEditor(detailComposite, topClass);
 		add_arriveColdEditor(detailComposite, topClass);
 		add_DESPurchaseEditor(detailComposite, topClass);
 		add_transferFromEditor(detailComposite, topClass);
 		add_salesDeliveryTypeEditor(detailComposite, topClass);
+		add_desPurchaseDealTypeEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -86,6 +91,20 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cargoCVEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__CARGO_CV));
+	}
+
+	/**
+	 * Create the editor for the schedulePurge feature on LoadSlot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_schedulePurgeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PURGE)) {
+			// Hide for spot loads
+			if (!CargoPackage.Literals.SPOT_LOAD_SLOT.equals(topClass)) {
+				detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__SCHEDULE_PURGE));
+			}
+		}
 	}
 
 	/**
@@ -133,6 +152,16 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_salesDeliveryTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__SALES_DELIVERY_TYPE));
+	}
+
+	/**
+	 * Create the editor for the desPurchaseDealType feature on LoadSlot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_desPurchaseDealTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE);
+		detailComposite.addInlineEditor(new NonShppedDealTypeInlineEditorWrapper(editor));
 	}
 
 	@Override

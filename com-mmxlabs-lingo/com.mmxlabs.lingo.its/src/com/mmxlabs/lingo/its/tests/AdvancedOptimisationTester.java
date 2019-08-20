@@ -43,6 +43,10 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 			final String limitedLabel = withLimited ? "Limited_" : "";
 			final String gcoLabel = withGCO ? "GCO_" : "";
 			for (final boolean withActionSets : BOOLS) {
+				// Check period for ITS.
+				if (withActionSets && (periodStart == null || periodEnd == null)) {
+					continue;
+				}
 				final String actionLabel = withActionSets ? "_ActionSets" : "";
 				for (final SimilarityMode similarityMode : SimilarityMode.values()) {
 					if (similarityMode == SimilarityMode.ALL) {

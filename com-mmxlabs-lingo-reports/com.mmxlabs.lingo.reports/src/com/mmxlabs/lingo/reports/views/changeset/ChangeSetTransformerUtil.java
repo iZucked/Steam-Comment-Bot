@@ -62,6 +62,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -124,6 +125,8 @@ public final class ChangeSetTransformerUtil {
 					} else if (event instanceof Idle) {
 						continue;
 					} else if (event instanceof Cooldown) {
+						continue;
+					} else if (event instanceof Purge) {
 						continue;
 					}
 
@@ -246,7 +249,6 @@ public final class ChangeSetTransformerUtil {
 						// This is probably caused from schedule models pre-dating the SlotAllocationType. The purchase type appears to be used as default.
 						// We should add in migration into the relevant place to add it in (NOT CURRENT MIGRATION).
 						final LoadSlot slot = (LoadSlot) loadAllocation.getSlot();
-						assert slot != null;
 
 						final String key = ChangeSetTransformerUtil.getKeyName(loadAllocation);
 						final String name = ChangeSetTransformerUtil.getRowName(slot);
@@ -266,7 +268,6 @@ public final class ChangeSetTransformerUtil {
 					if (i < dischargeAllocations.size()) {
 						dischargeAllocation = dischargeAllocations.get(i);
 						final DischargeSlot slot = (DischargeSlot) dischargeAllocation.getSlot();
-						assert slot != null;
 
 						final String key = ChangeSetTransformerUtil.getKeyName(dischargeAllocation);
 						final String name = ChangeSetTransformerUtil.getRowName(slot);
@@ -726,9 +727,9 @@ public final class ChangeSetTransformerUtil {
 								ChangeSetRowData lhsLink = changeSetRowData.getLhsLink();
 								if (lhsLink != null) {
 									// TODO: Why is it null in sandbox?
-								final ChangeSetRowDataGroup rowDataGroup = lhsLink.getRowDataGroup();
-								data.setRowDataGroup(rowDataGroup);
-								handled = true;
+									final ChangeSetRowDataGroup rowDataGroup = lhsLink.getRowDataGroup();
+									data.setRowDataGroup(rowDataGroup);
+									handled = true;
 								}
 							}
 						}
@@ -1137,7 +1138,7 @@ public final class ChangeSetTransformerUtil {
 			if (toSchedule.getOtherPNL() != null && toSchedule.getOtherPNL().getGroupProfitAndLoss() != null) {
 				pnl += toSchedule.getOtherPNL().getGroupProfitAndLoss().getProfitAndLoss();
 				lateness += LatenessUtils.getLatenessExcludingFlex(toSchedule.getOtherPNL());
-//				violations += ScheduleModelKPIUtils.getCapacityViolationCount(toSchedule.getOtherPNL());
+				// violations += ScheduleModelKPIUtils.getCapacityViolationCount(toSchedule.getOtherPNL());
 
 			}
 		}

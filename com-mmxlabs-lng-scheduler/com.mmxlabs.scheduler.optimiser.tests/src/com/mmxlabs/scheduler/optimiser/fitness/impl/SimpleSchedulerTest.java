@@ -19,7 +19,6 @@ import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Module;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
@@ -68,7 +67,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionR
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
-import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker.ModuleBuilder;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
@@ -120,9 +118,9 @@ public class SimpleSchedulerTest {
 		baseFuCurveProviderEditor.setBaseFuelCurve(baseFuel, new ConstantValueCurve(7000));
 
 		// TODO: Setup start/end ports correctly
-		final IVessel vessel1 = builder.createVessel("vessel-1", 12000, 20000, 150000000, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
-		final IVessel vessel2 = builder.createVessel("vessel-2", 12000, 20000, 150000000, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
-		final IVessel vessel3 = builder.createVessel("vessel-3", 12000, 20000, 150000000, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
+		final IVessel vessel1 = builder.createVessel("vessel-1", 12000, 20000, 150000000, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, 0, false);
+		final IVessel vessel2 = builder.createVessel("vessel-2", 12000, 20000, 150000000, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, 0, false);
+		final IVessel vessel3 = builder.createVessel("vessel-3", 12000, 20000, 150000000, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, 0, false);
 
 		// set up basefuel curve
 		final StepwiseIntegerCurve baseFuelCurve = new StepwiseIntegerCurve();
@@ -166,19 +164,19 @@ public class SimpleSchedulerTest {
 		final ISalesPriceCalculator salesCurve = new FixedPriceContract(200000);
 
 		final ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
-				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+				false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
 		final ILoadSlot load2 = builder.createLoadSlot("load2", port1, tw3, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
-				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+				false, 		IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
 		final ILoadSlot load3 = builder.createLoadSlot("load3", port1, tw5, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
-				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+				false, 	IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
 		final ILoadSlot load4 = builder.createLoadSlot("load4", port1, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
-				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+				false, 	IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
 		final ILoadSlot load5 = builder.createLoadSlot("load5", port3, tw2, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
-				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+				false, 	IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
 		final ILoadSlot load6 = builder.createLoadSlot("load6", port3, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
-				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+				false, 	IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
 		final ILoadSlot load7 = builder.createLoadSlot("load7", port5, tw6, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
-				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+				false, 	IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
 
 		final IDischargeSlot discharge1 = builder.createDischargeSlot("discharge1", port2, tw2, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
 				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
@@ -235,6 +233,7 @@ public class SimpleSchedulerTest {
 	private IPhaseOptimisationData createPhaseOptimisationData(Injector injector, IOptimisationData optimisationData) {
 		PhaseOptimisationData phase = injector.getInstance(PhaseOptimisationData.class);
 		phase.setSequenceElements(optimisationData.getSequenceElements());
+		phase.setResources(optimisationData.getResources());
 		return phase;
 	}
 
@@ -282,7 +281,7 @@ public class SimpleSchedulerTest {
 				}
 			};
 
-			final ILocalSearchOptimiser optimiser = GeneralTestUtils.buildOptimiser(context, data, pData, new Random(seed), 1000, 5, monitor);
+			final ILocalSearchOptimiser optimiser = GeneralTestUtils.buildOptimiser(injector, context, data, pData, new Random(seed), 1000, 5, monitor);
 
 			for (final IConstraintChecker c : optimiser.getConstraintCheckers()) {
 				injector.injectMembers(c);
@@ -338,8 +337,7 @@ public class SimpleSchedulerTest {
 					protected void configure() {
 						bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
 					}
-				}
-		);
+				});
 	}
 
 	void printSequences(final Collection<ISequences> sequences) {

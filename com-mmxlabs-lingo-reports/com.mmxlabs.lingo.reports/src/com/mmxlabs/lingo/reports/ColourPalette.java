@@ -107,6 +107,7 @@ public final class ColourPalette {
 		setItemColour(ColourPaletteItems.Voyage_Start, ColourElements.Background, Slot_White);
 		setItemColour(ColourPaletteItems.Voyage_End, ColourElements.Background, Slot_White);
 		setItemColour(ColourPaletteItems.Voyage_Cooldown, ColourElements.Background, Slot_White);
+		setItemColour(ColourPaletteItems.Voyage_Purge, ColourElements.Background, Slot_White);
 
 		setItemColour(ColourPaletteItems.Event_CharterOut, ColourElements.Background, Vessel_Charter_Out);
 		setItemColour(ColourPaletteItems.Event_Maintenance, ColourElements.Background, Vessel_Maintenance);
@@ -151,7 +152,7 @@ public final class ColourPalette {
 		Voyage_Load, Voyage_Discharge,
 		Voyage_Laden_Journey, Voyage_Laden_Idle,
 		Voyage_Ballast_Journey, Voyage_Ballast_Idle,
-		Voyage_Cooldown,
+		Voyage_Cooldown, Voyage_Purge,
 		Voyage_GeneratedCharterOut,
 		Voyage_CharterLength,
 		Event_DryDock, Event_Maintenance, Event_CharterOut,

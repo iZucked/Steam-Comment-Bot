@@ -30,6 +30,8 @@ import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintChecker;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
@@ -154,7 +156,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeDESPurchase("L", true, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
+				.makeDESPurchase("L", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
 				.with(s -> s.setShippingDaysRestriction(60)) //
 				.build() //
 				// Discharge
@@ -232,7 +234,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 				.with(s -> s.getRestrictedPorts().add(portFinder.findPort("Dragon LNG"))) //
 				.build() //
 				// Discharge
-				.makeFOBSale("D", true, LocalDate.of(2017, 1, 13), portFinder.findPort("Sakai"), null, entity, "7", null)//
+				.makeFOBSale("D", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2017, 1, 13), portFinder.findPort("Sakai"), null, entity, "7", null)//
 				.build() //
 				// Cargo
 				.build();
@@ -302,7 +304,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeDESPurchase("L", true, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), contract, null, null, vessel) //
+				.makeDESPurchase("L", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), contract, null, null, vessel) //
 				.with(s -> s.setShippingDaysRestriction(60)) //
 				.build() //
 				// Discharge
@@ -376,7 +378,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.build() //
 				// Discharge
-				.makeFOBSale("D", true, LocalDate.of(2017, 1, 13), portFinder.findPort("Sakai"), contract, null, null, null)//
+				.makeFOBSale("D", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2017, 1, 13), portFinder.findPort("Sakai"), contract, null, null, null)//
 				.build() //
 				// Cargo
 				.build();
@@ -457,7 +459,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 				.makeMarketFOBPurchase("L", spotMarket, YearMonth.of(2017, 1), portFinder.findPort("Point Fortin")) //
 				.build() //
 				// Discharge
-				.makeFOBSale("D", true, LocalDate.of(2017, 1, 13), portFinder.findPort("Sakai"), null, entity, "7", null)//
+				.makeFOBSale("D", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2017, 1, 13), portFinder.findPort("Sakai"), null, entity, "7", null)//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -536,7 +538,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeDESPurchase("L", true, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
+				.makeDESPurchase("L", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
 				.with(s -> s.setShippingDaysRestriction(60)) //
 				.build() //
 				// Discharge
@@ -614,7 +616,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeDESPurchase("L", true, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), contract, null, null, vessel) //
+				.makeDESPurchase("L", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), contract, null, null, vessel) //
 				.with(s -> s.setShippingDaysRestriction(60)) //
 				.build() //
 				// Discharge
@@ -700,7 +702,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 				.with(s -> s.getRestrictedContracts().add(contract2)) //
 				.build() //
 				// Discharge
-				.makeFOBSale("D", true, LocalDate.of(2017, 1, 13), portFinder.findPort("Sakai"), contract, null, null, null)//
+				.makeFOBSale("D", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2017, 1, 13), portFinder.findPort("Sakai"), contract, null, null, null)//
 				.build() //
 				// Cargo
 				.build();

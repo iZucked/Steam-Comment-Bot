@@ -325,7 +325,7 @@ public class ProfitAndLossCalculator {
 		final int k = sequence.length - skip;
 		for (int i = 0; i < k; i++) {
 			final Object o = sequence[i];
-			planDuration += (o instanceof VoyageDetails) ? (((VoyageDetails) o).getIdleTime() + ((VoyageDetails) o).getTravelTime()) : ((PortDetails) o).getOptions().getVisitDuration();
+			planDuration += (o instanceof VoyageDetails) ? (((VoyageDetails) o).getPurgeDuration() +((VoyageDetails) o).getIdleTime() + ((VoyageDetails) o).getTravelTime()) : ((PortDetails) o).getOptions().getVisitDuration();
 		}
 		return planDuration;
 	}

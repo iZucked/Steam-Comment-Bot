@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -227,7 +228,7 @@ public class EquivalanceGroupBuilder {
 				foundEquivalent = true;
 				for (final EObject referenceElement : referenceElements) {
 					// Skip these elements types - they are supplemental items.
-					if (referenceElement instanceof Journey || referenceElement instanceof Idle || referenceElement instanceof Cooldown) {
+					if (referenceElement instanceof Journey || referenceElement instanceof Idle || referenceElement instanceof Cooldown || referenceElement instanceof Purge) {
 						continue;
 					}
 

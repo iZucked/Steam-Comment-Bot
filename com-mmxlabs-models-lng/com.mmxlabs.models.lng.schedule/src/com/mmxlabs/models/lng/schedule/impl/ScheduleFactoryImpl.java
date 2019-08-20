@@ -119,6 +119,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.GENERATED_CHARTER_OUT: return createGeneratedCharterOut();
 			case SchedulePackage.CHARTER_LENGTH_EVENT: return createCharterLengthEvent();
 			case SchedulePackage.COOLDOWN: return createCooldown();
+			case SchedulePackage.PURGE: return createPurge();
 			case SchedulePackage.FUEL_USAGE: return createFuelUsage();
 			case SchedulePackage.FUEL_QUANTITY: return createFuelQuantity();
 			case SchedulePackage.FUEL_AMOUNT: return createFuelAmount();
@@ -356,6 +357,17 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public Cooldown createCooldown() {
 		CooldownImpl cooldown = new CooldownImpl();
 		return cooldown;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Purge createPurge() {
+		PurgeImpl purge = new PurgeImpl();
+		return purge;
 	}
 
 	/**

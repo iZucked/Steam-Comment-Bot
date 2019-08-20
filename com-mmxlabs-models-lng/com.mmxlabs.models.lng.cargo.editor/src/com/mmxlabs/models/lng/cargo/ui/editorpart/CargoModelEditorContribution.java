@@ -41,6 +41,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -190,7 +191,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			editorPart.setPageText(overridePage, "Overrides");
 		}
 
-		if (LicenseFeatures.isPermitted("features:inventory-model")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_MODEL)) {
 
 			// TODO: Add/Remove facilities
 			// TODO: CSV Import/Export
@@ -311,7 +312,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 		}
 
-		if (LicenseFeatures.isPermitted("features:paperdeals")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS)) {
 			paperDealsPane = new PaperDealsPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			paperDealsPane.createControl(parent);
 			paperDealsPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_PaperDeals()), editorPart.getAdapterFactory(), editorPart.getModelReference());

@@ -23,5 +23,4 @@ public class PricingCalendarsImportAction extends SimpleImportAction {
 		PricingCalendarImporter importer = new PricingCalendarImporter();
 		return importer;
 	}
-
 }

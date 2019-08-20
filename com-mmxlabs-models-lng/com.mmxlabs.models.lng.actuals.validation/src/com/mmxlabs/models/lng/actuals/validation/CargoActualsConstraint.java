@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -109,7 +110,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 									status.addEObjectAndFeature(loadSlot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
 									failures.add(status);
 								}
-								if (loadSlot.getSlotOrDelegateDivertible()) {
+								if (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 									checkReturnActuals = true;
 								}
 

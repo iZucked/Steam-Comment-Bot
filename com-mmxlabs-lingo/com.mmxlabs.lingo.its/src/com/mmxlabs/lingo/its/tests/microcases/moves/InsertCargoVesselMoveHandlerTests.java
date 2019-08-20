@@ -30,6 +30,8 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -137,7 +139,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final LoadSlot load1 = cargoModelBuilder//
-				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
 				.build();
 		//
 		final DischargeSlot discharge1 = cargoModelBuilder//
@@ -210,7 +212,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final LoadSlot load1 = cargoModelBuilder//
-				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
 				.build();
 		//
 		final DischargeSlot discharge1 = cargoModelBuilder//
@@ -265,7 +267,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build();
 		//
 		final DischargeSlot discharge1 = cargoModelBuilder//
-				.makeFOBSale("D1", false, LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "7", null) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "7", null) //
 				.build();
 
 		runTest((injector, scenarioRunner) -> {
@@ -337,7 +339,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build();
 		//
 		final DischargeSlot discharge1 = cargoModelBuilder//
-				.makeFOBSale("D1", false, LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "7", null) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "7", null) //
 				.build();
 
 		runTest((injector, scenarioRunner) -> {
@@ -391,7 +393,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build();
 
 		final LoadSlot load2 = cargoModelBuilder//
-				.makeDESPurchase("L2", false, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
+				.makeDESPurchase("L2", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
 				.build();
 		//
 
@@ -450,7 +452,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build();
 
 		final DischargeSlot discharge = cargoModelBuilder//
-				.makeFOBSale("D2", false, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
+				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
 				.build();
 		//
 

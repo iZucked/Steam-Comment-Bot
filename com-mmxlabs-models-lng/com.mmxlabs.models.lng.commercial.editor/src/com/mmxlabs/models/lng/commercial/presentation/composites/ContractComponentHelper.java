@@ -96,7 +96,6 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_contractTypeEditor(detailComposite, topClass);
 		add_pricingEventEditor(detailComposite, topClass);
 		add_cancellationExpressionEditor(detailComposite, topClass);
-		add_divertibleEditor(detailComposite, topClass);
 		add_shippingDaysRestrictionEditor(detailComposite, topClass);
 	}
 	
@@ -146,19 +145,7 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	protected void add_cancellationExpressionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__CANCELLATION_EXPRESSION));
 	}
-
-
-	/**
-	 * Create the editor for the divertible feature on Contract
-	 *
-	 * @generated NOT
-	 */
-	protected void add_divertibleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__DIVERTIBLE);
-		editor.addNotificationChangedListener(new DivertibleContractInlineEditorChangedListener());
-		detailComposite.addInlineEditor(editor);
-	}
-
+ 
 	/**
 	 * Create the editor for the shippingDaysRestriction feature on Contract
 	 *
