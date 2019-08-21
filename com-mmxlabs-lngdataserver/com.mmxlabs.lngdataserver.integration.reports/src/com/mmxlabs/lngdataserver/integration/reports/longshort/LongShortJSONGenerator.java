@@ -23,8 +23,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
 public class LongShortJSONGenerator {
 
@@ -45,6 +48,32 @@ public class LongShortJSONGenerator {
 			positionsPerMonth.merge(key, 1, Integer::sum);
 		}
 
+		for (final CargoAllocation cargoAllocation : scheduleModel.getSchedule().getCargoAllocations()) {
+			boolean spotSlot = false;
+			Slot<?> nonSpotSlot = null;
+			
+			for (SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
+				final Slot<?> slot = sa.getSlot();
+				
+				if (slot instanceof SpotSlot) {
+					spotSlot = true;
+				}
+				else {
+					nonSpotSlot = slot;
+				}
+			}
+			
+			if (spotSlot) {
+				// Long or short?
+				final Map<YearMonth, Integer> positionsPerMonth = nonSpotSlot instanceof LoadSlot ? longsPerMonths : shortsPerMonths;
+
+				final LocalDate d = nonSpotSlot.getWindowStart();
+				final YearMonth key = YearMonth.of(d.getYear(), d.getMonth());
+				positionsPerMonth.merge(key, 1, Integer::sum);
+			}
+		}
+
+		
 		final YearMonth min = findMinYearMonth(shortsPerMonths.keySet(), longsPerMonths.keySet());
 		final YearMonth max = findMaxYearMonth(shortsPerMonths.keySet(), longsPerMonths.keySet());
 
