@@ -28,10 +28,23 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.rcp.common.ServiceHelper;
 
 public class LongShortJSONGenerator {
 
 	public static List<LongShortReportModel> createLongShortData(final ScheduleModel scheduleModel) {
+		final List<LongShortReportModel> results = ServiceHelper.withOptionalService(ISlotFilter.class, f -> {
+			if (f != null) {
+				return createLongShortData(scheduleModel, f);
+			}
+			else {
+				return createLongShortData(scheduleModel, new DefaultSlotFilter());
+			}
+		});
+		return results;
+	}
+	
+	public static List<LongShortReportModel> createLongShortData(final ScheduleModel scheduleModel, final ISlotFilter slotFilter) {
 		final Map<YearMonth, Integer> shortsPerMonths = new HashMap<>();
 		final Map<YearMonth, Integer> longsPerMonths = new HashMap<>();
 
@@ -40,20 +53,24 @@ public class LongShortJSONGenerator {
 			if (slot.isCancelled()) {
 				continue;
 			}
-			// Long or short?
-			final Map<YearMonth, Integer> positionsPerMonth = slot instanceof LoadSlot ? longsPerMonths : shortsPerMonths;
+			if (slotFilter.includeSlot(slot)) {
+				// Long or short?
+				final Map<YearMonth, Integer> positionsPerMonth = slot instanceof LoadSlot ? longsPerMonths : shortsPerMonths;
 
-			final LocalDate d = slot.getWindowStart();
-			final YearMonth key = YearMonth.of(d.getYear(), d.getMonth());
-			positionsPerMonth.merge(key, 1, Integer::sum);
+				final LocalDate d = slot.getWindowStart();
+				final YearMonth key = YearMonth.of(d.getYear(), d.getMonth());
+				positionsPerMonth.merge(key, 1, Integer::sum);
+			}
 		}
 
 		for (final CargoAllocation cargoAllocation : scheduleModel.getSchedule().getCargoAllocations()) {
 			boolean spotSlot = false;
+			boolean includeSlot = true;
 			Slot<?> nonSpotSlot = null;
 			
 			for (SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
 				final Slot<?> slot = sa.getSlot();
+				includeSlot = includeSlot && slotFilter.includeSlot(slot);
 				
 				if (slot instanceof SpotSlot) {
 					spotSlot = true;
@@ -63,7 +80,7 @@ public class LongShortJSONGenerator {
 				}
 			}
 			
-			if (spotSlot) {
+			if (spotSlot && includeSlot) {
 				// Long or short?
 				final Map<YearMonth, Integer> positionsPerMonth = nonSpotSlot instanceof LoadSlot ? longsPerMonths : shortsPerMonths;
 
@@ -73,7 +90,6 @@ public class LongShortJSONGenerator {
 			}
 		}
 
-		
 		final YearMonth min = findMinYearMonth(shortsPerMonths.keySet(), longsPerMonths.keySet());
 		final YearMonth max = findMaxYearMonth(shortsPerMonths.keySet(), longsPerMonths.keySet());
 
