@@ -30,17 +30,17 @@ import org.slf4j.LoggerFactory;
  */
 public class CopyGridToHtmlStringUtil {
 
-	private static final Logger LOG = LoggerFactory.getLogger(CopyGridToHtmlStringUtil.class);
-	private final Grid table;
+	protected static final Logger LOG = LoggerFactory.getLogger(CopyGridToHtmlStringUtil.class);
+	protected final Grid table;
 
 	private boolean rowHeadersIncluded = false;
 	// Set border around everything?
-	private final boolean includeBorder = false;
+	protected final boolean includeBorder = false;
 	private boolean showBackgroundColours = false;
 	private boolean showForegroundColours = false;
 	private boolean includeAllColumns = false;
-	private IAdditionalAttributeProvider additionalAttributeProvider = null;
-	private static final String EOL = System.getProperty("line.separator");
+	protected IAdditionalAttributeProvider additionalAttributeProvider = null;
+	protected static final String EOL = System.getProperty("line.separator");
 
 	public CopyGridToHtmlStringUtil(final Grid table, final boolean includeRowHeaders, final boolean includeAllColumns) {
 
@@ -89,7 +89,7 @@ public class CopyGridToHtmlStringUtil {
 		}
 	}
 
-	private void addPreTableRows(@NonNull final StringWriter sw) {
+	protected void addPreTableRows(@NonNull final StringWriter sw) {
 		final String[] additionalPreRows = getAdditionalPreRows();
 		if (additionalPreRows != null) {
 			for (final String r : additionalPreRows) {
@@ -98,7 +98,7 @@ public class CopyGridToHtmlStringUtil {
 		}
 	}
 
-	private void addHeader(@NonNull final StringWriter sw) {
+	protected void addHeader(@NonNull final StringWriter sw) {
 		// final int numColumns = table.getColumnCount();
 		// write the head
 		sw.write("<thead>" + EOL);
@@ -200,7 +200,7 @@ public class CopyGridToHtmlStringUtil {
 		return indicies;
 	}
 
-	private void processTableRow(final StringWriter sw, final int numColumns, final GridItem item, final int[] rowOffsets) throws IOException {
+	protected void processTableRow(final StringWriter sw, final int numColumns, final GridItem item, final int[] rowOffsets) throws IOException {
 		// start a row
 		sw.write("<tr>");
 
