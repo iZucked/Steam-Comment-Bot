@@ -5,8 +5,12 @@
 package com.mmxlabs.lingo.app.headless;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -22,13 +26,22 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSON;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSONTransformer;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserRunner;
 import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
+import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 
 /**
  * Headless Optimisation Runner
@@ -66,21 +79,143 @@ public class HeadlessApplication implements IApplication {
 			System.err.println("Error parsing the command line settings");
 			return IApplication.EXIT_OK;
 		}
+		
+		int threads = 1;
+		
+		HeadlessOptimiserJSON json = setOptionParamsInJSONOutputObject(options, options.scenarioFileName, threads);		
+		
+		File scenarioFile = new File(options.scenarioFileName);
+		File outputFile = new File(options.outputLoggingFolder + "/" + UUID.randomUUID().toString() + ".json");
+		runAndWriteResults(options, scenarioFile, outputFile, json);
+
 		/*
 		 * if (options.turnPerfOptsOn) { OptOptions.getInstance().setAllOnOff(options.turnPerfOptsOn); }
 		 */
-		File scenarioFile = new File(options.scenarioFileName);
+		/*
 		{
 			HeadlessOptimiserRunner runner = new HeadlessOptimiserRunner();
 			try {
-				runner.run(scenarioFile, options, new NullProgressMonitor(), null);
+				runner.run(scenarioFile, options, new NullProgressMonitor(), null, null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		*/
 
 		return IApplication.EXIT_OK;
 	}
+	
+	private HeadlessOptimiserJSON setOptionParamsInJSONOutputObject(HeadlessOptimiserRunner.Options options, String scenarioFileName,
+			int threads) {
+		HeadlessOptimiserJSON json = HeadlessOptimiserJSONTransformer.createJSONResultObject();
+
+		json.getMeta().setClient("V");
+		json.getMeta().setScenario(scenarioFileName);
+		//json.getMeta().setMachineType(getMachineInfo());
+		json.getMeta().setVersion("Dev");
+
+		json.getParams().setCores(threads);
+		// json.getParams().getOptioniserProperties().setOptions(OptOptions.getInstance().toString());
+		/*
+		json.getParams().getOptioniserProperties().setIterations(options.iterations);
+		json.getParams().getOptioniserProperties().setLoadIds(options.loadIds.toArray(new String[0]));
+		json.getParams().getOptioniserProperties().setDischargeIds(options.dischargeIds.toArray(new String[0]));
+		json.getParams().getOptioniserProperties().setEventIds(options.eventsIds.toArray(new String[0]));
+		*/
+		
+		return json ;
+	}
+
+	private void runAndWriteResults(HeadlessOptimiserRunner.Options options, File scenarioFile, File outputFile, HeadlessOptimiserJSON json) throws Exception {
+		SlotInsertionOptimiserLogger logger = new SlotInsertionOptimiserLogger();
+		
+		HeadlessOptimiserRunner runner = new HeadlessOptimiserRunner();
+		runner.run(scenarioFile, options, new NullProgressMonitor(), null, json); //
+		renameInvalidBsonFields(json.getMetrics().getStages());
+		
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.registerModule(new JavaTimeModule());
+			mapper.registerModule(new Jdk8Module());
+			
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm a z");
+			//mapper.setDateFormat(df);
+			mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+			mapper.disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS);
+			
+			mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, json);
+		} catch (Exception e) {
+			System.err.println("Error writing to file:");
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private boolean isValidBsonFieldname(String name) {
+		return name.matches("^[_0-9a-zA-Z\\-]+$");
+	}
+	
+	private String makeValidBsonFieldname(String name) {
+		// force only alphanumeric characters, underscore & hyphen
+		String result = name.replaceAll("[^_a-zA-Z0-9\\-]", "_");
+		
+		// don't allow an empty string
+		if (result.equals("")) {
+			result = "_";
+		}
+		
+		return result;
+
+	}
+	
+	private void renameInvalidBsonFields(JSONObject object) {
+		Set keys = object.keySet();
+		
+		List<Object> badNames = new LinkedList<>(); 				
+		
+		for (Object key: keys) {
+			String name = key.toString();			
+			Object value = object.get(key);
+
+			if (!isValidBsonFieldname(name)) {
+				badNames.add(key);
+			}
+			
+			if (value instanceof JSONObject) {
+				renameInvalidBsonFields((JSONObject) value);
+			}
+			else if (value instanceof JSONArray) {
+				renameInvalidBsonFields((JSONArray) value);
+			}
+		}
+		
+		for (Object key: badNames) {
+			String name = key.toString();
+			String newName = makeValidBsonFieldname(name);
+			if (object.containsKey(newName)) {
+				throw new RuntimeException("Tried to ".format("Tried to rename invalid BSON name '%s' to '%s' but encountered a name collision.", name, newName));
+			}
+			else {
+				object.put(newName, object.get(key));
+				object.remove(key);
+			}
+			
+		}
+  
+	}
+	
+	private void renameInvalidBsonFields(JSONArray object) {
+		for (Object child: object) {
+			if (child instanceof JSONObject) {
+				renameInvalidBsonFields((JSONObject) child);
+			}
+			else if (child instanceof JSONArray) {
+				renameInvalidBsonFields((JSONArray) child);
+			}
+		}
+		
+	}
+
 
 	/**
 	 * Filter out invalid command line items that getopt cannot work with

@@ -5,10 +5,14 @@
 package com.mmxlabs.optimiser.lso.logging;
 
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
@@ -34,32 +38,26 @@ public class FitnessAnnotationLogger {
 		fitnessComponentTrace.put(iteration, new LinkedHashMap<String, Long>(componentValues));
 	}
 
-	public void exportData(PrintWriter writer) {
-		if (writer == null) {
+	public void exportData(JSONObject node) {
+		if (node == null) {
 			return;
 		}
 
-		// Write out the header
-		writer.print("Iteration,");
-		for (final String component : componentNames) {
-			writer.print(",");
-			writer.print(component);
-		}
-		writer.println();
+		JSONArray array = new JSONArray();
 
 		// Print Data rows.
 		for (final Integer key : fitnessComponentTrace.keySet()) {
+			JSONObject m2 = new JSONObject();
 			final Map<String, Long> components = fitnessComponentTrace.get(key);
 
-			writer.print(key);
-
 			for (final String component : componentNames) {
-				writer.print(",");
-				writer.print(components.get(component));
+				m2.put(component, components.get(component));
 			}
-			writer.println();
+			m2.put("iteration", key);
+			array.add(m2);
 		}
 
+		node.put("a", array);
 	}
 
 }

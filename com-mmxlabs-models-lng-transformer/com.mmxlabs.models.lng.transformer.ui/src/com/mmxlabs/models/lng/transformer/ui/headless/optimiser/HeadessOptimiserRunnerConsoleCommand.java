@@ -80,7 +80,7 @@ public class HeadessOptimiserRunnerConsoleCommand implements CommandProvider {
 					{
 						HeadlessOptimiserRunner runner = new HeadlessOptimiserRunner();
 						try {
-							runner.run(scenarioFile, options, new NullProgressMonitor(), null);
+							runner.run(scenarioFile, options, new NullProgressMonitor(), null, null);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
