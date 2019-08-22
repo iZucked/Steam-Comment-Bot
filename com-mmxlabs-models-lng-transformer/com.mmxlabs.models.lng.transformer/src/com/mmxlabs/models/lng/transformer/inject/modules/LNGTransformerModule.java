@@ -412,27 +412,30 @@ public class LNGTransformerModule extends AbstractModule {
 	@Provides
 	@Named(Parser_Charter)
 	@Singleton
-	private SeriesParser provideCharterParser(final ShiftFunctionMapper shiftMapper) {
+	private SeriesParser provideCharterParser(final ShiftFunctionMapper shiftMapper, CalendarMonthMapper monthMapper) {
 		final SeriesParser parser = new SeriesParser();
 		parser.setShiftMapper(shiftMapper);
+		parser.setCalendarMonthMapper(monthMapper);
 		return parser;
 	}
 
 	@Provides
 	@Named(Parser_BaseFuel)
 	@Singleton
-	private SeriesParser provideBaseFuelParser(final ShiftFunctionMapper shiftMapper) {
+	private SeriesParser provideBaseFuelParser(final ShiftFunctionMapper shiftMapper, CalendarMonthMapper monthMapper) {
 		final SeriesParser parser = new SeriesParser();
 		parser.setShiftMapper(shiftMapper);
+		parser.setCalendarMonthMapper(monthMapper);
 		return parser;
 	}
 
 	@Provides
 	@Named(Parser_Currency)
 	@Singleton
-	private SeriesParser provideCurrencyParser(final ShiftFunctionMapper shiftMapper) {
+	private SeriesParser provideCurrencyParser(final ShiftFunctionMapper shiftMapper, CalendarMonthMapper monthMapper) {
 		final SeriesParser parser = new SeriesParser();
 		parser.setShiftMapper(shiftMapper);
+		parser.setCalendarMonthMapper(monthMapper);
 		return parser;
 	}
 }
