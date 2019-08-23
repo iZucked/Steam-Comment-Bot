@@ -109,6 +109,18 @@ public class NominationsAdapterFactory extends AdapterFactoryImpl {
 				return createNominationsParametersAdapter();
 			}
 			@Override
+			public Adapter caseNominationAuditItem(NominationAuditItem object) {
+				return createNominationAuditItemAdapter();
+			}
+			@Override
+			public Adapter caseNominationSpecAuditItem(NominationSpecAuditItem object) {
+				return createNominationSpecAuditItemAdapter();
+			}
+			@Override
+			public Adapter caseAbstractAuditItem(AbstractAuditItem object) {
+				return createAbstractAuditItemAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -245,6 +257,48 @@ public class NominationsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createNominationsParametersAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.nominations.NominationAuditItem <em>Nomination Audit Item</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.nominations.NominationAuditItem
+	 * @generated
+	 */
+	public Adapter createNominationAuditItemAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.nominations.NominationSpecAuditItem <em>Nomination Spec Audit Item</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.nominations.NominationSpecAuditItem
+	 * @generated
+	 */
+	public Adapter createNominationSpecAuditItemAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.nominations.AbstractAuditItem <em>Abstract Audit Item</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractAuditItem
+	 * @generated
+	 */
+	public Adapter createAbstractAuditItemAdapter() {
 		return null;
 	}
 

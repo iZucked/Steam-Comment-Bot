@@ -16,11 +16,15 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.nominations.AbstractAuditItem;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.AbstractNominationSpec;
+import com.mmxlabs.models.lng.nominations.AuditItemType;
 import com.mmxlabs.models.lng.nominations.ContractNomination;
 import com.mmxlabs.models.lng.nominations.ContractNominationSpec;
 import com.mmxlabs.models.lng.nominations.DatePeriodPrior;
+import com.mmxlabs.models.lng.nominations.NominationAuditItem;
+import com.mmxlabs.models.lng.nominations.NominationSpecAuditItem;
 import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
@@ -101,6 +105,27 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass nominationAuditItemEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass nominationSpecAuditItemEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass abstractAuditItemEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum datePeriodPriorEEnum = null;
 
 	/**
@@ -109,6 +134,13 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 	 * @generated
 	 */
 	private EEnum sideEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum auditItemTypeEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -218,6 +250,16 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 	@Override
 	public EReference getNominationsModel_NominationParameters() {
 		return (EReference)nominationsModelEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getNominationsModel_AuditLog() {
+		return (EReference)nominationsModelEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -466,6 +508,66 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 	 * @generated
 	 */
 	@Override
+	public EClass getNominationAuditItem() {
+		return nominationAuditItemEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getNominationAuditItem_Nomination() {
+		return (EReference)nominationAuditItemEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getNominationSpecAuditItem() {
+		return nominationSpecAuditItemEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getNominationSpecAuditItem_NominationSpec() {
+		return (EReference)nominationSpecAuditItemEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getAbstractAuditItem() {
+		return abstractAuditItemEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAbstractAuditItem_AuditItemType() {
+		return (EAttribute)abstractAuditItemEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getDatePeriodPrior() {
 		return datePeriodPriorEEnum;
 	}
@@ -478,6 +580,16 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 	@Override
 	public EEnum getSide() {
 		return sideEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getAuditItemType() {
+		return auditItemTypeEEnum;
 	}
 
 	/**
@@ -513,6 +625,7 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 		createEReference(nominationsModelEClass, NOMINATIONS_MODEL__NOMINATION_SPECS);
 		createEReference(nominationsModelEClass, NOMINATIONS_MODEL__NOMINATIONS);
 		createEReference(nominationsModelEClass, NOMINATIONS_MODEL__NOMINATION_PARAMETERS);
+		createEReference(nominationsModelEClass, NOMINATIONS_MODEL__AUDIT_LOG);
 
 		abstractNominationSpecEClass = createEClass(ABSTRACT_NOMINATION_SPEC);
 		createEAttribute(abstractNominationSpecEClass, ABSTRACT_NOMINATION_SPEC__TYPE);
@@ -545,9 +658,19 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 		createEAttribute(nominationsParametersEClass, NOMINATIONS_PARAMETERS__START_DATE);
 		createEAttribute(nominationsParametersEClass, NOMINATIONS_PARAMETERS__END_DATE);
 
+		nominationAuditItemEClass = createEClass(NOMINATION_AUDIT_ITEM);
+		createEReference(nominationAuditItemEClass, NOMINATION_AUDIT_ITEM__NOMINATION);
+
+		nominationSpecAuditItemEClass = createEClass(NOMINATION_SPEC_AUDIT_ITEM);
+		createEReference(nominationSpecAuditItemEClass, NOMINATION_SPEC_AUDIT_ITEM__NOMINATION_SPEC);
+
+		abstractAuditItemEClass = createEClass(ABSTRACT_AUDIT_ITEM);
+		createEAttribute(abstractAuditItemEClass, ABSTRACT_AUDIT_ITEM__AUDIT_ITEM_TYPE);
+
 		// Create enums
 		datePeriodPriorEEnum = createEEnum(DATE_PERIOD_PRIOR);
 		sideEEnum = createEEnum(SIDE);
+		auditItemTypeEEnum = createEEnum(AUDIT_ITEM_TYPE);
 	}
 
 	/**
@@ -589,12 +712,16 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 		contractNominationEClass.getESuperTypes().add(this.getAbstractNomination());
 		contractNominationSpecEClass.getESuperTypes().add(this.getAbstractNominationSpec());
 		abstractNominationEClass.getESuperTypes().add(this.getAbstractNominationSpec());
+		nominationAuditItemEClass.getESuperTypes().add(this.getAbstractAuditItem());
+		nominationSpecAuditItemEClass.getESuperTypes().add(this.getAbstractAuditItem());
+		abstractAuditItemEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(nominationsModelEClass, NominationsModel.class, "NominationsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getNominationsModel_NominationSpecs(), this.getAbstractNominationSpec(), null, "nominationSpecs", null, 0, -1, NominationsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getNominationsModel_Nominations(), this.getAbstractNomination(), null, "nominations", null, 0, -1, NominationsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getNominationsModel_NominationParameters(), this.getNominationsParameters(), null, "nominationParameters", null, 0, 1, NominationsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getNominationsModel_AuditLog(), this.getAbstractAuditItem(), null, "auditLog", null, 0, -1, NominationsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(abstractNominationSpecEClass, AbstractNominationSpec.class, "AbstractNominationSpec", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAbstractNominationSpec_Type(), ecorePackage.getEString(), "type", null, 0, 1, AbstractNominationSpec.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -627,6 +754,15 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 		initEAttribute(getNominationsParameters_StartDate(), theDateTimePackage.getLocalDate(), "startDate", null, 0, 1, NominationsParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNominationsParameters_EndDate(), theDateTimePackage.getLocalDate(), "endDate", null, 0, 1, NominationsParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(nominationAuditItemEClass, NominationAuditItem.class, "NominationAuditItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getNominationAuditItem_Nomination(), this.getAbstractNomination(), null, "nomination", null, 0, 1, NominationAuditItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(nominationSpecAuditItemEClass, NominationSpecAuditItem.class, "NominationSpecAuditItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getNominationSpecAuditItem_NominationSpec(), this.getAbstractNominationSpec(), null, "nominationSpec", null, 0, 1, NominationSpecAuditItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(abstractAuditItemEClass, AbstractAuditItem.class, "AbstractAuditItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAbstractAuditItem_AuditItemType(), this.getAuditItemType(), "auditItemType", null, 0, 1, AbstractAuditItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(datePeriodPriorEEnum, DatePeriodPrior.class, "DatePeriodPrior");
 		addEEnumLiteral(datePeriodPriorEEnum, DatePeriodPrior.DAYS_PRIOR);
@@ -635,6 +771,11 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 		initEEnum(sideEEnum, Side.class, "Side");
 		addEEnumLiteral(sideEEnum, Side.BUY);
 		addEEnumLiteral(sideEEnum, Side.SELL);
+
+		initEEnum(auditItemTypeEEnum, AuditItemType.class, "AuditItemType");
+		addEEnumLiteral(auditItemTypeEEnum, AuditItemType.DELETE);
+		addEEnumLiteral(auditItemTypeEEnum, AuditItemType.CREATE);
+		addEEnumLiteral(auditItemTypeEEnum, AuditItemType.MODIFY);
 
 		// Create resource
 		createResource(eNS_URI);

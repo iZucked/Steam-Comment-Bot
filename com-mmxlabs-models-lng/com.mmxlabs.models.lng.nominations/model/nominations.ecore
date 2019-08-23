@@ -9,6 +9,8 @@
         eType="#//AbstractNomination" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nominationParameters" eType="#//NominationsParameters"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auditLog" upperBound="-1"
+        eType="#//AbstractAuditItem" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AbstractNominationSpec" abstract="true"
       eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
@@ -54,5 +56,19 @@
   <eClassifiers xsi:type="ecore:EClass" name="NominationsParameters">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AuditItemType">
+    <eLiterals name="Delete"/>
+    <eLiterals name="Create" value="1"/>
+    <eLiterals name="Modify" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NominationAuditItem" eSuperTypes="#//AbstractAuditItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nomination" eType="#//AbstractNomination"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NominationSpecAuditItem" eSuperTypes="#//AbstractAuditItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nominationSpec" eType="#//AbstractNominationSpec"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractAuditItem" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="auditItemType" eType="#//AuditItemType"/>
   </eClassifiers>
 </ecore:EPackage>

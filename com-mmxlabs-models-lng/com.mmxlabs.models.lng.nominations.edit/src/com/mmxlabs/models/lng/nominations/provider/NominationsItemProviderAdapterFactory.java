@@ -234,6 +234,75 @@ public class NominationsItemProviderAdapterFactory extends NominationsAdapterFac
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.nominations.NominationAuditItem} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NominationAuditItemItemProvider nominationAuditItemItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.nominations.NominationAuditItem}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNominationAuditItemAdapter() {
+		if (nominationAuditItemItemProvider == null) {
+			nominationAuditItemItemProvider = new NominationAuditItemItemProvider(this);
+		}
+
+		return nominationAuditItemItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.nominations.NominationSpecAuditItem} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NominationSpecAuditItemItemProvider nominationSpecAuditItemItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.nominations.NominationSpecAuditItem}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNominationSpecAuditItemAdapter() {
+		if (nominationSpecAuditItemItemProvider == null) {
+			nominationSpecAuditItemItemProvider = new NominationSpecAuditItemItemProvider(this);
+		}
+
+		return nominationSpecAuditItemItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.nominations.AbstractAuditItem} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected AbstractAuditItemItemProvider abstractAuditItemItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.nominations.AbstractAuditItem}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createAbstractAuditItemAdapter() {
+		if (abstractAuditItemItemProvider == null) {
+			abstractAuditItemItemProvider = new AbstractAuditItemItemProvider(this);
+		}
+
+		return abstractAuditItemItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -365,6 +434,9 @@ public class NominationsItemProviderAdapterFactory extends NominationsAdapterFac
 		if (contractNominationItemProvider != null) contractNominationItemProvider.dispose();
 		if (contractNominationSpecItemProvider != null) contractNominationSpecItemProvider.dispose();
 		if (nominationsParametersItemProvider != null) nominationsParametersItemProvider.dispose();
+		if (nominationAuditItemItemProvider != null) nominationAuditItemItemProvider.dispose();
+		if (nominationSpecAuditItemItemProvider != null) nominationSpecAuditItemItemProvider.dispose();
+		if (abstractAuditItemItemProvider != null) abstractAuditItemItemProvider.dispose();
 	}
 
 }
