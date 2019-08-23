@@ -601,7 +601,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	protected GridTableViewer viewer;
 
 	private Action packColumnsAction;
-	private CopyGridToHtmlClipboardAction copyTableAction;
+	protected CopyGridToHtmlClipboardAction copyTableAction;
 	
 	protected void setCopyForegroundColours(final boolean showForegroundColours) {
 		if (copyTableAction != null) {
@@ -752,14 +752,22 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		manager.appendToGroup("filter", filterField.getContribution());
 		// BE manager.appendToGroup("sortmode", sortModeAction); //BE
 		manager.appendToGroup("pack", packColumnsAction);
-		manager.appendToGroup("copy", copyTableAction);
+		if (!hasCustomCopyAction()) {
+			manager.appendToGroup("copy", copyTableAction);
+		}
 	}
 
 	private void makeActions() {
 		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false, () -> setCopyPasteMode(true), () -> setCopyPasteMode(false));
 		
-		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
+		if (!hasCustomCopyAction()) {
+			getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
+		}
+	}
+	
+	protected boolean hasCustomCopyAction() {
+		return false;
 	}
 
 	protected void setCopyPasteMode(boolean copyPasteMode) {

@@ -22,9 +22,9 @@ import com.mmxlabs.rcp.common.internal.Activator;
  */
 public class CopyGridToHtmlClipboardAction extends Action{
 
-	private CopyGridToHtmlStringUtil util;
-	private Runnable preOperation;
-	private Runnable postOperation;
+	protected CopyGridToHtmlStringUtil util;
+	protected Runnable preOperation;
+	protected Runnable postOperation;
 
 	public CopyGridToHtmlClipboardAction(final Grid table, final boolean includeRowHeaders) {
 		this(table, includeRowHeaders, null, null);
